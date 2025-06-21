@@ -16,6 +16,7 @@ public interface PhysicalCard extends Filterable {
 
     String getCardController();
 
+    void setCardId(int cardId);
     int getCardId();
 
     LotroCardBlueprint getBlueprint();
@@ -37,4 +38,6 @@ public interface PhysicalCard extends Filterable {
 
         String getHumanReadable();
     }
+
+    void copyCardStats(PhysicalCard other);
 }

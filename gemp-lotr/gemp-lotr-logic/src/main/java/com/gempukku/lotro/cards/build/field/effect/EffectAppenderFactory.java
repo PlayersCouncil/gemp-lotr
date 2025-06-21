@@ -162,6 +162,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removetokenscumulative", new RemoveTokensCumulative());
         effectAppenderProducers.put("removetwilight", new RemoveTwilight());
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
+        effectAppenderProducers.put("replacecardinplaywithcardindiscard", new ReplaceCardInPlayWithCardInDiscard());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
         effectAppenderProducers.put("restore", new RestoreCardsInPlay());

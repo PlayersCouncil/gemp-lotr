@@ -20,15 +20,48 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ExtraCost
+				cost: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: title(Smeagol)
+					}
+					true: {
+						type: Spot
+						filter: title(Smeagol)
+					}
+					false: {
+						type: Exert
+						select: choose(Shire, companion)
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: title(Gollum)
+				}
+				effect: {
+					type: ModifyStrength
+					select: choose(minion, not(title(Gollum)))
+					amount: -1
+					until: start(regroup)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: title(Shelob)
+				}
+				effect: {
+					type: Kill
+					select: choose(title(Gollum))
+				}
 			}
 		]
 		gametext: To play, exert a [shire] companion (or spot Smeagol).<br>Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.<br>Each time Shelob loses a skirmish, kill Gollum.
@@ -59,19 +92,50 @@
 		culture: Gollum
 		twilight: 3
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: skirmish
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: title(Shelob), InSkirmish
+				}
+				limitPerPhase: 1
+				cost: {
+					type: StackCardsFromPlay
+					select: choose(minion,not(title(Shelob)))
+					where: self
+				}
+				effect: {
+					type: ModifyStrength
+					amount: -2
+					select: choose(character, InSkirmishAgainst(title(Shelob)))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: UsesSpecialAbility
+					filter: side(Free Peoples), condition
+					memorize: activatedCondition
+				}
+				cost: {
+					type: DiscardStackedCards
+					on: self
+					select: choose(minion)
+				}
+				effect: [
+					{
+						type: Hinder
+						select: memory(activatedCondition)
+					}
+					{
+						type: Heal
+						select: choose(title(Shelob))
+					}
+				]
 			}
 		]
 		gametext: Skirmish: If Shelob is skirmishing, stack another minion from play on this artifact to make a character skirmishing her strength -2 (limit once per phase).<br>Response: If a special ability on a Free Peoples condition is used, discard a minion stacked here to hinder that condition and heal Shelob.
@@ -113,15 +177,38 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: SkirmishAboutToEnd
+					involving: title(Shelob)
+				}
+				effect: {
+					type: Hinder
+					select: all(character,InSkirmishAgainst(title(Shelob)))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: title(Gollum), InSkirmish
+				}
+				cost: [
+					{
+						type: Exert
+						select: choose(title(Gollum))
+					}
+					{
+						type: Exert
+						select: choose(title(Shelob))
+					}
+				]
+				effect: {
+					type: Hinder
+					select: choose(character, InSkirmishAgainst(title(Gollum)))
+				}
 			}
 		]
 		gametext: Fierce.  Enduring.<br>Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.<br>Skirmish: If Gollum is skrimishing, exert Gollum and Shelob to hinder a character he is skirmishing.
@@ -152,19 +239,59 @@
 		culture: Gollum
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: Trigger
+				optional: false
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: bearer, InSkirmish
+				}
+				trigger: [
+					{
+						type: UsesSpecialAbility
+						player: Free Peoples
+					}
+					{
+						type: Played
+						player: Free Peoples
+						filter: event
+					}
+				]
+				effect: {
+					type: Choice
+					player: Free Peoples
+					texts: [
+						Exert {bearer}
+						Make {bearer} strength -1
+					]
+					effects: [
+						{
+							type: Exert
+							select: bearer
+						}
+						{
+							type: ModifyStrength
+							select: bearer
+							amount: -1
+						}
+					]
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Hinder
+					select: choose(your, Gollum)
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(companion)
+				}
 			}
 		]
 		gametext: During bearer's skirmish, each time the Free Peoples player uses a special ability or plays an event, they must exert bearer or make bearer strength -1. <br>Skirmish: Hinder your [gollum] card to transfer this to a companion.
@@ -195,18 +322,50 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Shadow
+			Maneuver
+			Skirmish
+		]
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ChooseActiveCards
+						select: choose(title(Gollum))
+						text: Choose a Gollum to restore
+						hindered: true
+						memorize: activeGollum
+					}
+					{
+						type: Restore
+						select: memory(activeGollum)
+					}
+					{
+						type: Optional
+						text: Would you like to remove a threat to replace Gollum with another in your discard pile?
+						requires: [
+							{
+								type: CanSpot
+								filter: title(Gollum)
+							}
+							{
+								type: HasCardInDiscard
+								filter: title(Gollum), not(SubtitleFromMemory(activeGollum))
+							}
+						]
+						cost: {
+							type: RemoveThreats
+							amount: 1
+						}
+						effect: [
+							{
+								type: ReplaceCardInPlayWithCardInDiscard
+								selectInPlay: memory(activeGollum)
+								selectInDiscard: choose(title(Gollum), not(SubtitleFromMemory(activeGollum)))
+							}
+						]
 					}
 				]
 			}
@@ -239,18 +398,50 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Fellowship
+			Maneuver
+			Skirmish
+		]
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ChooseActiveCards
+						select: choose(title(Smeagol))
+						text: Choose a Smeagol to restore
+						hindered: true
+						memorize: activeSmeagol
+					}
+					{
+						type: Restore
+						select: memory(activeSmeagol)
+					}
+					{
+						type: Optional
+						text: Would you like to add a threat to replace Smeagol with another in your discard pile?
+						requires: [
+							{
+								type: CanSpot
+								filter: title(Smeagol), not(ring-bearer)
+							}
+							{
+								type: HasCardInDiscard
+								filter: title(Smeagol), not(SubtitleFromMemory(activeSmeagol))
+							}
+						]
+						cost: {
+							type: AddThreats
+							amount: 1
+						}
+						effect: [
+							{
+								type: ReplaceCardInPlayWithCardInDiscard
+								selectInPlay: memory(activeSmeagol)
+								selectInDiscard: choose(title(Smeagol), not(SubtitleFromMemory(activeSmeagol)))
+							}
+						]
 					}
 				]
 			}
@@ -286,15 +477,50 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: AssignedToSkirmish
+					filter: title(Shelob)
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(Gollum, item)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: WinsSkirmish
+					filter: title(Shelob)
+				}
+				cost: {
+					type: DiscardStackedCards
+					on: Gollum, item
+					select: choose(minion)
+					count: 3
+				}
+				effect: [
+					{
+						type: AddTrigger
+						until: start(regroup)
+						requires: {
+							type: CanSpot
+							filter: title(Shelob)
+						}
+						trigger: {
+							type: afterAllSkirmishes
+						}
+						effect: {
+							type: setupExtraAssignmentAndSkirmishes
+							filter: title(Shelob)
+						}
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
 			}
 		]
 		gametext: Each time Shelob is assigned to a skirmish, you may play a [gollum] item from your discard pile.<br>Response: If Shelob wins a skirmish, discard 3 minions stacked on [gollum] items to make her participate in one additional assignment and skirmish phase after fierce skirmishes. Discard this condition.

@@ -20,6 +20,24 @@ public class Assertions {
 	}
 
 	/**
+	 * Asserts that one or more cards are all in zones considered in play.  If any are not there, an AssertionError
+	 * will be thrown with no message.
+	 * @param cards One or more cards which must all be in that zone.
+	 */
+	public static void assertInPlay(PhysicalCardImpl...cards) {
+		for(var card : cards) {
+			assertTrue(card.getZone().isInPlay());
+		}
+	}
+
+	/**
+	 * Asserts that one or more cards are all the discard pile.  If any are not there, an AssertionError
+	 * will be thrown with no message.
+	 * @param cards One or more cards which must all be in that zone.
+	 */
+	public static void assertInDiscard(PhysicalCardImpl...cards) { assertInZone(Zone.DISCARD, cards); }
+
+	/**
 	 * Asserts that one or more cards are all in either player's hand.  If any are in any other zone, an AssertionError
 	 * will be thrown with no message.
 	 * @param cards One or more cards which must all be in hand.

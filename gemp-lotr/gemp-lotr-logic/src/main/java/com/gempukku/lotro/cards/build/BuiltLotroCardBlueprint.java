@@ -477,6 +477,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public String getSanitizedTitle() { return sanitizedTitle; }
+    @Override
+    public String getSanitizedSubtitle() { return sanitizedSubtitle; }
 
     @Override
     public String getSubtitle() {
