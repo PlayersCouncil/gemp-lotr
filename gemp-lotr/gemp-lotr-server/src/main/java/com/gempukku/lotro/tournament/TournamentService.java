@@ -27,7 +27,6 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TournamentService {
     private final ProductLibrary _productLibrary;
@@ -48,8 +47,8 @@ public class TournamentService {
     private static final Duration _tournamentRepeatPeriod = Duration.ofDays(2);
     private static final int _scheduledTournamentLoadTime = 7; // In days; one week
 
-    private final Map<String, Tournament> _activeTournaments = new ConcurrentHashMap<>();
-    private final Map<String, TournamentQueue> _tournamentQueues = new ConcurrentHashMap<>();
+    private final Map<String, Tournament> _activeTournaments = new LinkedHashMap<>();
+    private final Map<String, TournamentQueue> _tournamentQueues = new LinkedHashMap<>();
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
@@ -488,7 +487,7 @@ public class TournamentService {
         return result;
     }
 
-    public synchronized List<Tournament> getLiveTournaments() {
+    public List<Tournament> getLiveTournaments() {
         return new ArrayList<>(_activeTournaments.values());
     }
 
