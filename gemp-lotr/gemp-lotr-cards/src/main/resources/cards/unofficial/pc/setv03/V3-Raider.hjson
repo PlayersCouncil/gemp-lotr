@@ -17,8 +17,8 @@
 		culture: Raider
 		twilight: 6
 		type: Possession
-		strength: 6
-		vitality: 1
+		strength: 3
+		vitality: 2
 		itemclass: Mount
 		target: Southron
 		effects: [
@@ -90,7 +90,6 @@
 		culture: Raider
 		twilight: 8
 		type: Artifact
-		strength: 4
 		vitality: 2
 		itemclass: Mount
 		target: self
@@ -117,8 +116,9 @@
 					type: ModifyStrength
 					filter: bearer
 					amount: {
-						type: ForEachStrength
+						type: ForEachYouCanSpot
 						filter: not(mounted),Southron
+						multiplier: 4
 					}
 				}
 			}
@@ -129,9 +129,8 @@
 					filter: bearer
 					keyword: ambush
 					amount: {
-						type: ForEachKeyword
+						type: ForEachYouCanSpot
 						filter: not(mounted),Southron
-						keyword: ambush
 					}
 				}
 			}
@@ -152,7 +151,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned<br>to skirmishes.<br>Bearer gains the <b>ambush</b> and strength of<br>all unmounted Southrons.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
+		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned to skirmishes.<br>Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -879,7 +878,7 @@
 		unique: false
 		side: Shadow
 		culture: Raider
-		twilight: 3
+		twilight: 0
 		type: Event
 		timewords: Assignment
 		effects: [
