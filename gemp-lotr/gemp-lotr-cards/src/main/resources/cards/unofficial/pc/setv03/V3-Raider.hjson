@@ -134,24 +134,23 @@
 					}
 				}
 			}
+			
 			{
-				type: Trigger
-				optional: false
-				requires: {
-					type: canSpot
-					filter: Southron
-					count: 6
-				}
-				trigger: {
-					type: afterAllSkirmishes
-				}
-				effect: {
-					type: setupExtraAssignmentAndSkirmishes
+				type: modifier
+				modifier: {
+					type: AddKeyword
 					filter: bearer
+					keyword: relentless
+					requires: {
+						type: CanSpot
+						filter: Southron
+						count: 6
+					}
 				}
 			}
 		]
-		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned to skirmishes.<br>Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
+		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.\Unmounted minions cannot be assigned\to skirmishes.\Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.\While you can spot 6 Southrons, bearer gains <b>relentless</b> <i>(they participate in an additional round of skirmishes after fierce)</i>.
+
 		lore: ""
 		promotext: ""
 		alts: {
