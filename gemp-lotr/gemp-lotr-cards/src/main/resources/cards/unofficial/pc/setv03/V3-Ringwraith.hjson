@@ -303,7 +303,7 @@
 			rarity: _
 		}
 		title: Morgul Legions
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Wraith
 		twilight: 1
