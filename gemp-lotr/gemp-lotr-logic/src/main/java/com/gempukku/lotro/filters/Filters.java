@@ -265,16 +265,19 @@ public class Filters {
                         }),
                 Filters.and(
                         CardType.COMPANION,
-                        (Filter) (game, physicalCard) -> assignedBySide == Side.SHADOW || !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.UNHASTY)
+                        (Filter) (game, physicalCard) ->
+                                //Shadow can always assign regardless of other factors
+                                assignedBySide == Side.SHADOW
+                                //non-unhasty companions can be assigned
+                                || !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.UNHASTY)
+                                //hasty companions who have been explicitly allowed can be assigned
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-                        new Filter() {
-                            @Override
-                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
-                            }
-                        }));
+						(Filter) (game, physicalCard) ->
+                                (
+                                    game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()
+                                ) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE)));
 
         return Filters.and(
                 assignableFilter,
