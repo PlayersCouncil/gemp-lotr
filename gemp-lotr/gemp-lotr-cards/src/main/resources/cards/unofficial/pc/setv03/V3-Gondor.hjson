@@ -925,19 +925,8 @@
 			{
 				type: extraCost
 				cost: {
-					type: If
-					check: {
-						type: CanSpotThreats
-						amount: 1
-					}
-					true: {
-						type: Spot
-						filter: any
-					}
-					false: {
-						type: addThreats
-						amount: 1
-					}
+					type: addThreats
+					amount: 1
 				}
 			}
 			{
@@ -951,7 +940,7 @@
 				}
 			}
 		]
-		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each hindered card you can spot.
+		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each hindered card you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -988,19 +977,8 @@
 			{
 				type: extraCost
 				cost: {
-					type: If
-					check: {
-						type: CanSpotThreats
-						amount: 1
-					}
-					true: {
-						type: Spot
-						filter: any
-					}
-					false: {
-						type: addThreats
-						amount: 1
-					}
+					type: addThreats
+					amount: 1
 				}
 			}
 			{
@@ -1026,7 +1004,7 @@
 				}
 			}
 		]
-		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each companion in the dead pile.<br>This companion is strength +1 for each Wraith in the dead piile.
+		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each companion in the dead pile.<br>This companion is strength +1 for each Wraith in the dead piile.
 		lore: ""
 		promotext: ""
 		alts: {
