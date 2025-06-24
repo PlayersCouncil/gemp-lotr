@@ -49,7 +49,7 @@ public class Restored implements TriggerCheckerProducer {
                 String performingPlayer = null;
                 PhysicalCard restoredCard = null;
 
-                if(TriggerConditions.forEachDiscardedFromPlay(actionContext.getGame(), actionContext.getEffectResult(), filterable)) {
+                if(TriggerConditions.forEachRestored(actionContext.getGame(), actionContext.getEffectResult(), filterable)) {
                     var restoredResult = (RestoredResult) actionContext.getEffectResult();
                     source = restoredResult.getSource();
                     performingPlayer = restoredResult.getPerformingPlayer();

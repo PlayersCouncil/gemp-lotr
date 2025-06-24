@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.*;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -226,6 +227,24 @@ public class EffectAppenderFactory {
             result[i] = wrapIgnoreCost(ignoreCostCheckFailure, effectAppenderProducer.createEffectAppender(cost, effectArray[i], environment));
         }
         return result;
+    }
+
+    public EffectAppender[] getNestedEffectAppenders(boolean cost, JSONObject[][] nestedArray, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        var effects = new ArrayList<EffectAppender>();
+        for (JSONObject[] array : nestedArray) {
+            if(array.length == 1) {
+                effects.add(getEffectAppender(cost, array[0], environment));
+            }
+            else {
+                effects.add(wrapArray(cost, array, environment));
+            }
+        }
+
+        return effects.toArray(new EffectAppender[0]);
+    }
+
+    public EffectAppender wrapArray(boolean cost, JSONObject[] effectArray, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        return ((Multiple)effectAppenderProducers.get("multiple")).createEffectAppender(cost, effectArray, environment);
     }
 
     private EffectAppender wrapIgnoreCost(boolean ignoreCostCheckFailure, EffectAppender effectAppender) {

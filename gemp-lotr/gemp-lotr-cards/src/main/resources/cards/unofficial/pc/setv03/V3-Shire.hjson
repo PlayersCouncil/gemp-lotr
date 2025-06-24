@@ -17,21 +17,35 @@
 		culture: Shire
 		twilight: 5
 		type: Event
-		timewords: Response
+		timewords: Skirmish
 		effects: [
 			{
-				type: responseEvent
-				trigger: {
-					type: StartOfTurn
-				}
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+				type: event
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ModifyStrength
+						select: choose(hobbit,InSkirmish,HasAttached(hand weapon),not(Ring-bearer))
+						amount: {
+							type: ForEachVitality
+							filter: InSkirmish
+						}
+						memorize: pumpedHobbit
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: SkirmishAboutToEnd
+							involving: memory(pumpedHobbit)
+						}
+						requires: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						effect: {
+							type: Hinder
+							select: choose(minion, InSkirmishAgainst(memory(pumpedHobbit)))
+						}
 					}
 				]
 			}
@@ -69,13 +83,48 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Exert
+					select: choose(unique, or(Gondor, Shire), companion, not(title(Frodo)))
+					memorize: exertedComp
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ModifyStrength
+						select: memory(exertedComp)
+						amount: {
+							type: Sum
+							source: [
+								{
+									type: ForEachWound
+									filter: title(Frodo)
+								}
+								{
+									type: Conditional
+									requires: {
+										type: CanSpot
+										filter: title(Frodo), Ring-bearer
+									}
+									true: {
+										type: ForEachBurden
+									}
+									false: 0
+								}
+							]
+							limit: {
+								type: Conditional
+								requires: {
+									type: CantSpot
+									filter: companion
+									count: 5
+								}
+								true: 100
+								false: 3
+							}
+						}
+					}
+					{
+						type: RemovePlayedEventFromTheGame
+						filter: self
 					}
 				]
 			}
@@ -157,18 +206,62 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Spot
+					select: choose(Hobbit, companion, not(Ring-bearer))
+					memorize: chosenHobbit
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 1
+						}
+						true: {
+							type: Hinder
+							select: all(Hobbit, not(memory(chosenHobbit)))
+						}
+					}
+					{
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 2
+						}
+						true: {
+							type: AddKeyword
+							keyword: defender+2
+							select: memory(chosenHobbit)
+							until: start(regroup)
+						}
+					}
+					
+					{
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 3
+						}
+						true: {
+							type: AddKeyword
+							keyword: enduring
+							select: memory(chosenHobbit)
+							until: start(regroup)
+						}
 					}
 				]
 			}
 		]
-		gametext: Spot a Hobbit companion (except the Ring-bearer).<br>In region 1, hinder all other Hobbits.<br>In region 2, make that Hobbit defender +2.<br>In region 3, make that Hobbit strength +1 for each minion you can spot until the regroup phase.
+		gametext: Spot a Hobbit companion (except the Ring-bearer).\In region 1, hinder all other Hobbits.\In region 2, make that Hobbit defender +2 until the regroup phase.\In region 3, make that Hobbit <b>enduring</b> until the regroup phase.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -206,15 +299,37 @@
 		keywords: Ring-bound
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: companion
+					}
+					requires: {
+						type: CantSpot
+						filter: companion
+						count: 5
+					}
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: companion
+					}
+					requires: {
+						type: CantSpot
+						filter: companion
+						count: 5
+					}
+				}
 			}
 		]
 		gametext: Ring-bearer (resistance 8).  Ring-bound.<br>While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
@@ -249,14 +364,35 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Restore
+						select: choose(Shire)
+					}
+					{
+						type: Optional
+						text: Would you like to reconcile your hand?
+						requires: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						effect: {
+							type: ReconcileHand
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						true: {
+							type: Heal
+							count: 0-2
+							select: choose(Shire, companion)
+						}
 					}
 				]
 			}
@@ -298,15 +434,31 @@
 		keywords: Ring-bound
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: Maneuver
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: Choice
+						texts: [
+							Hinder all odd-numbered Shadow support cards
+							Hinder all even-numbered Shadow support cards
+						]
+						effects: [
+							{
+								type: Hinder
+								select: all(side(Shadow), support, oddTwilight)
+							}
+							{
+								type: Hinder
+								select: all(side(Shadow), support, evenTwilight)
+							}
+						]
+					}
+				]
 			}
 		]
 		gametext: Ring-bound.<br>If you cannot spot more than 4 companions at the start of the maneuver phase, choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.<br>Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
@@ -344,15 +496,53 @@
 		resistance: 6
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ExtraCost
+				cost: {
+					type: AddBurdens
+					amount: 1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Assignment
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: [
+					{
+						type: Spot
+						select: choose(minion)
+						memorize: chosenMinion
+					}
+					{
+						type: CostToEffect
+						cost: [
+							{
+								type: AddTwilight
+								amount: 2
+							}
+							{
+								type: If
+								check: {
+									type: IsGreaterThanOrEqual
+									firstNumber: {
+										type: TwilightCostInMemory
+									}
+									secondNumber: 5
+								}
+								true: {
+									type: AddThreats
+									amount: 2
+								}
+							}
+						]
+						effect: {
+							type: Hinder
+							select: memory(chosenMinion)
+						}
+					}
+				]
 			}
 		]
 		gametext: To play, add a burden.<br>Assignment: Hinder Smeagol to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
@@ -386,19 +576,59 @@
 		type: Possession
 		vitality: 1
 		itemclass: Hand weapon
-		target: self
-		#target: a Ring-bound Hobbit
+		target: Ring-bound,Hobbit
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: Skirmish
 				requires: {
-					type: CanSpot
-					filter: any
+					type: CantSpot
+					filter: companion
+					count: 5
+				}
+				cost: {
+					type: AddThreats
+					amount: 1
+				}
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: {
+						type: Sum
+						source: [
+							{
+								type: ForEachThreat
+							}
+							{
+								type: ForEachBurden
+							}
+						]
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: Transfer
+					select: self
+					where: choose(Hobbit,Ring-bearer)
+					checkTarget: true
+				}
+			}
+			{
+				type: Response
+				fromDiscard: true
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+					on: Hobbit,Ring-bearer
+				}
 			}
 		]
 		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat and burden you can spot. <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
@@ -435,12 +665,60 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: Hobbit, companion
+					count: 2
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: Exert
+						select: choose(companion)
+						memorize: exertedComp
+					}
+					{
+						type: Hinder
+						ignoreCostCheckFailure: true
+						select: all(AttachedTo(memory(exertedComp)))
+						memorize: hinderedCards
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
+						select: memory(exertedComp)
+						amount: {
+							type: Sum
+							source: [
+								{
+									type: ForEachInMemory
+									memory: hinderedCards
+									filter: not(weapon)
+								}
+								{
+									type: ForEachInMemory
+									memory: hinderedCards
+									filter: weapon
+									multiplier: 3
+								}
+							]
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: companion
+							count: 5
+						}
+						true: {
+							type: Hinder
+							select: self
+						}
+					}
+				]
 			}
 		]
 		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: If you cannot spot more than 4 companions, hinder each Free Peoples card borne by a companion to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition.
@@ -474,15 +752,70 @@
 		timewords: Fellowship
 		effects: [
 			{
-				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+				type: Event
+				requires: {
+					type: CanSpot
+					filter: Hobbit, companion
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ChooseActiveCards
+						player: Shadow
+						select: choose(side(Free Peoples), character, CanExert)
+						memorize: exhaustedComp
+						text: Choose a Free Peoples character to exhaust
+					}
+					{
+						type: MemorizeNumber
+						amount: {
+							type: Subtract
+							firstNumber: {
+								type: ForEachVitality
+								filter: memory(exhaustedComp)
+							}
+							secondNumber: 1
+						}	
+						memory: exertions
+					}
+					{
+						type: Exhaust
+						player: Shadow
+						select: memory(exhaustedComp)
+					}
+					{
+						type: Repeat
+						times: {
+							type: FromMemory
+							memory: exertions
+						}
+						effect: {
+							type: Choice
+							texts: [
+								Hinder a Shadow support card
+								Shuffle a Shadow support card into its owner's draw deck
+							]
+							requires: [
+								{
+									type: AlwaysAvailable
+								}
+								{
+									type: CantSpot
+									filter: companion
+									count: 5
+								}
+							]
+							effects: [
+								{
+									type: Hinder
+									select: choose(side(Shadow), support)
+								}
+								{
+									type: ShuffleCardsFromPlayIntoDrawDeck
+									select: choose(side(Shadow), support)
+									includeStacked: true
+								}
+							]
+						}
 					}
 				]
 			}

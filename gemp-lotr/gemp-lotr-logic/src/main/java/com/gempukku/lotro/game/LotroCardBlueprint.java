@@ -111,6 +111,8 @@ public interface LotroCardBlueprint {
     List<? extends ActivateCardAction> getOptionalInPlayBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self);
 
     List<? extends ActivateCardAction> getOptionalInPlayAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
+    List<? extends ActivateCardAction> getOptionalInDiscardBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self);
+    List<? extends ActivateCardAction> getOptionalInDiscardAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
 
 
     List<PlayEventAction> getPlayResponseEventAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);

@@ -60,7 +60,7 @@ public abstract class EffectResult {
 
         FINISHED_PLAYING_FELLOWSHIP,
 
-        TAKE_OFF_THE_ONE_RING
+        TAKE_OFF_THE_ONE_RING, NEW_RING_BEARER
     }
 
     private final Type _type;

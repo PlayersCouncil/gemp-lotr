@@ -206,6 +206,14 @@ public class Filters {
         return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost;
     }
 
+    public static Filter evenPrintedTwilightCost() {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() % 2 == 0;
+    }
+
+    public static Filter oddPrintedTwilightCost() {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() % 2 != 0;
+    }
+
     public static Filter hasToken(final Token token) {
         return hasToken(token, 1);
     }

@@ -61,6 +61,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("killed", new Killed());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
+        triggerCheckers.put("newringbearer", new NewRingBearer());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());

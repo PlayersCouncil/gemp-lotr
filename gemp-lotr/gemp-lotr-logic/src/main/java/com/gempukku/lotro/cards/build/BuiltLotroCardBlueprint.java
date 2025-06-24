@@ -70,6 +70,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private List<ActionSource> beforeActivatedTriggers;
     private List<ActionSource> afterActivatedTriggers;
 
+    private List<ActionSource> beforeInDiscardActivatedTriggers;
+    private List<ActionSource> afterInDiscardActivatedTriggers;
+
     private List<ActionSource> optionalInHandBeforeActions;
     private List<ActionSource> optionalInHandAfterActions;
 
@@ -201,6 +204,18 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (requiredAfterTriggers == null)
             requiredAfterTriggers = new LinkedList<>();
         requiredAfterTriggers.add(actionSource);
+    }
+
+    public void appendInDiscardBeforeActivatedTrigger(ActionSource actionSource) {
+        if (beforeInDiscardActivatedTriggers == null)
+            beforeInDiscardActivatedTriggers = new LinkedList<>();
+        beforeInDiscardActivatedTriggers.add(actionSource);
+    }
+
+    public void appendInDiscardAfterActivatedTrigger(ActionSource actionSource) {
+        if (afterInDiscardActivatedTriggers == null)
+            afterInDiscardActivatedTriggers = new LinkedList<>();
+        afterInDiscardActivatedTriggers.add(actionSource);
     }
 
     public void appendOptionalBeforeTrigger(ActionSource actionSource) {
@@ -913,6 +928,54 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 final PhysicalCard firstActive = Filters.findFirstActive(game, copiedFilter.getFilterable(actionContext));
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getOptionalInPlayAfterActions(playerId, game, effectResult, self));
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<? extends ActivateCardAction> getOptionalInDiscardBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self) {
+        if (beforeInDiscardActivatedTriggers == null)
+            return null;
+
+        List<ActivateCardAction> result = new LinkedList<>();
+        for (ActionSource trigger : beforeInDiscardActivatedTriggers) {
+            var actionContext = new DefaultActionContext(playerId, game, self, null, effect);
+
+            if(trigger.getPlayer() != null) {
+                actionContext = new DefaultActionContext(trigger.getPlayer().getPlayer(actionContext), game, self, null, effect);
+            }
+
+            if (trigger.isValid(actionContext)) {
+                var action = new ActivateCardAction(self, playerId);
+                action.setActionTimeword(Timeword.RESPONSE);
+                trigger.createAction(action, actionContext);
+                result.add(action);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<? extends ActivateCardAction> getOptionalInDiscardAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self) {
+        if (afterInDiscardActivatedTriggers == null)
+            return null;
+
+        List<ActivateCardAction> result = new LinkedList<>();
+        for (ActionSource trigger : afterInDiscardActivatedTriggers) {
+            var actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
+
+            if(trigger.getPlayer() != null) {
+                actionContext = new DefaultActionContext(trigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+            }
+
+            if (trigger.isValid(actionContext)) {
+                var action = new ActivateCardAction(self, playerId);
+                action.setActionTimeword(Timeword.RESPONSE);
+                trigger.createAction(action, actionContext);
+                result.add(action);
             }
         }
 

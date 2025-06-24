@@ -16,23 +16,72 @@
 		unique: true
 		side: Free Peoples
 		culture: Elven
-		twilight: 0
+		twilight: 1
 		type: Artifact
 		vitality: 1
 		itemclass: Phial
-		target: self
-		#target: the Ring-bearer
+		target: Ring-bound,Hobbit
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: CanSpot
+						filter: companion
+						count: 5
+					}
+				}
+				effect: {
+					type: Discard
+					select: self
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: AddBurdens
+					amount: 2
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(side(Shadow),support)
+						memorize: chosenCard
+						text: Choose a Shadow support card's title
+					}
+					{
+						type: Hinder
+						select: all(NameFromMemory(chosenCard))
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: Transfer
+					select: self
+					where: choose(Hobbit,Ring-bearer)
+					checkTarget: true
+				}
+			}
+			
+			{
+				type: Response
+				fromDiscard: true
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+					on: Hobbit,Ring-bearer
+				}
 			}
 		]
 		gametext: Bearer must be the Ring-bearer. Discard this if you can spot more than 4 companions.<br>Maneuver: Add a burden and hinder this to hinder a support Shadow card and all cards sharing a title with that card.<br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
