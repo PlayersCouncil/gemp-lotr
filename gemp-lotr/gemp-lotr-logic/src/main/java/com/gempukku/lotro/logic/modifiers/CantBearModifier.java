@@ -6,11 +6,11 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
-public class MayNotBearModifier extends AbstractModifier {
+public class CantBearModifier extends AbstractModifier {
     private final Filter _unbearableCardFilter;
 
-    public MayNotBearModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Filterable... unbearableCardFilter) {
-        super(source, "Affected by \"may not bear\" limitation", affectFilter, condition, ModifierEffect.TARGET_MODIFIER);
+    public CantBearModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Filterable... unbearableCardFilter) {
+        super(source, "Affected by \"cannot bear\" limitation", affectFilter, condition, ModifierEffect.TARGET_MODIFIER);
         _unbearableCardFilter = Filters.and(unbearableCardFilter);
     }
 

@@ -392,5 +392,219 @@
 			}
 		}
 	}
+	
+	103_121: {
+		cardInfo: {
+			//id: 103_121.0
+			parent: 103_121
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E121.0_card.jpg
+			collInfo: V3_121
+			rarity: _
+		}
+		title: Jetsam
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Possession
+		keywords: [
+			Support Area
+			Pipeweed
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				cost: {
+					type: Exert
+					select: choose(companion, HasAttached(pipe))
+				}
+				effect: [
+					{
+						type: Choice
+						texts: [
+							Restore a companion
+							Allow an unhasty companion to participate in skirmishes until the regroup phase.
+						]
+						effects: [
+							{
+								type: Restore
+								select: choose(companion)
+							}
+							{
+								type: ChooseActiveCards
+								select: choose(unhasty,companion)
+								text: Choose an unhasty companion to make hasty
+								memorize: hastyComp
+							}
+						]
+					}
+					{
+						type: If
+						check: {
+							type: HasCardInMemory
+							memory: hastyComp
+						}
+						true: {
+							type: AddModifier
+							modifier: {
+								type: UnhastyCompanionCanParticipateInSkirmishes
+								filter: memory(hastyComp)
+							}
+							until: start(regroup)
+						}
+					}
+				]
+			}
+			
+		]
+		gametext: When you play this possession, you may exert a companion bearing a pipe to restore a companion or allow an unhasty companion to participate in skirmishes until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	103_123: {
+		cardInfo: {
+			//id: 103_123.0
+			parent: 103_123
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E123.0_card.jpg
+			collInfo: V3_123
+			rarity: _
+		}
+		title: Saruman's Hospitality
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		strength: 1
+		target: unbound,Hobbit,LimitOnePerBearer
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Moves
+				}
+				requires: {
+					type: IsGreaterThanOrEqual
+					firstNumber: {
+						type: ForEachCulture
+						filter: pipe
+					}
+					secondNumber: 3
+				}
+				effect: {
+					type: AddModifier
+					modifier: {
+						type: FPCultureCount
+						amount: -1
+					}
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_124: {
+		cardInfo: {
+			//id: 103_124.0
+			parent: 103_124
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E124.0_card.jpg
+			collInfo: V3_124
+			rarity: _
+		}
+		title: Wizard's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		itemclass: Pipe
+		target: unbound,companion
+		effects: [
+			{
+				type: Activated
+				phase: Regroup
+				requires: {
+					type: CanSpot
+					filter: bearer, Wizard
+				}
+				cost: [
+					{
+						type: Exert
+						select: bearer
+						times: 2
+					}
+					{
+						type: Discard
+						select: choose(pipeweed)
+					}
+				]
+				effect: [
+					{
+						type: AddModifier
+						modifier: {
+							type: DuplicateActionFromPhase
+							filter: pipe
+							oldPhase: Fellowship
+							newPhase: Regroup
+						}
+						until: end(regroup)
+					}
+					
+					{
+						type: AddTrigger
+						trigger: {
+							type: EndOfPhase
+							phase: Regroup
+						}
+						until: EndOfTurn
+						effect: {
+							type: Discard
+							select: self
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be an unbound companion.<br>Regroup: If bearer is a Wizard, exert them twice and discard a pipeweed; you may use special abilities on pipes as if it were the Fellowship phase.  Discard this pipe at the end of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 }

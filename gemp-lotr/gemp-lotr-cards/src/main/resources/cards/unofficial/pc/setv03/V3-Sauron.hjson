@@ -18,7 +18,6 @@
 		culture: Sauron
 		twilight: 2
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{
@@ -301,15 +300,43 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: companion
+				}
+				effect: {
+					type: Choice
+					player: Free Peoples
+					texts: [
+						Add a threat
+						Add a burden
+					]
+					effects: [
+						{
+							type: AddThreats
+							amount: 1
+						}
+						{
+							type: AddBurdens
+							amount: 1
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: ModifyStrength
+					select: choose(wounded, companion)
+					amount: -1
+				}
 			}
 		]
 		gametext: Lurker.<br>Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.<br>Skirmish: Exert this minion to make a wounded companion strength -1.
@@ -391,15 +418,28 @@
 		site: 4
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: hindered
+						hindered: true
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: Hinder
+					select: choose(or(weapon, condition), AttachedTo(InSkirmishAgainst(self)))
+				}
 			}
 		]
 		gametext: This minion is strength +1 for each hindered card you can spot.<br>Skirmish: Exert this minion to hinder a weapon or condition borne by a companion it is skirmishing.
@@ -433,15 +473,29 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Exert
+						select: choose(Sauron, minion)
+					}
+					{
+						type: RemoveCardsInDeadPileFromGame
+						select: choose(companion)
+						memorize: flungComp
+					}
+				]
+				effect: [
+					{
+						type: Exert
+						select: all(CultureFromMemory(flungComp), companion)
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
 			}
 		]
 		gametext: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert every companion sharing a culture with that companion.  Discard this condition.
@@ -480,15 +534,58 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ModifyOwnCost
+				amount: {
+					type: ForEachYouCanSpot
+					filter: support
+					multiplier: -1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Spot 4 other {Sauron} cards
+						Discard 3 cards from hand
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: Spot
+							filter: other,Sauron
+							count: 4
+						}
+						{
+							type: DiscardFromHand
+							count: 3
+							forced: false
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: companion
+					against: self
+					memorize: deadComp
+				}
+				effect: {
+					type: Kill
+					select: memory(deadComp)
+				}
 			}
 		]
 		gametext: Fierce.<br>Sauron is twilight cost -1 for each support card you can spot. <br>When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.<br>Each time a companion loses a skirmish to Sauron, kill that companion.
@@ -524,13 +621,30 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: If
+					check: {
+						type: CantSpot
+						filter: title(Sauron)
+					}
+					true: {
+						type: Exert
+						select: choose(culture(Sauron), minion)
+						count: 3
+					}
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Hinder
+						select: all(side(Free Peoples), or(support,AttachedTo(support)))
+						memorize: hinderedCards
+					}
+					{
+						type: Hinder
+						select: choose(side(Shadow), or(support,AttachedTo(support)))
+						count: {
+							type: ForEachInMemory
+							memory: hinderedCards
+						}
 					}
 				]
 			}
@@ -569,12 +683,45 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: or(Sauron, Ringwraith)
+					count: 2
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: [
+					{
+						type: RevealsCardFromDrawDeck
+						source: side(Free Peoples)
+					}
+					{
+						type: Discarded
+						source: side(Free Peoples)
+						fromZone: DECK
+					}
+				]
+				requires: {
+					type: perPhaseLimit
+					phase: regroup
+					limit: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							filter: side(Free Peoples), artifact
+						}
+						true: 100
+						false: 1
+					}
+				}
+				cost: {
+					type: Exert
+					select: choose(or(ally, and(unbound,companion)))
+				}
+				effect: {
+					type: DrawCards
+					count: 1
+				}
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card.
@@ -609,14 +756,22 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+				cost: [
+					{
+						type: Exert
+						select: choose(unique, or(Sauron, Ringwraith), minion)
+					}
+					{
+						type: Hinder
+						select: choose(Ring-bearer)
+					}
+				]
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: modifyStrength
+						select: all(minion)
+						amount: 1
+						until: start(regroup)
 					}
 				]
 			}

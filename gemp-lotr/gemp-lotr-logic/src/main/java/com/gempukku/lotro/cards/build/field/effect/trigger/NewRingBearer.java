@@ -7,12 +7,11 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.filters.Filters;
-import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
-import com.gempukku.lotro.logic.timing.results.RevealCardFromTopOfDeckResult;
+import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.NewRingBearerResult;
 import org.json.simple.JSONObject;
 
-public class RevealsCardFromTopOfDrawDeck implements TriggerCheckerProducer {
+public class NewRingBearer implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(value, "filter");
@@ -23,18 +22,19 @@ public class RevealsCardFromTopOfDrawDeck implements TriggerCheckerProducer {
 
         return new TriggerChecker() {
             @Override
-            public boolean isBefore() {
-                return false;
+            public boolean accepts(ActionContext actionContext) {
+
+                if(actionContext.getEffectResult().getType() != EffectResult.Type.NEW_RING_BEARER)
+                    return false;
+
+                final Filterable filterable = filterableSource.getFilterable(actionContext);
+                var result = (NewRingBearerResult) actionContext.getEffectResult();
+
+                return Filters.and(filterable).accepts(actionContext.getGame(), result.getNewRingBearer());
             }
 
             @Override
-            public boolean accepts(ActionContext actionContext) {
-                if (TriggerConditions.revealedCardsFromTopOfDeck(actionContext.getEffectResult(), actionContext.getPerformingPlayer())) {
-                    RevealCardFromTopOfDeckResult revealCardFromTopOfDeckResult = (RevealCardFromTopOfDeckResult) actionContext.getEffectResult();
-                    final Filterable filterable = filterableSource.getFilterable(actionContext);
-                    final PhysicalCard revealedCard = revealCardFromTopOfDeckResult.getRevealedCard();
-                    return Filters.accepts(actionContext.getGame(), revealedCard, filterable);
-                }
+            public boolean isBefore() {
                 return false;
             }
         };

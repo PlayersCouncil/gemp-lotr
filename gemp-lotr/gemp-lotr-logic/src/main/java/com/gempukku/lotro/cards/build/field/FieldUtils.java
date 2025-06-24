@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class FieldUtils {
@@ -128,6 +129,21 @@ public class FieldUtils {
         else if (value instanceof final JSONArray array) {
             return (JSONObject[]) array.toArray(new JSONObject[0]);
         }
+        throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
+    }
+
+    public static JSONObject[][] getNestedObjectArray(Object value, String key) throws InvalidCardDefinitionException {
+        if (value == null)
+            return new JSONObject[0][0];
+        else if (value instanceof final JSONArray array) {
+            var arrays = new ArrayList<JSONObject[]>();
+            for(int i = 0; i < array.size(); ++i) {
+                arrays.add(getObjectArray(array.get(i), "key[" + i + "]"));
+            }
+            return arrays.toArray(new JSONObject[0][]);
+        }
+
+
         throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
     }
 

@@ -494,36 +494,31 @@
 					type: WinsSkirmish
 					filter: title(Shelob)
 				}
-				cost: {
-					type: DiscardStackedCards
-					on: Gollum, item
-					select: choose(minion)
-					count: 3
-				}
-				effect: [
+				cost: [
 					{
-						type: AddTrigger
-						until: start(regroup)
-						requires: {
-							type: CanSpot
-							filter: title(Shelob)
-						}
-						trigger: {
-							type: afterAllSkirmishes
-						}
-						effect: {
-							type: setupExtraAssignmentAndSkirmishes
-							filter: title(Shelob)
-						}
+						type: DiscardStackedCards
+						on: Gollum, item
+						select: choose(minion)
+						count: 3
 					}
 					{
 						type: Discard
 						select: self
 					}
 				]
+				effect: [
+					{
+						type: AddKeyword
+						select: choose(title(Shelob))
+						keyword: relentless
+						until: start(regroup)
+					}
+					
+				]
 			}
 		]
-		gametext: Each time Shelob is assigned to a skirmish, you may play a [gollum] item from your discard pile.<br>Response: If Shelob wins a skirmish, discard 3 minions stacked on [gollum] items to make her participate in one additional assignment and skirmish phase after fierce skirmishes. Discard this condition.
+		gametext: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.\Response: If Shelob wins a skirmish, discard this condition and 3 minions stacked on [gollum] items to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skrimishes after fierce)</i>. 
+
 		lore: ""
 		promotext: ""
 		alts: {

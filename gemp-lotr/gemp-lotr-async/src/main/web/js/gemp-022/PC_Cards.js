@@ -1214,6 +1214,32 @@ var PCCards = {
 	'103_114': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E114.0_card.jpg',
 	// Pinnacle of Doom (V3_115)
 	'103_115': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E115.0_card.jpg',
+	// Pippin's Pipe (V3_116)
+	'103_116': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E116.0_card.jpg',
+	// Merry's Pipe (V3_117)
+	'103_117': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E117.0_card.jpg',
+	// Treasured Pipe (V3_118)
+	'103_118': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E118.0_card.jpg',
+	// Teach Me Your Herb-lore (V3_119)
+	'103_119': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E119.0_card.jpg',
+	// Flotsam (V3_120)
+	'103_120': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E120.0_card.jpg',
+	// Jetsam (V3_121)
+	'103_121': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E121.0_card.jpg',
+	// Hornblower Barrel (V3_122)
+	'103_122': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E122.0_card.jpg',
+	// Saruman's Hospitality (V3_123)
+	'103_123': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E123.0_card.jpg',
+	// Wizard's Pipe (V3_124)
+	'103_124': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E124.0_card.jpg',
+	// One Ill Turn Deserves Another (V3_125)
+	'103_125': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E125.0_card.jpg',
+	// Savage Fury (V3_126)
+	'103_126': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E126.0_card.jpg',
+	// Nor Is He Early (V3_127)
+	'103_127': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E127.0_card.jpg',
+	// A Wizard Knows Better (V3_128)
+	'103_128': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E128.0_card.jpg',
 	
 	//V3 Hinder Errata
 	// Blood Runs Chill (8R3) [Errata]

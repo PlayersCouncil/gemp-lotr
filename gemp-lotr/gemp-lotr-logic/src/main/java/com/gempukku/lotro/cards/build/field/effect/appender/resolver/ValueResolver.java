@@ -152,13 +152,13 @@ public class ValueResolver {
                     }
                 };
             } else if (type.equalsIgnoreCase("sum")) {
-                FieldUtils.validateAllowedFields(object, "source");
+                FieldUtils.validateAllowedFields(object, "source", "over", "limit", "multiplier", "divider");
                 final JSONArray sourceArray = FieldUtils.getArray(object.get("source"), "source");
                 ValueSource[] sources = new ValueSource[sourceArray.size()];
                 for (int i = 0; i < sources.length; i++)
                     sources[i] = ValueResolver.resolveEvaluator(sourceArray.get(i), 0, environment);
 
-                return new ValueSource() {
+                var sumSource =  new ValueSource() {
                     @Override
                     public Evaluator getEvaluator(ActionContext actionContext) {
                         Evaluator[] evaluators = new Evaluator[sources.length];
@@ -176,13 +176,15 @@ public class ValueResolver {
 
                     @Override
                     public boolean canPreEvaluate() {
-                        for (int i = 0; i < sources.length; i++) {
-                            if (!sources[i].canPreEvaluate())
-                                return false;
-                        }
+						for (ValueSource source : sources) {
+							if (!source.canPreEvaluate())
+								return false;
+						}
                         return true;
                     }
                 };
+
+                return new SmartValueSource(environment, object, sumSource);
             } else if (type.equalsIgnoreCase("abs")) {
                 FieldUtils.validateAllowedFields(object, "value");
                 ValueSource source = resolveEvaluator(object.get("value"), 0, environment);
@@ -629,11 +631,13 @@ public class ValueResolver {
                             });
                 }
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                FieldUtils.validateAllowedFields(object, "filter", "hindered", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final boolean hindered = FieldUtils.getBoolean(object.get("hindered"), "hindered", false);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, override, filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachHinderedYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

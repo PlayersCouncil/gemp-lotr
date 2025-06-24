@@ -72,18 +72,24 @@ public class AssignmentCost implements EffectProcessor {
             payAssignmentCostActionSource.addPlayRequirement(requirement);
         }
         payAssignmentCostActionSource.addPlayRequirement(
-                new Requirement() {
-                    @Override
-                    public boolean accepts(ActionContext actionContext) {
-                        LotroGame game = actionContext.getGame();
-                        GameState gameState = game.getGameState();
+				actionContext -> {
+					LotroGame game = actionContext.getGame();
+					GameState gameState = game.getGameState();
 
-                        return TriggerConditions.freePlayerStartedAssigning(game, actionContext.getEffectResult())
-                                && (gameState.isNormalSkirmishes() || (
-                                gameState.isFierceSkirmishes() && game.getModifiersQuerying().hasKeyword(game, actionContext.getSource(), Keyword.FIERCE)));
-                    }
-                }
-        );
+					return TriggerConditions.freePlayerStartedAssigning(game, actionContext.getEffectResult())
+							&& (
+									gameState.isNormalSkirmishes()
+									|| (
+											gameState.isFierceSkirmishes()
+											&& game.getModifiersQuerying().hasKeyword(game, actionContext.getSource(), Keyword.FIERCE)
+										)
+									|| (
+											gameState.isExtraSkirmishes()
+											&& game.getModifiersQuerying().hasKeyword(game, actionContext.getSource(), Keyword.RELENTLESS)
+										)
+							);
+				}
+		);
 
         payAssignmentCostActionSource.addEffect(
                 new EffectAppender() {

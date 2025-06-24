@@ -18,6 +18,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("addkeyword", new AddKeyword());
         modifierProducers.put("addkeywordfromcards", new AddKeywordFromCards());
         modifierProducers.put("addnotwilightforcompanionmove", new AddNoTwilightForCompanionMove());
+        modifierProducers.put("addrace", new AddRace());
         modifierProducers.put("addsignet", new AddSignet());
         modifierProducers.put("alliestakearcheryfirewoundsinsteadofcompanions", new AddModifierFlag(ModifierFlag.ALLIES_TAKE_ARCHERY_FIRE_WOUNDS_INSTEAD_OF_COMPANIONS));
         modifierProducers.put("allycanparticipateinarcheryfireandskirmishes", new AllyCanParticipateInArcheryFireAndSkirmishes());
@@ -58,6 +59,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
+        modifierProducers.put("duplicateactionfromphase", new DuplicateActionFromPhase());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
         modifierProducers.put("fpculturecount", new FPCultureCount());
         modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));

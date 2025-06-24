@@ -61,6 +61,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("killed", new Killed());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
+        triggerCheckers.put("newringbearer", new NewRingBearer());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
         triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
@@ -70,7 +71,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("removesculturetoken", new RemovesCultureToken());
         triggerCheckers.put("replacessite", new ReplacesSite());
         triggerCheckers.put("restored", new Restored());
-        triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
+        triggerCheckers.put("revealscardfromdrawdeck", new RevealsCardFromDrawDeck());
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
         triggerCheckers.put("siteliberated", new SiteLiberated());
         triggerCheckers.put("sitecontrolled", new SiteControlled());

@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.PossessionClass;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,15 +9,16 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V3_001_Tests
+public class Card_V3_116_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_1");
+					put("card", "103_116");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -30,41 +28,38 @@ public class Card_V3_001_Tests
 	}
 
 	@Test
-	public void PhialofGaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinsPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Phial of Galadriel, Bane of Darkness
+		 * Name: Pippin's Pipe
 		 * Unique: true
 		 * Side: Free Peoples
-		 * Culture: Elven
-		 * Twilight Cost: 0
-		 * Type: Artifact
-		 * Subtype: Phial
-		 * Vitality: 1
-		 * Game Text: Bearer must be the Ring-bearer. Discard this if you can spot more than 4 companions.
-		* 	Maneuver: Add a burden and hinder this to hinder a support Shadow card and all cards sharing a title with that card.
-		* 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Pipe
+		 * Game Text: Bearer must be an unbound Hobbit.
+		* 	Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Phial of Galadriel", card.getBlueprint().getTitle());
-		assertEquals("Bane of Darkness", card.getBlueprint().getSubtitle());
+		assertEquals("Pippin's Pipe", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PHIAL));
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void PhialofGaladrielTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinsPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

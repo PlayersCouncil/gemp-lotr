@@ -49,7 +49,7 @@ public class Hindered implements TriggerCheckerProducer {
                 String performingPlayer = null;
                 PhysicalCard hinderedCard = null;
 
-                if(TriggerConditions.forEachDiscardedFromPlay(actionContext.getGame(), actionContext.getEffectResult(), filterable)) {
+                if(TriggerConditions.forEachHindered(actionContext.getGame(), actionContext.getEffectResult(), filterable)) {
                     var hinderedResult = (HinderedResult) actionContext.getEffectResult();
                     source = hinderedResult.getSource();
                     performingPlayer = hinderedResult.getPerformingPlayer();

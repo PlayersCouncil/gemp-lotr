@@ -80,7 +80,8 @@ public enum Keyword implements Filterable {
 
     //PC Keywords
     CONCEALED("Concealed", true, false, false, true),
-    EXPOSED("Exposed", true, false, false, true);
+    EXPOSED("Exposed", true, false, false, true),
+    RELENTLESS("Relentless", true, false, false, true);
 
     private final String humanReadable;
     private final boolean infoDisplayable;

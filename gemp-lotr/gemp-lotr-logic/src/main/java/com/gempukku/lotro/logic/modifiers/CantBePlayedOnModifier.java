@@ -5,11 +5,11 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
-public class MayNotBePlayedOnModifier extends AbstractModifier {
+public class CantBePlayedOnModifier extends AbstractModifier {
     private final Filterable _unplayableCardFilter;
 
-    public MayNotBePlayedOnModifier(PhysicalCard source, Condition condition, Filterable affectFilter, Filterable unplayableCardFilter) {
-        super(source, "Affected by \"may not be played on\" limitation", affectFilter, condition, ModifierEffect.TARGET_MODIFIER);
+    public CantBePlayedOnModifier(PhysicalCard source, Condition condition, Filterable affectFilter, Filterable unplayableCardFilter) {
+        super(source, "Affected by \"cannot be played on\" limitation", affectFilter, condition, ModifierEffect.TARGET_MODIFIER);
         _unplayableCardFilter = unplayableCardFilter;
     }
 

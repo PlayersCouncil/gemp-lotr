@@ -18,7 +18,6 @@
 		culture: Wraith
 		twilight: 2
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{
@@ -303,7 +302,7 @@
 			rarity: _
 		}
 		title: Morgul Legions
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Wraith
 		twilight: 1

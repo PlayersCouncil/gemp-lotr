@@ -246,10 +246,20 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean revealedCardsFromTopOfDeck(EffectResult effectResult, String playerId) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_REVEALED_FROM_TOP_OF_DECK) {
-            RevealCardFromTopOfDeckResult revealCardFromTopOfDeckResult = (RevealCardFromTopOfDeckResult) effectResult;
-            return revealCardFromTopOfDeckResult.getPlayerId().equals(playerId);
+    public static boolean revealedCardsFromDeck(EffectResult effectResult, LotroGame game, String deck, Filterable source, Filterable card) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_REVEALED_FROM_DECK) {
+            var result = (RevealedCardFromDeckResult) effectResult;
+
+            if(deck != null && !result.getDeck().equals(deck))
+                return false;
+
+            if(!Filters.and(source).accepts(game, result.getSource()))
+                return false;
+
+            if(!Filters.and(card).accepts(game, result.getRevealedCard()))
+                return false;
+
+            return true;
         }
         return false;
     }
