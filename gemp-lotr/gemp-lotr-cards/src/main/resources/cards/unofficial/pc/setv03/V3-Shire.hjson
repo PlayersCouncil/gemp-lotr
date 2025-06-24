@@ -850,19 +850,29 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		target: self
-		#target: title(an unbound Hobbit)
+		target: unbound, Hobbit
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: Discard
+					select: choose(pipeweed)
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: RemoveThreats
+						amount: {
+							type: ForEachYouCanSpot
+							filter: pipe
+						}
+					}
+					{
+						type: Hinder
+						player: Shadow
+						select: choose(companion)
+					}
+				]
 			}
 		]
 		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
@@ -894,19 +904,30 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		target: self
-		#target: title(an unbound Hobbit)
+		target: unbound,Hobbit
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: Discard
+					select: choose(pipeweed)
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: RemoveTokensCumulative
+						count: {
+							type: ForEachYouCanSpot
+							filter: pipe
+						}
+						filter: side(Shadow)
+					}
+					{
+						type: Hinder
+						player: Shadow
+						select: choose(companion)
+					}
+				]
 			}
 		]
 		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X culture tokens, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
@@ -938,19 +959,52 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		target: self
-		#target: a companion
+		target: companion
 		effects: [
 			{
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: or(pipe, and(unbound,Hobbit))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: ChooseActiveCards
+						select: choose(or(pipe, pipeweed),not(self))
+						memorize: hinderedCards
+						count: {
+							type: Range
+							from: 0
+							to: {
+								type: ForEachYouCanSpot
+								filter: or(pipe, pipeweed),not(self)
+							}
+						}
+						text: Choose pipes and/or pipeweed to hinder
+					}
+					{
+						type: Hinder
+						select: self
+					}
+					{
+						type: Hinder
+						ignoreCostCheckFailure: true
+						select: all(memory(hinderedCards))
+					}
+				]
+				effect: {
+					type: ModifyStrength
+					amount: {
+						type: ForEachInMemory
+						memory: hinderedCards
+					}
+					select: choose(companion, HasAttached(pipe))
+					limitPerCardThisPhase: 3
+				}
 			}
 		]
 		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Skirmish: Hinder this pipe and X other pipes or pipeweeds to make a companion strength +X (limit +3).
@@ -981,22 +1035,26 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		target: self
-		keywords: Support Area
+		keywords: [
+			Support Area
+			Pipeweed
+		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: ShuffleCardsFromDiscardIntoDrawDeck
+					select: choose(or(pipe,pipeweed))
+					count: 0-2
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
 		]
-		gametext: When you play this possession, you may shuffle up to 2 pipes or pipeweed into your draw deck from your discard pile.
+		gametext: When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1007,48 +1065,7 @@
 		}
 	}
 
-	103_121: {
-		cardInfo: {
-			//id: 103_121.0
-			parent: 103_121
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E121.0_card.jpg
-			collInfo: V3_121
-			rarity: _
-		}
-		title: Jetsam
-		unique: false
-		side: Free Peoples
-		culture: Shire
-		twilight: 1
-		type: Possession
-		target: self
-		keywords: Support Area
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
-		gametext: When you play this possession, you may exert a companion bearing a pipe to restore a companion or allow an unhasty companion to participate in skirmishes until the regroup phase.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	
 
 	103_122: {
 		cardInfo: {
@@ -1067,19 +1084,38 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		target: self
-		keywords: Support Area
+		keywords: [
+			Support Area
+			Pipeweed
+		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: DiscardCardsFromDrawDeck
+					select: choose(side(Free Peoples))
+					showAll: true
+					shuffle: true
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: DiscardedFromPlayTrigger
+				optional: true
+				cost: {
+					type: Spot
+					filter: another, title(Hornblower Barrel)
+				}
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(side(Free Peoples), not(event))
+					count: 2
+					discard: you
+				}
 			}
 		]
 		gametext: When you play this possession, you may discard a Free Peoples card from your draw deck.<br>When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 Free Peoples cards (except events) from your discard pile into your hand.

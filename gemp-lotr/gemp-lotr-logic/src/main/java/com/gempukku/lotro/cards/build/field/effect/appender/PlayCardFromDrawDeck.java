@@ -47,7 +47,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
             // DO NOT WANT to pretend that there is a card in the draw deck if it's not actually there.  Else the
             // player will be offered a "play from draw deck" button that lies to them and will cause the effect to
             // fizzle.
-            countSource = actionContext -> new ConstantEvaluator(1);;
+            countSource = actionContext -> new ConstantEvaluator(1);
         }
 
 

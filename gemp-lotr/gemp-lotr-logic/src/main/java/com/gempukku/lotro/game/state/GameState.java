@@ -1314,6 +1314,12 @@ public class GameState {
             listener.setCurrentPhase(getPhaseString());
     }
 
+    public Phase setFakePhase(Phase phase) {
+        var realPhase = _currentPhase;
+        _currentPhase = phase;
+        return realPhase;
+    }
+
     public Phase getCurrentPhase() {
         return _currentPhase;
     }

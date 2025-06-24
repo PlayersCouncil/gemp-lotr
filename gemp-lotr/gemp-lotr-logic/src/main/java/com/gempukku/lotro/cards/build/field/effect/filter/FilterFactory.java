@@ -158,6 +158,8 @@ public class FilterFactory {
                 (actionContext) -> Filters.notAssignedToSkirmish);
         simpleFilters.put("oneperbearer", (actionContext) ->
                 Filters.not(Filters.hasAttached(Filters.name(actionContext.getSource().getBlueprint().getTitle()))));
+        simpleFilters.put("limitoneperbearer", simpleFilters.get("oneperbearer"));
+        simpleFilters.put("limit1perbearer", simpleFilters.get("oneperbearer"));
         simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
         simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
         simpleFilters.put("playable", (actionContext) -> Filters.playable(actionContext.getGame(), 0));

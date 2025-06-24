@@ -59,6 +59,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
+        modifierProducers.put("duplicateactionfromphase", new DuplicateActionFromPhase());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
         modifierProducers.put("fpculturecount", new FPCultureCount());
         modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));

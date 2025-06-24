@@ -633,14 +633,50 @@
 		effects: [
 			{
 				type: Event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: PlayCardFromDrawDeck
+						select: choose(pipe)
+						shuffle: true
+						showAll: true
+						memorize: playedPipeA
+					}
+					{
+						type: If
+						check: {
+							type: HasCardInMemory
+							memory: playedPipeA
+						}
+						true: {
+							type: PlayCardFromDrawDeck
+							select: choose(pipe)
+							shuffle: true
+							showAll: true
+							memorize: playedPipeB
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CantSpot
+							filter: title(Theoden)
+						}
+						true: {
+							type: AddBurdens
+							amount: {
+								type: Sum
+								source: [
+									{
+										type: ForEachInMemory
+										memory: playedPipeA
+									}
+									{
+										type: ForEachInMemory
+										memory: playedPipeB
+									}
+								]
+							}
+						}	
 					}
 				]
 			}
