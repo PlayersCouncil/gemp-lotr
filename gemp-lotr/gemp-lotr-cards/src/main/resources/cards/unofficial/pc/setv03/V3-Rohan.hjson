@@ -18,7 +18,6 @@
 		culture: Rohan
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area
@@ -65,7 +64,6 @@
 		culture: Rohan
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area
@@ -112,7 +110,6 @@
 		culture: Rohan
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area

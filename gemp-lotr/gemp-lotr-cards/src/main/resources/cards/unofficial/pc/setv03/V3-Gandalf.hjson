@@ -410,7 +410,6 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
-		target: self
 		keywords: [
 			Support Area
 			Pipeweed

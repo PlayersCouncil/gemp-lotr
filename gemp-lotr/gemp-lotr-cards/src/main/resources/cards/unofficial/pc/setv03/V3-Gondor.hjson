@@ -235,7 +235,6 @@
 		culture: Gondor
 		twilight: 3
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{
@@ -1096,7 +1095,6 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area
@@ -1143,7 +1141,6 @@
 		culture: Gondor
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area
@@ -1190,7 +1187,6 @@
 		culture: Gondor
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: [
 			Beacon
 			Support Area
