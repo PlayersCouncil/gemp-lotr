@@ -31,10 +31,10 @@ public class LoginRequestHandler extends LotroServerRequestHandler implements Ur
 
             Player player = _playerDao.loginUser(login, password);
             if (player != null) {
-                if (StringUtils.isNullOrEmpty(player.getPassword())) {
-                    throw new HttpProcessingException(202);
-                }
                 if (player.getType().contains(Player.Type.USER.getValue())) {
+                    if (StringUtils.isNullOrEmpty(player.getPassword())) {
+                        throw new HttpProcessingException(202);
+                    }
                     final Date bannedUntil = player.getBannedUntil();
                     if (bannedUntil != null && bannedUntil.after(new Date()))
                         throw new HttpProcessingException(409);

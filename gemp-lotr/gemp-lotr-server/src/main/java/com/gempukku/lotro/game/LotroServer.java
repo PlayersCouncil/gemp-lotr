@@ -9,6 +9,8 @@ import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.hall.GameSettings;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.simulation.BotPlayer;
+import com.gempukku.lotro.simulation.BotService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.*;
@@ -36,15 +38,18 @@ public class LotroServer extends AbstractServer {
     private final GameRecorder _gameRecorder;
     private final MarkdownParser _markdownParser;
 
+    private final BotService _botService;
+
     private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
     public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
-            GameRecorder gameRecorder, MarkdownParser parser) {
+            GameRecorder gameRecorder, MarkdownParser parser, BotService botService) {
         _deckDao = deckDao;
         _lotroCardBlueprintLibrary = library;
         _chatServer = chatServer;
         _gameRecorder = gameRecorder;
         _markdownParser = parser;
+        _botService = botService;
     }
 
     protected void cleanup() {
@@ -91,8 +96,10 @@ public class LotroServer extends AbstractServer {
     public LotroGameMediator createNewGame(String tournamentName, final LotroGameParticipant[] participants, GameSettings gameSettings) {
         _lock.writeLock().lock();
         try {
-            if (participants.length < 2)
+            if (participants.length < 2 && !gameSettings.isSolo())
                 throw new IllegalArgumentException("There has to be at least two players");
+            if (participants.length < 1 && gameSettings.isSolo())
+                throw new IllegalArgumentException("There has to be at least one player in a solo game");
             final String gameId = String.valueOf(_nextGameId);
 
             if (gameSettings.competitive()) {
@@ -116,7 +123,7 @@ public class LotroServer extends AbstractServer {
 
             LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.format(), participants,
                     _lotroCardBlueprintLibrary, gameSettings.timeSettings(), spectate, !gameSettings.competitive(),
-                    gameSettings.hiddenGame(), tournamentName, _markdownParser);
+                    gameSettings.hiddenGame(), tournamentName, _markdownParser, _botService, gameSettings.isSolo());
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override
@@ -145,6 +152,11 @@ public class LotroServer extends AbstractServer {
                 decks.put(participant.getPlayerId(), participant.getDeck());
             }
 
+            BotPlayer botPlayer = lotroGameMediator.getBotPlayer();
+            if (botPlayer != null) {
+                decks.put(botPlayer.getName(), lotroGameMediator.getBotDeck());
+            }
+
             lotroGameMediator.sendMessageToPlayers("Players in the game are: " + players);
 
             final var gameRecordingInProgress = _gameRecorder.recordGame(lotroGameMediator, gameSettings.format(), tournamentName, decks);
@@ -161,7 +173,11 @@ public class LotroServer extends AbstractServer {
 
                     @Override
                     public void gameCancelled() {
-                        gameRecordingInProgress.finishRecording(participants[0].getPlayerId(), "Game cancelled due to error", participants[1].getPlayerId(), "Game cancelled due to error");
+                        if (participants.length == 2) {
+                            gameRecordingInProgress.finishRecording(participants[0].getPlayerId(), "Game cancelled due to error", participants[1].getPlayerId(), "Game cancelled due to error");
+                        } else {
+                            gameRecordingInProgress.finishRecording(participants[0].getPlayerId(), "Game cancelled due to error", botPlayer.getName(), "Game cancelled due to error");
+                        }
                     }
                 }
             );

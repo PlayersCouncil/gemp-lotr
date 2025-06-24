@@ -60,6 +60,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             getHall(request, responseWriter);
         } else if (uri.equals("") && request.method() == HttpMethod.POST) {
             createTable(request, responseWriter);
+        } else if (uri.equals("/solo") && request.method() == HttpMethod.POST) {
+            createSoloTable(request, responseWriter);
         } else if (uri.equals("/update") && request.method() == HttpMethod.POST) {
             updateHall(request, responseWriter);
         } else if (uri.equals("/formats/html") && request.method() == HttpMethod.GET) {
@@ -201,6 +203,40 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 catch (HallException ex) {
                     _log.error(ex);
                 }
+                _log.error(e);
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
+        }
+        catch (Exception ex)
+        {
+            //This is a worthless error that doesn't need to be spammed into the log
+            if(!IgnoreError(ex)) {
+                _log.error("Error response for " + request.uri(), ex);
+            }
+            responseWriter.writeXmlResponse(marshalException(new HallException("Failed to create table. Please try again later.")));
+        }
+        finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void createSoloTable(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String format = getFormParameterSafely(postDecoder, "format");
+            String deckName = getFormParameterSafely(postDecoder, "deckName");
+            String isPrivateVal = getFormParameterSafely(postDecoder, "isPrivate");
+            boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
+
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            try {
+                _hallServer.createNewSoloTable(format, resourceOwner, deckName, isPrivate);
+                responseWriter.writeXmlResponse(null);
+            }
+            catch (HallException e) {
+                // TODO try again assuming it's a new player with one of the default library decks selected
                 _log.error(e);
                 responseWriter.writeXmlResponse(marshalException(e));
             }

@@ -130,6 +130,14 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
     }
 
     @Override
+    public boolean registerBot(String login) throws LoginInvalidException {
+        boolean registered = _delegate.registerBot(login);
+        if (registered)
+            _playerByName.remove(login);
+        return registered;
+    }
+
+    @Override
     public void setLastReward(Player player, int currentReward) throws SQLException {
         _delegate.setLastReward(player, currentReward);
         _playerById.remove(player.getId());

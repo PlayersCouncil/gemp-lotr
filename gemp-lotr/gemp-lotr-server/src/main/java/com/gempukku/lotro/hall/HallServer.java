@@ -296,7 +296,27 @@ public class HallServer extends AbstractServer {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden);
+        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
+
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
+
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            final GameTable table = tableHolder.createTable(player, gameSettings, lotroDeck);
+            if (table != null)
+                createGameFromTable(table);
+
+            hallChanged();
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    public void createNewSoloTable(String type, Player player, String deckName, boolean isPrivate) throws  HallException {
+        if (_shutdown)
+            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
+
+        GameSettings gameSettings = createGameSettings(type, "slow", "Solo game", false, isPrivate, false, true);
 
         LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
 
@@ -316,7 +336,7 @@ public class HallServer extends AbstractServer {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden);
+        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
 
         LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType());
 
@@ -332,7 +352,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    private GameSettings createGameSettings(String type, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
+    private GameSettings createGameSettings(String type, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden, boolean isSolo) throws HallException {
         League league = null;
         LeagueSerieInfo leagueSerie = null;
         CollectionType collectionType = _defaultCollectionType;
@@ -370,7 +390,7 @@ public class HallServer extends AbstractServer {
             throw new HallException("This format is not supported: " + type);
 
         return new GameSettings(collectionType, format, null, league, leagueSerie,
-                league != null, isPrivate, isInviteOnly, isHidden, gameTimer, description);
+                league != null, isPrivate, isInviteOnly, isHidden, gameTimer, description, isSolo);
     }
 
     public boolean joinQueue(String queueId, Player player, String deckName) throws HallException, SQLException, IOException {
@@ -940,11 +960,11 @@ public class HallServer extends AbstractServer {
             if (tournament.isWC()) {
                 gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                         tournamentId, null, null, true, true, false,
-                        false, GameTimer.CHAMPIONSHIP_TIMER, null);
+                        false, GameTimer.CHAMPIONSHIP_TIMER, null, false);
             } else {
                 gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                         tournamentId, null, null, !casual, !casual, false,
-                        false, GameTimer.TOURNAMENT_TIMER, null);
+                        false, GameTimer.TOURNAMENT_TIMER, null, false);
             }
         }
 
@@ -1010,7 +1030,7 @@ public class HallServer extends AbstractServer {
         private ManualGameSpawner(Tournament tourney, LotroFormat format, GameTimer timer, String description) {
             _tournamentName = tourney.getTournamentName();
             _settings = new GameSettings(null, format,
-                    tourney.getTournamentId(), null, null, true, false, false, false, timer, description);
+                    tourney.getTournamentId(), null, null, true, false, false, false, timer, description, false);
         }
 
         @Override

@@ -153,10 +153,17 @@ var GempLotrHallUI = Class.extend({
 				var isInviteOnly = that.isInviteOnlyCheckbox.is(':checked');
 				if (deck != null)
 					console.log("creating table");
-					that.comm.createTable(format, deck, timer, tableDesc, isPrivate, isInviteOnly, function (xml) {
-						console.log("received table response");
-						that.processResponse(xml);
-					});
+					if (tableDesc !== "solo") {
+						that.comm.createTable(format, deck, timer, tableDesc, isPrivate, isInviteOnly, function (xml) {
+							console.log("received table response");
+							that.processResponse(xml);
+						});
+					} else {
+						that.comm.createSoloTable(format, deck, isPrivate, function (xml) {
+							console.log("received table response");
+							that.processResponse(xml);
+						});
+					}
 			});
 
 		this.getHall();
