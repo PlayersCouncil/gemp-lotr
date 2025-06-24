@@ -92,7 +92,6 @@
 		type: Artifact
 		vitality: 2
 		itemclass: Mount
-		target: self
 		target: Southron
 		effects: [
 			{
@@ -1038,7 +1037,6 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		target: self
 		keywords: Support Area
 		effects: [
 			{
@@ -1082,7 +1080,6 @@
 		twilight: 2
 		type: Possession
 		strength: -3
-		target: self
 		keywords: Support Area
 		effects: [
 			{
