@@ -1,4 +1,4 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots.simulation;
 
 public class SimulationStats {
     private final int bot1Wins;

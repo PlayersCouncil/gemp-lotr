@@ -18,9 +18,9 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import com.gempukku.lotro.simulation.BotGameStateListener;
-import com.gempukku.lotro.simulation.BotPlayer;
-import com.gempukku.lotro.simulation.BotService;
+import com.gempukku.lotro.bots.BotGameStateListener;
+import com.gempukku.lotro.bots.BotPlayer;
+import com.gempukku.lotro.bots.BotService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,5 +1,6 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots.simulation;
 
+import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.game.DefaultUserFeedback;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;

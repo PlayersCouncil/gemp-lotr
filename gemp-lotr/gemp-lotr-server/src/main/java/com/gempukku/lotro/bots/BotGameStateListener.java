@@ -1,4 +1,4 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots;
 
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.communication.GameStateListener;

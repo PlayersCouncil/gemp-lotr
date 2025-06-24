@@ -1,5 +1,10 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots;
 
+import com.gempukku.lotro.bots.random.RandomDecisionBot;
+import com.gempukku.lotro.bots.simulation.FotrStartersSimulation;
+import com.gempukku.lotro.bots.simulation.SimpleBatchSimulationRunner;
+import com.gempukku.lotro.bots.simulation.SimulationRunner;
+import com.gempukku.lotro.bots.simulation.SimulationStats;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.db.LoginInvalidException;

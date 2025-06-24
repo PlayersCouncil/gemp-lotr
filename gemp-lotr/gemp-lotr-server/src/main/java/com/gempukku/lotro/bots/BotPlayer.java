@@ -1,4 +1,4 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots;
 
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;

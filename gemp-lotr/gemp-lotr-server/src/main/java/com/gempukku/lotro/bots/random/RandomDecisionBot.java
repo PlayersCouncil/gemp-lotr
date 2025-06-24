@@ -1,5 +1,6 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots.random;
 
+import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;

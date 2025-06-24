@@ -1,4 +1,4 @@
-package com.gempukku.lotro.simulation;
+package com.gempukku.lotro.bots.simulation;
 
 public interface SimulationRunner {
     SimulationStats run();
