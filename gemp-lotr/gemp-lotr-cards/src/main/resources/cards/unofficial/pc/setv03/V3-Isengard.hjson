@@ -1,0 +1,180 @@
+{
+
+	103_125: {
+		cardInfo: {
+			//id: 103_125.0
+			parent: 103_125
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E125.0_card.jpg
+			collInfo: V3_125
+			rarity: _
+		}
+		title: One Ill Turn Deserves Another
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot 2 [isengard] minions (or spot Saruman).<br>Each time your minion is hindered or discarded by a Free Peoples card, hinder a companion.<br>Each time your condition is hindered or discarded by a Free Peoples card, hinder a Free Peoples condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_126: {
+		cardInfo: {
+			//id: 103_126.0
+			parent: 103_126
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E126.0_card.jpg
+			collInfo: V3_126
+			rarity: _
+		}
+		title: Savage Fury
+		unique: 2
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time your [isengard] minion wins a skirmish, discard another Savage Fury to hinder each Free Peoples card on a companion it was skirmishing.<br>Maneuver: Discard a minion to make your [isengard] minion <b>fierce</b> or <b>relentless</b> until the regroup phase <i>(it participates in an additional round of skirmishes after fierce)</i>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_127: {
+		cardInfo: {
+			//id: 103_127.0
+			parent: 103_127
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E127.0_card.jpg
+			collInfo: V3_127
+			rarity: _
+		}
+		title: Nor Is He Early
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: ResponseEvent
+				trigger: {
+					type: StartOfTurn
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: If a Free Peoples character is played, add (3).  If you can spot 5 or more companions in region 1 or 2 (or if that character is [Gandalf]), spot an [isengard] card to hinder that character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_128: {
+		cardInfo: {
+			//id: 103_128.0
+			parent: 103_128
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E128.0_card.jpg
+			collInfo: V3_128
+			rarity: _
+		}
+		title: A Wizard Knows Better
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Restore 2 [Isengard] cards.  Then you may exert X [isengard] minions (or spot Saruman and spot X other [isengard] minions) to hinder an unbound companion costing up to X.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

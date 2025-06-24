@@ -611,5 +611,49 @@
 			}
 		}
 	}
+	
+	103_119: {
+		cardInfo: {
+			//id: 103_119.0
+			parent: 103_119
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E119.0_card.jpg
+			collInfo: V3_119
+			rarity: _
+		}
+		title: Teach Me Your Herb-lore
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Play up to 2 pipes from your draw deck.  If you cannot spot Theoden, add a burden for each pipe played.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 }

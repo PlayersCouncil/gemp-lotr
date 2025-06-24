@@ -392,5 +392,93 @@
 			}
 		}
 	}
+	
+	103_123: {
+		cardInfo: {
+			//id: 103_123.0
+			parent: 103_123
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E123.0_card.jpg
+			collInfo: V3_123
+			rarity: _
+		}
+		title: Saruman's Hospitality
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		strength: 1
+		target: self
+		#target: title(an unbound Hobbit)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_124: {
+		cardInfo: {
+			//id: 103_124.0
+			parent: 103_124
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E124.0_card.jpg
+			collInfo: V3_124
+			rarity: _
+		}
+		title: Wizard's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		itemclass: Pipe
+		target: self
+		#target: title(an unbound companion)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be an unbound companion.<br>Regroup: If bearer is a Wizard, exert them twice and discard a pipeweed; you may use special abilities on pipes as if it were the Fellowship phase.  Discard this pipe at the end of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 }

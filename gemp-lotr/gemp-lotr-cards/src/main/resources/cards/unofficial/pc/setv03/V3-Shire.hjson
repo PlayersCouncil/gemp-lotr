@@ -830,5 +830,268 @@
 			}
 		}
 	}
+	
+	
+	103_116: {
+		cardInfo: {
+			//id: 103_116.0
+			parent: 103_116
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E116.0_card.jpg
+			collInfo: V3_116
+			rarity: _
+		}
+		title: Pippin's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: self
+		#target: title(an unbound Hobbit)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_117: {
+		cardInfo: {
+			//id: 103_117.0
+			parent: 103_117
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E117.0_card.jpg
+			collInfo: V3_117
+			rarity: _
+		}
+		title: Merry's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: self
+		#target: title(an unbound Hobbit)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X culture tokens, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_118: {
+		cardInfo: {
+			//id: 103_118.0
+			parent: 103_118
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E118.0_card.jpg
+			collInfo: V3_118
+			rarity: _
+		}
+		title: Treasured Pipe
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: self
+		#target: a companion
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Skirmish: Hinder this pipe and X other pipes or pipeweeds to make a companion strength +X (limit +3).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_120: {
+		cardInfo: {
+			//id: 103_120.0
+			parent: 103_120
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E120.0_card.jpg
+			collInfo: V3_120
+			rarity: _
+		}
+		title: Flotsam
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When you play this possession, you may shuffle up to 2 pipes or pipeweed into your draw deck from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_121: {
+		cardInfo: {
+			//id: 103_121.0
+			parent: 103_121
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E121.0_card.jpg
+			collInfo: V3_121
+			rarity: _
+		}
+		title: Jetsam
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When you play this possession, you may exert a companion bearing a pipe to restore a companion or allow an unhasty companion to participate in skirmishes until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_122: {
+		cardInfo: {
+			//id: 103_122.0
+			parent: 103_122
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E122.0_card.jpg
+			collInfo: V3_122
+			rarity: _
+		}
+		title: Hornblower Barrel
+		unique: 2
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When you play this possession, you may discard a Free Peoples card from your draw deck.<br>When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 Free Peoples cards (except events) from your discard pile into your hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
 
 }
