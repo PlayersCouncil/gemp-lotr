@@ -22,13 +22,60 @@
 			{
 				type: ToPlay
 				requires: {
-					type: CanSpot
-					filter: any
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: isengard, minion
+							count: 2
+						}
+						{
+							type: CanSpot
+							filter: title(Saruman)
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: Discarded
+						filter: your, minion
+						source: side(Free Peoples)
+					}
+					{
+						type: Hindered
+						filter: your, minion
+						source: side(Free Peoples)
+					}
+				]
+				effect: {
+					type: Hinder
+					select: choose(companion)
+				}
+			}
+			
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: Discarded
+						filter: your, condition
+						source: side(Free Peoples)
+					}
+					{
+						type: Hindered
+						filter: your, condition
+						source: side(Free Peoples)
+					}
+				]
+				effect: {
+					type: Hinder
+					select: choose(side(Free Peoples), condition)
+				}
 			}
 		]
 		gametext: To play, spot 2 [isengard] minions (or spot Saruman).<br>Each time your minion is hindered or discarded by a Free Peoples card, hinder a companion.<br>Each time your condition is hindered or discarded by a Free Peoples card, hinder a Free Peoples condition.
@@ -62,15 +109,50 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: your, Isengard, minion
+					memorizeLoser: loser
+				}
+				cost: {
+					type: Discard
+					select: choose(another, title(Savage Fury))
+				}
+				effect: {
+					type: Hinder
+					select: all(side(Free Peoples), AttachedTo(memory(loser)))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: Discard
+					select: choose(minion)
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Make your {Isengard} minion Fierce
+						Make your {Isengard} minion Relentless
+					]
+					effects: [
+						{
+							type: AddKeyword
+							select: choose(Isengard, minion)
+							keyword: fierce
+							until: start(regroup)
+						}
+						{
+							type: AddKeyword
+							select: choose(Isengard, minion)
+							keyword: relentless
+							until: start(regroup)
+						}
+					]
+				}
 			}
 		]
 		gametext: Each time your [isengard] minion wins a skirmish, discard another Savage Fury to hinder each Free Peoples card on a companion it was skirmishing.<br>Maneuver: Discard a minion to make your [isengard] minion <b>fierce</b> or <b>relentless</b> until the regroup phase <i>(it participates in an additional round of skirmishes after fierce)</i>.
@@ -106,16 +188,55 @@
 			{
 				type: ResponseEvent
 				trigger: {
-					type: StartOfTurn
-				}
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Played
+					filter: side(Free Peoples), character
+					memorize: playedCard
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: AddTwilight
+						amount: 3
+					}
+					{
+						type: If
+						check: {
+							type: Or
+							requires: [
+								{
+									type: And
+									requires: [
+										{
+											type: CanSpot
+											filter: companion
+											count: 5
+										}
+										{
+											type: IsLessThanOrEqual
+											firstNumber: {
+												type: RegionNumber
+											}
+											secondNumber: 2
+										}
+									]
+								}
+								{
+									type: MemoryMatches
+									memory: playedCard
+									filter: culture(Gandalf)
+								}
+							]
+						}
+						true: {
+							type: CostToEffect
+							cost: {
+								type: Spot
+								filter: Isengard
+							}
+							effect: {
+								type: Hinder
+								select: memory(playedCard)
+							}
+						}
 					}
 				]
 			}
@@ -152,14 +273,63 @@
 		effects: [
 			{
 				type: Event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Restore
+						select: choose(Isengard)
+						count: 2
+					}
+					{
+						type: Optional
+						text: Would you like to exert or spot {Isengard} minions to hinder an unbound companion?
+						effect: {
+							type: If
+							check: {
+								type: CanSpot
+								filter: title(Saruman)
+							}
+							true: [
+								{
+									type: ChooseActiveCards
+									count: any
+									select: choose(Isengard, minion, not(title(Saruman)))
+									memorize: spottedMinions
+									text: Spot X minions
+								}
+								{
+									type: MemorizeNumber
+									amount: {
+										type: ForEachInMemory
+										memory: spottedMinions
+									}
+									memory: totalSpotted
+								}
+								{
+									type: Hinder
+									select: choose(unbound,companion,MaxTwilight(memory(totalSpotted)))
+								}
+							]
+							false: [
+								{
+									type: Exert
+									count: any
+									select: choose(Isengard, minion)
+									memorize: exertedMinions
+								}
+								{
+									type: MemorizeNumber
+									amount: {
+										type: ForEachInMemory
+										memory: exertedMinions
+									}
+									memory: totalExerted
+								}
+								{
+									type: Hinder
+									select: choose(unbound,companion,MaxTwilight(memory(totalExerted)))
+								}
+							]
+						}
 					}
 				]
 			}
