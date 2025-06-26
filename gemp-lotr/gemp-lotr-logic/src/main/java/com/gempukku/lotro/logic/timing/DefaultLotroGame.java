@@ -117,7 +117,7 @@ public class DefaultLotroGame implements LotroGame {
                         var preGameInfo = new PreGameInfo(decks.keySet().stream().toList(), tournamentName, timerInfo,
                                 !allowSpectators, format, formatInfo.toString(), notes, maps);
 
-                        _gameState.initPreGame(preGameInfo);
+                        _gameState.initPreGame(preGameInfo, decks);
                     }
                 }, characterDeathRule);
         _userFeedback = userFeedback;

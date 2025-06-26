@@ -1,6 +1,13 @@
 package com.gempukku.lotro.bots;
 
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
+import com.gempukku.lotro.bots.random.RandomLearningBot;
+import com.gempukku.lotro.bots.rl.LearningStep;
+import com.gempukku.lotro.bots.rl.ReplayBuffer;
+import com.gempukku.lotro.bots.rl.fotrstarters.FotrStarterBot;
+import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.gofirst.GoFirstTrainer;
 import com.gempukku.lotro.bots.simulation.FotrStartersSimulation;
 import com.gempukku.lotro.bots.simulation.SimpleBatchSimulationRunner;
 import com.gempukku.lotro.bots.simulation.SimulationRunner;
@@ -13,13 +20,14 @@ import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import smile.classification.SoftClassifier;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 public class BotService {
-    private static final boolean START_SIMULATIONS_AT_STARTUP = false;
+    private static final boolean START_SIMULATIONS_AT_STARTUP = true;
 
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
@@ -28,6 +36,9 @@ public class BotService {
     private final Random random = new Random();
     private final Map<String, List<BotWithDeck>> formatBotsMap = new HashMap<>();
 
+    private final ReplayBuffer replayBuffer = new ReplayBuffer(100_000);
+    private final ModelRegistry modelRegistry = new ModelRegistry();
+
     public BotService(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, PlayerDAO playerDAO) {
         this.library = library;
         this.formatLibrary = formatLibrary;
@@ -35,17 +46,45 @@ public class BotService {
 
         fillBotParticipantList();
 
+        replayBuffer.addListener(1_000, buffer -> {
+            List<LearningStep> batch = buffer.sampleBatch(buffer.size());
+            buffer.clear();
+
+            GoFirstTrainer trainer = new GoFirstTrainer();
+            SoftClassifier<double[]> model = trainer.train(batch);
+
+            // Save or register model somewhere accessible by bots
+            modelRegistry.setGoFirstModel(model);
+        });
+
         if (START_SIMULATIONS_AT_STARTUP) {
-            startRandomFotrStartersSimulation();
+            System.out.println("getting data");
+            startRandomFotrStartersSimulation(
+                    new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot1", replayBuffer),
+                    new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot2", replayBuffer));
+
+            ZonedDateTime start = DateUtils.Now();
+            System.out.println("training after games");
+            List<LearningStep> batch = replayBuffer.sampleBatch(replayBuffer.size());
+            replayBuffer.clear();
+            GoFirstTrainer trainer = new GoFirstTrainer();
+            SoftClassifier<double[]> model = trainer.train(batch);
+            // Save or register model somewhere accessible by bots
+            modelRegistry.setGoFirstModel(model);
+            System.out.println(DateUtils.HumanDuration(Duration.between(DateUtils.Now(), start).abs()));
+
+            System.out.println("using model");
+
+            startRandomFotrStartersSimulation(
+                    new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot1", modelRegistry),
+                    new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot2", modelRegistry));
         }
     }
 
-    public void startRandomFotrStartersSimulation() {
+    public void startRandomFotrStartersSimulation(BotPlayer b1, BotPlayer b2) {
+        System.out.println("Simulation started");
         SimulationRunner simulationRunner = new SimpleBatchSimulationRunner(
-                new FotrStartersSimulation(library, formatLibrary),
-                new RandomDecisionBot("bot1"),
-                new RandomDecisionBot("bot2"),
-                1000);
+                new FotrStartersSimulation(library, formatLibrary), b1, b2, 500);
 
         ZonedDateTime start = DateUtils.Now();
         SimulationStats simulationStats = simulationRunner.run();

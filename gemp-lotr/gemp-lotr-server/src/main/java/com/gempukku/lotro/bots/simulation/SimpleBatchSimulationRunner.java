@@ -1,6 +1,7 @@
 package com.gempukku.lotro.bots.simulation;
 
 import com.gempukku.lotro.bots.BotPlayer;
+import com.gempukku.lotro.bots.rl.LearningBotPlayer;
 
 public class SimpleBatchSimulationRunner implements SimulationRunner{
     private final Simulation simulation;
@@ -23,6 +24,14 @@ public class SimpleBatchSimulationRunner implements SimulationRunner{
             GameResult result = simulation.simulateGame(bot1, bot2);
             if (result == GameResult.P1_WON) {
                 bot1Wins++;
+            }
+            double bot1Reward = result == GameResult.P1_WON ? 10.0 : 0.0;
+            double bot2Reward = 10.0 - bot1Reward;
+            if (bot1 instanceof LearningBotPlayer) {
+                ((LearningBotPlayer) bot1).endEpisode(bot1Reward);
+            }
+            if (bot2 instanceof LearningBotPlayer) {
+                ((LearningBotPlayer) bot2).endEpisode(bot2Reward);
             }
         }
 
