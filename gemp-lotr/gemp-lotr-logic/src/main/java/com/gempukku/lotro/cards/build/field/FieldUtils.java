@@ -10,6 +10,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class FieldUtils {
@@ -87,6 +89,27 @@ public class FieldUtils {
         } catch (IllegalArgumentException exp) {
             throw new InvalidCardDefinitionException("Unknown enum value - " + string + ", in " + key + " field");
         }
+    }
+
+    public static <T extends Enum<T>> Set<T> getEnumArray(Class<T> enumClass, Object value, String key) throws InvalidCardDefinitionException {
+        if (value == null)
+            return new HashSet<T>();
+
+        //Perhaps it is a single enum outside of an array
+        try {
+            var result = getEnum(enumClass, value, key);
+            return Collections.singleton(result);
+        }
+        catch(InvalidCardDefinitionException ignored) { }
+
+        if (value instanceof final JSONArray array) {
+            var result = new HashSet<T>();
+            for(var item : array) {
+                result.add(getEnum(enumClass, item, key));
+            }
+            return result;
+        }
+        throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
     }
 
     public static SitesBlock getBlock(Object value, String key) throws InvalidCardDefinitionException {

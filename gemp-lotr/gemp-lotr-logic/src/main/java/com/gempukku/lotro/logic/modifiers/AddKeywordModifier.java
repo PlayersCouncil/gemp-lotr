@@ -7,6 +7,8 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
+import java.util.HashSet;
+
 public class AddKeywordModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Keyword _keyword;
     private final Evaluator _evaluator;
@@ -26,8 +28,8 @@ public class AddKeywordModifier extends AbstractModifier implements KeywordAffec
     }
 
     @Override
-    public Keyword getKeyword() {
-        return _keyword;
+    public HashSet<Keyword> getKeywords() {
+        return new HashSet<>(){{ add(_keyword); }};
     }
 
     @Override

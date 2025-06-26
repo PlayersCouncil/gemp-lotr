@@ -7,6 +7,8 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
+import java.util.HashSet;
+
 public class CancelKeywordBonusTargetModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Keyword _keyword;
     private final Filter _sourceFilter;
@@ -26,7 +28,7 @@ public class CancelKeywordBonusTargetModifier extends AbstractModifier implement
     }
 
     @Override
-    public Keyword getKeyword() {
-        return _keyword;
+    public HashSet<Keyword> getKeywords() {
+        return new HashSet<>(){{ add(_keyword); }};
     }
 }

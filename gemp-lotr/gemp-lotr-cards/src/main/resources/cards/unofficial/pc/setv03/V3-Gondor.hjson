@@ -394,19 +394,15 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: Wraith
-					count: 2
-				}
-			}
-			
-			{
 				type: Modifier
 				modifier: {
 					type: ThreatLimit
 					amount: 2
+					requires: {
+						type: CanSpot
+						filter: Wraith
+						count: 2
+					}
 				}
 			}
 			
@@ -447,7 +443,7 @@
 				}
 			}
 		]
-		gametext: To play, spot 2 Wraiths.<br>The threat limit is +2.<br>While you can spot more threats than companions, each Wraith is strength +1.<br>Each time this condition is hindered or discarded, remove a threat.
+		gametext: While you can spot 2 [gondor] Wraiths, the threat limit is +2.\While you can spot more threats than companions, each Wraith is strength +1.\Each time this condition is hindered or discarded, remove a threat.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1101,15 +1097,29 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ExtraCost
+				cost: {
+					type: Exert
+					select: choose(Gondor, companion)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: Man
+					memorize: playedMan
+				}
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: Heal
+					select: choose(Man, not(memory(playedMan)))
+				}
 			}
 		]
 		gametext: <b>Beacon</b>. To play, exert a [gondor] companion.<br>Each time you play a Man, you may hinder this to heal another Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from your discard pile. Remove a threat if you can spot a Northern Signal-fire.
@@ -1135,7 +1145,7 @@
 			rarity: _
 		}
 		title: Northern Signal-fire
-		subtitle: Beacon of Eilenach
+		subtitle: Flame of Eilenach
 		unique: 2
 		side: Free Peoples
 		culture: Gondor
@@ -1147,15 +1157,53 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ExtraCost
+				cost: [
+					{
+						type: Exert
+						select: choose(Man)
+					}
+					{
+						type: Hinder
+						select: choose(title(War Beacon))
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Northern Signal-fire)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: valiant,companion
+					keyword: knight
+					requires: [
+						{
+							type: CanSpot
+							filter: Gondor,companion
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: fortification
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(mount)
+				}
 			}
 		]
 		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a [gondor] companion, valiant companions gain <b>knight</b>.<br>Each time you play a fortification, you may play a mount from your discard pile.
@@ -1181,7 +1229,7 @@
 			rarity: _
 		}
 		title: Northern Signal-fire
-		subtitle: Beacon of Amon Din
+		subtitle: Flame of Amon Din
 		unique: 2
 		side: Free Peoples
 		culture: Gondor
@@ -1193,15 +1241,68 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Exert
+						select: choose(Man)
+					}
+					{
+						type: Hinder
+						select: choose(title(War Beacon))
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Northern Signal-fire)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: choose(ranger)
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(minion)
+						text: Choose a minion
+						memorize: chosenMinion
+					}
+					{
+						type: MemorizeNumber
+						amount: {
+							type: ForEachYouCanSpot
+							filter: mounted,companion
+						}
+						memory: mountedComps
+					}
+					{
+						type: ModifyStrength
+						select: memory(chosenMinion)
+						amount: {
+							type: FromMemory
+							memory: mountedComps
+							multiplier: -1
+						}
+					}
+					{
+						type: ModifySiteNumber
+						select: memory(chosenMinion)
+						amount: {
+							type: FromMemory
+							memory: mountedComps
+							multiplier: -1
+						}
+					}
+				]
 			}
 		]
 		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>Skirmish: Exert a ranger to make a minion strength -X and site number +X, where X is the number of mounted companions you can spot.
