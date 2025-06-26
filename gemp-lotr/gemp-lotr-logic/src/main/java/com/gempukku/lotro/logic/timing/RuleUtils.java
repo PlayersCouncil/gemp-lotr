@@ -10,7 +10,6 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -163,17 +162,18 @@ public class RuleUtils {
                     public boolean accepts(LotroGame game, PhysicalCard attachedTo) {
                         Set<PossessionClass> possessionClasses = blueprint.getPossessionClasses();
                         if (possessionClasses != null) {
-                            for (PossessionClass possessionClass : possessionClasses) {
+                            for (PossessionClass itemClass : possessionClasses) {
                                 List<PhysicalCard> attachedCards = game.getGameState().getAttachedCards(attachedTo);
 
-                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.item, possessionClass);
-                                if (matchingClassPossessions.size() > 1)
+                                int allowedItemsOfClass = game.getModifiersQuerying().bearableItemsOfClass(game, attachedTo, itemClass);
+
+                                var matchingClassItems = Filters.filter(game, attachedCards, Filters.item, itemClass);
+                                if (matchingClassItems.size() > allowedItemsOfClass)
                                     return false;
 
                                 boolean extraPossessionClass = self.getBlueprint().isExtraPossessionClass(game, self, attachedTo);
-                                if (!extraPossessionClass && matchingClassPossessions.size() == 1) {
-                                    final PhysicalCard attachedPossession = matchingClassPossessions.iterator().next();
-                                    if (!attachedPossession.getBlueprint().isExtraPossessionClass(game, attachedPossession, attachedTo))
+                                if (!extraPossessionClass && matchingClassItems.size() == allowedItemsOfClass) {
+                                    if (matchingClassItems.stream().noneMatch(item -> item.getBlueprint().isExtraPossessionClass(game, item, attachedTo)));
                                         return false;
                                 }
                             }

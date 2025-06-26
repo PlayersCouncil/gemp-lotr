@@ -120,6 +120,7 @@ public interface ModifiersQuerying {
     boolean canHaveTransferredOn(LotroGame game, PhysicalCard playedCard, PhysicalCard target);
 
     boolean canBeTransferred(LotroGame game, PhysicalCard attachment);
+    int bearableItemsOfClass(LotroGame game, PhysicalCard attachedTo, PossessionClass itemClass);
 
     boolean shouldSkipPhase(LotroGame game, Phase phase, String playerId);
 

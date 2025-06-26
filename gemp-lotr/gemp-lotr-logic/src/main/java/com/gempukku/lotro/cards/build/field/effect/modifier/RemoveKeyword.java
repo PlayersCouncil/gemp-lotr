@@ -15,9 +15,9 @@ public class RemoveKeyword implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
 
-        Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
+        var keywords = FieldUtils.getEnumArray(Keyword.class, object.get("keyword"), "keyword");
 
-        if (keyword == null)
+        if (keywords.isEmpty())
             throw new InvalidCardDefinitionException("'keyword' is required for RemoveKeyword modifier.");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
@@ -28,7 +28,7 @@ public class RemoveKeyword implements ModifierSourceProducer {
             public Modifier getModifier(ActionContext actionContext) {
                 return new RemoveKeywordModifier(actionContext.getSource(),
                         filterableSource.getFilterable(actionContext),
-                        RequirementCondition.createCondition(requirements, actionContext), keyword);
+                        RequirementCondition.createCondition(requirements, actionContext), keywords);
             }
         };
     }

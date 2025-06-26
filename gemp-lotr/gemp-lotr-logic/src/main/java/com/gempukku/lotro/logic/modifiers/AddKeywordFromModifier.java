@@ -6,6 +6,8 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
+import java.util.HashSet;
+
 public class AddKeywordFromModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Filterable from;
     private final boolean terrainOnly;
@@ -17,7 +19,7 @@ public class AddKeywordFromModifier extends AbstractModifier implements KeywordA
     }
 
     @Override
-    public Keyword getKeyword() {
+    public HashSet<Keyword> getKeywords() {
         return null;
     }
 

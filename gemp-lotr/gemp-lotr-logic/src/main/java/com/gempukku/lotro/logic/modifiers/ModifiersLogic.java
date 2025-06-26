@@ -144,11 +144,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
             boolean keywordMatches = false;
 
             if(modifier instanceof KeywordAffectingModifier keyModifier) {
-                keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
+                keywordMatches = keyModifier.getKeywords() == null || keyModifier.getKeywords().contains(keyword);
             }
             else if(modifier instanceof DelegateModifier delegateModifier) {
                 if(delegateModifier.delegate instanceof KeywordAffectingModifier keyModifier) {
-                    keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
+                    keywordMatches = keyModifier.getKeywords() == null || keyModifier.getKeywords().contains(keyword);
                 }
             }
 
@@ -805,6 +805,17 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
             if (!modifier.canBeTransferred(game, attachment))
                 return false;
         return true;
+    }
+
+    @Override
+    public int bearableItemsOfClass(LotroGame game, PhysicalCard attachedTo, PossessionClass itemClass) {
+        int total = 1;
+        for (Modifier mod : getModifiersAffectingCard(game, ModifierEffect.CAN_BEAR_EXTRA_ITEMS, attachedTo)) {
+            if (mod instanceof final BearExtraItemsModifier modifier) {
+                total += modifier.getItemClassBonus(game, itemClass);
+            }
+        }
+        return total;
     }
 
     @Override
