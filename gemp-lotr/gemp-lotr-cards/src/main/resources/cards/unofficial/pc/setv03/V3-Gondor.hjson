@@ -1121,6 +1121,34 @@
 					select: choose(Man, not(memory(playedMan)))
 				}
 			}
+			{
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: AddTwilight
+					amount: {
+						type: ForEachYouCanSpot
+						filter: beacon
+					}
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(beacon)
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: title(Northern Signal-fire)
+						}
+						true: {
+							type: RemoveThreats
+							amount: 1
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Beacon</b>. To play, exert a [gondor] companion.<br>Each time you play a Man, you may hinder this to heal another Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from your discard pile. Remove a threat if you can spot a Northern Signal-fire.
 		lore: ""
