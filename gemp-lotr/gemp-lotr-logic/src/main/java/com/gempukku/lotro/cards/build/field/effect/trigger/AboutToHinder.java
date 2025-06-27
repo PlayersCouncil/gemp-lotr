@@ -17,12 +17,12 @@ public class AboutToHinder implements TriggerCheckerProducer {
 
         final FilterableSource sourceFilter = environment.getFilterFactory().generateFilter(source, environment);
         final FilterableSource affectedFilter = environment.getFilterFactory().generateFilter(filter, environment);
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
 
         return new TriggerChecker() {
             @Override
             public boolean accepts(ActionContext actionContext) {
-                String playerId = playerSource.getPlayer(actionContext);
+                String playerId = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return TriggerConditions.isGettingHinderedBy(actionContext.getEffect(), actionContext.getGame(),
                         sourceFilter.getFilterable(actionContext),
                         playerId,
