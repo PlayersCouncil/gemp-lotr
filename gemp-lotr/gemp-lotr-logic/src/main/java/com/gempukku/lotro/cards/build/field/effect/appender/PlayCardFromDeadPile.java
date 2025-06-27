@@ -37,13 +37,13 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
 
-                            return Filters.playable(game, costModifier, false, true, true);
+                            return Filters.playable(costModifier, 0, false, true, true);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
 
-                            return Filters.playable(actionContext.getGame(), 0, costModifier, false, true, true);
+                            return Filters.playable(costModifier, 0, false, true, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "Choose card to play", environment));
         result.addEffectAppender(

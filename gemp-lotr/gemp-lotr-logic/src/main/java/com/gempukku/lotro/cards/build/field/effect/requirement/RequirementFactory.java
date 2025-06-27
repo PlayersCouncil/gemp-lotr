@@ -25,8 +25,6 @@ public class RequirementFactory {
 
         requirementProducers.put("alwaysavailable", new AlwaysAvailableRequirement());
 
-        requirementProducers.put("canplayfromdiscard", new CanPlayFromDiscard());
-        requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
         requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("cantspot", new CantSpot());
@@ -70,7 +68,7 @@ public class RequirementFactory {
         requirementProducers.put("opponentdoesnotcontrolsite", new OpponentDoesNotControlSite());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
-        requirementProducers.put("playablefromdiscard", new PlayableFromDiscard());
+        requirementProducers.put("playable", new Playable());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
         requirementProducers.put("ringisactive", new RingIsActive());

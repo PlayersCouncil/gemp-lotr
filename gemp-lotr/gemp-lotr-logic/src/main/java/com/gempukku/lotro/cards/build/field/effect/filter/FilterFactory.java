@@ -162,7 +162,7 @@ public class FilterFactory {
         simpleFilters.put("limit1perbearer", simpleFilters.get("oneperbearer"));
         simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
         simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
-        simpleFilters.put("playable", (actionContext) -> Filters.playable(actionContext.getGame(), 0));
+        simpleFilters.put("playable", (actionContext) -> Filters.playable(0));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",
@@ -855,11 +855,11 @@ public class FilterFactory {
                 sb.append(ch);
             } else {
                 if (ch == ',') {
-                    parts.add(sb.toString());
+                    parts.add(sb.toString().trim());
                     sb = new StringBuilder();
                 } else {
                     if (ch == ')')
-                        throw new InvalidCardDefinitionException("Invalid filter definition: " + value);
+                        throw new InvalidCardDefinitionException("Mismatched closing parenthesis in filter: " + value);
                     if (ch == '(')
                         depth++;
                     sb.append(ch);
@@ -870,7 +870,7 @@ public class FilterFactory {
         if (depth != 0)
             throw new InvalidCardDefinitionException("Not matching number of opening and closing brackets: " + value);
 
-        parts.add(sb.toString());
+        parts.add(sb.toString().trim());
 
         return parts.toArray(new String[0]);
     }

@@ -173,7 +173,8 @@
 				phase: Shadow
 				requires: [
 					{
-						type: canSelfBePlayed
+						type: Playable
+						filter: self
 					}
 					{
 						type: Location
