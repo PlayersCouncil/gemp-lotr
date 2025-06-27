@@ -410,8 +410,8 @@
 		culture: Gandalf
 		twilight: 1
 		type: Possession
+		target: HasAttached(pipe)
 		keywords: [
-			Support Area
 			Pipeweed
 		]
 		effects: [
@@ -422,50 +422,42 @@
 					type: Played
 					filter: self
 				}
-				cost: {
-					type: Exert
-					select: choose(companion, HasAttached(pipe))
+				effect: {
+					type: Discard
+					select: choose(side(Shadow), AttachedTo(bearer))
 				}
+			}
+			
+			{
+				type: DiscardedFromPlayTrigger
+				optional: false
+				source: pipe
 				effect: [
 					{
-						type: Choice
-						texts: [
-							Restore a companion
-							Allow an unhasty companion to participate in skirmishes until the regroup phase.
-						]
-						effects: [
-							{
-								type: Restore
-								select: choose(companion)
-							}
-							{
-								type: ChooseActiveCards
-								select: choose(unhasty,companion)
-								text: Choose an unhasty companion to make hasty
-								memorize: hastyComp
-							}
-						]
+						type: addModifier
+						modifier: {
+							type: itemClassSpot
+							class: Pipe
+						}
 					}
 					{
 						type: If
 						check: {
-							type: HasCardInMemory
-							memory: hastyComp
+							type: CanSpot
+							filter: your,character,unhasty
 						}
 						true: {
-							type: AddModifier
-							modifier: {
-								type: UnhastyCompanionCanParticipateInSkirmishes
-								filter: memory(hastyComp)
-							}
-							until: start(regroup)
+							type: RemoveKeyword
+							select: choose(your,character,unhasty)
+							keyword: unhasty
+							until: EndOfTurn
 						}
 					}
 				]
 			}
-			
+
 		]
-		gametext: When you play this possession, you may exert a companion bearing a pipe to restore a companion or allow an unhasty companion to participate in skirmishes until the regroup phase.
+		gametext: Pipeweed. Bearer must bear a pipe. When you play this, you may discard a Shadow card on bearer.\When this is discarded by a pipe, add 1 to the number of pipes you can spot this phase and make your character lose <b>unhasty</b> until the end of the turn.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -494,7 +486,7 @@
 		twilight: 1
 		type: Condition
 		strength: 1
-		target: unbound,Hobbit,LimitOnePerBearer
+		target: unbound,companion,HasAttached(pipe)
 		effects: [
 			{
 				type: Trigger
@@ -520,7 +512,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be an unbound Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
+		gametext: Pipeweed.\Bearer must be an unbound companion bearing a pipe. \Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -552,16 +544,20 @@
 		target: unbound,companion
 		effects: [
 			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: companion,HasAttached(pipe)
+					amount: 1
+				}
+			}
+			{
 				type: Activated
 				phase: Regroup
-				requires: {
-					type: CanSpot
-					filter: bearer, Wizard
-				}
 				cost: [
 					{
 						type: Exert
-						select: bearer
+						select: choose(Wizard)
 						times: 2
 					}
 					{
@@ -596,7 +592,7 @@
 				]
 			}
 		]
-		gametext: Bearer must be an unbound companion.<br>Regroup: If bearer is a Wizard, exert them twice and discard a pipeweed; you may use special abilities on pipes as if it were the Fellowship phase.  Discard this pipe at the end of the regroup phase.
+		gametext: Bearer must be an unbound companion. Each companion bearing a pipe is strength +1.\Regroup: Exert a Wizard twice and discard a pipeweed; this phase you may use special abilities on pipes as if it were the Fellowship phase. 
 		lore: ""
 		promotext: ""
 		alts: {

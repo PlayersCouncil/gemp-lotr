@@ -868,14 +868,26 @@
 						}
 					}
 					{
-						type: Hinder
-						player: Shadow
-						select: choose(companion)
+						type: Choice
+						texts: [
+							Hinder {self}
+							Hinder {bearer}
+						]
+						effects: [
+							{
+								type: Hinder
+								select: self
+							}
+							{
+								type: Hinder
+								select: bearer
+							}
+						]
 					}
 				]
 			}
 		]
-		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		gametext: Bearer must be an unbound Hobbit.\Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Hinder this pipe or hinder bearer.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -907,30 +919,35 @@
 		target: unbound,Hobbit
 		effects: [
 			{
-				type: Activated
-				phase: Fellowship
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Discarded
+					filter: pipeweed
+					source: any
+					memorize: discardedPipeweed
+				}
 				cost: {
-					type: Discard
-					select: choose(pipeweed)
+					type: Exert
+					select: bearer
 				}
 				effect: [
 					{
-						type: RemoveTokensCumulative
-						count: {
-							type: ForEachYouCanSpot
-							filter: pipe
-						}
-						filter: side(Shadow)
+						type: PlayCardFromDiscard
+						select: memory(discardedPipeweed)
 					}
 					{
 						type: Hinder
-						player: Shadow
-						select: choose(companion)
+						select: memory(discardedPipeweed)
+					}
+					{
+						type: Hinder
+						select: self
 					}
 				]
 			}
 		]
-		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X culture tokens, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		gametext: Bearer must be an unbound Hobbit.\Each time a pipeweed is discarded, you may exert bearer to play that pipeweed from your discard pile.  Hinder it and this pipe.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -970,41 +987,33 @@
 			}
 			{
 				type: Activated
-				phase: Skirmish
+				phase: Fellowship
 				cost: [
 					{
-						type: ChooseActiveCards
-						select: choose(or(pipe, pipeweed),not(self))
-						memorize: hinderedCards
+						type: Discard
+						select: choose(pipeweed)
+					}
+					{
+						type: chooseHowManyToSpot
+						filter: pipe
+						memorize: spottedPipes
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
 						count: {
-							type: Range
-							from: 0
-							to: {
-								type: ForEachYouCanSpot
-								filter: or(pipe, pipeweed),not(self)
-							}
+							type: fromMemory
+							memory: spottedPipes
 						}
-						text: Choose pipes and/or pipeweed to hinder
+						amount: 1
+						select: choose(companion)
 					}
 					{
 						type: Hinder
 						select: self
 					}
-					{
-						type: Hinder
-						ignoreCostCheckFailure: true
-						select: all(memory(hinderedCards))
-					}
 				]
-				effect: {
-					type: ModifyStrength
-					amount: {
-						type: ForEachInMemory
-						memory: hinderedCards
-					}
-					select: choose(companion, HasAttached(pipe))
-					limitPerCardThisPhase: 3
-				}
 			}
 		]
 		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Skirmish: Hinder this pipe and X other pipes or pipeweeds to make a companion strength +X (limit +3).
@@ -1035,8 +1044,8 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		target: HasAttached(pipe)
 		keywords: [
-			Support Area
 			Pipeweed
 		]
 		effects: [
@@ -1053,8 +1062,27 @@
 					count: 0-2
 				}
 			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: oldBearer
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+				effect: {
+					type: Heal
+					select: memory(oldBearer)
+				}
+			}
 		]
-		gametext: When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
+		gametext: Pipeweed. Bearer must bear a pipe.\When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.\Skirmish: Discard this possession to heal bearer.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1106,6 +1134,7 @@
 			{
 				type: DiscardedFromPlayTrigger
 				optional: true
+				source: pipe
 				cost: {
 					type: Spot
 					filter: another, title(Hornblower Barrel)
