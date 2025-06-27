@@ -151,8 +151,8 @@
 						type: Spot
 						select: choose(unbound, companion)
 						memorize: chosenComp
-			}
-			{
+					}
+					{
 						type: Hinder
 						select: self
 					}
@@ -890,6 +890,7 @@
 			{
 				type: Activated
 				phase: Skirmish
+				limitPerPhase: 1
 				cost: {
 					type: Exert
 					select: self
@@ -904,9 +905,8 @@
 					{
 						type: If
 						check: {
-							type: MemoryMatches
-							memory: chosenNazgul
-							filter: self
+							type: CanSpot
+							filter: Nazgul, not(self)
 						}
 						true: {
 							type: ModifyStrength
@@ -914,8 +914,7 @@
 								type: ForEachYouCanSpot
 								filter: your,site,Zone(ADVENTURE PATH)
 							}
-							select: self
-							limitPerCardThisPhase: 3
+							select: memory(chosenNazgul)
 						}
 						false: {
 							type: ModifyStrength
@@ -924,12 +923,13 @@
 								filter: your,site,Zone(ADVENTURE PATH)
 							}
 							select: memory(chosenNazgul)
+							limitPerCardThisPhase: 3
 						}
 					}
 				]
 			}
 		]
-		gametext: Fierce.<br>Skirmish: Exert this minion to make another Nazgul strength +1 for each of your sites on the adventure path.
+		gametext: Fierce.\Skirmish: Exert this minion to make a Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot another Nazgul). Limit once per phase.
 		lore: ""
 		promotext: ""
 		alts: {
