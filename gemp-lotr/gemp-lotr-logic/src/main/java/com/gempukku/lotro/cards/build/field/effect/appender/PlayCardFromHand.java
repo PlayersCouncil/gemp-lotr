@@ -47,18 +47,18 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, costModifier, onFilterable));
+                                return Filters.and(Filters.playable(costModifier, 0, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
-                            return Filters.playable(game, 0, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(costModifier, 0, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
                             }
-                            return Filters.playable(game, removedTwilight, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(

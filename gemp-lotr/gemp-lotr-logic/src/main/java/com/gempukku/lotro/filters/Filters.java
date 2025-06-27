@@ -435,30 +435,18 @@ public class Filters {
         };
     }
 
-    public static Filter playable(final LotroGame game, final int twilightModifier) {
-        return playable(game, twilightModifier, false);
+    public static Filter playable(final int twilightModifier) {
+        return playable(twilightModifier, 0, false, false, false);
     }
 
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty) {
-        return playable(game, twilightModifier, ignoreRoamingPenalty, false);
-    }
-
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile) {
-        return playable(game, 0, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, false);
-    }
-
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
-        return playable(game, 0, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
-    }
-
-    public static Filter playable(final LotroGame game, final int withTwilightRemoved, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
-        return (game1, physicalCard) -> {
-            Side expectedSide = (physicalCard.getOwner().equals(game1.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
+    public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
+        return (game, physicalCard) -> {
+            Side expectedSide = (physicalCard.getOwner().equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
             final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
             if (blueprint.getSide() != expectedSide)
                 return false;
 
-            return PlayUtils.checkPlayRequirements(game1, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
         };
     }
 

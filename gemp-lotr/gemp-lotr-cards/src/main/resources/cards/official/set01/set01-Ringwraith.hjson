@@ -1524,7 +1524,8 @@
 					count: 5
 				}
 				{
-					type: PlayableFromDiscard
+					type: Playable
+					fromZone: DISCARD
 					filter: minion
 				}
 			]

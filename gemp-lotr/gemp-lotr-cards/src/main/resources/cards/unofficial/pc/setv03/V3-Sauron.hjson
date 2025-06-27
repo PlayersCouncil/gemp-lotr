@@ -116,15 +116,48 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(title(Ominous Sky))
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Cover of Darkness)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: or(Orc, Troll)
+					memorize: playedMinion
+				}
+				cost: {
+					type: Exhaust
+					select: memory(playedMinion)
+				}
+				effect: {
+					type: AddModifier
+					until: start(regroup)
+					modifier: {
+						type: ModifyStrength
+						amount: {
+							type: ForEachYouCanSpot
+							filter: twilight,condition
+						}
+						filter: memory(playedMinion)
+					}
+				}
 			}
 		]
 		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Each time you play an Orc or Troll, you may exhaust it to make it strength +1 for each twilight condition you can spot until the regroup phase.
@@ -162,15 +195,44 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(title(Ominous Sky))
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Cover of Darkness)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: Hinder
+						select: self
+					}
+					{
+						type: Exert
+						select: choose(Orc)
+						memorize: exertedOrc
+					}
+				]
+				effect: {
+					type: ModifyStrength
+					select: memory(exertedOrc)
+					amount: {
+						type: ForEachBurden
+					}
+				}
 			}
 		]
 		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Hinder this condition and exert an Orc to make that Orc strength +1 for each burden you can spot.
@@ -208,15 +270,42 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(title(Ominous Sky))
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Cover of Darkness)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: Exert
+						select: choose(Troll)
+						memorize: exertedTroll
+						times: 2
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+				effect: {
+					type: Discard
+					select: choose(side(Free Peoples), AttachedTo(InSkirmishAgainst(memory(exertedTroll))))
+				}
 			}
 		]
 		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Exert a Troll twice and hinder this condition to discard a Free Peoples card borne by a companion that Troll is skirmishing.
@@ -253,15 +342,131 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(title(Cover of Darkness))
+						count: 2
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: CantBeDiscarded
+					filter: self
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: Orc
+					keyword: fierce
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: Troll
+					keyword: enduring
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: Nazgul
+					keyword: damage+1
+				}
+			}
+			
+			{
+				type: Activated
+				phase: Shadow
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: Playable
+							fromZone: DISCARD
+							filter: name(Sauron)
+							discount: {
+								type: ForEachCultureToken
+								culture: Sauron
+								multiplier: -1
+							}
+						}
+						{
+							type: Playable
+							fromZone: HAND
+							filter: name(Sauron)
+							discount: {
+								type: ForEachCultureToken
+								culture: Sauron
+								multiplier: -1
+							}
+						}
+					]
+				}
+				effect: {
+					type: CostToEffect
+					cost: {
+						type: ChooseANumber
+						text: Choose how many {SAURON} tokens to remove
+						from: 0
+						to: {
+							type: ForEachCultureToken
+							culture: Sauron
+						}
+						memorize: removedTokens
+					}
+					effect: {
+						type: CostToEffect
+						cost: {
+							type: RemoveTokensCumulative
+							count: memory(removedTokens)
+							culture: Sauron
+						}
+						effect: {
+							type: Choice
+							texts: [
+								Play Sauron from hand
+								Play Sauron from your discard pile
+							]
+							effects: [
+								{
+									type: PlayCardFromHand
+									select: choose(name(Sauron))
+									discount: {
+										type: FromMemory
+										memory: removedTokens
+										multiplier: -1
+									}
+								}
+								{
+									type: PlayCardFromDiscard
+									select: choose(name(Sauron))
+									maxDiscount: {
+										type: ForEachCultureToken
+										culture: Sauron
+										multiplier: -1
+									}
+									discount: {
+										type: FromMemory
+										memory: removedTokens
+										multiplier: -1
+									}
+								}
+							]
+						}
+					}
+				} 
 			}
 		]
 		gametext: Twilight. To play, hinder 2 copies of Cover of Darkness.<br>This cannot be discarded.<br>Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. <br>Shadow: Remove X [sauron] tokens from your cards to play Sauron from your hand or discard pile; he is twilight cost -X.
@@ -373,15 +578,65 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: Orc
+				}
+				cost: {
+					type: Spot
+					filter: title(Cover of Darkness)
+				}
+				effect: {
+					type: ReinforceTokens
+					select: choose(side(Shadow))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: [
+					Shadow
+					Regroup
+				]
+				cost: {
+					type: Choice
+					texts: [
+						Remove (2)
+						Remove a Shadow token
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 2
+						}
+						{
+							type: RemoveCultureTokens
+							count: 1
+							select: choose(side(Shadow))
+						}
+					]
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(side(Shadow), condition)
+						memorize: playedCondition
+					}
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: playedCondition
+							filter: twilight
+						}
+						false: {
+							type: Hinder
+							select: self
+						}
+					}
+				]
 			}
 		]
 		gametext: Twilight. Each time you play an Orc, spot Cover of Darkness to reinforce a Shadow token.<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
