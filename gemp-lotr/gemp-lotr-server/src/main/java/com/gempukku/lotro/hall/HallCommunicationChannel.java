@@ -107,7 +107,8 @@ public class HallCommunicationChannel implements LongPollableResource {
                     @Override
                     public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName,
                                                      String tournamentPrizes, String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp,
-                                                     boolean joinable, boolean startable, int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc) {
+                                                     boolean joinable, boolean startable, int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc, String draftCode,
+                                                     boolean recurring, boolean scheduled, boolean displayInWaitingTables) {
                         Map<String, String> props = new HashMap<>();
                         props.put("cost", String.valueOf(cost));
                         props.put("collection", collectionName);
@@ -125,9 +126,12 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("readyCheckSecsRemaining", String.valueOf(readyCheckSecsRemaining));
                         props.put("confirmedReadyCheck", String.valueOf(confirmedReadyCheck));
                         props.put("wc", String.valueOf(wc));
-                        if (tournamentQueueKey.contains("table")) {
-                            props.put("draftCode", tournamentQueueKey.replace("_queue", ""));
+                        if (draftCode != null) {
+                            props.put("draftCode", draftCode);
                         }
+                        props.put("recurring", String.valueOf(recurring));
+                        props.put("scheduled", String.valueOf(scheduled));
+                        props.put("displayInWaitingTables", String.valueOf(displayInWaitingTables));
 
                         tournamentQueuesOnServer.put(tournamentQueueKey, props);
                     }

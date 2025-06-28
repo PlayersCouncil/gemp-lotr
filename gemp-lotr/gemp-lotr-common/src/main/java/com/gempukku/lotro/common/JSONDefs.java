@@ -20,6 +20,7 @@ public class JSONDefs {
         public String id;
         public String format;
         public List<List<String>> seriesProduct;
+        public boolean hall = false;
     }
 
     public static class ItemStub {
@@ -28,6 +29,19 @@ public class JSONDefs {
         public ItemStub(String c, String n) {
             code = c;
             name = n;
+        }
+    }
+
+    public static class LiveDraftInfo {
+        public String code;
+        public String name;
+        public int maxPlayers;
+        public String recommendedTimer;
+        public LiveDraftInfo(String c, String n, int p, String t) {
+            code = c;
+            name = n;
+            maxPlayers = p;
+            recommendedTimer = t;
         }
     }
 
@@ -86,6 +100,14 @@ public class JSONDefs {
         public Map<String, ItemStub> DraftTemplates;
         public Map<String, ItemStub> TableDraftTemplates;
         public List<String> TableDraftTimerTypes;
+    }
+
+    public static class PlayerMadeTournamentAvailableFormats {
+        public List<ItemStub> constructed;
+        public List<ItemStub> sealed;
+        public List<ItemStub> soloDrafts;
+        public List<LiveDraftInfo> tableDrafts;
+        public List<String> draftTimerTypes;
     }
 
     public static class TimerType {

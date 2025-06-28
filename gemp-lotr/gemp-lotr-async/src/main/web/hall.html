@@ -180,96 +180,47 @@
 						</table>
 					</div>
 					
-					<div id="wcQueuesHeader" class='eventHeader wc-queues'>World Championship Queues<span class='count'>(0)</span></div>
-					<div id="wcQueuesContent" class='visibilityToggle'>
-						<table class='tables wc-queues'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='20%'>Event</th>
-								<th width='16%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
-					</div>
-					
-					<div id="wcEventsHeader" class='eventHeader wc-events'>World Championship Events<span class='count'>(0)</span></div>
-					<div id="wcEventsContent" class='visibilityToggle'>
-						<table class='tables wc-events'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='20%'>Event</th>
-								<th width='10%'>System</th>
-								<th width='16%'>Stage</th>
-								<th width='6%'>Round</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
-					</div>
-					
-					<div id="tournamentQueuesHeader" class='eventHeader queues'>Tournament Queues<span class='count'>(0)</span></div>
-					<div id="tournamentQueuesContent" class='visibilityToggle'>
-						<table class='tables queues'>
+					<div id="recurringQueuesHeader" class='eventHeader recurringQueues'>Recurring Events<span class='count'>(0)</span></div>
+					<div id="recurringQueuesContent" class='visibilityToggle'>
+						<table class='tables recurringQueues'>
 							<tr>
 								<th width='10%'>Format</th>
 								<th width='8%'>Collection</th>
-								<th width='20%'>Queue name</th>
-								<th width='16%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
+								<th width='30%'>Event Name</th>
+								<th width='16%'>Next Start</th>
+								<th width='16%'>System</th>
 								<th width='8%'>Cost</th>
 								<th width='12%'>Prizes</th>
-								<th width='10%'>Actions</th>
 							</tr>
 						</table>
 					</div>
 
-					<div id="draftQueuesHeader" class='eventHeader draftQueues'>Draft Games<span class='count'>(0)</span></div>
-					<div id="draftQueuesContent" class='visibilityToggle'>
-						<table class='tables draftQueues'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='8%'>Collection</th>
-								<th width='30%'>Queue name</th>
-								<th width='26%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
-					</div>
+					<div id="queueSpawnerHeader" class='eventHeader limitedGames'>Create Tournaments & Limited Games</div>
+					<div id="queueSpawnerContent" class='visibilityToggle'>
+						<form id="queueSpawnerForm">
+							<!-- Game Type Selection -->
+							<div class="formRow">
+								<label for="gameTypeSelect">Type of Game:</label>
+								<select id="gameTypeSelect" name="gameType">
+									<option value="" disabled selected>Select game type</option>
+									<option value="constructed">Constructed</option>
+									<option value="sealed">Sealed</option>
+									<option value="table_draft">Live Draft</option>
+									<option value="solodraft">Solo Draft</option>
+								</select>
+							</div>
 
-					<div id="sealedQueuesHeader" class='eventHeader sealedQueues'>Sealed Games<span class='count'>(0)</span></div>
-					<div id="sealedQueuesContent" class='visibilityToggle'>
-						<table class='tables sealedQueues'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='8%'>Collection</th>
-								<th width='30%'>Queue name</th>
-								<th width='26%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
-					</div>
-					
-					<div id="activeTournamentsHeader" class='eventHeader tournaments'>Active Tournaments<span class='count'>(0)</span></div>
-					<div id="activeTournamentsContent" class='visibilityToggle'>
-						<table class='tables tournaments'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='10%'>Collection</th>
-								<th width='25%'>Tournament name</th>
-								<th width='15%'>System</th>
-								<th width='10%'>Stage</th>
-								<th width='10%'>Round</th>
-								<th width='10%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
+							<!-- Placeholder for dynamic fields -->
+							<div id="dynamicFields"></div>
+
+							<!-- Toggle for advanced fields -->
+							<button type="button" id="toggleAdvancedFields" class="ui-button ui-corner-all ui-widget" style="display: none;">Show advanced settings</button>
+
+							<!-- Advanced settings section -->
+							<div id="advancedFields" style="display: none;"></div>
+
+							<button type="button" id="createTournamentButton" class="ui-button ui-corner-all ui-widget" style="display: none;">Create</button>
+						</form>
 					</div>
 					
 				</div>
