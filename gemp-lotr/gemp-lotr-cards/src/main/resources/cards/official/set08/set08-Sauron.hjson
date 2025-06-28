@@ -29,6 +29,7 @@
 					}
 					{
 						type: removeBurdens
+						ignoreCostCheckFailure: true
 						amount: {
 							type: fromMemory
 							memory: chosenCompanion
