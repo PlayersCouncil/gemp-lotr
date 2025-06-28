@@ -97,7 +97,7 @@
 							true: {
 								type: exert
 								player: free people
-								select: choose(companion)
+								select: choose(minion)
 								count: 0-1
 								memorize: exertedCharacter
 							}

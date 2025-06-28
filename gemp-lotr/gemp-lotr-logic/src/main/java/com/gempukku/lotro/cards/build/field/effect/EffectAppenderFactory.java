@@ -124,6 +124,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("preventburden", new PreventEffect());
         effectAppenderProducers.put("preventeffect", new PreventEffect());
         effectAppenderProducers.put("preventtwilight", new PreventEffect());
+        effectAppenderProducers.put("preventcardeffect", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventdiscard", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventexert", new PreventCardEffectAppender());
         effectAppenderProducers.put("preventheal", new PreventCardEffectAppender());

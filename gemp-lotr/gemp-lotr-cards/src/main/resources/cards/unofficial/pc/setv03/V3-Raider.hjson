@@ -288,15 +288,42 @@
 		keywords: Corsair
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Response
+				trigger: [
+					{
+						type: aboutToDiscard
+						opponent: true
+						filter: your, Raider
+					}
+					{
+						type: AboutToHinder
+						filter: your, Raider
+					}
+				]
+				cost: {
+					type: Choice
+					texts: [
+						Exert {self}
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: Exert
+							select: self
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: preventCardEffect
+						select: choose(your, Raider)
+						memorize: preventedCards
+					}
+				] 
 			}
 		]
 		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
@@ -334,15 +361,30 @@
 		keywords: Corsair
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfSkirmishInvolving
+					filter: self
+				}
+				effect: {
+					type: Hinder
+					player: Free Peoples
+					select: choose(side(Free Peoples), item, AttachedTo(character, InSkirmish))
+					count: any
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: self
+					keyword: damage
+					amount: {
+						type: ForEachYouCanSpot
+						filter: side(Free Peoples), item, AttachedTo(character, InSkirmish)
+					}
+				}
 			}
 		]
 		gametext: <b>Corsair.</b><br>At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of items on a companion in that skirmish.<br>This minion is <b>damage +1</b> for each Free Peoples item on each character in its skrimish.
@@ -779,18 +821,26 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Hinder
+					select: choose(Raider)
+					count: 0-3
+					memorize: hinderedCards
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ReinforceTokens
+						culture: Raider
+						select: choose(any)
+						times: {
+							type: ForEachInMemory
+							memory: hinderedCards
+						}
 					}
 				]
 			}
 		]
-		gametext: Choose one: Reinforce 2 [raider] tokens; or hinder any number of [raider] support cards to reinforce the same number of [raider] tokens.
+		gametext: Hinder up to 3 [raider] cards to reinforce the same number of [raider] tokens.
+
 		lore: ""
 		promotext: ""
 		alts: {
@@ -998,15 +1048,34 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: your, side(Shadow), event
+					amount: -1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AboutToTakeWound
+					filter: minion
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: [
+					{
+						type: PreventWound
+						select: choose(minion)
+					}
+					{
+						type: Hinder
+						select: choose(side(Free Peoples), weapon)
+					}
+				]
 			}
 		]
 		gametext: Lurker.<br>Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
@@ -1040,18 +1109,56 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: Hinder
+					select: choose(corsair)
 				}
+				effect: [
+					{
+						type: Optional
+						text: Would you like to discard another Raiding Schooner to hinder all Free Peoples support cards of one culture?
+						requires: {
+							type: CanSpot
+							filter: another, title(Raiding Schooner)
+						}
+						cost: {
+							type: Discard
+							select: choose(another, title(Raiding Schooner))
+						}
+						effect: [
+							{
+								type: ChooseActiveCards
+								select: choose(side(Free Peoples), support)
+								memorize: chosenSupportCard
+								text: Choose a Free Peoples culture
+							}
+							{
+								type: Hinder
+								select: all(side(Free Peoples), CultureFromMemory(chosenSupportCard), support)
+							}
+						]
+					}
+					{
+						type: If
+						check: {
+							type: HasCardInMemory
+							memory: chosenSupportCard
+						}
+						false: {
+							type: Hinder
+							select: choose(side(Free Peoples), support, possession)
+						}
+					}
+				]
 			}
 			{
 				type: DisplayableInformation
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Maneuver: Hinder a corsair to hinder a Free Peoples support possession.<br>Maneuver: Hinder a corsair and discard another Raiding Schooner to choose a Free Peoples culture.  Hinder all support cards of that culture.
+		gametext: Maneuver: Hinder a corsair to hinder a Free Peoples support possession (or all support cards of a Free Peoples culture you spot if you discard another Raiding Schooner).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1083,18 +1190,63 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Moves
+				}
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: self,Zone(ATTACHED)
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Hinder {bearer}
+						Hinder a Free Peoples item on {bearer}
+					]
+					effects: [
+						{
+							type: Hinder
+							select: bearer
+						}
+						{
+							type: Hinder
+							select: choose(item, AttachedTo(bearer))
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Maneuver
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
+				cost: [
+					{
+						type: Exert
+						select: choose(corsair)
+						count: 2
+					}
+					{
+						type: RemoveCultureTokens
+						count: 2
+						culture: Raider
+						select: choose(possession)
+					}
+				]
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(unbound, companion, LimitOnePerBearer)
+					memorizeTarget: chosenMinion
+				}
 			}
 		]
-		gametext: Limit 1 per bearer.  Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.<br>Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to a companion.
+		gametext: Limit 1 per bearer.  Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.\Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to an unbound companion.
 		lore: ""
 		promotext: ""
 		alts: {
