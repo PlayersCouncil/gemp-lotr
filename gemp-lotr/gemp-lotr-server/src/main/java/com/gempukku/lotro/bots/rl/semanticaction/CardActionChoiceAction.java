@@ -1,22 +1,29 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
+@JSONType(typeName = "CardActionChoiceAction")
 public class CardActionChoiceAction implements SemanticAction {
-    private final boolean pass;
     private final String actionText;
 
     public CardActionChoiceAction(String answer, AwaitingDecision decision) {
-        if (answer.isEmpty()) {
-            pass = true;
+        if (answer == null || answer.isEmpty()) {
             actionText = null;
         } else {
-            pass = false;
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             actionText = actionTexts[Integer.parseInt(answer)];
         }
+    }
+
+    public CardActionChoiceAction(String actionText) {
+        this.actionText = actionText;
+    }
+
+    public String getActionText() {
+        return actionText;
     }
 
     @Override
@@ -25,7 +32,7 @@ public class CardActionChoiceAction implements SemanticAction {
             throw new IllegalArgumentException("Wrong decision type.");
         }
 
-        if (pass) {
+        if (actionText == null) {
             return "";
         }
 

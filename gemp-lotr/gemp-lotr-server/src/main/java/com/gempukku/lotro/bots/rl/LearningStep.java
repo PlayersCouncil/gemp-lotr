@@ -1,5 +1,7 @@
 package com.gempukku.lotro.bots.rl;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import com.gempukku.lotro.bots.rl.semanticaction.SemanticAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
@@ -15,5 +17,12 @@ public class LearningStep {
         this.action = action;
         this.playerId = playerId;
         this.decision = decision;
+    }
+
+    public String toJson() {
+        JSONWriter.Feature[] features = {
+                JSONWriter.Feature.WriteClassName
+        };
+        return JSON.toJSONString(this, features);
     }
 }

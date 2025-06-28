@@ -3,8 +3,10 @@ package com.gempukku.lotro.bots;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.random.RandomLearningBot;
 import com.gempukku.lotro.bots.rl.LearningStep;
+import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.ReplayBuffer;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStarterBot;
+import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.gofirst.GoFirstTrainer;
@@ -46,15 +48,11 @@ public class BotService {
 
         fillBotParticipantList();
 
-        replayBuffer.addListener(1_000, buffer -> {
+        replayBuffer.addListener(10_000, buffer -> {
             List<LearningStep> batch = buffer.sampleBatch(buffer.size());
             buffer.clear();
 
-            GoFirstTrainer trainer = new GoFirstTrainer();
-            SoftClassifier<double[]> model = trainer.train(batch);
-
-            // Save or register model somewhere accessible by bots
-            modelRegistry.setGoFirstModel(model);
+            new FotrStartersLearningStepsPersistence().save(batch);
         });
 
         if (START_SIMULATIONS_AT_STARTUP) {
@@ -64,11 +62,16 @@ public class BotService {
                     new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot2", replayBuffer));
 
             ZonedDateTime start = DateUtils.Now();
+
             System.out.println("training after games");
             List<LearningStep> batch = replayBuffer.sampleBatch(replayBuffer.size());
             replayBuffer.clear();
+
+            LearningStepsPersistence lsp = new FotrStartersLearningStepsPersistence();
+            lsp.save(batch);
+
             GoFirstTrainer trainer = new GoFirstTrainer();
-            SoftClassifier<double[]> model = trainer.train(batch);
+            SoftClassifier<double[]> model = trainer.train(lsp.load());
             // Save or register model somewhere accessible by bots
             modelRegistry.setGoFirstModel(model);
             System.out.println(DateUtils.HumanDuration(Duration.between(DateUtils.Now(), start).abs()));

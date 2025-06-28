@@ -1,5 +1,6 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -7,6 +8,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import java.util.ArrayList;
 import java.util.List;
 
+@JSONType(typeName = "ChooseFromArbitraryCardsAction")
 public class ChooseFromArbitraryCardsAction implements SemanticAction {
     private final List<String> chosenBlueprintIds = new ArrayList<>();
 
@@ -24,6 +26,14 @@ public class ChooseFromArbitraryCardsAction implements SemanticAction {
                 }
             }
         }
+    }
+
+    public ChooseFromArbitraryCardsAction(List<String> getChosenBlueprintIds) {
+        this.chosenBlueprintIds.addAll(getChosenBlueprintIds);
+    }
+
+    public List<String> getChosenBlueprintIds() {
+        return chosenBlueprintIds;
     }
 
     @Override

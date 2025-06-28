@@ -1,5 +1,6 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
+import com.alibaba.fastjson2.annotation.JSONType;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -8,8 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@JSONType(typeName = "AssignMinionsAction")
 public class AssignMinionsAction implements SemanticAction {
     private final HashMap<String, List<String>> assignmentMap = new HashMap<>();
 
@@ -24,6 +27,14 @@ public class AssignMinionsAction implements SemanticAction {
             }
             assignmentMap.put(fp, minions);
         }
+    }
+
+    public AssignMinionsAction(HashMap<String, List<String>> assignmentMap) {
+        this.assignmentMap.putAll(assignmentMap);
+    }
+
+    public HashMap<String, List<String>> getAssignmentMap() {
+        return assignmentMap;
     }
 
     @Override
