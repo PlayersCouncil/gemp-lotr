@@ -63,4 +63,13 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         }
         return DateUtils.Now().isAfter(_startTime.minus(window)) && (maximumPlayers < 0 || _players.size() < maximumPlayers);
     }
+
+    @Override
+    public boolean shouldBeDisplayedAsWaiting() {
+        var window = _signupTimeBeforeStart;
+        if (isWC()) {
+            window = _wcSignupTimeBeforeStart;
+        }
+        return DateUtils.Now().isAfter(_startTime.minus(window));
+    }
 }

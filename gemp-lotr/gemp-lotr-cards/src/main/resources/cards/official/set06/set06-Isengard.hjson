@@ -140,11 +140,14 @@
 					filter: bearer
 				}
 				effect: {
-					type: exert
-					player: fp
-					select: choose(companion)
-					count: {
+					type: Repeat
+					times: {
 						type: ForEachSiteYouControl
+					}
+					effect: {
+						type: exert
+						player: fp
+						select: choose(companion)
 					}
 				}
 			}

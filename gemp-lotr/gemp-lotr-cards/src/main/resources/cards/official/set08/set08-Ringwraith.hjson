@@ -119,10 +119,16 @@
 			{
 				type: activated
 				phase: archery
-				requires: {
-					type: canSpot
-					filter: your,or(enduring,mounted),nazgul
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: self,Zone(SUPPORT)
+					}
+					{
+						type: canSpot
+						filter: your,or(enduring,mounted),nazgul
+					}
+				]
 				effect: [
 					{
 						type: transfer
@@ -142,6 +148,14 @@
 				modifier: {
 					type: cantHeal
 					filter: bearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: CantBear
+					filter: bearer
+					cardFilter: mount
 				}
 			}
 		]

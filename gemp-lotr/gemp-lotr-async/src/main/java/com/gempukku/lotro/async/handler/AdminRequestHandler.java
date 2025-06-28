@@ -130,8 +130,28 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             unBanUser(request, responseWriter);
         } else if (uri.equals("/findMultipleAccounts") && request.method() == HttpMethod.POST) {
             findMultipleAccounts(request, responseWriter);
+        } else if (uri.equals("/toggleSealedHallStatus") && request.method() == HttpMethod.POST) {
+            toggleSealedHallStatus(request, responseWriter);
         } else {
             throw new HttpProcessingException(404);
+        }
+    }
+
+    private void toggleSealedHallStatus(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+        var postDecoder = new HttpPostRequestDecoder(request);
+
+        String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
+
+
+        Throw400IfStringNull("sealedFormatCode", sealedFormatCodeStr);
+        var sealedFormat = _formatLibrary.GetSealedTemplate(sealedFormatCodeStr);
+        Throw400IfValidationFails("sealedFormatCode", sealedFormatCodeStr,sealedFormat != null);
+
+        if (_formatLibrary.toggleSealedInHall(sealedFormatCodeStr)) {
+            responseWriter.writeHtmlResponse("Added format");
+        } else {
+            responseWriter.writeHtmlResponse("Removed format");
         }
     }
 
@@ -961,6 +981,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         Throw400IfValidationFails("name", name, name.length() <= 45, "Tournament name must be 45 characters or less.");
         boolean wc = ParseBoolean("wc", wcStr, false);
         Throw400IfStringNull("tournamentId", tournamentId);
+        Throw400IfValidationFails("tournamentId", tournamentId, !tournamentId.contains(" "), "Tournament id must not contain spaces.");
         Throw400IfStringNull("format", formatStr);
         Throw400IfStringNull("start", startStr);
 
