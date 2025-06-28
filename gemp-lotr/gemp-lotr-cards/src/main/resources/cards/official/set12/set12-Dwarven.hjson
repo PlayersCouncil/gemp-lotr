@@ -29,7 +29,7 @@
 				}
 				{
 					type: discard
-					select: all(minion,not(race(memory(chosenMinion))))
+					select: all(minion,hasRace,not(race(memory(chosenMinion))))
 				}
 			]
 		}

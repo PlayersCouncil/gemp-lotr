@@ -586,9 +586,15 @@
 			}
 			effect: [
 				{
+					type: ChooseActiveCards
+					text: Choose a condition to discard
+					select: choose(condition)
+					memorize: chosenCard
+				}
+				{
 					type: preventable
 					player: free people
-					text: Would you like to discard the top 6 cards of your draw deck to prevent discarding a condition?
+					text: Would you like to discard the top 6 cards of your draw deck to prevent discarding {chosenCard}?
 					cost: {
 						type: discardTopCardsFromDeck
 						forced: false
@@ -597,7 +603,7 @@
 					}
 					effect: {
 						type: discard
-						select: choose(condition)
+						select: memory(chosenCard)
 					}
 				}
 			]
