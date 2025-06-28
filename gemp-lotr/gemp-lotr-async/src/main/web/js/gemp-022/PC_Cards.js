@@ -1032,7 +1032,7 @@ var PCCards = {
 	'103_23' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E023.0_card.jpg',
 	// Keep Him Blind to All Else That Moves (V3_24)
 	'103_24' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E024.0_card.jpg',
-	King of the Dead, Dead Keeper (V3_25)
+	//King of the Dead, Dead Keeper (V3_25)
 	'103_25' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E025.0_card.jpg',
 	// Pippin, Trollslayer (V3_26)
 	'103_26' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E026.0_card.jpg',
