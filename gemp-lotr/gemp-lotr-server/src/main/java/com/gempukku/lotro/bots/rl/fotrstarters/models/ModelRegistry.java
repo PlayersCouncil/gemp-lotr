@@ -4,6 +4,7 @@ import smile.classification.SoftClassifier;
 
 public class ModelRegistry {
     private SoftClassifier<double[]> goFirstModel;
+    private SoftClassifier<double[]> mulliganModel;
     private SoftClassifier<double[]> integerModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
@@ -12,6 +13,14 @@ public class ModelRegistry {
 
     public void setGoFirstModel(SoftClassifier<double[]> goFirstModel) {
         this.goFirstModel = goFirstModel;
+    }
+
+    public SoftClassifier<double[]> getMulliganModel() {
+        return mulliganModel;
+    }
+
+    public void setMulliganModel(SoftClassifier<double[]> mulliganModel) {
+        this.mulliganModel = mulliganModel;
     }
 
     public SoftClassifier<double[]> getIntegerModel() {

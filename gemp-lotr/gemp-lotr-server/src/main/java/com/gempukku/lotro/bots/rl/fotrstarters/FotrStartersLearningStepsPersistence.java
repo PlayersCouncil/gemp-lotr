@@ -5,6 +5,7 @@ import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,6 +21,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
 
     static {
         trainerFileMap.put(new GoFirstTrainer(), "fotr-starters-go-first.jsonl");
+        trainerFileMap.put(new MulliganTrainer(), "fotr-starters-mulligan.jsonl");
         trainerFileMap.put(new IntegerTrainer(), "fotr-starters-integer.jsonl");
         // Add other trainers here when needed
     }
