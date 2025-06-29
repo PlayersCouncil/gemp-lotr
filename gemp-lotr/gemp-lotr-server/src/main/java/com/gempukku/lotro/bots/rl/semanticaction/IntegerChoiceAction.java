@@ -11,6 +11,10 @@ public class IntegerChoiceAction implements SemanticAction {
         this.value = value;
     }
 
+    public static IntegerChoiceAction fromJson(JSONObject obj) {
+        return new IntegerChoiceAction(obj.getInteger("value"));
+    }
+
     public int getValue() {
         return value;
     }
@@ -22,6 +26,9 @@ public class IntegerChoiceAction implements SemanticAction {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject obj = new JSONObject();
+        obj.put("type", "IntegerChoiceAction");
+        obj.put("value", value);
+        return obj;
     }
 }

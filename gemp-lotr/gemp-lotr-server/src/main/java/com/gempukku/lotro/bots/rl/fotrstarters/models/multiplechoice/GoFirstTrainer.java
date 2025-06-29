@@ -1,4 +1,4 @@
-package com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.gofirst;
+package com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;

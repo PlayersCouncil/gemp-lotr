@@ -11,6 +11,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import smile.classification.SoftClassifier;
 
 import java.util.List;
+import java.util.Map;
 
 public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     private final RLGameStateFeatures features;
@@ -34,6 +35,20 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
                     model.predict(stateVector, probs);
                     return probs[1] > probs[0] ? new MultipleChoiceAction("Go first").toDecisionString(decision, gameState) : new MultipleChoiceAction("Go second").toDecisionString(decision, gameState);
                 }
+            }
+        } else if (decision.getDecisionType().equals(AwaitingDecisionType.INTEGER)) {
+            SoftClassifier<double[]> model = modelRegistry.getIntegerModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            if (model != null) {
+                Map<String, String[]> params = decision.getDecisionParameters();
+                int min = params.containsKey("min") ? Integer.parseInt(params.get("min")[0]) : 0;
+                int predictedValue = model.predict(stateVector);
+                int value = predictedValue + min;
+                if (decision.getDecisionParameters().containsKey("max")) {
+                    int max = Integer.parseInt(params.get("max")[0]);
+                    value = Math.min(value, max);
+                }
+                return String.valueOf(value);
             }
         }
         return super.chooseAction(gameState, decision);

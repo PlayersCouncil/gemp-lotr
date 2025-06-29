@@ -7,6 +7,7 @@ public class SemanticActionFactory {
         String type = obj.getString("type");
         return switch (type) {
             case "MultipleChoiceAction" -> MultipleChoiceAction.fromJson(obj);
+            case "IntegerChoiceAction" -> IntegerChoiceAction.fromJson(obj);
             // add others later
             default -> throw new IllegalArgumentException("Unknown action type: " + type);
         };

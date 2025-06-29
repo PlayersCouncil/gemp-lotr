@@ -3,7 +3,8 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.gofirst.GoFirstTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,6 +20,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
 
     static {
         trainerFileMap.put(new GoFirstTrainer(), "fotr-starters-go-first.jsonl");
+        trainerFileMap.put(new IntegerTrainer(), "fotr-starters-integer.jsonl");
         // Add other trainers here when needed
     }
 

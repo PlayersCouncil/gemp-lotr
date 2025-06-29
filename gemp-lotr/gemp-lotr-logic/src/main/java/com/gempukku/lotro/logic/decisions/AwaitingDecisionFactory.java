@@ -7,6 +7,7 @@ public class AwaitingDecisionFactory {
         String type = obj.getString("type");
         return switch (type) {
             case "MultipleChoiceAwaitingDecision" -> MultipleChoiceAwaitingDecision.fromJson(obj);
+            case "IntegerAwaitingDecision" -> IntegerAwaitingDecision.fromJson(obj);
             // add others later
             default -> throw new IllegalArgumentException("Unknown action type: " + type);
         };

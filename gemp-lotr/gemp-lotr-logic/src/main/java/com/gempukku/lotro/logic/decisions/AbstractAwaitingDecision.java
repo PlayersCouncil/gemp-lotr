@@ -47,6 +47,11 @@ public abstract class AbstractAwaitingDecision implements AwaitingDecision {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject obj = new JSONObject();
+        obj.put("type", _decisionType.toString());
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        obj.putAll(_params);
+        return obj;
     }
 }

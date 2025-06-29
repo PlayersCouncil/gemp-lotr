@@ -11,16 +11,6 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
         setParam("results", _possibleResults);
     }
 
-    public static AwaitingDecision fromJson(JSONObject obj) {
-        return new MultipleChoiceAwaitingDecision(obj.getInteger("id"), obj.getString("text"), obj.getObject("results", String[].class)) {
-            @Override
-            protected void validDecisionMade(int index, String result) {
-
-            }
-        };
-
-    }
-
     protected abstract void validDecisionMade(int index, String result);
 
     @Override
@@ -45,5 +35,15 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
         obj.put("text", getText());
         obj.put("results", getDecisionParameters().get("results"));
         return obj;
+    }
+
+    public static MultipleChoiceAwaitingDecision fromJson(JSONObject obj) {
+        return new MultipleChoiceAwaitingDecision(obj.getInteger("id"), obj.getString("text"), obj.getObject("results", String[].class)) {
+            @Override
+            protected void validDecisionMade(int index, String result) {
+                throw new UnsupportedOperationException("Not implemented in training context");
+            }
+        };
+
     }
 }

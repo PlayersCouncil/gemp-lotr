@@ -3,13 +3,14 @@ package com.gempukku.lotro.bots;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.random.RandomLearningBot;
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.ReplayBuffer;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStarterBot;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.gofirst.GoFirstTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.simulation.FotrStartersSimulation;
 import com.gempukku.lotro.bots.simulation.SimpleBatchSimulationRunner;
 import com.gempukku.lotro.bots.simulation.SimulationRunner;
@@ -29,8 +30,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class BotService {
-    private static final boolean START_SIMULATIONS_AT_STARTUP = false;
-    private static final boolean TEST_MODEL_AT_STARTUP = false;
+    private static final boolean START_SIMULATIONS_AT_STARTUP = true;
+    private static final boolean TEST_MODEL_AT_STARTUP = true;
 
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
@@ -70,9 +71,14 @@ public class BotService {
             System.out.println("training models after games");
 
             System.out.println("training 'go first' model");
-            GoFirstTrainer trainer = new GoFirstTrainer();
-            SoftClassifier<double[]> model = trainer.train(new FotrStartersLearningStepsPersistence().load(trainer));
-            modelRegistry.setGoFirstModel(model);
+            Trainer goFirstTrainer = new GoFirstTrainer();
+            SoftClassifier<double[]> goFirstModel = goFirstTrainer.train(new FotrStartersLearningStepsPersistence().load(goFirstTrainer));
+            modelRegistry.setGoFirstModel(goFirstModel);
+
+            System.out.println("training 'integer' model");
+            Trainer integerTrainer = new IntegerTrainer();
+            SoftClassifier<double[]> integerModel = integerTrainer.train(new FotrStartersLearningStepsPersistence().load(integerTrainer));
+            modelRegistry.setIntegerModel(integerModel);
 
             System.out.println("training done");
 
