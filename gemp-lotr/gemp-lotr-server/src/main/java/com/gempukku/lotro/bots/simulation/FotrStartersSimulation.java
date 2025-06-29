@@ -11,7 +11,9 @@ import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class FotrStartersSimulation implements Simulation {
     private final LotroCardBlueprintLibrary library;
@@ -44,9 +46,10 @@ public class FotrStartersSimulation implements Simulation {
                         "1_304,1_84,1_312,1_26,1_26,1_86,1_168,1_168,1_168,1_176,1_176,1_176,1_176,1_177,1_178,1_178,1_178" +
                         ",1_178,1_179,1_179,1_179,1_180,1_180,1_180,1_180,1_181,1_181,1_181,1_187,1_187,1_187,1_191," +
                         "1_191,1_191,1_196,1_196", "fotr_block", "Gandalf Starter");
+        List<LotroDeck> availableDecks = List.of(aragornStarter, gandalfStarter);
         Map<String, LotroDeck> decks = new HashMap<>();
-        decks.put(bot1.getName(), aragornStarter);
-        decks.put(bot2.getName(), gandalfStarter);
+        decks.put(bot1.getName(), availableDecks.get(ThreadLocalRandom.current().nextInt(availableDecks.size())));
+        decks.put(bot2.getName(), availableDecks.get(ThreadLocalRandom.current().nextInt(availableDecks.size())));
 
         // Init game with bots and starter decks
         DefaultLotroGame lotroGame = new DefaultLotroGame(formatLibrary.getFormat("fotr_block"), decks, userFeedback, library);
