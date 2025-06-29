@@ -888,8 +888,12 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: Activated
-				phase: Skirmish
+				type: Trigger
+				optional: true
+				trigger: {
+					type: StartOfSkirmishInvolving
+					filter: Nazgul
+				}
 				limitPerPhase: 1
 				cost: {
 					type: Exert
@@ -898,7 +902,7 @@
 				effect: [
 					{
 						type: Spot
-						select: choose(Nazgul)
+						select: choose(Nazgul,InSkirmish)
 						memorize: chosenNazgul
 						text: Choose Nazgul to strengthen
 					}
@@ -906,7 +910,8 @@
 						type: If
 						check: {
 							type: CanSpot
-							filter: Nazgul, not(self)
+							filter: Nazgul
+							count: 2
 						}
 						true: {
 							type: ModifyStrength
@@ -929,7 +934,7 @@
 				]
 			}
 		]
-		gametext: Fierce.\Skirmish: Exert this minion to make a Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot another Nazgul). Limit once per phase.
+		gametext: Fierce.\At the start of each skirmish involving a Nazgul, you may exert this minion to make that Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot 2 Nazgul).
 		lore: ""
 		promotext: ""
 		alts: {

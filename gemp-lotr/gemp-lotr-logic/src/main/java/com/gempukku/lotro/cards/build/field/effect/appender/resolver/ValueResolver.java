@@ -372,6 +372,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("fromMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "limit", "over", "multiplier", "divider");
                 String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to FromMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> Integer.parseInt(actionContext.getValueFromMemory(memory)));
             } else if (type.equalsIgnoreCase("forEachBurden")) {
@@ -404,6 +406,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("forEachCultureInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachCultureInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             Set<Culture> cultures = new HashSet<>();
@@ -497,6 +501,9 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "memory", "filter", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachInMemory value.");
+
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) ->
@@ -527,8 +534,10 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "memory", "keyword", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachKeywordOnCardInMemory value.");
                 if (keyword == null)
-                    throw new InvalidCardDefinitionException("Keyword cannot be null");
+                    throw new InvalidCardDefinitionException("keyword must be provided to ForEachKeywordOnCardInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             int count = 0;
@@ -671,6 +680,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("siteNumberInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to SiteNumberInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> actionContext.getCardFromMemory(memory).getSiteNumber());
             } else if (type.equalsIgnoreCase("regionNumber")) {
@@ -680,6 +691,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("printedStrengthFromMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to PrintedStrengthFromMemory value.");
 
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
@@ -696,6 +709,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("twilightCostInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to TwilightCostInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             int total = 0;
