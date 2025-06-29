@@ -138,6 +138,7 @@
 						type: Discard
 						player: Free Peoples
 						select: choose(side(Free Peoples), AttachedTo(companion))
+						count: any
 						memorize: discardedCards
 					}
 					{
