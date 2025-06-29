@@ -365,12 +365,13 @@
 						type: ReconcileHand
 					}
 					{
-						type: If
-						check: {
+						type: Optional
+						text: Would you like to shuffle {self} into your draw deck?
+						requires: {
 							type: CanSpot
 							filter: Gandalf, artifact
 						}
-						true: [
+						effect: [
 							{
 								type: PutPlayedEventOnTopOfDrawDeck
 							}
@@ -382,7 +383,8 @@
 				]
 			}
 		]
-		gametext: Spell.<br>Exert your Wizard thrice to reconcile your hand.<br>Shuffle this into your draw deck if you can spot a [gandalf] artifact.
+		gametext: Spell.\Exert your Wizard thrice to reconcile your hand.\You may spot a [gandalf] artifact to shuffle this into your draw deck.
+
 		lore: ""
 		promotext: ""
 		alts: {

@@ -144,6 +144,7 @@
 				}
 				cost: {
 					type: Exhaust
+					ignoreCostCheckFailure: true
 					select: memory(playedMinion)
 				}
 				effect: {
@@ -414,62 +415,55 @@
 						}
 					]
 				}
-				effect: {
-					type: CostToEffect
-					cost: {
-						type: ChooseANumber
-						text: Choose how many {SAURON} tokens to remove
+				cost: {
+					type: Hinder
+					select: choose(your, side(Shadow), support)
+					count: {
+						type: Range
 						from: 0
 						to: {
-							type: ForEachCultureToken
-							culture: Sauron
-						}
-						memorize: removedTokens
-					}
-					effect: {
-						type: CostToEffect
-						cost: {
-							type: RemoveTokensCumulative
-							count: memory(removedTokens)
-							culture: Sauron
-						}
-						effect: {
-							type: Choice
-							texts: [
-								Play Sauron from hand
-								Play Sauron from your discard pile
-							]
-							effects: [
-								{
-									type: PlayCardFromHand
-									select: choose(name(Sauron))
-									discount: {
-										type: FromMemory
-										memory: removedTokens
-										multiplier: -1
-									}
-								}
-								{
-									type: PlayCardFromDiscard
-									select: choose(name(Sauron))
-									maxDiscount: {
-										type: ForEachCultureToken
-										culture: Sauron
-										multiplier: -1
-									}
-									discount: {
-										type: FromMemory
-										memory: removedTokens
-										multiplier: -1
-									}
-								}
-							]
+							type: ForEachYouCanSpot
+							filter: your, side(Shadow), support
 						}
 					}
-				} 
+					memorize: hinderedCards
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Play Sauron from hand
+						Play Sauron from your discard pile
+					]
+					effects: [
+						{
+							type: PlayCardFromHand
+							select: choose(name(Sauron))
+							discount: {
+								type: ForEachInMemory
+								memory: hinderedCards
+								multiplier: -1
+							}
+						}
+						{
+							type: PlayCardFromDiscard
+							select: choose(name(Sauron))
+							maxDiscount: {
+								type: ForEachYouCanSpot
+								filter: your, side(Shadow), support
+								multiplier: -1
+							}
+							discount: {
+								type: ForEachInMemory
+								memory: hinderedCards
+								multiplier: -1
+							}
+						}
+					]
+				}
 			}
 		]
-		gametext: Twilight. To play, hinder 2 copies of Cover of Darkness.<br>This cannot be discarded.<br>Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. <br>Shadow: Remove X [sauron] tokens from your cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		gametext: Twilight. To play, hinder 2 copies of Cover of Darkness.\This cannot be discarded.\Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. \Shadow: Hinder X of your Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+
 		lore: ""
 		promotext: ""
 		alts: {
@@ -586,12 +580,12 @@
 					filter: Orc
 				}
 				cost: {
-					type: Spot
-					filter: title(Cover of Darkness)
+					type: Hinder
+					select: self
 				}
 				effect: {
-					type: ReinforceTokens
-					select: choose(side(Shadow))
+					type: AddTwilight
+					amount: 1
 				}
 			}
 			{
@@ -639,7 +633,7 @@
 				]
 			}
 		]
-		gametext: Twilight. Each time you play an Orc, spot Cover of Darkness to reinforce a Shadow token.<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
+		gametext: Twilight. Each time you play an Orc, you may hinder this to add (1).\<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -791,9 +785,19 @@
 			{
 				type: ModifyOwnCost
 				amount: {
-					type: ForEachYouCanSpot
-					filter: support
-					multiplier: -1
+					type: Sum
+					source: [
+						{
+							type: ForEachYouCanSpot
+							filter: side(Free Peoples), support
+							multiplier: -1
+						}
+						{
+							type: ForEachYouCanSpot
+							filter: companion
+							multiplier: -1
+						}
+					]
 				}
 			}
 			{
@@ -843,7 +847,7 @@
 				}
 			}
 		]
-		gametext: Fierce.<br>Sauron is twilight cost -1 for each support card you can spot. <br>When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.<br>Each time a companion loses a skirmish to Sauron, kill that companion.
+		gametext: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. \When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.\Each time a companion loses a skirmish to Sauron, kill that companion.
 		lore: ""
 		promotext: ""
 		alts: {

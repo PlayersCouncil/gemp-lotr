@@ -932,13 +932,13 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: Spot
-					select: choose(unbound,companion)
-					count: 3
-					memorize: chosenCompanions
-				}
-				effect: [
+				cost: [
+					{
+						type: Spot
+						select: choose(unbound,companion)
+						count: 3
+						memorize: chosenCompanions
+					}
 					{
 						type: ChooseActiveCards
 						text: Spot 3 Southrons
@@ -947,6 +947,8 @@
 						count: 3
 						memorize: chosenSouthrons
 					}
+				]
+				effect: [
 					{
 						type: Hinder
 						select: all(character,not(or(memory(chosenCompanions), memory(chosenSouthrons))))
@@ -954,7 +956,7 @@
 				]
 			}
 		]
-		gametext: Spot 3 unbound companions.  The Free Peoples player then spots 3 Southrons.  All other characters are hindered.
+		gametext: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -294,7 +294,7 @@
 		strength: 2
 		vitality: 4
 		signet: Gandalf
-		resistance: 8
+		resistance: 7
 		canStartWithRing: true
 		keywords: Ring-bound
 		effects: [
@@ -332,7 +332,7 @@
 				}
 			}
 		]
-		gametext: Ring-bearer (resistance 8).  Ring-bound.<br>While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
+		gametext: Ring-bearer (resistance 7).  Ring-bound.<br>While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -440,6 +440,10 @@
 					type: StartOfPhase
 					phase: Maneuver
 				}
+				cost: {
+					type: AddBurdens
+					amount: 1
+				}
 				effect: [
 					{
 						type: Choice
@@ -461,7 +465,7 @@
 				]
 			}
 		]
-		gametext: Ring-bound.<br>If you cannot spot more than 4 companions at the start of the maneuver phase, choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.<br>Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
+		gametext: Ring-bound. If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.\Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -494,6 +498,9 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 6
+		keywords: [
+			Ring-bound
+		]
 		effects: [
 			{
 				type: ExtraCost
@@ -505,10 +512,20 @@
 			{
 				type: Activated
 				phase: Assignment
-				cost: {
-					type: Hinder
-					select: self
-				}
+				requires: {
+					type: CantSpot
+					filter: companion, not(culture(shire))
+				}						
+				cost: [
+					{
+						type: Exert
+						select: self
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
 				effect: [
 					{
 						type: Spot
@@ -528,6 +545,7 @@
 									type: IsGreaterThanOrEqual
 									firstNumber: {
 										type: TwilightCostInMemory
+										memory: chosenMinion
 									}
 									secondNumber: 5
 								}
@@ -545,7 +563,7 @@
 				]
 			}
 		]
-		gametext: To play, add a burden.<br>Assignment: Hinder Smeagol to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
+		gametext: Ring-bound. To play, add a burden.\Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
 		lore: ""
 		promotext: ""
 		alts: {
