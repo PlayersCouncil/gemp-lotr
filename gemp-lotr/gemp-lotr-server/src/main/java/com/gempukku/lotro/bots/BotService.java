@@ -29,7 +29,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class BotService {
-    private static final boolean START_SIMULATIONS_AT_STARTUP = true;
+    private static final boolean START_SIMULATIONS_AT_STARTUP = false;
+    private static final boolean TEST_MODEL_AT_STARTUP = false;
 
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
@@ -48,39 +49,39 @@ public class BotService {
 
         fillBotParticipantList();
 
-        replayBuffer.addListener(10_000, buffer -> {
-            List<LearningStep> batch = buffer.sampleBatch(buffer.size());
-            buffer.clear();
-
-            new FotrStartersLearningStepsPersistence().save(batch);
-        });
 
         if (START_SIMULATIONS_AT_STARTUP) {
-            System.out.println("getting data");
+            replayBuffer.addListener(10_000, buffer -> {
+                List<LearningStep> batch = buffer.sampleBatch(buffer.size());
+                buffer.clear();
+                new FotrStartersLearningStepsPersistence().save(batch);
+            });
+
+            System.out.println("simulating games to get data");
             startRandomFotrStartersSimulation(
                     new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot1", replayBuffer),
                     new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot2", replayBuffer));
 
-            ZonedDateTime start = DateUtils.Now();
-
-            System.out.println("training after games");
             List<LearningStep> batch = replayBuffer.sampleBatch(replayBuffer.size());
             replayBuffer.clear();
+            new FotrStartersLearningStepsPersistence().save(batch);
+        }
+        if (TEST_MODEL_AT_STARTUP) {
+            System.out.println("training models after games");
 
-            LearningStepsPersistence lsp = new FotrStartersLearningStepsPersistence();
-            lsp.save(batch);
-
+            System.out.println("training 'go first' model");
             GoFirstTrainer trainer = new GoFirstTrainer();
-            SoftClassifier<double[]> model = trainer.train(lsp.load());
-            // Save or register model somewhere accessible by bots
+            SoftClassifier<double[]> model = trainer.train(new FotrStartersLearningStepsPersistence().load(trainer));
             modelRegistry.setGoFirstModel(model);
-            System.out.println(DateUtils.HumanDuration(Duration.between(DateUtils.Now(), start).abs()));
 
-            System.out.println("using model");
+            System.out.println("training done");
+
+            System.out.println("using model in game simulations");
 
             startRandomFotrStartersSimulation(
                     new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot1", modelRegistry),
                     new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot2", modelRegistry));
+
         }
     }
 

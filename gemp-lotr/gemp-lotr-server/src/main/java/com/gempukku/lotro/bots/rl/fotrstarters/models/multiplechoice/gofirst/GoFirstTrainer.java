@@ -10,45 +10,24 @@ import smile.classification.SoftClassifier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntPredicate;
 
 public class GoFirstTrainer implements Trainer {
     private static final String GO_FIRST = "Go first";
     @Override
     public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
         List<LabeledPoint> data = new ArrayList<>();
-        System.out.println("Points to extract from: " + steps.size());
-        int mcFound = 0;
-        int gfFound = 0;
         for (LearningStep step : steps) {
-            if (step.decision.getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE) {
-                mcFound++;
-                String[] options = step.decision.getDecisionParameters().get("results");
-
-                int goFirstIndex = -1;
-                for (int i = 0; i < options.length; i++) {
-                    if (options[i].equalsIgnoreCase(GO_FIRST)) {
-                        goFirstIndex = i;
-                        break;
-                    }
+            if (isStepRelevant(step)) {
+                int label;
+                if (((MultipleChoiceAction) step.action).getChosenOption().equals(GO_FIRST)) {
+                    label = step.reward > 0 ? 1 : 0;
+                } else {
+                    label = step.reward > 0 ? 0 : 1;
                 }
 
-                if (goFirstIndex != -1 && step.action instanceof MultipleChoiceAction mca) {
-                    gfFound++;
-                    // Check if the action taken corresponds to choosing "Go first"
-                    int label;
-                    if (mca.getChosenOption().equals(GO_FIRST)) {
-                        label = step.reward > 0 ? 1 : 0;
-                    } else {
-                        label = step.reward > 0 ? 0 : 1;
-                    }
-
-                    data.add(new LabeledPoint(label, step.state));
-                }
+                data.add(new LabeledPoint(label, step.state));
             }
         }
-        System.out.println("MC steps found: " + mcFound);
-        System.out.println("GF steps found: " + gfFound);
         return data;
     }
 
@@ -57,22 +36,29 @@ public class GoFirstTrainer implements Trainer {
         double[][] x = points.stream().map(LabeledPoint::x).toArray(double[][]::new);
         int[] y = points.stream().mapToInt(LabeledPoint::y).toArray();
 
-
-        System.out.println("Training with: " + points.size());
-        System.out.println("First better: " + points.stream().mapToInt(LabeledPoint::y).filter(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value == 1;
-            }
-        }).count());
-
-        System.out.println("Second better: " + points.stream().mapToInt(LabeledPoint::y).filter(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value == 0;
-            }
-        }).count());
-
         return LogisticRegression.fit(x, y);
+    }
+
+    @Override
+    public boolean isStepRelevant(LearningStep step) {
+        if (step.decision.getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE) {
+            String[] options = step.decision.getDecisionParameters().get("results");
+
+            int goFirstIndex = -1;
+            for (int i = 0; i < options.length; i++) {
+                if (options[i].equalsIgnoreCase(GO_FIRST)) {
+                    goFirstIndex = i;
+                    break;
+                }
+            }
+
+            return goFirstIndex != -1 && step.action instanceof MultipleChoiceAction;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass().equals(GoFirstTrainer.class);
     }
 }

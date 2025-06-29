@@ -1,6 +1,6 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
-import com.alibaba.fastjson2.annotation.JSONType;
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -8,7 +8,6 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import java.util.ArrayList;
 import java.util.List;
 
-@JSONType(typeName = "CardSelectionAction")
 public class CardSelectionAction implements SemanticAction {
     private final List<String> chosenBlueprintIds = new ArrayList<>();
 
@@ -61,5 +60,10 @@ public class CardSelectionAction implements SemanticAction {
         } else {
             throw new IllegalArgumentException("Cards to pick are not present in the decision.");
         }
+    }
+
+    @Override
+    public JSONObject toJson() {
+        return null;
     }
 }

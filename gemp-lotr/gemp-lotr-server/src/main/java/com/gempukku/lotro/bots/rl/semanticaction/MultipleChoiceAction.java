@@ -1,11 +1,10 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
-import com.alibaba.fastjson2.annotation.JSONType;
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
-@JSONType(typeName = "MultipleChoiceAction")
 public class MultipleChoiceAction implements SemanticAction {
     private final String chosenOption;
 
@@ -34,5 +33,17 @@ public class MultipleChoiceAction implements SemanticAction {
         }
 
         throw new IllegalArgumentException("Option not found.");
+    }
+
+    public static MultipleChoiceAction fromJson(JSONObject obj) {
+        return new MultipleChoiceAction(obj.getString("chosenOption"));
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "MultipleChoiceAction");
+        obj.put("chosenOption", chosenOption);
+        return obj;
     }
 }

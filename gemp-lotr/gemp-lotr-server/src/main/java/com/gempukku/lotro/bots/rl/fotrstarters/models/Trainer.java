@@ -8,6 +8,7 @@ import java.util.List;
 public interface Trainer {
     List<LabeledPoint> extractTrainingData(List<LearningStep> steps);
     SoftClassifier<double[]> trainWithPoints(List<LabeledPoint> points);
+    boolean isStepRelevant(LearningStep step);
     default SoftClassifier<double[]> train(List<LearningStep> steps) {
         return trainWithPoints(extractTrainingData(steps));
     }

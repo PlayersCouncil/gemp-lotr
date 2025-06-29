@@ -1,5 +1,7 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
+
 public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDecision {
     private final String[] _possibleResults;
 
@@ -7,6 +9,16 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
         super(id, text, AwaitingDecisionType.MULTIPLE_CHOICE);
         _possibleResults = possibleResults;
         setParam("results", _possibleResults);
+    }
+
+    public static AwaitingDecision fromJson(JSONObject obj) {
+        return new MultipleChoiceAwaitingDecision(obj.getInteger("id"), obj.getString("text"), obj.getObject("results", String[].class)) {
+            @Override
+            protected void validDecisionMade(int index, String result) {
+
+            }
+        };
+
     }
 
     protected abstract void validDecisionMade(int index, String result);
@@ -23,5 +35,15 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
             throw new DecisionResultInvalidException("Unknown response number");
         }
         validDecisionMade(index, _possibleResults[index]);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "MultipleChoiceAwaitingDecision");
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        obj.put("results", getDecisionParameters().get("results"));
+        return obj;
     }
 }
