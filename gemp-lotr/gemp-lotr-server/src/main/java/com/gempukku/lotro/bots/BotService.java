@@ -10,6 +10,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
 import com.gempukku.lotro.bots.simulation.FotrStartersSimulation;
@@ -80,6 +81,11 @@ public class BotService {
             Trainer mulliganTrainer = new MulliganTrainer();
             SoftClassifier<double[]> mulliganModel = mulliganTrainer.train(new FotrStartersLearningStepsPersistence().load(mulliganTrainer));
             modelRegistry.setMulliganModel(mulliganModel);
+
+            System.out.println("training 'another move' model");
+            Trainer anotherMoveTrainer = new AnotherMoveTrainer();
+            SoftClassifier<double[]> anotherMoveModel = anotherMoveTrainer.train(new FotrStartersLearningStepsPersistence().load(anotherMoveTrainer));
+            modelRegistry.setAnotherMoveModel(anotherMoveModel);
 
             System.out.println("training 'integer' model");
             Trainer integerTrainer = new IntegerTrainer();

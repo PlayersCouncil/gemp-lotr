@@ -45,6 +45,15 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
                     return probs[1] > probs[0] ? new MultipleChoiceAction("Yes").toDecisionString(decision, gameState) : new MultipleChoiceAction("No").toDecisionString(decision, gameState);
                 }
             }
+            if (decision.getText().contains("another move")) {
+                SoftClassifier<double[]> model = modelRegistry.getAnotherMoveModel();
+                double[] stateVector = features.extractFeatures(gameState, decision, getName());
+                if (model != null) {
+                    double[] probs = new double[2];
+                    model.predict(stateVector, probs);
+                    return probs[1] > probs[0] ? new MultipleChoiceAction("Yes").toDecisionString(decision, gameState) : new MultipleChoiceAction("No").toDecisionString(decision, gameState);
+                }
+            }
         } else if (decision.getDecisionType().equals(AwaitingDecisionType.INTEGER)) {
             SoftClassifier<double[]> model = modelRegistry.getIntegerModel();
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
