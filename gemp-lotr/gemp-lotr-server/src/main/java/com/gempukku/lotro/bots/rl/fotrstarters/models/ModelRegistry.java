@@ -6,7 +6,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> goFirstModel;
     private SoftClassifier<double[]> mulliganModel;
     private SoftClassifier<double[]> anotherMoveModel;
-    private SoftClassifier<double[]> integerModel;
+    private SoftClassifier<double[]> burdensBidModel;
     private SoftClassifier<double[]> cardSelectionModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
@@ -33,12 +33,12 @@ public class ModelRegistry {
         this.anotherMoveModel = anotherMoveModel;
     }
 
-    public SoftClassifier<double[]> getIntegerModel() {
-        return integerModel;
+    public SoftClassifier<double[]> getBurdensBidModel() {
+        return burdensBidModel;
     }
 
-    public void setIntegerModel(SoftClassifier<double[]> integerModel) {
-        this.integerModel = integerModel;
+    public void setBurdensBidModel(SoftClassifier<double[]> burdensBidModel) {
+        this.burdensBidModel = burdensBidModel;
     }
 
     public SoftClassifier<double[]> getCardSelectionModel() {

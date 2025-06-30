@@ -10,7 +10,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.CardSelectionTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
@@ -88,10 +88,10 @@ public class BotService {
             SoftClassifier<double[]> anotherMoveModel = anotherMoveTrainer.train(new FotrStartersLearningStepsPersistence().load(anotherMoveTrainer));
             modelRegistry.setAnotherMoveModel(anotherMoveModel);
 
-            System.out.println("training 'integer' model");
-            Trainer integerTrainer = new IntegerTrainer();
-            SoftClassifier<double[]> integerModel = integerTrainer.train(new FotrStartersLearningStepsPersistence().load(integerTrainer));
-            modelRegistry.setIntegerModel(integerModel);
+            System.out.println("training 'burden' model");
+            Trainer burdenTrainer = new BurdenTrainer();
+            SoftClassifier<double[]> burdenModel = burdenTrainer.train(new FotrStartersLearningStepsPersistence().load(burdenTrainer));
+            modelRegistry.setBurdensBidModel(burdenModel);
 
             System.out.println("training 'card selection' model");
             Trainer cardSelectionTrainer = new CardSelectionTrainer();

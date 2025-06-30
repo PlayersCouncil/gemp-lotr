@@ -4,7 +4,7 @@ import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.CardSelectionTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
@@ -25,7 +25,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new GoFirstTrainer(), "fotr-starters-go-first.jsonl");
         trainerFileMap.put(new MulliganTrainer(), "fotr-starters-mulligan.jsonl");
         trainerFileMap.put(new AnotherMoveTrainer(), "fotr-starters-another-move.jsonl");
-        trainerFileMap.put(new IntegerTrainer(), "fotr-starters-integer.jsonl");
+        trainerFileMap.put(new BurdenTrainer(), "fotr-starters-burdens.jsonl");
         trainerFileMap.put(new CardSelectionTrainer(), "fotr-starters-card-selection.jsonl");
         // Add other trainers here when needed
     }

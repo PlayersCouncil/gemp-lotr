@@ -1,6 +1,8 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.Assignment;
@@ -12,6 +14,8 @@ import com.gempukku.lotro.logic.timing.GameStats;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
 public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
     private static final List<String> BLUEPRINTS = List.of(
@@ -85,6 +89,169 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
 
     @Override
     public double[] extractFeatures(GameState gameState, AwaitingDecision decision, String playerId) {
+        return switch (decision.getDecisionType()) {
+            case MULTIPLE_CHOICE -> {
+                if (decision.getText().contains("mulligan")) {
+                    yield extractMulliganFeatures(gameState, playerId);
+                }
+                if (decision.getText().contains("another move")) {
+                    yield extractAnotherMoveFeatures(gameState, playerId);
+                }
+                if (decision.getDecisionParameters().get("results") != null && Arrays.stream(decision.getDecisionParameters().get("results")).toList().contains("Go first")) {
+                    yield extractGoFirstFeatures(gameState, playerId);
+                }
+                yield extractAllFeatures(gameState, decision, playerId);
+            }
+            case INTEGER -> {
+                if (decision.getText().contains("burdens to bid")) {
+                    yield extractBurdensBidFeatures(gameState, playerId);
+                }
+                yield extractAllFeatures(gameState, decision, playerId);
+            }
+            case CARD_SELECTION -> {
+                yield extractAllFeatures(gameState, decision, playerId);
+            }
+            default -> extractAllFeatures(gameState, decision, playerId);
+        };
+    }
+
+    private double[] extractBurdensBidFeatures(GameState gameState, String playerId) {
+        List<Double> features = new ArrayList<>();
+
+        // Only know my deck
+        features.add(getDeckIndex(gameState, playerId));
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+
+    }
+
+    private double[] extractIntegerFeatures(GameState gameState, AwaitingDecision decision, String playerId) {
+        String opponent = gameState.getPlayerNames().stream()
+                .filter(s -> !s.equals(playerId)).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unknown second player"));
+        GameStats gameStats = gameState.getMostRecentGameStats();
+
+        List<Double> features = new ArrayList<>();
+
+        features.add(getDeckIndex(gameState, playerId));
+        features.add(getPhaseIndex(gameState));
+            features.add(getTurnIndicator(gameState, playerId));
+            features.add((double) gameState.getTwilightPool());
+            features.add((double) gameState.getPlayerPosition(playerId));
+            features.add((double) gameState.getPlayerPosition(opponent));
+
+            features.addAll(getActiveCardCounts(gameState, playerId));
+            features.addAll(getActiveCardCounts(gameState, opponent));
+
+            features.addAll(getAttachmentCounts(gameState, playerId));
+            features.addAll(getAttachmentCounts(gameState, opponent));
+
+            features.addAll(getCardInHandCounts(gameState, playerId));
+            features.add((double) gameState.getHand(opponent).size());
+
+            features.addAll(getDeadPileCounts(gameState, playerId));
+            features.addAll(getDeadPileCounts(gameState, opponent));
+
+            features.addAll(getDiscardPileCounts(gameState, playerId));
+            features.addAll(getDiscardPileCounts(gameState, opponent));
+
+            features.addAll(getAssignments(gameState));
+            features.addAll(getSkirmish(gameState));
+
+            features.add((double) gameState.getPlayerBurdens(playerId));
+            features.add((double) gameState.getPlayerBurdens(opponent));
+
+            features.addAll(getWoundsOnCards(gameState, playerId));
+            features.addAll(getWoundsOnCards(gameState, opponent));
+
+            features.add(gameState.isWearingRing() ? 1.0 : 0.0);
+            features.add(((double) gameState.getMoveCount()));
+
+            features.add(((double) gameStats.getFellowshipSkirmishStrength()));
+            features.add(((double) gameStats.getShadowSkirmishStrength()));
+            features.add(((double) gameStats.getFellowshipSkirmishDamageBonus()));
+            features.add(((double) gameStats.getShadowSkirmishDamageBonus()));
+            features.add(gameStats.isFpOverwhelmed() ? 1.0 : 0.0);
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private double[] extractGoFirstFeatures(GameState gameState, String playerId) {
+        List<Double> features = new ArrayList<>();
+
+        // Only know my deck + burdens (but they are not placed yet so i skip them)
+        features.add(getDeckIndex(gameState, playerId));
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private double[] extractAnotherMoveFeatures(GameState gameState, String playerId) {
+        String opponent = gameState.getPlayerNames().stream()
+                .filter(s -> !s.equals(playerId)).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unknown second player"));
+
+        List<Double> features = new ArrayList<>();
+        // My deck
+        features.add(getDeckIndex(gameState, playerId));
+        // Opponent deck
+        features.add(getDeckIndex(gameState, opponent));
+        // Twilight
+        features.add((double) gameState.getTwilightPool());
+        // Positions on adventure path
+        features.add((double) gameState.getPlayerPosition(playerId));
+        features.add((double) gameState.getPlayerPosition(opponent));
+        // Number of companions
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
+        // Number of minions
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getBlueprint().getCardType().equals(CardType.MINION)).count());
+        // Number of attached cards on companions
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId) && physicalCard.getAttachedTo() != null && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getAttachedTo() != null && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
+        // Number of attached cards on minions
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getAttachedTo() != null && physicalCard.getBlueprint().getCardType().equals(CardType.MINION)).count());
+        // Hand situation
+        features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.FREE_PEOPLE)).count());
+        features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.FREE_PEOPLE) && physicalCard.getBlueprint().getCardType().equals(CardType.EVENT)).count());
+        features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.SHADOW)).count());
+        features.add((double) gameState.getHand(opponent).size());
+        // Cards in discard -> cards remaining in deck
+        features.add((double) gameState.getDiscard(playerId).size());
+        features.add((double) gameState.getDiscard(opponent).size());
+        // Side of top card in opponents discard
+        features.add(gameState.getDiscard(opponent).isEmpty() ? 0.0 : gameState.getDiscard(opponent).getLast().getBlueprint().getSide().equals(Side.SHADOW) ? 1.0 : 2.0);
+        // Burden count
+        features.add((double) gameState.getPlayerBurdens(playerId));
+        features.add((double) gameState.getPlayerBurdens(opponent));
+        // Total wounds on companions
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId)).mapToInt((ToIntFunction<PhysicalCard>) gameState::getWounds).sum());
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent)).mapToInt((ToIntFunction<PhysicalCard>) gameState::getWounds).sum());
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private double[] extractMulliganFeatures(GameState gameState, String playerId) {// Game state
+        String opponent = gameState.getPlayerNames().stream()
+                .filter(s -> !s.equals(playerId)).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unknown second player"));
+
+        List<Double> features = new ArrayList<>();
+
+        // My deck
+        features.add(getDeckIndex(gameState, playerId));
+        // My turn
+        features.add(getTurnIndicator(gameState, playerId));
+        // NUmber of fp and shadow cards in hand
+        features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.FREE_PEOPLE)).count());
+        features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.SHADOW)).count());
+        // Opponent mulligan
+        features.add((double) gameState.getHand(opponent).size());
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+
+    }
+
+    private double[] extractAllFeatures(GameState gameState, AwaitingDecision decision, String playerId) {
         // Game state
         String opponent = gameState.getPlayerNames().stream()
                 .filter(s -> !s.equals(playerId)).findFirst()

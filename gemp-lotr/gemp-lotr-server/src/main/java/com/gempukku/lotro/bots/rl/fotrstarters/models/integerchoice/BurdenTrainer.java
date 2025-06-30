@@ -9,10 +9,18 @@ import smile.classification.LogisticRegression;
 import smile.classification.SoftClassifier;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-public class IntegerTrainer implements Trainer {
+public class BurdenTrainer implements Trainer {
+    private static final String BURDENS = "burdens to bid";
+    private static final Set<Integer> uniqueBids = new HashSet<>();
+
+    public static int getUniqueBids() {
+        return uniqueBids.size();
+    }
+
     @Override
     public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
         List<LabeledPoint> data = new ArrayList<>();
@@ -21,20 +29,12 @@ public class IntegerTrainer implements Trainer {
             if (!isStepRelevant(step))
                 continue;
 
-            Map<String, String[]> params = step.decision.getDecisionParameters();
-
-            // Parse min and max (nullable)
-            int min = params.containsKey("min") ? Integer.parseInt(params.get("min")[0]) : 0;
-            Integer max = params.containsKey("max") ? Integer.parseInt(params.get("max")[0]) : null;
+            if (step.reward <= 0) // Only predict based on winning bids
+                continue;
 
             int chosenValue = ((IntegerChoiceAction) step.action).getValue();
-
-            // Map chosen value to a label (zero-based)
-            int label = chosenValue - min;
-            if (label < 0 || (max != null && chosenValue > max))
-                throw new IllegalStateException("Chosen value out of expected range");
-
-            data.add(new LabeledPoint(label, step.state));
+            uniqueBids.add(chosenValue);
+            data.add(new LabeledPoint(chosenValue, step.state));
         }
 
         return data;
@@ -50,14 +50,13 @@ public class IntegerTrainer implements Trainer {
 
     @Override
     public boolean isStepRelevant(LearningStep step) {
-        if (step.decision.getDecisionType() == AwaitingDecisionType.INTEGER) {
-            return step.action instanceof IntegerChoiceAction;
-        }
-        return false;
+        return step.decision.getDecisionType() == AwaitingDecisionType.INTEGER &&
+            step.decision.getText().contains(BURDENS) &&
+            step.action instanceof IntegerChoiceAction;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass().equals(IntegerTrainer.class);
+        return obj.getClass().equals(BurdenTrainer.class);
     }
 }
