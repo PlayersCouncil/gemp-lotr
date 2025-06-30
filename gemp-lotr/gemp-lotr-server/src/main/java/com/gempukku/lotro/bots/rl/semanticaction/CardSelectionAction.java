@@ -6,6 +6,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CardSelectionAction implements SemanticAction {
@@ -21,8 +22,8 @@ public class CardSelectionAction implements SemanticAction {
         }
     }
 
-    public CardSelectionAction(List<String> getChosenBlueprintIds) {
-        this.chosenBlueprintIds.addAll(getChosenBlueprintIds);
+    public CardSelectionAction(String[] chosenBlueprintIds) {
+        this.chosenBlueprintIds.addAll(Arrays.asList(chosenBlueprintIds));
     }
 
     public List<String> getChosenBlueprintIds() {
@@ -64,6 +65,13 @@ public class CardSelectionAction implements SemanticAction {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject obj = new JSONObject();
+        obj.put("type", "CardSelectionAction");
+        obj.put("chosenBlueprints", chosenBlueprintIds.toArray());
+        return obj;
+    }
+
+    public static CardSelectionAction fromJson(JSONObject obj) {
+        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class));
     }
 }

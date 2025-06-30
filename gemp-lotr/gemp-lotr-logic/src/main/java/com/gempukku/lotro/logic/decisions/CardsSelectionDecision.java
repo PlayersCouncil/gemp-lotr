@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.PhysicalCard;
 
 import java.util.*;
@@ -17,6 +18,16 @@ public abstract class CardsSelectionDecision extends AbstractAwaitingDecision {
         setParam("min", String.valueOf(minimum));
         setParam("max", String.valueOf(maximum));
         setParam("cardId", getCardIds(_physicalCards));
+    }
+
+    public CardsSelectionDecision(int id, String text, List<String> physicalCardIds, int minimum, int maximum) {
+        super(id, text, AwaitingDecisionType.CARD_SELECTION);
+        _physicalCards = null;
+        _minimum = minimum;
+        _maximum = maximum;
+        setParam("min", String.valueOf(minimum));
+        setParam("max", String.valueOf(maximum));
+        setParam("cardId", physicalCardIds.toArray(new String[0]));
     }
 
     private String[] getCardIds(List<? extends PhysicalCard> physicalCards) {
@@ -58,5 +69,30 @@ public abstract class CardsSelectionDecision extends AbstractAwaitingDecision {
                 return physicalCard;
 
         throw new DecisionResultInvalidException();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "CardsSelectionDecision");
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        obj.put("min", _minimum);
+        obj.put("max", _maximum);
+        if (_physicalCards != null) {
+            obj.put("physicalCards", getCardIds(_physicalCards));
+        } else {
+            obj.put("physicalCards", getDecisionParameters().get("cardId"));
+        }
+        return obj;
+    }
+
+    public static CardsSelectionDecision fromJson(JSONObject obj) {
+        return new CardsSelectionDecision(obj.getInteger("id"), obj.getString("text"), Arrays.asList(obj.getObject("physicalCards", String[].class)), obj.getInteger("min"), obj.getInteger("max")) {
+            @Override
+            public void decisionMade(String result) throws DecisionResultInvalidException {
+                throw new UnsupportedOperationException("Not implemented in training context");
+            }
+        };
     }
 }

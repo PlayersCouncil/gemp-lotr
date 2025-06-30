@@ -44,6 +44,5 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
                 throw new UnsupportedOperationException("Not implemented in training context");
             }
         };
-
     }
 }

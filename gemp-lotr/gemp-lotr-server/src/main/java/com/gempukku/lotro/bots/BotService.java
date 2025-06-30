@@ -9,6 +9,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersiste
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.CardSelectionTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.IntegerTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -91,6 +92,11 @@ public class BotService {
             Trainer integerTrainer = new IntegerTrainer();
             SoftClassifier<double[]> integerModel = integerTrainer.train(new FotrStartersLearningStepsPersistence().load(integerTrainer));
             modelRegistry.setIntegerModel(integerModel);
+
+            System.out.println("training 'card selection' model");
+            Trainer cardSelectionTrainer = new CardSelectionTrainer();
+            SoftClassifier<double[]> cardSelectionModel = cardSelectionTrainer.train(new FotrStartersLearningStepsPersistence().load(cardSelectionTrainer));
+            modelRegistry.setCardSelectionModel(cardSelectionModel);
 
             System.out.println("training done");
 

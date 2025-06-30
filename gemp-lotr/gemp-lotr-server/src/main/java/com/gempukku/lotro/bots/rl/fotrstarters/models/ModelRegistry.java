@@ -7,6 +7,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> mulliganModel;
     private SoftClassifier<double[]> anotherMoveModel;
     private SoftClassifier<double[]> integerModel;
+    private SoftClassifier<double[]> cardSelectionModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -38,5 +39,13 @@ public class ModelRegistry {
 
     public void setIntegerModel(SoftClassifier<double[]> integerModel) {
         this.integerModel = integerModel;
+    }
+
+    public SoftClassifier<double[]> getCardSelectionModel() {
+        return cardSelectionModel;
+    }
+
+    public void setCardSelectionModel(SoftClassifier<double[]> cardSelectionModel) {
+        this.cardSelectionModel = cardSelectionModel;
     }
 }

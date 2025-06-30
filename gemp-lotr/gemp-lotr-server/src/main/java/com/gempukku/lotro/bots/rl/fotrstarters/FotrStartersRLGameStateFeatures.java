@@ -79,6 +79,10 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
             "1_145", "1_150", "1_150", "1_150", "1_150", "1_151", "1_151", "1_151", "1_151", "1_152", "1_152", "1_152", "1_152", "1_153", "1_153", "1_153", "1_158", "1_158" // Uruks
     );
 
+    public static List<String> getBlueprints() {
+        return BLUEPRINTS;
+    }
+
     @Override
     public double[] extractFeatures(GameState gameState, AwaitingDecision decision, String playerId) {
         // Game state
