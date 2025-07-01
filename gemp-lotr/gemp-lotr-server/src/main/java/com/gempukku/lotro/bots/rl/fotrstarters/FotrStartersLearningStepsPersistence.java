@@ -3,7 +3,7 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.CardSelectionTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -26,7 +26,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new MulliganTrainer(), "fotr-starters-mulligan.jsonl");
         trainerFileMap.put(new AnotherMoveTrainer(), "fotr-starters-another-move.jsonl");
         trainerFileMap.put(new BurdenTrainer(), "fotr-starters-burdens.jsonl");
-        trainerFileMap.put(new CardSelectionTrainer(), "fotr-starters-card-selection.jsonl");
+        trainerFileMap.put(new ReconcileTrainer(), "fotr-starters-reconcile.jsonl");
         // Add other trainers here when needed
     }
 
@@ -37,6 +37,13 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
             String filename = entry.getValue();
 
             saveFilteredSteps(filename, trainer, steps);
+        }
+        try (FileWriter fw = new FileWriter("fotr-starters-all.jsonl", true)) {
+            for (LearningStep step : steps) {
+                    fw.write(step.toJson() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

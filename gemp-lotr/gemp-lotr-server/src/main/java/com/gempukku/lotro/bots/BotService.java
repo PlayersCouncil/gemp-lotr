@@ -9,7 +9,8 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersiste
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.CardSelectionTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.BlueprintFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -48,6 +49,7 @@ public class BotService {
 
     public BotService(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, PlayerDAO playerDAO) {
         this.library = library;
+        BlueprintFeatures.init(library);
         this.formatLibrary = formatLibrary;
         this.playerDAO = playerDAO;
 
@@ -93,10 +95,10 @@ public class BotService {
             SoftClassifier<double[]> burdenModel = burdenTrainer.train(new FotrStartersLearningStepsPersistence().load(burdenTrainer));
             modelRegistry.setBurdensBidModel(burdenModel);
 
-            System.out.println("training 'card selection' model");
-            Trainer cardSelectionTrainer = new CardSelectionTrainer();
-            SoftClassifier<double[]> cardSelectionModel = cardSelectionTrainer.train(new FotrStartersLearningStepsPersistence().load(cardSelectionTrainer));
-            modelRegistry.setCardSelectionModel(cardSelectionModel);
+            System.out.println("training 'reconcile' model");
+            Trainer reconcileTrainer = new ReconcileTrainer();
+            SoftClassifier<double[]> reconcileModel = reconcileTrainer.train(new FotrStartersLearningStepsPersistence().load(reconcileTrainer));
+            modelRegistry.setReconcileModel(reconcileModel);
 
             System.out.println("training done");
 

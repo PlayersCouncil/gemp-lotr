@@ -44,7 +44,7 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
             case ARBITRARY_CARDS -> new ChooseFromArbitraryCardsAction(action, decision);
             case CARD_ACTION_CHOICE -> new CardActionChoiceAction(action, decision);
             case ACTION_CHOICE -> new ActionChoiceAction(action, decision);
-            case CARD_SELECTION -> new CardSelectionAction(action, gameState);
+            case CARD_SELECTION -> new CardSelectionAction(action, decision, gameState);
             case ASSIGN_MINIONS -> new AssignMinionsAction(action, gameState);
         };
     }

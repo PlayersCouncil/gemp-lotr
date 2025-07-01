@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
+import com.gempukku.lotro.logic.decisions.CardsSelectionDecision;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +12,9 @@ import java.util.List;
 
 public class CardSelectionAction implements SemanticAction {
     private final List<String> chosenBlueprintIds = new ArrayList<>();
+    private final List<String> notChosenBlueprintIds = new ArrayList<>();
 
-    public CardSelectionAction(String answer, GameState gameState) {
+    public CardSelectionAction(String answer, AwaitingDecision decision, GameState gameState) {
         String[] individualCards = answer.split(",");
 
         for (String individualCard : individualCards) {
@@ -20,14 +22,28 @@ public class CardSelectionAction implements SemanticAction {
                 chosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(individualCard)));
             }
         }
+
+        if (decision instanceof CardsSelectionDecision csd) {
+            List<String> allChoices = Arrays.asList(csd.getDecisionParameters().get("cardId"));
+            allChoices.forEach(choice -> {
+                if (!chosenBlueprintIds.contains(choice)) {
+                    notChosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(choice)));
+                }
+            });
+        }
     }
 
-    public CardSelectionAction(String[] chosenBlueprintIds) {
+    public CardSelectionAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds) {
         this.chosenBlueprintIds.addAll(Arrays.asList(chosenBlueprintIds));
+        this.notChosenBlueprintIds.addAll(Arrays.asList(notChosenBlueprintIds));
     }
 
     public List<String> getChosenBlueprintIds() {
         return chosenBlueprintIds;
+    }
+
+    public List<String> getNotChosenBlueprintIds() {
+        return notChosenBlueprintIds;
     }
 
     @Override
@@ -68,10 +84,11 @@ public class CardSelectionAction implements SemanticAction {
         JSONObject obj = new JSONObject();
         obj.put("type", "CardSelectionAction");
         obj.put("chosenBlueprints", chosenBlueprintIds.toArray());
+        obj.put("notChosenBlueprints", notChosenBlueprintIds.toArray());
         return obj;
     }
 
     public static CardSelectionAction fromJson(JSONObject obj) {
-        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class));
+        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class));
     }
 }

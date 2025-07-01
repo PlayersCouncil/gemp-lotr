@@ -7,7 +7,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> mulliganModel;
     private SoftClassifier<double[]> anotherMoveModel;
     private SoftClassifier<double[]> burdensBidModel;
-    private SoftClassifier<double[]> cardSelectionModel;
+    private SoftClassifier<double[]> reconcileModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -41,11 +41,11 @@ public class ModelRegistry {
         this.burdensBidModel = burdensBidModel;
     }
 
-    public SoftClassifier<double[]> getCardSelectionModel() {
-        return cardSelectionModel;
+    public SoftClassifier<double[]> getReconcileModel() {
+        return reconcileModel;
     }
 
-    public void setCardSelectionModel(SoftClassifier<double[]> cardSelectionModel) {
-        this.cardSelectionModel = cardSelectionModel;
+    public void setReconcileModel(SoftClassifier<double[]> reconcileModel) {
+        this.reconcileModel = reconcileModel;
     }
 }
