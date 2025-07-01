@@ -113,6 +113,9 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 if (decision.getText().contains("Reconcile")) {
                     yield extractGeneralStateFeatures(gameState, playerId);
                 }
+                if (decision.getText().contains("Sanctuary healing")) {
+                    yield extractGeneralStateFeatures(gameState, playerId);
+                }
                 yield extractAllFeatures(gameState, decision, playerId);
             }
             default -> extractAllFeatures(gameState, decision, playerId);

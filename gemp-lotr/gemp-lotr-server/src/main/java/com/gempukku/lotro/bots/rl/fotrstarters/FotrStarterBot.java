@@ -4,7 +4,6 @@ import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.BlueprintFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -38,13 +37,21 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     }
 
     private String chooseCardSelectionAction(GameState gameState, AwaitingDecision decision) {
+        int min = Integer.parseInt(decision.getDecisionParameters().get("min")[0]);
+        int max = Integer.parseInt(decision.getDecisionParameters().get("max")[0]);
+        List<String> cardIds = Arrays.stream(decision.getDecisionParameters().get("cardId")).toList();
+
+        if (min == max && min == cardIds.size()) {
+            // Need to choose all
+            return String.join(",", cardIds);
+        }
+
         if (decision.getText().contains("Reconcile")) {
             SoftClassifier<double[]> model = modelRegistry.getReconcileModel();
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            String[] physicalIds = decision.getDecisionParameters().get("cardId");
             List<ScoredCard> scoredCards = new ArrayList<>();
 
-            for (String physicalId : physicalIds) {
+            for (String physicalId : cardIds) {
                 try {
                     String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
                     double[] cardVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
@@ -64,13 +71,30 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             ScoredCard best = scoredCards.get(0);
             return best.cardId; // Never pass, always discard one card
         }
-        int min = Integer.parseInt(decision.getDecisionParameters().get("min")[0]);
-        int max = Integer.parseInt(decision.getDecisionParameters().get("max")[0]);
-        List<String> cardIds = Arrays.stream(decision.getDecisionParameters().get("cardId")).toList();
+        if (decision.getText().contains("Sanctuary healing")) {
+            SoftClassifier<double[]> model = modelRegistry.getSanctuaryModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
 
-        if (min == max && min == cardIds.size()) {
-            // Need to choose all
-            return String.join(",", cardIds);
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    double[] cardVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of healing this card
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the card with the highest heal probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            ScoredCard best = scoredCards.get(0);
+            return best.cardId; // Never pass, always heal at sanctuary
         }
 
 

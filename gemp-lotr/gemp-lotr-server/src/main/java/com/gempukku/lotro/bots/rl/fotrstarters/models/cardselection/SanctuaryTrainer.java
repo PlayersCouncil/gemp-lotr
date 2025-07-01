@@ -12,8 +12,9 @@ import smile.classification.SoftClassifier;
 
 import java.util.*;
 
-public class ReconcileTrainer implements Trainer {
-    private static final String RECONCILE = "Reconcile";
+public class SanctuaryTrainer implements Trainer {
+    private static final String SANCTUARY = "Sanctuary healing";
+    private static final String LAST_HEAL = "remaining heals: 1";
 
     @Override
     public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
@@ -39,17 +40,19 @@ public class ReconcileTrainer implements Trainer {
                     }
                 });
 
-                notSelected.forEach(blueprintId -> {
-                    try {
-                        double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
-                        double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
-                        System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
+                if (step.decision.getText().contains(LAST_HEAL)) {
+                    notSelected.forEach(blueprintId -> {
+                        try {
+                            double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                            double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
+                            System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
-                        data.add(new LabeledPoint(0, extended));
-                    } catch (CardNotFoundException ignore) {
+                            data.add(new LabeledPoint(0, extended));
+                        } catch (CardNotFoundException ignore) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         }
 
@@ -66,12 +69,12 @@ public class ReconcileTrainer implements Trainer {
     @Override
     public boolean isStepRelevant(LearningStep step) {
         return step.decision.getDecisionType() == AwaitingDecisionType.CARD_SELECTION
-                && step.decision.getText().contains(RECONCILE)
+                && step.decision.getText().contains(SANCTUARY)
                 && step.action instanceof CardSelectionAction;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass().equals(ReconcileTrainer.class);
+        return obj.getClass().equals(SanctuaryTrainer.class);
     }
 }

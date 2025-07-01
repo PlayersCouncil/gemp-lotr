@@ -9,8 +9,9 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersiste
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.BlueprintFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.BlueprintFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.SanctuaryTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -99,6 +100,11 @@ public class BotService {
             Trainer reconcileTrainer = new ReconcileTrainer();
             SoftClassifier<double[]> reconcileModel = reconcileTrainer.train(new FotrStartersLearningStepsPersistence().load(reconcileTrainer));
             modelRegistry.setReconcileModel(reconcileModel);
+
+            System.out.println("training 'sanctuary' model");
+            Trainer sanctuaryTrainer = new SanctuaryTrainer();
+            SoftClassifier<double[]> sanctuaryModel = sanctuaryTrainer.train(new FotrStartersLearningStepsPersistence().load(sanctuaryTrainer));
+            modelRegistry.setSanctuaryModel(sanctuaryModel);
 
             System.out.println("training done");
 

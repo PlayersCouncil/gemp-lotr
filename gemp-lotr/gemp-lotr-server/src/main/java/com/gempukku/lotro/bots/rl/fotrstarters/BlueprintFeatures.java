@@ -1,4 +1,4 @@
-package com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection;
+package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
@@ -31,6 +31,7 @@ public class BlueprintFeatures {
             features.add(blueprint.getSide() == Side.SHADOW ? 1.0 : 0.0);
             features.add(blueprint.getSide() == Side.FREE_PEOPLE ? 1.0 : 0.0);
             features.add(blueprint.getCardType() == CardType.COMPANION ? 1.0 : 0.0);
+            features.add(blueprint.canStartWithRing() ? 1.0 : 0.0);
             features.add(blueprint.getCardType() == CardType.ALLY ? 1.0 : 0.0);
             features.add(blueprint.getCardType() == CardType.MINION ? 1.0 : 0.0);
             features.add(blueprint.getCardType() == CardType.POSSESSION || blueprint.getCardType() == CardType.ARTIFACT ? 1.0 : 0.0);

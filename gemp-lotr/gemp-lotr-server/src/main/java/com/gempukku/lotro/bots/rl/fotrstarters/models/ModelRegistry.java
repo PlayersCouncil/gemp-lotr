@@ -8,6 +8,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> anotherMoveModel;
     private SoftClassifier<double[]> burdensBidModel;
     private SoftClassifier<double[]> reconcileModel;
+    private SoftClassifier<double[]> sanctuaryModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -47,5 +48,13 @@ public class ModelRegistry {
 
     public void setReconcileModel(SoftClassifier<double[]> reconcileModel) {
         this.reconcileModel = reconcileModel;
+    }
+
+    public SoftClassifier<double[]> getSanctuaryModel() {
+        return sanctuaryModel;
+    }
+
+    public void setSanctuaryModel(SoftClassifier<double[]> sanctuaryModel) {
+        this.sanctuaryModel = sanctuaryModel;
     }
 }
