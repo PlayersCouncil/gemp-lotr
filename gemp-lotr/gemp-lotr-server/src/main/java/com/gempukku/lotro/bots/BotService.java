@@ -10,6 +10,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ArcheryWoundTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.SanctuaryTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
@@ -105,6 +106,11 @@ public class BotService {
             Trainer sanctuaryTrainer = new SanctuaryTrainer();
             SoftClassifier<double[]> sanctuaryModel = sanctuaryTrainer.train(new FotrStartersLearningStepsPersistence().load(sanctuaryTrainer));
             modelRegistry.setSanctuaryModel(sanctuaryModel);
+
+            System.out.println("training 'archery wound' model");
+            Trainer archeryWoundTrainer = new ArcheryWoundTrainer();
+            SoftClassifier<double[]> archeryWoundModel = archeryWoundTrainer.train(new FotrStartersLearningStepsPersistence().load(archeryWoundTrainer));
+            modelRegistry.setArcheryModel(archeryWoundModel);
 
             System.out.println("training done");
 

@@ -3,6 +3,7 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ArcheryWoundTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.SanctuaryTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
@@ -29,6 +30,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new BurdenTrainer(), "fotr-starters-burdens.jsonl");
         trainerFileMap.put(new ReconcileTrainer(), "fotr-starters-reconcile.jsonl");
         trainerFileMap.put(new SanctuaryTrainer(), "fotr-starters-sanctuary.jsonl");
+        trainerFileMap.put(new ArcheryWoundTrainer(), "fotr-starters-archery.jsonl");
         // Add other trainers here when needed
     }
 
