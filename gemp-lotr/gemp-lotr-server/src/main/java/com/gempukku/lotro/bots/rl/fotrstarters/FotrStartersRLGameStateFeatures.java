@@ -183,6 +183,9 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
         // Number of companions
         features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
         features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).count());
+        // Total companion strength
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).mapToInt((ToIntFunction<PhysicalCard>) value -> value.getBlueprint().getStrength()).sum());
+        features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getBlueprint().getCardType().equals(CardType.COMPANION)).mapToInt((ToIntFunction<PhysicalCard>) value -> value.getBlueprint().getStrength()).sum());
         // Number of minions
         features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent) && physicalCard.getBlueprint().getCardType().equals(CardType.MINION)).count());
         // Total minion strength
