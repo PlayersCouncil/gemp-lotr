@@ -11,18 +11,18 @@ import java.util.List;
 
 import static com.gempukku.lotro.common.Timeword.*;
 
-public class BlueprintFeatures {
+public class CardFeatures {
     private static LotroCardBlueprintLibrary library = null;
 
-    private BlueprintFeatures() {
+    private CardFeatures() {
 
     }
 
     public static void init (LotroCardBlueprintLibrary library) {
-        BlueprintFeatures.library = library;
+        CardFeatures.library = library;
     }
 
-    public static double[] getBlueprintFeatures(String blueprintId) throws CardNotFoundException {
+    public static double[] getCardFeatures(String blueprintId, int woundsPlaced) throws CardNotFoundException {
         if (library != null) {
             LotroCardBlueprint blueprint = library.getLotroCardBlueprint(blueprintId);
 
@@ -50,6 +50,8 @@ public class BlueprintFeatures {
             features.add((double) blueprint.getStrength());
             features.add((double) blueprint.getVitality());
             features.add((double) blueprint.getSiteNumber());
+
+            features.add((double) woundsPlaced);
 
             return features.stream().mapToDouble(Double::doubleValue).toArray();
         } else {

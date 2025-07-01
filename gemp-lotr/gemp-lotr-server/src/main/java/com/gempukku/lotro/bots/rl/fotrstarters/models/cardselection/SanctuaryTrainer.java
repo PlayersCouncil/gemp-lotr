@@ -1,7 +1,7 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.fotrstarters.BlueprintFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.semanticaction.CardSelectionAction;
@@ -25,12 +25,10 @@ public class SanctuaryTrainer implements Trainer {
 
             if (step.reward > 0) {
                 CardSelectionAction action = (CardSelectionAction) step.action;
-                Set<String> selected = new HashSet<>(action.getChosenBlueprintIds());
-                Set<String> notSelected = new HashSet<>(action.getNotChosenBlueprintIds());
 
-                selected.forEach(blueprintId -> {
+                for (int i = 0; i < action.getChosenBlueprintIds().size(); i++) {
                     try {
-                        double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(action.getChosenBlueprintIds().get(i), action.getWoundsOnChosen().get(i));
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -38,12 +36,12 @@ public class SanctuaryTrainer implements Trainer {
                     } catch (CardNotFoundException ignore) {
 
                     }
-                });
+                }
 
                 if (step.decision.getText().contains(LAST_HEAL)) {
-                    notSelected.forEach(blueprintId -> {
+                    for (int i = 0; i < action.getNotChosenBlueprintIds().size(); i++) {
                         try {
-                            double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                            double[] blueprintVector = CardFeatures.getCardFeatures(action.getNotChosenBlueprintIds().get(i), action.getWoundsOnNotChosen().get(i));
                             double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                             System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -51,7 +49,7 @@ public class SanctuaryTrainer implements Trainer {
                         } catch (CardNotFoundException ignore) {
 
                         }
-                    });
+                    }
                 }
             }
         }

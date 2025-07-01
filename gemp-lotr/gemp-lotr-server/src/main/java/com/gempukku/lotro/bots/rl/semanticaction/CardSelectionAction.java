@@ -1,6 +1,7 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -12,7 +13,9 @@ import java.util.List;
 
 public class CardSelectionAction implements SemanticAction {
     private final List<String> chosenBlueprintIds = new ArrayList<>();
+    private final List<Integer> woundsOnChosen = new ArrayList<>();
     private final List<String> notChosenBlueprintIds = new ArrayList<>();
+    private final List<Integer> woundsOnNotChosen = new ArrayList<>();
 
     public CardSelectionAction(String answer, AwaitingDecision decision, GameState gameState) {
         String[] individualCards = answer.split(",");
@@ -20,22 +23,38 @@ public class CardSelectionAction implements SemanticAction {
         for (String individualCard : individualCards) {
             if (!individualCard.isEmpty()) {
                 chosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(individualCard)));
+                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                    if (physicalCard.getCardId() == Integer.parseInt(individualCard)) {
+                        woundsOnChosen.add(gameState.getWounds(physicalCard));
+                    }
+                }
             }
         }
 
         if (decision instanceof CardsSelectionDecision csd) {
             List<String> allChoices = Arrays.asList(csd.getDecisionParameters().get("cardId"));
             allChoices.forEach(choice -> {
-                if (!chosenBlueprintIds.contains(choice)) {
+                if (!chosenBlueprintIds.contains(gameState.getBlueprintId(Integer.parseInt(choice)))) {
                     notChosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(choice)));
+                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                        if (physicalCard.getCardId() == Integer.parseInt(choice)) {
+                            woundsOnNotChosen.add(gameState.getWounds(physicalCard));
+                        }
+                    }
                 }
             });
         }
+
+        if (chosenBlueprintIds.size() != woundsOnChosen.size() || notChosenBlueprintIds.size() != woundsOnNotChosen.size()) {
+            throw new IllegalArgumentException("Card and wound list have different sizes");
+        }
     }
 
-    public CardSelectionAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds) {
+    public CardSelectionAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds, Integer[] woundsOnChosen, Integer[] woundsOnNotChosen) {
         this.chosenBlueprintIds.addAll(Arrays.asList(chosenBlueprintIds));
         this.notChosenBlueprintIds.addAll(Arrays.asList(notChosenBlueprintIds));
+        this.woundsOnChosen.addAll(Arrays.asList(woundsOnChosen));
+        this.woundsOnNotChosen.addAll(Arrays.asList(woundsOnNotChosen));
     }
 
     public List<String> getChosenBlueprintIds() {
@@ -44,6 +63,14 @@ public class CardSelectionAction implements SemanticAction {
 
     public List<String> getNotChosenBlueprintIds() {
         return notChosenBlueprintIds;
+    }
+
+    public List<Integer> getWoundsOnChosen() {
+        return woundsOnChosen;
+    }
+
+    public List<Integer> getWoundsOnNotChosen() {
+        return woundsOnNotChosen;
     }
 
     @Override
@@ -84,11 +111,13 @@ public class CardSelectionAction implements SemanticAction {
         JSONObject obj = new JSONObject();
         obj.put("type", "CardSelectionAction");
         obj.put("chosenBlueprints", chosenBlueprintIds.toArray());
+        obj.put("woundsOnChosen", woundsOnChosen.toArray());
         obj.put("notChosenBlueprints", notChosenBlueprintIds.toArray());
+        obj.put("woundsOnNotChosen", woundsOnNotChosen.toArray());
         return obj;
     }
 
     public static CardSelectionAction fromJson(JSONObject obj) {
-        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class));
+        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class), obj.getObject("woundsOnChosen", Integer[].class), obj.getObject("woundsOnNotChosen", Integer[].class));
     }
 }

@@ -1,7 +1,7 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.fotrstarters.BlueprintFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.semanticaction.CardSelectionAction;
@@ -29,7 +29,7 @@ public class ReconcileTrainer implements Trainer {
 
                 selected.forEach(blueprintId -> {
                     try {
-                        double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -41,7 +41,7 @@ public class ReconcileTrainer implements Trainer {
 
                 notSelected.forEach(blueprintId -> {
                     try {
-                        double[] blueprintVector = BlueprintFeatures.getBlueprintFeatures(blueprintId);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
