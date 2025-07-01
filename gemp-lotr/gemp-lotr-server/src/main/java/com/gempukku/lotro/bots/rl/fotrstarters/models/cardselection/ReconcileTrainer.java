@@ -50,6 +50,21 @@ public class ReconcileTrainer implements Trainer {
 
                     }
                 });
+            } else {
+                CardSelectionAction action = (CardSelectionAction) step.action;
+                Set<String> selected = new HashSet<>(action.getChosenBlueprintIds());
+
+                selected.forEach(blueprintId -> {
+                    try {
+                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                        double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
+                        System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
+
+                        data.add(new LabeledPoint(0, extended));
+                    } catch (CardNotFoundException ignore) {
+
+                    }
+                });
             }
         }
 
