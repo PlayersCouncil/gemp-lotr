@@ -7,6 +7,7 @@ import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.gempukku.lotro.common.Timeword.*;
@@ -54,6 +55,22 @@ public class CardFeatures {
             features.add((double) woundsPlaced);
 
             return features.stream().mapToDouble(Double::doubleValue).toArray();
+        } else {
+            throw new IllegalStateException("Blueprint library not initialized");
+        }
+    }
+
+    public static double[] getFpAssignedCardFeatures(String blueprintId, int woundsPlaced, int numberOfMinions, int minionStrength) throws CardNotFoundException {
+        if (library != null) {
+            double[] standard = getCardFeatures(blueprintId, woundsPlaced);
+            double[] additionalInfo = new double[2];
+            additionalInfo[0] = numberOfMinions;
+            additionalInfo[1] = minionStrength;
+
+            double[] extended = Arrays.copyOf(standard, standard.length + additionalInfo.length);
+            System.arraycopy(additionalInfo, 0, extended, standard.length, additionalInfo.length);
+
+            return extended;
         } else {
             throw new IllegalStateException("Blueprint library not initialized");
         }

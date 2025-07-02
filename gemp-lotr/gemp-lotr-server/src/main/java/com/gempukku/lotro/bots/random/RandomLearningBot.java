@@ -5,6 +5,7 @@ import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.ReplayBuffer;
 import com.gempukku.lotro.bots.rl.semanticaction.*;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
@@ -44,7 +45,12 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
             case ARBITRARY_CARDS -> new ChooseFromArbitraryCardsAction(action, decision);
             case CARD_ACTION_CHOICE -> new CardActionChoiceAction(action, decision);
             case ACTION_CHOICE -> new ActionChoiceAction(action, decision);
-            case CARD_SELECTION -> new CardSelectionAction(action, decision, gameState);
+            case CARD_SELECTION -> {
+                if (gameState.getCurrentPhase().equals(Phase.SKIRMISH)) {
+                    yield new CardSelectionAssignedAction(action, decision, gameState);
+                }
+                yield new CardSelectionAction(action, decision, gameState);
+            }
             case ASSIGN_MINIONS -> new AssignMinionsAction(action, gameState);
         };
     }

@@ -10,6 +10,8 @@ public class ModelRegistry {
     private SoftClassifier<double[]> reconcileModel;
     private SoftClassifier<double[]> sanctuaryModel;
     private SoftClassifier<double[]> archeryModel;
+    private SoftClassifier<double[]> attachItemModel;
+    private SoftClassifier<double[]> skirmishOrderModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -65,5 +67,21 @@ public class ModelRegistry {
 
     public void setArcheryModel(SoftClassifier<double[]> archeryModel) {
         this.archeryModel = archeryModel;
+    }
+
+    public SoftClassifier<double[]> getAttachItemModel() {
+        return attachItemModel;
+    }
+
+    public void setAttachItemModel(SoftClassifier<double[]> attachItemModel) {
+        this.attachItemModel = attachItemModel;
+    }
+
+    public SoftClassifier<double[]> getSkirmishOrderModel() {
+        return skirmishOrderModel;
+    }
+
+    public void setSkirmishOrderModel(SoftClassifier<double[]> skirmishOrderModel) {
+        this.skirmishOrderModel = skirmishOrderModel;
     }
 }

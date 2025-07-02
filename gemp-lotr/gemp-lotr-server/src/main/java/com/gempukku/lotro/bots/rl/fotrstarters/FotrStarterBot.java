@@ -8,6 +8,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTraine
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -130,6 +131,73 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             }
 
             // Find the card with the highest archery wound probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            ScoredCard best = scoredCards.get(0);
+            return best.cardId;
+        }
+        if (decision.getText().contains("Choose target to attach to")) {
+            SoftClassifier<double[]> model = modelRegistry.getAttachItemModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    int wounds = 0;
+                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                            wounds = gameState.getWounds(physicalCard);
+                        }
+                    }
+                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of attaching to this card
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the card with the highest probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            ScoredCard best = scoredCards.get(0);
+            return best.cardId;
+        }
+        if (decision.getText().contains("next skirmish to resolve")) {
+            SoftClassifier<double[]> model = modelRegistry.getSkirmishOrderModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    for (Assignment assignment : gameState.getAssignments()) {
+                        if (assignment.getFellowshipCharacter().getCardId() == Integer.parseInt(physicalId)) {
+                            String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                            int wounds = 0;
+                            for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                                if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                                    wounds = gameState.getWounds(physicalCard);
+                                }
+                            }
+                            double[] cardVector = CardFeatures.getFpAssignedCardFeatures(blueprintId, wounds, assignment.getShadowCharacters().size(), assignment.getShadowCharacters().stream().mapToInt(value -> value.getBlueprint().getStrength()).sum());
+                            double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                            System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                            double[] probs = new double[2];
+                            model.predict(extended, probs);
+                            scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of choosing this card
+                        }
+                    }
+
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the card with the highest probability
             scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
             ScoredCard best = scoredCards.get(0);
             return best.cardId;

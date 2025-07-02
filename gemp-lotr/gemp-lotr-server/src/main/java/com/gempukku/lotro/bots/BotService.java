@@ -10,9 +10,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ArcheryWoundTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.SanctuaryTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -111,6 +109,16 @@ public class BotService {
             Trainer archeryWoundTrainer = new ArcheryWoundTrainer();
             SoftClassifier<double[]> archeryWoundModel = archeryWoundTrainer.train(new FotrStartersLearningStepsPersistence().load(archeryWoundTrainer));
             modelRegistry.setArcheryModel(archeryWoundModel);
+
+            System.out.println("training 'attach item' model");
+            Trainer attachItemTrainer = new AttachItemTrainer();
+            SoftClassifier<double[]> attachItemModel = attachItemTrainer.train(new FotrStartersLearningStepsPersistence().load(attachItemTrainer));
+            modelRegistry.setAttachItemModel(attachItemModel);
+
+            System.out.println("training 'skirmish order' model");
+            Trainer skirmishOrderTrainer = new SkirmishOrderTrainer();
+            SoftClassifier<double[]> skirmishOrderModel = skirmishOrderTrainer.train(new FotrStartersLearningStepsPersistence().load(skirmishOrderTrainer));
+            modelRegistry.setSkirmishOrderModel(skirmishOrderModel);
 
             System.out.println("training done");
 

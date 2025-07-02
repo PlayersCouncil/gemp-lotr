@@ -110,16 +110,7 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 yield extractAllFeatures(gameState, decision, playerId);
             }
             case CARD_SELECTION -> {
-                if (decision.getText().contains("Reconcile")) {
-                    yield extractGeneralStateFeatures(gameState, playerId);
-                }
-                if (decision.getText().contains("Sanctuary healing")) {
-                    yield extractGeneralStateFeatures(gameState, playerId);
-                }
-                if (decision.getText().contains("assign archery wound to")) {
-                    yield extractGeneralStateFeatures(gameState, playerId);
-                }
-                yield extractAllFeatures(gameState, decision, playerId);
+                yield extractGeneralStateFeatures(gameState, playerId);
             }
             default -> extractAllFeatures(gameState, decision, playerId);
         };

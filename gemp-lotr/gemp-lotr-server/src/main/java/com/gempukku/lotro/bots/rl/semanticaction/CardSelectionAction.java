@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CardSelectionAction implements SemanticAction {
-    private final List<String> chosenBlueprintIds = new ArrayList<>();
-    private final List<Integer> woundsOnChosen = new ArrayList<>();
-    private final List<String> notChosenBlueprintIds = new ArrayList<>();
-    private final List<Integer> woundsOnNotChosen = new ArrayList<>();
+    protected final List<String> chosenBlueprintIds = new ArrayList<>();
+    protected final List<Integer> woundsOnChosen = new ArrayList<>();
+    protected final List<String> notChosenBlueprintIds = new ArrayList<>();
+    protected final List<Integer> woundsOnNotChosen = new ArrayList<>();
 
     public CardSelectionAction(String answer, AwaitingDecision decision, GameState gameState) {
         String[] individualCards = answer.split(",");

@@ -3,9 +3,7 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ArcheryWoundTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.ReconcileTrainer;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.SanctuaryTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
@@ -31,6 +29,8 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new ReconcileTrainer(), "fotr-starters-reconcile.jsonl");
         trainerFileMap.put(new SanctuaryTrainer(), "fotr-starters-sanctuary.jsonl");
         trainerFileMap.put(new ArcheryWoundTrainer(), "fotr-starters-archery.jsonl");
+        trainerFileMap.put(new AttachItemTrainer(), "fotr-starters-attach-item.jsonl");
+        trainerFileMap.put(new SkirmishOrderTrainer(), "fotr-starters-skirmish-order.jsonl");
         // Add other trainers here when needed
     }
 
