@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
+import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import smile.classification.SoftClassifier;
@@ -203,6 +204,23 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId;
         }
 
+
+        // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
+        if (gameState.getSkirmish() != null && min == 1 && max == 1) {
+            Skirmish skirmish = gameState.getSkirmish();
+            for (String cardId : cardIds) {
+                if (skirmish.getFellowshipCharacter().getCardId() == Integer.parseInt(cardId)) {
+                    return cardId;
+                }
+                for (PhysicalCard shadowCharacter : skirmish.getShadowCharacters()) {
+                    if (shadowCharacter.getCardId() == Integer.parseInt(cardId)) {
+                        return cardId;
+                    }
+                }
+            }
+            // Skirmishing character cannot be chosen, choose whatever
+            return super.chooseAction(gameState, decision);
+        }
 
         System.out.println("Unknown card selection action: " + decision.getText() + " (" + decision.getDecisionParameters().get("min")[0] + ";" + decision.getDecisionParameters().get("max")[0] + ") " + Arrays.toString(decision.getDecisionParameters().get("cardId")));
         return super.chooseAction(gameState, decision);
