@@ -235,7 +235,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             ScoredCard best = scoredCards.get(0);
             return best.cardId;
         }
-        if (decision.getText().toLowerCase().contains("discard") && decision.getText().toLowerCase().contains("reconcile")) {
+        if (decision.getText().toLowerCase().contains("discard") && !decision.getText().toLowerCase().contains("reconcile")) {
             String zoneOfAllCards = null;
             for (String choice : decision.getDecisionParameters().get("cardId")) {
                 for (PhysicalCard physicalCard : gameState.getAllCards()) {
