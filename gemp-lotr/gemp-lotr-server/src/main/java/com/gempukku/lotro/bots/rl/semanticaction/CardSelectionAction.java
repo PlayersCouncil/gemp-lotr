@@ -16,6 +16,7 @@ public class CardSelectionAction implements SemanticAction {
     protected final List<Integer> woundsOnChosen = new ArrayList<>();
     protected final List<String> notChosenBlueprintIds = new ArrayList<>();
     protected final List<Integer> woundsOnNotChosen = new ArrayList<>();
+    protected final String zoneString;
 
     public CardSelectionAction(String answer, AwaitingDecision decision, GameState gameState) {
         String[] individualCards = answer.split(",");
@@ -31,9 +32,11 @@ public class CardSelectionAction implements SemanticAction {
             }
         }
 
+        String zoneOfAllCards = null;
+
         if (decision instanceof CardsSelectionDecision csd) {
             List<String> allChoices = Arrays.asList(csd.getDecisionParameters().get("cardId"));
-            allChoices.forEach(choice -> {
+            for (String choice : allChoices) {
                 if (!chosenBlueprintIds.contains(gameState.getBlueprintId(Integer.parseInt(choice)))) {
                     notChosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(choice)));
                     for (PhysicalCard physicalCard : gameState.getAllCards()) {
@@ -42,19 +45,34 @@ public class CardSelectionAction implements SemanticAction {
                         }
                     }
                 }
-            });
+                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                    if (physicalCard.getCardId() == Integer.parseInt(choice)) {
+                        String zoneOfThisCard = physicalCard.getZone().getHumanReadable();
+                        if (zoneOfAllCards == null) {
+                            zoneOfAllCards = zoneOfThisCard;
+                        }
+                        if (!zoneOfAllCards.equals(zoneOfThisCard)) {
+                            throw new IllegalArgumentException("Cards are not from the same zone");
+                        }
+                    }
+                }
+
+            }
         }
+
+        this.zoneString = zoneOfAllCards;
 
         if (chosenBlueprintIds.size() != woundsOnChosen.size() || notChosenBlueprintIds.size() != woundsOnNotChosen.size()) {
             throw new IllegalArgumentException("Card and wound list have different sizes");
         }
     }
 
-    public CardSelectionAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds, Integer[] woundsOnChosen, Integer[] woundsOnNotChosen) {
+    public CardSelectionAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds, Integer[] woundsOnChosen, Integer[] woundsOnNotChosen, String zone) {
         this.chosenBlueprintIds.addAll(Arrays.asList(chosenBlueprintIds));
         this.notChosenBlueprintIds.addAll(Arrays.asList(notChosenBlueprintIds));
         this.woundsOnChosen.addAll(Arrays.asList(woundsOnChosen));
         this.woundsOnNotChosen.addAll(Arrays.asList(woundsOnNotChosen));
+        this.zoneString = zone;
     }
 
     public List<String> getChosenBlueprintIds() {
@@ -71,6 +89,10 @@ public class CardSelectionAction implements SemanticAction {
 
     public List<Integer> getWoundsOnNotChosen() {
         return woundsOnNotChosen;
+    }
+
+    public String getZoneString() {
+        return zoneString;
     }
 
     @Override
@@ -114,10 +136,13 @@ public class CardSelectionAction implements SemanticAction {
         obj.put("woundsOnChosen", woundsOnChosen.toArray());
         obj.put("notChosenBlueprints", notChosenBlueprintIds.toArray());
         obj.put("woundsOnNotChosen", woundsOnNotChosen.toArray());
+        obj.put("zone", zoneString);
         return obj;
     }
 
     public static CardSelectionAction fromJson(JSONObject obj) {
-        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class), obj.getObject("woundsOnChosen", Integer[].class), obj.getObject("woundsOnNotChosen", Integer[].class));
+        return new CardSelectionAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class),
+                obj.getObject("woundsOnChosen", Integer[].class), obj.getObject("woundsOnNotChosen", Integer[].class),
+                obj.getString("zone"));
     }
 }

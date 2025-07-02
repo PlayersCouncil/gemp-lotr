@@ -27,8 +27,8 @@ public class CardSelectionAssignedAction extends CardSelectionAction {
         }
     }
 
-    public CardSelectionAssignedAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds, Integer[] woundsOnChosen, Integer[] woundsOnNotChosen, Integer[] minionsOnChosen, Integer[] strengthOfMinionsOnChosen) {
-        super(chosenBlueprintIds, notChosenBlueprintIds, woundsOnChosen, woundsOnNotChosen);
+    public CardSelectionAssignedAction(String[] chosenBlueprintIds, String[] notChosenBlueprintIds, Integer[] woundsOnChosen, Integer[] woundsOnNotChosen, String zone, Integer[] minionsOnChosen, Integer[] strengthOfMinionsOnChosen) {
+        super(chosenBlueprintIds, notChosenBlueprintIds, woundsOnChosen, woundsOnNotChosen, zone);
         this.minionsOnChosen.addAll(Arrays.asList(minionsOnChosen));
         this.strengthOfMinionsOnChosen.addAll(Arrays.asList(strengthOfMinionsOnChosen));
     }
@@ -49,14 +49,15 @@ public class CardSelectionAssignedAction extends CardSelectionAction {
         obj.put("woundsOnChosen", woundsOnChosen.toArray());
         obj.put("notChosenBlueprints", notChosenBlueprintIds.toArray());
         obj.put("woundsOnNotChosen", woundsOnNotChosen.toArray());
+        obj.put("zone", zoneString);
         obj.put("minionsOnChosen", minionsOnChosen.toArray());
         obj.put("strengthOfMinionsOnChosen", strengthOfMinionsOnChosen.toArray());
         return obj;
     }
 
     public static CardSelectionAssignedAction fromJson(JSONObject obj) {
-        return new CardSelectionAssignedAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class)
-                , obj.getObject("woundsOnChosen", Integer[].class), obj.getObject("woundsOnNotChosen", Integer[].class)
-                , obj.getObject("minionsOnChosen", Integer[].class), obj.getObject("strengthOfMinionsOnChosen", Integer[].class));
+        return new CardSelectionAssignedAction(obj.getObject("chosenBlueprints", String[].class), obj.getObject("notChosenBlueprints", String[].class),
+                obj.getObject("woundsOnChosen", Integer[].class), obj.getObject("woundsOnNotChosen", Integer[].class), obj.getString("zone"),
+                obj.getObject("minionsOnChosen", Integer[].class), obj.getObject("strengthOfMinionsOnChosen", Integer[].class));
     }
 }

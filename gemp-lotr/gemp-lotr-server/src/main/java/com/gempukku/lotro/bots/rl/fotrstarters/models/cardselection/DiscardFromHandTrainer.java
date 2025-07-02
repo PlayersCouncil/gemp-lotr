@@ -5,6 +5,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.semanticaction.CardSelectionAction;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import smile.classification.LogisticRegression;
@@ -13,8 +14,9 @@ import smile.classification.SoftClassifier;
 import java.util.*;
 
 public class DiscardFromHandTrainer implements Trainer {
-    private static final String EIGHT_RULE = "discard down to 8";
-    private static final String HAND_DISCARD = "from hand to discard";
+    private static final String DISCARD = "discard";
+    private static final String RECONCILE = "reconcile";
+    private static final String HAND_ZONE = Zone.HAND.getHumanReadable();
 
     @Override
     public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
@@ -82,8 +84,10 @@ public class DiscardFromHandTrainer implements Trainer {
     @Override
     public boolean isStepRelevant(LearningStep step) {
         return step.decision.getDecisionType() == AwaitingDecisionType.CARD_SELECTION
-                && (step.decision.getText().contains(EIGHT_RULE) || step.decision.getText().contains(HAND_DISCARD))
-                && step.action instanceof CardSelectionAction;
+                && step.decision.getText().toLowerCase().contains(DISCARD)
+                && !step.decision.getText().toLowerCase().contains(RECONCILE)
+                && step.action instanceof CardSelectionAction csa
+                && csa.getZoneString().equals(HAND_ZONE);
     }
 
     @Override
