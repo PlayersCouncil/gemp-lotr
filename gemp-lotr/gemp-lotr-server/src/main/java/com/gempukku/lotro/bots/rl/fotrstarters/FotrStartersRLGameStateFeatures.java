@@ -162,6 +162,8 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 .orElseThrow(() -> new IllegalStateException("Unknown second player"));
 
         List<Double> features = new ArrayList<>();
+        // FP / Shadow player
+        features.add(getTurnIndicator(gameState, playerId));
         // My deck
         features.add(getDeckIndex(gameState, playerId));
         // Opponent deck

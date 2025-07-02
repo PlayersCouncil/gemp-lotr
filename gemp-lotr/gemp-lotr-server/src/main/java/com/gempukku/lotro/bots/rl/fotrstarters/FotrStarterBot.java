@@ -260,6 +260,38 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
             return String.join(",", sortedIds.subList(0, max));
         }
+        if (decision.getText().contains("to exert")) {
+            SoftClassifier<double[]> model = modelRegistry.getExertModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    int wounds = 0;
+                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                            wounds = gameState.getWounds(physicalCard);
+                        }
+                    }
+                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the cards with the highest discard probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            List<String> sortedIds = new ArrayList<>();
+            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
+            return String.join(",", sortedIds.subList(0, max));
+        }
 
 
         // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
