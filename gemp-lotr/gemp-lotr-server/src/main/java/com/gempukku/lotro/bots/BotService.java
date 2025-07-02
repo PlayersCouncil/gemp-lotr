@@ -125,6 +125,11 @@ public class BotService {
             SoftClassifier<double[]> healModel = healTrainer.train(new FotrStartersLearningStepsPersistence().load(healTrainer));
             modelRegistry.setHealModel(healModel);
 
+            System.out.println("training 'discard from hand' model");
+            Trainer discardFromHandTrainer = new DiscardFromHandTrainer();
+            SoftClassifier<double[]> discardFromHandModel = discardFromHandTrainer.train(new FotrStartersLearningStepsPersistence().load(discardFromHandTrainer));
+            modelRegistry.setDiscardFromHandModel(discardFromHandModel);
+
             System.out.println("training done");
 
             System.out.println("using model in game simulations");

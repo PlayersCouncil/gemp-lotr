@@ -13,6 +13,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> attachItemModel;
     private SoftClassifier<double[]> skirmishOrderModel;
     private SoftClassifier<double[]> healModel;
+    private SoftClassifier<double[]> discardFromHandModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -92,5 +93,13 @@ public class ModelRegistry {
 
     public void setHealModel(SoftClassifier<double[]> healModel) {
         this.healModel = healModel;
+    }
+
+    public SoftClassifier<double[]> getDiscardFromHandModel() {
+        return discardFromHandModel;
+    }
+
+    public void setDiscardFromHandModel(SoftClassifier<double[]> discardFromHandModel) {
+        this.discardFromHandModel = discardFromHandModel;
     }
 }

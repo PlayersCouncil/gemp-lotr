@@ -234,6 +234,32 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             ScoredCard best = scoredCards.get(0);
             return best.cardId;
         }
+        if (decision.getText().contains("discard down to 8") || decision.getText().contains("from hand to discard")) {
+            SoftClassifier<double[]> model = modelRegistry.getDiscardFromHandModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the cards with the highest discard probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            List<String> sortedIds = new ArrayList<>();
+            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
+            return String.join(",", sortedIds.subList(0, max));
+        }
 
 
         // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
