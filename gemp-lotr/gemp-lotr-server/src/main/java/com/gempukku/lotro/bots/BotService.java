@@ -64,7 +64,7 @@ public class BotService {
             });
 
             System.out.println("simulating games to get data");
-            startRandomFotrStartersSimulation(
+            startFotrStartersSimulation(
                     new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot1", replayBuffer),
                     new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot2", replayBuffer));
 
@@ -134,14 +134,14 @@ public class BotService {
 
             System.out.println("using model in game simulations");
 
-            startRandomFotrStartersSimulation(
+            startFotrStartersSimulation(
                     new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot1", modelRegistry),
-                    new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot2", modelRegistry));
+                    new RandomDecisionBot("~bot2"));
 
         }
     }
 
-    public void startRandomFotrStartersSimulation(BotPlayer b1, BotPlayer b2) {
+    public void startFotrStartersSimulation(BotPlayer b1, BotPlayer b2) {
         System.out.println("Simulation started");
         SimulationRunner simulationRunner = new SimpleBatchSimulationRunner(
                 new FotrStartersSimulation(library, formatLibrary), b1, b2, 500);
