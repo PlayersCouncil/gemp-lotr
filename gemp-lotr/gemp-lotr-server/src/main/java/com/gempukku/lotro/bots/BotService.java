@@ -120,6 +120,11 @@ public class BotService {
             SoftClassifier<double[]> skirmishOrderModel = skirmishOrderTrainer.train(new FotrStartersLearningStepsPersistence().load(skirmishOrderTrainer));
             modelRegistry.setSkirmishOrderModel(skirmishOrderModel);
 
+            System.out.println("training 'heal' model");
+            Trainer healTrainer = new HealTrainer();
+            SoftClassifier<double[]> healModel = healTrainer.train(new FotrStartersLearningStepsPersistence().load(healTrainer));
+            modelRegistry.setHealModel(healModel);
+
             System.out.println("training done");
 
             System.out.println("using model in game simulations");

@@ -31,6 +31,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new ArcheryWoundTrainer(), "fotr-starters-archery.jsonl");
         trainerFileMap.put(new AttachItemTrainer(), "fotr-starters-attach-item.jsonl");
         trainerFileMap.put(new SkirmishOrderTrainer(), "fotr-starters-skirmish-order.jsonl");
+        trainerFileMap.put(new HealTrainer(), "fotr-starters-heal.jsonl");
         // Add other trainers here when needed
     }
 

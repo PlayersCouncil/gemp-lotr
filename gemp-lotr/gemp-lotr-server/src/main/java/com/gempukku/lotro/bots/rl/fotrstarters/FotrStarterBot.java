@@ -203,6 +203,37 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             ScoredCard best = scoredCards.get(0);
             return best.cardId;
         }
+        if (decision.getText().contains("to heal")) {
+            SoftClassifier<double[]> model = modelRegistry.getHealModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    int wounds = 0;
+                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                            wounds = gameState.getWounds(physicalCard);
+                        }
+                    }
+                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of healing this card
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the card with the highest probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            ScoredCard best = scoredCards.get(0);
+            return best.cardId;
+        }
 
 
         // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
@@ -222,7 +253,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return super.chooseAction(gameState, decision);
         }
 
-        System.out.println("Unknown card selection action: " + decision.getText() + " (" + decision.getDecisionParameters().get("min")[0] + ";" + decision.getDecisionParameters().get("max")[0] + ") " + Arrays.toString(decision.getDecisionParameters().get("cardId")));
+        System.out.println("Unknown card selection action: " + gameState.getCurrentPhase() + " - " + decision.getText() + " (" + decision.getDecisionParameters().get("min")[0] + ";" + decision.getDecisionParameters().get("max")[0] + ") " + Arrays.toString(decision.getDecisionParameters().get("cardId")));
         return super.chooseAction(gameState, decision);
     }
 
