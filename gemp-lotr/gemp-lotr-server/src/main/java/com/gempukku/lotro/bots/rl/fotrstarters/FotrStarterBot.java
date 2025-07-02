@@ -6,6 +6,7 @@ import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.Assignment;
@@ -234,31 +235,47 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             ScoredCard best = scoredCards.get(0);
             return best.cardId;
         }
-        if (decision.getText().contains("discard down to 8") || decision.getText().contains("from hand to discard")) {
-            SoftClassifier<double[]> model = modelRegistry.getDiscardFromHandModel();
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                } catch (CardNotFoundException ignored) {
-
+        if (decision.getText().toLowerCase().contains("discard") && decision.getText().toLowerCase().contains("reconcile")) {
+            String zoneOfAllCards = null;
+            for (String choice : decision.getDecisionParameters().get("cardId")) {
+                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                    if (physicalCard.getCardId() == Integer.parseInt(choice)) {
+                        String zoneOfThisCard = physicalCard.getZone().getHumanReadable();
+                        if (zoneOfAllCards == null) {
+                            zoneOfAllCards = zoneOfThisCard;
+                        }
+                        if (!zoneOfAllCards.equals(zoneOfThisCard)) {
+                            throw new IllegalArgumentException("Cards are not from the same zone");
+                        }
+                    }
                 }
             }
+            if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.HAND.getHumanReadable())) {
+                SoftClassifier<double[]> model = modelRegistry.getDiscardFromHandModel();
+                double[] stateVector = features.extractFeatures(gameState, decision, getName());
+                List<ScoredCard> scoredCards = new ArrayList<>();
 
-            // Find the cards with the highest discard probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            List<String> sortedIds = new ArrayList<>();
-            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-            return String.join(",", sortedIds.subList(0, max));
+                for (String physicalId : cardIds) {
+                    try {
+                        String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                        double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                        double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                        System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                        double[] probs = new double[2];
+                        model.predict(extended, probs);
+                        scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
+                    } catch (CardNotFoundException ignored) {
+
+                    }
+                }
+
+                // Find the cards with the highest discard probability
+                scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+                List<String> sortedIds = new ArrayList<>();
+                scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
+                return String.join(",", sortedIds.subList(0, max));
+            }
         }
         if (decision.getText().contains("to exert")) {
             SoftClassifier<double[]> model = modelRegistry.getExertModel();
@@ -291,6 +308,54 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             List<String> sortedIds = new ArrayList<>();
             scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
             return String.join(",", sortedIds.subList(0, max));
+        }
+        if (decision.getText().toLowerCase().contains("discard")) {
+            String zoneOfAllCards = null;
+            for (String choice : decision.getDecisionParameters().get("cardId")) {
+                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                    if (physicalCard.getCardId() == Integer.parseInt(choice)) {
+                        String zoneOfThisCard = physicalCard.getZone().getHumanReadable();
+                        if (zoneOfAllCards == null) {
+                            zoneOfAllCards = zoneOfThisCard;
+                        }
+                        if (!zoneOfAllCards.equals(zoneOfThisCard)) {
+                            throw new IllegalArgumentException("Cards are not from the same zone");
+                        }
+                    }
+                }
+            }
+            if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.FREE_CHARACTERS.getHumanReadable())) {
+                SoftClassifier<double[]> model = modelRegistry.getDiscardFromPlayModel();
+                double[] stateVector = features.extractFeatures(gameState, decision, getName());
+                List<ScoredCard> scoredCards = new ArrayList<>();
+
+                for (String physicalId : cardIds) {
+                    try {
+                        String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                        int wounds = 0;
+                        for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                            if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                                wounds = gameState.getWounds(physicalCard);
+                            }
+                        }
+                        double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
+                        double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                        System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                        double[] probs = new double[2];
+                        model.predict(extended, probs);
+                        scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
+                    } catch (CardNotFoundException ignored) {
+
+                    }
+                }
+
+                // Find the cards with the highest discard probability
+                scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+                List<String> sortedIds = new ArrayList<>();
+                scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
+                return String.join(",", sortedIds.subList(0, max));
+            }
         }
 
 

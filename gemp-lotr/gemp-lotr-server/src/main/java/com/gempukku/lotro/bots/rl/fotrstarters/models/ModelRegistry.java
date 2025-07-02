@@ -15,6 +15,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> healModel;
     private SoftClassifier<double[]> discardFromHandModel;
     private SoftClassifier<double[]> exertModel;
+    private SoftClassifier<double[]> discardFromPlayModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -110,5 +111,13 @@ public class ModelRegistry {
 
     public void setExertModel(SoftClassifier<double[]> exertModel) {
         this.exertModel = exertModel;
+    }
+
+    public SoftClassifier<double[]> getDiscardFromPlayModel() {
+        return discardFromPlayModel;
+    }
+
+    public void setDiscardFromPlayModel(SoftClassifier<double[]> discardFromPlayModel) {
+        this.discardFromPlayModel = discardFromPlayModel;
     }
 }
