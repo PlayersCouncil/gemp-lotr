@@ -25,12 +25,10 @@ public class HealTrainer implements Trainer {
 
             if (step.reward > 0) {
                 CardSelectionAction action = (CardSelectionAction) step.action;
-                Set<String> selected = new HashSet<>(action.getChosenBlueprintIds());
-                Set<String> notSelected = new HashSet<>(action.getNotChosenBlueprintIds());
 
-                selected.forEach(blueprintId -> {
+                for (int i = 0; i < action.getChosenBlueprintIds().size(); i++) {
                     try {
-                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(action.getChosenBlueprintIds().get(i), action.getWoundsOnChosen().get(i));
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -38,11 +36,11 @@ public class HealTrainer implements Trainer {
                     } catch (CardNotFoundException ignore) {
 
                     }
-                });
+                }
 
-                notSelected.forEach(blueprintId -> {
+                for (int i = 0; i < action.getNotChosenBlueprintIds().size(); i++) {
                     try {
-                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(action.getNotChosenBlueprintIds().get(i), action.getWoundsOnNotChosen().get(i));
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -50,14 +48,13 @@ public class HealTrainer implements Trainer {
                     } catch (CardNotFoundException ignore) {
 
                     }
-                });
+                }
             } else {
                 CardSelectionAction action = (CardSelectionAction) step.action;
-                Set<String> selected = new HashSet<>(action.getChosenBlueprintIds());
 
-                selected.forEach(blueprintId -> {
+                for (int i = 0; i < action.getChosenBlueprintIds().size(); i++) {
                     try {
-                        double[] blueprintVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                        double[] blueprintVector = CardFeatures.getCardFeatures(action.getChosenBlueprintIds().get(i), action.getWoundsOnChosen().get(i));
                         double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
                         System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
 
@@ -65,7 +62,7 @@ public class HealTrainer implements Trainer {
                     } catch (CardNotFoundException ignore) {
 
                     }
-                });
+                }
             }
         }
 
