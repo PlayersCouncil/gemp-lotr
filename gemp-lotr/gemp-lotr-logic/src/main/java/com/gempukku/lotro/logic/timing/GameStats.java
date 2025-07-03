@@ -166,7 +166,17 @@ public class GameStats {
         Map<Integer, Integer> newSiteNumbers = new HashMap<>();
         Map<Integer, String> newCharResistances = new HashMap<>();
         Set<Integer> newHindered = new HashSet<>();
+
+        for(var card : game.getGameState().getAllCards()) {
+            if(card.isFlipped()) {
+                newHindered.add(card.getCardId());
+            }
+        }
+
         for (PhysicalCard character : Filters.filterActive(game, Filters.or(CardType.COMPANION, CardType.ALLY, CardType.MINION))) {
+            if(game.getGameState().isHindered(character))
+                continue;
+
             newCharStrengths.put(character.getCardId(), game.getModifiersQuerying().getStrength(game, character));
             newCharVitalities.put(character.getCardId(), game.getModifiersQuerying().getVitality(game, character));
             final LotroCardBlueprint blueprint = character.getBlueprint();
@@ -191,12 +201,6 @@ public class GameStats {
                 } else {
                     newCharResistances.put(character.getCardId(), String.valueOf(resistance));
                 }
-            }
-        }
-
-        for(var card : game.getGameState().getAllCards()) {
-            if(card.isFlipped()) {
-                newHindered.add(card.getCardId());
             }
         }
 

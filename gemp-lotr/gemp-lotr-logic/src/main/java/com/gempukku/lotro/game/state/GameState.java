@@ -1143,7 +1143,7 @@ public class GameState {
 
     public Set<PhysicalCard> getInactiveCards() {
         return Stream.concat(_inPlay.stream(), _stacked.values().stream().flatMap(Collection::stream))
-                .filter(x -> !isCardInPlayActive(x))
+                .filter(x -> !isCardInPlayActive(x, false, false, false, true))
                 .collect(Collectors.toSet());
     }
 

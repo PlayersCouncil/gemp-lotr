@@ -454,6 +454,17 @@ var GameAnimations = Class.extend({
                     var cardDiv = $(".card:cardId(" + cardId + ")");
                     var cardData = cardDiv.data("card");
                     cardData.flipOverCard(hindered);
+                    
+                    if(cardData.flipped) {
+                       $(".cardStrength", cardDiv).css({display:"none"});
+                       $(".cardStrengthBg", cardDiv).css({display:"none"});
+                       $(".cardVitality", cardDiv).css({display:"none"});
+                       $(".cardVitalityBg", cardDiv).css({display:"none"});
+                       $(".cardResistance", cardDiv).css({display:"none"});
+                       $(".cardResistanceBg", cardDiv).css({display:"none"});
+                       $(".cardSiteNumber", cardDiv).css({display:"none"});
+                       $(".cardSiteNumberBg", cardDiv).css({display:"none"}); 
+                    }
                 }
                  next();
             });
@@ -855,6 +866,8 @@ var GameAnimations = Class.extend({
                 });
         }
     },
+    
+    
 
     gameStats:function (element, animate) {
         var that = this;
