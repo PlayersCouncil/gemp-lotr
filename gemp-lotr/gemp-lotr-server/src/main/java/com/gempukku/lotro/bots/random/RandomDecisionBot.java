@@ -39,7 +39,7 @@ public class RandomDecisionBot implements BotPlayer {
 
     private String chooseIntegerDecision(Map<String, String[]> params) {
         int min = 0;
-        int max = 10; // a reasonable default
+        int max = 9; // a reasonable default
 
         if (params.containsKey("min")) {
             min = Integer.parseInt(params.get("min")[0]);
