@@ -17,6 +17,7 @@ public class ModelRegistry {
     private SoftClassifier<double[]> exertModel;
     private SoftClassifier<double[]> discardFromPlayModel;
     private SoftClassifier<double[]> playFromHandModel;
+    private SoftClassifier<double[]> fallbackCardSelectionModel;
 
     public SoftClassifier<double[]> getGoFirstModel() {
         return goFirstModel;
@@ -128,5 +129,13 @@ public class ModelRegistry {
 
     public void setPlayFromHandModel(SoftClassifier<double[]> playFromHandModel) {
         this.playFromHandModel = playFromHandModel;
+    }
+
+    public SoftClassifier<double[]> getFallbackCardSelectionModel() {
+        return fallbackCardSelectionModel;
+    }
+
+    public void setFallbackCardSelectionModel(SoftClassifier<double[]> fallbackCardSelectionModel) {
+        this.fallbackCardSelectionModel = fallbackCardSelectionModel;
     }
 }

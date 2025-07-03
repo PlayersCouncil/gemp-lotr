@@ -147,6 +147,11 @@ public class BotService {
             SoftClassifier<double[]> playFromHandModel = playFromHandTrainer.train(new FotrStartersLearningStepsPersistence().load(playFromHandTrainer));
             modelRegistry.setPlayFromHandModel(playFromHandModel);
 
+            System.out.println("training 'card selection fallback' model");
+            Trainer fallbackCsTrainer = new FallBackCardSelectionTrainer();
+            SoftClassifier<double[]> fallbackCsModel = fallbackCsTrainer.train(new FotrStartersLearningStepsPersistence().load(fallbackCsTrainer));
+            modelRegistry.setFallbackCardSelectionModel(fallbackCsModel);
+
             System.out.println("using model in game simulations");
 
             startFotrStartersSimulation(
