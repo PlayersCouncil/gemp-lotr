@@ -142,6 +142,11 @@ public class BotService {
             modelRegistry.setDiscardFromPlayModel(discardFromPlayModel);
             System.out.println("training done");
 
+            System.out.println("training 'play from hand' model");
+            Trainer playFromHandTrainer = new PlayFromHandTrainer();
+            SoftClassifier<double[]> playFromHandModel = playFromHandTrainer.train(new FotrStartersLearningStepsPersistence().load(playFromHandTrainer));
+            modelRegistry.setPlayFromHandModel(playFromHandModel);
+
             System.out.println("using model in game simulations");
 
             startFotrStartersSimulation(

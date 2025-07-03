@@ -16,7 +16,10 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import smile.classification.SoftClassifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     private final RLGameStateFeatures features;
@@ -356,6 +359,32 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
                 scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
                 return String.join(",", sortedIds.subList(0, max));
             }
+        }
+        if (decision.getText().toLowerCase().contains("play from hand")) {
+            SoftClassifier<double[]> model = modelRegistry.getPlayFromHandModel();
+            double[] stateVector = features.extractFeatures(gameState, decision, getName());
+            List<ScoredCard> scoredCards = new ArrayList<>();
+
+            for (String physicalId : cardIds) {
+                try {
+                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
+                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
+                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
+                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
+
+                    double[] probs = new double[2];
+                    model.predict(extended, probs);
+                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
+                } catch (CardNotFoundException ignored) {
+
+                }
+            }
+
+            // Find the cards with the highest discard probability
+            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
+            List<String> sortedIds = new ArrayList<>();
+            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
+            return String.join(",", sortedIds.subList(0, max));
         }
 
 

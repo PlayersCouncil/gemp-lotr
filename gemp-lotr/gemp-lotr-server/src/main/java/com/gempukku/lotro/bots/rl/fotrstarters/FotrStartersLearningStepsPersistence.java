@@ -35,6 +35,7 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         trainerFileMap.put(new DiscardFromHandTrainer(), "fotr-starters-hand-discard.jsonl");
         trainerFileMap.put(new ExertTrainer(), "fotr-starters-exert.jsonl");
         trainerFileMap.put(new DiscardFromPlayTrainer(), "fotr-starters-play-discard.jsonl");
+        trainerFileMap.put(new PlayFromHandTrainer(), "fotr-starters-hand-play.jsonl");
         // Add other trainers here when needed
     }
 
