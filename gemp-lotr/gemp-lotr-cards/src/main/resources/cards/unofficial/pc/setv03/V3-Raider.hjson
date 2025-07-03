@@ -1058,8 +1058,7 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
+				type: Response
 				trigger: {
 					type: AboutToTakeWound
 					filter: minion
