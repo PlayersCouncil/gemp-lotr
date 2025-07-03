@@ -3,6 +3,8 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.LearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
@@ -35,7 +37,9 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
             ExertTrainer.class,
             DiscardFromPlayTrainer.class,
             PlayFromHandTrainer.class,
-            FallBackCardSelectionTrainer.class
+            FallBackCardSelectionTrainer.class,
+            CardFromDiscardTrainer.class,
+            StartingFellowshipTrainer.class
     );
 
     private static final Map<Class<? extends Trainer>, String> trainerFileMap =

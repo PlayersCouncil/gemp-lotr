@@ -9,6 +9,7 @@ public class AwaitingDecisionFactory {
             case "MultipleChoiceAwaitingDecision" -> MultipleChoiceAwaitingDecision.fromJson(obj);
             case "IntegerAwaitingDecision" -> IntegerAwaitingDecision.fromJson(obj);
             case "CardsSelectionDecision" -> CardsSelectionDecision.fromJson(obj);
+            case "ArbitraryCardsSelectionDecision" -> ArbitraryCardsSelectionDecision.fromJson(obj);
             // add others later
             default -> throw new IllegalArgumentException("Unknown action type: " + type);
         };

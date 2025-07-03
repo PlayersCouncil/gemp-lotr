@@ -109,11 +109,35 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 }
                 yield extractAllFeatures(gameState, decision, playerId);
             }
-            case CARD_SELECTION -> {
+            case CARD_SELECTION -> extractGeneralStateFeatures(gameState, playerId);
+            case ARBITRARY_CARDS -> {
+                if (decision.getText().toLowerCase().contains("starting fellowship")){
+                    yield extractStartingFellowshipFeatures(gameState, playerId);
+                }
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
             default -> extractAllFeatures(gameState, decision, playerId);
         };
+    }
+
+    private double[] extractStartingFellowshipFeatures(GameState gameState, String playerId) {
+        String opponent = gameState.getPlayerNames().stream()
+                .filter(s -> !s.equals(playerId)).findFirst()
+                .orElseThrow(() -> new IllegalStateException("Unknown second player"));
+        List<Double> features = new ArrayList<>();
+
+        // My deck
+        features.add(getDeckIndex(gameState, playerId));
+        // Starting player
+        features.add(gameState.getFirstPlayerId().equals(playerId) ? 1.0 : 0.0);
+        // Burden count
+        features.add((double) gameState.getPlayerBurdens(playerId));
+        features.add((double) gameState.getPlayerBurdens(opponent));
+        // Twilight
+        features.add((double) gameState.getTwilightPool());
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+
     }
 
     private double[] extractBurdensBidFeatures(GameState gameState, String playerId) {
@@ -135,7 +159,7 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
         return features.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
-    private double[] extractMulliganFeatures(GameState gameState, String playerId) {// Game state
+    private double[] extractMulliganFeatures(GameState gameState, String playerId) {
         String opponent = gameState.getPlayerNames().stream()
                 .filter(s -> !s.equals(playerId)).findFirst()
                 .orElseThrow(() -> new IllegalStateException("Unknown second player"));
@@ -146,7 +170,7 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
         features.add(getDeckIndex(gameState, playerId));
         // My turn
         features.add(getTurnIndicator(gameState, playerId));
-        // NUmber of fp and shadow cards in hand
+        // Number of fp and shadow cards in hand
         features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.FREE_PEOPLE)).count());
         features.add((double) gameState.getHand(playerId).stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getBlueprint().getSide().equals(Side.SHADOW)).count());
         // Opponent mulligan

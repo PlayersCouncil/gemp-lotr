@@ -5,6 +5,8 @@ import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.rl.DecisionAnswerer;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
@@ -17,8 +19,10 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     private final List<DecisionAnswerer> cardSelectionTrainers = List.of(
@@ -48,6 +52,11 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             new AnotherMoveTrainer()
     );
 
+    private final List<DecisionAnswerer> arbitraryCardsTrainers = List.of(
+            new CardFromDiscardTrainer(),
+            new StartingFellowshipTrainer()
+    );
+
     private final RLGameStateFeatures features;
     private final ModelRegistry modelRegistry;
 
@@ -65,7 +74,47 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return chooseIntegerAction(gameState, decision);
         } else if (decision.getDecisionType().equals(AwaitingDecisionType.CARD_SELECTION)) {
             return chooseCardSelectionAction(gameState, decision);
+        } else if (decision.getDecisionType().equals(AwaitingDecisionType.ARBITRARY_CARDS)) {
+            return chooseArbitraryCardsAction(gameState, decision);
         }
+        return super.chooseAction(gameState, decision);
+    }
+
+    private String chooseArbitraryCardsAction(GameState gameState, AwaitingDecision decision) {
+        Map<String, String[]> params = decision.getDecisionParameters();
+        String[] cardIds = params.get("cardId");
+        String[] selectable = params.get("selectable");
+        int min = params.containsKey("min") ? Integer.parseInt(params.get("min")[0]) : 0;
+        int max = params.containsKey("max") ? Integer.parseInt(params.get("max")[0]) : cardIds.length;
+
+        // Check if something is selectable
+        if (cardIds == null || selectable == null || cardIds.length != selectable.length)
+            return ""; // Invalid input
+        // Collect all selectable indices
+        List<Integer> selectableIndices = new ArrayList<>();
+        for (int i = 0; i < selectable.length; i++) {
+            if (Boolean.parseBoolean(selectable[i])) {
+                selectableIndices.add(i);
+            }
+        }
+        // If nothing is selectable or max == 0, just return empty
+        if (selectableIndices.isEmpty() || max == 0)
+            return "";
+
+        for (DecisionAnswerer trainer : arbitraryCardsTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
+            }
+        }
+
+        // Fallback to random decision
+        System.out.println("Unknown arbitrary card selection action: "
+                + gameState.getCurrentPhase() + " - "
+                + decision.getText()
+                + " (" + decision.getDecisionParameters().get("min")[0]
+                + ";" + decision.getDecisionParameters().get("max")[0] + ") "
+                + "cards=" + Arrays.toString(decision.getDecisionParameters().get("blueprintId"))
+                + ", selectable=" + Arrays.toString(decision.getDecisionParameters().get("selectable")));
         return super.chooseAction(gameState, decision);
     }
 

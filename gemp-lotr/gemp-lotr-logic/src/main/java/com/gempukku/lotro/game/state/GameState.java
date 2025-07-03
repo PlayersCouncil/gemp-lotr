@@ -40,6 +40,7 @@ public class GameState {
     private final Map<Integer, PhysicalCardImpl> _allCards = new HashMap<>();
 
     private String _currentPlayerId;
+    private String _firstPlayerId;
     private Phase _currentPhase = Phase.PUT_RING_BEARER;
     private int _twilightPool;
 
@@ -99,6 +100,7 @@ public class GameState {
         _isInit = true;
         _playerOrder = playerOrder;
         _currentPlayerId = firstPlayer;
+        _firstPlayerId = firstPlayer;
         _format = format;
 
         for (Map.Entry<String, List<String>> stringListEntry : cards.entrySet()) {
@@ -788,6 +790,10 @@ public class GameState {
 
     public String getCurrentPlayerId() {
         return _currentPlayerId;
+    }
+
+    public String getFirstPlayerId() {
+        return _firstPlayerId;
     }
 
     public int getCurrentSiteNumber() {
