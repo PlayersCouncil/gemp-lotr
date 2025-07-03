@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EventSerializer {
     public Node serializeEvent(Document doc, GameEvent gameEvent) {
@@ -200,10 +201,9 @@ public class EventSerializer {
         if (!charStr.isEmpty())
             eventElem.setAttribute("charStats", charStr.toString());
 
-
-//        var hindered = gameStats.getHindered();
-//        var hinderStr = hindered.stream().map(String::valueOf).collect(Collectors.joining(","));
-//        eventElem.setAttribute("hindered", hinderStr);
+        var hindered = gameStats.getHindered();
+        var hinderStr = hindered.stream().map(String::valueOf).collect(Collectors.joining(","));
+        eventElem.setAttribute("hindered", hinderStr);
     }
 
     public static void main(String[] args) {
