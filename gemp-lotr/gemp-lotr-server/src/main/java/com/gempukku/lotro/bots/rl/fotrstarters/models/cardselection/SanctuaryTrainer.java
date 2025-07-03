@@ -1,20 +1,18 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.semanticaction.CardSelectionAction;
-import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
-import smile.classification.LogisticRegression;
-import smile.classification.SoftClassifier;
 
 import java.util.*;
 
-public class SanctuaryTrainer implements Trainer {
-    private static final String SANCTUARY = "Sanctuary healing";
+public class SanctuaryTrainer extends AbstractCardSelectionTrainer {
     private static final String LAST_HEAL = "remaining heals: 1";
+
+    @Override
+    protected String getTextTrigger() {
+        return "sanctuary healing";
+    }
 
     @Override
     public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
@@ -22,57 +20,19 @@ public class SanctuaryTrainer implements Trainer {
 
         for (LearningStep step : steps) {
             if (!isStepRelevant(step)) continue;
+            if (step.reward <= 0) continue;
 
-            if (step.reward > 0) {
-                CardSelectionAction action = (CardSelectionAction) step.action;
+            CardSelectionAction action = (CardSelectionAction) step.action;
 
-                for (int i = 0; i < action.getChosenBlueprintIds().size(); i++) {
-                    try {
-                        double[] blueprintVector = CardFeatures.getCardFeatures(action.getChosenBlueprintIds().get(i), action.getWoundsOnChosen().get(i));
-                        double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
-                        System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
+            // Add positives for chosen cards
+            addLabeledPoints(data, action.getChosenBlueprintIds(), action.getWoundsOnChosen(), step.state, 1);
 
-                        data.add(new LabeledPoint(1, extended));
-                    } catch (CardNotFoundException ignore) {
-
-                    }
-                }
-
-                if (step.decision.getText().contains(LAST_HEAL)) {
-                    for (int i = 0; i < action.getNotChosenBlueprintIds().size(); i++) {
-                        try {
-                            double[] blueprintVector = CardFeatures.getCardFeatures(action.getNotChosenBlueprintIds().get(i), action.getWoundsOnNotChosen().get(i));
-                            double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
-                            System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
-
-                            data.add(new LabeledPoint(0, extended));
-                        } catch (CardNotFoundException ignore) {
-
-                        }
-                    }
-                }
+            // Add negatives for not chosen only if this is the last heal decision
+            if (step.decision.getText().contains(LAST_HEAL)) {
+                addLabeledPoints(data, action.getNotChosenBlueprintIds(), action.getWoundsOnNotChosen(), step.state, 0);
             }
         }
 
         return data;
-    }
-
-    @Override
-    public SoftClassifier<double[]> trainWithPoints(List<LabeledPoint> points) {
-        double[][] x = points.stream().map(LabeledPoint::x).toArray(double[][]::new);
-        int[] y = points.stream().mapToInt(LabeledPoint::y).toArray();
-        return LogisticRegression.fit(x, y);
-    }
-
-    @Override
-    public boolean isStepRelevant(LearningStep step) {
-        return step.decision.getDecisionType() == AwaitingDecisionType.CARD_SELECTION
-                && step.decision.getText().contains(SANCTUARY)
-                && step.action instanceof CardSelectionAction;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass().equals(SanctuaryTrainer.class);
     }
 }

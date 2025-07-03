@@ -75,82 +75,35 @@ public class BotService {
         if (TEST_MODEL_AT_STARTUP) {
             System.out.println("training models after games");
 
-            System.out.println("training 'go first' model");
-            Trainer goFirstTrainer = new GoFirstTrainer();
-            SoftClassifier<double[]> goFirstModel = goFirstTrainer.train(new FotrStartersLearningStepsPersistence().load(goFirstTrainer));
-            modelRegistry.setGoFirstModel(goFirstModel);
+            // List of all trainer instances
+            List<Trainer> trainers = List.of(
+                    new GoFirstTrainer(),
+                    new MulliganTrainer(),
+                    new AnotherMoveTrainer(),
+                    new BurdenTrainer(),
+                    new ReconcileTrainer(),
+                    new SanctuaryTrainer(),
+                    new ArcheryWoundTrainer(),
+                    new AttachItemTrainer(),
+                    new SkirmishOrderTrainer(),
+                    new HealTrainer(),
+                    new DiscardFromHandTrainer(),
+                    new ExertTrainer(),
+                    new DiscardFromPlayTrainer(),
+                    new PlayFromHandTrainer(),
+                    new FallBackCardSelectionTrainer()
+            );
 
-            System.out.println("training 'mulligan' model");
-            Trainer mulliganTrainer = new MulliganTrainer();
-            SoftClassifier<double[]> mulliganModel = mulliganTrainer.train(new FotrStartersLearningStepsPersistence().load(mulliganTrainer));
-            modelRegistry.setMulliganModel(mulliganModel);
+            FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
 
-            System.out.println("training 'another move' model");
-            Trainer anotherMoveTrainer = new AnotherMoveTrainer();
-            SoftClassifier<double[]> anotherMoveModel = anotherMoveTrainer.train(new FotrStartersLearningStepsPersistence().load(anotherMoveTrainer));
-            modelRegistry.setAnotherMoveModel(anotherMoveModel);
+            for (Trainer trainer : trainers) {
+                System.out.println("training '" + trainer.getClass().getSimpleName() + "' model");
+                List<LearningStep> steps = persistence.load(trainer);
+                SoftClassifier<double[]> model = trainer.train(steps);
+                modelRegistry.registerModel(trainer.getClass(), model);
+            }
 
-            System.out.println("training 'burden' model");
-            Trainer burdenTrainer = new BurdenTrainer();
-            SoftClassifier<double[]> burdenModel = burdenTrainer.train(new FotrStartersLearningStepsPersistence().load(burdenTrainer));
-            modelRegistry.setBurdensBidModel(burdenModel);
-
-            System.out.println("training 'reconcile' model");
-            Trainer reconcileTrainer = new ReconcileTrainer();
-            SoftClassifier<double[]> reconcileModel = reconcileTrainer.train(new FotrStartersLearningStepsPersistence().load(reconcileTrainer));
-            modelRegistry.setReconcileModel(reconcileModel);
-
-            System.out.println("training 'sanctuary' model");
-            Trainer sanctuaryTrainer = new SanctuaryTrainer();
-            SoftClassifier<double[]> sanctuaryModel = sanctuaryTrainer.train(new FotrStartersLearningStepsPersistence().load(sanctuaryTrainer));
-            modelRegistry.setSanctuaryModel(sanctuaryModel);
-
-            System.out.println("training 'archery wound' model");
-            Trainer archeryWoundTrainer = new ArcheryWoundTrainer();
-            SoftClassifier<double[]> archeryWoundModel = archeryWoundTrainer.train(new FotrStartersLearningStepsPersistence().load(archeryWoundTrainer));
-            modelRegistry.setArcheryModel(archeryWoundModel);
-
-            System.out.println("training 'attach item' model");
-            Trainer attachItemTrainer = new AttachItemTrainer();
-            SoftClassifier<double[]> attachItemModel = attachItemTrainer.train(new FotrStartersLearningStepsPersistence().load(attachItemTrainer));
-            modelRegistry.setAttachItemModel(attachItemModel);
-
-            System.out.println("training 'skirmish order' model");
-            Trainer skirmishOrderTrainer = new SkirmishOrderTrainer();
-            SoftClassifier<double[]> skirmishOrderModel = skirmishOrderTrainer.train(new FotrStartersLearningStepsPersistence().load(skirmishOrderTrainer));
-            modelRegistry.setSkirmishOrderModel(skirmishOrderModel);
-
-            System.out.println("training 'heal' model");
-            Trainer healTrainer = new HealTrainer();
-            SoftClassifier<double[]> healModel = healTrainer.train(new FotrStartersLearningStepsPersistence().load(healTrainer));
-            modelRegistry.setHealModel(healModel);
-
-            System.out.println("training 'discard from hand' model");
-            Trainer discardFromHandTrainer = new DiscardFromHandTrainer();
-            SoftClassifier<double[]> discardFromHandModel = discardFromHandTrainer.train(new FotrStartersLearningStepsPersistence().load(discardFromHandTrainer));
-            modelRegistry.setDiscardFromHandModel(discardFromHandModel);
-
-            System.out.println("training 'exert' model");
-            Trainer exertTrainer = new ExertTrainer();
-            SoftClassifier<double[]> exertModel = exertTrainer.train(new FotrStartersLearningStepsPersistence().load(exertTrainer));
-            modelRegistry.setExertModel(exertModel);
-
-
-            System.out.println("training 'discard from play' model");
-            Trainer discardFromPlayTrainer = new DiscardFromPlayTrainer();
-            SoftClassifier<double[]> discardFromPlayModel = discardFromPlayTrainer.train(new FotrStartersLearningStepsPersistence().load(discardFromPlayTrainer));
-            modelRegistry.setDiscardFromPlayModel(discardFromPlayModel);
             System.out.println("training done");
-
-            System.out.println("training 'play from hand' model");
-            Trainer playFromHandTrainer = new PlayFromHandTrainer();
-            SoftClassifier<double[]> playFromHandModel = playFromHandTrainer.train(new FotrStartersLearningStepsPersistence().load(playFromHandTrainer));
-            modelRegistry.setPlayFromHandModel(playFromHandModel);
-
-            System.out.println("training 'card selection fallback' model");
-            Trainer fallbackCsTrainer = new FallBackCardSelectionTrainer();
-            SoftClassifier<double[]> fallbackCsModel = fallbackCsTrainer.train(new FotrStartersLearningStepsPersistence().load(fallbackCsTrainer));
-            modelRegistry.setFallbackCardSelectionModel(fallbackCsModel);
 
             System.out.println("using model in game simulations");
 

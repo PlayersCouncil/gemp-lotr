@@ -1,64 +1,44 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
-import com.gempukku.lotro.bots.rl.semanticaction.CardSelectionAction;
-import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
-import smile.classification.LogisticRegression;
-import smile.classification.SoftClassifier;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.AbstractTrainer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class FallBackCardSelectionTrainer implements Trainer {
+public class FallBackCardSelectionTrainer extends AbstractCardSelectionTrainer {
+
+    // List of all other card selection trainers to check against
+    private static final List<AbstractTrainer> OTHER_TRAINERS = List.of(
+            new ArcheryWoundTrainer(),
+            new AttachItemTrainer(),
+            new DiscardFromHandTrainer(),
+            new DiscardFromPlayTrainer(),
+            new ExertTrainer(),
+            new HealTrainer(),
+            new PlayFromHandTrainer(),
+            new ReconcileTrainer(),
+            new SanctuaryTrainer(),
+            new SkirmishOrderTrainer()
+    );
 
     @Override
-    public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
-        List<LabeledPoint> data = new ArrayList<>();
-
-        for (LearningStep step : steps) {
-            if (!isStepRelevant(step)) continue;
-
-            CardSelectionAction action = (CardSelectionAction) step.action;
-
-            for (int i = 0; i < action.getChosenBlueprintIds().size(); i++) {
-                try {
-                    double[] blueprintVector = CardFeatures.getCardFeatures(action.getChosenBlueprintIds().get(i), action.getWoundsOnChosen().get(i));
-                    double[] extended = Arrays.copyOf(step.state, step.state.length + blueprintVector.length);
-                    System.arraycopy(blueprintVector, 0, extended, step.state.length, blueprintVector.length);
-
-                    int label = step.reward > 0 ? 1 : 0;
-
-                    data.add(new LabeledPoint(label, extended));
-                } catch (CardNotFoundException ignore) {
-
-                }
-            }
-        }
-
-        return data;
-    }
-
-    @Override
-    public SoftClassifier<double[]> trainWithPoints(List<LabeledPoint> points) {
-        double[][] x = points.stream().map(LabeledPoint::x).toArray(double[][]::new);
-        int[] y = points.stream().mapToInt(LabeledPoint::y).toArray();
-        return LogisticRegression.fit(x, y);
+    protected String getTextTrigger() {
+        return ""; // No specific text trigger, allow fallback to handle any
     }
 
     @Override
     public boolean isStepRelevant(LearningStep step) {
-        // TODO exclude all other CS trainer steps
-        return step.decision.getDecisionType() == AwaitingDecisionType.CARD_SELECTION
-                && step.action instanceof CardSelectionAction;
-    }
+        if (!super.isStepRelevant(step))
+            return false;
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass().equals(FallBackCardSelectionTrainer.class);
+        // Return false if any other specialized trainer considers this relevant
+        for (AbstractTrainer trainer : OTHER_TRAINERS) {
+            if (trainer.isStepRelevant(step)) {
+                return false;
+            }
+        }
+
+        // Otherwise fallback is relevant
+        return true;
     }
 }

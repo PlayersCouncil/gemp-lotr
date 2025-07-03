@@ -1,64 +1,35 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice;
 
 import com.gempukku.lotro.bots.rl.LearningStep;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
-import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
-import smile.classification.LogisticRegression;
-import smile.classification.SoftClassifier;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class GoFirstTrainer implements Trainer {
-    private static final String GO_FIRST = "Go first";
+public class GoFirstTrainer extends AbstractMultipleChoiceTrainer {
     @Override
-    public List<LabeledPoint> extractTrainingData(List<LearningStep> steps) {
-        List<LabeledPoint> data = new ArrayList<>();
-        for (LearningStep step : steps) {
-            if (isStepRelevant(step)) {
-                int label;
-                if (((MultipleChoiceAction) step.action).getChosenOption().equals(GO_FIRST)) {
-                    label = step.reward > 0 ? 1 : 0;
-                } else {
-                    label = step.reward > 0 ? 0 : 1;
-                }
-
-                data.add(new LabeledPoint(label, step.state));
-            }
-        }
-        return data;
+    protected String getTextTrigger() {
+        return "Go first"; // Not used
     }
 
     @Override
-    public SoftClassifier<double[]> trainWithPoints(List<LabeledPoint> points) {
-        double[][] x = points.stream().map(LabeledPoint::x).toArray(double[][]::new);
-        int[] y = points.stream().mapToInt(LabeledPoint::y).toArray();
-
-        return LogisticRegression.fit(x, y);
+    protected String getPositiveOption() {
+        return "Go first";
     }
 
     @Override
     public boolean isStepRelevant(LearningStep step) {
-        if (step.decision.getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE) {
-            String[] options = step.decision.getDecisionParameters().get("results");
+        if (step.decision.getDecisionType() != AwaitingDecisionType.MULTIPLE_CHOICE)
+            return false;
 
-            int goFirstIndex = -1;
-            for (int i = 0; i < options.length; i++) {
-                if (options[i].equalsIgnoreCase(GO_FIRST)) {
-                    goFirstIndex = i;
-                    break;
-                }
+        if (!(step.action instanceof MultipleChoiceAction)) {
+            return false;
+        }
+
+        String[] options = step.decision.getDecisionParameters().get("results");
+        for (String option : options) {
+            if (option.equalsIgnoreCase(getPositiveOption())) {
+                return true;
             }
-
-            return goFirstIndex != -1 && step.action instanceof MultipleChoiceAction;
         }
         return false;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass().equals(GoFirstTrainer.class);
     }
 }

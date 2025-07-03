@@ -2,140 +2,27 @@ package com.gempukku.lotro.bots.rl.fotrstarters.models;
 
 import smile.classification.SoftClassifier;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class ModelRegistry {
-    private SoftClassifier<double[]> goFirstModel;
-    private SoftClassifier<double[]> mulliganModel;
-    private SoftClassifier<double[]> anotherMoveModel;
-    private SoftClassifier<double[]> burdensBidModel;
-    private SoftClassifier<double[]> reconcileModel;
-    private SoftClassifier<double[]> sanctuaryModel;
-    private SoftClassifier<double[]> archeryModel;
-    private SoftClassifier<double[]> attachItemModel;
-    private SoftClassifier<double[]> skirmishOrderModel;
-    private SoftClassifier<double[]> healModel;
-    private SoftClassifier<double[]> discardFromHandModel;
-    private SoftClassifier<double[]> exertModel;
-    private SoftClassifier<double[]> discardFromPlayModel;
-    private SoftClassifier<double[]> playFromHandModel;
-    private SoftClassifier<double[]> fallbackCardSelectionModel;
+    private final Map<Class<? extends Trainer>, SoftClassifier<double[]>> modelMap = new HashMap<>();
 
-    public SoftClassifier<double[]> getGoFirstModel() {
-        return goFirstModel;
+    public <T extends Trainer> void registerModel(Class<T> trainerClass, SoftClassifier<double[]> model) {
+        modelMap.put(trainerClass, model);
     }
 
-    public void setGoFirstModel(SoftClassifier<double[]> goFirstModel) {
-        this.goFirstModel = goFirstModel;
+    public <T extends Trainer> SoftClassifier<double[]> getModel(Class<T> trainerClass) {
+        return modelMap.get(trainerClass);
     }
 
-    public SoftClassifier<double[]> getMulliganModel() {
-        return mulliganModel;
+    public boolean hasModel(Class<? extends Trainer> trainerClass) {
+        return modelMap.containsKey(trainerClass);
     }
 
-    public void setMulliganModel(SoftClassifier<double[]> mulliganModel) {
-        this.mulliganModel = mulliganModel;
-    }
-
-    public SoftClassifier<double[]> getAnotherMoveModel() {
-        return anotherMoveModel;
-    }
-
-    public void setAnotherMoveModel(SoftClassifier<double[]> anotherMoveModel) {
-        this.anotherMoveModel = anotherMoveModel;
-    }
-
-    public SoftClassifier<double[]> getBurdensBidModel() {
-        return burdensBidModel;
-    }
-
-    public void setBurdensBidModel(SoftClassifier<double[]> burdensBidModel) {
-        this.burdensBidModel = burdensBidModel;
-    }
-
-    public SoftClassifier<double[]> getReconcileModel() {
-        return reconcileModel;
-    }
-
-    public void setReconcileModel(SoftClassifier<double[]> reconcileModel) {
-        this.reconcileModel = reconcileModel;
-    }
-
-    public SoftClassifier<double[]> getSanctuaryModel() {
-        return sanctuaryModel;
-    }
-
-    public void setSanctuaryModel(SoftClassifier<double[]> sanctuaryModel) {
-        this.sanctuaryModel = sanctuaryModel;
-    }
-
-    public SoftClassifier<double[]> getArcheryModel() {
-        return archeryModel;
-    }
-
-    public void setArcheryModel(SoftClassifier<double[]> archeryModel) {
-        this.archeryModel = archeryModel;
-    }
-
-    public SoftClassifier<double[]> getAttachItemModel() {
-        return attachItemModel;
-    }
-
-    public void setAttachItemModel(SoftClassifier<double[]> attachItemModel) {
-        this.attachItemModel = attachItemModel;
-    }
-
-    public SoftClassifier<double[]> getSkirmishOrderModel() {
-        return skirmishOrderModel;
-    }
-
-    public void setSkirmishOrderModel(SoftClassifier<double[]> skirmishOrderModel) {
-        this.skirmishOrderModel = skirmishOrderModel;
-    }
-
-    public SoftClassifier<double[]> getHealModel() {
-        return healModel;
-    }
-
-    public void setHealModel(SoftClassifier<double[]> healModel) {
-        this.healModel = healModel;
-    }
-
-    public SoftClassifier<double[]> getDiscardFromHandModel() {
-        return discardFromHandModel;
-    }
-
-    public void setDiscardFromHandModel(SoftClassifier<double[]> discardFromHandModel) {
-        this.discardFromHandModel = discardFromHandModel;
-    }
-
-    public SoftClassifier<double[]> getExertModel() {
-        return exertModel;
-    }
-
-    public void setExertModel(SoftClassifier<double[]> exertModel) {
-        this.exertModel = exertModel;
-    }
-
-    public SoftClassifier<double[]> getDiscardFromPlayModel() {
-        return discardFromPlayModel;
-    }
-
-    public void setDiscardFromPlayModel(SoftClassifier<double[]> discardFromPlayModel) {
-        this.discardFromPlayModel = discardFromPlayModel;
-    }
-
-    public SoftClassifier<double[]> getPlayFromHandModel() {
-        return playFromHandModel;
-    }
-
-    public void setPlayFromHandModel(SoftClassifier<double[]> playFromHandModel) {
-        this.playFromHandModel = playFromHandModel;
-    }
-
-    public SoftClassifier<double[]> getFallbackCardSelectionModel() {
-        return fallbackCardSelectionModel;
-    }
-
-    public void setFallbackCardSelectionModel(SoftClassifier<double[]> fallbackCardSelectionModel) {
-        this.fallbackCardSelectionModel = fallbackCardSelectionModel;
+    public Set<Class<? extends Trainer>> getRegisteredTrainerTypes() {
+        return Collections.unmodifiableSet(modelMap.keySet());
     }
 }

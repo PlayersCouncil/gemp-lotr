@@ -6,10 +6,10 @@ import smile.classification.SoftClassifier;
 import java.util.List;
 
 public interface Trainer {
-    List<LabeledPoint> extractTrainingData(List<LearningStep> steps);
-    SoftClassifier<double[]> trainWithPoints(List<LabeledPoint> points);
     boolean isStepRelevant(LearningStep step);
-    default SoftClassifier<double[]> train(List<LearningStep> steps) {
-        return trainWithPoints(extractTrainingData(steps));
+    SoftClassifier<double[]> train(List<LearningStep> steps);
+
+    static boolean equal(Trainer t1, Trainer t2) {
+        return t1.getClass().equals(t2.getClass());
     }
 }

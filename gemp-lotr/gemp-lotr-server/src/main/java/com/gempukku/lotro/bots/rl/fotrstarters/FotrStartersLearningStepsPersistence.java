@@ -14,46 +14,56 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class FotrStartersLearningStepsPersistence implements LearningStepsPersistence {
-    private static final Map<Trainer, String> trainerFileMap = new HashMap<>();
+    private static final List<Class<? extends Trainer>> trainerClasses = List.of(
+            GoFirstTrainer.class,
+            MulliganTrainer.class,
+            AnotherMoveTrainer.class,
+            BurdenTrainer.class,
+            ReconcileTrainer.class,
+            SanctuaryTrainer.class,
+            ArcheryWoundTrainer.class,
+            AttachItemTrainer.class,
+            SkirmishOrderTrainer.class,
+            HealTrainer.class,
+            DiscardFromHandTrainer.class,
+            ExertTrainer.class,
+            DiscardFromPlayTrainer.class,
+            PlayFromHandTrainer.class,
+            FallBackCardSelectionTrainer.class
+    );
 
-    static {
-        trainerFileMap.put(new GoFirstTrainer(), "fotr-starters-go-first.jsonl");
-        trainerFileMap.put(new MulliganTrainer(), "fotr-starters-mulligan.jsonl");
-        trainerFileMap.put(new AnotherMoveTrainer(), "fotr-starters-another-move.jsonl");
-        trainerFileMap.put(new BurdenTrainer(), "fotr-starters-burdens.jsonl");
-        trainerFileMap.put(new ReconcileTrainer(), "fotr-starters-reconcile.jsonl");
-        trainerFileMap.put(new SanctuaryTrainer(), "fotr-starters-sanctuary.jsonl");
-        trainerFileMap.put(new ArcheryWoundTrainer(), "fotr-starters-archery.jsonl");
-        trainerFileMap.put(new AttachItemTrainer(), "fotr-starters-attach-item.jsonl");
-        trainerFileMap.put(new SkirmishOrderTrainer(), "fotr-starters-skirmish-order.jsonl");
-        trainerFileMap.put(new HealTrainer(), "fotr-starters-heal.jsonl");
-        trainerFileMap.put(new DiscardFromHandTrainer(), "fotr-starters-hand-discard.jsonl");
-        trainerFileMap.put(new ExertTrainer(), "fotr-starters-exert.jsonl");
-        trainerFileMap.put(new DiscardFromPlayTrainer(), "fotr-starters-play-discard.jsonl");
-        trainerFileMap.put(new PlayFromHandTrainer(), "fotr-starters-hand-play.jsonl");
-        trainerFileMap.put(new FallBackCardSelectionTrainer(), "fotr-starters-cs-fallback.jsonl");
-        // Add other trainers here when needed
+    private static final Map<Class<? extends Trainer>, String> trainerFileMap =
+            trainerClasses.stream().collect(Collectors.toMap(
+                    Function.identity(),
+                    FotrStartersLearningStepsPersistence::generateFileName
+            ));
+
+    private static String generateFileName(Class<? extends Trainer> cls) {
+        String base = cls.getSimpleName()
+                .replaceAll("Trainer$", "") // Remove "Trainer" suffix
+                .replaceAll("([a-z])([A-Z])", "$1-$2") // CamelCase to kebab-case
+                .toLowerCase();
+        return "fotr-starters-" + base + ".jsonl";
     }
 
     @Override
     public void save(List<LearningStep> steps) {
-        for (Map.Entry<Trainer, String> entry : trainerFileMap.entrySet()) {
-            Trainer trainer = entry.getKey();
+        for (Map.Entry<Class<? extends Trainer>, String> entry : trainerFileMap.entrySet()) {
+            Class<? extends Trainer> trainerClass = entry.getKey();
             String filename = entry.getValue();
 
-            saveFilteredSteps(filename, trainer, steps);
-        }
-        try (FileWriter fw = new FileWriter("fotr-starters-all.jsonl", true)) {
-            for (LearningStep step : steps) {
-                    fw.write(step.toJson() + "\n");
+            try {
+                Trainer trainer = trainerClass.getDeclaredConstructor().newInstance(); // assumes default constructor
+                saveFilteredSteps(filename, trainer, steps);
+            } catch (Exception e) {
+                e.printStackTrace(); // or log
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -69,23 +79,20 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
         }
     }
 
-    @Override
     public List<LearningStep> load(Trainer trainer) {
-        List<LearningStep> steps = new ArrayList<>();
+        String fileName = trainerFileMap.get(trainer.getClass());
+        if (fileName == null)
+            return List.of();
 
-        trainerFileMap.forEach((trainerInMap, fileName) -> {
-            if (trainerInMap.equals(trainer)) {
-                try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        LearningStep step = LearningStep.fromJson(line);
-                        steps.add(step);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        List<LearningStep> steps = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                steps.add(LearningStep.fromJson(line));
             }
-        });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return steps;
     }
 }

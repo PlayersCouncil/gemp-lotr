@@ -4,7 +4,11 @@ import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -54,7 +58,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
         }
 
         if (decision.getText().contains("Reconcile")) {
-            SoftClassifier<double[]> model = modelRegistry.getReconcileModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(ReconcileTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -79,7 +83,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId; // Never pass, always discard one card
         }
         if (decision.getText().contains("Sanctuary healing")) {
-            SoftClassifier<double[]> model = modelRegistry.getSanctuaryModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(SanctuaryTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -110,7 +114,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId; // Never pass, always heal at sanctuary
         }
         if (decision.getText().contains("assign archery wound to")) {
-            SoftClassifier<double[]> model = modelRegistry.getArcheryModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(ArcheryWoundTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -141,7 +145,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId;
         }
         if (decision.getText().contains("Choose target to attach to")) {
-            SoftClassifier<double[]> model = modelRegistry.getAttachItemModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(AttachItemTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -172,7 +176,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId;
         }
         if (decision.getText().contains("next skirmish to resolve")) {
-            SoftClassifier<double[]> model = modelRegistry.getSkirmishOrderModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(SkirmishOrderTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -208,7 +212,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return best.cardId;
         }
         if (decision.getText().contains("to heal")) {
-            SoftClassifier<double[]> model = modelRegistry.getHealModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(HealTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -254,7 +258,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
                 }
             }
             if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.HAND.getHumanReadable())) {
-                SoftClassifier<double[]> model = modelRegistry.getDiscardFromHandModel();
+                SoftClassifier<double[]> model = modelRegistry.getModel(DiscardFromHandTrainer.class);
                 double[] stateVector = features.extractFeatures(gameState, decision, getName());
                 List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -281,7 +285,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             }
         }
         if (decision.getText().contains("to exert")) {
-            SoftClassifier<double[]> model = modelRegistry.getExertModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(ExertTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -328,7 +332,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
                 }
             }
             if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.FREE_CHARACTERS.getHumanReadable())) {
-                SoftClassifier<double[]> model = modelRegistry.getDiscardFromPlayModel();
+                SoftClassifier<double[]> model = modelRegistry.getModel(DiscardFromPlayTrainer.class);
                 double[] stateVector = features.extractFeatures(gameState, decision, getName());
                 List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -361,7 +365,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             }
         }
         if (decision.getText().toLowerCase().contains("play from hand")) {
-            SoftClassifier<double[]> model = modelRegistry.getPlayFromHandModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(PlayFromHandTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -406,7 +410,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
         }
 
         // Last fallback
-        SoftClassifier<double[]> model = modelRegistry.getFallbackCardSelectionModel();
+        SoftClassifier<double[]> model = modelRegistry.getModel(FallBackCardSelectionTrainer.class);
         double[] stateVector = features.extractFeatures(gameState, decision, getName());
         List<ScoredCard> scoredCards = new ArrayList<>();
 
@@ -439,10 +443,10 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
 
     private String chooseIntegerAction(GameState gameState, AwaitingDecision decision) {
         if (decision.getText().contains("burdens to bid")) {
-            SoftClassifier<double[]> model = modelRegistry.getBurdensBidModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(BurdenTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             if (model != null) {
-                double[] probs = new double[BurdenTrainer.getUniqueBids()];
+                double[] probs = new double[new BurdenTrainer().getMaxChoice() + 1];
                 model.predict(stateVector, probs);
                 int predictedValue = sampleFromDistribution(probs);
                 return String.valueOf(predictedValue);
@@ -470,7 +474,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     private String chooseMultipleChoiceAction(GameState gameState, AwaitingDecision decision) {
         String[] options = decision.getDecisionParameters().get("results");
         if (List.of(options).contains("Go first")) {
-            SoftClassifier<double[]> model = modelRegistry.getGoFirstModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(GoFirstTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             if (model != null) {
                 double[] probs = new double[2];
@@ -479,7 +483,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             }
         }
         if (decision.getText().contains("mulligan")) {
-            SoftClassifier<double[]> model = modelRegistry.getMulliganModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(MulliganTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             if (model != null) {
                 double[] probs = new double[2];
@@ -488,7 +492,7 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             }
         }
         if (decision.getText().contains("another move")) {
-            SoftClassifier<double[]> model = modelRegistry.getAnotherMoveModel();
+            SoftClassifier<double[]> model = modelRegistry.getModel(AnotherMoveTrainer.class);
             double[] stateVector = features.extractFeatures(gameState, decision, getName());
             if (model != null) {
                 double[] probs = new double[2];
