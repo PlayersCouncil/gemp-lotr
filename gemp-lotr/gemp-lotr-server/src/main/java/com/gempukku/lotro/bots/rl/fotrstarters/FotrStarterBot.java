@@ -2,6 +2,7 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
+import com.gempukku.lotro.bots.rl.DecisionAnswerer;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
@@ -10,22 +11,43 @@ import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMove
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
 import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
-import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
-import smile.classification.SoftClassifier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
+    private final List<DecisionAnswerer> cardSelectionTrainers = List.of(
+            new ReconcileTrainer(),
+            new SanctuaryTrainer(),
+            new ArcheryWoundTrainer(),
+            new AttachItemTrainer(),
+            new SkirmishOrderTrainer(),
+            new HealTrainer(),
+            new DiscardFromHandTrainer(),
+            new ExertTrainer(),
+            new DiscardFromPlayTrainer(),
+            new PlayFromHandTrainer()
+    );
+
+    private final List<DecisionAnswerer> fallBackTrainers = List.of(
+            new FallBackCardSelectionTrainer() // card selection
+    );
+
+    private final List<DecisionAnswerer> integerTrainers = List.of(
+            new BurdenTrainer()
+    );
+
+    private final List<DecisionAnswerer> multipleChoiceTrainers = List.of(
+            new GoFirstTrainer(),
+            new MulliganTrainer(),
+            new AnotherMoveTrainer()
+    );
+
     private final RLGameStateFeatures features;
     private final ModelRegistry modelRegistry;
 
@@ -57,340 +79,11 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return String.join(",", cardIds);
         }
 
-        if (decision.getText().contains("Reconcile")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(ReconcileTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest discard probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId; // Never pass, always discard one card
-        }
-        if (decision.getText().contains("Sanctuary healing")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(SanctuaryTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    int wounds = 0;
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            wounds = gameState.getWounds(physicalCard);
-                        }
-                    }
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of healing this card
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest heal probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId; // Never pass, always heal at sanctuary
-        }
-        if (decision.getText().contains("assign archery wound to")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(ArcheryWoundTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    int wounds = 0;
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            wounds = gameState.getWounds(physicalCard);
-                        }
-                    }
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of wounding this card
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest archery wound probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId;
-        }
-        if (decision.getText().contains("Choose target to attach to")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(AttachItemTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    int wounds = 0;
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            wounds = gameState.getWounds(physicalCard);
-                        }
-                    }
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of attaching to this card
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId;
-        }
-        if (decision.getText().contains("next skirmish to resolve")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(SkirmishOrderTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    for (Assignment assignment : gameState.getAssignments()) {
-                        if (assignment.getFellowshipCharacter().getCardId() == Integer.parseInt(physicalId)) {
-                            String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                            int wounds = 0;
-                            for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                                if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                                    wounds = gameState.getWounds(physicalCard);
-                                }
-                            }
-                            double[] cardVector = CardFeatures.getFpAssignedCardFeatures(blueprintId, wounds, assignment.getShadowCharacters().size(), assignment.getShadowCharacters().stream().mapToInt(value -> value.getBlueprint().getStrength()).sum());
-                            double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                            System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                            double[] probs = new double[2];
-                            model.predict(extended, probs);
-                            scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of choosing this card
-                        }
-                    }
-
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId;
-        }
-        if (decision.getText().contains("to heal")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(HealTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    int wounds = 0;
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            wounds = gameState.getWounds(physicalCard);
-                        }
-                    }
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of healing this card
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the card with the highest probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            ScoredCard best = scoredCards.get(0);
-            return best.cardId;
-        }
-        if (decision.getText().toLowerCase().contains("discard") && !decision.getText().toLowerCase().contains("reconcile")) {
-            String zoneOfAllCards = null;
-            for (String choice : decision.getDecisionParameters().get("cardId")) {
-                for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                    if (physicalCard.getCardId() == Integer.parseInt(choice)) {
-                        String zoneOfThisCard = physicalCard.getZone().getHumanReadable();
-                        if (zoneOfAllCards == null) {
-                            zoneOfAllCards = zoneOfThisCard;
-                        }
-                        if (!zoneOfAllCards.equals(zoneOfThisCard)) {
-                            throw new IllegalArgumentException("Cards are not from the same zone");
-                        }
-                    }
-                }
-            }
-            if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.HAND.getHumanReadable())) {
-                SoftClassifier<double[]> model = modelRegistry.getModel(DiscardFromHandTrainer.class);
-                double[] stateVector = features.extractFeatures(gameState, decision, getName());
-                List<ScoredCard> scoredCards = new ArrayList<>();
-
-                for (String physicalId : cardIds) {
-                    try {
-                        String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                        double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
-                        double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                        System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                        double[] probs = new double[2];
-                        model.predict(extended, probs);
-                        scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                    } catch (CardNotFoundException ignored) {
-
-                    }
-                }
-
-                // Find the cards with the highest discard probability
-                scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-                List<String> sortedIds = new ArrayList<>();
-                scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-                return String.join(",", sortedIds.subList(0, max));
+        for (DecisionAnswerer trainer : cardSelectionTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
             }
         }
-        if (decision.getText().contains("to exert")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(ExertTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    int wounds = 0;
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            wounds = gameState.getWounds(physicalCard);
-                        }
-                    }
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the cards with the highest discard probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            List<String> sortedIds = new ArrayList<>();
-            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-            return String.join(",", sortedIds.subList(0, max));
-        }
-        if (decision.getText().toLowerCase().contains("discard")) {
-            String zoneOfAllCards = null;
-            for (String choice : decision.getDecisionParameters().get("cardId")) {
-                for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                    if (physicalCard.getCardId() == Integer.parseInt(choice)) {
-                        String zoneOfThisCard = physicalCard.getZone().getHumanReadable();
-                        if (zoneOfAllCards == null) {
-                            zoneOfAllCards = zoneOfThisCard;
-                        }
-                        if (!zoneOfAllCards.equals(zoneOfThisCard)) {
-                            throw new IllegalArgumentException("Cards are not from the same zone");
-                        }
-                    }
-                }
-            }
-            if (zoneOfAllCards != null && zoneOfAllCards.equals(Zone.FREE_CHARACTERS.getHumanReadable())) {
-                SoftClassifier<double[]> model = modelRegistry.getModel(DiscardFromPlayTrainer.class);
-                double[] stateVector = features.extractFeatures(gameState, decision, getName());
-                List<ScoredCard> scoredCards = new ArrayList<>();
-
-                for (String physicalId : cardIds) {
-                    try {
-                        String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                        int wounds = 0;
-                        for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                            if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                                wounds = gameState.getWounds(physicalCard);
-                            }
-                        }
-                        double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                        double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                        System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                        double[] probs = new double[2];
-                        model.predict(extended, probs);
-                        scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                    } catch (CardNotFoundException ignored) {
-
-                    }
-                }
-
-                // Find the cards with the highest discard probability
-                scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-                List<String> sortedIds = new ArrayList<>();
-                scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-                return String.join(",", sortedIds.subList(0, max));
-            }
-        }
-        if (decision.getText().toLowerCase().contains("play from hand")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(PlayFromHandTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            List<ScoredCard> scoredCards = new ArrayList<>();
-
-            for (String physicalId : cardIds) {
-                try {
-                    String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
-                    double[] cardVector = CardFeatures.getCardFeatures(blueprintId, 0);
-                    double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                    System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                    double[] probs = new double[2];
-                    model.predict(extended, probs);
-                    scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of discard
-                } catch (CardNotFoundException ignored) {
-
-                }
-            }
-
-            // Find the cards with the highest discard probability
-            scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-            List<String> sortedIds = new ArrayList<>();
-            scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-            return String.join(",", sortedIds.subList(0, max));
-        }
-
 
         // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
         if (gameState.getSkirmish() != null && min == 1 && max == 1) {
@@ -409,47 +102,22 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return super.chooseAction(gameState, decision);
         }
 
-        // Last fallback
-        SoftClassifier<double[]> model = modelRegistry.getModel(FallBackCardSelectionTrainer.class);
-        double[] stateVector = features.extractFeatures(gameState, decision, getName());
-        List<ScoredCard> scoredCards = new ArrayList<>();
-
-        for (String physicalId : cardIds) {
-            try {
-                String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));int wounds = 0;
-                for (PhysicalCard physicalCard : gameState.getAllCards()) {
-                    if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                        wounds = gameState.getWounds(physicalCard);
-                    }
-                }
-                double[] cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
-                System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
-
-                double[] probs = new double[2];
-                model.predict(extended, probs);
-                scoredCards.add(new ScoredCard(physicalId, probs[1])); // probability of being chosen
-            } catch (CardNotFoundException ignored) {
-
+        // Last fallback to trainer
+        for (DecisionAnswerer trainer : fallBackTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
             }
         }
 
-        // Find the cards with the highest choose probability
-        scoredCards.sort(Comparator.comparingDouble(c -> -c.score));
-        List<String> sortedIds = new ArrayList<>();
-        scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
-        return String.join(",", sortedIds.subList(0, max));
+        // Fallback to random decision
+        System.out.println("Unknown card selection action: " + gameState.getCurrentPhase() + " - " + decision.getText() + " (" + decision.getDecisionParameters().get("min")[0] + ";" + decision.getDecisionParameters().get("max")[0] + ") " + Arrays.toString(decision.getDecisionParameters().get("cardId")));
+        return super.chooseAction(gameState, decision);
     }
 
     private String chooseIntegerAction(GameState gameState, AwaitingDecision decision) {
-        if (decision.getText().contains("burdens to bid")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(BurdenTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            if (model != null) {
-                double[] probs = new double[new BurdenTrainer().getMaxChoice() + 1];
-                model.predict(stateVector, probs);
-                int predictedValue = sampleFromDistribution(probs);
-                return String.valueOf(predictedValue);
+        for (DecisionAnswerer trainer : integerTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
             }
         }
         if (decision.getText().contains("how many to spot")) {
@@ -460,44 +128,11 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
         return super.chooseAction(gameState, decision);
     }
 
-    private int sampleFromDistribution(double[] probabilities) {
-        double r = Math.random();
-        double cumulative = 0.0;
-        for (int i = 0; i < probabilities.length; i++) {
-            cumulative += probabilities[i];
-            if (r < cumulative)
-                return i;
-        }
-        return probabilities.length - 1; // fallback
-    }
-
     private String chooseMultipleChoiceAction(GameState gameState, AwaitingDecision decision) {
         String[] options = decision.getDecisionParameters().get("results");
-        if (List.of(options).contains("Go first")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(GoFirstTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            if (model != null) {
-                double[] probs = new double[2];
-                model.predict(stateVector, probs);
-                return probs[1] > probs[0] ? new MultipleChoiceAction("Go first").toDecisionString(decision, gameState) : new MultipleChoiceAction("Go second").toDecisionString(decision, gameState);
-            }
-        }
-        if (decision.getText().contains("mulligan")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(MulliganTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            if (model != null) {
-                double[] probs = new double[2];
-                model.predict(stateVector, probs);
-                return probs[1] > probs[0] ? new MultipleChoiceAction("Yes").toDecisionString(decision, gameState) : new MultipleChoiceAction("No").toDecisionString(decision, gameState);
-            }
-        }
-        if (decision.getText().contains("another move")) {
-            SoftClassifier<double[]> model = modelRegistry.getModel(AnotherMoveTrainer.class);
-            double[] stateVector = features.extractFeatures(gameState, decision, getName());
-            if (model != null) {
-                double[] probs = new double[2];
-                model.predict(stateVector, probs);
-                return probs[1] > probs[0] ? new MultipleChoiceAction("Yes").toDecisionString(decision, gameState) : new MultipleChoiceAction("No").toDecisionString(decision, gameState);
+        for (DecisionAnswerer trainer : multipleChoiceTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
             }
         }
         if (List.of(options).contains("Heal a companion") && List.of(options).contains("Remove a Shadow condition from a companion")) {
@@ -509,23 +144,5 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
 
         System.out.println("Unknown multiple choice action: " + decision.getText() + " - " + Arrays.toString(options));
         return super.chooseAction(gameState, decision);
-    }
-
-    private static class ScoredCard {
-        String cardId;
-        double score;
-
-        ScoredCard(String cardId, double score) {
-            this.cardId = cardId;
-            this.score = score;
-        }
-
-        @Override
-        public String toString() {
-            return "ScoredCard{" +
-                    "cardId='" + cardId + '\'' +
-                    ", score=" + score +
-                    '}';
-        }
     }
 }

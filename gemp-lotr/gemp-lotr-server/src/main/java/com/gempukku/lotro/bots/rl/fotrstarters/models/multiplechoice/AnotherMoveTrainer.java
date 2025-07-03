@@ -10,4 +10,9 @@ public class AnotherMoveTrainer extends AbstractMultipleChoiceTrainer {
     protected String getPositiveOption() {
         return "Yes";
     }
+
+    @Override
+    protected String getNegativeOption() {
+        return "No";
+    }
 }

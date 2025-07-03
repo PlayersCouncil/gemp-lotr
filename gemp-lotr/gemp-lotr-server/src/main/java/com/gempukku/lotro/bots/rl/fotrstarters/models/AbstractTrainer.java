@@ -1,12 +1,13 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models;
 
+import com.gempukku.lotro.bots.rl.DecisionAnswerer;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import smile.classification.LogisticRegression;
 import smile.classification.SoftClassifier;
 
 import java.util.List;
 
-public abstract class AbstractTrainer implements Trainer {
+public abstract class AbstractTrainer implements Trainer, DecisionAnswerer {
 
     abstract protected List<LabeledPoint> extractTrainingData(List<LearningStep> steps);
 
