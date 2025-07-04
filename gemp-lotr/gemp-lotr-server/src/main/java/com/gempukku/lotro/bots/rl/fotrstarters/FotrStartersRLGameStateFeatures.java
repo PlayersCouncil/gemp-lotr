@@ -1,10 +1,7 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
-import com.gempukku.lotro.common.Token;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
@@ -17,6 +14,7 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
     private static final List<String> BLUEPRINTS = List.of(
@@ -117,7 +115,9 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
             case CARD_ACTION_CHOICE -> {
-                // TODO more for skirmish action
+                if (gameState.getCurrentPhase().equals(Phase.SKIRMISH)) {
+                    yield extractGeneralSkirmishStateFeatures(gameState, playerId);
+                }
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
             default -> extractAllFeatures(gameState, decision, playerId);
@@ -232,6 +232,20 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
         // Total wounds on companions
         features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(playerId)).mapToInt((ToIntFunction<PhysicalCard>) gameState::getWounds).sum());
         features.add((double) gameState.getInPlay().stream().filter((Predicate<PhysicalCard>) physicalCard -> physicalCard.getOwner().equals(opponent)).mapToInt((ToIntFunction<PhysicalCard>) gameState::getWounds).sum());
+
+        return features.stream().mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private double[] extractGeneralSkirmishStateFeatures(GameState gameState, String playerId) {
+        double[] generalFeatures = extractGeneralStateFeatures(gameState, playerId);
+        List<Double> features = Arrays.stream(generalFeatures).boxed().collect(Collectors.toList());
+
+        GameStats gameStats = gameState.getMostRecentGameStats();
+        features.add(((double) gameStats.getFellowshipSkirmishStrength()));
+        features.add(((double) gameStats.getShadowSkirmishStrength()));
+        features.add(((double) gameStats.getFellowshipSkirmishDamageBonus()));
+        features.add(((double) gameStats.getShadowSkirmishDamageBonus()));
+        features.add(gameStats.isFpOverwhelmed() ? 1.0 : 0.0);
 
         return features.stream().mapToDouble(Double::doubleValue).toArray();
     }
