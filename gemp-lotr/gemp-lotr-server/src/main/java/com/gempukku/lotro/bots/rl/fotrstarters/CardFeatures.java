@@ -14,6 +14,7 @@ import static com.gempukku.lotro.common.Timeword.*;
 
 public class CardFeatures {
     private static LotroCardBlueprintLibrary library = null;
+    public static final String PASS = "pass";
 
     private CardFeatures() {
 
@@ -25,36 +26,44 @@ public class CardFeatures {
 
     public static double[] getCardFeatures(String blueprintId, int woundsPlaced) throws CardNotFoundException {
         if (library != null) {
-            LotroCardBlueprint blueprint = library.getLotroCardBlueprint(blueprintId);
+            try {
+                LotroCardBlueprint blueprint = library.getLotroCardBlueprint(blueprintId);
 
-            List<Double> features = new ArrayList<>();
+                List<Double> features = new ArrayList<>();
 
-            features.add(blueprint.getSide() == Side.SHADOW ? 1.0 : 0.0);
-            features.add(blueprint.getSide() == Side.FREE_PEOPLE ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.COMPANION ? 1.0 : 0.0);
-            features.add(blueprint.canStartWithRing() ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.ALLY ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.MINION ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.POSSESSION || blueprint.getCardType() == CardType.ARTIFACT ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.CONDITION ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.FOLLOWER ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(FELLOWSHIP) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(SHADOW) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(MANEUVER) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(ARCHERY) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(ASSIGNMENT) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(SKIRMISH) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(REGROUP) ? 1.0 : 0.0);
-            features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(RESPONSE) ? 1.0 : 0.0);
+                features.add(blueprint.getSide() == Side.SHADOW ? 1.0 : 0.0);
+                features.add(blueprint.getSide() == Side.FREE_PEOPLE ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.COMPANION ? 1.0 : 0.0);
+                features.add(blueprint.canStartWithRing() ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.ALLY ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.MINION ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.POSSESSION || blueprint.getCardType() == CardType.ARTIFACT ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.CONDITION ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.FOLLOWER ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(FELLOWSHIP) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(SHADOW) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(MANEUVER) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(ARCHERY) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(ASSIGNMENT) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(SKIRMISH) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(REGROUP) ? 1.0 : 0.0);
+                features.add(blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(RESPONSE) ? 1.0 : 0.0);
 
-            features.add((double) blueprint.getTwilightCost());
-            features.add((double) blueprint.getStrength());
-            features.add((double) blueprint.getVitality());
-            features.add((double) blueprint.getSiteNumber());
+                features.add((double) blueprint.getTwilightCost());
+                features.add((double) blueprint.getStrength());
+                features.add((double) blueprint.getVitality());
+                features.add((double) blueprint.getSiteNumber());
 
-            features.add((double) woundsPlaced);
+                features.add((double) woundsPlaced);
 
-            return features.stream().mapToDouble(Double::doubleValue).toArray();
+                return features.stream().mapToDouble(Double::doubleValue).toArray();
+            } catch (CardNotFoundException e) {
+                if (blueprintId.equals(PASS)) {
+                    return new double[22];
+                } else {
+                    throw e;
+                }
+            }
         } else {
             throw new IllegalStateException("Blueprint library not initialized");
         }

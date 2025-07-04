@@ -11,6 +11,7 @@ public class SemanticActionFactory {
             case "CardSelectionAssignedAction" -> CardSelectionAssignedAction.fromJson(obj);
             case "CardSelectionAction" -> CardSelectionAction.fromJson(obj);
             case "ArbitraryCardsAction" -> ChooseFromArbitraryCardsAction.fromJson(obj);
+            case "CardActionChoiceAction" -> CardActionChoiceAction.fromJson(obj);
             // add others later
             default -> throw new IllegalArgumentException("Unknown action type: " + type);
         };

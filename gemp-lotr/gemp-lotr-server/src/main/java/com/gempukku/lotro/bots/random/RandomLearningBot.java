@@ -43,7 +43,7 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
             case INTEGER -> new IntegerChoiceAction(Integer.parseInt(action));
             case MULTIPLE_CHOICE -> new MultipleChoiceAction(action, decision);
             case ARBITRARY_CARDS -> new ChooseFromArbitraryCardsAction(action, decision);
-            case CARD_ACTION_CHOICE -> new CardActionChoiceAction(action, decision);
+            case CARD_ACTION_CHOICE -> new CardActionChoiceAction(action, decision, gameState);
             case ACTION_CHOICE -> new ActionChoiceAction(action, decision);
             case CARD_SELECTION -> {
                 if (gameState.getCurrentPhase().equals(Phase.SKIRMISH)) {

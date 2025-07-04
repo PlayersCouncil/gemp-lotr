@@ -7,6 +7,7 @@ import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
@@ -18,6 +19,7 @@ import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
+import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +59,20 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             new StartingFellowshipTrainer()
     );
 
+    private final List<DecisionAnswerer> cardActionTrainers = List.of(
+            new FellowshipCardActionTrainer(),
+            new ShadowCardActionTrainer(),
+            new ManeuverCardActionTrainer(),
+            new SkirmishCardActionTrainer(),
+            new RegroupCardActionTrainer()
+    );
+
     private final RLGameStateFeatures features;
     private final ModelRegistry modelRegistry;
+
+    private CardActionSelectionDecision lastDecision = null;
+    private String lastAction = null;
+    private int decisionRepeat = 0;
 
     public FotrStarterBot(RLGameStateFeatures features, String playerId, ModelRegistry modelRegistry) {
         super(playerId);
@@ -76,7 +90,49 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return chooseCardSelectionAction(gameState, decision);
         } else if (decision.getDecisionType().equals(AwaitingDecisionType.ARBITRARY_CARDS)) {
             return chooseArbitraryCardsAction(gameState, decision);
+        } else if (decision.getDecisionType().equals(AwaitingDecisionType.CARD_ACTION_CHOICE)) {
+            return chooseCardActionChoice(gameState, decision);
         }
+        return super.chooseAction(gameState, decision);
+    }
+
+    private String chooseCardActionChoice(GameState gameState, AwaitingDecision decision) {
+        String[] actionIds = decision.getDecisionParameters().get("actionId");
+        if (actionIds == null || actionIds.length == 0) {
+            // No actions available: must pass
+            return "";
+        }
+
+        String chosenAnswer = null;
+        for (DecisionAnswerer trainer : cardActionTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                chosenAnswer = trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
+            }
+        }
+        // Loop prevention
+        if (chosenAnswer != null) {
+            if (decision.equals(lastDecision) && chosenAnswer.equals(lastAction)) {
+                decisionRepeat++;
+                if (decisionRepeat >= 4) {
+                    decisionRepeat = 0;
+                    lastAction = null;
+                    return "";
+                }
+            } else {
+                lastDecision = (CardActionSelectionDecision) decision;
+                decisionRepeat = 0;
+                lastAction = chosenAnswer;
+            }
+            return chosenAnswer;
+        }
+
+        System.out.println("Unknown card action decision: "
+                + gameState.getCurrentPhase() + " - "
+                + decision.getText()
+                + "; actionId=" + Arrays.toString(decision.getDecisionParameters().get("actionId"))
+                + "; cardId=" + Arrays.toString(decision.getDecisionParameters().get("cardId"))
+                + "; blueprintId=" + Arrays.toString(decision.getDecisionParameters().get("blueprintId"))
+                + "; actionText=" + Arrays.toString(decision.getDecisionParameters().get("actionText")));
         return super.chooseAction(gameState, decision);
     }
 

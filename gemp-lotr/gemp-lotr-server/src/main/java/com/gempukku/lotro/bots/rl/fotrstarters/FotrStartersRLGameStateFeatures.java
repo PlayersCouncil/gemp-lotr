@@ -116,6 +116,10 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 }
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
+            case CARD_ACTION_CHOICE -> {
+                // TODO more for skirmish action
+                yield extractGeneralStateFeatures(gameState, playerId);
+            }
             default -> extractAllFeatures(gameState, decision, playerId);
         };
     }

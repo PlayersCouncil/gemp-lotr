@@ -5,24 +5,59 @@ import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class CardActionChoiceAction implements SemanticAction {
     private final String actionText;
+    private final String sourceBlueprint;
+    private final List<String> notChosenActions = new ArrayList<>();
+    private final List<String> notChosenBlueprints = new ArrayList<>();
 
-    public CardActionChoiceAction(String answer, AwaitingDecision decision) {
+    public CardActionChoiceAction(String answer, AwaitingDecision decision, GameState gameState) {
         if (answer == null || answer.isEmpty()) {
             actionText = null;
+            sourceBlueprint = null;
+            String[] actionTexts = decision.getDecisionParameters().get("actionText");
+            for (int i = 0; i < actionTexts.length; i++) {
+                notChosenActions.add(actionTexts[i]);
+                notChosenBlueprints.add(gameState.getBlueprintId(Integer.parseInt(decision.getDecisionParameters().get("cardId")[i])));
+            }
         } else {
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             actionText = actionTexts[Integer.parseInt(answer)];
+            sourceBlueprint = gameState.getBlueprintId(Integer.parseInt(decision.getDecisionParameters().get("cardId")[Integer.parseInt(answer)]));
+            for (int i = 0; i < actionTexts.length; i++) {
+                if (!actionText.equals(actionTexts[i])) {
+                    notChosenActions.add(actionTexts[i]);
+                    notChosenBlueprints.add(gameState.getBlueprintId(Integer.parseInt(decision.getDecisionParameters().get("cardId")[i])));
+                }
+            }
         }
     }
 
-    public CardActionChoiceAction(String actionText) {
+    public CardActionChoiceAction(String actionText, String sourceBlueprint, String[] notChosenActions, String[] notChosenBlueprintIds) {
         this.actionText = actionText;
+        this.sourceBlueprint = sourceBlueprint;
+        this.notChosenActions.addAll(Arrays.asList(notChosenActions));
+        this.notChosenBlueprints.addAll(Arrays.asList(notChosenBlueprintIds));
     }
 
     public String getActionText() {
         return actionText;
+    }
+
+    public String getSourceBlueprint() {
+        return sourceBlueprint;
+    }
+
+    public List<String> getNotChosenActions() {
+        return notChosenActions;
+    }
+
+    public List<String> getNotChosenBlueprints() {
+        return notChosenBlueprints;
     }
 
     @Override
@@ -46,6 +81,20 @@ public class CardActionChoiceAction implements SemanticAction {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject obj = new JSONObject();
+        obj.put("type", "CardActionChoiceAction");
+        obj.put("actionText", actionText);
+        obj.put("sourceBlueprint", sourceBlueprint);
+        obj.put("notChosenActions", notChosenActions.toArray(new String[0]));
+        obj.put("notChosenBlueprints", notChosenBlueprints.toArray(new String[0]));
+        return obj;
+    }
+
+    public static CardActionChoiceAction fromJson(JSONObject obj) {
+        String actionText = obj.getString("actionText");
+        String sourceBlueprint = obj.getString("sourceBlueprint");
+        String[] notChosenActions = obj.getObject("notChosenActions", String[].class);
+        String[] notChosenBlueprints = obj.getObject("notChosenBlueprints", String[].class);
+        return new CardActionChoiceAction(actionText, sourceBlueprint, notChosenActions, notChosenBlueprints);
     }
 }
