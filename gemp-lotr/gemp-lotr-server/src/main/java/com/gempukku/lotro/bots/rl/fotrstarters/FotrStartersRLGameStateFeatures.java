@@ -115,7 +115,7 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
             case CARD_ACTION_CHOICE -> {
-                if (gameState.getCurrentPhase().equals(Phase.SKIRMISH)) {
+                if (gameState.getCurrentPhase().equals(Phase.SKIRMISH) || decision.getText().toLowerCase().contains("responses")) {
                     yield extractGeneralSkirmishStateFeatures(gameState, playerId);
                 }
                 yield extractGeneralStateFeatures(gameState, playerId);

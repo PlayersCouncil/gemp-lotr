@@ -64,7 +64,8 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             new ShadowCardActionTrainer(),
             new ManeuverCardActionTrainer(),
             new SkirmishCardActionTrainer(),
-            new RegroupCardActionTrainer()
+            new RegroupCardActionTrainer(),
+            new OptionalResponsesCardActionTrainer()
     );
 
     private final RLGameStateFeatures features;

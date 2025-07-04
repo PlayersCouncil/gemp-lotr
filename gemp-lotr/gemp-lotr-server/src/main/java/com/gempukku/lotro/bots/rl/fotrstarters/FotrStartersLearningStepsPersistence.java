@@ -45,7 +45,8 @@ public class FotrStartersLearningStepsPersistence implements LearningStepsPersis
             ShadowCardActionTrainer.class,
             ManeuverCardActionTrainer.class,
             SkirmishCardActionTrainer.class,
-            RegroupCardActionTrainer.class
+            RegroupCardActionTrainer.class,
+            OptionalResponsesCardActionTrainer.class
     );
 
     private static final Map<Class<? extends Trainer>, String> trainerFileMap =

@@ -101,7 +101,8 @@ public class BotService {
                     new ShadowCardActionTrainer(),
                     new ManeuverCardActionTrainer(),
                     new SkirmishCardActionTrainer(),
-                    new RegroupCardActionTrainer()
+                    new RegroupCardActionTrainer(),
+                    new OptionalResponsesCardActionTrainer()
             );
 
             FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
