@@ -914,6 +914,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeAssignedToSkirmish(LotroGame game, Side sidePlayer, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canBeAssignedToSkirmish");
         try {
+            if(hasKeyword(game, card, Keyword.HINDERED))
+                return false;
+
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ASSIGNMENT_MODIFIER, card))
                 if (modifier.isPreventedFromBeingAssignedToSkirmish(game, sidePlayer, card))
                     return false;

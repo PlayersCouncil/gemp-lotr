@@ -671,15 +671,19 @@ public class GameState {
         if (_skirmish.getFellowshipCharacter() == card) {
             _skirmish.setFellowshipCharacter(null);
             _skirmish.addRemovedFromSkirmish(card);
-            if (notify)
-                for (GameStateListener listener : getAllGameStateListeners())
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
+                }
+            }
         }
         if (_skirmish.getShadowCharacters().remove(card)) {
             _skirmish.addRemovedFromSkirmish(card);
-            if (notify)
-                for (GameStateListener listener : getAllGameStateListeners())
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
+                }
+            }
         }
     }
 
@@ -1029,6 +1033,8 @@ public class GameState {
         for(var card : cards) {
             card.setFlipped(true);
             stopAffecting(card);
+            removeFromAssignment(card);
+            removeFromSkirmish(card);
         }
 
         for (GameStateListener listener : getAllGameStateListeners()) {

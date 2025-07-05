@@ -32,7 +32,7 @@ public class RestoreRule {
                             RequiredTriggerAction action = new RequiredTriggerAction(null);
                             action.setText("Reconcile restores hindered cards.");
                             action.appendEffect(
-                                    new RestoreCardsInPlayEffect(null, null,
+                                    new RestoreCardsInPlayEffect(result.getPlayerId(), null,
                                             //For now, we are only restoring cards owned by the reconciling player; this may
                                             // be re-evaluated in the future depending.
                                             Filters.owner(result.getPlayerId()),
