@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_02_020_ErrataTests
 {
@@ -35,7 +33,7 @@ public class Card_02_020_ErrataTests
 		/**
 		 * Set: 2
 		 * Name: Secret Sentinels
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 2
@@ -54,7 +52,7 @@ public class Card_02_020_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -79,8 +77,7 @@ public class Card_02_020_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

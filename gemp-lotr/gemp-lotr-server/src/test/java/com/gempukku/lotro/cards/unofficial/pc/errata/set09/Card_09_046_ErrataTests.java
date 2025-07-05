@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_07_054_ErrataTests
+public class Card_09_046_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "57_54");
+					put("card", "59_46");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,37 +28,38 @@ public class Card_07_054_ErrataTests
 	}
 
 	@Test
-	public void CleverHobbitsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheRedArrowStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 7
-		 * Name: Clever Hobbits
-		 * Unique: false
+		 * Set: 9
+		 * Name: The Red Arrow
+		 * Unique: true
 		 * Side: Free Peoples
-		 * Culture: Gollum
+		 * Culture: Rohan
 		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Game Text: Each time you play a Man, exert a Man of a different culture to play a possession from your discard pile on the first.
+		* 	Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Clever Hobbits", card.getBlueprint().getTitle());
+		assertEquals("The Red Arrow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CleverHobbitsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheRedArrowTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

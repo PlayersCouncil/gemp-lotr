@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_07_054_ErrataTests
+public class Card_02_001_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "57_54");
+					put("card", "52_1");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,37 +28,39 @@ public class Card_07_054_ErrataTests
 	}
 
 	@Test
-	public void CleverHobbitsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BeneaththeMountainsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 7
-		 * Name: Clever Hobbits
+		 * Set: 2
+		 * Name: Beneath the Mountains
 		 * Unique: false
 		 * Side: Free Peoples
-		 * Culture: Gollum
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Tale. Each time your Dwarf wins a skirmish, you may play a [dwarven] item stacked here.
+		* 	Fellowship: Exert X Dwarves to reveal cards from the top of your draw deck until you reveal X Shadow cards.  Stack all [dwarven] items revealed here, and shuffle the rest into your draw deck.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Clever Hobbits", card.getBlueprint().getTitle());
+		assertEquals("Beneath the Mountains", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CleverHobbitsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BeneaththeMountainsTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

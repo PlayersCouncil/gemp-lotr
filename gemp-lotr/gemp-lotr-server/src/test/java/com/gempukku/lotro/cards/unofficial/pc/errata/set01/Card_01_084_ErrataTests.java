@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_084_ErrataTests
 {
@@ -32,14 +33,14 @@ public class Card_01_084_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Sleep, Caradhras
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
 		 * Game Text: <b>Spell</b>.
-		* 	Exert Gandalf to discard a Shadow condition and then hinder all condition.
+		* 	Exert Gandalf to discard a Shadow condition and then hinder all other conditions.
 		*/
 
 		var scn = GetScenario();
@@ -78,8 +79,7 @@ public class Card_01_084_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_136_ErrataTests
 {
@@ -32,14 +33,14 @@ public class Card_01_136_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Saruman's Power
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Shadow
 		 * Game Text: <b>Spell</b>.
-		* 	Exert an [isengard] minion to discard a Free Peoples condition and then hinder all conditions.
+		* 	Exert an [isengard] minion to discard a Free Peoples condition and then hinder all other conditions.
 		*/
 
 		var scn = GetScenario();
@@ -78,8 +79,7 @@ public class Card_01_136_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

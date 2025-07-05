@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_05_051_ErrataTests
 {
@@ -32,7 +33,7 @@ public class Card_05_051_ErrataTests
 		/**
 		 * Set: 5
 		 * Name: Grima, Chief Counselor
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 2
@@ -82,8 +83,7 @@ public class Card_05_051_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

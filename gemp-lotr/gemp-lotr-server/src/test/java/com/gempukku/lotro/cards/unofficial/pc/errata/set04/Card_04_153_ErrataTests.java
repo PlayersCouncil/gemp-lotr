@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_07_054_ErrataTests
+public class Card_04_153_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "57_54");
+					put("card", "54_153");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,37 +28,45 @@ public class Card_07_054_ErrataTests
 	}
 
 	@Test
-	public void CleverHobbitsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrimaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 7
-		 * Name: Clever Hobbits
-		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Gollum
+		 * Set: 4
+		 * Name: Grima, Son of Galmod
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Isengard
 		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 4
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: Lurker.
+		* 	Each unbound companion (or ally) bearing a Shadow condition is strength -1.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Clever Hobbits", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals("Grima", card.getBlueprint().getTitle());
+		assertEquals("Son of Galmod", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CleverHobbitsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrimaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
