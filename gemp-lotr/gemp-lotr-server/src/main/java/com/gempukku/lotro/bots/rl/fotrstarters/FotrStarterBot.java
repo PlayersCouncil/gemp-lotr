@@ -93,7 +93,20 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             return chooseArbitraryCardsAction(gameState, decision);
         } else if (decision.getDecisionType().equals(AwaitingDecisionType.CARD_ACTION_CHOICE)) {
             return chooseCardActionChoice(gameState, decision);
+        } else if (decision.getDecisionType().equals(AwaitingDecisionType.ACTION_CHOICE)) {
+            return chooseActionChoice(gameState, decision);
         }
+        return super.chooseAction(gameState, decision);
+    }
+
+    private String chooseActionChoice(GameState gameState, AwaitingDecision decision) {
+        // Order does not matter with FotR starters
+//        System.out.println("Unknown action decision: "
+//                + gameState.getCurrentPhase() + " - "
+//                + decision.getText()
+//                + "; actionId=" + Arrays.toString(decision.getDecisionParameters().get("actionId"))
+//                + "; blueprintId=" + Arrays.toString(decision.getDecisionParameters().get("blueprintId"))
+//                + "; actionText=" + Arrays.toString(decision.getDecisionParameters().get("actionText")));
         return super.chooseAction(gameState, decision);
     }
 
