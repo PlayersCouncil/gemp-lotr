@@ -790,14 +790,13 @@
 						{
 							type: ForEachYouCanSpot
 							filter: side(Free Peoples), support
-							multiplier: -1
 						}
 						{
 							type: ForEachYouCanSpot
 							filter: companion
-							multiplier: -1
 						}
 					]
+					multiplier: -1
 				}
 			}
 			{
