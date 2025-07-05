@@ -39,7 +39,7 @@ public class Card_V3_084_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).
+		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
 		* 	Each time you play an Orc or Troll, you may exhaust it to make it strength +1 for each twilight condition you can spot until the regroup phase.
 		*/
 

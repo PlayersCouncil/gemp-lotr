@@ -39,9 +39,9 @@ public class Card_V3_030_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: <b>Beacon</b>. To play, exert a [gondor] companion.
-		* 	Each time you play a Man, you may hinder this to heal another Man.
-		* 	Fellowship: Add (1) per beacon you can spot to play a beacon from your discard pile. Remove a threat if you can spot a Northern Signal-fire.
+		 * Game Text: <b>Beacon</b>. To play, exert an unbound Man.
+		* 	Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.
+		* 	Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		*/
 
 		var scn = GetScenario();

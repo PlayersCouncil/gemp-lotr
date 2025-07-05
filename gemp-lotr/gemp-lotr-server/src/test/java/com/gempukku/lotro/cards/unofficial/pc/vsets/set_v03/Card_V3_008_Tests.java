@@ -39,7 +39,7 @@ public class Card_V3_008_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, exert a [shire] companion (or spot Smeagol).
+		 * Game Text: To play, spot 2 [shire] companions.
 		* 	Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.
 		* 	Each time Shelob loses a skirmish, kill Gollum.
 		*/

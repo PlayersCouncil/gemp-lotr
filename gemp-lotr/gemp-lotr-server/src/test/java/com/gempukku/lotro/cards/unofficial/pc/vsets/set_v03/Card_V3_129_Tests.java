@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V3_060_Tests
+public class Card_V3_129_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_60");
+					put("card", "103_129");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -32,7 +32,7 @@ public class Card_V3_060_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Fear
+		 * Name: Cover of Darkness, Omen of Gloom
 		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Wraith
@@ -40,7 +40,8 @@ public class Card_V3_060_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		* 	Shadow: Hinder this condition to take a twilight card into hand from your draw deck.
+		* 	Regroup: Hinder a twilight card to add (1).
 		*/
 
 		var scn = GetScenario();
@@ -48,7 +49,7 @@ public class Card_V3_060_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Fear", card.getBlueprint().getSubtitle());
+		assertEquals("Omen of Gloom", card.getBlueprint().getSubtitle());
 		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());

@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V3_060_Tests
+public class Card_V3_130_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_60");
+					put("card", "103_130");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,39 +28,38 @@ public class Card_V3_060_Tests
 	}
 
 	@Test
-	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GatesofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Fear
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		 * Name: Gates of Isengard
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 1K
+		 * Game Text: Fellowship: Exert an unbound hobbit to play a pipe or pipeweed from your draw deck (limit once per phase).
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(1);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Fear", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals("Gates of Isengard", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(1, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GatesofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

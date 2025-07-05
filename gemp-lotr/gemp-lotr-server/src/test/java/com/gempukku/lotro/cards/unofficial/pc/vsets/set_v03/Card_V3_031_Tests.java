@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_031_Tests
 {
@@ -34,15 +32,15 @@ public class Card_V3_031_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Beacon of Calenhad
+		 * Name: Northern Signal-fire, Flame of Calenhad
 		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).
-		* 	While you can spot a [rohan] and [gondor] companion, your Men are strength +1.
+		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
+		* 	<b>Maneuver</b>: Hinder this beacon and exert an unbound Man to make each of your Men gain each of the unloaded keywords on that unbound Man until the regroup phase.
 		*/
 
 		var scn = GetScenario();

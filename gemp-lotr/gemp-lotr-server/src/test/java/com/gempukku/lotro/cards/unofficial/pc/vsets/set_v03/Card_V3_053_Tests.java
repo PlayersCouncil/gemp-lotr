@@ -39,8 +39,7 @@ public class Card_V3_053_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Maneuver: Hinder a corsair to hinder a Free Peoples support possession.
-		* 	Maneuver: Hinder a corsair and discard another Raiding Schooner to choose a Free Peoples culture.  Hinder all support cards of that culture.
+		 * Game Text: Maneuver: Hinder a corsair to hinder a Free Peoples support possession (or all support cards of a Free Peoples culture you spot if you discard another Raiding Schooner).
 		*/
 
 		var scn = GetScenario();

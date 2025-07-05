@@ -40,7 +40,7 @@ public class Card_V3_118_Tests
 		 * Type: Possession
 		 * Subtype: Pipe
 		 * Game Text: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.
-		* 	Skirmish: Hinder this pipe and X other pipes or pipeweeds to make a companion strength +X (limit +3).
+		* 	Fellowship: Discard a pipeweed and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.
 		*/
 
 		var scn = GetScenario();

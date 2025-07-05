@@ -43,7 +43,7 @@ public class Card_V3_066_Tests
 		 * Vitality: 3
 		 * Site Number: *
 		 * Game Text: Lurker.
-		* 	Minions cannot take more than 1 wound per phase.
+		* 	Other minions cannot take more than 1 wound per phase.
 		* 	Response: If a Free Peoples event is played, exert this minion to cancel that event.
 		*/
 

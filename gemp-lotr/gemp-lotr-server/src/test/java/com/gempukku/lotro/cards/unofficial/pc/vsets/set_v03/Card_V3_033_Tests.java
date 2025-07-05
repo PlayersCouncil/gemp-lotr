@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_033_Tests
 {
@@ -34,15 +32,15 @@ public class Card_V3_033_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Beacon of Nardol
+		 * Name: Northern Signal-fire, Flame of Nardol
 		 * Unique: 2
 		 * Side: Free Peoples
-		 * Culture: Rohan
+		 * Culture: Gondor
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).
-		* 	While you can spot a mounted [rohan] companion, at the start of each skirmish involving a knight, each minion skirmishing that knight must exert.
+		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
+		* 	Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
 		*/
 
 		var scn = GetScenario();
@@ -53,7 +51,7 @@ public class Card_V3_033_Tests
 		assertEquals("Flame of Nardol", card.getBlueprint().getSubtitle());
 		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));

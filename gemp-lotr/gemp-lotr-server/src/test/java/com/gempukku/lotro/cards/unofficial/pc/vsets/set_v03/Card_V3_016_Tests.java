@@ -43,9 +43,9 @@ public class Card_V3_016_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: Aragorn is strength +1 for each culture you can spot.
+		 * Game Text: While you can spot 2 [rohan] Men, Aragorn is strength +2.
+		* 	While you can spot 2 [Gondor] Men, Aragorn is strength +2.
 		* 	Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
-		* 	Fellowship: Exert a Man to heal an unbound Man.
 		*/
 
 		var scn = GetScenario();

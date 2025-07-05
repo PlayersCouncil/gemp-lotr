@@ -41,8 +41,8 @@ public class Card_V3_099_Tests
 		 * Subtype: Assignment
 		 * Game Text: Spot a Hobbit companion (except the Ring-bearer).
 		* 	In region 1, hinder all other Hobbits.
-		* 	In region 2, make that Hobbit defender +2.
-		* 	In region 3, make that Hobbit strength +1 for each minion you can spot until the regroup phase.
+		* 	In region 2, make that Hobbit defender +2 until the regroup phase.
+		* 	In region 3, make that Hobbit <b>enduring</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();

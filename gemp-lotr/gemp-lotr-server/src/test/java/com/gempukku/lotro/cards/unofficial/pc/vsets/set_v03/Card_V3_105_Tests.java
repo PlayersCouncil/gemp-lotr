@@ -40,7 +40,7 @@ public class Card_V3_105_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: To play, spot 2 Hobbit companions.
-		* 	Skirmish: If you cannot spot more than 4 companions, hinder each Free Peoples card borne by a companion to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition.
+		* 	Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
 		*/
 
 		var scn = GetScenario();

@@ -39,7 +39,7 @@ public class Card_V3_101_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-		 * Game Text: Restore a [shire] card.  If you cannot spot more than 4 companions, you may reconcile your hand and you may heal 2 [shire] companions.
+		 * Game Text: Restore a [shire] card.  If you cannot spot more than 4 companions, you may reconcile your hand and heal up to 2 [shire] companions.
 		*/
 
 		var scn = GetScenario();

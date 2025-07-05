@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -43,8 +43,8 @@ public class Card_V3_124_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Pipe
-		 * Game Text: Bearer must be an unbound companion.
-		* 	Regroup: If bearer is a Wizard, exert them twice and discard a pipeweed; you may use special abilities on pipes as if it were the Fellowship phase.  Discard this pipe at the end of the regroup phase.
+		 * Game Text: Bearer must be an unbound companion. Each companion bearing a pipe is strength +1.
+		* 	Regroup: Exert a Wizard twice and discard a pipeweed; this phase you may use special abilities on pipes as if it were the Fellowship phase. 
 		*/
 
 		var scn = GetScenario();

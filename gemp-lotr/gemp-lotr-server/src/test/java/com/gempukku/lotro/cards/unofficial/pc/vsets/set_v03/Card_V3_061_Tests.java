@@ -43,7 +43,7 @@ public class Card_V3_061_Tests
 		 * Vitality: 4
 		 * Site Number: 3
 		 * Game Text: Each time you play a Nazgul, you may exert Gollum to add a threat.
-		* 	Assignment: Remove X threats to assign Gollum to a companion costing X (except the Ring-bearer).
+		* 	Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();

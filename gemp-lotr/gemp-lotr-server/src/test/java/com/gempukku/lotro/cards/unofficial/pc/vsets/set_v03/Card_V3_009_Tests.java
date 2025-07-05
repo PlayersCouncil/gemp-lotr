@@ -39,8 +39,8 @@ public class Card_V3_009_Tests
 		 * Twilight Cost: 3
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: Skirmish: If Shelob is skirmishing, stack another minion from play on this artifact to make a character skirmishing her strength -2 (limit once per phase).
-		* 	Response: If a special ability on a Free Peoples condition is used, discard a minion stacked here to hinder that condition and heal Shelob.
+		 * Game Text: Each time a special ability on a Free Peoples condition is used, you may discard a minion stacked here to hinder that condition and heal Shelob.
+		* 	Skirmish: If Shelob is skirmishing, stack another minion from play on this artifact to make a character skirmishing her strength -2 (limit once per phase).
 		*/
 
 		var scn = GetScenario();

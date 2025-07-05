@@ -40,7 +40,7 @@ public class Card_V3_117_Tests
 		 * Type: Possession
 		 * Subtype: Pipe
 		 * Game Text: Bearer must be an unbound Hobbit.
-		* 	Fellowship: Discard a pipeweed to remove X culture tokens, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		* 	Each time a pipeweed is discarded, you may exert bearer to play that pipeweed from your discard pile.  Hinder it and this pipe.
 		*/
 
 		var scn = GetScenario();

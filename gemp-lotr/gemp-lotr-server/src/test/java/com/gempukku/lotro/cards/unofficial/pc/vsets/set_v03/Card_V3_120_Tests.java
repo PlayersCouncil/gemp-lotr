@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_120_Tests
 {
@@ -40,8 +38,10 @@ public class Card_V3_120_Tests
 		 * Culture: Shire
 		 * Twilight Cost: 1
 		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: When you play this possession, you may shuffle up to 2 pipes or pipeweed into your draw deck from your discard pile.
+		 * Subtype: 
+		 * Game Text: Pipeweed. Bearer must bear a pipe.
+		* 	When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
+		* 	Skirmish: Discard this possession to heal bearer.
 		*/
 
 		var scn = GetScenario();

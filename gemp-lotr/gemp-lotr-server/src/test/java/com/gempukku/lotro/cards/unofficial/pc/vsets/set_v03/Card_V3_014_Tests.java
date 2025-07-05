@@ -39,8 +39,8 @@ public class Card_V3_014_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time Shelob is assigned to a skirmish, you may play a [gollum] item from your discard pile.
-		* 	Response: If Shelob wins a skirmish, discard 3 minions stacked on [gollum] items to make her participate in one additional assignment and skirmish phase after fierce skirmishes. Discard this condition.
+		 * Game Text: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.
+		* 	Response: If Shelob wins a skirmish, discard this condition and 3 minions stacked on [gollum] items to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skrimishes after fierce)</i>. 
 		*/
 
 		var scn = GetScenario();

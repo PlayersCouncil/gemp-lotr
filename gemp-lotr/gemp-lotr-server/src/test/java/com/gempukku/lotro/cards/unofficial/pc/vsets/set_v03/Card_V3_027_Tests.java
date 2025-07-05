@@ -43,7 +43,7 @@ public class Card_V3_027_Tests
 		 * Vitality: 2
 		 * Resistance: 6
 		 * Game Text: Enduring.
-		* 	To play, spot or add a threat.
+		* 	To play, add a threat.
 		* 	This companion is strength +1 for each hindered card you can spot.
 		*/
 

@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_092_Tests
 {
@@ -42,8 +43,7 @@ public class Card_V3_092_Tests
 		 * Strength: 24
 		 * Vitality: 5
 		 * Site Number: 6
-		 * Game Text: Fierce.
-		* 	Sauron is twilight cost -1 for each support card you can spot. 
+		 * Game Text: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. 
 		* 	When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.
 		* 	Each time a companion loses a skirmish to Sauron, kill that companion.
 		*/

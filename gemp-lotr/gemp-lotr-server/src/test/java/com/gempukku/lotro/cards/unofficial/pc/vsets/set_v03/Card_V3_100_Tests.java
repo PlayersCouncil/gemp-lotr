@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_100_Tests
 {
@@ -40,7 +41,7 @@ public class Card_V3_100_Tests
 		 * Subtype: Hobbit
 		 * Strength: 2
 		 * Vitality: 4
-		 * Resistance: 8
+		 * Resistance: 7
 		 * Signet: Gandalf
 		 * Game Text: Ring-bearer (resistance 7).  Ring-bound.
 		* 	While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.

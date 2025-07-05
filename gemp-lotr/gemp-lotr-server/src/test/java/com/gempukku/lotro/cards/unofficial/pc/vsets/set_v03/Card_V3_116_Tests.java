@@ -40,7 +40,7 @@ public class Card_V3_116_Tests
 		 * Type: Possession
 		 * Subtype: Pipe
 		 * Game Text: Bearer must be an unbound Hobbit.
-		* 	Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Make the Shadow player choose a companion to hinder.
+		* 	Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Hinder this pipe or hinder bearer.
 		*/
 
 		var scn = GetScenario();

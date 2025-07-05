@@ -43,8 +43,8 @@ public class Card_V3_103_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Frodo
-		 * Game Text: To play, add a burden.
-		* 	Assignment: Hinder Smeagol to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
+		 * Game Text: Ring-bound. To play, add a burden.
+		* 	Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
 		*/
 
 		var scn = GetScenario();
@@ -57,6 +57,7 @@ public class Card_V3_103_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());

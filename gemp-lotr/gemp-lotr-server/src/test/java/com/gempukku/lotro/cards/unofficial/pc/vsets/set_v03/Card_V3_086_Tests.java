@@ -39,7 +39,7 @@ public class Card_V3_086_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).
+		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
 		* 	Skirmish: Exert a Troll twice and hinder this condition to discard a Free Peoples card borne by a companion that Troll is skirmishing.
 		*/
 
