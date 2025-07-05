@@ -1,5 +1,78 @@
 {
-
+	57_82: {
+		cardInfo: {
+			//id: 57_82.1
+			parent: 7_82
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN07E082.1_card.jpg
+			collInfo: 7C82
+			rarity: C
+		}
+		title: Cirion
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: isGreaterThanOrEqual
+							firstNumber: {
+								type: forEachInHand
+							}
+							secondNumber: 4
+						}
+						{
+							type: isLessThanOrEqual
+							firstNumber: {
+								type: forEachInHand
+							}
+							secondNumber: 5
+						}
+					]
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: Activated
+				phase: Fellowship
+				limitPerTurn: 1
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: beacon
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: While you have only 4 or 5 cards in hand, Cirion is strength +2.<br>Fellowship: Exert Cirion to play a beacon from your draw deck (limit once per turn).
+		lore: "So now at last the City was besieged...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
 	57_96: {
 		cardInfo: {
 			//id: 7_96.1

@@ -49,4 +49,62 @@
 			}
 		}
 	}
+	
+	54_99: {
+		cardInfo: {
+			//id: 54_99.1
+			parent: 4_99
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E099.1_card.jpg
+			collInfo: 4U99
+			rarity: U
+		}
+		title: Roll of Thunder
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: [
+			Fellowship
+			Maneuver
+		]
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: [
+				{
+					type: Choice
+					texts: [
+						Discard a Shadow possession
+						Hinder a Shadow artifact
+					]
+					effects: [
+						{
+							type: Discard
+							select: choose(side(shadow),possession)
+						}
+						{
+							type: Hinder
+							select: choose(side(shadow),artifact)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Fellowship</b> <i>or</i> Maneuver: Spot Gandalf to discard a Shadow possession or hinder a Shadow artifact.
+		lore: "'I have not passed through fire and death to bandy crooked words with a serving-man till the lightning falls.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

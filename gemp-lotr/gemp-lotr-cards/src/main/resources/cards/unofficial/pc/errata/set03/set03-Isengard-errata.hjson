@@ -525,66 +525,137 @@
 		}
 	}
 
+	# 53_67: {
+	# 	cardInfo: {
+	# 		//id: 3_67.1
+	# 		parent: 3_67
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/53_67.jpg
+	# 		collInfo: 3R67
+	# 		rarity: R
+	# 	}
+	# 	title: The Palantir of Orthanc
+	# 	unique: true
+	# 	culture: isengard
+	# 	twilight: 0
+	# 	type: artifact
+	# 	itemclass: palantir
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: culture(isengard),minion
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: shadow
+	# 			cost: [
+	# 				{
+	# 					type: removeTwilight
+	# 					amount: 2
+	# 				}
+	# 			]
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: culture(isengard),minion
+	# 				count: 2
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: revealRandomCardsFromHand
+	# 					forced: true
+	# 					hand: freeps
+	# 					count: 1
+	# 					memorize: revealedCard
+	# 				}
+	# 				{
+	# 					type: putCardsFromHandOnTopOfDeck
+	# 					select: all(memory(revealedCard))
+	# 					player: shadow
+	# 					hand: freeps
+	# 					reveal: true
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot 2 [isengard] minions and remove (2) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
+	# 	lore: "'Seven stars and seven stones....'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_67: {
 		cardInfo: {
-			//id: 3_67.1
+			//id: 53_67.2
 			parent: 3_67
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
-			image: errata/53_67.jpg
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN03E067.2_card.jpg
 			collInfo: 3R67
 			rarity: R
 		}
 		title: The Palantir of Orthanc
 		unique: true
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 0
-		type: artifact
-		itemclass: palantir
-		keyword: support area
+		type: Artifact
+		target: self
+		keywords: Support Area
 		effects: [
 			{
-				type: toPlay
-				requires: {
-					type: canSpot
-					filter: culture(isengard),minion
-				}
-			}
-			{
-				type: activated
-				phase: shadow
-				cost: [
-					{
-						type: removeTwilight
-						amount: 2
-					}
-				]
-				requires: {
-					type: canSpot
-					filter: culture(isengard),minion
-					count: 2
+				type: Activated
+				phase: Shadow
+				limitPerPhase: 1
+				cost: {
+					type: Exert
+					select: choose(Isengard, minion)
+					memorize: exertedMinion
 				}
 				effect: [
 					{
-						type: revealRandomCardsFromHand
-						forced: true
-						hand: freeps
-						count: 1
-						memorize: revealedCard
+						type: Optional
+						text: Would you like to put any cards in hand on top of your draw deck?
+						player: Free Peoples
+						effect: {
+							type: PutCardsFromHandOnTopOfDeck
+							player: Free Peoples
+							hand: Free Peoples
+							count: any
+							reveal: false
+						}
 					}
 					{
-						type: putCardsFromHandOnTopOfDeck
-						select: all(memory(revealedCard))
-						player: shadow
-						hand: freeps
-						reveal: true
+						type: RevealHand
+						hand: Free Peoples
+						memorize: freepsHand
+					}
+					{
+						type: ModifyStrength
+						amount: {
+							type: ForEachInMemory
+							memory: freepsHand
+							filter: side(Free Peoples)
+						}
+						select: memory(exertedMinion)
+						until: start(regroup)
 					}
 				]
 			}
 		]
-		gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot 2 [isengard] minions and remove (2) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
-		lore: "'Seven stars and seven stones....'"
+		gametext: Plays to your support area.<br><b>Shadow:</b> Exert an [isengard] minion.  The Free Peoples player may place any number of cards from hand on top of their draw deck, then reveals their hand.  For each Free Peoples card revealed, make that minion strength +1 until the regroup phase.  Limit once per phase.
+		lore: ""
 		promotext: ""
 		alts: {
 			promos: {
