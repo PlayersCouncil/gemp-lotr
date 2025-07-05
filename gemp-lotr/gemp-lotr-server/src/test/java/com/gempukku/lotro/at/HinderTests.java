@@ -848,6 +848,40 @@ public class HinderTests
     }
 
     @Test
+    public void HinderedCompanionsPermitsUseOfAttachedSpecialAbilitie() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("visitor", "7_126"); //Regroup: Discard this condition to discard a minion and remove (4)
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var visitor = scn.GetFreepsCard("visitor");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn, visitor);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(aragorn));
+
+        scn.SkipToPhase(Phase.REGROUP);
+        assertTrue(scn.FreepsActionAvailable(visitor));
+    }
+
+    @Test
     public void HinderedCompanionsCannotUseModifiers() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         var scn = new VirtualTableScenario(

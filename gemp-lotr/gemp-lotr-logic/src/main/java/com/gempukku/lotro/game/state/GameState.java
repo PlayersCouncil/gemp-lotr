@@ -1195,13 +1195,15 @@ public class GameState {
             return card.getOwner().equals(_currentPlayerId);
 
         if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE) {
-            if(!isCardInPlayActive(card.getAttachedTo(), includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+            //We override the activity check to include hindered cards, as being attached to a hindered card does not inactivate attached cards
+            if(!isCardInPlayActive(card.getAttachedTo(), includeOutOfTurn, includeAttachedToInactive, includeStacked, true)) {
                 return includeAttachedToInactive;
             }
         }
 
         if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE){
-            if(!isCardInPlayActive(card.getStackedOn(), includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+            //We override the activity check to include hindered cards, as being stacked on a hindered card does not inactivate stacked cards
+            if(!isCardInPlayActive(card.getStackedOn(), includeOutOfTurn, includeAttachedToInactive, includeStacked, true)) {
                 return includeStacked;
             }
         }
