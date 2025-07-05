@@ -179,8 +179,8 @@ public class DefaultLotroGame implements LotroGame {
             _cancelled = true;
 
             if (_gameState != null) {
-                _gameState.sendMessage("Game was cancelled due to an error, the error was logged and will be fixed soon.");
-                _gameState.sendMessage("Please post the replay game link and description of what happened on the TLHH forum.");
+                _gameState.sendMessage("Game was cancelled due to an error.");
+                _gameState.sendMessage("Please fill out a bug report so the error can be identified and fixed.");
             }
 
             for (GameResultListener gameResultListener : _gameResultListeners)

@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_092_Tests
 {
@@ -18,8 +17,9 @@ public class Card_V3_092_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_92");
-					// put other cards in here as needed for the test case
+					put("sauron", "103_92");
+
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,7 +50,7 @@ public class Card_V3_092_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sauron");
 
 		assertEquals("Sauron", card.getBlueprint().getTitle());
 		assertEquals("Lord of All Middle-earth", card.getBlueprint().getSubtitle());
@@ -66,28 +66,27 @@ public class Card_V3_092_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SauronIsDiscounted1PerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var sauron = scn.GetShadowCard("sauron");
+		scn.MoveCardsToHand(sauron);
 
 		scn.StartGame();
+
+		scn.SetTwilight(20);
 		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		assertEquals(24, scn.GetTwilight());
+		scn.ShadowPlayCard(sauron);
+
+		//24 -18 base -2 roaming +2 discount for both companions
+		assertEquals(6, scn.GetTwilight());
 	}
 }

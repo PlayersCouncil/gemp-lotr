@@ -28,7 +28,7 @@ public class FilterFactory {
         for (Keyword value : Keyword.values())
             appendFilter(value);
 
-        appendFilter("support", "support", Keyword.SUPPORT_AREA);
+        appendFilter("support", "support", Filters.zone(Zone.SUPPORT));
 
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);

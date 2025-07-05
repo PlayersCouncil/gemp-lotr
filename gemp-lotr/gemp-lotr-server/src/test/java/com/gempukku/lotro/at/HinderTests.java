@@ -801,7 +801,7 @@ public class HinderTests
     }
 
     //@Test
-    public void HinderedRingBearerCannotSpotBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+    public void HinderedRingBearerCanSpotBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 
     }
 
@@ -845,6 +845,40 @@ public class HinderTests
 
         scn.SkipToPhase(Phase.MANEUVER);
         assertFalse(scn.FreepsActionAvailable(aragorn)); //"Maneuver: Exert Aragorn to make him defender +1"
+    }
+
+    @Test
+    public void HinderedCompanionsPermitsUseOfAttachedSpecialAbilitie() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("visitor", "7_126"); //Regroup: Discard this condition to discard a minion and remove (4)
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var visitor = scn.GetFreepsCard("visitor");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn, visitor);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(aragorn));
+
+        scn.SkipToPhase(Phase.REGROUP);
+        assertTrue(scn.FreepsActionAvailable(visitor));
     }
 
     @Test
@@ -1009,7 +1043,7 @@ public class HinderTests
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
-                    put("troll", "15_117");
+                    put("troll", "15_117"); // Tower Troll
                 }}
         );
 
@@ -1036,9 +1070,56 @@ public class HinderTests
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
         scn.FreepsPassCurrentPhaseAction();
-        scn.ShadowUseCardAction(troll);
+        scn.ShadowUseCardAction(troll); // Assignment: exert this minion twice to assign it to a companion (except the Ring-bearer).
         assertEquals(2, scn.GetWoundsOn(troll));
         assertFalse(scn.IsCharAssigned(troll));
+        assertFalse(scn.IsCharAssigned(aragorn));
+
+        assertTrue(scn.FreepsDecisionAvailable("Assignment action"));
+    }
+
+    @Test
+    public void HinderedCompanionsCannotBeAssignedAsBearerByAttachedCards() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("visitor", "7_126"); //Each minion gains this ability: "Assignment: Assign this minion to bearer of Unexpected Visitor"
+
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var visitor = scn.GetFreepsCard("visitor");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn, visitor);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(aragorn));
+
+        scn.SkipToPhase(Phase.ASSIGNMENT);
+        scn.FreepsPassCurrentPhaseAction();
+
+        assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
+
+        scn.ShadowUseCardAction(runner);
+        assertFalse(scn.IsCharAssigned(runner));
         assertFalse(scn.IsCharAssigned(aragorn));
 
         assertTrue(scn.FreepsDecisionAvailable("Assignment action"));
@@ -1392,24 +1473,210 @@ public class HinderTests
     }
 
 
-    //@Test
+    @Test
     public void HinderingAnAssignedMinionCancelsThatAssignment() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("visitor", "7_126"); //Each minion gains this ability: "Assignment: Assign this minion to bearer of Unexpected Visitor"
 
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var visitor = scn.GetFreepsCard("visitor");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn, visitor);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, runner));
+                action.setText("Hinder Runner");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.SkipToPhase(Phase.ASSIGNMENT);
+        scn.FreepsPassCurrentPhaseAction();
+
+        assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
+
+        scn.ShadowUseCardAction(runner);
+        assertTrue(scn.IsCharAssigned(runner));
+        assertTrue(scn.IsCharAssigned(aragorn));
+
+        assertTrue(scn.FreepsDecisionAvailable("Assignment action"));
+        assertFalse(scn.IsHindered(runner));
+        scn.FreepsUseCardAction(frodo); //Hindering Runner
+        assertTrue(scn.IsHindered(runner));
+
+        assertFalse(scn.IsCharAssigned(runner));
+        assertFalse(scn.IsCharAssigned(aragorn));
+
+        scn.ShadowPass();
+        scn.FreepsPass();
+
+        assertTrue(scn.FreepsCanAssign(frodo));
+        assertFalse(scn.FreepsCanAssign(runner));
+        assertTrue(scn.FreepsCanAssign(aragorn));
     }
 
-    //@Test
+    @Test
     public void HinderingAnAssignedCompanionCancelsThatAssignment() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("visitor", "7_126"); //Each minion gains this ability: "Assignment: Assign this minion to bearer of Unexpected Visitor"
 
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var visitor = scn.GetFreepsCard("visitor");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn, visitor);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.SkipToPhase(Phase.ASSIGNMENT);
+        scn.FreepsPassCurrentPhaseAction();
+
+        assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
+
+        scn.ShadowUseCardAction(runner);
+        assertTrue(scn.IsCharAssigned(runner));
+        assertTrue(scn.IsCharAssigned(aragorn));
+
+        assertTrue(scn.FreepsDecisionAvailable("Assignment action"));
+        assertFalse(scn.IsHindered(aragorn));
+        scn.FreepsUseCardAction(frodo); //Hindering Aragorn
+        assertTrue(scn.IsHindered(aragorn));
+
+        assertFalse(scn.IsCharAssigned(runner));
+        assertFalse(scn.IsCharAssigned(aragorn));
+
+        scn.ShadowPass();
+        scn.FreepsPass();
+
+        assertTrue(scn.FreepsCanAssign(frodo));
+        assertTrue(scn.FreepsCanAssign(runner));
+        assertFalse(scn.FreepsCanAssign(aragorn));
     }
 
-    //@Test
+    @Test
     public void HinderingASkirmishingMinionEndsThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
 
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, runner));
+                action.setText("Hinder Runner");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.SkipToAssignments();
+        scn.FreepsAssignAndResolve(aragorn, runner);
+
+        assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+        assertFalse(scn.IsCharAssignedAgainst(aragorn, runner));
+        assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner));
+        assertFalse(scn.IsHindered(runner));
+        scn.FreepsUseCardAction(frodo); //Hindering Runner
+        assertTrue(scn.IsHindered(runner));
+
+        assertFalse(scn.IsCharAssignedAgainst(aragorn, runner));
+        assertFalse(scn.IsCharSkirmishingAgainst(aragorn, runner));
+
+        assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
     }
 
-    //@Test
+    @Test
     public void HinderingASkirmishingCompanionEndsThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
 
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.AttachCardsTo(aragorn);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.SkipToAssignments();
+        scn.FreepsAssignAndResolve(aragorn, runner);
+
+        assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+        assertFalse(scn.IsCharAssignedAgainst(aragorn, runner));
+        assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner));
+        assertFalse(scn.IsHindered(aragorn));
+        scn.FreepsUseCardAction(frodo); //Hindering Aragorn
+        assertTrue(scn.IsHindered(aragorn));
+
+        assertFalse(scn.IsCharAssignedAgainst(aragorn, runner));
+        assertFalse(scn.IsCharSkirmishingAgainst(aragorn, runner));
+
+        assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
     }
 
     //@Test
