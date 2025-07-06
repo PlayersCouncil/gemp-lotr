@@ -1241,9 +1241,9 @@ var PCCards = {
 	// A Wizard Knows Better (V3_128)
 	'103_128': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E128.0_card.jpg',
 	// Cover of Darkness, Omen of Gloom (V3_129)
-	'103_129': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E129.0_card.jpg',
+	'103_129': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E129.0_card.jpg',
 	// Gates of Isengard (V3_130)
-	'103_130': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E130.0_card.jpg',
+	'103_130': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E130.0_card.jpg',
 	
 	//V3 Hinder Errata
 	// Blood Runs Chill (8R3) [Errata]
