@@ -1295,7 +1295,7 @@ var PCCards = {
 	// Mines of Khazad-Dûm (3R3) [Errata]
 	'53_3'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E003.1_card.jpg',
 	// Hospitality of the Dwarves (V1C1) [Errata]
-	'101_1'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S001.1_card.jpg',
+	'101_1'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E001.1_card.jpg',
 	// Grima, Son of Galmod (4C153) [Errata]
 	'54_153' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E153.1_card.jpg',
 	// Cirion (7C82) [Errata]
