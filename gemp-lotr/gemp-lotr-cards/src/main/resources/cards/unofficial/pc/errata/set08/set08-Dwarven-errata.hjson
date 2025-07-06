@@ -78,16 +78,24 @@
 			{
 				type: ResponseEvent
 				trigger: {
-					type: StartOfTurn
+					type: Moves
 				}
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+					type: exert
+					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					times: 2
+					memorize: exertedDwarf
+				},
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Hinder
+						player: shadow
+						select: choose(side(shadow))
+						count: {
+							type: forEachKeywordOnCardInMemory
+							memory: exertedDwarf
+							keyword: damage
+						}
 					}
 				]
 			}
