@@ -69,6 +69,7 @@
 				optional: true
 				trigger: {
 					type: StartOfPhase
+					player: Shadow
 					#Intentionally left blank as we want to trigger in every phase
 				}
 				requires: {
@@ -465,7 +466,8 @@
 				optional: true
 				trigger: {
 					type: StartOfPhase
-					#Intentionally left blank as we want to trigger in every phase
+					player: Shadow
+					#Phase intentionally left blank as we want to trigger in every phase
 				}
 				effect: {
 					type: Hinder
