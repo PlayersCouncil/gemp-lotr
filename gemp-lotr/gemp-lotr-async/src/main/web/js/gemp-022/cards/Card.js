@@ -350,7 +350,7 @@ class Card {
         if (setNo == 102)
             return (cardNo >= 67 && cardNo <= 73);
         if (setNo == 103)
-            return (cardNo >= 107 && cardNo <= 115);
+            return (cardNo == 130 || (cardNo >= 107 && cardNo <= 115));
 
         return false;
     }
