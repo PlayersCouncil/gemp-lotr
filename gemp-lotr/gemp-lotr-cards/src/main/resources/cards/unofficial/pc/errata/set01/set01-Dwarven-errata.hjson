@@ -509,7 +509,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Dwarf
 		strength: 3
 		vitality: 3
