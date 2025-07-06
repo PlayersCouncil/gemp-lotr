@@ -21,8 +21,7 @@ public class CantTakeMoreWoundsThan implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> new CantTakeMoreThanXWoundsModifier(actionContext.getSource(), phase,
-                objectSource.getEvaluator(actionContext)
-                        .evaluateExpression(actionContext.getGame(), null),
+                objectSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null),
                 RequirementCondition.createCondition(requirements, actionContext),
                 filterableSource.getFilterable(actionContext));
     }

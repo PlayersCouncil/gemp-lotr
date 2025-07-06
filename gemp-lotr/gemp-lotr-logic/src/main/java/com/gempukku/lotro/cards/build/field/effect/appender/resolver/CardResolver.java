@@ -60,7 +60,7 @@ public class CardResolver {
 
             return resolveChoiceCards(select, null, null, countSource, environment, stackSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + select);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + select + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveStackedCards(String type, ValueSource countSource, FilterableSource stackedOn,
@@ -110,7 +110,7 @@ public class CardResolver {
 
             return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveCardsInHand(String type, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -190,7 +190,7 @@ public class CardResolver {
 
             return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveCardsInAdventureDeck(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String adventureDeckPlayer, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -229,7 +229,7 @@ public class CardResolver {
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveCardsInDiscard(String type, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -287,7 +287,7 @@ public class CardResolver {
 
             return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveCardsInDeadPile(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -322,7 +322,7 @@ public class CardResolver {
 
             return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
         }
-        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
     public static EffectAppender resolveCardsInDeck(String type, FilterableSource choiceFilter, ValueSource countSource, String memory, String choicePlayer, String targetDeck,

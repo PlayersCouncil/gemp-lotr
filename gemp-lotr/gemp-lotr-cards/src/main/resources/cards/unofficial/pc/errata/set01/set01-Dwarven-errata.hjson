@@ -1,5 +1,65 @@
 {
-
+	51_5: {
+		cardInfo: {
+			//id: 51_5.1
+			parent: 1_5
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E005.1_card.jpg
+			collInfo: 1C5
+			rarity: C
+		}
+		title: Cleaving Blow
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: 2
+					memorize: chosenDwarf
+				}
+				{
+					type: addKeyword
+					select: memory(chosenDwarf)
+					keyword: damage+1
+				}
+				{
+					type: Discard
+					select: choose(possession, AttachedTo(minion, InSkirmishAgainst(memory(chosenDwarf))))
+				}
+				{
+					type: addTrigger
+					optional: true
+					trigger: {
+						type: winsSkirmish
+						filter: memory(chosenDwarf)
+					}
+					effect: {
+						type: discard
+						select: choose(side(Shadow),possession)
+					}
+				}
+			]
+		}
+		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. Discard a possession borne by a minion they are skirmishing.  If that Dwarf wins this skirmish, you may discard another Shadow possession.
+		lore: "The shoddy workmanship of Orc-smiths cannot withstand the fury of Durin's folk."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_7: {
 		cardInfo: {
 			//id: 1_7.1
@@ -378,49 +438,103 @@
 		}
 	}
 	
+	# 51_17: {
+	# 	cardInfo: {
+	# 		//id: 1_17.1
+	# 		parent: 1_17
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN01E017.1.jpg
+	# 		collInfo: 1U17
+	# 		rarity: U
+	# 	}
+	# 	title: Grimir
+	# 	subtitle: Dwarven Elder
+	# 	unique: true
+	# 	culture: dwarven
+	# 	twilight: 1
+	# 	type: ally
+	# 	allyHome: 3F
+	# 	race: dwarf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	effects: {
+	# 		type: activated
+	# 		phase: fellowship
+	# 		cost: [
+	# 			{
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			{
+	# 				type: discardTopCardsFromDeck
+	# 				deck: freeps
+	# 				count: 1
+	# 				forced: false
+	# 			}
+	# 		]
+	# 		effect: {
+	# 			type: PutCardsFromDiscardOnTopOfDeck
+	# 			select: choose(culture(dwarven),event)
+	# 			count: 1
+	# 		}
+	# 	}
+	# 	gametext: <b>Fellowship:</b> Exert Grimir and discard the top card of your draw deck to place a [dwarven] event from your discard pile on top of your draw deck.
+	# 	lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	51_17: {
 		cardInfo: {
-			//id: 1_17.1
+			//id: 51_17.2
 			parent: 1_17
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
-			image: errata/LOTR-EN01E017.1.jpg
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN01E017.2_card.jpg
 			collInfo: 1U17
 			rarity: U
 		}
 		title: Grimir
 		subtitle: Dwarven Elder
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: ally
-		allyHome: 3F
-		race: dwarf
+		type: Ally
+		allyHome: 3
+		race: Dwarf
 		strength: 3
 		vitality: 3
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: [
-				{
-					type: exert
-					select: self
+		effects: [
+			{
+				type: Activated
+				phase: Fellowship
+				cost: [
+					{
+						type: Spot
+						filter: Dwarven, companion
+					}
+					{
+						type: Exert
+						select: self
+					}
+				]
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(Dwarven, event)
+					discard: you
 				}
-				{
-					type: discardTopCardsFromDeck
-					deck: freeps
-					count: 1
-					forced: false
-				}
-			]
-			effect: {
-				type: PutCardsFromDiscardOnTopOfDeck
-				select: choose(culture(dwarven),event)
-				count: 1
 			}
-		}
-		gametext: <b>Fellowship:</b> Exert Grimir and discard the top card of your draw deck to place a [dwarven] event from your discard pile on top of your draw deck.
+		]
+		gametext: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand.
 		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
 		promotext: ""
 		alts: {
@@ -488,7 +602,125 @@
 		}
 	}
 	
+	51_24: {
+		cardInfo: {
+			//id: 51_24.1
+			parent: 1_24
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E024.1_card.jpg
+			collInfo: 1C24
+			rarity: C
+		}
+		title: Stairs of Khazad-dum
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: dwarf,inSkirmishAgainst(or(Orc,and(culture(moria),minion)))
+					amount: 1
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: Dwarf
+					against: Moria, minion
+				}
+				cost: {
+					type: Discard
+					select: choose(Dwarven, not(companion))
+				}
+				effect: {
+					type: Discard
+					select: choose(Moria, support)
+				}
+			}
+		]
+		gametext: Tale. While a Dwarf skirmishes an Orc or [moria] minion, that Dwarf is strength +1.<br>Each time a Dwarf wins a skirmish against a [moria] minion, you may discard a [dwarven] card from play (except a companion) to discard a [Moria] support card.
+		lore: "'Moria – Khazad-dûm! Greatest of the dwarf-halls – What I would not give to look upon its treasures!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 	
+	51_25: {
+		cardInfo: {
+			//id: 51_25.1
+			parent: 1_25
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E025.1_card.jpg
+			collInfo: 1C25
+			rarity: C
+		}
+		title: Still Draws Breath
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: dwarf
+					memorize: winner
+				}
+				cost: {
+					type: DiscardFromHand
+					forced: false
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(memory(winner))
+					}
+					{
+						type: If
+						check: {
+							type: Location
+							filter: underground
+						}
+						true: {
+							type: Exert
+							select: choose(minion)
+						}
+					}
+				]
+			}
+		]
+		gametext: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. If the fellowship is at an underground site, exert a minion.
+		lore: "When thirteen had fallen the rest fled shrieking, leaving the defenders unharmed...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 	
 	
 	

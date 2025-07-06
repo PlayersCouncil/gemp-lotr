@@ -270,6 +270,83 @@
 			}
 		}
 	}
+	
+	52_11: {
+		cardInfo: {
+			//id: 52_11.1
+			parent: 2_11
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E011.1_card.jpg
+			collInfo: 2R11
+			rarity: R
+		}
+		title: Make Light of Burdens
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: {
+			type: Activated
+			phase: Maneuver
+			cost: [
+				{
+					type: Choice
+					texts: [
+						Exert a Dwarf
+						Hinder an item borne by a Dwarf
+					]
+					effects: [
+						{
+							type: Exert
+							select: choose(dwarf)
+						}
+						{
+							type: Hinder
+							select: choose(item, AttachedTo(Dwarf))
+						}
+					]
+				}
+			]
+			effect: [
+				{
+					type: ChooseActiveCards
+					text: Choose a Shadow condition
+					select: choose(side(Shadow), condition)
+					memorize: chosenCondition
+				}
+				{
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: chosenCondition
+						filter: or(weather, AttachedTo(Dwarf))
+					}
+					true: {
+						type: Discard
+						select: memory(chosenCondition)
+					}
+					false: {
+						type: Hinder
+						select: memory(chosenCondition)
+					}
+				}
+			]
+		}
+		gametext: Maneuver: Exert a Dwarf or hinder an item on a Dwarf to hinder a Shadow condition (if that condition is a weather or attached to a Dwarf, discard it instead).
+		lore: "A Dwarf does not readily notice the weight on his back, or in his heart."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	52_121: {
 		cardInfo: {

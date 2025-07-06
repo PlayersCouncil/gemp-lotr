@@ -55,7 +55,7 @@
 				}
 				effect: {
 					type: PlayCardFromDrawDeck
-					select: beacon
+					select: choose(beacon)
 					shuffle: true
 					showAll: true
 				}
