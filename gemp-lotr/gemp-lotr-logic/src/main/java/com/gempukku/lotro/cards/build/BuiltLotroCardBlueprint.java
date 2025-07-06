@@ -15,6 +15,7 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 import com.google.common.collect.Sets;
 
 import java.util.*;
@@ -1131,13 +1132,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
-    public RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, PhysicalCard self) {
+    public RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result) {
         if (discardedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
+        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
         if (discardedFromPlayRequiredTriggerAction.isValid(actionContext)) {
-            RequiredTriggerAction action = new RequiredTriggerAction(self);
+            RequiredTriggerAction action = new RequiredTriggerAction(result.getDiscardedCard());
             discardedFromPlayRequiredTriggerAction.createAction(action, actionContext);
             return action;
         }
@@ -1145,13 +1146,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
-    public OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(String playerId, LotroGame game, PhysicalCard self) {
+    public OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(LotroGame game, DiscardCardsFromPlayResult result) {
         if (discardedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
+        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
         if (discardedFromPlayOptionalTriggerAction.isValid(actionContext)) {
-            OptionalTriggerAction action = new OptionalTriggerAction(self);
+            OptionalTriggerAction action = new OptionalTriggerAction(result.getDiscardedCard());
             discardedFromPlayOptionalTriggerAction.createAction(action, actionContext);
             return action;
         }

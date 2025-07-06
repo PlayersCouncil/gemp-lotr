@@ -7,6 +7,7 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 
 import java.util.List;
 import java.util.Set;
@@ -123,9 +124,9 @@ public interface LotroCardBlueprint {
     List<OptionalTriggerAction> getOptionalInHandAfterTriggers(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
 
 
-    RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, PhysicalCard self);
+    RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result);
 
-    OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(String playerId, LotroGame game, PhysicalCard self);
+    OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(LotroGame game, DiscardCardsFromPlayResult result);
 
 
     RequiredTriggerAction getKilledRequiredTrigger(LotroGame game, PhysicalCard self);
