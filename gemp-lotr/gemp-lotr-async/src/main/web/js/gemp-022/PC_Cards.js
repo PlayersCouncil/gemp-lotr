@@ -307,7 +307,7 @@ var PCCards = {
 	'51_4': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E004.1_card.jpg',
 	'51_9': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E009.1_card.jpg',
 	'51_16': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E016.1_card.jpg',
-	'51_17': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.1_card.jpg',
+	//'51_17': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.1_card.jpg',
 	'51_23': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E023.1_card.jpg',
 	'51_29': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E029.1_card.jpg',
 	'51_36': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E036.1_card.jpg',
@@ -339,7 +339,7 @@ var PCCards = {
 	'52_59': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E059.1_card.jpg',
 	'52_91': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E091.1_card.jpg',
 	'52_107': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E107.1_card.jpg',
-	'53_4': 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.1_card.jpg',
+	//'53_4': 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.1_card.jpg',
 	'53_17': 'https://i.lotrtcgpc.net/errata/LOTR-EN03E017.2_card.jpg',
 	'53_54': 'https://i.lotrtcgpc.net/errata/LOTR-EN03E054.1_card.jpg',
 	'53_68': 'https://i.lotrtcgpc.net/errata/LOTR-EN03E068.2_card.jpg',
@@ -1240,6 +1240,10 @@ var PCCards = {
 	'103_127': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E127.0_card.jpg',
 	// A Wizard Knows Better (V3_128)
 	'103_128': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E128.0_card.jpg',
+	// Cover of Darkness, Omen of Gloom (V3_129)
+	'103_129': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E129.0_card.jpg',
+	// Gates of Isengard (V3_130)
+	'103_130': 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E130.0_card.jpg',
 	
 	//V3 Hinder Errata
 	// Blood Runs Chill (8R3) [Errata]
@@ -1271,6 +1275,32 @@ var PCCards = {
 	// Galadriel, Lady Redeemed (10R11) [Errata]
 	'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.4_card.jpg',
 	// Clever Hobbits (7U54) [Errata]
-	'57_54'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E054.1_card.jpg'
+	'57_54'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E054.1_card.jpg',
+	// The Palantir of Orthanc (3R67) [Errata]
+	'53_67'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E067.2_card.jpg',
+	// Roll of Thunder (4U99) [Errata]
+	'54_99'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E099.1_card.jpg',
+	// Still Draws Breath (1C25) [Errata]
+	'51_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E025.1_card.jpg',
+	// Cleaving Blow (1C5) [Errata]
+	'51_5'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E005.1_card.jpg',
+	// Stairs of Khazad-dum (1C24) [Errata]
+	'51_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E024.1_card.jpg',
+	// Grimir, Dwarven Elder (1U17) [Errata]
+	'51_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.2_card.jpg',
+	// Make Light of Burdens (2R11) [Errata]
+	'52_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E011.1_card.jpg',
+	// A Royal Welcome (3U4) [Errata]
+	'53_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.2_card.jpg',
+	// Mines of Khazad-Dûm (3R3) [Errata]
+	'53_3'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E003.1_card.jpg',
+	// Hospitality of the Dwarves (V1C1) [Errata]
+	'101_1'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S001.1_card.jpg',
+	// Grima, Son of Galmod (4C153) [Errata]
+	'54_153' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E153.1_card.jpg',
+	// Cirion (7C82) [Errata]
+	'57_82'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E082.1_card.jpg',
+	// The Red Arrow (9R46) [Errata]
+	'59_46'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E046.1_card.jpg'
 }
 
