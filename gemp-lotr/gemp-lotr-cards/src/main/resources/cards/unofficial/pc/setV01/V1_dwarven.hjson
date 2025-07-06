@@ -104,7 +104,6 @@
 		culture: Dwarven
 		twilight: 1
 		type: Condition
-		target: self
 		keywords: Support Area
 		effects: [
 			{

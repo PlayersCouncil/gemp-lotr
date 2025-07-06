@@ -17,7 +17,6 @@
 		culture: Rohan
 		twilight: 2
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{

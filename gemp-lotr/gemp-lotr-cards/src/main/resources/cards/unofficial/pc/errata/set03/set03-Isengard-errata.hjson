@@ -611,7 +611,6 @@
 		culture: Isengard
 		twilight: 0
 		type: Artifact
-		target: self
 		keywords: Support Area
 		effects: [
 			{
