@@ -1,8 +1,99 @@
 {
 
+	# 101_1: {
+	# 	cardInfo: {
+	# 		//id: 101_1
+	# 		image: sets/vset1/LOTR-ENV1S001.0_card.jpg
+	# 		collInfo: V1C1
+	# 		rarity: C
+	# 	}
+	# 	title: Hospitality of the Dwarves
+	# 	unique: false
+	# 	side: Free Peoples
+	# 	culture: Dwarven
+	# 	twilight: 1
+	# 	type: Condition
+	# 	keywords: Support Area
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			requires: {
+	# 				type: location
+	# 				filter: or(siteNumber(4),siteNumber(5),siteNumber(6),siteNumber(7),siteNumber(8))
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: removeKeyword
+	# 						filter: dwarf
+	# 						keyword: damage
+	# 					}
+	# 					until: start(regroup)
+	# 				}
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: cantTakeMoreWoundsThan
+	# 						amount: 1
+	# 						filter: dwarf,hasAttachedCount(2,item)
+	# 						phase: maneuver
+	# 					}
+	# 					until: start(archery)
+	# 				}
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: cantTakeMoreWoundsThan
+	# 						amount: 1
+	# 						filter: dwarf,hasAttachedCount(2,item)
+	# 						phase: archery
+	# 					}
+	# 					until: start(assignment)
+	# 				}
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: cantTakeMoreWoundsThan
+	# 						amount: 1
+	# 						filter: dwarf,hasAttachedCount(2,item)
+	# 						phase: assignment
+	# 					}
+	# 					until: start(regroup)
+	# 				}
+	# 				{
+	# 					type: addmodifier
+	# 					modifier: {
+	# 						type: cantTakeMoreWoundsThan
+	# 						amount: 1
+	# 						filter: dwarf,hasAttachedCount(2,item)
+	# 						phase: skirmish
+	# 					}
+	# 					until: start(regroup)
+	# 				}
+	# 			]
+	# 		}
+			
+	# 	]
+	# 	gametext: Maneuver: If the fellowship is at any sites 4 to 8, make each Dwarf lose all <b>damage</b> bonuses until the regroup phase, and each Dwarf bearing 2 or more items takes no more than 1 wound per phase until the regroup phase.
+	# 	lore: "'Roaring fires, malt beer, red meat off the bone...'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_1: {
 		cardInfo: {
-			//id: 101_1
+			//id: 101_1.1
+			parent: 101_1
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
 			image: sets/vset1/LOTR-ENV1S001.0_card.jpg
 			collInfo: V1C1
 			rarity: C
@@ -16,67 +107,94 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: activated
-				phase: maneuver
-				requires: {
-					type: location
-					filter: or(siteNumber(4),siteNumber(5),siteNumber(6),siteNumber(7),siteNumber(8))
-				}
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Spot
+						select: choose(unbound, Dwarf, HasAttachedCount(2, item))
+						text: Choose an unbound Dwarf bearing 2 or more items
+						memorize: chosenDwarf
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+
 				effect: [
 					{
-						type: addmodifier
-						modifier: {
-							type: removeKeyword
-							filter: dwarf
-							keyword: damage
+						type: If
+						check: {
+							type: Location
+							filter: underground
 						}
-						until: start(regroup)
+						true: [
+							{
+								type: AddKeyword
+								select: memory(chosenDwarf)
+								keyword: damage+1
+								until: start(regroup)
+							}
+							{
+								type: AddTrigger
+								trigger: {
+									type: TakesWound
+									filter: memory(chosenDwarf)
+								}
+								until: start(regroup)
+								effect: {
+									type: AddModifier
+									modifier: {
+										type: CantTakeWounds
+										filter: memory(chosenDwarf)
+									}
+								}
+							}
+						]
+						false: {
+							type: Choice
+							texts: [
+								Make {chosenDwarf} damage +1 until the Regroup phase
+								Make {chosenDwarf} take no more than 1 wound until the Regroup phase
+							]
+							effects: [
+								{
+									type: AddKeyword
+									select: memory(chosenDwarf)
+									keyword: damage+1
+									until: start(regroup)
+								}
+								{
+									type: AddTrigger
+									trigger: {
+										type: TakesWound
+										filter: memory(chosenDwarf)
+									}
+									until: start(regroup)
+									effect: {
+										type: AddModifier
+										modifier: {
+											type: CantTakeWounds
+											filter: memory(chosenDwarf)
+										}
+									}
+								}
+							]
+						}
 					}
 					{
-						type: addmodifier
-						modifier: {
-							type: cantTakeMoreWoundsThan
-							amount: 1
-							filter: dwarf,hasAttachedCount(2,item)
-							phase: maneuver
-						}
-						until: start(archery)
-					}
-					{
-						type: addmodifier
-						modifier: {
-							type: cantTakeMoreWoundsThan
-							amount: 1
-							filter: dwarf,hasAttachedCount(2,item)
-							phase: archery
-						}
-						until: start(assignment)
-					}
-					{
-						type: addmodifier
-						modifier: {
-							type: cantTakeMoreWoundsThan
-							amount: 1
-							filter: dwarf,hasAttachedCount(2,item)
-							phase: assignment
-						}
-						until: start(regroup)
-					}
-					{
-						type: addmodifier
-						modifier: {
-							type: cantTakeMoreWoundsThan
-							amount: 1
-							filter: dwarf,hasAttachedCount(2,item)
-							phase: skirmish
-						}
-						until: start(regroup)
+						type: exert
+						select: bearer
 					}
 				]
 			}
-			
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
 		]
-		gametext: Maneuver: If the fellowship is at any sites 4 to 8, make each Dwarf lose all <b>damage</b> bonuses until the regroup phase, and each Dwarf bearing 2 or more items takes no more than 1 wound per phase until the regroup phase.
+		gametext: Maneuver: Spot an unbound Dwarf bearing 2 or more items and hinder this condition to choose one: make that Dwarf <b>damage +1</b> until the regroup phase, or make that Dwarf take no more than 1 wound until the regroup phase.  If at an underground site, do both.
 		lore: "'Roaring fires, malt beer, red meat off the bone...'"
 		promotext: ""
 		alts: {

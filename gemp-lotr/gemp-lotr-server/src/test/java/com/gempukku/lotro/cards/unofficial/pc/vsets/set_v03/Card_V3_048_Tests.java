@@ -39,7 +39,7 @@ public class Card_V3_048_Tests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Maneuver
-		 * Game Text: Choose one: Reinforce 2 [raider] tokens; or hinder any number of [raider] support cards to reinforce the same number of [raider] tokens.
+		 * Game Text: Hinder up to 3 [raider] cards to reinforce the same number of [raider] tokens.
 		*/
 
 		var scn = GetScenario();

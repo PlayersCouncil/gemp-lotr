@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_07_035_ErrataTests
 {
@@ -32,7 +33,7 @@ public class Card_07_035_ErrataTests
 		/**
 		 * Set: 7
 		 * Name: Fool's Hope
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 3
@@ -76,8 +77,7 @@ public class Card_07_035_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

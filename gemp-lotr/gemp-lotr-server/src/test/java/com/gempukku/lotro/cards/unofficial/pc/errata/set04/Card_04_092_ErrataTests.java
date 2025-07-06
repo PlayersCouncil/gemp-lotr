@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_04_092_ErrataTests
 {
@@ -32,7 +33,7 @@ public class Card_04_092_ErrataTests
 		/**
 		 * Set: 4
 		 * Name: Grown Suddenly Tall
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 0
@@ -78,8 +79,7 @@ public class Card_04_092_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(0, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

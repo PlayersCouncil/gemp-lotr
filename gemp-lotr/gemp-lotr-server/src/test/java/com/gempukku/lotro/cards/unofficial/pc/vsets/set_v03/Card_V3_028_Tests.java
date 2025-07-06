@@ -43,7 +43,7 @@ public class Card_V3_028_Tests
 		 * Vitality: 2
 		 * Resistance: 6
 		 * Game Text: Enduring.
-		* 	To play, spot or add a threat.
+		* 	To play, add a threat.
 		* 	This companion is strength +1 for each companion in the dead pile.
 		* 	This companion is strength +1 for each Wraith in the dead piile.
 		*/

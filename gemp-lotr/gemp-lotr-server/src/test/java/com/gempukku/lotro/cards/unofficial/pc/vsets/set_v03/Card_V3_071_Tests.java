@@ -43,7 +43,7 @@ public class Card_V3_071_Tests
 		 * Vitality: 3
 		 * Site Number: 2
 		 * Game Text: Fierce.
-		* 	Skirmish: Exert this minion to make another Nazgul strength +1 for each of your sites on the adventure path.
+		* 	At the start of each skirmish involving a Nazgul, you may exert this minion to make that Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot 2 Nazgul).
 		*/
 
 		var scn = GetScenario();

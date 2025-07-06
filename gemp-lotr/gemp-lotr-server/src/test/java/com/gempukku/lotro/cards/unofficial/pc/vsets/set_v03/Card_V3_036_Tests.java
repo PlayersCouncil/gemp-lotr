@@ -41,7 +41,8 @@ public class Card_V3_036_Tests
 		 * Subtype: Support area
 		 * Game Text: Beacon. To play, hinder 2 copies of Northern Signal-fire.
 		* 	This condition cannot be discarded.
-		* 	While you can spot an unbound [gondor] Man and a mounted [Rohan] Man, mounted [Rohan] companions can bear 1 additional hand weapon and minions skirmishing knights lose <b>fierce</b> until the regroup phase.
+		* 	Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.
+		* 	Skirmish: Hinder a beacon to make your Man strength +1.
 		*/
 
 		var scn = GetScenario();

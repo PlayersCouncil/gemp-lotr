@@ -41,7 +41,7 @@ public class Card_V3_007_Tests
 		 * Subtype: Maneuver
 		 * Game Text: Spell.
 		* 	Exert your Wizard thrice to reconcile your hand.
-		* 	Shuffle this into your draw deck if you can spot a [gandalf] artifact.
+		* 	You may spot a [gandalf] artifact to shuffle this into your draw deck.
 		*/
 
 		var scn = GetScenario();

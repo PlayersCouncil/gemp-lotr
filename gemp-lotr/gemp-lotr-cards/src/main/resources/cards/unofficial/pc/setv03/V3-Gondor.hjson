@@ -116,9 +116,25 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: {
-						type: ForEachCulture
-						filter: any
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: other, Rohan, Man
+						count: 2
+					}
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: other, Gondor, Man
+						count: 2
 					}
 				}
 			}
@@ -150,64 +166,8 @@
 					]
 				}
 			}
-			{
-				type: Activated
-				phase: Fellowship
-				cost: {
-					type: Exert
-					select: choose(Man)
-					memorize: exertedMan
-				}
-				effect: {
-					type: Heal
-					select: choose(unbound,Man,not(memory(exertedMan)))
-				}
-			}
 		]
-		gametext: Aragorn is strength +1 for each culture you can spot.<br>Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.<br>Fellowship: Exert a Man to heal an unbound Man.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_17: {
-		cardInfo: {
-			//id: 103_17.0
-			parent: 103_17
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E017.0_card.jpg
-			collInfo: V3_17
-			rarity: _
-		}
-		title: Dark Ancient Halls
-		unique: false
-		side: Free Peoples
-		culture: Gondor
-		twilight: 2
-		type: Possession
-		target: self
-		keywords: Support Area
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
-		gametext: When you play this, spot a [gondor] Wraith to remove a threat.<br>Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this condition to prevent that wound and hinder that Wraith.
+		gametext: While you can spot 2 [rohan] Men, Aragorn is strength +2.\While you can spot 2 [Gondor] Men, Aragorn is strength +2.\Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1104,26 +1064,13 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: Played
-					player: you
-					filter: Man
-					memorize: playedMan
-				}
-				cost: {
-					type: Hinder
-					select: self
-				}
-				effect: {
-					type: Heal
-					select: choose(Man, not(memory(playedMan)))
-				}
-			}
-			{
 				type: Activated
 				phase: Fellowship
+				text: Play a beacon from your discard pile
+				requires: {
+					type: HasCardInDiscard
+					filter: beacon, playable
+				}
 				cost: {
 					type: AddTwilight
 					amount: {
@@ -1136,21 +1083,54 @@
 						type: PlayCardFromDiscard
 						select: choose(beacon)
 					}
+				]
+			}
+			
+			{
+				type: Activated
+				phase: Fellowship
+				text: Reveal cards on the top of your deck
+				cost: [
 					{
-						type: If
-						check: {
-							type: CanSpot
-							filter: title(Northern Signal-fire)
-						}
-						true: {
-							type: RemoveThreats
-							amount: 1
-						}
+						type: Exert
+						select: choose(Man)
+					}
+					{
+						type: Hinder
+						select: choose(beacon)
+					}
+				]
+				effect: [
+					{
+						type: RevealTopCardsOfDrawDeck
+						deck: you
+						count: 5
+						memorize: revealedCards
+					}
+					{
+						type: ChooseArbitraryCards
+						text: Choose {Gondor} and {Rohan} cards to take into hand
+						fromMemory: revealedCards
+						count: any
+						filter: or(Gondor, Rohan)
+						memorize: takenCards
+					}
+					{
+						type: PutCardsFromDeckIntoHand
+						select: memory(takenCards)
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+					{
+						type: PutCardsFromDeckOnTopOfDeck
+						select: all(memory(revealedCards),not(memory(takenCards)))
+						reveal: false
 					}
 				]
 			}
 		]
-		gametext: <b>Beacon</b>. To play, exert a [gondor] companion.<br>Each time you play a Man, you may hinder this to heal another Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from your discard pile. Remove a threat if you can spot a Northern Signal-fire.
+		gametext: <b>Beacon</b>. To play, exert an unbound Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.<br>Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1188,12 +1168,8 @@
 				type: ExtraCost
 				cost: [
 					{
-						type: Exert
-						select: choose(Man)
-					}
-					{
 						type: Hinder
-						select: choose(title(War Beacon))
+						select: choose(beacon)
 						count: {
 							type: Conditional
 							requires: {
@@ -1206,35 +1182,112 @@
 					}
 				]
 			}
+			
 			{
 				type: Modifier
 				modifier: {
-					type: AddKeyword
-					filter: valiant,companion
-					keyword: knight
+					type: CantTakeMoreWoundsThan
+					filter: your, unbound, Man
 					requires: [
 						{
 							type: CanSpot
-							filter: Gondor,companion
+							filter: ranger
+						}
+						{
+							type: CanSpot
+							filter: knight
+						}
+						{
+							type: CanSpot
+							filter: valiant
+						}
+						{
+							type: CanSpot
+							filter: mounted, Man
 						}
 					]
 				}
 			}
+		]
+		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>While you can spot a ranger, knight, valiant Man, and mounted Man, your unbound Men cannot take more than 1 wound per phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_33: {
+		cardInfo: {
+			//id: 103_33.0
+			parent: 103_33
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E033.0_card.jpg
+			collInfo: V3_33
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Flame of Nardol
+		unique: 2
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: Played
-					player: you
-					filter: fortification
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(beacon)
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Northern Signal-fire)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
+			}
+			
+			{
+				type: Activated
+				phase: Archery
+				cost: [
+					{
+						type: Hinder
+						select: self
+					}
+					{
+						type: Discard
+						select: choose(or(Gondor, Rohan), or(condition, possession))
+						count: any
+						memorize: discardedCards
+					}
+				]
 				effect: {
-					type: PlayCardFromDiscard
-					select: choose(mount)
+					type: ModifyArcheryTotal
+					amount: {
+						type: ForEachInMemory
+						memory: discardedCards
+					}
+					side: Free Peoples
 				}
 			}
 		]
-		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a [gondor] companion, valiant companions gain <b>knight</b>.<br>Each time you play a fortification, you may play a mount from your discard pile.
+		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1272,12 +1325,8 @@
 				type: ExtraCost
 				cost: [
 					{
-						type: Exert
-						select: choose(Man)
-					}
-					{
 						type: Hinder
-						select: choose(title(War Beacon))
+						select: choose(beacon)
 						count: {
 							type: Conditional
 							requires: {
@@ -1290,50 +1339,30 @@
 					}
 				]
 			}
+			
 			{
-				type: Activated
-				phase: Skirmish
-				cost: {
-					type: Exert
-					select: choose(ranger)
+				type: Response
+				trigger: {
+					type: AboutToTakeWound
+					filter: unbound, Man
+					memorize: woundedMan
 				}
-				effect: [
-					{
-						type: ChooseActiveCards
-						select: choose(minion)
-						text: Choose a minion
-						memorize: chosenMinion
+				cost: {
+					type: Hinder
+					ignoreCostCheckFailure: true
+					select: choose(beacon)
+					count: {
+						type: TwilightCostInMemory
+						memory: woundedMan
 					}
-					{
-						type: MemorizeNumber
-						amount: {
-							type: ForEachYouCanSpot
-							filter: mounted,companion
-						}
-						memory: mountedComps
-					}
-					{
-						type: ModifyStrength
-						select: memory(chosenMinion)
-						amount: {
-							type: FromMemory
-							memory: mountedComps
-							multiplier: -1
-						}
-					}
-					{
-						type: ModifySiteNumber
-						select: memory(chosenMinion)
-						amount: {
-							type: FromMemory
-							memory: mountedComps
-							multiplier: -1
-						}
-					}
-				]
+				}
+				effect: {
+					type: PreventWound
+					select: memory(woundedMan)
+				}
 			}
 		]
-		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>Skirmish: Exert a ranger to make a minion strength -X and site number +X, where X is the number of mounted companions you can spot.
+		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>Response: If an unbound Man costing X is about to take a wound, hinder X beacons to prevent that wound.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1359,7 +1388,7 @@
 		unique: false
 		side: Free Peoples
 		culture: Gondor
-		twilight: 2
+		twilight: 0
 		type: Event
 		timewords: Response
 		effects: [

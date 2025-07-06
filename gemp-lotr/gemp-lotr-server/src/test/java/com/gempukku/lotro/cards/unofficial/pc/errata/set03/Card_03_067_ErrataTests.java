@@ -1,26 +1,25 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_067_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
-					put("palantir", "53_67");
-					put("uruk1", "1_151");
-					put("uruk2", "1_151");
+					put("card", "53_67");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -32,91 +31,55 @@ public class Card_03_067_ErrataTests
 	public void ThePalantirofOrthancStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 3
-		* Title: *The Palantir of Orthanc
-		* Side: Free Peoples
-		* Culture: Isengard
-		* Twilight Cost: 0
-		* Type: artifact
-		* Subtype: Palantir
-		* Game Text: To play, spot an [isengard] minion. Plays to your support area.
-		* 	<b>Shadow:</b> Spot 2 [isengard] minions and remove (2) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
+		 * Set: 3
+		 * Name: The Palantir of Orthanc
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 0
+		 * Type: Artifact
+		 * Subtype: Palantir
+		 * Game Text: Plays to your support area.
+		* 	<b>Shadow:</b> Exert an [isengard] minion.  The Free Peoples player may place any number of cards from hand on top of their draw deck, then reveals their hand.  For each Free Peoples card revealed, make that minion strength +1 until the regroup phase.  Limit once per phase.
 		*/
 
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl palantir = scn.GetFreepsCard("palantir");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(palantir.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, palantir.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, palantir.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, palantir.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(palantir, Keyword.SUPPORT_AREA));
-		assertTrue(palantir.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
-		assertEquals(0, palantir.getBlueprint().getTwilightCost());
+		assertEquals("The Palantir of Orthanc", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void PalantirRequires1IsengardMinionToPlayBut2ToActivate() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void ThePalantirofOrthancTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		scn.FreepsDrawCards(3);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
-		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
-		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
-		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
-		scn.MoveCardsToHand(palantir, uruk1, uruk2);
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-
-		scn.SetTwilight(20);
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(23, scn.GetTwilight());
-
-		assertFalse(scn.ShadowPlayAvailable(palantir));
-		scn.ShadowPlayCard(uruk1);
-		assertTrue(scn.ShadowPlayAvailable(palantir));
-		scn.ShadowPlayCard(palantir);
-		assertFalse(scn.ShadowActionAvailable(palantir));
-		scn.ShadowPlayCard(uruk2);
-		assertTrue(scn.ShadowActionAvailable(palantir));
-	}
-
-	@Test
-	public void PalantirRemoves2ToRevealCardFromFreepsHandAndPlacesOnDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
-
-		scn.FreepsDrawCards(3);
-
-		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
-		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
-		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
-		scn.MoveMinionsToTable(uruk1, uruk2);
-		scn.MoveCardsToSupportArea(palantir);
-
-		scn.StartGame();
-
-		scn.SetTwilight(20);
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(23, scn.GetTwilight());
-		assertEquals(3, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetFreepsDeckCount());
-
-		scn.ShadowUseCardAction(palantir);
-		assertEquals(21, scn.GetTwilight());
-		assertEquals(1, scn.ShadowGetCardChoiceCount());
-
-		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
-
-		assertEquals(2, scn.GetFreepsHandCount());
-		assertEquals(1, scn.GetFreepsDeckCount());
+		
+		assertFalse(true);
 	}
 }

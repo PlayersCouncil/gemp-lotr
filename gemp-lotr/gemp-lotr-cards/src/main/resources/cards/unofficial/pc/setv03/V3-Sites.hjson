@@ -1,4 +1,49 @@
 {
+	
+	103_130: {
+		cardInfo: {
+			//id: 103_130.0
+			parent: 103_130
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E130.0_card.jpg
+			collInfo: V3_130
+			rarity: _
+		}
+		title: Gates of Isengard
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: Exert
+					select: choose(unbound, Hobbit)
+				}
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: choose(or(pipe, pipeweed))
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: Fellowship: Exert an unbound hobbit to play a pipe or pipeweed from your draw deck (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	103_107: {
 		cardInfo: {

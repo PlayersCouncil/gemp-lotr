@@ -412,7 +412,7 @@ public class ValueResolver {
                         actionContext -> (game, cardAffected) -> {
                             Set<Culture> cultures = new HashSet<>();
                             for (PhysicalCard card : actionContext.getCardsFromMemory(memory)) {
-                                cultures.add(card.getBlueprint().getCulture());
+                                cultures.addAll(game.getModifiersQuerying().getCultures(game, card));
                             }
                             return cultures.size();
                         });

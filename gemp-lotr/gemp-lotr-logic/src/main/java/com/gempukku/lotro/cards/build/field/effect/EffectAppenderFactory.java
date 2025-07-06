@@ -72,6 +72,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("discard", new DiscardFromPlay());
         effectAppenderProducers.put("discardbottomcardsfromdeck", new DiscardBottomCardsFromDeck());
         effectAppenderProducers.put("discardcardatrandomfromhand", new DiscardCardAtRandomFromHand());
+        effectAppenderProducers.put("discardcardsfromdeadpile", new DiscardCardsFromDeadPile());
         effectAppenderProducers.put("discardcardsfromdrawdeck", new DiscardCardsFromDrawDeck());
         effectAppenderProducers.put("discardfromhand", new DiscardFromHand());
         effectAppenderProducers.put("discardstackedcards", new DiscardStackedCards());

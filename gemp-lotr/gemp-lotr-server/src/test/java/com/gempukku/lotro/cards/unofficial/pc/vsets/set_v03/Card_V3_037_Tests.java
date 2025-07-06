@@ -36,7 +36,7 @@ public class Card_V3_037_Tests
 		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 2
+		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
 		 * Game Text: If any number of [gondor] cards are about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder those cards instead. You may add a threat to hinder that Shadow card.
@@ -53,7 +53,7 @@ public class Card_V3_037_Tests
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

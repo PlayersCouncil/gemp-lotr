@@ -39,8 +39,8 @@ public class Card_V3_106_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Fellowship
-		 * Game Text: To play, spot a Hobbit.
-		* 	If you cannot spot more than 4 companions, make the Shadow player exhaust 1 of your characters.  For each exertion made, shuffle a Shadow support card into its owner's draw deck and hinder another Shadow support card.
+		 * Game Text: To play, spot a Hobbit companion.
+		* 	Make the Shadow player exhaust 1 of your characters.  For each exertion made, hinder a Shadow support card; if you cannot spot more than 4 companions, you may instead shuffle it (and all cards stacked on it) into its owner's draw deck.
 		*/
 
 		var scn = GetScenario();

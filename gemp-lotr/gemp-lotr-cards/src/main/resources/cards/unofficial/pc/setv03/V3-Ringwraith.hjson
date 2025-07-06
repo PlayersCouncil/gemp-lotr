@@ -120,7 +120,7 @@
 				cost: [
 					{
 						type: Hinder
-						select: choose(title(Ominous Sky))
+						select: choose(twilight,condition)
 						count: {
 							type: Conditional
 							requires: {
@@ -163,7 +163,87 @@
 				}
 			}
 		]
-		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		gametext: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).<br>Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_129: {
+		cardInfo: {
+			//id: 103_129.0
+			parent: 103_129
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E129.0_card.jpg
+			collInfo: V3_129
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Gloom
+		unique: 2
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(twilight,condition)
+						count: {
+							type: Conditional
+							requires: {
+								type: CantSpot
+								filter: title(Cover of Darkness)
+							}
+							true: 2
+							false: 3
+						}
+					}
+				]
+			}
+			{
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: PutCardsFromDeckIntoHand
+					select: choose(twilight)
+					shuffle: true
+					reveal: true
+					showAll: true
+				}
+			}
+			{
+				type: Activated
+				phase: Regroup
+				cost: {
+					type: Hinder
+					select: choose(twilight)
+				}
+				effect: {
+					type: AddTwilight
+					amount: 1
+				}
+			}
+		]
+		gametext: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).<br>Shadow: Hinder this condition to take a twilight card into hand from your draw deck.<br>Regroup: Hinder a twilight card to add (1).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -552,7 +632,7 @@
 				type: Modifier
 				modifier: {
 					type: CantTakeMoreWoundsThan
-					filter: minion
+					filter: other, minion
 					amount: 1
 				}
 			}
@@ -571,7 +651,7 @@
 				}
 			}
 		]
-		gametext: Lurker.<br>Minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
+		gametext: Lurker.<br>Other minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -957,7 +1037,7 @@
 			rarity: _
 		}
 		title: Ulaire Nertea
-		subtitle: Sanctified for Cruelty
+		subtitle: Sanctified with Cruelty
 		unique: true
 		side: Shadow
 		culture: Wraith

@@ -39,7 +39,8 @@ public class Card_V3_122_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: When you play this possession, you may discard a Free Peoples card from your draw deck.
+		 * Game Text: Pipeweed.
+		* 	When you play this possession, you may discard a Free Peoples card from your draw deck.
 		* 	When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 Free Peoples cards (except events) from your discard pile into your hand.
 		*/
 
@@ -53,6 +54,7 @@ public class Card_V3_122_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}

@@ -40,7 +40,7 @@ public class Card_V3_094_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: To play, spot 2 [sauron] or [ringwraith] cards.
-		* 	Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card.
+		* 	Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site unless you can spot a Free Peoples artifact).
 		*/
 
 		var scn = GetScenario();

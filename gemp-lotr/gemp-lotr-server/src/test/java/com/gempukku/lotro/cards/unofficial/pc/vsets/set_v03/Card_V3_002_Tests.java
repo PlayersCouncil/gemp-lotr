@@ -40,7 +40,7 @@ public class Card_V3_002_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.
-		* 	Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal a companion. 
+		* 	Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal another companion. 
 		*/
 
 		var scn = GetScenario();

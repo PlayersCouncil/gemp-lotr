@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_030_ErrataTests
 {
@@ -32,14 +33,14 @@ public class Card_03_030_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Deep in Thought
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 4
 		 * Type: Event
 		 * Subtype: Maneuver
 		 * Game Text: <b>Spell</b>.
-		* 	Spot Gandalf and 4 twilight tokens to discard a Shadow conditions, then hinder all remaining Shadow conditions.
+		* 	Spot Gandalf and 4 twilight tokens to discard a Shadow condition. Hinder all other Shadow conditions.
 		*/
 
 		var scn = GetScenario();
@@ -78,8 +79,7 @@ public class Card_03_030_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

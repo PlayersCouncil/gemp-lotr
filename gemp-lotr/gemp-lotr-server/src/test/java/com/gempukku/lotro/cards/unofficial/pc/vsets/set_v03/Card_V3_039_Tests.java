@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.PossessionClass;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_039_Tests
 {
@@ -45,9 +43,8 @@ public class Card_V3_039_Tests
 		 * Game Text: Bearer must be a Southron.  Bearer is <b>fierce</b>.
 		* 	Unmounted minions cannot be assigned
 		* 	to skirmishes.
-		* 	Bearer gains the <b>ambush</b> and strength of
-		* 	all unmounted Southrons.
-		* 	While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
+		* 	Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.
+		* 	While you can spot 6 Southrons, bearer gains <b>relentless</b> <i>(they participate in an additional round of skirmishes after fierce)</i>.
 		*/
 
 		var scn = GetScenario();
@@ -62,7 +59,6 @@ public class Card_V3_039_Tests
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
 		assertEquals(8, card.getBlueprint().getTwilightCost());
-		assertEquals(0, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 	}
 

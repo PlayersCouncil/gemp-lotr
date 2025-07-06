@@ -39,8 +39,9 @@ public class Card_V3_018_Tests
 		 * Twilight Cost: 3
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: Each time a Wraith is played, heal a companion.
+		 * Game Text: When you play this, spot a [gondor] Wraith to remove a threat.
 		* 	Each time a [gondor] Wraith takes a threat wound, wound a minion.
+		* 	Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
 		*/
 
 		var scn = GetScenario();

@@ -44,7 +44,7 @@ public class Card_V3_010_Tests
 		 * Site Number: 8
 		 * Game Text: Fierce.  Enduring.
 		* 	Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.
-		* 	Skirmish: If Gollum is skrimishing, exert Gollum and Shelob to hinder a character he is skirmishing.
+		* 	Skirmish: If Gollum is skirmishing, exert Gollum and Shelob to hinder a character he is skirmishing.
 		*/
 
 		var scn = GetScenario();

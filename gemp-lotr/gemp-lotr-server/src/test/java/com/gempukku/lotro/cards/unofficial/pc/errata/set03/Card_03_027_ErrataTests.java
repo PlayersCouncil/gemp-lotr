@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_027_ErrataTests
 {
@@ -32,7 +33,7 @@ public class Card_03_027_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Vilya
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 0
@@ -78,8 +79,7 @@ public class Card_03_027_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(0, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

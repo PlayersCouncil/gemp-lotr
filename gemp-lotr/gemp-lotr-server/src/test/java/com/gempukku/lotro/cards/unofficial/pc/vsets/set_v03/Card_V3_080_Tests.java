@@ -39,8 +39,8 @@ public class Card_V3_080_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver, Skirmish
-		 * Game Text: Maneuver: If you cannot spot a mounted minion, heal a mounted [rohan] companion.
-		* 	Skirmish: Exert Theoden or Eomer to exert a mounted minion twice.  You may then transfer a mount on that minion to an unmounted minion skirmishing a [rohan] companion.
+		 * Game Text: Maneuver: Heal a mounted companion.
+		* 	Skirmish: Exert Theoden or Eomer to exert a mounted minion twice.  You may then transfer a mount on that minion to an unmounted minion skirmishing or assigned to skirmish a [rohan] companion.
 		*/
 
 		var scn = GetScenario();

@@ -27,12 +27,8 @@
 				type: ExtraCost
 				cost: [
 					{
-						type: Exert
-						select: choose(Man)
-					}
-					{
 						type: Hinder
-						select: choose(title(War Beacon))
+						select: choose(beacon)
 						count: {
 							type: Conditional
 							requires: {
@@ -46,98 +42,31 @@
 				]
 			}
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: your, Man
-					amount: 1
-					requires: [
-						{
-							type: CanSpot
-							filter: Rohan,companion
-						}
-						{
-							type: CanSpot
-							filter: Gondor,companion
-						}
-					]
-				}
-			}
-		]
-		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a [rohan] and [gondor] companion, your Men are strength +1.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_33: {
-		cardInfo: {
-			//id: 103_33.0
-			parent: 103_33
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E033.0_card.jpg
-			collInfo: V3_33
-			rarity: _
-		}
-		title: Northern Signal-fire
-		subtitle: Flame of Nardol
-		unique: 2
-		side: Free Peoples
-		culture: Rohan
-		twilight: 2
-		type: Possession
-		keywords: [
-			Beacon
-			Support Area
-		]
-		effects: [
-			{
-				type: ExtraCost
+				type: Activated
+				phase: Maneuver
 				cost: [
 					{
-						type: Exert
-						select: choose(Man)
+						type: Hinder
+						select: self
 					}
 					{
-						type: Hinder
-						select: choose(title(War Beacon))
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						type: Exert
+						select: choose(unbound, Man)
+						memorize: exertedMan
 					}
 				]
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: StartOfSkirmishInvolving
-					filter: knight
-				}
-				requires: {
-					type: CanSpot
-					filter: mounted, Rohan, companion
-				}
 				effect: {
-					type: Exert
-					select: all(minion,InSkirmish)
+					type: AddModifier
+					until: start(Regroup)
+					modifier: {
+						type: AddKeywordFromCards
+						filter: your, Man
+						from: memory(exertedMan)
+					}
 				}
 			}
 		]
-		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a mounted [rohan] companion, at the start of each skirmish involving a knight, each minion skirmishing that knight must exert.
+		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man to make each of your Men gain each of the unloaded keywords on that unbound Man until the regroup phase.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -175,12 +104,8 @@
 				type: ExtraCost
 				cost: [
 					{
-						type: Exert
-						select: choose(Man)
-					}
-					{
 						type: Hinder
-						select: choose(title(War Beacon))
+						select: choose(beacon)
 						count: {
 							type: Conditional
 							requires: {
@@ -194,29 +119,42 @@
 				]
 			}
 			{
-				type: Modifier
-				modifier: {
-					type: CantTakeMoreWoundsThan
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: mount
+					player: you
+					on: your, Man
+					memorize: playedMount
+				}
+				cost: {
+					type: AddTwilight
 					amount: 1
-					filter: your, unbound, Man
-					requires: [
-						{
-							type: CanSpot
-							filter: ranger
-						}
-						{
-							type: CanSpot
-							filter: knight
-						}
-						{
-							type: CanSpot
-							filter: valiant, companion
-						}
-					]
+				}
+				effect: {
+					type: Heal
+					select: choose(HasAttached(memory(playedMount)))
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: Exerted
+					filter: minion
+					source: mount, AttachedTo(your, Man)
+				}
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: Exert
+					select: memory(exertedMinion)
 				}
 			}
 		]
-		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a ranger, knight, and valiant companion, your unbound Men cannot take more than 1 wound per phase.
+		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>Each time you play a mount on your Man, you may add (1) to heal that Man.<br>Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -270,33 +208,35 @@
 			{
 				type: Modifier
 				modifier: {
-					type: CanBearExtraItems
-					filter: mounted, Rohan, companion
-					itemclass: HAND_WEAPON
+					type: AddCulture
+					filter: your, Gondor, Man
+					culture: Rohan
 				}
 			}
 			
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: StartOfSkirmishInvolving
-					filter: knight
-				}
-				requires: {
-					type: canSpot
-					filter: minion,inSkirmishAgainst(knight)
-				}
-				effect: {
-					type: RemoveKeyword
-					select: all(minion,inSkirmishAgainst(knight))
-					keyword: [
-						fierce
-						relentless
-					]
-					until: regroup
+				type: Modifier
+				modifier: {
+					type: AddCulture
+					filter: your, Rohan, Man
+					culture: Gondor
 				}
 			}
+			
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Hinder
+					select: choose(beacon)
+				}
+				effect: {
+					type: ModifyStrength
+					amount: 1
+					select: choose(your,Man)
+				}
+			}
+
 		]
 		gametext: Beacon. To play, hinder 2 copies of Northern Signal-fire.<br>This condition cannot be discarded.<br>While you can spot an unbound [gondor] Man and a mounted [Rohan] Man, mounted [Rohan] companions can bear 1 additional hand weapon and minions skirmishing knights lose <b>fierce</b> until the regroup phase.
 		lore: ""

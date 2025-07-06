@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_10_011_ErrataTests
 {
@@ -32,7 +33,7 @@ public class Card_10_011_ErrataTests
 		/**
 		 * Set: 10
 		 * Name: Galadriel, Lady Redeemed
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 3
@@ -41,7 +42,8 @@ public class Card_10_011_ErrataTests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Resistance: 6
-		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
+		 * Game Text: When Galadriel is in your starting fellowship, her twilight cost is -3.
+		* 	<b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
 		*/
 
 		var scn = GetScenario();
@@ -82,8 +84,7 @@ public class Card_10_011_ErrataTests
 		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

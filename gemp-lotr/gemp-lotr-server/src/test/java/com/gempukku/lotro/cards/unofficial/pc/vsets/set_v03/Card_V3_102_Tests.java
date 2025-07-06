@@ -43,8 +43,7 @@ public class Card_V3_102_Tests
 		 * Vitality: 4
 		 * Resistance: 5
 		 * Signet: Aragorn
-		 * Game Text: Ring-bound.
-		* 	If you cannot spot more than 4 companions at the start of the maneuver phase, choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.
+		 * Game Text: Ring-bound. If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.
 		* 	Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
 		*/
 

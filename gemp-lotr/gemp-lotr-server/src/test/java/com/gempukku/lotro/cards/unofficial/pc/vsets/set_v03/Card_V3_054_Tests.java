@@ -41,7 +41,7 @@ public class Card_V3_054_Tests
 		 * Subtype: Support area
 		 * Strength: -3
 		 * Game Text: Limit 1 per bearer.  Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.
-		* 	Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to a companion.
+		* 	Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to an unbound companion.
 		*/
 
 		var scn = GetScenario();

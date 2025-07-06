@@ -73,93 +73,34 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		timewords: Maneuver
-		effects: {
-			type: event
-			requires: {
-				type: CanSpot
-				filter: dwarf,damage,CanExert,MinVitality(3)
-			}
-			cost: [
-				{
-					type: ChooseActiveCards
+		timewords: Response
+		effects: [
+			{
+				type: ResponseEvent
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: exert
 					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					times: 2
 					memorize: exertedDwarf
-					text: Choose a Dwarf to exert twice
-				}
-				{
-					type: MemorizeNumber
-					amount: {
-						type: forEachKeywordOnCardInMemory
-						memory: exertedDwarf
-						keyword: damage
-						limit: {
-							type: ForEachYouCanSpot
-							filter: culture(dwarven), companion
+				},
+				effect: [
+					{
+						type: Hinder
+						player: shadow
+						select: choose(side(shadow))
+						count: {
+							type: forEachKeywordOnCardInMemory
+							memory: exertedDwarf
+							keyword: damage
 						}
 					}
-					memory: damageAmount
-				}
-			],
-			effect: {
-					type: CostToEffect
-					cost: {
-						type: exert
-						select: memory(exertedDwarf)
-						times: 2
-						memorize: exertedDwarf
-						ignoreCostCheckFailure: true
-					}
-					effect: {
-					type: Repeat
-					times: memory(damageAmount)
-					effect: [
-						{
-							type: ChooseActiveCards
-							text: Choose Shadow card to hinder or exert
-							count: 1
-							player: Shadow
-							select: choose(side(shadow),hinderable)
-							memorize: chosenCard
-						}
-						{
-							type: If
-							check: {
-								type: MemoryMatches
-								memory: chosenCard
-								filter: canExert, minion
-							}
-							true: {
-								type: Choice
-								player: Shadow
-								texts: [
-									Exert {chosenCard}
-									Hinder {chosenCard}
-								]
-								effects: [
-									{
-										type: Exert
-										player: Shadow
-										select: memory(chosenCard)
-									}
-									{
-										type: Hinder
-										player: Shadow
-										select: memory(chosenCard)
-									}
-								]
-							}
-							false: {
-								type: Hinder
-								player: Shadow
-								select: memory(chosenCard)
-							}
-						}
-					]
-				}
+				]
 			}
-		}
-		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder or exert X Shadow cards. X is limited to the number of [dwarven] companions you can spot.
+		]
+		gametext: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder X Shadow cards.
 		lore: "...the Dark Door gaped before them like the mouth of night."
 		promotext: ""
 		alts: {

@@ -43,8 +43,8 @@ public class Card_V3_042_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: <b>Corsair.</b>
-		* 	At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of items on a companion in that skirmish.
-		* 	This minion is <b>damage +1</b> for each Free Peoples item on each character in its skrimish.
+		* 	At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of Free Peoples items on a character in that skirmish.
+		* 	This minion is <b>damage +1</b> for each Free Peoples item on each character in its skirmish.
 		*/
 
 		var scn = GetScenario();

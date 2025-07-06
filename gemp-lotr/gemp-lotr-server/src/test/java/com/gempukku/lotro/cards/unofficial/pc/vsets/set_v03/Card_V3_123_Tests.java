@@ -37,10 +37,11 @@ public class Card_V3_123_Tests
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 1
-		 * Type: Condition
+		 * Type: Possession
 		 * Subtype: 
 		 * Strength: 1
-		 * Game Text: Bearer must be an unbound Hobbit. Limit 1 per bearer.
+		 * Game Text: Pipeweed.
+		* 	Bearer must be an unbound companion bearing a pipe. 
 		* 	Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
 		*/
 
@@ -53,7 +54,8 @@ public class Card_V3_123_Tests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
 	}

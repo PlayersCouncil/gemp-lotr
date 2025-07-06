@@ -1,0 +1,67 @@
+{
+
+	59_46: {
+		cardInfo: {
+			//id: 59_46.1
+			parent: 9_46
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN09E046.1_card.jpg
+			collInfo: 9R46
+			rarity: R
+		}
+		title: The Red Arrow
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Artifact
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: Man
+					memorize: playedMan
+				}
+				effect: {
+					type: exert
+					select: choose(Man, not(CultureFromMemory(playedMan)))
+				}
+			}
+			{
+				type: Activated
+				phase: Regroup
+				cost: {
+					type: Exert
+					count: 2
+					select: choose(your, Man)
+				}
+				effect: [
+					{
+						type: DiscardCardsFromDeadPile
+						select: choose(Man)
+					}
+					{
+						type: RemoveFromTheGame
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Each time you play a Man, exert a Man of a different culture to play a possession from your discard pile on the first.<br>Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
+		lore: "'The Red Arrow has not been seen in the Mark in all my years! Has it indeed come to that?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

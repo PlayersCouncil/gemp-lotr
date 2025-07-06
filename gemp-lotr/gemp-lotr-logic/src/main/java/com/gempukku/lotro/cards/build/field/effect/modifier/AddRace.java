@@ -16,8 +16,8 @@ public class AddRace implements ModifierSourceProducer {
 
 		final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
-		final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
-		final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
+		final JSONObject[] requirementsArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+		final Requirement[] requirements = environment.getRequirementFactory().getRequirements(requirementsArray, environment);
 
 		return actionContext ->
 				new IsAdditionalRaceModifier(actionContext.getSource(),

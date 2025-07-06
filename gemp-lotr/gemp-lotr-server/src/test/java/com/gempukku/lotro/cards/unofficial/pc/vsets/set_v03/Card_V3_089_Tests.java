@@ -39,7 +39,7 @@ public class Card_V3_089_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. Each time you play an Orc, spot Cover of Darkness to reinforce a Shadow token.
+		 * Game Text: Twilight. Each time you play an Orc, you may hinder this to add (1).
 		* 	<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
 		*/
 

@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_050_Tests
 {
@@ -41,7 +39,7 @@ public class Card_V3_050_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Spot 3 unbound companions.  The Free Peoples player then spots 3 Southrons.  All other characters are hindered.
+		 * Game Text: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
 		*/
 
 		var scn = GetScenario();

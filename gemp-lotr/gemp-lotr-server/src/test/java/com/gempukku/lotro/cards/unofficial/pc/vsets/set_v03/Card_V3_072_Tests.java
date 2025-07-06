@@ -32,7 +32,7 @@ public class Card_V3_072_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Nertea, Sanctified for Cruelty
+		 * Name: Ulaire Nertea, Sanctified with Cruelty
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
@@ -50,7 +50,7 @@ public class Card_V3_072_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Ulaire Nertea", card.getBlueprint().getTitle());
-		assertEquals("Sanctified for Cruelty", card.getBlueprint().getSubtitle());
+		assertEquals("Sanctified with Cruelty", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());

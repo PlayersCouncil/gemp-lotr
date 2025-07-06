@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.PossessionClass;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_001_Tests
 {
@@ -38,12 +36,12 @@ public class Card_V3_001_Tests
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Elven
-		 * Twilight Cost: 0
+		 * Twilight Cost: 1
 		 * Type: Artifact
 		 * Subtype: Phial
 		 * Vitality: 1
-		 * Game Text: Bearer must be the Ring-bearer. Discard this if you can spot more than 4 companions.
-		* 	Maneuver: Add a burden and hinder this to hinder a support Shadow card and all cards sharing a title with that card.
+		 * Game Text: Bearer must be a Ring-bound Hobbit. Discard this if you can spot more than 4 companions.
+		* 	Maneuver: Add 2 burdens to hinder all Shadow support cards with a title you spot.
 		* 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		*/
 

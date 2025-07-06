@@ -39,8 +39,7 @@ public class Card_V3_020_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, spot 2 Wraiths.
-		* 	The threat limit is +2.
+		 * Game Text: While you can spot 2 [gondor] Wraiths, the threat limit is +2.
 		* 	While you can spot more threats than companions, each Wraith is strength +1.
 		* 	Each time this condition is hindered or discarded, remove a threat.
 		*/

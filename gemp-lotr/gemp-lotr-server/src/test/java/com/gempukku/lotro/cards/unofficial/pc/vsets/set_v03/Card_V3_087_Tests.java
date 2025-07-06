@@ -42,7 +42,7 @@ public class Card_V3_087_Tests
 		 * Game Text: Twilight. To play, hinder 2 copies of Cover of Darkness.
 		* 	This cannot be discarded.
 		* 	Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. 
-		* 	Shadow: Remove X [sauron] tokens from your cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		* 	Shadow: Hinder X of your Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
 		*/
 
 		var scn = GetScenario();

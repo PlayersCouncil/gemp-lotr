@@ -486,9 +486,12 @@
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 1
-		type: Condition
+		type: Possession
 		strength: 1
 		target: unbound,companion,HasAttached(pipe)
+		keywords: [
+			Pipeweed
+		]
 		effects: [
 			{
 				type: Trigger

@@ -41,7 +41,7 @@ public class Card_V3_022_Tests
 		 * Subtype: Support area
 		 * Strength: -3
 		 * Game Text: Fortification.
-		* 	Maneuver: Exert and hinder 2 knights to transfer this from your support area to a minion.  Hinder that minion.
+		* 	Maneuver: If this is in your support area, exert and hinder 2 knights to transfer this to a minion.  Hinder that minion.
 		*/
 
 		var scn = GetScenario();

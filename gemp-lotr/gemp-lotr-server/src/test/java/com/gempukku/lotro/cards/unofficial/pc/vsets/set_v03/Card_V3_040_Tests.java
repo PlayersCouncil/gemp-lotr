@@ -43,7 +43,7 @@ public class Card_V3_040_Tests
 		 * Subtype: Support area
 		 * Strength: 6
 		 * Vitality: 3
-		 * Game Text: Regroup: Stack a Southron from play here.
+		 * Game Text: Regroup: Stack a Southron Man here.
 		* 	Maneuver: Spot a mounted Southron and remove (4) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
 		*/
 

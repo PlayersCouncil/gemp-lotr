@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_034_Tests
 {
@@ -34,15 +32,15 @@ public class Card_V3_034_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Beacon of Amon Din
+		 * Name: Northern Signal-fire, Flame of Amon Din
 		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).
-		* 	Skirmish: Exert a ranger to make a minion strength -X and site number +X, where X is the number of mounted companions you can spot.
+		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
+		* 	Response: If an unbound Man costing X is about to take a wound, hinder X beacons to prevent that wound.
 		*/
 
 		var scn = GetScenario();
