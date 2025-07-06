@@ -581,19 +581,6 @@
 						}
 						until: end(regroup)
 					}
-					
-					{
-						type: AddTrigger
-						trigger: {
-							type: EndOfPhase
-							phase: Regroup
-						}
-						until: EndOfTurn
-						effect: {
-							type: Discard
-							select: self
-						}
-					}
 				]
 			}
 		]
