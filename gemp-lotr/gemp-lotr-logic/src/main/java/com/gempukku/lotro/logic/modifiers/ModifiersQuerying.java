@@ -75,6 +75,8 @@ public interface ModifiersQuerying {
     boolean isCardType(LotroGame game, PhysicalCard card, CardType cardType);
     List<Race> getRaces(LotroGame game, PhysicalCard card);
     boolean isRace(LotroGame game, PhysicalCard card, Race race);
+    List<Culture> getCultures(LotroGame game, PhysicalCard card);
+    boolean isCulture(LotroGame game, PhysicalCard card, Culture culture);
 
     // Wounds/exertions
     boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard card, int woundsToTake);

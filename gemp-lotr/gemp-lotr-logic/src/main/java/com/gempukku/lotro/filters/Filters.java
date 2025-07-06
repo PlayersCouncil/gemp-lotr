@@ -642,7 +642,7 @@ public class Filters {
     public static Filter uncontrolledSite = (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() == null;
 
     private static Filter culture(final Culture culture) {
-        return (game, physicalCard) -> (physicalCard.getBlueprint().getCulture() == culture);
+        return (game, card) -> (game.getModifiersQuerying().isCulture(game, card, culture));
     }
 
     private static Filter keyword(final Keyword keyword) {

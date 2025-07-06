@@ -2,17 +2,17 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.common.Race;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.json.simple.JSONObject;
 
-public class AddRace implements ModifierSourceProducer {
+public class AddCulture implements ModifierSourceProducer {
 	@Override
 	public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-		FieldUtils.validateAllowedFields(object, "filter", "race", "requires");
+		FieldUtils.validateAllowedFields(object, "filter", "culture", "requires");
 
 		final String filter = FieldUtils.getString(object.get("filter"), "filter");
-		final Race race = FieldUtils.getEnum(Race.class, object.get("race"), "race");
+		final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
 
 		final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
@@ -20,9 +20,9 @@ public class AddRace implements ModifierSourceProducer {
 		final Requirement[] requirements = environment.getRequirementFactory().getRequirements(requirementsArray, environment);
 
 		return actionContext ->
-				new IsAdditionalRaceModifier(actionContext.getSource(),
+				new IsAdditionalCultureModifier(actionContext.getSource(),
 						filterableSource.getFilterable(actionContext),
 						RequirementCondition.createCondition(requirements, actionContext),
-						race);
+						culture);
 	}
 }

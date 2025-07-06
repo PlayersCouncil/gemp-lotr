@@ -24,6 +24,6 @@ public class AllyParticipatesInArcheryFireAndSkirmishesModifier extends Abstract
     public boolean isAllyParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card) {
         boolean unhasty = game.getModifiersQuerying().hasKeyword(game, card, Keyword.UNHASTY);
         return sidePlayer == Side.SHADOW
-                || !unhasty || _source.getBlueprint().getCulture() == Culture.GANDALF;
+                || !unhasty || game.getModifiersQuerying().isCulture(game, _source, Culture.GANDALF);
     }
 }

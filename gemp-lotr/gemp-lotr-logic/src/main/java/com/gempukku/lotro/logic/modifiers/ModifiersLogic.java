@@ -609,6 +609,27 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public List<Culture> getCultures(LotroGame game, PhysicalCard card) {
+        var cultures = new ArrayList<Culture>();
+        if(card.getBlueprint().getCulture() != null) {
+            cultures.add(card.getBlueprint().getCulture());
+        }
+
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ADDITIONAL_CULTURE, card)) {
+            var cultureMod = (IsAdditionalCultureModifier)modifier;
+            cultures.add(cultureMod.getCulture());
+        }
+
+        return cultures;
+    }
+
+    @Override
+    public boolean isCulture(LotroGame game, PhysicalCard card, Culture culture) {
+        var cultures = getCultures(game, card);
+        return cultures.contains(culture);
+    }
+
+    @Override
     public int getWoundsTakenInCurrentPhase(PhysicalCard card) {
         Integer wounds = _woundsPerPhaseMap.get(card.getCardId());
         if (wounds == null)
@@ -1110,9 +1131,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public int getNumberOfSpottableFPCultures(LotroGame game, String playerId) {
         Set<Culture> spottableCulturesBasedOnCards = new HashSet<>();
         for (PhysicalCard spottableFPCard : Filters.filterActive(game, Side.FREE_PEOPLE, Filters.spottable)) {
-            final Culture fpCulture = spottableFPCard.getBlueprint().getCulture();
-            if (fpCulture != null)
-                spottableCulturesBasedOnCards.add(fpCulture);
+            spottableCulturesBasedOnCards.addAll(game.getModifiersQuerying().getCultures(game, spottableFPCard));
         }
 
         int result = 0;
@@ -1121,8 +1140,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 result++;
         }
 
-        for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER))
+        for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER)) {
             result += modifier.getFPCulturesSpotCountModifier(game, playerId);
+        }
 
         return result;
     }
@@ -1148,10 +1168,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     @Override
     public int getNumberOfSpottableShadowCultures(LotroGame game, String playerId) {
         Set<Culture> spottableCulturesBasedOnCards = new HashSet<>();
-        for (PhysicalCard spottableFPCard : Filters.filterActive(game, Side.SHADOW, Filters.spottable)) {
-            final Culture fpCulture = spottableFPCard.getBlueprint().getCulture();
-            if (fpCulture != null)
-                spottableCulturesBasedOnCards.add(fpCulture);
+        for (PhysicalCard spottableShadowCard : Filters.filterActive(game, Side.SHADOW, Filters.spottable)) {
+            spottableCulturesBasedOnCards.addAll(game.getModifiersQuerying().getCultures(game, spottableShadowCard));
         }
 
         int result = 0;

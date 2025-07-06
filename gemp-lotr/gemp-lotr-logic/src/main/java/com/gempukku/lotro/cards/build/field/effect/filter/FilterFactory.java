@@ -180,10 +180,10 @@ public class FilterFactory {
                     return lostSkirmish.getLoser();
                 });
         simpleFilters.put("storedculture",
-                (actionContext) -> (Filter) (game, physicalCard) -> {
+                (actionContext) -> (Filter) (game, card) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
                     if (data != null) {
-                        return physicalCard.getBlueprint().getCulture() == Culture.findCultureByHumanReadable(data.getHumanReadable());
+                        return game.getModifiersQuerying().isCulture(game, card, Culture.findCultureByHumanReadable(data.getHumanReadable()));
                     }
                     return false;
                 });
@@ -303,8 +303,9 @@ public class FilterFactory {
         });
         parameterFilters.put("culturefrommemory", ((parameter, environment) -> actionContext -> {
             Set<Culture> cultures = new HashSet<>();
-            for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter)) {
-                cultures.add(physicalCard.getBlueprint().getCulture());
+            var game = actionContext.getGame();
+            for (PhysicalCard card : actionContext.getCardsFromMemory(parameter)) {
+                cultures.addAll(game.getModifiersQuerying().getCultures(game, card));
             }
             return Filters.or(cultures.toArray(new Culture[0]));
         }));
