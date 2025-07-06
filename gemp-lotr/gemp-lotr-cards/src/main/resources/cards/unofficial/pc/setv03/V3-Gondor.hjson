@@ -116,9 +116,25 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: {
-						type: ForEachCulture
-						filter: any
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: other, Rohan, Man
+						count: 2
+					}
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: other, Gondor, Man
+						count: 2
 					}
 				}
 			}
@@ -150,21 +166,8 @@
 					]
 				}
 			}
-			{
-				type: Activated
-				phase: Fellowship
-				cost: {
-					type: Exert
-					select: choose(Man)
-					memorize: exertedMan
-				}
-				effect: {
-					type: Heal
-					select: choose(unbound,Man,not(memory(exertedMan)))
-				}
-			}
 		]
-		gametext: Aragorn is strength +1 for each culture you can spot.<br>Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.<br>Fellowship: Exert a Man to heal an unbound Man.
+		gametext: While you can spot 2 [rohan] Men, Aragorn is strength +2.\While you can spot 2 [Gondor] Men, Aragorn is strength +2.\Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -22,19 +22,9 @@
 			{
 				type: ExtraCost
 				cost: {
-					type: If
-					check: {
-						type: CanSpot
-						filter: title(Smeagol)
-					}
-					true: {
-						type: Spot
-						filter: title(Smeagol)
-					}
-					false: {
-						type: Exert
-						select: choose(Shire, companion)
-					}
+					type: Spot
+					filter: Shire, companion
+					count: 2
 				}
 			}
 			{
@@ -64,7 +54,7 @@
 				}
 			}
 		]
-		gametext: To play, exert a [shire] companion (or spot Smeagol).<br>Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.<br>Each time Shelob loses a skirmish, kill Gollum.
+		gametext: To play, spot 2 [shire] companions.<br>Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.<br>Each time Shelob loses a skirmish, kill Gollum.
 		lore: ""
 		promotext: ""
 		alts: {

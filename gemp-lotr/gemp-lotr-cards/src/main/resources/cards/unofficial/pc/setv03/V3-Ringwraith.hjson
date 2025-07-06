@@ -632,7 +632,7 @@
 				type: Modifier
 				modifier: {
 					type: CantTakeMoreWoundsThan
-					filter: minion
+					filter: other, minion
 					amount: 1
 				}
 			}
@@ -651,7 +651,7 @@
 				}
 			}
 		]
-		gametext: Lurker.<br>Minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
+		gametext: Lurker.<br>Other minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
 		lore: ""
 		promotext: ""
 		alts: {
