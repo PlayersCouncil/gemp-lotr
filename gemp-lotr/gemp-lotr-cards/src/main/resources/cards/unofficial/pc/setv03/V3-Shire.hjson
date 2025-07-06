@@ -464,6 +464,16 @@
 					}
 				]
 			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
 		]
 		gametext: Ring-bound. If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.\Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
 		lore: ""
