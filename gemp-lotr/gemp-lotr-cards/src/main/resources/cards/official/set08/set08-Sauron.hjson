@@ -31,7 +31,7 @@
 						type: removeBurdens
 						ignoreCostCheckFailure: true
 						amount: {
-							type: fromMemory
+							type: TwilightCostInMemory
 							memory: chosenCompanion
 						}
 					}
