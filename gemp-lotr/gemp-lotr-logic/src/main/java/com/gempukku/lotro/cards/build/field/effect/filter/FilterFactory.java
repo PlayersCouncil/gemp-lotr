@@ -630,6 +630,7 @@ public class FilterFactory {
                         titles.add(physicalCard.getBlueprint().getSanitizedTitle());
                     return (Filter) (game, physicalCard) -> titles.contains(physicalCard.getBlueprint().getSanitizedTitle());
                 });
+        parameterFilters.put("titlefrommemory", parameterFilters.get("namefrommemory"));
         parameterFilters.put("nameinstackedon",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

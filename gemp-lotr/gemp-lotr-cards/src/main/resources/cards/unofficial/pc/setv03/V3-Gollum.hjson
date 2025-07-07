@@ -81,7 +81,7 @@
 		side: Shadow
 		culture: Gollum
 		twilight: 3
-		type: Artifact
+		type: Possession
 		keywords: Support Area
 		effects: [
 			{
@@ -229,8 +229,26 @@
 		culture: Gollum
 		twilight: 2
 		type: Possession
+		strength: -1
 		keywords: Support Area
 		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: Exerted
+						filter: bearer
+					}
+				]
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: -1
+					until: start(regroup)
+				}
+			}
+			
 			{
 				type: Trigger
 				optional: false
@@ -240,33 +258,13 @@
 				}
 				trigger: [
 					{
-						type: UsesSpecialAbility
-						player: Free Peoples
-					}
-					{
 						type: Played
-						player: Free Peoples
 						filter: event
 					}
 				]
 				effect: {
-					type: Choice
-					player: Free Peoples
-					texts: [
-						Exert {bearer}
-						Make {bearer} strength -1
-					]
-					effects: [
-						{
-							type: Exert
-							select: bearer
-						}
-						{
-							type: ModifyStrength
-							select: bearer
-							amount: -1
-						}
-					]
+					type: Exert
+					select: bearer
 				}
 			}
 			
@@ -275,7 +273,7 @@
 				phase: Skirmish
 				cost: {
 					type: Hinder
-					select: choose(your, Gollum)
+					select: choose(your, culture(Gollum))
 				}
 				effect: {
 					type: transfer
@@ -322,45 +320,48 @@
 				type: event
 				effect: [
 					{
-						type: ChooseActiveCards
-						select: choose(title(Gollum))
-						text: Choose a Gollum to restore
-						hindered: true
-						memorize: activeGollum
+						type: Restore
+						select: choose(culture(Gollum), minion)
 					}
 					{
-						type: Restore
-						select: memory(activeGollum)
+						type: Memorize
+						filter: culture(Gollum), minion
+						memory: gollumMinionsInPlay
 					}
 					{
 						type: Optional
-						text: Would you like to remove a threat to replace Gollum with another in your discard pile?
+						text: Would you like to remove a threat to replace your {Gollum} minion with another from your discard pile?
 						requires: [
 							{
-								type: CanSpot
-								filter: title(Gollum)
-							}
-							{
 								type: HasCardInDiscard
-								filter: title(Gollum), not(SubtitleFromMemory(activeGollum))
+								ignoreCostCheckFailure: true
+								filter: TitleFromMemory(gollumMinionsInPlay), not(SubtitleFromMemory(gollumMinionsInPlay))
 							}
 						]
-						cost: {
-							type: RemoveThreats
-							amount: 1
-						}
+						cost: [
+							{
+								type: RemoveThreats
+								amount: 1
+							}
+							{
+								type: ChooseActiveCards
+								select: choose(culture(Gollum), minion)
+								memorize: chosenMinion
+								text: Choose a {Gollum} minion to replace
+							}
+						]
 						effect: [
 							{
 								type: ReplaceCardInPlayWithCardInDiscard
-								selectInPlay: memory(activeGollum)
-								selectInDiscard: choose(title(Gollum), not(SubtitleFromMemory(activeGollum)))
+								selectInPlay: memory(chosenMinion)
+								selectInDiscard: choose(TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
 							}
 						]
 					}
 				]
 			}
 		]
-		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Gollum.  Then you may spot Gollum and remove a threat to replace him with another Gollum from your discard pile (keep all tokens and attached cards).
+		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore your [gollum] minion.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and attached cards).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -470,7 +471,7 @@
 				type: Trigger
 				optional: true
 				trigger: {
-					type: AssignedToSkirmish
+					type: LosesSkirmish
 					filter: title(Shelob)
 				}
 				effect: {
@@ -484,15 +485,20 @@
 					type: WinsSkirmish
 					filter: title(Shelob)
 				}
+				requires: [
+					{
+						type: IsGreaterThanOrEqual
+						firstNumber: {
+							type: forEachStacked
+							filter: minion
+							on: culture(Gollum),item
+						}
+						secondNumber: 4
+					}
+				]
 				cost: [
 					{
-						type: DiscardStackedCards
-						on: Gollum, item
-						select: choose(minion)
-						count: 3
-					}
-					{
-						type: Discard
+						type: Hinder
 						select: self
 					}
 				]
@@ -507,8 +513,7 @@
 				]
 			}
 		]
-		gametext: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.\Response: If Shelob wins a skirmish, discard this condition and 3 minions stacked on [gollum] items to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skrimishes after fierce)</i>. 
-
+		gametext: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.\Response: If Shelob wins a skirmish, spot\4 minions stacked on [gollum] items and hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skirmishes after fierce)</i>. 
 		lore: ""
 		promotext: ""
 		alts: {

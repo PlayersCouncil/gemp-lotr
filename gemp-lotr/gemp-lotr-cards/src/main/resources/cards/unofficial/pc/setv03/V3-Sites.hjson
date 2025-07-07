@@ -22,6 +22,7 @@
 			{
 				type: Activated
 				phase: Fellowship
+				limitPerPhase: 1
 				cost: {
 					type: Exert
 					select: choose(unbound, Hobbit)
@@ -67,6 +68,7 @@
 			{
 				type: Trigger
 				optional: true
+				player: Shadow
 				trigger: {
 					type: StartOfPhase
 					player: Shadow
@@ -464,9 +466,9 @@
 			{
 				type: Trigger
 				optional: true
+				player: Shadow
 				trigger: {
 					type: StartOfPhase
-					player: Shadow
 					#Phase intentionally left blank as we want to trigger in every phase
 				}
 				effect: {
