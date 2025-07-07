@@ -1403,6 +1403,13 @@
 						type: Restore
 						select: all(memory(restoredCards))
 					}
+					{
+						type: AddTwilight
+						amount: {
+							type: ForEachInMemory
+							memory: restoredCards
+						}
+					}
 				]
 			}
 		]
