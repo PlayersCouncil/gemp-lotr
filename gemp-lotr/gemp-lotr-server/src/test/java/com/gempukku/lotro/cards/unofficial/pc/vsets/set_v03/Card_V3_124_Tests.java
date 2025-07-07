@@ -109,7 +109,8 @@ public class Card_V3_124_Tests
 
 		scn.FreepsChooseToStay();
 
-		assertInZone(Zone.DISCARD, wizardspipe);
+		//Previous version used to self-discard
+		assertInZone(Zone.ATTACHED, wizardspipe);
 	}
 
 	@Test

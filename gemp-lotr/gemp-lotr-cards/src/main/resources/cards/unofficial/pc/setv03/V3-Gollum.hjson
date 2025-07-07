@@ -324,14 +324,14 @@
 						select: choose(culture(Gollum), minion)
 					}
 					{
+						type: Memorize
+						filter: culture(Gollum), minion
+						memory: gollumMinionsInPlay
+					}
+					{
 						type: Optional
 						text: Would you like to remove a threat to replace your {Gollum} minion with another from your discard pile?
 						requires: [
-							{
-								type: Memorize
-								filter: culture(Gollum), minion
-								memory: gollumMinionsInPlay
-							}
 							{
 								type: HasCardInDiscard
 								ignoreCostCheckFailure: true
