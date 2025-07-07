@@ -51,7 +51,7 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
                 }
                 yield new CardSelectionAction(action, decision, gameState);
             }
-            case ASSIGN_MINIONS -> new AssignMinionsAction(action, gameState);
+            case ASSIGN_MINIONS -> new AssignMinionsAction(action, gameState, gameState.getCurrentPlayerId().equals(getName()));
         };
     }
 

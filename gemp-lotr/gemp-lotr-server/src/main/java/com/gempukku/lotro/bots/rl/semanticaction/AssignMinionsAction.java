@@ -1,6 +1,7 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -13,8 +14,21 @@ import java.util.stream.Collectors;
 
 public class AssignMinionsAction implements SemanticAction {
     private final HashMap<String, List<String>> assignmentMap = new HashMap<>();
+    private final boolean isFreePeoplesAssignment;
+    private final HashMap<String, List<String>> alreadyAssignedMap = new HashMap<>();
+    private final HashMap<String, Integer> woundsOnFp = new HashMap<>();
 
-    public AssignMinionsAction(String answer, GameState gameState) {
+    public AssignMinionsAction(String answer, GameState gameState, boolean isFreePeoplesAssignment) {
+        this.isFreePeoplesAssignment = isFreePeoplesAssignment;
+
+        gameState.getAssignments().forEach(assignment -> {
+            String fpBlueprint = assignment.getFellowshipCharacter().getBlueprintId();
+            alreadyAssignedMap.put(fpBlueprint, new ArrayList<>());
+            assignment.getShadowCharacters().forEach(shadow -> {
+                alreadyAssignedMap.get(fpBlueprint).add(shadow.getBlueprintId());
+            });
+        });
+
         String[] assignments = answer.split(",");
         for (String assignment : assignments) {
             String[] cards = assignment.split(" ");
@@ -25,14 +39,41 @@ public class AssignMinionsAction implements SemanticAction {
             }
             assignmentMap.put(fp, minions);
         }
+
+        gameState.getInPlay().forEach(fpCharacter -> {
+            if ((fpCharacter.getBlueprint().getCardType().equals(CardType.COMPANION) ||
+                    fpCharacter.getBlueprint().getCardType().equals(CardType.ALLY)) &&
+                    fpCharacter.getOwner().equals(gameState.getCurrentPlayerId())) {
+                woundsOnFp.put(fpCharacter.getBlueprintId(), gameState.getWounds(fpCharacter));
+                if (!alreadyAssignedMap.containsKey(fpCharacter.getBlueprintId())) {
+                    alreadyAssignedMap.put(fpCharacter.getBlueprintId(), new ArrayList<>());
+                }
+            }
+        });
     }
 
-    public AssignMinionsAction(HashMap<String, List<String>> assignmentMap) {
+    public AssignMinionsAction(HashMap<String, List<String>> assignmentMap, boolean isFreePeoplesAssignment,
+                               HashMap<String, List<String>> alreadyAssignedMap, HashMap<String, Integer> woundsOnFp) {
+        this.isFreePeoplesAssignment = isFreePeoplesAssignment;
         this.assignmentMap.putAll(assignmentMap);
+        this.alreadyAssignedMap.putAll(alreadyAssignedMap);
+        this.woundsOnFp.putAll(woundsOnFp);
     }
 
     public HashMap<String, List<String>> getAssignmentMap() {
         return assignmentMap;
+    }
+
+    public boolean isFreePeoplesAssignment() {
+        return isFreePeoplesAssignment;
+    }
+
+    public HashMap<String, List<String>> getAlreadyAssignedMap() {
+        return alreadyAssignedMap;
+    }
+
+    public HashMap<String, Integer> getWoundsOnFp() {
+        return woundsOnFp;
     }
 
     @Override
@@ -71,6 +112,21 @@ public class AssignMinionsAction implements SemanticAction {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject obj = new JSONObject();
+        obj.put("type", "AssignMinionsAction");
+        obj.put("assignmentMap", assignmentMap);
+        obj.put("isFreePeoplesAssignment", isFreePeoplesAssignment);
+        obj.put("alreadyAssignedMap", alreadyAssignedMap);
+        obj.put("woundsOnFp", woundsOnFp);
+        return obj;
+    }
+
+    public static AssignMinionsAction fromJson(JSONObject obj) {
+        HashMap<String, List<String>> assignmentMap = obj.getObject("assignmentMap", HashMap.class);
+        boolean isFreePeoplesAssignment = obj.getBoolean("isFreePeoplesAssignment");
+        HashMap<String, List<String>> alreadyAssignedMap = obj.getObject("alreadyAssignedMap", HashMap.class);
+        HashMap<String, Integer> wounds = obj.getObject("woundsOnFp", HashMap.class);
+
+        return new AssignMinionsAction(assignmentMap, isFreePeoplesAssignment, alreadyAssignedMap, wounds);
     }
 }

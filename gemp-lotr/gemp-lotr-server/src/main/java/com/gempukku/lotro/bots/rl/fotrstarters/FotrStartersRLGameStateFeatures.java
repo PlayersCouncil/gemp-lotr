@@ -120,6 +120,9 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
                 }
                 yield extractGeneralStateFeatures(gameState, playerId);
             }
+            case ASSIGN_MINIONS -> {
+                yield extractGeneralStateFeatures(gameState, playerId);
+            }
             default -> extractAllFeatures(gameState, decision, playerId);
         };
     }

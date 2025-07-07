@@ -11,6 +11,7 @@ public class AwaitingDecisionFactory {
             case "CardsSelectionDecision" -> CardsSelectionDecision.fromJson(obj);
             case "ArbitraryCardsSelectionDecision" -> ArbitraryCardsSelectionDecision.fromJson(obj);
             case "CardActionSelectionDecision" -> CardActionSelectionDecision.fromJson(obj);
+            case "PlayerAssignMinionsDecision" -> PlayerAssignMinionsDecision.fromJson(obj);
             // add others later
             default -> throw new IllegalArgumentException("Unknown action type: " + type);
         };

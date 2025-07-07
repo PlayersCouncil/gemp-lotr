@@ -7,6 +7,7 @@ import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.ShadowAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
@@ -18,7 +19,6 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 
 import java.util.ArrayList;
@@ -68,6 +68,10 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             new OptionalResponsesCardActionTrainer()
     );
 
+    private final List<DecisionAnswerer> assignmentTrainers = List.of(
+            new ShadowAssignmentTrainer()
+    );
+
     private final RLGameStateFeatures features;
     private final ModelRegistry modelRegistry;
 
@@ -83,19 +87,29 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
 
     @Override
     public String chooseAction(GameState gameState, AwaitingDecision decision) {
-        if (decision.getDecisionType().equals(AwaitingDecisionType.MULTIPLE_CHOICE)) {
-            return chooseMultipleChoiceAction(gameState, decision);
-        } else if (decision.getDecisionType().equals(AwaitingDecisionType.INTEGER)) {
-            return chooseIntegerAction(gameState, decision);
-        } else if (decision.getDecisionType().equals(AwaitingDecisionType.CARD_SELECTION)) {
-            return chooseCardSelectionAction(gameState, decision);
-        } else if (decision.getDecisionType().equals(AwaitingDecisionType.ARBITRARY_CARDS)) {
-            return chooseArbitraryCardsAction(gameState, decision);
-        } else if (decision.getDecisionType().equals(AwaitingDecisionType.CARD_ACTION_CHOICE)) {
-            return chooseCardActionChoice(gameState, decision);
-        } else if (decision.getDecisionType().equals(AwaitingDecisionType.ACTION_CHOICE)) {
-            return chooseActionChoice(gameState, decision);
+        return switch (decision.getDecisionType()) {
+            case INTEGER -> chooseIntegerAction(gameState, decision);
+            case MULTIPLE_CHOICE -> chooseMultipleChoiceAction(gameState, decision);
+            case ARBITRARY_CARDS -> chooseArbitraryCardsAction(gameState, decision);
+            case CARD_ACTION_CHOICE -> chooseCardActionChoice(gameState, decision);
+            case ACTION_CHOICE -> chooseActionChoice(gameState, decision);
+            case CARD_SELECTION -> chooseCardSelectionAction(gameState, decision);
+            case ASSIGN_MINIONS -> chooseAssignmentAction(gameState, decision);
+        };
+    }
+
+    private String chooseAssignmentAction(GameState gameState, AwaitingDecision decision) {
+        for (DecisionAnswerer trainer : assignmentTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
+            }
         }
+
+        System.out.println("Unknown assign minions decision: "
+                + gameState.getCurrentPhase() + " - "
+                + decision.getText()
+                + "; freeCharacters=" + Arrays.toString(decision.getDecisionParameters().get("freeCharacters"))
+                + "; minions=" + Arrays.toString(decision.getDecisionParameters().get("minions")));
         return super.chooseAction(gameState, decision);
     }
 

@@ -12,6 +12,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.ShadowAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTrainer;
@@ -102,7 +103,8 @@ public class BotService {
                     new ManeuverCardActionTrainer(),
                     new SkirmishCardActionTrainer(),
                     new RegroupCardActionTrainer(),
-                    new OptionalResponsesCardActionTrainer()
+                    new OptionalResponsesCardActionTrainer(),
+                    new ShadowAssignmentTrainer()
             );
 
             FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
