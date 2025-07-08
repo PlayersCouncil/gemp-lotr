@@ -2,6 +2,7 @@ package com.gempukku.lotro.bots.rl.semanticaction;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -17,16 +18,38 @@ public class AssignMinionsAction implements SemanticAction {
     private final boolean isFreePeoplesAssignment;
     private final HashMap<String, List<String>> alreadyAssignedMap = new HashMap<>();
     private final HashMap<String, Integer> woundsOnFp = new HashMap<>();
+    private final int numberOfUnassignedMinions;
+    private final int strengthOfUnassignedMinions;
 
-    public AssignMinionsAction(String answer, GameState gameState, boolean isFreePeoplesAssignment) {
+    public AssignMinionsAction(String answer, AwaitingDecision decision, GameState gameState, boolean isFreePeoplesAssignment) {
         this.isFreePeoplesAssignment = isFreePeoplesAssignment;
+        if (!isFreePeoplesAssignment) {
+            numberOfUnassignedMinions = 0;
+            strengthOfUnassignedMinions = 0;
+        } else {
+            Map<String, String[]> params = decision.getDecisionParameters();
+            String[] minionIds = params.get("minions");
+            List<String> unassigned = new ArrayList<>();
+            for (String minionId : minionIds) {
+                if (!answer.contains(minionId)) {
+                    unassigned.add(minionId);
+                }
+            }
+            numberOfUnassignedMinions = unassigned.size();
+            strengthOfUnassignedMinions = unassigned.stream().mapToInt(minionId -> {
+                for (PhysicalCard physicalCard : gameState.getInPlay()) {
+                    if (physicalCard.getCardId() == Integer.parseInt(minionId)) {
+                        return physicalCard.getBlueprint().getStrength();
+                    }
+                }
+                return 0;
+            }).sum();
+        }
 
         gameState.getAssignments().forEach(assignment -> {
             String fpBlueprint = assignment.getFellowshipCharacter().getBlueprintId();
             alreadyAssignedMap.put(fpBlueprint, new ArrayList<>());
-            assignment.getShadowCharacters().forEach(shadow -> {
-                alreadyAssignedMap.get(fpBlueprint).add(shadow.getBlueprintId());
-            });
+            assignment.getShadowCharacters().forEach(shadow -> alreadyAssignedMap.get(fpBlueprint).add(shadow.getBlueprintId()));
         });
 
         String[] assignments = answer.split(",");
@@ -53,11 +76,14 @@ public class AssignMinionsAction implements SemanticAction {
     }
 
     public AssignMinionsAction(HashMap<String, List<String>> assignmentMap, boolean isFreePeoplesAssignment,
-                               HashMap<String, List<String>> alreadyAssignedMap, HashMap<String, Integer> woundsOnFp) {
+                               HashMap<String, List<String>> alreadyAssignedMap, HashMap<String, Integer> woundsOnFp,
+                               int numberOfUnassignedMinions, int strengthOfUnassignedMinions) {
         this.isFreePeoplesAssignment = isFreePeoplesAssignment;
         this.assignmentMap.putAll(assignmentMap);
         this.alreadyAssignedMap.putAll(alreadyAssignedMap);
         this.woundsOnFp.putAll(woundsOnFp);
+        this.numberOfUnassignedMinions = numberOfUnassignedMinions;
+        this.strengthOfUnassignedMinions = strengthOfUnassignedMinions;
     }
 
     public HashMap<String, List<String>> getAssignmentMap() {
@@ -74,6 +100,14 @@ public class AssignMinionsAction implements SemanticAction {
 
     public HashMap<String, Integer> getWoundsOnFp() {
         return woundsOnFp;
+    }
+
+    public int getNumberOfUnassignedMinions() {
+        return numberOfUnassignedMinions;
+    }
+
+    public int getStrengthOfUnassignedMinions() {
+        return strengthOfUnassignedMinions;
     }
 
     @Override
@@ -115,6 +149,8 @@ public class AssignMinionsAction implements SemanticAction {
         JSONObject obj = new JSONObject();
         obj.put("type", "AssignMinionsAction");
         obj.put("assignmentMap", assignmentMap);
+        obj.put("numberOfUnassignedMinions", numberOfUnassignedMinions);
+        obj.put("strengthOfUnassignedMinions", strengthOfUnassignedMinions);
         obj.put("isFreePeoplesAssignment", isFreePeoplesAssignment);
         obj.put("alreadyAssignedMap", alreadyAssignedMap);
         obj.put("woundsOnFp", woundsOnFp);
@@ -124,9 +160,12 @@ public class AssignMinionsAction implements SemanticAction {
     public static AssignMinionsAction fromJson(JSONObject obj) {
         HashMap<String, List<String>> assignmentMap = obj.getObject("assignmentMap", HashMap.class);
         boolean isFreePeoplesAssignment = obj.getBoolean("isFreePeoplesAssignment");
+        int numberOfUnassignedMinions = obj.getInteger("numberOfUnassignedMinions");
+        int strengthOfUnassignedMinions = obj.getInteger("strengthOfUnassignedMinions");
         HashMap<String, List<String>> alreadyAssignedMap = obj.getObject("alreadyAssignedMap", HashMap.class);
         HashMap<String, Integer> wounds = obj.getObject("woundsOnFp", HashMap.class);
 
-        return new AssignMinionsAction(assignmentMap, isFreePeoplesAssignment, alreadyAssignedMap, wounds);
+        return new AssignMinionsAction(assignmentMap, isFreePeoplesAssignment, alreadyAssignedMap, wounds,
+                numberOfUnassignedMinions, strengthOfUnassignedMinions);
     }
 }

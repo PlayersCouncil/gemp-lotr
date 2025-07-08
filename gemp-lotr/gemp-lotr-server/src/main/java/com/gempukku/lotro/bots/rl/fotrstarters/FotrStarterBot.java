@@ -7,6 +7,7 @@ import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.FpAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.ShadowAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardselection.*;
@@ -69,7 +70,8 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
     );
 
     private final List<DecisionAnswerer> assignmentTrainers = List.of(
-            new ShadowAssignmentTrainer()
+            new ShadowAssignmentTrainer(),
+            new FpAssignmentTrainer()
     );
 
     private final RLGameStateFeatures features;

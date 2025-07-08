@@ -94,7 +94,8 @@ public class CardFeatures {
         }
     }
 
-    public static double[] getAssignmentFeatures(Map<String, List<String>> assignmentMap, Map<String, Integer> woundsMap) throws CardNotFoundException {
+    public static double[] getAssignmentFeatures(Map<String, List<String>> assignmentMap, Map<String, Integer> woundsMap,
+                                                 int numberOfUnassignedMinions, int strengthOfUnassignedMinions) throws CardNotFoundException {
         List<Double> tbr = new ArrayList<>();
 
         List<String> companions = assignmentMap.keySet().stream().filter(s -> {
@@ -181,6 +182,10 @@ public class CardFeatures {
                 }
             }
         });
+
+        tbr.add((double) numberOfUnassignedMinions);
+        tbr.add((double) strengthOfUnassignedMinions);
+
         return tbr.stream().mapToDouble(Double::doubleValue).toArray();
     }
 }
