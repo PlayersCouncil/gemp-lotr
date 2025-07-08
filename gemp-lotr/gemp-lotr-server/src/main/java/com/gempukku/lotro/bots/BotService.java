@@ -159,7 +159,7 @@ public class BotService {
                         "1_311,1_116,1_116,1_116,1_117,1_117,1_117,1_121,1_121,1_121,1_133,1_133,1_141,1_141,1_145,1_150," +
                         "1_150,1_150,1_150,1_151,1_151,1_151,1_152,1_152,1_152,1_152,1_153,1_153,1_153,1_153,1_154,1_154," +
                         "1_154,1_157,1_157,1_158,1_158", "fotr_block", "Aragorn Starter");
-        fotrBots.add(new BotWithDeck(new RandomDecisionBot(aragornBotName), aragornStarter));
+        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), aragornBotName, modelRegistry), aragornStarter));
 
         String gandalfBotName = "~GandalfBot";
         LotroDeck gandalfStarter = DeckSerialization.buildDeckFromContents("Gandalf Starter",
@@ -168,7 +168,7 @@ public class BotService {
                         "1_304,1_84,1_312,1_26,1_26,1_86,1_168,1_168,1_168,1_176,1_176,1_176,1_176,1_177,1_178,1_178,1_178" +
                         ",1_178,1_179,1_179,1_179,1_180,1_180,1_180,1_180,1_181,1_181,1_181,1_187,1_187,1_187,1_191," +
                         "1_191,1_191,1_196,1_196", "fotr_block", "Gandalf Starter");
-        fotrBots.add(new BotWithDeck(new RandomDecisionBot(gandalfBotName), gandalfStarter));
+        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), gandalfBotName, modelRegistry), gandalfStarter));
 
         try {
             playerDAO.registerBot(aragornBotName);
