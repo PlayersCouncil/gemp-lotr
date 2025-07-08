@@ -2,8 +2,7 @@ package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
-import com.gempukku.lotro.bots.rl.DecisionAnswerer;
-import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
+import com.gempukku.lotro.bots.rl.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
@@ -15,7 +14,8 @@ import com.gempukku.lotro.bots.rl.fotrstarters.models.integerchoice.BurdenTraine
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.AnotherMoveTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.GoFirstTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.multiplechoice.MulliganTrainer;
-import com.gempukku.lotro.bots.rl.semanticaction.MultipleChoiceAction;
+import com.gempukku.lotro.bots.rl.semanticaction.*;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.Skirmish;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
+public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlayer {
     private final List<DecisionAnswerer> cardSelectionTrainers = List.of(
             new ReconcileTrainer(),
             new SanctuaryTrainer(),
@@ -76,20 +76,35 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
 
     private final RLGameStateFeatures features;
     private final ModelRegistry modelRegistry;
+    private final ReplayBuffer replayBuffer;
 
     private CardActionSelectionDecision lastDecision = null;
     private String lastAction = null;
     private int decisionRepeat = 0;
 
-    public FotrStarterBot(RLGameStateFeatures features, String playerId, ModelRegistry modelRegistry) {
+    private final List<LearningStep> episodeSteps = new ArrayList<>();
+
+    public FotrStarterBot(RLGameStateFeatures features, String playerId, ModelRegistry modelRegistry, ReplayBuffer replayBuffer) {
         super(playerId);
         this.features = features;
         this.modelRegistry = modelRegistry;
+        this.replayBuffer = replayBuffer;
     }
 
     @Override
     public String chooseAction(GameState gameState, AwaitingDecision decision) {
-        return switch (decision.getDecisionType()) {
+        double[] stateVector = features.extractFeatures(gameState, decision, getName());
+
+        SemanticAction action = chooseSemanticAction(gameState, decision);
+
+        // Store temporarily — reward comes later
+        episodeSteps.add(new LearningStep(stateVector, action, getName(), decision));
+
+        return action.toDecisionString(decision, gameState);
+    }
+
+    private SemanticAction chooseSemanticAction(GameState gameState, AwaitingDecision decision) {
+        String action =  switch (decision.getDecisionType()) {
             case INTEGER -> chooseIntegerAction(gameState, decision);
             case MULTIPLE_CHOICE -> chooseMultipleChoiceAction(gameState, decision);
             case ARBITRARY_CARDS -> chooseArbitraryCardsAction(gameState, decision);
@@ -97,6 +112,21 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
             case ACTION_CHOICE -> chooseActionChoice(gameState, decision);
             case CARD_SELECTION -> chooseCardSelectionAction(gameState, decision);
             case ASSIGN_MINIONS -> chooseAssignmentAction(gameState, decision);
+        };
+
+        return switch (decision.getDecisionType()) {
+            case INTEGER -> new IntegerChoiceAction(Integer.parseInt(action));
+            case MULTIPLE_CHOICE -> new MultipleChoiceAction(action, decision);
+            case ARBITRARY_CARDS -> new ChooseFromArbitraryCardsAction(action, decision);
+            case CARD_ACTION_CHOICE -> new CardActionChoiceAction(action, decision, gameState);
+            case ACTION_CHOICE -> new ActionChoiceAction(action, decision);
+            case CARD_SELECTION -> {
+                if (gameState.getCurrentPhase().equals(Phase.SKIRMISH)) {
+                    yield new CardSelectionAssignedAction(action, decision, gameState);
+                }
+                yield new CardSelectionAction(action, decision, gameState);
+            }
+            case ASSIGN_MINIONS -> new AssignMinionsAction(action, decision, gameState, gameState.getCurrentPlayerId().equals(getName()));
         };
     }
 
@@ -279,5 +309,21 @@ public class FotrStarterBot extends RandomDecisionBot implements BotPlayer {
 
         System.out.println("Unknown multiple choice action: " + decision.getText() + " - " + Arrays.toString(options));
         return super.chooseAction(gameState, decision);
+    }
+
+    @Override
+    public void observe(GameState gameState, AwaitingDecision decision, String playerId, String chosenAction, double reward, boolean terminal) {
+        // At this stage, we assume `chosenAction` was already used to resolve game state,
+        // and we just want to record the final outcome of this decision if needed.
+        // Right now, we store full episode and use reward only in `endEpisode`.
+    }
+
+    @Override
+    public void endEpisode(double reward) {
+        episodeSteps.forEach(learningStep -> learningStep.reward = reward);
+        if (replayBuffer != null) {
+            replayBuffer.addEpisode(new ArrayList<>(episodeSteps));
+        }
+        episodeSteps.clear();
     }
 }

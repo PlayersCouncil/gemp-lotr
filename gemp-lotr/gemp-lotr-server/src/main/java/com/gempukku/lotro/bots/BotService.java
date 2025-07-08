@@ -1,6 +1,5 @@
 package com.gempukku.lotro.bots;
 
-import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.random.RandomLearningBot;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.ReplayBuffer;
@@ -40,7 +39,6 @@ import java.util.*;
 
 public class BotService {
     private static final boolean START_SIMULATIONS_AT_STARTUP = true;
-    private static final boolean TEST_MODEL_AT_STARTUP = true;
 
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
@@ -62,23 +60,9 @@ public class BotService {
 
 
         if (START_SIMULATIONS_AT_STARTUP) {
-            replayBuffer.addListener(10_000, buffer -> {
-                List<LearningStep> batch = buffer.sampleBatch(buffer.size());
-                buffer.clear();
-                new FotrStartersLearningStepsPersistence().save(batch);
-            });
-
-            System.out.println("simulating games to get data");
-            startFotrStartersSimulation(
-                    new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot1", replayBuffer),
-                    new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~bot2", replayBuffer));
-
-            List<LearningStep> batch = replayBuffer.sampleBatch(replayBuffer.size());
-            replayBuffer.clear();
-            new FotrStartersLearningStepsPersistence().save(batch);
-        }
-        if (TEST_MODEL_AT_STARTUP) {
-            System.out.println("training models after games");
+            runSelfPlayTrainingLoop(5, 1000);
+        } else {
+            System.out.println("training bot models at startup");
 
             // List of all trainer instances
             List<Trainer> trainers = List.of(
@@ -119,26 +103,95 @@ public class BotService {
             }
 
             System.out.println("training done");
-
-            System.out.println("using model in game simulations");
-
-            startFotrStartersSimulation(
-                    new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~bot1", modelRegistry),
-                    new RandomDecisionBot("~bot2"));
-
         }
     }
 
-    public void startFotrStartersSimulation(BotPlayer b1, BotPlayer b2) {
-        System.out.println("Simulation started");
+    private void startFotrStartersSimulation(BotPlayer b1, BotPlayer b2, int games) {
+        System.out.println(games + " simulation started");
         SimulationRunner simulationRunner = new SimpleBatchSimulationRunner(
-                new FotrStartersSimulation(library, formatLibrary), b1, b2, 500);
+                new FotrStartersSimulation(library, formatLibrary), b1, b2, games);
 
         ZonedDateTime start = DateUtils.Now();
         SimulationStats simulationStats = simulationRunner.run();
         System.out.println(DateUtils.HumanDuration(Duration.between(DateUtils.Now(), start).abs()));
 
         System.out.println(simulationStats);
+    }
+
+    private void runSelfPlayTrainingLoop(int generations, int gamesPerGeneration) {
+        System.out.println("Starting self-play training loop for " + generations + " generations");
+
+        FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
+
+        replayBuffer.addListener(10_000, buffer -> {
+            persistence.save(buffer.sampleBatch(buffer.size()));
+            replayBuffer.clear();
+        });
+
+        for (int generation = 0; generation <= generations; generation++) {
+            System.out.println("=== Generation " + generation + " ===");
+
+            // Step 1: Run simulations with current model
+            if (generation == 0) {
+                startFotrStartersSimulation(
+                        new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot1", replayBuffer),
+                        new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot2", replayBuffer),
+                        gamesPerGeneration);
+            } else {
+                startFotrStartersSimulation(
+                        new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBot" + generation, modelRegistry, replayBuffer),
+                        new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot", replayBuffer),
+                        gamesPerGeneration / 4
+                );
+                startFotrStartersSimulation(
+                        new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBotOne" + generation, modelRegistry, replayBuffer),
+                        new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBotTwo" + generation, modelRegistry, replayBuffer),
+                        gamesPerGeneration * 3 / 4
+                );
+            }
+
+            // Step 2: Save data
+            persistence.save(replayBuffer.sampleBatch(replayBuffer.size()));
+            replayBuffer.clear();
+
+            // Step 3: Aggregate all historical data and retrain
+            // List of all trainer instances
+            List<Trainer> trainers = List.of(
+                    new GoFirstTrainer(),
+                    new MulliganTrainer(),
+                    new AnotherMoveTrainer(),
+                    new BurdenTrainer(),
+                    new ReconcileTrainer(),
+                    new SanctuaryTrainer(),
+                    new ArcheryWoundTrainer(),
+                    new AttachItemTrainer(),
+                    new SkirmishOrderTrainer(),
+                    new HealTrainer(),
+                    new DiscardFromHandTrainer(),
+                    new ExertTrainer(),
+                    new DiscardFromPlayTrainer(),
+                    new PlayFromHandTrainer(),
+                    new FallBackCardSelectionTrainer(),
+                    new CardFromDiscardTrainer(),
+                    new StartingFellowshipTrainer(),
+                    new FellowshipCardActionTrainer(),
+                    new ShadowCardActionTrainer(),
+                    new ManeuverCardActionTrainer(),
+                    new SkirmishCardActionTrainer(),
+                    new RegroupCardActionTrainer(),
+                    new OptionalResponsesCardActionTrainer(),
+                    new ShadowAssignmentTrainer(),
+                    new FpAssignmentTrainer()
+            );
+
+            for (Trainer trainer : trainers) {
+                List<LearningStep> steps = persistence.load(trainer);
+                SoftClassifier<double[]> model = trainer.train(steps);
+                modelRegistry.registerModel(trainer.getClass(), model);
+            }
+        }
+
+        System.out.println("Self-play training loop complete.");
     }
 
     public BotWithDeck getBotParticipant(LotroFormat lotroFormat) {
@@ -159,7 +212,7 @@ public class BotService {
                         "1_311,1_116,1_116,1_116,1_117,1_117,1_117,1_121,1_121,1_121,1_133,1_133,1_141,1_141,1_145,1_150," +
                         "1_150,1_150,1_150,1_151,1_151,1_151,1_152,1_152,1_152,1_152,1_153,1_153,1_153,1_153,1_154,1_154," +
                         "1_154,1_157,1_157,1_158,1_158", "fotr_block", "Aragorn Starter");
-        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), aragornBotName, modelRegistry), aragornStarter));
+        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), aragornBotName, modelRegistry, null), aragornStarter));
 
         String gandalfBotName = "~GandalfBot";
         LotroDeck gandalfStarter = DeckSerialization.buildDeckFromContents("Gandalf Starter",
@@ -168,7 +221,7 @@ public class BotService {
                         "1_304,1_84,1_312,1_26,1_26,1_86,1_168,1_168,1_168,1_176,1_176,1_176,1_176,1_177,1_178,1_178,1_178" +
                         ",1_178,1_179,1_179,1_179,1_180,1_180,1_180,1_180,1_181,1_181,1_181,1_187,1_187,1_187,1_191," +
                         "1_191,1_191,1_196,1_196", "fotr_block", "Gandalf Starter");
-        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), gandalfBotName, modelRegistry), gandalfStarter));
+        fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), gandalfBotName, modelRegistry, null), gandalfStarter));
 
         try {
             playerDAO.registerBot(aragornBotName);
