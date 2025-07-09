@@ -1,6 +1,5 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
-import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.rl.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
@@ -61,11 +60,11 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
     );
 
     private final List<DecisionAnswerer> cardActionTrainers = List.of(
-            new FellowshipCardActionTrainer(),
-            new ShadowCardActionTrainer(),
-            new ManeuverCardActionTrainer(),
-            new SkirmishCardActionTrainer(),
-            new RegroupCardActionTrainer(),
+            new FellowshipCardActionAnswerer(),
+            new ShadowCardActionAnswerer(),
+            new ManeuverCardActionAnswerer(),
+            new SkirmishCardActionAnswerer(),
+            new RegroupCardActionAnswerer(),
             new OptionalResponsesCardActionTrainer()
     );
 

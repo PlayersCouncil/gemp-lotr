@@ -1,6 +1,7 @@
 package com.gempukku.lotro.bots.rl.semanticaction;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -12,6 +13,7 @@ import java.util.List;
 public class CardActionChoiceAction implements SemanticAction {
     private final String actionText;
     private final String sourceBlueprint;
+    private int woundsOnSource;
     private final List<String> notChosenActions = new ArrayList<>();
     private final List<String> notChosenBlueprints = new ArrayList<>();
 
@@ -19,6 +21,7 @@ public class CardActionChoiceAction implements SemanticAction {
         if (answer == null || answer.isEmpty()) {
             actionText = null;
             sourceBlueprint = null;
+            woundsOnSource = 0;
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             for (int i = 0; i < actionTexts.length; i++) {
                 notChosenActions.add(actionTexts[i]);
@@ -28,6 +31,13 @@ public class CardActionChoiceAction implements SemanticAction {
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             actionText = actionTexts[Integer.parseInt(answer)];
             sourceBlueprint = gameState.getBlueprintId(Integer.parseInt(decision.getDecisionParameters().get("cardId")[Integer.parseInt(answer)]));
+            woundsOnSource = 0;
+            for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                if (physicalCard.getCardId() == Integer.parseInt(decision.getDecisionParameters().get("cardId")[Integer.parseInt(answer)])) {
+                    woundsOnSource = gameState.getWounds(physicalCard);
+                    break;
+                }
+            }
             for (int i = 0; i < actionTexts.length; i++) {
                 if (!actionText.equals(actionTexts[i])) {
                     notChosenActions.add(actionTexts[i]);
@@ -37,9 +47,10 @@ public class CardActionChoiceAction implements SemanticAction {
         }
     }
 
-    public CardActionChoiceAction(String actionText, String sourceBlueprint, String[] notChosenActions, String[] notChosenBlueprintIds) {
+    public CardActionChoiceAction(String actionText, String sourceBlueprint, int woundsOnSource, String[] notChosenActions, String[] notChosenBlueprintIds) {
         this.actionText = actionText;
         this.sourceBlueprint = sourceBlueprint;
+        this.woundsOnSource = woundsOnSource;
         this.notChosenActions.addAll(Arrays.asList(notChosenActions));
         this.notChosenBlueprints.addAll(Arrays.asList(notChosenBlueprintIds));
     }
@@ -58,6 +69,10 @@ public class CardActionChoiceAction implements SemanticAction {
 
     public List<String> getNotChosenBlueprints() {
         return notChosenBlueprints;
+    }
+
+    public int getWoundsOnSource() {
+        return woundsOnSource;
     }
 
     @Override
@@ -85,6 +100,7 @@ public class CardActionChoiceAction implements SemanticAction {
         obj.put("type", "CardActionChoiceAction");
         obj.put("actionText", actionText);
         obj.put("sourceBlueprint", sourceBlueprint);
+        obj.put("woundsOnSource", woundsOnSource);
         obj.put("notChosenActions", notChosenActions.toArray(new String[0]));
         obj.put("notChosenBlueprints", notChosenBlueprints.toArray(new String[0]));
         return obj;
@@ -93,8 +109,9 @@ public class CardActionChoiceAction implements SemanticAction {
     public static CardActionChoiceAction fromJson(JSONObject obj) {
         String actionText = obj.getString("actionText");
         String sourceBlueprint = obj.getString("sourceBlueprint");
+        int woundsOnSource = obj.getIntValue("woundsOnSource");
         String[] notChosenActions = obj.getObject("notChosenActions", String[].class);
         String[] notChosenBlueprints = obj.getObject("notChosenBlueprints", String[].class);
-        return new CardActionChoiceAction(actionText, sourceBlueprint, notChosenActions, notChosenBlueprints);
+        return new CardActionChoiceAction(actionText, sourceBlueprint, woundsOnSource, notChosenActions, notChosenBlueprints);
     }
 }
