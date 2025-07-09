@@ -1,6 +1,7 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.PossessionClass;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
@@ -89,6 +90,40 @@ public class CardFeatures {
             features.add(((double) minionStrength));
 
             return features.stream().mapToDouble(Double::doubleValue).toArray();
+        } else {
+            throw new IllegalStateException("Blueprint library not initialized");
+        }
+    }
+
+    public static double[] getItemCardFeatures(String blueprintId, String holderBlueprintId, int woundsPlaced) throws CardNotFoundException {
+        if (library != null) {
+            try {
+                LotroCardBlueprint blueprint = library.getLotroCardBlueprint(blueprintId);
+                LotroCardBlueprint holderBlueprint = library.getLotroCardBlueprint(holderBlueprintId);
+
+                List<Double> features = new ArrayList<>();
+
+                features.add(blueprint.getSide() == Side.SHADOW ? 1.0 : 0.0);
+                features.add(blueprint.getSide() == Side.FREE_PEOPLE ? 1.0 : 0.0);
+                features.add((double) blueprint.getTwilightCost());
+                features.add(blueprint.getPossessionClasses() != null && blueprint.getPossessionClasses().contains(PossessionClass.HAND_WEAPON) ? 1.0 : 0.0);
+                features.add(blueprint.getPossessionClasses() != null && blueprint.getPossessionClasses().contains(PossessionClass.ARMOR) ? 1.0 : 0.0);
+                features.add(blueprint.getPossessionClasses() != null && blueprint.getPossessionClasses().contains(PossessionClass.SHIELD) ? 1.0 : 0.0);
+
+                features.add(holderBlueprint.canStartWithRing() ? 1.0 : 0.0);
+                features.add((double) holderBlueprint.getTwilightCost());
+                features.add((double) holderBlueprint.getStrength());
+                features.add((double) holderBlueprint.getVitality());
+                features.add((double) woundsPlaced);
+
+                return features.stream().mapToDouble(Double::doubleValue).toArray();
+            } catch (CardNotFoundException e) {
+                if (blueprintId.equals(PASS)) {
+                    return new double[11];
+                } else {
+                    throw e;
+                }
+            }
         } else {
             throw new IllegalStateException("Blueprint library not initialized");
         }

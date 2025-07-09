@@ -68,7 +68,7 @@ public abstract class AbstractCardSelectionTrainer extends AbstractTrainer {
             try {
                 String blueprintId = gameState.getBlueprintId(Integer.parseInt(physicalId));
                 int wounds = 0;
-                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                for (PhysicalCard physicalCard : gameState.getInPlay()) {
                     if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
                         wounds = gameState.getWounds(physicalCard);
                     }

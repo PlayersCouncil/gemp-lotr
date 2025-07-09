@@ -23,11 +23,11 @@ public class OptionalResponsesCardActionTrainer extends AbstractPlayUseCardTrain
 
     @Override
     protected boolean isTransferTrainer() {
-        return true;
+        return false;
     }
 
     @Override
     protected boolean isHealTrainer() {
-        return true;
+        return false;
     }
 }

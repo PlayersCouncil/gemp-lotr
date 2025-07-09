@@ -88,7 +88,7 @@ public class FellowshipCardActionAnswerer extends AbstractCardActionAnswerer {
         }
     }
 
-    public static class FellowshipHealTrainer extends AbstractPlayUseCardTrainer {
+    public static class FellowshipTransferTrainer extends AbstractPlayUseCardTrainer {
 
         @Override
         protected String getTextTrigger() {
@@ -116,7 +116,7 @@ public class FellowshipCardActionAnswerer extends AbstractCardActionAnswerer {
         }
     }
 
-    public static class FellowshipTransferTrainer extends AbstractPlayUseCardTrainer {
+    public static class FellowshipHealTrainer extends AbstractPlayUseCardTrainer {
 
         @Override
         protected String getTextTrigger() {

@@ -24,11 +24,13 @@ public class CardSelectionAction implements SemanticAction {
         for (String individualCard : individualCards) {
             if (!individualCard.isEmpty()) {
                 chosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(individualCard)));
-                for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                int wounds = 0;
+                for (PhysicalCard physicalCard : gameState.getInPlay()) {
                     if (physicalCard.getCardId() == Integer.parseInt(individualCard)) {
-                        woundsOnChosen.add(gameState.getWounds(physicalCard));
+                        wounds = gameState.getWounds(physicalCard);
                     }
                 }
+                woundsOnChosen.add(wounds);
             }
         }
 
@@ -39,11 +41,13 @@ public class CardSelectionAction implements SemanticAction {
             for (String choice : allChoices) {
                 if (!chosenBlueprintIds.contains(gameState.getBlueprintId(Integer.parseInt(choice)))) {
                     notChosenBlueprintIds.add(gameState.getBlueprintId(Integer.parseInt(choice)));
-                    for (PhysicalCard physicalCard : gameState.getAllCards()) {
+                    int wounds = 0;
+                    for (PhysicalCard physicalCard : gameState.getInPlay()) {
                         if (physicalCard.getCardId() == Integer.parseInt(choice)) {
-                            woundsOnNotChosen.add(gameState.getWounds(physicalCard));
+                            wounds = gameState.getWounds(physicalCard);
                         }
                     }
+                    woundsOnNotChosen.add(wounds);
                 }
                 for (PhysicalCard physicalCard : gameState.getAllCards()) {
                     if (physicalCard.getCardId() == Integer.parseInt(choice)) {
