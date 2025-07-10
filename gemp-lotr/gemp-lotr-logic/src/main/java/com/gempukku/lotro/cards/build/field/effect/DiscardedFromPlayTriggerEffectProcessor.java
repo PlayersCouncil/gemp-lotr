@@ -20,7 +20,15 @@ public class DiscardedFromPlayTriggerEffectProcessor implements EffectProcessor 
         EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
         triggerActionSource.addPlayRequirement(
-                actionContext -> Filters.accepts(actionContext.getGame(), actionContext.getSource(), bySource.getFilterable(actionContext)));
+                actionContext -> {
+                    if(bySource == null)
+                        return true;
+
+                    if(actionContext.getSource() == null)
+                        return false;
+
+					return Filters.accepts(actionContext.getGame(), actionContext.getSource(), bySource.getFilterable(actionContext));
+				});
 
         if (optional)
             blueprint.setDiscardedFromPlayOptionalTriggerAction(triggerActionSource);
