@@ -23,7 +23,7 @@
 			}
 			requires: {
 				type: location
-				filter: siteNumber(4-100)
+				filter: siteNumber(4-100), SiteBlock(Fellowship)
 			}
 			effect: {
 				type: drawCards
