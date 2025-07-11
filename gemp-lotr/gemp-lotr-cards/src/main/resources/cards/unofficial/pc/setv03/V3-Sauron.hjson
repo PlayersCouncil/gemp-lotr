@@ -985,15 +985,7 @@
 				requires: {
 					type: perPhaseLimit
 					phase: regroup
-					limit: {
-						type: Conditional
-						requires: {
-							type: CanSpot
-							filter: side(Free Peoples), artifact
-						}
-						true: 100
-						false: 1
-					}
+					limit: 1
 				}
 				cost: {
 					type: Exert
