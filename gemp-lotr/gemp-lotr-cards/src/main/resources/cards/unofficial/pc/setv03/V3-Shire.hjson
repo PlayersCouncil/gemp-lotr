@@ -294,7 +294,7 @@
 		strength: 2
 		vitality: 4
 		signet: Gandalf
-		resistance: 7
+		resistance: 6
 		canStartWithRing: true
 		keywords: Ring-bound
 		effects: [
@@ -303,9 +303,35 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
+					amount: 1
+					requires: {
+						type: CanSpot
+						filter: title(Sam)
+					}
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: self
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: title(Sam)
+					}
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
 					amount: {
 						type: ForEachYouCanSpot
-						filter: companion
+						filter: other,companion
 					}
 					requires: {
 						type: CantSpot
@@ -322,7 +348,7 @@
 					filter: self
 					amount: {
 						type: ForEachYouCanSpot
-						filter: companion
+						filter: other,companion
 					}
 					requires: {
 						type: CantSpot

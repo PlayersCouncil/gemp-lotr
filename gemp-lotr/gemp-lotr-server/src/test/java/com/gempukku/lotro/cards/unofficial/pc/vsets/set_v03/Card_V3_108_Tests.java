@@ -1,7 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +10,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_108_Tests
 {
@@ -28,11 +28,11 @@ public class Card_V3_108_Tests
 	}
 
 	@Test
-	public void GorgorothPlateauStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GorgorothHighwayStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Gorgoroth Plateau
+		 * Name: Gorgoroth Highway
 		 * Unique: false
 		 * Side: 
 		 * Culture: 
@@ -49,7 +49,7 @@ public class Card_V3_108_Tests
 		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gorgoroth Plateau", card.getBlueprint().getTitle());
+		assertEquals("Gorgoroth Highway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
@@ -60,7 +60,7 @@ public class Card_V3_108_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GorgorothPlateauTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GorgorothHighwayTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

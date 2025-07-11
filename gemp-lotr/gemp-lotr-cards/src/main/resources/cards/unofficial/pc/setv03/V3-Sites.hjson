@@ -109,7 +109,7 @@
 			collInfo: V3_108
 			rarity: _
 		}
-		title: Gorgoroth Plateau
+		title: Gorgoroth Highway
 		unique: false
 		twilight: 7
 		type: Site
@@ -328,6 +328,62 @@
 		keywords: Mountain
 		effects: [
 			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Hindered
+					memorize: hinderedCard
+				}
+				effect: {
+					type: Discard
+					select: memory(hinderedCard)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					memorize: exertedCard
+				}
+				effect: {
+					type: Wound
+					select: memory(exertedCard)
+				}
+			}
+		]
+		gametext: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_113: {
+		cardInfo: {
+			//id: 103_113.0
+			parent: 103_113
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E113.0_card.jpg
+			collInfo: V3_113
+			rarity: _
+		}
+		title: Threshold of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
 				type: Activated
 				phase: Shadow
 				cost: {
@@ -383,62 +439,6 @@
 		}
 	}
 
-	103_113: {
-		cardInfo: {
-			//id: 103_113.0
-			parent: 103_113
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E113.0_card.jpg
-			collInfo: V3_113
-			rarity: _
-		}
-		title: Lake of Fire
-		unique: false
-		twilight: 9
-		type: Site
-		site: 9
-		block: King
-		direction: Left
-		keywords: Mountain
-		effects: [
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Hindered
-					memorize: hinderedCard
-				}
-				effect: {
-					type: Discard
-					select: memory(hinderedCard)
-				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Exerted
-					memorize: exertedCard
-				}
-				effect: {
-					type: Wound
-					select: memory(exertedCard)
-				}
-			}
-		]
-		gametext: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
 	103_114: {
 		cardInfo: {
 			//id: 103_114.0
@@ -464,20 +464,16 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
-				player: Shadow
+				optional: false
 				trigger: {
-					type: StartOfPhase
-					#Phase intentionally left blank as we want to trigger in every phase
+					type: AddsThreat
 				}
 				effect: {
-					type: Hinder
-					player: Shadow
-					select: choose(not(companion))
+					type: AssignThreatWounds
 				}
 			}
 		]
-		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
+		gametext: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -510,16 +506,20 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
+				player: Shadow
 				trigger: {
-					type: AddsThreat
+					type: StartOfPhase
+					#Phase intentionally left blank as we want to trigger in every phase
 				}
 				effect: {
-					type: AssignThreatWounds
+					type: Hinder
+					player: Shadow
+					select: choose(not(companion))
 				}
 			}
 		]
-		gametext: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.
+		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
 		lore: ""
 		promotext: ""
 		alts: {
