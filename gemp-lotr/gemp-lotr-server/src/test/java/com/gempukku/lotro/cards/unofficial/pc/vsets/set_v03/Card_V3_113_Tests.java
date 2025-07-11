@@ -1,7 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +11,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_113_Tests
 {
@@ -28,11 +29,11 @@ public class Card_V3_113_Tests
 	}
 
 	@Test
-	public void LakeofFireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThresholdOfDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Lake of Fire
+		 * Name: Threshold Of Doom
 		 * Unique: false
 		 * Side: 
 		 * Culture: 
@@ -49,7 +50,7 @@ public class Card_V3_113_Tests
 		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Lake of Fire", card.getBlueprint().getTitle());
+		assertEquals("Threshold of Doom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
@@ -61,7 +62,7 @@ public class Card_V3_113_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void LakeofFireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThresholdOfDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

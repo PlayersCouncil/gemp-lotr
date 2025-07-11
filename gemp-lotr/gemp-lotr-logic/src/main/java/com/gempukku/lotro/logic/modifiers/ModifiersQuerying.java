@@ -138,6 +138,7 @@ public interface ModifiersQuerying {
 
     // Others
     boolean canBeDiscardedFromPlay(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source);
+    boolean canBeHinderedBy(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source);
 
     boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source);
 

@@ -961,6 +961,21 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public boolean canBeHinderedBy(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source) {
+        LoggingThreadLocal.logMethodStart(card, "canBeHinderedBy");
+        try {
+            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.HINDERED_MODIFER, card)) {
+                var hinderedMod = (CantHinderModifier) modifier;
+                if (!hinderedMod.canBeHinderedBy(game, performingPlayer, source))
+                    return false;
+            }
+            return true;
+        } finally {
+            LoggingThreadLocal.logMethodEnd();
+        }
+    }
+
+    @Override
     public boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source) {
         LoggingThreadLocal.logMethodStart(card, "canBeReturnedToHand");
         try {
