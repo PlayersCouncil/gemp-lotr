@@ -50,33 +50,47 @@
 				type: Response
 				trigger: {
 					type: AboutToTakeWound
-					filter: unbound,gondor,companion
+					filter: other,unbound,companion
 					memorize: woundedComp
 				}
-				cost: {
-					type: Choice
-					texts: [
-						Exert {bearer}
-						Add 2 threats
-					]
-					effects: [
-						{
-							type: Exert
-							select: bearer
+				cost: [
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: woundedComp
+							filter: or(Gondor, Man)
 						}
-						{
-							type: AddThreats
+						false: {
+							type: AddTwilight
 							amount: 2
 						}
-					]
-				}
+					}
+					{
+						type: Choice
+						texts: [
+							Exert {bearer}
+							Add 2 threats
+						]
+						effects: [
+							{
+								type: Exert
+								select: bearer
+							}
+							{
+								type: AddThreats
+								amount: 2
+							}
+						]
+					}
+				]
 				effect: {
 					type: Hinder
 					select: memory(woundedComp)
 				}
 			}
 		]
-		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.<br>Response: If an unbound [gondor] companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion.
+		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.\Response: If another unbound companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -120,7 +134,7 @@
 					requires: {
 						type: CanSpot
 						filter: other, Rohan, Man
-						count: 2
+						count: 1
 					}
 				}
 			}
@@ -130,11 +144,11 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: 2
+					amount: 1
 					requires: {
 						type: CanSpot
 						filter: other, Gondor, Man
-						count: 2
+						count: 1
 					}
 				}
 			}
@@ -167,7 +181,7 @@
 				}
 			}
 		]
-		gametext: While you can spot 2 [rohan] Men, Aragorn is strength +2.\While you can spot 2 [Gondor] Men, Aragorn is strength +2.\Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
+		gametext: While you can spot another [Gondor] Man, Aragorn is strength +1.\While you can spot another [Rohan] Man, Aragorn is strength +2.\Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1170,15 +1184,7 @@
 					{
 						type: Hinder
 						select: choose(beacon)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -1249,15 +1255,7 @@
 					{
 						type: Hinder
 						select: choose(beacon)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -1327,15 +1325,7 @@
 					{
 						type: Hinder
 						select: choose(beacon)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}

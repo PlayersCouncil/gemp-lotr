@@ -29,15 +29,7 @@
 					{
 						type: Hinder
 						select: choose(beacon)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -106,15 +98,7 @@
 					{
 						type: Hinder
 						select: choose(beacon)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Northern Signal-fire)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -192,8 +176,8 @@
 				cost: [
 					{
 						type: Hinder
-						select: choose(title(Northern Signal-fire))
-						count: 2
+						select: choose(beacon)
+						count: 4
 					}
 				]
 			}
@@ -201,6 +185,13 @@
 				type: Modifier
 				modifier: {
 					type: CantBeDiscarded
+					filter: self
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: CantBeHindered
 					filter: self
 				}
 			}
@@ -238,7 +229,7 @@
 			}
 
 		]
-		gametext: Beacon. To play, hinder 2 copies of Northern Signal-fire.<br>This condition cannot be discarded.<br>While you can spot an unbound [gondor] Man and a mounted [Rohan] Man, mounted [Rohan] companions can bear 1 additional hand weapon and minions skirmishing knights lose <b>fierce</b> until the regroup phase.
+		gametext: Beacon. To play, hinder 4 beacons.\This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.\Skirmish: Hinder another beacon to make your Man strength +1.
 		lore: ""
 		promotext: ""
 		alts: {
