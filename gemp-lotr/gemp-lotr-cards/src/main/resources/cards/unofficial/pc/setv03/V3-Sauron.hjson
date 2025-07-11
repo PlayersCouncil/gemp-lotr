@@ -121,15 +121,7 @@
 					{
 						type: Hinder
 						select: choose(twilight,condition)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Cover of Darkness)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -201,15 +193,7 @@
 					{
 						type: Hinder
 						select: choose(twilight,condition)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Cover of Darkness)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -276,15 +260,7 @@
 					{
 						type: Hinder
 						select: choose(twilight,condition)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Cover of Darkness)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -347,8 +323,8 @@
 				cost: [
 					{
 						type: Hinder
-						select: choose(title(Cover of Darkness))
-						count: 2
+						select: choose(twilight, condition)
+						count: 4
 					}
 				]
 			}
@@ -356,6 +332,13 @@
 				type: Modifier
 				modifier: {
 					type: CantBeDiscarded
+					filter: self
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: CantBeHindered
 					filter: self
 				}
 			}
@@ -384,6 +367,24 @@
 					type: AddKeyword
 					filter: Nazgul
 					keyword: damage+1
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: your,Man
+					keyword: archer
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: your,Uruk-hai
+					keyword: archer
 				}
 			}
 			
@@ -614,26 +615,48 @@
 				}
 				effect: [
 					{
-						type: PlayCardFromDiscard
+						type: ChooseCardsFromDiscard
 						select: choose(side(Shadow), condition)
-						memorize: playedCondition
+						memorize: chosenCondition
 					}
 					{
 						type: If
 						check: {
 							type: MemoryMatches
-							memory: playedCondition
-							filter: twilight
+							memory: chosenCondition
+							filter: twilight, Playable
 						}
-						false: {
-							type: Hinder
-							select: self
+						true: [
+							{
+								type: Optional
+								text: Would you like to play {chosenCondition}?
+								effect: {
+									type: PlayCardFromDiscard
+									select: choose(side(Shadow), condition)
+									memorize: chosenCondition
+								}
+							}
+						]
+					}
+					
+					#We only shuffle the card if the player
+					#didn't decide to play it
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: chosenCondition
+							filter: Zone(DISCARD)
+						}
+						true: {
+							type: ShuffleCardsFromDiscardIntoDrawDeck
+							select: memory(chosenCondition)
 						}
 					}
 				]
 			}
 		]
-		gametext: Twilight. Each time you play an Orc, you may hinder this to add (1).\<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
+		gametext: Twilight. Each time you play an Orc, you may hinder this to add (1).\<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
 		lore: ""
 		promotext: ""
 		alts: {

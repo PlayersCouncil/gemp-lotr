@@ -121,15 +121,7 @@
 					{
 						type: Hinder
 						select: choose(twilight,condition)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Cover of Darkness)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
@@ -138,14 +130,14 @@
 				phase: Skirmish
 				requires: {
 					type: CanSpot
-					filter: Nazgul
+					filter: culture(Ringwraith), minion
 					count: 3
 				}
 				cost: [
 					{
 						type: Spot
-						select: choose(Nazgul)
-						memorize: chosenNazgul
+						select: choose(culture(Ringwraith), minion)
+						memorize: chosenMinion
 					}
 					{
 						type: Spot
@@ -159,7 +151,7 @@
 				]
 				effect: {
 					type: Hinder
-					select: all(not(or(memory(chosenNazgul),memory(chosenComp) )))
+					select: all(not(or(memory(chosenMinion),memory(chosenComp) )))
 				}
 			}
 		]
@@ -203,15 +195,7 @@
 					{
 						type: Hinder
 						select: choose(twilight,condition)
-						count: {
-							type: Conditional
-							requires: {
-								type: CantSpot
-								filter: title(Cover of Darkness)
-							}
-							true: 2
-							false: 3
-						}
+						count: 2
 					}
 				]
 			}
