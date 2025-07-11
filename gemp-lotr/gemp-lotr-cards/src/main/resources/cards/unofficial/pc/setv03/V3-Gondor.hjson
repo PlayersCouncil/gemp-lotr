@@ -1060,7 +1060,7 @@
 				type: ExtraCost
 				cost: {
 					type: Exert
-					select: choose(Gondor, companion)
+					select: choose(unbound, Man)
 				}
 			}
 			{
