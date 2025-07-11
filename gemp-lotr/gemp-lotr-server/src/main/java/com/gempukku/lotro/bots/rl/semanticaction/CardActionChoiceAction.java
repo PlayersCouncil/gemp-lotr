@@ -17,6 +17,9 @@ public class CardActionChoiceAction implements SemanticAction {
     private String holderBlueprint;
     private final List<String> notChosenActions = new ArrayList<>();
     private final List<String> notChosenBlueprints = new ArrayList<>();
+    private final String skirmishingFpBlueprintId;
+    private final List<String> skirmishingMinionBlueprintIds = new ArrayList<>();
+    private final boolean sourceInSkirmish;
 
     public CardActionChoiceAction(String answer, AwaitingDecision decision, GameState gameState) {
         if (answer == null || answer.isEmpty()) {
@@ -24,6 +27,8 @@ public class CardActionChoiceAction implements SemanticAction {
             sourceBlueprint = null;
             woundsOnSource = 0;
             holderBlueprint = null;
+            skirmishingFpBlueprintId = null;
+            sourceInSkirmish = false;
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             for (int i = 0; i < actionTexts.length; i++) {
                 notChosenActions.add(actionTexts[i]);
@@ -51,17 +56,40 @@ public class CardActionChoiceAction implements SemanticAction {
                     notChosenBlueprints.add(gameState.getBlueprintId(Integer.parseInt(decision.getDecisionParameters().get("cardId")[i])));
                 }
             }
+
+            if (gameState.getSkirmish() != null && gameState.getSkirmish().getFellowshipCharacter() != null && !gameState.getSkirmish().getShadowCharacters().isEmpty()) {
+                int sourceId = Integer.parseInt(decision.getDecisionParameters().get("cardId")[Integer.parseInt(answer)]);
+                boolean tmpSourceInSkirmish = gameState.getSkirmish().getFellowshipCharacter().getCardId() == sourceId;
+
+                skirmishingFpBlueprintId = gameState.getSkirmish().getFellowshipCharacter().getBlueprintId();
+                for (PhysicalCard shadowCharacter : gameState.getSkirmish().getShadowCharacters()) {
+                    skirmishingMinionBlueprintIds.add(shadowCharacter.getBlueprintId());
+                    if (shadowCharacter.getCardId() == sourceId) {
+                        tmpSourceInSkirmish = true;
+                    }
+                }
+
+                sourceInSkirmish = tmpSourceInSkirmish;
+            } else {
+                skirmishingFpBlueprintId = null;
+                sourceInSkirmish = false;
+            }
         }
     }
 
     public CardActionChoiceAction(String actionText, String sourceBlueprint, int woundsOnSource, String holderBlueprint,
-                                  String[] notChosenActions, String[] notChosenBlueprintIds) {
+                                  String[] notChosenActions, String[] notChosenBlueprintIds,
+                                  String skirmishingFpBlueprintId, String[] skirmishingMinionBlueprintIds,
+                                  boolean sourceInSkirmish) {
         this.actionText = actionText;
         this.sourceBlueprint = sourceBlueprint;
         this.woundsOnSource = woundsOnSource;
         this.holderBlueprint = holderBlueprint;
         this.notChosenActions.addAll(Arrays.asList(notChosenActions));
         this.notChosenBlueprints.addAll(Arrays.asList(notChosenBlueprintIds));
+        this.skirmishingFpBlueprintId = skirmishingFpBlueprintId;
+        this.skirmishingMinionBlueprintIds.addAll(Arrays.asList(skirmishingMinionBlueprintIds));
+        this.sourceInSkirmish = sourceInSkirmish;
     }
 
     public String getActionText() {
@@ -86,6 +114,18 @@ public class CardActionChoiceAction implements SemanticAction {
 
     public String getHolderBlueprint() {
         return holderBlueprint;
+    }
+
+    public String getSkirmishingFpBlueprintId() {
+        return skirmishingFpBlueprintId;
+    }
+
+    public List<String> getSkirmishingMinionBlueprintIds() {
+        return skirmishingMinionBlueprintIds;
+    }
+
+    public boolean isSourceInSkirmish() {
+        return sourceInSkirmish;
     }
 
     @Override
@@ -117,6 +157,9 @@ public class CardActionChoiceAction implements SemanticAction {
         obj.put("holderBlueprint", holderBlueprint);
         obj.put("notChosenActions", notChosenActions.toArray(new String[0]));
         obj.put("notChosenBlueprints", notChosenBlueprints.toArray(new String[0]));
+        obj.put("skirmishingFpBlueprintId", skirmishingFpBlueprintId);
+        obj.put("skirmishingMinionBlueprintIds", skirmishingMinionBlueprintIds.toArray(new String[0]));
+        obj.put("sourceInSkirmish", sourceInSkirmish);
         return obj;
     }
 
@@ -127,6 +170,10 @@ public class CardActionChoiceAction implements SemanticAction {
         String holderBlueprint = obj.getString("holderBlueprint");
         String[] notChosenActions = obj.getObject("notChosenActions", String[].class);
         String[] notChosenBlueprints = obj.getObject("notChosenBlueprints", String[].class);
-        return new CardActionChoiceAction(actionText, sourceBlueprint, woundsOnSource, holderBlueprint, notChosenActions, notChosenBlueprints);
+        String skirmishingFpBlueprintId = obj.getString("skirmishingFpBlueprintId");
+        String[] skirmishingMinionBlueprintIds = obj.getObject("skirmishingMinionBlueprintIds", String[].class);
+        boolean sourceInSkirmish = obj.getBoolean("sourceInSkirmish");
+        return new CardActionChoiceAction(actionText, sourceBlueprint, woundsOnSource, holderBlueprint, notChosenActions,
+                notChosenBlueprints, skirmishingFpBlueprintId, skirmishingMinionBlueprintIds, sourceInSkirmish);
     }
 }

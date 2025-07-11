@@ -31,7 +31,7 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
         SemanticAction action = pickSemanticAction(decision, gameState);
 
         // Store temporarily — reward comes later
-        episodeSteps.add(new LearningStep(stateVector, action, getName(), decision));
+        episodeSteps.add(new LearningStep(stateVector, action, getName().equals(gameState.getCurrentPlayerId()), decision));
 
         return action.toDecisionString(decision, gameState);
     }

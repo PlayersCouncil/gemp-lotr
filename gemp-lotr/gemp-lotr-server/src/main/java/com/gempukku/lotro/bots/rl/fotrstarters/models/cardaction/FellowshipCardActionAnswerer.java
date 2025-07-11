@@ -1,5 +1,11 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction;
 
+import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
+import com.gempukku.lotro.bots.rl.semanticaction.CardActionChoiceAction;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.GameState;
+
 public class FellowshipCardActionAnswerer extends AbstractCardActionAnswerer {
     private static final String TRIGGER = "Play Fellowship action or Pass";
     private final FellowshipPlayCardTrainer playTrainer = new FellowshipPlayCardTrainer();
@@ -113,6 +119,28 @@ public class FellowshipCardActionAnswerer extends AbstractCardActionAnswerer {
         @Override
         protected boolean isHealTrainer() {
             return false;
+        }
+
+        @Override
+        protected double[] getPassCardFeatures() throws CardNotFoundException {
+            return CardFeatures.getItemCardFeatures(CardFeatures.PASS, CardFeatures.PASS, 0);
+        }
+
+        @Override
+        protected double[] getCardFeatures(String blueprintId, CardActionChoiceAction action) throws CardNotFoundException {
+            return CardFeatures.getItemCardFeatures(blueprintId, action.getHolderBlueprint(), action.getWoundsOnSource());
+        }
+
+        @Override
+        protected double[] getCardFeatures(String blueprintId, int wounds, GameState gameState, String physicalId) throws CardNotFoundException {
+            double[] cardVector = null;
+            for (PhysicalCard physicalCard : gameState.getInPlay()) {
+                if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
+                    cardVector = CardFeatures.getItemCardFeatures(blueprintId, physicalCard.getAttachedTo().getBlueprintId(), wounds);
+                    break;
+                }
+            }
+            return cardVector;
         }
     }
 

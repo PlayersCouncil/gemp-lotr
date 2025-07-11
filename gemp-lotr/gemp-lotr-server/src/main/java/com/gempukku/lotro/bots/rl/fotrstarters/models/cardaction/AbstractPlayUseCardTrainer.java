@@ -106,20 +106,9 @@ public abstract class AbstractPlayUseCardTrainer extends AbstractTrainer {
                         wounds = gameState.getWounds(physicalCard);
                     }
                 }
-                double[] cardVector;
-                if (!isTransferTrainer()) {
-                    cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-                } else {
-                    cardVector = null;
-                    for (PhysicalCard physicalCard : gameState.getInPlay()) {
-                        if (physicalCard.getCardId() == Integer.parseInt(physicalId)) {
-                            cardVector = CardFeatures.getItemCardFeatures(blueprintId, physicalCard.getAttachedTo().getBlueprintId(), wounds);
-                            break;
-                        }
-                    }
-                    if (cardVector == null) {
-                        continue;
-                    }
+                double[] cardVector = getCardFeatures(blueprintId, wounds, gameState, physicalId);
+                if (cardVector == null) {
+                    continue;
                 }
                 double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
                 System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
@@ -134,12 +123,7 @@ public abstract class AbstractPlayUseCardTrainer extends AbstractTrainer {
 
         // Add pass option
         try {
-            double[] cardVector;
-            if (!isTransferTrainer()) {
-                cardVector = CardFeatures.getCardFeatures(CardFeatures.PASS, 0);
-            } else {
-                cardVector = CardFeatures.getItemCardFeatures(CardFeatures.PASS, CardFeatures.PASS, 0);
-            }
+            double[] cardVector = getPassCardFeatures();
             double[] extended = Arrays.copyOf(stateVector, stateVector.length + cardVector.length);
             System.arraycopy(cardVector, 0, extended, stateVector.length, cardVector.length);
 
@@ -172,18 +156,18 @@ public abstract class AbstractPlayUseCardTrainer extends AbstractTrainer {
             if (step.reward > 0) {
                 // Chosen: good
                 if (action.getSourceBlueprint() != null) {
-                    addLabeledPoints(data, action.getSourceBlueprint(), action.getWoundsOnSource(), action.getHolderBlueprint(), step.state, 1);
+                    addLabeledPoints(data, action.getSourceBlueprint(), action, step.state, 1);
                 } else {
                     // Passed and it was good
-                    addLabeledPoints(data, CardFeatures.PASS, action.getWoundsOnSource(), CardFeatures.PASS, step.state, 1);
+                    addLabeledPoints(data, CardFeatures.PASS, action, step.state, 1);
                 }
             } else {
                 // Chosen: bad
                 if (action.getSourceBlueprint() != null) {
-                    addLabeledPoints(data, action.getSourceBlueprint(), action.getWoundsOnSource(), action.getHolderBlueprint(), step.state, 0);
+                    addLabeledPoints(data, action.getSourceBlueprint(), action, step.state, 0);
                 } else {
                     // Passed and it was bad, should have played
-                    addLabeledPoints(data, CardFeatures.PASS, action.getWoundsOnSource(), CardFeatures.PASS, step.state, 0);
+                    addLabeledPoints(data, CardFeatures.PASS, action, step.state, 0);
                 }
             }
         }
@@ -191,20 +175,27 @@ public abstract class AbstractPlayUseCardTrainer extends AbstractTrainer {
         return data;
     }
 
-    protected void addLabeledPoints(List<LabeledPoint> data, String blueprintId, int wounds, String holderBlueprintId,
+    protected void addLabeledPoints(List<LabeledPoint> data, String blueprintId, CardActionChoiceAction action,
                                     double[] state, int label) {
         try {
-            double[] cardVector;
-            if (!isTransferTrainer()) {
-                cardVector = CardFeatures.getCardFeatures(blueprintId, wounds);
-            } else {
-                cardVector = CardFeatures.getItemCardFeatures(blueprintId, holderBlueprintId, wounds);
-            }
+            double[] cardVector = getCardFeatures(blueprintId, action);
             double[] extended = Arrays.copyOf(state, state.length + cardVector.length);
             System.arraycopy(cardVector, 0, extended, state.length, cardVector.length);
             data.add(new LabeledPoint(label, extended));
         } catch (CardNotFoundException ignore) {
         }
 
+    }
+
+    protected double[] getPassCardFeatures() throws CardNotFoundException {
+        return CardFeatures.getCardFeatures(CardFeatures.PASS, 0);
+    }
+
+    protected double[] getCardFeatures(String blueprintId, CardActionChoiceAction action) throws CardNotFoundException {
+        return CardFeatures.getCardFeatures(blueprintId, action.getWoundsOnSource());
+    }
+
+    protected double[] getCardFeatures(String blueprintId, int wounds, GameState gameState, String physicalId) throws CardNotFoundException {
+        return CardFeatures.getCardFeatures(blueprintId, wounds);
     }
 }

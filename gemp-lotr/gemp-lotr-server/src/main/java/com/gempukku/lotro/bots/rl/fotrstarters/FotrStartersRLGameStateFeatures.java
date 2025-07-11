@@ -243,12 +243,21 @@ public class FotrStartersRLGameStateFeatures implements RLGameStateFeatures {
         double[] generalFeatures = extractGeneralStateFeatures(gameState, playerId);
         List<Double> features = Arrays.stream(generalFeatures).boxed().collect(Collectors.toList());
 
-        GameStats gameStats = gameState.getMostRecentGameStats();
-        features.add(((double) gameStats.getFellowshipSkirmishStrength()));
-        features.add(((double) gameStats.getShadowSkirmishStrength()));
-        features.add(((double) gameStats.getFellowshipSkirmishDamageBonus()));
-        features.add(((double) gameStats.getShadowSkirmishDamageBonus()));
-        features.add(gameStats.isFpOverwhelmed() ? 1.0 : 0.0);
+        if (gameState.getSkirmish() == null || gameState.getSkirmish().getFellowshipCharacter() == null || gameState.getSkirmish().getShadowCharacters().isEmpty()) {
+            for (int i = 0; i < 4; i++) {
+                features.add(0.0);
+            }
+        } else {
+            GameStats gameStats = gameState.getMostRecentGameStats();
+            features.add(((double) gameStats.getFellowshipSkirmishStrength() - gameStats.getShadowSkirmishStrength()));
+            features.add(((double) gameStats.getFellowshipSkirmishDamageBonus()));
+            features.add(gameStats.isFpOverwhelmed() ? 1.0 : 0.0);
+            if (gameStats.getFellowshipSkirmishStrength() - gameStats.getShadowSkirmishStrength() > 0) {
+                features.add((double) gameState.getSkirmish().getFellowshipCharacter().getBlueprint().getVitality() - gameState.getWounds(gameState.getSkirmish().getFellowshipCharacter()));
+            } else {
+                features.add((double) gameState.getSkirmish().getFellowshipCharacter().getBlueprint().getVitality() - gameState.getWounds(gameState.getSkirmish().getFellowshipCharacter()) - 1 - gameStats.getShadowSkirmishDamageBonus());
+            }
+        }
 
         return features.stream().mapToDouble(Double::doubleValue).toArray();
     }

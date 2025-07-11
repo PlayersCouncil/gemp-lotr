@@ -63,7 +63,8 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
             new FellowshipCardActionAnswerer(),
             new ShadowCardActionAnswerer(),
             new ManeuverCardActionAnswerer(),
-            new SkirmishCardActionAnswerer(),
+            new SkirmishFpCardActionAnswerer(),
+            new SkirmishShadowCardActionAnswerer(),
             new RegroupCardActionAnswerer(),
             new OptionalResponsesCardActionTrainer()
     );
@@ -97,7 +98,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
         SemanticAction action = chooseSemanticAction(gameState, decision);
 
         // Store temporarily — reward comes later
-        episodeSteps.add(new LearningStep(stateVector, action, getName(), decision));
+        episodeSteps.add(new LearningStep(stateVector, action, getName().equals(gameState.getCurrentPlayerId()), decision));
 
         return action.toDecisionString(decision, gameState);
     }
@@ -243,14 +244,12 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
             return String.join(",", cardIds);
         }
 
-        for (DecisionAnswerer trainer : cardSelectionTrainers) {
-            if (trainer.appliesTo(gameState, decision, getName())) {
-                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
-            }
-        }
-
-        // Have this last as a fallback for skirmish modifiers - choose the one skirmishing
-        if (gameState.getSkirmish() != null && min == 1 && max == 1) {
+        // Choose the one skirmishing
+        if (gameState.getSkirmish() != null &&
+                gameState.getSkirmish().getFellowshipCharacter() != null &&
+                gameState.getSkirmish().getShadowCharacters() != null &&
+                !gameState.getSkirmish().getShadowCharacters().isEmpty()
+                && min == 1 && max == 1) {
             Skirmish skirmish = gameState.getSkirmish();
             for (String cardId : cardIds) {
                 if (skirmish.getFellowshipCharacter().getCardId() == Integer.parseInt(cardId)) {
@@ -264,6 +263,12 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
             }
             // Skirmishing character cannot be chosen, choose whatever
             return super.chooseAction(gameState, decision);
+        }
+
+        for (DecisionAnswerer trainer : cardSelectionTrainers) {
+            if (trainer.appliesTo(gameState, decision, getName())) {
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
+            }
         }
 
         // Last fallback to trainer
