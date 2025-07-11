@@ -18,7 +18,9 @@ public class CardActionChoiceAction implements SemanticAction {
     private final List<String> notChosenActions = new ArrayList<>();
     private final List<String> notChosenBlueprints = new ArrayList<>();
     private final String skirmishingFpBlueprintId;
+    private final int remainingVitalityOnSkirmishFp;
     private final List<String> skirmishingMinionBlueprintIds = new ArrayList<>();
+    private final List<Integer> remainingVitalityOnSkirmishingMinions = new ArrayList<>();
     private final boolean sourceInSkirmish;
 
     public CardActionChoiceAction(String answer, AwaitingDecision decision, GameState gameState) {
@@ -28,6 +30,7 @@ public class CardActionChoiceAction implements SemanticAction {
             woundsOnSource = 0;
             holderBlueprint = null;
             skirmishingFpBlueprintId = null;
+            remainingVitalityOnSkirmishFp = 0;
             sourceInSkirmish = false;
             String[] actionTexts = decision.getDecisionParameters().get("actionText");
             for (int i = 0; i < actionTexts.length; i++) {
@@ -62,8 +65,10 @@ public class CardActionChoiceAction implements SemanticAction {
                 boolean tmpSourceInSkirmish = gameState.getSkirmish().getFellowshipCharacter().getCardId() == sourceId;
 
                 skirmishingFpBlueprintId = gameState.getSkirmish().getFellowshipCharacter().getBlueprintId();
+                remainingVitalityOnSkirmishFp = gameState.getSkirmish().getFellowshipCharacter().getBlueprint().getVitality() - gameState.getWounds(gameState.getSkirmish().getFellowshipCharacter());
                 for (PhysicalCard shadowCharacter : gameState.getSkirmish().getShadowCharacters()) {
                     skirmishingMinionBlueprintIds.add(shadowCharacter.getBlueprintId());
+                    remainingVitalityOnSkirmishingMinions.add(shadowCharacter.getBlueprint().getVitality() - gameState.getWounds(shadowCharacter));
                     if (shadowCharacter.getCardId() == sourceId) {
                         tmpSourceInSkirmish = true;
                     }
@@ -72,6 +77,7 @@ public class CardActionChoiceAction implements SemanticAction {
                 sourceInSkirmish = tmpSourceInSkirmish;
             } else {
                 skirmishingFpBlueprintId = null;
+                remainingVitalityOnSkirmishFp = 0;
                 sourceInSkirmish = false;
             }
         }
@@ -80,7 +86,7 @@ public class CardActionChoiceAction implements SemanticAction {
     public CardActionChoiceAction(String actionText, String sourceBlueprint, int woundsOnSource, String holderBlueprint,
                                   String[] notChosenActions, String[] notChosenBlueprintIds,
                                   String skirmishingFpBlueprintId, String[] skirmishingMinionBlueprintIds,
-                                  boolean sourceInSkirmish) {
+                                  boolean sourceInSkirmish, int remainingVitalityOnSkirmishFp, Integer[] remainingVitalityOnSkirmishingMinions) {
         this.actionText = actionText;
         this.sourceBlueprint = sourceBlueprint;
         this.woundsOnSource = woundsOnSource;
@@ -90,6 +96,8 @@ public class CardActionChoiceAction implements SemanticAction {
         this.skirmishingFpBlueprintId = skirmishingFpBlueprintId;
         this.skirmishingMinionBlueprintIds.addAll(Arrays.asList(skirmishingMinionBlueprintIds));
         this.sourceInSkirmish = sourceInSkirmish;
+        this.remainingVitalityOnSkirmishFp = remainingVitalityOnSkirmishFp;
+        this.remainingVitalityOnSkirmishingMinions.addAll(Arrays.asList(remainingVitalityOnSkirmishingMinions));
     }
 
     public String getActionText() {
@@ -128,6 +136,14 @@ public class CardActionChoiceAction implements SemanticAction {
         return sourceInSkirmish;
     }
 
+    public int getRemainingVitalityOnSkirmishFp() {
+        return remainingVitalityOnSkirmishFp;
+    }
+
+    public List<Integer> getRemainingVitalityOnSkirmishingMinions() {
+        return remainingVitalityOnSkirmishingMinions;
+    }
+
     @Override
     public String toDecisionString(AwaitingDecision decision, GameState gameState) {
         if (decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE) {
@@ -160,6 +176,8 @@ public class CardActionChoiceAction implements SemanticAction {
         obj.put("skirmishingFpBlueprintId", skirmishingFpBlueprintId);
         obj.put("skirmishingMinionBlueprintIds", skirmishingMinionBlueprintIds.toArray(new String[0]));
         obj.put("sourceInSkirmish", sourceInSkirmish);
+        obj.put("remainingVitalityOnSkirmishFp", remainingVitalityOnSkirmishFp);
+        obj.put("remainingVitalityOnSkirmishingMinions", remainingVitalityOnSkirmishingMinions.toArray(new Integer[0]));
         return obj;
     }
 
@@ -172,8 +190,11 @@ public class CardActionChoiceAction implements SemanticAction {
         String[] notChosenBlueprints = obj.getObject("notChosenBlueprints", String[].class);
         String skirmishingFpBlueprintId = obj.getString("skirmishingFpBlueprintId");
         String[] skirmishingMinionBlueprintIds = obj.getObject("skirmishingMinionBlueprintIds", String[].class);
+        int remainingVitalityOnSkirmishFp = obj.getIntValue("remainingVitalityOnSkirmishFp");
+        Integer[] remainingVitalityOnSkirmishingMinions = obj.getObject("remainingVitalityOnSkirmishingMinions", Integer[].class);
         boolean sourceInSkirmish = obj.getBoolean("sourceInSkirmish");
         return new CardActionChoiceAction(actionText, sourceBlueprint, woundsOnSource, holderBlueprint, notChosenActions,
-                notChosenBlueprints, skirmishingFpBlueprintId, skirmishingMinionBlueprintIds, sourceInSkirmish);
+                notChosenBlueprints, skirmishingFpBlueprintId, skirmishingMinionBlueprintIds, sourceInSkirmish,
+                remainingVitalityOnSkirmishFp, remainingVitalityOnSkirmishingMinions);
     }
 }

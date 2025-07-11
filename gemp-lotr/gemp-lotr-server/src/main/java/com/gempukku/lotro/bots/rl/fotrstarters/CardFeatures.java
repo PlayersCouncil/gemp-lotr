@@ -1,13 +1,19 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.PossessionClass;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.gempukku.lotro.common.Timeword.*;
@@ -221,7 +227,7 @@ public class CardFeatures {
         return tbr.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
-    public static double[] getSkirmishPlayCardFeatures(String cardBlueprintId, String fpBlueprintId, List<String> minionBlueprintIds, boolean sourceInSkirmish) throws CardNotFoundException {
+    public static double[] getSkirmishPlayCardFeatures(String cardBlueprintId, String fpBlueprintId, boolean fpCanExert, List<String> minionBlueprintIds, List<Boolean> minionsCanExert, boolean sourceInSkirmish) throws CardNotFoundException {
         if (library != null) {
             try {
                 LotroCardBlueprint cardBlueprint = library.getLotroCardBlueprint(cardBlueprintId);
@@ -235,13 +241,15 @@ public class CardFeatures {
 
 
                 boolean shadowCanAffect = false;
-                for (String minionBlueprintId : minionBlueprintIds) {
-                    if (canCardAffectTarget(cardBlueprintId, minionBlueprintId, sourceInSkirmish)) {
+                for (int i = 0; i < minionBlueprintIds.size(); i++) {
+                    String minionBlueprintId = minionBlueprintIds.get(i);
+                    boolean minionCanExert = minionsCanExert.get(i);
+                    if (canCardAffectTarget(cardBlueprintId, minionBlueprintId, sourceInSkirmish, minionCanExert)) {
                         shadowCanAffect = true;
                         break;
                     }
                 }
-                features.add(canCardAffectTarget(cardBlueprintId, fpBlueprintId, sourceInSkirmish) || shadowCanAffect ? 1.0 : 0.0);
+                features.add(canCardAffectTarget(cardBlueprintId, fpBlueprintId, sourceInSkirmish, fpCanExert) || shadowCanAffect ? 1.0 : 0.0);
 
                 return features.stream().mapToDouble(Double::doubleValue).toArray();
             } catch (CardNotFoundException e) {
@@ -256,7 +264,7 @@ public class CardFeatures {
         }
     }
 
-    private static boolean canCardAffectTarget(String sourceBlueprintId, String targetBlueprintId, boolean sourceInSkirmish) {
+    private static boolean canCardAffectTarget(String sourceBlueprintId, String targetBlueprintId, boolean sourceInSkirmish, boolean targetCanExert) {
         if (library == null)
             throw new IllegalStateException("Blueprint library not initialized");
 
@@ -268,20 +276,23 @@ public class CardFeatures {
             if (effectsObj == null)
                 return false;
 
-            return containsMatchingSelect(effectsObj, targetCard, sourceInSkirmish && targetBlueprintId.equals(sourceBlueprintId), null);
+            return containsMatchingSelect(effectsObj, targetCard, sourceInSkirmish && targetBlueprintId.equals(sourceBlueprintId), null, targetCanExert);
 
         } catch (CardNotFoundException e) {
             return false;
         }
     }
 
-    private static boolean containsMatchingSelect(Object node, LotroCardBlueprint targetCard, boolean sourceInSkirmish, String costSelect) {
+    private static boolean containsMatchingSelect(Object node, LotroCardBlueprint targetCard, boolean sourceInSkirmish, String costSelect, boolean targetCanExert) {
         if (node instanceof JSONObject obj) {
             for (Object keyObj : obj.keySet()) {
                 String key = keyObj.toString();
                 if (key.equals("cost")) {
-                    //TODO exert
-                    costSelect = (String) ((JSONObject) obj.get(key)).get("select");
+                    if (targetCanExert &&
+                            ((JSONObject) obj.get(key)).get("type").equals("exert") &&
+                            ((JSONObject) obj.get(key)).containsKey("memorize")) {
+                        costSelect = (String) ((JSONObject) obj.get(key)).get("select");
+                    }
                     continue; // Skip cost blocks
                 }
 
@@ -301,12 +312,12 @@ public class CardFeatures {
                 }
 
                 // Recurse into other fields
-                if (containsMatchingSelect(value, targetCard, sourceInSkirmish, costSelect))
+                if (containsMatchingSelect(value, targetCard, sourceInSkirmish, costSelect, targetCanExert))
                     return true;
             }
         } else if (node instanceof JSONArray arr) {
             for (Object item : arr) {
-                if (containsMatchingSelect(item, targetCard, sourceInSkirmish, costSelect)) {
+                if (containsMatchingSelect(item, targetCard, sourceInSkirmish, costSelect, targetCanExert)) {
                     return true;
                 }
             }

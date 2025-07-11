@@ -80,21 +80,28 @@ public class SkirmishShadowCardActionAnswerer extends AbstractCardActionAnswerer
 
         @Override
         protected double[] getPassCardFeatures() throws CardNotFoundException {
-            return CardFeatures.getSkirmishPlayCardFeatures(CardFeatures.PASS, CardFeatures.PASS, List.of(), false);
+            return CardFeatures.getSkirmishPlayCardFeatures(CardFeatures.PASS, CardFeatures.PASS, false, List.of(), List.of(), false);
         }
 
         @Override
         protected double[] getCardFeatures(String blueprintId, CardActionChoiceAction action) throws CardNotFoundException {
-            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, action.getSkirmishingFpBlueprintId(),
-                    action.getSkirmishingMinionBlueprintIds(), action.isSourceInSkirmish());
+            List<Boolean> canExert = new ArrayList<>();
+            for (Integer remainingVitalityOnSkirmishingMinion : action.getRemainingVitalityOnSkirmishingMinions()) {
+                canExert.add(remainingVitalityOnSkirmishingMinion > 1);
+            }
+
+            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, action.getSkirmishingFpBlueprintId(), false,
+                    action.getSkirmishingMinionBlueprintIds(), canExert, action.isSourceInSkirmish());
         }
 
         @Override
         protected double[] getCardFeatures(String blueprintId, int wounds, GameState gameState, String physicalId) throws CardNotFoundException {
             Skirmish skirmish = gameState.getSkirmish();
             List<String> minions = new ArrayList<>();
+            List<Boolean> canExert = new ArrayList<>();
             for (PhysicalCard shadowCharacter : skirmish.getShadowCharacters()) {
                 minions.add(shadowCharacter.getBlueprintId());
+                canExert.add(gameState.getWounds(shadowCharacter) + 1 < shadowCharacter.getBlueprint().getVitality());
             }
 
             boolean sourceInSkirmish = false;
@@ -104,7 +111,7 @@ public class SkirmishShadowCardActionAnswerer extends AbstractCardActionAnswerer
                 }
             }
 
-            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, skirmish.getFellowshipCharacter().getBlueprintId(), minions, sourceInSkirmish);
+            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, skirmish.getFellowshipCharacter().getBlueprintId(), false, minions, canExert, sourceInSkirmish);
         }
     }
 
@@ -141,21 +148,28 @@ public class SkirmishShadowCardActionAnswerer extends AbstractCardActionAnswerer
 
         @Override
         protected double[] getPassCardFeatures() throws CardNotFoundException {
-            return CardFeatures.getSkirmishPlayCardFeatures(CardFeatures.PASS, CardFeatures.PASS, List.of(), false);
+            return CardFeatures.getSkirmishPlayCardFeatures(CardFeatures.PASS, CardFeatures.PASS, false, List.of(), List.of(), false);
         }
 
         @Override
         protected double[] getCardFeatures(String blueprintId, CardActionChoiceAction action) throws CardNotFoundException {
-            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, action.getSkirmishingFpBlueprintId(),
-                    action.getSkirmishingMinionBlueprintIds(), action.isSourceInSkirmish());
+            List<Boolean> canExert = new ArrayList<>();
+            for (Integer remainingVitalityOnSkirmishingMinion : action.getRemainingVitalityOnSkirmishingMinions()) {
+                canExert.add(remainingVitalityOnSkirmishingMinion > 1);
+            }
+
+            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, action.getSkirmishingFpBlueprintId(), false,
+                    action.getSkirmishingMinionBlueprintIds(), canExert, action.isSourceInSkirmish());
         }
 
         @Override
         protected double[] getCardFeatures(String blueprintId, int wounds, GameState gameState, String physicalId) throws CardNotFoundException {
             Skirmish skirmish = gameState.getSkirmish();
             List<String> minions = new ArrayList<>();
+            List<Boolean> canExert = new ArrayList<>();
             for (PhysicalCard shadowCharacter : skirmish.getShadowCharacters()) {
                 minions.add(shadowCharacter.getBlueprintId());
+                canExert.add(gameState.getWounds(shadowCharacter) + 1 < shadowCharacter.getBlueprint().getVitality());
             }
 
             boolean sourceInSkirmish = false;
@@ -165,7 +179,7 @@ public class SkirmishShadowCardActionAnswerer extends AbstractCardActionAnswerer
                 }
             }
 
-            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, skirmish.getFellowshipCharacter().getBlueprintId(), minions, sourceInSkirmish);
+            return CardFeatures.getSkirmishPlayCardFeatures(blueprintId, skirmish.getFellowshipCharacter().getBlueprintId(), false, minions, canExert, sourceInSkirmish);
         }
     }
 }
