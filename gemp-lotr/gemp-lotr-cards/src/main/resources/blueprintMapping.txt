@@ -418,3 +418,7 @@ gl_theOneRing,1_2
 101_104,101_39
 #June 2025 WC Circuit: V2 Saruman
 102_100,102_29
+#FA Sam, Great Elf Warrior
+10_129,10_122
+#July 2025 WC Circuit: FA Mumak Commander, GATS
+15_211,15_86
