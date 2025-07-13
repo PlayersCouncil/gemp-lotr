@@ -343,7 +343,7 @@
 				optional: true
 				trigger: {
 					type: winsSkirmish
-					filter: self
+					filter: self, InFierceSkirmish
 				}
 				effect: {
 					type: repeat

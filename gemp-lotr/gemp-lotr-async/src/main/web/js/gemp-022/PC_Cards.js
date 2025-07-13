@@ -983,6 +983,10 @@ var PCCards = {
 	// Pale Crown FA
 	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
 	// V2 Saruman FA
-	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg'
+	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg',
+	// FA Sam, Great Elf Warrior
+	'10_129': 'https://i.lotrtcgpc.net/promos/LOTR-EN10U122.0_card.jpg',
+	// July 2025 WC Circuit: FA Mumak Commander, GATS
+	'15_211': 'https://i.lotrtcgpc.net/promos/LOTR-EN15U086.0_card.jpg'
 }
 
