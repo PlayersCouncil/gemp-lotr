@@ -72,6 +72,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
+		keywords: River
 		effects: [
 			{
 				type: Trigger
