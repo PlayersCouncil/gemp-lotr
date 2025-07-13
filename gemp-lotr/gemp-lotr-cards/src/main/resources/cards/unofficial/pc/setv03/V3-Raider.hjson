@@ -15,21 +15,12 @@
 		unique: false
 		side: Shadow
 		culture: Raider
-		twilight: 6
+		twilight: 3
 		type: Possession
-		strength: 3
-		vitality: 2
-		itemclass: Mount
-		target: Southron
+		keyword: [
+			Support Area
+		]
 		effects: [
-			{
-				type: modifier
-				modifier: {
-					type: addKeyword
-					filter: bearer
-					keyword: fierce
-				}
-			}
 			{
 				type: Trigger
 				optional: false
@@ -39,30 +30,89 @@
 				}
 				requires: {
 					type: canSpot
-					filter: bearer,inSkirmish
+					filter: self,inSkirmish
 				}
 				effect: {
 					type: AddThreats
 					amount: {
-						type: ForEachVitality
-						filter: InSkirmishAgainst(bearer)
+						type: Conditional
+						requires: {
+							type: HasCardStacked
+							count: 4
+							filter: Southron
+							on: self
+						}
+						true: 2
+						false: 1
 					}
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: skirmishAboutToEnd
-					involving: bearer
-				}
-				effect: {
-					type: RemoveThreats
-					amount: 2
-				}
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: canSpot
+						filter: self,zone(support)
+					}
+				]
+				cost: [
+					{
+						type: RemoveTwilight
+						amount: 3
+					}
+					{
+						type: StackCardsFromPlay
+						select: choose(Southron, Man)
+						where: self
+						count: any
+					}
+				]
+				effect: [				
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 4
+						vitality: 4
+						keywords: [
+							fierce
+							mounted
+							southron
+						]
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyStrength
+							filter: self
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								multiplier: 3
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeyword
+							filter: self
+							keyword: ambush
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+							}
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
-		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>At the start of each skirmish involving bearer, add X threats, where X is the vitality of each character skirmishing bearer. <br>Remove 2 threats at the end of each skirmish involving bearer.
+		gametext: Maneuver: Remove (3) and stack any number of Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -88,64 +138,96 @@
 		unique: true
 		side: Shadow
 		culture: Raider
-		twilight: 8
+		twilight: 5
 		type: Artifact
-		vitality: 2
-		itemclass: Mount
-		target: Southron
+		keywords: [
+			Support Area
+		]
 		effects: [
 			{
-				type: modifier
-				modifier: {
-					type: addKeyword
-					filter: bearer
-					keyword: fierce
+				type: Activated
+				phase: Shadow
+				effect: {
+					type: StackCardsFromHand
+					select: choose(Southron,Man)
+					where: self
 				}
 			}
 			{
-				type: modifier
-				modifier: {
-					type: CantBeAssignedToSkirmish
-					filter: not(mounted),minion
-				}
-			}
-			{
-				type: modifier
-				modifier: {
-					type: ModifyStrength
-					filter: bearer
-					amount: {
-						type: ForEachYouCanSpot
-						filter: not(mounted),Southron
-						multiplier: 4
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: canSpot
+						filter: self,zone(support)
 					}
-				}
-			}
-			{
-				type: modifier
-				modifier: {
-					type: AddKeyword
-					filter: bearer
-					keyword: ambush
-					amount: {
-						type: ForEachYouCanSpot
-						filter: not(mounted),Southron
-					}
-				}
-			}
-			
-			{
-				type: modifier
-				modifier: {
-					type: AddKeyword
-					filter: bearer
-					keyword: relentless
-					requires: {
-						type: CanSpot
+					{
+						type: HasCardStacked
 						filter: Southron
-						count: 6
+						count: 3
+						on: self
 					}
+				]
+				cost: {
+					type: RemoveTwilight
+					amount: 6
 				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 6
+						vitality: 6
+						keywords: [
+							fierce
+							mounted
+							southron
+						]
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyStrength
+							filter: self
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								multiplier: 3
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeyword
+							filter: self
+							keyword: ambush
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyArcheryTotal
+							side: Shadow
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								limit: 6
+							}
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.\Unmounted minions cannot be assigned\to skirmishes.\Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.\While you can spot 6 Southrons, bearer gains <b>relentless</b> <i>(they participate in an additional round of skirmishes after fierce)</i>.
@@ -175,7 +257,7 @@
 		unique: false
 		side: Shadow
 		culture: Raider
-		twilight: 3
+		twilight: 4
 		type: Artifact
 		keywords: Support Area
 		effects: [
@@ -198,7 +280,7 @@
 				requires: [
 					{
 						type: CanSpot
-						filter: mounted,Southron
+						filter: Southron
 					}
 					{
 						type: canSpot
@@ -207,14 +289,14 @@
 				]
 				cost: {
 					type: RemoveTwilight
-					amount: 4
+					amount: 5
 				}
 				effect: [
 					{
 						type: turnIntoMinion
 						select: self
-						strength: 6
-						vitality: 3
+						strength: 5
+						vitality: 5
 						keywords: [
 							fierce
 							mounted
