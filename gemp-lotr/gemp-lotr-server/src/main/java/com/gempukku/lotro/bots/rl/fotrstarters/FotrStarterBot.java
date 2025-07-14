@@ -173,7 +173,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
         if (chosenAnswer != null) {
             if (decision.equals(lastDecision) && chosenAnswer.equals(lastAction)) {
                 decisionRepeat++;
-                if (decisionRepeat >= 4) {
+                if (decisionRepeat >= 3) {
                     decisionRepeat = 0;
                     lastAction = null;
                     return "";
