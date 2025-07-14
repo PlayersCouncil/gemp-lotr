@@ -6,6 +6,7 @@ import com.gempukku.lotro.bots.rl.ReplayBuffer;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStarterBot;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersLearningStepsPersistence;
 import com.gempukku.lotro.bots.rl.fotrstarters.FotrStartersRLGameStateFeatures;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelIO;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.Trainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
@@ -38,7 +39,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class BotService {
-    private static final boolean START_SIMULATIONS_AT_STARTUP = true;
+    private static final boolean START_SIMULATIONS_AT_STARTUP = false;
+    private static final boolean LOAD_MODELS_FROM_FILES = true;
 
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
@@ -60,9 +62,9 @@ public class BotService {
 
 
         if (START_SIMULATIONS_AT_STARTUP) {
-            runSelfPlayTrainingLoop(5, 1000);
+            runSelfPlayTrainingLoop(5, 10000);
         } else {
-            System.out.println("training bot models at startup");
+            System.out.println("Loading bot models");
 
             // List of all trainer instances
             List<Trainer> trainers = List.of(
@@ -104,18 +106,25 @@ public class BotService {
             FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
 
             for (Trainer trainer : trainers) {
-                System.out.println("training '" + trainer.getClass().getSimpleName() + "' model");
-                List<LearningStep> steps = persistence.load(trainer);
-                SoftClassifier<double[]> model = trainer.train(steps);
-                modelRegistry.registerModel(trainer.getClass(), model);
+                if (LOAD_MODELS_FROM_FILES) {
+                    // Load trained models
+                    SoftClassifier<double[]> model = ModelIO.loadModel(trainer.getClass());
+                    modelRegistry.registerModel(trainer.getClass(), model);
+                } else {
+                    // Train models on last simulation steps
+                    List<LearningStep> steps = persistence.load(trainer);
+                    SoftClassifier<double[]> model = trainer.train(steps);
+                    modelRegistry.registerModel(trainer.getClass(), model);
+                    ModelIO.saveModel(trainer.getClass(), model);
+                }
             }
 
-            System.out.println("training done");
+            System.out.println("Bot decision models ready");
         }
     }
 
     private void startFotrStartersSimulation(BotPlayer b1, BotPlayer b2, int games) {
-        System.out.println(games + " simulation started");
+        System.out.println(games + " games simulation started");
         SimulationRunner simulationRunner = new SimpleBatchSimulationRunner(
                 new FotrStartersSimulation(library, formatLibrary), b1, b2, games);
 
@@ -144,17 +153,17 @@ public class BotService {
                 startFotrStartersSimulation(
                         new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot1", replayBuffer),
                         new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot2", replayBuffer),
-                        gamesPerGeneration);
+                        1000);
             } else {
                 startFotrStartersSimulation(
                         new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBot" + generation, modelRegistry, replayBuffer),
                         new RandomLearningBot(new FotrStartersRLGameStateFeatures(), "~randomBot", replayBuffer),
-                        gamesPerGeneration / 4
+                        gamesPerGeneration / 5
                 );
                 startFotrStartersSimulation(
                         new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBotOne" + generation, modelRegistry, replayBuffer),
                         new FotrStarterBot(new FotrStartersRLGameStateFeatures(), "~trainBotTwo" + generation, modelRegistry, replayBuffer),
-                        gamesPerGeneration * 3 / 4
+                        gamesPerGeneration * 4 / 5
                 );
             }
 
@@ -200,11 +209,14 @@ public class BotService {
                     new FpAssignmentTrainer()
             );
 
+            ZonedDateTime start = DateUtils.Now();
             for (Trainer trainer : trainers) {
                 List<LearningStep> steps = persistence.load(trainer);
                 SoftClassifier<double[]> model = trainer.train(steps);
                 modelRegistry.registerModel(trainer.getClass(), model);
+                ModelIO.saveModel(trainer.getClass(), model);
             }
+            System.out.println("Training " + DateUtils.HumanDuration(Duration.between(DateUtils.Now(), start).abs()));
         }
 
         System.out.println("Self-play training loop complete.");

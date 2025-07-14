@@ -65,7 +65,9 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
     @Override
     public void endEpisode(double reward) {
         episodeSteps.forEach(learningStep -> learningStep.reward = reward);
-        replayBuffer.addEpisode(new ArrayList<>(episodeSteps));
+        if (replayBuffer != null) {
+            replayBuffer.addEpisode(new ArrayList<>(episodeSteps));
+        }
         episodeSteps.clear();
     }
 }
