@@ -99,6 +99,15 @@ public abstract class AbstractCardSelectionTrainer extends AbstractTrainer {
         if (!(step.action instanceof CardSelectionAction csa))
             return false;
 
+
+        int min = Integer.parseInt(step.decision.getDecisionParameters().get("min")[0]);
+        int max = Integer.parseInt(step.decision.getDecisionParameters().get("max")[0]);
+        List<String> cardIds = Arrays.stream(step.decision.getDecisionParameters().get("cardId")).toList();
+        if (min == max && min == cardIds.size()) {
+            // Had to choose all, nothing to learn from
+            return false;
+        }
+
         if (!step.decision.getText().toLowerCase().contains(getTextTrigger().toLowerCase()))
             return false;
 
