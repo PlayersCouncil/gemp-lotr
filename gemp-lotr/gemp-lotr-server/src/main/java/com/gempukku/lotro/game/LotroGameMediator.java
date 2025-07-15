@@ -450,9 +450,11 @@ public class LotroGameMediator {
                         startClocksForUsersPendingDecision();
 
                     } catch (DecisionResultInvalidException decisionResultInvalidException) {
-                        // Bot provided wrong answer - send a warning message, and ask again for the same decision
+                        // Bot provided wrong answer - concede to prevent loop
                         System.out.println(botName + " wrong answer - " + decisionResultInvalidException.getWarningMessage());
-                        _userFeedback.sendAwaitingDecision(botName, awaitingDecision);
+
+                        addTimeSpentOnDecisionToUserClock(botName);
+                        _lotroGame.playerLost(botName, "Invalid decision");
                     } catch (RuntimeException runtimeException) {
                         LOG.error("Error processing game decision", runtimeException);
                         _lotroGame.cancelGame();
