@@ -857,8 +857,17 @@
 						}
 						true: [
 							{
+								type: ChooseActiveCards
+								player: Shadow
+								text: Choose a hindered Shadow card to shuffle into your draw deck
+								select: choose(side(Shadow), hindered)
+								hindered: true
+								memorize: chosenHindered
+							}
+							{
 								type: ShuffleCardsFromPlayIntoDrawDeck
-								select: choose(side(Shadow), support)
+								player: Shadow
+								select: memory(chosenHindered)
 								includeStacked: true
 							}
 						]
