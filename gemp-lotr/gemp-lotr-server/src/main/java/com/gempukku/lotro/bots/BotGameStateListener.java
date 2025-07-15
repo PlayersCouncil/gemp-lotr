@@ -37,6 +37,11 @@ public class BotGameStateListener implements GameStateListener {
     }
 
     @Override
+    public void cardsFlipped(Collection<PhysicalCard> cards, boolean down) {
+
+    }
+
+    @Override
     public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards) {
 
     }
