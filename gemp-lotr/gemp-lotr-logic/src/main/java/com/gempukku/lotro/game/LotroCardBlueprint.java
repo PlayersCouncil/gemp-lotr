@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
+import org.json.simple.JSONObject;
 
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,8 @@ public interface LotroCardBlueprint {
     enum Direction {
         LEFT, RIGHT
     }
+
+    JSONObject getJsonDefinition();
 
     default LotroCardBlueprint getParent() {
         return this;
