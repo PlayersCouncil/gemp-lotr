@@ -76,13 +76,29 @@ public class LotroGameMediator {
             _playersPlaying.add(participantId);
         }
 
-        if (_soloGame && participants.length == 1) {
-            BotService.BotWithDeck bot = botService.getBotParticipant(lotroFormat);
-            _botPlayer = bot.getBotPlayer();
-            _botDeck = bot.getLotroDeck();
-            _playerDecks.put(_botPlayer.getName(), _botDeck);
-            _playerClocks.put(_botPlayer.getName(), 0);
-            _playersPlaying.add(_botPlayer.getName());
+        if (_soloGame) {
+            if (participants.length == 1) {
+                BotService.BotWithDeck bot = botService.getBotParticipant(lotroFormat);
+                _botPlayer = bot.getBotPlayer();
+                _botDeck = bot.getLotroDeck();
+                _playerDecks.put(_botPlayer.getName(), _botDeck);
+                _playerClocks.put(_botPlayer.getName(), 0);
+                _playersPlaying.add(_botPlayer.getName());
+            } else {
+                BotPlayer tmpBot = null;
+                LotroDeck tmpDeck = null;
+                for (LotroGameParticipant participant : participants) {
+                    String participantId = participant.getPlayerId();
+                    var deck = participant.getDeck();
+                    if (participantId.equals(BotService.GENERAL_BOT_NAME)) {
+                        BotService.BotWithDeck bot = botService.getBotForDeck(deck);
+                        tmpBot = bot.getBotPlayer();
+                        tmpDeck = bot.getLotroDeck();
+                    }
+                }
+                _botPlayer = tmpBot;
+                _botDeck = tmpDeck;
+            }
         } else {
             _botPlayer = null;
             _botDeck = null;

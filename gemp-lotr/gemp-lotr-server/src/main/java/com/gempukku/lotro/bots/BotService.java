@@ -42,6 +42,8 @@ public class BotService {
     private static final boolean START_SIMULATIONS_AT_STARTUP = false;
     private static final boolean LOAD_MODELS_FROM_FILES = true;
 
+    public static final String GENERAL_BOT_NAME = "~bot";
+
     private final LotroCardBlueprintLibrary library;
     private final LotroFormatLibrary formatLibrary;
     private final PlayerDAO playerDAO;
@@ -231,6 +233,11 @@ public class BotService {
         return botList.get(random.nextInt(botList.size()));
     }
 
+    public BotWithDeck getBotForDeck(LotroDeck deck) {
+        // TODO something better than making starter bot play anything
+        return new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), GENERAL_BOT_NAME, modelRegistry, null), deck);
+    }
+
     private void fillBotParticipantList() {
         List<BotWithDeck> fotrBots = new ArrayList<>();
         String aragornBotName = "~AragornBot";
@@ -252,6 +259,8 @@ public class BotService {
         fotrBots.add(new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), gandalfBotName, modelRegistry, null), gandalfStarter));
 
         try {
+            playerDAO.registerBot(GENERAL_BOT_NAME);
+
             playerDAO.registerBot(aragornBotName);
             playerDAO.registerBot(gandalfBotName);
 

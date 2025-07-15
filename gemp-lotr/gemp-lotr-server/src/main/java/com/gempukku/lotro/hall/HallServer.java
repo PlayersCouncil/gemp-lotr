@@ -4,6 +4,7 @@ import com.gempukku.lotro.AbstractServer;
 import com.gempukku.lotro.PrivateInformationException;
 import com.gempukku.lotro.SubscriptionConflictException;
 import com.gempukku.lotro.SubscriptionExpiredException;
+import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.chat.ChatCommandCallback;
 import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatRoomMediator;
@@ -312,7 +313,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public void createNewSoloTable(String type, Player player, String deckName, boolean isPrivate) throws  HallException {
+    public void createNewSoloTable(String type, Player player, String deckName, String botDeckName, boolean isPrivate) throws  HallException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
@@ -320,11 +321,17 @@ public class HallServer extends AbstractServer {
 
         LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
 
+
+        LotroDeck botDeck = null;
+        if (botDeckName != null) {
+            botDeck = validateUserAndDeck(gameSettings.format(), player, botDeckName, gameSettings.collectionType());
+        }
+
         _hallDataAccessLock.writeLock().lock();
         try {
             final GameTable table = tableHolder.createTable(player, gameSettings, lotroDeck);
             if (table != null)
-                createGameFromTable(table);
+                createGameFromTable(table, botDeck);
 
             hallChanged();
         } finally {
@@ -843,7 +850,14 @@ public class HallServer extends AbstractServer {
     }
 
     private void createGameFromTable(GameTable gameTable) {
-        Set<LotroGameParticipant> players = gameTable.getPlayers();
+        createGameFromTable(gameTable, null);
+    }
+
+    private void createGameFromTable(GameTable gameTable, LotroDeck botDeck) {
+        Set<LotroGameParticipant> players = new HashSet<>(gameTable.getPlayers());
+        if (botDeck != null) {
+            players.add(new LotroGameParticipant(BotService.GENERAL_BOT_NAME, botDeck));
+        }
         LotroGameParticipant[] participants = players.toArray(new LotroGameParticipant[0]);
         final League league = gameTable.getGameSettings().league();
         final LeagueSerieInfo leagueSerie = gameTable.getGameSettings().leagueSerie();

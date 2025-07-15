@@ -227,12 +227,15 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String format = getFormParameterSafely(postDecoder, "format");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             String isPrivateVal = getFormParameterSafely(postDecoder, "isPrivate");
+            String botDeckName = getFormParameterSafely(postDecoder, "botDeckName");
             boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
 
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
             try {
-                _hallServer.createNewSoloTable(format, resourceOwner, deckName, isPrivate);
+                //TODO
+//                _hallServer.createNewSoloTable(format, resourceOwner, deckName, botDeckName, isPrivate);
+                _hallServer.createNewSoloTable(format, resourceOwner, deckName, deckName, isPrivate);
                 responseWriter.writeXmlResponse(null);
             }
             catch (HallException e) {
