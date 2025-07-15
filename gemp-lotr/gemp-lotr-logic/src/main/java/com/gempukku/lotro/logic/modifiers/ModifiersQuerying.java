@@ -127,6 +127,7 @@ public interface ModifiersQuerying {
     boolean shouldSkipPhase(LotroGame game, Phase phase, String playerId);
 
     List<? extends Action> getExtraPhaseActions(LotroGame game, PhysicalCard target);
+    Collection<PhysicalCard> getGameTextCardsToDuplicate(LotroGame game, PhysicalCard target);
 
     boolean hasExtraPhaseActionsFromOtherPlayer(LotroGame game, PhysicalCard target);
 

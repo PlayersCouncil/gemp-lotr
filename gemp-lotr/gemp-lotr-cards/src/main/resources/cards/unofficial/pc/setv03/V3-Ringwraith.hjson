@@ -665,7 +665,7 @@
 		twilight: 7
 		type: Minion
 		race: Nazgul
-		strength: 12
+		strength: 13
 		vitality: 3
 		site: 3
 		keywords: Fierce
@@ -732,7 +732,7 @@
 		twilight: 6
 		type: Minion
 		race: Nazgul
-		strength: 10
+		strength: 11
 		vitality: 3
 		site: 3
 		keywords: Fierce
@@ -800,7 +800,7 @@
 		twilight: 7
 		type: Minion
 		race: Nazgul
-		strength: 11
+		strength: 12
 		vitality: 4
 		site: 3
 		keywords: Fierce
@@ -831,36 +831,40 @@
 						filter: another,Nazgul
 					}
 					true: {
-						type: choice
-						texts: [
-							Take a Shadow card from your draw deck
-							Take a Shadow card from your discard pile
-						]
-						effects: [
-							{
-								type: PutCardsFromDeckIntoHand
-								select: choose(side(shadow))
-								count: 1
-								reveal: true
-								shuffle: true
-								showAll: true
-							}
-							{
-								type: PutCardsFromDiscardIntoHand
-								select: choose(side(shadow))
-								count: 1
-							}
-						]
+						type: Repeat
+						times: 2
+						effect: {
+							type: choice
+							texts: [
+								Take a Shadow card from your draw deck
+								Take a Shadow card from your discard pile
+							]
+							effects: [
+								{
+									type: PutCardsFromDeckIntoHand
+									select: choose(side(shadow))
+									count: 0-1
+									reveal: true
+									shuffle: true
+									showAll: true
+								}
+								{
+									type: PutCardsFromDiscardIntoHand
+									select: choose(side(shadow))
+									count: 0-1
+								}
+							]
+						}
 					}
 					false: {
 						type: PutCardsFromDiscardIntoHand
 						select: choose(side(shadow))
-						count: 1
+						count: 0-2
 					}
 				}
 			}
 		]
-		gametext: Fierce.<br>Each time a companion is about to be killed in a skirmish, you may exert this minion and hinder that companion to take a Shadow card into hand from your discard pile.  If you can spot another Nazgul, you may take one from your draw deck instead.
+		gametext: Fierce.\Each time a companion is about to be killed in a skirmish, you may exert this minion and hinder that companion to take up to 2 Shadow cards into hand from your discard pile.  If you can spot another Nazgul, you may take them from your draw deck instead.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -890,7 +894,7 @@
 		twilight: 5
 		type: Minion
 		race: Nazgul
-		strength: 9
+		strength: 10
 		vitality: 2
 		site: 3
 		effects: [
@@ -946,7 +950,7 @@
 		twilight: 6
 		type: Minion
 		race: Nazgul
-		strength: 10
+		strength: 11
 		vitality: 3
 		site: 2
 		keywords: Fierce
@@ -1028,7 +1032,7 @@
 		twilight: 5
 		type: Minion
 		race: Nazgul
-		strength: 9
+		strength: 10
 		vitality: 2
 		site: 3
 		effects: [
@@ -1122,7 +1126,7 @@
 		twilight: 5
 		type: Minion
 		race: Nazgul
-		strength: 9
+		strength: 10
 		vitality: 3
 		site: 3
 		effects: [
@@ -1186,7 +1190,7 @@
 		twilight: 7
 		type: Minion
 		race: Nazgul
-		strength: 12
+		strength: 13
 		vitality: 3
 		site: 3
 		keywords: Fierce
@@ -1348,7 +1352,7 @@
 		twilight: 10
 		type: Minion
 		race: Nazgul
-		strength: 14
+		strength: 15
 		vitality: 4
 		site: 3
 		keywords: [
@@ -1388,16 +1392,22 @@
 						select: all(memory(restoredCards))
 					}
 					{
-						type: AddTwilight
-						amount: {
+						type: Repeat
+						times: {
 							type: ForEachInMemory
 							memory: restoredCards
+						}
+						effect: {
+							type: Exert
+							player: Free Peoples
+							count: 1
+							select: choose(side(Free Peoples), character, canExert)
 						}
 					}
 				]
 			}
 		]
-		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards; add (1) per card restored this way.
+		gametext: Fierce. Enduring. Damage +1.\When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards, and must exert one of their characters for each card restored.
 		lore: ""
 		promotext: ""
 		alts: {

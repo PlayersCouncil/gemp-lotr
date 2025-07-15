@@ -501,34 +501,23 @@
 						memorize: exertedMinion
 					}
 					{
-						type: Memorize
-						filter: mount, attachedTo(memory(exertedMinion))
-						memory: mountToTransfer
+						type: Exert
+						select: choose(Rohan, companion)
+						count: any
+						memorize: exertedComps
 					}
 					{
-						type: Optional
-						text: Would you like to transfer {mountToTransfer} away from {exertedMinion}?
-						requires: [
-							{
-								type: HasCardInMemory
-								memory: mountToTransfer
-							}
-							{
-								type: CanSpot
-								filter: not(memory(exertedMinion)), minion, AssignedToSkirmish(rohan,companion)
-							}
-						]
-						effect: {
-							type: transfer
-							select: memory(mountToTransfer)
-							where: choose(minion, AssignedToSkirmish(rohan,companion))
-							checkTarget: true
+						type: DiscardStackedCards
+						select: choose(side(Shadow))
+						count: {
+							type: ForEachInMemory
+							memory: exertedComps
 						}
 					}
 				]
 			}
 		]
-		gametext: Maneuver: If you cannot spot a mounted minion, heal a mounted [rohan] companion.<br>Skirmish: Exert Theoden or Eomer to exert a mounted minion twice.  You may then transfer a mount on that minion to an unmounted minion skirmishing a [rohan] companion.
+		gametext: Skirmish: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
 		lore: ""
 		promotext: ""
 		alts: {

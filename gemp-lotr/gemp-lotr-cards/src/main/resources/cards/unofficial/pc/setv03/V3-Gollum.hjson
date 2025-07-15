@@ -223,13 +223,12 @@
 			collInfo: V3_11
 			rarity: _
 		}
-		title: Sticky Strands of Spider Silk
+		title: Sticky Strands of Spider-silk
 		unique: false
 		side: Shadow
 		culture: Gollum
 		twilight: 2
 		type: Possession
-		strength: -1
 		keywords: Support Area
 		effects: [
 			{
@@ -237,34 +236,15 @@
 				optional: false
 				trigger: [
 					{
-						type: Exerted
-						filter: bearer
+						type: SkirmishAboutToEnd
+						involving: bearer
 					}
 				]
 				effect: {
 					type: ModifyStrength
 					select: bearer
 					amount: -1
-					until: start(regroup)
-				}
-			}
-			
-			{
-				type: Trigger
-				optional: false
-				requires: {
-					type: CanSpot
-					filter: bearer, InSkirmish
-				}
-				trigger: [
-					{
-						type: Played
-						filter: event
-					}
-				]
-				effect: {
-					type: Exert
-					select: bearer
+					until: EndOfTurn
 				}
 			}
 			
@@ -282,7 +262,7 @@
 				}
 			}
 		]
-		gametext: During bearer's skirmish, each time the Free Peoples player uses a special ability or plays an event, they must exert bearer or make bearer strength -1. <br>Skirmish: Hinder your [gollum] card to transfer this to a companion.
+		gametext: At the end of each skirmish involving bearer, make them strength -1 until the end of the turn.\Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion.
 		lore: ""
 		promotext: ""
 		alts: {

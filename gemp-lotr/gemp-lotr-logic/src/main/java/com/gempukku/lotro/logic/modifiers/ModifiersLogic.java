@@ -413,8 +413,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     @Override
     public int getArcheryTotal(LotroGame game, Side side, int baseArcheryTotal) {
         int result = baseArcheryTotal;
-        for (Modifier modifier : getModifiers(game, ModifierEffect.ARCHERY_MODIFIER))
-            result += modifier.getArcheryTotalModifier(game, side);
+        for (Modifier modifier : getModifiers(game, ModifierEffect.ARCHERY_MODIFIER)) {
+            if(addsToArcheryTotal(game, modifier.getSource())) {
+                result += modifier.getArcheryTotalModifier(game, side);
+            }
+        }
         return Math.max(0, result);
     }
 
@@ -858,6 +861,21 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         }
 
         return activateCardActions;
+    }
+
+    @Override
+    public Collection<PhysicalCard> getGameTextCardsToDuplicate(LotroGame game, PhysicalCard target) {
+        var cards = new LinkedList<PhysicalCard>();
+
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.GAME_TEXT_DUPLICATE, target)) {
+            var dupeMod = (DuplicateGameTextModifier) modifier;
+            var dupes = dupeMod.getCardsToDuplicate(game);
+            if(dupes != null) {
+                cards.addAll(dupeMod.getCardsToDuplicate(game));
+            }
+        }
+
+        return cards;
     }
 
     @Override

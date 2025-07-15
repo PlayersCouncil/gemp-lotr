@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_048_Tests
 {
@@ -28,11 +30,11 @@ public class Card_V3_048_Tests
 	}
 
 	@Test
-	public void FeintingRetreatStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BurnAndPillageStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Feinting Retreat
+		 * Name: Burn and Pillage
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
@@ -46,7 +48,7 @@ public class Card_V3_048_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Feinting Retreat", card.getBlueprint().getTitle());
+		assertEquals("Burn and Pillage", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -58,7 +60,7 @@ public class Card_V3_048_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FeintingRetreatTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BurnAndPillageTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
