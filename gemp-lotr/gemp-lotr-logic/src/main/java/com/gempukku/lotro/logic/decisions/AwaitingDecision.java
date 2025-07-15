@@ -1,8 +1,10 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.gempukku.util.JsonSerializable;
+
 import java.util.Map;
 
-public interface AwaitingDecision {
+public interface AwaitingDecision extends JsonSerializable {
     int getAwaitingDecisionId();
 
     String getText();

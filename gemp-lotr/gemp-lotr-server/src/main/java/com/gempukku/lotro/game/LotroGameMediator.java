@@ -9,6 +9,7 @@ import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.state.GameCommunicationChannel;
 import com.gempukku.lotro.game.state.GameEvent;
+import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
@@ -17,6 +18,9 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.bots.BotGameStateListener;
+import com.gempukku.lotro.bots.BotPlayer;
+import com.gempukku.lotro.bots.BotService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +45,10 @@ public class LotroGameMediator {
     private final boolean _cancellable;
     private final boolean _showInGameHall;
 
+    private final boolean _soloGame;
+    private final BotPlayer _botPlayer;
+    private final LotroDeck _botDeck;
+
     private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock(true);
     private final ReentrantReadWriteLock.ReadLock _readLock = _lock.readLock();
     private final ReentrantReadWriteLock.WriteLock _writeLock = _lock.writeLock();
@@ -49,12 +57,13 @@ public class LotroGameMediator {
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
-                             String tournamentName, MarkdownParser parser) {
+                             String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
         _cancellable = cancellable;
         this._showInGameHall = showInGameHall;
+        _soloGame = isSolo;
         if (participants.length < 1)
             throw new IllegalArgumentException("Game can't have less than one participant");
 
@@ -67,9 +76,42 @@ public class LotroGameMediator {
             _playersPlaying.add(participantId);
         }
 
+        if (_soloGame) {
+            if (participants.length == 1) {
+                BotService.BotWithDeck bot = botService.getBotParticipant(lotroFormat);
+                _botPlayer = bot.getBotPlayer();
+                _botDeck = bot.getLotroDeck();
+                _playerDecks.put(_botPlayer.getName(), _botDeck);
+                _playerClocks.put(_botPlayer.getName(), 0);
+                _playersPlaying.add(_botPlayer.getName());
+            } else {
+                BotPlayer tmpBot = null;
+                LotroDeck tmpDeck = null;
+                for (LotroGameParticipant participant : participants) {
+                    String participantId = participant.getPlayerId();
+                    var deck = participant.getDeck();
+                    if (participantId.equals(BotService.GENERAL_BOT_NAME)) {
+                        BotService.BotWithDeck bot = botService.getBotForDeck(deck);
+                        tmpBot = bot.getBotPlayer();
+                        tmpDeck = bot.getLotroDeck();
+                    }
+                }
+                _botPlayer = tmpBot;
+                _botDeck = tmpDeck;
+            }
+        } else {
+            _botPlayer = null;
+            _botDeck = null;
+        }
+
         _userFeedback = new DefaultUserFeedback();
         _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(),
                 _allowSpectators, tournamentName);
+
+        if (_botPlayer != null) {
+            _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this));
+        }
+
         _userFeedback.setGame(_lotroGame);
     }
 
@@ -389,6 +431,56 @@ public class LotroGameMediator {
         } finally {
             _writeLock.unlock();
         }
+    }
+
+    public synchronized void botAnswered(String botName, int decisionId, String answer) {
+        _writeLock.lock();
+        try {
+            AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(botName);
+            if (awaitingDecision != null) {
+                if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
+                    try {
+                        _userFeedback.participantDecided(botName);
+                        awaitingDecision.decisionMade(answer);
+
+                        // Decision successfully made, add the time to user clock
+                        addTimeSpentOnDecisionToUserClock(botName);
+
+                        _lotroGame.carryOutPendingActionsUntilDecisionNeeded();
+                        startClocksForUsersPendingDecision();
+
+                    } catch (DecisionResultInvalidException decisionResultInvalidException) {
+                        // Bot provided wrong answer - concede to prevent loop
+                        System.out.println(botName + " wrong answer - " + decisionResultInvalidException.getWarningMessage());
+
+                        addTimeSpentOnDecisionToUserClock(botName);
+                        _lotroGame.playerLost(botName, "Invalid decision");
+                    } catch (RuntimeException runtimeException) {
+                        LOG.error("Error processing game decision", runtimeException);
+                        _lotroGame.cancelGame();
+                    }
+                }
+            }
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
+    public GameState getGameState() {
+        _readLock.lock();
+        try {
+            return _lotroGame.getGameState();
+        } finally {
+            _readLock.unlock();
+        }
+    }
+
+    public BotPlayer getBotPlayer() {
+        return _botPlayer;
+    }
+
+    public LotroDeck getBotDeck() {
+        return _botDeck;
     }
 
     public GameCommunicationChannel getCommunicationChannel(Player player, int channelNumber) throws PrivateInformationException, SubscriptionConflictException, SubscriptionExpiredException {

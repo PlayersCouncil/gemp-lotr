@@ -354,6 +354,39 @@ public class DbPlayerDAO implements PlayerDAO {
         }
     }
 
+    @Override
+    public synchronized boolean registerBot(String login) throws LoginInvalidException {
+        if (!login.startsWith("~"))
+            throw new LoginInvalidException();
+
+        if (loginExists(login)) {
+            return false;
+        }
+
+
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                                INSERT INTO player (name, password, type, create_ip)
+                                VALUES (:login, :password, :type, :create_ip)
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("login", login)
+                        .addParameter("password", "")
+                        .addParameter("type", Player.Type.BOT.toString())
+                        .addParameter("create_ip", "")
+                        .executeUpdate();
+
+                conn.commit();
+                return conn.getResult() == 1;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert new user", ex);
+        }
+    }
+
     private boolean validLoginName(String login) throws LoginInvalidException {
         if (login.length() < 2 || login.length() > 30)
             throw new LoginInvalidException();
@@ -370,7 +403,7 @@ public class DbPlayerDAO implements PlayerDAO {
         return true;
     }
 
-    private boolean loginExists(String login) throws SQLException {
+    private boolean loginExists(String login) {
 
         try {
             var db = _dbAccess.openDB();
@@ -407,6 +440,9 @@ public class DbPlayerDAO implements PlayerDAO {
                         .executeAndFetch(DBDefs.Player.class);
 
                 var def = result.stream().findFirst().orElse(null);
+                if (def.type.contains("b")) {
+                    return false;
+                }
                 return def != null;
             }
         } catch (Exception ex) {

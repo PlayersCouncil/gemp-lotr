@@ -17,6 +17,7 @@ import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
+import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.tournament.TournamentDAO;
 import com.gempukku.lotro.tournament.TournamentMatchDAO;
 import com.gempukku.lotro.tournament.TournamentPlayerDAO;
@@ -122,13 +123,21 @@ public class ServerBuilder {
                         extract(objectMap, TableDraftDefinitions.class),
                         extract(objectMap, ChatServer.class)));
 
+        objectMap.put(BotService.class,
+                new BotService(
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, PlayerDAO.class)
+                ));
+
         objectMap.put(LotroServer.class,
                 new LotroServer(
                         extract(objectMap, DeckDAO.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, ChatServer.class),
                         extract(objectMap, GameRecorder.class),
-                        extract(objectMap, MarkdownParser.class)));
+                        extract(objectMap, MarkdownParser.class),
+                        extract(objectMap, BotService.class)));
 
         objectMap.put(HallServer.class,
                 new HallServer(

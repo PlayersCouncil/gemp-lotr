@@ -7,6 +7,7 @@ import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
+import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,6 +40,7 @@ public class GameState {
     private final Map<Integer, PhysicalCardImpl> _allCards = new HashMap<>();
 
     private String _currentPlayerId;
+    private String _firstPlayerId;
     private Phase _currentPhase = Phase.PUT_RING_BEARER;
     private int _twilightPool;
 
@@ -71,23 +73,34 @@ public class GameState {
 
     private int _nextCardId = 0;
 
+    private GameStats _mostRecentGameStats = null;
+    private boolean _isInit = false;
+    private Map<String, LotroDeck> _lotroDecks;
+
     private int nextCardId() {
         return _nextCardId++;
     }
 
     //This happens before the bidding, so it has to be done separately from init
-    public void initPreGame(PreGameInfo preGameInfo) {
+    public void initPreGame(PreGameInfo preGameInfo, Map<String, LotroDeck> decks) {
         _preGameInfo = preGameInfo;
+        _lotroDecks = decks;
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.initializePregameBoard(preGameInfo);
         }
     }
 
+    public boolean isInit() {
+        return _isInit;
+    }
+
     public void init(PlayerOrder playerOrder, String firstPlayer, Map<String, List<String>> cards,
             Map<String, String> ringBearers, Map<String, String> rings, Map<String, String> maps,
             LotroCardBlueprintLibrary library, LotroFormat format) {
+        _isInit = true;
         _playerOrder = playerOrder;
         _currentPlayerId = firstPlayer;
+        _firstPlayerId = firstPlayer;
         _format = format;
 
         for (Map.Entry<String, List<String>> stringListEntry : cards.entrySet()) {
@@ -207,9 +220,14 @@ public class GameState {
         return _playerOrder;
     }
 
+    public List<String> getPlayerNames() {
+        return _preGameInfo.participants();
+    }
+
     public void addGameStateListener(String playerId, GameStateListener gameStateListener, GameStats gameStats) {
         _gameStateListeners.add(gameStateListener);
         sendStateToPlayer(playerId, gameStateListener, gameStats);
+        _mostRecentGameStats = gameStats;
     }
 
     public void removeGameStateListener(GameStateListener gameStateListener) {
@@ -887,6 +905,19 @@ public class GameState {
         return Collections.unmodifiableCollection(_allCards.values());
     }
 
+    public String getBlueprintId(int cardId) {
+        for (PhysicalCardImpl physicalCard : _allCards.values()) {
+            if (physicalCard.getCardId() == cardId) {
+                return physicalCard.getBlueprintId();
+            }
+        }
+        throw new IllegalArgumentException("Card not found");
+    }
+
+    public LotroDeck getLotroDeck(String playerId) {
+        return _lotroDecks.get(playerId);
+    }
+
     public List<? extends PhysicalCard> getHand(String playerId) {
         return Collections.unmodifiableList(_hands.get(playerId));
     }
@@ -925,6 +956,10 @@ public class GameState {
 
     public String getCurrentPlayerId() {
         return _currentPlayerId;
+    }
+
+    public String getFirstPlayerId() {
+        return _firstPlayerId;
     }
 
     public int getCurrentSiteNumber() {
@@ -1007,6 +1042,10 @@ public class GameState {
 
     public int getBurdens() {
         return getTokenCount(_ringBearers.get(getCurrentPlayerId()), Token.BURDEN);
+    }
+
+    public int getPlayerBurdens(String playerId) {
+        return getTokenCount(_ringBearers.get(playerId), Token.BURDEN);
     }
 
     public int getPlayerThreats(String playerId) {
@@ -1404,10 +1443,15 @@ public class GameState {
     public void sendGameStats(GameStats gameStats) {
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendGameStats(gameStats);
+        _mostRecentGameStats = gameStats;
     }
 
     public void sendWarning(String player, String warning) {
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendWarning(player, warning);
+    }
+
+    public GameStats getMostRecentGameStats() {
+        return _mostRecentGameStats;
     }
 }

@@ -17,10 +17,14 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 import com.google.common.collect.Sets;
+import org.json.simple.JSONObject;
 
 import java.util.*;
 
 public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
+
+    private JSONObject jsonDefinition;
+
     private String id;
 
     private CardInfo info;
@@ -118,6 +122,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 //    public BuiltLotroCardBlueprint(BuiltLotroCardBlueprint other) {
 //
 //    }
+
+
+    public BuiltLotroCardBlueprint(JSONObject jsonDefinition) {
+        this.jsonDefinition = jsonDefinition;
+    }
 
     // Building methods
 
@@ -436,6 +445,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     // Implemented methods
+
+
+    @Override
+    public JSONObject getJsonDefinition() {
+        return jsonDefinition;
+    }
 
     @Override
     public String getId() {
