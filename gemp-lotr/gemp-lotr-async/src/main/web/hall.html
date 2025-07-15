@@ -179,7 +179,45 @@
 							</tr>
 						</table>
 					</div>
-					
+
+
+					<div id="soloHeader" class='eventHeader soloGames'>Play Against Bot - Work in Progress</div>
+					<div id="soloContent" class='visibilityToggle'>
+						<form id="soloForm">
+							<div>
+								Disclaimer:
+								<ul>
+									<li>Bots are just prototypes for now.</li>
+									<li>They will make stupid decisions.</li>
+									<li>They will concede if they encounter situation that they cannot solve.
+									<li>This version of bots has been originally made to play only Fellowship Block format
+								and only with FotR starters, and was not tested almost at all with other formats.</li>
+									<li>If you choose a non-starter deck for them, expect them to act even dumber,
+									they really won't know how to play Saved from the Fire decks.
+									<li>Things can, and probably will, also break if you make them play different deck,
+								choose format other than Fellowship Block, or if you play a deck that makes bot take any
+								decision that could not be encountered with starter decks.</li>
+								</ul>
+							</div>
+							<div>
+								Bug reports: Do NOT report bots acting dumb. This is just a prototype.
+								However, if the game freezes, crashes or something like that, please do fill a bug report.
+							</div>
+							<div>
+								How to play solo game: Choose your format and deck as usual. To table description write 'solo'.
+								Optionally choose deck for the bot here. Choosing the bot deck is required if your chosen
+								format is not Fellowship Block. Click 'Create table' as usual.
+							</div>
+							<!-- Bot Deck Selection -->
+							<div class="formRow">
+								<label for="botDeckSelect">Bot Deck:</label>
+								<select id="botDeckSelect" name="gameType">
+									<option value="" selected>Random FotR Starter</option>
+								</select>
+							</div>
+						</form>
+					</div>
+
 					<div id="recurringQueuesHeader" class='eventHeader recurringQueues'>Recurring Events<span class='count'>(0)</span></div>
 					<div id="recurringQueuesContent" class='visibilityToggle'>
 						<table class='tables recurringQueues'>

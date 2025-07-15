@@ -323,7 +323,7 @@ public class HallServer extends AbstractServer {
 
 
         LotroDeck botDeck = null;
-        if (botDeckName != null) {
+        if (botDeckName != null && !botDeckName.isEmpty()) {
             botDeck = validateUserAndDeck(gameSettings.format(), player, botDeckName, gameSettings.collectionType());
         }
 

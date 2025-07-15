@@ -4,6 +4,7 @@ var GempLotrHallUI = Class.extend({
 	supportedFormatsInitialized:false,
 	supportedFormatsSelect:null,
 	decksSelect:null,
+	botDeckSelect:null,
 	tableDescInput:null,
 	timerSelect:null,
 	createTableButton:null,
@@ -96,6 +97,7 @@ var GempLotrHallUI = Class.extend({
 		this.supportedFormatsSelect = $("#supportedFormatsSelect");
 		this.createTableButton = $("#createTableBut");
 		this.decksSelect = $("#decksSelect");
+		this.botDeckSelect = $("#botDeckSelect");
 		this.timerSelect = $("#timerSelect");
 		this.buttonsDiv = $("#buttonsDiv");
 		
@@ -118,14 +120,15 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		this.initTable(hallSettings[5] == "1", "recurringQueuesHeader", "recurringQueuesContent");
-		this.initTable(hallSettings[6] == "1", "queueSpawnerHeader", "queueSpawnerContent");
+		this.initTable(hallSettings[5] == "1", "soloHeader", "soloContent");
+		this.initTable(hallSettings[6] == "1", "recurringQueuesHeader", "recurringQueuesContent");
+		this.initTable(hallSettings[7] == "1", "queueSpawnerHeader", "queueSpawnerContent");
 
 		$("#deckbuilder-button").button();
 		$("#bug-button").button();
@@ -159,7 +162,8 @@ var GempLotrHallUI = Class.extend({
 							that.processResponse(xml);
 						});
 					} else {
-						that.comm.createSoloTable(format, deck, isPrivate, function (xml) {
+						var botDeck = that.botDeckSelect.val();
+						that.comm.createSoloTable(format, deck, botDeck, isPrivate, function (xml) {
 							console.log("received table response");
 							that.processResponse(xml);
 						});
@@ -261,13 +265,13 @@ var GempLotrHallUI = Class.extend({
 
 		// Fallback insert
 		if (!inserted) {
-			const $anchor = $("#recurringQueuesHeader");
+			const $anchor = $("#soloHeader");
 			$header.insertBefore($anchor);
 			$content.insertBefore($anchor);
         }
 
 		// Load settings
-		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
 		const hallSettings = hallSettingsStr.split("|");
 
 		// Determine which section it is
@@ -686,12 +690,13 @@ var GempLotrHallUI = Class.extend({
 			"finishedTablesContent",
 			"wcQueuesContent",
 			"scheduledQueuesContent",
+			"soloContent",
 			"recurringQueuesContent",
 			"queueSpawnerContent"
 		];
 
 		// Load current cookie (or use default if missing)
-		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
 		let currentSettings = hallSettingsStr.split("|");
 
 		// Update only if the element exists
@@ -848,6 +853,10 @@ var GempLotrHallUI = Class.extend({
 						.attr("value", deckName)
 						.text(formatDeckName(formatName, deckName));
 				this.decksSelect.append(deckElem);
+				var botDeckElem = $("<option/>")
+						.attr("value", deckName)
+						.text("Experimental - " + formatDeckName(formatName, deckName));
+				this.botDeckSelect.append(botDeckElem);
 			}
 			this.decksSelect.css("display", "");
 		}

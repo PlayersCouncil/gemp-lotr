@@ -233,9 +233,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
             try {
-                //TODO
-//                _hallServer.createNewSoloTable(format, resourceOwner, deckName, botDeckName, isPrivate);
-                _hallServer.createNewSoloTable(format, resourceOwner, deckName, deckName, isPrivate);
+                _hallServer.createNewSoloTable(format, resourceOwner, deckName, botDeckName, isPrivate);
                 responseWriter.writeXmlResponse(null);
             }
             catch (HallException e) {

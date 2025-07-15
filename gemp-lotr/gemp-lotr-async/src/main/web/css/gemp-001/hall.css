@@ -849,6 +849,7 @@ table.standings {
 	margin-bottom: 5px;
 }
 
+#soloForm,
 #queueSpawnerForm {
   display: grid;
   margin-left: 20px;
@@ -858,6 +859,11 @@ table.standings {
   max-width: 400px;
 }
 
+#soloForm {
+  max-width: 800px;
+}
+
+form#soloForm select,
 form#queueSpawnerForm select {
   width: 100%;
   box-sizing: border-box;
