@@ -79,8 +79,9 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
     private final ReplayBuffer replayBuffer;
 
     private CardActionSelectionDecision lastDecision = null;
-    private String lastAction = null;
     private int decisionRepeat = 0;
+    private String lastAction = null;
+    private int answerRepeat = 0;
 
     private final List<LearningStep> episodeSteps = new ArrayList<>();
 
@@ -172,15 +173,24 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
         // Loop prevention
         if (chosenAnswer != null) {
             if (decision.equals(lastDecision) && chosenAnswer.equals(lastAction)) {
+                answerRepeat++;
                 decisionRepeat++;
-                if (decisionRepeat >= 3) {
-                    decisionRepeat = 0;
+                if (answerRepeat >= 3) {
+                    answerRepeat = 0;
+                    lastAction = null;
+                    return "";
+                }
+            } else if (decision.equals(lastDecision)) {
+                decisionRepeat++;
+                if (decisionRepeat >= 6) {
+                    answerRepeat = 0;
                     lastAction = null;
                     return "";
                 }
             } else {
                 lastDecision = (CardActionSelectionDecision) decision;
                 decisionRepeat = 0;
+                answerRepeat = 0;
                 lastAction = chosenAnswer;
             }
             return chosenAnswer;
