@@ -279,6 +279,7 @@
 		twilight: 1
 		type: Possession
 		itemclass: Hand weapon
+		vitality: 1
 		target: gondor,Wraith
 		effects: [
 			{
