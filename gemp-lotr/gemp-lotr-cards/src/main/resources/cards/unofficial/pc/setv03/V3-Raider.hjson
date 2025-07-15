@@ -430,7 +430,7 @@
 			collInfo: V3_42
 			rarity: _
 		}
-		title: Corsair Renegade
+		title: Corsair Quartermaster
 		unique: false
 		side: Shadow
 		culture: Raider
@@ -892,7 +892,7 @@
 			collInfo: V3_48
 			rarity: _
 		}
-		title: Feinting Retreat
+		title: Burn and Pillage
 		unique: false
 		side: Shadow
 		culture: Raider
@@ -905,7 +905,7 @@
 				cost: {
 					type: Hinder
 					select: choose(Raider)
-					count: 0-3
+					count: 0-4
 					memorize: hinderedCards
 				}
 				effect: [
@@ -918,11 +918,19 @@
 							memory: hinderedCards
 						}
 					}
+					{
+						type: DrawCards
+						count: {
+							type: ForEachYouCanSpot
+							hindered: true
+							filter: side(Shadow), hindered
+							divider: 2
+						}
+					}
 				]
 			}
 		]
-		gametext: Hinder up to 3 [raider] cards to reinforce the same number of [raider] tokens.
-
+		gametext: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens. Draw a card for each 2 hindered Shadow cards you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -958,31 +966,43 @@
 				trigger: {
 					type: played
 					filter: unique,southron
+					memorize: playedSouthron
+				}
+				cost: {
+					type: Exert
+					ignoreCostCheckFailure: true
+					select: memory(playedSouthron)
 				}
 				effect: [
 					{
-						type: PlayCardFromDiscard
-						select: choose(raider,mount)
+						type: PutCardsFromDiscardIntoHand
+						select: choose(raider,not(unique),or(item, minion))
 					}
 				]
 			}
 			
 			{
-				type: Trigger
-				optional: true
+				type: Response
 				trigger: {
-					type: played
-					filter: raider,mount
+					type: WinsSkirmish
+					filter: your,mounted,Southron
+					memorize: winningSouthron
+				}
+				cost: {
+					type: Hinder
+					select: self
 				}
 				effect: [
 					{
-						type: PlayCardFromDiscard
-						select: choose(not(unique),raider,minion,MaxTwilight(3))
+						type: AddKeyword
+						select: memory(winningSouthron)
+						keyword: relentless
+						until: start(regroup)
 					}
 				]
 			}
 		]
-		gametext: Each time you play a unique Southron, you may play a [raider] mount from your discard pile.<br>Each time you play a [raider] mount, you may play a nonunique [raider] minion from your discard pile costing (3) or less.
+		gametext: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or minion into hand from discard.\Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron <b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1066,6 +1086,9 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
+		itemclass: [
+			Horn
+		]
 		target: mounted,Southron
 		effects: [
 			{
@@ -1451,22 +1474,23 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: AboutToTakeWound
-					filter: your,mounted,southron
+					type: Killed
+					filter: your,southron,man
 				}
 				cost: {
-					type: Wound
-					select: choose(not(mounted),southron)
+					type: RemoveTwilight
+					amount: 1
 				}
 				effect: [
 					{
-						type: PreventWound 
-						select: choose(your,mounted,southron)
+						type: StackCardsFromDiscard 
+						select: choose(southron)
+						where: choose(raider, or(and(support, item), minion), HasStacked(Southron))
 					}
 				]
 			}
 		]
-		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.<br>Each time your mounted Southron is about to take a wound, you may wound an unmounted Southron to prevent that.
+		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.\Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] support item or [raider] minion that already has a Southron stacked on it.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1588,6 +1612,94 @@
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	103_131: {
+		cardInfo: {
+			//id: 103_131.0
+			parent: 103_131
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E131.0_card.jpg
+			collInfo: V3_131
+			rarity: _
+		}
+		title: War Howdah
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Possession
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: mounted, Southron
+					memorize: winner
+				}
+				cost: {
+					type: Exert
+					ignoreCostCheckFailure: true
+					select: memory(winner)
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(raider, playable)
+					on: memory(winner)
+				}
+			}
+			
+			{
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Exert
+						select: choose(mounted,Southron, hasStacked(Man))
+						memorize: exertedSouthron
+					}
+					{
+						type: ChooseCardsFromSingleStack
+						select: choose(Man)
+						on: memory(exertedSouthron)
+						memorize: dupedMan
+					}
+				]
+				effect: [
+					{
+						type: AddModifier
+						modifier: {
+							type: DuplicateGameText
+							filter: self
+							from: memory(dupedMan)
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeywordFromCards
+							filter: self
+							from: memory(dupedMan)
+						}
+						until: EndOfTurn
+					}
+				]
+			}
+		]
+		gametext: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.\Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
 		lore: ""
 		promotext: ""
 		alts: {

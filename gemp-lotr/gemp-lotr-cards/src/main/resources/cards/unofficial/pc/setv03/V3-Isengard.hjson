@@ -182,11 +182,20 @@
 		side: Shadow
 		culture: Isengard
 		twilight: 0
-		type: Event
-		timewords: Response
+		type: Condition
+		keywords: [
+			Support Area
+		]
 		effects: [
 			{
-				type: ResponseEvent
+				type: ExtraCost
+				cost: {
+					type: Exert
+					select: choose(Isengard, minion)
+				}
+			}
+			{
+				type: Response
 				trigger: {
 					type: Played
 					filter: side(Free Peoples), character
@@ -230,7 +239,7 @@
 							type: CostToEffect
 							cost: {
 								type: Spot
-								filter: Isengard
+								filter: other, Isengard
 							}
 							effect: {
 								type: Hinder
@@ -238,10 +247,14 @@
 							}
 						}
 					}
+					{
+						type: Hinder
+						select: self
+					}
 				]
 			}
 		]
-		gametext: If a Free Peoples character is played, add (3).  If you can spot 5 or more companions in region 1 or 2 (or if that character is [Gandalf]), spot an [isengard] card to hinder that character.
+		gametext: To play, exert an [isengard] minion.\Response: If a Free Peoples character is played, add (3).  If you can spot 5 or more companions in region 1 or 2 (or if that character is [Gandalf]), you may hinder another [isengard] card to hinder that character.  Hinder this condition.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -292,7 +305,7 @@
 								{
 									type: ChooseActiveCards
 									count: any
-									select: choose(Isengard, minion, not(title(Saruman)))
+									select: choose(Isengard, minion)
 									memorize: spottedMinions
 									text: Spot X minions
 								}

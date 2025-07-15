@@ -528,7 +528,7 @@
 		unique: true
 		side: Free Peoples
 		culture: Shire
-		twilight: 0
+		twilight: 1
 		type: Companion
 		strength: 3
 		vitality: 4
@@ -842,39 +842,31 @@
 							type: FromMemory
 							memory: exertions
 						}
-						effect: {
-							type: Choice
-							texts: [
-								Hinder a Shadow support card
-								Shuffle a Shadow support card into its owner's draw deck
-							]
-							requires: [
-								{
-									type: AlwaysAvailable
-								}
-								{
-									type: CantSpot
-									filter: companion
-									count: 5
-								}
-							]
-							effects: [
-								{
-									type: Hinder
-									select: choose(side(Shadow), support)
-								}
-								{
-									type: ShuffleCardsFromPlayIntoDrawDeck
-									select: choose(side(Shadow), support)
-									includeStacked: true
-								}
-							]
+						effect: 
+						{
+							type: Hinder
+							select: choose(side(Shadow), support)
 						}
+					}
+					{
+						type: If
+						check: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						true: [
+							{
+								type: ShuffleCardsFromPlayIntoDrawDeck
+								select: choose(side(Shadow), support)
+								includeStacked: true
+							}
+						]
 					}
 				]
 			}
 		]
-		gametext: To play, spot a Hobbit.<br>If you cannot spot more than 4 companions, make the Shadow player exhaust 1 of your characters.  For each exertion made, shuffle a Shadow support card into its owner's draw deck and hinder another Shadow support card.
+		gametext: To play, spot a Hobbit companion.\Make the Shadow player exhaust 1 of your characters.  For each exertion made, hinder a Shadow support card.  If you cannot spot more than 4 companions, you may make the Shadow player shuffle one of their hindered cards (and all cards stacked on it) into its owner's draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

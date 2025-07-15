@@ -67,21 +67,8 @@
 						}
 					}
 					{
-						type: Choice
-						texts: [
-							Exert {bearer}
-							Add 2 threats
-						]
-						effects: [
-							{
-								type: Exert
-								select: bearer
-							}
-							{
-								type: AddThreats
-								amount: 2
-							}
-						]
+						type: AddThreats
+						amount: 2
 					}
 				]
 				effect: {
@@ -90,7 +77,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.\Response: If another unbound companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
+		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.\Response: If another unbound companion is about to take a wound, add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
 		lore: ""
 		promotext: ""
 		alts: {

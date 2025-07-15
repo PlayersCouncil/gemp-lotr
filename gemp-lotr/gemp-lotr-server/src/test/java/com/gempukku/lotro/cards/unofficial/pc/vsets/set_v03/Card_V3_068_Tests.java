@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_068_Tests
 {
@@ -59,7 +58,7 @@ public class Card_V3_068_Tests
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
+		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}

@@ -641,6 +641,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null)
                     addAllNotNull(activatedActions, firstActive.getBlueprint().getPhaseActionsInPlay(playerId, game, self));
             }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(activatedActions, card.getBlueprint().getPhaseActionsInPlay(playerId, game, self));
+            }
         }
         return activatedActions;
     }
@@ -662,6 +665,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null) {
                     addAllNotNull(modifiers, firstActive.getBlueprint().getInPlayModifiers(game, self));
                 }
+            }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(modifiers, card.getBlueprint().getInPlayModifiers(game, self));
             }
         }
         return modifiers;
@@ -760,6 +766,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getRequiredBeforeTriggers(game, effect, self));
             }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getRequiredBeforeTriggers(game, effect, self));
+            }
         }
 
         return result;
@@ -796,6 +805,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getRequiredAfterTriggers(game, effectResult, self));
             }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getRequiredAfterTriggers(game, effectResult, self));
+            }
         }
 
         return result;
@@ -827,6 +839,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getOptionalBeforeTriggers(playerId, game, effect, self));
             }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getOptionalBeforeTriggers(playerId, game, effect, self));
+            }
         }
 
         return result;
@@ -857,6 +872,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 final PhysicalCard firstActive = Filters.findFirstActive(game, copiedFilter.getFilterable(actionContext));
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getOptionalAfterTriggers(playerId, game, effectResult, self));
+            }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getOptionalAfterTriggers(playerId, game, effectResult, self));
             }
         }
 
@@ -894,6 +912,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getOptionalInPlayBeforeActions(playerId, game, effect, self));
             }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getOptionalInPlayBeforeActions(playerId, game, effect, self));
+            }
         }
 
         return result;
@@ -929,6 +950,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 final PhysicalCard firstActive = Filters.findFirstActive(game, copiedFilter.getFilterable(actionContext));
                 if (firstActive != null)
                     addAllNotNull(result, firstActive.getBlueprint().getOptionalInPlayAfterActions(playerId, game, effectResult, self));
+            }
+            for (var card : game.getModifiersQuerying().getGameTextCardsToDuplicate(game, self)) {
+                addAllNotNull(result, card.getBlueprint().getOptionalInPlayAfterActions(playerId, game, effectResult, self));
             }
         }
 
