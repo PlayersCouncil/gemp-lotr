@@ -351,6 +351,11 @@ public class LotroGameMediator {
                         addTimeSpentOnDecisionToUserClock(player);
                         _lotroGame.playerLost(player, "Player decision timed-out");
                     }
+                    // Bot player 5 secs time out
+                    if (player.startsWith("~") && (currentTime > decisionSent + 5 * 1000L)) {
+                        addTimeSpentOnDecisionToUserClock(player);
+                        _lotroGame.playerLost(player, "Bot got stuck on a decision");
+                    }
                 }
 
                 for (Map.Entry<String, Integer> playerClock : _playerClocks.entrySet()) {
