@@ -27,12 +27,20 @@
 					type: Exert
 					select: choose(unbound, Hobbit)
 				}
-				effect: {
-					type: PlayCardFromDrawDeck
-					select: choose(or(pipe, pipeweed))
-					shuffle: true
-					showAll: true
-				}
+				effect: [
+					{
+						type: PlayCardFromDrawDeck
+						select: choose(pipe)
+						shuffle: true
+						showAll: true
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: choose(pipeweed)
+						shuffle: true
+						showAll: true
+					}
+				]
 			}
 		]
 		gametext: Fellowship: Exert an unbound hobbit to play a pipe or pipeweed from your draw deck (limit once per phase).
