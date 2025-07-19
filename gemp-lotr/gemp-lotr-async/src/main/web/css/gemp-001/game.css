@@ -120,25 +120,25 @@ body {
 .cardStrength {
     text-align: center;
     font-weight: bolder;
-    color: #ffffff;
+    color: #88ffff;
 }
 
 .cardVitality {
     text-align: center;
     font-weight: bolder;
-    color: #ffffff;
+    color: #88ffff;
 }
 
 .cardSiteNumber {
     text-align: center;
     font-weight: bolder;
-    color: #ffffff;
+    color: #88ffff;
 }
 
 .cardResistance {
     text-align: center;
     font-weight: bolder;
-    color: #ffffff;
+    color: #88ffff;
 }
 
 .selectableCard > .borderOverlay {
