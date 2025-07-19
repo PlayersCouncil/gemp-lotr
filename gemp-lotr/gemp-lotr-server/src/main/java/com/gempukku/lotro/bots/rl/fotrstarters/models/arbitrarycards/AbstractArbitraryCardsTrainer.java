@@ -69,7 +69,7 @@ public abstract class AbstractArbitraryCardsTrainer extends AbstractTrainer {
         List<String> sortedIds = new ArrayList<>();
         scoredCards.forEach(scoredCard -> sortedIds.add(scoredCard.cardId));
         // Always chooses max cards, never passes
-        return String.join(",", sortedIds.subList(0, max));
+        return String.join(",", sortedIds.subList(0, Math.max(max, sortedIds.size())));
     }
 
     @Override
