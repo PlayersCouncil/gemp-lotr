@@ -267,21 +267,7 @@
 		<!-- <div id="culture-icon"><img src="images/cultures/sauron.svg"/></div> -->
 	</div>
 	<div id="buttonsDiv" class="flex-horiz">
-			<select id="supportedFormatsSelect" ></select>
-			<select id="decksSelect" ></select>
-			<select id="timerSelect">
-				<option value="default">Default (45m/6m)</option>
-				<option value="blitz">Blitz! (25m/3m)</option>
-				<option value="WC">Championship (20m/10m)</option>
-				<option value="slow">Slow (80m/10m)</option>
-				<option value="glacial">Glacial (1d/1d)</option>
-			</select>
-			<input id='tableDescInput' type='text' maxlength='100' placeHolder='Description (or player to invite)'>
-			<div class="checkboxes">
-				<label id="inviteCheckbox"><input type='checkbox' id='isInviteOnlyCheckbox'>Invite Only</input></label>
-				<label id="privateCheckbox"><input type='checkbox' id='isPrivateCheckbox'>Private</input></label>
-			</div>
-			<button id="createTableBut">Create table</button>
+			<button id="show-table-button">Create Table</button>
 	</div>
 	<div id="chat" class="flex-horiz" >
 		<div id="chatarea" class="flex-vert">
@@ -309,6 +295,23 @@
 		The information presented on this site about LotR TCG, both literal and graphical, is copyrighted by Decipher Inc.
 		This website is not produced, endorsed, supported, or affiliated with Decipher.
 	</div>
+</div>
+<div id="table-popup">
+	<select id="supportedFormatsSelect" ></select>
+			<select id="decksSelect" ></select>
+			<select id="timerSelect">
+				<option value="default">Default (45m/6m)</option>
+				<option value="blitz">Blitz! (25m/3m)</option>
+				<option value="WC">Championship (20m/10m)</option>
+				<option value="slow">Slow (80m/10m)</option>
+				<option value="glacial">Glacial (1d/1d)</option>
+			</select>
+			<input id='tableDescInput' type='text' maxlength='100' placeHolder='Description (or player to invite)'>
+			<div class="checkboxes">
+				<label id="inviteCheckbox"><input type='checkbox' id='isInviteOnlyCheckbox'>Invite Only</input></label>
+				<label id="privateCheckbox"><input type='checkbox' id='isPrivateCheckbox'>Private</input></label>
+			</div>
+			<button id="createTableBut">Create table</button>
 </div>
 </body>
 </html>

@@ -94,6 +94,10 @@ var GempLotrHallUI = Class.extend({
 		this.isPrivateCheckbox = $("#isPrivateCheckbox");
 		this.isInviteOnlyCheckbox = $("#isInviteOnlyCheckbox");
 		this.pocketDiv = $("#pocketDiv");
+		
+		
+		this.showTableButton = $("#show-table-button");
+		
 		this.supportedFormatsSelect = $("#supportedFormatsSelect");
 		this.createTableButton = $("#createTableBut");
 		this.decksSelect = $("#decksSelect");
@@ -136,6 +140,27 @@ var GempLotrHallUI = Class.extend({
 		$("#discord-button").button();
 		$("#wiki-button").button();
 		$("#merchant-button").button();
+		
+		$(this.showTableButton).button().click(
+           function() {
+				that.tablePopup.dialog("open");
+           });
+		
+		this.tablePopup = $("#table-popup").dialog({
+	        autoOpen: false,
+	        closeOnEscape: true,
+	        resizable: true,
+	        modal: true,
+	        buttons: {
+	            // "Add": addAnimal,
+	            // "Cancel": function() {
+	            //     that.tablePopup.dialog("close");
+	            // }
+	        },
+	        close: function() {
+	            //form[0].reset();
+	        }
+	    });
 
 		$(this.createTableButton).button().click(
 			function () {
