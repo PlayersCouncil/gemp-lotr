@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.PhysicalCard;
 
 import java.util.*;
@@ -14,6 +15,14 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
         _minions = new LinkedList<>(minions);
         setParam("freeCharacters", getCardIds(_freeCharacters));
         setParam("minions", getCardIds(_minions));
+    }
+
+    public PlayerAssignMinionsDecision(int id, String text, List<String> freeCharacterIds, List<String> minionIds) {
+        super(id, text, AwaitingDecisionType.ASSIGN_MINIONS);
+        this._freeCharacters = null; // not used in training context
+        this._minions = null;
+        setParam("freeCharacters", freeCharacterIds.toArray(new String[0]));
+        setParam("minions", minionIds.toArray(new String[0]));
     }
 
     protected Map<PhysicalCard, Set<PhysicalCard>> getAssignmentsBasedOnResponse(String response) throws DecisionResultInvalidException {
@@ -62,5 +71,29 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
         for (int i = 0; i < cards.size(); i++)
             result[i] = String.valueOf(cards.get(i).getCardId());
         return result;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "PlayerAssignMinionsDecision");
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        obj.put("freeCharacters", getDecisionParameters().get("freeCharacters"));
+        obj.put("minions", getDecisionParameters().get("minions"));
+        return obj;
+    }
+
+    public static PlayerAssignMinionsDecision fromJson(JSONObject obj) {
+        return new PlayerAssignMinionsDecision(
+                obj.getInteger("id"),
+                obj.getString("text"),
+                Arrays.asList(obj.getObject("freeCharacters", String[].class)),
+                Arrays.asList(obj.getObject("minions", String[].class))) {
+            @Override
+            public void decisionMade(String result) throws DecisionResultInvalidException {
+                throw new UnsupportedOperationException("Not implemented in training context");
+            }
+        };
     }
 }

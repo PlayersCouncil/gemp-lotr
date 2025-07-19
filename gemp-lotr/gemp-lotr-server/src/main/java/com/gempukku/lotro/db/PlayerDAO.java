@@ -34,6 +34,8 @@ public interface PlayerDAO {
 
     public boolean registerUser(String login, String password, String remoteAddr) throws SQLException, LoginInvalidException;
 
+    public boolean registerBot(String login) throws LoginInvalidException;
+
     public void updateLastLoginIp(String login, String remoteAddr) throws SQLException;
 
     List<DBDefs.Player> getAllPlayers();
