@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_016_Tests
 {
@@ -60,7 +59,7 @@ public class Card_V3_016_Tests
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 

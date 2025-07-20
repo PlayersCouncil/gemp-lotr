@@ -361,8 +361,18 @@ public class GameState {
             ((PhysicalCardImpl) card).setZone(Zone.ATTACHED);
 
         ((PhysicalCardImpl) card).attachTo((PhysicalCardImpl) transferTo);
-        for (GameStateListener listener : getAllGameStateListeners())
+        for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardMoved(card);
+        }
+    }
+
+    public void transferCardAsMinion(PhysicalCard card) {
+        if (card.getZone() != Zone.SHADOW_CHARACTERS)
+            ((PhysicalCardImpl) card).setZone(Zone.SHADOW_CHARACTERS);
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardMoved(card);
+        }
     }
 
     public void takeControlOfCard(String playerId, LotroGame game, PhysicalCard card, Zone zone) {

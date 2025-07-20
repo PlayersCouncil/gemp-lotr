@@ -14,7 +14,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -69,8 +68,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                             int strengthValue = strength.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), card);
                             int vitalityValue = vitality.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), card);
                             effects.add(
-                                    new DiscardCardsFromPlayEffect(action.getPerformingPlayer(), action.getActionSource(), Filters.attachedTo(card)));
-                            effects.add(
                                     new TransferToShadowEffect(card) {
                                         @Override
                                         protected void cardTransferredCallback() {
@@ -106,9 +103,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                     new AbstractActionProxy() {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
-//                            if (TriggerConditions.endOfTurn(game, effectResult) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-//                                return createReturnToSupportCleanupTrigger(card);
-//                            }
                             return null;
                         }
                     }
