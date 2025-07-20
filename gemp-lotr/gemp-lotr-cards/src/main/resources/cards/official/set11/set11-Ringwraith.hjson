@@ -411,14 +411,22 @@
 					type: removeTwilight
 					amount: 5
 				}
-				effect: {
-					type: turnIntoMinion
-					select: self
-					strength: 10
-					vitality: 3
-					keywords: fierce
-					until: regroup
-				}
+				effect: [
+					# Decipher ruling that clears any cards which managed to get 
+					# attached while the game text was disabled.
+					{
+						type: Discard
+						select: all(AttachedTo(self))
+					}
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 10
+						vitality: 3
+						keywords: fierce
+						until: regroup
+					}
+				]
 			}
 			{
 				type: Trigger
