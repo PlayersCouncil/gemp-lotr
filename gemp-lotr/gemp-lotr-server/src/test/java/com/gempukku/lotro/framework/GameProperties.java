@@ -67,10 +67,13 @@ public interface GameProperties extends TestBase {
 	 * @return Gets the player whose turn it isn't.
 	 */
 	default String GetOffPlayer() {
-		return gameState()
+		var order = gameState()
 				.getPlayerOrder()
-				.getCounterClockwisePlayOrder(GetCurrentPlayer(), true)
-				.getNextPlayer();
+				.getCounterClockwisePlayOrder(GetCurrentPlayer(), true);
+
+		//Skip the first player in the order, as that is the decider.
+		order.getNextPlayer();
+		return order.getNextPlayer();
 	}
 
 	/**
@@ -81,10 +84,15 @@ public interface GameProperties extends TestBase {
 	/**
 	 * @return Gets the player who is not currently making a decision.
 	 */
-	default String GetNextDecider() { return gameState()
+	default String GetNextDecider() {
+		var order = gameState()
 			.getPlayerOrder()
-			.getCounterClockwisePlayOrder(GetDecidingPlayer(), true)
-			.getNextPlayer();}
+			.getCounterClockwisePlayOrder(GetDecidingPlayer(), true);
+
+		//Skip the first player in the order, as that is the decider.
+		order.getNextPlayer();
+		return order.getNextPlayer();
+	}
 
 
 
