@@ -153,8 +153,10 @@ public class LotroServer extends AbstractServer {
             }
 
             BotPlayer botPlayer = lotroGameMediator.getBotPlayer();
-            if (botPlayer != null) {
+            if (botPlayer != null && participants.length < 2) {
                 decks.put(botPlayer.getName(), lotroGameMediator.getBotDeck());
+                players.append(", ");
+                players.append(botPlayer.getName());
             }
 
             lotroGameMediator.sendMessageToPlayers("Players in the game are: " + players);

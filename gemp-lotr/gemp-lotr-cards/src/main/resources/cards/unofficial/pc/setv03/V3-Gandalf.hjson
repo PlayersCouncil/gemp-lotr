@@ -183,7 +183,7 @@
 				effect: [
 					{
 						type: RevealCardsFromHand
-						select: choose(side(Free Peoples), event, Playable)
+						select: choose(side(Free Peoples), event, Playable, not(self))
 						memorize: revealedEvent
 					}
 					{
@@ -192,10 +192,13 @@
 						effect: [
 							{
 								type: PlayCardFromHand
+								ignoreCostCheckFailure: true
+								ignorePlayability: true
 								select: memory(revealedEvent)
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
+								ignoreCostCheckFailure: true
 								select: memory(revealedEvent)
 								discard: you
 							}

@@ -24,7 +24,7 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "ignorePlayability", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
@@ -33,12 +33,15 @@ public class PlayCardFromHand implements EffectAppenderProducer {
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
         final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
+        final boolean ignorePlayability = FieldUtils.getBoolean(effectObject.get("ignorePlayability"), "ignorePlayability", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
         MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
+        if(!ignorePlayability) {
+            result.setPlayabilityCheckedForEffect(true);
+        }
 
         result.addEffectAppender(
                 CardResolver.resolveCardsInHand(select,
