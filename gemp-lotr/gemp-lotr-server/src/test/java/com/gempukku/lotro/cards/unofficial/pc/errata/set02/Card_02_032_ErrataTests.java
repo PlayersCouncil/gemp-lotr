@@ -138,7 +138,7 @@ public class Card_02_032_ErrataTests
         scn.PassCurrentPhaseActions();
         scn.FreepsAssignToMinions(aragorn, runner);
         //skip assigning the nazgul
-        scn.PassCurrentPhaseActions();
+        scn.ShadowPass("Assign minions to companions or allies at home");
 
         //start goblin skirmish
         scn.FreepsResolveSkirmish(aragorn);
