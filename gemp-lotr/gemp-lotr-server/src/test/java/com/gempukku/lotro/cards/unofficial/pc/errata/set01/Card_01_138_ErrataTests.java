@@ -156,7 +156,7 @@ public class Card_01_138_ErrataTests
         scn.FreepsAssignToMinions(boromir, runner);
 
         //skip assigning the uruk
-        scn.PassCurrentPhaseActions();
+        scn.ShadowPass("Assign minions to companions or allies at home");
 
         //start goblin skirmish
         scn.FreepsResolveSkirmish(boromir);
