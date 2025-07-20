@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_004_Tests
 {
@@ -18,8 +18,11 @@ public class Card_V3_004_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_4");
-					// put other cards in here as needed for the test case
+					put("haste", "103_4");
+					put("gandalf", "1_364");
+					put("wielder", "2_28"); // Maneuver event with no exert cost
+
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +47,7 @@ public class Card_V3_004_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("haste");
 
 		assertEquals("Show Them the Meaning of Haste", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +59,42 @@ public class Card_V3_004_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ShowThemtheMeaningofHasteTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ShowThemtheMeaningofHastePlaysANonExertingEventThrice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var haste = scn.GetFreepsCard("haste");
+		var wielder = scn.GetFreepsCard("wielder");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCardsToHand(haste, wielder);
+		scn.MoveCompanionsToTable(gandalf);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsPlayAvailable(wielder));
+		assertInZone(Zone.FREE_CHARACTERS, gandalf);
+		assertTrue(scn.FreepsPlayAvailable(haste));
+		assertInZone(Zone.HAND, wielder);
+
+		scn.FreepsPlayCard(haste);
+		assertFalse(scn.HasKeyword(gandalf, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(gandalf, Keyword.DEFENDER));
+		//Wielder was automatically chosen as the only valid target
+		scn.ShadowDismissRevealedCards();
+
+		scn.ShadowChooseNo(); //Remove (3) to prevent giving companion Defender +1
+		scn.FreepsChooseCard(gandalf);
+		scn.ShadowChooseNo(); //Remove (3) to prevent giving companion Defender +1
+		scn.FreepsChooseCard(gandalf);
+		scn.ShadowChooseNo(); //Remove (3) to prevent giving companion Defender +1
+		scn.FreepsChooseCard(gandalf);
+
+		assertEquals(3, scn.GetKeywordCount(gandalf, Keyword.DEFENDER));
+		assertInZone(Zone.REMOVED, wielder);
 	}
 }

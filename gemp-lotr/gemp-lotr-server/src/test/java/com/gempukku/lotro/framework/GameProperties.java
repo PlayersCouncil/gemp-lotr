@@ -73,6 +73,21 @@ public interface GameProperties extends TestBase {
 				.getNextPlayer();
 	}
 
+	/**
+	 * @return Gets the player who is currently making a decision.
+	 */
+	default String GetDecidingPlayer() { return userFeedback().getUsersPendingDecision().stream().findFirst().get(); }
+
+	/**
+	 * @return Gets the player who is not currently making a decision.
+	 */
+	default String GetNextDecider() { return gameState()
+			.getPlayerOrder()
+			.getCounterClockwisePlayOrder(GetDecidingPlayer(), true)
+			.getNextPlayer();}
+
+
+
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {
 		return (PhysicalCardImpl)gameState().getRing(P1);

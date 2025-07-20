@@ -1,7 +1,6 @@
 package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 
 /**
  * A set of functions within the test rig that pertain to decisions.  Decisions in Gemp are a catch-all term referring
@@ -101,12 +100,42 @@ public interface Decisions extends TestBase  {
 		}
 	}
 	/**
+	 * Causes the Free Peoples player to pass a decision with a given description.
+	 * @param text The action text to be passing for.
+	 */
+	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
+	default void FreepsPass(String text) {
+		if(FreepsDecisionAvailable(text)) {
+			PlayerDecided(P1, "");
+		}
+	}
+	/**
 	 * Causes the Shadow player to pass the current decision.
 	 */
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
 	default void ShadowPass() {
 		if(ShadowAnyDecisionsAvailable()) {
 			PlayerDecided(P2, "");
+		}
+	}
+	/**
+	 * Causes the Shadow player to pass the current decision.
+	 * @param text The action text to be passing for.
+	 */
+	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
+	default void ShadowPass(String text) {
+		if(ShadowDecisionAvailable(text)) {
+			PlayerDecided(P2, "");
+		}
+	}
+
+	/**
+	 * Causes the given player to pass whatever decision they are currently being presented with, if any.
+	 * @param player The player who is currently pending a decision.
+	 */
+	default void PlayerPass(String player) {
+		if(AnyDecisionsAvailable(player)) {
+			PlayerDecided(player, "");
 		}
 	}
 

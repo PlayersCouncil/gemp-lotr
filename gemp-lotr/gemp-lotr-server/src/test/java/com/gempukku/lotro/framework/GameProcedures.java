@@ -3,7 +3,6 @@ package com.gempukku.lotro.framework;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Assert;
 
 /**
@@ -83,15 +82,51 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	default void FreepsDeclineReconciliation() { FreepsPassCurrentPhaseAction(); }
 	default void ShadowDeclineReconciliation() { ShadowPassCurrentPhaseAction(); }
 
+	/**
+	 * Causes both players to pass, first the player with a current decision and then the other.
+	 */
+	default void PassResponses() {
+		var decider = GetDecidingPlayer();
+		var offPlayer = GetNextDecider();
 
+		PlayerPass(decider);
+
+		if(AnyDecisionsAvailable(offPlayer)) {
+			PlayerPass(offPlayer);
+		}
+	}
 
 	/**
-	 * Causes both players to pass, first by making the current player pass and then their opponent. Both will check
+	 * Causes both players to pass any decisions that contain the provided text.  First the current decider will pass,
+	 * and then the other.
+	 * @param text Text which must be contained inside the decision
+	 */
+	default void PassResponses(String text) {
+		var decider = GetDecidingPlayer();
+		var offPlayer = GetNextDecider();
+
+		if(DecisionAvailable(decider, text)) {
+			PlayerPass(decider);
+
+			if(DecisionAvailable(offPlayer, text)) {
+				PlayerPass(offPlayer);
+			}
+		}
+	}
+
+	/**
+	 * Causes both players to pass, first the player with a current decision and then the other. Both will check
 	 * to ensure that they have a currently available decision to be passing first.
 	 */
 	default void PassCurrentPhaseActions() {
-		FreepsPassCurrentPhaseAction();
-		ShadowPassCurrentPhaseAction();
+		var decider = GetDecidingPlayer();
+		var offPlayer = GetNextDecider();
+
+		PlayerPass(decider);
+
+		if(AnyDecisionsAvailable(offPlayer)) {
+			PlayerPass(offPlayer);
+		}
 	}
 
 	default void FreepsPassCurrentPhaseAction() {
