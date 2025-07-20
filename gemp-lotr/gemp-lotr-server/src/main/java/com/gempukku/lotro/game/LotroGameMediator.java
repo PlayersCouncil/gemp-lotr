@@ -55,6 +55,8 @@ public class LotroGameMediator {
     private int _channelNextIndex = 0;
     private volatile boolean _destroyed;
 
+    private int botDecisions = 0;
+
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
                              String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo) {
@@ -444,6 +446,15 @@ public class LotroGameMediator {
             AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(botName);
             if (awaitingDecision != null) {
                 if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
+                    if (botDecisions > 1000) {
+                        // Bot made tons of decisions this game, probably non-trivial loop - concede
+                        System.out.println(botName + " probably in non-trivial loop, ending the game");
+
+                        addTimeSpentOnDecisionToUserClock(botName);
+                        _lotroGame.playerLost(botName, "Possible loop detected");
+                        
+                    }
+
                     try {
                         _userFeedback.participantDecided(botName);
                         awaitingDecision.decisionMade(answer);
@@ -453,6 +464,8 @@ public class LotroGameMediator {
 
                         _lotroGame.carryOutPendingActionsUntilDecisionNeeded();
                         startClocksForUsersPendingDecision();
+                        
+                        botDecisions++;
 
                     } catch (DecisionResultInvalidException decisionResultInvalidException) {
                         // Bot provided wrong answer - concede to prevent loop

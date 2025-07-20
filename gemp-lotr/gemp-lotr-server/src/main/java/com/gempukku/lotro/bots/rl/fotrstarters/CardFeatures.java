@@ -173,7 +173,12 @@ public class CardFeatures {
             allies.add(PASS);
         }
 
+        final int[] companionsAdded = {0};
         companions.forEach(companion -> {
+            if (companionsAdded[0] >= 9) {
+                return;
+            }
+            companionsAdded[0]++;
             if (companion.equals(PASS)) {
                 double[] nullVector = new double[8];
                 tbr.addAll(Arrays.stream(nullVector).boxed().collect(Collectors.toList()));
@@ -197,7 +202,12 @@ public class CardFeatures {
             }
         });
 
+        final int[] alliesAdded = {0};
         allies.forEach(ally -> {
+            if (alliesAdded[0] >= 4) {
+                return;
+            }
+            alliesAdded[0]++;
             if (ally.equals(PASS)) {
                 double[] nullVector = new double[8];
                 tbr.addAll(Arrays.stream(nullVector).boxed().collect(Collectors.toList()));
