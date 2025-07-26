@@ -352,7 +352,7 @@ public class LotroServerRequestHandler {
      * @throws HttpProcessingException This function throws HTTP 400 (Bad Request) if the value is not a valid boolean.
      */
     protected void Throw400IfValidationFails(String paramName, String value, boolean validIf, String errorMsg) throws HttpProcessingException {
-        if(value.isEmpty()) {
+        if(StringUtils.isEmpty(value)) {
             throw new HttpProcessingException(400, "Parameter '" + paramName + "' cannot be blank.");
         }
 
