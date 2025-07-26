@@ -1460,7 +1460,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"json"
         });
     },
-    createTournament:function (type, deckName, maxPlayers, constructedFormatCode, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
+    createTournament:function (type, deckName, maxPlayers, formatCode, tableDraftTimer,
                                playoff, deckbuildingDuration, competitive, startable, readyCheck, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -1470,10 +1470,7 @@ var GempLotrCommunication = Class.extend({
                 type:type,
                 deckName:deckName,
                 maxPlayers:maxPlayers,
-                constructedFormatCode:constructedFormatCode,
-                sealedFormatCode:sealedFormatCode,
-                soloDraftFormatCode:soloDraftFormatCode,
-                tableDraftFormatCode:tableDraftFormatCode,
+                formatCode:formatCode,
                 tableDraftTimer:tableDraftTimer,
                 playoff:playoff,
                 deckbuildingDuration:deckbuildingDuration,

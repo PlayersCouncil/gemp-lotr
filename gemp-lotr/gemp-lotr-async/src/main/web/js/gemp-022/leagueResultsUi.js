@@ -2,8 +2,9 @@ var LeagueResultsUI = Class.extend({
     communication:null,
     questionDialog:null,
     formatDialog:null,
+    joinCallback:null,
 
-    init:function (url) {
+    init:function (url, joinCallback) {
         this.communication = new GempLotrCommunication(url,
             function (xhr, ajaxOptions, thrownError) {
             });
@@ -27,6 +28,8 @@ var LeagueResultsUI = Class.extend({
                 title:"Format description",
                 closeText: ''
             });
+            
+        this.joinCallback = joinCallback;
 
         this.loadResults();
     },
@@ -105,6 +108,9 @@ var LeagueResultsUI = Class.extend({
                             function () {
                                 that.communication.joinLeague(leagueCode, function () {
                                     that.loadResultsWithLeague(leagueCode);
+                                    if(that.joinCallback != null) {
+                                        that.joinCallback();
+                                    }
                                 }, {
                                     "409":function () {
                                         alert("You don't have enough funds to join this league.");
@@ -205,6 +211,7 @@ var LeagueResultsUI = Class.extend({
             tabDiv.tabs();
 
             $("#leagueExtraInfo").append(tabDiv);
+            $(".top-of-league-form").parent().scrollTop(0);
         }
     },
 
@@ -246,9 +253,6 @@ var LeagueResultsUI = Class.extend({
                     })(leagueType));
                 $("#leagueResults").append(detailsBut);
             }
-
-            $("#leagueResults").append("<hr />");
-            $("#leagueResults").append("<div id='leagueExtraInfo'></div>");
         }
     },
 

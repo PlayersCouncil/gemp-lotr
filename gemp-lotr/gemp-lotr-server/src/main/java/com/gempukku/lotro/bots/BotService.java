@@ -225,9 +225,9 @@ public class BotService {
     }
 
     public BotWithDeck getBotParticipant(LotroFormat lotroFormat) {
-        if (!formatBotsMap.containsKey(lotroFormat.getCode())) {
-            throw new IllegalArgumentException("This format is not supported.");
-        }
+//        if (!formatBotsMap.containsKey(lotroFormat.getCode())) {
+//            throw new IllegalArgumentException("This format is not supported.");
+//        }
 
         List<BotWithDeck> botList = formatBotsMap.get(lotroFormat.getCode());
         return botList.get(random.nextInt(botList.size()));
