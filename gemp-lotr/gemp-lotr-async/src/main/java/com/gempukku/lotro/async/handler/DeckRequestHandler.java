@@ -106,14 +106,13 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             String includeEventsStr = getFormParameterSafely(postDecoder, "includeEvents");
             boolean includeEvents = includeEventsStr != null && includeEventsStr.equalsIgnoreCase("true");
 
-            String json = "{}";
+            var data = new JSONDefs.FullFormatReadout();
+            data.Formats = _formatLibrary.getAllFormats().values().stream()
+                    .map(LotroFormat::Serialize)
+                    .collect(Collectors.toMap(x-> x.code, x-> x));
 
             if(includeEvents)
             {
-                JSONDefs.FullFormatReadout data = new JSONDefs.FullFormatReadout();
-                data.Formats = _formatLibrary.getAllFormats().values().stream()
-                        .map(LotroFormat::Serialize)
-                        .collect(Collectors.toMap(x-> x.code, x-> x));
                 data.SealedTemplates = _formatLibrary.GetAllSealedTemplates().values().stream()
                         .map(SealedEventDefinition::Serialize)
                         .collect(Collectors.toMap(x-> x.name, x-> x));
@@ -124,17 +123,9 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                         .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getCode(), tableDraftDefinition.getName()))
                         .collect(Collectors.toMap(itemStub -> itemStub.name, itemStub -> itemStub));
                 data.TableDraftTimerTypes = DraftTimer.getAllTypes();
-
-                json = JsonUtils.Serialize(data);
             }
-            else {
-                JSONDefs.FullFormatReadout data = new JSONDefs.FullFormatReadout();
-                data.Formats = _formatLibrary.getAllFormats().values().stream()
-                        .map(LotroFormat::Serialize)
-                        .collect(Collectors.toMap(x-> x.code, x-> x));
 
-                json = JsonUtils.Serialize(data);
-            }
+            String json = JsonUtils.Serialize(data);
 
             responseWriter.writeJsonResponse(json);
         } finally {

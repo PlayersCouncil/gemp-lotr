@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.time.Duration;
@@ -95,20 +96,26 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         }
     }
 
-    private void getTournamentFormats(HttpRequest request, ResponseWriter responseWriter) {
+    private void getTournamentFormats(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
+        var postDecoder = new HttpPostRequestDecoder(request);
+
+        String participantId = getFormParameterSafely(postDecoder, "participantId");
+        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
         JSONDefs.PlayerMadeTournamentAvailableFormats data = new JSONDefs.PlayerMadeTournamentAvailableFormats();
 
         Map<String, String> availableSoloDraftFormats = new HashMap<>();
         availableSoloDraftFormats.put("fotr_draft", "Fellowship Block");
         availableSoloDraftFormats.put("ttt_draft", "Towers Block");
         availableSoloDraftFormats.put("hobbit_random_draft", "Hobbit");
+
         List<String> orderedSoloDrafts = List.of("fotr_draft", "ttt_draft", "hobbit_random_draft");
 
         data.constructed = _formatLibrary.getHallFormats().values().stream()
                 .map(constructedFormat -> new JSONDefs.ItemStub(constructedFormat.getCode(), constructedFormat.getName()))
                 .collect(Collectors.toList());
         data.sealed = _formatLibrary.getAllHallSealedTemplates().values().stream()
-                .map(sealed -> new JSONDefs.ItemStub(sealed.GetID(), sealed.GetName().substring(3)))
+                .map(sealedFormat -> new JSONDefs.ItemStub(sealedFormat.GetID(), sealedFormat.GetName().substring(3)))
                 .collect(Collectors.toList());
         data.sealed.sort(Comparator.comparing(o -> _formatLibrary.GetSealedTemplate(o.code).GetName())); // Sort by sealed format number
         data.soloDrafts = orderedSoloDrafts.stream()
@@ -144,15 +151,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         String readyCheckStr = getFormParameterSafely(postDecoder, "readyCheck");
         int readyCheck = Throw400IfNullOrNonInteger("readyCheck", readyCheckStr);
 
-        String constructedFormatCodeStr = getFormParameterSafely(postDecoder, "constructedFormatCode");
+        String formatCodeStr = getFormParameterSafely(postDecoder, "formatCode");
+        Throw400IfStringNull("formatCode", formatCodeStr);
 
-        String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
-
-        String soloDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloDraftFormatCode");
-
-        String soloTableDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloTableDraftFormatCode");
-
-        String tableDraftFormatCodeStr = getFormParameterSafely(postDecoder, "tableDraftFormatCode");
         String tableDraftTimer = getFormParameterSafely(postDecoder, "tableDraftTimer");
 
 
@@ -172,9 +173,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         if (type == Tournament.TournamentType.CONSTRUCTED) {
             params.type = Tournament.TournamentType.CONSTRUCTED;
-            var format = _formatLibrary.getFormat(constructedFormatCodeStr);
-            Throw400IfValidationFails("constructedFormatCodeStr", constructedFormatCodeStr,format != null);
-            params.format = constructedFormatCodeStr;
+            var format = _formatLibrary.getFormat(formatCodeStr);
+            Throw400IfValidationFails("formatCode", formatCodeStr,format != null);
+            params.format = formatCodeStr;
             params.name = prefix + format.getName();
             params.requiresDeck = true;
         } else if(type == Tournament.TournamentType.SEALED) {
@@ -184,10 +185,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             sealedParams.deckbuildingDuration = Throw400IfNullOrNonInteger("deckbuildingDuration", deckbuildingDurationStr);
             sealedParams.turnInDuration = 0;
 
-            Throw400IfStringNull("sealedFormatCode", sealedFormatCodeStr);
-            var sealedFormat = _formatLibrary.GetSealedTemplate(sealedFormatCodeStr);
-            Throw400IfValidationFails("sealedFormatCode", sealedFormatCodeStr,sealedFormat != null);
-            sealedParams.sealedFormatCode = sealedFormatCodeStr;
+            var sealedFormat = _formatLibrary.GetSealedTemplate(formatCodeStr);
+            Throw400IfValidationFails("formatCode", formatCodeStr,sealedFormat != null);
+            sealedParams.sealedFormatCode = formatCodeStr;
             sealedParams.format = sealedFormat.GetFormat().getCode();
             sealedParams.name = prefix + sealedFormat.GetName().substring(3); // Strip the ordering number for sealed formats
             sealedParams.requiresDeck = false;
@@ -200,16 +200,15 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             soloDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("soloDraftDeckbuildingDuration", deckbuildingDurationStr);
             soloDraftParams.turnInDuration = 0;
 
-            Throw400IfStringNull("soloDraftFormatCode", soloDraftFormatCodeStr);
-            var soloDraftFormat = _soloDraftDefinitions.getSoloDraft(soloDraftFormatCodeStr);
-            Throw400IfValidationFails("soloDraftFormatCode", soloDraftFormatCodeStr,soloDraftFormat != null);
-            soloDraftParams.soloDraftFormatCode = soloDraftFormatCodeStr;
+            var soloDraftFormat = _soloDraftDefinitions.getSoloDraft(formatCodeStr);
+            Throw400IfValidationFails("formatCode", formatCodeStr,soloDraftFormat != null);
+            soloDraftParams.soloDraftFormatCode = formatCodeStr;
             soloDraftParams.format = soloDraftFormat.getFormat();
-            switch (soloDraftFormatCodeStr) {
+            switch (formatCodeStr) {
                 case "fotr_draft" -> soloDraftParams.name = prefix + "FotR Solo Draft";
                 case "ttt_draft" -> soloDraftParams.name = prefix + "TTT Solo Draft";
                 case "hobbit_random_draft" -> soloDraftParams.name = prefix + "Hobbit Solo Draft";
-                default -> soloDraftParams.name = prefix + soloDraftFormatCodeStr;
+                default -> soloDraftParams.name = prefix + formatCodeStr;
             }
             soloDraftParams.requiresDeck = false;
             params = soloDraftParams;
@@ -221,10 +220,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             soloTableDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("soloTableDraftDeckbuildingDuration", deckbuildingDurationStr);
             soloTableDraftParams.turnInDuration = 0;
 
-            Throw400IfStringNull("soloTableDraftFormatCode", soloTableDraftFormatCodeStr);
-            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftFormatCodeStr);
-            Throw400IfValidationFails("soloTableDraftFormatCode", soloTableDraftFormatCodeStr,tableDraftDefinition != null);
-            soloTableDraftParams.soloTableDraftFormatCode = soloTableDraftFormatCodeStr;
+            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(formatCodeStr);
+            Throw400IfValidationFails("formatCode", formatCodeStr,tableDraftDefinition != null);
+            soloTableDraftParams.soloTableDraftFormatCode = formatCodeStr;
             soloTableDraftParams.format = tableDraftDefinition.getFormat();
             soloTableDraftParams.name = prefix + tableDraftDefinition.getName();
             soloTableDraftParams.requiresDeck = false;
@@ -237,12 +235,11 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             tableDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("tableDraftDeckbuildingDuration", deckbuildingDurationStr);
             tableDraftParams.turnInDuration = 0;
 
-            Throw400IfStringNull("tableDraftFormatCode", tableDraftFormatCodeStr);
-            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(tableDraftFormatCodeStr);
-            Throw400IfValidationFails("tableDraftFormatCode", tableDraftFormatCodeStr,tableDraftDefinition != null);
+            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(formatCodeStr);
+            Throw400IfValidationFails("formatCode", formatCodeStr,tableDraftDefinition != null);
             //Check if all players can get to one table
             Throw400IfValidationFails("maxPlayers", maxPlayersStr, tableDraftDefinition.getMaxPlayers() >= maxPlayers);
-            tableDraftParams.tableDraftFormatCode = tableDraftFormatCodeStr;
+            tableDraftParams.tableDraftFormatCode = formatCodeStr;
             tableDraftParams.format = tableDraftDefinition.getFormat();
             tableDraftParams.draftTimerType = DraftTimer.getTypeFromString(tableDraftTimer);
             tableDraftParams.name = prefix + tableDraftDefinition.getName();

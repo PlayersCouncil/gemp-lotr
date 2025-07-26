@@ -799,7 +799,7 @@ public class HallServer extends AbstractServer {
         } else {
             CardCollection collection = _collectionsManager.getPlayerCollection(player, collectionType.getCode());
             if (collection == null)
-                throw new HallException("You don't have cards in the required collection to play in this format");
+                throw new HallException("You are not registered for this league; go to the Events tab to sign up.  If this is a Draft, make sure to click on 'Go to Draft' to get your cards.");
 
             Map<String, Integer> deckCardCounts = CollectionUtils.getTotalCardCountForDeck(lotroDeck);
 
@@ -825,7 +825,7 @@ public class HallServer extends AbstractServer {
                     String cardName = null;
                     try {
                         cardName = GameUtils.getFullName(_library.getLotroCardBlueprint(cardCount.getKey()));
-                        throw new HallException("You don't have the required cards in collection: " + cardName + " required " + cardCount.getValue() + ", owned " + collectionCount);
+                        throw new HallException("You cannot use this deck for this League; your collection for this League does not contain one or more cards: " + cardName + " required " + cardCount.getValue() + ", owned " + collectionCount + " (and others)");
                     } catch (CardNotFoundException e) {
                         // Ignore, card player has in a collection, should not disappear
                     }

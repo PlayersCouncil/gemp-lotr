@@ -37,7 +37,7 @@
 	<script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/cards/CardFilter.js"></script>
 
-  <script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
 	<script type="text/javascript" src="js/gemp-022/cards/Card.js"></script>
 	<script type="text/javascript" src="js/gemp-022/cards/CardDisplay.js"></script>
 	<script type="text/javascript" src="js/gemp-022/cards/CardInfoDialog.js"></script>
@@ -48,6 +48,20 @@
 	<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
 
 	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/Deck.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/Format.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/FormatManager.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/DeckManager.js"></script>
+	
+	<script type="text/javascript" src="js/gemp-022/tables/CreateBotTable.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/CreateUnrankedTable.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/CreateLeagueTable.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/CreateTournament.js"></script>
+	
+	<script type="text/javascript" src="js/gemp-022/tables/SelectDeck.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/CreateTable.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/JoinTable.js"></script>
+	
 	<script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tournamentResultsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/statsUi.js"></script>
@@ -97,11 +111,6 @@
 		<div id="gameHallMain" class="hall-tab flex-vert">
 			<div id="serverInfo" class="flex-vert">
 				<div id="infoButtons" class="flex-horiz">
-					<a href="deckBuild.html" target="_blank">
-						<button id="deckbuilder-button" class="toolbar-button">
-							<span class="custom-icon icon-deckbuilder"></span><span>Deck Builder</span>
-						</button>
-					</a>
 					
 					<a href="https://forms.gle/pks6CHMWcpBsTcwv9" target="_blank">
 						<button id="bug-button" class="toolbar-button">
@@ -180,44 +189,6 @@
 						</table>
 					</div>
 
-
-					<div id="soloHeader" class='eventHeader soloGames'>Play Against Bot - Work in Progress</div>
-					<div id="soloContent" class='visibilityToggle'>
-						<form id="soloForm">
-							<div>
-								Disclaimer:
-								<ul>
-									<li>Bots are just prototypes for now.</li>
-									<li>They will make stupid decisions.</li>
-									<li>They will concede if they encounter situation that they cannot solve.
-									<li>This version of bots has been originally made to play only Fellowship Block format
-										and only with FotR starters, and was not tested almost at all with other formats.</li>
-									<li>If you choose a non-starter deck for them, expect them to act even dumber,
-										they will use The ATAR Ring in skirmish to corrupt themselves and so on.
-									<li>Things can, and probably will, break if you make them play different deck,
-										choose format other than Fellowship Block, or if you play a deck that makes bot take any
-										decision that could not be encountered with starter decks.</li>
-								</ul>
-							</div>
-							<div>
-								Bug reports: Do NOT report bots acting dumb. This is just a prototype.
-								However, if the game freezes, crashes or something like that, please do fill a bug report.
-							</div>
-							<div>
-								How to play solo game: Choose your format and deck as usual. To table description write 'solo'.
-								Optionally choose deck for the bot here. Choosing the bot deck is required if your chosen
-								format is not Fellowship Block. Click 'Create table' as usual.
-							</div>
-							<!-- Bot Deck Selection -->
-							<div class="formRow">
-								<label for="botDeckSelect">Bot Deck:</label>
-								<select id="botDeckSelect" name="gameType">
-									<option value="" selected>Random FotR Starter</option>
-								</select>
-							</div>
-						</form>
-					</div>
-
 					<div id="recurringQueuesHeader" class='eventHeader recurringQueues'>Recurring Events<span class='count'>(0)</span></div>
 					<div id="recurringQueuesContent" class='visibilityToggle'>
 						<table class='tables recurringQueues'>
@@ -232,34 +203,6 @@
 							</tr>
 						</table>
 					</div>
-
-					<div id="queueSpawnerHeader" class='eventHeader limitedGames'>Create Tournaments & Limited Games</div>
-					<div id="queueSpawnerContent" class='visibilityToggle'>
-						<form id="queueSpawnerForm">
-							<!-- Game Type Selection -->
-							<div class="formRow">
-								<label for="gameTypeSelect">Type of Game:</label>
-								<select id="gameTypeSelect" name="gameType">
-									<option value="" disabled selected>Select game type</option>
-									<option value="constructed">Constructed</option>
-									<option value="sealed">Sealed</option>
-									<option value="table_draft">Live Draft</option>
-									<option value="solodraft">Solo Draft</option>
-								</select>
-							</div>
-
-							<!-- Placeholder for dynamic fields -->
-							<div id="dynamicFields"></div>
-
-							<!-- Toggle for advanced fields -->
-							<button type="button" id="toggleAdvancedFields" class="ui-button ui-corner-all ui-widget" style="display: none;">Show advanced settings</button>
-
-							<!-- Advanced settings section -->
-							<div id="advancedFields" style="display: none;"></div>
-
-							<button type="button" id="createTournamentButton" class="ui-button ui-corner-all ui-widget" style="display: none;">Create</button>
-						</form>
-					</div>
 					
 				</div>
 			</div>
@@ -267,8 +210,22 @@
 		<!-- <div id="culture-icon"><img src="images/cultures/sauron.svg"/></div> -->
 	</div>
 	<div id="buttonsDiv" class="flex-horiz">
-			<button id="show-table-button">Create Table</button>
+			<a href="deckBuild.html" target="_blank">
+				<button id="deckbuilder-button" class="play-buttons">
+					<span class="bigger-icon icon-deckbuilder"></span>
+					<span><b>Deck-builder</b></span>
+				</button>
+			</a>
+			
+			<button id="open-table-button" class="play-buttons">
+				<span class="bigger-icon icon-play" ></span>
+				<span><b>Play</b></span>
+			</button>
+			
+			
 	</div>
+	
+	
 	<div id="chat" class="flex-horiz" >
 		<div id="chatarea" class="flex-vert">
 			<div id="legacyChat" class="flex-vert">
@@ -296,22 +253,330 @@
 		This website is not produced, endorsed, supported, or affiliated with Decipher.
 	</div>
 </div>
-<div id="table-popup">
-	<select id="supportedFormatsSelect" ></select>
-			<select id="decksSelect" ></select>
-			<select id="timerSelect">
-				<option value="default">Default (45m/6m)</option>
-				<option value="blitz">Blitz! (25m/3m)</option>
-				<option value="WC">Championship (20m/10m)</option>
-				<option value="slow">Slow (80m/10m)</option>
-				<option value="glacial">Glacial (1d/1d)</option>
-			</select>
-			<input id='tableDescInput' type='text' maxlength='100' placeHolder='Description (or player to invite)'>
-			<div class="checkboxes">
-				<label id="inviteCheckbox"><input type='checkbox' id='isInviteOnlyCheckbox'>Invite Only</input></label>
-				<label id="privateCheckbox"><input type='checkbox' id='isPrivateCheckbox'>Private</input></label>
+
+
+<div id="create-table-popup" style="display:none">
+	
+	<div id="create-table-overlay">
+		<button id="create-table-back-button" autofocus>< Back</button>
+	</div>
+	
+	<div id="create-table-selection">
+		<button id="create-bot-table-button"><span class="bigger-icon icon-bot"></span><span>Play Against Bots (Beta)</span></button>
+		<button id="create-unranked-table-button"><span class="bigger-icon icon-unranked"></span><span>Open Unranked Table</span></button>
+		<button id="create-league-table-button"><span class="bigger-icon icon-league"></span><span>Open League Table</span></button>
+		<button id="create-tournament-button"><span class="bigger-icon icon-tournament"></span><span>Create Tournament</span></button>
+	</div>
+	
+	<div id="create-bot-table" style="display:none" class="table-form">
+		<h1>Open Bot Table</h1>
+		<div id="bot-table-options" class="inner-table-form">
+			<div class="flex-vert">
+				Welcome to the future!  Here you may open a match against a neural-net bot trained on playing the LOTR-TCG.  This is an experimental feature, and so can go wrong in many ways.
+				Remember:
+				<ul>
+					<li>Bots will concede if they get confused or have an error.
+					<li>The bots are sometimes dumb.  REALLY DUMB.  Don't give them the blue ATAR ring or they <i>will</i> self-corrupt. (That's how dumb we're talking.)</li>
+				</ul>
+				Please report any matches where you encounter an issue with the bots, but please don't report when they're stupid; we already know. :)
 			</div>
-			<button id="createTableBut">Create table</button>
+			
+			<hr />
+			
+			<div class="flex-horiz">
+				<div class="label-column">Table Format: </div>
+				<button id="bot-unlock-format" class="flex-static">Unlock Formats</button>
+				<select id="bot-format" class="flex-fill" disabled="disabled"></select>
+			</div>
+			
+			<div class="bot-deck flex-horiz">
+					<div class="label-column">Bot Deck: </div>
+					<select class="player-deck-dropdown flex-fill">
+						<option value="" selected>Random FotR Starter</option>
+					</select>
+			</div>
+			
+			<div class="player-deck flex-horiz">
+					<div class="label-column">Your Deck: </div>
+					<select class="player-deck-dropdown flex-fill"></select>
+			</div>
+			
+			<button id="submit-bot-table-button" >
+				Create Table
+			</button>
+			
+			<div id="bot-result-label" class="flex-horiz result-label">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="bot-result" class="flex-fill result-box">
+					Ready.
+				</div>
+			</div>
+			
+			 
+		</div>
+	</div>
+	
+	<div id="create-unranked-table" style="display:none" class="table-form">
+		
+		
+		<div id="unranked-table-options" class="inner-table-form">
+			<h1>Open Unranked Table</h1>
+			
+			<div class="player-deck" class="flex-vert">
+				<!-- <div class="flex-horiz">
+					<div class="label-column">Format: </div>
+					<select class="player-deck-format" ></select>
+				</div> -->
+				
+				<div class="flex-horiz">
+					<div class="label-column">Select Deck: </div>
+					<select class="player-deck-dropdown flex-fill" ></select>
+				</div>
+				<!-- <div class="player-deck-tabs">
+					<ul>
+						<li><a href="#unranked-deck-tabs-1">My Decks</a></li>
+						<li><a href="#unranked-deck-tabs-2">Deck Library</a></li>
+					</ul>
+					<div id="unranked-deck-tabs-1">
+						<select class="player-deck-dropdown" ></select>
+					</div>
+					<div id="unranked-deck-tabs-2">
+						qwer
+						<select class="library-deck-dropdown" ></select>
+					</div>
+				</div> -->
+			</div>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Description: </div>
+				<input id="unranked-desc" class="flex-fill" type='text' maxlength='100'>
+			</div>			
+			
+			<div class="flex-horiz">
+				<div class="label-column">Table Format: </div>
+				<select id="unranked-format" class="flex-fill"></select>
+			</div>
+
+			<div class="flex-horiz">
+				<div class="label-column">Game Timer: </div>
+				<select id="unranked-timer" class="flex-fill">
+					<option value="default">Default (45m/6m)</option>
+					<option value="blitz">Blitz! (25m/3m)</option>
+					<option value="WC">Championship (20m/10m)</option>
+					<option value="slow">Slow (80m/10m)</option>
+					<option value="glacial">Glacial (1d/1d)</option>
+				</select>
+			</div>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Invite Only: </div>
+				<input type="checkbox" id="unranked-invite-only" />
+				<select id="unranked-invitee" class="flex-fill" disabled="true"></select>
+			</div>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Private Mode (no spectators): </div>
+				<input type="checkbox" id="unranked-private" />
+			</div>
+					
+			<button id="submit-unranked-table-button" >
+				Create Table
+			</button> 
+			<div id="unranked-result-label" class="flex-horiz result-label">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="unranked-result" class="flex-fill result-box">
+					Ready.
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		
+	</div>
+	
+	<div id="create-league-table" style="display:none" class="table-form flex-vert">
+
+		<div id="league-table-options" class="inner-table-form">
+			<h1>Open League Table</h1>
+			
+			<div class="flex-horiz">
+				<div class="label-column">League: </div>
+				<select id="league-format" class="flex-fill"></select>
+			</div>
+			
+			<div class="player-deck" class="flex-vert">
+
+				<div class="flex-horiz">
+					<div class="label-column">Deck: </div>
+					<select class="player-deck-dropdown flex-fill"></select>
+				</div>
+
+			</div>
+
+			<button id="submit-league-table-button" >
+				Create Table
+			</button> 
+			<div id="league-result-label" class="flex-horiz result-label">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="league-result" class="flex-fill result-box">
+					Ready.
+				</div>
+			</div>
+			
+		</div>
+		
+		<h1>Join Current League</h1>
+		<div id="league-table-leagues" class="inner-table-form">
+			<div class='top-of-league-form'></div>
+			<div id='leagueExtraInfo'></div>
+			<hr />
+			<div id="leagueResults"></div>
+		</div>
+			
+	</div>
+	
+	<div id="create-tournament" style="display:none" class="table-form flex-vert">
+		
+		<div id="league-table-options" class="inner-table-form">
+			<h1>Create Tournament</h1>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Tournament Type: </div>
+				<select id="tournament-type-select" class="flex-fill">
+					<option value="" disabled selected>Select Game Type</option>
+					<option value="constructed">Constructed</option>
+					<option value="sealed">Sealed</option>
+					<option value="table_draft">Live Draft</option>
+					<option value="solodraft">Solo Draft</option>
+				</select>
+			</div>
+			
+			<div id="tournament-startup" class="flex-vert" style="display:none">
+				<div class="flex-horiz">
+					<div class="label-column">Format: </div>
+					<select id="tournament-format" class="flex-fill"></select>
+				</div>
+				
+				<div id="tournament-draft-info-row" class="flex-horiz conditional-display" >
+					<div class="label-column">Draft Info: </div>
+					<div id="tournament-draft-info" class="flex-fill"></div>
+				</div>
+				
+				<div class="flex-horiz">
+					<div class="label-column">Number of Players: </div>
+					<input type="number" min="1" id="tournament-players" value="4" class="flex-fill">
+				</div>
+				
+				<!-- Advanced settings section -->
+				<div class="flex-vert" >
+					<button id="tournament-advanced-toggle" >
+						Show Advanced Settings
+					</button> 
+					<div id="tournament-advanced-fields" class="flex-vert">
+						
+						<div class="flex-horiz">
+							<div class="label-column">Pairing Type: </div>
+							<select id="tournament-pairing" class="flex-fill">
+								<option value="SWISS">Swiss (everyone plays all rounds)</option>
+								<option value="SINGLE_ELIMINATION">Single-elimination (losers play no more rounds)</option>
+							</select>
+						</div>
+						
+						<div id="tournament-duration-row" class="flex-horiz conditional-display">
+							<div class="label-column">Deck-building Duration (minutes): </div>
+							<input type="number" min="5" id="tournament-deckbuilding" value="15" class="flex-fill">
+						</div>
+						
+						<div class="flex-horiz">
+							<div class="label-column">Private Mode: </div>
+							<input type="checkbox" id="tournament-private" />
+							<i>(No spectators, names are hidden while in the queue)</i>
+						</div>
+						
+						<div class="flex-horiz">
+							<div class="label-column">Early Start: </div>
+							<input type="checkbox" id="tournament-early-start" checked="true" />
+							<i>(Tournament owner can force start without all player slots filled)</i>
+						</div>
+						
+						<div class="flex-horiz">
+							<div class="label-column">Ready Check: </div>
+							<select id="tournament-ready-check" class="flex-fill">
+								<option value="-1">Start with no ready check</option>
+								<option value="60" selected="selected">1 minute to confirm</option>
+								<option value="120">2 minutes to confirm</option>
+								<option value="180">3 minutes to confirm</option>
+							</select>
+						</div>
+						
+						<div id="tournament-timer-row" class="flex-horiz conditional-display">
+							<div class="label-column">Draft Timer: </div>
+							<select id="tournament-draft-timer" class="flex-fill"></select>
+						</div>
+						
+					</div>
+				</div>
+				
+				<hr/>
+				
+				<div class="player-deck flex-horiz conditional-display">
+						<div class="label-column">Your Deck: </div>
+						<select class="player-deck-dropdown flex-fill"></select>
+				</div>
+				
+				<button id="submit-tournament-button" class="flex-fill">
+					Host Tournament
+				</button> 
+				<div id="tournament-result-label" class="flex-horiz result-label">
+					<div class="label">
+						<b>Result:</b>
+					</div>
+					<div id="tournament-result" class="flex-fill result-box">
+						Ready.
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+
+	
 </div>
+
+<div id="join-table-popup">
+	<div id="join-table-options" class="inner-table-form table-form">
+			<h1>Join Table</h1>
+			
+			<div class="player-deck" class="flex-vert">
+				<div class="flex-horiz">
+					<div class="label-column">Select Deck: </div>
+					<select class="player-deck-dropdown flex-fill" ></select>
+				</div>
+			</div>
+	
+			<button id="submit-join-table-button" >
+				Join Table
+			</button> 
+			<div id="join-result-label" class="flex-horiz result-label" style="display:none">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="join-result" class="flex-fill result-box">
+					Ready.
+				</div>
+			</div>
+			
+		</div>
+</div>
+
 </body>
 </html>

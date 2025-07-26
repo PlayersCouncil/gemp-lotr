@@ -163,8 +163,13 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
     }
 
     private void getNonExpiredLeagues(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
+        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
+
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+        Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         Document doc = documentBuilder.newDocument();
         Element leagues = doc.createElement("leagues");
@@ -173,8 +178,16 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             final LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
             final List<LeagueSerieInfo> series = leagueData.getSeries();
 
-            Element leagueElem = doc.createElement("league");
+            var end = series.getLast().getEnd();
+            var start = series.getFirst().getStart();
+            var currentDate = DateUtils.Today();
 
+            Element leagueElem = doc.createElement("league");
+            boolean inLeague = _leagueService.isPlayerInLeague(league, resourceOwner);
+
+            leagueElem.setAttribute("member", String.valueOf(inLeague));
+            leagueElem.setAttribute("joinable", String.valueOf(!inLeague && !league.inviteOnly() && currentDate.isBefore(end)));
+            leagueElem.setAttribute("draftable", String.valueOf(inLeague && leagueData.isSoloDraftLeague() && DateUtils.IsAfterStart(currentDate, start)));
             leagueElem.setAttribute("code", league.getCodeStr());
             leagueElem.setAttribute("name", league.getName());
             leagueElem.setAttribute("desc", league.getDescription());

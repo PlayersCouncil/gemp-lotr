@@ -248,7 +248,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             if(!IgnoreError(ex)) {
                 _log.error("Error response for " + request.uri(), ex);
             }
-            responseWriter.writeXmlResponse(marshalException(new HallException("Failed to create table. Please try again later.")));
+            responseWriter.writeXmlResponse(marshalException(new HallException("Failed to create table. The bot only supports Fellowship Block format.")));
         }
         finally {
             postDecoder.destroy();
@@ -533,7 +533,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             for (League league : _leagueService.getActiveLeagues()) {
                 final LeagueSerieInfo currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
                 if (currentLeagueSerie != null && _leagueService.isPlayerInLeague(league, resourceOwner)) {
-                    Element formatElem = doc.createElement("format");
+                    Element formatElem = doc.createElement("league");
                     formatElem.setAttribute("type", String.valueOf(league.getCode()));
                     formatElem.appendChild(doc.createTextNode(league.getName()));
                     hall.appendChild(formatElem);
