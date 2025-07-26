@@ -108,6 +108,11 @@ textarea, input, select {
 	background-color: #222222;
 }
 
+textarea:disabled, input:disabled, select:disabled {
+	color: #dddddd;
+	background-color: #888888;
+}
+
 select {
 	border-color: #888888 #666666 #666666 #888888;
 	border-radius: 8px;
@@ -203,7 +208,7 @@ button {
 .hall-tab {
 	background: linear-gradient(to top, #200902, #111111 80%) !important;
 	width: calc(100% - 0.4em);
-	height: 100%;
+	height: calc(100% - 1rem);
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: row;
@@ -340,9 +345,24 @@ table.tables tr.privateForPlayer {
 	border-top-width:1px; 
 	border-top-color:#aaaaaa; 
 	border-top-style:solid;
+	justify-content: center;
 	align-items: center;
 	gap: 4px;
 	padding: 5px;
+}
+
+#open-table-button {
+	background: #554400 linear-gradient(#888800, #1C1C1C);
+}
+
+.play-buttons {
+	width: 15rem;
+	border-color: #AAAAAA;
+	font-size: 1.3rem;
+}
+
+#open-table-button:hover {
+	background: #554400 linear-gradient(#CCCC00, #1C1C1C);
 }
 
 #supportedFormatsSelect {
@@ -387,13 +407,13 @@ table.tables tr.privateForPlayer {
 	top:  0 !important;
 }
 
-.ui-resizable-handle, .ui-layout-resizer{
+#chat .ui-resizable-handle, .ui-layout-resizer{
 	background-color: #777777;
 	height: 7px;
 	top: -1px;
 }
 
-.ui-resizable-handle::after {
+#chat .ui-resizable-handle::after {
   content: '';
   width: 10%;
   height: 10px;
@@ -585,7 +605,7 @@ table.tables tr.privateForPlayer {
 	cursor: pointer;
 }
 
-.draftFormatInfo {
+#tournament-draft-info {
 	display: inline;
 	color: #6f8cff ;
 	cursor: pointer;
@@ -799,7 +819,9 @@ table.tables tr.privateForPlayer {
 }
 
 .label-column {
-	width: 30%;
+	width: max(200px, 20%);
+	flex-grow: 0;
+	flex-shrink: 0;
 }
 
 .desc-div {
@@ -849,7 +871,6 @@ table.standings {
 	margin-bottom: 5px;
 }
 
-#soloForm,
 #queueSpawnerForm {
   display: grid;
   margin-left: 20px;
@@ -859,11 +880,6 @@ table.standings {
   max-width: 400px;
 }
 
-#soloForm {
-  max-width: 800px;
-}
-
-form#soloForm select,
 form#queueSpawnerForm select {
   width: 100%;
   box-sizing: border-box;
@@ -916,3 +932,67 @@ form#queueSpawnerForm input {
 .eventHeader.expanded .disclosureTriangle {
   transform: rotate(90deg);
 }
+
+#create-table-popup {
+	display: flex;
+	flex-direction: column;
+}
+
+#create-table-selection {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	gap: 5rem;
+	margin: 5rem;
+}
+
+#create-table-selection button {
+	font-size: 2rem;
+}
+
+.table-form {
+	width:90%; 
+	margin-left: auto;
+	margin-right: auto;
+	overflow: auto;
+}
+
+.table-form h1 {
+  text-align: center;
+}
+
+.table-form select {
+	flex-basis: 70%;
+}
+
+.inner-table-form {
+	display: flex;
+	flex-direction: column; 
+	min-width: max(300px, 20%);
+	margin: 0 auto 0 auto;
+	align-items: stretch;
+	gap: 0.4em;
+}
+
+#league-table-leagues {
+	display: flex;
+	flex-grow: 0;
+	flex-basis: 35%;
+	border-color: grey;
+	border-style: solid;
+	overflow-x:hidden;
+	overflow-y:auto;
+	min-height: 35%;
+	max-height: 35%;
+	height: 35%;
+}
+
+#league-table-options,
+#league-table-leagues {
+	width: 90%;
+	padding: 1rem;
+}
+
+
