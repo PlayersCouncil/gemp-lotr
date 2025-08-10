@@ -8,7 +8,6 @@ import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import com.gempukku.lotro.tournament.Tournament;
 import com.gempukku.lotro.tournament.TournamentService;
 
 import java.util.*;
@@ -45,7 +44,7 @@ public class TableHolder {
             verifyNotPlayingLeagueGame(player, league);
 
             if (!leagueService.isPlayerInLeague(league, player))
-                throw new HallException("You're not in that league");
+                throw new HallException("You're not in that league and somehow were able to get this message.  Please report a bug.");
 
             if (!leagueService.canPlayRankedGame(league, gameSettings.leagueSerie(), player.getName()))
                 throw new HallException("You have already played max games in league");
@@ -77,13 +76,13 @@ public class TableHolder {
             verifyNotPlayingLeagueGame(player, league);
 
             if (!leagueService.isPlayerInLeague(league, player))
-                throw new HallException("You're not in that league");
+                throw new HallException("You're not registered for this league; go to the Events tab to sign up.");
 
             LeagueSerieInfo leagueSerie = awaitingTable.getGameSettings().leagueSerie();
             if (!leagueService.canPlayRankedGame(league, leagueSerie, player.getName()))
-                throw new HallException("You have already played max games in league");
+                throw new HallException("You have already played max games for this league: " + leagueSerie.getMaxMatches());
             if (!awaitingTable.getPlayerNames().isEmpty() && !leagueService.canPlayRankedGameAgainst(league, leagueSerie, awaitingTable.getPlayerNames().iterator().next(), player.getName()))
-                throw new HallException("You have already played ranked league game against this player in that series");
+                throw new HallException("You have already played max matches against this player for this league series");
         }
 
         final boolean tableFull = awaitingTable.addPlayer(new LotroGameParticipant(player.getName(), lotroDeck));
