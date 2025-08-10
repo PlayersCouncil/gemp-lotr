@@ -21,32 +21,31 @@ services:
       - target: 8000
         published: 8052
     volumes:
-       - type: bind
-         source: ../gemp-lotr-async/src/main/web
-         target: /etc/gemp-lotr/web
-         consistency: consistent
+      #  - type: bind
+      #    source: ../gemp-lotr-async/src/main/web
+      #    target: /etc/gemp-lotr/web
+      #    consistency: consistent
        - type: bind
          source: ../../gemp-lotr
          target: /etc/gemp-lotr
          consistency: consistent
-       - type: bind
-         source: ../../logs
-         target: /logs
-         consistency: consistent
-       - type: bind
-         source: ../../replay
-         target: /etc/gemp-lotr/replay
-         consistency: consistent
-       - type: bind
-         source: ../../logs/nohup.out
-         target: /etc/gemp-lotr/nohup.out
-         consistency: consistent
+      #  - type: bind
+      #    source: ../../logs
+      #    target: /logs
+      #    consistency: consistent
+      #  - type: bind
+      #    source: ../../replay
+      #    target: /etc/gemp-lotr/replay
+      #    consistency: consistent
+      #  - type: bind
+      #    source: ../../logs/nohup.out
+      #    target: /etc/gemp-lotr/nohup.out
+      #    consistency: consistent
     networks:
       gemp_net_1:
         ipv4_address: ${APP_IP}
     tty: true
-    command: nohup java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector /etc/gemp-lotr/gemp-lotr-async/target/web.jar &> /logs/nohup.out &
-
+    command: java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector /etc/gemp-lotr/gemp-lotr-async/target/web.jar
 
   db:
     env_file:
