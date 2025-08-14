@@ -1,5 +1,7 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
+
 public abstract class IntegerAwaitingDecision extends AbstractAwaitingDecision {
     private final Integer _min;
     private final Integer _max;
@@ -36,5 +38,27 @@ public abstract class IntegerAwaitingDecision extends AbstractAwaitingDecision {
         } catch (NumberFormatException exp) {
             throw new DecisionResultInvalidException();
         }
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "IntegerAwaitingDecision");
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        if (_min != null)
+            obj.put("min", _min);
+        if (_max != null)
+            obj.put("max", _max);
+        return obj;
+    }
+
+    public static IntegerAwaitingDecision fromJson(JSONObject obj) {
+        return new IntegerAwaitingDecision(obj.getInteger("id"), obj.getString("text"), obj.getInteger("min"), obj.getInteger("max")) {
+            @Override
+            public void decisionMade(String result) throws DecisionResultInvalidException {
+                throw new UnsupportedOperationException("Not implemented in training context");
+            }
+        };
     }
 }

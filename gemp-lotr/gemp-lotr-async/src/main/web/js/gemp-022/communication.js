@@ -851,6 +851,22 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    createSoloTable:function (format, deckName, botDeckName, isPrivate, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/solo",
+            cache:false,
+            data:{
+                format:format,
+                deckName:deckName,
+                botDeckName:botDeckName,
+                isPrivate:isPrivate,
+                participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     getFormat:function (formatCode, callback, errorMap) {
         $.ajax({
             type:"GET",
