@@ -227,7 +227,7 @@
 		unique: false
 		side: Shadow
 		culture: Gollum
-		twilight: 2
+		twilight: 1
 		type: Possession
 		keywords: Support Area
 		effects: [
