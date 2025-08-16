@@ -297,7 +297,7 @@
 					}
 					{
 						type: Exert
-						select: choose(minion,InSkirmishAgainst(memory(exertedWraith)))
+						select: choose(minion,AssignedToSkirmish(memory(exertedWraith)))
 					}
 				]
 			}
