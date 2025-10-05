@@ -999,8 +999,8 @@ var PCCards = {
 	// Uruk Raider (3C74) [Errata]
 	'53_74'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E074.2_card.jpg',
 	// Gandalf, Lathspell (V213) [Errata]
-	'102_13' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2E013.2_card.jpg',
+	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.2_card.jpg',
 	// Gandalf's Staff, Old Man's Crutch (V277) [Errata]
-	'102_77' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2E077.1_card.jpg'
+	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E077.1_card.jpg'
 }
 
