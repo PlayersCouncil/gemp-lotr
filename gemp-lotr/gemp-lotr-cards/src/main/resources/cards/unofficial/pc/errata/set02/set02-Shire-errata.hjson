@@ -48,14 +48,64 @@
 		}
 	}
 	
+	# 52_104: {
+	# 	cardInfo: {
+	# 		//id: 2_104.1
+	# 		parent: 2_104
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN02E104.1_card.jpg
+	# 		collInfo: 2C104
+	# 		rarity: C
+	# 	}
+	# 	title: Merry
+	# 	subtitle: Horticulturalist
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Shire
+	# 	twilight: 1
+	# 	type: Companion
+	# 	race: Hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: Gandalf
+	# 	resistance: 6
+	# 	effects: {
+	# 		type: activated
+	# 		limitPerTurn: 1
+	# 		phase: fellowship
+	# 		cost: {
+	# 			type: exert
+	# 			select: self
+	# 		}
+	# 		effect: {
+	# 			type: PutCardsFromDeckIntoHand
+	# 			select: choose(culture(shire),ally)
+	# 			reveal: true
+	# 			showAll: true
+	# 			shuffle: true
+	# 		}
+	# 	}
+	# 	gametext: <b>Fellowship:</b> Exert Merry to take a [shire] ally into hand from your draw deck (limit once per turn).
+	# 	lore: "'Ow... I think I've broken something.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	52_104: {
 		cardInfo: {
-			//id: 2_104.1
+			//id: 52_104.2
 			parent: 2_104
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN02E104.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN02E104.2_card.jpg
 			collInfo: 2C104
 			rarity: C
 		}
@@ -81,13 +131,13 @@
 			}
 			effect: {
 				type: PutCardsFromDeckIntoHand
-				select: choose(culture(shire),ally)
+				select: choose(Hobbit,ally)
 				reveal: true
 				showAll: true
 				shuffle: true
 			}
 		}
-		gametext: <b>Fellowship:</b> Exert Merry to take a [shire] ally into hand from your draw deck (limit once per turn).
+		gametext: <b>Fellowship:</b> Exert Merry to take a Hobbit ally into hand from your draw deck (limit once per turn).
 		lore: "'Ow... I think I've broken something.'"
 		promotext: ""
 		alts: {

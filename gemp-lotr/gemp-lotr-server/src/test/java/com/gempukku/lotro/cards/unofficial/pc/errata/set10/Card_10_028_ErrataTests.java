@@ -1,15 +1,14 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_10_028_ErrataTests
 {
@@ -33,13 +32,13 @@ public class Card_10_028_ErrataTests
 		/**
 		 * Set: 10
 		 * Name: Denethor, Lord of Minas Tirith
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
 		 * Type: Companion
 		 * Subtype: Man
-		 * Strength: 5
+		 * Strength: 8
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Aragorn
@@ -58,7 +57,7 @@ public class Card_10_028_ErrataTests
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
@@ -72,10 +71,20 @@ public class Card_10_028_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
+		//scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

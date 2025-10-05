@@ -167,11 +167,11 @@
 		hall: false
 		# Fill this up with the current batch of errata for it to show up on the playtest server.
 		valid: [
-			"51_172",
-			"52_40",
-			"53_14", "53_20", "53_25", "53_74", "53_85",
-			"101_59",
-			"102_13", "102_51", "102_77"
+			"51_44",
+			"52_104",
+			"53_74",
+			"60_28",
+			"102_13", "102_77"
 		]
 		sets: [
 			100
