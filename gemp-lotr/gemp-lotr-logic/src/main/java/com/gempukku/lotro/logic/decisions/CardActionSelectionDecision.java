@@ -1,8 +1,10 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Action;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +21,23 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         setParam("cardId", getCardIds(actions));
         setParam("blueprintId", getBlueprintIdsForVirtualActions(actions));
         setParam("actionText", getActionTexts(actions));
+    }
+
+    public CardActionSelectionDecision(int id, String text, List<String> cardIds, List<String> blueprintIds, List<String> actionTexts) {
+        super(id, text, AwaitingDecisionType.CARD_ACTION_CHOICE);
+        _game = null;
+        _actions = null;
+
+        setParam("cardId", cardIds.toArray(new String[0]));
+        setParam("blueprintId", blueprintIds.toArray(new String[0]));
+        setParam("actionText", actionTexts.toArray(new String[0]));
+
+        // Generate fake actionId array
+        String[] actionIds = new String[actionTexts.size()];
+        for (int i = 0; i < actionIds.length; i++) {
+            actionIds[i] = String.valueOf(i);
+        }
+        setParam("actionId", actionIds);
     }
 
     /**
@@ -75,5 +94,46 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         } catch (NumberFormatException exp) {
             throw new DecisionResultInvalidException();
         }
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "CardActionSelectionDecision");
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+
+        obj.put("cardId", getDecisionParameters().get("cardId"));
+        obj.put("blueprintId", getDecisionParameters().get("blueprintId"));
+        obj.put("actionText", getDecisionParameters().get("actionText"));
+
+        return obj;
+    }
+
+    public static CardActionSelectionDecision fromJson(JSONObject obj) {
+        int id = obj.getInteger("id");
+        String text = obj.getString("text");
+        List<String> cardIds = Arrays.asList(obj.getObject("cardId", String[].class));
+        List<String> blueprintIds = Arrays.asList(obj.getObject("blueprintId", String[].class));
+        List<String> actionTexts = Arrays.asList(obj.getObject("actionText", String[].class));
+
+        return new CardActionSelectionDecision(id, text, cardIds, blueprintIds, actionTexts) {
+            @Override
+            public void decisionMade(String result) throws DecisionResultInvalidException {
+                throw new UnsupportedOperationException("Not implemented in training context");
+            }
+        };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CardActionSelectionDecision that = (CardActionSelectionDecision) o;
+
+        String[] actions = getDecisionParameters().get("actionText");
+        String[] otherActions = that.getDecisionParameters().get("actionText");
+        return Arrays.equals(actions, otherActions);
     }
 }
