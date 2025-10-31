@@ -77,15 +77,6 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		return false;
 	}
 
-	default boolean HasCharWonSkirmish(PhysicalCardImpl card) {
-		var skirmish = gameState().skirmish
-		if(skirmish == null)
-			return false;
-
-		return skirmish.getFellowshipCharacter() == card ||
-				skirmish.getShadowCharacters().stream().anyMatch(x -> x == card);
-	}
-
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
 	{
 		return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
