@@ -57,7 +57,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
     }
 
     public LotroCardBlueprint buildFromJson(String cardId, JSONObject json) throws InvalidCardDefinitionException {
-        BuiltLotroCardBlueprint result = new BuiltLotroCardBlueprint();
+        BuiltLotroCardBlueprint result = new BuiltLotroCardBlueprint(json);
         result.setId(cardId);
 
         //TODO: Detect a cardinfo without any other fields and add these to a

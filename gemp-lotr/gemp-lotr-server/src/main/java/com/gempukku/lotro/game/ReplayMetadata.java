@@ -78,9 +78,9 @@ public class ReplayMetadata {
         return PlayerIDs.keySet().stream().filter(x -> !x.equals(player)).findFirst().get();
     }
 
-    private final Pattern gameStartPattern = Pattern.compile("Players in the game are: ([\\w-]+), ([\\w-]+)");
-    private final Pattern orderPattern = Pattern.compile("([\\w-]+) has chosen to go (.*)");
-    private final Pattern bidPattern = Pattern.compile("([\\w-]+) bid (\\d+)");
+    private final Pattern gameStartPattern = Pattern.compile("Players in the game are: ([\\w~-]+), ([\\w~-]+)");
+    private final Pattern orderPattern = Pattern.compile("([\\w~-]+) has chosen to go (.*)");
+    private final Pattern bidPattern = Pattern.compile("([\\w~-]+) bid (\\d+)");
     public void ParseReplay(String player, List<GameEvent> events) {
         GameStarted = false;
 
