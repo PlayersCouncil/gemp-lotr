@@ -221,7 +221,7 @@
 				]
 			}
 		]
-		gametext: Each mounted companion gains <b>valiant</b>.<br>Each time a minion's special ability is used (except during a skirmish), you may spot 3 valiant companions and exert Gandalf twice to prevent that and exert that minion. 
+		gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used, spot 3 valiant companions and exert Gandalf twice to prevent that and exert that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
 		alts: {

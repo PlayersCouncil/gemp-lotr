@@ -311,18 +311,33 @@ DROP TABLE IF EXISTS `transfer`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `transfer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `notify` int(11) NOT NULL,
+  `notify` BIT NOT NULL DEFAULT 0,
   `player` varchar(45) NOT NULL,
   `reason` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `currency` int(11) NOT NULL,
-  `collection` text NOT NULL,
-  `transfer_date` decimal(20,0) NOT NULL,
+  `collection` varchar(255) NOT NULL,
+  `currency` INT(11) NOT NULL DEFAULT 0,
+  `contents` text NOT NULL,
+  `date_recorded` DATETIME NOT NULL DEFAULT now(),
   `direction` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `player` (`player`,`notify`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3644 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS `announcements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `announcements` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_bin NOT NULL,
+  `content` text COLLATE utf8_bin NOT NULL,
+  `start` datetime NOT NULL DEFAULT NOW(),
+  `until` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping routines for database 'gemp_db'

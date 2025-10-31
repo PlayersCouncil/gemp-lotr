@@ -37,7 +37,7 @@ public class Card_V2_077_Tests
 		/**
 		 * Set: V2
 		 * Name: Gandalf's Staff, Old Man's Crutch
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2
@@ -45,9 +45,9 @@ public class Card_V2_077_Tests
 		 * Subtype: Staff
 		 * Vitality: 1
 		 * Game Text: Bearer must be Gandalf.
-		* 	Discard any weapon he bears.
-		* 	Each time Gandalf is exerted by a Free Peoples card, you may wound a minion (limit once per phase).
-		*/
+		 * 	Discard any weapon he bears.
+		 * 	Response: If Gandalf is exerted by a Free Peoples card, heal him (limit once per turn).
+		 */
 
 		var scn = GetScenario();
 
@@ -92,7 +92,7 @@ public class Card_V2_077_Tests
 	}
 
 	@Test
-	public void GandalfsStaffCanWoundAMinionWhenExertingOncePerPhase() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfsStaffCanHealBearerWhenExertingOncePerTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -121,14 +121,15 @@ public class Card_V2_077_Tests
 		assertEquals(0, scn.GetWoundsOn(shotgun));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
 
 		scn.ShadowPassCurrentPhaseAction();
 
 		//Staff doesn't trigger a second time
+		assertEquals(0, scn.GetWoundsOn(gandalf));
 		scn.FreepsUseCardAction(betrayal);
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(shotgun));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 }
