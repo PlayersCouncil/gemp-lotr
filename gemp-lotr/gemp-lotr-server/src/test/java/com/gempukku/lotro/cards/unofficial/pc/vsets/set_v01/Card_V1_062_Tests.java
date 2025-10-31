@@ -127,4 +127,54 @@ public class Card_V1_062_Tests
 		assertEquals(Zone.DISCARD, runner2.getZone());
 
 	}
+
+
+	@Test
+	public void AnduinBanksKillingAMinionCountsAsSkirmishLoss() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var valley = scn.GetShadowSite(7);
+
+		var runner1 = scn.GetShadowCard("runner1");
+
+		scn.MoveCardsToHand(runner1);
+
+		//Max out the move limit so we don't have to juggle play back and forth
+		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+
+		scn.StartGame();
+
+		scn.SkipToSite(6);
+
+		scn.MoveMinionsToTable(runner1);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(valley, scn.GetCurrentSite());
+		assertEquals(7, (long)scn.GetCurrentSite().getSiteNumber());
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, runner1);
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(runner1));
+		assertEquals(Zone.SHADOW_CHARACTERS, runner1.getZone());
+		scn.FreepsResolveSkirmish(frodo);
+
+		var skirmish = scn.GetActiveSkirmish();
+
+		assertFalse(scn.IsCharSkirmishing().);
+
+		scn.FreepsDeclineOptionalTrigger(); // one ring response
+
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(savage2));
+		assertEquals(Zone.DISCARD, runner1.getZone());
+		assertEquals(Zone.DISCARD, runner2.getZone());
+
+	}
+
 }
