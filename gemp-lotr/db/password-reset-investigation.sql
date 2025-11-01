@@ -1,5 +1,5 @@
 
-SET @player = 'Temaraan';
+SET @player = 'ANUBIS8408TCG';
 
 SELECT *
 FROM player p

@@ -1,19 +1,15 @@
 var GempLotrHallUI = Class.extend({
 	comm:null,
 	chat:null,
-	supportedFormatsInitialized:false,
-	supportedFormatsSelect:null,
-	decksSelect:null,
-	tableDescInput:null,
-	timerSelect:null,
-	createTableButton:null,
-	isPrivateCheckbox:null,
-	isInviteOnlyCheckbox:null,
 
 	tablesDiv:null,
 	buttonsDiv:null,
 	adminTab:null,
 	userInfo:null,
+	players: [],
+
+	tableJoiner:null,
+	tableCreator:null,
 	
 	inTournament:false,
 
@@ -47,16 +43,15 @@ var GempLotrHallUI = Class.extend({
 		});
 
 		this.comm.getPlayerInfo(function(json)
-				{
-					that.userInfo = json;
-				});
-
-		this.comm.getTournamentAvailableFormats(function(json)
-				{
-                    that.setupTournamentSpawner(json);
-				});
+		{
+			that.userInfo = json;
+		});
 
 		this.chat = chat;
+		this.chat.updatePlayerListener((players) => {
+			that.players = players;
+			that.tableCreator.createUnrankedTable.updatePlayers(players, that.userInfo ? that.userInfo.name : "");
+		});
 		this.chat.tournamentCallback = function(from, message) {
 			var thisName = that.userInfo.name
 			if (from == "TournamentSystem" && that.inTournament) {
@@ -93,11 +88,15 @@ var GempLotrHallUI = Class.extend({
 		this.isPrivateCheckbox = $("#isPrivateCheckbox");
 		this.isInviteOnlyCheckbox = $("#isInviteOnlyCheckbox");
 		this.pocketDiv = $("#pocketDiv");
-		this.supportedFormatsSelect = $("#supportedFormatsSelect");
-		this.createTableButton = $("#createTableBut");
-		this.decksSelect = $("#decksSelect");
-		this.timerSelect = $("#timerSelect");
-		this.buttonsDiv = $("#buttonsDiv");
+		
+		var deckManager = new DeckManager(this.comm);
+		var formatManager = new FormatManager(this.comm);
+		this.tableCreator = new CreateTable(this, this.comm, $("#create-table-popup"), formatManager, deckManager);
+		this.tableJoiner = new JoinTable(this, this.comm, $("#join-table-popup"), formatManager, deckManager);
+		$("#open-table-button").button().click(
+			function() {
+				that.tableCreator.showPopup();
+			});
 		
 		this.adminTab = $("#tabs > ul :nth-child(7)");
 		this.adminTab.hide();
@@ -118,14 +117,15 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		this.initTable(hallSettings[5] == "1", "recurringQueuesHeader", "recurringQueuesContent");
-		this.initTable(hallSettings[6] == "1", "queueSpawnerHeader", "queueSpawnerContent");
+		this.initTable(hallSettings[5] == "1", "soloHeader", "soloContent");
+		this.initTable(hallSettings[6] == "1", "recurringQueuesHeader", "recurringQueuesContent");
+		this.initTable(hallSettings[7] == "1", "queueSpawnerHeader", "queueSpawnerContent");
 
 		$("#deckbuilder-button").button();
 		$("#bug-button").button();
@@ -134,95 +134,72 @@ var GempLotrHallUI = Class.extend({
 		$("#wiki-button").button();
 		$("#merchant-button").button();
 
-		$(this.createTableButton).button().click(
-			function () {
-				that.createTableButton.attr("disabled", "disabled");
-				that.createTableButton.addClass("ui-state-disabled")
-				that.createTableButton.removeClass("ui-state-focus")
-				var format = that.supportedFormatsSelect.val();
-				
-				if(format == null || format === "") {
-					that.showErrorDialog("Table creation error", "You must select a format", false, false);
-					return;
-				}
-				
-				var deck = that.decksSelect.val();
-				var tableDesc = that.tableDescInput.val();
-				var timer = that.timerSelect.val();
-				var isPrivate = that.isPrivateCheckbox.is(':checked');
-				var isInviteOnly = that.isInviteOnlyCheckbox.is(':checked');
-				if (deck != null)
-					console.log("creating table");
-					that.comm.createTable(format, deck, timer, tableDesc, isPrivate, isInviteOnly, function (xml) {
-						console.log("received table response");
-						that.processResponse(xml);
-					});
-			});
-
-		this.getHall();
-		this.updateDecks();
+		this.getHall();		
 		
-		
+	},
+	
+	setPendingTournament: function(value) {
+		this.inTournament = value;	
 	},
 
 	addWcQueuesSection: function() {
-        if ($("#wcQueuesHeader").length) return;
+		if ($("#wcQueuesHeader").length) return;
 
-        const $header = $("<div>")
-            .attr("id", "wcQueuesHeader")
-            .addClass("eventHeader wc-queues")
-            .html(`World Championship Queues<span class='count'>(0)</span>`);
+		const $header = $("<div>")
+			.attr("id", "wcQueuesHeader")
+			.addClass("eventHeader wc-queues")
+			.html(`World Championship Queues<span class='count'>(0)</span>`);
 
-        const $content = $("<div>")
-            .attr("id", "wcQueuesContent")
-            .addClass("visibilityToggle")
-            .append(
-                $("<table>").addClass("tables wc-queues").append(`
-                    <tr>
-                        <th width='10%'>Format</th>
-                        <th width='8%'>Collection</th>
-                        <th width='30%'>Event Name</th>
-                        <th width='16%'>Starts</th>
-                        <th width='16%'>System</th>
-                        <th width='8%'>Cost</th>
-                        <th width='12%'>Prizes</th>
-                    </tr>
-                `)
-            );
+		const $content = $("<div>")
+			.attr("id", "wcQueuesContent")
+			.addClass("visibilityToggle")
+			.append(
+				$("<table>").addClass("tables wc-queues").append(`
+					<tr>
+						<th width='10%'>Format</th>
+						<th width='8%'>Collection</th>
+						<th width='30%'>Event Name</th>
+						<th width='16%'>Starts</th>
+						<th width='16%'>System</th>
+						<th width='8%'>Cost</th>
+						<th width='12%'>Prizes</th>
+					</tr>
+				`)
+			);
 
-        this.insertEventSection($header, $content, "wcQueues");
-    },
+		this.insertEventSection($header, $content, "wcQueues");
+	},
 
-    addScheduledQueuesSection: function() {
-        if ($("#scheduledQueuesHeader").length) return;
+	addScheduledQueuesSection: function() {
+		if ($("#scheduledQueuesHeader").length) return;
 
-        const $header = $("<div>")
-            .attr("id", "scheduledQueuesHeader")
-            .addClass("eventHeader scheduledQueues")
-            .html(`Scheduled Events<span class='count'>(0)</span>`);
+		const $header = $("<div>")
+			.attr("id", "scheduledQueuesHeader")
+			.addClass("eventHeader scheduledQueues")
+			.html(`Scheduled Events<span class='count'>(0)</span>`);
 
-        const $content = $("<div>")
-            .attr("id", "scheduledQueuesContent")
-            .addClass("visibilityToggle")
-            .append(
-                $("<table>").addClass("tables scheduledQueues").append(`
-                    <tr>
-                        <th width='10%'>Format</th>
-                        <th width='8%'>Collection</th>
-                        <th width='30%'>Event Name</th>
-                        <th width='16%'>Starts</th>
-                        <th width='16%'>System</th>
-                        <th width='8%'>Cost</th>
-                        <th width='12%'>Prizes</th>
-                    </tr>
-                `)
-            );
+		const $content = $("<div>")
+			.attr("id", "scheduledQueuesContent")
+			.addClass("visibilityToggle")
+			.append(
+				$("<table>").addClass("tables scheduledQueues").append(`
+					<tr>
+						<th width='10%'>Format</th>
+						<th width='8%'>Collection</th>
+						<th width='30%'>Event Name</th>
+						<th width='16%'>Starts</th>
+						<th width='16%'>System</th>
+						<th width='8%'>Cost</th>
+						<th width='12%'>Prizes</th>
+					</tr>
+				`)
+			);
 
-        this.insertEventSection($header, $content, "scheduledQueues");
-    },
+		this.insertEventSection($header, $content, "scheduledQueues");
+	},
 
-    insertEventSection: function($header, $content, sectionKey) {
-        const sectionOrder = [
+	insertEventSection: function($header, $content, sectionKey) {
+		const sectionOrder = [
 			"wcQueues",
 			"scheduledQueues"
 		];
@@ -254,13 +231,13 @@ var GempLotrHallUI = Class.extend({
 
 		// Fallback insert
 		if (!inserted) {
-			const $anchor = $("#recurringQueuesHeader");
-			$header.insertBefore($anchor);
-			$content.insertBefore($anchor);
-        }
+			const $anchor = $("#finishedTablesHeader");
+			$header.insertAfter($anchor);
+			$content.insertAfter($anchor);
+		}
 
 		// Load settings
-		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
 		const hallSettings = hallSettingsStr.split("|");
 
 		// Determine which section it is
@@ -278,373 +255,18 @@ var GempLotrHallUI = Class.extend({
 		if (settingIndex !== null) {
 			this.initTable(hallSettings[settingIndex] === "1", headerId, contentId);
 		}
-    },
-
-    removeWcQueuesSection: function() {
-        $("#wcQueuesHeader").remove();
-        $("#wcQueuesContent").remove();
-    },
-
-    removeScheduledQueuesSection: function() {
-        $("#scheduledQueuesHeader").remove();
-        $("#scheduledQueuesContent").remove();
-    },
-
-	setupTournamentSpawner: function(json) {
-		var that = this;
-
-
-        function validateTournamentForm() {
-            const gameType = $("#gameTypeSelect").val();
-            const format = $("#formatSelect").val();
-            const pairingType = $("#pairingType").val();
-            const playerCount = parseInt($("#numPlayers").val(), 10);
-            const deckDuration = parseInt($("#deckDuration").val(), 10);
-            const draftTimer = $("#draftTimer").val();
-            const competitive = $("#competitiveSelect").val();
-            const startableEarly = $("#startableEarlySelect").val();
-            const readyCheck = $("#readyCheckSelect").val();
-
-            const formatMaxPlayers = $("#formatSelect").find("option:selected").data("maxplayers");
-            var validMaxPlayers = true;
-            if (formatMaxPlayers) {
-                validMaxPlayers = playerCount <= formatMaxPlayers;
-            }
-
-            const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 1 && validMaxPlayers;
-            const validDeckDuration = (Number.isInteger(deckDuration) && deckDuration >= 5) || gameType === "constructed";
-            const draftValid = gameType !== "table_draft" || draftTimer;
-            const validPlayerReadyCombo = playerCount > 2 || readyCheck < 0;
-
-            const allValid =
-                gameType &&
-                format &&
-                pairingType &&
-                validPlayerCount &&
-                validDeckDuration &&
-                competitive &&
-                startableEarly &&
-                readyCheck &&
-                validPlayerReadyCombo &&
-                draftValid;
-
-            if (allValid) {
-                $("#createTournamentButton").prop("disabled", false);
-                $("#createTournamentButton").removeClass("ui-state-disabled");
-            } else {
-                $("#createTournamentButton").prop("disabled", true);
-                $("#createTournamentButton").addClass("ui-state-disabled");
-            }
-        };
-
-        $("#gameTypeSelect").on("change", function () {
-            // Advanced settings toggle
-            const $advanced = $("#advancedFields").empty();
-            const $toggleAdvanced = $("#toggleAdvancedFields").show().text("Show advanced settings");
-            let advancedVisible = false;
-            $toggleAdvanced.off("click").on("click", function () {
-                advancedVisible = !advancedVisible;
-                $advanced.toggle(advancedVisible);
-                if (advancedVisible) {
-                    // Scroll to bottom so that the new field can be seen
-                    $("#queueSpawnerForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
-                }
-                $(this).text(advancedVisible ? "Hide advanced settings" : "Show advanced settings");
-            });
-
-
-            const gameType = $(this).val();
-            const formatListMap = {
-                constructed: json.constructed,
-                sealed: json.sealed,
-                solodraft: json.soloDrafts,
-                table_draft: json.tableDrafts
-            };
-
-            const formats = formatListMap[gameType] || [];
-
-            const $fields = $("#dynamicFields");
-            $fields.empty(); // clear previous dynamic fields
-            if (formats.length === 0) return;
-
-            // Create Format label and select
-            const $formatRow = $("<div>").addClass("formRow");
-            const $label = $("<label>").attr("for", "formatSelect").text("Format:");
-            const $select = $("<select>")
-              .attr("id", "formatSelect")
-              .attr("name", "format")
-              .append($("<option disabled selected>").text("Select format"));
-            $formatRow.append($label, $select);
-
-            // Fill format options
-            for (const format of formats) {
-                const $option = $("<option>")
-                    .val(format.code)
-                    .text(format.name);
-
-                // For live draft, save the table capacity
-                if (gameType === "table_draft" && format.maxPlayers) {
-                    $option.attr("data-maxplayers", format.maxPlayers);
-                }
-                // And recommended timer
-                if (gameType === "table_draft" && format.recommendedTimer) {
-                    $option.attr("data-recommendedtimer", format.recommendedTimer);
-                }
-
-                $select.append($option);
-            }
-
-			// Draft info link
-            const $draftInfoRow = $("<div>").addClass("formRow");
-            const $draftInfoLabel = $("<label>").text("Draft Format Info:");
-            const $draftInfoLink = $("<label>").addClass("italic").text("Select format first");
-            if (gameType === "table_draft") {
-                $select.on("change", function () {
-					// Create and append new info row
-					$draftInfoLink
-						.removeClass("italic")
-						.addClass("draftFormatInfo")
-						.attr("draftCode", $("#formatSelect").val())
-						.text($(this).find("option:selected").text());
-            	});
-            }
-            $draftInfoRow.append($draftInfoLabel, $draftInfoLink);
-
-            // Number of players
-            const $playersRow = $("<div>").addClass("formRow");
-            const $playersLabel = $("<label>").attr("for", "numPlayers").text("Number of players:");
-            const $playersInput = $("<input>")
-                .attr({ type: "number", id: "numPlayers", name: "numPlayers", min: 1 })
-                .val(4);
-            $playersRow.append($playersLabel, $playersInput);
-
-            // Modify the max number of players based on format selected (if needed)
-            $select.on("change", function () {
-                const selectedFormat = $(this).find("option:selected");
-                const maxPlayers = selectedFormat.data("maxplayers");
-
-                if (maxPlayers) {
-                    $playersInput.attr("max", maxPlayers);
-                    const currentVal = parseInt($playersInput.val(), 10);
-                    if (currentVal > maxPlayers) {
-                        $playersInput.val(maxPlayers);
-                    }
-                } else {
-                    $playersInput.removeAttr("max");
-                }
-            });
-
-            // Pairing type
-            const $pairingRow = $("<div>").addClass("formRow");
-            const $pairingLabel = $("<label>").attr("for", "pairingType").text("Pairing type:");
-            const $pairingSelect = $("<select>")
-                .attr({ id: "pairingType", name: "pairingType" })
-                .append($("<option>").val("SWISS").text("Swiss - losers play next rounds too"))
-                .append($("<option>").val("SINGLE_ELIMINATION").text("Single elimination"));
-            $pairingRow.append($pairingLabel, $pairingSelect);
-
-            // Deck-building duration
-            const $durationRow = $("<div>").addClass("formRow");
-            const $durationLabel = $("<label>").attr("for", "deckDuration").text("Deck-building duration (minutes, minimum 5):");
-            const $durationInput = $("<input>")
-                .attr({ type: "number", id: "deckDuration", name: "deckDuration", min: 5 });
-            if (gameType === "table_draft") {
-                $durationInput.val("15");
-            } else {
-                $durationInput.val("30");
-            }
-            $durationRow.append($durationLabel, $durationInput);
-
-            // Competitive
-            const $competitiveRow = $("<div>").addClass("formRow");
-            const $competitiveLabel = $("<label>").attr("for", "competitiveSelect").text("Competitive:");
-            const $competitiveSelect = $("<select>")
-                .attr({ id: "competitiveSelect", name: "competitive" })
-                .append($("<option>").val("false").text("Games can be spectated"))
-                .append($("<option>").val("true").text("No spectate; hidden names in queue"));
-            $competitiveRow.append($competitiveLabel, $competitiveSelect);
-            if (gameType === "constructed") {
-            	$competitiveSelect.val("true");
-            }
-
-            // Early start
-            const $earlyStartRow = $("<div>").addClass("formRow");
-            const $earlyStartLabel = $("<label>").attr("for", "startableEarlySelect").text("Early start:");
-            const $earlyStartSelect = $("<select>")
-                .attr({ id: "startableEarlySelect", name: "startableEarly" })
-                .append($("<option>").val("true").text("Can be started with less players"))
-                .append($("<option>").val("false").text("Starts only with all player slots filled"));
-            $earlyStartRow.append($earlyStartLabel, $earlyStartSelect);
-            // Set default to false for constructed games
-            if (gameType === "constructed") {
-            	$earlyStartSelect.val("false");
-            }
-
-            // Ready check
-            const $readyCheckRow = $("<div>").addClass("formRow");
-            const $readyCheckLabel = $("<label>").attr("for", "readyCheckSelect").text("Ready check:");
-            const $readyCheckSelect = $("<select>")
-                .attr({ id: "readyCheckSelect", name: "readyCheck" })
-                .append($("<option>").val("-1").text("No, just start the tournament"))
-                .append($("<option>").val("60").text("1 minute to confirm"))
-                .append($("<option>").val("90").text("1 minute 30 seconds to confirm"))
-                .append($("<option>").val("180").text("3 minutes to confirm"));
-            $readyCheckRow.append($readyCheckLabel, $readyCheckSelect);
-            // Set default to 90 seconds as we start with 4 players
-            $readyCheckSelect.val("90");
-
-            // Append to form
-            $fields.append($("<div>").append($formatRow));
-            if (gameType === "table_draft") {
-            	$fields.append($("<div>").append($draftInfoRow));
-            }
-            $fields.append($("<div>").append($playersRow));
-
-            $advanced.append($("<div>").append($pairingRow));
-            if (gameType !== "constructed") {
-            	$advanced.append($("<div>").append($durationRow));
-            }
-            $advanced.append(
-                $("<div>").append($competitiveRow),
-                $("<div>").append($earlyStartRow),
-                $("<div>").append($readyCheckRow)
-            );
-
-            // Add live draft timer
-            const $timerRow = $("<div>").addClass("formRow");
-            const $timerLabel = $("<label>").attr("for", "draftTimer").text("Draft timer:");
-            const $timerSelect = $("<select>")
-                .attr({ id: "draftTimer", name: "draftTimer" })
-                .append($("<option disabled selected>").text("Select timer"));
-            $timerRow.append($timerLabel, $timerSelect);
-            if (gameType === "table_draft") {
-                for (const timerType of json.draftTimerTypes) {
-                    $timerSelect.append(
-                        $("<option>").val(timerType).text(timerType.replace("_", " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
-                    );
-                }
-
-                $advanced.append(
-                    $("<div>").append($timerRow)
-                );
-
-                // Modify the timer based on format selected
-                $select.on("change", function () {
-                    const selectedFormat = $(this).find("option:selected");
-                    const recommendedTimer = selectedFormat.data("recommendedtimer");
-
-                    if (recommendedTimer) {
-                        $timerSelect.val(recommendedTimer);
-                    }
-                });
-            }
-
-            // Add validating listeners
-            $select.on("change", validateTournamentForm);
-            $pairingSelect.on("change", validateTournamentForm);
-            $durationInput.on("input", validateTournamentForm);
-            $competitiveSelect.on("change", validateTournamentForm);
-            $earlyStartSelect.on("change", validateTournamentForm);
-            $readyCheckSelect.on("change", validateTournamentForm);
-            if (gameType === "table_draft") {
-                $timerSelect.on("change", validateTournamentForm);
-            }
-
-            // Add listener for ready check / player count combo
-            $playersInput.on("input", function () {
-                const playerCount = parseInt($(this).val(), 10);
-                const $readyCheck = $("#readyCheckSelect");
-
-                if (playerCount <= 2) {
-                    // Set to -1 (no ready check) and disable other options
-                    $readyCheck.val("-1");
-                    $readyCheck.find("option").each(function () {
-                        if ($(this).val() !== "-1") {
-                            $(this).prop("disabled", true);
-                        }
-                    });
-                } else {
-                    // Enable all options and select 90 seconds
-                    $readyCheck.find("option").prop("disabled", false);
-                    $readyCheck.val("90");
-                }
-
-                validateTournamentForm();
-            });
-
-            // Submit button
-            $('#createTournamentButton').show();
-            $('#createTournamentButton').off('click').on('click', () => {
-                that.createTournament();
-            });
-            validateTournamentForm();
-
-            // Scroll to bottom so that the new field can be seen
-            $("#queueSpawnerForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
-        });
 	},
 
-	createTournament: function() {
-		var that = this;
+	removeWcQueuesSection: function() {
+		$("#wcQueuesHeader").remove();
+		$("#wcQueuesContent").remove();
+	},
 
-		const deck = this.decksSelect.val();
+	removeScheduledQueuesSection: function() {
+		$("#scheduledQueuesHeader").remove();
+		$("#scheduledQueuesContent").remove();
+	},
 
-		const type = $("#gameTypeSelect").val();
-		// Depending on the type, pick the correct format code from the formatSelect dropdown
-		const formatCode = $("#formatSelect").val();
-
-		// Assign the format codes based on the selected game type
-		let constructedFormatCode = null;
-		let sealedFormatCode = null;
-		let soloDraftFormatCode = null;
-		let tableDraftFormatCode = null;
-
-		if (type === "constructed") {
-        	constructedFormatCode = formatCode;
-        } else if (type === "sealed") {
-			sealedFormatCode = formatCode;
-		} else if (type === "solodraft") {
-			soloDraftFormatCode = formatCode;
-		} else if (type === "table_draft") {
-			tableDraftFormatCode = formatCode;
-		}
-
-		// Draft timer only applies to table draft
-		const tableDraftTimer = type === "table_draft" ? $("#draftTimer").val() : null;
-
-		const playoff = $("#pairingType").val();
-		const competitive = $("#competitiveSelect").val();
-		const startableEarly = $("#startableEarlySelect").val();
-		const readyCheck = $("#readyCheckSelect").val();
-
-
-		// Number input
-		const deckbuildingDuration = parseInt($("#deckDuration").val(), 10) || 15;
-		const maxPlayers = parseInt($("#numPlayers").val(), 10) || 4;
-
-		// Call the communication layer with all gathered values
-		this.comm.createTournament(
-			type,
-			deck,
-			maxPlayers,
-			constructedFormatCode,
-			sealedFormatCode,
-			soloDraftFormatCode,
-			tableDraftFormatCode,
-			tableDraftTimer,
-			playoff,
-			deckbuildingDuration,
-			competitive,
-			startableEarly,
-			readyCheck,
-			function(json) {
-				// Success callback
-				that.showDialog("Tournament Update", "Tournament queue created successfully");
-			},
-			this.hallErrorMap()
-		);
-    },
-	
 	initTable: function(displayed, headerID, tableID) {
 		const header = $("#" + headerID);
 		const content = $("#" + tableID);
@@ -679,12 +301,13 @@ var GempLotrHallUI = Class.extend({
 			"finishedTablesContent",
 			"wcQueuesContent",
 			"scheduledQueuesContent",
+			"soloContent",
 			"recurringQueuesContent",
 			"queueSpawnerContent"
 		];
 
 		// Load current cookie (or use default if missing)
-		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
 		let currentSettings = hallSettingsStr.split("|");
 
 		// Update only if the element exists
@@ -784,24 +407,6 @@ var GempLotrHallUI = Class.extend({
 		}).html(text);	
 	},
 
-	updateDecks:function () {
-		var that = this;
-		this.comm.getDecks(function (xml) {
-			count = xml.documentElement.getElementsByTagName("deck").length;
-			if(count == 0)
-			{
-				that.comm.getLibraryDecks(function(xml) {
-					that.processDecks(xml);
-				});
-			}
-			else
-			{
-				that.processDecks(xml);
-			}
-			
-		});
-	},
-
 	processResponse:function (xml) {
 		if (xml != null && xml != "OK") {
 			var root = xml.documentElement;
@@ -821,29 +426,6 @@ var GempLotrHallUI = Class.extend({
 			}
 		}
 		return true;
-	},
-
-	processDecks:function (xml) {
-		var root = xml.documentElement;
-		
-		function formatDeckName(formatName, deckName)
-		{
-			return "[" + formatName + "] - " + deckName;
-		}
-		if (root.tagName == "decks") {
-			this.decksSelect.html("");
-			var decks = root.getElementsByTagName("deck");
-			for (var i = 0; i < decks.length; i++) {
-				var deck = decks[i];
-				var deckName = deck.childNodes[0].nodeValue;
-				var formatName = deck.getAttribute("targetFormat");
-				var deckElem = $("<option/>")
-						.attr("value", deckName)
-						.text(formatDeckName(formatName, deckName));
-				this.decksSelect.append(deckElem);
-			}
-			this.decksSelect.css("display", "");
-		}
 	},
 
 	animateRowUpdate: function(rowSelector) {
@@ -900,7 +482,7 @@ var GempLotrHallUI = Class.extend({
 
 			var serverTime = root.getAttribute("serverTime");
 			if (serverTime != null)
-				$(".serverTime").text("Server time: " + serverTime);
+				$(".server-time").html(serverTime.replace(" ", "<br>"));
 
 			var queues = root.getElementsByTagName("queue");
 			for (var i = 0; i < queues.length; i++) {
@@ -916,62 +498,8 @@ var GempLotrHallUI = Class.extend({
 
 					var joined = queue.getAttribute("signedUp");
 					if (joined != "true" && queue.getAttribute("joinable") == "true") {
-						var but = $("<button>Join Queue</button>");
-						$(but).button().click((
-							function(queueInfo) {
-								return function () {
-									var deck = that.decksSelect.val();
-									
-									if (deck == null)
-										return;
-									
-									var queueId = queueInfo.getAttribute("id");
-									var type = queueInfo.getAttribute("type");
-									if (type !== null)
-										type = type.toLowerCase();
-									var queueName = queueInfo.getAttribute("queue");
-									var queueStart = queueInfo.getAttribute("start");
-									that.comm.joinQueue(queueId, deck, function (xml) {
-										var result = that.processResponse(xml);
-										if(result) {
-											that.inTournament = true;
-											let message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now. " +
-											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
-											 "The first game begins at " + queueStart + ".	Good luck!";
-											 
-											if(type === "sealed") {
-												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck. " +
-											 "At any time during the deck building phase, you will need to lock-in your deck before the tournament begins.<br><br>" +
-											 "Deck building begins at " + queueStart + ".	Good luck!";
-											}
-
-											if(type === "solodraft") {
-												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Playing Tables Section, and then build your deck in the Deck Builder. " +
-											 "At any time during the deck building phase, you will need to lock-in your deck before the tournament begins.<br><br>" +
-											 "Deck building begins at " + queueStart + ".	Good luck!";
-											}
-
-											if(type === "table_solodraft") {
-												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Playing Tables Section, and then build your deck in the Deck Builder. " +
-											 "At any time during the deck building phase, you will need to lock-in your deck before the tournament begins.<br><br>" +
-											 "Deck building begins at " + queueStart + ".	Good luck!";
-											}
-
-											if(type === "table_draft") {
-												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Playing Tables Section, and then build your deck in the Deck Builder. " +
-											 "At any time during the deck building phase, you will need to lock-in your deck before the tournament begins.<br><br>" +
-											 "Draft begins at " + queueStart + ".	Good luck!";
-											}
-											that.showDialog("Joined Tournament", message, 320);
-										}
-									}, that.hallErrorMap());
-								};
-							})(queue));
+						var but = this.tableJoiner.generateJoinQueueButton(queue);
+						
 						actionsField.append(but);
 					} else if (joined == "true") {
 						that.inTournament = true;
@@ -1035,13 +563,13 @@ var GempLotrHallUI = Class.extend({
 						function(queueInfo) {
 							return function() {
 								var infoDialog = $("<div></div>")
-                                				.dialog({
-                                					autoOpen:false,
-                                					closeOnEscape:true,
-                                					resizable:false,
-                                					title:"Prizes details",
-                                					closeText: ""
-                                				});
+												.dialog({
+													autoOpen:false,
+													closeOnEscape:true,
+													resizable:false,
+													title:"Prizes details",
+													closeText: ""
+												});
 
 								var prizeDescription = $(queueInfo.getAttribute("prizes")).attr("value");
 								if (prizeDescription) {
@@ -1476,19 +1004,10 @@ var GempLotrHallUI = Class.extend({
 						} 
 						else if(!isInviteOnly || inviteForYou) {
 							var that = this;
-
-							var but = $("<button>Join Table</button>");
-							$(but).button().click((
-								function(tableId) {
-									return function() {
-										var deck = that.decksSelect.val();
-										if (deck != null)
-											that.comm.joinTable(tableId, deck, function (xml) {
-												that.processResponse(xml);
-											});
-									};
-								})(id));
-							lastField.append(but);
+							
+							//Join Table
+							var button = this.tableJoiner.generateJoinButton(id);
+							lastField.append(button);
 						}
 					} else if (status == "PLAYING") {
 						if (playing == "true") {
@@ -1593,25 +1112,6 @@ var GempLotrHallUI = Class.extend({
 			if (games.length > 0) {				
 				this.PlaySound("gamestart");
 			}
-
-			if (!this.supportedFormatsInitialized) {
-				var formats = root.getElementsByTagName("format");
-				
-				var defaultItem = "<option value='' disabled selected>Select Format</option>"
-				this.supportedFormatsSelect.append(defaultItem);
-				
-				for (var i = 0; i < formats.length; i++) {
-					var format = formats[i].childNodes[0].nodeValue;
-					var type = formats[i].getAttribute("type");
-					
-					var item = "<option value='" + type + "'>" + format + "</option>"
-					this.supportedFormatsSelect.append(item);
-				}
-				this.supportedFormatsInitialized = true;
-			}
-
-			that.createTableButton.removeAttr("disabled");
-			that.createTableButton.removeClass("ui-state-disabled")
 
 			setTimeout(function () {
 				that.updateHall();

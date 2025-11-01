@@ -19,7 +19,8 @@ public class Player {
         COMMENTATOR("c"),
         //COMMENTATOR_ADMIN("m"),
         UNBANNED("n"),
-        USER("u");
+        USER("u"),
+        BOT("b");
 
         private final String _value;
 

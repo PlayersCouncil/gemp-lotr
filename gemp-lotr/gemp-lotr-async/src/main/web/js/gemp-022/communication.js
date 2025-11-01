@@ -851,6 +851,22 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    createSoloTable:function (format, deckName, botDeckName, isPrivate, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/solo",
+            cache:false,
+            data:{
+                format:format,
+                deckName:deckName,
+                botDeckName:botDeckName,
+                isPrivate:isPrivate,
+                participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     getFormat:function (formatCode, callback, errorMap) {
         $.ajax({
             type:"GET",
@@ -1444,7 +1460,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"json"
         });
     },
-    createTournament:function (type, deckName, maxPlayers, constructedFormatCode, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
+    createTournament:function (type, deckName, maxPlayers, formatCode, tableDraftTimer,
                                playoff, deckbuildingDuration, competitive, startable, readyCheck, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -1454,10 +1470,7 @@ var GempLotrCommunication = Class.extend({
                 type:type,
                 deckName:deckName,
                 maxPlayers:maxPlayers,
-                constructedFormatCode:constructedFormatCode,
-                sealedFormatCode:sealedFormatCode,
-                soloDraftFormatCode:soloDraftFormatCode,
-                tableDraftFormatCode:tableDraftFormatCode,
+                formatCode:formatCode,
                 tableDraftTimer:tableDraftTimer,
                 playoff:playoff,
                 deckbuildingDuration:deckbuildingDuration,
