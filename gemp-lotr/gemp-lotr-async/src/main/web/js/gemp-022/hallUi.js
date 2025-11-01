@@ -482,7 +482,7 @@ var GempLotrHallUI = Class.extend({
 
 			var serverTime = root.getAttribute("serverTime");
 			if (serverTime != null)
-				$(".serverTime").text("Server time: " + serverTime);
+				$(".server-time").html(serverTime.replace(" ", "<br>"));
 
 			var queues = root.getElementsByTagName("queue");
 			for (var i = 0; i < queues.length; i++) {

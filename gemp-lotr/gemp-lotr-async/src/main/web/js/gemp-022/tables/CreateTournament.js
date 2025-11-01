@@ -1,4 +1,5 @@
 class CreateTournament {
+	mainHall = null;
 	comm = null;
 	// Should be the create-tournament-table div
 	mainDiv = null;
@@ -27,9 +28,10 @@ class CreateTournament {
 	
 	resultDiv = null;
 	
-	constructor(comm, div, formatManager, deckManager) {
+	constructor(mainHall, comm, div, formatManager, deckManager) {
 		var that = this;
 		
+		this.mainHall = mainHall;
 		this.comm = comm;
 		this.mainDiv = div;
 		this.formatManager = formatManager;
@@ -122,7 +124,7 @@ class CreateTournament {
 			competitive,
 			startableEarly,
 			readyCheck,
-			CreateTable.getResponse(that.resultDiv),
+			CreateTable.getResponse(that.resultDiv, that.mainHall.tableCreator.hideAndCloseOnSuccess(that.mainHall.tableCreator)),
 			CreateTable.getCreateErrorMap(that.resultDiv)
 		);
 	}
@@ -207,6 +209,7 @@ class CreateTournament {
 				return;
 
 
+			that.formatDropdown.off("change");
 			that.formatDropdown.empty();
 			// Fill format options
 			for (const format of formats) {
@@ -232,7 +235,8 @@ class CreateTournament {
 					if(gameType === "table_draft") {
 						that.draftInfoText
 							.attr("draftCode", that.formatDropdown.val())
-							.text(that.formatDropdown.text());
+							.text($("option:selected", that.formatDropdown).text())
+							.addClass("draftFormatInfo");
 							
 						that.draftInfoRow.show();
 						that.deckbuildingDurationInput.val("15");					
@@ -263,6 +267,8 @@ class CreateTournament {
 					
 					that.validateTournamentForm(that);
 				});
+			
+			that.formatDropdown.change();
 
 			// Add validating listeners
 			that.pairingDropdown.on("change", that.validateTournamentForm);
@@ -287,5 +293,8 @@ class CreateTournament {
 			
 			that.validateTournamentForm(that);
 		});
+
+		//Else upon reloading, the last value still shows, but the form is stale
+		that.tournamentTypeDropdown.val("");
 	}
 }

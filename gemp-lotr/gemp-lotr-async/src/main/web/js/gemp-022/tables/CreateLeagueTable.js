@@ -1,4 +1,5 @@
 class CreateLeagueTable {
+	mainHall = null;
 	comm = null;
 	// Should be the create-bot-table div
 	mainDiv = null;
@@ -18,9 +19,10 @@ class CreateLeagueTable {
 	
 	leagueUI = null;
 	
-	constructor(comm, div, formatManager, deckManager) {
+	constructor(mainHall, comm, div, formatManager, deckManager) {
 		var that = this;
 		
+		this.mainHall = mainHall;
 		this.comm = comm;
 		this.mainDiv = div;
 		this.formatManager = formatManager;
@@ -74,7 +76,7 @@ class CreateLeagueTable {
 			}
 
 			that.comm.createTable(format, deck, null, null, false, false,
-					CreateTable.getResponse(that.resultDiv),
+					CreateTable.getResponse(that.resultDiv, that.mainHall.tableCreator.hideAndCloseOnSuccess(that.mainHall.tableCreator)),
 					CreateTable.getCreateErrorMap(that.resultDiv)
 				);
 			

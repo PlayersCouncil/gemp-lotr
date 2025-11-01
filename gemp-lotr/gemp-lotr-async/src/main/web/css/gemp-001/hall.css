@@ -217,7 +217,7 @@ button {
 	gap: 5px;
 }
 
-#buttonsDiv a,
+.buttons-gutter a,
 #motd a,
 #infoButtons a,
 .msg-content p a,
@@ -236,12 +236,12 @@ button {
 	flex-grow: 1;
 }
 
-.serverTime {
+.server-time {
 	/*border: 1px solid #aaaaaa;*/
 	text-align: right;
 	padding: 5px;
-	color: #FFFF00;
-	min-width: 32ch;
+	color: #DDDD00;
+	min-width: 10ch;
 }
 
 #tablesDiv {
@@ -337,7 +337,7 @@ table.tables tr.privateForPlayer {
 	font-weight: bolder;
 }
 
-#buttonsDiv {
+.buttons-gutter {
 	left:0px; 
 	top: 0px;
 	height: 40px;
@@ -944,7 +944,7 @@ form#queueSpawnerForm input {
 	flex-direction: column;
 	justify-content: center;
 	align-items: stretch;
-	gap: 5rem;
+	gap: 2rem;
 	margin: 5rem;
 }
 
@@ -956,7 +956,7 @@ form#queueSpawnerForm input {
 	width:90%; 
 	margin-left: auto;
 	margin-right: auto;
-	overflow: auto;
+	overflow: visible;
 }
 
 .table-form h1 {
@@ -974,6 +974,14 @@ form#queueSpawnerForm input {
 	margin: 0 auto 0 auto;
 	align-items: stretch;
 	gap: 0.4em;
+} 
+
+.table-blurb {
+	margin: 0 1rem;
+	padding: 1rem;
+	border-color: white;
+	border-style: solid;
+	background-color: #333333;
 }
 
 #league-table-leagues {

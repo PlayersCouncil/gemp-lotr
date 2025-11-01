@@ -36,9 +36,9 @@ class CreateTable {
 		this.mainSelection = $("#create-table-selection");
 		
 		this.createBotTable = new CreateBotTable(mainHall, comm, $("#create-bot-table"), formatManager, deckManager);
-		this.createUnrankedTable = new CreateUnrankedTable(comm, $("#create-unranked-table"), formatManager, deckManager);
-		this.createLeagueTable = new CreateLeagueTable(comm, $("#create-league-table"), formatManager, deckManager);
-		this.createTournament = new CreateTournament(comm, $("#create-tournament"), formatManager, deckManager);
+		this.createUnrankedTable = new CreateUnrankedTable(mainHall, comm, $("#create-unranked-table"), formatManager, deckManager);
+		this.createLeagueTable = new CreateLeagueTable(mainHall, comm, $("#create-league-table"), formatManager, deckManager);
+		this.createTournament = new CreateTournament(mainHall, comm, $("#create-tournament"), formatManager, deckManager);
 		
 		this.backButton = $("#create-table-back-button").button().click(
 			function() {
@@ -91,10 +91,10 @@ class CreateTable {
 			modal: true,
 			show: 100,
 			hide: 100,
-			minWidth: 500,
-			width: $(window).width() - 200,
-			minHeight: 300,
-			height: $(window).height() - 400,
+			minWidth: 450,
+			width: 900,
+			minHeight: 400,
+			height: 800,
 			title: "Create Table",
 			open: function(event, ui) { 
 	
@@ -116,7 +116,15 @@ class CreateTable {
 		this.mainSelection.show();
 		this.popup.dialog('option', 'title', 'Create Table');
 	}
-
+	
+	hideAndCloseOnSuccess(that) {
+		return (success) => {
+			if(success) {
+				that.hideAll();
+				that.popup.dialog("close");
+			}
+		}
+	}
 	
 	showPopup() {
 		var that = this;
@@ -130,8 +138,6 @@ class CreateTable {
 		this.mainSelection.show();
 		
 		this.popup.dialog("open");
-		
-		
 	}
 	
 	static getResponse(outputControl, callback=null) {
@@ -142,7 +148,7 @@ class CreateTable {
 					var message = root.getAttribute("message");
 					outputControl.html(message);
 					if(callback!=null) {
-						callback();
+						callback(false);
 					}
 					return false;
 				}
@@ -150,14 +156,14 @@ class CreateTable {
 					var message = root.getAttribute("message");
 					outputControl.html(message);
 					if(callback!=null) {
-						callback();
+						callback(true);
 					}
 					return true;
 				}
 			}
 			outputControl.html("OK");
 			if(callback!=null) {
-				callback();
+				callback(true);
 			}
 			return true;
 		};
