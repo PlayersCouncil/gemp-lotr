@@ -1,5 +1,7 @@
 package com.gempukku.lotro.logic.decisions;
 
+import com.alibaba.fastjson2.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,5 +43,15 @@ public abstract class AbstractAwaitingDecision implements AwaitingDecision {
     @Override
     public Map<String, String[]> getDecisionParameters() {
         return _params;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", _decisionType.toString());
+        obj.put("id", getAwaitingDecisionId());
+        obj.put("text", getText());
+        obj.putAll(_params);
+        return obj;
     }
 }

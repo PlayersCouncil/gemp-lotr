@@ -127,4 +127,5 @@ public class Card_V1_062_Tests
 		assertEquals(Zone.DISCARD, runner2.getZone());
 
 	}
+
 }

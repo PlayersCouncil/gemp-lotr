@@ -4,6 +4,7 @@ import com.gempukku.lotro.AbstractServer;
 import com.gempukku.lotro.PrivateInformationException;
 import com.gempukku.lotro.SubscriptionConflictException;
 import com.gempukku.lotro.SubscriptionExpiredException;
+import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.chat.ChatCommandCallback;
 import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatRoomMediator;
@@ -296,7 +297,7 @@ public class HallServer extends AbstractServer {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden);
+        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
 
         LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
 
@@ -312,11 +313,37 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    public void createNewSoloTable(String type, Player player, String deckName, String botDeckName, boolean isPrivate) throws  HallException {
+        if (_shutdown)
+            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
+
+        GameSettings gameSettings = createGameSettings(type, "slow", "Solo game", false, isPrivate, false, true);
+
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
+
+
+        LotroDeck botDeck = null;
+        if (botDeckName != null && !botDeckName.isEmpty()) {
+            botDeck = validateUserAndDeck(gameSettings.format(), player, botDeckName, gameSettings.collectionType());
+        }
+
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            final GameTable table = tableHolder.createTable(player, gameSettings, lotroDeck);
+            if (table != null)
+                createGameFromTable(table, botDeck);
+
+            hallChanged();
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
     public void spoofNewTable(String type, Player player, Player librarian, String deckName, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden);
+        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
 
         LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType());
 
@@ -332,7 +359,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    private GameSettings createGameSettings(String type, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
+    private GameSettings createGameSettings(String type, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden, boolean isSolo) throws HallException {
         League league = null;
         LeagueSerieInfo leagueSerie = null;
         CollectionType collectionType = _defaultCollectionType;
@@ -370,7 +397,7 @@ public class HallServer extends AbstractServer {
             throw new HallException("This format is not supported: " + type);
 
         return new GameSettings(collectionType, format, null, league, leagueSerie,
-                league != null, isPrivate, isInviteOnly, isHidden, gameTimer, description);
+                league != null, isPrivate, isInviteOnly, isHidden, gameTimer, description, isSolo);
     }
 
     public boolean joinQueue(String queueId, Player player, String deckName) throws HallException, SQLException, IOException {
@@ -772,7 +799,7 @@ public class HallServer extends AbstractServer {
         } else {
             CardCollection collection = _collectionsManager.getPlayerCollection(player, collectionType.getCode());
             if (collection == null)
-                throw new HallException("You don't have cards in the required collection to play in this format");
+                throw new HallException("You are not registered for this league; go to the Events tab to sign up.  If this is a Draft, make sure to click on 'Go to Draft' to get your cards.");
 
             Map<String, Integer> deckCardCounts = CollectionUtils.getTotalCardCountForDeck(lotroDeck);
 
@@ -798,7 +825,7 @@ public class HallServer extends AbstractServer {
                     String cardName = null;
                     try {
                         cardName = GameUtils.getFullName(_library.getLotroCardBlueprint(cardCount.getKey()));
-                        throw new HallException("You don't have the required cards in collection: " + cardName + " required " + cardCount.getValue() + ", owned " + collectionCount);
+                        throw new HallException("You cannot use this deck for this League; your collection for this League does not contain one or more cards: " + cardName + " required " + cardCount.getValue() + ", owned " + collectionCount + " (and others)");
                     } catch (CardNotFoundException e) {
                         // Ignore, card player has in a collection, should not disappear
                     }
@@ -823,7 +850,14 @@ public class HallServer extends AbstractServer {
     }
 
     private void createGameFromTable(GameTable gameTable) {
-        Set<LotroGameParticipant> players = gameTable.getPlayers();
+        createGameFromTable(gameTable, null);
+    }
+
+    private void createGameFromTable(GameTable gameTable, LotroDeck botDeck) {
+        Set<LotroGameParticipant> players = new HashSet<>(gameTable.getPlayers());
+        if (botDeck != null) {
+            players.add(new LotroGameParticipant(BotService.GENERAL_BOT_NAME, botDeck));
+        }
         LotroGameParticipant[] participants = players.toArray(new LotroGameParticipant[0]);
         final League league = gameTable.getGameSettings().league();
         final LeagueSerieInfo leagueSerie = gameTable.getGameSettings().leagueSerie();
@@ -940,11 +974,11 @@ public class HallServer extends AbstractServer {
             if (tournament.isWC()) {
                 gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                         tournamentId, null, null, true, true, false,
-                        false, GameTimer.CHAMPIONSHIP_TIMER, null);
+                        false, GameTimer.CHAMPIONSHIP_TIMER, null, false);
             } else {
                 gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
                         tournamentId, null, null, !casual, !casual, false,
-                        false, GameTimer.TOURNAMENT_TIMER, null);
+                        false, GameTimer.TOURNAMENT_TIMER, null, false);
             }
         }
 
@@ -1010,7 +1044,7 @@ public class HallServer extends AbstractServer {
         private ManualGameSpawner(Tournament tourney, LotroFormat format, GameTimer timer, String description) {
             _tournamentName = tourney.getTournamentName();
             _settings = new GameSettings(null, format,
-                    tourney.getTournamentId(), null, null, true, false, false, false, timer, description);
+                    tourney.getTournamentId(), null, null, true, false, false, false, timer, description, false);
         }
 
         @Override
