@@ -77,11 +77,88 @@
 	# 	}
 	# }
 	
+	# 102_13: {
+	# 	cardInfo: {
+	# 		//id: 102_13
+	# 		image: sets/V2/LOTR-ENV2S013.1_card.jpg
+	# 		collInfo: V2_13
+	# 		rarity: _
+	# 	}
+	# 	title: Gandalf
+	# 	subtitle: Lathspell
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gandalf
+	# 	twilight: 4
+	# 	type: Companion
+	# 	race: Wizard
+	# 	strength: 7
+	# 	vitality: 4
+	# 	signet: Theoden
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: Modifier
+	# 			modifier: {
+	# 				type: AddKeyword
+	# 				keyword: valiant
+	# 				filter: companion,mounted
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: UsesSpecialAbility
+	# 				filter: minion
+	# 				memorize: activatedMinion
+	# 			}
+	# 			requires: {
+	# 				type: not
+	# 				requires: {
+	# 					type: phase
+	# 					phase: skirmish
+	# 				}
+	# 			}
+	# 			cost: [
+	# 				{
+	# 					type: Spot
+	# 					count: 3
+	# 					filter: valiant, companion
+	# 				}
+	# 				{
+	# 					type: Exert
+	# 					select: self
+	# 					times: 1
+	# 				}
+	# 			]
+	# 			effect: [
+	# 				{
+	# 					type: cancelSpecialAbility
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that. 
+	# 	lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+
 	102_13: {
 		cardInfo: {
-			//id: 102_13
-			image: sets/V2/LOTR-ENV2S013.0_card.jpg
-			collInfo: V2_13
+			//id: 102_13.2
+			parent: 102_13
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: sets/V2/LOTR-ENV2E013.2_card.jpg
+			collInfo: V213
 			rarity: _
 		}
 		title: Gandalf
@@ -129,17 +206,22 @@
 					{
 						type: Exert
 						select: self
-						times: 1
+						times: 2
 					}
 				]
 				effect: [
 					{
 						type: cancelSpecialAbility
 					}
+					{
+						type: Exert
+						select: memory(activatedMinion)
+						times: 1
+					}
 				]
 			}
 		]
-		gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that. 
+		gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used, spot 3 valiant companions and exert Gandalf twice to prevent that and exert that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
 		alts: {
@@ -149,7 +231,7 @@
 			}
 		}
 	}
-
+	
 	102_14: {
 		cardInfo: {
 			//id: 102_14
@@ -199,14 +281,81 @@
 		}
 	}
 	
+	# 102_77: {
+	# 	cardInfo: {
+	# 		//id: 102_77.0
+	# 		parent: 102_77
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 0
+	# 		image: sets/V2/LOTR-ENV2S077.0_card.jpg
+	# 		collInfo: V277
+	# 		rarity: _
+	# 	}
+	# 	title: Gandalf's Staff
+	# 	subtitle: Old Man's Crutch
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gandalf
+	# 	twilight: 2
+	# 	type: Artifact
+	# 	vitality: 1
+	# 	itemclass: Staff
+	# 	target: title(Gandalf)
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: {
+	# 				type: ConstantlyCheck
+	# 				requires: [
+	# 					{
+	# 						type: canSpot
+	# 						filter: weapon,attachedTo(bearer)
+	# 					}
+	# 				]
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				select: all(weapon,attachedTo(bearer))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			limitPerPhase: 1
+	# 			trigger: {
+	# 				type: Exerted
+	# 				filter: bearer
+	# 				source: side(freeps)
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: Wound
+	# 					select: choose(minion)
+	# 				}			
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Bearer must be Gandalf.<br>Discard any weapon he bears.<br>Each time Gandalf is exerted by a Free Peoples card, you may wound a minion (limit once per phase).
+	# 	lore: "'The staff in the hand of a wizard may be more than a prop for age.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	102_77: {
 		cardInfo: {
-			//id: 102_77.0
+			//id: 102_77.1
 			parent: 102_77
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 0
-			image: sets/V2/LOTR-ENV2S077.0_card.jpg
+			revision: 1
+			image: sets/V2/LOTR-ENV2E077.1_card.jpg
 			collInfo: V277
 			rarity: _
 		}
@@ -241,7 +390,7 @@
 			{
 				type: Trigger
 				optional: true
-				limitPerPhase: 1
+				limitPerTurn: 1
 				trigger: {
 					type: Exerted
 					filter: bearer
@@ -249,13 +398,13 @@
 				}
 				effect: [
 					{
-						type: Wound
-						select: choose(minion)
+						type: Heal
+						select: bearer
 					}			
 				]
 			}
 		]
-		gametext: Bearer must be Gandalf.<br>Discard any weapon he bears.<br>Each time Gandalf is exerted by a Free Peoples card, you may wound a minion (limit once per phase).
+		gametext: Bearer must be Gandalf.<br>Discard any weapon he bears.<br>Response: If Gandalf is exerted by a Free Peoples card, heal him (limit once per turn).
 		lore: "'The staff in the hand of a wizard may be more than a prop for age.'"
 		promotext: ""
 		alts: {

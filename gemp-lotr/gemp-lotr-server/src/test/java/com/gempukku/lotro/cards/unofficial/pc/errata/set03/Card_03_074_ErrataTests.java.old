@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+
 
 public class Card_03_074_ErrataTests
 {
@@ -34,7 +35,7 @@ public class Card_03_074_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Uruk Raider
-		 * Unique: false
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 2
@@ -43,8 +44,8 @@ public class Card_03_074_ErrataTests
 		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: Tracker. 
-		* 	While an ally is in the dead pile, this minion is strength +3 and <b>damage +1</b>.
+		 * Game Text: Tracker. Damage +1.
+		* 	While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
 		* 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		*/
 
@@ -60,6 +61,8 @@ public class Card_03_074_ErrataTests
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
@@ -81,13 +84,13 @@ public class Card_03_074_ErrataTests
 
 		assertEquals(Zone.HAND,  rosie.getZone());
 		assertEquals(6, scn.GetStrength(raider));
-		assertFalse(scn.HasKeyword(raider, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(raider, Keyword.FIERCE));
 
 		scn.MoveCardsToDeadPile(rosie);
 
 		assertEquals(Zone.DEAD,  rosie.getZone());
 		assertEquals(9, scn.GetStrength(raider));
-		assertTrue(scn.HasKeyword(raider, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(raider, Keyword.FIERCE));
 	}
 
 	@Test
@@ -168,5 +171,31 @@ public class Card_03_074_ErrataTests
 
 		assertEquals(Zone.DEAD,  rosie.getZone());
 		assertEquals(1, scn.GetWoundsOn(raider));
+	}
+
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void UrukRaiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+//		var card = scn.GetFreepsCard("card");
+//		scn.MoveCardsToHand(card);
+//		scn.MoveCompanionToTable(card);
+//		scn.MoveCardsToSupportArea(card);
+//		scn.MoveCardToDiscard(card);
+//		scn.MoveCardsToTopOfDeck(card);
+
+		var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		scn.StartGame();
+		scn.FreepsPlayCard(card);
+		
+		assertEquals(2, scn.GetTwilight());
 	}
 }

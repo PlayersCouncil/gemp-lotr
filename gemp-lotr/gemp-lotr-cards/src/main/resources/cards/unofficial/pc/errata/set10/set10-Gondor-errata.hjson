@@ -1,9 +1,85 @@
 {
+	# 60_28: {
+	# 	cardInfo: {
+	# 		//id: 60_28.1
+	# 		revision: 1
+	# 		image: errata/LOTR-EN10E028.1_card.jpg
+	# 		collInfo: 10R28
+	# 		rarity: R
+	# 	}
+	# 	title: Denethor
+	# 	subtitle: Lord of Minas Tirith
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gondor
+	# 	twilight: 2
+	# 	type: Companion
+	# 	race: Man
+	# 	strength: 5
+	# 	vitality: 3
+	# 	signet: Aragorn
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 					type: canSpot
+	# 					filter: culture(gondor),man
+	# 					count: 2
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: fellowship
+	# 			requires: {
+	# 				type: location
+	# 				filter: sanctuary
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: putCardsFromDeckIntoHand
+	# 					select: choose(culture(gondor),or(condition, item))
+	# 						reveal: true
+	# 						shuffle: true
+	# 						showAll: true
+	# 				}
+	# 				{
+	# 					type: optional
+	# 					player: shadow
+	# 					text: Would you like to draw a card?
+	# 					effect: {
+	# 							type: drawCards
+	# 							player: shadow
+	# 							count: 1
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or item into hand from your draw deck. Choose an opponent who may draw 2 cards.
+	# 	lore: "There Denethor sat in a grey gloom, like an old patient spider...."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
+	
 	60_28: {
 		cardInfo: {
-			//id: 60_28.1
-			revision: 1
-			image: errata/LOTR-EN10E028.1_card.jpg
+			//id: 60_28.2
+			parent: 10_28
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN10E028.2_card.jpg
 			collInfo: 10R28
 			rarity: R
 		}
@@ -15,7 +91,7 @@
 		twilight: 2
 		type: Companion
 		race: Man
-		strength: 5
+		strength: 8
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
@@ -60,7 +136,7 @@
 				]
 			}
 		]
-		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or item into hand from your draw deck. Choose an opponent who may draw 2 cards.
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] item or condition into hand from your draw deck. Choose an opponent who may draw a card.
 		lore: "There Denethor sat in a grey gloom, like an old patient spider...."
 		promotext: ""
 		alts: {

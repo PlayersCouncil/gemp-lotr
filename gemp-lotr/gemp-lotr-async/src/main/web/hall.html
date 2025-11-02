@@ -145,7 +145,6 @@
 				</div>
 				<div class="flex-horiz" id="messageArea">
 					<div id="motd"></div>
-					<div class="serverTime"></div>
 				</div>
 			</div>
 			<div id="hall" class="">
@@ -209,7 +208,8 @@
 		</div>
 		<!-- <div id="culture-icon"><img src="images/cultures/sauron.svg"/></div> -->
 	</div>
-	<div id="buttonsDiv" class="flex-horiz">
+	<div class="buttons-gutter flex-horiz">
+		<div class="buttons-gutter flex-horiz flex-fill">
 			<a href="deckBuild.html" target="_blank">
 				<button id="deckbuilder-button" class="play-buttons">
 					<span class="bigger-icon icon-deckbuilder"></span>
@@ -217,13 +217,15 @@
 				</button>
 			</a>
 			
-			<button id="open-table-button" class="play-buttons">
+			<button id="open-table-button" class="play-buttons table-create-button">
 				<span class="bigger-icon icon-play" ></span>
 				<span><b>Play</b></span>
 			</button>
-			
-			
+		</div>
+		
+		<div class="server-time flex-static"></div>
 	</div>
+	
 	
 	
 	<div id="chat" class="flex-horiz" >
@@ -271,7 +273,7 @@
 	<div id="create-bot-table" style="display:none" class="table-form">
 		<h1>Open Bot Table</h1>
 		<div id="bot-table-options" class="inner-table-form">
-			<div class="flex-vert">
+			<div class="flex-vert table-blurb">
 				Welcome to the future!  Here you may open a match against a neural-net bot trained on playing the LOTR-TCG.  This is an experimental feature, and so can go wrong in many ways.
 				Remember:
 				<ul>
@@ -280,8 +282,6 @@
 				</ul>
 				Please report any matches where you encounter an issue with the bots, but please don't report when they're stupid; we already know. :)
 			</div>
-			
-			<hr />
 			
 			<div class="flex-horiz">
 				<div class="label-column">Table Format: </div>
@@ -301,7 +301,7 @@
 					<select class="player-deck-dropdown flex-fill"></select>
 			</div>
 			
-			<button id="submit-bot-table-button" >
+			<button id="submit-bot-table-button" class="table-create-button">
 				Create Table
 			</button>
 			
@@ -323,6 +323,17 @@
 		
 		<div id="unranked-table-options" class="inner-table-form">
 			<h1>Open Unranked Table</h1>
+			
+			<div class="flex-vert table-blurb">
+				Open a casual table to play another human 1v1 in your format of choice.  
+				Remember:
+				<ul>
+					<li>If you have to leave early for any reason, go to <b>Options -> Concede game</b> (and then pass your current action, if necessary)</li>
+					<li>If you are looking for decks to use, check out the Deck Library which includes many starter, sample, and championship decks from years past.</li>
+					<li>Always be courteous to your fellow players! Use the description field to avoid misunderstandings.</li>
+				</ul>
+
+			</div>
 			
 			<div class="player-deck" class="flex-vert">
 				<!-- <div class="flex-horiz">
@@ -380,8 +391,13 @@
 				<div class="label-column">Private Mode (no spectators): </div>
 				<input type="checkbox" id="unranked-private" />
 			</div>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Keep this window open: </div>
+				<input type="checkbox" id="unranked-keep-open" />
+			</div>
 					
-			<button id="submit-unranked-table-button" >
+			<button id="submit-unranked-table-button" class="table-create-button">
 				Create Table
 			</button> 
 			<div id="unranked-result-label" class="flex-horiz result-label">
@@ -404,6 +420,13 @@
 		<div id="league-table-options" class="inner-table-form">
 			<h1>Open League Table</h1>
 			
+			<div class="flex-vert table-blurb">
+					Leagues are multi-week or multi-month events where players compete in many matches across days to improve their skills and hone their craft.  
+				<br /><br /><br />
+					Join leagues below or using the Events tab at the top of the main hall.  If you enter a Limited league (Sealed or Draft), you will need to receive your cards and construct a new deck using those cards before you can participate.
+
+			</div>
+			
 			<div class="flex-horiz">
 				<div class="label-column">League: </div>
 				<select id="league-format" class="flex-fill"></select>
@@ -418,7 +441,7 @@
 
 			</div>
 
-			<button id="submit-league-table-button" >
+			<button id="submit-league-table-button" class="table-create-button">
 				Create Table
 			</button> 
 			<div id="league-result-label" class="flex-horiz result-label">
@@ -446,6 +469,16 @@
 		
 		<div id="league-table-options" class="inner-table-form">
 			<h1>Create Tournament</h1>
+			
+			<div class="flex-vert table-blurb">
+					Tournaments are competitive events where players fight to prove their skills against other players!  Anyone may create or enter a tournament, but know that others will be playing to win! :)
+				<ul>
+					<li><b>Constructed</b>: Players provide their own constructed decks with no limits beyond the selected format.</li>
+					<li><b>Sealed</b>: Players will receive standardized starter decks with digital boosters and 30 minutes (by default) to crack those packs and build a deck for the tournament. </li>
+					<li><b>Live Draft</b>: Players will sit around the table and open digital packs, selecting 1 card and passing the rest to their opponents.  After all packs have been drafted, players have 15 minutes (by default) to construct a deck for the tournament.</li>
+					<li><b>Solo Draft</b>: Players will each draft against the computer, meaning that they have a limited selection but the remainder is <b>not</b> passed to a human opponent. After drafting, players have 30 minutes (by default) to construct a deck for the tournament.</li>
+				</ul>
+			</div>
 			
 			<div class="flex-horiz">
 				<div class="label-column">Tournament Type: </div>
@@ -531,7 +564,7 @@
 						<select class="player-deck-dropdown flex-fill"></select>
 				</div>
 				
-				<button id="submit-tournament-button" class="flex-fill">
+				<button id="submit-tournament-button" class="flex-fill table-create-button">
 					Host Tournament
 				</button> 
 				<div id="tournament-result-label" class="flex-horiz result-label">

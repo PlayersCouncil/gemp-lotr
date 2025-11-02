@@ -41,7 +41,7 @@ public class Card_V2_013_Tests
 		/**
 		 * Set: V2
 		 * Name: Gandalf, Lathspell
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 4
@@ -52,8 +52,8 @@ public class Card_V2_013_Tests
 		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Each mounted companion gains <b>valiant</b>.
-		* 	Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that. 
-		*/
+		 * 	Response: If a minion's special ability is used, spot 3 valiant companions and exert Gandalf twice to prevent that and exert that minion.
+		 */
 
 		var scn = GetScenario();
 
@@ -70,7 +70,7 @@ public class Card_V2_013_Tests
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet());
 	}
 
 	@Test
@@ -146,9 +146,9 @@ public class Card_V2_013_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(valiant1));
-		assertEquals(1, scn.GetWoundsOn(gandalf));
-		//Lathspell's retribution no longer wounds, just blocks
-		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		//Lathspell's retribution exerts and blocks
+		assertEquals(2, scn.GetWoundsOn(shotgun));
 	}
 
 	@Test
@@ -193,7 +193,7 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	public void GandalfCanBlockGrishnakhIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfCanBlockGrishnakhAndExertHimIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -221,57 +221,12 @@ public class Card_V2_013_Tests
 		assertEquals(2, scn.GetWoundsOn(grishnakh));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetWoundsOn(gandalf));
 		//Lathspell's retribution no longer wounds
 		assertEquals(Zone.SHADOW_CHARACTERS, grishnakh.getZone());
 		assertEquals(2, scn.GetWoundsOn(grishnakh));
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(7, scn.GetShadowDeckCount());
-	}
-
-	@Test
-	public void GandalfCanBlockGrishnakhAndWoundHimIf3ValiantCompanionsAndBearingNewStaff() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var crutch = scn.GetFreepsCard("crutch");
-		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionsToTable(gandalf);
-		scn.AttachCardsTo(gandalf, crutch);
-		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
-
-		var grishnakh = scn.GetShadowCard("grishnakh");
-		scn.MoveMinionsToTable(grishnakh);
-		scn.MoveMinionsToTable("marauder");
-
-		scn.StartGame();
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertTrue(scn.ShadowActionAvailable(grishnakh));
-
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertEquals(0, scn.GetWoundsOn(grishnakh));
-		assertEquals(0, scn.GetShadowHandCount());
-		assertEquals(7, scn.GetShadowDeckCount());
-		scn.ShadowUseCardAction(grishnakh);
-		//Grishnakh's own exertions
-		assertEquals(2, scn.GetWoundsOn(grishnakh));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(gandalf));
-		//Lathspell's retribution no longer wounds
-		assertEquals(Zone.SHADOW_CHARACTERS, grishnakh.getZone());
-		assertEquals(2, scn.GetWoundsOn(grishnakh));
-		assertEquals(0, scn.GetShadowHandCount());
-		assertEquals(7, scn.GetShadowDeckCount());
-
-		//The staff makes up for it tho
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		scn.FreepsChooseCard(grishnakh);
-		assertEquals(Zone.DISCARD, grishnakh.getZone());
 	}
 
 	@Test

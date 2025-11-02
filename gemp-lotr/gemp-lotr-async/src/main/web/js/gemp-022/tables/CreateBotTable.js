@@ -102,7 +102,7 @@ class CreateBotTable {
 			}
 
 			that.comm.createSoloTable(format, yourDeck, botDeck, false, 
-          CreateTable.getResponse(that.resultDiv),
+          CreateTable.getResponse(that.resultDiv, that.mainHall.tableCreator.hideAndCloseOnSuccess(that.mainHall.tableCreator)),
 					CreateTable.getCreateErrorMap(that.resultDiv));
 			
 		};

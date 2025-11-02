@@ -407,13 +407,33 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Maneuver
+			Regroup
+		]
 		effects: [
 			{
 				type: event
-				requires: {
-					type: canSpot
-					filter: culture(rohan),man
+				cost: {
+					type: If
+					check: {
+						type: Phase
+						phase: Maneuver
+					}
+					true: [
+						{
+							type: Exert
+							select: choose(Culture(Rohan), Man, MinResistance(3), CanExert)
+						}
+						{
+							type: Spot
+							filter: culture(Rohan),Man
+						}
+					]
+					false: {
+						type: Spot
+						filter: culture(Rohan),Man
+					}
 				}
 				effect: [
 					{
