@@ -30,8 +30,9 @@ class JoinTable {
 			modal: true,
 			show: 100,
 			hide: 300,
-			width: $(window).width()-200,
-			height: $(window).height() / 4,
+			minWidth: 450,
+			width: 900,
+			height: 200,
 			title: "Join Table",
 			close: function() {
 				//form[0].reset();
