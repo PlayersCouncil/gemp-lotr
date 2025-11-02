@@ -952,6 +952,7 @@ form#queueSpawnerForm input {
 
 .table-form select {
 	flex-basis: 70%;
+	min-width: 0;
 }
 
 .inner-table-form {
