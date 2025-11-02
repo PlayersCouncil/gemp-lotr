@@ -217,7 +217,7 @@
 				</button>
 			</a>
 			
-			<button id="open-table-button" class="play-buttons">
+			<button id="open-table-button" class="play-buttons table-create-button">
 				<span class="bigger-icon icon-play" ></span>
 				<span><b>Play</b></span>
 			</button>
@@ -301,7 +301,7 @@
 					<select class="player-deck-dropdown flex-fill"></select>
 			</div>
 			
-			<button id="submit-bot-table-button" >
+			<button id="submit-bot-table-button" class="table-create-button">
 				Create Table
 			</button>
 			
@@ -391,8 +391,13 @@
 				<div class="label-column">Private Mode (no spectators): </div>
 				<input type="checkbox" id="unranked-private" />
 			</div>
+			
+			<div class="flex-horiz">
+				<div class="label-column">Keep this window open: </div>
+				<input type="checkbox" id="unranked-keep-open" />
+			</div>
 					
-			<button id="submit-unranked-table-button" >
+			<button id="submit-unranked-table-button" class="table-create-button">
 				Create Table
 			</button> 
 			<div id="unranked-result-label" class="flex-horiz result-label">
@@ -436,7 +441,7 @@
 
 			</div>
 
-			<button id="submit-league-table-button" >
+			<button id="submit-league-table-button" class="table-create-button">
 				Create Table
 			</button> 
 			<div id="league-result-label" class="flex-horiz result-label">
@@ -559,7 +564,7 @@
 						<select class="player-deck-dropdown flex-fill"></select>
 				</div>
 				
-				<button id="submit-tournament-button" class="flex-fill">
+				<button id="submit-tournament-button" class="flex-fill table-create-button">
 					Host Tournament
 				</button> 
 				<div id="tournament-result-label" class="flex-horiz result-label">

@@ -14,6 +14,7 @@ class CreateUnrankedTable {
 	inviteCheckbox = null;
 	inviteeDropdown = null;
 	privateCheckbox = null;
+	keepopenCheckbox = null;
 	createTableButton = null;
 	
 	resultDiv = null;
@@ -35,6 +36,7 @@ class CreateUnrankedTable {
 		this.inviteCheckbox = $("#unranked-invite-only");
 		this.inviteeDropdown = $("#unranked-invitee");
 		this.privateCheckbox = $("#unranked-private");
+		this.keepopenCheckbox = $("#unranked-keep-open");
 		
 		this.inviteCheckbox.click(() => {
 			if (that.inviteCheckbox.is(":checked")) {
@@ -108,6 +110,7 @@ class CreateUnrankedTable {
 			var isPrivate = that.privateCheckbox.is(':checked');
 			var isInviteOnly = that.inviteCheckbox.is(':checked');
 			var invitee = that.inviteeDropdown.val();
+			var keepOpen = that.keepopenCheckbox.is(':checked');
 			
 			if(isInviteOnly) {
 				if(invitee == null || invitee === "") {
@@ -124,7 +127,13 @@ class CreateUnrankedTable {
 			}
 
 			that.comm.createTable(format, deck, timer, tableDesc, isPrivate, isInviteOnly,
-					CreateTable.getResponse(that.resultDiv, that.mainHall.tableCreator.hideAndCloseOnSuccess(that.mainHall.tableCreator)),
+					CreateTable.getResponse(that.resultDiv, (success) => {
+						
+						if(success && !keepOpen) {
+							that.mainHall.tableCreator.hideAll();
+							that.mainHall.tableCreator.popup.dialog("close");
+						}
+					}),
 					CreateTable.getCreateErrorMap(that.resultDiv)
 				);
 			
