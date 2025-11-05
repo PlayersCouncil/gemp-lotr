@@ -290,6 +290,65 @@
 			}
 		}
 	}
+	
+	51_44: {
+		cardInfo: {
+			//id: 51_44.1
+			parent: 1_44
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E044.1_card.jpg
+			collInfo: 1U44
+			rarity: U
+		}
+		title: Foul Creation
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: [
+				{
+					type: revealHand
+					hand: shadowPlayer
+					memorize: revealedCards
+				}
+				{
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: revealedCards
+						filter: culture(isengard),minion
+					}
+					true: {
+						type: optional
+						text: Would you like to draw 2 cards?
+						effect: {
+							type: drawCards
+							count: 2
+						}
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may draw 2 cards if an [isengard] minion was revealed.
+		lore: "Saruman's Uruk-hai mirrored the singular focus of their master, viewing with contempt and disgust all they encountered."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	51_45: {
 		cardInfo: {

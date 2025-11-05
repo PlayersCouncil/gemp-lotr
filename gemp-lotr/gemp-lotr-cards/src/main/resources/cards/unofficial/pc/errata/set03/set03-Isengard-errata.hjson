@@ -665,14 +665,97 @@
 		}
 	}
 	
+	# 53_74: {
+	# 	cardInfo: {
+	# 		//id: 53_74.1
+	# 		parent: 3_74
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E074.1_card.jpg
+	# 		collInfo: 3C74
+	# 		rarity: C
+	# 	}
+	# 	title: Uruk Raider
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Isengard
+	# 	twilight: 2
+	# 	type: Minion
+	# 	race: Uruk-hai
+	# 	strength: 6
+	# 	vitality: 2
+	# 	site: 5
+	# 	keywords: [
+	# 		Tracker
+	# 		Damage+1
+	# 	]
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: modifyStrength
+	# 				requires: {
+	# 					type: hasCardInDeadPile
+	# 					filter: ally
+	# 				}
+	# 				filter: self
+	# 				amount: 3
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: addKeyword
+	# 				requires: {
+	# 					type: hasCardInDeadPile
+	# 					filter: ally
+	# 				}
+	# 				filter: self
+	# 				keyword: fierce
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: Exerted
+	# 				filter: ally
+	# 				memorize: exertedAlly
+	# 			}
+	# 			requires: {
+	# 				type: CanSpot
+	# 				filter: culture(isengard),another
+	# 			}
+	# 			cost: {
+	# 				type: Exert
+	# 				select: self
+	# 			}
+	# 			effect: {
+	# 				type: Wound
+	# 				select: memory(exertedAlly)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Tracker. Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
+	# 	lore: "'There is no safety where Saruman's emblem is shown.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_74: {
 		cardInfo: {
-			//id: 53_74.1
+			//id: 53_74.2
 			parent: 3_74
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN03E074.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E074.2_card.jpg
 			collInfo: 3C74
 			rarity: C
 		}
@@ -686,10 +769,7 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		keywords: [
-			Tracker
-			Damage+1
-		]
+		keywords: Tracker
 		effects: [
 			{
 				type: modifier
@@ -712,7 +792,7 @@
 						filter: ally
 					}
 					filter: self
-					keyword: fierce
+					keyword: damage+1
 				}
 			}
 			{
@@ -737,7 +817,7 @@
 				}
 			}
 		]
-		gametext: Tracker. Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
+		gametext: Tracker. <br>While an ally is in the dead pile, this minion is strength +3 and <b>damage +1</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		lore: "'There is no safety where Saruman's emblem is shown.'"
 		promotext: ""
 		alts: {
@@ -747,4 +827,5 @@
 			}
 		}
 	}
+	
 }

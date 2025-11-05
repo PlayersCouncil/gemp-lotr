@@ -217,7 +217,7 @@ button {
 	gap: 5px;
 }
 
-#buttonsDiv a,
+.buttons-gutter a,
 #motd a,
 #infoButtons a,
 .msg-content p a,
@@ -236,12 +236,12 @@ button {
 	flex-grow: 1;
 }
 
-.serverTime {
+.server-time {
 	/*border: 1px solid #aaaaaa;*/
 	text-align: right;
 	padding: 5px;
-	color: #FFFF00;
-	min-width: 32ch;
+	color: #DDDD00;
+	min-width: 10ch;
 }
 
 #tablesDiv {
@@ -337,7 +337,7 @@ table.tables tr.privateForPlayer {
 	font-weight: bolder;
 }
 
-#buttonsDiv {
+.buttons-gutter {
 	left:0px; 
 	top: 0px;
 	height: 40px;
@@ -349,20 +349,6 @@ table.tables tr.privateForPlayer {
 	align-items: center;
 	gap: 4px;
 	padding: 5px;
-}
-
-#open-table-button {
-	background: #554400 linear-gradient(#888800, #1C1C1C);
-}
-
-.play-buttons {
-	width: 15rem;
-	border-color: #AAAAAA;
-	font-size: 1.3rem;
-}
-
-#open-table-button:hover {
-	background: #554400 linear-gradient(#CCCC00, #1C1C1C);
 }
 
 #supportedFormatsSelect {
@@ -428,6 +414,7 @@ table.tables tr.privateForPlayer {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	margin-top: 10px;
 }
 
 #discordChat {
@@ -944,7 +931,7 @@ form#queueSpawnerForm input {
 	flex-direction: column;
 	justify-content: center;
 	align-items: stretch;
-	gap: 5rem;
+	gap: 2rem;
 	margin: 5rem;
 }
 
@@ -956,7 +943,7 @@ form#queueSpawnerForm input {
 	width:90%; 
 	margin-left: auto;
 	margin-right: auto;
-	overflow: auto;
+	overflow: visible;
 }
 
 .table-form h1 {
@@ -965,6 +952,7 @@ form#queueSpawnerForm input {
 
 .table-form select {
 	flex-basis: 70%;
+	min-width: 0;
 }
 
 .inner-table-form {
@@ -974,6 +962,29 @@ form#queueSpawnerForm input {
 	margin: 0 auto 0 auto;
 	align-items: stretch;
 	gap: 0.4em;
+} 
+
+.table-blurb {
+	margin: 0 1rem;
+	padding: 1rem;
+	border-color: white;
+	border-style: solid;
+	background-color: #333333;
+}
+
+.play-buttons {
+	width: 15rem;
+	border-color: #AAAAAA;
+	font-size: 1.3rem;
+}
+
+.table-create-button {
+	background: #554400 linear-gradient(#845826, #1C1C1C);
+}
+
+.table-create-button:hover, 
+.table-create-button:focus {
+	background: #554400 linear-gradient(#BF8A4A, #1C1C1C);
 }
 
 #league-table-leagues {

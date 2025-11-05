@@ -962,7 +962,7 @@ var PCCards = {
 	// Saelbeth, Elven Councilor (3U25) [Errata]
 	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.2_card.jpg',
 	// Gandalf, Lathspell (V213) [Errata]
-	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.1_card.jpg',
+	//'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.1_card.jpg',
 	// Now for Wrath (V251) [Errata]
 	'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E051.1_card.jpg',
 	// Demands of the Sackville-Bagginses (2C40) [Errata]
@@ -972,21 +972,35 @@ var PCCards = {
 	// Rivendell Gateway (V1U59) [Errata]
 	'101_59' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E059.1_card.jpg',
 	// Gandalf's Staff, Old Man's Crutch (V2_77) 
-	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S077.0_card.jpg',
+	//'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S077.0_card.jpg',
 	// Goblin Archer (1R172) [Errata]
 	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata]
 	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.2_card.jpg',
 	// Watcher in the Water FA
 	'2_131'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN02U073.0_card.jpg',
-	// Pale Crown FA
-	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
+	// Ringwraith in Twilight FA
+	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U040.0_card.jpg',
 	// V2 Saruman FA
 	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg',
 	// FA Sam, Great Elf Warrior
 	'10_129': 'https://i.lotrtcgpc.net/promos/LOTR-EN10U122.0_card.jpg',
 	// July 2025 WC Circuit: FA Mumak Commander, GATS
 	'15_211': 'https://i.lotrtcgpc.net/promos/LOTR-EN15U086.0_card.jpg',
+	
+	// 2025 Pre-WC Errata
+	// Foul Creation (1U44) [Errata]
+	'51_44'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E044.1_card.jpg',
+	// Denethor, Lord of Minas Tirith (10R28) [Errata]
+	'60_28'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E028.2_card.jpg',
+	// Merry, Horticulturalist (2C104) [Errata]
+	'52_104' : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E104.2_card.jpg',
+	// Uruk Raider (3C74) [Errata]
+	'53_74'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E074.2_card.jpg',
+	// Gandalf, Lathspell (V213) [Errata]
+	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.2_card.jpg',
+	// Gandalf's Staff, Old Man's Crutch (V277) [Errata]
+	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E077.1_card.jpg',
 	
 	// Phial of Galadriel, Bane of Darkness (V3_1)
 	'103_1'  : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E001.0_card.jpg',
