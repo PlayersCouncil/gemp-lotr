@@ -730,7 +730,7 @@ var GempLotrHallUI = Class.extend({
 					var joined = tournament.getAttribute("signedUp");
 					if (joined == "true") {
 						that.inTournament = true;
-						debugger;
+						//debugger;
 						if(type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
 							var but = $("<button>Go to Draft</button>");
 							$(but).button().click((
@@ -780,20 +780,10 @@ var GempLotrHallUI = Class.extend({
 							actionsField.append(but);
 						}
 						if((type === "sealed" || type === "solodraft" || type === "table_solodraft" || type === "table_draft") && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
-								var but = $("<button>Register Deck</button>");
-								$(but).button().click((
-									function(tourneyInfo) {
-										var tourneyId = tournament.getAttribute("id");
-										var tourneyName = tournament.getAttribute("name");
-										
-										return function () {
-											that.comm.registerLimitedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
-														that.processResponse(xml);
-												});
-										};
-									}
-									)(tournament));
-								actionsField.append(but);
+								
+							//Register Deck
+							var button = this.tableJoiner.generateRegisterDeckButton(tournament);
+							actionsField.append(button);
 						}
 						
 						var but = $("<button>Abandon Tournament</button>");
@@ -818,19 +808,8 @@ var GempLotrHallUI = Class.extend({
 					}
 					else if(!abandoned){
 						if(joinable) {
-							var but = $("<button>Join Tournament</button>");
-							$(but).button().click((
-								function(tourneyInfo) {
-									var tourneyId = tournament.getAttribute("id");
-									var tourneyName = tournament.getAttribute("name");
-									
-									return function () {
-											that.comm.joinTournamentLate(tourneyId, that.decksSelect.val(), function (xml) {
-												that.processResponse(xml);
-										});
-								};
-							}
-							)(tournament));
+							var but = this.tableJoiner.generateLateJoinButton(queue);
+						
 							actionsField.append(but);
 						}
 					}

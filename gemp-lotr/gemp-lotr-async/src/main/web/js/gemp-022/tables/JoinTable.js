@@ -32,7 +32,7 @@ class JoinTable {
 			hide: 300,
 			minWidth: 450,
 			width: 900,
-			height: 200,
+			height: 300,
 			title: "Join Table",
 			close: function() {
 				//form[0].reset();
@@ -52,15 +52,26 @@ class JoinTable {
 		that.popup.dialog("close");
 	}
 	
+	resetJoinForm(that, text, newCallback) {
+		that.showPopup(that);
+		
+		that.joinButton.text(text);
+		that.joinButton.off("click");
+		that.joinButton.button().click(newCallback);
+	}
+	
+	updateResult(text) {
+		this.resultDiv.show();
+		this.joinResult.html(text);
+	}
+	
 	generateJoinButton(tableId) {
 		var that = this;
 		var hallButton = $("<button>Join Table</button>");
 		$(hallButton).button().click((
 			function(id) {
 				return function() {
-					that.showPopup(that);
-					
-					that.joinButton.button().click(that.submitTable(that, tableId));
+					that.resetJoinForm(that, "Join Table", that.submitTable(that, tableId));
 				};
 			})(tableId));
 		
@@ -91,12 +102,7 @@ class JoinTable {
 			
 		};
 	}
-	
-	updateResult(text) {
-		this.resultDiv.show();
-		this.joinResult.html(text);
-	}
-	
+
 	generateJoinQueueButton(queue) {
 		var that = this;
 		var hallButton = $("<button>Join Queue</button>");
@@ -105,9 +111,19 @@ class JoinTable {
 			function(queueInfo) {
 				return function () {
 					
-					that.showPopup(that);
-
-					that.joinButton.button().click(that.submitQueue(that, queueInfo));
+					var type = queueInfo.getAttribute("type");
+					if (type !== null)
+						type = type.toLowerCase();
+					
+					if(type == "constructed") {
+						that.resetJoinForm(that, "Join Queue", that.submitQueue(that, queueInfo, true));
+					}
+					//sealed, solo draft, table draft, table solo draft
+					//i.e. something where joining the queue does not yet provide a deck
+					else {
+						that.submitQueue(that, queueInfo, false)();
+					}
+					
 
 				};
 			})(queue));
@@ -115,12 +131,12 @@ class JoinTable {
 		return hallButton;
 	}
 	
-	submitQueue(that, queueInfo) {
+	submitQueue(that, queueInfo, requiresDeck) {
 		return () => {
 
 			var deck = that.deckSelector.getSelectedDeck();
 
-			if(deck == null || deck === "") {
+			if(requiresDeck && (deck == null || deck === "")) {
 				that.updateResult("You must select a deck.");
 				return;
 			}
@@ -180,7 +196,108 @@ class JoinTable {
 		};
 	}
 	
+	generateLateJoinButton(queue) {
+		var that = this;
+		var hallButton = $("<button>Join Tournament</button>");
+		
+		$(hallButton).button().click((
+			function(tourneyInfo) {
+				return function () {
+					
+					var type = tourneyInfo.getAttribute("type");
+					if (type !== null)
+						type = type.toLowerCase();
+					
+					if(type == "constructed") {
+						that.resetJoinForm(that, "Join Tournament", that.submitJoinLate(that, tourneyInfo, true));
+					}
+					//sealed, solo draft, table draft, table solo draft
+					//i.e. something where joining the queue does not yet provide a deck
+					else {
+						that.submitJoinLate(that, tourneyInfo, false)();
+					}
+					
+
+				};
+			})(queue));
+		
+		return hallButton;
+	}
 	
+	submitJoinLate(that, tourneyInfo, requiresDeck) {
+		return () => {
+
+			var deck = that.deckSelector.getSelectedDeck();
+
+			if(requiresDeck && (deck == null || deck === "")) {
+				that.updateResult("You must select a deck.");
+				return;
+			}
+			
+			var tourneyId = tourneyInfo.getAttribute("id");
+			var type = tourneyInfo.getAttribute("type");
+			if (type !== null)
+				type = type.toLowerCase();
+			var tourneyName = tourneyInfo.getAttribute("name");
+			
+			that.comm.joinTournamentLate(tourneyId, deck, function (xml) {
+				var result = (JoinTable.getResponse(that.joinResult))(xml);
+				if(result) {
+					that.mainHall.setPendingTournament(true);
+					that.hidePopup(that);
+					that.mainHall.showDialog("Registered Deck", that.joinResult.html(), 320);
+				}
+				else {
+					that.resultDiv.show(); 
+				}
+			}, JoinTable.getCreateErrorMap(that.joinResult));
+	
+		};
+	}
+	
+	generateRegisterDeckButton(tourneyInfo) {
+		var that = this;
+		var hallButton = $("<button>Register Deck</button>");
+		$(hallButton).button().click((
+			function(id) {
+				return function() {
+					that.resetJoinForm(that, "Register Deck", that.submitRegistration(that, tourneyInfo));
+				};
+			})(tourneyInfo));
+		
+		return hallButton;
+	}
+	
+	submitRegistration(that, tourneyInfo) {
+		return () => {
+
+			var deck = that.deckSelector.getSelectedDeck();
+
+			if(deck == null || deck === "") {
+				that.updateResult("You must select a deck.");
+				return;
+			}
+			
+			var tourneyId = tourneyInfo.getAttribute("id");
+			var type = tourneyInfo.getAttribute("type");
+			if (type !== null)
+				type = type.toLowerCase();
+			var tourneyName = tourneyInfo.getAttribute("name");
+			
+			that.comm.registerLimitedTournamentDeck(tourneyId, deck, function (xml) {
+				var result = (JoinTable.getResponse(that.joinResult))(xml);
+				if(result) {
+					that.mainHall.setPendingTournament(true);
+					that.hidePopup(that);
+					that.mainHall.showDialog("Registered Deck", that.joinResult.html(), 320);
+				}
+				else {
+					that.resultDiv.show(); 
+				}
+			}, JoinTable.getCreateErrorMap(that.joinResult));
+	
+		};
+	}
 	
 	static getResponse(outputControl, callback=null) {
 		return (xml) => {
