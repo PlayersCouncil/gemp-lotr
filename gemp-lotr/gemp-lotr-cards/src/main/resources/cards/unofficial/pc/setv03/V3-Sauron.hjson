@@ -977,10 +977,16 @@
 					type: Exert
 					select: choose(or(ally, and(unbound,companion)))
 				}
-				effect: {
-					type: DrawCards
-					count: 1
-				}
+				effect: [
+					{
+						type: DrawCards
+						count: 1
+					}
+					{
+						type: IncrementPerPhaseLimit 
+						phase: regroup
+					}
+				]
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card.
