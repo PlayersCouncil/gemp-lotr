@@ -939,7 +939,7 @@
 			rarity: _
 		}
 		title: They Are Not All Accounted For
-		unique: true
+		unique: false
 		side: Shadow
 		culture: Sauron
 		twilight: 1
