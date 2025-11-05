@@ -1000,7 +1000,7 @@ var PCCards = {
 	// Gandalf, Lathspell (V213) [Errata]
 	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.2_card.jpg',
 	// Gandalf's Staff, Old Man's Crutch (V277) [Errata]
-	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E077.1_card.jpg'
+	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E077.1_card.jpg',
 	
 	// Phial of Galadriel, Bane of Darkness (V3_1)
 	'103_1'  : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E001.0_card.jpg',
