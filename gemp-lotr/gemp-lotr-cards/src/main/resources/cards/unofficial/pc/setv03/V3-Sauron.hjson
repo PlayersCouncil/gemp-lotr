@@ -418,13 +418,13 @@
 				}
 				cost: {
 					type: Hinder
-					select: choose(your, side(Shadow), support)
+					select: choose(your, other, side(Shadow), support)
 					count: {
 						type: Range
 						from: 0
 						to: {
 							type: ForEachYouCanSpot
-							filter: your, side(Shadow), support
+							filter: your, other, side(Shadow), support
 						}
 					}
 					memorize: hinderedCards
