@@ -952,6 +952,7 @@ form#queueSpawnerForm input {
 
 .table-form select {
 	flex-basis: 70%;
+	min-width: 0;
 }
 
 .inner-table-form {
@@ -981,7 +982,8 @@ form#queueSpawnerForm input {
 	background: #554400 linear-gradient(#845826, #1C1C1C);
 }
 
-.table-create-button:hover {
+.table-create-button:hover, 
+.table-create-button:focus {
 	background: #554400 linear-gradient(#BF8A4A, #1C1C1C);
 }
 

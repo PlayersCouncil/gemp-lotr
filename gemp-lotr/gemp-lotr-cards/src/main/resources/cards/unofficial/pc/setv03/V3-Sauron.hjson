@@ -596,22 +596,8 @@
 					Regroup
 				]
 				cost: {
-					type: Choice
-					texts: [
-						Remove (2)
-						Remove a Shadow token
-					]
-					effects: [
-						{
-							type: RemoveTwilight
-							amount: 2
-						}
-						{
-							type: RemoveCultureTokens
-							count: 1
-							select: choose(side(Shadow))
-						}
-					]
+					type: RemoveTwilight
+					amount: 2
 				}
 				effect: [
 					{
