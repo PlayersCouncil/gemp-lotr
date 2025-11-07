@@ -219,7 +219,7 @@
 				phase: Skirmish
 				cost: {
 					type: Hinder
-					select: choose(beacon)
+					select: choose(another, beacon)
 				}
 				effect: {
 					type: ModifyStrength
