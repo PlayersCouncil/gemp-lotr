@@ -450,7 +450,7 @@ public class CardResolver {
                 };
             };
 
-            return resolveChoiceCards(type, additionalFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
+            return resolveChoiceCards(type, additionalFilter, playabilityFilter, countSource, environment, cardSource, choicePlayer, effectSource);
         }
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
     }
@@ -555,23 +555,42 @@ public class CardResolver {
     }
 
     private static DelayedAppender resolveChoiceCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
-                                                      ValueSource countSource, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource, ChoiceEffectSource effectSource) throws InvalidCardDefinitionException {
+            ValueSource countSource, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource, ChoiceEffectSource effectSource) throws InvalidCardDefinitionException {
+        return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, null, effectSource);
+    }
+
+    private static DelayedAppender resolveChoiceCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
+            ValueSource countSource, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
+            String choicePlayer, ChoiceEffectSource effectSource) throws InvalidCardDefinitionException {
         final String filter = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        PlayerSource playerSource = choicePlayer == null ? PlayerResolver.resolvePlayer("you") : PlayerResolver.resolvePlayer(choicePlayer);
 
         return new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
-                return filterCards(actionContext, playabilityFilter).size() >= min;
+                var playerContext = actionContext;
+                if(choicePlayer != null) {
+                    String choicePlayerId = playerSource.getPlayer(actionContext);
+                    playerContext = new DelegateActionContext(actionContext, choicePlayerId);
+                }
+
+                return filterCards(playerContext, playabilityFilter).size() >= min;
             }
 
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                Evaluator evaluator = countSource.getEvaluator(actionContext);
-                int min = evaluator.getMinimum(actionContext.getGame(), null);
-                int max = evaluator.getMaximum(actionContext.getGame(), null);
-                return effectSource.createEffect(filterCards(actionContext, choiceFilter), action, actionContext, min, max);
+                var playerContext = actionContext;
+                if(choicePlayer != null) {
+                    String choicePlayerId = playerSource.getPlayer(actionContext);
+                    playerContext = new DelegateActionContext(actionContext, choicePlayerId);
+                }
+
+                Evaluator evaluator = countSource.getEvaluator(playerContext);
+                int min = evaluator.getMinimum(playerContext.getGame(), null);
+                int max = evaluator.getMaximum(playerContext.getGame(), null);
+                return effectSource.createEffect(filterCards(playerContext, choiceFilter), action, playerContext, min, max);
             }
 
             private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {

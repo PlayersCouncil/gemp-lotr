@@ -25,6 +25,10 @@ public class DelegateActionContext implements ActionContext {
         this.effect = effect;
     }
 
+    public DelegateActionContext(ActionContext delegate, String performingPlayer) {
+        this(delegate, performingPlayer, delegate.getGame(), delegate.getSource(), delegate.getEffectResult(), delegate.getEffect());
+    }
+
     @Override
     public void setValueToMemory(String memory, String value) {
         delegate.setValueToMemory(memory, value);
