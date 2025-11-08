@@ -658,7 +658,7 @@
 			rarity: _
 		}
 		title: Ulaire Attea
-		subtitle: Bestowed with Brutality
+		subtitle: Bestowed with Dominion
 		unique: true
 		side: Shadow
 		culture: Wraith
@@ -671,38 +671,40 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: Activated
-				phase: Skirmish
-				requires: {
-					type: CanSpot
-					filter: self,InSkirmish
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: minion
+					from: HAND
+					memorize: playedMinion
 				}
 				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: minion, PrintedTwilightCostFromMemory(playedMinion)
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
 					type: Hinder
-					select: choose(another,side(Shadow))
+					select: choose(another,minion)
 				}
 				effect: [
 					{
 						type: modifyStrength
 						select: self
 						amount: 1
-						limitPerCardThisPhase: 5
-					}
-					{
-						type: If
-						check: {
-							type: CantSpot
-							filter: another,side(Shadow)
-						}
-						true: {
-							type: AddBurdens
-							amount: 1
-						}
 					}
 				]
 			}
 		]
-		gametext: Fierce.<br>Skirmish: If this minion is skirmishing, hinder another Shadow card to make this minion strength +1 (limit +5).  If you then cannot spot another unhindered Shadow card, add a burden.
+		gametext: Fierce.<br>Each time you play a minion from hand, you may exert Ulaire Attea to play another minion with the same twilight cost from your discard pile.<br>Skirmish: Hinder another minion to make Ulaire Attea strength +1.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -793,7 +795,7 @@
 			rarity: _
 		}
 		title: Ulaire Enquea
-		subtitle: Magnified by Suffering
+		subtitle: Magnified through Suffering
 		unique: true
 		side: Shadow
 		culture: Wraith
@@ -897,6 +899,7 @@
 		strength: 10
 		vitality: 2
 		site: 3
+		keywords: Fierce
 		effects: [
 			{
 				type: Modifier
@@ -1025,7 +1028,7 @@
 			rarity: _
 		}
 		title: Ulaire Nertea
-		subtitle: Sanctified with Cruelty
+		subtitle: Sanctified for Cruelty
 		unique: true
 		side: Shadow
 		culture: Wraith
@@ -1035,6 +1038,7 @@
 		strength: 10
 		vitality: 2
 		site: 3
+		keywords: Fierce
 		effects: [
 			{
 				type: trigger
@@ -1129,6 +1133,7 @@
 		strength: 10
 		vitality: 3
 		site: 3
+		keywords: Fierce
 		effects: [
 			{
 				type: trigger
@@ -1183,7 +1188,7 @@
 			rarity: _
 		}
 		title: Ulaire Toldea
-		subtitle: Blessed to Dominate
+		subtitle: Blessed with Brutality
 		unique: true
 		side: Shadow
 		culture: Wraith
@@ -1312,7 +1317,7 @@
 				type: Activated
 				phase: Assignment
 				cost: {
-					type: Discard
+					type: ReturnToHand
 					select: choose(another, title(Winged Nazgul))
 				}
 				effect: {
@@ -1322,7 +1327,7 @@
 				}
 			}
 		]
-		gametext: Enduring. Fierce.<br>Assignment: Discard another Winged Nazgul to assign this minion to an unbound companion.
+		gametext: Enduring. Fierce.<br>Assignment: Return another Winged Nazgul to hand to assign this minion to an unbound companion.
 		lore: ""
 		promotext: ""
 		alts: {

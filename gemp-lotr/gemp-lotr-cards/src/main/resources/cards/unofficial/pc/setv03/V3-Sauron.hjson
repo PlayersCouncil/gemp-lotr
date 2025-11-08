@@ -139,21 +139,28 @@
 					ignoreCostCheckFailure: true
 					select: memory(playedMinion)
 				}
-				effect: {
-					type: AddModifier
-					until: start(regroup)
-					modifier: {
-						type: ModifyStrength
+				effect: [
+					{
+						type: MemorizeNumber
 						amount: {
 							type: ForEachYouCanSpot
 							filter: twilight,condition
 						}
-						filter: memory(playedMinion)
+						memory: twilightSnapshot
 					}
-				}
+					{
+						type: AddModifier
+						until: start(regroup)
+						modifier: {
+							type: ModifyStrength
+							amount: memory(twilightSnapshot)
+							filter: memory(playedMinion)
+						}
+					}
+				]
 			}
 		]
-		gametext: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).<br>Each time you play an Orc or Troll, you may exhaust it to make it strength +1 for each twilight condition you can spot until the regroup phase.
+		gametext: Twilight.\To play, hinder 2 twilight conditions.\Each time you play an Orc or Troll, you may exhaust it to make it strength +X until the regroup phase, where X is the number of twilight conditions you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -198,29 +205,48 @@
 				]
 			}
 			{
-				type: Activated
-				phase: Skirmish
+				type: Response
+				trigger: {
+					type: AddsBurden
+				}
 				cost: [
+					{
+						type: Hinder
+						select: Orc
+					}
 					{
 						type: Hinder
 						select: self
 					}
+				]
+				effect: {
+					type: AddThreats
+					amount: 1
+				}
+			}
+			
+			{
+				type: Response
+				trigger: {
+					type: AddsThreat
+				}
+				cost: [
 					{
-						type: Exert
-						select: choose(Orc)
-						memorize: exertedOrc
+						type: Hinder
+						select: Orc
+					}
+					{
+						type: Hinder
+						select: self
 					}
 				]
 				effect: {
-					type: ModifyStrength
-					select: memory(exertedOrc)
-					amount: {
-						type: ForEachBurden
-					}
+					type: AddBurdens
+					amount: 1
 				}
 			}
 		]
-		gametext: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).<br>Skirmish: Hinder this condition and exert an Orc to make that Orc strength +1 for each burden you can spot.
+		gametext: Twilight.\To play, hinder 2 twilight conditions.\Response: If a burden is added, hinder an Orc and this condition to add a threat.\Response: If a threat is added, hinder an Orc and this condition to add a burden.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1035,13 +1061,13 @@
 					{
 						type: modifyStrength
 						select: all(minion)
-						amount: 1
+						amount: 2
 						until: start(regroup)
 					}
 				]
 			}
 		]
-		gametext: Exert a unique [sauron] or [ringwraith] minion and hinder the Ring-bearer to make each minion strength +1 until the regroup phase.
+		gametext: Exert a unique [sauron] or [ringwraith] minion and hinder the Ring-bearer to make each minion strength +2 until the regroup phase.
 		lore: ""
 		promotext: ""
 		alts: {

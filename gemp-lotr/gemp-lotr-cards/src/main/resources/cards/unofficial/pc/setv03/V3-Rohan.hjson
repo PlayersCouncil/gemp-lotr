@@ -216,20 +216,20 @@
 			
 			{
 				type: Activated
-				phase: Skirmish
+				phase: Maneuver
 				cost: {
 					type: Hinder
 					select: choose(another, beacon)
 				}
 				effect: {
-					type: ModifyStrength
-					amount: 1
-					select: choose(your,Man)
+					type: PlayCardFromDiscard
+					select: choose(item)
+					on: choose(your,Man)
 				}
 			}
 
 		]
-		gametext: Beacon. To play, hinder 4 beacons.\This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.\Skirmish: Hinder another beacon to make your Man strength +1.
+		gametext: Beacon. To play, hinder 4 beacons.\This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.\Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -578,12 +578,22 @@
 					filter: minion, MinStrength(15)
 				}
 				effect: {
-					type: Hinder
-					select: self
+					type: Optional
+					player: Shadow
+					text: Would you like to exhaust a minion of strength 15 or more to hinder {self}?
+					cost: {
+						type: Exhaust
+						player: Shadow
+						select: minion, MinStrength(15)
+					}
+					effect: {
+						type: Hinder
+						select: self
+					}
 				}
 			}
 		]
-		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, hinder Snowmane if you can spot a minion of strength 15 or more.
+		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, the Shadow player may exhaust a minion of strength 15 or more to hinder Snowmane.
 		lore: ""
 		promotext: ""
 		alts: {

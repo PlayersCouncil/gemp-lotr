@@ -597,7 +597,7 @@
 					memorize: activatedCard
 				}
 				cost: {
-					type: Discard
+					type: Hinder
 					select: choose(fortification)
 				}
 				effect: [
@@ -643,7 +643,7 @@
 				]
 			}
 		]
-		gametext: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).<br>Response: After the special ability of a Shadow support card is used, discard a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
+		gametext: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).<br>Each time the special ability of a Shadow support card is used, you may hinder a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1061,8 +1061,8 @@
 			{
 				type: ExtraCost
 				cost: {
-					type: Exert
-					select: choose(unbound, Man)
+					type: Spot
+					filter: choose(unbound, Man)
 				}
 			}
 			{
@@ -1132,7 +1132,7 @@
 				]
 			}
 		]
-		gametext: <b>Beacon</b>. To play, exert an unbound Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.<br>Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
+		gametext: <b>Beacon</b>. To play, spot an unbound Man.\Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.\Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1178,32 +1178,54 @@
 			}
 			
 			{
-				type: Modifier
-				modifier: {
-					type: CantTakeMoreWoundsThan
-					filter: your, unbound, Man
-					requires: [
-						{
-							type: CanSpot
-							filter: ranger
-						}
-						{
-							type: CanSpot
-							filter: knight
-						}
-						{
-							type: CanSpot
-							filter: valiant
-						}
-						{
-							type: CanSpot
-							filter: mounted, Man
-						}
-					]
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: ModifyStrength
+					amount: {
+						type: Sum
+						source: [
+							{
+								type: ForEachYouCanSpot
+								filter: ranger
+								limit: 1
+							}
+							{
+								type: ForEachYouCanSpot
+								filter: knight
+								limit: 1
+							}
+							{
+								type: ForEachYouCanSpot
+								filter: mounted,Man
+								limit: 1
+							}
+							{
+								type: ForEachYouCanSpot
+								filter: valiant,Man
+								limit: 1
+							}
+							{
+								type: ForEachYouCanSpot
+								filter: ring-bound,Man
+								limit: 1
+							}
+							{
+								type: ForEachYouCanSpot
+								filter: exhausted,Man
+								limit: 1
+							}
+						]
+					}
+					select: choose(your,unbound,Man)
 				}
 			}
 		]
-		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>While you can spot a ranger, knight, valiant Man, and mounted Man, your unbound Men cannot take more than 1 wound per phase.
+		gametext: Beacon. To play, hinder 2 beacons.<br>Skirmish: Hinder this beacon to make your unbound Man strength +1 for each of the following you can spot: ranger, knight, mounted Man, valiant Man, ring-bound Man, exhausted Man.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1368,7 +1390,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timewords: Response
+		timewords: [
+			Response
+			Skirmish
+		]
 		effects: [
 			{
 				type: responseEvent
@@ -1407,8 +1432,21 @@
 					}
 				]
 			}
+
+			{
+				type: event
+				effect: [
+					{
+						type: ModifyStrength
+						select: choose(your,Wraith)
+						amount: {
+							type: ForEachThreat
+						}
+					}
+				]
+			}
 		]
-		gametext: If any number of [gondor] cards are about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder those cards instead. You may add a threat to hinder that Shadow card.
+		gametext: Response: If your [gondor] card is about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder that card instead.<br>Skirmish: Make your Wraith strength +1 for each threat you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
