@@ -1,15 +1,18 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_112_Tests
 {
@@ -18,10 +21,20 @@ public class Card_V3_112_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_112");
+					put("initiate", "103_43");
 					// put other cards in here as needed for the test case
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "103_112");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -40,14 +53,12 @@ public class Card_V3_112_Tests
 		 * Type: Site
 		 * Subtype: Standard
 		 * Site Number: 9K
-		 * Game Text: Mountain. Shadow: Remove a burden or a threat to play a minion from your discard pile. If it costs (5) or more, add (1).
+		 * Game Text: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(9);
 
 		assertEquals("Doom Causeway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,28 +70,30 @@ public class Card_V3_112_Tests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DoomCausewayTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DoomCausewayDiscardsHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var causeway = scn.GetShadowSite(9);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var initiate = scn.GetShadowCard("initiate");
+		scn.MoveCardsToHand(initiate);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToSite(8);
+		scn.FreepsPass();
+
+		assertEquals(scn.GetCurrentSite(), causeway);
+
+		assertTrue(scn.ShadowPlayAvailable(initiate));
+		scn.ShadowPlayCard(initiate);
+		assertInZone(Zone.SHADOW_CHARACTERS, initiate);
+
+		//Desert Wind Initiate has the option to self-hinder when you play it
+		scn.ShadowChoose("hinder");
+
+		assertInZone(Zone.DISCARD, initiate);
 	}
 }

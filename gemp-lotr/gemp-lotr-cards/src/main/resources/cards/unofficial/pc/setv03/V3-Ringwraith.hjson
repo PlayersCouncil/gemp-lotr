@@ -1384,7 +1384,8 @@
 						player: freeps
 						count: any
 						select: choose(your,hindered)
-						text: Choose any number of cards to restore (you will pay (1) for each)
+						hindered: true
+						text: Choose any number of cards to restore (you will exert a character for each)
 						memorize: restoredCards
 					}
 					{

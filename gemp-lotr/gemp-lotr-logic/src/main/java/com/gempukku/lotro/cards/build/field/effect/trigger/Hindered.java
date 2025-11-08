@@ -18,11 +18,11 @@ public class Hindered implements TriggerCheckerProducer {
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String source = FieldUtils.getString(value.get("source"), "source", "any");
-        final String discardingPlayer = FieldUtils.getString(value.get("player"), "player");
+        final String hinderingPlayer = FieldUtils.getString(value.get("player"), "player");
         Zone zone = FieldUtils.getEnum(Zone.class, value.get("zone"), "zone");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
 
-        final PlayerSource playerSource = (discardingPlayer != null) ? PlayerResolver.resolvePlayer(discardingPlayer) : null;
+        final PlayerSource playerSource = (hinderingPlayer != null) ? PlayerResolver.resolvePlayer(hinderingPlayer) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource bySource = source != null ? environment.getFilterFactory().generateFilter(source,

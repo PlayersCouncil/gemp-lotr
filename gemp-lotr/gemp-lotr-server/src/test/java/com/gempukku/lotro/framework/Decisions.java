@@ -81,6 +81,68 @@ public interface Decisions extends TestBase  {
 	default Boolean ShadowAnyDecisionsAvailable() { return AnyDecisionsAvailable(P2); }
 
 	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Fellowship phase, or else false.
+	 */
+	default boolean AwaitingFellowshipPhaseActions() { return FreepsDecisionAvailable("Play Fellowship action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Shadow phase, or else false.
+	 */
+	default boolean AwaitingShadowPhaseActions() { return ShadowDecisionAvailable("Play Shadow action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Maneuver phase, or else false.
+	 */
+	default boolean AwaitingFreepsManeuverPhaseActions() { return FreepsDecisionAvailable("Play Maneuver action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Maneuver phase, or else false.
+	 */
+	default boolean AwaitingShadowManeuverPhaseActions() { return ShadowDecisionAvailable("Play Maneuver action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Archery phase, or else false.
+	 */
+	default boolean AwaitingFreepsArcheryPhaseActions() { return FreepsDecisionAvailable("Play Archery action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Archery phase, or else false.
+	 */
+	default boolean AwaitingShadowArcheryPhaseActions() { return ShadowDecisionAvailable("Play Archery action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Assignment phase, or else false.
+	 */
+	default boolean AwaitingFreepsAssignmentPhaseActions() { return FreepsDecisionAvailable("Play Assignment action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Assignment phase, or else false.
+	 */
+	default boolean AwaitingShadowAssignmentPhaseActions() { return ShadowDecisionAvailable("Play Assignment action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
+	 */
+	default boolean AwaitingFreepsSkirmishPhaseActions() { return FreepsDecisionAvailable("Play Skirmish action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
+	 */
+	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Play Skirmish action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
+	 */
+	default boolean AwaitingFreepsRegroupPhaseActions() { return FreepsDecisionAvailable("Play Regroup action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
+	 */
+	default boolean AwaitingShadowRegroupPhaseActions() { return ShadowDecisionAvailable("Play Regroup action or Pass"); }
+
+
+
+	/**
 	 * Returns whether the given player is currently presented with any decision at all.
 	 * @param player The player to check for pending decisions
 	 * @return True if the given player has a pending decision, else false.

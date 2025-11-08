@@ -8,7 +8,7 @@ public class NewRingBearerResult extends EffectResult {
     private final PhysicalCard _oldRB;
 
     public NewRingBearerResult(PhysicalCard oldRB, PhysicalCard newRB) {
-        super(Type.FOR_EACH_EXERTED);
+        super(Type.NEW_RING_BEARER);
         _newRB = newRB;
         _oldRB = oldRB;
     }

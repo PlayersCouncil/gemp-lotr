@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_001_Tests
 {
@@ -18,8 +18,11 @@ public class Card_V3_001_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_1");
-					// put other cards in here as needed for the test case
+					put("phial", "103_1");
+					put("sam", "1_311");
+
+					put("runner", "1_178");
+
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_V3_001_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("phial");
 
 		assertEquals("Phial of Galadriel", card.getBlueprint().getTitle());
 		assertEquals("Bane of Darkness", card.getBlueprint().getSubtitle());
@@ -60,28 +63,85 @@ public class Card_V3_001_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PhialofGaladrielTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PhialofGaladrielCanPlayOnSamWhenInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var sam = scn.GetFreepsCard("sam");
+		var phial = scn.GetFreepsCard("phial");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToDiscard(phial);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.AddWoundsToChar(frodo, 3);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, runner);
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		//The One Ring offering to convert wound to burden
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertInZone(Zone.DEAD, frodo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(sam, ring.getAttachedTo());
+
+		assertInZone(Zone.DISCARD, phial);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsActionAvailable(phial));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertInZone(Zone.ATTACHED, phial);
+		assertEquals(sam, phial.getAttachedTo());
+	}
+
+	@Test
+	public void PhialofGaladrielCanPlayOnSamWhenOnFrodo() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var sam = scn.GetFreepsCard("sam");
+		var phial = scn.GetFreepsCard("phial");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(frodo, phial);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(frodo, 4);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, runner);
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		//The One Ring offering to convert wound to burden
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertInZone(Zone.DEAD, frodo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(sam, ring.getAttachedTo());
+
+		assertInZone(Zone.DISCARD, phial);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsActionAvailable(phial));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertInZone(Zone.ATTACHED, phial);
+		assertEquals(sam, phial.getAttachedTo());
 	}
 }
