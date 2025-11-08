@@ -388,6 +388,9 @@ public class CardResolver {
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext ->
                 Filters.filterActive(actionContext.getGame(), spotOverrides, Filters.any);
 
+        Function<ActionContext, Iterable<? extends PhysicalCard>> maxOverrideCardSource = actionContext ->
+                Filters.filterActive(actionContext.getGame(), SpotOverride.INCLUDE_ALL, Filters.any);
+
         if (type.equals("self")) {
             return resolveSelf(additionalFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.equals("bearer")) {
@@ -434,7 +437,7 @@ public class CardResolver {
                 }
             };
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, maxOverrideCardSource);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {

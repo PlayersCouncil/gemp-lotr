@@ -17,7 +17,7 @@ public abstract class AbstractPreventableCardEffect extends AbstractEffect imple
     private final Set<PhysicalCard> _preventedTargets = new HashSet<>();
     private int _requiredTargets;
 
-    public AbstractPreventableCardEffect(PhysicalCard... cards) { this(SpotOverride.NONE, cards); }
+    public AbstractPreventableCardEffect(PhysicalCard... cards) { this(SpotOverride.INCLUDE_ALL, cards); }
 
     public AbstractPreventableCardEffect(Map<InactiveReason, Boolean> spotOverrides, PhysicalCard... cards) {
         List<PhysicalCard> affectedCards = Arrays.asList(cards);
@@ -26,7 +26,7 @@ public abstract class AbstractPreventableCardEffect extends AbstractEffect imple
         _spotOverrides.putAll(spotOverrides);
     }
 
-    public AbstractPreventableCardEffect(Filterable... filter) { this(SpotOverride.NONE, filter); }
+    public AbstractPreventableCardEffect(Filterable... filter) { this(SpotOverride.INCLUDE_ALL, filter); }
 
     public AbstractPreventableCardEffect(Map<InactiveReason, Boolean> spotOverrides, Filterable... filter) {
         _spotOverrides.putAll(spotOverrides);
