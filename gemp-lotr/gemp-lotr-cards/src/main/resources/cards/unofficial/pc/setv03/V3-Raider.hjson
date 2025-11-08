@@ -532,22 +532,8 @@
 					]
 				}
 			}
-			
-			{
-				type: trigger
-				optional: true
-				trigger: {
-					type: AboutToHinder
-					filter: self
-					player: you
-				}
-				effect:	{
-					type: Hinder
-					select: choose(another,culture(raider),minion)
-				}
-			}
 		]
-		gametext: <b>Southron.</b>  Tracker.  Ambush (3). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
+		gametext: <b>Southron.</b>  Tracker.  Ambush (3). <br>When you play this minion, remove (3) or hinder this minion.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -687,21 +673,7 @@
 					]
 				}
 			}
-			
-			{
-				type: trigger
-				optional: true
-				trigger: {
-					type: AboutToHinder
-					filter: self
-					player: you
-				}
-				effect:	{
-					type: Hinder
-					select: choose(another,culture(raider),minion)
-				}
-			}
-			
+
 			{
 				type: modifier
 				modifier: {
@@ -712,7 +684,7 @@
 				}
 			}
 		]
-		gametext: <b>Southron.</b>  Tracker. <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.<br>Southrons gain <b>ambush (1)</b>.
+		gametext: <b>Southron.</b>  Tracker. <br>When you play this minion, remove (3) or hinder this minion.<br>Southrons gain <b>ambush (1)</b>.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -776,20 +748,6 @@
 			}
 			
 			{
-				type: trigger
-				optional: true
-				trigger: {
-					type: AboutToHinder
-					filter: self
-					player: you
-				}
-				effect:	{
-					type: Hinder
-					select: choose(another,culture(raider),minion)
-				}
-			}
-			
-			{
 				type: modifier
 				modifier: {
 					type: ModifyStrength
@@ -801,7 +759,7 @@
 				}
 			}
 		]
-		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.<br>Each minion with ambush (X) is strength +X.
+		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (3) or hinder this minion.<br>Each minion with ambush (X) is strength +X.
 		lore: ""
 		promotext: ""
 		alts: {
