@@ -93,11 +93,24 @@ public class Filters {
 
     public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) { return filterActive(game, SpotOverride.NONE, filters); }
 
-
     public static Collection<PhysicalCard> filterActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         Filter filter = Filters.and(filters);
         var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
         game.getGameState().iterateActiveCards(getCardsMatchingFilter, spotOverrides);
+        return getCardsMatchingFilter.getPhysicalCards();
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
+        Filter filter = Filters.and(filters);
+        var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, SpotOverride.NONE, cards);
+        return getCardsMatchingFilter.getPhysicalCards();
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
+        Filter filter = Filters.and(filters);
+        var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, spotOverrides, cards);
         return getCardsMatchingFilter.getPhysicalCards();
     }
 
@@ -570,7 +583,7 @@ public class Filters {
     public static Filter hasAttached(int count, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filter(game, physicalCardList, filters).size() >= count);
+            return (Filters.filterActive(game, physicalCardList, filters).size() >= count);
         };
     }
 

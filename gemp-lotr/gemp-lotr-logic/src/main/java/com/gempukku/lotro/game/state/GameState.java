@@ -868,8 +868,14 @@ public class GameState {
     public void putCardOnTopOfDeck(PhysicalCard card) {
         addCardToZone(null, card, Zone.DECK, false);
     }
-    public boolean iterateActiveCards(PhysicalCardVisitor visitor) { return iterateActiveCards(visitor, SpotOverride.NONE); }
+    public boolean iterateActiveCards(PhysicalCardVisitor visitor) {
+        return iterateActiveCards(visitor, SpotOverride.NONE, _inPlay);
+    }
     public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides) {
+        return iterateActiveCards(physicalCardVisitor, spotOverrides, _inPlay);
+    }
+
+    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides, Iterable<? extends PhysicalCard> cards) {
 
         //These represent all the ways a card might be inactive and thus excluded from iteration.
         // However, sometimes card effects wish to pierce the veil of inactivity for one reason or another; such cards
@@ -895,10 +901,10 @@ public class GameState {
             }
         }
 
-        for (PhysicalCardImpl physicalCard : _inPlay) {
+        for (var card : cards) {
             // Check if the card can be spotted as "active" and include it if it can be.
-            if (isCardInPlayActive(physicalCard, includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
-                if (physicalCardVisitor.visitPhysicalCard(physicalCard)) {
+            if (isCardInPlayActive(card, includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+                if (physicalCardVisitor.visitPhysicalCard(card)) {
                     return true;
                 }
             }

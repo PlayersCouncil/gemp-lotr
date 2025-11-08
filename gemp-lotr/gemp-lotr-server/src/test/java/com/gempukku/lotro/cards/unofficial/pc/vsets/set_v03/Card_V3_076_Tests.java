@@ -17,8 +17,13 @@ public class Card_V3_076_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_76");
-					// put other cards in here as needed for the test case
+					put("twk", "103_76");
+
+					put("aragorn", "1_89");
+					put("sting", "1_313");
+					put("anduril", "7_79");
+					put("coat", "2_105");
+					put("bow", "1_90");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +47,13 @@ public class Card_V3_076_Tests
 		 * Vitality: 4
 		 * Site Number: 3
 		 * Game Text: Fierce. Enduring. Damage +1.
-		* 	When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards; add (1) per card restored this way.
+		* 	When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples
+		 * 	player may restore any number of their cards, and must exert one of their characters for each card restored.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("twk");
 
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Empowered by His Master", card.getBlueprint().getSubtitle());
@@ -66,28 +72,72 @@ public class Card_V3_076_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
+	@Test
 	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sting = scn.GetFreepsCard("sting");
+		var coat = scn.GetFreepsCard("coat");
+		var anduril = scn.GetFreepsCard("anduril");
+		var bow = scn.GetFreepsCard("bow");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(frodo, sting, coat);
+		scn.AttachCardsTo(aragorn, anduril, bow);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var twk = scn.GetShadowCard("twk");
+		scn.MoveCardsToHand(twk);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SetTwilight(20);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		assertTrue(scn.ShadowPlayAvailable(twk));
+		scn.ShadowPlayCard(twk);
+
+		assertFalse(scn.IsHindered(frodo));
+		assertFalse(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(sting));
+		assertFalse(scn.IsHindered(coat));
+		assertFalse(scn.IsHindered(anduril));
+		assertFalse(scn.IsHindered(bow));
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose a card type to hinder"));
+
+		//Companions are not valid targets
+		assertFalse(scn.ShadowHasCardChoicesAvailable(frodo, aragorn));
+		//Possessions and Artifacts are
+		assertTrue(scn.ShadowHasCardChoicesAvailable(sting, anduril, coat, bow));
+
+		scn.ShadowChooseCard(anduril);
+
+		//Artifacts are hindered, not possessions
+		assertTrue(scn.IsHindered(coat));
+		assertTrue(scn.IsHindered(anduril));
+		assertFalse(scn.IsHindered(sting));
+		assertFalse(scn.IsHindered(bow));
+
+		//Freeps now has a chance to restore any cards they want
+		assertTrue(scn.FreepsDecisionAvailable("Choose any number of cards to restore"));
+		assertTrue(scn.FreepsHasCardChoicesAvailable(anduril, coat));
+		assertFalse(scn.FreepsHasCardChoicesAvailable(sting, bow));
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsChooseCards(anduril);
+
+		assertTrue(scn.IsHindered(coat));
+		assertFalse(scn.IsHindered(anduril));
+
+		scn.FreepsChooseCards(aragorn);
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
+
 }

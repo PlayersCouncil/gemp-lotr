@@ -418,13 +418,13 @@
 				}
 				cost: {
 					type: Hinder
-					select: choose(your, side(Shadow), support)
+					select: choose(your, other, side(Shadow), support)
 					count: {
 						type: Range
 						from: 0
 						to: {
 							type: ForEachYouCanSpot
-							filter: your, side(Shadow), support
+							filter: your, other, side(Shadow), support
 						}
 					}
 					memorize: hinderedCards
@@ -939,7 +939,7 @@
 			rarity: _
 		}
 		title: They Are Not All Accounted For
-		unique: true
+		unique: false
 		side: Shadow
 		culture: Sauron
 		twilight: 1
@@ -977,10 +977,16 @@
 					type: Exert
 					select: choose(or(ally, and(unbound,companion)))
 				}
-				effect: {
-					type: DrawCards
-					count: 1
-				}
+				effect: [
+					{
+						type: DrawCards
+						count: 1
+					}
+					{
+						type: IncrementPerPhaseLimit 
+						phase: regroup
+					}
+				]
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card.

@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_006_Tests
 {
@@ -18,8 +17,11 @@ public class Card_V3_006_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_6");
-					// put other cards in here as needed for the test case
+					put("broken", "103_6");
+					put("gandalf", "1_72");
+					put("staff", "2_22");
+
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +46,7 @@ public class Card_V3_006_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("broken");
 
 		assertEquals("Your Staff is Broken", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +58,28 @@ public class Card_V3_006_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void YourStaffisBrokenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void YourStaffDoesNotTriggerIfOnlyArtifactOnGandalfIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var broken = scn.GetFreepsCard("broken");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var staff = scn.GetFreepsCard("staff");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, staff);
+		scn.MoveCardsToSupportArea(broken);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.HinderCard(staff);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 }
