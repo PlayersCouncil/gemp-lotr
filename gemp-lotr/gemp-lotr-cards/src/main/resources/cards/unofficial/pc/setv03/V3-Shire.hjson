@@ -293,8 +293,7 @@
 		race: Hobbit
 		strength: 2
 		vitality: 4
-		signet: Gandalf
-		resistance: 6
+		resistance: 5
 		canStartWithRing: true
 		keywords: Ring-bound
 		effects: [
@@ -303,40 +302,8 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: 1
-					requires: {
-						type: CanSpot
-						filter: title(Sam)
-					}
-				}
-			}
-			
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyResistance
-					filter: self
-					amount: 2
-					requires: {
-						type: CanSpot
-						filter: title(Sam)
-					}
-				}
-			}
-			
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: self
 					amount: {
-						type: ForEachYouCanSpot
-						filter: other,companion
-					}
-					requires: {
-						type: CantSpot
-						filter: companion
-						count: 5
+						type: ForEachBurden
 					}
 				}
 			}
@@ -358,7 +325,7 @@
 				}
 			}
 		]
-		gametext: Ring-bearer (resistance 7).  Ring-bound.<br>While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
+		gametext: Ring-bearer (resistance 5).  Ring-bound.\Frodo is strength +1 for each burden.\While you cannot spot more than 4 companions, Frodo is resistance +1 for each other companion you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -397,33 +364,31 @@
 					}
 					{
 						type: Optional
-						text: Would you like to reconcile your hand?
+						text: Would you like to add (3) to reconcile your hand and heal 2 {shire} companions?
 						requires: {
 							type: CantSpot
 							filter: companion
 							count: 5
 						}
-						effect: {
-							type: ReconcileHand
+						cost: {
+							type: AddTwilight
+							amount: 3
 						}
-					}
-					{
-						type: If
-						check: {
-							type: CantSpot
-							filter: companion
-							count: 5
-						}
-						true: {
-							type: Heal
-							count: 0-2
-							select: choose(Shire, companion)
-						}
+						effect: [
+							{
+								type: ReconcileHand
+							}
+							{
+								type: Heal
+								count: 0-2
+								select: choose(Shire, companion)
+							}
+						]
 					}
 				]
 			}
 		]
-		gametext: Restore a [shire] card.  If you cannot spot more than 4 companions, you may reconcile your hand and you may heal 2 [shire] companions.
+		gametext: Restore a [shire] card.  If you cannot spot more than 4 companions, you may add (3) to reconcile your hand and heal up to 2 [shire] companions.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -491,17 +456,15 @@
 				]
 			}
 			{
-				type: Response
-				trigger: {
-					type: killed
-					filter: name(Frodo),ring bearer
-				}
-				effect: {
-					type: makeSelfRingBearer
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: title(Frodo)
+					amount: 2
 				}
 			}
 		]
-		gametext: Ring-bound. If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.\Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
+		gametext: Ring-bound. \Frodo is resistance +2.\If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -622,13 +585,14 @@
 			rarity: _
 		}
 		title: Sting
-		subtitle: Fear of All Orc-kind
+		subtitle: Spider-bane
 		unique: true
 		side: Free Peoples
 		culture: Shire
 		twilight: 1
 		type: Possession
-		vitality: 1
+		strength: 1
+		resistance: 1
 		itemclass: Hand weapon
 		target: Ring-bound,Hobbit
 		effects: [

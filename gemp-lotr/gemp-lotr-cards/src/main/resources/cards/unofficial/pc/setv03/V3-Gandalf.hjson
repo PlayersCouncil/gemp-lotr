@@ -485,7 +485,7 @@
 			rarity: _
 		}
 		title: Saruman's Hospitality
-		unique: false
+		unique: 2
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 1
@@ -565,7 +565,7 @@
 				cost: [
 					{
 						type: Exert
-						select: choose(Wizard)
+						select: choose(your,Wizard)
 						times: 2
 					}
 					{
