@@ -212,7 +212,7 @@
 				cost: [
 					{
 						type: Hinder
-						select: Orc
+						select: choose(Orc)
 					}
 					{
 						type: Hinder
@@ -233,7 +233,7 @@
 				cost: [
 					{
 						type: Hinder
-						select: Orc
+						select: choose(Orc)
 					}
 					{
 						type: Hinder

@@ -676,7 +676,7 @@
 				trigger: {
 					type: Played
 					filter: minion
-					from: HAND
+					fromZone: HAND
 					memorize: playedMinion
 				}
 				cost: {
@@ -685,7 +685,7 @@
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: minion, PrintedTwilightCostFromMemory(playedMinion)
+					select: choose(minion, PrintedTwilightCostFromMemory(playedMinion))
 				}
 			}
 			{

@@ -50,7 +50,7 @@ public class Card_V3_067_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Ulaire Attea", card.getBlueprint().getTitle());
-		assertEquals("Bestowed with Brutality", card.getBlueprint().getSubtitle());
+		assertEquals("Bestowed with Dominion", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());

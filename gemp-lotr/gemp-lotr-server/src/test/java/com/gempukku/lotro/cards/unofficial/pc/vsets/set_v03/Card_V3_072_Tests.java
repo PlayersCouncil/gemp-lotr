@@ -52,7 +52,7 @@ public class Card_V3_072_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Ulaire Nertea", card.getBlueprint().getTitle());
-		assertEquals("Sanctified with Cruelty", card.getBlueprint().getSubtitle());
+		assertEquals("Sanctified for Cruelty", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());

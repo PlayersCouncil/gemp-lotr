@@ -50,7 +50,7 @@ public class Card_V3_069_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Ulaire Enquea", card.getBlueprint().getTitle());
-		assertEquals("Magnified by Suffering", card.getBlueprint().getSubtitle());
+		assertEquals("Magnified through Suffering", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
