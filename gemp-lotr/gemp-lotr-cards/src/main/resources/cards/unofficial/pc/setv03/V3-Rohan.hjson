@@ -224,7 +224,7 @@
 				effect: {
 					type: PlayCardFromDiscard
 					select: choose(item)
-					on: choose(your,Man)
+					on: your,Man
 				}
 			}
 
@@ -584,7 +584,7 @@
 					cost: {
 						type: Exhaust
 						player: Shadow
-						select: minion, MinStrength(15)
+						select: choose(minion, MinStrength(15))
 					}
 					effect: {
 						type: Hinder
