@@ -563,7 +563,7 @@
 		unique: true
 		side: Free Peoples
 		culture: Gondor
-		twilight: 3
+		twilight: 4
 		type: Condition
 		keywords: [
 			Fortification
