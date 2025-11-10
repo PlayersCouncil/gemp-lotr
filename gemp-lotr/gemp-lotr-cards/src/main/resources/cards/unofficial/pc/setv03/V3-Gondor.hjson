@@ -120,7 +120,7 @@
 					amount: 2
 					requires: {
 						type: CanSpot
-						filter: other, Rohan, Man
+						filter: Rohan, Man
 						count: 1
 					}
 				}
@@ -1441,6 +1441,7 @@
 						select: choose(your,Wraith)
 						amount: {
 							type: ForEachThreat
+							limit: 3
 						}
 					}
 				]

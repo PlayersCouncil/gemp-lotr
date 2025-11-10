@@ -190,8 +190,9 @@
 			{
 				type: ExtraCost
 				cost: {
-					type: Exert
-					select: choose(Isengard, minion)
+					type: Spot
+					count: 2
+					filter: Isengard, minion
 				}
 			}
 			{
@@ -212,21 +213,9 @@
 							type: Or
 							requires: [
 								{
-									type: And
-									requires: [
-										{
-											type: CanSpot
-											filter: companion
-											count: 5
-										}
-										{
-											type: IsLessThanOrEqual
-											firstNumber: {
-												type: RegionNumber
-											}
-											secondNumber: 2
-										}
-									]
+									type: CanSpot
+									filter: companion
+									count: 5
 								}
 								{
 									type: MemoryMatches
@@ -238,8 +227,9 @@
 						true: {
 							type: CostToEffect
 							cost: {
-								type: Spot
-								filter: other, Isengard
+								type: DiscardFromHand
+								forced: false
+								filter: Isengard
 							}
 							effect: {
 								type: Hinder

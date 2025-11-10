@@ -293,7 +293,7 @@
 		race: Hobbit
 		strength: 2
 		vitality: 4
-		resistance: 5
+		resistance: 7
 		canStartWithRing: true
 		keywords: Ring-bound
 		effects: [
@@ -304,23 +304,6 @@
 					filter: self
 					amount: {
 						type: ForEachBurden
-					}
-				}
-			}
-			
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyResistance
-					filter: self
-					amount: {
-						type: ForEachYouCanSpot
-						filter: other,companion
-					}
-					requires: {
-						type: CantSpot
-						filter: companion
-						count: 5
 					}
 				}
 			}
@@ -357,6 +340,10 @@
 		effects: [
 			{
 				type: event
+				cost: {
+					type: Spot
+					filter: title(Frodo)
+				}
 				effect: [
 					{
 						type: Restore
@@ -425,11 +412,13 @@
 		keywords: Ring-bound
 		effects: [
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: StartOfPhase
-					phase: Maneuver
+				type: Activated
+				phase: Maneuver
+				limitPerTurn: 1
+				requires: {
+					type: CantSpot
+					count: 5
+					filter: companion
 				}
 				cost: {
 					type: AddBurdens
@@ -455,6 +444,7 @@
 					}
 				]
 			}
+			
 			{
 				type: Modifier
 				modifier: {

@@ -557,6 +557,10 @@
 					type: ModifyStrength
 					filter: companion,HasAttached(pipe)
 					amount: 1
+					requires: {
+						type: CanSpot
+						filter: bearer, Wizard
+					}
 				}
 			}
 			{

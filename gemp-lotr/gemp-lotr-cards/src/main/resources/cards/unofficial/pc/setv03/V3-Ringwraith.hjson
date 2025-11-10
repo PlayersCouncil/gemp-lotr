@@ -127,7 +127,7 @@
 			}
 			{
 				type: Activated
-				phase: Skirmish
+				phase: Assignment
 				requires: {
 					type: CanSpot
 					filter: culture(Ringwraith), minion
@@ -805,68 +805,45 @@
 		strength: 12
 		vitality: 4
 		site: 3
-		keywords: Fierce
+		keywords: [
+			Fierce
+			Relentless
+		]
 		effects: [
 			{
 				type: Trigger
 				optional: true
 				trigger: {
-					type: Killed
-					filter: companion
-					inSkirmish: true
-					memorize: deadComp
+					type: startOfPhase
+					phase: skirmish
 				}
-				cost: [
+				requires: [
 					{
-						type: Exert
-						select: self
+						type: canSpot
+						filter: self,inSkirmish
 					}
 					{
-						type: Hinder
-						select: memory(deadComp)
+						type: canSpot
+						filter: inSkirmish, side(Free Peoples), wounded, character
 					}
 				]
-				effect: {
-					type: If
-					check: {
-						type: CanSpot
-						filter: another,Nazgul
-					}
-					true: {
-						type: Repeat
-						times: 2
-						effect: {
-							type: choice
-							texts: [
-								Take a Shadow card from your draw deck
-								Take a Shadow card from your discard pile
-							]
-							effects: [
-								{
-									type: PutCardsFromDeckIntoHand
-									select: choose(side(shadow))
-									count: 0-1
-									reveal: true
-									shuffle: true
-									showAll: true
-								}
-								{
-									type: PutCardsFromDiscardIntoHand
-									select: choose(side(shadow))
-									count: 0-1
-								}
-							]
-						}
-					}
-					false: {
-						type: PutCardsFromDiscardIntoHand
-						select: choose(side(shadow))
-						count: 0-2
-					}
+				cost: {
+					type: Exert
+					select: self
 				}
+				effect: [
+					{
+						type: Heal
+						select: choose(inSkirmish, side(Free Peoples), wounded, character)
+					}
+					{
+						type: Exert
+						select: choose(companion)
+					}
+				]
 			}
 		]
-		gametext: Fierce.\Each time a companion is about to be killed in a skirmish, you may exert this minion and hinder that companion to take up to 2 Shadow cards into hand from your discard pile.  If you can spot another Nazgul, you may take them from your draw deck instead.
+		gametext: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i>\At the start of each skirmish involving Ulaire Enquea and a wounded character, you may exert him to heal that character and exert a companion.
 		lore: ""
 		promotext: ""
 		alts: {
