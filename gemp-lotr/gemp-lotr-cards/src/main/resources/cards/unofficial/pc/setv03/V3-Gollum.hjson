@@ -231,6 +231,23 @@
 		type: Possession
 		keywords: Support Area
 		effects: [
+		
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: StartOfTurn
+					}
+				]
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: -1
+					until: EndOfTurn
+				}
+			}
+			
 			{
 				type: Trigger
 				optional: false
