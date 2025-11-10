@@ -183,7 +183,7 @@
 				effect: [
 					{
 						type: RevealCardsFromHand
-						select: choose(side(Free Peoples), event, Playable, not(self))
+						select: choose(side(Free Peoples), event, Playable, not(self), not(title(Show Them the Meaning of Haste)))
 						memorize: revealedEvent
 					}
 					{
@@ -557,6 +557,10 @@
 					type: ModifyStrength
 					filter: companion,HasAttached(pipe)
 					amount: 1
+					requires: {
+						type: CanSpot
+						filter: bearer, Wizard
+					}
 				}
 			}
 			{

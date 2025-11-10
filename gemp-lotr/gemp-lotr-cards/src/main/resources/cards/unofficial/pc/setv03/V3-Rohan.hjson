@@ -283,7 +283,7 @@
 						amount: {
 							type: ForEachYouCanSpot
 							hindered: true
-							filter: side(Free Peoples), hindered
+							filter: hindered
 						}
 					}
 				]

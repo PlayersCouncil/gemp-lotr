@@ -1173,56 +1173,61 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: Activated
-				phase: Maneuver
-				cost: {
-					type: Hinder
-					select: choose(corsair)
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
 				}
-				effect: [
-					{
-						type: Optional
-						text: Would you like to discard another Raiding Schooner to hinder all Free Peoples support cards of one culture?
-						requires: {
-							type: CanSpot
-							filter: another, title(Raiding Schooner)
-						}
-						cost: {
-							type: Discard
-							select: choose(another, title(Raiding Schooner))
-						}
-						effect: [
-							{
-								type: ChooseActiveCards
-								select: choose(side(Free Peoples), support)
-								memorize: chosenSupportCard
-								text: Choose a Free Peoples culture
-							}
-							{
-								type: Hinder
-								select: all(side(Free Peoples), CultureFromMemory(chosenSupportCard), support)
-							}
-						]
-					}
-					{
-						type: If
-						check: {
-							type: HasCardInMemory
-							memory: chosenSupportCard
-						}
-						false: {
-							type: Hinder
-							select: choose(side(Free Peoples), support, possession)
-						}
-					}
-				]
+				cost: {
+					type: Spot
+					filter: corsair
+				}
+				effect: {
+					type: AddCultureTokens
+					count: 1
+					culture: raider
+					select: self
+				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: RemoveTokensCumulative
+					count: 1
+					culture: raider
+					filter: your
+				}
+				effect: {
+					type: Hinder
+					select: side(Free Peoples), possession
+				}
 			}
+			
+			{
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Hinder
+						select: another, title(Raiding Schooner)
+					}
+					{
+						type: RemoveTokensCumulative
+						count: 2
+						culture: raider
+						filter: your
+					}
+				]
+				effect: {
+					type: Hinder
+					select: side(Free Peoples), artifact
+				}
+			}
+			
 		]
-		gametext: Maneuver: Hinder a corsair to hinder a Free Peoples support possession (or all support cards of a Free Peoples culture you spot if you discard another Raiding Schooner).
+		gametext: When you play this, spot a Corsair to add a [raider] token here.\Shadow: Remove a [raider] token to hinder a Free Peoples possession.\Maneuver: Hinder another Raiding Schooner and remove 2 [raider] tokens to hinder a Free Peoples artifact.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1488,8 +1493,18 @@
 					{
 						type: If
 						check: {
-							type: CanSpotBurdens
-							amount: 5
+							type: Or
+							requires: [
+								{
+									type: CanSpotBurdens
+									amount: 5
+								}
+								{
+									type: CanSpot
+									filter: raider
+									amount: 10
+								}
+							]
 						}
 						true: {
 							type: Hinder
@@ -1505,7 +1520,7 @@
 				]
 			}
 		]
-		gametext: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens).
+		gametext: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens or 10 [raider] cards).
 		lore: ""
 		promotext: ""
 		alts: {

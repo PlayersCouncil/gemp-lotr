@@ -773,7 +773,7 @@
 				effect: [
 					{
 						type: Exert
-						select: all(CultureFromMemory(flungComp), companion)
+						select: all(CultureFromMemory(flungComp), character)
 					}
 					{
 						type: Discard
