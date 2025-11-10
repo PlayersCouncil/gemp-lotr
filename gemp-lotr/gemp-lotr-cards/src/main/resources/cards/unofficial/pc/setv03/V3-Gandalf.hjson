@@ -183,7 +183,7 @@
 				effect: [
 					{
 						type: RevealCardsFromHand
-						select: choose(side(Free Peoples), event, Playable, not(self))
+						select: choose(side(Free Peoples), event, Playable, not(self), not(title(Show Them the Meaning of Haste)))
 						memorize: revealedEvent
 					}
 					{
