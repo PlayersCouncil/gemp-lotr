@@ -542,14 +542,16 @@
 			collInfo: V3_124
 			rarity: _
 		}
-		title: Wizard's Pipe
+		title: Wizard's Stash
 		unique: true
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 2
 		type: Possession
-		itemclass: Pipe
-		target: unbound,companion
+		target: Wizard
+		keywords: [
+			Pipeweed
+		]
 		effects: [
 			{
 				type: Modifier
@@ -557,10 +559,6 @@
 					type: ModifyStrength
 					filter: companion,HasAttached(pipe)
 					amount: 1
-					requires: {
-						type: CanSpot
-						filter: bearer, Wizard
-					}
 				}
 			}
 			{
@@ -569,12 +567,12 @@
 				cost: [
 					{
 						type: Exert
-						select: choose(your,Wizard)
-						times: 2
+						select: bearer
+						times: 1
 					}
 					{
 						type: Discard
-						select: choose(pipeweed)
+						select: self
 					}
 				]
 				effect: [
@@ -591,7 +589,7 @@
 				]
 			}
 		]
-		gametext: Bearer must be an unbound companion. Each companion bearing a pipe is strength +1.\Regroup: Exert a Wizard twice and discard a pipeweed; this phase you may use special abilities on pipes as if it were the Fellowship phase. 
+		ygametext: Pipeweed. Bearer must be a Wizard.\Each companion bearing a pipe is strength +1.\Regroup: Exert bearer and discard this pipeweed. This phase you may use special abilities on pipes as if it were the Fellowship phase.
 		lore: ""
 		promotext: ""
 		alts: {
