@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_01_025_ErrataTests
+public class Card_07_080_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_25");
+					put("card", "57_80");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,37 +28,39 @@ public class Card_01_025_ErrataTests
 	}
 
 	@Test
-	public void StillDrawsBreathStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AndurilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 1
-		 * Name: Still Draws Breath
-		 * Unique: 2
+		 * Set: 7
+		 * Name: Anduril, King's Blade
+		 * Unique: true
 		 * Side: Free Peoples
-		 * Culture: Dwarven
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf (and you may hinder a Shadow support condition if underground).
+		 * Culture: Gondor
+		 * Twilight Cost: 3
+		 * Type: Artifact
+		 * Subtype: Hand weapon
+		 * Strength: 4
+		 * Game Text: Bearer must be Aragorn.<br>Assignment: Add a threat to make Aragorn <b>defender +1</b> (limit +1).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Still Draws Breath", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Anduril", card.getBlueprint().getTitle());
+		assertEquals("King's Blade", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void StillDrawsBreathTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

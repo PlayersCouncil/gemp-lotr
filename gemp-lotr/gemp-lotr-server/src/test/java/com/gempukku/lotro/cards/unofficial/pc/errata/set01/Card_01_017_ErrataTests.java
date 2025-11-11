@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_017_ErrataTests
 {
@@ -41,7 +42,7 @@ public class Card_01_017_ErrataTests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand.
+		 * Game Text: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand (limit once per phase).
 		*/
 
 		var scn = GetScenario();
@@ -58,7 +59,7 @@ public class Card_01_017_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.SHADOWS, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_01_025_ErrataTests
+public class Card_V1_049_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_25");
+					put("card", "101_49");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,29 +28,31 @@ public class Card_01_025_ErrataTests
 	}
 
 	@Test
-	public void StillDrawsBreathStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AShadowofthePastStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 1
-		 * Name: Still Draws Breath
-		 * Unique: 2
-		 * Side: Free Peoples
-		 * Culture: Dwarven
+		 * Set: V1
+		 * Name: A Shadow of the Past
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Sauron
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf (and you may hinder a Shadow support condition if underground).
+		 * Game Text: While you can spot 4 burdens, each [sauron] Orc is <b>damage +1</b>.
+		* 	While you can spot 6 burdens, each [Sauron] Orc is <b>fierce</b>.
+		* 	At the end of each Shadow phase, exert 2 [sauron] Orcs or hinder this condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Still Draws Breath", card.getBlueprint().getTitle());
+		assertEquals("A Shadow of the Past", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
@@ -58,7 +60,7 @@ public class Card_01_025_ErrataTests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void StillDrawsBreathTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AShadowofthePastTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
