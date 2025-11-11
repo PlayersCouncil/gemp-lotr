@@ -183,15 +183,7 @@
 							]
 						}
 					}
-					{
-						type: exert
-						select: bearer
-					}
 				]
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Maneuver: Spot an unbound Dwarf bearing 2 or more items and hinder this condition to choose one: make that Dwarf <b>damage +1</b> until the regroup phase, or make that Dwarf take no more than 1 wound until the regroup phase.  If at an underground site, do both.
@@ -264,10 +256,71 @@
 		}
 	}
 
+	# 101_3: {
+	# 	cardInfo: {
+	# 		//id: 101_3
+	# 		revision: 0
+	# 		image: sets/vset1/LOTR-ENV1S003.0_card.jpg
+	# 		collInfo: V1R3
+	# 		rarity: R
+	# 	}
+	# 	title: Gimli
+	# 	subtitle: Vengeful Longbeard
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Dwarven
+	# 	twilight: 2
+	# 	type: Companion
+	# 	race: Dwarf
+	# 	strength: 6
+	# 	vitality: 3
+	# 	signet: Frodo
+	# 	resistance: 6
+	# 	keywords: Damage+1
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: modifyStrength
+	# 				filter: self
+	# 				requires: {
+	# 					type: canspot
+	# 					count: 2
+	# 					filter: item,attachedTo(self)
+	# 				}
+	# 				amount: 2
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: addKeyword
+	# 				filter: self
+	# 				requires: {
+	# 					type: canspot
+	# 					count: 3
+	# 					filter: item,attachedTo(self)
+	# 				}
+	# 				keyword: damage+1
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Damage +1.<br> While Gimli bears 2 items, he is strength +2.<br>While Gimli bears 3 items, he is damage +1. 
+	# 	lore: "'...there is one dwarf in Moria who still draws breath!'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_3: {
 		cardInfo: {
 			//id: 101_3
-			image: sets/vset1/LOTR-ENV1S003.0_card.jpg
+			revision: 1
+			image: sets/vset1/LOTR-ENV1S003.1_card.jpg
 			collInfo: V1R3
 			rarity: R
 		}
@@ -292,7 +345,7 @@
 					filter: self
 					requires: {
 						type: canspot
-						count: 2
+						count: 3
 						filter: item,attachedTo(self)
 					}
 					amount: 2
@@ -305,14 +358,14 @@
 					filter: self
 					requires: {
 						type: canspot
-						count: 3
+						count: 2
 						filter: item,attachedTo(self)
 					}
 					keyword: damage+1
 				}
 			}
 		]
-		gametext: Damage +1.<br> While Gimli bears 2 items, he is strength +2.<br>While Gimli bears 3 items, he is damage +1. 
+		gametext: Damage +1.\ While Gimli bears 2 items, he is damage +1.\While Gimli bears 3 items, he is strength +2. 
 		lore: "'...there is one dwarf in Moria who still draws breath!'"
 		promotext: ""
 		alts: {

@@ -335,11 +335,67 @@
 	# }
 	
 
+	# 101_54: {
+	# 	cardInfo: {
+	# 		//id: 101_54.2
+	# 		revision: 1
+	# 		image: sets/vset1/LOTR-ENV1E054.1_card.jpg
+	# 		collInfo: V1U54
+	# 		rarity: U
+	# 	}
+	# 	title: Sam
+	# 	subtitle: Of Bagshot Row
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Shire
+	# 	twilight: 2
+	# 	type: Companion
+	# 	race: Hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: Frodo
+	# 	resistance: 5
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: winsSkirmish
+	# 				filter: companion,signet(frodo)
+	# 				memorize: winner
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(memory(winner))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: killed
+	# 				filter: name(Frodo),ring bearer
+	# 			}
+	# 			effect: {
+	# 				type: makeSelfRingBearer
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Each time a companion with the Frodo signet wins a skirmish, heal that companion.<br>Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+	# 	lore: "'Don't turn me into anything... unnatural.'" 
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_54: {
 		cardInfo: {
 			//id: 101_54.2
 			revision: 2
-			image: sets/vset1/LOTR-ENV1E054.1_card.jpg
+			image: sets/vset1/LOTR-ENV1E054.2_card.jpg
 			collInfo: V1U54
 			rarity: U
 		}
@@ -364,6 +420,10 @@
 					filter: companion,signet(frodo)
 					memorize: winner
 				}
+				cost: {
+					type: Spot
+					filter: title(Frodo)
+				}
 				effect: {
 					type: heal
 					select: choose(memory(winner))
@@ -380,7 +440,7 @@
 				}
 			}
 		]
-		gametext: Each time a companion with the Frodo signet wins a skirmish, heal that companion.<br>Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+		gametext: Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to heal that companion.\Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
 		lore: "'Don't turn me into anything... unnatural.'" 
 		promotext: ""
 		alts: {
