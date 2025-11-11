@@ -589,7 +589,7 @@
 				]
 			}
 		]
-		ygametext: Pipeweed. Bearer must be a Wizard.\Each companion bearing a pipe is strength +1.\Regroup: Exert bearer and discard this pipeweed. This phase you may use special abilities on pipes as if it were the Fellowship phase.
+		gametext: Pipeweed. Bearer must be a Wizard.\Each companion bearing a pipe is strength +1.\Regroup: Exert bearer and discard this pipeweed. This phase you may use special abilities on pipes as if it were the Fellowship phase.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -229,7 +229,7 @@
 							cost: {
 								type: DiscardFromHand
 								forced: false
-								filter: Isengard
+								select: choose(Isengard)
 							}
 							effect: {
 								type: Hinder

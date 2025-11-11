@@ -72,7 +72,7 @@
 		}
 	}
 	
-		57_80: {
+	57_80: {
 		cardInfo: {
 			//id: 57_80.1
 			parent: 7_80
@@ -107,7 +107,7 @@
 					keyword: defender
 					amount: {
 						type: CardPhaseLimit
-						source: 1
+						amount: 1
 						limit: 1
 					}
 				}

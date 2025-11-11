@@ -18,7 +18,7 @@ public class Card_V3_124_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("wizardspipe", "103_124");
+					put("stash", "103_124");
 					put("gandalf", "1_72");
 					put("aragornspipe", "1_91");
 					put("aragorn", "1_89");
@@ -49,25 +49,25 @@ public class Card_V3_124_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("wizardspipe");
+		var card = scn.GetFreepsCard("stash");
 
-		assertEquals("Wizard's Pipe", card.getBlueprint().getTitle());
+		assertEquals("Wizard's Stash", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertTrue(card.getBlueprint().hasKeyword(Keyword.PIPEWEED));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void WizardsPipePermitsPipeFellowshipActionsToBeUsedInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WizardsStashPermitsPipeFellowshipActionsToBeUsedInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-		var wizardspipe = scn.GetFreepsCard("wizardspipe");
+		var stash = scn.GetFreepsCard("stash");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var aragornspipe = scn.GetFreepsCard("aragornspipe");
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -76,14 +76,14 @@ public class Card_V3_124_Tests
 		scn.MoveCompanionsToTable(gandalf, aragorn);
 		scn.MoveCardsToSupportArea(leaf, toby);
 
-		scn.AttachCardsTo(gandalf, wizardspipe);
+		scn.AttachCardsTo(gandalf, stash);
 		scn.AttachCardsTo(aragorn, aragornspipe);
 
 		scn.StartGame();
 
 		assertTrue(scn.FreepsActionAvailable(aragornspipe));
 		assertTrue(scn.FreepsActionAvailable(frodo));
-		assertFalse(scn.FreepsActionAvailable(wizardspipe));
+		assertFalse(scn.FreepsActionAvailable(stash));
 
 		scn.SkipToPhase(Phase.REGROUP);
 
@@ -91,13 +91,11 @@ public class Card_V3_124_Tests
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertFalse(scn.FreepsActionAvailable(aragornspipe));
 		assertFalse(scn.FreepsActionAvailable(frodo));
-		assertTrue(scn.FreepsActionAvailable(wizardspipe));
+		assertTrue(scn.FreepsActionAvailable(stash));
 
-		scn.FreepsUseCardAction(wizardspipe);
-		scn.FreepsChooseCard(leaf);
+		scn.FreepsUseCardAction(stash);
 
-		assertInZone(Zone.DISCARD, leaf);
-		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertInZone(Zone.SUPPORT, toby);
 		assertTrue(scn.HasKeyword(toby, Keyword.PIPEWEED));
 		scn.ShadowPass();
@@ -105,32 +103,7 @@ public class Card_V3_124_Tests
 		assertTrue(scn.FreepsActionAvailable(aragornspipe));
 		assertFalse(scn.FreepsActionAvailable(frodo));
 
-		scn.FreepsPass();
 
-		scn.FreepsChooseToStay();
-
-		//Previous version used to self-discard
-		assertInZone(Zone.ATTACHED, wizardspipe);
 	}
 
-	@Test
-	public void WizardsPipeDoesNothingOnNonWizard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var wizardspipe = scn.GetFreepsCard("wizardspipe");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(wizardspipe);
-
-		scn.StartGame();
-
-		assertTrue(scn.FreepsPlayAvailable(wizardspipe));
-		scn.FreepsPlayCard(wizardspipe);
-
-		assertAttachedTo(wizardspipe, aragorn);
-
-		scn.SkipToPhase(Phase.REGROUP);
-		assertFalse(scn.FreepsActionAvailable(wizardspipe));
-	}
 }
