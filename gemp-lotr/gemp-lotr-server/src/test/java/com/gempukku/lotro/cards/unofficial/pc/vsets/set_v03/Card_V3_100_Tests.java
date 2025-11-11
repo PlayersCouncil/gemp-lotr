@@ -61,7 +61,7 @@ public class Card_V3_100_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getResistance());
+		assertEquals(7, card.getBlueprint().getResistance());
 		assertTrue(card.getBlueprint().canStartWithRing());
 		assertNull(card.getBlueprint().getSignet());
 	}

@@ -1195,13 +1195,13 @@
 				phase: Shadow
 				cost: {
 					type: RemoveTokensCumulative
-					count: 1
+					count: 2
 					culture: raider
 					filter: your
 				}
 				effect: {
 					type: Hinder
-					select: side(Free Peoples), possession
+					select: choose(side(Free Peoples), possession)
 				}
 			}
 			
@@ -1211,23 +1211,23 @@
 				cost: [
 					{
 						type: Hinder
-						select: another, title(Raiding Schooner)
+						select: choose(another, title(Raiding Schooner))
 					}
 					{
 						type: RemoveTokensCumulative
-						count: 2
+						count: 3
 						culture: raider
 						filter: your
 					}
 				]
 				effect: {
 					type: Hinder
-					select: side(Free Peoples), artifact
+					select: choose(side(Free Peoples), artifact)
 				}
 			}
 			
 		]
-		gametext: When you play this, spot a Corsair to add a [raider] token here.\Shadow: Remove a [raider] token to hinder a Free Peoples possession.\Maneuver: Hinder another Raiding Schooner and remove 2 [raider] tokens to hinder a Free Peoples artifact.
+		gametext: When you play this, spot a Corsair to add a [raider] token here.\Shadow: Remove 2 [raider] tokens to hinder a Free Peoples possession.\Maneuver: Hinder another Raiding Schooner and remove 3 [raider] tokens to hinder a Free Peoples artifact.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1502,7 +1502,7 @@
 								{
 									type: CanSpot
 									filter: raider
-									amount: 10
+									count: 10
 								}
 							]
 						}
