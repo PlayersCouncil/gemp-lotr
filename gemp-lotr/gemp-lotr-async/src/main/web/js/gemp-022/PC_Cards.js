@@ -123,7 +123,7 @@ var PCCards = {
 	// Player's Council VSet1 'A Shadow of the Past'
 	'101_1':  'https://i.lotrtcgpc.net/sets/vset1/V1_001.jpg',
 	'101_2':  'https://i.lotrtcgpc.net/sets/vset1/V1_002.jpg',
-	'101_3':  'https://i.lotrtcgpc.net/sets/vset1/V1_003.jpg',
+	//'101_3':  'https://i.lotrtcgpc.net/sets/vset1/V1_003.jpg',
 	'101_4':  'https://i.lotrtcgpc.net/sets/vset1/V1_004.jpg',
 	'101_5':  'https://i.lotrtcgpc.net/sets/vset1/V1_005.jpg',
 	'101_6':  'https://i.lotrtcgpc.net/sets/vset1/V1_006.jpg',
@@ -169,12 +169,12 @@ var PCCards = {
 	'101_46': 'https://i.lotrtcgpc.net/sets/vset1/V1_046.jpg',
 	'101_47': 'https://i.lotrtcgpc.net/sets/vset1/V1_047.jpg',
 	'101_48': 'https://i.lotrtcgpc.net/sets/vset1/V1_048.jpg',
-	'101_49': 'https://i.lotrtcgpc.net/sets/vset1/V1_049.jpg',
+	//'101_49': 'https://i.lotrtcgpc.net/sets/vset1/V1_049.jpg',
 	'101_50': 'https://i.lotrtcgpc.net/sets/vset1/V1_050.jpg',
 	'101_51': 'https://i.lotrtcgpc.net/sets/vset1/V1_051.jpg',
 	'101_52': 'https://i.lotrtcgpc.net/sets/vset1/V1_052.jpg',
 	'101_53': 'https://i.lotrtcgpc.net/sets/vset1/V1_053.jpg',
-	'101_54': 'https://i.lotrtcgpc.net/sets/vset1/V1_054.jpg',
+	//'101_54': 'https://i.lotrtcgpc.net/sets/vset1/V1_054.jpg',
 	'101_55': 'https://i.lotrtcgpc.net/sets/vset1/V1_055.jpg',
 	'101_56': 'https://i.lotrtcgpc.net/sets/vset1/V1_056.jpg',
 	'101_57': 'https://i.lotrtcgpc.net/sets/vset1/V1_057.jpg',
@@ -190,7 +190,7 @@ var PCCards = {
 	// Sirannon Dam (V165) 
 	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
 	// Writhing Tentacle (V1C66) 
-	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S066.0_card.jpg',
+	//'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S066.0_card.jpg',
 	
 	// Christmas 2021 Errata
 
@@ -1319,6 +1319,18 @@ var PCCards = {
 	// Cirion (7C82) [Errata]
 	'57_82'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E082.1_card.jpg',
 	// The Red Arrow (9R46) [Errata]
-	'59_46'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E046.1_card.jpg'
+	'59_46'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E046.1_card.jpg',
+	// Anduril, King's Blade (7R80) [Errata]
+	'57_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E080.1_card.jpg',
+	// Morgul Hunter (1R256) [Errata]
+	'51_256' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E256.1_card.jpg',
+	// Sam, Of Bagshot Row (V1U54) [Errata]
+	'101_54' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E054.2_card.jpg',
+	// Gimli, Vengeful Longbeard (V1R3) [Errata]
+	'101_3'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E003.1_card.jpg',
+	// Writhing Tentacle (V166) [Errata]
+	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.1_card.jpg',
+	// A Shadow of the Past (V1R49) [Errata]
+	'101_49' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E049.1_card.jpg'
 }
 
