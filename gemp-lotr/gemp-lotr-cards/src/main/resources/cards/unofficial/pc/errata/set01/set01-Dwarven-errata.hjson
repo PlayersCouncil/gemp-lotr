@@ -32,10 +32,6 @@
 					keyword: damage+1
 				}
 				{
-					type: Discard
-					select: choose(possession, AttachedTo(minion, InSkirmishAgainst(memory(chosenDwarf))))
-				}
-				{
 					type: addTrigger
 					optional: true
 					trigger: {
@@ -49,7 +45,7 @@
 				}
 			]
 		}
-		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. Discard a possession borne by a minion they are skirmishing.  If that Dwarf wins this skirmish, you may discard another Shadow possession.
+		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. If that Dwarf wins this skirmish, you may discard another Shadow possession.
 		lore: "The shoddy workmanship of Orc-smiths cannot withstand the fury of Durin's folk."
 		promotext: ""
 		alts: {
@@ -517,6 +513,7 @@
 			{
 				type: Activated
 				phase: Fellowship
+				limitPerPhase: 1
 				cost: [
 					{
 						type: Spot
@@ -534,7 +531,7 @@
 				}
 			}
 		]
-		gametext: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand.
+		gametext: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand (limit once per phase).
 		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
 		promotext: ""
 		alts: {
@@ -673,7 +670,7 @@
 			rarity: C
 		}
 		title: Still Draws Breath
-		unique: false
+		unique: 2
 		side: Free Peoples
 		culture: Dwarven
 		twilight: 1

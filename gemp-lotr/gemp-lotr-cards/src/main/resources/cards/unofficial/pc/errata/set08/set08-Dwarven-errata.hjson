@@ -83,7 +83,7 @@
 				cost: {
 					type: exert
 					select: choose(dwarf,damage,CanExert,MinVitality(3))
-					times: 2
+					times: 1
 					memorize: exertedDwarf
 				},
 				effect: [
@@ -100,7 +100,7 @@
 				]
 			}
 		]
-		gametext: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder X Shadow cards.
+		gametext: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf to make an opponent hinder X Shadow cards.
 		lore: "...the Dark Door gaped before them like the mouth of night."
 		promotext: ""
 		alts: {
