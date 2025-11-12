@@ -48,6 +48,7 @@ public class RequirementFactory {
         requirementProducers.put("hascardinadventuredeck", new HasCardInAdventureDeck());
         requirementProducers.put("hascardindeadpile", new HasCardInDeadPile());
         requirementProducers.put("hascardindiscard", new HasCardInDiscard());
+        requirementProducers.put("hascardindrawdeck", new HasCardInDrawDeck());
         requirementProducers.put("hascardinhand", new HasCardInHand());
         requirementProducers.put("hascardinremoved", new HasCardInRemoved());
         requirementProducers.put("hascardstacked", new HasCardStacked());

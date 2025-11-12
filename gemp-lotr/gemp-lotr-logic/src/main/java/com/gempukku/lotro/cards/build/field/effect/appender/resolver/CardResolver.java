@@ -290,6 +290,44 @@ public class CardResolver {
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
     }
 
+    public static EffectAppender resolveCardsInRemoved(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetRemoved, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
+        final PlayerSource targetRemovedSource = PlayerResolver.resolvePlayer(targetRemoved);
+
+        Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
+            String targetPlayerId = targetRemovedSource.getPlayer(actionContext);
+            return actionContext.getGame().getGameState().getDiscard(targetPlayerId);
+        };
+
+        if (type.equals("self")) {
+            return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("memory(") && type.endsWith(")")) {
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+        } else if (type.startsWith("all(") && type.endsWith(")")) {
+            return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
+        } else if (type.startsWith("choose(") && type.endsWith(")")) {
+            ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
+                String choicePlayerId = playerSource.getPlayer(actionContext);
+                String targetPlayerDiscardId = targetRemovedSource.getPlayer(actionContext);
+                return new ChooseCardsFromRemovedEffect(choicePlayerId, targetPlayerDiscardId, min, max, Filters.in(possibleCards)) {
+                    @Override
+                    protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
+                        actionContext.setCardMemory(memory, cards);
+                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
+                    }
+
+                    @Override
+                    public String getText(LotroGame game) {
+                        return GameUtils.substituteText(choiceText, actionContext);
+                    }
+                };
+            };
+
+            return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
+        }
+        throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type + "; did you forget to wrap it in 'choose()'?");
+    }
+
     public static EffectAppender resolveCardsInDeadPile(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
 
@@ -501,12 +539,18 @@ public class CardResolver {
         };
     }
 
-    private static DelayedAppender resolveMemoryCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
-                                                      ValueSource countSource, String memory,
-                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+    public static String extractMemoryLocation(String type) throws InvalidCardDefinitionException {
         String sourceMemory = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
         if (sourceMemory.contains("(") || sourceMemory.contains(")"))
             throw new InvalidCardDefinitionException("Memory name cannot contain parenthesis");
+
+        return sourceMemory;
+    }
+
+    private static DelayedAppender resolveMemoryCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
+                                                      ValueSource countSource, String memory,
+                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+        String sourceMemory = extractMemoryLocation(type);
 
         return new DelayedAppender() {
             @Override

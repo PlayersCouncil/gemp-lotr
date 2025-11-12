@@ -6,6 +6,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.PutPlayedEventIntoHandEffect;
@@ -20,8 +21,10 @@ public class PutPlayedEventIntoHand implements EffectAppenderProducer {
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "self");
 
-        if (!filter.equalsIgnoreCase("self") && !filter.equalsIgnoreCase("played"))
-            throw new InvalidCardDefinitionException("Can only return either 'self' or 'played'");
+        String memory = filter.contains("memory(") ? CardResolver.extractMemoryLocation(filter) : null;
+
+        if (!filter.equalsIgnoreCase("self") && !filter.equalsIgnoreCase("played") && memory == null)
+            throw new InvalidCardDefinitionException("PutPlayedEventIntoHand can only handle either 'self', 'played', or 'memory()'");
 
         return new DelayedAppender() {
             @Override
@@ -29,7 +32,16 @@ public class PutPlayedEventIntoHand implements EffectAppenderProducer {
                 if (filter.equalsIgnoreCase("played")) {
                     PhysicalCard playedCard = ((PlayCardResult) actionContext.getEffectResult()).getPlayedCard();
                     return new PutPlayedEventIntoHandEffect(playedCard);
-                } else {
+                }
+                //If a memory location was provided, then we trust that this is an event that is being played by some other
+                // effect. See V3 Show Them the Meaning of Haste, where an event is "played three times" and thus knows which event is being returned.
+                else if(memory != null) {
+                    var cards = actionContext.getCardsFromMemory(memory);
+                    if(cards.size() != 1)
+                        return null;
+                    return new PutPlayedEventIntoHandEffect(cards.stream().findFirst().get(), true);
+                }
+                else {
                     return new PutPlayedEventIntoHandEffect(actionContext.getSource());
                 }
             }
