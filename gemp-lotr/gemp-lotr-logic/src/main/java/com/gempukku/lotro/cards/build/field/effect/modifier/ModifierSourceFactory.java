@@ -30,6 +30,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cancelkeywordbonus", new CancelKeywordBonus());
         modifierProducers.put("cancelstrengthbonus", new CancelStrengthBonus());
         modifierProducers.put("canplaystackedcards", new CanPlayStackedCards());
+        modifierProducers.put("cantaddburdens", new CantRemoveBurdens());
         modifierProducers.put("cantbear", new CantBear());
         modifierProducers.put("cantbeassignedtoskirmish", new CantBeAssignedToSkirmish());
         modifierProducers.put("cantbeassignedtoskirmishagainst", new CantBeAssignedToSkirmishAgainst());
