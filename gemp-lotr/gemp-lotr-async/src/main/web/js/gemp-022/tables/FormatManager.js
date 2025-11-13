@@ -44,7 +44,7 @@ class FormatManager {
 					dropdown.append(options[i]);
 				}
 			}
-			
+
 			dropdown.val(currentFormat);
 			dropdown.change();
 		});
@@ -140,7 +140,21 @@ class FormatManager {
 			});
 	}
 	
-	
+	lookupFormatByName(formatName) {
+		var that = this;
+		
+		var ret = null;
+		
+		Object.keys(this.formats).forEach(function(code, index) {
+			
+			if(that.formats[code].name === formatName) {
+				ret = code;
+				return;
+			}
+		});
+		
+		return ret;
+	}
 	
 	
 	static processFormatsFromJson(json) {
@@ -186,4 +200,6 @@ class FormatManager {
 				}
 			});
 	}
+	
+	
 }
