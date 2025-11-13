@@ -20,18 +20,21 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     private long _lastConsumed = System.currentTimeMillis();
     private final int _channelNumber;
     private volatile WaitingRequest _waitingRequest;
-
+    private final boolean _isHuman;
     private final LotroFormat _format;
 
-    public GameCommunicationChannel(String self, int channelNumber, LotroFormat format) {
+    public GameCommunicationChannel(String self, int channelNumber, boolean human, LotroFormat format) {
         _self = self;
         _channelNumber = channelNumber;
+        _isHuman = human;
         _format = format;
     }
 
     public int getChannelNumber() {
         return _channelNumber;
     }
+    @Override
+    public boolean isLiveConnection() { return _isHuman; }
 
     @Override
     public void initializeBoard(List<String> participants, boolean discardIsPublic) {
