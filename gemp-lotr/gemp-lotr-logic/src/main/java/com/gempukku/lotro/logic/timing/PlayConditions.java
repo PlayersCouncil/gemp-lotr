@@ -7,6 +7,8 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 
+import java.util.Map;
+
 public class PlayConditions {
     public static boolean canLiberateASite(LotroGame game, String performingPlayer, PhysicalCard source, String controlledByPlayerId) {
         PhysicalCard siteToLiberate = getSiteToLiberate(game, controlledByPlayerId);
@@ -47,6 +49,10 @@ public class PlayConditions {
 
     public static boolean canSpot(LotroGame game, int count, Filterable... filters) {
         return Filters.canSpot(game, count, filters);
+    }
+
+    public static boolean canSpot(LotroGame game, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return Filters.canSpot(game, count, spotOverrides, filters);
     }
 
     public static boolean hasInitiative(LotroGame game, Side side) {

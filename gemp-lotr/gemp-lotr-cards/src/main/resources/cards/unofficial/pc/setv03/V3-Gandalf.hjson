@@ -195,13 +195,13 @@
 								ignoreCostCheckFailure: true
 								ignorePlayability: true
 								select: memory(revealedEvent)
-							}
-							{
-								type: PutCardsFromDiscardIntoHand
-								ignoreCostCheckFailure: true
-								select: memory(revealedEvent)
-								discard: you
-							}
+								extraEffects: [
+									{
+										type: PutPlayedEventIntoHand
+										filter: memory(revealedEvent)
+									}
+								]
+							}						
 						]
 					}
 					{

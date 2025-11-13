@@ -123,12 +123,12 @@ public interface Decisions extends TestBase  {
 	/**
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
 	 */
-	default boolean AwaitingFreepsSkirmishPhaseActions() { return FreepsDecisionAvailable("Play Skirmish action or Pass"); }
+	default boolean AwaitingFreepsSkirmishPhaseActions() { return FreepsDecisionAvailable("Choose action to play or Pass"); }
 
 	/**
 	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
 	 */
-	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Play Skirmish action or Pass"); }
+	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Choose action to play or Pass"); }
 
 	/**
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.

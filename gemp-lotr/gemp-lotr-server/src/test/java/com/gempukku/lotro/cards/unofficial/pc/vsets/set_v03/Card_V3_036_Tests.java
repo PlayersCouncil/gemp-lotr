@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_036_Tests
 {
@@ -18,8 +18,10 @@ public class Card_V3_036_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_36");
-					// put other cards in here as needed for the test case
+					put("aid", "103_36");
+
+					put("uruk", "1_151");
+					put("power", "51_136");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +49,7 @@ public class Card_V3_036_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aid");
 
 		assertEquals("Gondor Calls For Aid!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,28 +62,29 @@ public class Card_V3_036_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GondorCallsForAidTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GondorCallsForAidCannotBeDiscardedOrHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var aid = scn.GetFreepsCard("aid");
+		scn.MoveCardsToSupportArea(aid);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var uruk = scn.GetShadowCard("uruk");
+		//Errata'd Saruman's Power, which discards 1 condition and then hinders all others
+		var power = scn.GetShadowCard("power");
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToHand(power);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.FreepsPass();
+
+		assertInZone(Zone.SUPPORT, aid);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(power));
+
+		scn.ShadowPlayCard(power);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SUPPORT, aid);
 	}
 }

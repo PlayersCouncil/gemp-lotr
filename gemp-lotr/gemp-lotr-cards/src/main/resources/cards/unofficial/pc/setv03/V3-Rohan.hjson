@@ -219,7 +219,7 @@
 				phase: Maneuver
 				cost: {
 					type: Hinder
-					select: choose(another, beacon)
+					select: choose(hinderable, beacon)
 				}
 				effect: {
 					type: PlayCardFromDiscard

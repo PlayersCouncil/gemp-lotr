@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class GameState {
     private static final Logger _log = LogManager.getLogger(GameState.class);
-    private static final int LAST_MESSAGE_STORED_COUNT = 15;
+    private static final int LAST_MESSAGE_STORED_COUNT = 50;
     private PlayerOrder _playerOrder;
 
     private LotroFormat _format;
