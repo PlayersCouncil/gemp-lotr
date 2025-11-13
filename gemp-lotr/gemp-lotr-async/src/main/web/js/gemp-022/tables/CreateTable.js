@@ -138,6 +138,11 @@ class CreateTable {
 		this.mainSelection.show();
 		
 		this.popup.dialog("open");
+		
+		var unrankedDefaultFlow = loadFromCookie("unranked-table-default-flow", "false");
+		if(unrankedDefaultFlow === "true") {
+			this.createUnrankedButton.click();
+		}
 	}
 	
 	static getResponse(outputControl, callback=null) {

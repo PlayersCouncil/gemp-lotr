@@ -27,6 +27,7 @@ class DeckManager {
 			}
 			
 			dropdown.val(currentDeck);
+			
 			dropdown.change();
 		});
 	}

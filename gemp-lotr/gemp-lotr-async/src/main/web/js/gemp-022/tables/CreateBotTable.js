@@ -24,8 +24,8 @@ class CreateBotTable {
 		this.formatManager = formatManager;
 		this.deckManager = deckManager;
 		
-		this.playerDeckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager)
-		this.botDeckSelector = new SelectDeck(this.comm, $(div).find(".bot-deck"), deckManager)
+		this.playerDeckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager, "bot-table");
+		this.botDeckSelector = new SelectDeck(this.comm, $(div).find(".bot-deck"), deckManager, "bot");
 		
 		this.unlockFormatsButton = $("#bot-unlock-format").button().click(() => {
 			that.unlockFormatsButton.hide();

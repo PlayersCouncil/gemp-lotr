@@ -608,6 +608,33 @@ var GempLotrGameUI = Class.extend({
             that.settingsAutoAccept = selected;
             $.cookie("autoAccept", "" + selected, {expires: 365});
         });
+        
+        $("#settingsBox").append("<label for='animation-slider'>Animation Speed</label><br /><div id='animation-slider'></div>");
+        
+        var animSpeed = loadFromCookie("animation-speed", 0);
+        that.animations.replaySpeed = 2 ** (-1 * animSpeed);
+        
+        $("#animation-slider").slider({
+            min:-4,
+            max:4,
+            range: "min",
+            slide: function(event, ui) {
+                let newAnimSpeed = ui.value;
+                saveToCookie("animation-speed", newAnimSpeed);
+                that.animations.replaySpeed = 2 ** (-1 * newAnimSpeed);
+                console.log("set: " + newAnimSpeed);
+                console.log("actual: " + (2 ** (-1 * newAnimSpeed)));
+            },
+            value: animSpeed
+        });
+        
+        // $("#animation-slider").bind("change", function (event) {
+        //     let newAnimSpeed = $("#animation-slider").value;
+        //     $.cookie("animation-speed", "" + newAnimSpeed, {expires: 365});
+        //     that.animations.replaySpeed = 2 ^ newAnimSpeed;
+        //     console.log(newAnimSpeed);
+        //     console.log(2 ^ newAnimSpeed);
+        // });
 
         $("#settingsBox").append("<input id='alwaysDropDown' type='checkbox' value='selected' /><label for='alwaysDropDown'>Always display drop-down in answer selection</label><br />");
 

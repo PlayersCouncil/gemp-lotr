@@ -14,9 +14,7 @@ var GameAnimations = Class.extend({
     },
 
     getAnimationLength:function (origValue) {
-        if (this.game.replayMode)
             return origValue * this.replaySpeed;
-        return origValue;
     },
 
     cardActivated:function (element, animate) {
