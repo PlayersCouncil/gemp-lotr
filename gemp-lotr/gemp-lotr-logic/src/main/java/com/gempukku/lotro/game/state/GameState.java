@@ -225,9 +225,18 @@ public class GameState {
     }
 
     public void addGameStateListener(String playerId, GameStateListener gameStateListener, GameStats gameStats) {
+        terminateOldListener(playerId);
         _gameStateListeners.add(gameStateListener);
         sendStateToPlayer(playerId, gameStateListener, gameStats);
         _mostRecentGameStats = gameStats;
+    }
+
+    private void terminateOldListener(String playerId) {
+        for(var listener : new HashSet<>(_gameStateListeners)) {
+            if(listener.isLiveConnection() && listener.getAssignedPlayerId().equals(playerId)) {
+                _gameStateListeners.remove(listener);
+            }
+        }
     }
 
     public void removeGameStateListener(GameStateListener gameStateListener) {

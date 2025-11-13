@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface GameStateListener {
+
+    boolean isLiveConnection();
     void cardCreated(PhysicalCard card);
     void cardCreated(PhysicalCard card, boolean overridePlayerVisibility);
 
@@ -32,6 +34,8 @@ public interface GameStateListener {
     void setCurrentPhase(String currentPhase);
 
     void addAssignment(PhysicalCard fp, Set<PhysicalCard> minions);
+
+    void addPendingAssignment(PhysicalCard fp, PhysicalCard minion);
 
     void removeAssignment(PhysicalCard fp);
 

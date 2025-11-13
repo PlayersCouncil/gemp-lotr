@@ -22,6 +22,9 @@ public class BotGameStateListener implements GameStateListener {
     }
 
     @Override
+    public boolean isLiveConnection() { return false; }
+
+    @Override
     public void cardCreated(PhysicalCard card) {
 
     }
