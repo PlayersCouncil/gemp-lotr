@@ -15,6 +15,7 @@ class CreateUnrankedTable {
 	inviteeDropdown = null;
 	privateCheckbox = null;
 	keepopenCheckbox = null;
+	defaultFlowCheckbox = null;
 	createTableButton = null;
 	
 	resultDiv = null;
@@ -28,8 +29,9 @@ class CreateUnrankedTable {
 		this.formatManager = formatManager;
 		this.deckManager = deckManager;
 		
-		this.deckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager)
+		this.deckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager, "unranked-table");
 		
+		this.deckDropdown = this.deckSelector.playerDeckDropdown;
 		this.formatDropdown = $("#unranked-format");
 		this.timerDropdown = $("#unranked-timer");
 		this.descText = $("#unranked-desc");
@@ -37,6 +39,7 @@ class CreateUnrankedTable {
 		this.inviteeDropdown = $("#unranked-invitee");
 		this.privateCheckbox = $("#unranked-private");
 		this.keepopenCheckbox = $("#unranked-keep-open");
+		this.defaultFlowCheckbox = $("#unranked-default-flow");
 		
 		this.inviteCheckbox.click(() => {
 			if (that.inviteCheckbox.is(":checked")) {
@@ -46,11 +49,36 @@ class CreateUnrankedTable {
 			}
 		});
 		
+		this.defaultFlowCheckbox.click(() => {
+			if (that.defaultFlowCheckbox.is(":checked")) {
+				saveToCookie("unranked-table-default-flow", "true");
+			} else {
+				saveToCookie("unranked-table-default-flow", "false");  
+			}
+		});
+		
 		this.resultDiv = $("#unranked-result");
 		
 		this.createTableButton = $("#submit-unranked-table-button").button().click(this.submitTable(this));
 		
 		this.formatManager.registerFormatDropdownUpdate(this.formatDropdown);
+		
+		
+		
+		this.deckDropdown.on('change',function(){
+			var currentDeck = that.deckDropdown.val();
+			var currentFormat = that.formatDropdown.val();
+			//Turns out it feels better to just always switch
+			// if(currentFormat !== null) 
+			// 	return;
+
+			that.deckManager.playerDecks.forEach((deck) => {
+		    if(deck.name === currentDeck) {
+		    	var formatCode = that.formatManager.lookupFormatByName(deck.targetFormat);
+					that.formatDropdown.val(formatCode);
+				}
+			});
+		});
 	}
 	
 	hide() {
@@ -59,6 +87,12 @@ class CreateUnrankedTable {
 	
 	show() {
 		var that = this;
+		
+		this.deckDropdown.val(loadFromCookie("unranked-table-last-deck", ""));
+		this.formatDropdown.val(loadFromCookie("unranked-table-last-format", ""));
+		this.timerDropdown.val(loadFromCookie("unranked-table-last-timer", ""));
+		
+		this.defaultFlowCheckbox.checked = loadFromCookie("unranked-table-default-flow", "false") === "true";
 		
 		that.mainDiv.show();
 	}
@@ -125,6 +159,10 @@ class CreateUnrankedTable {
 				that.updateResult("You must select a deck.");
 				return;
 			}
+
+			saveToCookie("unranked-table-last-deck", deck);
+			saveToCookie("unranked-table-last-format", format);
+			saveToCookie("unranked-table-last-timer", timer);
 
 			that.comm.createTable(format, deck, timer, tableDesc, isPrivate, isInviteOnly,
 					CreateTable.getResponse(that.resultDiv, (success) => {
