@@ -1,14 +1,14 @@
 {
-	
+
 	103_121: {
 		cardInfo: {
-			//id: 103_130.0
-			parent: 103_130
+			//id: 103_121.0
+			parent: 103_121
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E130.0_card.jpg
-			collInfo: V3_130
+			image: sets/V3/LOTR-ENV3S121.0_card.jpg
+			collInfo: V3_121
 			rarity: _
 		}
 		title: Gates of Isengard
@@ -43,7 +43,7 @@
 				]
 			}
 		]
-		gametext: Fellowship: Exert an unbound hobbit to play a pipe or pipeweed from your draw deck (limit once per phase).
+		gametext: Fellowship: Exert an unbound Hobbit to play a pipe and pipeweed from your draw deck (limit once per phase).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -56,13 +56,13 @@
 
 	103_122: {
 		cardInfo: {
-			//id: 103_107.0
-			parent: 103_107
+			//id: 103_122.0
+			parent: 103_122
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E107.0_card.jpg
-			collInfo: V3_107
+			image: sets/V3/LOTR-ENV3S122.0_card.jpg
+			collInfo: V3_122
 			rarity: _
 		}
 		title: Desolation of Ash
@@ -108,13 +108,13 @@
 
 	103_123: {
 		cardInfo: {
-			//id: 103_108.0
-			parent: 103_108
+			//id: 103_123.0
+			parent: 103_123
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E108.0_card.jpg
-			collInfo: V3_108
+			image: sets/V3/LOTR-ENV3S123.0_card.jpg
+			collInfo: V3_123
 			rarity: _
 		}
 		title: Gorgoroth Highway
@@ -155,13 +155,13 @@
 
 	103_124: {
 		cardInfo: {
-			//id: 103_109.0
-			parent: 103_109
+			//id: 103_124.0
+			parent: 103_124
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E109.0_card.jpg
-			collInfo: V3_109
+			image: sets/V3/LOTR-ENV3S124.0_card.jpg
+			collInfo: V3_124
 			rarity: _
 		}
 		title: Gorgoroth Wastes
@@ -217,7 +217,7 @@
 				]
 			}
 		]
-		gametext: When moving here, for each Free Peoples card attached to companions, the Free Peoples player must discard it or add (2).
+		gametext: When moving here, for each Free Peoples card borne by companions, the Free Peoples player must discard it or add (2).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -230,13 +230,13 @@
 
 	103_125: {
 		cardInfo: {
-			//id: 103_110.0
-			parent: 103_110
+			//id: 103_125.0
+			parent: 103_125
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E110.0_card.jpg
-			collInfo: V3_110
+			image: sets/V3/LOTR-ENV3S125.0_card.jpg
+			collInfo: V3_125
 			rarity: _
 		}
 		title: Muster of Gorgoroth
@@ -272,13 +272,13 @@
 
 	103_126: {
 		cardInfo: {
-			//id: 103_111.0
-			parent: 103_111
+			//id: 103_126.0
+			parent: 103_126
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E111.0_card.jpg
-			collInfo: V3_111
+			image: sets/V3/LOTR-ENV3S126.0_card.jpg
+			collInfo: V3_126
 			rarity: _
 		}
 		title: Cracks of Doom
@@ -317,13 +317,13 @@
 
 	103_127: {
 		cardInfo: {
-			//id: 103_112.0
-			parent: 103_112
+			//id: 103_127.0
+			parent: 103_127
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E112.0_card.jpg
-			collInfo: V3_112
+			image: sets/V3/LOTR-ENV3S127.0_card.jpg
+			collInfo: V3_127
 			rarity: _
 		}
 		title: Doom Causeway
@@ -371,15 +371,106 @@
 		}
 	}
 
-	103_130: {
+	103_128: {
 		cardInfo: {
-			//id: 103_113.0
-			parent: 103_113
+			//id: 103_128.0
+			parent: 103_128
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E113.0_card.jpg
-			collInfo: V3_113
+			image: sets/V3/LOTR-ENV3S128.0_card.jpg
+			collInfo: V3_128
+			rarity: _
+		}
+		title: Orodruin
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AddsThreat
+				}
+				effect: {
+					type: AssignThreatWounds
+				}
+			}
+		]
+		gametext: Mountain.  Each time a threat is added, the Free Peoples player must assign all threat wounds.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_129: {
+		cardInfo: {
+			//id: 103_129.0
+			parent: 103_129
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S129.0_card.jpg
+			collInfo: V3_129
+			rarity: _
+		}
+		title: Pinnacle of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: [
+			Mountain
+			Battleground
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: Shadow
+				trigger: {
+					type: StartOfPhase
+					#Phase intentionally left blank as we want to trigger in every phase
+				}
+				effect: {
+					type: Hinder
+					player: Shadow
+					select: choose(not(companion))
+				}
+			}
+		]
+		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_130: {
+		cardInfo: {
+			//id: 103_130.0
+			parent: 103_130
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S130.0_card.jpg
+			collInfo: V3_130
 			rarity: _
 		}
 		title: Threshold of Doom
@@ -437,97 +528,6 @@
 			}
 		]
 		gametext: Mountain. Shadow: Remove a burden or a threat to play a minion from your discard pile. If it costs (5) or more, add (1).
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_128: {
-		cardInfo: {
-			//id: 103_114.0
-			parent: 103_114
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E114.0_card.jpg
-			collInfo: V3_114
-			rarity: _
-		}
-		title: Orodruin
-		unique: false
-		twilight: 9
-		type: Site
-		site: 9
-		block: King
-		direction: Left
-		keywords: [
-			Mountain
-			Battleground
-		]
-		effects: [
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: AddsThreat
-				}
-				effect: {
-					type: AssignThreatWounds
-				}
-			}
-		]
-		gametext: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_129: {
-		cardInfo: {
-			//id: 103_115.0
-			parent: 103_115
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E115.0_card.jpg
-			collInfo: V3_115
-			rarity: _
-		}
-		title: Pinnacle of Doom
-		unique: false
-		twilight: 9
-		type: Site
-		site: 9
-		block: King
-		direction: Left
-		keywords: Mountain
-		effects: [
-			{
-				type: Trigger
-				optional: true
-				player: Shadow
-				trigger: {
-					type: StartOfPhase
-					#Phase intentionally left blank as we want to trigger in every phase
-				}
-				effect: {
-					type: Hinder
-					player: Shadow
-					select: choose(not(companion))
-				}
-			}
-		]
-		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
 		lore: ""
 		promotext: ""
 		alts: {

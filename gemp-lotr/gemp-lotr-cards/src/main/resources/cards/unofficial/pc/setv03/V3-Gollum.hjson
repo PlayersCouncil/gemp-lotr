@@ -2,13 +2,13 @@
 
 	103_11: {
 		cardInfo: {
-			//id: 103_8.0
-			parent: 103_8
+			//id: 103_11.0
+			parent: 103_11
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E008.0_card.jpg
-			collInfo: V3_8
+			image: sets/V3/LOTR-ENV3S011.0_card.jpg
+			collInfo: V3_11
 			rarity: _
 		}
 		title: Fickle Loyalties
@@ -55,7 +55,7 @@
 			}
 		]
 		gametext: To play, spot 2 [shire] companions.<br>Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.<br>Each time Shelob loses a skirmish, kill Gollum.
-		lore: ""
+		lore: "So he thought in an inner chamber of his cunning, which he still hoped to hide from her..."
 		promotext: ""
 		alts: {
 			promos: {
@@ -65,15 +65,15 @@
 		}
 	}
 
-	10103_123_9: {
+	103_12: {
 		cardInfo: {
-			//id: 103_9.0
-			parent: 103_9
+			//id: 103_12.0
+			parent: 103_12
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E009.0_card.jpg
-			collInfo: V3_9
+			image: sets/V3/LOTR-ENV3S012.0_card.jpg
+			collInfo: V3_12
 			rarity: _
 		}
 		title: Pass of the Spider
@@ -128,7 +128,7 @@
 				]
 			}
 		]
-		gametext: Skirmish: If Shelob is skirmishing, stack another minion from play on this artifact to make a character skirmishing her strength -2 (limit once per phase).<br>Response: If a special ability on a Free Peoples condition is used, discard a minion stacked here to hinder that condition and heal Shelob.
+		gametext: Each time a special ability on a Free Peoples condition is used, you may discard a minion stacked here to hinder that condition and heal Shelob.<br>Skirmish: If Shelob is skirmishing, stack another minion from play here to make a character skirmishing her strength -2 (limit once per phase).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -141,13 +141,13 @@
 
 	103_13: {
 		cardInfo: {
-			//id: 103_10.0
-			parent: 103_10
+			//id: 103_13.0
+			parent: 103_13
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E010.0_card.jpg
-			collInfo: V3_10
+			image: sets/V3/LOTR-ENV3S013.0_card.jpg
+			collInfo: V3_13
 			rarity: _
 		}
 		title: Shelob
@@ -201,7 +201,7 @@
 				}
 			}
 		]
-		gametext: Fierce.  Enduring.<br>Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.<br>Skirmish: If Gollum is skrimishing, exert Gollum and Shelob to hinder a character he is skirmishing.
+		gametext: Fierce.  Enduring.<br>Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.<br>Skirmish: If Gollum is skirmishing, exert Gollum and Shelob to hinder a character he is skirmishing.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -214,13 +214,13 @@
 
 	103_14: {
 		cardInfo: {
-			//id: 103_11.0
-			parent: 103_11
+			//id: 103_14.0
+			parent: 103_14
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E011.0_card.jpg
-			collInfo: V3_11
+			image: sets/V3/LOTR-ENV3S014.0_card.jpg
+			collInfo: V3_14
 			rarity: _
 		}
 		title: Sticky Strands of Spider-silk
@@ -279,8 +279,8 @@
 				}
 			}
 		]
-		gametext: At the end of each skirmish involving bearer, make them strength -1 until the end of the turn.\Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion.
-		lore: ""
+		gametext: At the start of each turn and at the end of each skirmish involving bearer, make <br>bearer strength -1 until the end of the turn.<br>Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion.
+		lore: "Never yet had any fly escaped from Shelob's webs, and the greater now was her rage and hunger."
 		promotext: ""
 		alts: {
 			promos: {
@@ -292,13 +292,13 @@
 
 	103_15: {
 		cardInfo: {
-			//id: 103_12.0
-			parent: 103_12
+			//id: 103_15.0
+			parent: 103_15
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E012.0_card.jpg
-			collInfo: V3_12
+			image: sets/V3/LOTR-ENV3S015.0_card.jpg
+			collInfo: V3_15
 			rarity: _
 		}
 		title: Two-faced
@@ -358,8 +358,8 @@
 				]
 			}
 		]
-		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore your [gollum] minion.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and attached cards).
-		lore: ""
+		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore a [gollum] card.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and borne cards).
+		lore: "Too little did he or his master know of the craft of Shelob. She had many exits from her lair."
 		promotext: ""
 		alts: {
 			promos: {
@@ -371,13 +371,13 @@
 
 	103_16: {
 		cardInfo: {
-			//id: 103_13.0
-			parent: 103_13
+			//id: 103_16.0
+			parent: 103_16
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E013.0_card.jpg
-			collInfo: V3_13
+			image: sets/V3/LOTR-ENV3S016.0_card.jpg
+			collInfo: V3_16
 			rarity: _
 		}
 		title: Two Minds of It
@@ -434,7 +434,7 @@
 				]
 			}
 		]
-		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Smeagol.  Then you may spot Smeagol (if he is not the Ring-bearer) and add a threat to replace him with another Smeagol from your discard pile (keep all tokens and attached cards).
+		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Smeagol.  Then you may spot Smeagol (if he is not the Ring-bearer) and add a threat to replace him with another Smeagol from your discard pile (keep all tokens and borne cards).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -447,13 +447,13 @@
 
 	103_17: {
 		cardInfo: {
-			//id: 103_14.0
-			parent: 103_14
+			//id: 103_17.0
+			parent: 103_17
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E014.0_card.jpg
-			collInfo: V3_14
+			image: sets/V3/LOTR-ENV3S017.0_card.jpg
+			collInfo: V3_17
 			rarity: _
 		}
 		title: Ungoliant's Get
@@ -510,7 +510,7 @@
 				]
 			}
 		]
-		gametext: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.\Response: If Shelob wins a skirmish, spot\4 minions stacked on [gollum] items and hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skirmishes after fierce)</i>. 
+		gametext: Each time Shelob loses a skirmish, you may play a [gollum] item from your discard pile.<br>Response: If Shelob wins a skirmish and there are 4 minions stacked on [gollum] items, hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in 1 extra round of skirmishes after fierce)</i>. 
 		lore: ""
 		promotext: ""
 		alts: {
