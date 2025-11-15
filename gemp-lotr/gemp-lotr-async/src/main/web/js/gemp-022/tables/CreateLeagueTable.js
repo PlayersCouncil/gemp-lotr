@@ -28,7 +28,7 @@ class CreateLeagueTable {
 		this.formatManager = formatManager;
 		this.deckManager = deckManager;
 		
-		this.deckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager)
+		this.deckSelector = new SelectDeck(this.comm, $(div).find(".player-deck"), deckManager, "league-table")
 		
 		this.leagueDropdown = $("#league-format");		
 		this.resultDiv = $("#league-result");
