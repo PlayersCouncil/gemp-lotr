@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_010_Tests
 {
@@ -18,9 +17,11 @@ public class Card_V3_010_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("broken", "103_6");
+					put("broken", "103_10");
 					put("gandalf", "1_72");
 					put("staff", "2_22");
+
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,7 +46,7 @@ public class Card_V3_010_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("broken");
 
 		assertEquals("Your Staff is Broken", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());

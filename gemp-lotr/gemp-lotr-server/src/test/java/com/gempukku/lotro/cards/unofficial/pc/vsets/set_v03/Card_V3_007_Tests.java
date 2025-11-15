@@ -18,7 +18,7 @@ public class Card_V3_007_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("stash", "103_124");
+					put("stash", "103_7");
 					put("gandalf", "1_72");
 					put("aragornspipe", "1_91");
 					put("aragorn", "1_89");
@@ -50,7 +50,7 @@ public class Card_V3_007_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("stash");
 
 		assertEquals("Wizard's Stash", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());

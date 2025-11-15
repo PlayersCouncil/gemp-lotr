@@ -1192,7 +1192,7 @@
 			}
 		]
 		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each hindered card you can spot.
-		lore: "'At his command they fell back. "Even the shades of Men are obedient to his will," I thought. "They may serve his needs yet!'"
+		lore: "'At his command they fell back. \"Even the shades of Men are obedient to his will,\" I thought. \"They may serve his needs yet!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1394,7 +1394,59 @@
 			Response
 			Skirmish
 		]
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+					type: aboutToDiscard
+					opponent: true
+					filter: gondor
+					memorizeSource: discarder
+				}
+				cost: {
+					type: Spot
+					filter: Gondor, Wraith
+					count: 3
+				}
+				effect: [
+					{
+						type: preventDiscard
+						select: all(gondor)
+						memorize: preventedCards
+					}
+					{
+						type: Hinder
+						select: all(memory(preventedCards))
+					}
+					{
+						type: Optional
+						text: Would you like to add a threat to hinder {discarder}?
+						cost: {
+							type: AddThreats
+							amount: 1
+						}
+						effect: {
+							type: Hinder
+							select: memory(discarder)
+						}
+					}
+				]
+			}
 
+			{
+				type: event
+				effect: [
+					{
+						type: ModifyStrength
+						select: choose(your,Wraith)
+						amount: {
+							type: ForEachThreat
+							limit: 3
+						}
+					}
+				]
+			}
+		]
 		gametext: Response: If your [gondor] card is about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder that card instead.<br>Skirmish: Make your Wraith strength +1 for each threat you can spot (limit +3).
 		lore: "'Is it then your errand to seek death? For that is all that you will find on that road. They do not suffer the living to pass.'"
 		promotext: ""

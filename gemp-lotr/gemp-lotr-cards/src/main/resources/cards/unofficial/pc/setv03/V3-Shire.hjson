@@ -78,6 +78,7 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
+		target: hasAttached(pipe)
 		keywords: Pipeweed
 		effects: [
 			{
@@ -692,7 +693,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 6
+		resistance: 5
 		keywords: Ring-bound
 		effects: [
 			{

@@ -18,7 +18,7 @@ public class Card_V3_083_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("aid", "103_36");
+					put("aid", "103_83");
 
 					put("uruk", "1_151");
 					put("power", "51_136");

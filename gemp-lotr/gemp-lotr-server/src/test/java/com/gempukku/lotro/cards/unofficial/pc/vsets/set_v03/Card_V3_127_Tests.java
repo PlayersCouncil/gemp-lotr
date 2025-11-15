@@ -18,7 +18,7 @@ public class Card_V3_127_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("initiate", "103_43");
+					put("initiate", "103_47");
 					// put other cards in here as needed for the test case
 				}},
 				new HashMap<>() {{
@@ -30,7 +30,7 @@ public class Card_V3_127_Tests
 					put("site6", "1_350");
 					put("site7", "1_353");
 					put("site8", "1_356");
-					put("site9", "103_112");
+					put("site9", "103_127");
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -55,9 +55,7 @@ public class Card_V3_127_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(9);
 
 		assertEquals("Doom Causeway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());

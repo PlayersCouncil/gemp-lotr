@@ -18,12 +18,12 @@ public class Card_V3_006_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("haste", "103_4");
+					put("haste", "103_6");
 					put("gandalf", "1_364");
 					put("shadowfax", "4_100");
 					put("wielder", "2_28"); // Maneuver event with no exert cost
 					put("terrible", "7_50"); // Maneuver event with an exert cost
-					put("forfrodo", "103_97"); // Skirmish event that removes self from game
+					put("forfrodo", "103_107"); // Skirmish event that removes self from game
 					put("sam", "1_311");
 
 					put("runner", "1_178");

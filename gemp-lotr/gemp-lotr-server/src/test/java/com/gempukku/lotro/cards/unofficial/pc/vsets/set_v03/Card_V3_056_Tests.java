@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_056_Tests
 {
@@ -18,9 +17,9 @@ public class Card_V3_056_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("trap", "103_55");
+					put("ambush", "103_56");
 					put("isengard_tracker", "4_193");
-					put("raider_tracker", "103_45");
+					put("raider_tracker", "103_47");
 					put("ambush_southron", "4_252");
 					put("ambush_horror", "14_13");
 					put("southron", "4_253");
@@ -50,7 +49,7 @@ public class Card_V3_056_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("trap");
+		var card = scn.GetFreepsCard("ambush");
 
 		assertEquals("Sandcraft Ambush", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -68,7 +67,7 @@ public class Card_V3_056_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var trap = scn.GetShadowCard("trap");
+		var ambush = scn.GetShadowCard("ambush");
 		var isengard_tracker = scn.GetShadowCard("isengard_tracker");
 		var raider_tracker = scn.GetShadowCard("raider_tracker");
 		var ambush_southron = scn.GetShadowCard("ambush_southron");
@@ -77,7 +76,7 @@ public class Card_V3_056_Tests
 		var soldier = scn.GetShadowCard("soldier");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.MoveCardsToHand(trap);
+		scn.MoveCardsToHand(ambush);
 		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier, runner);
 		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
 
@@ -94,8 +93,8 @@ public class Card_V3_056_Tests
 		assertTrue(scn.IsHindered(soldier));
 		assertFalse(scn.IsHindered(runner));
 
-		assertTrue(scn.ShadowPlayAvailable(trap));
-		scn.ShadowPlayCard(trap);
+		assertTrue(scn.ShadowPlayAvailable(ambush));
+		scn.ShadowPlayCard(ambush);
 
 		//Trackers of all cultures restored
 		assertFalse(scn.IsHindered(isengard_tracker));

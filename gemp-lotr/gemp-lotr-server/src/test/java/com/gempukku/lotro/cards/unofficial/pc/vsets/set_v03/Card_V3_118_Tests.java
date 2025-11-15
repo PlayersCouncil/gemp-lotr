@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_118_Tests
 {
@@ -32,7 +34,7 @@ public class Card_V3_118_Tests
 
 		/**
 		 * Set: V3
-		 * Name: The Sooner We’re Rid of It
+		 * Name: The Sooner We'’'re Rid of It
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
@@ -47,7 +49,7 @@ public class Card_V3_118_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Sooner We’re Rid of It", card.getBlueprint().getTitle());
+		assertEquals("The Sooner We're Rid of It", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());

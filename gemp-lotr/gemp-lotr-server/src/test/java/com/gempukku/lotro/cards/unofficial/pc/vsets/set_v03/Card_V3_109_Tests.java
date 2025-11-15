@@ -1,15 +1,17 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_109_Tests
 {
@@ -18,7 +20,7 @@ public class Card_V3_109_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("gaffer", "103_98");
+					put("gaffer", "103_109");
 					put("sam", "10_122");
 					put("promise1", "2_112");
 					put("promise2", "2_112");

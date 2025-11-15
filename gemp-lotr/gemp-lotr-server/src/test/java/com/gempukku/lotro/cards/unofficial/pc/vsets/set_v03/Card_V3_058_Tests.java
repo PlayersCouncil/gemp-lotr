@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_058_Tests
 {
@@ -18,7 +17,7 @@ public class Card_V3_058_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("sands", "103_56");
+					put("sands", "103_58");
 					put("scout", "4_252");
 
 					put("runner", "1_178");
