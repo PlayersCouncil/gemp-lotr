@@ -216,7 +216,7 @@
 			}
 		]
 		gametext: While Isildur is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or exert 3 companions. <br>While Isildur bears The One Ring or an artifact, each [gondor] knight is strength +1.
-		lore: "'"But for my part I will risk no hurt to this thing: of all the works of Sauron the only fair."'"
+		lore: "'But for my part I will risk no hurt to this thing: of all the works of Sauron the only fair.'"
 		promotext: ""
 		alts: {
 			promos: {
