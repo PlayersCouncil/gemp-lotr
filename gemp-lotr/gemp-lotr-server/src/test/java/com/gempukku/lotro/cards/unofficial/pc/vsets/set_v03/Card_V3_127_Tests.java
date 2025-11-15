@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_127_Tests
 {
@@ -19,65 +18,82 @@ public class Card_V3_127_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_127");
+					put("initiate", "103_43");
 					// put other cards in here as needed for the test case
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "103_112");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
 
 	@Test
-	public void NorIsHeEarlyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DoomCausewayStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Nor Is He Early
+		 * Name: Doom Causeway
 		 * Unique: false
-		 * Side: Shadow
-		 * Culture: Isengard
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If a Free Peoples character is played, add (3).  If you can spot 5 or more companions in region 1 or 2 (or if that character is [Gandalf]), spot an [isengard] card to hinder that character.
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 9K
+		 * Game Text: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Nor Is He Early", card.getBlueprint().getTitle());
+		assertEquals("Doom Causeway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NorIsHeEarlyTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	
+	@Test
+	public void DoomCausewayDiscardsHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var causeway = scn.GetShadowSite(9);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var initiate = scn.GetShadowCard("initiate");
+		scn.MoveCardsToHand(initiate);
 
 		scn.StartGame();
 		
-		assertFalse(true);
+		scn.SkipToSite(8);
+		scn.FreepsPass();
+
+		assertEquals(scn.GetCurrentSite(), causeway);
+
+		assertTrue(scn.ShadowPlayAvailable(initiate));
+		scn.ShadowPlayCard(initiate);
+		assertInZone(Zone.SHADOW_CHARACTERS, initiate);
+
+		//Desert Wind Initiate has the option to self-hinder when you play it
+		scn.ShadowChoose("hinder");
+
+		assertInZone(Zone.DISCARD, initiate);
 	}
 }

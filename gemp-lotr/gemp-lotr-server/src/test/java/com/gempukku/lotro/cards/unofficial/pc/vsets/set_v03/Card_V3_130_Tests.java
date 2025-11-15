@@ -28,38 +28,40 @@ public class Card_V3_130_Tests
 	}
 
 	@Test
-	public void GatesofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThresholdofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Gates of Isengard
+		 * Name: Threshold of Doom
 		 * Unique: false
 		 * Side: 
 		 * Culture: 
-		 * Shadow Number: 
+		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: Standard
-		 * Site Number: 1K
-		 * Game Text: Fellowship: Exert an unbound hobbit to play a pipe or pipeweed from your draw deck (limit once per phase).
+		 * Site Number: 9K
+		 * Game Text: Mountain. Shadow: Remove a burden or a threat to play a minion from your discard pile. If it costs (5) or more, add (1).
 		*/
 
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(1);
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gates of Isengard", card.getBlueprint().getTitle());
+		assertEquals("Threshold of Doom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getSiteNumber());
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GatesofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThresholdofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

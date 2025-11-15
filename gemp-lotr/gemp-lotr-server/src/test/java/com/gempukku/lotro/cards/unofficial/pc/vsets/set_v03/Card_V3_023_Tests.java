@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_023_Tests
 {
@@ -38,11 +36,11 @@ public class Card_V3_023_Tests
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 3
+		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).
-		* 	Response: After the special ability of a Shadow support card is used, discard a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
+		* 	Each time the special ability of a Shadow support card is used, you may hinder a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
 		*/
 
 		var scn = GetScenario();

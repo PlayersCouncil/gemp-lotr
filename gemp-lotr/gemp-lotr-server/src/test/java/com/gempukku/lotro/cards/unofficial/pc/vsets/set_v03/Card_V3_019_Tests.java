@@ -28,39 +28,47 @@ public class Card_V3_019_Tests
 	}
 
 	@Test
-	public void EtherealBannerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ethereal Banner
+		 * Name: Aragorn, King of Gondor and Arnor
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Hand weapon
-		 * Game Text: Bearer must be a [gondor] Wraith.
-		* 	Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.
-		* 	Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
+		 * Twilight Cost: 5
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: While you can spot another [Gondor] Man, Aragorn is strength +1.
+		* 	While you can spot a [Rohan] Man, Aragorn is strength +2.
+		* 	Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ethereal Banner", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Aragorn", card.getBlueprint().getTitle());
+		assertEquals("King of Gondor and Arnor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void EtherealBannerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

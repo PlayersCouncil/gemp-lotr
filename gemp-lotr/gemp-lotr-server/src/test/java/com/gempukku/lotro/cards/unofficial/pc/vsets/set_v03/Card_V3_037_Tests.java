@@ -28,37 +28,38 @@ public class Card_V3_037_Tests
 	}
 
 	@Test
-	public void TheWayisShutStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorisHeEarlyStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: The Way is Shut
-		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Gondor
+		 * Name: Nor is He Early
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Isengard
 		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If any number of [gondor] cards are about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder those cards instead. You may add a threat to hinder that Shadow card.
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: To play, spot 2 [isengard] minions.
+		* 	Response: If a Free Peoples character is played, add (3).  If you can spot 5 or more companions (or if that character is [Gandalf]), you may discard an [isengard] card from hand to hinder that character.  Hinder this condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Way is Shut", card.getBlueprint().getTitle());
+		assertEquals("Nor is He Early", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheWayisShutTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorisHeEarlyTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

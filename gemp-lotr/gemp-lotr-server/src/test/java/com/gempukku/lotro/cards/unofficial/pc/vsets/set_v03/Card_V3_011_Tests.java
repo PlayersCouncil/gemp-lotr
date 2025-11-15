@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_011_Tests
 {
@@ -30,38 +28,39 @@ public class Card_V3_011_Tests
 	}
 
 	@Test
-	public void StickyStrandsofSpiderSilkStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FickleLoyaltiesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sticky Strands of Spider-silk
+		 * Name: Fickle Loyalties
 		 * Unique: false
-		 * Side: Shadow
+		 * Side: Free Peoples
 		 * Culture: Gollum
-		 * Twilight Cost: 2
-		 * Type: Possession
+		 * Twilight Cost: 1
+		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: During bearer's skirmish, each time the Free Peoples player uses a special ability or plays an event, they must exert bearer or make bearer strength -1. 
-		* 	Skirmish: Hinder your [gollum] card to transfer this to a companion.
+		 * Game Text: To play, spot 2 [shire] companions.
+		* 	Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.
+		* 	Each time Shelob loses a skirmish, kill Gollum.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Sticky Strands of Spider-silk", card.getBlueprint().getTitle());
+		assertEquals("Fickle Loyalties", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void StickyStrandsofSpiderSilkTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FickleLoyaltiesTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

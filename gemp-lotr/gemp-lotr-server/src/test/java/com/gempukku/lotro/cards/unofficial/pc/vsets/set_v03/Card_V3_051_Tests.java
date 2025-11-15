@@ -28,38 +28,37 @@ public class Card_V3_051_Tests
 	}
 
 	@Test
-	public void HornofFarHaradStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DutyNoLessThanYoursStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Horn of Far Harad
-		 * Unique: false
+		 * Name: Duty No Less Than Yours
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: 
-		 * Game Text: Bearer must be a mounted Southron.
-		* 	When you play this, hinder all Free Peoples mounts.
-		* 	Skirmish: Remove a threat to make a Southron strength +2.
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time a [raider] minion dies, you may exert a [raider] minion to exert an unbound companion. If you can spot another Duty No Less Than Yours, you may discard it to also hinder that companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Horn of Far Harad", card.getBlueprint().getTitle());
+		assertEquals("Duty No Less Than Yours", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HornofFarHaradTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DutyNoLessThanYoursTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

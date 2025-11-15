@@ -28,39 +28,39 @@ public class Card_V3_020_Tests
 	}
 
 	@Test
-	public void EtherealMarchStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DomainoftheDeadKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ethereal March
-		 * Unique: false
+		 * Name: Domain of the Dead King
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 2
-		 * Type: Condition
+		 * Twilight Cost: 3
+		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: While you can spot 2 [gondor] Wraiths, the threat limit is +2.
-		* 	While you can spot more threats than companions, each Wraith is strength +1.
-		* 	Each time this condition is hindered or discarded, remove a threat.
+		 * Game Text: When you play this, spot a [gondor] Wraith to remove a threat.
+		* 	Each time a [gondor] Wraith takes a threat wound, wound a minion.
+		* 	Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ethereal March", card.getBlueprint().getTitle());
+		assertEquals("Domain of the Dead King", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void EtherealMarchTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DomainoftheDeadKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

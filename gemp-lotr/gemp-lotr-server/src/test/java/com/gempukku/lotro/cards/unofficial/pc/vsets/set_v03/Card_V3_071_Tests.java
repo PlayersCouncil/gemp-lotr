@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_071_Tests
 {
@@ -27,45 +28,37 @@ public class Card_V3_071_Tests
 	}
 
 	@Test
-	public void UlaireNelyaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThisisMyHourStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Nelya, Glorified to Conquer
-		 * Unique: true
+		 * Name: This is My Hour
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 6
-		 * Type: Minion
-		 * Subtype: Nazgul
-		 * Strength: 10
-		 * Vitality: 3
-		 * Site Number: 2
-		 * Game Text: Fierce.
-		* 	At the start of each skirmish involving a Nazgul, you may exert this minion to make that Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot 2 Nazgul).
+		 * Twilight Cost: 4
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: If your Nazgul wins a skirmish, exert it to reconcile your hand.  You may discard a Nazgul from hand to wound a companion it was skirmishing.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ulaire Nelya", card.getBlueprint().getTitle());
-		assertEquals("Glorified to Conquer", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("This is My Hour", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(11, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(2, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UlaireNelyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThisisMyHourTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

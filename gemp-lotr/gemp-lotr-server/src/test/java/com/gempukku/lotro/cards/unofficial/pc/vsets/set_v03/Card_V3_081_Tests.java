@@ -28,41 +28,46 @@ public class Card_V3_081_Tests
 	}
 
 	@Test
-	public void SnowmaneStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WingedNazgulStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Snowmane, Faithful Servant
-		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Mount
-		 * Vitality: 1
-		 * Game Text: Bearer must be Theoden.
-		* 	[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.
-		* 	At the start of the assignment phase, hinder Snowmane if you can spot a minion of strength 15 or more.
+		 * Name: Winged Nazgul
+		 * Unique: 2
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Nazgul
+		 * Strength: 9
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: Enduring. Fierce.
+		* 	Assignment: Return another Winged Nazgul to hand to assign this minion to an unbound companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Snowmane", card.getBlueprint().getTitle());
-		assertEquals("Faithful Servant", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals("Winged Nazgul", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SnowmaneTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WingedNazgulTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

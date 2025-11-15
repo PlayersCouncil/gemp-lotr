@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_121_Tests
 {
@@ -20,13 +18,8 @@ public class Card_V3_121_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("jetsam", "103_121");
-					put("gaffers", "1_292");
-					put("gandalfs", "1_74");
-					put("aragorns", "1_91");
-
-					put("oldtoby", "1_305");
-					put("leaf", "1_300");
+					put("card", "103_121");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -35,62 +28,57 @@ public class Card_V3_121_Tests
 	}
 
 	@Test
-	public void JetsamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GatesofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Jetsam
+		 * Name: Gates of Isengard
 		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: 
-		 * Game Text: Pipeweed. Bearer must bear a pipe. When you play this, you may discard a Shadow card on bearer.
-		* 	When this is discarded by a pipe, add 1 to the number of pipes you can spot this phase and make your character lose <b>unhasty</b> until the end of the turn.
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 1K
+		 * Game Text: Fellowship: Exert an unbound Hobbit to play a pipe and pipeweed from your draw deck (limit once per phase).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("jetsam");
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(1);
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Jetsam", card.getBlueprint().getTitle());
+		assertEquals("Gates of Isengard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(1, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	@Test
-	public void JetsamIncreasesPipeCountDuringPipeUsageAndAfter() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void GatesofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var jetsam = scn.GetFreepsCard("jetsam");
-		var gaffers = scn.GetFreepsCard("gaffers");
-		var aragorns = scn.GetFreepsCard("aragorns");
-		var gandalfs = scn.GetFreepsCard("gandalfs");
-		var oldtoby = scn.GetFreepsCard("oldtoby");
-		scn.MoveCardsToSupportArea(oldtoby);
-		scn.AttachCardsTo(frodo, jetsam, gaffers, aragorns, gandalfs);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
-
-		scn.FreepsUseCardAction(gaffers);
-		scn.FreepsChooseCard(jetsam);
-
-		//Gaffer's, Gandalf's, and Aragorn's pipes, +1 from the Jetsam
-		assertEquals(4, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("4");
-		assertEquals(6, scn.GetTwilight());
-
-		scn.FreepsUseCardAction(gaffers);
-		//Gaffer's, Gandalf's, and Aragorn's pipes, +1 from the Jetsam even tho another pipeweed was discarded
-		assertEquals(4, scn.FreepsGetChoiceMax());
+		
+		assertFalse(true);
 	}
 }

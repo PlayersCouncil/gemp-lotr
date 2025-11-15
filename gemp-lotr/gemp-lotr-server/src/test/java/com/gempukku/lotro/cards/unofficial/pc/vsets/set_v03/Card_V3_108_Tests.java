@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.SitesBlock;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -10,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_108_Tests
 {
@@ -28,39 +28,40 @@ public class Card_V3_108_Tests
 	}
 
 	@Test
-	public void GorgorothHighwayStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FortheShireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Gorgoroth Highway
+		 * Name: For the Shire
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 7
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 8K
-		 * Game Text: All characters lose all strength bonuses from weapons and gain <b>enduring</b>.
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Assignment
+		 * Game Text: Spot a Hobbit companion (except the Ring-bearer).
+		* 	In region 1, hinder all other Hobbits.
+		* 	In region 2, make that Hobbit defender +2 until the regroup phase.
+		* 	In region 3, make that Hobbit <b>enduring</b> until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gorgoroth Highway", card.getBlueprint().getTitle());
+		assertEquals("For the Shire", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(7, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GorgorothHighwayTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FortheShireTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

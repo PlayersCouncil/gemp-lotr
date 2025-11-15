@@ -28,37 +28,41 @@ public class Card_V3_065_Tests
 	}
 
 	@Test
-	public void ThisisMyHourStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: This is My Hour
-		 * Unique: false
+		 * Name: Cover of Darkness, Omen of Gloom
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 4
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If your Nazgul wins a skirmish, exert it to reconcile your hand.  You may discard a Nazgul from hand to wound a companion it was skirmishing.
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Twilight.
+		* 	To play, hinder 2 twilight conditions.
+		* 	Shadow: Hinder this condition to take a twilight card into hand from your draw deck.
+		* 	Regroup: Hinder a twilight card to add (1).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("This is My Hour", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
+		assertEquals("Omen of Gloom", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ThisisMyHourTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,37 +28,37 @@ public class Card_V3_053_Tests
 	}
 
 	@Test
-	public void RaidingSchoonerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HonoroftheDesertWarriorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Raiding Schooner
-		 * Unique: 2
+		 * Name: Honor of the Desert Warrior
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Maneuver: Hinder a corsair to hinder a Free Peoples support possession (or all support cards of a Free Peoples culture you spot if you discard another Raiding Schooner).
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Assignment
+		 * Game Text: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Raiding Schooner", card.getBlueprint().getTitle());
+		assertEquals("Honor of the Desert Warrior", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void RaidingSchoonerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HonoroftheDesertWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,40 +28,40 @@ public class Card_V3_035_Tests
 	}
 
 	@Test
-	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarbeaconStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Flame of Halifirien
-		 * Unique: 2
+		 * Name: War-beacon
+		 * Unique: 3
 		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 2
+		 * Culture: Gondor
+		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
-		* 	Each time you play a mount on your Man, you may add (1) to heal that Man.
-		* 	Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
+		 * Game Text: <b>Beacon</b>. To play, spot an unbound Man.
+		* 	Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.
+		* 	Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
-		assertEquals("Flame of Halifirien", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("War-beacon", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals(3, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarbeaconTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

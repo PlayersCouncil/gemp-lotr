@@ -28,37 +28,38 @@ public class Card_V3_119_Tests
 	}
 
 	@Test
-	public void TeachMeYourHerbloreStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TreasuredPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Teach Me Your Herb-lore
+		 * Name: Treasured Pipe
 		 * Unique: false
 		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Fellowship
-		 * Game Text: Play up to 2 pipes from your draw deck.  If you cannot spot Theoden, add a burden for each pipe played.
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Pipe
+		 * Game Text: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.
+		* 	Fellowship: Discard a pipeweed and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Teach Me Your Herb-lore", card.getBlueprint().getTitle());
+		assertEquals("Treasured Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TeachMeYourHerbloreTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TreasuredPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

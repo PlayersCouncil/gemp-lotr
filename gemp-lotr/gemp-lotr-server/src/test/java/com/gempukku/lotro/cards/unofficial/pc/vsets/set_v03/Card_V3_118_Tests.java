@@ -28,38 +28,38 @@ public class Card_V3_118_Tests
 	}
 
 	@Test
-	public void TreasuredPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheSoonerWereRidofItStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Treasured Pipe
-		 * Unique: false
+		 * Name: The Sooner We’re Rid of It
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Pipe
-		 * Game Text: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.
-		* 	Fellowship: Discard a pipeweed and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.
+		 * Twilight Cost: 3
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: To play, spot 2 Hobbit companions.
+		* 	Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Treasured Pipe", card.getBlueprint().getTitle());
+		assertEquals("The Sooner We’re Rid of It", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TreasuredPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheSoonerWereRidofItTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

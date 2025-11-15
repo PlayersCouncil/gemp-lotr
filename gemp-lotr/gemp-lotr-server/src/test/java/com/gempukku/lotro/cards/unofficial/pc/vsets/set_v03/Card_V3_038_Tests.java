@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_038_Tests
 {
@@ -29,40 +28,39 @@ public class Card_V3_038_Tests
 	}
 
 	@Test
-	public void BladetuskChargerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OneIllTurnDeservesAnotherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Bladetusk Charger
-		 * Unique: false
+		 * Name: One Ill Turn Deserves Another
+		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Raider
-		 * Twilight Cost: 6
-		 * Type: Possession
-		 * Subtype: Mount
-		 * Strength: 3
-		 * Vitality: 2
-		 * Game Text: Bearer must be a Southron.  Bearer is <b>fierce</b>.
-		* 	At the start of each skirmish involving bearer, add X threats, where X is the vitality of each character skirmishing bearer. 
-		* 	Remove 2 threats at the end of each skirmish involving bearer.
+		 * Culture: Isengard
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: To play, spot 2 [isengard] minions (or Saruman).
+		* 	Each time your minion is hindered or discarded by a Free Peoples card, hinder a companion.
+		* 	Each time your condition is hindered or discarded by a Free Peoples card, hinder a Free Peoples condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Bladetusk Charger", card.getBlueprint().getTitle());
+		assertEquals("One Ill Turn Deserves Another", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BladetuskChargerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OneIllTurnDeservesAnotherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

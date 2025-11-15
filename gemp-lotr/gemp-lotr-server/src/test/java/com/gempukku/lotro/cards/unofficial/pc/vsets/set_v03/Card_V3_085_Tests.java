@@ -28,39 +28,49 @@ public class Card_V3_085_Tests
 	}
 
 	@Test
-	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Dread
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Sauron
+		 * Name: Merry, Master Holbytla
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Rohan
 		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Skirmish: Hinder this condition and exert an Orc to make that Orc strength +1 for each burden you can spot.
+		 * Type: Companion
+		 * Subtype: Hobbit
+		 * Strength: 3
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: Valiant. Enduring.
+		* 	While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.
+		* 	Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Dread", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals("Merry", card.getBlueprint().getTitle());
+		assertEquals("Master Holbytla", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

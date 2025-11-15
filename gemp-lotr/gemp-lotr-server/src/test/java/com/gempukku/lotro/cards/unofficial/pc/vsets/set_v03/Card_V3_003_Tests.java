@@ -28,39 +28,38 @@ public class Card_V3_003_Tests
 	}
 
 	@Test
-	public void ShadowfaxStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MantleoftheWhiteWizardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Shadowfax, Swiftest of All
-		 * Unique: false
+		 * Name: Mantle of the White Wizard
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Mount
-		 * Game Text: Bearer must be Gandalf.
-		* 	While you can spot a [gandalf] artifact, minions skirmishing bearer gain no strength or keyword bonuses from Shadow cards they bear.
-		* 	While bearer is unwounded or exhausted, bearer is strength +3.
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.
+		* 	Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal another companion. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Shadowfax", card.getBlueprint().getTitle());
-		assertEquals("Swiftest of All", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Mantle of the White Wizard", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ShadowfaxTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MantleoftheWhiteWizardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

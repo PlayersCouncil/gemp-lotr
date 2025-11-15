@@ -28,43 +28,47 @@ public class Card_V3_061_Tests
 	}
 
 	@Test
-	public void GollumStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireAtteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Gollum, Half a Wraith Himself
+		 * Name: Ulaire Attea, Khamul of the East
 		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 2
+		 * Culture: Raider
+		 * Twilight Cost: 6
 		 * Type: Minion
-		 * Subtype: 
-		 * Strength: 5
-		 * Vitality: 4
+		 * Subtype: Nazgul
+		 * Strength: 12
+		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Each time you play a Nazgul, you may exert Gollum to add a threat.
-		* 	Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
+		 * Game Text: <b>Easterling.</b>  Fierce.
+		* 	While you can spot 3 burdens, each Easterling is strength +2.
+		* 	While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gollum", card.getBlueprint().getTitle());
-		assertEquals("Half a Wraith Himself", card.getBlueprint().getSubtitle());
+		assertEquals("Ulaire Attea", card.getBlueprint().getTitle());
+		assertEquals("Khamul of the East", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.EASTERLING));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(12, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireAtteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

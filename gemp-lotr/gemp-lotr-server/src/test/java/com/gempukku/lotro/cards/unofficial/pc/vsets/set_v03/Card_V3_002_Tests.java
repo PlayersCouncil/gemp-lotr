@@ -18,8 +18,13 @@ public class Card_V3_002_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_2");
-					// put other cards in here as needed for the test case
+					put("jetsam", "103_121");
+					put("gaffers", "1_292");
+					put("gandalfs", "1_74");
+					put("aragorns", "1_91");
+
+					put("oldtoby", "1_305");
+					put("leaf", "1_300");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,57 +33,62 @@ public class Card_V3_002_Tests
 	}
 
 	@Test
-	public void MantleoftheWhiteWizardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void JetsamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Mantle of the White Wizard
-		 * Unique: true
+		 * Name: Jetsam
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.
-		* 	Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal another companion. 
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: 
+		 * Game Text: Pipeweed. Bearer must bear a pipe. When you play this, you may discard a Shadow card on bearer.
+		* 	When this is discarded by a pipe, add 1 to the number of pipes you can spot this phase and make your character lose <b>unhasty</b> until the end of the turn.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("jetsam");
 
-		assertEquals("Mantle of the White Wizard", card.getBlueprint().getTitle());
+		assertEquals("Jetsam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MantleoftheWhiteWizardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void JetsamIncreasesPipeCountDuringPipeUsageAndAfter() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var jetsam = scn.GetFreepsCard("jetsam");
+		var gaffers = scn.GetFreepsCard("gaffers");
+		var aragorns = scn.GetFreepsCard("aragorns");
+		var gandalfs = scn.GetFreepsCard("gandalfs");
+		var oldtoby = scn.GetFreepsCard("oldtoby");
+		scn.MoveCardsToSupportArea(oldtoby);
+		scn.AttachCardsTo(frodo, jetsam, gaffers, aragorns, gandalfs);
 
 		scn.StartGame();
+		scn.SetTwilight(10);
+
+		scn.FreepsUseCardAction(gaffers);
+		scn.FreepsChooseCard(jetsam);
+
+		//Gaffer's, Gandalf's, and Aragorn's pipes, +1 from the Jetsam
+		assertEquals(4, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("4");
+		assertEquals(6, scn.GetTwilight());
 		
-		assertFalse(true);
+		scn.FreepsUseCardAction(gaffers);
+		//Gaffer's, Gandalf's, and Aragorn's pipes, +1 from the Jetsam even tho another pipeweed was discarded
+		assertEquals(4, scn.FreepsGetChoiceMax());
 	}
 }

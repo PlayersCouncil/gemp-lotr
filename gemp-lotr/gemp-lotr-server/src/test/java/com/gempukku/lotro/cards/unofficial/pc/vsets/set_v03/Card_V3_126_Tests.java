@@ -28,38 +28,40 @@ public class Card_V3_126_Tests
 	}
 
 	@Test
-	public void SavageFuryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CracksofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Savage Fury
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time your [isengard] minion wins a skirmish, discard another Savage Fury to hinder each Free Peoples card on a companion it was skirmishing.
-		* 	Maneuver: Discard a minion to make your [isengard] minion <b>fierce</b> or <b>relentless</b> until the regroup phase <i>(it participates in an additional round of skirmishes after fierce)</i>.
+		 * Name: Cracks of Doom
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 9K
+		 * Game Text: Mountain.  Game text on Free Peoples items and The One Ring does not apply.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Savage Fury", card.getBlueprint().getTitle());
+		assertEquals("Cracks of Doom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SavageFuryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CracksofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

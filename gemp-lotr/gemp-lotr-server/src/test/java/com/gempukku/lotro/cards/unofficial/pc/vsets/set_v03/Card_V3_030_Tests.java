@@ -28,40 +28,39 @@ public class Card_V3_030_Tests
 	}
 
 	@Test
-	public void WarBeaconStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: War Beacon
-		 * Unique: 3
+		 * Name: Northern Signal-fire, Flame of Nardol
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 1
+		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: <b>Beacon</b>. To play, exert an unbound Man.
-		* 	Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.
-		* 	Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
+		 * Game Text: Beacon. To play, hinder 2 beacons.
+		* 	Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("War Beacon", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(3, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
+		assertEquals("Flame of Nardol", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WarBeaconTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,29 +28,29 @@ public class Card_V3_101_Tests
 	}
 
 	@Test
-	public void GetUpMisterFrodoStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SauronsReachStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Get Up, Mister Frodo
+		 * Name: Sauron's Reach
 		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Shire
+		 * Side: Shadow
+		 * Culture: Sauron
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-		 * Game Text: Restore a [shire] card.  If you cannot spot more than 4 companions, you may reconcile your hand and heal up to 2 [shire] companions.
+		 * Game Text: Exert 3 [sauron] minions (or spot Sauron) to hinder all Free Peoples support cards.  For each card hindered, hinder a Shadow support card.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Get Up, Mister Frodo", card.getBlueprint().getTitle());
+		assertEquals("Sauron's Reach", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
@@ -58,7 +58,7 @@ public class Card_V3_101_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GetUpMisterFrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SauronsReachTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

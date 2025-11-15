@@ -28,40 +28,48 @@ public class Card_V3_115_Tests
 	}
 
 	@Test
-	public void PinnacleofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Pinnacle of Doom
-		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 9
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 9K
-		 * Game Text: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.
+		 * Name: Sam, Undaunted
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Hobbit
+		 * Strength: 3
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: Ring-bound. 
+		* 	Frodo is resistance +2.
+		* 	Maneuver: If you cannot spot more than 4 companions, add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice. Limit once per turn.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Pinnacle of Doom", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
-		assertEquals(9, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals("Sam", card.getBlueprint().getTitle());
+		assertEquals("Undaunted", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void PinnacleofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

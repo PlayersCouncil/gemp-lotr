@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_056_Tests
 {
@@ -17,12 +18,14 @@ public class Card_V3_056_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("sands", "103_56");
-					put("scout", "4_252");
+					put("trap", "103_55");
+					put("isengard_tracker", "4_193");
+					put("raider_tracker", "103_45");
+					put("ambush_southron", "4_252");
+					put("ambush_horror", "14_13");
+					put("southron", "4_253");
+					put("soldier", "1_271");
 					put("runner", "1_178");
-
-					put("condition1", "1_16");
-					put("condition2", "1_21");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -31,95 +34,79 @@ public class Card_V3_056_Tests
 	}
 
 	@Test
-	public void ShiftingSandsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SandcraftAmbushStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Shifting Sands
+		 * Name: Sandcraft Ambush
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time ambush twilight is added, hinder a Free Peoples condition.
-		* 	Each time your mounted Southron is about to take a wound, you may wound an unmounted Southron to prevent that.
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: Assignment
+		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("sands");
+		var card = scn.GetFreepsCard("trap");
 
-		assertEquals("Shifting Sands", card.getBlueprint().getTitle());
+		assertEquals("Sandcraft Ambush", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void ShiftingSandsHindersAFreepsConditionEachTimeAmbushTwilightIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SandcraftTrapRestoresTrackersAndNativeAmbushMinions() throws DecisionResultInvalidException, CardNotFoundException {
+
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var condition1 = scn.GetFreepsCard("condition1");
-		var condition2 = scn.GetFreepsCard("condition2");
-		scn.MoveCardsToSupportArea(condition1, condition2);
-
-		var sands = scn.GetShadowCard("sands");
-		var scout = scn.GetShadowCard("scout");
-		scn.MoveCardsToSupportArea(sands);
-		scn.MoveMinionsToTable(scout);
-
-		scn.StartGame();
-
-		scn.SkipToAssignments();
-
-		assertTrue(scn.HasKeyword(scout, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(scout, Keyword.AMBUSH));
-		assertEquals(3, scn.GetTwilight());
-
-		scn.FreepsAssignToMinions(frodo, scout);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		assertTrue(scn.ShadowActionAvailable("Ambush - add 2"));
-		scn.ShadowAcceptOptionalTrigger();
-
-		assertTrue(scn.ShadowDecisionAvailable("Choose cards to hinder"));
-		assertTrue(scn.ShadowHasCardChoicesAvailable(condition1, condition2));
-		assertFalse(scn.IsHindered(condition1));
-		assertFalse(scn.IsHindered(condition2));
-
-		scn.ShadowChooseCard(condition1);
-
-		assertTrue(scn.IsHindered(condition1));
-		assertFalse(scn.IsHindered(condition2));
-
-	}
-
-	@Test
-	public void ShiftingSandsDoesNotRespondToNonAmbushTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var condition1 = scn.GetFreepsCard("condition1");
-		var condition2 = scn.GetFreepsCard("condition2");
-		scn.MoveCardsToSupportArea(condition1, condition2);
-
-		var sands = scn.GetShadowCard("sands");
+		var trap = scn.GetShadowCard("trap");
+		var isengard_tracker = scn.GetShadowCard("isengard_tracker");
+		var raider_tracker = scn.GetShadowCard("raider_tracker");
+		var ambush_southron = scn.GetShadowCard("ambush_southron");
+		var ambush_horror = scn.GetShadowCard("ambush_horror");
+		var southron = scn.GetShadowCard("southron");
+		var soldier = scn.GetShadowCard("soldier");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToSupportArea(sands);
-		scn.MoveCardsToHand(runner);
+
+		scn.MoveCardsToHand(trap);
+		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier, runner);
+		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
 
 		scn.StartGame();
+		
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowPlayCard(runner);
+		assertTrue(scn.IsHindered(isengard_tracker));
+		assertTrue(scn.IsHindered(raider_tracker));
+		assertTrue(scn.IsHindered(ambush_southron));
+		assertTrue(scn.IsHindered(ambush_southron));
+		assertTrue(scn.IsHindered(ambush_horror));
+		assertTrue(scn.IsHindered(soldier));
+		assertFalse(scn.IsHindered(runner));
 
-		assertFalse(scn.ShadowDecisionAvailable("Choose cards to hinder"));
+		assertTrue(scn.ShadowPlayAvailable(trap));
+		scn.ShadowPlayCard(trap);
+
+		//Trackers of all cultures restored
+		assertFalse(scn.IsHindered(isengard_tracker));
+		assertFalse(scn.IsHindered(raider_tracker));
+		//Minions of all cultures with ambush restored
+		assertFalse(scn.IsHindered(ambush_southron));
+		assertFalse(scn.IsHindered(ambush_horror));
+
+		//Non-ambush southron still hindered
+		assertTrue(scn.IsHindered(southron));
+		//Non-tracker non-ambush minion still hindered
+		assertTrue(scn.IsHindered(soldier));
 	}
 }

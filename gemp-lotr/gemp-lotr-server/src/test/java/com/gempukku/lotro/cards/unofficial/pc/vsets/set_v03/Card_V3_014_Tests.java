@@ -28,38 +28,39 @@ public class Card_V3_014_Tests
 	}
 
 	@Test
-	public void UngoliantsGetStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StickyStrandsofSpidersilkStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ungoliant's Get
-		 * Unique: true
+		 * Name: Sticky Strands of Spider-silk
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Gollum
-		 * Twilight Cost: 2
-		 * Type: Condition
+		 * Twilight Cost: 1
+		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Each time Shelob is assigned to a skirmish, <thin>you may play a [gollum] item from your discard pile</thin>.
-		* 	Response: If Shelob wins a skirmish, discard this condition and 3 minions stacked on [gollum] items to make her <b>relentless</b> until the regroup phase <i>(she participates in an additional round of skrimishes after fierce)</i>. 
+		 * Game Text: At the start of each turn and at the end of each skirmish involving bearer, make 
+		* 	bearer strength -1 until the end of the turn.
+		* 	Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ungoliant's Get", card.getBlueprint().getTitle());
+		assertEquals("Sticky Strands of Spider-silk", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UngoliantsGetTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StickyStrandsofSpidersilkTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

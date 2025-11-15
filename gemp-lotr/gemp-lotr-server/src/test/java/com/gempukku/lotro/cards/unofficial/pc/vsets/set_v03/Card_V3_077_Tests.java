@@ -28,37 +28,45 @@ public class Card_V3_077_Tests
 	}
 
 	@Test
-	public void IAmNoManStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireNerteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: I Am No Man
-		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered Free Peoples card you can spot.
+		 * Name: Ulaire Nertea, Sanctified for Cruelty
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Nazgul
+		 * Strength: 10
+		 * Vitality: 2
+		 * Site Number: 3
+		 * Game Text: Fierce.
+		* 	Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("I Am No Man", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals("Ulaire Nertea", card.getBlueprint().getTitle());
+		assertEquals("Sanctified for Cruelty", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(10, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void IAmNoManTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireNerteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,39 +28,42 @@ public class Card_V3_018_Tests
 	}
 
 	@Test
-	public void DomainoftheDeadKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AndurilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Domain of the Dead King
+		 * Name: Anduril, Legend Remade
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3
 		 * Type: Artifact
-		 * Subtype: Support area
-		 * Game Text: When you play this, spot a [gondor] Wraith to remove a threat.
-		* 	Each time a [gondor] Wraith takes a threat wound, wound a minion.
-		* 	Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
+		 * Subtype: Hand weapon
+		 * Strength: 2
+		 * Vitality: 1
+		 * Game Text: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.
+		* 	Response: If another unbound companion is about to take a wound, add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Domain of the Dead King", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Anduril", card.getBlueprint().getTitle());
+		assertEquals("Legend Remade", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DomainoftheDeadKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

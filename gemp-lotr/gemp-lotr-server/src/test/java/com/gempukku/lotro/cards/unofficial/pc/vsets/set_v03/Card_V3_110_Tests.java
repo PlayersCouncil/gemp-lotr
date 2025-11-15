@@ -28,40 +28,46 @@ public class Card_V3_110_Tests
 	}
 
 	@Test
-	public void MusterofGorgorothStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FrodoStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Muster of Gorgoroth
-		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 8
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 8K
-		 * Game Text: Battleground. Each minion is strength +1 for each threat you can spot.
+		 * Name: Frodo, Bereft of Hope
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 0
+		 * Type: Companion
+		 * Subtype: Hobbit
+		 * Strength: 2
+		 * Vitality: 4
+		 * Resistance: 7
+		 * Game Text: Ring-bearer (resistance 7).  Ring-bound.
+		* 	Frodo is strength +1 for each burden.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Muster of Gorgoroth", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
-		assertEquals(8, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals("Frodo", card.getBlueprint().getTitle());
+		assertEquals("Bereft of Hope", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(7, card.getBlueprint().getResistance());
+		assertTrue(card.getBlueprint().canStartWithRing());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MusterofGorgorothTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

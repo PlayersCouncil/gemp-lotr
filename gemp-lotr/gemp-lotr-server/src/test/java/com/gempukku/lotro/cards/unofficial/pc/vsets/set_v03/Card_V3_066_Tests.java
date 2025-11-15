@@ -28,45 +28,43 @@ public class Card_V3_066_Tests
 	}
 
 	@Test
-	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GollumStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: The Mouth of Sauron, Bearer of Dread News
+		 * Name: Gollum, Half a Wraith Himself
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 3
+		 * Twilight Cost: 2
 		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 9
-		 * Vitality: 3
-		 * Site Number: *
-		 * Game Text: Lurker.
-		* 	Other minions cannot take more than 1 wound per phase.
-		* 	Response: If a Free Peoples event is played, exert this minion to cancel that event.
+		 * Subtype: 
+		 * Strength: 5
+		 * Vitality: 4
+		 * Site Number: 3
+		 * Game Text: Each time you play a Nazgul, you may exert Gollum to add a threat.
+		* 	Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
-		assertEquals("Bearer of Dread News", card.getBlueprint().getSubtitle());
+		assertEquals("Gollum", card.getBlueprint().getTitle());
+		assertEquals("Half a Wraith Himself", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

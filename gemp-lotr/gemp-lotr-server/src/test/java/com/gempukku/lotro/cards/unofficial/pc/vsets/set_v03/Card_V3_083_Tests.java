@@ -18,8 +18,10 @@ public class Card_V3_083_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_83");
-					// put other cards in here as needed for the test case
+					put("aid", "103_36");
+
+					put("uruk", "1_151");
+					put("power", "51_136");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,58 +30,62 @@ public class Card_V3_083_Tests
 	}
 
 	@Test
-	public void CirithUngolWatcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GondorCallsForAidStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cirith Ungol Watcher, Hideous Warden
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 2
-		 * Type: Artifact
+		 * Name: Gondor Calls For Aid!
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 3
+		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [sauron] card and add a threat.
-		* 	Each time a companion exerts, draw a card (limit once per site).
-		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 3 threats and hinder that companion.
+		 * Game Text: Beacon. To play, hinder 4 beacons.
+		* 	This cannot be discarded or hindered.
+		* 	Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.
+		* 	Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aid");
 
-		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
-		assertEquals("Hideous Warden", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertEquals("Gondor Calls For Aid!", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GondorCallsForAidCannotBeDiscardedOrHindered() throws DecisionResultInvalidException, CardNotFoundException {
+
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var aid = scn.GetFreepsCard("aid");
+		scn.MoveCardsToSupportArea(aid);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var uruk = scn.GetShadowCard("uruk");
+		//Errata'd Saruman's Power, which discards 1 condition and then hinders all others
+		var power = scn.GetShadowCard("power");
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToHand(power);
 
 		scn.StartGame();
+		scn.FreepsPass();
+
+		assertInZone(Zone.SUPPORT, aid);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(power));
 		
-		assertFalse(true);
+		scn.ShadowPlayCard(power);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SUPPORT, aid);
 	}
 }

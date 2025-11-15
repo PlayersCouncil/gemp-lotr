@@ -28,39 +28,46 @@ public class Card_V3_033_Tests
 	}
 
 	@Test
-	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TormentedSpectreStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Flame of Nardol
-		 * Unique: 2
+		 * Name: Tormented Spectre
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
-		* 	Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
+		 * Type: Companion
+		 * Subtype: Wraith
+		 * Strength: 5
+		 * Vitality: 2
+		 * Resistance: 6
+		 * Game Text: Enduring.
+		* 	To play, add a threat.
+		* 	This companion is strength +1 for each hindered card you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
-		assertEquals("Flame of Nardol", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Tormented Spectre", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TormentedSpectreTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

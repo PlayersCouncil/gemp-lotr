@@ -28,39 +28,45 @@ public class Card_V3_060_Tests
 	}
 
 	@Test
-	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Fear
-		 * Unique: 2
+		 * Name: The Mouth of Sauron, Herald of the Dark Lord
+		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		 * Culture: Raider
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 9
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: Lurker.
+		* 	Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Fear", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
+		assertEquals("Herald of the Dark Lord", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

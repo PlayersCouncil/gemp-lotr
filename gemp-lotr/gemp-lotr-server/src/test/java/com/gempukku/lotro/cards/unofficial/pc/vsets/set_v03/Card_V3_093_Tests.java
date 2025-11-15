@@ -28,37 +28,40 @@ public class Card_V3_093_Tests
 	}
 
 	@Test
-	public void SauronsReachStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sauron's Reach
-		 * Unique: false
+		 * Name: Cover of Darkness, Omen of Despair
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Exert 3 [sauron] minions (or spot Sauron) to hinder all Free Peoples support cards.  For each card hindered, hinder a Shadow support card.
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Twilight.
+		* 	To play, hinder 2 twilight conditions.
+		* 	Skirmish: Exert a Troll twice and hinder this condition to discard a Free Peoples card borne by a companion that Troll is skirmishing.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Sauron's Reach", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
+		assertEquals("Omen of Despair", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SauronsReachTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

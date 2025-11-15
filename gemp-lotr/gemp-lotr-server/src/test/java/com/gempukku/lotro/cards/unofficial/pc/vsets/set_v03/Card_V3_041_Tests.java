@@ -28,45 +28,41 @@ public class Card_V3_041_Tests
 	}
 
 	@Test
-	public void CorsairSlinkthiefStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskChargerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Corsair Slinkthief
+		 * Name: Bladetusk Charger
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 8
-		 * Vitality: 2
-		 * Site Number: 4
-		 * Game Text: <b>Corsair.</b>
-		* 	Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
+		 * Type: Possession
+		 * Subtype: Support area
+		 * Strength: 4
+		 * Vitality: 4
+		 * Game Text: Maneuver: Remove (3) and stack any number of Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Corsair Slinkthief", card.getBlueprint().getTitle());
+		assertEquals("Bladetusk Charger", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CorsairSlinkthiefTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskChargerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

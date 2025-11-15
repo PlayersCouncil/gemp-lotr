@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_040_Tests
 {
@@ -30,40 +28,37 @@ public class Card_V3_040_Tests
 	}
 
 	@Test
-	public void BladetuskRearguardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AWizardKnowsBetterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Bladetusk Rearguard
+		 * Name: A Wizard Knows Better
 		 * Unique: false
 		 * Side: Shadow
-		 * Culture: Raider
-		 * Twilight Cost: 3
-		 * Type: Artifact
-		 * Subtype: Support area
-		 * Strength: 6
-		 * Vitality: 3
-		 * Game Text: Regroup: Stack a Southron Man here.
-		* 	Maneuver: Spot a mounted Southron and remove (4) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		 * Culture: Isengard
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Restore 2 [Isengard] cards.  Then you may exert X [isengard] minions (or spot Saruman and spot X [isengard] minions) to hinder an unbound companion costing up to X.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Bladetusk Rearguard", card.getBlueprint().getTitle());
+		assertEquals("A Wizard Knows Better", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BladetuskRearguardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AWizardKnowsBetterTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

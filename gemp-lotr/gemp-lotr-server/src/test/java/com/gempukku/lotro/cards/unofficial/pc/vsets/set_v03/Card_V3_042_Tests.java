@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_042_Tests
 {
@@ -27,46 +28,42 @@ public class Card_V3_042_Tests
 	}
 
 	@Test
-	public void CorsairQuartermasterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskMatriarchStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Corsair Quartermaster
-		 * Unique: false
+		 * Name: Bladetusk Matriarch
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 6
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 11
-		 * Vitality: 3
-		 * Site Number: 4
-		 * Game Text: <b>Corsair.</b>
-		* 	At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of Free Peoples items on a character in that skirmish.
-		* 	This minion is <b>damage +1</b> for each Free Peoples item on each character in its skirmish.
+		 * Twilight Cost: 5
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Strength: 6
+		 * Vitality: 6
+		 * Game Text: Shadow: Stack a Southron from hand here.
+		* 	Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Corsair Quartermaster", card.getBlueprint().getTitle());
+		assertEquals("Bladetusk Matriarch", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(11, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(6, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CorsairQuartermasterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskMatriarchTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.SitesBlock;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_113_Tests
 {
@@ -29,40 +28,38 @@ public class Card_V3_113_Tests
 	}
 
 	@Test
-	public void ThresholdOfDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MerrysPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Threshold Of Doom
-		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 9
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 9K
-		 * Game Text: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
+		 * Name: Merry's Pipe
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Pipe
+		 * Game Text: Bearer must be an unbound Hobbit.
+		* 	Each time a pipeweed is discarded, you may exert bearer to play that pipeweed from your discard pile.  Hinder it and this pipe.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Threshold of Doom", card.getBlueprint().getTitle());
+		assertEquals("Merry's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
-		assertEquals(9, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ThresholdOfDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MerrysPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,39 +28,48 @@ public class Card_V3_031_Tests
 	}
 
 	@Test
-	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Flame of Calenhad
-		 * Unique: 2
+		 * Name: Pippin, Trollslayer
+		 * Unique: true
 		 * Side: Free Peoples
-		 * Culture: Rohan
+		 * Culture: Gondor
 		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
-		* 	<b>Maneuver</b>: Hinder this beacon and exert an unbound Man to make each of your Men gain each of the unloaded keywords on that unbound Man until the regroup phase.
+		 * Type: Companion
+		 * Subtype: Hobbit
+		 * Strength: 3
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Gandalf
+		 * Game Text: Knight. Enduring. To play, spot a [gondor] companion.
+		* 	Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
-		assertEquals("Flame of Calenhad", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Pippin", card.getBlueprint().getTitle());
+		assertEquals("Trollslayer", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

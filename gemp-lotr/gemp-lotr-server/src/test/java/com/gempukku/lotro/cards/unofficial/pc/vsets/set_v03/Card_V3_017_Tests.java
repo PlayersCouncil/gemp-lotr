@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V3_046_Tests
+public class Card_V3_017_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_46");
+					put("card", "103_17");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,45 +28,38 @@ public class Card_V3_046_Tests
 	}
 
 	@Test
-	public void CorsairSlinkthiefStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UngoliantsGetStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Corsair Slinkthief
-		 * Unique: false
+		 * Name: Ungoliant's Get
+		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Raider
-		 * Twilight Cost: 3
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 8
-		 * Vitality: 2
-		 * Site Number: 4
-		 * Game Text: <b>Corsair.</b>
-		* 	Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
+		 * Culture: Gollum
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time Shelob loses a skirmish, you may play a [gollum] item from your discard pile.
+		* 	Response: If Shelob wins a skirmish and there are 4 minions stacked on [gollum] items, hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in 1 extra round of skirmishes after fierce)</i>. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Corsair Slinkthief", card.getBlueprint().getTitle());
+		assertEquals("Ungoliant's Get", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CorsairSlinkthiefTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UngoliantsGetTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
