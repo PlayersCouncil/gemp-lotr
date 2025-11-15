@@ -39,7 +39,7 @@ public class Card_08_003_ErrataTests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Response
-		 * Game Text: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder X Shadow cards.
+		 * Game Text: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf to make an opponent hinder X Shadow cards.
 		*/
 
 		var scn = GetScenario();

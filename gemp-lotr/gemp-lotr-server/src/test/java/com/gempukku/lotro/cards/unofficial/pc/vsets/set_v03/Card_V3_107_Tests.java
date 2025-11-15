@@ -28,39 +28,37 @@ public class Card_V3_107_Tests
 	}
 
 	@Test
-	public void DesolationofAshStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ForFrodoStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Desolation of Ash
+		 * Name: For Frodo
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 8
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 8K
-		 * Game Text: At the start of each phase, the Shadow player may remove (1) to take a Shadow event into hand from their discard pile.
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each wound and burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desolation of Ash", card.getBlueprint().getTitle());
+		assertEquals("For Frodo", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(8, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesolationofAshTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ForFrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

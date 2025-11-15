@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface GameStateListener {
+
+    boolean isLiveConnection();
     void cardCreated(PhysicalCard card);
     void cardCreated(PhysicalCard card, boolean overridePlayerVisibility);
 
@@ -33,7 +35,11 @@ public interface GameStateListener {
 
     void addAssignment(PhysicalCard fp, Set<PhysicalCard> minions);
 
+    void addPendingAssignment(PhysicalCard fp, PhysicalCard minion);
+
     void removeAssignment(PhysicalCard fp);
+
+    void removePendingAssignment(PhysicalCard freePeople, PhysicalCard minion);
 
     void startSkirmish(PhysicalCard fp, Set<PhysicalCard> minions);
 

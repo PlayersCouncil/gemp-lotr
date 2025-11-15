@@ -28,40 +28,38 @@ public class Card_V3_082_Tests
 	}
 
 	@Test
-	public void VanguardsLanceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DeathTakeUsAllStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Vanguard's Lance
+		 * Name: Death Take Us All
 		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Rohan
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Hand weapon
-		 * Strength: 2
-		 * Game Text: Bearer must be a [Rohan] companion.
-		* 	While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: The Shadow player may hinder any of their own support cards.
+		* 	Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Vanguard's Lance", card.getBlueprint().getTitle());
+		assertEquals("Death Take Us All", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void VanguardsLanceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DeathTakeUsAllTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

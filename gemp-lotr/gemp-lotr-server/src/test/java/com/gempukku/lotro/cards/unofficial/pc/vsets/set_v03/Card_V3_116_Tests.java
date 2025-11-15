@@ -28,38 +28,46 @@ public class Card_V3_116_Tests
 	}
 
 	@Test
-	public void PippinsPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SmeagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Pippin's Pipe
+		 * Name: Smeagol, Once Like Us
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Pipe
-		 * Game Text: Bearer must be an unbound Hobbit.
-		* 	Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Hinder this pipe or hinder bearer.
+		 * Type: Companion
+		 * Subtype: 
+		 * Strength: 3
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Frodo
+		 * Game Text: Ring-bound. To play, add a burden.
+		* 	Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Pippin's Pipe", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Smeagol", card.getBlueprint().getTitle());
+		assertEquals("Once Like Us", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void PippinsPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SmeagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

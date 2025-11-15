@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_043_Tests
 {
@@ -28,49 +30,41 @@ public class Card_V3_043_Tests
 	}
 
 	@Test
-	public void DesertWindInitiateStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskRearguardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Desert Wind Initiate
+		 * Name: Bladetusk Rearguard
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 1
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 6
-		 * Vitality: 2
-		 * Site Number: 4
-		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (3). 
-		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time you hinder this minion you may hinder another [raider] minion.
+		 * Twilight Cost: 4
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Strength: 5
+		 * Vitality: 5
+		 * Game Text: Regroup: Stack a Southron Man here.
+		* 	Maneuver: Spot a Southron and remove 
+		* 	(5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desert Wind Initiate", card.getBlueprint().getTitle());
+		assertEquals("Bladetusk Rearguard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
-		assertEquals(3, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesertWindInitiateTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BladetuskRearguardTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

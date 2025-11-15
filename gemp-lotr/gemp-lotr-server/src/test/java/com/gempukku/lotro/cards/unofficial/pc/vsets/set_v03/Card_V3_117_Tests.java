@@ -28,38 +28,43 @@ public class Card_V3_117_Tests
 	}
 
 	@Test
-	public void MerrysPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Merry's Pipe
+		 * Name: Sting, Spider-bane
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 1
 		 * Type: Possession
-		 * Subtype: Pipe
-		 * Game Text: Bearer must be an unbound Hobbit.
-		* 	Each time a pipeweed is discarded, you may exert bearer to play that pipeweed from your discard pile.  Hinder it and this pipe.
+		 * Subtype: Hand weapon
+		 * Strength: 1
+		 * Resistance: 1
+		 * Game Text: Bearer must be a Ring-bound Hobbit. 
+		* 	Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat and burden you can spot. 
+		* 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry's Pipe", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Sting", card.getBlueprint().getTitle());
+		assertEquals("Spider-bane", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getStrength());
+		assertEquals(1, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerrysPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,46 +28,41 @@ public class Card_V3_025_Tests
 	}
 
 	@Test
-	public void KingoftheDeadStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void InnerGateStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: King of the Dead, Dead Keeper
-		 * Unique: true
+		 * Name: Inner Gate
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 4
-		 * Type: Companion
-		 * Subtype: Wraith
-		 * Strength: 7
-		 * Vitality: 4
-		 * Resistance: 6
-		 * Game Text: Enduring.  To play, add 2 threats.
-		* 	Each time King of the Dead is killed, heal every Wraith.
-		* 	Assignment: Exert King of the Dead to restore a Wraith and heal it.
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Strength: -3
+		 * Game Text: Fortification.
+		* 	Maneuver: If this is in your support area, exert and hinder 2 unbound knights to transfer this to a minion.  Hinder that minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("King of the Dead", card.getBlueprint().getTitle());
-		assertEquals("Dead Keeper", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Inner Gate", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.FORTIFICATION));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(-3, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void KingoftheDeadTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void InnerGateTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

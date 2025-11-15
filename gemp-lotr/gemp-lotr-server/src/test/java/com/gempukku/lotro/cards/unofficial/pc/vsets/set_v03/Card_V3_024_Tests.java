@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_024_Tests
 {
@@ -17,7 +18,7 @@ public class Card_V3_024_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("blind", "103_24");
+					put("card", "103_24");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -27,47 +28,56 @@ public class Card_V3_024_Tests
 	}
 
 	@Test
-	public void KeepHimBlindtoAllElseThatMovesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ICallonYouStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Keep Him Blind to All Else That Moves
-		 * Unique: true
+		 * Name: I Call on You
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: When you play this, heal each Free Peoples Man. 
-		* 	Shadow: The Shadow player may discard this to reconcile their hand.
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: Exert Aragorn (or spot Anduril) and add X threats to play a Wraith from your dead pile, where X is the region number.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("blind");
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Keep Him Blind to All Else That Moves", card.getBlueprint().getTitle());
+		assertEquals("I Call on You", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void KeepHimBlindGrantsActionToShadowPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void ICallonYouTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var blind = scn.GetFreepsCard("blind");
-		scn.MoveCardsToSupportArea(blind);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertTrue(scn.ShadowActionAvailable(blind));
+		assertFalse(true);
 	}
 }

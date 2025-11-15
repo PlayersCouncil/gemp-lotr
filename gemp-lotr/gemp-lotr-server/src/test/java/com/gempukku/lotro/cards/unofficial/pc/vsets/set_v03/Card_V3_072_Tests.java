@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Race;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_072_Tests
 {
@@ -30,43 +28,46 @@ public class Card_V3_072_Tests
 	}
 
 	@Test
-	public void UlaireNerteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireAtteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Nertea, Sanctified with Cruelty
+		 * Name: Ulaire Attea, Bestowed with Dominion
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 5
+		 * Twilight Cost: 7
 		 * Type: Minion
 		 * Subtype: Nazgul
-		 * Strength: 9
-		 * Vitality: 2
+		 * Strength: 13
+		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
+		 * Game Text: Fierce.
+		* 	Each time you play a minion from hand, you may exert Ulaire Attea to play another minion with the same twilight cost from your discard pile.
+		* 	Skirmish: Hinder another minion to make Ulaire Attea strength +1.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ulaire Nertea", card.getBlueprint().getTitle());
-		assertEquals("Sanctified for Cruelty", card.getBlueprint().getSubtitle());
+		assertEquals("Ulaire Attea", card.getBlueprint().getTitle());
+		assertEquals("Bestowed with Dominion", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(7, card.getBlueprint().getTwilightCost());
+		assertEquals(13, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UlaireNerteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireAtteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

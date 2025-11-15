@@ -18,12 +18,8 @@ public class Card_V3_124_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("wizardspipe", "103_124");
-					put("gandalf", "1_72");
-					put("aragornspipe", "1_91");
-					put("aragorn", "1_89");
-					put("leaf", "1_300");
-					put("toby", "1_305");
+					put("card", "103_124");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -32,105 +28,58 @@ public class Card_V3_124_Tests
 	}
 
 	@Test
-	public void WizardsPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GorgorothWastesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Wizard's Pipe
-		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Pipe
-		 * Game Text: Bearer must be an unbound companion. Each companion bearing a pipe is strength +1.
-		* 	Regroup: Exert a Wizard twice and discard a pipeweed; this phase you may use special abilities on pipes as if it were the Fellowship phase. 
+		 * Name: Gorgoroth Wastes
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 5
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 8K
+		 * Game Text: When moving here, for each Free Peoples card borne by companions, the Free Peoples player must discard it or add (2).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("wizardspipe");
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Wizard's Pipe", card.getBlueprint().getTitle());
+		assertEquals("Gorgoroth Wastes", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	@Test
-	public void WizardsPipePermitsPipeFellowshipActionsToBeUsedInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void GorgorothWastesTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var wizardspipe = scn.GetFreepsCard("wizardspipe");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var aragornspipe = scn.GetFreepsCard("aragornspipe");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var leaf = scn.GetFreepsCard("leaf");
-		var toby = scn.GetFreepsCard("toby");
-		scn.MoveCompanionsToTable(gandalf, aragorn);
-		scn.MoveCardsToSupportArea(leaf, toby);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
-		scn.AttachCardsTo(gandalf, wizardspipe);
-		scn.AttachCardsTo(aragorn, aragornspipe);
-
-		scn.StartGame();
-
-		assertTrue(scn.FreepsActionAvailable(aragornspipe));
-		assertTrue(scn.FreepsActionAvailable(frodo));
-		assertFalse(scn.FreepsActionAvailable(wizardspipe));
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		assertInZone(Zone.SUPPORT, leaf);
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertFalse(scn.FreepsActionAvailable(aragornspipe));
-		assertFalse(scn.FreepsActionAvailable(frodo));
-		assertTrue(scn.FreepsActionAvailable(wizardspipe));
-
-		scn.FreepsUseCardAction(wizardspipe);
-		scn.FreepsChooseCard(leaf);
-
-		assertInZone(Zone.DISCARD, leaf);
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertInZone(Zone.SUPPORT, toby);
-		assertTrue(scn.HasKeyword(toby, Keyword.PIPEWEED));
-		scn.ShadowPass();
-
-		assertTrue(scn.FreepsActionAvailable(aragornspipe));
-		assertFalse(scn.FreepsActionAvailable(frodo));
-
-		scn.FreepsPass();
-
-		scn.FreepsChooseToStay();
-
-		//Previous version used to self-discard
-		assertInZone(Zone.ATTACHED, wizardspipe);
-	}
-
-	@Test
-	public void WizardsPipeDoesNothingOnNonWizard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var wizardspipe = scn.GetFreepsCard("wizardspipe");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(wizardspipe);
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-
-		assertTrue(scn.FreepsPlayAvailable(wizardspipe));
-		scn.FreepsPlayCard(wizardspipe);
-
-		assertAttachedTo(wizardspipe, aragorn);
-
-		scn.SkipToPhase(Phase.REGROUP);
-		assertFalse(scn.FreepsActionAvailable(wizardspipe));
+		
+		assertFalse(true);
 	}
 }

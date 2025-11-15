@@ -33,13 +33,13 @@ public class Card_01_025_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Still Draws Breath
-		 * Unique: false
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Dwarven
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. If the fellowship is at an underground site, exert a minion.
+		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf (and you may hinder a Shadow support condition if underground).
 		*/
 
 		var scn = GetScenario();
@@ -48,7 +48,7 @@ public class Card_01_025_ErrataTests
 
 		assertEquals("Still Draws Breath", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

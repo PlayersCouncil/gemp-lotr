@@ -28,39 +28,39 @@ public class Card_V3_008_Tests
 	}
 
 	@Test
-	public void FickleLoyaltiesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WordsofPowerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Fickle Loyalties
+		 * Name: Words of Power
 		 * Unique: false
 		 * Side: Free Peoples
-		 * Culture: Gollum
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: To play, spot 2 [shire] companions.
-		* 	Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.
-		* 	Each time Shelob loses a skirmish, kill Gollum.
+		 * Culture: Gandalf
+		 * Twilight Cost: 4
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spell.
+		* 	Exhaust your Wizard to reconcile your hand. You may spot a [gandalf] artifact to shuffle this into your draw deck.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Fickle Loyalties", card.getBlueprint().getTitle());
+		assertEquals("Words of Power", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FickleLoyaltiesTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WordsofPowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

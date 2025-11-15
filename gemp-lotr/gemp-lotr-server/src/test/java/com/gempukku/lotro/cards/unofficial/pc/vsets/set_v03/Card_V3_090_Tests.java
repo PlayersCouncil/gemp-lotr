@@ -28,44 +28,37 @@ public class Card_V3_090_Tests
 	}
 
 	@Test
-	public void RedEyeAssassinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TeachMeYourHerbloreStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Red Eye Assassin
+		 * Name: Teach Me Your Herb-lore
 		 * Unique: false
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 5
-		 * Type: Minion
-		 * Subtype: Orc
-		 * Strength: 6
-		 * Vitality: 3
-		 * Site Number: 4
-		 * Game Text: This minion is strength +1 for each hindered card you can spot.
-		* 	Skirmish: Exert this minion to hinder a weapon or condition borne by a companion it is skirmishing.
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: Play up to 2 pipes from your draw deck.  If you cannot spot Theoden, add a burden for each pipe played.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Red Eye Assassin", card.getBlueprint().getTitle());
+		assertEquals("Teach Me Your Herb-lore", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void RedEyeAssassinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TeachMeYourHerbloreTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

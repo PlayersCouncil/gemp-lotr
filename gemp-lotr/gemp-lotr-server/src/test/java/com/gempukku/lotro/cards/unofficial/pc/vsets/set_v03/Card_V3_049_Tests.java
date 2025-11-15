@@ -28,38 +28,47 @@ public class Card_V3_049_Tests
 	}
 
 	@Test
-	public void HailingfromtheFarSouthStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindStalkerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Hailing from the Far South
-		 * Unique: true
+		 * Name: Desert Wind Stalker
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time you play a unique Southron, you may play a [raider] mount from your discard pile.
-		* 	Each time you play a [raider] mount, you may play a nonunique [raider] minion from your discard pile costing (3) or less.
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 12
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: <b>Southron.</b>  Tracker. 
+		* 	When you play this minion, remove (3) or hinder this minion.
+		* 	Southrons gain <b>ambush (1)</b>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Hailing from the Far South", card.getBlueprint().getTitle());
+		assertEquals("Desert Wind Stalker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(12, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HailingfromtheFarSouthTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindStalkerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

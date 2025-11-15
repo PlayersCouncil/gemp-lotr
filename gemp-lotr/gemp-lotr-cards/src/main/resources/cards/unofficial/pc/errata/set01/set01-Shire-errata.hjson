@@ -283,7 +283,7 @@
 			}
 		]
 		gametext: <b>Fellowship:</b> Exert Sam and another companion to remove a burden. Then, exert Sam again unless you can spot 2 [shire] allies (or Rosie Cotton).<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5).</b>
-		lore: “‘Oh, I've never held a girl's hand before. I... I think I might just have myself another ale.'”
+		lore: "'Oh, I've never held a girl's hand before. I... I think I might just have myself another ale.'"
 		promotext: ""
 		alts: {
 			promos: {

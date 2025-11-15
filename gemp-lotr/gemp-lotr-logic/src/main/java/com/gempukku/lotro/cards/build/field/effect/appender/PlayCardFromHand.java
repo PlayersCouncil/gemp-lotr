@@ -24,7 +24,7 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "ignorePlayability", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "ignorePlayability", "extraEffects", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
@@ -35,6 +35,9 @@ public class PlayCardFromHand implements EffectAppenderProducer {
         final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
         final boolean ignorePlayability = FieldUtils.getBoolean(effectObject.get("ignorePlayability"), "ignorePlayability", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
+        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
@@ -76,6 +79,10 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, ignoreRoamingPenalty);
+                            for (EffectAppender extraEffectsAppender : extraEffectsAppenders) {
+                                extraEffectsAppender.appendEffect(false, playCardAction, actionContext);
+                            }
+
                             return new StackActionEffect(playCardAction);
                         } else {
                             return new FailedEffect();

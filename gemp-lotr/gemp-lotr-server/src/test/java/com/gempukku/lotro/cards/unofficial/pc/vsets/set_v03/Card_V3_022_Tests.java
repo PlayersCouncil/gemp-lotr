@@ -28,41 +28,39 @@ public class Card_V3_022_Tests
 	}
 
 	@Test
-	public void InnerGateStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EtherealMarchStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Inner Gate
-		 * Unique: 2
+		 * Name: Ethereal March
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Strength: -3
-		 * Game Text: Fortification.
-		* 	Maneuver: If this is in your support area, exert and hinder 2 knights to transfer this to a minion.  Hinder that minion.
+		 * Game Text: While you can spot 2 [gondor] Wraiths, the threat limit is +2.
+		* 	While you can spot more threats than companions, each Wraith is strength +1.
+		* 	Each time this condition is hindered or discarded, remove a threat.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Inner Gate", card.getBlueprint().getTitle());
+		assertEquals("Ethereal March", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.FORTIFICATION));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(-3, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void InnerGateTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EtherealMarchTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -28,37 +28,48 @@ public class Card_V3_047_Tests
 	}
 
 	@Test
-	public void DutyNoLessThanYoursStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindInitiateStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Duty No Less Than Yours
-		 * Unique: 2
+		 * Name: Desert Wind Initiate
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a [raider] minion dies, you may exert a [raider] minion to exert an unbound companion. If you can spot another Duty No Less Than Yours, you may discard it to also hinder that companion.
+		 * Twilight Cost: 1
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (3). 
+		* 	When you play this minion, remove (3) or hinder this minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Duty No Less Than Yours", card.getBlueprint().getTitle());
+		assertEquals("Desert Wind Initiate", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
+		assertEquals(3, scn.GetKeywordCount(card, Keyword.AMBUSH));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DutyNoLessThanYoursTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindInitiateTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

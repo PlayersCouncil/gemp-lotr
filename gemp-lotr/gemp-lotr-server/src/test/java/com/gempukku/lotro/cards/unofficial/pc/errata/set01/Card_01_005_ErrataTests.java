@@ -39,7 +39,7 @@ public class Card_01_005_ErrataTests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. Discard a possession borne by a minion they are skirmishing.  If that Dwarf wins this skirmish, you may discard another Shadow possession.
+		 * Game Text: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. If that Dwarf wins this skirmish, you may discard a Shadow possession.
 		*/
 
 		var scn = GetScenario();

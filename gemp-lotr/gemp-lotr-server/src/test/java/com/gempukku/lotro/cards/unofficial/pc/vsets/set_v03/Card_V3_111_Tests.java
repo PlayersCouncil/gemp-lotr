@@ -28,40 +28,37 @@ public class Card_V3_111_Tests
 	}
 
 	@Test
-	public void CracksofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GetUpMisterFrodoStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cracks of Doom
+		 * Name: Get Up, Mister Frodo
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 9
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 9K
-		 * Game Text: Mountain.  Game text on Free Peoples items and The One Ring does not apply.
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Spot Frodo to restore a [shire] card.  If you cannot spot more than 4 companions, you may add (3) to reconcile your hand and heal up to 2 [shire] companions.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cracks of Doom", card.getBlueprint().getTitle());
+		assertEquals("Get Up, Mister Frodo", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
-		assertEquals(9, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CracksofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GetUpMisterFrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

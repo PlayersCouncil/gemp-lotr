@@ -1,0 +1,91 @@
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
+
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
+
+public class Card_01_256_ErrataTests
+{
+
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("card", "51_256");
+					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void MorgulHunterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+
+		/**
+		 * Set: 1
+		 * Name: Morgul Hunter
+		 * Unique: false
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 9
+		 * Vitality: 4
+		 * Site Number: 6
+		 * Game Text: Tracker.
+		* 	For each companion you can spot, this minion is strength +1.
+		*/
+
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+
+		assertEquals("Morgul Hunter", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
+	}
+
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void MorgulHunterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		scn.StartGame();
+		
+		assertFalse(true);
+	}
+}

@@ -28,42 +28,37 @@ public class Card_V3_015_Tests
 	}
 
 	@Test
-	public void AndurilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TwofacedStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Anduril, Legend Remade
-		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Gondor
-		 * Twilight Cost: 3
-		 * Type: Artifact
-		 * Subtype: Hand weapon
-		 * Strength: 2
-		 * Vitality: 1
-		 * Game Text: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.
-		* 	Response: If an unbound [gondor] companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion.
+		 * Name: Two-faced
+		 * Unique: false
+		 * Side: Shadow
+		 * Culture: Gollum
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore a [gollum] card.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and borne cards).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Anduril", card.getBlueprint().getTitle());
-		assertEquals("Legend Remade", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals("Two-faced", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TwofacedTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

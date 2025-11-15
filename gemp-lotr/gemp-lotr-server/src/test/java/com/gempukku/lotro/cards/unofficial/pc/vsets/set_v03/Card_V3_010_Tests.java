@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_010_Tests
 {
@@ -18,8 +17,11 @@ public class Card_V3_010_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_10");
-					// put other cards in here as needed for the test case
+					put("broken", "103_10");
+					put("gandalf", "1_72");
+					put("staff", "2_22");
+
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,66 +30,57 @@ public class Card_V3_010_Tests
 	}
 
 	@Test
-	public void ShelobStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void YourStaffisBrokenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Shelob, Terror of Cirith Ungol
-		 * Unique: true
-		 * Side: Shadow
-		 * Culture: Gollum
-		 * Twilight Cost: 6
-		 * Type: Minion
-		 * Subtype: Spider
-		 * Strength: 8
-		 * Vitality: 8
-		 * Site Number: 8
-		 * Game Text: Fierce.  Enduring.
-		* 	Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.
-		* 	Skirmish: If Gollum is skirmishing, exert Gollum and Shelob to hinder a character he is skirmishing.
+		 * Name: Your Staff is Broken
+		 * Unique: false
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 3
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: At the start of each Assignment phase, you may exert Gandalf bearing an artifact to discard a hindered Shadow card.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("broken");
 
-		assertEquals("Shelob", card.getBlueprint().getTitle());
-		assertEquals("Terror of Cirith Ungol", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.SPIDER, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(8, card.getBlueprint().getVitality());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals("Your Staff is Broken", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ShelobTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void YourStaffDoesNotTriggerIfOnlyArtifactOnGandalfIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var broken = scn.GetFreepsCard("broken");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var staff = scn.GetFreepsCard("staff");
+
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, staff);
+		scn.MoveCardsToSupportArea(broken);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.HinderCard(staff);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 }

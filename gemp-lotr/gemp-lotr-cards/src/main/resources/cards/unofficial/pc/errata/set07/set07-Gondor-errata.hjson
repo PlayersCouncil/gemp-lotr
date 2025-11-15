@@ -72,6 +72,57 @@
 		}
 	}
 	
+	57_80: {
+		cardInfo: {
+			//id: 57_80.1
+			parent: 7_80
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN07E080.1_card.jpg
+			collInfo: 7R80
+			rarity: R
+		}
+		title: Anduril
+		subtitle: King's Blade
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 4
+		itemclass: Hand weapon
+		target: title(Aragorn)
+		effects: [
+			{
+				type: Activated
+				phase: Assignment
+				limitPerPhase: 1
+				cost: {
+					type: AddThreats
+				}
+				effect: {
+					type: AddKeyword
+					select: bearer
+					keyword: defender
+					amount: {
+						type: CardPhaseLimit
+						amount: 1
+						limit: 1
+					}
+				}
+			}
+		]
+		gametext: Bearer must be Aragorn.<br>Assignment: Add a threat to make Aragorn <b>defender +1</b> (limit +1).
+		lore: "The Sword of Elendil was forged anew by Elvish smiths... for Aragorn son of Arathorn was going to war upon the marches of Mordor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}	
 	
 	57_96: {
 		cardInfo: {

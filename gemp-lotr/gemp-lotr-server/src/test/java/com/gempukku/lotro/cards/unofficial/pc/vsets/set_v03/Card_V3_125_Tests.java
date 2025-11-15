@@ -28,39 +28,40 @@ public class Card_V3_125_Tests
 	}
 
 	@Test
-	public void OneIllTurnDeservesAnotherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MusterofGorgorothStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: One Ill Turn Deserves Another
-		 * Unique: true
-		 * Side: Shadow
-		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: To play, spot 2 [isengard] minions (or spot Saruman).
-		* 	Each time your minion is hindered or discarded by a Free Peoples card, hinder a companion.
-		* 	Each time your condition is hindered or discarded by a Free Peoples card, hinder a Free Peoples condition.
+		 * Name: Muster of Gorgoroth
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 8K
+		 * Game Text: Battleground. Each minion is strength +1 for each threat you can spot.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("One Ill Turn Deserves Another", card.getBlueprint().getTitle());
+		assertEquals("Muster of Gorgoroth", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
+		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OneIllTurnDeservesAnotherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MusterofGorgorothTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

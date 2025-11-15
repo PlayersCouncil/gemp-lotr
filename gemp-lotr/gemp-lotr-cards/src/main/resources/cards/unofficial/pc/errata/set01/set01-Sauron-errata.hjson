@@ -276,6 +276,50 @@
 		}
 	}
 	
+	51_256: {
+		cardInfo: {
+			//id: 51_256.1
+			parent: 1_256
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E256.1_card.jpg
+			collInfo: 1R256
+			rarity: R
+		}
+		title: Morgul Hunter
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 4
+		site: 6
+		keywords: Tracker
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
+			}
+		}
+		gametext: Tracker.<br>For each companion you can spot, this minion is strength +1.
+		lore: "Sauron's hatred lives in the hearts of his minions."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_260: {
 		cardInfo: {
 			//id: 51_260.1

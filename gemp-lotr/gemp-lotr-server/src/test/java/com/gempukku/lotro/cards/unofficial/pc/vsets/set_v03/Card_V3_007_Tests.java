@@ -18,8 +18,12 @@ public class Card_V3_007_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_7");
-					// put other cards in here as needed for the test case
+					put("stash", "103_7");
+					put("gandalf", "1_72");
+					put("aragornspipe", "1_91");
+					put("aragorn", "1_89");
+					put("leaf", "1_300");
+					put("toby", "1_305");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,59 +32,80 @@ public class Card_V3_007_Tests
 	}
 
 	@Test
-	public void WordsofPowerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WizardsStashStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Words of Power
-		 * Unique: false
+		 * Name: Wizard's Stash
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 4
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Spell.
-		* 	Exert your Wizard thrice to reconcile your hand.
-		* 	You may spot a [gandalf] artifact to shuffle this into your draw deck.
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: 
+		 * Game Text: Pipeweed. Bearer must be a Wizard.
+		* 	Each companion who is bearing a pipe is strength +1.
+		* 	Regroup: Exert bearer and discard this. This phase you may use special abilities on pipes as if it were the Fellowship phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("stash");
 
-		assertEquals("Words of Power", card.getBlueprint().getTitle());
+		assertEquals("Wizard's Stash", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
-		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WordsofPowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	
+	@Test
+	public void WizardsStashPermitsPipeFellowshipActionsToBeUsedInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
+
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var stash = scn.GetFreepsCard("stash");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var leaf = scn.GetFreepsCard("leaf");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+		scn.MoveCardsToSupportArea(leaf, toby);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.AttachCardsTo(gandalf, stash);
+		scn.AttachCardsTo(aragorn, aragornspipe);
 
 		scn.StartGame();
 		
-		assertFalse(true);
+		assertTrue(scn.FreepsActionAvailable(aragornspipe));
+		assertTrue(scn.FreepsActionAvailable(frodo));
+		assertFalse(scn.FreepsActionAvailable(stash));
+
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertInZone(Zone.SUPPORT, leaf);
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertFalse(scn.FreepsActionAvailable(aragornspipe));
+		assertFalse(scn.FreepsActionAvailable(frodo));
+		assertTrue(scn.FreepsActionAvailable(stash));
+
+		scn.FreepsUseCardAction(stash);
+
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertInZone(Zone.SUPPORT, toby);
+		assertTrue(scn.HasKeyword(toby, Keyword.PIPEWEED));
+		scn.ShadowPass();
+
+		assertTrue(scn.FreepsActionAvailable(aragornspipe));
+		assertFalse(scn.FreepsActionAvailable(frodo));
+
+
 	}
 }

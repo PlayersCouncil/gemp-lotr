@@ -28,41 +28,39 @@ public class Card_V3_123_Tests
 	}
 
 	@Test
-	public void SarumansHospitalityStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GorgorothHighwayStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Saruman's Hospitality
+		 * Name: Gorgoroth Highway
 		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: 
-		 * Strength: 1
-		 * Game Text: Pipeweed.
-		* 	Bearer must be an unbound companion bearing a pipe. 
-		* 	Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 7
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 8K
+		 * Game Text: All characters lose all strength bonuses from weapons and gain <b>enduring</b>.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Saruman's Hospitality", card.getBlueprint().getTitle());
+		assertEquals("Gorgoroth Highway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(1, card.getBlueprint().getStrength());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(7, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SarumansHospitalityTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GorgorothHighwayTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

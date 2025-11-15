@@ -28,40 +28,37 @@ public class Card_V3_099_Tests
 	}
 
 	@Test
-	public void FortheShireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ReleasethePrisonersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: For the Shire
+		 * Name: Release the Prisoners!
 		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 1
-		 * Type: Event
-		 * Subtype: Assignment
-		 * Game Text: Spot a Hobbit companion (except the Ring-bearer).
-		* 	In region 1, hinder all other Hobbits.
-		* 	In region 2, make that Hobbit defender +2 until the regroup phase.
-		* 	In region 3, make that Hobbit <b>enduring</b> until the regroup phase.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert every character sharing a culture with that companion.  Discard this condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("For the Shire", card.getBlueprint().getTitle());
+		assertEquals("Release the Prisoners!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FortheShireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ReleasethePrisonersTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

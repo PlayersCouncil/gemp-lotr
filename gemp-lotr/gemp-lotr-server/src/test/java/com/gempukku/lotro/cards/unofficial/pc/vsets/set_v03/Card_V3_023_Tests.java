@@ -36,11 +36,11 @@ public class Card_V3_023_Tests
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 3
+		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).
-		* 	Response: After the special ability of a Shadow support card is used, discard a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
+		* 	Each time the special ability of a Shadow support card is used, you may hinder a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
 		*/
 
 		var scn = GetScenario();
@@ -55,7 +55,7 @@ public class Card_V3_023_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.FORTIFICATION));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -20,18 +20,21 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     private long _lastConsumed = System.currentTimeMillis();
     private final int _channelNumber;
     private volatile WaitingRequest _waitingRequest;
-
+    private final boolean _isHuman;
     private final LotroFormat _format;
 
-    public GameCommunicationChannel(String self, int channelNumber, LotroFormat format) {
+    public GameCommunicationChannel(String self, int channelNumber, boolean human, LotroFormat format) {
         _self = self;
         _channelNumber = channelNumber;
+        _isHuman = human;
         _format = format;
     }
 
     public int getChannelNumber() {
         return _channelNumber;
     }
+    @Override
+    public boolean isLiveConnection() { return _isHuman; }
 
     @Override
     public void initializeBoard(List<String> participants, boolean discardIsPublic) {
@@ -86,14 +89,28 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
         return result;
     }
 
+    private int[] getCardIds(PhysicalCard card) {
+        return new int[] {card.getCardId()};
+    }
+
     @Override
     public void addAssignment(PhysicalCard freePeople, Set<PhysicalCard> minions) {
         appendEvent(new GameEvent(ADD_ASSIGNMENT).cardId(freePeople.getCardId()).otherCardIds(getCardIds(minions)));
     }
 
     @Override
+    public void addPendingAssignment(PhysicalCard freePeople, PhysicalCard minion) {
+        appendEvent(new GameEvent(ADD_ASSIGNMENT).cardId(freePeople.getCardId() * -1).otherCardIds(getCardIds(minion)));
+    }
+
+    @Override
     public void removeAssignment(PhysicalCard freePeople) {
         appendEvent(new GameEvent(REMOVE_ASSIGNMENT).cardId(freePeople.getCardId()));
+    }
+
+    @Override
+    public void removePendingAssignment(PhysicalCard freePeople, PhysicalCard minion) {
+        appendEvent(new GameEvent(REMOVE_ASSIGNMENT).cardId(freePeople.getCardId() * -1).otherCardIds(getCardIds(minion)));
     }
 
     @Override

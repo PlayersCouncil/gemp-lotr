@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_039_Tests
 {
@@ -29,41 +28,38 @@ public class Card_V3_039_Tests
 	}
 
 	@Test
-	public void BladetuskMatriarchStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SavageFuryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Bladetusk Matriarch
-		 * Unique: true
+		 * Name: Savage Fury
+		 * Unique: 2
 		 * Side: Shadow
-		 * Culture: Raider
-		 * Twilight Cost: 8
-		 * Type: Artifact
-		 * Subtype: Mount
-		 * Vitality: 2
-		 * Game Text: Bearer must be a Southron.  Bearer is <b>fierce</b>.
-		* 	Unmounted minions cannot be assigned
-		* 	to skirmishes.
-		* 	Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.
-		* 	While you can spot 6 Southrons, bearer gains <b>relentless</b> <i>(they participate in an additional round of skirmishes after fierce)</i>.
+		 * Culture: Isengard
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time your [isengard] minion wins a skirmish, you may discard another Savage Fury to hinder each Free Peoples card on a companion it was skirmishing.
+		* 	Maneuver: Discard a minion to make your [isengard] minion <b>fierce</b> or <b>relentless</b> until the regroup phase <i>(it participates in 1 extra round of skirmishes after fierce)</i>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Bladetusk Matriarch", card.getBlueprint().getTitle());
+		assertEquals("Savage Fury", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BladetuskMatriarchTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SavageFuryTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

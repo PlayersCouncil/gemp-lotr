@@ -28,37 +28,38 @@ public class Card_V3_062_Tests
 	}
 
 	@Test
-	public void IllWindStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarHowdahStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ill Wind
-		 * Unique: true
+		 * Name: War Howdah
+		 * Unique: false
 		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 1
-		 * Type: Condition
+		 * Culture: Raider
+		 * Twilight Cost: 2
+		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion (except a companion with the highest strength).   If you can spot The Witch-king, exert that companion first.
+		 * Game Text: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.
+		* 	Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ill Wind", card.getBlueprint().getTitle());
+		assertEquals("War Howdah", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void IllWindTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarHowdahTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

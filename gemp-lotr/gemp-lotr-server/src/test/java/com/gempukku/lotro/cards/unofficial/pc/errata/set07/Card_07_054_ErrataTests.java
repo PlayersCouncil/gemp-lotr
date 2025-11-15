@@ -39,7 +39,7 @@ public class Card_07_054_ErrataTests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		 * Game Text: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of your spotted conditions and hinder each of your opponent's spotted conditions. 
 		*/
 
 		var scn = GetScenario();

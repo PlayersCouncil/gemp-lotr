@@ -28,37 +28,47 @@ public class Card_V3_050_Tests
 	}
 
 	@Test
-	public void HonoroftheDesertWarriorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindWhisperStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Honor of the Desert Warrior
-		 * Unique: false
+		 * Name: Desert Wind Whisper
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Assignment
-		 * Game Text: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 15
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: <b>Southron</b>. Tracker.
+		* 	When you play this minion, remove (3) or hinder this minion.
+		* 	Each minion with ambush (X) is strength +X.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Honor of the Desert Warrior", card.getBlueprint().getTitle());
+		assertEquals("Desert Wind Whisper", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(15, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HonoroftheDesertWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindWhisperTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

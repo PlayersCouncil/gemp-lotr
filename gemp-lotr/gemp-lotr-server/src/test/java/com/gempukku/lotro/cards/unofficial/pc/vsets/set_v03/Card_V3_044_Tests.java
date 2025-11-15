@@ -28,49 +28,37 @@ public class Card_V3_044_Tests
 	}
 
 	@Test
-	public void DesertWindScoutStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BurnandPillageStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Desert Wind Scout
+		 * Name: Burn and Pillage
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 2
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 10
-		 * Vitality: 2
-		 * Site Number: 4
-		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (2). 
-		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time you hinder this minion you may hinder another [raider] minion.
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens. Draw a card for each 2 hindered Shadow cards you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desert Wind Scout", card.getBlueprint().getTitle());
+		assertEquals("Burn and Pillage", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesertWindScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BurnandPillageTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

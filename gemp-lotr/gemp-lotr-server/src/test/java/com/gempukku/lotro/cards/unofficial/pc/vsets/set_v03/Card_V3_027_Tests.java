@@ -28,46 +28,46 @@ public class Card_V3_027_Tests
 	}
 
 	@Test
-	public void TormentedSpectreStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void KingoftheDeadStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Tormented Spectre
-		 * Unique: false
+		 * Name: King of the Dead, Dead Keeper
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 2
+		 * Twilight Cost: 4
 		 * Type: Companion
 		 * Subtype: Wraith
-		 * Strength: 5
-		 * Vitality: 2
+		 * Strength: 7
+		 * Vitality: 4
 		 * Resistance: 6
-		 * Game Text: Enduring.
-		* 	To play, add a threat.
-		* 	This companion is strength +1 for each hindered card you can spot.
+		 * Game Text: Enduring.  To play, add 2 threats.
+		* 	Each time King of the Dead is killed, heal every Wraith.
+		* 	Assignment: Exert King of the Dead to restore a Wraith and heal it.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Tormented Spectre", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("King of the Dead", card.getBlueprint().getTitle());
+		assertEquals("Dead Keeper", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TormentedSpectreTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void KingoftheDeadTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

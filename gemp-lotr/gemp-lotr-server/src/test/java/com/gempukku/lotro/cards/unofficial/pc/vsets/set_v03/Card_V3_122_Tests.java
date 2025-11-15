@@ -28,40 +28,39 @@ public class Card_V3_122_Tests
 	}
 
 	@Test
-	public void HornblowerBarrelStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesolationofAshStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Hornblower Barrel
-		 * Unique: 2
-		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 1
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Pipeweed.
-		* 	When you play this possession, you may discard a Free Peoples card from your draw deck.
-		* 	When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 Free Peoples cards (except events) from your discard pile into your hand.
+		 * Name: Desolation of Ash
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 8K
+		 * Game Text: At the start of each phase, the Shadow player may remove (1) to take a Shadow event into hand from their discard pile.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Hornblower Barrel", card.getBlueprint().getTitle());
+		assertEquals("Desolation of Ash", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HornblowerBarrelTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesolationofAshTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

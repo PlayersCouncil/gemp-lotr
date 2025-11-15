@@ -28,39 +28,46 @@ public class Card_V3_032_Tests
 	}
 
 	@Test
-	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TormentedRevenantStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Northern Signal-fire, Flame of Eilenach
-		 * Unique: 2
+		 * Name: Tormented Revenant
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Support area
-		 * Game Text: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).
-		* 	While you can spot a ranger, knight, valiant, and mounted Man, your unbound Men cannot take more than 1 wound per phase.
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Wraith
+		 * Strength: 4
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Game Text: Enduring.
+		* 	To play, spot or add 2 threats.
+		* 	This companion is strength +X, where X is the twilight cost of each minion skirmishing this companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
-		assertEquals("Flame of Eilenach", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Tormented Revenant", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TormentedRevenantTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

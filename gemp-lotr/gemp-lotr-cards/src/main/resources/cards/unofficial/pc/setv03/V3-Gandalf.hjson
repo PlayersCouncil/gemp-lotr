@@ -7,8 +7,82 @@
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E002.0_card.jpg
+			image: sets/V3/LOTR-ENV3S002.0_card.jpg
 			collInfo: V3_2
+			rarity: _
+		}
+		title: Jetsam
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Possession
+		target: HasAttached(pipe)
+		keywords: [
+			Pipeweed
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: Discard
+					select: choose(side(Shadow), AttachedTo(bearer))
+				}
+			}
+			
+			{
+				type: DiscardedFromPlayTrigger
+				optional: false
+				source: pipe
+				effect: [
+					{
+						type: addModifier
+						modifier: {
+							type: itemClassSpot
+							class: Pipe
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: your,character,unhasty
+						}
+						true: {
+							type: RemoveKeyword
+							select: choose(your,character,unhasty)
+							keyword: unhasty
+							until: EndOfTurn
+						}
+					}
+				]
+			}
+		]
+		gametext: Pipeweed. Bearer must bear a pipe. When you play this, you may discard a Shadow card on bearer.<br>When this is discarded by a pipe, add 1 to the number of pipes you can spot this phase and make your character lose <b>unhasty</b> until the end of the turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_3: {
+		cardInfo: {
+			//id: 103_3.0
+			parent: 103_3
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S003.0_card.jpg
+			collInfo: V3_3
 			rarity: _
 		}
 		title: Mantle of the White Wizard
@@ -60,7 +134,63 @@
 				}
 			}
 		]
-		gametext: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.<br>Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal a companion. 
+		gametext: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.<br>Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal another companion. 
+		lore: "'Indeed I am Saruman, one might almost say, Saruman as he should have been.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_4: {
+		cardInfo: {
+			//id: 103_4.0
+			parent: 103_4
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S004.0_card.jpg
+			collInfo: V3_4
+			rarity: _
+		}
+		title: Saruman's Hospitality
+		unique: 2
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Possession
+		strength: 1
+		target: HasAttached(pipe)
+		keywords: Pipeweed
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Moves
+				}
+				requires: {
+					type: IsGreaterThanOrEqual
+					firstNumber: {
+						type: ForEachCulture
+						filter: pipe
+					}
+					secondNumber: 3
+				}
+				effect: {
+					type: AddModifier
+					modifier: {
+						type: FPCultureCount
+						amount: -1
+					}
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: Pipeweed.<br>Bearer must be an unbound companion bearing a pipe. <br>Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -71,15 +201,15 @@
 		}
 	}
 
-	103_3: {
+	103_5: {
 		cardInfo: {
-			//id: 103_3.0
-			parent: 103_3
+			//id: 103_5.0
+			parent: 103_5
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E003.0_card.jpg
-			collInfo: V3_3
+			image: sets/V3/LOTR-ENV3S005.0_card.jpg
+			collInfo: V3_5
 			rarity: _
 		}
 		title: Shadowfax
@@ -143,15 +273,15 @@
 		}
 	}
 
-	103_4: {
+	103_6: {
 		cardInfo: {
-			//id: 103_4.0
-			parent: 103_4
+			//id: 103_6.0
+			parent: 103_6
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E004.0_card.jpg
-			collInfo: V3_4
+			image: sets/V3/LOTR-ENV3S006.0_card.jpg
+			collInfo: V3_6
 			rarity: _
 		}
 		title: Show Them the Meaning of Haste
@@ -183,7 +313,7 @@
 				effect: [
 					{
 						type: RevealCardsFromHand
-						select: choose(side(Free Peoples), event, Playable, not(self))
+						select: choose(side(Free Peoples), event, Playable, not(self), not(title(Show Them the Meaning of Haste)))
 						memorize: revealedEvent
 					}
 					{
@@ -195,13 +325,13 @@
 								ignoreCostCheckFailure: true
 								ignorePlayability: true
 								select: memory(revealedEvent)
-							}
-							{
-								type: PutCardsFromDiscardIntoHand
-								ignoreCostCheckFailure: true
-								select: memory(revealedEvent)
-								discard: you
-							}
+								extraEffects: [
+									{
+										type: PutPlayedEventIntoHand
+										filter: memory(revealedEvent)
+									}
+								]
+							}						
 						]
 					}
 					{
@@ -211,122 +341,8 @@
 				]
 			}
 		]
-		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Exert Gandalf thrice (or spot Shadowfax and exert Gandalf once) to reveal a Free Peoples event from your hand.  Play that event 3 times, then remove it from the game.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_5: {
-		cardInfo: {
-			//id: 103_5.0
-			parent: 103_5
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E005.0_card.jpg
-			collInfo: V3_5
-			rarity: _
-		}
-		title: You Cannot Enter Here
-		unique: false
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 2
-		type: Event
-		timewords: Maneuver
-		effects: [
-			{
-				type: event
-				cost: {
-					type: Exert
-					select: choose(your, Wizard)
-					memorize: exertedWizard
-				}
-				effect: [
-					{
-						type: Hinder
-						select: choose(side(Shadow))
-						memorize: hinderedCard
-					}
-					{
-						type: If
-						check: {
-							type: MemoryMatches
-							memory: hinderedCard
-							filter: minion
-						}
-						true: {
-							type: Exhaust
-							select: memory(exertedWizard)
-						}
-					}
-				]
-			}
-		]
-		gametext: Exert your Wizard to hinder a Shadow card.  Exhaust that Wizard if you chose a minion.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_6: {
-		cardInfo: {
-			//id: 103_6.0
-			parent: 103_6
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E006.0_card.jpg
-			collInfo: V3_6
-			rarity: _
-		}
-		title: Your Staff is Broken
-		unique: false
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 3
-		type: Condition
-		keywords: Support Area
-		effects: [
-			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: StartOfPhase
-					phase: Assignment
-				}
-				cost: {
-					type: Exert
-					select: choose(title(Gandalf), HasAttached(artifact))
-				}
-				effect: [
-					{
-						type: ChooseActiveCards
-						hindered: true
-						select: choose(hindered, side(Shadow))
-						memorize: cardToDiscard
-						text: Choose a hindered Shadow card to discard.
-					}
-					{
-						type: Discard
-						select: memory(cardToDiscard)
-					}
-				]
-			}
-		]
-		gametext: At the start of each Assignment phase, you may exert Gandalf bearing an artifact to discard a hindered Shadow card.
-		lore: ""
+		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Exert Gandalf thrice (or spot Shadowfax and exert Gandalf once) to reveal another Free Peoples event from your hand.  Play that event 3 times, then remove it from the game.
+		lore: "Wherever he came men’s hearts would lift again, and the winged shadows pass from memory."
 		promotext: ""
 		alts: {
 			promos: {
@@ -343,8 +359,75 @@
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E007.0_card.jpg
+			image: sets/V3/LOTR-ENV3S007.0_card.jpg
 			collInfo: V3_7
+			rarity: _
+		}
+		title: Wizard's Stash
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		target: Wizard
+		keywords: Pipeweed
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: companion,HasAttached(pipe)
+					amount: 1
+				}
+			}
+			{
+				type: Activated
+				phase: Regroup
+				cost: [
+					{
+						type: Exert
+						select: bearer
+						times: 1
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+				effect: [
+					{
+						type: AddModifier
+						modifier: {
+							type: DuplicateActionFromPhase
+							filter: pipe
+							oldPhase: Fellowship
+							newPhase: Regroup
+						}
+						until: end(regroup)
+					}
+				]
+			}
+		]
+		gametext: Pipeweed. Bearer must be a Wizard.<br>Each companion who is bearing a pipe is strength +1.<br>Regroup: Exert bearer and discard this. This phase you may use special abilities on pipes as if it were the Fellowship phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_8: {
+		cardInfo: {
+			//id: 103_8.0
+			parent: 103_8
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S008.0_card.jpg
+			collInfo: V3_8
 			rarity: _
 		}
 		title: Words of Power
@@ -386,9 +469,8 @@
 				]
 			}
 		]
-		gametext: Spell.\Exert your Wizard thrice to reconcile your hand.\You may spot a [gandalf] artifact to shuffle this into your draw deck.
-
-		lore: ""
+		gametext: Spell.<br>Exhaust your Wizard to reconcile your hand. You may spot a [gandalf] artifact to shuffle this into your draw deck.
+		lore: "'For this is what your folk would call magic. I believe; though I do not understand clearly what they mean; and they seem also to use the same word of the deceits of the Enemy.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -397,198 +479,112 @@
 			}
 		}
 	}
-	
-	103_121: {
+
+	103_9: {
 		cardInfo: {
-			//id: 103_121.0
-			parent: 103_121
+			//id: 103_9.0
+			parent: 103_9
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E121.0_card.jpg
-			collInfo: V3_121
+			image: sets/V3/LOTR-ENV3S009.0_card.jpg
+			collInfo: V3_9
 			rarity: _
 		}
-		title: Jetsam
+		title: You Cannot Enter Here
 		unique: false
 		side: Free Peoples
 		culture: Gandalf
-		twilight: 1
-		type: Possession
-		target: HasAttached(pipe)
-		keywords: [
-			Pipeweed
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: Exert
+					select: choose(your, Wizard)
+					memorize: exertedWizard
+				}
+				effect: [
+					{
+						type: Hinder
+						select: choose(side(Shadow))
+						memorize: hinderedCard
+					}
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: hinderedCard
+							filter: minion
+						}
+						true: {
+							type: Exhaust
+							select: memory(exertedWizard)
+						}
+					}
+				]
+			}
 		]
+		gametext: Exert your Wizard to hinder a Shadow card.  Exhaust that Wizard if you chose a minion.
+		lore: "All fled before his face. All save one. There waiting, silent and still in the space before the Gate, sat Gandalf upon Shadowfax."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_10: {
+		cardInfo: {
+			//id: 103_10.0
+			parent: 103_10
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S010.0_card.jpg
+			collInfo: V3_10
+			rarity: _
+		}
+		title: Your Staff is Broken
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: Trigger
 				optional: true
 				trigger: {
-					type: Played
-					filter: self
+					type: StartOfPhase
+					phase: Assignment
 				}
-				effect: {
-					type: Discard
-					select: choose(side(Shadow), AttachedTo(bearer))
+				cost: {
+					type: Exert
+					select: choose(title(Gandalf), HasAttached(artifact))
 				}
-			}
-			
-			{
-				type: DiscardedFromPlayTrigger
-				optional: false
-				source: pipe
 				effect: [
 					{
-						type: addModifier
-						modifier: {
-							type: itemClassSpot
-							class: Pipe
-						}
-					}
-					{
-						type: If
-						check: {
-							type: CanSpot
-							filter: your,character,unhasty
-						}
-						true: {
-							type: RemoveKeyword
-							select: choose(your,character,unhasty)
-							keyword: unhasty
-							until: EndOfTurn
-						}
-					}
-				]
-			}
-
-		]
-		gametext: Pipeweed. Bearer must bear a pipe. When you play this, you may discard a Shadow card on bearer.\When this is discarded by a pipe, add 1 to the number of pipes you can spot this phase and make your character lose <b>unhasty</b> until the end of the turn.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-	
-	103_123: {
-		cardInfo: {
-			//id: 103_123.0
-			parent: 103_123
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E123.0_card.jpg
-			collInfo: V3_123
-			rarity: _
-		}
-		title: Saruman's Hospitality
-		unique: 2
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 1
-		type: Possession
-		strength: 1
-		target: unbound,companion,HasAttached(pipe)
-		keywords: [
-			Pipeweed
-		]
-		effects: [
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Moves
-				}
-				requires: {
-					type: IsGreaterThanOrEqual
-					firstNumber: {
-						type: ForEachCulture
-						filter: pipe
-					}
-					secondNumber: 3
-				}
-				effect: {
-					type: AddModifier
-					modifier: {
-						type: FPCultureCount
-						amount: -1
-					}
-					until: start(regroup)
-				}
-			}
-		]
-		gametext: Pipeweed.\Bearer must be an unbound companion bearing a pipe. \Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_124: {
-		cardInfo: {
-			//id: 103_124.0
-			parent: 103_124
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E124.0_card.jpg
-			collInfo: V3_124
-			rarity: _
-		}
-		title: Wizard's Pipe
-		unique: true
-		side: Free Peoples
-		culture: Gandalf
-		twilight: 2
-		type: Possession
-		itemclass: Pipe
-		target: unbound,companion
-		effects: [
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: companion,HasAttached(pipe)
-					amount: 1
-				}
-			}
-			{
-				type: Activated
-				phase: Regroup
-				cost: [
-					{
-						type: Exert
-						select: choose(your,Wizard)
-						times: 2
+						type: ChooseActiveCards
+						hindered: true
+						select: choose(hindered, side(Shadow))
+						memorize: cardToDiscard
+						text: Choose a hindered Shadow card to discard.
 					}
 					{
 						type: Discard
-						select: choose(pipeweed)
-					}
-				]
-				effect: [
-					{
-						type: AddModifier
-						modifier: {
-							type: DuplicateActionFromPhase
-							filter: pipe
-							oldPhase: Fellowship
-							newPhase: Regroup
-						}
-						until: end(regroup)
+						select: memory(cardToDiscard)
 					}
 				]
 			}
 		]
-		gametext: Bearer must be an unbound companion. Each companion bearing a pipe is strength +1.\Regroup: Exert a Wizard twice and discard a pipeweed; this phase you may use special abilities on pipes as if it were the Fellowship phase. 
-		lore: ""
+		gametext: At the start of each Assignment phase, you may exert Gandalf bearing an artifact to discard a hindered Shadow card.
+		lore: "'Behold, I am not Gandalf the Grey, whom you betrayed. I am Gandalf the White, who has returned from death. You have no colour now, and I cast you from the order and from the Council.'"
 		promotext: ""
 		alts: {
 			promos: {

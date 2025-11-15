@@ -1,14 +1,14 @@
 {
 
-	103_38: {
+	103_41: {
 		cardInfo: {
-			//id: 103_38.0
-			parent: 103_38
+			//id: 103_41.0
+			parent: 103_41
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E038.0_card.jpg
-			collInfo: V3_38
+			image: sets/V3/LOTR-ENV3S041.0_card.jpg
+			collInfo: V3_41
 			rarity: _
 		}
 		title: Bladetusk Charger
@@ -123,15 +123,15 @@
 		}
 	}
 
-	103_39: {
+	103_42: {
 		cardInfo: {
-			//id: 103_39.0
-			parent: 103_39
+			//id: 103_42.0
+			parent: 103_42
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E039.0_card.jpg
-			collInfo: V3_39
+			image: sets/V3/LOTR-ENV3S042.0_card.jpg
+			collInfo: V3_42
 			rarity: _
 		}
 		title: Bladetusk Matriarch
@@ -230,8 +230,7 @@
 				]
 			}
 		]
-		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.\Unmounted minions cannot be assigned\to skirmishes.\Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.\While you can spot 6 Southrons, bearer gains <b>relentless</b> <i>(they participate in an additional round of skirmishes after fierce)</i>.
-
+		gametext: Shadow: Stack a Southron from hand here.<br>Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -242,15 +241,15 @@
 		}
 	}
 
-	103_40: {
+	103_43: {
 		cardInfo: {
-			//id: 103_40.0
-			parent: 103_40
+			//id: 103_43.0
+			parent: 103_43
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E040.0_card.jpg
-			collInfo: V3_40
+			image: sets/V3/LOTR-ENV3S043.0_card.jpg
+			collInfo: V3_43
 			rarity: _
 		}
 		title: Bladetusk Rearguard
@@ -335,7 +334,128 @@
 				]
 			}
 		]
-		gametext: Regroup: Stack a Southron from play here.<br>Maneuver: Spot a mounted Southron and remove (4) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		gametext: Regroup: Stack a Southron Man here.<br>Maneuver: Spot a Southron and remove <br>(5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		lore: "The great monsters were unfought,...like towers of defence, and the Haradrim rallied about them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_44: {
+		cardInfo: {
+			//id: 103_44.0
+			parent: 103_44
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S044.0_card.jpg
+			collInfo: V3_44
+			rarity: _
+		}
+		title: Burn and Pillage
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: Hinder
+					select: choose(Raider)
+					count: 0-4
+					memorize: hinderedCards
+				}
+				effect: [
+					{
+						type: ReinforceTokens
+						culture: Raider
+						select: choose(any)
+						times: {
+							type: ForEachInMemory
+							memory: hinderedCards
+						}
+					}
+					{
+						type: DrawCards
+						count: {
+							type: ForEachYouCanSpot
+							hindered: true
+							filter: side(Shadow), hindered
+							divider: 2
+						}
+					}
+				]
+			}
+		]
+		gametext: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens. Draw a card for each 2 hindered Shadow cards you can spot.
+		lore: "For black against the glittering stream they beheld a fleet borne up on the wind: dromunds, and ships of great draught with many oars, and with black sails bellying in the breeze."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_45: {
+		cardInfo: {
+			//id: 103_45.0
+			parent: 103_45
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S045.0_card.jpg
+			collInfo: V3_45
+			rarity: _
+		}
+		title: Corsair Quartermaster
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 12
+		vitality: 3
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfSkirmishInvolving
+					filter: self
+				}
+				effect: {
+					type: Hinder
+					player: Free Peoples
+					select: choose(side(Free Peoples), item, AttachedTo(character, InSkirmish))
+					count: any
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: self
+					keyword: damage
+					amount: {
+						type: ForEachYouCanSpot
+						filter: side(Free Peoples), item, AttachedTo(character, InSkirmish)
+					}
+				}
+			}
+		]
+		gametext: <b>Corsair.</b><br>At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of Free Peoples items on a character in that skirmish.<br>This minion is <b>damage +1</b> for each Free Peoples item you can spot on each character in its skirmish.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -346,15 +466,15 @@
 		}
 	}
 
-	103_41: {
+	103_46: {
 		cardInfo: {
-			//id: 103_41.0
-			parent: 103_41
+			//id: 103_46.0
+			parent: 103_46
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E041.0_card.jpg
-			collInfo: V3_41
+			image: sets/V3/LOTR-ENV3S046.0_card.jpg
+			collInfo: V3_46
 			rarity: _
 		}
 		title: Corsair Slinkthief
@@ -409,7 +529,7 @@
 			}
 		]
 		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
-		lore: ""
+		lore: "They cried. 'Back to the walls! Come back to the City before all are overwhelmed!' But the wind that sped the ships blew all their clamour away."
 		promotext: ""
 		alts: {
 			promos: {
@@ -419,76 +539,15 @@
 		}
 	}
 
-	103_42: {
+	103_47: {
 		cardInfo: {
-			//id: 103_42.0
-			parent: 103_42
+			//id: 103_47.0
+			parent: 103_47
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E042.0_card.jpg
-			collInfo: V3_42
-			rarity: _
-		}
-		title: Corsair Quartermaster
-		unique: false
-		side: Shadow
-		culture: Raider
-		twilight: 6
-		type: Minion
-		race: Man
-		strength: 11
-		vitality: 3
-		site: 4
-		keywords: Corsair
-		effects: [
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: StartOfSkirmishInvolving
-					filter: self
-				}
-				effect: {
-					type: Hinder
-					player: Free Peoples
-					select: choose(side(Free Peoples), item, AttachedTo(character, InSkirmish))
-					count: any
-				}
-			}
-			{
-				type: Modifier
-				modifier: {
-					type: AddKeyword
-					filter: self
-					keyword: damage
-					amount: {
-						type: ForEachYouCanSpot
-						filter: side(Free Peoples), item, AttachedTo(character, InSkirmish)
-					}
-				}
-			}
-		]
-		gametext: <b>Corsair.</b><br>At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of items on a companion in that skirmish.<br>This minion is <b>damage +1</b> for each Free Peoples item on each character in its skrimish.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_43: {
-		cardInfo: {
-			//id: 103_43.0
-			parent: 103_43
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E043.0_card.jpg
-			collInfo: V3_43
+			image: sets/V3/LOTR-ENV3S047.0_card.jpg
+			collInfo: V3_47
 			rarity: _
 		}
 		title: Desert Wind Initiate
@@ -544,15 +603,15 @@
 		}
 	}
 
-	103_44: {
+	103_48: {
 		cardInfo: {
-			//id: 103_44.0
-			parent: 103_44
+			//id: 103_48.0
+			parent: 103_48
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E044.0_card.jpg
-			collInfo: V3_44
+			image: sets/V3/LOTR-ENV3S048.0_card.jpg
+			collInfo: V3_48
 			rarity: _
 		}
 		title: Desert Wind Scout
@@ -622,15 +681,15 @@
 		}
 	}
 
-	103_45: {
+	103_49: {
 		cardInfo: {
-			//id: 103_45.0
-			parent: 103_45
+			//id: 103_49.0
+			parent: 103_49
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E045.0_card.jpg
-			collInfo: V3_45
+			image: sets/V3/LOTR-ENV3S049.0_card.jpg
+			collInfo: V3_49
 			rarity: _
 		}
 		title: Desert Wind Stalker
@@ -695,15 +754,15 @@
 		}
 	}
 
-	103_46: {
+	103_50: {
 		cardInfo: {
-			//id: 103_46.0
-			parent: 103_46
+			//id: 103_50.0
+			parent: 103_50
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E046.0_card.jpg
-			collInfo: V3_46
+			image: sets/V3/LOTR-ENV3S050.0_card.jpg
+			collInfo: V3_50
 			rarity: _
 		}
 		title: Desert Wind Whisper
@@ -770,15 +829,15 @@
 		}
 	}
 
-	103_47: {
+	103_51: {
 		cardInfo: {
-			//id: 103_47.0
-			parent: 103_47
+			//id: 103_51.0
+			parent: 103_51
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E047.0_card.jpg
-			collInfo: V3_47
+			image: sets/V3/LOTR-ENV3S051.0_card.jpg
+			collInfo: V3_51
 			rarity: _
 		}
 		title: Duty No Less Than Yours
@@ -829,7 +888,7 @@
 			}
 		]
 		gametext: Each time a [raider] minion dies, you may exert a [raider] minion to exert an unbound companion. If you can spot another Duty No Less Than Yours, you may discard it to also hinder that companion.
-		lore: ""
+		lore: "He wondered what the man's name was and where he came from; and if he was really evil of heart, or what lies or threats had led him on the long march..."
 		promotext: ""
 		alts: {
 			promos: {
@@ -839,75 +898,15 @@
 		}
 	}
 
-	103_48: {
+	103_52: {
 		cardInfo: {
-			//id: 103_48.0
-			parent: 103_48
+			//id: 103_52.0
+			parent: 103_52
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E048.0_card.jpg
-			collInfo: V3_48
-			rarity: _
-		}
-		title: Burn and Pillage
-		unique: false
-		side: Shadow
-		culture: Raider
-		twilight: 1
-		type: Event
-		timewords: Maneuver
-		effects: [
-			{
-				type: event
-				cost: {
-					type: Hinder
-					select: choose(Raider)
-					count: 0-4
-					memorize: hinderedCards
-				}
-				effect: [
-					{
-						type: ReinforceTokens
-						culture: Raider
-						select: choose(any)
-						times: {
-							type: ForEachInMemory
-							memory: hinderedCards
-						}
-					}
-					{
-						type: DrawCards
-						count: {
-							type: ForEachYouCanSpot
-							hindered: true
-							filter: side(Shadow), hindered
-							divider: 2
-						}
-					}
-				]
-			}
-		]
-		gametext: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens. Draw a card for each 2 hindered Shadow cards you can spot.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_49: {
-		cardInfo: {
-			//id: 103_49.0
-			parent: 103_49
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E049.0_card.jpg
-			collInfo: V3_49
+			image: sets/V3/LOTR-ENV3S052.0_card.jpg
+			collInfo: V3_52
 			rarity: _
 		}
 		title: Hailing from the Far South
@@ -960,7 +959,7 @@
 				]
 			}
 		]
-		gametext: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or minion into hand from discard.\Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron <b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
+		gametext: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or minion into hand from discard.<br>Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron <b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -971,15 +970,15 @@
 		}
 	}
 
-	103_50: {
+	103_53: {
 		cardInfo: {
-			//id: 103_50.0
-			parent: 103_50
+			//id: 103_53.0
+			parent: 103_53
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E050.0_card.jpg
-			collInfo: V3_50
+			image: sets/V3/LOTR-ENV3S053.0_card.jpg
+			collInfo: V3_53
 			rarity: _
 		}
 		title: Honor of the Desert Warrior
@@ -1017,7 +1016,7 @@
 			}
 		]
 		gametext: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
-		lore: ""
+		lore: "'We were outnumbered, for Mordor has allied itself with the Easterlings and the cruel Haradrim; but it was not by numbers that we were defeated. A power was there that we have not felt before.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1027,15 +1026,15 @@
 		}
 	}
 
-	103_51: {
+	103_54: {
 		cardInfo: {
-			//id: 103_51.0
-			parent: 103_51
+			//id: 103_54.0
+			parent: 103_54
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E051.0_card.jpg
-			collInfo: V3_51
+			image: sets/V3/LOTR-ENV3S054.0_card.jpg
+			collInfo: V3_54
 			rarity: _
 		}
 		title: Horn of Far Harad
@@ -1044,9 +1043,7 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
-		itemclass: [
-			Horn
-		]
+		itemclass: Horn
 		target: mounted,Southron
 		effects: [
 			{
@@ -1078,7 +1075,7 @@
 			}
 		]
 		gametext: Bearer must be a mounted Southron.<br>When you play this, hinder all Free Peoples mounts.<br>Skirmish: Remove a threat to make a Southron strength +2.
-		lore: ""
+		lore: "But wherever the mûmakil came there the horses would not go, but blenched and swerved away; and the great monsters were unfought."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1088,80 +1085,15 @@
 		}
 	}
 
-	103_52: {
+	103_55: {
 		cardInfo: {
-			//id: 103_52.0
-			parent: 103_52
+			//id: 103_55.0
+			parent: 103_55
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E052.0_card.jpg
-			collInfo: V3_52
-			rarity: _
-		}
-		title: The Mouth of Sauron
-		subtitle: Herald of the Dark Lord
-		unique: true
-		side: Shadow
-		culture: Raider
-		twilight: 3
-		type: Minion
-		race: Man
-		strength: 9
-		vitality: 3
-		site: 5
-		keywords: Lurker
-		effects: [
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyCost
-					filter: your, side(Shadow), event
-					amount: -1
-				}
-			}
-			{
-				type: Response
-				trigger: {
-					type: AboutToTakeWound
-					filter: minion
-				}
-				cost: {
-					type: Exert
-					select: self
-				}
-				effect: [
-					{
-						type: PreventWound
-						select: choose(minion)
-					}
-					{
-						type: Hinder
-						select: choose(side(Free Peoples), weapon)
-					}
-				]
-			}
-		]
-		gametext: Lurker.<br>Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_53: {
-		cardInfo: {
-			//id: 103_53.0
-			parent: 103_53
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E053.0_card.jpg
-			collInfo: V3_53
+			image: sets/V3/LOTR-ENV3S055.0_card.jpg
+			collInfo: V3_55
 			rarity: _
 		}
 		title: Raiding Schooner
@@ -1173,56 +1105,61 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: Activated
-				phase: Maneuver
-				cost: {
-					type: Hinder
-					select: choose(corsair)
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
 				}
-				effect: [
-					{
-						type: Optional
-						text: Would you like to discard another Raiding Schooner to hinder all Free Peoples support cards of one culture?
-						requires: {
-							type: CanSpot
-							filter: another, title(Raiding Schooner)
-						}
-						cost: {
-							type: Discard
-							select: choose(another, title(Raiding Schooner))
-						}
-						effect: [
-							{
-								type: ChooseActiveCards
-								select: choose(side(Free Peoples), support)
-								memorize: chosenSupportCard
-								text: Choose a Free Peoples culture
-							}
-							{
-								type: Hinder
-								select: all(side(Free Peoples), CultureFromMemory(chosenSupportCard), support)
-							}
-						]
-					}
-					{
-						type: If
-						check: {
-							type: HasCardInMemory
-							memory: chosenSupportCard
-						}
-						false: {
-							type: Hinder
-							select: choose(side(Free Peoples), support, possession)
-						}
-					}
-				]
+				cost: {
+					type: Spot
+					filter: corsair
+				}
+				effect: {
+					type: AddCultureTokens
+					count: 1
+					culture: raider
+					select: self
+				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: RemoveTokensCumulative
+					count: 2
+					culture: raider
+					filter: your
+				}
+				effect: {
+					type: Hinder
+					select: choose(side(Free Peoples), possession)
+				}
 			}
+			
+			{
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Hinder
+						select: choose(another, title(Raiding Schooner))
+					}
+					{
+						type: RemoveTokensCumulative
+						count: 3
+						culture: raider
+						filter: your
+					}
+				]
+				effect: {
+					type: Hinder
+					select: choose(side(Free Peoples), artifact)
+				}
+			}
+			
 		]
-		gametext: Maneuver: Hinder a corsair to hinder a Free Peoples support possession (or all support cards of a Free Peoples culture you spot if you discard another Raiding Schooner).
+		gametext: When you play this, spot a Corsair to add a [raider] token here.<br>Shadow: Remove 2 [raider] tokens from your cards to hinder a Free Peoples possession.<br>Maneuver: Spot a Corsair, hinder another Raiding Schooner, and remove 3 [raider] tokens from your cards to hinder a Free Peoples artifact.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1233,15 +1170,83 @@
 		}
 	}
 
-	103_54: {
+	103_56: {
 		cardInfo: {
-			//id: 103_54.0
-			parent: 103_54
+			//id: 103_56.0
+			parent: 103_56
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E054.0_card.jpg
-			collInfo: V3_54
+			image: sets/V3/LOTR-ENV3S056.0_card.jpg
+			collInfo: V3_56
+			rarity: _
+		}
+		title: Sandcraft Ambush
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: event
+				effect: [
+					{
+						type: Restore
+						select: all(or(tracker,and(minion,ambush)))
+						memorize: restoredMinions
+					}
+					{
+						type: If
+						check: [
+							{
+								type: HasCardInMemory
+								memory: restoredMinions
+							}
+							{
+								type: CanSpot
+								filter: Southron
+							}
+						]
+						true: [
+							{
+								type: ChooseActiveCards
+								select: choose(Southron)
+								memorize: assignedSouthron
+								text: Choose a Southron for your opponent to assign
+							}
+							{
+								type: AssignFPCharacterToSkirmish
+								player: Freeps
+								fpCharacter: choose(unbound,companion,LowestStrength(unbound,companion))
+								minion: choose(memory(assignedSouthron))
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
+		lore: "To the land of the Haradrim came only a tale from far off: a rumour of the wrath and terror of Gondor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_57: {
+		cardInfo: {
+			//id: 103_57.0
+			parent: 103_57
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S057.0_card.jpg
+			collInfo: V3_57
 			rarity: _
 		}
 		title: Savage Harpoon
@@ -1310,7 +1315,7 @@
 				}
 			}
 		]
-		gametext: Limit 1 per bearer.  Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.\Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to an unbound companion.
+		gametext: Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.<br>Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to an unbound companion. Limit 1 per bearer.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1321,83 +1326,15 @@
 		}
 	}
 
-	103_55: {
+	103_58: {
 		cardInfo: {
-			//id: 103_55.0
-			parent: 103_55
+			//id: 103_58.0
+			parent: 103_58
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E055.0_card.jpg
-			collInfo: V3_55
-			rarity: _
-		}
-		title: Sandcraft Trap
-		unique: false
-		side: Shadow
-		culture: Raider
-		twilight: 3
-		type: Event
-		timewords: Assignment
-		effects: [
-			{
-				type: event
-				effect: [
-					{
-						type: Restore
-						select: all(or(tracker,and(minion,ambush)))
-						memorize: restoredMinions
-					}
-					{
-						type: If
-						check: [
-							{
-								type: HasCardInMemory
-								memory: restoredMinions
-							}
-							{
-								type: CanSpot
-								filter: Southron
-							}
-						]
-						true: [
-							{
-								type: ChooseActiveCards
-								select: choose(Southron)
-								memorize: assignedSouthron
-								text: Choose a Southron for your opponent to assign
-							}
-							{
-								type: AssignFPCharacterToSkirmish
-								player: Freeps
-								fpCharacter: choose(unbound,companion,LowestStrength(unbound,companion))
-								minion: choose(memory(assignedSouthron))
-							}
-						]
-					}
-				]
-			}
-		]
-		gametext: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_56: {
-		cardInfo: {
-			//id: 103_56.0
-			parent: 103_56
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E056.0_card.jpg
-			collInfo: V3_56
+			image: sets/V3/LOTR-ENV3S058.0_card.jpg
+			collInfo: V3_58
 			rarity: _
 		}
 		title: Shifting Sands
@@ -1448,7 +1385,7 @@
 				]
 			}
 		]
-		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.\Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] support item or [raider] minion that already has a Southron stacked on it.
+		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.<br>Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] support item or [raider] minion that already has a Southron stacked on it.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1459,15 +1396,15 @@
 		}
 	}
 
-	103_57: {
+	103_59: {
 		cardInfo: {
-			//id: 103_57.0
-			parent: 103_57
+			//id: 103_59.0
+			parent: 103_59
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E057.0_card.jpg
-			collInfo: V3_57
+			image: sets/V3/LOTR-ENV3S059.0_card.jpg
+			collInfo: V3_59
 			rarity: _
 		}
 		title: Strength of Men
@@ -1488,8 +1425,18 @@
 					{
 						type: If
 						check: {
-							type: CanSpotBurdens
-							amount: 5
+							type: Or
+							requires: [
+								{
+									type: CanSpotBurdens
+									amount: 5
+								}
+								{
+									type: CanSpot
+									filter: raider
+									count: 10
+								}
+							]
 						}
 						true: {
 							type: Hinder
@@ -1505,8 +1452,8 @@
 				]
 			}
 		]
-		gametext: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens).
-		lore: ""
+		gametext: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens or 10 [raider] cards).
+		lore: "Hard fighting and long labour they had still; for the Southrons were bold men and grim, and fierce in despair; and the Easterlings were strong and war-hardened and asked for no quarter."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1516,15 +1463,80 @@
 		}
 	}
 
-	103_58: {
+	103_60: {
 		cardInfo: {
-			//id: 103_58.0
-			parent: 103_58
+			//id: 103_60.0
+			parent: 103_60
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E058.0_card.jpg
-			collInfo: V3_58
+			image: sets/V3/LOTR-ENV3S060.0_card.jpg
+			collInfo: V3_60
+			rarity: _
+		}
+		title: The Mouth of Sauron
+		subtitle: Herald of the Dark Lord
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: your, side(Shadow), event
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: AboutToTakeWound
+					filter: minion
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: [
+					{
+						type: PreventWound
+						select: choose(minion)
+					}
+					{
+						type: Hinder
+						select: choose(side(Free Peoples), weapon)
+					}
+				]
+			}
+		]
+		gametext: Lurker.<br>Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
+		lore: "'Thou shalt see what comes to him who sets his foolish webs before the feet of Sauron the Great.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_61: {
+		cardInfo: {
+			//id: 103_61.0
+			parent: 103_61
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S061.0_card.jpg
+			collInfo: V3_61
 			rarity: _
 		}
 		title: Ulaire Attea
@@ -1570,7 +1582,7 @@
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
-		lore: ""
+		lore: "'He gave a sort of hiss. It might have been laughing, and it might not. Then he spurred his great horse right at me...'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1579,16 +1591,16 @@
 			}
 		}
 	}
-	
-	103_131: {
+
+	103_62: {
 		cardInfo: {
-			//id: 103_131.0
-			parent: 103_131
+			//id: 103_62.0
+			parent: 103_62
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E131.0_card.jpg
-			collInfo: V3_131
+			image: sets/V3/LOTR-ENV3S062.0_card.jpg
+			collInfo: V3_62
 			rarity: _
 		}
 		title: War Howdah
@@ -1657,7 +1669,7 @@
 				]
 			}
 		]
-		gametext: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.\Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
+		gametext: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.<br>Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
 		lore: ""
 		promotext: ""
 		alts: {

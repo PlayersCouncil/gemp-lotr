@@ -41,7 +41,7 @@ public class Card_01_017_ErrataTests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand.
+		 * Game Text: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand (limit once per phase).
 		*/
 
 		var scn = GetScenario();

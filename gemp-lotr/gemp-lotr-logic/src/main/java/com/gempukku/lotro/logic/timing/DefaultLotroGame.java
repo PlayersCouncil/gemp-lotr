@@ -293,9 +293,21 @@ public class DefaultLotroGame implements LotroGame {
     @Override
     public void checkRingBearerCorruption() {
         GameState gameState = getGameState();
-        if (gameState != null && gameState.getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && gameState.getCurrentPhase() != Phase.BETWEEN_TURNS && gameState.getCurrentPhase() != Phase.PUT_RING_BEARER) {
+        if (gameState != null
+                && gameState.getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP
+                && gameState.getCurrentPhase() != Phase.BETWEEN_TURNS
+                && gameState.getCurrentPhase() != Phase.PUT_RING_BEARER) {
             // Ring-bearer death
-            PhysicalCard ringBearer = gameState.getRingBearer(gameState.getCurrentPlayerId());
+            var ringBearer = gameState.getRingBearer(gameState.getCurrentPlayerId());
+
+            //At the time the Ring-bearer was hindered, they hadn't been corrupted.  Since
+            // hindering can alter resistance from e.g. ARB Galadriel's game text, we temporarily
+            // suspend corruption checks while hindered.
+            //This works since burdens cannot be added or removed while the RB is hindered, so we
+            // know nothing could have changed until the RB is restored.
+            if(gameState.isHindered(ringBearer))
+                return;
+
             Zone zone = ringBearer.getZone();
             if (zone != null && zone.isInPlay()) {
                 // Ring-bearer corruption

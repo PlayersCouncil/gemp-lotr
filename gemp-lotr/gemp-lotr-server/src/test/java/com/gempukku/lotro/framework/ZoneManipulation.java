@@ -60,6 +60,14 @@ public interface ZoneManipulation extends TestBase{
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.SHADOW_CHARACTERS));
 	}
 
+	default void MoveFreepsCardsToSupportArea(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCardsToSupportArea(GetFreepsCard(name)));
+	}
+
+	default void MoveShadowCardsToSupportArea(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCardsToSupportArea(GetShadowCard(name)));
+	}
+
 	default void MoveCardsToSupportArea(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.SUPPORT));
 	}

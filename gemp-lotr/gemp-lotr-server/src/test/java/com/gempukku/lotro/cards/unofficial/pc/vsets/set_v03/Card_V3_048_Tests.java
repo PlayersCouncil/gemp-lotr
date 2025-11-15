@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_048_Tests
 {
@@ -30,37 +28,49 @@ public class Card_V3_048_Tests
 	}
 
 	@Test
-	public void BurnAndPillageStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindScoutStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Burn and Pillage
+		 * Name: Desert Wind Scout
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 1
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Hinder up to 3 [raider] cards to reinforce the same number of [raider] tokens.
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 10
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (2). 
+		* 	When you play this minion, remove (3) or hinder this minion.
+		* 	Each time you hinder this minion you may hinder another [raider] minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Burn and Pillage", card.getBlueprint().getTitle());
+		assertEquals("Desert Wind Scout", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
+		assertEquals(2, scn.GetKeywordCount(card, Keyword.AMBUSH));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(10, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BurnAndPillageTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesertWindScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
