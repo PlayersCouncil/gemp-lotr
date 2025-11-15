@@ -28,37 +28,41 @@ public class Card_V3_021_Tests
 	}
 
 	@Test
-	public void ICallonYouStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EtherealBannerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: I Call on You
-		 * Unique: false
+		 * Name: Ethereal Banner
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Fellowship
-		 * Game Text: Exert Aragorn (or spot Anduril) and add X threats to play a Wraith from your dead pile, where X is the region number.
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Hand weapon
+		 * Vitality: 1
+		 * Game Text: Bearer must be a [gondor] Wraith.
+		* 	Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.
+		* 	Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("I Call on You", card.getBlueprint().getTitle());
+		assertEquals("Ethereal Banner", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ICallonYouTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EtherealBannerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -1,64 +1,72 @@
 {
 
-	103_31: {
+	103_82: {
 		cardInfo: {
-			//id: 103_31.0
-			parent: 103_31
+			//id: 103_82.0
+			parent: 103_82
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E031.0_card.jpg
-			collInfo: V3_31
+			image: sets/V3/LOTR-ENV3S082.0_card.jpg
+			collInfo: V3_82
 			rarity: _
 		}
-		title: Northern Signal-fire
-		subtitle: Flame of Calenhad
-		unique: 2
+		title: Death Take Us All
+		unique: false
 		side: Free Peoples
 		culture: Rohan
-		twilight: 2
-		type: Possession
-		keywords: [
-			Beacon
-			Support Area
-		]
+		twilight: 3
+		type: Event
+		timewords: Skirmish
 		effects: [
 			{
-				type: ExtraCost
-				cost: [
+				type: event
+				effect: [
 					{
 						type: Hinder
-						select: choose(beacon)
-						count: 2
-					}
-				]
-			}
-			{
-				type: Activated
-				phase: Maneuver
-				cost: [
-					{
-						type: Hinder
-						select: self
+						player: Shadow
+						select: choose(side(Shadow), support)
+						count: any
 					}
 					{
-						type: Exert
-						select: choose(unbound, Man)
-						memorize: exertedMan
+						type: CostToEffect
+						cost: {
+							type: ChooseActiveCards
+							text: Choose a Shadow support card
+							select: choose(side(Shadow), support)
+							memorize: chosenCard
+						}
+						effect: {
+							type: ModifyStrength
+							select: choose(Rohan, companion)
+							amount: {
+								type: Sum
+								source: [
+									{
+										type: TwilightCostInMemory
+										memory: chosenCard
+									}
+									{
+										type: ForEachStacked
+										filter: any
+										on: memory(chosenCard)
+									}
+									{
+										type: ForEachCultureToken
+										filter: memory(chosenCard)
+									}
+									{
+										type: ForEachYouCanSpot
+										filter: NameFromMemory(chosenCard)
+									}
+								]
+							}
+						}
 					}
 				]
-				effect: {
-					type: AddModifier
-					until: start(Regroup)
-					modifier: {
-						type: AddKeywordFromCards
-						filter: your, Man
-						from: memory(exertedMan)
-					}
-				}
 			}
 		]
-		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man to make each of your Men gain each of the unloaded keywords on that unbound Man until the regroup phase.
+		gametext: The Shadow player may hinder any of their own support cards.<br>Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -69,95 +77,15 @@
 		}
 	}
 
-	103_35: {
+	103_83: {
 		cardInfo: {
-			//id: 103_35.0
-			parent: 103_35
+			//id: 103_83.0
+			parent: 103_83
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E035.0_card.jpg
-			collInfo: V3_35
-			rarity: _
-		}
-		title: Northern Signal-fire
-		subtitle: Flame of Halifirien
-		unique: 2
-		side: Free Peoples
-		culture: Rohan
-		twilight: 2
-		type: Possession
-		keywords: [
-			Beacon
-			Support Area
-		]
-		effects: [
-			{
-				type: ExtraCost
-				cost: [
-					{
-						type: Hinder
-						select: choose(beacon)
-						count: 2
-					}
-				]
-			}
-			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: Played
-					filter: mount
-					player: you
-					on: your, Man
-					memorize: playedMount
-				}
-				cost: {
-					type: AddTwilight
-					amount: 1
-				}
-				effect: {
-					type: Heal
-					select: choose(HasAttached(memory(playedMount)))
-				}
-			}
-			{
-				type: Response
-				trigger: {
-					type: Exerted
-					filter: minion
-					source: mount, AttachedTo(your, Man)
-				}
-				cost: {
-					type: Hinder
-					select: self
-				}
-				effect: {
-					type: Exert
-					select: memory(exertedMinion)
-				}
-			}
-		]
-		gametext: Beacon. To play, hinder 3 beacons (or 2 beacons if you cannot spot another Northern Signal-fire).<br>Each time you play a mount on your Man, you may add (1) to heal that Man.<br>Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_36: {
-		cardInfo: {
-			//id: 103_36.0
-			parent: 103_36
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E036.0_card.jpg
-			collInfo: V3_36
+			image: sets/V3/LOTR-ENV3S083.0_card.jpg
+			collInfo: V3_83
 			rarity: _
 		}
 		title: Gondor Calls For Aid!
@@ -229,8 +157,8 @@
 			}
 
 		]
-		gametext: Beacon. To play, hinder 4 beacons.\This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.\Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
-		lore: ""
+		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.<br>Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
+		lore: "And so King Théoden departed from his own realm, and mile by mile the long road wound away..."
 		promotext: ""
 		alts: {
 			promos: {
@@ -240,15 +168,15 @@
 		}
 	}
 
-	103_77: {
+	103_84: {
 		cardInfo: {
-			//id: 103_77.0
-			parent: 103_77
+			//id: 103_84.0
+			parent: 103_84
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E077.0_card.jpg
-			collInfo: V3_77
+			image: sets/V3/LOTR-ENV3S084.0_card.jpg
+			collInfo: V3_84
 			rarity: _
 		}
 		title: I Am No Man
@@ -289,8 +217,8 @@
 				]
 			}
 		]
-		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered Free Peoples card you can spot.
-		lore: ""
+		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered card you can spot.
+		lore: "'You look upon a woman. Éowyn I am, Éomund’s daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -300,92 +228,15 @@
 		}
 	}
 
-	103_78: {
+	103_85: {
 		cardInfo: {
-			//id: 103_78.0
-			parent: 103_78
+			//id: 103_85.0
+			parent: 103_85
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E078.0_card.jpg
-			collInfo: V3_78
-			rarity: _
-		}
-		title: Death Take Us All
-		unique: false
-		side: Free Peoples
-		culture: Rohan
-		twilight: 3
-		type: Event
-		timewords: Skirmish
-		effects: [
-			{
-				type: event
-				effect: [
-					{
-						type: Hinder
-						player: Shadow
-						select: choose(side(Shadow), support)
-						count: any
-					}
-					{
-						type: CostToEffect
-						cost: {
-							type: ChooseActiveCards
-							text: Choose a Shadow support card
-							select: choose(side(Shadow), support)
-							memorize: chosenCard
-						}
-						effect: {
-							type: ModifyStrength
-							select: choose(Rohan, companion)
-							amount: {
-								type: Sum
-								source: [
-									{
-										type: TwilightCostInMemory
-										memory: chosenCard
-									}
-									{
-										type: ForEachStacked
-										filter: any
-										on: memory(chosenCard)
-									}
-									{
-										type: ForEachCultureToken
-										filter: memory(chosenCard)
-									}
-									{
-										type: ForEachYouCanSpot
-										filter: NameFromMemory(chosenCard)
-									}
-								]
-							}
-						}
-					}
-				]
-			}
-		]
-		gametext: The Shadow player may hinder any of their own support cards.<br>Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	103_79: {
-		cardInfo: {
-			//id: 103_79.0
-			parent: 103_79
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3E079.0_card.jpg
-			collInfo: V3_79
+			image: sets/V3/LOTR-ENV3S085.0_card.jpg
+			collInfo: V3_85
 			rarity: _
 		}
 		title: Merry
@@ -446,9 +297,8 @@
 				}
 			}
 		]
-		gametext: Valiant. Enduring.\While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.\Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
-
-		lore: ""
+		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
+		lore: "'One poor hobbit coming in from the battle is easily overlooked.’"
 		promotext: ""
 		alts: {
 			promos: {
@@ -458,67 +308,66 @@
 		}
 	}
 
-	103_80: {
+	103_86: {
 		cardInfo: {
-			//id: 103_80.0
-			parent: 103_80
+			//id: 103_86.0
+			parent: 103_86
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E080.0_card.jpg
-			collInfo: V3_80
+			image: sets/V3/LOTR-ENV3S086.0_card.jpg
+			collInfo: V3_86
 			rarity: _
 		}
-		title: Take it Down!
-		unique: false
+		title: Northern Signal-fire
+		subtitle: Flame of Calenhad
+		unique: 2
 		side: Free Peoples
 		culture: Rohan
 		twilight: 2
-		type: Event
-		timewords: [
-			Maneuver
-			Skirmish
+		type: Possession
+		keywords: [
+			Beacon
+			Support Area
 		]
 		effects: [
 			{
-				type: event
-				cost: {
-					type: If
-					check: {
-						type: Phase
-						phase: Skirmish
-					}
-					true: {
-						type: Exert
-						select: choose(or(title(Theoden), title(Eomer)))
-					}
-				}
-				effect: [
+				type: ExtraCost
+				cost: [
 					{
-						type: Exert
-						select: choose(mounted, minion)
-						times: 2
-						memorize: exertedMinion
-					}
-					{
-						type: Exert
-						select: choose(Rohan, companion)
-						count: any
-						memorize: exertedComps
-					}
-					{
-						type: DiscardStackedCards
-						select: choose(side(Shadow))
-						count: {
-							type: ForEachInMemory
-							memory: exertedComps
-						}
+						type: Hinder
+						select: choose(beacon)
+						count: 2
 					}
 				]
 			}
+			{
+				type: Activated
+				phase: Maneuver
+				cost: [
+					{
+						type: Hinder
+						select: self
+					}
+					{
+						type: Exert
+						select: choose(unbound, Man)
+						memorize: exertedMan
+					}
+				]
+				effect: {
+					type: AddModifier
+					until: start(Regroup)
+					modifier: {
+						type: AddKeywordFromCards
+						filter: your, Man
+						from: memory(exertedMan)
+					}
+				}
+			}
 		]
-		gametext: Skirmish: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
-		lore: ""
+		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
+		lore: "'It is over-late to send for aid when you are already besieged,’ answered Beregond. 'But I do not know the counsel of the Lord and his captains.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -528,15 +377,95 @@
 		}
 	}
 
-	103_81: {
+	103_87: {
 		cardInfo: {
-			//id: 103_81.0
-			parent: 103_81
+			//id: 103_87.0
+			parent: 103_87
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E081.0_card.jpg
-			collInfo: V3_81
+			image: sets/V3/LOTR-ENV3S087.0_card.jpg
+			collInfo: V3_87
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Flame of Halifirien
+		unique: 2
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ExtraCost
+				cost: [
+					{
+						type: Hinder
+						select: choose(beacon)
+						count: 2
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: mount
+					player: you
+					on: your, Man
+					memorize: playedMount
+				}
+				cost: {
+					type: AddTwilight
+					amount: 1
+				}
+				effect: {
+					type: Heal
+					select: choose(HasAttached(memory(playedMount)))
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: Exerted
+					filter: minion
+					source: mount, AttachedTo(your, Man)
+				}
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: Exert
+					select: memory(exertedMinion)
+				}
+			}
+		]
+		gametext: Beacon. To play, hinder 2 beacons.<br>Each time you play a mount on your Man, you may add (1) to heal that Man.<br>Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
+		lore: "'And there, I think, he will hear tidings of war, and the Riders of Rohan will go down to Minas Tirith.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_88: {
+		cardInfo: {
+			//id: 103_88.0
+			parent: 103_88
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S088.0_card.jpg
+			collInfo: V3_88
 			rarity: _
 		}
 		title: Snowmane
@@ -594,7 +523,7 @@
 			}
 		]
 		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, the Shadow player may exhaust a minion of strength 15 or more to hinder Snowmane.
-		lore: ""
+		lore: "Lightfoot’s foal, swift Snowmane."
 		promotext: ""
 		alts: {
 			promos: {
@@ -604,58 +533,64 @@
 		}
 	}
 
-	103_82: {
+	103_89: {
 		cardInfo: {
-			//id: 103_82.0
-			parent: 103_82
+			//id: 103_89.0
+			parent: 103_89
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E082.0_card.jpg
-			collInfo: V3_82
+			image: sets/V3/LOTR-ENV3S089.0_card.jpg
+			collInfo: V3_89
 			rarity: _
 		}
-		title: Vanguard's Lance
+		title: Take it Down!
 		unique: false
 		side: Free Peoples
 		culture: Rohan
-		twilight: 1
-		type: Possession
-		strength: 2
-		itemclass: Hand weapon
-		target: Rohan, companion
+		twilight: 2
+		type: Event
+		timewords: Skirmish
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: bearer
-					amount: 2
-					requires: {
-						type: CanSpot
-						filter: bearer, mounted
+				type: event
+				cost: {
+					type: If
+					check: {
+						type: Phase
+						phase: Skirmish
+					}
+					true: {
+						type: Exert
+						select: choose(or(title(Theoden), title(Eomer)))
 					}
 				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: WinsSkirmish
-					filter: bearer
-				}
-				cost: {
-					type: Exert
-					select: bearer
-				}
-				effect: {
-					type: Wound
-					select: choose(minion)
-				}
+				effect: [
+					{
+						type: Exert
+						select: choose(mounted, minion)
+						times: 2
+						memorize: exertedMinion
+					}
+					{
+						type: Exert
+						select: choose(Rohan, companion)
+						count: any
+						memorize: exertedComps
+					}
+					{
+						type: DiscardStackedCards
+						select: choose(side(Shadow))
+						count: {
+							type: ForEachInMemory
+							memory: exertedComps
+						}
+					}
+				]
 			}
 		]
-		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
-		lore: ""
+		gametext: Skirmish: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
+		lore: "He let blow the horns to rally all men to his banner that could come thither; for he thought to make a great shield-wall at the last, and stand, and fight there on foot till all fell..."
 		promotext: ""
 		alts: {
 			promos: {
@@ -664,16 +599,16 @@
 			}
 		}
 	}
-	
-	103_119: {
+
+	103_90: {
 		cardInfo: {
-			//id: 103_119.0
-			parent: 103_119
+			//id: 103_90.0
+			parent: 103_90
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E119.0_card.jpg
-			collInfo: V3_119
+			image: sets/V3/LOTR-ENV3S090.0_card.jpg
+			collInfo: V3_90
 			rarity: _
 		}
 		title: Teach Me Your Herb-lore
@@ -735,7 +670,68 @@
 			}
 		]
 		gametext: Play up to 2 pipes from your draw deck.  If you cannot spot Theoden, add a burden for each pipe played.
-		lore: ""
+		lore: "'Live now in blessedness; and when you sit in peace with your pipe, think of me! For never now shall I sit with you in Meduseld, as I promised, or listen to your herb-lore.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_91: {
+		cardInfo: {
+			//id: 103_91.0
+			parent: 103_91
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S091.0_card.jpg
+			collInfo: V3_91
+			rarity: _
+		}
+		title: Vanguard's Lance
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: Rohan, companion
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: bearer
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: bearer, mounted
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: {
+					type: Wound
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
+		lore: "South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil."
 		promotext: ""
 		alts: {
 			promos: {

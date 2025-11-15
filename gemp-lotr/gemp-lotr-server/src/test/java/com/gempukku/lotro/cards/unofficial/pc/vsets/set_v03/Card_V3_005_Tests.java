@@ -28,37 +28,39 @@ public class Card_V3_005_Tests
 	}
 
 	@Test
-	public void YouCannotEnterHereStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShadowfaxStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: You Cannot Enter Here
+		 * Name: Shadowfax, Swiftest of All
 		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Exert your Wizard to hinder a Shadow card.  Exhaust that Wizard if you chose a minion.
+		 * Type: Possession
+		 * Subtype: Mount
+		 * Game Text: Bearer must be Gandalf.
+		* 	While you can spot a [gandalf] artifact, minions skirmishing bearer gain no strength or keyword bonuses from Shadow cards they bear.
+		* 	While bearer is unwounded or exhausted, bearer is strength +3.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("You Cannot Enter Here", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Shadowfax", card.getBlueprint().getTitle());
+		assertEquals("Swiftest of All", card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void YouCannotEnterHereTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShadowfaxTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -60,7 +60,7 @@
 				}
 			]
 		}
-		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; that minion’s owner may discard a card from hand to prevent this.
+		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; that minion's owner may discard a card from hand to prevent this.
 		lore: Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery.
 		promotext: ""
 		alts: {
@@ -646,7 +646,7 @@
 			]
 		}
 		gametext: <b>Fellowship:</b> Add (1) and exert a Dwarf to heal an Elf, or add (1) and exert an Elf to heal a Dwarf.
-		lore: “‘May it be a sign that though the world is now dark better days are at hand, and that friendship shall be renewed between our peoples.'”
+		lore: "'May it be a sign that though the world is now dark better days are at hand, and that friendship shall be renewed between our peoples.'"
 		promotext: ""
 		alts: {
 			promos: {

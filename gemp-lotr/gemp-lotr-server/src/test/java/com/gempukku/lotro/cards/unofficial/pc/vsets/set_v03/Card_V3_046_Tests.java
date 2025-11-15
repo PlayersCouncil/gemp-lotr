@@ -28,48 +28,45 @@ public class Card_V3_046_Tests
 	}
 
 	@Test
-	public void DesertWindWhisperStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairSlinkthiefStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Desert Wind Whisper
-		 * Unique: true
+		 * Name: Corsair Slinkthief
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 5
+		 * Twilight Cost: 3
 		 * Type: Minion
 		 * Subtype: Man
-		 * Strength: 15
-		 * Vitality: 3
+		 * Strength: 8
+		 * Vitality: 2
 		 * Site Number: 4
-		 * Game Text: <b>Southron</b>. Tracker.
-		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time you hinder this minion you may hinder another [raider] minion.
-		* 	Each minion with ambush (X) is strength +X.
+		 * Game Text: <b>Corsair.</b>
+		* 	Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desert Wind Whisper", card.getBlueprint().getTitle());
+		assertEquals("Corsair Slinkthief", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(15, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesertWindWhisperTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairSlinkthiefTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

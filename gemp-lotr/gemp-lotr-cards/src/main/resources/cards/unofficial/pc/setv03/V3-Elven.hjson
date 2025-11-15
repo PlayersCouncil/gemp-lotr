@@ -7,7 +7,7 @@
 			variant: ORIGINAL
 			variantPath: promos/pc
 			revision: 0
-			image: sets/V3/LOTR-ENV3E001.0_card.jpg
+			image: sets/V3/LOTR-ENV3S001.0_card.jpg
 			collInfo: V3_1
 			rarity: _
 		}
@@ -84,7 +84,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be the Ring-bearer. Discard this if you can spot more than 4 companions.<br>Maneuver: Add a burden and hinder this to hinder a support Shadow card and all cards sharing a title with that card.<br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		gametext: Bearer must be a Ring-bound Hobbit. Discard this if you can spot more than 4 companions.<br>Maneuver: Add 2 burdens to hinder all Shadow support cards with a title you spot.<br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -28,49 +28,46 @@ public class Card_V3_079_Tests
 	}
 
 	@Test
-	public void MerryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireToldeaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Merry, Master Holbytla
+		 * Name: Ulaire Toldea, Blessed with Brutality
 		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 2
-		 * Type: Companion
-		 * Subtype: Hobbit
-		 * Strength: 3
-		 * Vitality: 4
-		 * Resistance: 6
-		 * Signet: Aragorn
-		 * Game Text: Valiant. Enduring.
-		* 	While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.
-		* 	Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 7
+		 * Type: Minion
+		 * Subtype: Nazgul
+		 * Strength: 13
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: Fierce.
+		* 	Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.
+		* 	Each time this minion is assigned to a weaker companion, you may exert that companion to add a threat.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Merry", card.getBlueprint().getTitle());
-		assertEquals("Master Holbytla", card.getBlueprint().getSubtitle());
+		assertEquals("Ulaire Toldea", card.getBlueprint().getTitle());
+		assertEquals("Blessed with Brutality", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(7, card.getBlueprint().getTwilightCost());
+		assertEquals(13, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

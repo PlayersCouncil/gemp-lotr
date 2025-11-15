@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_074_Tests
 {
@@ -27,11 +28,11 @@ public class Card_V3_074_Tests
 	}
 
 	@Test
-	public void UlaireToldeaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireEnqueaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Toldea, Blessed to Dominate
+		 * Name: Ulaire Enquea, Magnified through Suffering
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
@@ -39,34 +40,34 @@ public class Card_V3_074_Tests
 		 * Type: Minion
 		 * Subtype: Nazgul
 		 * Strength: 12
-		 * Vitality: 3
+		 * Vitality: 4
 		 * Site Number: 3
-		 * Game Text: Fierce.
-		* 	Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.
-		* 	Each time this minion is assigned to a weaker companion, you may exert that companion to add a threat.
+		 * Game Text: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i>
+		* 	At the start of each skirmish involving Ulaire Enquea and a wounded character, you may exert him to heal that character and exert a companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ulaire Toldea", card.getBlueprint().getTitle());
-		assertEquals("Blessed with Brutality", card.getBlueprint().getSubtitle());
+		assertEquals("Ulaire Enquea", card.getBlueprint().getTitle());
+		assertEquals("Magnified through Suffering", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(card, Keyword.RELENTLESS));
 		assertEquals(7, card.getBlueprint().getTwilightCost());
-		assertEquals(13, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(12, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireEnqueaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

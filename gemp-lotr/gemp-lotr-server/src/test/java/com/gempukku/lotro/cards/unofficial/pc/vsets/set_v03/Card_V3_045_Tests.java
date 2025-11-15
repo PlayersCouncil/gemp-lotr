@@ -28,48 +28,46 @@ public class Card_V3_045_Tests
 	}
 
 	@Test
-	public void DesertWindStalkerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairQuartermasterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Desert Wind Stalker
-		 * Unique: 2
+		 * Name: Corsair Quartermaster
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 3
+		 * Twilight Cost: 6
 		 * Type: Minion
 		 * Subtype: Man
 		 * Strength: 12
-		 * Vitality: 2
+		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: <b>Southron.</b>  Tracker. 
-		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time you hinder this minion you may hinder another [raider] minion.
-		* 	Southrons gain <b>ambush (1)</b>.
+		 * Game Text: <b>Corsair.</b>
+		* 	At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of Free Peoples items on a character in that skirmish.
+		* 	This minion is <b>damage +1</b> for each Free Peoples item you can spot on each character in its skirmish.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Desert Wind Stalker", card.getBlueprint().getTitle());
+		assertEquals("Corsair Quartermaster", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
+		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(12, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DesertWindStalkerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairQuartermasterTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

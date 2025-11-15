@@ -28,45 +28,38 @@ public class Card_V3_052_Tests
 	}
 
 	@Test
-	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HailingfromtheFarSouthStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: The Mouth of Sauron, Herald of the Dark Lord
+		 * Name: Hailing from the Far South
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 3
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 9
-		 * Vitality: 3
-		 * Site Number: 5
-		 * Game Text: Lurker.
-		* 	Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or minion into hand from discard.
+		* 	Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron <b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
-		assertEquals("Herald of the Dark Lord", card.getBlueprint().getSubtitle());
+		assertEquals("Hailing from the Far South", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HailingfromtheFarSouthTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

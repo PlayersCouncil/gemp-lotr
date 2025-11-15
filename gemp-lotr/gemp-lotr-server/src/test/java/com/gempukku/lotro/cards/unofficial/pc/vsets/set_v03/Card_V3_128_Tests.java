@@ -28,37 +28,40 @@ public class Card_V3_128_Tests
 	}
 
 	@Test
-	public void AWizardKnowsBetterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrodruinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: A Wizard Knows Better
+		 * Name: Orodruin
 		 * Unique: false
-		 * Side: Shadow
-		 * Culture: Isengard
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Restore 2 [Isengard] cards.  Then you may exert X [isengard] minions (or spot Saruman and spot X other [isengard] minions) to hinder an unbound companion costing up to X.
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 9K
+		 * Game Text: Mountain.  Each time a threat is added, the Free Peoples player must assign all threat wounds.
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("A Wizard Knows Better", card.getBlueprint().getTitle());
+		assertEquals("Orodruin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void AWizardKnowsBetterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrodruinTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

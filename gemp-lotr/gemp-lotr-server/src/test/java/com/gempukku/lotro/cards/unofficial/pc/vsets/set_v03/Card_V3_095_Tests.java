@@ -28,37 +28,40 @@ public class Card_V3_095_Tests
 	}
 
 	@Test
-	public void WasHeDeartoTheeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Was He Dear to Thee?
-		 * Unique: false
+		 * Name: Cover of Darkness, Omen of Horror
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Exert a unique [sauron] or [ringwraith] minion and hinder the Ring-bearer to make each minion strength +1 until the regroup phase.
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Twilight.
+		* 	To play, hinder 2 twilight conditions.
+		* 	Each time you play an Orc or Troll, you may exhaust it to make it strength +X until the regroup phase, where X is the number of twilight conditions you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Was He Dear to Thee?", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
+		assertEquals("Omen of Horror", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WasHeDeartoTheeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

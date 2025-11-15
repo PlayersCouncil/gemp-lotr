@@ -28,38 +28,39 @@ public class Card_V3_063_Tests
 	}
 
 	@Test
-	public void MorgulLegionsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CirithUngolWatcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Morgul Legions
-		 * Unique: true
+		 * Name: Cirith Ungol Watcher, Spirit of Vigilence
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 1
-		 * Type: Condition
+		 * Twilight Cost: 2
+		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: Each time you play a [ringwraith] Orc, the Free Peoples player must hinder one of their possessions.
-		* 	Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.  Discard this possession.
+		 * Game Text: To play, spot a [ringwraith] card and add a burden.
+		* 	Each time a companion exerts, draw a card (limit once per site).
+		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (6) and hinder that companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Morgul Legions", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
+		assertEquals("Spirit of Vigilence", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MorgulLegionsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V3_100_Tests
 {
@@ -17,8 +18,9 @@ public class Card_V3_100_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_100");
-					// put other cards in here as needed for the test case
+					put("sauron", "103_100");
+
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -27,67 +29,65 @@ public class Card_V3_100_Tests
 	}
 
 	@Test
-	public void FrodoStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Frodo, Bereft of Hope
+		 * Name: Sauron, Lord of All Middle-earth
 		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 0
-		 * Type: Companion
-		 * Subtype: Hobbit
-		 * Strength: 2
-		 * Vitality: 4
-		 * Resistance: 7
-		 * Signet: Gandalf
-		 * Game Text: Ring-bearer (resistance 7).  Ring-bound.
-		* 	While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 18
+		 * Type: Minion
+		 * Subtype: Maia
+		 * Strength: 24
+		 * Vitality: 5
+		 * Site Number: 6
+		 * Game Text: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. 
+		* 	When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.
+		* 	Each time a companion loses a skirmish to Sauron, kill that companion.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sauron");
 
-		assertEquals("Frodo", card.getBlueprint().getTitle());
-		assertEquals("Bereft of Hope", card.getBlueprint().getSubtitle());
+		assertEquals("Sauron", card.getBlueprint().getTitle());
+		assertEquals("Lord of All Middle-earth", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(7, card.getBlueprint().getResistance());
-		assertTrue(card.getBlueprint().canStartWithRing());
-		assertNull(card.getBlueprint().getSignet());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAIA, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(18, card.getBlueprint().getTwilightCost());
+		assertEquals(24, card.getBlueprint().getStrength());
+		assertEquals(5, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SauronIsDiscounted1PerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var sauron = scn.GetShadowCard("sauron");
+		scn.MoveCardsToHand(sauron);
 
 		scn.StartGame();
 		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		
+		scn.SkipToPhase(Phase.SHADOW);
+
+		assertEquals(24, scn.GetTwilight());
+		scn.ShadowPlayCard(sauron);
+
+		//24 -18 base -2 roaming +2 discount for both companions
+		assertEquals(6, scn.GetTwilight());
 	}
 }

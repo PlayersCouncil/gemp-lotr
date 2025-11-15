@@ -28,39 +28,37 @@ public class Card_V3_084_Tests
 	}
 
 	@Test
-	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IAmNoManStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Horror
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Sauron
+		 * Name: I Am No Man
+		 * Unique: false
+		 * Side: Free Peoples
+		 * Culture: Rohan
 		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Each time you play an Orc or Troll, you may exhaust it to make it strength +1 for each twilight condition you can spot until the regroup phase.
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered card you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Horror", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals("I Am No Man", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IAmNoManTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

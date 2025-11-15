@@ -89,14 +89,28 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
         return result;
     }
 
+    private int[] getCardIds(PhysicalCard card) {
+        return new int[] {card.getCardId()};
+    }
+
     @Override
     public void addAssignment(PhysicalCard freePeople, Set<PhysicalCard> minions) {
         appendEvent(new GameEvent(ADD_ASSIGNMENT).cardId(freePeople.getCardId()).otherCardIds(getCardIds(minions)));
     }
 
     @Override
+    public void addPendingAssignment(PhysicalCard freePeople, PhysicalCard minion) {
+        appendEvent(new GameEvent(ADD_ASSIGNMENT).cardId(freePeople.getCardId() * -1).otherCardIds(getCardIds(minion)));
+    }
+
+    @Override
     public void removeAssignment(PhysicalCard freePeople) {
         appendEvent(new GameEvent(REMOVE_ASSIGNMENT).cardId(freePeople.getCardId()));
+    }
+
+    @Override
+    public void removePendingAssignment(PhysicalCard freePeople, PhysicalCard minion) {
+        appendEvent(new GameEvent(REMOVE_ASSIGNMENT).cardId(freePeople.getCardId() * -1).otherCardIds(getCardIds(minion)));
     }
 
     @Override

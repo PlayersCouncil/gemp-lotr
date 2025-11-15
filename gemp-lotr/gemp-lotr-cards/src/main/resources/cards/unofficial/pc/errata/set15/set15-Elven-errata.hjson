@@ -93,7 +93,7 @@
 			}
 		]
 		gametext: Each time Legolas wins a skirmish, you may heal a hunter [dwarven] Dwarf or hunter [gondor] Man.<br><b>Skirmish:</b> Discard this condition to make an [elven] Elf strength +2.
-		lore: “‘...not even my eyes can see him, my good Legolas...'”
+		lore: "'...not even my eyes can see him, my good Legolas...'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -157,7 +157,7 @@
 			}
 		]
 		gametext: <b>Valiant.</b> <br>To play, spot an Elf.<br>While the fellowship is at a battleground site, Haldir is strength +2.<br>While the fellowship is at a forest site, Haldir is an <b>archer</b>.
-		lore: “‘...since you come with an Elf of our kindred, we are willing to befirend you, as Elrond asked...'”
+		lore: "'...since you come with an Elf of our kindred, we are willing to befirend you, as Elrond asked...'"
 		promotext: ""
 		alts: {
 			promos: {

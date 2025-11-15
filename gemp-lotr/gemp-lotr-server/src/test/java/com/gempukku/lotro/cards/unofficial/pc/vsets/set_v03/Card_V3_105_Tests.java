@@ -28,38 +28,37 @@ public class Card_V3_105_Tests
 	}
 
 	@Test
-	public void TheSoonerWereRidofItStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DrivenByHerOwnCruelWillStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: The Sooner We’re Rid of It
-		 * Unique: true
+		 * Name: Driven By Her Own Cruel Will
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Shire
-		 * Twilight Cost: 3
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: To play, spot 2 Hobbit companions.
-		* 	Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
+		 * Twilight Cost: 5
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Make a skirmishing Hobbit bearing a hand weapon (except the Ring-bearer) strength +X, where X is the total vitality of all characters in that skirmish.  At the end of that skirmish, hinder a minion involved in that skirmish if you cannot spot more than 4 companions.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Sooner We’re Rid of It", card.getBlueprint().getTitle());
+		assertEquals("Driven By Her Own Cruel Will", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheSoonerWereRidofItTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DrivenByHerOwnCruelWillTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

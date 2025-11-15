@@ -268,7 +268,7 @@
 			}
 		]
 		gametext: Skirmish: Exert Pippin to prevent a skirmishing [shire] companion from being overwhelmed unless their strength is tripled (and make them strength +1 if you can spot 3 companions with the Frodo signet).
-		lore: "‘You must go - and therefore we must, too. Merry and I are coming with you.'"
+		lore: "'You must go - and therefore we must, too. Merry and I are coming with you.'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -28,47 +28,46 @@ public class Card_V3_102_Tests
 	}
 
 	@Test
-	public void SamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sam, Undaunted
+		 * Name: The Mouth of Sauron, Emissary of Mordor
 		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 2
-		 * Type: Companion
-		 * Subtype: Hobbit
-		 * Strength: 3
-		 * Vitality: 4
-		 * Resistance: 5
-		 * Signet: Aragorn
-		 * Game Text: Ring-bound. If you cannot spot more than 4 companions at the start of the maneuver phase, you may add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.
-		* 	Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 9
+		 * Vitality: 3
+		 * Site Number: 5
+		 * Game Text: Lurker.
+		* 	Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.
+		* 	Skirmish: Exert this minion to make a wounded companion strength -1.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Sam", card.getBlueprint().getTitle());
-		assertEquals("Undaunted", card.getBlueprint().getSubtitle());
+		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
+		assertEquals("Emissary of Mordor", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

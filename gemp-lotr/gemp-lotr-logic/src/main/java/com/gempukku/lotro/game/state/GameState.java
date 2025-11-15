@@ -314,8 +314,18 @@ public class GameState {
                     listener.cardCreated(physicalCard);
             }
 
-            for (Assignment assignment : _assignments)
-                listener.addAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
+            for (Assignment assignment : _assignments) {
+                if(assignment instanceof NestedAssignment nested) {
+                    for(var pending : nested.getPendingSubskirmishes()) {
+                        if(!pending.getShadowCharacters().isEmpty()) {
+                            listener.addPendingAssignment(pending.getFellowshipCharacter(), pending.getShadowCharacters().stream().findFirst().get());
+                        }
+                    }
+                }
+                else {
+                    listener.addAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
+                }
+            }
 
             if (_skirmish != null)
                 listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
@@ -682,6 +692,39 @@ public class GameState {
         }
     }
 
+    public void breakSkirmishIntoSubSkirmishes(PhysicalCard fp, PhysicalCard firstMinion) {
+        var minions = new HashSet<>(_skirmish.getShadowCharacters());
+        if(!minions.contains(firstMinion))
+            return;
+
+        var pendingMinions = new HashSet<PhysicalCard>();
+
+        //We can't use any of the premade functions for any of this stuff because they will result in cancelling
+        // the skirmish or assignments.
+        for(var minion : minions) {
+            if(minion == firstMinion)
+                continue;
+
+            if (_skirmish.getShadowCharacters().remove(minion)) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
+                    listener.removeFromSkirmish(minion);
+                }
+            }
+
+            pendingMinions.add(minion);
+        }
+
+        var nested = new NestedAssignment(fp, pendingMinions);
+
+        _assignments.add(nested);
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            for(var pending : nested.getPendingSubskirmishes()) {
+                listener.addPendingAssignment(pending.getFellowshipCharacter(), pending.getShadowCharacters().stream().findFirst().get());
+            }
+        }
+    }
+
     public void replaceInSkirmishMinion(PhysicalCard card, PhysicalCard removedMinion) {
         //The removed minion is pulled out of the current skirmish
         removeFromSkirmish(removedMinion);
@@ -729,6 +772,18 @@ public class GameState {
             return;
 
         for (var assignment : new LinkedList<>(_assignments)) {
+            //Nested assignments handle their own removal
+            if(assignment instanceof NestedAssignment nested) {
+                if(nested.getFellowshipCharacter() == card) {
+                    for(var subAssignment : nested.getPendingSubskirmishes()) {
+                        removeAssignment(subAssignment);
+                        removeSubAssignment(subAssignment);
+                    }
+                    removeAssignment(assignment);
+                }
+                continue;
+            }
+
             if (assignment.getFellowshipCharacter() == card) {
                 removeAssignment(assignment);
             }
@@ -749,9 +804,16 @@ public class GameState {
             removeFromSkirmish(minion);
 
             for (Assignment assignment : new LinkedList<>(_assignments)) {
-                if (assignment.getShadowCharacters().remove(minion))
-                    if (assignment.getShadowCharacters().isEmpty())
+                if (assignment.getShadowCharacters().remove(minion)) {
+                    if(assignment instanceof NestedAssignment nested) {
+                        if(nested.getPendingSubskirmishes().isEmpty()) {
+                            removeAssignment(nested);
+                        }
+                    }
+                    else if (assignment.getShadowCharacters().isEmpty()) {
                         removeAssignment(assignment);
+                    }
+                }
             }
         }
 
@@ -766,7 +828,9 @@ public class GameState {
     }
 
     public void refreshAssignment(Assignment assignment) {
-        removeAssignment(assignment);
+        if(!(assignment instanceof NestedAssignment)) {
+            removeAssignment(assignment);
+        }
         assignToSkirmishes(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
     }
 
@@ -774,6 +838,15 @@ public class GameState {
         _assignments.remove(assignment);
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.removeAssignment(assignment.getFellowshipCharacter());
+        }
+    }
+
+    //This should only be used to communicate that a split-up subskirmish assignment is now active
+    public void removeSubAssignment(Assignment assignment) {
+        //As the parent NestedListener is still in the assignment group, we won't remove it
+        //from local tracking; instead just inform the client so they don't display the character wrong
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.removePendingAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters().stream().findFirst().get());
         }
     }
 

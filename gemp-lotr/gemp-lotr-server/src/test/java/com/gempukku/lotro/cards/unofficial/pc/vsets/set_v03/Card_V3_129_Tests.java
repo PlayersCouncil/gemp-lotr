@@ -28,40 +28,41 @@ public class Card_V3_129_Tests
 	}
 
 	@Test
-	public void CoverofDarknessStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PinnacleofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cover of Darkness, Omen of Gloom
-		 * Unique: 2
-		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 3 twilight conditions (or 2 if you cannot spot another Cover of Darkness).
-		* 	Shadow: Hinder this condition to take a twilight card into hand from your draw deck.
-		* 	Regroup: Hinder a twilight card to add (1).
+		 * Name: Pinnacle of Doom
+		 * Unique: false
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Subtype: Standard
+		 * Site Number: 9K
+		 * Game Text: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
-		assertEquals("Omen of Gloom", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals("Pinnacle of Doom", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PinnacleofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

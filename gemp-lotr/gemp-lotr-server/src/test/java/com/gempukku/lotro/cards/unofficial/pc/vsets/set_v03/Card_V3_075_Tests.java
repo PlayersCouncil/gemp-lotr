@@ -28,46 +28,45 @@ public class Card_V3_075_Tests
 	}
 
 	@Test
-	public void WingedNazgulStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireLemenyaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Winged Nazgul
-		 * Unique: 2
+		 * Name: Ulaire Lemenya, Anointed with Terror
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 4
+		 * Twilight Cost: 5
 		 * Type: Minion
 		 * Subtype: Nazgul
-		 * Strength: 9
-		 * Vitality: 3
-		 * Site Number: 4
-		 * Game Text: Enduring. Fierce.
-		* 	Assignment: Discard another Winged Nazgul to assign this minion to an unbound companion.
+		 * Strength: 10
+		 * Vitality: 2
+		 * Site Number: 3
+		 * Game Text: Fierce.
+		* 	Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Winged Nazgul", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Ulaire Lemenya", card.getBlueprint().getTitle());
+		assertEquals("Anointed with Terror", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(10, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WingedNazgulTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireLemenyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

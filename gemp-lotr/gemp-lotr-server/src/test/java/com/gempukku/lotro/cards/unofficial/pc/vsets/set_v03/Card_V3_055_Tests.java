@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_055_Tests
 {
@@ -17,14 +18,8 @@ public class Card_V3_055_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("trap", "103_55");
-					put("isengard_tracker", "4_193");
-					put("raider_tracker", "103_45");
-					put("ambush_southron", "4_252");
-					put("ambush_horror", "14_13");
-					put("southron", "4_253");
-					put("soldier", "1_271");
-					put("runner", "1_178");
+					put("card", "103_55");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -33,78 +28,58 @@ public class Card_V3_055_Tests
 	}
 
 	@Test
-	public void SandcraftTrapStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RaidingSchoonerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sandcraft Trap
-		 * Unique: false
+		 * Name: Raiding Schooner
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Assignment
-		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Support area
+		 * Game Text: When you play this, spot a Corsair to add a [raider] token here.
+		* 	Shadow: Remove 2 [raider] tokens from your cards to hinder a Free Peoples possession.
+		* 	Maneuver: Spot a Corsair, hinder another Raiding Schooner, and remove 3 [raider] tokens from your cards to hinder a Free Peoples artifact.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("trap");
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Sandcraft Trap", card.getBlueprint().getTitle());
+		assertEquals("Raiding Schooner", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void SandcraftTrapRestoresTrackersAndNativeAmbushMinions() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void RaidingSchoonerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var trap = scn.GetShadowCard("trap");
-		var isengard_tracker = scn.GetShadowCard("isengard_tracker");
-		var raider_tracker = scn.GetShadowCard("raider_tracker");
-		var ambush_southron = scn.GetShadowCard("ambush_southron");
-		var ambush_horror = scn.GetShadowCard("ambush_horror");
-		var southron = scn.GetShadowCard("southron");
-		var soldier = scn.GetShadowCard("soldier");
-		var runner = scn.GetShadowCard("runner");
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
-		scn.MoveCardsToHand(trap);
-		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier, runner);
-		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPass();
-
-		assertTrue(scn.IsHindered(isengard_tracker));
-		assertTrue(scn.IsHindered(raider_tracker));
-		assertTrue(scn.IsHindered(ambush_southron));
-		assertTrue(scn.IsHindered(ambush_southron));
-		assertTrue(scn.IsHindered(ambush_horror));
-		assertTrue(scn.IsHindered(soldier));
-		assertFalse(scn.IsHindered(runner));
-
-		assertTrue(scn.ShadowPlayAvailable(trap));
-		scn.ShadowPlayCard(trap);
-
-		//Trackers of all cultures restored
-		assertFalse(scn.IsHindered(isengard_tracker));
-		assertFalse(scn.IsHindered(raider_tracker));
-		//Minions of all cultures with ambush restored
-		assertFalse(scn.IsHindered(ambush_southron));
-		assertFalse(scn.IsHindered(ambush_horror));
-
-		//Non-ambush southron still hindered
-		assertTrue(scn.IsHindered(southron));
-		//Non-tracker non-ambush minion still hindered
-		assertTrue(scn.IsHindered(soldier));
+		assertFalse(true);
 	}
 }

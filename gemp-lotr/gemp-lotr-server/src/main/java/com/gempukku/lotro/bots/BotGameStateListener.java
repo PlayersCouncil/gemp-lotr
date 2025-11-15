@@ -90,7 +90,17 @@ public class BotGameStateListener implements GameStateListener {
     }
 
     @Override
+    public void addPendingAssignment(PhysicalCard fp, PhysicalCard minion) {
+
+    }
+
+    @Override
     public void removeAssignment(PhysicalCard fp) {
+
+    }
+
+    @Override
+    public void removePendingAssignment(PhysicalCard freePeople, PhysicalCard minion) {
 
     }
 

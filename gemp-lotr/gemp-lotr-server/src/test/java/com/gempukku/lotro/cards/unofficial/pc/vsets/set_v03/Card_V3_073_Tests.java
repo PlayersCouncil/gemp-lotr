@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Race;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_073_Tests
 {
@@ -30,43 +28,45 @@ public class Card_V3_073_Tests
 	}
 
 	@Test
-	public void UlaireOtseaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireCanteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Otsea, Consecrated by Pestilence
+		 * Name: Ulaire Cantea, Exalted with Decay
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 5
+		 * Twilight Cost: 6
 		 * Type: Minion
 		 * Subtype: Nazgul
-		 * Strength: 9
+		 * Strength: 11
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Each time a Nazgul wins a skirmish, you may exert this minion to play a Shadow condition from your discard pile. Add a threat if it is a [ringwraith] condtion.
+		 * Game Text: Fierce.
+		* 	Skirmish: Exert this minion to hinder a possession or condition borne by a character it is skirmishing.  If you can spot another Nazgul, hinder all other copies of that card you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ulaire Otsea", card.getBlueprint().getTitle());
-		assertEquals("Consecrated by Pestilence", card.getBlueprint().getSubtitle());
+		assertEquals("Ulaire Cantea", card.getBlueprint().getTitle());
+		assertEquals("Exalted with Decay", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UlaireOtseaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireCanteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

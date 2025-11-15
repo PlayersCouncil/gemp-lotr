@@ -28,38 +28,39 @@ public class Card_V3_106_Tests
 	}
 
 	@Test
-	public void WorthFightingForStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FlotsamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Worth Fighting For
+		 * Name: Flotsam
 		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Shire
-		 * Twilight Cost: 2
-		 * Type: Event
-		 * Subtype: Fellowship
-		 * Game Text: To play, spot a Hobbit companion.
-		* 	Make the Shadow player exhaust 1 of your characters.  For each exertion made, hinder a Shadow support card; if you cannot spot more than 4 companions, you may instead shuffle it (and all cards stacked on it) into its owner's draw deck.
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: 
+		 * Game Text: Pipeweed. Bearer must bear a pipe.
+		* 	When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
+		* 	Skirmish: Discard this possession to heal bearer.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Worth Fighting For", card.getBlueprint().getTitle());
+		assertEquals("Flotsam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WorthFightingForTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FlotsamTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

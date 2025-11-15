@@ -28,41 +28,38 @@ public class Card_V3_114_Tests
 	}
 
 	@Test
-	public void OrodruinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinsPipeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Orodruin
-		 * Unique: false
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 9
-		 * Type: Site
-		 * Subtype: Standard
-		 * Site Number: 9K
-		 * Game Text: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
+		 * Name: Pippin's Pipe
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Pipe
+		 * Game Text: Bearer must be an unbound Hobbit.
+		* 	Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Hinder this pipe or hinder bearer.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Orodruin", card.getBlueprint().getTitle());
+		assertEquals("Pippin's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
-		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
-		assertEquals(9, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getSiteNumber());
-		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PIPE));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OrodruinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PippinsPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -750,9 +750,43 @@ public class HinderTests
 
     }
 
-    //@Test
+    @Test
     public void CannotSpotWoundsOnHinderedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                     put("whelp", "7_202");
+                }}
+        );
 
+        var frodo = scn.GetRingBearer();
+
+        var whelp = scn.GetShadowCard("whelp");
+        scn.MoveMinionsToTable(whelp);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, frodo));
+                action.setText("Hinder Frodo");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        //Whelp is base 3 strength when there is no wound on the RB
+        assertEquals(3, scn.GetStrength(whelp));
+
+        //Whelp jumps to 9 strength when there is a wound on the RB
+        scn.AddWoundsToChar(frodo, 1);
+        assertEquals(9, scn.GetStrength(whelp));
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(frodo));
+
+        //A hindered character cannot have its wounds spotted, so Whelp goes back down to 3
+        assertEquals(3, scn.GetStrength(whelp));
     }
 
     //@Test
@@ -760,29 +794,184 @@ public class HinderTests
 
     }
 
-    //@Test
+    @Test
     public void CannotSpotCultureTokenOnHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("ships", "8_65");
+                    put("wind", "13_86"); //While you can spot 5 or more culture tokens, the minion archery total is +2
+                }}
+        );
 
+        var frodo = scn.GetRingBearer();
+
+        var ships = scn.GetShadowCard("ships");
+        var wind = scn.GetShadowCard("wind");
+        scn.MoveCardsToSupportArea(ships);
+        scn.MoveMinionsToTable(wind);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, ships));
+                action.setText("Hinder Ships of Great Draught");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        assertEquals(0, scn.GetShadowArcheryTotal());
+
+        //With 5 spottable culture tokens, Desert Wind makes the archery total +2
+        scn.AddTokensToCard(ships, 5);
+        assertEquals(2, scn.GetShadowArcheryTotal());
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(ships));
+
+        //A hindered condition cannot have its culture tokens spotted, so the archery total goes back down
+        assertEquals(0, scn.GetShadowArcheryTotal());
     }
 
-    //@Test
-    public void CannotCountCultureTokenOnHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
-
-    }
-
-    //@Test
+    @Test
     public void CannotReinforceCultureTokenOnHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("brego", "13_63"); //reinforces a [gondor] token on play
+                    put("leaders", "7_112");
+                }}
+        );
 
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var brego = scn.GetFreepsCard("brego");
+        var leaders = scn.GetFreepsCard("leaders");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToSupportArea(leaders);
+        scn.MoveCardsToHand(brego);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, leaders));
+                action.setText("Hinder Noble Leaders");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.AddTokensToCard(leaders, 1);
+        assertEquals(1, scn.GetCultureTokensOn(leaders));
+
+        assertTrue(scn.FreepsPlayAvailable(brego));
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(leaders));
+
+        scn.FreepsPlayCard(brego);
+
+        //Accept the optional trigger
+        scn.FreepsAcceptOptionalTrigger();
+        assertTrue(scn.AwaitingFellowshipPhaseActions());
+        //Brego failed to reinforce anything because the only token was on a hindered card
+        assertEquals(1, scn.GetCultureTokensOn(leaders));
     }
 
-    //@Test
+    @Test
     public void CannotAddCultureTokenOnHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("knowledge", "7_104"); //Adds a [gondor] token (not reinforce)
+                    put("leaders", "7_112");
+                }}
+        );
 
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var knowledge = scn.GetFreepsCard("knowledge");
+        var leaders = scn.GetFreepsCard("leaders");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToSupportArea(leaders);
+        scn.MoveCardsToHand(knowledge);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, leaders));
+                action.setText("Hinder Noble Leaders");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.AddTokensToCard(leaders, 1);
+        assertEquals(1, scn.GetCultureTokensOn(leaders));
+
+        assertTrue(scn.FreepsPlayAvailable(knowledge));
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(leaders));
+
+        scn.FreepsPlayCard(knowledge);
+
+        scn.DismissRevealedCards();
+
+        assertTrue(scn.AwaitingFellowshipPhaseActions());
+        //Hidden Knowledge failed to add tokens to anything because the only token was on a hindered card
+        assertEquals(1, scn.GetCultureTokensOn(leaders));
     }
 
-    //@Test
+    @Test
     public void CannotRemoveCultureTokenOnHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("brego", "13_63"); //maneuver action removes 2 [gondor] tokens to wound a minion
+                    put("leaders", "7_112");
 
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var brego = scn.GetFreepsCard("brego");
+        var leaders = scn.GetFreepsCard("leaders");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToSupportArea(leaders);
+        scn.AttachCardsTo(aragorn, brego);
+
+        var runner = scn.GetShadowCard("runner");
+        scn.MoveMinionsToTable(runner);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, leaders));
+                action.setText("Hinder Noble Leaders");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        scn.AddTokensToCard(leaders, 2);
+        assertEquals(2, scn.GetCultureTokensOn(leaders));
+
+        scn.FreepsUseCardAction(frodo);
+        assertTrue(scn.IsHindered(leaders));
+
+        scn.SkipToPhase(Phase.MANEUVER);
+
+        //Brego cannot be used because the only 2 gondor tokens are on a hindered card
+        assertFalse(scn.FreepsActionAvailable(brego));
     }
 
     @Test

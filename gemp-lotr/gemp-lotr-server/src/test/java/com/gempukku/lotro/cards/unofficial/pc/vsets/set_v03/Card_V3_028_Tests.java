@@ -28,47 +28,39 @@ public class Card_V3_028_Tests
 	}
 
 	@Test
-	public void TormentedWarriorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Tormented Warrior
-		 * Unique: false
+		 * Name: Northern Signal-fire, Flame of Amon Din
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 3
-		 * Type: Companion
-		 * Subtype: Wraith
-		 * Strength: 6
-		 * Vitality: 2
-		 * Resistance: 6
-		 * Game Text: Enduring.
-		* 	To play, add a threat.
-		* 	This companion is strength +1 for each companion in the dead pile.
-		* 	This companion is strength +1 for each Wraith in the dead piile.
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Support area
+		 * Game Text: Beacon. To play, hinder 2 beacons.
+		* 	Response: If an unbound Man costing X is about to take a wound, hinder X beacons to prevent that wound.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Tormented Warrior", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
+		assertEquals("Flame of Amon Din", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TormentedWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

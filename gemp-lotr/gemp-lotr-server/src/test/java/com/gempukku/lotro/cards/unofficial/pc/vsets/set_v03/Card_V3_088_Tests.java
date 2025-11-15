@@ -28,46 +28,41 @@ public class Card_V3_088_Tests
 	}
 
 	@Test
-	public void TheMouthofSauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SnowmaneStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: The Mouth of Sauron, Emissary of Mordor
+		 * Name: Snowmane, Faithful Servant
 		 * Unique: true
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 3
-		 * Type: Minion
-		 * Subtype: Man
-		 * Strength: 9
-		 * Vitality: 3
-		 * Site Number: 5
-		 * Game Text: Lurker.
-		* 	Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.
-		* 	Skirmish: Exert this minion to make a wounded companion strength -1.
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Mount
+		 * Vitality: 1
+		 * Game Text: Bearer must be Theoden.
+		* 	[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.
+		* 	At the start of the assignment phase, the Shadow player may exhaust a minion of strength 15 or more to hinder Snowmane.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
-		assertEquals("Emissary of Mordor", card.getBlueprint().getSubtitle());
+		assertEquals("Snowmane", card.getBlueprint().getTitle());
+		assertEquals("Faithful Servant", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.LURKER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SnowmaneTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

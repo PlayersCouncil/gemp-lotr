@@ -35,7 +35,7 @@
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
-		lore: “‘You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. ‘He is wise enough on his own ground.'”
+		lore: "'You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. 'He is wise enough on his own ground.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -180,7 +180,7 @@
 			}
 		}
 		gametext: Play a Wizard or [gandalf] ally from your draw deck.
-		lore: “‘A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'”
+		lore: "'A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'"
 		promotext: ""
 		alts: {
 			promos: {

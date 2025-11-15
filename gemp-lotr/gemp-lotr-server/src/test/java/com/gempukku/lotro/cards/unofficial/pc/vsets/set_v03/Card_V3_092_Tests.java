@@ -18,9 +18,8 @@ public class Card_V3_092_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("sauron", "103_92");
-
-					put("aragorn", "1_89");
+					put("card", "103_92");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -29,64 +28,58 @@ public class Card_V3_092_Tests
 	}
 
 	@Test
-	public void SauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CirithUngolWatcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sauron, Lord of All Middle-earth
-		 * Unique: true
+		 * Name: Cirith Ungol Watcher, Hideous Warden
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 18
-		 * Type: Minion
-		 * Subtype: Maia
-		 * Strength: 24
-		 * Vitality: 5
-		 * Site Number: 6
-		 * Game Text: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. 
-		* 	When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.
-		* 	Each time a companion loses a skirmish to Sauron, kill that companion.
+		 * Twilight Cost: 2
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Game Text: To play, spot a [sauron] card and add a threat.
+		* 	Each time a companion exerts, draw a card (limit once per site).
+		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 3 threats and hinder that companion.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("sauron");
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Sauron", card.getBlueprint().getTitle());
-		assertEquals("Lord of All Middle-earth", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
+		assertEquals("Hideous Warden", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAIA, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertEquals(18, card.getBlueprint().getTwilightCost());
-		assertEquals(24, card.getBlueprint().getStrength());
-		assertEquals(5, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void SauronIsDiscounted1PerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
-		var sauron = scn.GetShadowCard("sauron");
-		scn.MoveCardsToHand(sauron);
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-
-		scn.SetTwilight(20);
 		
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(24, scn.GetTwilight());
-		scn.ShadowPlayCard(sauron);
-
-		//24 -18 base -2 roaming +2 discount for both companions
-		assertEquals(6, scn.GetTwilight());
+		assertFalse(true);
 	}
 }

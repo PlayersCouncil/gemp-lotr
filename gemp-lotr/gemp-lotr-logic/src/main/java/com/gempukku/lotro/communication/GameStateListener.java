@@ -39,6 +39,8 @@ public interface GameStateListener {
 
     void removeAssignment(PhysicalCard fp);
 
+    void removePendingAssignment(PhysicalCard freePeople, PhysicalCard minion);
+
     void startSkirmish(PhysicalCard fp, Set<PhysicalCard> minions);
 
     void addToSkirmish(PhysicalCard card);

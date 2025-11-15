@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_103_Tests
 {
@@ -27,46 +28,38 @@ public class Card_V3_103_Tests
 	}
 
 	@Test
-	public void SmeagolStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheyAreNotAllAccountedForStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Smeagol, Once Like Us
-		 * Unique: true
-		 * Side: Free Peoples
-		 * Culture: Shire
-		 * Twilight Cost: 0
-		 * Type: Companion
-		 * Subtype: 
-		 * Strength: 3
-		 * Vitality: 4
-		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: Ring-bound. To play, add a burden.
-		* 	Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
+		 * Name: They Are Not All Accounted For
+		 * Unique: false
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: To play, spot 2 [sauron] or [ringwraith] cards.
+		* 	Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Smeagol", card.getBlueprint().getTitle());
-		assertEquals("Once Like Us", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
+		assertEquals("They Are Not All Accounted For", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SmeagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheyAreNotAllAccountedForTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

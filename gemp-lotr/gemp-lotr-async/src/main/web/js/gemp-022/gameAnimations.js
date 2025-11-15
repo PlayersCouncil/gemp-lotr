@@ -14,7 +14,7 @@ var GameAnimations = Class.extend({
     },
 
     getAnimationLength:function (origValue) {
-            return origValue * this.replaySpeed;
+        return origValue * this.replaySpeed;
     },
 
     cardActivated:function (element, animate) {
@@ -634,12 +634,35 @@ var GameAnimations = Class.extend({
             function (next) {
                 var cardId = element.getAttribute("cardId");
                 var opposingCardIds = element.getAttribute("otherCardIds").split(",");
-
-                for (var i = 0; i < opposingCardIds.length; i++) {
-                    if ($(".card:cardId(" + opposingCardIds[i] + ")").data("card").assign != cardId)
-                        that.game.assignMinion(opposingCardIds[i], cardId);
+                
+                //A negative card id indicates that this is a split-up skirmish where minions are
+                // going to each wait their turn.  To avoid confusion, they will be off to the side
+                // but "assigned" to a see-through version of our character
+                if(Number(cardId) < 0) {
+                    var existingFakeDiv = $(".card:cardId(extra" + cardId + ")");
+                    if(existingFakeDiv == null || existingFakeDiv.length == 0) {
+                        var realCard = $(".card:cardId(" + (Number(cardId) * -1) + ")").data("card");
+                        var newId = that.game.createVirtualCard(cardId, "" + realCard.blueprintId);
+                        existingFakeDiv = $(".card:cardId(" + newId + ")");
+                    }
+                    
+                    if (opposingCardIds != null && opposingCardIds != "") {
+                        for (var i = 0; i < opposingCardIds.length; i++) {
+                            if (existingFakeDiv.data("card").assign != cardId) {
+                                that.game.assignMinion(opposingCardIds[i], cardId);
+                            }
+                        }
+                    }
                 }
-
+                else {
+                    if (opposingCardIds != null && opposingCardIds != "") {
+                        for (var i = 0; i < opposingCardIds.length; i++) {
+                            if ($(".card:cardId(" + opposingCardIds[i] + ")").data("card").assign != cardId) {
+                                that.game.assignMinion(opposingCardIds[i], cardId);
+                            }
+                        }
+                    }
+                }
                 next();
             });
         if (animate) {
@@ -656,12 +679,25 @@ var GameAnimations = Class.extend({
         $("#main").queue(
             function (next) {
                 var cardId = element.getAttribute("cardId");
-
-                $(".card").each(function () {
-                    var cardData = $(this).data("card");
-                    if (cardData.assign == cardId)
-                        that.game.unassignMinion(cardData.cardId);
-                });
+                
+                //This represents a skirmish that has been separated into
+                // multiple pending individual skirmishes
+                if(Number(cardId) < 0) {
+                    var opposingCardIds = element.getAttribute("otherCardIds").split(",");
+                    
+                    for (var i = 0; i < opposingCardIds.length; i++) {
+                        if ($(".card:cardId(" + opposingCardIds[i] + ")").data("card").assign == cardId)
+                            that.game.unassignMinion(opposingCardIds[i]);
+                    }
+                }
+                else {
+                    $(".card").each(function () {
+                        var cardData = $(this).data("card");
+                        if (cardData.assign == cardId) {
+                            that.game.unassignMinion(cardData.cardId);
+                        }
+                    });
+                }
 
                 next();
             });

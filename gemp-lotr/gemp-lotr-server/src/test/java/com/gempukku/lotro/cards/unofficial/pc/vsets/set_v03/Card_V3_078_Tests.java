@@ -28,38 +28,45 @@ public class Card_V3_078_Tests
 	}
 
 	@Test
-	public void DeathTakeUsAllStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireOtseaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Death Take Us All
-		 * Unique: false
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: The Shadow player may hinder any of their own support cards.
-		* 	Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
+		 * Name: Ulaire Otsea, Consecrated by Pestilence
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 5
+		 * Type: Minion
+		 * Subtype: Nazgul
+		 * Strength: 10
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: Fierce.
+		* 	Each time a Nazgul wins a skirmish, you may exert this minion to play a Shadow condition from your discard pile. Add a threat if it is a [ringwraith] condtion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Death Take Us All", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals("Ulaire Otsea", card.getBlueprint().getTitle());
+		assertEquals("Consecrated by Pestilence", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(10, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DeathTakeUsAllTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UlaireOtseaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

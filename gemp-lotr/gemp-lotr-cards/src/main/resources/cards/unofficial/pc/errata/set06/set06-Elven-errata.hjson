@@ -56,7 +56,7 @@
 			]
 		}
 		gametext: Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
-		lore: “‘Give them a volley.'”
+		lore: "'Give them a volley.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -194,7 +194,7 @@
 			}
 		]
 		gametext: <b>Valiant.</b> <br>To play, spot 3 Elf companions. While Naith Warband bears a ranged weapon, it takes no more than 1 wound during each skirmish phase and does not add to the fellowship archery total.
-		lore: “‘But do not think that only by singing amid the trees... is Lothlórien maintained and defended....'”
+		lore: "'But do not think that only by singing amid the trees... is Lothlórien maintained and defended....'"
 		promotext: ""
 		alts: {
 			promos: {

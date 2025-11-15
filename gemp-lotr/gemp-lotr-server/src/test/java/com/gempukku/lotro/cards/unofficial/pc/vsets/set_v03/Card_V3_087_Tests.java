@@ -28,41 +28,40 @@ public class Card_V3_087_Tests
 	}
 
 	@Test
-	public void EndlessNightStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Endless Night
-		 * Unique: true
-		 * Side: Shadow
-		 * Culture: Sauron
-		 * Twilight Cost: 4
-		 * Type: Condition
+		 * Name: Northern Signal-fire, Flame of Halifirien
+		 * Unique: 2
+		 * Side: Free Peoples
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 2 copies of Cover of Darkness.
-		* 	This cannot be discarded.
-		* 	Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. 
-		* 	Shadow: Hinder X of your Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		 * Game Text: Beacon. To play, hinder 2 beacons.
+		* 	Each time you play a mount on your Man, you may add (1) to heal that Man.
+		* 	Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Endless Night", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
+		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
+		assertEquals("Flame of Halifirien", card.getBlueprint().getSubtitle());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void EndlessNightTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

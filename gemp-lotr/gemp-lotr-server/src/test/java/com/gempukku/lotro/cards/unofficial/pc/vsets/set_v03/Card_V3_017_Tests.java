@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V3_131_Tests
+public class Card_V3_017_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_131");
+					put("card", "103_17");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,38 +28,38 @@ public class Card_V3_131_Tests
 	}
 
 	@Test
-	public void WarHowdahStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UngoliantsGetStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: War Howdah
-		 * Unique: false
+		 * Name: Ungoliant's Get
+		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Raider
+		 * Culture: Gollum
 		 * Twilight Cost: 2
-		 * Type: Possession
+		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.
-		* 	Maneuver: Exert a mounted Southron and choose a Man stacked on a [raider] card.  Until the end of the turn, that Southron gains the game text of the stacked Man.
+		 * Game Text: Each time Shelob loses a skirmish, you may play a [gollum] item from your discard pile.
+		* 	Response: If Shelob wins a skirmish and there are 4 minions stacked on [gollum] items, hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in 1 extra round of skirmishes after fierce)</i>. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("War Howdah", card.getBlueprint().getTitle());
+		assertEquals("Ungoliant's Get", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WarHowdahTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UngoliantsGetTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

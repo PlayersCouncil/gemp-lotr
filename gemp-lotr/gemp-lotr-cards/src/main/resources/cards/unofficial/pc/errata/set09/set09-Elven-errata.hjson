@@ -60,7 +60,7 @@
 	# 		}
 	# 	]
 	# 	gametext: Bearer must be an Elf (except an archer).<br>While borne, discard other weapons on bearer.<br>If bearer is Gil-galad, he is strength +1 for each [elven] artifact you can spot (limit +6).<br><b>Regroup:</b> Discard Aiglos to wound a minion for each Elf you spot.
-	# 	lore: “‘The Spear of Gil-galad... none could withstand.'”
+	# 	lore: "'The Spear of Gil-galad... none could withstand.'"
 	# 	promotext: ""
 	# 	alts: {
 	# 		//These are just CardInfo objects
@@ -107,7 +107,7 @@
 			}
 		}
 		gametext: While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [elven] companion you can spot.
-		lore: “‘...I shall not be dark, but beautiful and terrible as the Morning and the Night!...Dreadful as the Storm and the Lightning!'”
+		lore: "'...I shall not be dark, but beautiful and terrible as the Morning and the Night!...Dreadful as the Storm and the Lightning!'"
 		promotext: ""
 		alts: {
 			promos: {

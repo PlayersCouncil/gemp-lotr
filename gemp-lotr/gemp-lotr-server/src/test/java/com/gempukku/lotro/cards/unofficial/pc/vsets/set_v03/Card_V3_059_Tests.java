@@ -28,39 +28,37 @@ public class Card_V3_059_Tests
 	}
 
 	@Test
-	public void CirithUngolWatcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrengthofMenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Cirith Ungol Watcher, Spirit of Vigilence
-		 * Unique: 2
+		 * Name: Strength of Men
+		 * Unique: false
 		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 2
-		 * Type: Artifact
-		 * Subtype: Support area
-		 * Game Text: To play, spot a [ringwraith] card and add a burden.
-		* 	Each time a companion exerts, draw a card (limit once per site).
-		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (6) and hinder that companion.
+		 * Culture: Raider
+		 * Twilight Cost: 4
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens or 10 [raider] cards).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
-		assertEquals("Spirit of Vigilence", card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals("Strength of Men", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrengthofMenTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
