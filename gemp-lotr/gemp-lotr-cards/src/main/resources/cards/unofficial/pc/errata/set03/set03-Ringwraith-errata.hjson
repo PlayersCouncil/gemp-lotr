@@ -152,7 +152,7 @@
 	# 		}
 	# 	]
 	# 	gametext: To play, exert a [ringwraith] minion.  Bearer must be a companion or ally. Bearer cannot be exerted by Free Peoples cards.<br>At the start of the regroup phase, the Free Peoples player may discard 1 card from hand of bearer's culture to discard this condition.
-	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	lore: "'I do not wish to become like the Dark Lord himself.'"
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {
@@ -209,7 +209,7 @@
 	# 		}
 	# 	}
 	# 	gametext: Spot a Nazgul to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
-	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	lore: "'I do not wish to become like the Dark Lord himself.'"
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {
@@ -354,7 +354,7 @@
 			}
 		]
 		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
-		lore: “‘Do not tempt me!'”
+		lore: "'Do not tempt me!'"
 		promotext: ""
 		alts: {
 			promos: {

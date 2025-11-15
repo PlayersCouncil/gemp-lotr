@@ -575,7 +575,7 @@
 			}
 		]
 		gametext: Exert Aragorn (or spot Anduril) and add X threats to play a Wraith from your dead pile, where X is the region number.
-		lore: "‘The hour is come at last.....When all this land is clean of the servants of Sauron, I will hold the oath fulfilled, and ye shall have peace and depart for ever. For I am Elessar, Isildur’s heir of Gondor.’"
+		lore: "'The hour is come at last.....When all this land is clean of the servants of Sauron, I will hold the oath fulfilled, and ye shall have peace and depart for ever. For I am Elessar, Isildur's heir of Gondor.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -774,7 +774,7 @@
 			}
 		]
 		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead to restore a Wraith and heal it.
-		lore: "'Yet it is said in Harrowdale,’ said Éowyn in a low voice. ‘that in the moonless nights but little while ago a great host in strange array passed by.'"
+		lore: "'Yet it is said in Harrowdale,' said Éowyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -841,7 +841,7 @@
 			}
 		]
 		gametext: Beacon. To play, hinder 2 beacons.<br>Response: If an unbound Man costing X is about to take a wound, hinder X beacons to prevent that wound.
-		lore: "‘On, Shadowfax! We must hasten. Time is short. See! The beacons of Gondor are alight, calling for aid. War is kindled.'"
+		lore: "'On, Shadowfax! We must hasten. Time is short. See! The beacons of Gondor are alight, calling for aid. War is kindled.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1004,7 +1004,7 @@
 			}
 		]
 		gametext: Beacon. To play, hinder 2 beacons.<br>Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
-		lore: "‘What is that?’ cried Pippin suddenly, clutching at Gandalf’s cloak. ‘Look! Fire, red fire! Are there dragons in this land? Look, there is another!’"
+		lore: "'What is that?' cried Pippin suddenly, clutching at Gandalf's cloak. 'Look! Fire, red fire! Are there dragons in this land? Look, there is another!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1192,7 +1192,7 @@
 			}
 		]
 		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each hindered card you can spot.
-		lore: "‘At his command they fell back. “Even the shades of Men are obedient to his will,” I thought. “They may serve his needs yet!'"
+		lore: "'At his command they fell back. "Even the shades of Men are obedient to his will," I thought. "They may serve his needs yet!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1396,7 +1396,7 @@
 		]
 
 		gametext: Response: If your [gondor] card is about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder that card instead.<br>Skirmish: Make your Wraith strength +1 for each threat you can spot (limit +3).
-		lore: "‘Is it then your errand to seek death? For that is all that you will find on that road. They do not suffer the living to pass.’"
+		lore: "'Is it then your errand to seek death? For that is all that you will find on that road. They do not suffer the living to pass.'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -233,7 +233,7 @@
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Response: If a burden is added, hinder an Orc and this condition to add a threat.<br>Response: If a threat is added, hinder an Orc and this condition to add a burden.
-		lore: "'He is burning, already burning,’ he said sadly. ‘The house of his spirit crumbles.'"
+		lore: "'He is burning, already burning,’ he said sadly. 'The house of his spirit crumbles.'"
 		promotext: ""
 		alts: {
 			promos: {

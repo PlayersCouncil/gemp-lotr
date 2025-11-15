@@ -512,7 +512,7 @@
 			}
 		]
 		gametext: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
-		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,’ said Gandalf. ‘King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
+		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,’ said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
 		promotext: ""
 		alts: {
 			promos: {

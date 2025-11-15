@@ -186,7 +186,7 @@
 			}
 		]
 		gametext: At the start of each of your turns, you may spot an ally whose home is site 3 to heal that ally up to 2 times.  Add (1) per wound healed.<br>Regroup: Exert Elrond twice to heal a companion.
-		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
+		lore: "Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -573,8 +573,8 @@
 				}
 			}
 		]
-		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
-		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
+		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer's resistance is +2.
+		lore: "'May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -798,7 +798,7 @@
 	# 		}
 	# 	]
 	# 	gametext: Bearer must be Elrond.<br><b>Maneuver:</b> Spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.  Return Vilya to your hand.
-	# 	lore: “Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
+	# 	lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {

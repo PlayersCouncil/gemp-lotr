@@ -529,7 +529,7 @@
 			}
 		]
 		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
-		lore: "They cried. ‘Back to the walls! Come back to the City before all are overwhelmed!’ But the wind that sped the ships blew all their clamour away."
+		lore: "They cried. 'Back to the walls! Come back to the City before all are overwhelmed!' But the wind that sped the ships blew all their clamour away."
 		promotext: ""
 		alts: {
 			promos: {
