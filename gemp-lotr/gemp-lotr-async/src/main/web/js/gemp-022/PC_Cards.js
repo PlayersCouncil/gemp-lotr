@@ -1197,7 +1197,7 @@ var PCCards = {
 	// For Frodo (V3_97)
 	'103_97' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S097.0_card.jpg',
 	// For My Old Gaffer (V3_98)
-	//'103_98' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S098.0_card.jpg',
+	'103_98' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S098.0_card.jpg',
 	// For the Shire (V3_99)
 	'103_99' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S099.0_card.jpg',
 	// Frodo, Bereft of Hope (V3_100)

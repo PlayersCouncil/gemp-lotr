@@ -21,6 +21,7 @@ class Card {
     owner = null;
     attachedCards = null;
     locationIndex = null;
+    //Flipped face-down
     flipped = false;
     //Upside-down due to being owned by the opponent; not used in LOTR
     inverted = false;

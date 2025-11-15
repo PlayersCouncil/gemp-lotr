@@ -10,6 +10,8 @@ import java.util.Set;
 public class Skirmish {
     private PhysicalCard _fellowshipCharacter;
     private final Set<PhysicalCard> _shadowCharacters;
+    //Used to handle effects like on V3 For My Old Gaffer
+    private final Set<PhysicalCard> _pendingShadowCharacters;
     private boolean _cancelled;
 
     private Evaluator _fpStrengthOverrideEvaluator;
@@ -20,6 +22,7 @@ public class Skirmish {
     public Skirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
         _fellowshipCharacter = fellowshipCharacter;
         _shadowCharacters = shadowCharacters;
+        _pendingShadowCharacters = new HashSet<>();
     }
 
     public Evaluator getFpStrengthOverrideEvaluator() {

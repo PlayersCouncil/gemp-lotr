@@ -168,6 +168,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("replacecardinplaywithcardindiscard", new ReplaceCardInPlayWithCardInDiscard());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
+        effectAppenderProducers.put("resolveskirmishseparately", new ResolveSkirmishSeparately());
         effectAppenderProducers.put("restore", new RestoreCardsInPlay());
         effectAppenderProducers.put("returntohand", new ReturnToHand());
         effectAppenderProducers.put("revealbottomcardsofdrawdeck", new RevealBottomCardsOfDrawDeck());

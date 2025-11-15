@@ -161,14 +161,46 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+				cost: [
+					{
+						type: Spot
+						filter: minion, InSkirmishAgainst(hobbit)
+						count: 2
+					}
+				]
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Memorize
+						filter: Hobbit, InSkirmish
+						memory: skirmisher
+					}
+					{
+						type: ResolveSkirmishSeparately
+						filter: memory(skirmisher)
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: LosesSkirmish
+							filter: memory(skirmisher)
+						}
+						until: start(regroup)
+						effect: {
+							type: AddBurdens
+							amount: 1
+						}
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: WinsSkirmish
+							filter: memory(skirmisher)
+						}
+						until: start(regroup)
+						effect: {
+							type: AddThreats
+							amount: 1
+						}
 					}
 				]
 			}
