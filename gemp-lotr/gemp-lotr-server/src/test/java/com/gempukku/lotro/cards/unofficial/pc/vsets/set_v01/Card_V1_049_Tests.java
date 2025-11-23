@@ -9,9 +9,8 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V1_049_ErrataTests
+public class Card_V1_049_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
