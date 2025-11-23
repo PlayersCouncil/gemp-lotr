@@ -190,12 +190,12 @@
 					]
 					false: {
 						type: Hinder
-						select: choose(attachedTo(unbound,companion),possession)
+						select: choose(attachedTo(unbound,companion),weapon)
 					}
 				}
 			}
 		]
-		gametext: Maneuver: Exert Grima to hinder a possession borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more cards).
+		gametext: Maneuver: Exert Grima to hinder a weapon borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more cards).
 		lore: "'I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'"
 		promotext: ""
 		alts: {

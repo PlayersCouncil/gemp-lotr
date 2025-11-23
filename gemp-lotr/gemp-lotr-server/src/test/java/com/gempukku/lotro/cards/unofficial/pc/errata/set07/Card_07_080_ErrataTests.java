@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.PossessionClass;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_07_080_ErrataTests
 {
@@ -39,7 +41,6 @@ public class Card_07_080_ErrataTests
 		 * Twilight Cost: 3
 		 * Type: Artifact
 		 * Subtype: Hand weapon
-		 * Strength: 4
 		 * Game Text: Bearer must be Aragorn.<br>Assignment: Add a threat to make Aragorn <b>defender +1</b> (limit +1).
 		*/
 
@@ -55,7 +56,7 @@ public class Card_07_080_ErrataTests
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(0, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
