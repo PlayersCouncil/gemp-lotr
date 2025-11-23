@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_064_Tests
 {
@@ -40,8 +42,9 @@ public class Card_V3_064_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Twilight.
-		* 	To play, hinder 2 twilight conditions.
-		* 	Assignment: Spot 3 [ringwraith] minions and hinder this condition to spot a [ringwraith] minion and an unbound companion.  Hinder all other characters.
+		 * 	To play, hinder 2 twilight conditions.
+		 * 	Assignment: Spot 3 [ringwraith] minions, remove a burden, and hinder this condition to spot a [ringwraith]
+		 * 	minion and an unbound companion.  Hinder all other characters.
 		*/
 
 		var scn = GetScenario();

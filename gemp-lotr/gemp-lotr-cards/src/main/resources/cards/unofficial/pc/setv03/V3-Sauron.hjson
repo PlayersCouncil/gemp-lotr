@@ -277,41 +277,28 @@
 				]
 			}
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: Played
-					player: you
-					filter: or(Orc, Troll)
-					memorize: playedMinion
-				}
-				cost: {
-					type: Exhaust
-					ignoreCostCheckFailure: true
-					select: memory(playedMinion)
-				}
-				effect: [
+				type: Activated
+				phase: Skirmish
+				cost: [
 					{
-						type: MemorizeNumber
-						amount: {
-							type: ForEachYouCanSpot
-							filter: twilight,condition
-						}
-						memory: twilightSnapshot
+						type: Exert
+						select: choose(or(Orc, Troll))
+						memorize: exertedMinion
 					}
 					{
-						type: AddModifier
-						until: start(regroup)
-						modifier: {
-							type: ModifyStrength
-							amount: memory(twilightSnapshot)
-							filter: memory(playedMinion)
-						}
+						type: Hinder
+						select: choose(twilight, condition)
+						count: 2
 					}
 				]
+				effect: {
+					type: ModifyStrength
+					select: memory(exertedMinion)
+					amount: 2
+				}
 			}
 		]
-		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Each time you play an Orc or Troll, you may exhaust it to make it strength +X until the regroup phase, where X is the number of twilight conditions you can spot.
+		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Skirmish: Exert an Orc or Troll and hinder 2 twilight conditions to make that minion strength +2.  
 		lore: "The shadows closed on men again...and the valour of Gondor withered into ash."
 		promotext: ""
 		alts: {
@@ -528,7 +515,7 @@
 				trigger: {
 					type: Played
 					player: you
-					filter: Orc
+					filter: or(Orc, Troll)
 				}
 				cost: {
 					type: Hinder
@@ -592,7 +579,7 @@
 				]
 			}
 		]
-		gametext: Twilight. Each time you play an Orc, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
+		gametext: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
 		lore: "'Better to burn sooner than late, for burn we must.'"
 		promotext: ""
 		alts: {
@@ -748,13 +735,14 @@
 					source: [
 						{
 							type: ForEachYouCanSpot
-							filter: side(Free Peoples), support
+							filter: artifact
 						}
 						{
 							type: ForEachYouCanSpot
 							filter: companion
 						}
 					]
+					limit: 6
 					multiplier: -1
 				}
 			}
@@ -805,7 +793,7 @@
 				}
 			}
 		]
-		gametext: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. <br>When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.<br>Each time a companion loses a skirmish to Sauron, kill that companion.
+		gametext: Sauron is twilight cost -1 for each artifact and companion you can spot (limit -6).<br>While you can spot 6 companions, Sauron is <b>fierce</b>.  While you can spot 7 companions, Sauron is <b>relentless</b> <i>(he participates in 1 extra round of skirmishes after fierce.)</i>.<br>Each time a companion loses a skirmish to Sauron, kill that companion.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -44,8 +44,8 @@ public class Card_V3_043_Tests
 		 * Strength: 5
 		 * Vitality: 5
 		 * Game Text: Regroup: Stack a Southron Man here.
-		* 	Maneuver: Spot a Southron and remove 
-		* 	(5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		 * 	Maneuver: Remove (5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn
+		 * 	that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it.
 		*/
 
 		var scn = GetScenario();

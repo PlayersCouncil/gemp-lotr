@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_097_Tests
 {
@@ -39,7 +41,7 @@ public class Card_V3_097_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. Each time you play an Orc, you may hinder this to add (1).
+		 * Game Text: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).
 		* 	<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
 		*/
 

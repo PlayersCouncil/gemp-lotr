@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_044_Tests
 {
@@ -38,8 +40,9 @@ public class Card_V3_044_Tests
 		 * Culture: Raider
 		 * Twilight Cost: 1
 		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens. Draw a card for each 2 hindered Shadow cards you can spot.
+		 * Subtype: Shadow
+		 * Game Text: Hinder up to 4 [raider] cards to reinforce the same number of [raider] tokens.
+		 * 	Draw a card for each 2 hindered Shadow cards you can spot.
 		*/
 
 		var scn = GetScenario();
@@ -52,7 +55,7 @@ public class Card_V3_044_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 

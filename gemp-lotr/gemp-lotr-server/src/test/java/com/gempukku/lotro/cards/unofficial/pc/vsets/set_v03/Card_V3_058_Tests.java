@@ -37,14 +37,16 @@ public class Card_V3_058_Tests
 		/**
 		 * Set: V3
 		 * Name: Shifting Sands
-		 * Unique: false
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time ambush twilight is added, hinder a Free Peoples condition.
-		* 	Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] support item or [raider] minion that already has a Southron stacked on it.
+		 * Subtype: Support Area
+		 * Game Text: At the start of each skirmish involving a minion with ambush, you may remove (2) to hinder a
+		 * 		Free Peoples condition.
+		 * 		Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a
+		 * 		[raider] item that already has a Southron stacked on it.
 		*/
 
 		var scn = GetScenario();
@@ -53,7 +55,7 @@ public class Card_V3_058_Tests
 
 		assertEquals("Shifting Sands", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
@@ -89,6 +91,12 @@ public class Card_V3_058_Tests
 		assertTrue(scn.ShadowActionAvailable("Ambush - add 2"));
 		scn.ShadowAcceptOptionalTrigger();
 
+		//Old version used to hinder at the time of ambush twilight being added
+		assertFalse(scn.ShadowDecisionAvailable("Choose cards to hinder"));
+
+		scn.FreepsResolveSkirmish(frodo);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to hinder"));
 		assertTrue(scn.ShadowHasCardChoicesAvailable(condition1, condition2));
 		assertFalse(scn.IsHindered(condition1));
@@ -99,29 +107,5 @@ public class Card_V3_058_Tests
 		assertTrue(scn.IsHindered(condition1));
 		assertFalse(scn.IsHindered(condition2));
 
-	}
-
-	@Test
-	public void ShiftingSandsDoesNotRespondToNonAmbushTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var condition1 = scn.GetFreepsCard("condition1");
-		var condition2 = scn.GetFreepsCard("condition2");
-		scn.MoveCardsToSupportArea(condition1, condition2);
-
-		var sands = scn.GetShadowCard("sands");
-
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToSupportArea(sands);
-		scn.MoveCardsToHand(runner);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowPlayCard(runner);
-		
-		assertFalse(scn.ShadowDecisionAvailable("Choose cards to hinder"));
 	}
 }

@@ -43,7 +43,9 @@ public class Card_V3_041_Tests
 		 * Subtype: Support area
 		 * Strength: 4
 		 * Vitality: 4
-		 * Game Text: Maneuver: Remove (3) and stack any number of Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
+		 * Game Text: Maneuver: Stack 1 or more Southron Men here to make this a <b>fierce</b> mounted Southron minion
+		 * until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here.
+		 * At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
 		*/
 
 		var scn = GetScenario();

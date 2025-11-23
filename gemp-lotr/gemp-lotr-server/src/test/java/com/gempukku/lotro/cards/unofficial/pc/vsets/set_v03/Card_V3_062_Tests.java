@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_062_Tests
 {
@@ -39,8 +41,10 @@ public class Card_V3_062_Tests
 		 * Twilight Cost: 2
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.
-		* 	Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
+		 * Game Text: Bearer gains <b>archer</b>.
+		 * 		Maneuver: If this is in your support area, exert a mounted Southron to transfer this to that Southron.
+		 * 		Choose a Man stacked on that Southron.  Until the end of the turn, that Southron gains the game text
+		 * 		of that stacked Man.
 		*/
 
 		var scn = GetScenario();

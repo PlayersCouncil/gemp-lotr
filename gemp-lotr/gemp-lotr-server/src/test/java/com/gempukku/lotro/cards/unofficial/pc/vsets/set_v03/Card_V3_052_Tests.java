@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_052_Tests
 {
@@ -39,8 +41,10 @@ public class Card_V3_052_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or minion into hand from discard.
-		* 	Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron <b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
+		 * Game Text: Each time you play a unique Southron, you may exert it to take a non-unique [raider] item or
+		 * minion into hand from discard.
+		 * 	Response: If your mounted Southron wins a skirmish, hinder this condition to make that Southron
+		 * 	<b>relentless</b> until the regroup phase <i>(they participate in 1 extra round of skirmishes after fierce)</i>.
 		*/
 
 		var scn = GetScenario();

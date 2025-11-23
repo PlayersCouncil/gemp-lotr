@@ -50,7 +50,7 @@ public class Card_V3_127_Tests
 		 * Type: Site
 		 * Subtype: Standard
 		 * Site Number: 9K
-		 * Game Text: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
+		 * Game Text: Mountain. Underground. Battleground Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
 		*/
 
 		var scn = GetScenario();
@@ -62,6 +62,8 @@ public class Card_V3_127_Tests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
+		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
