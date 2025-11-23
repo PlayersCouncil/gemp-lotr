@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
 
-public class Card_V1_066_ErrataTests
+public class Card_01_048_ErrataTests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "101_66");
+					put("card", "51_48");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -28,45 +28,43 @@ public class Card_V1_066_ErrataTests
 	}
 
 	@Test
-	public void WrithingTentacleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HaldirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V1
-		 * Name: Writhing Tentacle
-		 * Unique: false
-		 * Side: Shadow
-		 * Culture: Moria
+		 * Set: 1
+		 * Name: Haldir, Elf of the Golden Wood
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Elven
 		 * Twilight Cost: 2
-		 * Type: Minion
-		 * Subtype: Creature
+		 * Type: Companion
+		 * Subtype: Elf
 		 * Strength: 6
-		 * Vitality: 1
-		 * Site Number: 4
-		 * Game Text: Tentacle. This minion may not bear items and is discarded if not at a marsh.
-		* 	Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles (except Writhing Tentacle) from your discard pile on that card.
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Game Text: To play, spot an Elf.<br>While Haldir is at a forest or river (or any site 6, 7, or 8), he is strength +2 and an <b>archer</b>.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Writhing Tentacle", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.TENTACLE));
+		assertEquals("Haldir", card.getBlueprint().getTitle());
+		assertEquals("Elf of the Golden Wood", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WrithingTentacleTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HaldirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
