@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.PossessionClass;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_018_Tests
 {
@@ -39,9 +41,8 @@ public class Card_V3_018_Tests
 		 * Twilight Cost: 3
 		 * Type: Artifact
 		 * Subtype: Hand weapon
-		 * Strength: 2
-		 * Vitality: 1
-		 * Game Text: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.
+		 * Strength: 3
+		 * Game Text: Bearer must be Aragorn.  Bearer is <b>damage +1</b>.
 		* 	Response: If another unbound companion is about to take a wound, add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
 		*/
 
@@ -57,8 +58,8 @@ public class Card_V3_018_Tests
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(0, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

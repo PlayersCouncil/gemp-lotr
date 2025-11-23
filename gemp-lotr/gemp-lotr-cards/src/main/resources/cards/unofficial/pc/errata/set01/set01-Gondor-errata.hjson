@@ -53,7 +53,7 @@
 		unique: true
 		side: Free Peoples
 		culture: Gondor
-		twilight: 0
+		twilight: 1
 		type: Possession
 		itemclass: Cloak
 		target: name(Boromir)

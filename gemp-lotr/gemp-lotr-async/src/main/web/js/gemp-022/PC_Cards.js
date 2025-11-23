@@ -1294,36 +1294,30 @@ var PCCards = {
 	'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.4_card.jpg',
 	// Clever Hobbits (7U54) [Errata]
 	'57_54'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E054.1_card.jpg',
-	// The Palantir of Orthanc (3R67) [Errata]
-	'53_67'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E067.2_card.jpg',
-	// Roll of Thunder (4U99) [Errata]
-	'54_99'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E099.1_card.jpg',
-	// Still Draws Breath (1C25) [Errata]
-	'51_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E025.1_card.jpg',
 	// Cleaving Blow (1C5) [Errata]
 	'51_5'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E005.1_card.jpg',
-	// Stairs of Khazad-dum (1C24) [Errata]
-	'51_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E024.1_card.jpg',
 	// Grimir, Dwarven Elder (1U17) [Errata]
 	'51_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.2_card.jpg',
+	// Song of Durin (3U5) [Errata]
+	'53_5'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E005.1_card.jpg',
+	// Still Draws Breath (1C25) [Errata]
+	'51_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E025.1_card.jpg',
 	// Make Light of Burdens (2R11) [Errata]
 	'52_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E011.1_card.jpg',
 	// A Royal Welcome (3U4) [Errata]
 	'53_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.2_card.jpg',
-	// Mines of Khazad-Dûm (3R3) [Errata]
-	'53_3'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E003.1_card.jpg',
 	// Hospitality of the Dwarves (V1C1) [Errata]
 	'101_1'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E001.1_card.jpg',
+	// The Palantir of Orthanc (3R67) [Errata]
+	'53_67'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E067.2_card.jpg',
+	// Roll of Thunder (4U99) [Errata]
+	'54_99'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E099.1_card.jpg',
 	// Grima, Son of Galmod (4C153) [Errata]
 	'54_153' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E153.1_card.jpg',
 	// Cirion (7C82) [Errata]
 	'57_82'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E082.1_card.jpg',
 	// The Red Arrow (9R46) [Errata]
 	'59_46'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E046.1_card.jpg',
-	// Anduril, King's Blade (7R80) [Errata]
-	'57_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E080.1_card.jpg',
-	// Morgul Hunter (1R256) [Errata]
-	'51_256' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E256.1_card.jpg',
 	// Sam, Of Bagshot Row (V1U54) [Errata]
 	'101_54' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E054.2_card.jpg',
 	// Gimli, Vengeful Longbeard (V1R3) [Errata]
@@ -1331,6 +1325,18 @@ var PCCards = {
 	// Writhing Tentacle (V166) [Errata]
 	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.1_card.jpg',
 	// A Shadow of the Past (V1R49) [Errata]
-	'101_49' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E049.1_card.jpg'
+	'101_49' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E049.1_card.jpg',
+	// Anduril, King's Blade (7R80) [Errata]
+	'57_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E080.1_card.jpg',
+	// Boromir's Cloak (1U98) [Errata]
+	'51_98'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E098.1_card.jpg',
+	// Haldir, Elf of the Golden Wood (1U48) [Errata]
+	'51_48'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E048.1_card.jpg',
+	// Shield of Boromir (2R38) [Errata]
+	'52_38'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E038.1_card.jpg',
+	// Denizens Enraged (1R167) [Errata]
+	'51_167' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E167.1_card.jpg',
+	// Traitor's Voice (1U142) [Errata]
+	'51_142' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E142.1_card.jpg'
 }
 
