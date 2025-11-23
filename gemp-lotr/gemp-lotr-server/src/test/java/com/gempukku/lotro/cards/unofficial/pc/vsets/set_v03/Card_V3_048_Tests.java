@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_048_Tests
 {
@@ -44,7 +43,7 @@ public class Card_V3_048_Tests
 		 * Site Number: 4
 		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (2). 
 		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time you hinder this minion you may hinder another [raider] minion.
+		* 	Each time this minion is hindered, you may hinder another [raider] minion.
 		*/
 
 		var scn = GetScenario();

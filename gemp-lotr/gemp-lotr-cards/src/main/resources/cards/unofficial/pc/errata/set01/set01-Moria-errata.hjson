@@ -1,4 +1,61 @@
 {
+	51_167: {
+		cardInfo: {
+			//id: 51_172.1
+			parent: 1_172
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E167.1_card.jpg
+			collInfo: 1R167
+			rarity: R
+		}
+		title: Denizens Enraged
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: Choice
+				texts: [
+					Make a {Moria} minion strength +2
+					Make a {Moria} Orc strength +1 for each other [moria] minion
+				]
+				effects: [
+					{
+						type: modifyStrength
+						select: choose(moria, minion)
+						memorize: chosenMinion
+						amount: 2
+					}
+					{
+						type: modifyStrength
+						select: choose(culture(moria),orc)
+						memorize: chosenOrc
+						amount: {
+							type: forEachYouCanSpot
+							filter: not(memory(chosenOrc)),culture(moria),minion
+							limit: 5
+						}
+					}
+				]
+			}
+		}
+		gametext: Choose one: make a [moria] minion strength +2, or make a [moria] Orc strength +1 for each other [moria] minion you can spot (limit +5).
+		lore: "...there came a great noise: a rolling Boom that seemed to come from depths far below, and to tremble in the stone at their feet."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_172: {
 		cardInfo: {
 			//id: 51_172.1

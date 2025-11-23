@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_069_Tests
 {
@@ -38,8 +40,8 @@ public class Card_V3_069_Tests
 		 * Culture: Wraith
 		 * Twilight Cost: 3
 		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
+		 * Subtype: Maneuver/Skirmish
+		 * Game Text: Maneuver or Skirmish: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
 		*/
 
 		var scn = GetScenario();
@@ -53,6 +55,7 @@ public class Card_V3_069_Tests
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 

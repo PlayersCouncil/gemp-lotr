@@ -43,8 +43,10 @@ public class Card_V3_042_Tests
 		 * Subtype: Support area
 		 * Strength: 6
 		 * Vitality: 6
-		 * Game Text: Shadow: Stack a Southron from hand here.
-		* 	Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
+		 * Game Text: Shadow: Spot a Southron and remove (1) to stack a Southron from hand here.
+		 * 	Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted
+		 * 	Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron
+		 * 	stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
 		*/
 
 		var scn = GetScenario();

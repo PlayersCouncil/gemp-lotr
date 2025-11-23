@@ -43,9 +43,10 @@ public class Card_V3_100_Tests
 		 * Strength: 24
 		 * Vitality: 5
 		 * Site Number: 6
-		 * Game Text: Fierce. Sauron is twilight cost -1 for each companion and Free Peoples support card you can spot. 
-		* 	When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.
-		* 	Each time a companion loses a skirmish to Sauron, kill that companion.
+		 * Game Text: Sauron is twilight cost -1 for each artifact and companion you can spot (limit -6).
+		 * 		While you can spot 6 companions, Sauron is <b>fierce</b>.  While you can spot 7 companions, Sauron is
+		 * 		<b>relentless</b> <i>(he participates in 1 extra round of skirmishes after fierce.)</i>.
+		 * 		Each time a companion loses a skirmish to Sauron, kill that companion.
 		*/
 
 		var scn = GetScenario();

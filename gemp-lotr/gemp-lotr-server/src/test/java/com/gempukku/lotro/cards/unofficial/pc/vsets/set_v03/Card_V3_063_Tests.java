@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_063_Tests
 {
@@ -32,7 +34,7 @@ public class Card_V3_063_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Cirith Ungol Watcher, Spirit of Vigilence
+		 * Name: Cirith Ungol Watcher, Spirit of Vigilance
 		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Wraith
@@ -49,7 +51,7 @@ public class Card_V3_063_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
-		assertEquals("Spirit of Vigilence", card.getBlueprint().getSubtitle());
+		assertEquals("Spirit of Vigilance", card.getBlueprint().getSubtitle());
 		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());

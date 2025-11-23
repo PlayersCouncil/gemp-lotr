@@ -1,7 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +11,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_126_Tests
 {
@@ -40,7 +41,7 @@ public class Card_V3_126_Tests
 		 * Type: Site
 		 * Subtype: Standard
 		 * Site Number: 9K
-		 * Game Text: Mountain.  Game text on Free Peoples items and The One Ring does not apply.
+		 * Game Text: Mountain. Underground. Game text on Free Peoples items and The One Ring does not apply.
 		*/
 
 		var scn = GetScenario();
@@ -54,6 +55,7 @@ public class Card_V3_126_Tests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());

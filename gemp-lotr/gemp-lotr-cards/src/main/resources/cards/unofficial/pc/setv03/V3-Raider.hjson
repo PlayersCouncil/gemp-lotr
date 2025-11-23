@@ -58,14 +58,10 @@
 				]
 				cost: [
 					{
-						type: RemoveTwilight
-						amount: 3
-					}
-					{
 						type: StackCardsFromPlay
 						select: choose(Southron, Man)
 						where: self
-						count: any
+						count: AnyNonZero
 					}
 				]
 				effect: [				
@@ -112,7 +108,7 @@
 				]
 			}
 		]
-		gametext: Maneuver: Remove (3) and stack any number of Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
+		gametext: Maneuver: Stack 1 or more Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -147,6 +143,16 @@
 			{
 				type: Activated
 				phase: Shadow
+				cost: [
+					{
+						type: Spot
+						filter: Southron
+					}
+					{
+						type: RemoveTwilight
+						amount: 1
+					}
+				]
 				effect: {
 					type: StackCardsFromHand
 					select: choose(Southron,Man)
@@ -230,7 +236,7 @@
 				]
 			}
 		]
-		gametext: Shadow: Stack a Southron from hand here.<br>Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
+		gametext: Shadow: Spot a Southron and remove (1) to stack a Southron from hand here.<br>Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -277,10 +283,6 @@
 				type: activated
 				phase: maneuver
 				requires: [
-					{
-						type: CanSpot
-						filter: Southron
-					}
 					{
 						type: canSpot
 						filter: self,zone(support)
@@ -334,7 +336,7 @@
 				]
 			}
 		]
-		gametext: Regroup: Stack a Southron Man here.<br>Maneuver: Spot a Southron and remove <br>(5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		gametext: Regroup: Stack a Southron Man here.<br>Maneuver: Remove (5) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
 		lore: "The great monsters were unfought,...like towers of defence, and the Haradrim rallied about them."
 		promotext: ""
 		alts: {
@@ -362,7 +364,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		timewords: Maneuver
+		timewords: Shadow
 		effects: [
 			{
 				type: event
@@ -662,7 +664,6 @@
 				trigger: {
 					type: AboutToHinder
 					filter: self
-					player: you
 				}
 				effect:	{
 					type: Hinder
@@ -670,7 +671,7 @@
 				}
 			}
 		]
-		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
+		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time this minion is hindered, you may hinder another [raider] minion.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -993,29 +994,57 @@
 				type: event
 				cost: [
 					{
-						type: Spot
-						select: choose(unbound,companion)
-						count: 3
-						memorize: chosenCompanions
+						type: Exert
+						select: choose(Southron)
+						memorize: chosenSouthron
 					}
 					{
-						type: ChooseActiveCards
-						text: Spot 3 Southrons
-						player: Free Peoples
-						select: choose(southron)
-						count: 3
-						memorize: chosenSouthrons
+						type: Hinder
+						ignoreCostCheckFailure: true
+						select: all(minion,not(memory(chosenSouthron)))
+					}
+					{
+						type: Spot
+						select: choose(unbound, companion)
+						memorize: chosenCompanion
 					}
 				]
 				effect: [
 					{
-						type: Hinder
-						select: all(character,not(or(memory(chosenCompanions), memory(chosenSouthrons))))
+						type: Preventable
+						text: Would you like to make {chosenSouthron} strength +3, ambush (4), and fierce until the regroup phase to prevent assigning it to {chosenCompanion}?
+						player: freeps
+						cost: [
+							{
+								type: ModifyStrength
+								amount: 3
+								select: memory(chosenSouthron)
+								until: start(regroup)
+							}
+							{
+								type: AddKeyword
+								select: memory(chosenSouthron)
+								keyword: ambush
+								amount: 4
+								until: start(regroup)
+							}
+							{
+								type: AddKeyword
+								select: memory(chosenSouthron)
+								keyword: fierce
+								until: start(regroup)
+							}
+						]
+						effect: {
+							type: AssignFPCharacterToSkirmish
+							fpCharacter: memory(chosenCompanion)
+							minion: memory(chosenSouthron)
+						}
 					}
 				]
 			}
 		]
-		gametext: To play, spot 3 unbound companions and make the Free Peoples player spot 3 Southrons.  Hinder all other characters.
+		gametext: Exert a Southron and hinder all other minions to assign that Southron to an unbound companion.  The Free Peoples player may make that Southron strength +3, <b>ambush (4)</b>, and <b>fierce</b> until the regroup phase to prevent this.
 		lore: "'We were outnumbered, for Mordor has allied itself with the Easterlings and the cruel Haradrim; but it was not by numbers that we were defeated. A power was there that we have not felt before.'"
 		promotext: ""
 		alts: {
@@ -1142,6 +1171,10 @@
 				phase: Maneuver
 				cost: [
 					{
+						type: Spot
+						filter: Corsair
+					}
+					{
 						type: Hinder
 						select: choose(another, title(Raiding Schooner))
 					}
@@ -1181,7 +1214,7 @@
 			collInfo: V3_56
 			rarity: _
 		}
-		title: Sandcraft Ambush
+		title: Sandcraft Trap
 		unique: false
 		side: Shadow
 		culture: Raider
@@ -1204,30 +1237,21 @@
 								type: HasCardInMemory
 								memory: restoredMinions
 							}
-							{
-								type: CanSpot
-								filter: Southron
-							}
 						]
 						true: [
 							{
-								type: ChooseActiveCards
-								select: choose(Southron)
-								memorize: assignedSouthron
-								text: Choose a Southron for your opponent to assign
-							}
-							{
-								type: AssignFPCharacterToSkirmish
-								player: Freeps
-								fpCharacter: choose(unbound,companion,LowestStrength(unbound,companion))
-								minion: choose(memory(assignedSouthron))
+								type: AddKeyword
+								select: all(Southron)
+								keyword: ambush
+								amount: 1
+								until: start(regroup)
 							}
 						]
 					}
 				]
 			}
 		]
-		gametext: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
+		gametext: Restore all trackers and minions with ambush.  If you restored any, make each Southron gain ambush (1) until the regroup phase.
 		lore: "To the land of the Haradrim came only a tale from far off: a rumour of the wrath and terror of Gondor."
 		promotext: ""
 		alts: {
@@ -1338,7 +1362,7 @@
 			rarity: _
 		}
 		title: Shifting Sands
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Raider
 		twilight: 1
@@ -1347,15 +1371,18 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
-					type: AddsTwilight
-					filter: any
-					cause: Ambush
+					type: StartOfPhase
+					phase: Skirmish
 				}
 				requires: {
 					type: CanSpot
-					filter: side(freeps),condition
+					filter: InSkirmish, minion, ambush
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 2
 				}
 				effect: [
 					{
@@ -1367,7 +1394,7 @@
 			
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: Killed
 					filter: your,southron,man
@@ -1380,12 +1407,12 @@
 					{
 						type: StackCardsFromDiscard 
 						select: choose(southron)
-						where: choose(raider, or(and(support, item), minion), HasStacked(Southron))
+						where: choose(raider, item, HasStacked(Southron))
 					}
 				]
 			}
 		]
-		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.<br>Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] support item or [raider] minion that already has a Southron stacked on it.
+		gametext: At the start of each skirmish involving a minion with ambush, you may remove (2) to hinder a Free Peoples condition.<br>Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] item that already has a Southron stacked on it.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1612,64 +1639,73 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: WinsSkirmish
-					filter: mounted, Southron
-					memorize: winner
-				}
-				cost: {
-					type: Exert
-					ignoreCostCheckFailure: true
-					select: memory(winner)
-				}
-				effect: {
-					type: PlayCardFromHand
-					select: choose(raider, playable)
-					on: memory(winner)
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
 				}
 			}
 			
 			{
 				type: Activated
 				phase: Maneuver
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
 				cost: [
 					{
 						type: Exert
-						select: choose(mounted,Southron, hasStacked(Man))
+						select: choose(mounted,Southron)
 						memorize: exertedSouthron
-					}
-					{
-						type: ChooseCardsFromSingleStack
-						select: choose(Man)
-						on: memory(exertedSouthron)
-						memorize: dupedMan
 					}
 				]
 				effect: [
 					{
-						type: AddModifier
-						modifier: {
-							type: DuplicateGameText
-							filter: self
-							from: memory(dupedMan)
-						}
-						until: EndOfTurn
+						type: transfer
+						select: self
+						fromSupport: true
+						where: memory(exertedSouthron)
 					}
 					{
-						type: AddModifier
-						modifier: {
-							type: AddKeywordFromCards
-							filter: self
-							from: memory(dupedMan)
+						type: If
+						check: {
+							type: HasCardStacked
+							filter: Man
+							on: memory(exertedSouthron)
 						}
-						until: EndOfTurn
+						true: [
+							{
+								type: ChooseCardsFromSingleStack
+								select: choose(Man)
+								on: memory(exertedSouthron)
+								memorize: dupedMan
+							}
+							{
+								type: AddModifier
+								modifier: {
+									type: DuplicateGameText
+									filter: self
+									from: memory(dupedMan)
+								}
+								until: EndOfTurn
+							}
+							{
+								type: AddModifier
+								modifier: {
+									type: AddKeywordFromCards
+									filter: self
+									from: memory(dupedMan)
+								}
+								until: EndOfTurn
+							}
+						]
 					}
 				]
 			}
 		]
-		gametext: Each time a mounted Southron wins a skirmish, you may exert them to play a [raider] card on them from hand.<br>Maneuver: Exert a mounted Southron and choose a Man stacked on it.  Until the end of the turn, that Southron gains the game text of the stacked Man.
+		gametext: Bearer gains <b>archer</b>.<br>Maneuver: If this is in your support area, exert a mounted Southron to transfer this to that Southron.  Choose a Man stacked on that Southron.  Until the end of the turn, that Southron gains the game text of that stacked Man.
 		lore: ""
 		promotext: ""
 		alts: {

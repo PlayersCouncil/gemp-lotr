@@ -410,6 +410,73 @@
 		}
 	}
 	
+	51_48: {
+		cardInfo: {
+			//id: 1_48.1
+			parent: 1_48
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E048.1_card.jpg
+			collInfo: 1U48
+			rarity: U
+		}
+		title: Haldir
+		subtitle: Elf of the Golden Wood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					amount: 2
+					requires: {
+						type: location
+						filter: or(or(river,forest), or(siteNumber(6),siteNumber(7),siteNumber(8)) )
+					}
+					filter: self
+				}
+			}
+			
+			{
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					keyword: archer
+					requires: {
+						type: location
+						filter: or(or(river,forest), or(siteNumber(6),siteNumber(7),siteNumber(8)) )
+					}
+					filter: self
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>While Haldir is at a forest or river (or any site 6, 7, or 8), he is strength +2 and an <b>archer</b>.
+		lore: "'But there are some of us who still go abroad for the gathering of news and the watching of our enemies.... I am one. Haldir is my name.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_50: {
 		cardInfo: {
 			//id: 51_50.1

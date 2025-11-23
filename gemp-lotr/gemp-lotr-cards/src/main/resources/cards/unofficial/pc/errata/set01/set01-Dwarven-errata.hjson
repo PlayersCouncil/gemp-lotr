@@ -32,20 +32,12 @@
 					keyword: damage+1
 				}
 				{
-					type: addTrigger
-					optional: true
-					trigger: {
-						type: winsSkirmish
-						filter: memory(chosenDwarf)
-					}
-					effect: {
-						type: discard
-						select: choose(side(Shadow),possession)
-					}
+					type: discard
+					select: choose(side(Shadow), item, InSkirmishAgainst(memory(chosenDwarf)))
 				}
 			]
 		}
-		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. If that Dwarf wins this skirmish, you may discard another Shadow possession.
+		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b> and discard a Shadow item borne by a minion that Dwarf is skirmishing.
 		lore: "The shoddy workmanship of Orc-smiths cannot withstand the fury of Durin's folk."
 		promotext: ""
 		alts: {
@@ -512,8 +504,7 @@
 		effects: [
 			{
 				type: Activated
-				phase: Fellowship
-				limitPerPhase: 1
+				phase: Skirmish
 				cost: [
 					{
 						type: Spot
@@ -525,13 +516,17 @@
 					}
 				]
 				effect: {
-					type: PutCardsFromDiscardIntoHand
+					type: PlayCardFromDiscard
 					select: choose(Dwarven, event)
-					discard: you
+					memorize: playedEvent
+					extraEffects: {
+						type: RemoveFromTheGame
+						select: memory(playedEvent)
+					}
 				}
 			}
 		]
-		gametext: Fellowship: Spot a [dwarven] companion and exert Grimir to take a [dwarven] event from your discard pile into hand (limit once per phase).
+		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir to play a [dwarven] event from your discard pile, then remove it from the game.
 		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
 		promotext: ""
 		alts: {
@@ -590,65 +585,6 @@
 		}
 		gametext: If a Dwarf wins a skirmish, discard a Shadow card.  Its owner may discard 3 cards from the bottom of their draw deck to prevent this.
 		lore: "'My folk have never had dealings with any of the servants of the Enemy.'"
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-	
-	51_24: {
-		cardInfo: {
-			//id: 51_24.1
-			parent: 1_24
-			variant: ERRATA
-			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN01E024.1_card.jpg
-			collInfo: 1C24
-			rarity: C
-		}
-		title: Stairs of Khazad-dum
-		unique: false
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 2
-		type: Condition
-		keywords: [
-			Tale
-			Support Area
-		]
-		effects: [
-			{
-				type: modifier
-				modifier: {
-					type: modifyStrength
-					filter: dwarf,inSkirmishAgainst(or(Orc,and(culture(moria),minion)))
-					amount: 1
-				}
-			}
-			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: WinsSkirmish
-					filter: Dwarf
-					against: Moria, minion
-				}
-				cost: {
-					type: Discard
-					select: choose(Dwarven, not(companion))
-				}
-				effect: {
-					type: Discard
-					select: choose(Moria, support)
-				}
-			}
-		]
-		gametext: Tale. While a Dwarf skirmishes an Orc or [moria] minion, that Dwarf is strength +1.<br>Each time a Dwarf wins a skirmish against a [moria] minion, you may discard a [dwarven] card from play (except a companion) to discard a [Moria] support card.
-		lore: "'Moria – Khazad-dûm! Greatest of the dwarf-halls – What I would not give to look upon its treasures!'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -20,19 +20,29 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: Trigger
-				optional: true
-				trigger: {
-					type: Played
-					player: you
-					filter: Man
-					memorize: playedMan
-				}
+				type: Activated
+				phase: Fellowship
+				cost: [
+					{
+						type: Discard
+						select: self
+					}
+					{
+						type: Exert
+						select: choose(Man)
+						memorize: exertedMan
+					}
+				]
 				effect: {
-					type: exert
-					select: choose(Man, not(CultureFromMemory(playedMan)))
+					type: putCardsFromDeckIntoHand
+					select: choose(side(freeps), Man, not(cultureFromMemory(exertedMan)))
+					count: 1
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
+
 			{
 				type: Activated
 				phase: Regroup
@@ -53,7 +63,7 @@
 				]
 			}
 		]
-		gametext: Each time you play a Man, exert a Man of a different culture to play a possession from your discard pile on the first.<br>Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
+		gametext: Fellowship: Exert a Man to take a Man of a different culture into hand from your draw deck. Discard this artifact. \Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
 		lore: "'The Red Arrow has not been seen in the Mark in all my years! Has it indeed come to that?'"
 		promotext: ""
 		alts: {

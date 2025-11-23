@@ -12,7 +12,7 @@
 			rarity: _
 		}
 		title: Cirith Ungol Watcher
-		subtitle: Spirit of Vigilence
+		subtitle: Spirit of Vigilance
 		unique: 2
 		side: Shadow
 		culture: Wraith
@@ -134,6 +134,10 @@
 					count: 3
 				}
 				cost: [
+					{
+						type: RemoveBurdens
+						amount: 1
+					}
 					{
 						type: Spot
 						select: choose(culture(Ringwraith), minion)
@@ -481,7 +485,10 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		timewords: Maneuver
+		timewords: [
+			Maneuver
+			Skirmish
+		]
 		effects: [
 			{
 				type: event
@@ -511,7 +518,7 @@
 				]
 			}
 		]
-		gametext: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
+		gametext: Maneuver or Skirmish: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
 		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,’ said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
 		promotext: ""
 		alts: {

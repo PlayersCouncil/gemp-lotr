@@ -44,6 +44,8 @@ public class ValueResolver {
                 return actionContext -> new RangeEvaluator(min, max);
             } else if (stringValue.equalsIgnoreCase("any")) {
                 return actionContext -> new RangeEvaluator(0, Integer.MAX_VALUE);
+            } else if (stringValue.equalsIgnoreCase("anyNonZero")) {
+                return actionContext -> new RangeEvaluator(1, Integer.MAX_VALUE);
             } else if (stringValue.startsWith("memory(") && stringValue.endsWith(")")) {
                 String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
                 return new ValueSource() {

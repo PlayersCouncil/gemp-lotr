@@ -756,16 +756,18 @@
 			{
 				type: Activated
 				phase: Assignment
-				cost: {
-					type: Exert
-					select: self
-				}
-				effect: [
+				cost: [
+					{
+						type: Exert
+						select: self
+					}
 					{
 						type: Restore
 						select: choose(Wraith)
 						memorize: restoredWraith
 					}
+				]
+				effect: [
 					{
 						type: Heal
 						select: memory(restoredWraith)
@@ -773,7 +775,7 @@
 				]
 			}
 		]
-		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead to restore a Wraith and heal it.
+		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead and restore a Wraith to heal that Wraith.
 		lore: "'Yet it is said in Harrowdale,' said Éowyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
 		promotext: ""
 		alts: {

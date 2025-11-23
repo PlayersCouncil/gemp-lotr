@@ -167,4 +167,79 @@
 			}
 		}
 	}
+	
+	52_38: {
+		cardInfo: {
+			//id: 2_38.1
+			parent: 2_38
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E038.1.jpg
+			collInfo: 2R38
+			rarity: R
+		}
+		title: Shield of Boromir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: minion,inSkirmishAgainst(bearer,name(Boromir))
+					from: weapon
+				}
+			}
+			
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: addTrigger
+					trigger: {
+						type: aboutToTakeWound
+						filter: memory(bearer)
+					}
+					effect: {
+						type: preventWound
+						select: choose(memory(bearer))
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons.\Skirmish: If bearer is Boromir, discard this to make him take no wounds.
+		lore: "Boromir bore the heirlooms of the Steward's house with pride."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

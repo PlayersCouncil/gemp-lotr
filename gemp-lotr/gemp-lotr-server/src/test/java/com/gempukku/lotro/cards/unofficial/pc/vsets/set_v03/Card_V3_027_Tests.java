@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_027_Tests
 {
@@ -43,8 +42,8 @@ public class Card_V3_027_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Game Text: Enduring.  To play, add 2 threats.
-		* 	Each time King of the Dead is killed, heal every Wraith.
-		* 	Assignment: Exert King of the Dead to restore a Wraith and heal it.
+		 * 	Each time King of the Dead is killed, heal every Wraith.
+		 * 	Assignment: Exert King of the Dead and restore a Wraith to heal that Wraith.
 		*/
 
 		var scn = GetScenario();

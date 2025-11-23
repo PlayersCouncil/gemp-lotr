@@ -17,7 +17,7 @@ public class Card_V3_056_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("ambush", "103_56");
+					put("trap", "103_56");
 					put("isengard_tracker", "4_193");
 					put("raider_tracker", "103_47");
 					put("ambush_southron", "4_252");
@@ -33,25 +33,25 @@ public class Card_V3_056_Tests
 	}
 
 	@Test
-	public void SandcraftAmbushStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SandcraftTrapStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Sandcraft Ambush
+		 * Name: Sandcraft Trap
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
+		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, make each Southron gain ambush (1) until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("ambush");
+		var card = scn.GetFreepsCard("trap");
 
-		assertEquals("Sandcraft Ambush", card.getBlueprint().getTitle());
+		assertEquals("Sandcraft Trap", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -67,7 +67,7 @@ public class Card_V3_056_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var ambush = scn.GetShadowCard("ambush");
+		var trap = scn.GetShadowCard("trap");
 		var isengard_tracker = scn.GetShadowCard("isengard_tracker");
 		var raider_tracker = scn.GetShadowCard("raider_tracker");
 		var ambush_southron = scn.GetShadowCard("ambush_southron");
@@ -76,7 +76,7 @@ public class Card_V3_056_Tests
 		var soldier = scn.GetShadowCard("soldier");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.MoveCardsToHand(ambush);
+		scn.MoveCardsToHand(trap);
 		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier, runner);
 		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
 
@@ -93,19 +93,19 @@ public class Card_V3_056_Tests
 		assertTrue(scn.IsHindered(soldier));
 		assertFalse(scn.IsHindered(runner));
 
-		assertTrue(scn.ShadowPlayAvailable(ambush));
-		scn.ShadowPlayCard(ambush);
+		assertTrue(scn.ShadowPlayAvailable(trap));
+		scn.ShadowPlayCard(trap);
 
 		//Trackers of all cultures restored
 		assertFalse(scn.IsHindered(isengard_tracker));
 		assertFalse(scn.IsHindered(raider_tracker));
-		//Minions of all cultures with ambush restored
+		//Minions of all cultures with trap restored
 		assertFalse(scn.IsHindered(ambush_southron));
 		assertFalse(scn.IsHindered(ambush_horror));
 
-		//Non-ambush southron still hindered
+		//Non-trap southron still hindered
 		assertTrue(scn.IsHindered(southron));
-		//Non-tracker non-ambush minion still hindered
+		//Non-tracker non-trap minion still hindered
 		assertTrue(scn.IsHindered(soldier));
 	}
 }
