@@ -182,7 +182,7 @@
 					{
 						type: turnIntoMinion
 						select: self
-						strength: 6
+						strength: 2
 						vitality: 6
 						keywords: [
 							fierce
