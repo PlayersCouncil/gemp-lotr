@@ -155,7 +155,7 @@
 				]
 				effect: {
 					type: StackCardsFromHand
-					select: choose(Southron,Man)
+					select: choose(Southron)
 					where: self
 				}
 			}
