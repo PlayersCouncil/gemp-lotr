@@ -1178,7 +1178,7 @@
 			}
 		]
 		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each hindered card you can spot.
-		lore: "'At his command they fell back. “Even the shades of Men are obedient to his will," I thought. “They may serve his needs yet!'"
+		lore: "'At his command they fell back. \"Even the shades of Men are obedient to his will,\" I thought. \"They may serve his needs yet!'"
 		promotext: ""
 		alts: {
 			promos: {

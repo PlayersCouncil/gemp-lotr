@@ -1292,7 +1292,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     private static Set<String> frodosThatCantStartWithRing = Sets.newHashSet("Frenzied Fighter");
-    private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler");
+    private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler", "Undaunted");
 
     public void validateConsistency() throws InvalidCardDefinitionException {
         if (title == null)
