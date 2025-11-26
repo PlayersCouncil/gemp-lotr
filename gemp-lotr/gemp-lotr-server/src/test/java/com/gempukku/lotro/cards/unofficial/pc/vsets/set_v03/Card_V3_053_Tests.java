@@ -38,7 +38,7 @@ public class Card_V3_053_Tests
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 0
+		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
 		 * Game Text: Exert a Southron and hinder all other minions to assign that Southron to an unbound companion.
@@ -57,7 +57,7 @@ public class Card_V3_053_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -39,7 +39,7 @@ public class Card_V3_089_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Skirmish: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
+		 * Game Text: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
 		*/
 
 		var scn = GetScenario();

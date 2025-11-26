@@ -32,11 +32,11 @@ public class Card_V3_058_Tests
 	}
 
 	@Test
-	public void ShiftingSandsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShiftingBattlelinesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Shifting Sands
+		 * Name: Shifting Battle-lines
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
