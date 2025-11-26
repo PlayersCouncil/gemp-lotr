@@ -6,6 +6,7 @@ import com.gempukku.lotro.common.PossessionClass;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -20,8 +21,12 @@ public class Card_V3_018_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_18");
-					// put other cards in here as needed for the test case
+					put("anduril", "103_18");
+					put("aragorn", "1_89");
+					put("gandalf", "1_364");
+
+					put("uruk", "1_143");
+					put("uruk2", "1_143");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,7 +55,7 @@ public class Card_V3_018_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("anduril");
 
 		assertEquals("Anduril", card.getBlueprint().getTitle());
 		assertEquals("Legend Remade", card.getBlueprint().getSubtitle());
@@ -64,28 +69,57 @@ public class Card_V3_018_Tests
 		assertEquals(0, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AndurilPreventsTheWoundsFromBeingAppliedToHinderedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.AttachCardsTo(aragorn, anduril);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var uruk1 = scn.GetShadowCard("uruk");
+		var uruk2 = scn.GetShadowCard("uruk2");
+
+		scn.MoveMinionsToTable(uruk1, uruk2);
 
 		scn.StartGame();
 		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { gandalf, uruk1 },
+				new PhysicalCardImpl[] { aragorn, uruk2 }
+		);
+
+		scn.FreepsResolveSkirmish(gandalf);
+		scn.BothPass();
+
+		assertFalse(scn.IsHindered(gandalf));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(5, scn.GetTwilight());
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.IsHindered(gandalf));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetThreats());
+		assertEquals(7, scn.GetTwilight());
+
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.BothPass();
+		//Cannot be used to prevent wounds on aragorn
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.BothPass();
+		scn.FreepsChooseToStay();
+
+		//No shenanigans around timing; the wound wasn't applied even after restoration
+		assertFalse(scn.IsHindered(gandalf));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
 	}
 }
