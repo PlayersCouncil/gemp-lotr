@@ -159,10 +159,6 @@
 							type: Sum
 							source: [
 								{
-									type: ForEachWound
-									filter: title(Frodo)
-								}
-								{
 									type: Conditional
 									requires: {
 										type: CanSpot
@@ -858,7 +854,7 @@
 			rarity: _
 		}
 		title: Sting
-		subtitle: Spider-bane
+		subtitle: Sharp Elven-blade
 		unique: true
 		side: Free Peoples
 		culture: Shire
@@ -885,15 +881,7 @@
 					type: ModifyStrength
 					select: bearer
 					amount: {
-						type: Sum
-						source: [
-							{
-								type: ForEachThreat
-							}
-							{
-								type: ForEachBurden
-							}
-						]
+						type: ForEachThreat
 					}
 				}
 			}
