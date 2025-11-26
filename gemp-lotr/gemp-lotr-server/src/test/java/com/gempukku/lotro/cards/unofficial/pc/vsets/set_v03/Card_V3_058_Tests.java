@@ -32,11 +32,11 @@ public class Card_V3_058_Tests
 	}
 
 	@Test
-	public void ShiftingSandsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShiftingBattlelinesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Shifting Sands
+		 * Name: Shifting Battle-lines
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
@@ -53,7 +53,7 @@ public class Card_V3_058_Tests
 
 		var card = scn.GetFreepsCard("sands");
 
-		assertEquals("Shifting Sands", card.getBlueprint().getTitle());
+		assertEquals("Shifting Battle-lines", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -64,7 +64,7 @@ public class Card_V3_058_Tests
 	}
 
 	@Test
-	public void ShiftingSandsHindersAFreepsConditionEachTimeAmbushTwilightIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShiftingBattlelinesHindersAFreepsConditionEachTimeAmbushTwilightIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

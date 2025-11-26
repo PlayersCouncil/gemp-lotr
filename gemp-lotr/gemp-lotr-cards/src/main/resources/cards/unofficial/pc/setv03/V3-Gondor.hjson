@@ -61,8 +61,8 @@
 				}
 			}
 		]
-		gametext: Bearer must be Aragorn.  Bearer is <b>damage +1</b>.\Response: If an unbound companion is about to take a wound (except Aragorn), add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
-		lore: ""
+		gametext: Bearer must be Aragorn.  He is <b>damage +1</b>.<br>Response: If an unbound companion is about to take a wound (except Aragorn),<br>add 2 threats to hinder that companion.<br>Add (2) unless that companion was [gondor] or a Man.
+		lore: "'Here is the Sword that was Broken and is forged again! Will you aid me or thwart me? Choose swiftly!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -153,7 +153,7 @@
 			}
 		]
 		gametext: While you can spot another [Gondor] Man, Aragorn is strength +1.<br>While you can spot a [Rohan] Man, Aragorn is strength +2.<br>Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
-		lore: ""
+		lore: "'Stand, Men of the West! This is the hour of doom.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1062,7 +1062,7 @@
 			}
 		]
 		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
-		lore: "Then Pippin stabbed upwards, and the written blade of Westernesse pierced through the hide and went deep into the vitals of the troll..."
+		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I’ll smite some of this beastly brood before the end.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1242,7 +1242,7 @@
 			}
 		]
 		gametext: Enduring.<br>To play, add a threat.<br>This companion is strength +1 for each companion in the dead pile.<br>This companion is strength +1 for each Wraith in the dead pile.
-		lore: ""
+		lore: "'For this war will last through years uncounted, and you shall be summoned once again ere the end.'"
 		promotext: ""
 		alts: {
 			promos: {

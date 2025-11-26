@@ -32,7 +32,7 @@ public class Card_V3_117_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Sting, Spider-bane
+		 * Name: Sting, Sharp Elven-blade
 		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
@@ -42,7 +42,7 @@ public class Card_V3_117_Tests
 		 * Strength: 1
 		 * Resistance: 1
 		 * Game Text: Bearer must be a Ring-bound Hobbit. 
-		* 	Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat and burden you can spot. 
+		* 	Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot. 
 		* 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		*/
 
@@ -51,7 +51,7 @@ public class Card_V3_117_Tests
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Sting", card.getBlueprint().getTitle());
-		assertEquals("Spider-bane", card.getBlueprint().getSubtitle());
+		assertEquals("Sharp Elven-blade", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());

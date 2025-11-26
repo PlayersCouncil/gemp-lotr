@@ -39,7 +39,7 @@ public class Card_V3_107_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each wound and burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
+		 * Game Text: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
 		*/
 
 		var scn = GetScenario();

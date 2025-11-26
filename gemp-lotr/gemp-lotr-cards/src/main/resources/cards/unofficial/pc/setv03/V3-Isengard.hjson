@@ -166,7 +166,7 @@
 			}
 		]
 		gametext: To play, spot 2 [isengard] minions (or Saruman).<br>Each time your minion is hindered or discarded by a Free Peoples card, hinder a companion.<br>Each time your condition is hindered or discarded by a Free Peoples card, hinder a Free Peoples condition.
-		lore: ""
+		lore: "'If they're such fools, I will...teach them a lesson.'"
 		promotext: ""
 		alts: {
 			promos: {

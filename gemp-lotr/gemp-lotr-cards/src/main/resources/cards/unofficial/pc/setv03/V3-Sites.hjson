@@ -187,7 +187,7 @@
 					}
 					{
 						type: SendMessage
-						text: "{freeps} enters the Gorgoroth Wastes and must choose which attached cards to leave behind."
+						text: "{freeps} enters the Gorgoroth Wastes and must choose which borne cards to leave behind."
 					}
 					{
 						type: Discard
@@ -204,7 +204,7 @@
 					}
 					{
 						type: SendMessage
-						text: "{freeps} pays (2) for each of their remaining cards attached to companions: {undiscardedCards}"
+						text: "{freeps} pays (2) for each of their remaining cards borne by companions: {undiscardedCards}"
 					}
 					{
 						type: AddTwilight

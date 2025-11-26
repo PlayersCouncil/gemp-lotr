@@ -435,7 +435,7 @@
 			}
 		]
 		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Smeagol.  Then you may spot Smeagol (if he is not the Ring-bearer) and add a threat to replace him with another Smeagol from your discard pile (keep all tokens and borne cards).
-		lore: ""
+		lore: "'All the same, I'd rather have him under my eye,' said Sam. 'All the more so, if he's false.'"
 		promotext: ""
 		alts: {
 			promos: {

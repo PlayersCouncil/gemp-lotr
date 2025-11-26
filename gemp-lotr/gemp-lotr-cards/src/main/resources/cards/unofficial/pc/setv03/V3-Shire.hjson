@@ -51,7 +51,7 @@
 			}
 		]
 		gametext: Make a skirmishing Hobbit bearing a hand weapon (except the Ring-bearer) strength +X, where X is the total vitality of all characters in that skirmish.  At the end of that skirmish, hinder a minion involved in that skirmish if you cannot spot more than 4 companions.
-		lore: ""
+		lore: "'You've hurt my master, you brute, and you'll pay!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -159,10 +159,6 @@
 							type: Sum
 							source: [
 								{
-									type: ForEachWound
-									filter: title(Frodo)
-								}
-								{
 									type: Conditional
 									requires: {
 										type: CanSpot
@@ -193,8 +189,8 @@
 				]
 			}
 		]
-		gametext: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each wound and burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
-		lore: "'Stand, Men of the West! Stand and wait! This is the hour of doom.'"
+		gametext: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
+		lore: "'His Eye is now straining towards us, blind almost to all else that is moving....Therein lies all our hope.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -405,7 +401,7 @@
 			}
 		]
 		gametext: Ring-bearer (resistance 7).  Ring-bound.<br>Frodo is strength +1 for each burden.
-		lore: "'Look here, Sam dear lad,? said Frodo: ?I am tired, weary, I haven?t a hope left. But I have to go on trying to get to the Mountain, as long as I can move. The Ring is enough. This extra weight is killing me. It must go.'"
+		lore: "'Look here, Sam dear lad,' said Frodo: 'I am tired, weary, I haven't a hope left. But I have to go on trying to get to the Mountain, as long as I can move. The Ring is enough. This extra weight is killing me. It must go.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -472,7 +468,7 @@
 			}
 		]
 		gametext: Spot Frodo to restore a [shire] card.  If you cannot spot more than 4 companions, you may add (3) to reconcile your hand and heal up to 2 [shire] companions.
-		lore: "?I?ll get there, if I leave everything but my bones behind,? said Sam. ?And I?ll carry Mr. Frodo up myself, if it breaks my back and heart.'"
+		lore: "'I'll get there, if I leave everything but my bones behind,' said Sam. 'And I'll carry Mr. Frodo up myself, if it breaks my back and heart.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -693,7 +689,7 @@
 		strength: 3
 		vitality: 4
 		signet: Aragorn
-		resistance: 5
+		resistance: 6
 		keywords: Ring-bound
 		effects: [
 			{
@@ -740,7 +736,7 @@
 			}
 		]
 		gametext: Ring-bound. <br>Frodo is resistance +2.<br>Maneuver: If you cannot spot more than 4 companions, add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice. Limit once per turn.
-		lore: "'I can?t carry it for you, but I can carry you...!'"
+		lore: "'I can't carry it for you, but I can carry you...!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -858,7 +854,7 @@
 			rarity: _
 		}
 		title: Sting
-		subtitle: Spider-bane
+		subtitle: Sharp Elven-blade
 		unique: true
 		side: Free Peoples
 		culture: Shire
@@ -885,15 +881,7 @@
 					type: ModifyStrength
 					select: bearer
 					amount: {
-						type: Sum
-						source: [
-							{
-								type: ForEachThreat
-							}
-							{
-								type: ForEachBurden
-							}
-						]
+						type: ForEachThreat
 					}
 				}
 			}
@@ -922,8 +910,8 @@
 				}
 			}
 		]
-		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat and burden you can spot. <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
-		lore: ""
+		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot. <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		lore: "Sting flashed out...but at its edges a blue fire flicked."
 		promotext: ""
 		alts: {
 			promos: {

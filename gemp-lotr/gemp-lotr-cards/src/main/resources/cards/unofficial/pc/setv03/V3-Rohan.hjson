@@ -218,7 +218,7 @@
 			}
 		]
 		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered card you can spot.
-		lore: "'You look upon a woman. Éowyn I am, Éomund’s daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
+		lore: "'You look upon a woman. Éowyn I am, Éomund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -298,7 +298,7 @@
 			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
-		lore: "'One poor hobbit coming in from the battle is easily overlooked.’"
+		lore: "'One poor hobbit coming in from the battle is easily overlooked.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -367,7 +367,7 @@
 			}
 		]
 		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
-		lore: "'It is over-late to send for aid when you are already besieged,’ answered Beregond. 'But I do not know the counsel of the Lord and his captains.'"
+		lore: "'It is over-late to send for aid when you are already besieged,' answered Beregond. 'But I do not know the counsel of the Lord and his captains.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -523,7 +523,7 @@
 			}
 		]
 		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, the Shadow player may exhaust a minion of strength 15 or more to hinder Snowmane.
-		lore: "Lightfoot’s foal, swift Snowmane."
+		lore: "Lightfoot's foal, swift Snowmane."
 		promotext: ""
 		alts: {
 			promos: {
@@ -589,7 +589,7 @@
 				]
 			}
 		]
-		gametext: Skirmish: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
+		gametext: Exert Theoden or Eomer to wound a mounted minion twice.  You may then exert X [rohan] companions to discard X stacked Shadow cards.
 		lore: "He let blow the horns to rally all men to his banner that could come thither; for he thought to make a great shield-wall at the last, and stand, and fight there on foot till all fell..."
 		promotext: ""
 		alts: {

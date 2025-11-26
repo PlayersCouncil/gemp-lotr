@@ -28,11 +28,11 @@ public class Card_V3_046_Tests
 	}
 
 	@Test
-	public void CorsairSlinkthiefStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairHelmsmanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V3
-		 * Name: Corsair Slinkthief
+		 * Name: Corsair Helmsman
 		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
@@ -50,7 +50,7 @@ public class Card_V3_046_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Corsair Slinkthief", card.getBlueprint().getTitle());
+		assertEquals("Corsair Helmsman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -66,7 +66,7 @@ public class Card_V3_046_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void CorsairSlinkthiefTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CorsairHelmsmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

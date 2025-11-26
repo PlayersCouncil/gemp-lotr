@@ -42,8 +42,10 @@ public class Card_V3_018_Tests
 		 * Type: Artifact
 		 * Subtype: Hand weapon
 		 * Strength: 3
-		 * Game Text: Bearer must be Aragorn.  Bearer is <b>damage +1</b>.
-		* 	Response: If another unbound companion is about to take a wound, add 2 threats to hinder that companion. Add (2) unless that companion was [gondor] or a Man.
+		 * Game Text: Bearer must be Aragorn.  He is <b>damage +1</b>.
+		* 	Response: If an unbound companion is about to take a wound (except Aragorn),
+		* 	add 2 threats to hinder that companion.
+		* 	Add (2) unless that companion was [gondor] or a Man.
 		*/
 
 		var scn = GetScenario();
