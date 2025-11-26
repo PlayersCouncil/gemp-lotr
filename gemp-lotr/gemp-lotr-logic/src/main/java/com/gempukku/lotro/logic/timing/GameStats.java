@@ -32,6 +32,7 @@ public class GameStats {
 
     private Map<String, Map<Zone, Integer>> _zoneSizes = new HashMap<>();
     private Map<String, Integer> _threats = new HashMap<>();
+    private Map<String, Integer> _threatTotals = new HashMap<>();
     private Map<Integer, Integer> _charStrengths = new HashMap<>();
     private Map<Integer, Integer> _charVitalities = new HashMap<>();
     private Map<Integer, Integer> _siteNumbers = new HashMap<>();
@@ -230,14 +231,22 @@ public class GameStats {
         }
 
         Map<String, Integer> newThreats = new HashMap<>();
+        Map<String, Integer> newThreatTotals = new HashMap<>();
         if (playerOrder != null) {
-            for (String player : playerOrder.getAllPlayers())
+            for (String player : playerOrder.getAllPlayers()) {
                 newThreats.put(player, game.getGameState().getPlayerThreats(player));
+                newThreatTotals.put(player, PlayConditions.getThreatLimit(game));
+            }
         }
 
         if (!newThreats.equals(_threats)) {
             changed = true;
             _threats = newThreats;
+        }
+
+        if (!newThreatTotals.equals(_threatTotals)) {
+            changed = true;
+            _threatTotals = newThreatTotals;
         }
 
         return changed;
@@ -294,6 +303,10 @@ public class GameStats {
         return _threats;
     }
 
+    public Map<String, Integer> getThreatTotals() {
+        return _threatTotals;
+    }
+
     public Map<Integer, Integer> getCharStrengths() {
         return Collections.unmodifiableMap(_charStrengths);
     }
@@ -329,6 +342,7 @@ public class GameStats {
         copy._fpOverwhelmed = _fpOverwhelmed;
         copy._zoneSizes = _zoneSizes;
         copy._threats = _threats;
+        copy._threatTotals = _threatTotals;
         copy._charStrengths = _charStrengths;
         copy._charVitalities = _charVitalities;
         copy._siteNumbers = _siteNumbers;

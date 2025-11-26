@@ -64,9 +64,14 @@ public class PlayConditions {
     }
 
     public static int getMaxAddThreatCount(LotroGame game) {
+        int threatLimit = getThreatLimit(game);
+        return threatLimit - game.getGameState().getThreats();
+    }
+
+    public static int getThreatLimit(LotroGame game) {
         int companionCount = Filters.countActive(game, SpotOverride.INCLUDE_HINDERED, CardType.COMPANION);
         int threatLimit = game.getModifiersQuerying().getThreatLimit(game, companionCount);
-        return threatLimit - game.getGameState().getThreats();
+        return threatLimit;
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, Filterable... filters) {

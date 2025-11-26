@@ -182,6 +182,13 @@ public class EventSerializer {
             eventElem.appendChild(threatsElem);
         }
 
+        for (Map.Entry<String, Integer> playerThreatEntry : gameStats.getThreatTotals().entrySet()) {
+            Element threatsElem = doc.createElement("threatTotals");
+            threatsElem.setAttribute("name", playerThreatEntry.getKey());
+            threatsElem.setAttribute("value", playerThreatEntry.getValue().toString());
+            eventElem.appendChild(threatsElem);
+        }
+
         var charVitalities = gameStats.getCharVitalities();
         var charSiteNumbers = gameStats.getSiteNumbers();
         var charResistances = gameStats.getCharResistances();

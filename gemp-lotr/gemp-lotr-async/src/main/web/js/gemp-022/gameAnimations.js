@@ -1023,12 +1023,15 @@ var GameAnimations = Class.extend({
                 }
 
                 var playerThreats = element.getElementsByTagName("threats")
+                var playerThreatTotals = element.getElementsByTagName("threatTotals")
                 for (var i = 0; i < playerThreats.length; i++) {
                     var playerThreat = playerThreats[i];
+                    var playerTotal = playerThreatTotals[i];
 
                     var playerId = playerThreat.getAttribute("name");
                     var value = playerThreat.getAttribute("value");
-                    $("#threats" + that.game.getPlayerIndex(playerId)).text(value);
+                    var total = playerTotal.getAttribute("value");
+                    $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
                 }
 
                 if (that.game.fpStrengthDiv != null) {
