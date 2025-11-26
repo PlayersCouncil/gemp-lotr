@@ -2163,7 +2163,8 @@ var GempLotrGameUI = Class.extend({
                 } else {
                     hasVirtual = true;
                     
-                    var id = that.createVirtualCard(cardId, blueprintId, testingText, backSideTestingText)
+                    var id = that.createVirtualCard(cardId, blueprintId, testingText, backSideTestingText);
+                    cardIds[i] = id;
                     var cardIdElem = $(".card:cardId(" + id + ")");
                     if (cardIdElem.data("action") == null) {
                         cardIdElem.data("action", new Array());
