@@ -694,6 +694,7 @@ public class AssignmentAtTest extends AbstractAtTest {
         selectCardAction(P2, fellBeast);
         assertEquals(2, getWounds(witchKing));
         assertEquals(Phase.ASSIGNMENT, getPhase());
-        assertTrue(_game.getGameState().isExtraSkirmishes());
+        //As of V3, TWK's Beast is converted to use Relentless under the hood
+        assertTrue(_game.getGameState().isRelentlessSkirmishes());
     }
 }

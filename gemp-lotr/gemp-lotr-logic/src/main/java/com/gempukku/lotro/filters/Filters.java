@@ -295,10 +295,30 @@ public class Filters {
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-						(Filter) (game, physicalCard) ->
-                                (
-                                    game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()
-                                ) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE)));
+						(Filter) (game, physicalCard) -> {
+
+                            //If we are in a situation like evaluating targets for A Dark Shape Sprang, we automatically pass
+                            if(game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT)
+                                return true;
+
+                            if(game.getGameState().isNormalSkirmishes()) {
+                                return true;
+                            }
+
+                            if(game.getGameState().isExtraSkirmishes()) {
+                                return game.getModifiersQuerying().canBeAssignedToSkirmish(game,null, physicalCard);
+                            }
+
+                            if(game.getGameState().isRelentlessSkirmishes()) {
+                                return game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.RELENTLESS);
+                            }
+
+                            if(game.getGameState().isFierceSkirmishes()) {
+                                return game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                            }
+
+							return false; //shouldn't ever hit this
+						}));
 
         return Filters.and(
                 assignableFilter,

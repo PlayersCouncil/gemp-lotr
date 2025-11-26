@@ -40,7 +40,9 @@ public class Card_10_019_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-		 * Game Text: If an opponent plays a possession on a companion, play Gollum at twilight cost -2 from your discard pile or hand to suspend the current phase. Begin a skirmish phase involving Gollum and that companion. When it ends, resume the suspended phase.
+		 * Game Text: If an opponent plays a possession on a companion, play Gollum at twilight cost -2 from your
+		 * discard pile or hand to suspend the current phase. Begin a skirmish phase involving Gollum and that companion.
+		 * When it ends, resume the suspended phase.
 		*/
 
 		var scn = GetScenario();

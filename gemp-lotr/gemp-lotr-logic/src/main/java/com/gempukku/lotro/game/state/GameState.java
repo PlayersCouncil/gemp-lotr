@@ -47,6 +47,7 @@ public class GameState {
     private int _moveCount;
     private int turnNumber;
     private boolean _fierceSkirmishes;
+    private boolean _relentlessSkirmishes;
     private boolean _extraSkirmishes;
 
     private boolean _wearingRing;
@@ -1302,6 +1303,14 @@ public class GameState {
         _extraSkirmishes = extraSkirmishes;
     }
 
+    public void setRelentlessSkirmishes(boolean value) {
+        _relentlessSkirmishes = value;
+    }
+
+    public boolean isRelentlessSkirmishes() {
+        return _relentlessSkirmishes;
+    }
+
     public void setFierceSkirmishes(boolean value) {
         _fierceSkirmishes = value;
     }
@@ -1311,7 +1320,7 @@ public class GameState {
     }
 
     public boolean isNormalSkirmishes() {
-        return !_fierceSkirmishes && !_extraSkirmishes;
+        return !_fierceSkirmishes && !_relentlessSkirmishes && !_extraSkirmishes;
     }
 
     public boolean isCardInPlayActive(PhysicalCard card) { return isCardInPlayActive(card, false, false, false, false); }

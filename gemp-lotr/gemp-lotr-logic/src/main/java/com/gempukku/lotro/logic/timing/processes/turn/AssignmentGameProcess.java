@@ -16,7 +16,7 @@ public class AssignmentGameProcess implements GameProcess {
 
     @Override
     public void process(LotroGame game) {
-        if (Filters.countActive(game, CardType.MINION)==0
+        if (Filters.countActive(game, CardType.MINION) == 0
                 || game.getModifiersQuerying().shouldSkipPhase(game, Phase.ASSIGNMENT, null))
             _followingGameProcess = new RegroupGameProcess();
         else

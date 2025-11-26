@@ -28,7 +28,14 @@ public class EndSkirmishesGameProcess implements GameProcess {
             return new GameProcess() {
                 @Override
                 public void process(LotroGame game) {
-                    game.getGameState().setExtraSkirmishes(true);
+                    if(_afterAllSkirmishesResult.isRelentlessPhase(game)) {
+                        game.getGameState().setRelentlessSkirmishes(true);
+                        game.getGameState().sendMessage("Relentless skirmishes.");
+                    }
+                    else {
+                        game.getGameState().setExtraSkirmishes(true);
+                        game.getGameState().sendMessage("Extra skirmish.");
+                    }
                 }
 
                 @Override
