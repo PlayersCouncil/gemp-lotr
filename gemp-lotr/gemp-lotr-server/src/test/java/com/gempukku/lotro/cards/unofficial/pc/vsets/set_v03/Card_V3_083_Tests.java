@@ -19,8 +19,10 @@ public class Card_V3_083_Tests
 				new HashMap<>()
 				{{
 					put("aid", "103_83");
+					put("strider", "11_54");
+					put("amondin", "103_28");
 
-					put("uruk", "1_151");
+					put("uruk", "1_143");
 					put("power", "51_136");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -63,13 +65,14 @@ public class Card_V3_083_Tests
 	}
 
 	@Test
-	public void GondorCallsForAidCannotBeDiscardedOrHindered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GondorCallsForAidCannotBeDiscardedOrHinderedBySarumansPower() throws DecisionResultInvalidException, CardNotFoundException {
 
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var aid = scn.GetFreepsCard("aid");
-		scn.MoveCardsToSupportArea(aid);
+		var amondin = scn.GetFreepsCard("amondin");
+		scn.MoveCardsToSupportArea(aid, amondin);
 
 		var uruk = scn.GetShadowCard("uruk");
 		//Errata'd Saruman's Power, which discards 1 condition and then hinders all others
@@ -83,9 +86,52 @@ public class Card_V3_083_Tests
 		assertInZone(Zone.SUPPORT, aid);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.ShadowPlayAvailable(power));
-		
+
 		scn.ShadowPlayCard(power);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertInZone(Zone.SUPPORT, aid);
+	}
+
+	@Test
+	public void GondorCallsForAidCannotBeHinderedByOtherBeacons() throws DecisionResultInvalidException, CardNotFoundException {
+
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aid = scn.GetFreepsCard("aid");
+		var amondin = scn.GetFreepsCard("amondin");
+		var strider = scn.GetFreepsCard("strider");
+		scn.MoveCardsToSupportArea(aid, amondin);
+		scn.MoveCompanionsToTable(strider);
+
+		var uruk = scn.GetShadowCard("uruk");
+		//Errata'd Saruman's Power, which discards 1 condition and then hinders all others
+		scn.MoveMinionsToTable(uruk);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		//site / strider timing tie
+		scn.FreepsChoose("Strider");
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(strider, uruk);
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		assertInZone(Zone.SUPPORT, aid);
+		assertFalse(scn.IsHindered(aid));
+		assertInZone(Zone.SUPPORT, amondin);
+		assertFalse(scn.IsHindered(amondin));
+
+		//Strider is being wounded, Flame of Amon Din permits hindering a beacon to prevent it
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertFalse(scn.FreepsHasCardChoicesAvailable(aid));
+		assertFalse(scn.FreepsHasCardChoicesAvailable(amondin));
+		assertFalse(scn.IsHindered(aid));
+		assertTrue(scn.IsHindered(amondin));
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

@@ -396,7 +396,8 @@ public class Filters {
     }
 
     public static Filter canBeHindered(final PhysicalCard source) {
-        return (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard);
+        return (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard)
+            && game.getModifiersQuerying().canBeHinderedBy(game, null, physicalCard, source);
     }
 
     public static Filter canBeRestored(final PhysicalCard source) {

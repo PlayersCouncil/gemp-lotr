@@ -1202,21 +1202,21 @@ public class GameState {
         var zone = card.getZone();
 
         //Cards in hand can be hindered
-        if(zone == Zone.HAND)
-            return true;
+//        if(zone == Zone.HAND)
+//            return true;
 
         //Cards stacked on active cards can be hindered
         if(zone == Zone.STACKED && isCardInPlayActive(card.getStackedOn()))
             return true;
 
         //Cards can be intercepted on being played and preemptively hindered
-        if(zone == Zone.VOID)
-            return true;
+//        if(zone == Zone.VOID)
+//            return true;
 
         var bp = card.getBlueprint();
         //An event card that is in the process of being resolved can be hindered (to cancel its effect)
-        if(bp.getCardType() == CardType.EVENT)
-            return zone == Zone.VOID_FROM_HAND;
+//        if(bp.getCardType() == CardType.EVENT)
+//            return zone == Zone.VOID_FROM_HAND;
 
         if(bp.getCardType() == CardType.SITE)
             return false;
