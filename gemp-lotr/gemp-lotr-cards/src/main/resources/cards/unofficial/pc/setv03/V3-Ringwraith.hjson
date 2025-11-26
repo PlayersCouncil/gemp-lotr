@@ -159,7 +159,7 @@
 				}
 			}
 		]
-		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Assignment: Spot 3 [ringwraith] minions and hinder this condition to spot a [ringwraith] minion and an unbound companion.  Hinder all other characters.
+		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Assignment: Spot 3 [ringwraith] minions, remove a burden, and hinder this condition to spot a [ringwraith] minion and an unbound companion.  Hinder all other characters.
 		lore: "So now at last the City was besieged, enclosed in a ring of foes."
 		promotext: ""
 		alts: {
@@ -232,7 +232,7 @@
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Shadow: Hinder this condition to take a twilight card into hand from your draw deck.<br>Regroup: Hinder a twilight card to add (1).
-		lore: "'But the Lord of the City, Beregond, has fallen before his city is taken. He is fey and dangerous.’"
+		lore: "'But the Lord of the City, Beregond, has fallen before his city is taken. He is fey and dangerous.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -518,8 +518,8 @@
 				]
 			}
 		]
-		gametext: Maneuver or Skirmish: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
-		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,’ said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
+		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
+		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,' said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -577,7 +577,7 @@
 			}
 		]
 		gametext: Lurker.<br>Other minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
-		lore: "'Take swift counsel with what little wit is left to you. For Sauron does not love spies...’"
+		lore: "'Take swift counsel with what little wit is left to you. For Sauron does not love spies...'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1347,8 +1347,8 @@
 				]
 			}
 		]
-		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards, and must exert one of their characters for each card restored.
-		lore: ""
+		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all<br>Free Peoples cards of one type (except companion). The Free Peoples player<br>may restore any number of their cards,<br>and must exert one of their characters<br>for each card restored.
+		lore: "From a mouth unseen there came a deadly laughter."
 		promotext: ""
 		alts: {
 			promos: {

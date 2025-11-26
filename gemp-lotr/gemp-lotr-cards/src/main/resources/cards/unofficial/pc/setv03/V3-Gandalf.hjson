@@ -342,7 +342,7 @@
 			}
 		]
 		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Exert Gandalf thrice (or spot Shadowfax and exert Gandalf once) to reveal another Free Peoples event from your hand.  Play that event 3 times, then remove it from the game.
-		lore: "Wherever he came men’s hearts would lift again, and the winged shadows pass from memory."
+		lore: "Wherever he came men's hearts would lift again, and the winged shadows pass from memory."
 		promotext: ""
 		alts: {
 			promos: {
@@ -409,7 +409,7 @@
 			}
 		]
 		gametext: Pipeweed. Bearer must be a Wizard.<br>Each companion who is bearing a pipe is strength +1.<br>Regroup: Exert bearer and discard this. This phase you may use special abilities on pipes as if it were the Fellowship phase.
-		lore: ""
+		lore: "'Hobbits first put it into pipes. Not even the Wizards first thought of that before we did.'"
 		promotext: ""
 		alts: {
 			promos: {

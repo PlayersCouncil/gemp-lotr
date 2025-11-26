@@ -233,7 +233,7 @@
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Response: If a burden is added, hinder an Orc and this condition to add a threat.<br>Response: If a threat is added, hinder an Orc and this condition to add a burden.
-		lore: "'He is burning, already burning,’ he said sadly. 'The house of his spirit crumbles.'"
+		lore: "'He is burning, already burning,' he said sadly. 'The house of his spirit crumbles.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -299,7 +299,7 @@
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Skirmish: Exert an Orc or Troll and hinder 2 twilight conditions to make that minion strength +2.  
-		lore: "The shadows closed on men again...and the valour of Gondor withered into ash."
+		lore: "The shadows closed on men again, and their hearts went cold, and the valour of Gondor withered into ash."
 		promotext: ""
 		alts: {
 			promos: {
@@ -580,7 +580,7 @@
 			}
 		]
 		gametext: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
-		lore: "'Better to burn sooner than late, for burn we must.'"
+		lore: "'No...not at sunrise. The Darkness has begun. There will be no dawn.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -726,7 +726,6 @@
 		strength: 24
 		vitality: 5
 		site: 6
-		keywords: Fierce
 		effects: [
 			{
 				type: ModifyOwnCost

@@ -595,7 +595,7 @@
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker.  Ambush (3). <br>When you play this minion, remove (3) or hinder this minion.
-		lore: ""
+		lore: "'From the North to the field of Dagorlad there is skirmish and rumour of war. In the South the Haradrim are moving, and fear has fallen on all our coastlands, so that little help will come to us thence.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -672,7 +672,7 @@
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time this minion is hindered, you may hinder another [raider] minion.
-		lore: ""
+		lore: "All the Southrons had been accounted for...Of the enemy no movement could be seen; not even an orc-spy was abroad."
 		promotext: ""
 		alts: {
 			promos: {
@@ -820,7 +820,7 @@
 			}
 		]
 		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (3) or hinder this minion.<br>Each minion with ambush (X) is strength +X.
-		lore: ""
+		lore: "But they saw nothing, and heard no sound but the sigh of withered leaves and grass."
 		promotext: ""
 		alts: {
 			promos: {
@@ -986,7 +986,7 @@
 		unique: false
 		side: Shadow
 		culture: Raider
-		twilight: 0
+		twilight: 2
 		type: Event
 		timewords: Assignment
 		effects: [
@@ -1045,7 +1045,7 @@
 			}
 		]
 		gametext: Exert a Southron and hinder all other minions to assign that Southron to an unbound companion.  The Free Peoples player may make that Southron strength +3, <b>ambush (4)</b>, and <b>fierce</b> until the regroup phase to prevent this.
-		lore: "'We were outnumbered, for Mordor has allied itself with the Easterlings and the cruel Haradrim; but it was not by numbers that we were defeated. A power was there that we have not felt before.'"
+		lore: "To the land of the Haradrim came only a tale from far off: a rumour of the wrath and terror of Gondor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1104,7 +1104,7 @@
 			}
 		]
 		gametext: Bearer must be a mounted Southron.<br>When you play this, hinder all Free Peoples mounts.<br>Skirmish: Remove a threat to make a Southron strength +2.
-		lore: "But wherever the mï¿½makil came there the horses would not go, but blenched and swerved away; and the great monsters were unfought."
+		lore: "But wherever the mûmakil came there the horses would not go, but blenched and swerved away; and the great monsters were unfought."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1251,8 +1251,8 @@
 				]
 			}
 		]
-		gametext: Restore all trackers and minions with ambush.  If you restored any, make each Southron gain ambush (1) until the regroup phase.
-		lore: "To the land of the Haradrim came only a tale from far off: a rumour of the wrath and terror of Gondor."
+		gametext: Restore all trackers and minions with ambush.  If you restored any, make each Southron gain <b>ambush (1)</b> until the regroup phase.
+		lore: "'We were outnumbered, for Mordor has allied itself with the Easterlings and the cruel Haradrim; but it was not by numbers that we were defeated. A power was there that we have not felt before.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1413,7 +1413,7 @@
 			}
 		]
 		gametext: At the start of each skirmish involving a minion with ambush, you may remove (2) to hinder a Free Peoples condition.<br>Each time your Southron Man dies, you may remove (1) to stack a Southron from your discard pile on a [raider] item that already has a Southron stacked on it.
-		lore: ""
+		lore: "Soon their case became worse; for new strength came."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1609,7 +1609,7 @@
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
-		lore: "'He gave a sort of hiss. It might have been laughing, and it might not. Then he spurred his great horse right at me...'"
+		lore: "The second to the Chief, Khamul the Shadow of the East, abode in Dol Guldur as Sauron's lieutenant."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1657,7 +1657,7 @@
 				cost: [
 					{
 						type: Exert
-						select: choose(mounted,Southron)
+						select: choose(mounted, Southron, LimitOnePerBearer)
 						memorize: exertedSouthron
 					}
 				]
@@ -1705,7 +1705,7 @@
 				]
 			}
 		]
-		gametext: Bearer gains <b>archer</b>.<br>Maneuver: If this is in your support area, exert a mounted Southron to transfer this to that Southron.  Choose a Man stacked on that Southron.  Until the end of the turn, that Southron gains the game text of that stacked Man.
+		gametext: Bearer gains <b>archer</b>.<br>Maneuver: If this is in your support area, exert a mounted Southron to transfer this to that Southron.  Limit 1 per bearer. Choose a Man stacked on that Southron.  Until the end of the turn, that Southron gains the game text of that stacked Man.
 		lore: ""
 		promotext: ""
 		alts: {
