@@ -960,7 +960,7 @@
 					{
 						type: Hinder
 						ignoreCostCheckFailure: true
-						select: all(AttachedTo(memory(exertedComp)))
+						select: all(AttachedTo(memory(exertedComp)), not(hindered))
 						memorize: hinderedCards
 					}
 				]

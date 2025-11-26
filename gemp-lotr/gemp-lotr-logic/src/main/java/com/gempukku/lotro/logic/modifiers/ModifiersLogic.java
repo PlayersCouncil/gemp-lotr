@@ -644,6 +644,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard card, int woundsToTake) {
         LoggingThreadLocal.logMethodStart(card, "canTakeWound");
         try {
+            if(game.getGameState().isHindered(card))
+                return false;
+
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card)) {
                 Integer woundsTaken = _woundsPerPhaseMap.get(card.getCardId());
                 if (woundsTaken == null)
@@ -661,6 +664,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canTakeWound");
         try {
+            if(game.getGameState().isHindered(card))
+                return false;
+
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card)) {
                 if (!modifier.canTakeWoundsFromLosingSkirmish(game, card))
                     return false;
@@ -675,6 +681,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canTakeArcheryWound(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canTakeArcheryWound");
         try {
+            if(game.getGameState().isHindered(card))
+                return false;
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card)) {
                 if (!modifier.canTakeArcheryWound(game, card))
                     return false;
@@ -689,6 +697,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeExerted(LotroGame game, PhysicalCard exertionSource, PhysicalCard exertedCard) {
         LoggingThreadLocal.logMethodStart(exertedCard, "canBeExerted");
         try {
+            if(game.getGameState().isHindered(exertedCard))
+                return false;
+
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, exertedCard)) {
                 if (!modifier.canBeExerted(game, exertionSource, exertedCard))
                     return false;
@@ -1010,6 +1021,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeHealed(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canBeHealed");
         try {
+            if(game.getGameState().isHindered(card))
+                return false;
+
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card))
                 if (!modifier.canBeHealed(game, card))
                     return false;

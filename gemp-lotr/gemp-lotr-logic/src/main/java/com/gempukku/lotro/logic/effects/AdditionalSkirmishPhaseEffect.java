@@ -25,6 +25,7 @@ public class AdditionalSkirmishPhaseEffect extends UnrespondableEffect {
         final Phase currentPhase = game.getGameState().getCurrentPhase();
         final Skirmish skirmish = game.getGameState().getSkirmish();
         final boolean fierce = game.getGameState().isFierceSkirmishes();
+        final boolean relentless = game.getGameState().isRelentlessSkirmishes();
         final boolean extra = game.getGameState().isExtraSkirmishes();
 
         if (skirmish != null)
@@ -41,11 +42,13 @@ public class AdditionalSkirmishPhaseEffect extends UnrespondableEffect {
                             game.getGameState().restartSkirmish(skirmish);
                         game.getGameState().setCurrentPhase(currentPhase);
                         game.getGameState().setFierceSkirmishes(fierce);
+                        game.getGameState().setRelentlessSkirmishes(relentless);
                         game.getGameState().setExtraSkirmishes(extra);
                     }
                 });
 
         game.getGameState().setFierceSkirmishes(false);
+        game.getGameState().setRelentlessSkirmishes(false);
         game.getGameState().setExtraSkirmishes(true);
         game.getActionsEnvironment().addActionToStack(
                 skirmishPhaseAction);

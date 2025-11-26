@@ -14,7 +14,11 @@ public class AfterAllSkirmishesResult extends EffectResult {
     }
 
     public boolean isCreateAnExtraAssignmentAndSkirmishPhases(LotroGame game) {
-        return _createAnExtraAssignmentAndSkirmishPhases || Filters.countActive(game, CardType.MINION, Keyword.RELENTLESS) > 0;
+        return _createAnExtraAssignmentAndSkirmishPhases || isRelentlessPhase(game);
+    }
+
+    public boolean isRelentlessPhase(LotroGame game) {
+        return Filters.countActive(game, CardType.MINION, Keyword.RELENTLESS) > 0;
     }
 
     public void setCreateAnExtraAssignmentAndSkirmishPhases(boolean createAnExtraAssignmentAndSkirmishPhases) {

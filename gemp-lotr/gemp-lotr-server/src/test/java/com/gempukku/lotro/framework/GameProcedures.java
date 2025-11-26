@@ -142,6 +142,22 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 	/**
+	 * Causes both players to pass. Both will check to ensure that they have a currently available decision to be passing first.
+	 */
+	default void BothPass() {
+		var currentPlayer = GetCurrentPlayer();
+		var offPlayer = GetOffPlayer();
+
+		if(AnyDecisionsAvailable(currentPlayer)) {
+			PlayerDecided(currentPlayer, "");
+		}
+
+		if(AnyDecisionsAvailable(offPlayer)) {
+			PlayerDecided(offPlayer, "");
+		}
+	}
+
+	/**
 	 * Causes both players to pass any decisions that contain the provided text.
 	 * @param text
 	 */

@@ -63,6 +63,7 @@
 				trigger: {
 					type: usesSpecialAbility
 					phase: skirmish
+					player: shadow
 				}
 				requires: {
 					type: CanSpot

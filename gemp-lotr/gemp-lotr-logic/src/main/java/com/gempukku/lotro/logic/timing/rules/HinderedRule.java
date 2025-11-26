@@ -16,13 +16,24 @@ public class HinderedRule {
     public void applyRule() {
         Filter hinderedFilter = (game, physicalCard) -> physicalCard.isFlipped();
 
-        Condition rbIsHindered = (LotroGame game) -> game.getGameState().isHindered(game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()));
-
+        //Adds the hindered pseudo-keyword to all cards which are flipped
         _modifiersLogic.addAlwaysOnModifier(new AddKeywordModifier(null, hinderedFilter, null, Keyword.HINDERED));
-        //If the Ring-bearer is hindered, burdens cannot be removed
-        _modifiersLogic.addAlwaysOnModifier(new CantRemoveBurdensModifier(null, rbIsHindered,Filters.any));
+
+        //Hindered characters cannot be wounded
+        _modifiersLogic.addAlwaysOnModifier(new CantTakeWoundsModifier(null, null, Filters.hindered));
+        _modifiersLogic.addAlwaysOnModifier(new CantTakeWoundsFromLosingSkirmishModifier(null, null, Filters.hindered));
+        //Hindered characters cannot be healed
+        _modifiersLogic.addAlwaysOnModifier(new CantHealModifier(null, null, Filters.hindered));
+        //Hindered characters cannot be exerted
+        _modifiersLogic.addAlwaysOnModifier(new CantExertWithCardModifier(null, Filters.hindered, null, Filters.any));
+
+        Condition rbIsHindered = (LotroGame game) -> game.getGameState().isHindered(game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()));
         //If the Ring-bearer is hindered, burdens cannot be added
         _modifiersLogic.addAlwaysOnModifier(new CantAddBurdensModifier(null, rbIsHindered, Filters.any));
+        //If the Ring-bearer is hindered, burdens cannot be removed
+        _modifiersLogic.addAlwaysOnModifier(new CantRemoveBurdensModifier(null, rbIsHindered, Filters.any));
+
+
 
 
     }

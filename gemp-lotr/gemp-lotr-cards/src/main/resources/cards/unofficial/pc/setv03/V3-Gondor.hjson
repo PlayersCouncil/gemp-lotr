@@ -34,7 +34,7 @@
 				type: Response
 				trigger: {
 					type: AboutToTakeWound
-					filter: other,unbound,companion
+					filter: unbound, companion, not(title(Aragorn))
 					memorize: woundedComp
 				}
 				cost: [

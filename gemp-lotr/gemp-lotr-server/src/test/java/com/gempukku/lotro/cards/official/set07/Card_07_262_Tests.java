@@ -91,7 +91,7 @@ public class Card_07_262_Tests
 		assertTrue(scn.ShadowPlayAvailable(battlements));
 
 		scn.ShadowPlayCard(battlements);
-		assertEquals(2, scn.ShadowGetChoiceCount());
+		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 
 		scn.ShadowChooseOption("burden");
 		assertEquals(Zone.STACKED, pillager.getZone());
@@ -167,7 +167,7 @@ public class Card_07_262_Tests
 		assertTrue(scn.ShadowPlayAvailable(battlements));
 
 		scn.ShadowPlayCard(battlements);
-		assertEquals(2, scn.ShadowGetChoiceCount());
+		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 
 		scn.ShadowChooseOption("play");
 		assertEquals(Zone.SHADOW_CHARACTERS, pillager.getZone());

@@ -120,7 +120,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.FREE_CHARACTERS, radagast.getZone());
 		scn.FreepsUseCardAction(frodo);
 		assertEquals(Zone.DEAD, radagast.getZone());
-		scn.FreepsChoose("0");
+		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetMoveLimit());
 	}
 

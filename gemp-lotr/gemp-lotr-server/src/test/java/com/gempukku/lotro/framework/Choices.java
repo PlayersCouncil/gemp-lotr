@@ -54,8 +54,11 @@ public interface Choices extends Decisions {
 	 * @param choice The choice (or decision response)
 	 */
 	default void FreepsChoose(String choice) {
-		if(FreepsGetChoiceCount() > 0) {
+		if(FreepsGetMultipleChoiceCount() > 0) {
 			FreepsChooseOption(choice);
+		}
+		else if(FreepsGetActionCount() > 0) {
+			FreepsChooseAction(choice);
 		}
 		else {
 			PlayerDecided(P1, choice);
@@ -76,8 +79,11 @@ public interface Choices extends Decisions {
 	 * @param choice The choice (or decision response)
 	 */
 	default void ShadowChoose(String choice) {
-		if(ShadowGetChoiceCount() > 0) {
+		if(ShadowGetMultipleChoiceCount() > 0) {
 			ShadowChooseOption(choice);
+		}
+		else if(ShadowGetActionCount() > 0) {
+			ShadowChooseAction(choice);
 		}
 		else {
 			PlayerDecided(P2, choice);
@@ -199,8 +205,10 @@ public interface Choices extends Decisions {
 	default List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
 	default List<String> FreepsGetCardChoices() { return GetADParamAsList(P1, "cardId"); }
 	default List<String> ShadowGetCardChoices() { return GetADParamAsList(P2, "cardId"); }
-	default int FreepsGetChoiceCount() { return GetChoiceCount(FreepsGetMultipleChoices()); }
-	default int ShadowGetChoiceCount() { return GetChoiceCount(ShadowGetMultipleChoices()); }
+	default int FreepsGetMultipleChoiceCount() { return GetChoiceCount(FreepsGetMultipleChoices());	}
+	default int ShadowGetMultipleChoiceCount() { return GetChoiceCount(ShadowGetMultipleChoices());	}
+	default int FreepsGetActionCount() { return GetChoiceCount(FreepsGetActionChoices()); }
+	default int ShadowGetActionCount() { return GetChoiceCount(ShadowGetActionChoices()); }
 
 	default int GetChoiceCount(List<String> list) {
 		if(list == null)
