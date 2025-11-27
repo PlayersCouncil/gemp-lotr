@@ -252,8 +252,12 @@ public class GameUtils {
                 }
                 else if(memory.equals("shadow")) {
                     found = getFirstShadowPlayer(context.getGame());
-                } else if (memory.equals("self")) {
+                }
+                else if (memory.equals("self")) {
                     found = GameUtils.getAppendedNames(Collections.singleton(context.getSource()));
+                }
+                else if (memory.equals("bearer")) {
+                    found = GameUtils.getAppendedNames(Collections.singleton(context.getSource().getAttachedTo()));
                 }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));

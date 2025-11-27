@@ -2,6 +2,25 @@ body {
     font-size: 12px;
 }
 
+.flex-horiz {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.flex-vert {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.flex-fill {
+    flex-grow: 1;
+}
+
+.flex-static {
+    flex-grow: 0;
+}
 
 .ui-widget-content a,
 .msg-content p a {
@@ -283,6 +302,12 @@ body {
 
 #settingsBox label {
     font-size: 70%;
+}
+
+#settingsBox {
+    overflow: scroll;
+    width: 100%;
+    height: 85%;
 }
 
 
