@@ -918,6 +918,21 @@ var GameAnimations = Class.extend({
                         var cardStatArr = cardStats[1].split("|");
                         $(".cardStrength", cardDiv).html(cardStatArr[0]);
                         $(".cardVitality", cardDiv).html(cardStatArr[1]);
+                        
+                        //First we enable all icons, in case this card was recently hindered
+                        //(and thus needs to have its icons replaced)
+                        var cardData = cardDiv.data("card");
+                        if(cardData != null && !cardData.flipped) {
+                            $(".cardStrength", cardDiv).css({display:""});
+                            $(".cardStrengthBg", cardDiv).css({display:""});
+                            $(".cardVitality", cardDiv).css({display:""});
+                            $(".cardVitalityBg", cardDiv).css({display:""});
+                            $(".cardResistance", cardDiv).css({display:""});
+                            $(".cardResistanceBg", cardDiv).css({display:"none"});
+                            $(".cardSiteNumber", cardDiv).css({display:""});
+                            $(".cardSiteNumberBg", cardDiv).css({display:"none"});
+                        }
+                            
                         if (cardStatArr.length > 2) {
                             if (cardStatArr[2].indexOf("R") == 0) {
                                 var resistanceDiv = $(".cardResistance", cardDiv);
@@ -942,18 +957,17 @@ var GameAnimations = Class.extend({
                                 $(".cardSiteNumber", cardDiv).html(cardStatArr[2]).css({display:""});
                                 $(".cardSiteNumberBg", cardDiv).css({display:""});
                             }
-                            
-                            var cardData = cardDiv.data("card");
-                            if(cardData != null && cardData.flipped) {
-                                $(".cardStrength", cardDiv).css({display:"none"});
-                                $(".cardStrengthBg", cardDiv).css({display:"none"});
-                                $(".cardVitality", cardDiv).css({display:"none"});
-                                $(".cardVitalityBg", cardDiv).css({display:"none"});
-                                $(".cardResistance", cardDiv).css({display:"none"});
-                                $(".cardResistanceBg", cardDiv).css({display:"none"});
-                                $(".cardSiteNumber", cardDiv).css({display:"none"});
-                                $(".cardSiteNumberBg", cardDiv).css({display:"none"});
-                            }
+                        }
+                        //If the card is hindered, now we disable all icon display
+                        if(cardData != null && cardData.flipped) {
+                            $(".cardStrength", cardDiv).css({display:"none"});
+                            $(".cardStrengthBg", cardDiv).css({display:"none"});
+                            $(".cardVitality", cardDiv).css({display:"none"});
+                            $(".cardVitalityBg", cardDiv).css({display:"none"});
+                            $(".cardResistance", cardDiv).css({display:"none"});
+                            $(".cardResistanceBg", cardDiv).css({display:"none"});
+                            $(".cardSiteNumber", cardDiv).css({display:"none"});
+                            $(".cardSiteNumberBg", cardDiv).css({display:"none"});
                         }
                     }
                 }
@@ -1022,16 +1036,25 @@ var GameAnimations = Class.extend({
                     $("#removedPile" + that.game.getPlayerIndex(playerId)).text(removed);
                 }
 
-                var playerThreats = element.getElementsByTagName("threats")
-                var playerThreatTotals = element.getElementsByTagName("threatTotals")
+                var playerThreats = element.getElementsByTagName("threats");
+                var playerThreatTotals = element.getElementsByTagName("threatTotals");
                 for (var i = 0; i < playerThreats.length; i++) {
                     var playerThreat = playerThreats[i];
                     var playerTotal = playerThreatTotals[i];
 
                     var playerId = playerThreat.getAttribute("name");
                     var value = playerThreat.getAttribute("value");
-                    var total = playerTotal.getAttribute("value");
-                    $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
+                    var total = "-1";
+                    if(playerThreatTotals != null && playerTotal != null) {
+                        total = playerTotal.getAttribute("value");   
+                    }
+                    
+                    if(total == "-1") {
+                        $("#threats" + that.game.getPlayerIndex(playerId)).text(value);
+                    }
+                    else {
+                        $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
+                    }
                 }
 
                 if (that.game.fpStrengthDiv != null) {

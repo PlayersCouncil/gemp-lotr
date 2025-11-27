@@ -99,9 +99,8 @@
 					}
 					true: [
 						{
-							type: chooseActiveCards
-							text: Choose unbound companion to hinder cards on
-							select: choose(unbound,companion,hasAttachedCount(3,any))
+							type: Hinder
+							select: choose(unbound,companion)
 							memorize: chosenCompanion
 						}
 						{

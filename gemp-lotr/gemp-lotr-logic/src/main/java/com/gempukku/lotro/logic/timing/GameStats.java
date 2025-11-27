@@ -235,7 +235,12 @@ public class GameStats {
         if (playerOrder != null) {
             for (String player : playerOrder.getAllPlayers()) {
                 newThreats.put(player, game.getGameState().getPlayerThreats(player));
-                newThreatTotals.put(player, PlayConditions.getThreatLimit(game));
+                if(player.equals(game.getGameState().getCurrentPlayerId())) {
+                    newThreatTotals.put(player, PlayConditions.getThreatLimit(game));
+                }
+                else {
+                    newThreatTotals.put(player, -1);
+                }
             }
         }
 

@@ -117,28 +117,14 @@ body {
     cursor: pointer;
 }
 
-.cardStrength {
+.cardStrength,
+.cardVitality,
+.cardSiteNumber,
+.cardResistance
+ {
     text-align: center;
     font-weight: bolder;
-    color: #88ffff;
-}
-
-.cardVitality {
-    text-align: center;
-    font-weight: bolder;
-    color: #88ffff;
-}
-
-.cardSiteNumber {
-    text-align: center;
-    font-weight: bolder;
-    color: #88ffff;
-}
-
-.cardResistance {
-    text-align: center;
-    font-weight: bolder;
-    color: #88ffff;
+    color: #ffffff;
 }
 
 .selectableCard > .borderOverlay {
