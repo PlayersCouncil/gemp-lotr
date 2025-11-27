@@ -4,6 +4,8 @@ var GempLotrGameUI = Class.extend({
     initialized: false,
     
     pregamePanel: null,
+    
+    useOldStackingVisuals: false,
 
     bottomPlayerId: null,
     replayMode: null,
@@ -610,6 +612,21 @@ var GempLotrGameUI = Class.extend({
             that.settingsAutoAccept = selected;
             $.cookie("autoAccept", "" + selected, {expires: 365});
         });
+        
+        $("#settingsBox").append("<input id='use-old-stack-checkbox' type='checkbox' value='' /><label for='use-old-stack-checkbox'>Use old visuals for stacked cards</label><br />");
+
+        var useOldStack = loadFromCookie("use-old-stack", "false");
+        if (useOldStack === "true" || useOldStack == null) {
+            $("#use-old-stack-checkbox").prop("checked", true);
+            this.useOldStackingVisuals = true;
+        }
+
+        $("#use-old-stack-checkbox").bind("change", function () {
+            var selected = $("#use-old-stack-checkbox").prop("checked");
+            that.useOldStackingVisuals = selected;
+            saveToCookie("use-old-stack", selected);
+        });
+        
         
         $("#settingsBox").append("<label for='animation-slider'>Animation Speed</label><br /><div id='animation-slider'></div>");
         
