@@ -1044,12 +1044,17 @@ var GameAnimations = Class.extend({
 
                     var playerId = playerThreat.getAttribute("name");
                     var value = playerThreat.getAttribute("value");
-                    var total = "?";
+                    var total = "-1";
                     if(playerThreatTotals != null && playerTotal != null) {
-                        total = playerTotal.getAttribute("value");
+                        total = playerTotal.getAttribute("value");   
                     }
                     
-                    $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
+                    if(total == "-1") {
+                        $("#threats" + that.game.getPlayerIndex(playerId)).text(value);
+                    }
+                    else {
+                        $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
+                    }
                 }
 
                 if (that.game.fpStrengthDiv != null) {
