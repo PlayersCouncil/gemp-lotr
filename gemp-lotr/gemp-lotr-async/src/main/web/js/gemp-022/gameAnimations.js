@@ -1036,15 +1036,19 @@ var GameAnimations = Class.extend({
                     $("#removedPile" + that.game.getPlayerIndex(playerId)).text(removed);
                 }
 
-                var playerThreats = element.getElementsByTagName("threats")
-                var playerThreatTotals = element.getElementsByTagName("threatTotals")
+                var playerThreats = element.getElementsByTagName("threats");
+                var playerThreatTotals = element.getElementsByTagName("threatTotals");
                 for (var i = 0; i < playerThreats.length; i++) {
                     var playerThreat = playerThreats[i];
                     var playerTotal = playerThreatTotals[i];
 
                     var playerId = playerThreat.getAttribute("name");
                     var value = playerThreat.getAttribute("value");
-                    var total = playerTotal.getAttribute("value");
+                    var total = "?";
+                    if(playerThreatTotals != null && playerTotal != null) {
+                        total = playerTotal.getAttribute("value");
+                    }
+                    
                     $("#threats" + that.game.getPlayerIndex(playerId)).text("" + value + "/" + total);
                 }
 
