@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_025_ErrataTests
 {
@@ -33,10 +35,10 @@ public class Card_01_025_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Still Draws Breath
-		 * Unique: 2
+		 * Unique: 1
 		 * Side: Free Peoples
 		 * Culture: Dwarven
-		 * Twilight Cost: 1
+		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf (and you may hinder a Shadow support condition if underground).
@@ -48,12 +50,12 @@ public class Card_01_025_ErrataTests
 
 		assertEquals("Still Draws Breath", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertEquals(2, card.getBlueprint().getUniqueRestriction());
+		assertEquals(1, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
