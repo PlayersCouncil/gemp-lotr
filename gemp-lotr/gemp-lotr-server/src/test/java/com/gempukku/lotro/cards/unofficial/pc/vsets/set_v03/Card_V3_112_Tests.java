@@ -51,7 +51,7 @@ public class Card_V3_112_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("barrel1");
 
 		assertEquals("Hornblower Barrel", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
