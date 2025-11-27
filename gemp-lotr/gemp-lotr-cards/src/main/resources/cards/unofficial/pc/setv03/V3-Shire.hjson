@@ -1061,6 +1061,7 @@
 						}
 						amount: 1
 						select: choose(companion)
+						until: start(regroup)
 					}
 					{
 						type: Hinder
