@@ -606,10 +606,10 @@
 			rarity: C
 		}
 		title: Still Draws Breath
-		unique: 2
+		unique: 1
 		side: Free Peoples
 		culture: Dwarven
-		twilight: 1
+		twilight: 2
 		type: Condition
 		keywords: Support Area
 		effects: [
@@ -628,23 +628,12 @@
 				effect: [
 					{
 						type: heal
-						select: choose(memory(winner))
-					}
-					{
-						type: If
-						check: {
-							type: Location
-							filter: underground
-						}
-						true: {
-							type: Exert
-							select: choose(minion)
-						}
+						select: memory(winner)
 					}
 				]
 			}
 		]
-		gametext: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. If the fellowship is at an underground site, exert a minion.
+		gametext: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. 
 		lore: "When thirteen had fallen the rest fled shrieking, leaving the defenders unharmed...."
 		promotext: ""
 		alts: {
