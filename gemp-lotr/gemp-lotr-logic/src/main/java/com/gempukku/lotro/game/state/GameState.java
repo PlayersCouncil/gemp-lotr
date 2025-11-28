@@ -520,7 +520,6 @@ public class GameState {
                 removeFromSkirmish(card, false);
             }
 
-
             removeAllTokens(card);
             //If this is reset, then there is no way for self-discounting effects (which are evaluated while in the void)
             // to have any sort of permanent effect once the card is in play.
@@ -545,8 +544,7 @@ public class GameState {
             zone = Zone.REMOVED;
 
         //Hindered cards that are being discarded, banished, moved to a deck, or killed do not remain hindered
-        if(card.isFlipped() && (zone == Zone.REMOVED || zone == Zone.DISCARD || zone == Zone.DEAD
-                || zone == Zone.DECK || zone == Zone.ADVENTURE_DECK)) {
+        if(card.isFlipped() && !zone.isInPlay()) {
             card.setFlipped(false);
         }
 
