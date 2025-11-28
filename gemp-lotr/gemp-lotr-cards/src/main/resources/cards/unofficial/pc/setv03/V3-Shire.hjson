@@ -524,7 +524,7 @@
 				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
-					select: choose(side(Free Peoples), not(event))
+					select: choose(side(Free Peoples), not(event), not(title(Hornblower Barrel)))
 					count: 2
 					discard: you
 				}
