@@ -1329,7 +1329,7 @@
 						type: ChooseArbitraryCards
 						text: Choose {Gondor} and {Rohan} cards to take into hand
 						fromMemory: revealedCards
-						count: any
+						count: 0-4
 						filter: or(Gondor, Rohan)
 						memorize: takenCards
 					}
