@@ -757,8 +757,8 @@
 				effect: [
 					{
 						type: Hinder
-						select: choose(or(possession,condition),AttachedTo(InSkirmishAgainst(self)))
-						memorize: hinderedCard
+						select: all(or(possession,condition),AttachedTo(InSkirmishAgainst(self)))
+						memorize: hinderedCards
 					}
 					{
 						type: If
@@ -769,12 +769,12 @@
 							}
 							{
 								type: HasCardInMemory
-								memory: hinderedCard
+								memory: hinderedCards
 							}
 						]
 						true: {
 							type: Hinder
-							select: all(NameFromMemory(hinderedCard))
+							select: all(NameFromMemory(hinderedCards))
 						}
 					}
 				]
