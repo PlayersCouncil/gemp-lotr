@@ -167,7 +167,7 @@
 
 		]
 		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder X beacons to play X items from your discard pile on your Men.
-		lore: "And so King Théoden departed from his own realm, and mile by mile the long road wound away..."
+		lore: "And so King ThÃ©oden departed from his own realm, and mile by mile the long road wound away..."
 		promotext: ""
 		alts: {
 			promos: {
@@ -228,7 +228,7 @@
 			}
 		]
 		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered card you can spot.
-		lore: "'You look upon a woman. Éowyn I am, Éomund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
+		lore: "'You look upon a woman. Ã‰owyn I am, Ã‰omund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -741,7 +741,7 @@
 			}
 		]
 		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
-		lore: "South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil."
+		lore: "South strode Ã‰omer and men fled before his face, and they were caught between the hammer and the anvil."
 		promotext: ""
 		alts: {
 			promos: {
