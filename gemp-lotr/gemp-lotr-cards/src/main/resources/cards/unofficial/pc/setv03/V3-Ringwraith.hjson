@@ -780,7 +780,7 @@
 				]
 			}
 		]
-		gametext: Fierce.<br>Skirmish: Exert this minion to hinder a possession or condition borne by a character it is skirmishing.  If you can spot another Nazgul, hinder all other copies of that card you can spot.
+		gametext: Fierce.<br>Skirmish: Exert this minion to hinder all possessions and conditions borne by a character it is skirmishing.  If you can spot another Nazgul, hinder all other copies of those cards you can spot.
 		lore: "'Do you not know Death when you see it? Die now and curse in vain!'"
 		promotext: ""
 		alts: {

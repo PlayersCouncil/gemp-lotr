@@ -148,16 +148,25 @@
 				cost: {
 					type: Hinder
 					select: choose(hinderable, beacon)
+					count: 1-5
+					memorize: hinderedBeacons
 				}
 				effect: {
-					type: PlayCardFromDiscard
-					select: choose(item)
-					on: your,Man
+					type: Repeat
+					times: {
+						type: ForEachInMemory
+						memory: hinderedBeacons
+					}
+					effect: {
+						type: PlayCardFromDiscard
+						select: choose(item)
+						on: your,Man
+					}
 				}
 			}
 
 		]
-		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.<br>Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
+		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder X beacons to play X items from your discard pile on your Men.
 		lore: "And so King Théoden departed from his own realm, and mile by mile the long road wound away..."
 		promotext: ""
 		alts: {
