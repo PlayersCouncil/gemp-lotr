@@ -269,6 +269,10 @@ var GameAnimations = Class.extend({
                                 cardDiv.addClass("stack-horiz")
                             }
                         }
+                        else {
+                            //Have to have this or else old replays break
+                            targetCardData.attachedCards.push(card);
+                        }
                     }
                 }
 
@@ -432,6 +436,10 @@ var GameAnimations = Class.extend({
                         if(!that.game.useOldStackingVisuals){
                             card.addClass("stack-horiz")
                         }
+                    }
+                    else {
+                        //Have to have this or else old replays break
+                        targetCardData.attachedCards.push(card);
                     }
                 }
 
