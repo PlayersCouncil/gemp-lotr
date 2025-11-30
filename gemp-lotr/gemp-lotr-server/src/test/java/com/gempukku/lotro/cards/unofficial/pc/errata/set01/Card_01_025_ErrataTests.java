@@ -41,7 +41,7 @@ public class Card_01_025_ErrataTests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf (and you may hinder a Shadow support condition if underground).
+		 * Game Text: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf.
 		*/
 
 		var scn = GetScenario();

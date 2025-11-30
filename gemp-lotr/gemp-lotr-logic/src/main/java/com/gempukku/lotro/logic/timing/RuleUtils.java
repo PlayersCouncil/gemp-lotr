@@ -173,7 +173,13 @@ public class RuleUtils {
 
                                 boolean extraPossessionClass = self.getBlueprint().isExtraPossessionClass(game, self, attachedTo);
                                 if (!extraPossessionClass && matchingClassItems.size() == allowedItemsOfClass) {
-                                    if (matchingClassItems.stream().noneMatch(item -> item.getBlueprint().isExtraPossessionClass(game, item, attachedTo)));
+                                    boolean anyExtraClasses = false;
+                                    for(var item : matchingClassItems) {
+                                        if(item.getBlueprint().isExtraPossessionClass(game, item, attachedTo)) {
+                                            anyExtraClasses = true;
+                                        }
+                                    }
+                                    if(!anyExtraClasses)
                                         return false;
                                 }
                             }
