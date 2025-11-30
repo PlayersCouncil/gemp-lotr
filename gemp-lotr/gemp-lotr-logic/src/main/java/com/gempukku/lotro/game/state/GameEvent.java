@@ -51,6 +51,7 @@ public class GameEvent {
     private String _blueprintId;
     private Integer _cardId;
     private Integer _targetCardId;
+    private String _targetType;
     private String _phase;
     private Integer _count;
     private Token _token;
@@ -219,14 +220,20 @@ public class GameEvent {
                 .participantId(physicalCard.getOwner())
                 .zone(physicalCard.getZone())
                 .hindered(physicalCard.isFlipped());
-        if (physicalCard.getCardController() != null)
+        if (physicalCard.getCardController() != null) {
             gameEvent = gameEvent.controllerId(physicalCard.getCardController());
-        PhysicalCard attachedTo = physicalCard.getAttachedTo();
-        if (attachedTo != null)
+        }
+        var attachedTo = physicalCard.getAttachedTo();
+        if (attachedTo != null) {
             gameEvent = gameEvent.targetCardId(attachedTo.getCardId());
-        PhysicalCard stackedOn = physicalCard.getStackedOn();
-        if (stackedOn != null)
+            gameEvent = gameEvent.targetAttached();
+        }
+
+        var stackedOn = physicalCard.getStackedOn();
+        if (stackedOn != null) {
             gameEvent = gameEvent.targetCardId(stackedOn.getCardId());
+            gameEvent = gameEvent.targetStacked();
+        }
         if (physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getZone().isInPlay())
             gameEvent = gameEvent.index(physicalCard.getSiteNumber());
         return gameEvent;
@@ -254,8 +261,22 @@ public class GameEvent {
         return _targetCardId;
     }
 
+    public String getTargetType() {
+        return _targetType;
+    }
+
     public GameEvent targetCardId(int targetCardId) {
         _targetCardId = targetCardId;
+        return this;
+    }
+
+    public GameEvent targetStacked() {
+        _targetType = "stacked";
+        return this;
+    }
+
+    public GameEvent targetAttached() {
+        _targetType = "attached";
         return this;
     }
 

@@ -505,3 +505,7 @@ ul.ui-tabs-nav {
 .card.inactive .cardResistance {
     color: #777777;
 }
+
+.card.stack-horiz {
+    transform: rotate(-90deg) translateY(10%);
+}

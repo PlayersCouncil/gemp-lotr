@@ -97,7 +97,7 @@ var CardGroup = Class.extend({
             }
 
             // Check if card needs to be rotated sideways from how it currently is
-            if (cardData.sideways!=cardData.onSide) {
+            if (cardData.sideways != cardData.onSide) {
                 callRotate = true;
                 rotateToSidewaysValue = (rotateToSidewaysValue + 90) % 180;
                 cardData.sideways = !cardData.sideways;
@@ -315,13 +315,20 @@ var NormalCardGroup = CardGroup.extend({
         } while (!result);
     },
 
-    getAttachedCardsWidth:function (maxDimension, cardData) {
+    getChildCardsWidth:function (maxDimension, cardData) {
         var result = 0;
+        for (var i = 0; i < cardData.stackedCards.length; i++) {
+            var stackedCardData = cardData.stackedCards[i].data("card");
+            result += stackedCardData.getWidthForMaxDimension(maxDimension);
+            result += this.getChildCardsWidth(maxDimension, stackedCardData);
+        }
+        
         for (var i = 0; i < cardData.attachedCards.length; i++) {
             var attachedCardData = cardData.attachedCards[i].data("card");
             result += attachedCardData.getWidthForMaxDimension(maxDimension);
-            result += this.getAttachedCardsWidth(maxDimension, attachedCardData);
+            result += this.getChildCardsWidth(maxDimension, attachedCardData);
         }
+        
         return result;
     },
 
@@ -330,7 +337,7 @@ var NormalCardGroup = CardGroup.extend({
         for (var cardIndex in cardsToLayout) {
             var cardData = cardsToLayout[cardIndex].data("card");
             var cardWithAttachmentWidth = cardData.getWidthForMaxDimension(1000);
-            cardWithAttachmentWidth += this.getAttachedCardsWidth(1000, cardData) * 0.2;
+            cardWithAttachmentWidth += this.getChildCardsWidth(1000, cardData) * 0.2;
             proportionsArray.push(cardWithAttachmentWidth / 1000);
         }
         return proportionsArray;
@@ -388,11 +395,20 @@ var NormalCardGroup = CardGroup.extend({
         return true;
     },
 
-    layoutAttached:function (cardData, y, height, layoutVars) {
+    layoutChildren:function (cardData, y, height, layoutVars) {
+        for (var i = 0; i < cardData.stackedCards.length; i++) {
+            var stackedCardData = cardData.stackedCards[i].data("card");
+            var stackedCardWidth = stackedCardData.getWidthForMaxDimension(height);
+            this.layoutChildren(stackedCardData, y, height, layoutVars);
+            this.layoutCard(cardData.stackedCards[i], this.x + layoutVars.x, this.y + y, stackedCardWidth, stackedCardData.getHeightForWidth(stackedCardWidth), layoutVars.index, stackedCardData);
+            layoutVars.x += Math.floor(stackedCardWidth * 0.22);
+            layoutVars.index++;
+        }
+        
         for (var i = 0; i < cardData.attachedCards.length; i++) {
             var attachedCardData = cardData.attachedCards[i].data("card");
             var attachedCardWidth = attachedCardData.getWidthForMaxDimension(height);
-            this.layoutAttached(attachedCardData, y, height, layoutVars);
+            this.layoutChildren(attachedCardData, y, height, layoutVars);
             this.layoutCard(cardData.attachedCards[i], this.x + layoutVars.x, this.y + y, attachedCardWidth, attachedCardData.getHeightForWidth(attachedCardWidth), layoutVars.index, attachedCardData);
             layoutVars.x += Math.floor(attachedCardWidth * 0.2);
             layoutVars.index++;
@@ -412,7 +428,7 @@ var NormalCardGroup = CardGroup.extend({
             var cardData = cardElem.data("card");
             var cardWidth = cardData.getWidthForMaxDimension(height);
 
-            this.layoutAttached(cardData, y, height, layoutVars)
+            this.layoutChildren(cardData, y, height, layoutVars)
 
             this.layoutCard(cardElem, this.x + layoutVars.x, this.y + y, cardWidth, cardData.getHeightForWidth(cardWidth), layoutVars.index, cardData);
             layoutVars.x += Math.floor(cardWidth);
@@ -436,7 +452,7 @@ var NormalCardGroup = CardGroup.extend({
             var cardData = cardElem.data("card");
             var cardWidth = cardData.getWidthForMaxDimension(rowHeight);
 
-            var attachmentWidths = this.getAttachedCardsWidth(rowHeight, cardData) * 0.2;
+            var attachmentWidths = this.getChildCardsWidth(rowHeight, cardData) * 0.2;
             var cardWidthWithAttachments = cardWidth + attachmentWidths;
             if (layoutVars.x + cardWidthWithAttachments > this.width) {
                 row++;
@@ -444,7 +460,7 @@ var NormalCardGroup = CardGroup.extend({
                 y = yBias + row * (rowHeight + this.padding);
             }
 
-            this.layoutAttached(cardData, y, rowHeight, layoutVars);
+            this.layoutChildren(cardData, y, rowHeight, layoutVars);
             this.layoutCard(cardElem, this.x + layoutVars.x, this.y + y, cardWidth, cardData.getHeightForWidth(cardWidth), layoutVars.index, cardData);
             layoutVars.x += Math.floor(cardWidth);
             if (layoutVars.x > this.width)
@@ -480,12 +496,12 @@ var NormalFlexGroup = CardGroup.extend({
         } while (!result);
     },
 
-    getAttachedCardsWidth:function (maxDimension, cardData) {
+    getChildCardsWidth:function (maxDimension, cardData) {
         var result = 0;
         for (var i = 0; i < cardData.attachedCards.length; i++) {
             var attachedCardData = cardData.attachedCards[i].data("card");
             result += attachedCardData.getWidthForMaxDimension(maxDimension);
-            result += this.getAttachedCardsWidth(maxDimension, attachedCardData);
+            result += this.getChildCardsWidth(maxDimension, attachedCardData);
         }
         return result;
     },
@@ -495,7 +511,7 @@ var NormalFlexGroup = CardGroup.extend({
         for (var cardIndex in cardsToLayout) {
             var cardData = cardsToLayout[cardIndex].data("card");
             var cardWithAttachmentWidth = cardData.getWidthForMaxDimension(1000);
-            cardWithAttachmentWidth += this.getAttachedCardsWidth(1000, cardData) * 0.2;
+            cardWithAttachmentWidth += this.getChildCardsWidth(1000, cardData) * 0.2;
             proportionsArray.push(cardWithAttachmentWidth / 1000);
         }
         return proportionsArray;
@@ -553,11 +569,20 @@ var NormalFlexGroup = CardGroup.extend({
         return true;
     },
 
-    layoutAttached:function (cardData, y, height, layoutVars) {
+    layoutChildren:function (cardData, y, height, layoutVars) {
+        for (var i = 0; i < cardData.stackedCards.length; i++) {
+            var stackedCardData = cardData.stackedCards[i].data("card");
+            var stackedCardWidth = stackedCardData.getWidthForMaxDimension(height);
+            this.layoutChildren(stackedCardData, y, height, layoutVars);
+            this.layoutCard(cardData.stackedCards[i], this.x + layoutVars.x, this.y + y, stackedCardWidth, stackedCardData.getHeightForWidth(stackedCardWidth), layoutVars.index);
+            layoutVars.x += Math.floor(stackedCardWidth * 0.2);
+            layoutVars.index++;
+        }
+        
         for (var i = 0; i < cardData.attachedCards.length; i++) {
             var attachedCardData = cardData.attachedCards[i].data("card");
             var attachedCardWidth = attachedCardData.getWidthForMaxDimension(height);
-            this.layoutAttached(attachedCardData, y, height, layoutVars);
+            this.layoutChildren(attachedCardData, y, height, layoutVars);
             this.layoutCard(cardData.attachedCards[i], this.x + layoutVars.x, this.y + y, attachedCardWidth, attachedCardData.getHeightForWidth(attachedCardWidth), layoutVars.index);
             layoutVars.x += Math.floor(attachedCardWidth * 0.2);
             layoutVars.index++;
@@ -577,7 +602,7 @@ var NormalFlexGroup = CardGroup.extend({
             var cardData = cardElem.data("card");
             var cardWidth = cardData.getWidthForMaxDimension(height);
 
-            this.layoutAttached(cardData, y, height, layoutVars)
+            this.layoutChildren(cardData, y, height, layoutVars)
 
             this.layoutCard(cardElem, this.x + layoutVars.x, this.y + y, cardWidth, cardData.getHeightForWidth(cardWidth), layoutVars.index);
             layoutVars.x += cardWidth;
@@ -601,7 +626,7 @@ var NormalFlexGroup = CardGroup.extend({
             var cardData = cardElem.data("card");
             var cardWidth = cardData.getWidthForMaxDimension(rowHeight);
 
-            var attachmentWidths = this.getAttachedCardsWidth(rowHeight, cardData) * 0.2;
+            var attachmentWidths = this.getChildCardsWidth(rowHeight, cardData) * 0.2;
             var cardWidthWithAttachments = cardWidth + attachmentWidths;
             if (layoutVars.x + cardWidthWithAttachments > this.width) {
                 row++;
@@ -609,7 +634,7 @@ var NormalFlexGroup = CardGroup.extend({
                 y = yBias + row * (rowHeight + this.padding);
             }
 
-            this.layoutAttached(cardData, y, rowHeight, layoutVars);
+            this.layoutChildren(cardData, y, rowHeight, layoutVars);
             this.layoutCard(cardElem, this.x + layoutVars.x, this.y + y, cardWidth, cardData.getHeightForWidth(cardWidth), layoutVars.index);
             layoutVars.x += cardWidth;
             if (layoutVars.x > this.width)
@@ -816,7 +841,7 @@ var TableCardGroup = CardGroup.extend({
             var cardHeightWithAttachments = cardHeight + attachmentHeights;
 
             // Layout the card (and attached cards)
-            this.layoutAttached(cardData, maxVerticalCardWidth, layoutVars)
+            this.layoutChildren(cardData, maxVerticalCardWidth, layoutVars)
             this.layoutCard(cardElem, this.x + layoutVars.x, this.y + layoutVars.y, cardWidth, cardHeight, layoutVars.index, cardData);
             layoutVars.index++;
 
@@ -833,14 +858,14 @@ var TableCardGroup = CardGroup.extend({
     * @param {Number} the column width
     * @param {Object} the layout variables
     */
-    layoutAttached:function (cardData, columnWidth, layoutVars) {
+    layoutChildren:function (cardData, columnWidth, layoutVars) {
         for (var i = 0; i < cardData.attachedCards.length; i++) {
             var attachedCardData = cardData.attachedCards[i].data("card");
             var attachedCardHeight = attachedCardData.getHeightForColumnWidth(columnWidth);
             var attachedCardWidth = attachedCardData.getWidthForHeight(attachedCardHeight);
 
             // Layout cards attached to this card
-            this.layoutAttached(attachedCardData, columnWidth, layoutVars);
+            this.layoutChildren(attachedCardData, columnWidth, layoutVars);
 
             // Layout the card
             this.layoutCard(cardData.attachedCards[i], this.x + layoutVars.x, this.y + layoutVars.y, attachedCardWidth, attachedCardHeight, layoutVars.index, attachedCardData);
