@@ -1062,7 +1062,7 @@
 			}
 		]
 		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
-		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I’ll smite some of this beastly brood before the end.'"
+		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I'll smite some of this beastly brood before the end.'"
 		promotext: ""
 		alts: {
 			promos: {
