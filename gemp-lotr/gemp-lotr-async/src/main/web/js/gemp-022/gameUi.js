@@ -553,11 +553,18 @@ var GempLotrGameUI = Class.extend({
 
     addBottomLeftTabPane: function () {
         var that = this;
-        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li>";
-        var tabsBodies = "<div id='chatBox' class='slimPanel'></div>";
-        if (!this.replayMode) {
-            tabsLabels += "<li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
-            tabsBodies += "<div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
+        var tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        
+        if(this.spectatorMode) {
+            //No Options box
+            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
+            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        }
+        else if (this.replayMode) {
+            //No options or connected players boxes
+            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li>";
+            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div>";
         }
         
         if(!this.autoZoom.isTouchDevice) {
