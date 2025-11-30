@@ -271,7 +271,7 @@ var GameAnimations = Class.extend({
                         }
                         else {
                             //Have to have this or else old replays break
-                            targetCardData.attachedCards.push(card);
+                            targetCardData.attachedCards.push(cardDiv);
                         }
                     }
                 }
