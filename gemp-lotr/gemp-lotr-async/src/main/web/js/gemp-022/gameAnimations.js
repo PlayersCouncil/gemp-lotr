@@ -224,6 +224,7 @@ var GameAnimations = Class.extend({
             function (next) {
                 var blueprintId = element.getAttribute("blueprintId");
                 var targetCardId = element.getAttribute("targetCardId");
+                var targetType = element.getAttribute("targetType");
                 var controllerId = element.getAttribute("controllerId");
                 var testingText = element.getAttribute("testingText");
                 var backSideTestingText = element.getAttribute("backSideTestingText");
@@ -256,7 +257,18 @@ var GameAnimations = Class.extend({
                 if (targetCardId != null) {
                     var targetCardData = $(".card:cardId(" + targetCardId + ")").data("card");
                     if(targetCardData != null) {
-                        targetCardData.attachedCards.push(cardDiv);    
+                        if(targetType == "attached") {
+                            targetCardData.attachedCards.push(cardDiv);
+                        }
+                        else if(targetType == "stacked") {
+                            targetCardData.stackedCards.push(cardDiv);
+                            
+                            var cardDiv = $(".card:cardId(" + cardId + ")")
+                            cardDiv.addClass("stacked");
+                            if(!that.game.useOldStackingVisuals){
+                                cardDiv.addClass("stack-horiz")
+                            }
+                        }
                     }
                 }
 
@@ -367,6 +379,7 @@ var GameAnimations = Class.extend({
                 var cardId = element.getAttribute("cardId");
                 var zone = element.getAttribute("zone");
                 var targetCardId = element.getAttribute("targetCardId");
+                var targetType = element.getAttribute("targetType");
                 var participantId = element.getAttribute("participantId");
                 var controllerId = element.getAttribute("controllerId");
 
@@ -378,13 +391,26 @@ var GameAnimations = Class.extend({
                     function () {
                         var cardData = $(this).data("card");
                         var index = -1;
-                        for (var i = 0; i < cardData.attachedCards.length; i++)
+                        for (var i = 0; i < cardData.attachedCards.length; i++) {
                             if (cardData.attachedCards[i].data("card").cardId == cardId) {
                                 index = i;
                                 break;
                             }
-                        if (index != -1)
+                        }
+                        if (index != -1) {
                             cardData.attachedCards.splice(index, 1);
+                        }
+                        
+                        index = -1;
+                        for (var i = 0; i < cardData.stackedCards.length; i++) {
+                            if (cardData.stackedCards[i].data("card").cardId == cardId) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index != -1) {
+                            cardData.stackedCards.splice(index, 1);
+                        }
                     }
                 );
 
@@ -397,7 +423,16 @@ var GameAnimations = Class.extend({
                 if (targetCardId != null) {
                     // attach to new card if it's attached
                     var targetCardData = $(".card:cardId(" + targetCardId + ")").data("card");
-                    targetCardData.attachedCards.push(card);
+                    if(targetType == "attached") {
+                        targetCardData.attachedCards.push(card);
+                    }
+                    else if(targetType == "stacked") {
+                        targetCardData.stackedCards.push(card);
+                        card.addClass("stacked");
+                        if(!that.game.useOldStackingVisuals){
+                            card.addClass("stack-horiz")
+                        }
+                    }
                 }
 
                 next();
@@ -527,20 +562,42 @@ var GameAnimations = Class.extend({
                     if (card.length > 0) {
                         var cardData = card.data("card");
                         
-                        if (cardData.zone == "ATTACHED" || cardData.zone == "STACKED") {
+                        if (cardData.zone == "ATTACHED") {
                             $(".card").each(
                                 function () {
                                     var cardData = $(this).data("card");
                                     if(!cardData || !cardData.attachedCards)
                                         return;
                                     var index = -1;
-                                    for (var i = 0; i < cardData.attachedCards.length; i++)
+                                    for (var i = 0; i < cardData.attachedCards.length; i++) {
                                         if (cardData.attachedCards[i].data("card").cardId == cardId) {
                                             index = i;
                                             break;
                                         }
-                                    if (index != -1)
+                                    }
+                                    if (index != -1) {
                                         cardData.attachedCards.splice(index, 1);
+                                    }
+                                }
+                            );
+                        }
+                        
+                        if (cardData.zone == "STACKED") {
+                            $(".card").each(
+                                function () {
+                                    var cardData = $(this).data("card");
+                                    if(!cardData || !cardData.stackedCards)
+                                        return;
+                                    var index = -1;
+                                    for (var i = 0; i < cardData.stackedCards.length; i++) {
+                                        if (cardData.stackedCards[i].data("card").cardId == cardId) {
+                                            index = i;
+                                            break;
+                                        }
+                                    }
+                                    if (index != -1) {
+                                        cardData.stackedCards.splice(index, 1);
+                                    }
                                 }
                             );
                         }

@@ -1179,21 +1179,27 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         _chatServer.sendSystemMessageToAllChatRooms("@everyone Server is reloading card definitions.  This will impact game speed until it is complete.");
 
-        _cardLibrary.reloadAllDefinitions();
+        try {
+            _cardLibrary.reloadAllDefinitions();
 
-        _productLibrary.ReloadPacks();
+            _productLibrary.ReloadPacks();
 
-        _formatLibrary.ReloadFormats();
-        _formatLibrary.ReloadSealedTemplates();
+            _formatLibrary.ReloadFormats();
+            _formatLibrary.ReloadSealedTemplates();
 
-        _soloDraftDefinitions.ReloadDraftsFromFile();
+            _soloDraftDefinitions.ReloadDraftsFromFile();
 
-        _tableDraftLibrary.reloadDraftsFromFile(_cardLibrary, _formatLibrary);
-        _tournamentService.reloadQueues();
+            _tableDraftLibrary.reloadDraftsFromFile(_cardLibrary, _formatLibrary);
+            _tournamentService.reloadQueues();
 
-        _chatServer.sendSystemMessageToAllChatRooms("@everyone Card definition reload complete.  If you are mid-game and you notice any oddities, reload the page and please let the mod team know in the game hall ASAP if the problem doesn't go away.");
-
-        responseWriter.writeHtmlResponse("OK");
+            responseWriter.writeHtmlResponse("OK");
+        }
+        catch(RuntimeException exception) {
+            responseWriter.writeHtmlResponse(exception.toString());
+        }
+        finally {
+            _chatServer.sendSystemMessageToAllChatRooms("@everyone Card definition reload complete.  If you are mid-game and you notice any oddities, reload the page and please let the mod team know in the game hall ASAP if the problem doesn't go away.");
+        }
     }
 
     private void clearCache(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, SQLException, IOException {

@@ -20,6 +20,7 @@ class Card {
     cardId = null;
     owner = null;
     attachedCards = null;
+    stackedCards = null;
     locationIndex = null;
     //Flipped face-down
     flipped = false;
@@ -153,6 +154,7 @@ class Card {
             this.onSide = onSide;
         }
         this.attachedCards = new Array();
+        this.stackedCards = new Array();
         if (this.bareBlueprint == "rules") {
             this.imageUrl = "/gemp-lotr/images/rules.png";
             return;

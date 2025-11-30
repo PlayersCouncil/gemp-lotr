@@ -141,22 +141,30 @@
 		]
 		effects: [
 			{
-				type: Activated
-				phase: Shadow
-				cost: [
-					{
-						type: Spot
-						filter: Southron
-					}
-					{
-						type: RemoveTwilight
-						amount: 1
-					}
-				]
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: Southron
+				}
 				effect: {
-					type: StackCardsFromHand
-					select: choose(Southron)
-					where: self
+					type: Choice
+					texts: [
+						Stack a Southron from play
+						Stack a Southron from hand
+					]
+					effects: [
+						{
+							type: StackCardsFromPlay
+							select: choose(Southron)
+							where: self
+						}
+						{
+							type: StackCardsFromHand
+							select: choose(Southron)
+							where: self
+						}
+					]
 				}
 			}
 			{
@@ -167,12 +175,6 @@
 						type: canSpot
 						filter: self,zone(support)
 					}
-					{
-						type: HasCardStacked
-						filter: Southron
-						count: 3
-						on: self
-					}
 				]
 				cost: {
 					type: RemoveTwilight
@@ -182,7 +184,7 @@
 					{
 						type: turnIntoMinion
 						select: self
-						strength: 2
+						strength: 6
 						vitality: 6
 						keywords: [
 							fierce
@@ -236,7 +238,7 @@
 				]
 			}
 		]
-		gametext: Shadow: Spot a Southron and remove (1) to stack a Southron from hand here.<br>Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
+		gametext: Each time a Southron is played, you may stack a Southron from play or hand here.<br>Maneuver: If there are 3 Southrons stacked here, remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
 		lore: ""
 		promotext: ""
 		alts: {

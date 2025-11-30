@@ -554,6 +554,16 @@
 		needsLoading: false
 		playable: true
 	}
+	
+	{
+		setId: 103
+		setName: The Pelennor Fields
+		rarityFile: /set103-rarity.txt
+		originalSet: false
+		merchantable: true
+		needsLoading: false
+		playable: true
+	}
 
 	{
 		setId: 150
