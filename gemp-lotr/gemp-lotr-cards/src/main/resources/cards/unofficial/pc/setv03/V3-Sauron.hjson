@@ -746,35 +746,29 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Played
+				type: modifier
+				modifier: {
+					type: addKeyword
 					filter: self
+					keyword: fierce
+					requires: {
+						type: CanSpot
+						count: 6
+						filter: companion
+					}
 				}
-				effect: {
-					type: Choice
-					texts: [
-						Spot 4 other {Sauron} cards
-						Discard 3 cards from hand
-						Hinder {self}
-					]
-					effects: [
-						{
-							type: Spot
-							filter: other,Sauron
-							count: 4
-						}
-						{
-							type: DiscardFromHand
-							count: 3
-							forced: false
-						}
-						{
-							type: Hinder
-							select: self
-						}
-					]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: relentless
+					requires: {
+						type: CanSpot
+						count: 7
+						filter: companion
+					}
 				}
 			}
 			{
@@ -1002,7 +996,7 @@
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site).
-		lore: "'Fëanor himself, maybe, wrought them, in days so long ago...But there is nothing that Sauron cannot turn to evil uses.'"
+		lore: "'FÃ«anor himself, maybe, wrought them, in days so long ago...But there is nothing that Sauron cannot turn to evil uses.'"
 		promotext: ""
 		alts: {
 			promos: {

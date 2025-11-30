@@ -294,21 +294,14 @@
 			phase: Maneuver
 			cost: [
 				{
-					type: Choice
-					texts: [
-						Exert a Dwarf
-						Hinder an item borne by a Dwarf
-					]
-					effects: [
-						{
-							type: Exert
-							select: choose(dwarf)
-						}
-						{
-							type: Hinder
-							select: choose(item, AttachedTo(Dwarf))
-						}
-					]
+					type: Exert
+					select: choose(dwarf, HasAttached(item))
+					memorize: exertedDwarf
+				}
+				{
+					type: Hinder
+					ignoreCostCheckFailure: true
+					select: choose(item, AttachedTo(memory(exertedDwarf)))
 				}
 			]
 			effect: [
@@ -336,7 +329,7 @@
 				}
 			]
 		}
-		gametext: Maneuver: Exert a Dwarf or hinder an item on a Dwarf to hinder a Shadow condition (if that condition is a weather or attached to a Dwarf, discard it instead).
+		gametext: Maneuver: Exert a Dwarf or hinder an item borne by a Dwarf to hinder a Shadow condition (if that condition is a weather or borne by a Dwarf, discard it instead).
 		lore: "A Dwarf does not readily notice the weight on his back, or in his heart."
 		promotext: ""
 		alts: {

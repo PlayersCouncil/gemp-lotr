@@ -28,12 +28,17 @@
 						memorize: chosenCompanion
 					}
 					{
+						type: MemorizeNumber
+						amount: {
+							type: ForEachVitality
+							filter: memory(chosenCompanion)
+						}
+						memory: vitality
+					}
+					{
 						type: removeBurdens
 						ignoreCostCheckFailure: true
-						amount: {
-							type: TwilightCostInMemory
-							memory: chosenCompanion
-						}
+						amount: memory(vitality)
 					}
 				]
 				effect: {

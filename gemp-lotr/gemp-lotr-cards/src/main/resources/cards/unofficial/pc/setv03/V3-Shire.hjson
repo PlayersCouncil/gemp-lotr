@@ -524,13 +524,13 @@
 				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
-					select: choose(side(Free Peoples), not(event))
+					select: choose(side(Free Peoples), not(event), not(title(Hornblower Barrel)))
 					count: 2
 					discard: you
 				}
 			}
 		]
-		gametext: Pipeweed.<br>When you play this possession, you may discard a Free Peoples card from your draw deck.<br>When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 Free Peoples cards (except events) from your discard pile into your hand.
+		gametext: Pipeweed.<br>When you play this, you may discard a Free Peoples card from your draw deck.<br>When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 other Free Peoples cards (except events or Hornblower Barrels) from your discard pile into hand.
 		lore: ""
 		promotext: ""
 		alts: {

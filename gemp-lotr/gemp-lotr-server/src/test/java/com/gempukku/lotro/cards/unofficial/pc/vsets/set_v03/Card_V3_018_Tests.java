@@ -57,7 +57,7 @@ public class Card_V3_018_Tests
 
 		var card = scn.GetFreepsCard("anduril");
 
-		assertEquals("Anduril", card.getBlueprint().getTitle());
+		assertEquals("Andúril", card.getBlueprint().getTitle());
 		assertEquals("Legend Remade", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());

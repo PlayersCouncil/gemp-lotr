@@ -961,20 +961,20 @@
 		timewords: Skirmish
 		effects: {
 			type: event
-			cost: {
-				type: optional
-				text: Would you like to remove 2 burdens to add +4 more strength?
-				cost: {
-					type: removeBurdens
-					amount: 2
-				}
-				effect: {
-					type: MemorizeInfo
-					memory: removedBurdens
-					info: yes
-				}
-			}
 			effect: [
+				{
+					type: optional
+					text: Would you like to remove 2 burdens to add +4 more strength?
+					cost: {
+						type: removeBurdens
+						amount: 2
+					}
+					effect: {
+						type: MemorizeInfo
+						memory: removedBurdens
+						info: yes
+					}
+				}
 				{
 					type: modifyStrength
 					select: choose(culture(orc),orc)
