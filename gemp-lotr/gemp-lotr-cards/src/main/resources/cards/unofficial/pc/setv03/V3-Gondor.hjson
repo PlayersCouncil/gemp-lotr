@@ -11,7 +11,7 @@
 			collInfo: V3_18
 			rarity: _
 		}
-		title: Andúril
+		title: AndÃºril
 		subtitle: Legend Remade
 		unique: true
 		side: Free Peoples
@@ -760,7 +760,7 @@
 			}
 		]
 		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead and restore a Wraith to heal that Wraith.
-		lore: "'Yet it is said in Harrowdale,' said Éowyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
+		lore: "'Yet it is said in Harrowdale,' said Ã‰owyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1062,7 +1062,7 @@
 			}
 		]
 		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
-		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I’ll smite some of this beastly brood before the end.'"
+		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, Iâ€™ll smite some of this beastly brood before the end.'"
 		promotext: ""
 		alts: {
 			promos: {

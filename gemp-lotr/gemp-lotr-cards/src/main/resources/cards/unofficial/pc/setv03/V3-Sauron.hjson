@@ -996,7 +996,7 @@
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site).
-		lore: "'Fëanor himself, maybe, wrought them, in days so long ago...But there is nothing that Sauron cannot turn to evil uses.'"
+		lore: "'FÃ«anor himself, maybe, wrought them, in days so long ago...But there is nothing that Sauron cannot turn to evil uses.'"
 		promotext: ""
 		alts: {
 			promos: {

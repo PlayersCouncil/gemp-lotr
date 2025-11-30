@@ -1104,7 +1104,7 @@
 			}
 		]
 		gametext: Bearer must be a mounted Southron.<br>When you play this, hinder all Free Peoples mounts.<br>Skirmish: Remove a threat to make a Southron strength +2.
-		lore: "But wherever the mûmakil came there the horses would not go, but blenched and swerved away; and the great monsters were unfought."
+		lore: "But wherever the mÃ»makil came there the horses would not go, but blenched and swerved away; and the great monsters were unfought."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1566,7 +1566,7 @@
 			collInfo: V3_61
 			rarity: _
 		}
-		title: Úlairë Attëa
+		title: ÃšlairÃ« AttÃ«a
 		subtitle: Khamul of the East
 		unique: true
 		side: Shadow

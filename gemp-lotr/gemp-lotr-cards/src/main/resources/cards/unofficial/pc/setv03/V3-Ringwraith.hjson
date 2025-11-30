@@ -519,7 +519,7 @@
 			}
 		]
 		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
-		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls,' said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the Nazgûl, a spear of terror in the hand of Sauron, shadow of despair.'"
+		lore: "'Yet now under the Lord of Barad-dÃ»r the most fell of all his captains is already master of your outer walls,' said Gandalf. 'King of Angmar long ago, Sorcerer, Ringwraith, Lord of the NazgÃ»l, a spear of terror in the hand of Sauron, shadow of despair.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -644,7 +644,7 @@
 			}
 		]
 		gametext: If your Nazgul wins a skirmish, exert it to reconcile your hand.  You may discard a Nazgul from hand to wound a companion it was skirmishing.
-		lore: "A great black shape against the fires beyond he loomed up, grown to a vast menace of despair. In rode the Lord of the Nazgûl, under the archway that no enemy ever yet had passed, and all fled before his face."
+		lore: "A great black shape against the fires beyond he loomed up, grown to a vast menace of despair. In rode the Lord of the NazgÃ»l, under the archway that no enemy ever yet had passed, and all fled before his face."
 		promotext: ""
 		alts: {
 			promos: {
@@ -665,7 +665,7 @@
 			collInfo: V3_72
 			rarity: _
 		}
-		title: Úlairë Attëa
+		title: ÃšlairÃ« AttÃ«a
 		subtitle: Bestowed with Dominion
 		unique: true
 		side: Shadow
@@ -734,7 +734,7 @@
 			collInfo: V3_73
 			rarity: _
 		}
-		title: Úlairë Cantëa
+		title: ÃšlairÃ« CantÃ«a
 		subtitle: Exalted with Decay
 		unique: true
 		side: Shadow
@@ -802,7 +802,7 @@
 			collInfo: V3_74
 			rarity: _
 		}
-		title: Úlairë Enquëa
+		title: ÃšlairÃ« EnquÃ«a
 		subtitle: Magnified through Suffering
 		unique: true
 		side: Shadow
@@ -873,7 +873,7 @@
 			collInfo: V3_75
 			rarity: _
 		}
-		title: Úlairë Lemenya
+		title: ÃšlairÃ« Lemenya
 		subtitle: Anointed with Terror
 		unique: true
 		side: Shadow
@@ -909,7 +909,7 @@
 			}
 		]
 		gametext: Fierce.<br>Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
-		lore: "'The storm is coming. The Nazgûl have crossed the River! Ride, ride! Wait not for the dawn! Let not the swift wait for the slow! Ride!'"
+		lore: "'The storm is coming. The NazgÃ»l have crossed the River! Ride, ride! Wait not for the dawn! Let not the swift wait for the slow! Ride!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -930,7 +930,7 @@
 			collInfo: V3_76
 			rarity: _
 		}
-		title: Úlairë Nelya
+		title: ÃšlairÃ« Nelya
 		subtitle: Glorified to Conquer
 		unique: true
 		side: Shadow
@@ -991,7 +991,7 @@
 			}
 		]
 		gametext: Fierce.<br>At the start of each skirmish involving a Nazgul, you may exert this minion to make that Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot another Nazgul).
-		lore: "'Those Nazgûl give me the creeps....But He likes 'em; they're His favourites nowadays.'"
+		lore: "'Those NazgÃ»l give me the creeps....But He likes 'em; they're His favourites nowadays.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1012,7 +1012,7 @@
 			collInfo: V3_77
 			rarity: _
 		}
-		title: Úlairë Nertea
+		title: ÃšlairÃ« Nertea
 		subtitle: Sanctified for Cruelty
 		unique: true
 		side: Shadow
@@ -1107,7 +1107,7 @@
 			collInfo: V3_78
 			rarity: _
 		}
-		title: Úlairë Otsëa
+		title: ÃšlairÃ« OtsÃ«a
 		subtitle: Consecrated by Pestilence
 		unique: true
 		side: Shadow
@@ -1172,7 +1172,7 @@
 			collInfo: V3_79
 			rarity: _
 		}
-		title: Úlairë Toldea
+		title: ÃšlairÃ« Toldea
 		subtitle: Blessed with Brutality
 		unique: true
 		side: Shadow
