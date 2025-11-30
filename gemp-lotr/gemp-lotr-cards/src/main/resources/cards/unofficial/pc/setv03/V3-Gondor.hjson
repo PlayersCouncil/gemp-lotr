@@ -760,7 +760,7 @@
 			}
 		]
 		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead and restore a Wraith to heal that Wraith.
-		lore: "'Yet it is said in Harrowdale,' said Ã‰owyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
+		lore: "'Yet it is said in Harrowdale,' said Éowyn in a low voice. 'that in the moonless nights but little while ago a great host in strange array passed by.'"
 		promotext: ""
 		alts: {
 			promos: {
