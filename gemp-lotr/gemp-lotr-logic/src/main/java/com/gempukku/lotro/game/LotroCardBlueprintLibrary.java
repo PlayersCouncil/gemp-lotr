@@ -56,8 +56,14 @@ public class LotroCardBlueprintLibrary {
 
         loadSets();
         loadMappings();
-        loadCards(_cardPath, true);
-        collectionReady.release();
+        try {
+            loadCards(_cardPath, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            collectionReady.release();
+        }
     }
 
     public boolean subscribeToRefreshes(Runnable callback) {
@@ -96,9 +102,11 @@ public class LotroCardBlueprintLibrary {
         try {
             collectionReady.acquire();
             loadSets();
-            collectionReady.release();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            collectionReady.release();
         }
     }
 
@@ -106,9 +114,11 @@ public class LotroCardBlueprintLibrary {
         try {
             collectionReady.acquire();
             loadMappings();
-            collectionReady.release();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            collectionReady.release();
         }
     }
 
@@ -116,11 +126,13 @@ public class LotroCardBlueprintLibrary {
         try {
             collectionReady.acquire();
             loadCards(_cardPath, false);
-            collectionReady.release();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
+        finally {
+            collectionReady.release();
+        }
+	}
 
     private void loadSets() {
         try {
@@ -168,7 +180,7 @@ public class LotroCardBlueprintLibrary {
         }
     }
 
-    private void loadCards(File path, boolean initial) {
+    private void loadCards(File path, boolean initial) throws Exception {
         if (path.isFile()) {
             loadCardsFromFile(path, initial);
         } else if (path.isDirectory()) {
@@ -200,7 +212,7 @@ public class LotroCardBlueprintLibrary {
         return result;
     }
 
-    private void loadCardsFromFile(File file, boolean validateNew) {
+    private void loadCardsFromFile(File file, boolean validateNew) throws Exception {
         if (!JsonUtils.IsValidHjsonFile(file))
             return;
 
@@ -215,12 +227,16 @@ public class LotroCardBlueprintLibrary {
             }
         } catch (FileNotFoundException exp) {
             logger.error("Failed to find file " + file.getAbsolutePath(), exp);
+            throw exp;
         } catch (IOException exp) {
             logger.error("Error while loading file " + file.getAbsolutePath(), exp);
+            throw exp;
         } catch (ParseException exp) {
             logger.error("Failed to parse file " + file.getAbsolutePath(), exp);
+            throw exp;
         } catch (Exception exp) {
             logger.error("Unexpected error while parsing file " + file.getAbsolutePath(), exp);
+            throw exp;
         }
         logger.debug("Loaded JSON card file " + file.getName());
     }
