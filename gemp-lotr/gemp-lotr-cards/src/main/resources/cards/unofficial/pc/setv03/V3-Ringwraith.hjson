@@ -892,23 +892,27 @@
 					type: ModifyStrength
 					filter: character,InSkirmishAgainst(self)
 					amount: {
-						type: ForEachYouCanSpot
-						filter: companion
-						multiplier: -1
-						limit: {
-							type: Conditional
-							requires: {
-								type: CanSpot
-								filter: another,Nazgul
-							}
-							true: 100
-							false: 3
+						type: Conditional
+						requires: {
+							type: CanSpot
+							filter: companion
+							count: 6
+						}
+						true: {
+							type: ForEachYouCanSpot
+							filter: companion
+							multiplier: -1
+						}
+						false: {
+							type: ForEachYouCanSpot
+							filter: Nazgul
+							multiplier: -1
 						}
 					}
 				}
 			}
 		]
-		gametext: Fierce.<br>Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
+		gametext: Fierce.<br>Each character skirmishing this minion is strength -1 for each Nazgul you can spot (or -1 for each companion you can spot if you can spot 6 companions).
 		lore: "'The storm is coming. The Nazgûl have crossed the River! Ride, ride! Wait not for the dawn! Let not the swift wait for the slow! Ride!'"
 		promotext: ""
 		alts: {
