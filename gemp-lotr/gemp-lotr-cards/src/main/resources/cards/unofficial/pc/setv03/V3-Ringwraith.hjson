@@ -362,7 +362,7 @@
 					{
 						type: ChooseActiveCards
 						text: Select a wounded companion to hinder
-						select: choose(wounded,companion,not(HighestStrength(wounded,companion)))
+						select: choose(wounded,companion,not(HighestStrength(companion)))
 						memorize: chosenComp
 					}
 					{
