@@ -48,7 +48,7 @@ public class Card_07_080_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Anduril", card.getBlueprint().getTitle());
+		assertEquals("Andúril", card.getBlueprint().getTitle());
 		assertEquals("King's Blade", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
