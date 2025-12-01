@@ -35,7 +35,7 @@ public class Card_V3_010_Tests
 		/**
 		 * Set: V3
 		 * Name: Your Staff is Broken
-		 * Unique: false
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 3
@@ -50,7 +50,7 @@ public class Card_V3_010_Tests
 
 		assertEquals("Your Staff is Broken", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

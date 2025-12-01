@@ -550,7 +550,7 @@
 			rarity: _
 		}
 		title: Your Staff is Broken
-		unique: false
+		unique: true
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 3

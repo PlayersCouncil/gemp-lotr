@@ -40,7 +40,7 @@ public class Card_V3_058_Tests
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 1
+		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support Area
 		 * Game Text: At the start of each skirmish involving a minion with ambush, you may remove (2) to hinder a
@@ -60,7 +60,7 @@ public class Card_V3_058_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
