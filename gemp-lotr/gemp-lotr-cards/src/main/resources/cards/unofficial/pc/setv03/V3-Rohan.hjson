@@ -445,10 +445,11 @@
 					type: Exerted
 					filter: minion
 					source: mount, AttachedTo(your, Man)
+					memorize: exertedMinion
 				}
 				cost: {
 					type: Hinder
-					select: self
+					select: choose(beacon)
 				}
 				effect: {
 					type: Exert
@@ -456,7 +457,7 @@
 				}
 			}
 		]
-		gametext: Beacon. To play, hinder 2 beacons.<br>Each time you play a mount on your Man, you may add (1) to heal that Man.<br>Response: If a mount borne by your Man exerts a minion, hinder this beacon to exert that minion again.
+		gametext: Beacon. To play, hinder 2 beacons.<br>Each time you play a mount on your Man, you may add (1) to heal that Man.<br>Response: If a mount borne by your Man exerts a minion, hinder a beacon to exert that minion again.
 		lore: "'And there, I think, he will hear tidings of war, and the Riders of Rohan will go down to Minas Tirith.'"
 		promotext: ""
 		alts: {
