@@ -49,7 +49,7 @@ public class Card_V3_077_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Úlairë Nertea", card.getBlueprint().getTitle());
+		assertEquals("Úlairë Nertëa", card.getBlueprint().getTitle());
 		assertEquals("Sanctified for Cruelty", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
