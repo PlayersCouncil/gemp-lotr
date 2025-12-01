@@ -1367,7 +1367,7 @@
 		unique: true
 		side: Shadow
 		culture: Raider
-		twilight: 1
+		twilight: 2
 		type: Condition
 		keywords: Support Area
 		effects: [
