@@ -177,6 +177,10 @@
 					type: Hinder
 					select: all(character,InSkirmishAgainst(title(Shelob)))
 				}
+				requires: {
+					type: CanSpot
+					filter: InSkirmishAgainst(title(Shelob))
+				}
 			}
 			{
 				type: Activated
@@ -229,25 +233,9 @@
 		culture: Gollum
 		twilight: 2
 		type: Possession
+		strength: -1
 		keywords: Support Area
-		effects: [
-		
-			{
-				type: Trigger
-				optional: false
-				trigger: [
-					{
-						type: StartOfTurn
-					}
-				]
-				effect: {
-					type: ModifyStrength
-					select: bearer
-					amount: -1
-					until: EndOfTurn
-				}
-			}
-			
+		effects: [			
 			{
 				type: Trigger
 				optional: false
@@ -275,7 +263,7 @@
 				effect: {
 					type: transfer
 					select: self
-					where: choose(companion)
+					where: choose(companion, or(InSkirmishAgainst(title(Shelob)), and(InSkirmishAgainst(culture(gollum), minion),Limit1PerBearer)) )
 				}
 			}
 		]
