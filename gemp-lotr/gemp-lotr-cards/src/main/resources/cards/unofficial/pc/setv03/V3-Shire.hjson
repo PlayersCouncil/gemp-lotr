@@ -693,6 +693,14 @@
 		keywords: Ring-bound
 		effects: [
 			{
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: title(Frodo)
+					amount: 2
+				}
+			}
+			{
 				type: Activated
 				phase: Maneuver
 				limitPerTurn: 1
@@ -709,33 +717,66 @@
 					{
 						type: Choice
 						texts: [
-							Hinder all odd-numbered Shadow support cards
-							Hinder all even-numbered Shadow support cards
+							Hinder Shadow support conditions
+							Hinder Shadow support possessions
 						]
 						effects: [
 							{
-								type: Hinder
-								select: all(side(Shadow), support, oddTwilight)
+								type: MemorizeInfo
+								memory: chosenType
+								info: condition
 							}
 							{
-								type: Hinder
-								select: all(side(Shadow), support, evenTwilight)
+								type: MemorizeInfo
+								memory: chosenType
+								info: possession
+							}
+						]
+					}
+					{
+						type: Choice
+						texts: [
+							Hinder all odd-numbered Shadow support {chosenType}s
+							Hinder all even-numbered Shadow support {chosenType}s
+						]
+						effects: [
+							{
+								type: If
+								check: {
+									type: MemoryIs
+									value: condition
+								}
+								true: {
+									type: Hinder
+									select: all(side(Shadow), support, oddTwilight, condition)
+								}
+								false: {
+									type: Hinder
+									select: all(side(Shadow), support, oddTwilight, possession)
+								}
+							}
+							
+							{
+								type: If
+								check: {
+									type: MemoryIs
+									value: condition
+								}
+								true: {
+									type: Hinder
+									select: all(side(Shadow), support, evenTwilight, condition)
+								}
+								false: {
+									type: Hinder
+									select: all(side(Shadow), support, evenTwilight, possession)
+								}
 							}
 						]
 					}
 				]
 			}
-			
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyResistance
-					filter: title(Frodo)
-					amount: 2
-				}
-			}
 		]
-		gametext: Ring-bound. <br>Frodo is resistance +2.<br>Maneuver: If you cannot spot more than 4 companions, add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice. Limit once per turn.
+		gametext: Ring-bound. Frodo is resistance +2.<br>Maneuver: If you cannot spot more than 4 companions, add a burden to choose condition or possession, then choose odd or even.  Hinder all Shadow support cards with a type and twilight cost matching your choice. Limit once per turn.
 		lore: "'I can't carry it for you, but I can carry you...!'"
 		promotext: ""
 		alts: {
