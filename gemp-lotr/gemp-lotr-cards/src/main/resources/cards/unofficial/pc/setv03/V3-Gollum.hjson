@@ -80,7 +80,7 @@
 		unique: true
 		side: Shadow
 		culture: Gollum
-		twilight: 3
+		twilight: 2
 		type: Possession
 		keywords: Support Area
 		effects: [
@@ -227,7 +227,7 @@
 		unique: false
 		side: Shadow
 		culture: Gollum
-		twilight: 1
+		twilight: 2
 		type: Possession
 		keywords: Support Area
 		effects: [

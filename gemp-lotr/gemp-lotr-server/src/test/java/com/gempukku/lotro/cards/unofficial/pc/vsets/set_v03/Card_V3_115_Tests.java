@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_115_Tests
 {
@@ -43,9 +42,10 @@ public class Card_V3_115_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: Ring-bound. 
-		* 	Frodo is resistance +2.
-		* 	Maneuver: If you cannot spot more than 4 companions, add a burden to choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice. Limit once per turn.
+		 * Game Text: Ring-bound. Frodo is resistance +2.
+		 * 		Maneuver: If you cannot spot more than 4 companions, add a burden to choose condition or possession,
+		 * 		then choose odd or even.  Hinder all Shadow support cards with a type and twilight cost matching your
+		 * 		choice. Limit once per turn.
 		*/
 
 		var scn = GetScenario();
