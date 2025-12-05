@@ -306,6 +306,30 @@
 					select: memory(exertedComp)
 				}
 			}
+			{
+				type: Activated
+				phase: Skirmish
+				requires: [
+					{
+						type: CantSpot
+						filter: self,notAssignedToSkirmish
+					}
+				]
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: Rohan, companion, InSkirmish
+					}
+					true: {
+						type: EndPhase
+					}
+				}
+			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
 		lore: "'One poor hobbit coming in from the battle is easily overlooked.'"

@@ -1034,6 +1034,11 @@
 							count: 5
 						}
 						true: {
+							type: Discard
+							select: self
+						}
+						
+						false: {
 							type: Hinder
 							select: self
 						}
