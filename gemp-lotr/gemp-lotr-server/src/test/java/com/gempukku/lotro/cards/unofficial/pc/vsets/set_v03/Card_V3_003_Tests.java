@@ -26,9 +26,6 @@ public class Card_V3_003_Tests
 					put("narya", "3_34"); // Gandalf artifact
 					put("aragorn", "1_89");
 					put("legolas", "1_50");
-
-					// Free Peoples card to be hindered and then restored
-					put("fpcondition", "1_365"); // Need: any Free Peoples support area card
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,6 +63,8 @@ public class Card_V3_003_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
+
+
 	@Test
 	public void MantleHindersArtifactToRestoreCardWhenSpellPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
@@ -84,7 +83,7 @@ public class Card_V3_003_Tests
 
 		scn.StartGame();
 
-		// Manually hinder frodo so we can restore it
+		// Manually hinder Frodo so we can restore him
 		scn.HinderCard(frodo);
 		scn.FreepsDeclineOptionalTrigger(); //Narya
 
@@ -99,6 +98,8 @@ public class Card_V3_003_Tests
 		scn.FreepsAcceptOptionalTrigger();
 
 		assertTrue(scn.IsHindered(narya));
+
+		// Choose card to restore
 		scn.FreepsChooseCard(frodo);
 		assertFalse(scn.IsHindered(frodo));
 	}
@@ -129,7 +130,7 @@ public class Card_V3_003_Tests
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetWoundsOn(legolas));
 
-		// Move to site 3 (sanctuary)
+		// Move automatically happens to site 3 (sanctuary) after Fellowship phase
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
@@ -156,7 +157,6 @@ public class Card_V3_003_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
 		var mantle = scn.GetFreepsCard("mantle");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -170,20 +170,23 @@ public class Card_V3_003_Tests
 
 		// Start at site 3 (sanctuary)
 		scn.SkipToSite(3);
-
 		scn.FreepsDeclineSanctuaryHealing();
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		// Move to site 4 (moving FROM sanctuary)
+		// Move automatically happens to site 4 (moving FROM sanctuary)
 		scn.FreepsPassCurrentPhaseAction();
+
 		// Should trigger
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
 		assertEquals(1, scn.GetWoundsOn(gandalf));
+
+		// Aragorn healed (auto-selected as only other companion besides Gandalf and Frodo)
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+
 		assertEquals(4, scn.GetCurrentSiteNumber());
 	}
 
@@ -206,7 +209,7 @@ public class Card_V3_003_Tests
 		// Skip to site 2
 		scn.SkipToSite(2);
 
-		// Move to site 3 (sanctuary)
+		// Move automatically happens to site 3 (sanctuary)
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());

@@ -29,6 +29,9 @@ public class CancelKeywordBonusTargetModifier extends AbstractModifier implement
 
     @Override
     public HashSet<Keyword> getKeywords() {
+        if(_keyword == null)
+            return null;
+
         return new HashSet<>(){{ add(_keyword); }};
     }
 }

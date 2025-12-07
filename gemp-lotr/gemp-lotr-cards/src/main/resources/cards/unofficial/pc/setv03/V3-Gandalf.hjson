@@ -163,7 +163,7 @@
 		twilight: 1
 		type: Possession
 		strength: 1
-		target: HasAttached(pipe)
+		target: unbound,companion,HasAttached(pipe)
 		keywords: Pipeweed
 		effects: [
 			{
@@ -442,9 +442,8 @@
 			{
 				type: event
 				cost: {
-					type: Exert
+					type: Exhaust
 					select: choose(your, Wizard)
-					times: 3
 				}
 				effect: [
 					{
