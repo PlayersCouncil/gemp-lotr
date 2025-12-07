@@ -18,6 +18,14 @@ public interface Choices extends Decisions {
 	default void FreepsDeclineChoosing() { PlayerDecided(P1, ""); }
 	default void ShadowDeclineChoosing() { PlayerDecided(P2, ""); }
 
+	default void FreepsDeclineSanctuaryHealing() {
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+	}
+
 	/**
 	 * Determines whether the Free Peoples player has any choices on the current decision whose description matches the
 	 * provided search text.

@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_003_Tests
 {
@@ -18,8 +20,15 @@ public class Card_V3_003_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_3");
-					// put other cards in here as needed for the test case
+					put("mantle", "103_3");
+					put("gandalf", "1_364");
+					put("sleep", "1_84"); // Fellowship spell event
+					put("narya", "3_34"); // Gandalf artifact
+					put("aragorn", "1_89");
+					put("legolas", "1_50");
+
+					// Free Peoples card to be hindered and then restored
+					put("fpcondition", "1_365"); // Need: any Free Peoples support area card
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,7 +54,7 @@ public class Card_V3_003_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("mantle");
 
 		assertEquals("Mantle of the White Wizard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,28 +66,153 @@ public class Card_V3_003_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MantleoftheWhiteWizardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MantleHindersArtifactToRestoreCardWhenSpellPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var mantle = scn.GetFreepsCard("mantle");
+		var sleep = scn.GetFreepsCard("sleep");
+		var narya = scn.GetFreepsCard("narya");
+		var gandalf = scn.GetFreepsCard("gandalf");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(mantle);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, narya);
+		scn.MoveCardsToHand(sleep);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Manually hinder frodo so we can restore it
+		scn.HinderCard(frodo);
+		scn.FreepsDeclineOptionalTrigger(); //Narya
+
+		assertFalse(scn.IsHindered(narya));
+		assertTrue(scn.IsHindered(frodo));
+
+		// Play spell
+		scn.FreepsPlayCard(sleep);
+
+		// Should trigger - choose artifact to hinder
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.IsHindered(narya));
+		scn.FreepsChooseCard(frodo);
+		assertFalse(scn.IsHindered(frodo));
+	}
+
+	@Test
+	public void MantleExertsGandalfToHealCompanionWhenMovingToSanctuary() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var mantle = scn.GetFreepsCard("mantle");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+
+		scn.MoveCardsToSupportArea(mantle);
+		scn.MoveCompanionsToTable(gandalf, aragorn, legolas);
+
+		scn.StartGame();
+
+		// Add wounds to companions
+		scn.AddWoundsToChar(aragorn, 2);
+		scn.AddWoundsToChar(legolas, 1);
+
+		// Skip to site 2
+		scn.SkipToSite(2);
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(legolas));
+
+		// Move to site 3 (sanctuary)
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+
+		// Should trigger - exert Gandalf to heal companion
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Gandalf exerted
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+
+		// Choose companion to heal (should have 2 choices: Aragorn or Legolas, not Gandalf)
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsCanChooseCharacter(aragorn));
+		assertTrue(scn.FreepsCanChooseCharacter(legolas));
+		assertFalse(scn.FreepsCanChooseCharacter(gandalf));
+
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void MantleExertsGandalfToHealCompanionWhenMovingFromSanctuary() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var mantle = scn.GetFreepsCard("mantle");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveCardsToSupportArea(mantle);
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(aragorn, 2);
+
+		// Start at site 3 (sanctuary)
+		scn.SkipToSite(3);
+
+		scn.FreepsDeclineSanctuaryHealing();
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+
+		// Move to site 4 (moving FROM sanctuary)
+		scn.FreepsPassCurrentPhaseAction();
+		// Should trigger
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(4, scn.GetCurrentSiteNumber());
+	}
+
+	@Test
+	public void MantleDoesNotTriggerOnSanctuaryMovementWithoutGandalf() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var mantle = scn.GetFreepsCard("mantle");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveCardsToSupportArea(mantle);
+		scn.MoveCompanionsToTable(aragorn);
+		// No Gandalf
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(aragorn, 2);
+
+		// Skip to site 2
+		scn.SkipToSite(2);
+
+		// Move to site 3 (sanctuary)
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+
+		// Should NOT trigger - no Gandalf to exert
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 	}
 }
