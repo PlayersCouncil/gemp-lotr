@@ -20,10 +20,7 @@ import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class CardResolver {
@@ -430,8 +427,15 @@ public class CardResolver {
                 Filters.filterActive(actionContext.getGame(), SpotOverride.INCLUDE_ALL, Filters.any);
 
         if (type.equals("self")) {
+            //In the event that we have an action get interrupted by that action's card getting hindered, we still want
+            //"self" to resolve.
+            var moreOverrides = new HashMap<>(spotOverrides);
+            moreOverrides.putIfAbsent(InactiveReason.HINDERED, Boolean.TRUE);
+			cardSource = actionContext -> Filters.filterActive(actionContext.getGame(), moreOverrides, Filters.any);
+
             return resolveSelf(additionalFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.equals("bearer")) {
+            Function<ActionContext, Iterable<? extends PhysicalCard>> finalCardSource = cardSource;
             return new DelayedAppender() {
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
@@ -471,7 +475,7 @@ public class CardResolver {
                     Filterable additionalFilterable = Filters.any;
                     if (filter != null)
                         additionalFilterable = filter.getFilterable(actionContext);
-                    return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), attachedTo, additionalFilterable);
+                    return Filters.filter(actionContext.getGame(), finalCardSource.apply(actionContext), attachedTo, additionalFilterable);
                 }
             };
         } else if (type.startsWith("memory(") && type.endsWith(")")) {

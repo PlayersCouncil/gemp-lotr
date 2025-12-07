@@ -18,8 +18,14 @@ public class Card_V3_011_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_11");
-					// put other cards in here as needed for the test case
+					put("fickle", "103_11");
+					put("sam", "1_311");
+					put("aragorn", "1_89"); // Strength 8, can beat Gollum
+					put("glorfindel", "9_16"); // Strength 9, can beat Shelob
+
+					put("gollum", "9_28"); // Gollum, Dark as Darkness - strength 5
+					put("shelob", "8_26"); // Last Child of Ungoliant - strength 8
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +52,7 @@ public class Card_V3_011_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("fickle");
 
 		assertEquals("Fickle Loyalties", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,28 +64,113 @@ public class Card_V3_011_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FickleLoyaltiesTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FickleLoyaltiesRequires2ShireCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var fickle = scn.GetFreepsCard("fickle");
+		var sam = scn.GetFreepsCard("sam");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(fickle, sam);
+		// Only Frodo (1 Shire companion) on table
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Cannot play with only 1 Shire companion
+		assertFalse(scn.FreepsPlayAvailable(fickle));
+
+		// Play Sam (2nd Shire companion)
+		scn.FreepsPlayCard(sam);
+
+		// Now can play Fickle Loyalties
+		assertTrue(scn.FreepsPlayAvailable(fickle));
+		scn.FreepsPlayCard(fickle);
+
+		assertInZone(Zone.SUPPORT, fickle);
+	}
+
+	@Test
+	public void FickleLoyaltiesMakesAnotherMinionStrengthMinus1WhenGollumLosesSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fickle = scn.GetFreepsCard("fickle");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
+
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.MoveCardsToSupportArea(fickle);
+		scn.MoveMinionsToTable(gollum, shelob);
+
+		scn.StartGame();
+
+		int shelobBaseStrength = scn.GetStrength(shelob);
+
+		scn.SkipToAssignments();
+
+		// Assign Aragorn (strength 8) to Gollum (strength 5)
+		scn.FreepsAssignToMinions(aragorn, gollum);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Verify strengths before skirmish resolves
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(5, scn.GetStrength(gollum));
+		assertEquals(shelobBaseStrength, scn.GetStrength(shelob));
+
+		// Pass skirmish actions - Gollum loses
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		// Trigger fires - choose another minion (shelob auto-selected as only other minion)
+		// Runner should now be -1 strength until regroup
+		assertEquals(shelobBaseStrength - 1, scn.GetStrength(shelob));
+
+		// Skip to regroup to verify modifier wears off
+		scn.SkipToPhase(Phase.REGROUP);
+
+		// Runner should be back to base strength
+		assertEquals(shelobBaseStrength, scn.GetStrength(shelob));
+	}
+
+	@Test
+	public void FickleLoyaltiesKillsGollumWhenShelobLosesSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fickle = scn.GetFreepsCard("fickle");
+		var sam = scn.GetFreepsCard("sam");
+		var glorfindel = scn.GetFreepsCard("glorfindel");
+		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
+
+		scn.MoveCompanionsToTable(sam, glorfindel);
+		scn.MoveCardsToSupportArea(fickle);
+		scn.MoveMinionsToTable(gollum, shelob);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+
+		// Assign Glorfindel (strength 9) to Shelob (strength 8)
+		scn.FreepsAssignToMinions(glorfindel, shelob);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(glorfindel);
+
+		// Verify strengths before skirmish resolves
+		assertEquals(9, scn.GetStrength(glorfindel));
+		assertEquals(8, scn.GetStrength(shelob));
+
+		// Pass skirmish actions - Shelob loses
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		// Trigger fires - Gollum is killed (goes to discard)
+		assertInZone(Zone.DISCARD, gollum);
 	}
 }

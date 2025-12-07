@@ -256,6 +256,10 @@
 			{
 				type: Activated
 				phase: Skirmish
+				requires: {
+					type: CanSpot
+					filter: companion, InSkirmishAgainst(culture(Gollum))
+				}
 				cost: {
 					type: Hinder
 					select: choose(your, culture(Gollum))
@@ -267,7 +271,7 @@
 				}
 			}
 		]
-		gametext: At the start of each turn and at the end of each skirmish involving bearer, make <br>bearer strength -1 until the end of the turn.<br>Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion.
+		gametext: At the end of each skirmish involving bearer, make bearer strength -1 until the end of the turn.\Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion. Limit 1 per bearer unless they are skirmishing Shelob.
 		lore: "Never yet had any fly escaped from Shelob's webs, and the greater now was her rage and hunger."
 		promotext: ""
 		alts: {

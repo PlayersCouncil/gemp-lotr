@@ -631,21 +631,25 @@ public class GameState {
         var assignment = findAssignment(oldCard);
         var skirmish = findSkirmish(oldCard);
         var tokens = new HashMap<>(getTokens(oldCard));
+        var zone = oldCard.getZone();
 
         // Put the card where the old card was
         newCard.copyCardStats(oldCard);
-        attachCard(game, newCard, oldCard.getAttachedTo());
+        if(oldCard.getAttachedTo() != null) {
+            attachCard(game, newCard, oldCard.getAttachedTo());
+        }
 
         // Remove old card from zone
         removeCardsFromZone(null, Collections.singleton(oldCard), true);
         addCardToZone(game, oldCard, Zone.VOID);
         assignNewCardId(oldCard);
 
+        addCardToZone(game, newCard, zone);
         // Give new card the card ID of the replaced card
         reassignCardId(newCard, oldCardId);
 
         // Add new card to zone
-        getZoneCards(newCard.getOwner(), newCard.getZone()).add((PhysicalCardImpl) newCard);
+        getZoneCards(newCard.getOwner(), zone).add((PhysicalCardImpl) newCard);
 
         for(var pair : tokens.entrySet()) {
             addTokens(newCard, pair.getKey(), pair.getValue());
