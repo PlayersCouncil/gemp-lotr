@@ -133,8 +133,9 @@
 		site: 3
 		keyword: archer
 		effects: {
-			type: discardedFromPlayTrigger
+			type: SelfRemovedFromPlayTrigger
 			optional: true
+			method: discarded
 			requires: [
 				{
 					type: isOwner

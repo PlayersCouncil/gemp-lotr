@@ -73,7 +73,7 @@
 				]
 			}
 			# {
-			# 	type: DiscardedFromPlayTrigger
+			# 	type: SelfRemovedFromPlayTrigger
 			# 	optional: false
 			# 	effect: [
 			# 		{

@@ -606,8 +606,9 @@
 		site: 4
 		effects: [
 			{
-				type: discardedFromPlayTrigger
+				type: SelfRemovedFromPlayTrigger
 				optional: true
+				method: discarded
 				requires: {
 					type: canSpot
 					filter: companion,maxResistance(4)

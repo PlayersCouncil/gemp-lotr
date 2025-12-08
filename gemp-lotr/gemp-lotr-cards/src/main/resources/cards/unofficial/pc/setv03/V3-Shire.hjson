@@ -515,7 +515,8 @@
 				}
 			}
 			{
-				type: DiscardedFromPlayTrigger
+				type: SelfRemovedFromPlayTrigger
+				method: discarded
 				optional: true
 				source: pipe
 				cost: {

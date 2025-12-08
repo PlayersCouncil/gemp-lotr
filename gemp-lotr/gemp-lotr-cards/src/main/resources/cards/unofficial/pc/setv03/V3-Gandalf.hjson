@@ -36,8 +36,9 @@
 			}
 			
 			{
-				type: DiscardedFromPlayTrigger
+				type: SelfRemovedFromPlayTrigger
 				optional: false
+				method: discarded
 				source: pipe
 				effect: [
 					{

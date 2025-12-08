@@ -1335,8 +1335,9 @@
 				}
 			}
 			{
-				type: discardedFromPlayTrigger
+				type: SelfRemovedFromPlayTrigger
 				optional: false
+				method: discarded
 				effect: {
 					type: removeThreats
 					amount: 3

@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
+import com.gempukku.lotro.logic.timing.results.HinderedResult;
 import com.google.common.collect.Sets;
 import org.json.simple.JSONObject;
 
@@ -107,6 +108,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private ActionSource killedOptionalTriggerAction;
     private ActionSource discardedFromPlayRequiredTriggerAction;
     private ActionSource discardedFromPlayOptionalTriggerAction;
+
+    private ActionSource hinderedFromPlayRequiredTriggerAction;
+    private ActionSource hinderedFromPlayOptionalTriggerAction;
 
     private AidCostSource aidCostSource;
 
@@ -335,6 +339,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setDiscardedFromPlayOptionalTriggerAction(ActionSource discardedFromPlayOptionalTriggerAction) {
         this.discardedFromPlayOptionalTriggerAction = discardedFromPlayOptionalTriggerAction;
+    }
+
+    public void setHinderedFromPlayRequiredTriggerAction(ActionSource action) {
+        this.hinderedFromPlayRequiredTriggerAction = action;
+    }
+
+    public void setHinderedFromPlayOptionalTriggerAction(ActionSource action) {
+        this.hinderedFromPlayOptionalTriggerAction = action;
     }
 
     public void setTitle(String title) {
@@ -1197,6 +1209,37 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
         return null;
     }
+
+
+    @Override
+    public RequiredTriggerAction getHinderedFromPlayRequiredTrigger(LotroGame game, HinderedResult result) {
+        if (hinderedFromPlayRequiredTriggerAction == null)
+            return null;
+
+        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        if (hinderedFromPlayRequiredTriggerAction.isValid(actionContext)) {
+            RequiredTriggerAction action = new RequiredTriggerAction(result.getHinderedCard());
+            hinderedFromPlayRequiredTriggerAction.createAction(action, actionContext);
+            return action;
+        }
+        return null;
+    }
+
+    @Override
+    public OptionalTriggerAction getHinderedFromPlayOptionalTrigger(LotroGame game, HinderedResult result) {
+        if (hinderedFromPlayOptionalTriggerAction == null)
+            return null;
+
+        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        if (hinderedFromPlayOptionalTriggerAction.isValid(actionContext)) {
+            OptionalTriggerAction action = new OptionalTriggerAction(result.getHinderedCard());
+            hinderedFromPlayOptionalTriggerAction.createAction(action, actionContext);
+            return action;
+        }
+        return null;
+    }
+
+
 
     @Override
     public RequiredTriggerAction getKilledRequiredTrigger(LotroGame game, PhysicalCard self) {
