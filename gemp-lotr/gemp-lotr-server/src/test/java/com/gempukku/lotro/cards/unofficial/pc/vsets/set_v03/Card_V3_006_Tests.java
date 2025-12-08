@@ -170,6 +170,7 @@ public class Card_V3_006_Tests
 		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(sam, runner);

@@ -109,6 +109,7 @@ public class Card_12_098_Tests
 		scn.MoveCardsToHand(card2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SetTwilight(20);
 

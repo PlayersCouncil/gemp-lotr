@@ -92,6 +92,7 @@ public class Card_11_170_Tests
 		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -143,6 +144,7 @@ public class Card_11_170_Tests
 		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -175,6 +177,7 @@ public class Card_11_170_Tests
 		scn.MoveMinionsToTable(runner1);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(

@@ -92,6 +92,7 @@ public class Card_02_091_ErrataTests
 		scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		//need cards in hand
 		scn.FreepsDrawCards(3);
@@ -127,6 +128,7 @@ public class Card_02_091_ErrataTests
 		scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		//need cards in hand
 		scn.FreepsDrawCards(3);

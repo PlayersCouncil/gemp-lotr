@@ -130,6 +130,7 @@ public class Card_04_001_Tests
 		});
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.FreepsUseCardAction(frodo);
 
@@ -208,6 +209,7 @@ public class Card_04_001_Tests
 		scn.MoveMinionsToTable(soldier);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		//Cheat and make orcs fierce
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.changeToFilter(Race.ORC), null, Keyword.FIERCE));

@@ -76,6 +76,7 @@ public class Card_01_240_ErrataTests
 		scn.MoveMinionsToTable(band);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.SetTwilight(2);
 
@@ -105,6 +106,7 @@ public class Card_01_240_ErrataTests
 		scn.MoveMinionsToTable(band);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.SetTwilight(2);
 

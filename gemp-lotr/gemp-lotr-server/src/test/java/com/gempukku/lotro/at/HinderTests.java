@@ -228,6 +228,7 @@ public class HinderTests
             }
         });
         scn.StartGame();
+        scn.AddBurdens(1);
         scn.FreepsUseCardAction(frodo);
 
         scn.SkipToPhase(Phase.MANEUVER);
@@ -999,7 +1000,7 @@ public class HinderTests
         });
         scn.StartGame();
 
-        assertEquals(1, scn.GetBurdens()); //1 from the bid
+        assertEquals(0, scn.GetBurdens());
         assertTrue(scn.FreepsPlayAvailable(smeagol));
 
         scn.FreepsUseCardAction(frodo);
@@ -1033,8 +1034,8 @@ public class HinderTests
         });
         scn.StartGame();
 
-        scn.AddBurdens(1);
-        assertEquals(2, scn.GetBurdens()); //1 from the bid, +1 above
+        scn.AddBurdens(2);
+        assertEquals(2, scn.GetBurdens());
         assertTrue(scn.FreepsActionAvailable(sam));
 
         scn.FreepsUseCardAction(sam);
@@ -1078,8 +1079,8 @@ public class HinderTests
         });
         scn.StartGame();
 
-        scn.AddBurdens(2);
-        assertEquals(3, scn.GetBurdens()); //2 from above, +1 from the bid
+        scn.AddBurdens(3);
+        assertEquals(3, scn.GetBurdens());
 
         //5 base, +3 for the burdens
         assertEquals(8, scn.GetStrength(stinker));
@@ -1121,8 +1122,8 @@ public class HinderTests
         });
         scn.StartGame();
 
-        scn.AddBurdens(3);
-        assertEquals(4, scn.GetBurdens()); //3 from above, +1 from the bid
+        scn.AddBurdens(4);
+        assertEquals(4, scn.GetBurdens()); //3 from above
 
         //Galadriel normally starts with 3 base resistance, and gets +1 for each elf comp you can spot
         // (+1 from herself, +1 from lorien elf)

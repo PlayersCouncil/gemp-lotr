@@ -72,6 +72,7 @@ public class Card_07_071_Tests
 		scn.MoveCardsToHand(smeagol);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		scn.FreepsPlayCard(smeagol);

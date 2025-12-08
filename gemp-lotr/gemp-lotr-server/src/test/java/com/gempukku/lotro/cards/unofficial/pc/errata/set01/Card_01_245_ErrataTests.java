@@ -118,6 +118,7 @@ public class Card_01_245_ErrataTests
 		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -148,6 +149,7 @@ public class Card_01_245_ErrataTests
 		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -184,6 +186,7 @@ public class Card_01_245_ErrataTests
 		scn.MoveCardsToFreepsDiscard("chaff1", "chaff2");
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();

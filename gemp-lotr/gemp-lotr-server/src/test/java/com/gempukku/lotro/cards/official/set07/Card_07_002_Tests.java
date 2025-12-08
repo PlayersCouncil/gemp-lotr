@@ -97,6 +97,7 @@ public class Card_07_002_Tests
 		});
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.FreepsUseCardAction(frodo);
 
@@ -175,6 +176,7 @@ public class Card_07_002_Tests
 		scn.MoveMinionsToTable(soldier);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 

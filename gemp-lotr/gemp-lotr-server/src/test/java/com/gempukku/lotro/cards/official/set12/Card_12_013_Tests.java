@@ -76,6 +76,7 @@ public class Card_12_013_Tests
 		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.AddBurdens(3);
 		scn.SkipToAssignments();
@@ -104,6 +105,7 @@ public class Card_12_013_Tests
 		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.AddBurdens(2);
 		scn.SkipToAssignments();
@@ -135,6 +137,7 @@ public class Card_12_013_Tests
 		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.AddBurdens(2);
 		scn.SkipToAssignments();

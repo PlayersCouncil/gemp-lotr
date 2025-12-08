@@ -300,6 +300,8 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         }
 
         SkipMulligans();
+        //Get rid of the bidded burden so that tests don't have to remember it exists all the time
+        RemoveBurdens(1);
     }
 
     /**

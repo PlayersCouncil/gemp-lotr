@@ -113,6 +113,7 @@ public class Card_10_116_Tests
 		scn.MoveCardsToHand(evil);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, sauron);

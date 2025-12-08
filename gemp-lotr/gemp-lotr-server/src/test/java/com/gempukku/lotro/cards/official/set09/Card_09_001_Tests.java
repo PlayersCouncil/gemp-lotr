@@ -105,6 +105,7 @@ public class Card_09_001_Tests
 		});
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.FreepsUseCardAction(frodo);
 
@@ -183,6 +184,7 @@ public class Card_09_001_Tests
 		scn.MoveMinionsToTable(soldier);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
@@ -216,6 +218,7 @@ public class Card_09_001_Tests
 		scn.MoveCompanionsToTable(gandalf, gimli);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.DECK, ring1.getZone());

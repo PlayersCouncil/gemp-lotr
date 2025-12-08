@@ -76,6 +76,7 @@ public class Card_01_311_ErrataTests
 		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));
@@ -104,6 +105,7 @@ public class Card_01_311_ErrataTests
 		scn.MoveCardsToSupportArea(proudfoot, gaffer);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));
@@ -131,6 +133,7 @@ public class Card_01_311_ErrataTests
 		scn.MoveCardsToSupportArea(rosie);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));

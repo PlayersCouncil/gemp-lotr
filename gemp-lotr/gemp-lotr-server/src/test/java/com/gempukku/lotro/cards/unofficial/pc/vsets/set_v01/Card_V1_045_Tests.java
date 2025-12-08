@@ -105,17 +105,19 @@ public class Card_V1_045_Tests
 		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
+
 		scn.FreepsPlayCard(introspection);
-		//scn.ShadowDeclineOptionalTrigger();
+
 		scn.ShadowChooseCard(cond);
 
-		assertEquals(1, scn.GetBurdens()); // from initial starting bid
+		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, cond.getZone());
 		assertEquals(Zone.SUPPORT, gaze.getZone());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertEquals(0, scn.GetBurdens()); // from initial starting bid
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, cond.getZone());
 		assertEquals(Zone.SUPPORT, gaze.getZone());
 	}
@@ -135,17 +137,18 @@ public class Card_V1_045_Tests
 		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
+
 		scn.FreepsPlayCard(introspection);
-		//scn.ShadowDeclineOptionalTrigger();
 		scn.ShadowChooseCard(gaze);
 
-		assertEquals(1, scn.GetBurdens()); // from initial starting bid
+		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, cond.getZone());
 		assertEquals(Zone.SUPPORT, gaze.getZone());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertEquals(0, scn.GetBurdens()); // from initial starting bid
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, cond.getZone());
 		assertEquals(Zone.SUPPORT, gaze.getZone());
 	}
@@ -166,7 +169,7 @@ public class Card_V1_045_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(1);
+		scn.AddBurdens(2);
 
 		scn.FreepsPlayCard(sleep);
 		//scn.ShadowDeclineOptionalTrigger();
@@ -203,6 +206,8 @@ public class Card_V1_045_Tests
 
 		scn.StartGame();
 
+		scn.AddBurdens(1);
+
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertEquals(1, scn.GetBurdens());
@@ -213,7 +218,7 @@ public class Card_V1_045_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertEquals(0, scn.GetBurdens()); // from initial starting bid
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, selfdiscard.getZone());
 
 	}
