@@ -1,14 +1,17 @@
 package com.gempukku.lotro.cards.official.set05;
 
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.PossessionClass;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
 import static org.junit.Assert.*;
 
 public class Card_05_089_Tests
@@ -18,8 +21,11 @@ public class Card_05_089_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "5_89");
-					// put other cards in here as needed for the test case
+					put("helm", "5_89");          // Rohirrim Helm
+					put("guard", "5_83");         // Household Guard - [Rohan] Man
+
+					put("grishnakh", "5_100");    // Grishnakh - [Sauron] Orc
+					put("stalker", "7_307");      // Orc Stalker - [Sauron] Orc
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +50,7 @@ public class Card_05_089_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("helm");
 
 		assertEquals("Rohirrim Helm", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +62,40 @@ public class Card_05_089_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RohirrimHelmTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void RohirrimHelmCancelsSkirmishWhenShadowDeclinesExertion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var helm = scn.GetFreepsCard("helm");
+		var guard = scn.GetFreepsCard("guard");
+		var grishnakh = scn.GetShadowCard("grishnakh");
+		var stalker = scn.GetShadowCard("stalker");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, helm);
+		scn.MoveMinionsToTable(grishnakh, stalker);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, grishnakh);
+		scn.ShadowAssignToMinions(guard, stalker);
+		scn.FreepsResolveSkirmish(guard);
 
-		assertEquals(1, scn.GetTwilight());
+		// Use Rohirrim Helm to cancel skirmish
+		assertTrue(scn.FreepsActionAvailable(helm));
+		scn.FreepsUseCardAction(helm);
+
+		// Helm discards as cost
+		assertInDiscard(helm);
+
+		// Shadow is offered chance to exert a minion to prevent
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to exert"));
+		scn.ShadowChooseNo();
+
+		// Skirmish should be cancelled
+		assertFalse(scn.IsCharSkirmishing(guard));
+		assertFalse(scn.IsCharSkirmishing(grishnakh));
+		assertFalse(scn.IsCharSkirmishing(stalker));
 	}
 }

@@ -74,7 +74,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -83,7 +83,7 @@
 				]
 				effect: {
 					type: transfer
-					select: choose(possession,attachedTo(memory(bearer)))
+					select: choose(possession,attachedTo(memory(oldBearer)))
 					where: choose(character)
 					checkTarget: true
 				}
@@ -211,7 +211,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -220,7 +220,7 @@
 				]
 				effect: {
 					type: preventWound
-					select: memory(bearer)
+					select: memory(oldBearer)
 				}
 			}
 		]

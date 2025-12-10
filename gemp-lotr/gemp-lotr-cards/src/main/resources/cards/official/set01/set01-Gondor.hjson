@@ -1088,7 +1088,7 @@
 				{
 					type: memorize
 					filter: bearer
-					memory: bearer
+					memory: oldBearer
 				}
 				{
 					type: discard
@@ -1097,7 +1097,7 @@
 			]
 			effect: {
 				type: modifyStrength
-				select: memory(bearer)
+				select: memory(oldBearer)
 				amount: 2
 			}
 		}

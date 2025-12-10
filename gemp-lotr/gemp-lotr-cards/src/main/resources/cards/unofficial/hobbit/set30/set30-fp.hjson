@@ -198,7 +198,7 @@
 				cost: [
 					{
 						type: memorize
-						memory: bearer
+						memory: oldBearer
 						filter: bearer
 					}
 					{
@@ -208,7 +208,7 @@
 				]
 				effect: {
 					type: preventWound
-					select: choose(memory(bearer))
+					select: choose(memory(oldBearer))
 				}
 			}
 		]

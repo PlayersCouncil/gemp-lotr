@@ -760,7 +760,7 @@
 			cost: [
 				{
 					type: memorize
-					memory: bearer
+					memory: oldBearer
 					filter: bearer
 				}
 				{
@@ -771,7 +771,7 @@
 			effect: {
 				type: modifyStrength
 				amount: 2
-				select: memory(bearer)
+				select: memory(oldBearer)
 			}
 		}
 	}
@@ -892,7 +892,7 @@
           {
             type: memorize
             filter: bearer
-            memory: bearer
+            memory: oldBearer
           }
           {
             type: discard
@@ -901,7 +901,7 @@
         ]
         effect: {
           type: heal
-          select: memory(bearer)
+          select: memory(oldBearer)
         }
       }
     ]

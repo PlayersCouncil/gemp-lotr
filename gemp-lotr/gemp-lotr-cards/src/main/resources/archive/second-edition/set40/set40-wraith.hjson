@@ -272,7 +272,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -289,12 +289,12 @@
 						{
 							type: transfer
 							select: choose(name(Blade Tip),zone(support))
-							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
+							where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
 						}
 						{
 							type: transferFromDiscard
 							select: choose(name(Blade Tip))
-							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
+							where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
 						}
 					]
 				}

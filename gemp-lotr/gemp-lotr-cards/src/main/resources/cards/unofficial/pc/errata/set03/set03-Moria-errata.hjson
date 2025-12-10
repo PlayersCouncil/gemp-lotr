@@ -110,26 +110,26 @@
 	# 					# little more elegant.
 	# 					type: Memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: ChooseActiveCards
-	# 					text: Choose a possession attached to {bearer} to discard.
-	# 					select: choose(possession,AttachedTo(bearer))
+	# 					text: Choose a possession attached to {oldBearer} to discard.
+	# 					select: choose(possession,AttachedTo(oldBearer))
 	# 					memorize: chosenPoss
 	# 				}
 	# 				{
 	# 					type: choice
 	# 					player: freeps
 	# 					texts: [
-	# 						Exert {bearer} to prevent discarding {chosenPoss}
+	# 						Exert {oldBearer} to prevent discarding {chosenPoss}
 	# 						Discard another Free Peoples item (artifact or possession) to prevent discarding {chosenPoss} 
 	# 						Let {chosenPoss} get discarded
 	# 					]
 	# 					effects: [
 	# 						{
 	# 							type: exert
-	# 							select: bearer
+	# 							select: oldBearer
 	# 							times: 1
 	# 						}
 	# 						{
@@ -256,13 +256,6 @@
 					filter: bearer,InSkirmishAgainst(culture(moria),minion),HasAttached(possession)
 				}
 				effect: [
-					{
-						# We do this just to make the option prompt a
-						# little more elegant.
-						type: Memorize
-						filter: bearer
-						memory: bearer
-					}
 					{
 						type: ChooseActiveCards
 						text: Choose a possession attached to {bearer} to discard.

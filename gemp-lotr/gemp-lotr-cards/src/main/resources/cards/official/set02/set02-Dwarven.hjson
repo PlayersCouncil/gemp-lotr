@@ -115,7 +115,7 @@
 				{
 					type: memorize
 					filter: bearer
-					memory: bearer
+					memory: oldBearer
 				}
 				{
 					type: discard
@@ -124,7 +124,7 @@
 			]
 			effect: {
 				type: preventWound
-				select: memory(bearer)
+				select: memory(oldBearer)
 			}
 		}
 		gametext: Bearer must be a Dwarf.<br><b>Response:</b> If bearer is about to take a wound, discard this possession to prevent that wound.
@@ -159,7 +159,7 @@
 				{
 					type: memorize
 					filter: bearer
-					memory: bearer
+					memory: oldBearer
 				}
 				{
 					type: discard
@@ -168,7 +168,7 @@
 			]
 			effect: {
 				type: modifyStrength
-				select: memory(bearer)
+				select: memory(oldBearer)
 				amount: 1
 			}
 		}
