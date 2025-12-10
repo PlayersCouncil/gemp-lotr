@@ -14,12 +14,20 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_V3_033_Tests
 {
 
+// ----------------------------------------
+// TORMENTED SPECTRE TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_33");
-					// put other cards in here as needed for the test case
+					put("spectre", "103_33");     // Tormented Spectre
+					put("sky1", "103_97");        // Ominous Sky - can be hindered
+					put("sky2", "103_97");
+					put("sky3", "103_97");
+					put("orc", "1_271");          // Orc Soldier - minion that can be hindered
+					put("runner", "1_178");       // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -49,7 +57,7 @@ public class Card_V3_033_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("spectre");
 
 		assertEquals("Tormented Spectre", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -65,28 +73,43 @@ public class Card_V3_033_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TormentedSpectreTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void TormentedSpectreAdds1ThreatToPlayAndGainsStrengthFromHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var spectre = scn.GetFreepsCard("spectre");
+		var sky1 = scn.GetShadowCard("sky1");
+		var sky2 = scn.GetShadowCard("sky2");
+		var sky3 = scn.GetShadowCard("sky3");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToHand(spectre);
+		scn.MoveCardsToSupportArea(sky1, sky2, sky3);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		int threatsBefore = scn.GetThreats();
+
+		// Play Spectre - adds 1 threat
+		scn.FreepsPlayCard(spectre);
+		assertEquals(threatsBefore + 1, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, spectre);
+
+		// No hindered cards yet - base strength
+		int baseStrength = scn.GetStrength(spectre);
+
+		// Hinder one condition
+		scn.HinderCard(sky1);
+		assertEquals(baseStrength + 1, scn.GetStrength(spectre));
+
+		// Hinder two more conditions
+		scn.HinderCard(sky2, sky3);
+		assertEquals(baseStrength + 3, scn.GetStrength(spectre));
+
+		// Hinder the minion too
+		scn.HinderCard(orc);
+		assertEquals(baseStrength + 4, scn.GetStrength(spectre));
 	}
 }

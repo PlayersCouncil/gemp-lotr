@@ -105,8 +105,9 @@ public class Card_08_032_Tests
 		scn.FreepsUseCardAction(catapult);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetFreepsDiscardCount());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(evilcatapult));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(evilcatapult, false));
 		scn.DismissRevealedCards();
+
 
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(runner));

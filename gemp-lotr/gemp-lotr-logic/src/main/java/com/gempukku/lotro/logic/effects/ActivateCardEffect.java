@@ -20,7 +20,7 @@ public class ActivateCardEffect extends AbstractEffect {
         _source = source;
         _actionTimeword = actionTimeword;
         _player = performingPlayer;
-        _activateCardResult = new ActivateCardResult(_source, performingPlayer, _actionTimeword);
+        _activateCardResult = new ActivateCardResult(_source, performingPlayer, _actionTimeword, source.getZone());
     }
 
     public ActivateCardResult getActivateCardResult() {

@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.ActivateCardResult;
@@ -13,12 +14,13 @@ import org.json.simple.JSONObject;
 public class UsesSpecialAbility implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "player", "memorize", "phase");
+        FieldUtils.validateAllowedFields(value, "filter", "player", "memorize", "phase", "fromZone");
 
         String player = FieldUtils.getString(value.get("player"), "player");
         String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Timeword timeword = FieldUtils.getEnum(Timeword.class, value.get("phase"), "phase");
+        Zone zone = FieldUtils.getEnum(Zone.class, value.get("fromZone"), "fromZone");
 
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
         final PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
@@ -40,6 +42,11 @@ public class UsesSpecialAbility implements TriggerCheckerProducer {
 
                     if (timeword != null) {
                         if (activateCardResult.getActionTimeword() != timeword)
+                            return false;
+                    }
+
+                    if(zone != null) {
+                        if(!zone.equals(activateCardResult.getActivatedZone()))
                             return false;
                     }
 

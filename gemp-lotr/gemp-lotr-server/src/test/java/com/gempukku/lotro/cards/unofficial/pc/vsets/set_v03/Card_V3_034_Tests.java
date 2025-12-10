@@ -14,12 +14,18 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_V3_034_Tests
 {
 
+// ----------------------------------------
+// TORMENTED WARRIOR TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_34");
-					// put other cards in here as needed for the test case
+					put("warrior", "103_34");     // Tormented Warrior
+					put("spectre", "103_33");     // Tormented Spectre - Wraith companion
+					put("aragorn", "1_89");       // Aragorn - non-Wraith companion
+					put("legolas", "1_50");       // Legolas - non-Wraith companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,7 +56,7 @@ public class Card_V3_034_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("warrior");
 
 		assertEquals("Tormented Warrior", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -66,28 +72,49 @@ public class Card_V3_034_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TormentedWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void TormentedWarriorAdds1ThreatToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var warrior = scn.GetFreepsCard("warrior");
+		scn.MoveCardsToHand(warrior);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		int threatsBefore = scn.GetThreats();
+
+		scn.FreepsPlayCard(warrior);
+
+		assertEquals(threatsBefore + 1, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, warrior);
+	}
+
+	@Test
+	public void TormentedWarriorGainsStrengthFromDeadPileWithWraithsCountingTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var warrior = scn.GetFreepsCard("warrior");
+		var spectre = scn.GetFreepsCard("spectre");   // Wraith companion
+		var aragorn = scn.GetFreepsCard("aragorn");   // Non-Wraith companion
+		var legolas = scn.GetFreepsCard("legolas");   // Non-Wraith companion
+		scn.MoveCompanionsToTable(warrior);
+
+		scn.StartGame();
+
+		int baseStrength = scn.GetStrength(warrior);
+
+		// Add non-Wraith companion to dead pile: +1 (companion only)
+		scn.MoveCardsToDeadPile(aragorn);
+		assertEquals(baseStrength + 1, scn.GetStrength(warrior));
+
+		// Add another non-Wraith companion: +2 total
+		scn.MoveCardsToDeadPile(legolas);
+		assertEquals(baseStrength + 2, scn.GetStrength(warrior));
+
+		// Add Wraith companion to dead pile: +2 more (companion + Wraith)
+		scn.MoveCardsToDeadPile(spectre);
+		assertEquals(baseStrength + 4, scn.GetStrength(warrior));
 	}
 }

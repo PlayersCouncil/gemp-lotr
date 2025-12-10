@@ -396,6 +396,7 @@
 						type: AddKeywordFromCards
 						filter: your, Man
 						from: memory(exertedMan)
+						unloaded: true
 					}
 				}
 			}

@@ -67,7 +67,10 @@ public class Card_V3_026_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.SHADOW);
-		
+
+		assertEquals(0, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowActionAvailable(blind));
+		scn.ShadowUseCardAction(blind);
+		assertEquals(1, scn.GetShadowHandCount());
 	}
 }
