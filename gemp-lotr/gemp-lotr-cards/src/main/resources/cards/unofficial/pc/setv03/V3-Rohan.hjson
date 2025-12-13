@@ -525,20 +525,28 @@
 		target: title(Theoden)
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: Rohan, companion
-					amount: 1
-				}
+					type: Modifier
+					modifier: {
+							type: ModifyStrength
+							filter: Rohan, companion
+							amount: {
+									type: ForEachWound
+									filter: name(Theoden)
+									multiplier: 1
+							}
+					}
 			}
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: mounted, Rohan, companion
-					amount: 1
-				}
+					type: Modifier
+					modifier: {
+							type: ModifyStrength
+							filter: mounted, Rohan, companion
+							amount: {
+									type: ForEachWound
+									filter: name(Theoden)
+									multiplier: 1
+							}
+					}
 			}
 			{
 				type: Trigger

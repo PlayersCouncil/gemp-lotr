@@ -17,6 +17,7 @@ public interface CardProperties extends TestBase {
 	default int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
 	default int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }
 	default int GetWoundsOn(PhysicalCardImpl card) { return gameState().getWounds(card); }
+	default boolean IsExhausted(PhysicalCardImpl card) { return GetVitality(card) == 1; }
 
 	default void AddWoundsToChar(PhysicalCardImpl card, int count) {
 		for(int i = 0; i < count; i++) {
