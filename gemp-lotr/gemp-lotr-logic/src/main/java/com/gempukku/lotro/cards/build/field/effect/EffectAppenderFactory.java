@@ -260,12 +260,8 @@ public class EffectAppenderFactory {
 
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
-                    try {
-                        return effectAppender.isPlayableInFull(actionContext);
-                    } catch (Exception e) {
-                        // Ignore any errors, as we can't evaluate at this time
-                        return true;
-                    }
+                    // ignoreCostCheckFailure means we assume it's playable regardless of what the inner check returns
+                    return true;
                 }
 
                 @Override

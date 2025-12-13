@@ -814,7 +814,6 @@
 				}
 				cost: {
 					type: Hinder
-					ignoreCostCheckFailure: true
 					select: choose(beacon)
 					count: {
 						type: TwilightCostInMemory
