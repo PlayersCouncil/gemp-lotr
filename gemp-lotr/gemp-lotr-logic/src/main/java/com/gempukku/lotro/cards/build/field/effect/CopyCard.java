@@ -6,7 +6,6 @@ import com.gempukku.lotro.cards.build.FilterableSource;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.cards.build.field.effect.trigger.TriggerChecker;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 
@@ -29,7 +28,7 @@ public class CopyCard implements EffectProcessor {
                     
                     }
                     effect: {
-                        type: RefreshSelf
+                        type: RefreshCard
                     }
                 }
                 """;
