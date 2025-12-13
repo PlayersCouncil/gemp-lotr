@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,17 +9,21 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_047_Tests
 {
+
+// ----------------------------------------
+// DESERT WIND INITIATE TESTS
+// ----------------------------------------
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_47");
-					// put other cards in here as needed for the test case
+					put("initiate", "103_47");    // Desert Wind Initiate
+
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +52,7 @@ public class Card_V3_047_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("initiate");
 
 		assertEquals("Desert Wind Initiate", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -67,28 +71,73 @@ public class Card_V3_047_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertWindInitiateTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+	@Test
+	public void DesertWindInitiateCanPayTwilightTaxToRemainActive() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var initiate = scn.GetShadowCard("initiate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(initiate);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		scn.ShadowPlayCard(initiate);
+
+		// Required trigger - choose to remove (3)
+		scn.ShadowChoose("Remove");
+
+		// 1 to play + 3 tax + 2 roaming = 6 total removed
+		assertEquals(twilightBefore - 4 - 2, scn.GetTwilight());
+		assertFalse(scn.IsHindered(initiate));
 	}
+
+	@Test
+	public void DesertWindInitiateCanHinderSelfInsteadOfPayingTax() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var initiate = scn.GetShadowCard("initiate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(initiate);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		scn.ShadowPlayCard(initiate);
+		scn.ShadowChoose("Hinder");
+
+		// Only 1 to play (plus roaming), no tax
+		assertEquals(twilightBefore - 1 - 2, scn.GetTwilight());
+		assertTrue(scn.IsHindered(initiate));
+	}
+
+	@Test
+	public void DesertWindInitiateMustHinderIfCannotAffordTax() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var initiate = scn.GetShadowCard("initiate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(initiate);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(1); // Just enough to play, not enough for tax
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(initiate);
+
+		// Should be forced to hinder (can't afford Remove 3)
+		// Either auto-hindered or only hinder choice available
+		assertTrue(scn.IsHindered(initiate));
+	}
+
 }

@@ -26,7 +26,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("multiple", new Multiple());
         effectAppenderProducers.put("optional", new Optional());
         effectAppenderProducers.put("preventable", new PreventableAppenderProducer());
-        effectAppenderProducers.put("refreshself", new RefreshSelf());
+        effectAppenderProducers.put("refreshcard", new RefreshCard());
         effectAppenderProducers.put("repeat", new Repeat());
         effectAppenderProducers.put("sendmessage", new SendMessage());
 

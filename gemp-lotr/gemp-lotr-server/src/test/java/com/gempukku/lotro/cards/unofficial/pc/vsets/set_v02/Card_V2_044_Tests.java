@@ -260,10 +260,6 @@ public class Card_V2_044_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		var item1 = scn.GetShadowCard("item1");
-		var item2 = scn.GetShadowCard("item2");
-		var item3 = scn.GetShadowCard("item3");
-		var item4 = scn.GetShadowCard("item4");
 		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.StartGame();

@@ -579,6 +579,7 @@
 					{
 						type: Discard
 						select: memory(cardToDiscard)
+						override: hindered
 					}
 				]
 			}

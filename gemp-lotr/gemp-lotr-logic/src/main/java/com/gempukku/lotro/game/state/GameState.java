@@ -957,7 +957,14 @@ public class GameState {
         return iterateActiveCards(visitor, SpotOverride.NONE, _inPlay);
     }
     public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides) {
-        return iterateActiveCards(physicalCardVisitor, spotOverrides, _inPlay);
+        var cards = _inPlay;
+        if(spotOverrides.get(InactiveReason.STACKED) != null && spotOverrides.get(InactiveReason.STACKED)) {
+            cards = Stream.concat(
+                    _inPlay.stream(),
+                    _stacked.values().stream().flatMap(List::stream)
+            ).toList();
+        }
+        return iterateActiveCards(physicalCardVisitor, spotOverrides, cards);
     }
 
     public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides, Iterable<? extends PhysicalCard> cards) {
@@ -1333,6 +1340,13 @@ public class GameState {
         //Hindered cards do not count as active for most purposes
         if(!includeHindered && card.isFlipped())
             return false;
+
+//        //out-of-play zones should of course be disqualified, but we make an exception for stack
+//        // since there's so many edge cases for it; it will be handled below
+//        var zone = card.getZone();
+//        if(zone != null && !zone.isInPlay() && zone != Zone.STACKED)
+//            return false;
+
 
         // Either it's not attached or attached to active card
         // AND is a site or fp/ring of current player or shadow of any other player

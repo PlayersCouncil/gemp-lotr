@@ -125,6 +125,20 @@ public interface Choices extends Decisions {
 
 	default void FreepsChooseOption(String option) { ChooseOption(P1, option); }
 	default void ShadowChooseOption(String option) { ChooseOption(P2, option); }
+
+	/**
+	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
+	 * pick a specific one.
+	 * @param card Which of the triggering cards to pick
+	 */
+	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P1, "cardId", String.valueOf(card.getCardId())); }
+
+	/**
+	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
+	 * pick a specific one.
+	 * @param card Which of the triggering cards to pick
+	 */
+	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P2, "cardId", String.valueOf(card.getCardId())); }
 	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}

@@ -150,9 +150,13 @@ public class RuleUtils {
                             return false;
 
                         if (thisType == CardType.POSSESSION || thisType == CardType.ARTIFACT) {
-                            final CardType targetType = physicalCard.getBlueprint().getCardType();
-                            return targetType == CardType.COMPANION || targetType == CardType.ALLY
-                                    || targetType == CardType.MINION;
+                            var types = game.getModifiersQuerying().getCardTypes(game, physicalCard);
+
+                            for(var type : types) {
+                                if(type == CardType.COMPANION || type == CardType.ALLY || type == CardType.MINION)
+                                    return true;
+                            }
+                            return false;
                         }
                         return true;
                     }

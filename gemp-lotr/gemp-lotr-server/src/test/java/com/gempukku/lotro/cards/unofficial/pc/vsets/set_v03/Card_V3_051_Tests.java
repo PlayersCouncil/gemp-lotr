@@ -14,12 +14,22 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_V3_051_Tests
 {
 
+// ----------------------------------------
+// DUTY NO LESS THAN YOURS TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_51");
-					// put other cards in here as needed for the test case
+					put("duty1", "103_51");       // Duty No Less Than Yours
+					put("duty2", "103_51");       // Second copy
+					put("southron1", "4_250");    // Desert Explorer - [Raider] minion
+					put("southron2", "4_250");
+					put("orc", "1_271");          // Orc Soldier - [Sauron], not Raider
+
+					put("aragorn", "1_89");       // Unbound companion
+					put("sam", "1_311");          // Ring-bound companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +54,7 @@ public class Card_V3_051_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("duty1");
 
 		assertEquals("Duty No Less Than Yours", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +66,139 @@ public class Card_V3_051_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DutyNoLessThanYoursTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void DutyTriggersWhenRaiderMinionDiesToExertUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var duty = scn.GetShadowCard("duty1");
+		var southron1 = scn.GetShadowCard("southron1");
+		var southron2 = scn.GetShadowCard("southron2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(duty);
+		scn.MoveMinionsToTable(southron1, southron2);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.AddWoundsToChar(southron1, 2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron1);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		int aragornWoundsBefore = scn.GetWoundsOn(aragorn);
+		int southron2WoundsBefore = scn.GetWoundsOn(southron2);
+
+		// Aragorn wins, southron1 dies
+		scn.BothPass();
+
+		// Duty triggers
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Exert an unbound companion (aragorn auto-selected as only unbound)
+		assertEquals(southron2WoundsBefore + 1, scn.GetWoundsOn(southron2));
+		assertEquals(aragornWoundsBefore + 1, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void DutyDoesNotTriggerWhenNonRaiderMinionDies() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var duty = scn.GetShadowCard("duty1");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(duty);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, orc);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Aragorn wins, orc dies
+		scn.PassCurrentPhaseActions();
+
+		// Duty should NOT trigger - orc is Sauron, not Raider
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+
+	@Test
+	public void DutyCanDiscardSecondCopyToHinderExertedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var duty1 = scn.GetShadowCard("duty1");
+		var duty2 = scn.GetShadowCard("duty2");
+		var southron1 = scn.GetShadowCard("southron1");
+		var southron2 = scn.GetShadowCard("southron2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(duty1, duty2);
+		scn.MoveMinionsToTable(southron1, southron2);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(southron1, 2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron1);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertFalse(scn.IsHindered(aragorn));
+
+		scn.PassCurrentPhaseActions();
+		assertInDiscard(southron1);
+		assertEquals(0, scn.GetWoundsOn(southron2));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable("Duty No Less Than Yours"));
+		scn.ShadowChooseOptionalTrigger(duty1);
+		assertEquals(1, scn.GetWoundsOn(southron2));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		// Offered to discard second copy to hinder
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard"));
+		scn.ShadowChooseYes();
+		// duty2 auto-selected as only other copy
+
+		assertInDiscard(duty2);
+		assertTrue(scn.IsHindered(aragorn));
+	}
+
+	@Test
+	public void DutyCanDeclineToHinderEvenWithSecondCopy() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var duty1 = scn.GetShadowCard("duty1");
+		var duty2 = scn.GetShadowCard("duty2");
+		var southron1 = scn.GetShadowCard("southron1");
+		var southron2 = scn.GetShadowCard("southron2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(duty1, duty2);
+		scn.MoveMinionsToTable(southron1, southron2);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(southron1, 2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron1);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		scn.PassCurrentPhaseActions();
+
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Decline to discard for hinder
+		scn.ShadowChooseNo();
+
+		assertInZone(Zone.SUPPORT, duty2); // Still in play
+		assertFalse(scn.IsHindered(aragorn)); // Not hindered
+		assertEquals(1, scn.GetWoundsOn(aragorn)); // But still exerted
 	}
 }

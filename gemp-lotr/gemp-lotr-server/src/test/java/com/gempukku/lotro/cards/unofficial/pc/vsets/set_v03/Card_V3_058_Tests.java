@@ -1,6 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -8,22 +11,29 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
 import static org.junit.Assert.*;
 
 public class Card_V3_058_Tests
 {
 
+// ----------------------------------------
+// SHIFTING BATTLE-LINES TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("sands", "103_58");
-					put("scout", "4_252");
+					put("battlelines", "103_58"); // Shifting Battle-lines
+					put("initiate", "103_47");    // Desert Wind Initiate - Ambush (3)
+					put("southron1", "4_250");    // Southron Explorer - Southron Man
+					put("southron2", "4_250");    // Another Southron for discard
+					put("charger", "103_41");     // Bladetusk Charger - [Raider] item
+					put("orc", "1_271");          // Orc Soldier - not Southron, no ambush
 
-					put("runner", "1_178");
-
-					put("condition1", "1_16");
-					put("condition2", "1_21");
+					put("aragorn", "1_89");
+					put("moria", "1_21");         // Lord of Moria - FP condition
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -51,7 +61,7 @@ public class Card_V3_058_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("sands");
+		var card = scn.GetFreepsCard("battlelines");
 
 		assertEquals("Shifting Battle-lines", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,48 +74,151 @@ public class Card_V3_058_Tests
 	}
 
 	@Test
-	public void ShiftingBattlelinesHindersAFreepsConditionEachTimeAmbushTwilightIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ShiftingBattleLinesHindersFPConditionAtStartOfAmbushSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var condition1 = scn.GetFreepsCard("condition1");
-		var condition2 = scn.GetFreepsCard("condition2");
-		scn.MoveCardsToSupportArea(condition1, condition2);
-
-		var sands = scn.GetShadowCard("sands");
-		var scout = scn.GetShadowCard("scout");
-		scn.MoveCardsToSupportArea(sands);
-		scn.MoveMinionsToTable(scout);
+		var battlelines = scn.GetShadowCard("battlelines");
+		var initiate = scn.GetShadowCard("initiate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var moria = scn.GetFreepsCard("moria");
+		scn.MoveCardsToSupportArea(battlelines, moria);
+		scn.MoveMinionsToTable(initiate);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, initiate);
+
+		// Initiate has Ambush - accept trigger
+		scn.ShadowAcceptOptionalTrigger();
+
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertFalse(scn.IsHindered(moria));
+		int twilightBefore = scn.GetTwilight();
+
+		// At start of skirmish, trigger available
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// moria auto-selected as only FP condition
+		assertTrue(scn.IsHindered(moria));
+		assertEquals(twilightBefore - 2, scn.GetTwilight());
+	}
+
+	@Test
+	public void ShiftingBattleLinesDoesNotTriggerForMinionWithoutAmbush() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var battlelines = scn.GetShadowCard("battlelines");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var moria = scn.GetFreepsCard("moria");
+		scn.MoveCardsToSupportArea(battlelines, moria);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, orc);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// No ambush minion - no trigger
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void ShiftingBattleLinesStacksSouthronFromDiscardWhenSouthronManDies() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var battlelines = scn.GetShadowCard("battlelines");
+		var southron1 = scn.GetShadowCard("southron1");
+		var southron2 = scn.GetShadowCard("southron2");
+		var charger = scn.GetShadowCard("charger");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(battlelines, charger);
+		scn.StackCardsOn(charger, southron2); // Charger already has a Southron stacked
+		scn.MoveMinionsToTable(southron1);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.AddWoundsToChar(southron1, 2);
 
 		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron1);
+		scn.FreepsResolveSkirmish(aragorn);
 
-		assertTrue(scn.HasKeyword(scout, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(scout, Keyword.AMBUSH));
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.GetStackedCards(charger).size());
 
-		scn.FreepsAssignToMinions(frodo, scout);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		assertTrue(scn.ShadowActionAvailable("Ambush - add 2"));
-		scn.ShadowAcceptOptionalTrigger();
+		// Aragorn wins, southron1 dies
+		scn.PassCurrentPhaseActions();
 
-		//Old version used to hinder at the time of ambush twilight being added
-		assertFalse(scn.ShadowDecisionAvailable("Choose cards to hinder"));
-
-		scn.FreepsResolveSkirmish(frodo);
+		// Southron Man died - trigger available
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.ShadowDecisionAvailable("Choose cards to hinder"));
-		assertTrue(scn.ShadowHasCardChoicesAvailable(condition1, condition2));
-		assertFalse(scn.IsHindered(condition1));
-		assertFalse(scn.IsHindered(condition2));
 
-		scn.ShadowChooseCard(condition1);
+		// southron1 now in discard, can stack it
+		// charger auto-selected as only valid target (has Southron stacked)
+		assertEquals(2, scn.GetStackedCards(charger).size());
+	}
 
-		assertTrue(scn.IsHindered(condition1));
-		assertFalse(scn.IsHindered(condition2));
+	@Test
+	public void ShiftingBattleLinesRequiresItemWithSouthronAlreadyStacked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
+		var battlelines = scn.GetShadowCard("battlelines");
+		var southron1 = scn.GetShadowCard("southron1");
+		var charger = scn.GetShadowCard("charger");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(battlelines, charger);
+		// Charger has NO Southrons stacked
+		scn.MoveMinionsToTable(southron1);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.AddWoundsToChar(southron1, 2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron1);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		scn.PassCurrentPhaseActions();
+
+		// Southron died, but no valid target (Charger has no Southron stacked)
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertInDiscard(southron1);
+	}
+
+	@Test
+	public void ShiftingBattleLinesDoesNotTriggerForNonSouthronManDeath() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var battlelines = scn.GetShadowCard("battlelines");
+		var orc = scn.GetShadowCard("orc");
+		var southron1 = scn.GetShadowCard("southron1");
+		var charger = scn.GetShadowCard("charger");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(battlelines, charger);
+		scn.StackCardsOn(charger, southron1);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.AddWoundsToChar(orc, 1);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, orc);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		scn.PassCurrentPhaseActions();
+
+		// Orc died, not a Southron Man - no trigger
+		assertInDiscard(orc);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }

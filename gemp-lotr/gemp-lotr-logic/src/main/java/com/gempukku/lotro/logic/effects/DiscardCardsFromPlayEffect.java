@@ -1,6 +1,8 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
@@ -13,6 +15,7 @@ import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class DiscardCardsFromPlayEffect extends AbstractPreventableCardEffect {
@@ -20,7 +23,11 @@ public class DiscardCardsFromPlayEffect extends AbstractPreventableCardEffect {
     private final String _performingPlayer;
 
     public DiscardCardsFromPlayEffect(String performingPlayer, PhysicalCard source, Filterable... filters) {
-        super(filters);
+        this(performingPlayer, source, SpotOverride.NONE, filters);
+    }
+
+    public DiscardCardsFromPlayEffect(String performingPlayer, PhysicalCard source, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        super(spotOverrides, filters);
         _performingPlayer = performingPlayer;
         _source = source;
     }

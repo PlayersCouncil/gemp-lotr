@@ -195,13 +195,25 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * @param cardName The human-readable name assigned at the top of each test class.
      * @return The physical card that was instantiated for the game.
      */
-    public PhysicalCardImpl GetFreepsCard(String cardName) { return Cards.get(P1).get(cardName); }
+    public PhysicalCardImpl GetFreepsCard(String cardName) {
+        var card =  Cards.get(P1).get(cardName);
+        if(card == null) {
+            throw new NullPointerException("Card '" + cardName + "' does not exist for Free Peoples.");
+        }
+        return card;
+    }
     /**
      * Returns a card from the Shadow player's deck by its human-readable test alias.
      * @param cardName The human-readable name assigned at the top of each test class.
      * @return The physical card that was instantiated for the game.
      */
-    public PhysicalCardImpl GetShadowCard(String cardName) { return Cards.get(P2).get(cardName); }
+    public PhysicalCardImpl GetShadowCard(String cardName) {
+        var card =  Cards.get(P2).get(cardName);
+        if(card == null) {
+            throw new NullPointerException("Card '" + cardName + "' does not exist for Shadow.");
+        }
+        return card;
+    }
     /**
      * Returns a given player's card by its human-readable test alias.
      * @param player The player to look up a card for.

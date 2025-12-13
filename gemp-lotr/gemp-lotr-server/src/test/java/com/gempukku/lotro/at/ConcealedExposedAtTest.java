@@ -29,7 +29,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     }
 
 
-    @Test
+    //Concealed was implemented but never incorporated into the game.
     public void ConcealedDoesNothingIfNoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         VirtualTableScenario scn = GetScenario();
@@ -49,13 +49,12 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         assertEquals(3, scn.GetTwilight());
     }
 
-    @Test
+    //Concealed was implemented but never incorporated into the game.
     public void ConcealedRemovesOneIfAvailable() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl nostranger = scn.GetFreepsCard("nostranger");
 
         scn.MoveCardsToHand(aragorn);
 
@@ -72,7 +71,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         assertEquals(6, scn.GetTwilight());
     }
 
-    @Test
+    //Concealed was implemented but never incorporated into the game.
     public void TwoConcealedRemovesTwoIfAvailable() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         VirtualTableScenario scn = GetScenario();
@@ -97,7 +96,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         assertEquals(6, scn.GetTwilight());
     }
 
-    @Test
+    //Concealed was implemented but never incorporated into the game.
     public void ConcealedRemovesNothingIfExposed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         VirtualTableScenario scn = GetScenario();
@@ -120,6 +119,8 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         //4 from playing aragorn, 1 for the ring-bearer, 1 for aragorn, 1 for the site (King's Tent), 0 for exposed concealed
         assertEquals(7, scn.GetTwilight());
     }
+
+    //WTF why are these here lol
 
     @Test
     public void lookAtHand() throws Exception {

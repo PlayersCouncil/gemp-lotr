@@ -343,9 +343,9 @@ public class Card_V3_035_Tests
 		var rohan2 = scn.GetFreepsCard("rohan2");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToSupportArea(beacon1);
-		scn.MoveCardsToTopOfDeck(rohan2, rohan1, gondor3, gondor2, gondor1);
 
 		scn.StartGame();
+		scn.MoveCardsToTopOfDeck(rohan2, rohan1, gondor3, gondor2, gondor1);
 
 		scn.FreepsUseCardAction(beacon1);
 
