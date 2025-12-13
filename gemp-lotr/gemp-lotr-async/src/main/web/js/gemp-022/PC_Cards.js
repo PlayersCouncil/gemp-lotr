@@ -871,7 +871,7 @@ var PCCards = {
 	
 	//2024 World Championship promos
 	//Unbranded - Do not release until 2025 WC has concluded.
-	//'1_393': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.0_card.jpg',
+	'1_393': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.0_card.jpg',
 	'1_394': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.1_card.jpg',
 	'1_395': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.2_card.jpg',
 	'1_396': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.3_card.jpg',
@@ -1337,6 +1337,21 @@ var PCCards = {
 	// Denizens Enraged (1R167) [Errata]
 	'51_167' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E167.1_card.jpg',
 	// Traitor's Voice (1U142) [Errata]
-	'51_142' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E142.1_card.jpg'
+	'51_142' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E142.1_card.jpg',
+	
+	
+	//2025 World Championship promos
+	//Unbranded - Do not release until 2026 WC has concluded.
+	//'1_398': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U309.0_card',
+	'1_399': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U309.1_card.jpg',
+	'1_400': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U309.2_card.jpg',
+	'1_401': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U309.3_card.jpg',
+	'1_402': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U309.4_card.jpg',
+	
+	//Holiday Gandalf, Friend of the Shirefolk
+	'1_403': 'https://i.lotrtcgpc.net/promos/LOTR-EN01H072.0_card.jpg',
+	//Holiday Hobbit Stealth
+	'1_404': 'https://i.lotrtcgpc.net/promos/LOTR-EN01H298.0_card.jpg'
+
 }
 
