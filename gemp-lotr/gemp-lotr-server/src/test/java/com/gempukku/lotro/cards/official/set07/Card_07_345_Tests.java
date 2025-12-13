@@ -92,6 +92,7 @@ public class Card_07_345_Tests
 		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		assertEquals(8, scn.GetFreepsHandCount());
 
 		scn.SkipToSite(4);
@@ -152,6 +153,7 @@ public class Card_07_345_Tests
 		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		assertEquals(8, scn.GetFreepsHandCount());
 
 		scn.SkipToSite(4);

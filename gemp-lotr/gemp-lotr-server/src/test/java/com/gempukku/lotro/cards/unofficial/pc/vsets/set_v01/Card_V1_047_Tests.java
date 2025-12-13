@@ -83,7 +83,7 @@ public class Card_V1_047_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.AddBurdens(4); // Now at 5 with the starting bid
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
@@ -112,7 +112,7 @@ public class Card_V1_047_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(4); // Now at 5 with the starting bid
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
@@ -145,7 +145,7 @@ public class Card_V1_047_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(4); // Now at 5 with the starting bid
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();

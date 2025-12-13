@@ -1,9 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -16,12 +13,21 @@ import static org.junit.Assert.*;
 public class Card_V3_053_Tests
 {
 
+// ----------------------------------------
+// HONOR OF THE DESERT WARRIOR TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_53");
-					// put other cards in here as needed for the test case
+					put("honor", "103_53");       // Honor of the Desert Warrior
+					put("explorer", "4_250");     // Southron Explorer
+					put("southron", "4_222");     // Desert Warrior - another Southron
+					put("orc", "1_271");          // Orc Soldier - non-Southron minion
+
+					put("aragorn", "1_89");       // Unbound companion
+					put("sam", "1_311");          // Ring-bound companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +54,7 @@ public class Card_V3_053_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("honor");
 
 		assertEquals("Honor of the Desert Warrior", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,28 +66,78 @@ public class Card_V3_053_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HonoroftheDesertWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void HonorForcesAssignmentWhenFreepsAllowsIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var honor = scn.GetShadowCard("honor");
+		var explorer = scn.GetShadowCard("explorer");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam"); // Ring-bound, won't be a valid target
+		scn.MoveCardsToHand(honor);
+		scn.MoveMinionsToTable(explorer, orc);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		int explorerWoundsBefore = scn.GetWoundsOn(explorer);
+		assertFalse(scn.IsHindered(orc));
+
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(honor);
+
+		// Southron is the only option, and Aragorn is the only unbound companion
+
+		assertEquals(explorerWoundsBefore + 1, scn.GetWoundsOn(explorer));
+		assertTrue(scn.IsHindered(orc)); // Other minions hindered
+
+		// Freeps offered prevention
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to make"));
+		scn.FreepsChooseNo(); // Allow the assignment
+
+		// Explorer assigned to Aragorn
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, explorer));
+
+		// No buffs since FP didn't prevent
+		assertFalse(scn.HasKeyword(explorer, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(explorer, Keyword.AMBUSH));
+	}
+
+	@Test
+	public void HonorBuffsSouthronWhenFreepsPreventsAssignment() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var honor = scn.GetShadowCard("honor");
+		var explorer = scn.GetShadowCard("explorer");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(honor);
+		scn.MoveMinionsToTable(explorer, orc);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		int explorerStrengthBefore = scn.GetStrength(explorer);
+		assertFalse(scn.HasKeyword(explorer, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(explorer, Keyword.AMBUSH));
+
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(honor);
+
+		// Freeps prevents
+		scn.FreepsChooseYes();
+
+		// Assignment prevented
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, explorer));
+
+		// But Explorer is now buffed
+		assertEquals(explorerStrengthBefore + 3, scn.GetStrength(explorer));
+		assertTrue(scn.HasKeyword(explorer, Keyword.FIERCE));
+		assertEquals(4, scn.GetKeywordCount(explorer, Keyword.AMBUSH));
 	}
 }

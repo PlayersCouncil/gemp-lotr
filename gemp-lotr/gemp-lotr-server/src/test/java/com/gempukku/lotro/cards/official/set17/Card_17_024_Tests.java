@@ -142,6 +142,7 @@ public class Card_17_024_Tests
 		scn.AttachCardsTo(gandalf, shadowfax);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetThreats());

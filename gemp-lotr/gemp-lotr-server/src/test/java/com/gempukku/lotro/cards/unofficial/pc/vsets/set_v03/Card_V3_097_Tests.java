@@ -1,9 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -11,17 +8,26 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_V3_097_Tests
 {
 
+// ----------------------------------------
+// OMINOUS SKY TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_97");
-					// put other cards in here as needed for the test case
+					put("sky", "103_97");
+					put("sky2", "103_97");       // Second copy for discard pile retrieval tests
+					put("orc", "1_271");          // Orc Soldier - [Sauron] Orc, cost 2
+					put("troll", "6_106");        // Troll of Udun, [Sauron] Troll, cost 10
+					put("hollowing", "3_54");     // Hollowing of Isengard - [Isengard] Condition (non-Twilight)
+					put("uruk", "1_151");         // Uruk Savage - Uruk-hai (not Orc or Troll), cost 2
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +53,7 @@ public class Card_V3_097_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sky");
 
 		assertEquals("Ominous Sky", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,28 +66,278 @@ public class Card_V3_097_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OminousSkyTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+// ========================================
+// TRIGGER TESTS - Playing Orc/Troll
+// ========================================
+
+	@Test
+	public void OminousSkyTriggersWhenYouPlayATroll() throws DecisionResultInvalidException, CardNotFoundException {
+		// Trigger: Each time you play an Orc or Troll, you may hinder this to add (1)
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var sky = scn.GetShadowCard("sky");
+		var troll = scn.GetShadowCard("troll");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToHand(troll);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Cave Troll costs 10 + 2 roaming = 12 twilight
+		scn.ShadowPlayCard(troll);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void OminousSkyAcceptingTriggerHindersSelfAndAddsTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.IsHindered(sky));
+
+		var twilight = scn.GetTwilight();
+
+		// Orc Soldier costs 2 + 2 roaming = 4 twilight; 20 - 4 = 16
+		scn.ShadowPlayCard(orc);
+		assertEquals(twilight - 4, scn.GetTwilight());
+
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.IsHindered(sky));
+		assertEquals(twilight - 3, scn.GetTwilight()); // 16 + 1 from trigger
+	}
+
+	@Test
+	public void OminousSkyDecliningTriggerDoesNotHinderOrAddTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.IsHindered(sky));
+		var twilight = scn.GetTwilight();
+
+		scn.ShadowPlayCard(orc);
+		assertEquals(twilight - 4, scn.GetTwilight());
+
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertFalse(scn.IsHindered(sky));
+		assertEquals(twilight - 4, scn.GetTwilight()); // Unchanged
+	}
+
+	@Test
+	public void OminousSkyDoesNotTriggerWhenPlayingUrukHai() throws DecisionResultInvalidException, CardNotFoundException {
+		// Uruk-hai are not Orcs or Trolls
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var uruk = scn.GetShadowCard("uruk");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToHand(uruk);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Uruk Savage costs 2 + 2 roaming = 4 twilight
+		scn.ShadowPlayCard(uruk);
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+// ========================================
+// ACTIVATED ABILITY TESTS - Shadow/Regroup
+// ========================================
+
+	@Test
+	public void OminousSkyAbilityAvailableDuringShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var hollowing = scn.GetShadowCard("hollowing");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(hollowing);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowActionAvailable(sky));
+	}
+
+	@Test
+	public void OminousSkyAbilityAvailableDuringRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var hollowing = scn.GetShadowCard("hollowing");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(hollowing);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(sky));
+	}
+
+	@Test
+	public void OminousSkyAbilityNotAvailableDuringManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(hollowing);
+		scn.MoveMinionsToTable(orc); // Need a minion to reach Maneuver
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		assertFalse(scn.ShadowActionAvailable(sky));
+	}
+
+	@Test
+	public void OminousSkyAbilityRequires2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var orc = scn.GetShadowCard("orc");
+		var hollowing = scn.GetShadowCard("hollowing");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(hollowing);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(orc);
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.ShadowActionAvailable(sky));
+	}
+
+	@Test
+	public void OminousSkyAbilityShufflesNonTwilightConditionIntoDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var hollowing = scn.GetShadowCard("hollowing"); // Non-Twilight condition
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(hollowing);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertInZone(Zone.DISCARD, hollowing);
+		var twilight = scn.GetTwilight();
+
+		scn.ShadowUseCardAction(sky);
+		// Only one Shadow condition in discard, so auto-selected
+
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertInZone(Zone.DECK, hollowing);
+	}
+
+	@Test
+	public void OminousSkyAbilityPlayingTwilightConditionDoesNotShuffleIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var sky2 = scn.GetShadowCard("sky2");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(sky2);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+		var twilight = scn.GetTwilight();
+
+		scn.ShadowUseCardAction(sky);
+		// Costs 2 twilight, sky2 auto-selected
+		assertEquals(twilight - 2, scn.GetTwilight());
+
+		scn.ShadowChooseYes(); // Choose to play sky2
+
+		// sky2 costs 1 twilight to play
+		assertEquals(twilight - 2 - 1, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, sky2); // Played, not shuffled
+	}
+
+	@Test
+	public void OminousSkyAbilityDecliningToPlayTwilightConditionShufflesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var sky2 = scn.GetShadowCard("sky2");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(sky2);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+		scn.SetTwilight(10);
+
+		scn.ShadowUseCardAction(sky);
+		assertEquals(8, scn.GetTwilight());
+
+		scn.ShadowChooseNo(); // Decline to play sky2
+
+		assertEquals(8, scn.GetTwilight()); // No additional cost
+		assertInZone(Zone.DECK, sky2); // Shuffled into deck
+	}
+
+	@Test
+	public void OminousSkyAbilityDoesNotOfferToPlayUnplayableTwilightCondition() throws DecisionResultInvalidException, CardNotFoundException {
+		// If the Twilight condition isn't playable (e.g., not enough twilight), just shuffle it
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var sky2 = scn.GetShadowCard("sky2");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToDiscard(sky2);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(3);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(orc);
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(2, scn.GetTwilight());
+
+		scn.ShadowUseCardAction(sky);
+		// After paying 2, twilight = 0, can't afford sky2's cost of 1
+
+		// Should NOT be offered to play since it's not playable
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to play"));
+		assertInZone(Zone.DECK, sky2); // Just shuffled
 	}
 }

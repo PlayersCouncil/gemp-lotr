@@ -498,11 +498,12 @@
 				trigger: [
 					{
 						type: aboutToDiscard
-						opponent: true
+						source: another
 						filter: your, Raider
 					}
 					{
 						type: AboutToHinder
+						source: another
 						filter: your, Raider
 					}
 				]
@@ -532,7 +533,7 @@
 				] 
 			}
 		]
-		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
+		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by another card effect, exert or hinder this minion to prevent that.
 		lore: "They cried. 'Back to the walls! Come back to the City before all are overwhelmed!' But the wind that sped the ships blew all their clamour away."
 		promotext: ""
 		alts: {
@@ -1296,6 +1297,7 @@
 				}
 				effect: {
 					type: Choice
+					player: Freeps
 					texts: [
 						Hinder {bearer}
 						Hinder a Free Peoples item on {bearer}
@@ -1685,10 +1687,15 @@
 								memorize: dupedMan
 							}
 							{
+								type: Memorize
+								filter: bearer
+								memory: mumak
+							}
+							{
 								type: AddModifier
 								modifier: {
 									type: DuplicateGameText
-									filter: self
+									filter: memory(mumak)
 									from: memory(dupedMan)
 								}
 								until: EndOfTurn
@@ -1697,10 +1704,14 @@
 								type: AddModifier
 								modifier: {
 									type: AddKeywordFromCards
-									filter: self
+									filter: memory(mumak)
 									from: memory(dupedMan)
 								}
 								until: EndOfTurn
+							}
+							{
+								type: RefreshCard
+								select: memory(mumak)
 							}
 						]
 					}

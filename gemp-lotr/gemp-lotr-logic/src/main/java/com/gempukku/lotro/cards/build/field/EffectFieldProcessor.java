@@ -23,7 +23,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("controlledsitemodifier", new ControlledSiteModifier());
         effectProcessors.put("copycard", new CopyCard());
         effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
-        effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
+        effectProcessors.put("selfremovedfromplaytrigger", new SelfRemovedFromPlayTriggerEffectProcessor());
         effectProcessors.put("displayableinformation", new DisplayableInformationEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());

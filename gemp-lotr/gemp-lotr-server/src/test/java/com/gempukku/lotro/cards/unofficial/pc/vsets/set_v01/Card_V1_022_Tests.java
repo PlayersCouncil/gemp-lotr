@@ -123,8 +123,8 @@ public class Card_V1_022_Tests
 
 		scn.StartGame();
 
-		//There is already 1 burden from bidding, we add enough for 2 actions
-		scn.AddBurdens(1);
+		//We add enough for 2 actions
+		scn.AddBurdens(2);
 
 		assertTrue(scn.FreepsActionAvailable(memorial));
 		assertEquals(2, scn.GetBurdens());

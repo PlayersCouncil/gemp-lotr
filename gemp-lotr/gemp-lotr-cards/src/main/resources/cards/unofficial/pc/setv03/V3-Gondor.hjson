@@ -284,13 +284,15 @@
 						select: choose(minion,AssignedToSkirmish(memory(exertedWraith)))
 					}
 				]
+				text: Exert a Wraith and a minion it is assigned to
 			}
 			{
 				type: Response
 				trigger: {
-					type: Killed
-					filter: minion,InSkirmishAgainst(bearer)
-					cause: OVERWHELM
+					type: losesSkirmish
+					overwhelm: true
+					filter: minion
+					against: bearer
 				}
 				cost: [
 					{
@@ -307,6 +309,7 @@
 					select: choose(minion)
 					count: 2
 				}
+				text: Discard this and remove 2 threats to wound 2 minions
 			}
 		]
 		gametext: Bearer must be a [gondor] Wraith.<br>Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.<br>Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
@@ -371,18 +374,9 @@
 				}
 			}
 			{
-				type: Trigger
+				type: SelfRemovedFromPlayTrigger
+				//method omitted as we want both discarded and hindered
 				optional: false
-				trigger: [
-					{
-						type: Discarded
-						filter: self
-					}
-					{
-						type: Hindered
-						filter: self
-					}
-				]
 				effect: {
 					type: RemoveThreats
 					amount: 1
@@ -445,7 +439,7 @@
 				type: Response
 				trigger: {
 					type: UsesSpecialAbility
-					filter: side(Shadow),support
+					filter: side(Shadow)
 					memorize: activatedCard
 				}
 				cost: {
@@ -464,8 +458,8 @@
 							filter: NameFromMemory(activatedCard),not(memory(activatedCard))
 						}
 						cost: {
-							type: ChooseActiveCards
-							text: Choose how many knights to exert
+							type: Exert
+							select: choose(knight)
 							count: {
 								type: Range
 								from: 0
@@ -527,6 +521,10 @@
 		effects: [
 			{
 				type: event
+				requires: {
+					type: HasCardInDeadPile
+					filter: Wraith, playable
+				}
 				cost: [
 					{
 						type: If
@@ -601,15 +599,18 @@
 				}
 				cost: [
 					{
-						type: Exert
-						count: 2
-						select: choose(knight,Hinderable)
-						memorize: exertedKnights
-					}
-					{
-						type: Hinder
-						ignoreCostCheckFailure: true
-						select: memory(exertedKnights)
+						type: CostToEffect
+						cost: {
+							type: Exert
+							count: 2
+							select: choose(unbound,knight,Hinderable)
+							memorize: exertedKnights
+						}
+						effect: {
+							type: Hinder
+							ignoreCostCheckFailure: true
+							select: memory(exertedKnights)
+						}
 					}
 				]
 				effect: [
@@ -1387,7 +1388,6 @@
 					type: aboutToDiscard
 					opponent: true
 					filter: gondor
-					memorizeSource: discarder
 				}
 				cost: {
 					type: Spot

@@ -106,7 +106,7 @@ public class Card_V2_013_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(4);
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -131,7 +131,7 @@ public class Card_V2_013_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(4);
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -168,7 +168,7 @@ public class Card_V2_013_Tests
 
 		scn.StartGame();
 
-		scn.AddBurdens(4);
+		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();

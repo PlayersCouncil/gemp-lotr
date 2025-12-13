@@ -140,6 +140,7 @@ public class Card_17_024_ErrataTests
 		scn.AttachCardsTo(gandalf, shadowfax);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetThreats());

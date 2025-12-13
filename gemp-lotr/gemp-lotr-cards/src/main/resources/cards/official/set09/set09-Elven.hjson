@@ -295,7 +295,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -304,7 +304,7 @@
 				]
 				effect: {
 					type: wound
-					select: choose(minion,inSkirmishAgainst(memory(bearer)))
+					select: choose(minion,inSkirmishAgainst(memory(oldBearer)))
 				}
 			}
 		]

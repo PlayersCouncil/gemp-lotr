@@ -6,13 +6,14 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.filters.Filters;
 import org.json.simple.JSONObject;
 
-public class DiscardedFromPlayTriggerEffectProcessor implements EffectProcessor {
+public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "optional", "source", "requires", "cost", "effect");
+        FieldUtils.validateAllowedFields(value, "optional", "source", "method", "requires", "cost", "effect");
 
         final boolean optional = FieldUtils.getBoolean(value.get("optional"), "optional", false);
         final String source = FieldUtils.getString(value.get("source"), "source", "any");
+        final String method = FieldUtils.getString(value.get("method"), "method", "");
 
         final FilterableSource bySource = source != null ? environment.getFilterFactory().generateFilter(source, environment) : null;
 
@@ -30,9 +31,25 @@ public class DiscardedFromPlayTriggerEffectProcessor implements EffectProcessor 
 					return Filters.accepts(actionContext.getGame(), actionContext.getSource(), bySource.getFilterable(actionContext));
 				});
 
-        if (optional)
-            blueprint.setDiscardedFromPlayOptionalTriggerAction(triggerActionSource);
-        else
-            blueprint.setDiscardedFromPlayRequiredTriggerAction(triggerActionSource);
+        if(method.toLowerCase().contains("discard") || method.isEmpty()) {
+            if (optional) {
+                blueprint.setDiscardedFromPlayOptionalTriggerAction(triggerActionSource);
+            }
+            else {
+                blueprint.setDiscardedFromPlayRequiredTriggerAction(triggerActionSource);
+            }
+        }
+
+        if(method.toLowerCase().contains("hinder") || method.isEmpty()) {
+            if (optional) {
+                blueprint.setHinderedFromPlayOptionalTriggerAction(triggerActionSource);
+            }
+            else {
+                blueprint.setHinderedFromPlayRequiredTriggerAction(triggerActionSource);
+            }
+        }
+
+
+
     }
 }

@@ -124,7 +124,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -134,7 +134,7 @@
 				effect: {
 					type: playCardFromDrawDeck
 					select: choose(or(artifact,possession))
-					on: memory(bearer)
+					on: memory(oldBearer)
 					showAll: true
 					shuffle: true
 				}

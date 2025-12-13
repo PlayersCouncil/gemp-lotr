@@ -106,6 +106,7 @@ public class Card_10_068_ErrataTests
 		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.AddWoundsToChar(enquea, 2);
 
 		scn.SkipToAssignments();

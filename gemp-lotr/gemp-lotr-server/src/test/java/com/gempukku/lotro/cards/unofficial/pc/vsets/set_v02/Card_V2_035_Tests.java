@@ -89,6 +89,7 @@ public class Card_V2_035_Tests
 		scn.MoveCompanionsToTable(pippin);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(evil);

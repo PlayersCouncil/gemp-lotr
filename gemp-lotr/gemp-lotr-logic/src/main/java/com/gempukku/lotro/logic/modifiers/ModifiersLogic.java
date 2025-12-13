@@ -882,7 +882,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
             var dupeMod = (DuplicateGameTextModifier) modifier;
             var dupes = dupeMod.getCardsToDuplicate(game);
             if(dupes != null) {
-                cards.addAll(dupeMod.getCardsToDuplicate(game));
+                cards.addAll(dupes);
             }
         }
 

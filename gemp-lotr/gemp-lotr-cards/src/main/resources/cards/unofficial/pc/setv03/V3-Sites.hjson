@@ -352,6 +352,7 @@
 				effect: {
 					type: Discard
 					select: memory(hinderedCard)
+					override: hindered
 				}
 			}
 			{

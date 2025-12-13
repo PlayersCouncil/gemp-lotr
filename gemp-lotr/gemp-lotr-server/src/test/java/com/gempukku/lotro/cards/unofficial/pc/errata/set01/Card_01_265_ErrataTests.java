@@ -151,6 +151,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveCardsToFreepsDiscard("sword", "guard1", "guard2");
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(sam, slayer);
@@ -213,6 +214,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveCardsToDeadPile(guard1, guard2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(sam, slayer);

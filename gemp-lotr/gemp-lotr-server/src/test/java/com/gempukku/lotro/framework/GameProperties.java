@@ -26,6 +26,9 @@ public interface GameProperties extends TestBase {
 	default int GetThreats() {
 		return gameState().getThreats();
 	}
+	default int GetThreatLimit() {
+		return PlayConditions.getThreatLimit(game());
+	}
 	default void AddThreats(int count) {
 		gameState().addThreats(gameState().getCurrentPlayerId(), count);
 	}

@@ -364,6 +364,7 @@
 					type: discardFromHand
 					forced: false
 					select: choose(culture(gondor))
+					count: 2
 				}
 				effect: {
 					type: modifyArcheryTotal

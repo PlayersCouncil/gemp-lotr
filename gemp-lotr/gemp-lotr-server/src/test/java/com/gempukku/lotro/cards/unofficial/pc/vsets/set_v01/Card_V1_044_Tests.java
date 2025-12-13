@@ -81,11 +81,11 @@ public class Card_V1_044_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetBurdens()); // 1 from bidding
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
 		assertTrue(scn.ShadowPlayAvailable(fell));
 		scn.ShadowPlayCard(fell);
-		assertEquals(2, scn.GetBurdens());
+		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.DISCARD, orc.getZone());
 	}
 
@@ -128,14 +128,14 @@ public class Card_V1_044_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetBurdens()); // 1 from bidding
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.SUPPORT, fcond.getZone());
 		assertEquals(Zone.SUPPORT, scond.getZone());
 
 		scn.ShadowPlayCard(fell);
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to discard a Free Peoples condition to prevent adding a burden"));
 		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(Zone.DISCARD, fcond.getZone());
 		assertEquals(Zone.SUPPORT, scond.getZone());
 		assertEquals(Zone.DISCARD, orc.getZone());

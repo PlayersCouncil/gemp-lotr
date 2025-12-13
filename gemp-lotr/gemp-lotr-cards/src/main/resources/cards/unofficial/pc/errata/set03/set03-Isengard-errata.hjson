@@ -54,19 +54,19 @@
 	# 					# little more elegant.
 	# 					type: Memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: Optional
 	# 					player: freeps
-	# 					text: Would you like to exert {bearer} twice to discard Can You Protect Me From Yourself?
+	# 					text: Would you like to exert {oldBearer} twice to discard Can You Protect Me From Yourself?
 	# 					effect: {
 	# 						type: CostToEffect
 	# 						cost: {
 	# 							type: exert
 	# 							player: freeps
 	# 							times: 2
-	# 							select: bearer
+	# 							select: oldBearer
 	# 						}
 	# 						effect: {
 	# 							type: Discard
@@ -196,13 +196,6 @@
 					secondNumber: 3
 				}
 				effect: [
-					{
-						# We do this just to make the option prompt a
-						# little more elegant.
-						type: Memorize
-						filter: bearer
-						memory: bearer
-					}
 					{
 						type: Optional
 						player: freeps

@@ -500,7 +500,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -510,7 +510,7 @@
 				effect: {
 					type: preventable
 					player: shadow
-					text: Would you like to exert a minion in skirmish to prevent cancelling skirmish involving {bearer}?
+					text: Would you like to exert a minion in skirmish to prevent cancelling skirmish involving {oldBearer}?
 					cost: {
 						type: exert
 						player: shadow
@@ -518,7 +518,7 @@
 					}
 					effect: {
 						type: cancelSkirmish
-						filter: memory(bearer)
+						filter: memory(oldBearer)
 					}
 				}
 			}
@@ -610,7 +610,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -619,7 +619,7 @@
 				]
 				effect: {
 					type: heal
-					select: memory(bearer)
+					select: memory(oldBearer)
 				}
 			}
 		]

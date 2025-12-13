@@ -139,7 +139,6 @@ public class Card_V1_046_Tests
 		scn.MoveCardsToSupportArea(iseeyou);
 		scn.MoveMinionsToTable(orc);
 
-		PhysicalCardImpl ring = scn.GetFreepsCard(VirtualTableScenario.GreatRing);
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);

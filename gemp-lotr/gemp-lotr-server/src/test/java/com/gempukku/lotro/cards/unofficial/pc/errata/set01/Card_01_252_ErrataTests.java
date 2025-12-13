@@ -107,6 +107,7 @@ public class Card_01_252_ErrataTests
 		scn.MoveCardsToSupportArea(shadow);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(5, scn.GetStrength(frodo)); // 3 base + 1 ring + 1 from Irresistable Shadow
@@ -127,6 +128,7 @@ public class Card_01_252_ErrataTests
 		scn.MoveCardsToSupportArea(shadow);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(7, scn.GetResistance(frodo)); // 10 base - 1 burden - 2 from Irresistable Shadow

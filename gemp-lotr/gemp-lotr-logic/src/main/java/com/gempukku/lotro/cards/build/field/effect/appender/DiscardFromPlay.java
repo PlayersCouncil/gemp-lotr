@@ -8,6 +8,8 @@ import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -18,11 +20,12 @@ import org.json.simple.JSONObject;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class DiscardFromPlay implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "memorize", "memorizeStackedCards");
+        FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "override", "memorize", "memorizeStackedCards");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final PlayerSource discardingPlayer = PlayerResolver.resolvePlayer(player);
@@ -30,19 +33,19 @@ public class DiscardFromPlay implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         if (select == null)
             throw new InvalidCardDefinitionException("'select' is required for Discard effect.");
+        final Map<InactiveReason, Boolean> override = FieldUtils.getSpotOverride(effectObject.get("override"), "override", SpotOverride.NONE);
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String stackedCardsMemory = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        EffectAppender cardResolver = CardResolver.resolveCards(select,
+        EffectAppender cardResolver = CardResolver.resolveCards(select, override,
                 (actionContext) -> Filters.canBeDiscarded(discardingPlayer.getPlayer(actionContext), actionContext.getSource()),
                 valueSource, memory, player, "Choose cards to discard", environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, discardingPlayer, valueSource, cardResolver);
 
-        result.addEffectAppender(
-                cardResolver);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -57,7 +60,7 @@ public class DiscardFromPlay implements EffectAppenderProducer {
 
                             actionContext.setCardMemory(stackedCardsMemory, stackedCards);
                         }
-                        return new DiscardCardsFromPlayEffect(discardingPlayerId, actionContext.getSource(), Filters.in(cardsFromMemory));
+                        return new DiscardCardsFromPlayEffect(discardingPlayerId, actionContext.getSource(), override, Filters.in(cardsFromMemory));
                     }
                 });
 

@@ -112,7 +112,7 @@ public class Card_V1_065_Tests
 		scn.MoveCardsToHand(foul, watcher);
 
 		scn.StartGame();
-		scn.AddBurdens(2);
+		scn.AddBurdens(3);
 		scn.SetTwilight(10);
 		scn.FreepsPassCurrentPhaseAction();
 

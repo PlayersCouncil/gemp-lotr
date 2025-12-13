@@ -2,6 +2,10 @@ package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 /**
  * A set of functions within the test rig that pertain to decisions.  Decisions in Gemp are a catch-all term referring
  * to any point where the game simulation cannot continue until a player makes a choice.  Thus, awaiting passes,
@@ -238,9 +242,81 @@ public interface Decisions extends TestBase  {
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
 
+	default boolean FreepsHasOptionalTriggerAvailable(String text) {
+		if(!FreepsDecisionAvailable("Optional"))
+			return false;
+
+		var texts = GetADParamAsList(P1, "actionText");
+
+		for(var choice : texts) {
+			if(choice.toLowerCase().contains(text.toLowerCase()))
+				return true;
+		}
+
+		return false;
+	}
+
+	default boolean ShadowHasOptionalTriggerAvailable(String text) {
+		if(!ShadowDecisionAvailable("Optional"))
+			return false;
+
+		var texts = GetADParamAsList(P2, "actionText");
+
+		for(var choice : texts) {
+			if(choice.toLowerCase().contains(text.toLowerCase()))
+				return true;
+		}
+
+		return false;
+	}
+
 	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1, "0"); }
 	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1, ""); }
+
+
+
 	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2, "0"); }
 	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2, ""); }
+
+
+	/**
+	 * Gets all of the options for a particular parameter of the current awaiting decision as an array of strings.
+	 * @param playerID The player making the current decision.
+	 * @param paramName The parameter options to return.
+	 * @return An array of strings, which are all options for the given parameter.  This list is indexed according to the
+	 * options on the current decision, so option 0 is tied to the first choice on the decision, option 1 is the second
+	 * choice on the decision, etc.
+	 */
+	default String[] GetADParam(String playerID, String paramName) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters().get(paramName);
+	}
+
+	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
+	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
+	default List<String> GetADParamAsList(String playerID, String paramName) {
+		var paramList = GetAwaitingDecisionParam(playerID, paramName);
+		if(paramList == null)
+			return null;
+
+		return Arrays.asList(paramList);
+	}
+
+	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
+		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
+	}
+	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName); }
+	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName); }
+	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName)[0]; }
+	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName)[0]; }
+	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters().get(paramName);
+	}
+
+	default Map<String, String[]> GetAwaitingDecisionParams(String playerID) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters();
+	}
 
 }

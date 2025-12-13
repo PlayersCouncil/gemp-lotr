@@ -107,6 +107,7 @@ public class Card_17_017_Tests
 		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(gandalf, runner);

@@ -57,7 +57,8 @@
 							]
 						}
 						true: {
-							type: CostToEffect
+							type: Optional
+							text: Would you like to discard an {ISENGARD} card from hand to hinder {playedCard}?
 							cost: {
 								type: DiscardFromHand
 								forced: false
@@ -161,6 +162,18 @@
 				]
 				effect: {
 					type: Hinder
+					select: choose(side(Free Peoples), condition)
+				}
+			}
+			
+			{
+				type: SelfRemovedFromPlayTrigger
+				optional: false
+				source: side(Free Peoples)
+				//method omitted since we want both hinder and discard
+				effect: {
+					type: Hinder
+					player: shadow
 					select: choose(side(Free Peoples), condition)
 				}
 			}

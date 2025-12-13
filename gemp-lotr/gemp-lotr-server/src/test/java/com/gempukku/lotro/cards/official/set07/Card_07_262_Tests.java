@@ -70,6 +70,7 @@ public class Card_07_262_Tests
 		scn.MoveCardsToDiscard(assassin, battlements);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
 		scn.FreepsPassCurrentPhaseAction();
@@ -113,6 +114,7 @@ public class Card_07_262_Tests
 		scn.MoveCardsToHand(pillager, battlements);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
 		scn.FreepsPassCurrentPhaseAction();
@@ -146,6 +148,7 @@ public class Card_07_262_Tests
 		scn.MoveCardsToDiscard(assassin, battlements);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
 		scn.FreepsPassCurrentPhaseAction();

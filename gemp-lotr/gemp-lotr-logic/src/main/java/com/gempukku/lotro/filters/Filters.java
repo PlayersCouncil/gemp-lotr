@@ -63,7 +63,9 @@ public class Filters {
         _keywordFilterMap.put(Keyword.VILLAGER, Filters.and(CardType.ALLY, keyword(Keyword.VILLAGER)));
 
         // Minion groups
-        _keywordFilterMap.put(Keyword.SOUTHRON, Filters.and(CardType.MINION, keyword(Keyword.SOUTHRON)));
+        // This is the kind of crap I'm talking about.  We now have Bladetusk Mumakil that start as items and
+        // grant themselves Southron as they transform, but this stupid thing keeps that from working.
+        //_keywordFilterMap.put(Keyword.SOUTHRON, Filters.and(CardType.MINION, keyword(Keyword.SOUTHRON)));
         _keywordFilterMap.put(Keyword.EASTERLING, Filters.and(CardType.MINION, keyword(Keyword.EASTERLING)));
         _keywordFilterMap.put(Keyword.CORSAIR, Filters.and(CardType.MINION, keyword(Keyword.CORSAIR)));
         _keywordFilterMap.put(Keyword.TRACKER, Filters.and(CardType.MINION, keyword(Keyword.TRACKER)));
@@ -374,7 +376,7 @@ public class Filters {
         return false;
     };
 
-    public static final Filter inPlay = (game, physicalCard) -> physicalCard.getZone().isInPlay();
+    public static final Filter inPlay = (game, physicalCard) -> physicalCard.getZone() != null && physicalCard.getZone().isInPlay();
 
     public static final Filter active = (game, physicalCard) -> game.getGameState().isCardInPlayActive(physicalCard);
 

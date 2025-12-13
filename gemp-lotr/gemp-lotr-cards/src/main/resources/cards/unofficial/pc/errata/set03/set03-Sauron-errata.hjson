@@ -604,14 +604,14 @@
 	# 					# little more elegant.
 	# 					type: Memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: Choice
 	# 					player: freeps
 	# 					texts: [
 	# 						Discard a Free Peoples character (except the Ring-bearer)
-	# 						Wound {bearer}
+	# 						Wound {oldBearer}
 	# 					]
 	# 					effects: [
 	# 						{

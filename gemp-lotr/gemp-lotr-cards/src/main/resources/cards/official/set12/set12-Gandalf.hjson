@@ -399,7 +399,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -408,7 +408,7 @@
 				]
 				effect: {
 					type: preventWound
-					select: memory(bearer)
+					select: memory(oldBearer)
 				}
 			}
 		]

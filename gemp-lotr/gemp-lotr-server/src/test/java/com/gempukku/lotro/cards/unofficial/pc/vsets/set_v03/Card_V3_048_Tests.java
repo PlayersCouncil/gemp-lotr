@@ -13,12 +13,22 @@ import static org.junit.Assert.*;
 public class Card_V3_048_Tests
 {
 
+// ----------------------------------------
+// DESERT WIND SCOUT TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_48");
-					// put other cards in here as needed for the test case
+					put("scout", "103_48");       // Desert Wind Scout
+					put("initiate", "103_47");    // Desert Wind Initiate - another Raider
+					put("southron", "4_222");     // Desert Warrior - another Raider
+					put("orc", "1_271");          // Orc Soldier - not Raider
+
+					put("aragorn", "1_89");
+					put("gandalf", "1_364");
+					put("enterhere", "103_9");    // You Cannot Enter Here - hinders Shadow card
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +58,7 @@ public class Card_V3_048_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("scout");
 
 		assertEquals("Desert Wind Scout", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -67,28 +77,115 @@ public class Card_V3_048_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertWindScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void DesertWindScoutPayTaxOrHinderOnPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var scout = scn.GetShadowCard("scout");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(scout);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		scn.ShadowPlayCard(scout);
+		scn.ShadowChoose("Remove"); // Pay tax
+
+		// 2 to play + 2 roaming + 3 tax = 7 total
+		assertEquals(twilightBefore - 7, scn.GetTwilight());
+		assertFalse(scn.IsHindered(scout));
+	}
+
+	@Test
+	public void DesertWindScoutCanHinderAnotherRaiderWhenSelfHindered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetShadowCard("scout");
+		var initiate = scn.GetShadowCard("initiate");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(scout);
+		scn.MoveMinionsToTable(initiate, orc);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.IsHindered(initiate));
+		assertFalse(scn.IsHindered(orc));
+
+		scn.ShadowPlayCard(scout);
+		scn.ShadowChoose("Hinder"); // Hinder self
+
+		// Optional trigger to hinder another Raider
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Should only offer Raider minions, not the Orc
+		assertTrue(scn.IsHindered(scout));
+		assertTrue(scn.IsHindered(initiate));
+		assertFalse(scn.IsHindered(orc));
+	}
+
+	@Test
+	public void DesertWindScoutTriggerFiresWhenHinderedByOpponent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetShadowCard("scout");
+		var southron = scn.GetShadowCard("southron");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var enterhere = scn.GetFreepsCard("enterhere");
+		scn.MoveMinionsToTable(scout, southron);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(enterhere);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertFalse(scn.IsHindered(scout));
+		assertFalse(scn.IsHindered(southron));
+
+		// Freeps hinders Scout
+		scn.FreepsPlayCard(enterhere);
+		scn.FreepsChooseCard(scout);
+
+		// Scout's trigger fires - can drag Southron with it
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		// Southron auto-selected as only other Raider minion
+
+		assertTrue(scn.IsHindered(scout));
+		assertTrue(scn.IsHindered(southron));
+	}
+
+	@Test
+	public void DesertWindScoutCanDeclineToHinderAnother() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetShadowCard("scout");
+		var initiate = scn.GetShadowCard("initiate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(scout);
+		scn.MoveMinionsToTable(initiate);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(scout);
+		scn.ShadowChoose("Hinder");
+
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertTrue(scn.IsHindered(scout));
+		assertFalse(scn.IsHindered(initiate)); // Not dragged along
 	}
 }

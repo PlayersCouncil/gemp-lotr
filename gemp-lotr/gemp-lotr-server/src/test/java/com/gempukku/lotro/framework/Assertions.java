@@ -51,7 +51,7 @@ public class Assertions {
 	 * @param bearer The card which supposedly bears the other card
 	 */
 	public static void assertAttachedTo(PhysicalCardImpl card, PhysicalCardImpl bearer) {
-		assertEquals(card.getZone(), Zone.ATTACHED);
+		assertEquals(Zone.ATTACHED, card.getZone());
 		assertSame(bearer, card.getAttachedTo());
 	}
 

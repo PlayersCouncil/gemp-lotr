@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_019_Tests
 {
@@ -18,8 +17,10 @@ public class Card_V3_019_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_19");
-					// put other cards in here as needed for the test case
+					put("aragorn", "103_19");
+					put("boromir", "1_97"); // Gondor Man
+					put("eomer", "4_267"); // Rohan Man
+					put("legolas", "1_50"); // Not a Man
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,7 +51,7 @@ public class Card_V3_019_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("King of Gondor and Arnor", card.getBlueprint().getSubtitle());
@@ -66,28 +67,215 @@ public class Card_V3_019_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AragornGainsStrengthPlus2WithRohanMan() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var eomer = scn.GetFreepsCard("eomer");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		// Add Eomer (Rohan Man)
+		scn.MoveCompanionsToTable(eomer);
+
+		// Aragorn should be +2 strength
+		assertEquals(aragornBaseStrength + 2, scn.GetStrength(aragorn));
+	}
+
+	@Test
+	public void AragornGainsStrengthPlus1WithAnotherGondorMan() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		// Add Boromir (Gondor Man)
+		scn.MoveCompanionsToTable(boromir);
+
+		// Aragorn should be +1 strength
+		assertEquals(aragornBaseStrength + 1, scn.GetStrength(aragorn));
+	}
+
+	@Test
+	public void AragornStrengthBonusesStack() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var eomer = scn.GetFreepsCard("eomer");
+
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		// Add both Boromir and Eomer
+		scn.MoveCompanionsToTable(boromir, eomer);
+
+		// Aragorn should be +3 strength (+1 Gondor Man, +2 Rohan Man)
+		assertEquals(aragornBaseStrength + 3, scn.GetStrength(aragorn));
+	}
+
+
+	@Test
+	public void AragornTriggerHindersManToRemoveThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		scn.StartGame();
+
+		scn.AddThreats(2);
+		scn.AddBurdens(2);
+
+		assertEquals(2, scn.GetThreats());
+		assertEquals(2, scn.GetBurdens());
+		assertFalse(scn.IsHindered(boromir));
+
+		// Pass Fellowship phase to trigger movement
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Trigger should be offered
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Boromir auto-selected as only valid Man to hinder
+		assertTrue(scn.IsHindered(boromir));
+
+		// Choose to remove threat
+		scn.FreepsChoose("threat");
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(2, scn.GetBurdens()); // Unchanged
+	}
+
+	@Test
+	public void AragornTriggerHindersManToRemoveBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		scn.StartGame();
+
+		scn.AddThreats(2);
+		scn.AddBurdens(2);
+
+		// Pass Fellowship phase to trigger movement
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.IsHindered(boromir));
+
+		// Choose to remove burden
+		scn.FreepsChoose("burden");
+
+		assertEquals(2, scn.GetThreats()); // Unchanged
+		assertEquals(1, scn.GetBurdens());
+	}
+
+	@Test
+	public void AragornTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		scn.StartGame();
+
+		scn.AddThreats(2);
+		scn.AddBurdens(2);
+
+		// Pass Fellowship phase to trigger movement
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsDeclineOptionalTrigger();
+
+		// Nothing should change
+		assertFalse(scn.IsHindered(boromir));
+		assertEquals(2, scn.GetThreats());
+		assertEquals(2, scn.GetBurdens());
+	}
+
+	@Test
+	public void AragornTriggerNotOfferedWithoutAnotherUnboundMan() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas"); // Elf, not Man
+
+		scn.MoveCompanionsToTable(aragorn, legolas);
+
+		scn.StartGame();
+
+		scn.AddThreats(2);
+		scn.AddBurdens(2);
+
+		// Pass Fellowship phase to trigger movement
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Trigger should NOT be offered - no other unbound Man to hinder
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void AragornTriggerAllowsChoiceBetweenMultipleMen() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var eomer = scn.GetFreepsCard("eomer");
+
+		scn.MoveCompanionsToTable(aragorn, boromir, eomer);
+
+		scn.StartGame();
+
+		scn.AddThreats(1);
+
+		// Pass Fellowship phase to trigger movement
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Should have choice between Boromir and Eomer
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoicesAvailable(boromir, eomer));
+
+		// Choose Eomer
+		scn.FreepsChooseCard(eomer);
+
+		assertTrue(scn.IsHindered(eomer));
+		assertFalse(scn.IsHindered(boromir));
 	}
 }

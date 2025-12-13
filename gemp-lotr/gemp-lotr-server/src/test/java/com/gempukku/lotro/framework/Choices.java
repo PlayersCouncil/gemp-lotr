@@ -4,9 +4,7 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will
@@ -17,6 +15,14 @@ public interface Choices extends Decisions {
 
 	default void FreepsDeclineChoosing() { PlayerDecided(P1, ""); }
 	default void ShadowDeclineChoosing() { PlayerDecided(P2, ""); }
+
+	default void FreepsDeclineSanctuaryHealing() {
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+		PlayerDecided(P1, "");
+	}
 
 	/**
 	 * Determines whether the Free Peoples player has any choices on the current decision whose description matches the
@@ -119,6 +125,20 @@ public interface Choices extends Decisions {
 
 	default void FreepsChooseOption(String option) { ChooseOption(P1, option); }
 	default void ShadowChooseOption(String option) { ChooseOption(P2, option); }
+
+	/**
+	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
+	 * pick a specific one.
+	 * @param card Which of the triggering cards to pick
+	 */
+	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P1, "cardId", String.valueOf(card.getCardId())); }
+
+	/**
+	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
+	 * pick a specific one.
+	 * @param card Which of the triggering cards to pick
+	 */
+	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P2, "cardId", String.valueOf(card.getCardId())); }
 	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}
@@ -222,32 +242,7 @@ public interface Choices extends Decisions {
 	default List<String> ShadowGetFreepsAssignmentTargets() { return GetADParamAsList(P2, "freeCharacters"); }
 	default List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2, "minions"); }
 
-	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
-	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
-	default List<String> GetADParamAsList(String playerID, String paramName) {
-		var paramList = GetAwaitingDecisionParam(playerID, paramName);
-		if(paramList == null)
-			return null;
 
-		return Arrays.asList(paramList);
-	}
-
-	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
-		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
-	}
-	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName); }
-	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName); }
-	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName)[0]; }
-	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName)[0]; }
-	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
-		var decision = userFeedback().getAwaitingDecision(playerID);
-		return decision.getDecisionParameters().get(paramName);
-	}
-
-	default Map<String, String[]> GetAwaitingDecisionParams(String playerID) {
-		var decision = userFeedback().getAwaitingDecision(playerID);
-		return decision.getDecisionParameters();
-	}
 
 
 
@@ -370,8 +365,15 @@ public interface Choices extends Decisions {
 	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) {
 		return HasCardChoiceAvailable(P1, card);
 	}
+	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
+		return HasCardChoiceAvailable(P1, card, selectable);
+	}
+
 	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) {
 		return HasCardChoiceAvailable(P2, card);
+	}
+	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
+		return HasCardChoiceAvailable(P2, card, selectable);
 	}
 
 	default boolean FreepsHasCardChoicesAvailable(PhysicalCardImpl...cards) {
@@ -388,6 +390,8 @@ public interface Choices extends Decisions {
 		}
 		return true;
 	}
+
+
 
 	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl card) {
 		return !HasCardChoiceAvailable(P1, card);
@@ -411,22 +415,54 @@ public interface Choices extends Decisions {
 		return true;
 	}
 
-	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) {
+	/**
+	 * Checks whether the given card is one of the options being presented to the player.  Will work as either a blueprint
+	 * choice (for e.g. selecting from the reserve deck) or as a physical id choice (for selecting among cards on the
+	 * table).  If the choice presents selectable flags, then this will only return true if the card is selectable.
+	 * @param player The player currently presented with a decision
+	 * @param card The card to search for
+	 * @return True if the given card is one of the options presented to the player, false otherwise.
+	 */
+	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) { return HasCardChoiceAvailable(player, card, true); }
 
-		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+	/**
+	 * Checks whether the given card is one of the options being presented to the player.  Will work as either a blueprint
+	 * choice (for e.g. selecting from the reserve deck) or as a physical id choice (for selecting among cards on the
+	 * table).  The choice will be filtered to match the provided selectable state.
+	 * @param player The player currently presented with a decision
+	 * @param card The card to search for
+	 * @param selectable True if we are looking for a selectable card, false otherwise
+	 * @return True if the given card is one of the options presented to the player, false otherwise.
+	 */
+	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable) {
+		String selectString = selectable ? "true" : "false";
+		String[] selectables = GetADParam(player,"selectable");
+
+		String[] choices = GetADParam(player,"blueprintId");
 		if(choices != null) {
-			for (String choice : choices) {
-				if (card.getBlueprintId().equals(choice))
+			for (int i = 0; i < choices.length; i++) {
+				String choice = choices[i];
+				if (card.getBlueprintId().equals(choice)) {
+					if(selectables != null) {
+						return selectables[i].equals(selectString);
+					}
 					return true;
+				}
 			}
 			return false;
 		}
 
-		choices = GetAwaitingDecisionParam(player,"cardId");
+		choices = GetADParam(player,"cardId");
 		if(choices != null) {
-			for (String choice : choices) {
-				if (card.getCardId() == Integer.parseInt(choice))
+			for (int i = 0; i < choices.length; i++) {
+				String choice = choices[i];
+				if (card.getCardId() == Integer.parseInt(choice)) {
+					if(selectables != null) {
+						return selectables[i].equals(selectString);
+					}
+
 					return true;
+				}
 			}
 			return false;
 		}

@@ -13,18 +13,29 @@ import static org.junit.Assert.*;
 public class Card_V3_056_Tests
 {
 
+// ----------------------------------------
+// SANDCRAFT TRAP TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("trap", "103_56");
+					put("trap", "103_56");        // Sandcraft Trap
+					put("whisper", "103_50");     // Desert Wind Whisper - Tracker
+					put("stalker", "103_49");     // Desert Wind Stalker - Tracker, grants ambush
+					put("initiate", "103_47");    // Desert Wind Initiate - Tracker, Ambush (3)
+					put("scout", "103_48");       // Desert Wind Scout - Tracker, Ambush (2)
+					put("southron", "4_222");     // Desert Warrior - Southron but NOT Tracker
+					put("southron2", "4_222");     // Desert Warrior - Southron but NOT Tracker
+					put("orc", "1_271");          // Orc Soldier - not Tracker, no ambush
 					put("isengard_tracker", "4_193");
 					put("raider_tracker", "103_47");
-					put("ambush_southron", "4_252");
+					put("ambush_southron", "4_252"); //Southron Scout - Ambush (2)
 					put("ambush_horror", "14_13");
-					put("southron", "4_253");
-					put("soldier", "1_271");
 					put("runner", "1_178");
+
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -73,11 +84,12 @@ public class Card_V3_056_Tests
 		var ambush_southron = scn.GetShadowCard("ambush_southron");
 		var ambush_horror = scn.GetShadowCard("ambush_horror");
 		var southron = scn.GetShadowCard("southron");
-		var soldier = scn.GetShadowCard("soldier");
-		var runner = scn.GetShadowCard("runner");
+		var southron2 = scn.GetShadowCard("southron2");
+		var soldier = scn.GetShadowCard("orc");
+		var runner = scn.GetShadowCard("runner"); // Because if there's no unhindered minions we skip assignment
 
 		scn.MoveCardsToHand(trap);
-		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier, runner);
+		scn.MoveMinionsToTable(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, southron2, soldier, runner);
 		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
 
 		scn.StartGame();
@@ -103,9 +115,45 @@ public class Card_V3_056_Tests
 		assertFalse(scn.IsHindered(ambush_southron));
 		assertFalse(scn.IsHindered(ambush_horror));
 
-		//Non-trap southron still hindered
+		//Non-ambush southron still hindered
 		assertTrue(scn.IsHindered(southron));
 		//Non-tracker non-trap minion still hindered
 		assertTrue(scn.IsHindered(soldier));
+
+		// All Southrons gain Ambush +1
+		// Isengard Tracker got no bonus
+		assertEquals(0, scn.GetKeywordCount(isengard_tracker, Keyword.AMBUSH));
+		// Horror of Harad got no bonus besides his native (1)
+		assertEquals(1, scn.GetKeywordCount(ambush_horror, Keyword.AMBUSH));
+		// Regular Southron: gains Ambush (1)
+		assertEquals(1, scn.GetKeywordCount(southron2, Keyword.AMBUSH));
+		// Ambush Southron: gains Ambush (2) + (1) = (3)
+		assertEquals(3, scn.GetKeywordCount(ambush_southron, Keyword.AMBUSH));
 	}
+
+	@Test
+	public void SandcraftTrapDoesNotGrantBonusIfNothingRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var trap = scn.GetShadowCard("trap");
+		var southron = scn.GetShadowCard("southron");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(trap);
+		scn.MoveMinionsToTable(southron, orc); // No trackers, no ambush minions
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
+
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(trap);
+
+		// Nothing to restore, so no ambush bonus
+		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
+	}
+
 }

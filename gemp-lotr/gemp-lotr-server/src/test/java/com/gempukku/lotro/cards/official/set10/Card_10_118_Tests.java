@@ -85,6 +85,7 @@ public class Card_10_118_Tests
 		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToSite(3);
 		scn.MoveMinionsToTable(savage);

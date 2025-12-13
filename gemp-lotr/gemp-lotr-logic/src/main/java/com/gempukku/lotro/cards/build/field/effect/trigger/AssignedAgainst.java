@@ -37,14 +37,17 @@ public class AssignedAgainst implements TriggerCheckerProducer {
                 final Filterable againstFilterable = againstSource.getFilterable(actionContext);
                 final boolean result = TriggerConditions.assignedAgainst(actionContext.getGame(), actionContext.getEffectResult(), side,
                         againstFilterable, assignedFilterable);
-                if (result && memorizeAgainst != null) {
-                    AssignAgainstResult assignmentResult = (AssignAgainstResult) actionContext.getEffectResult();
-                    actionContext.setCardMemory(memorizeAgainst, assignmentResult.getAgainst());
+
+                if(result) {
+                    var assignmentResult = (AssignAgainstResult) actionContext.getEffectResult();
+                    if (memorizeAgainst != null) {
+                        actionContext.setCardMemory(memorizeAgainst, assignmentResult.getAgainst());
+                    }
+                    if (memorizeAssigned != null) {
+                        actionContext.setCardMemory(memorizeAssigned, assignmentResult.getAssignedCard());
+                    }
                 }
-                if (result && memorizeAssigned != null) {
-                    AssignAgainstResult assignmentResult = (AssignAgainstResult) actionContext.getEffectResult();
-                    actionContext.setCardMemory(memorizeAssigned, assignmentResult.getAssignedCard());
-                }
+
                 return result;
             }
         };

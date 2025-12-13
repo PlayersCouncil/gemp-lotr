@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,17 +9,24 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_060_Tests
 {
+
+// ----------------------------------------
+// THE MOUTH OF SAURON, HERALD OF THE DARK LORD TESTS
+// ----------------------------------------
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_60");
-					// put other cards in here as needed for the test case
+					put("mouth", "103_60");       // The Mouth of Sauron, Herald of the Dark Lord
+					put("redwrath", "7_157");     // Red Wrath - [Raider] Skirmish event, cost 5
+					put("southron", "4_253");     // Desert Sentry - for Red Wrath
+
+					put("aragorn", "1_89");
+					put("anduril", "7_79");       // FP weapon (artifact)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +55,7 @@ public class Card_V3_060_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("mouth");
 
 		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
 		assertEquals("Herald of the Dark Lord", card.getBlueprint().getSubtitle());
@@ -64,28 +71,127 @@ public class Card_V3_060_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void MouthOfSauronReducesShadowEventCost() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var mouth = scn.GetShadowCard("mouth");
+		var redwrath = scn.GetShadowCard("redwrath");
+		var southron = scn.GetShadowCard("southron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveMinionsToTable(mouth, southron);
+		scn.MoveCardsToHand(redwrath);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Red Wrath normally costs 5, should cost 4 with Mouth
+		scn.SetTwilight(4);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowPlayAvailable(redwrath));
+	}
+
+	@Test
+	public void MouthOfSauronPreventsWoundAndHindersWeapon() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var southron = scn.GetShadowCard("southron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		scn.MoveMinionsToTable(mouth, southron);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		int mouthWoundsBefore = scn.GetWoundsOn(mouth);
+		int southronWoundsBefore = scn.GetWoundsOn(southron);
+		assertFalse(scn.IsHindered(anduril));
+
+		// Aragorn (8) beats Southron (6) - Southron about to take wound
+		scn.PassCurrentPhaseActions();
+
+		// Response available
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Mouth exerts
+		assertEquals(mouthWoundsBefore + 1, scn.GetWoundsOn(mouth));
+		// Southron's wound prevented
+		assertEquals(southronWoundsBefore, scn.GetWoundsOn(southron));
+		// Weapon hindered
+		assertTrue(scn.IsHindered(anduril));
+	}
+
+	@Test
+	public void MouthOfSauronCanProtectAnyMinionIncludingSelf() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, mouth);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Aragorn (8) + Anduril (+2?) vs Mouth (9) - let's wound Aragorn to ensure Mouth loses
+		// Actually Mouth is 9, Aragorn is 8 - Mouth wins tie. Let's pump Aragorn.
+		// Anduril gives +2, so Aragorn is 10 vs Mouth 9 - Aragorn wins
+
+		int mouthWoundsBefore = scn.GetWoundsOn(mouth);
+
+		scn.PassCurrentPhaseActions();
+
+		// Mouth about to take wound from losing - can respond to protect self
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Choose Mouth as the minion to protect (may need to select)
+		// Mouth exerts (1 wound) but prevents the skirmish wound
+		assertEquals(mouthWoundsBefore + 1, scn.GetWoundsOn(mouth)); // Just the exertion
+		assertTrue(scn.IsHindered(anduril));
+	}
+
+	@Test
+	public void MouthOfSauronCannotRespondIfFullyExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var southron = scn.GetShadowCard("southron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		scn.MoveMinionsToTable(mouth, southron);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
+		// Exhaust Mouth (3 vitality, so 2 wounds = exhausted)
+		scn.AddWoundsToChar(mouth, 2);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, southron);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		scn.PassCurrentPhaseActions();
+
+		// Mouth is exhausted - cannot exert to respond
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }

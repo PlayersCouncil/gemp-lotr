@@ -218,16 +218,25 @@
 						type: ModifyStrength
 						select: choose(minion,InSkirmish)
 						amount: {
-							type: ForEachYouCanSpot
-							hindered: true
-							filter: hindered
+							type: Sum
 							multiplier: -1
+							source: [
+								{
+									type: ForEachYouCanSpot
+									hindered: true
+									filter: hindered
+								}
+								{
+									type: ForEachYouCanSpot
+									filter: wounded
+								}
+							]
 						}
 					}
 				]
 			}
 		]
-		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered card you can spot.
+		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered or wounded card you can spot.
 		lore: "'You look upon a woman. Éowyn I am, Éomund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
@@ -306,6 +315,30 @@
 					select: memory(exertedComp)
 				}
 			}
+			{
+				type: Activated
+				phase: Skirmish
+				requires: [
+					{
+						type: CantSpot
+						filter: self,notAssignedToSkirmish
+					}
+				]
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: Rohan, companion, InSkirmish
+					}
+					true: {
+						type: EndPhase
+					}
+				}
+			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
 		lore: "'One poor hobbit coming in from the battle is easily overlooked.'"
@@ -372,6 +405,7 @@
 						type: AddKeywordFromCards
 						filter: your, Man
 						from: memory(exertedMan)
+						unloaded: true
 					}
 				}
 			}

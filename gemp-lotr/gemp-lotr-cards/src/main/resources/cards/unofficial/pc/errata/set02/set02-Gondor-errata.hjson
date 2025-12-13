@@ -46,7 +46,7 @@
 	# 				{
 	# 					type: memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: discard
@@ -56,12 +56,12 @@
 	# 			effect: [
 	# 				{
 	# 					type: modifyStrength
-	# 					select: memory(bearer)
+	# 					select: memory(oldBearer)
 	# 					amount: 3
 	# 				}
 	# 				{
 	# 					type: addKeyword
-	# 					select: memory(bearer)
+	# 					select: memory(oldBearer)
 	# 					keyword: damage+2
 	# 				}
 	# 			]
@@ -212,7 +212,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -223,11 +223,11 @@
 					type: addTrigger
 					trigger: {
 						type: aboutToTakeWound
-						filter: memory(bearer)
+						filter: memory(oldBearer)
 					}
 					effect: {
 						type: preventWound
-						select: choose(memory(bearer))
+						select: choose(memory(oldBearer))
 					}
 				}
 			}

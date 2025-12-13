@@ -13,15 +13,17 @@ import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_007_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("stash", "103_7");
-					put("gandalf", "1_72");
+					put("gandalf", "1_364");
+					put("radagast", "9_26"); // Another Wizard
+					put("gandalfspipe", "1_74");
+					put("frodospipe", "3_107");
+					put("aragorn", "3_38");
 					put("aragornspipe", "1_91");
-					put("aragorn", "1_89");
 					put("leaf", "1_300");
 					put("toby", "1_305");
 				}},
@@ -62,6 +64,56 @@ public class Card_V3_007_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
+	@Test
+	public void WizardsStashAttachesToWizardAndGivesStrengthToCompanionsWithPipes() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var radagast = scn.GetFreepsCard("radagast");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var stash = scn.GetFreepsCard("stash");
+		var gandalfspipe = scn.GetFreepsCard("gandalfspipe");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+
+		scn.MoveCompanionsToTable(gandalf, radagast, aragorn);
+		scn.AttachCardsTo(gandalf, gandalfspipe);
+		scn.AttachCardsTo(frodo, frodospipe);
+		// Aragorn has no pipe
+		scn.MoveCardsToHand(stash);
+
+		scn.StartGame();
+
+		int gandalfBaseStrength = scn.GetStrength(gandalf);
+		int frodoBaseStrength = scn.GetStrength(frodo);
+		int radagastBaseStrength = scn.GetStrength(radagast);
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		// Wizard's Stash should be playable on either Gandalf or Radagast (both Wizards)
+		scn.FreepsPlayCard(stash);
+
+		// Should have 2 valid targets (Gandalf and Radagast)
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoicesAvailable(gandalf, radagast));
+
+		scn.FreepsChooseCard(gandalf); // Choose Gandalf as bearer
+
+		assertAttachedTo(stash, gandalf);
+
+		// Gandalf bears a pipe - should get +1
+		assertEquals(gandalfBaseStrength + 1, scn.GetStrength(gandalf));
+
+		// Frodo bears a pipe - should get +1
+		assertEquals(frodoBaseStrength + 1, scn.GetStrength(frodo));
+
+		// Radagast does not bear a pipe - should NOT get +1
+		assertEquals(radagastBaseStrength, scn.GetStrength(radagast));
+
+		// Aragorn does not bear a pipe - should NOT get +1
+		assertEquals(aragornBaseStrength, scn.GetStrength(aragorn));
+	}
+
 	
 	@Test
 	public void WizardsStashPermitsPipeFellowshipActionsToBeUsedInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
@@ -88,6 +140,9 @@ public class Card_V3_007_Tests
 		assertTrue(scn.FreepsActionAvailable(frodo));
 		assertFalse(scn.FreepsActionAvailable(stash));
 
+		scn.FreepsPass();
+		scn.FreepsChooseAny(); //Aragorn and Site required triggers
+
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertInZone(Zone.SUPPORT, leaf);
@@ -105,7 +160,5 @@ public class Card_V3_007_Tests
 
 		assertTrue(scn.FreepsActionAvailable(aragornspipe));
 		assertFalse(scn.FreepsActionAvailable(frodo));
-
-
 	}
 }

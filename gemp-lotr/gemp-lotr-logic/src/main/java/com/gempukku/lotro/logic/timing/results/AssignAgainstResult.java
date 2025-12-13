@@ -12,10 +12,7 @@ public class AssignAgainstResult extends EffectResult {
     private final Set<PhysicalCard> _against;
 
     public AssignAgainstResult(String playerId, PhysicalCard assignedCard, PhysicalCard against) {
-        super(Type.ASSIGNED_AGAINST);
-        _playerId = playerId;
-        _assignedCard = assignedCard;
-        _against = Collections.singleton(against);
+        this(playerId, assignedCard, Collections.singleton(against));
     }
 
     public AssignAgainstResult(String playerId, PhysicalCard assignedCard, Set<PhysicalCard> against) {

@@ -406,9 +406,13 @@ public class TriggerConditions {
     public static boolean isGettingHinderedBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_HINDER) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
-                    && Filters.accepts(game, effect.getSource(), sourceFilter))
-                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
+            if(playerId != null && !effect.getPerformingPlayer().equals(playerId))
+                return false;
+
+            if (effect.getSource() != null && !Filters.accepts(game, effect.getSource(), sourceFilter))
+                return false;
+
+            return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
@@ -416,9 +420,13 @@ public class TriggerConditions {
     public static boolean isGettingRestoredBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_RESTORE) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
-                    && Filters.accepts(game, effect.getSource(), sourceFilter))
-                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
+            if(playerId != null && !effect.getPerformingPlayer().equals(playerId))
+                return false;
+
+            if (effect.getSource() != null && !Filters.accepts(game, effect.getSource(), sourceFilter))
+                return false;
+
+            return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }
