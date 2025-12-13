@@ -8,9 +8,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.PlayerOrder;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameStats {
     private Integer wearingRing;
@@ -34,10 +32,12 @@ public class GameStats {
 
     private Map<String, Map<Zone, Integer>> _zoneSizes = new HashMap<>();
     private Map<String, Integer> _threats = new HashMap<>();
+    private Map<String, Integer> _threatTotals = new HashMap<>();
     private Map<Integer, Integer> _charStrengths = new HashMap<>();
     private Map<Integer, Integer> _charVitalities = new HashMap<>();
     private Map<Integer, Integer> _siteNumbers = new HashMap<>();
     private Map<Integer, String> _charResistances = new HashMap<>();
+    private Set<Integer> _hinderedStatus = new HashSet<>();
 
     /**
      * @return If the stats have changed
@@ -166,7 +166,18 @@ public class GameStats {
         Map<Integer, Integer> newCharVitalities = new HashMap<>();
         Map<Integer, Integer> newSiteNumbers = new HashMap<>();
         Map<Integer, String> newCharResistances = new HashMap<>();
+        Set<Integer> newHindered = new HashSet<>();
+
+        for(var card : game.getGameState().getAllCards()) {
+            if(card.isFlipped()) {
+                newHindered.add(card.getCardId());
+            }
+        }
+
         for (PhysicalCard character : Filters.filterActive(game, Filters.or(CardType.COMPANION, CardType.ALLY, CardType.MINION))) {
+            if(game.getGameState().isHindered(character))
+                continue;
+
             newCharStrengths.put(character.getCardId(), game.getModifiersQuerying().getStrength(game, character));
             newCharVitalities.put(character.getCardId(), game.getModifiersQuerying().getVitality(game, character));
             final LotroCardBlueprint blueprint = character.getBlueprint();
@@ -214,15 +225,33 @@ public class GameStats {
             _charResistances = newCharResistances;
         }
 
+        if (!newHindered.equals(_hinderedStatus)) {
+            changed = true;
+            _hinderedStatus = newHindered;
+        }
+
         Map<String, Integer> newThreats = new HashMap<>();
+        Map<String, Integer> newThreatTotals = new HashMap<>();
         if (playerOrder != null) {
-            for (String player : playerOrder.getAllPlayers())
+            for (String player : playerOrder.getAllPlayers()) {
                 newThreats.put(player, game.getGameState().getPlayerThreats(player));
+                if(player.equals(game.getGameState().getCurrentPlayerId())) {
+                    newThreatTotals.put(player, PlayConditions.getThreatLimit(game));
+                }
+                else {
+                    newThreatTotals.put(player, -1);
+                }
+            }
         }
 
         if (!newThreats.equals(_threats)) {
             changed = true;
             _threats = newThreats;
+        }
+
+        if (!newThreatTotals.equals(_threatTotals)) {
+            changed = true;
+            _threatTotals = newThreatTotals;
         }
 
         return changed;
@@ -279,6 +308,10 @@ public class GameStats {
         return _threats;
     }
 
+    public Map<String, Integer> getThreatTotals() {
+        return _threatTotals;
+    }
+
     public Map<Integer, Integer> getCharStrengths() {
         return Collections.unmodifiableMap(_charStrengths);
     }
@@ -293,6 +326,9 @@ public class GameStats {
 
     public Map<Integer, String> getCharResistances() {
         return _charResistances;
+    }
+    public Set<Integer> getHindered() {
+        return _hinderedStatus;
     }
 
     public GameStats makeACopy() {
@@ -311,10 +347,12 @@ public class GameStats {
         copy._fpOverwhelmed = _fpOverwhelmed;
         copy._zoneSizes = _zoneSizes;
         copy._threats = _threats;
+        copy._threatTotals = _threatTotals;
         copy._charStrengths = _charStrengths;
         copy._charVitalities = _charVitalities;
         copy._siteNumbers = _siteNumbers;
         copy._charResistances = _charResistances;
+        copy._hinderedStatus = _hinderedStatus;
         return copy;
     }
 }

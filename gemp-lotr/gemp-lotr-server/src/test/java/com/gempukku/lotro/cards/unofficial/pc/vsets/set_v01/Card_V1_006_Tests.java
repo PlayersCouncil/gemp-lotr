@@ -65,7 +65,7 @@ public class Card_V1_006_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCardsToHand(bold);
-		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCompanionsToTable(gimli, legolas);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(bold);

@@ -131,7 +131,17 @@ public class GameUtils {
     }
 
     public static String getCardLink(String blueprintId, LotroCardBlueprint blueprint) {
-        return "<div class='cardHint' value='" + blueprintId + "'>" + (blueprint.isUnique() ? "·" : "") + GameUtils.getFullName(blueprint) + "</div>";
+        return "<div class='cardHint' value='" + blueprintId + "'>" + getUniqueDots(blueprint.getUniqueRestriction())
+                + GameUtils.getFullName(blueprint) + "</div>";
+    }
+
+    public static String getUniqueDots(int dotCount) {
+		return switch (dotCount) {
+			case 1 -> "·";
+			case 2 -> ":";
+			case 3 -> "∴";
+			default -> "";
+		};
     }
 
     public static String getProductLink(String blueprintId) {
@@ -153,7 +163,7 @@ public class GameUtils {
             cultureString = getCultureImage(culture, null);
         }
         return "<div class='cardHint' value='" + blueprintId + "'>" + cultureString
-                + (blueprint.isUnique() ? "·" : "") + " " + GameUtils.getFullName(blueprint) + "</div>";
+                + getUniqueDots(blueprint.getUniqueRestriction()) + " " + GameUtils.getFullName(blueprint) + "</div>";
     }
 
     public static String getCultureImage(String cultureName) {
@@ -242,8 +252,12 @@ public class GameUtils {
                 }
                 else if(memory.equals("shadow")) {
                     found = getFirstShadowPlayer(context.getGame());
-                } else if (memory.equals("self")) {
+                }
+                else if (memory.equals("self")) {
                     found = GameUtils.getAppendedNames(Collections.singleton(context.getSource()));
+                }
+                else if (memory.equals("bearer")) {
+                    found = GameUtils.getAppendedNames(Collections.singleton(context.getSource().getAttachedTo()));
                 }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
@@ -297,10 +311,8 @@ public class GameUtils {
 
     public static int getSpottableCulturesCount(LotroGame game, Filterable... filters) {
         Set<Culture> cultures = new HashSet<>();
-        for (PhysicalCard physicalCard : Filters.filterActive(game, filters)) {
-            final Culture culture = physicalCard.getBlueprint().getCulture();
-            if (culture != null)
-                cultures.add(culture);
+        for (PhysicalCard card : Filters.filterActive(game, filters)) {
+            cultures.addAll(game.getModifiersQuerying().getCultures(game, card));
         }
         return cultures.size();
     }

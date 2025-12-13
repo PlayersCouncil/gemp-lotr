@@ -25,9 +25,9 @@ public class DiscardedCardRule {
                     @Override
                     public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                         if (effectResult.getType() == EffectResult.Type.FOR_EACH_DISCARDED_FROM_PLAY) {
-                            DiscardCardsFromPlayResult discardResult = (DiscardCardsFromPlayResult) effectResult;
+                            var discardResult = (DiscardCardsFromPlayResult) effectResult;
                             final PhysicalCard discardedCard = discardResult.getDiscardedCard();
-                            RequiredTriggerAction trigger = discardedCard.getBlueprint().getDiscardedFromPlayRequiredTrigger(game, discardedCard);
+                            RequiredTriggerAction trigger = discardedCard.getBlueprint().getDiscardedFromPlayRequiredTrigger(game, discardResult);
                             if (trigger != null)
                                 return Collections.singletonList(trigger);
                         }
@@ -37,10 +37,10 @@ public class DiscardedCardRule {
                     @Override
                     public List<? extends OptionalTriggerAction> getOptionalAfterTriggers(String playerId, LotroGame game, EffectResult effectResult) {
                         if (effectResult.getType() == EffectResult.Type.FOR_EACH_DISCARDED_FROM_PLAY) {
-                            DiscardCardsFromPlayResult discardResult = (DiscardCardsFromPlayResult) effectResult;
+                            var discardResult = (DiscardCardsFromPlayResult) effectResult;
                             final PhysicalCard discardedCard = discardResult.getDiscardedCard();
                             if (discardedCard.getOwner().equals(playerId)) {
-                                OptionalTriggerAction trigger = discardedCard.getBlueprint().getDiscardedFromPlayOptionalTrigger(playerId, game, discardedCard);
+                                OptionalTriggerAction trigger = discardedCard.getBlueprint().getDiscardedFromPlayOptionalTrigger(game, discardResult);
                                 if (trigger != null) {
                                     trigger.setVirtualCardAction(true);
                                     return Collections.singletonList(trigger);

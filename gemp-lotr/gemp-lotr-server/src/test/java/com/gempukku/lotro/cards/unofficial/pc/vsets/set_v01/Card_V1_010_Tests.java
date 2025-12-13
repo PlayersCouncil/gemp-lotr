@@ -97,7 +97,7 @@ public class Card_V1_010_Tests
 		var greenleaf = scn.GetFreepsCard("greenleaf");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var lorien = scn.GetFreepsCard("lorien");
-		scn.MoveCompanionToTable(greenleaf, galadriel, aragorn, lorien);
+		scn.MoveCompanionsToTable(greenleaf, galadriel, aragorn, lorien);
 		scn.AttachCardsTo(galadriel, scn.GetFreepsCard("bow1"));
 		scn.AttachCardsTo(lorien, scn.GetFreepsCard("bow2"));
 		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("gornbow"));

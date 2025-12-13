@@ -35,7 +35,7 @@
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
-		lore: “‘You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. ‘He is wise enough on his own ground.'”
+		lore: "'You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. 'He is wise enough on his own ground.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -104,6 +104,54 @@
 		}
 	}
 	
+	51_84: {
+		cardInfo: {
+			//id: 51_84.1
+			parent: 1_84
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E084.1_card.jpg
+			collInfo: 1C84
+			rarity: C
+		}
+		title: Sleep, Caradhras
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				select: choose(name(Gandalf))
+			}
+			effect: [
+				{
+					type: Discard
+					count: 1
+					select: choose(side(Shadow), condition)
+				}
+				{
+					type: Hinder
+					select: all(condition)
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all condition.
+		lore: "'Losto Caradhras, sedho, hodo, nuitho i ruith.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_87: {
 		cardInfo: {
 			//id: 1_87.1
@@ -132,7 +180,7 @@
 			}
 		}
 		gametext: Play a Wizard or [gandalf] ally from your draw deck.
-		lore: “‘A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'”
+		lore: "'A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'"
 		promotext: ""
 		alts: {
 			promos: {

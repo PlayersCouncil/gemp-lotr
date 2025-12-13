@@ -96,7 +96,7 @@ public class Card_03_025_ErrataTests
 		var erestor = scn.GetFreepsCard("erestor");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen, saelbeth);
+		scn.MoveCompanionsToTable(arwen, saelbeth);
 
 		var nazgul = scn.GetShadowCard("nazgul");
 		scn.MoveMinionsToTable(nazgul);
@@ -124,7 +124,7 @@ public class Card_03_025_ErrataTests
 		var erestor = scn.GetFreepsCard("erestor");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(golradir, erestor, saelbeth);
 
 		var uruk = scn.GetShadowCard("uruk");

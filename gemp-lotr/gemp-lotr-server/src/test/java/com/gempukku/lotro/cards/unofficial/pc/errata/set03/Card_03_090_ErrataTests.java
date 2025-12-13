@@ -72,7 +72,7 @@ public class Card_03_090_ErrataTests
 		var anduril = scn.GetFreepsCard("anduril");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, anduril, bow, pipe);
 		scn.FreepsDrawCards(2);
 
@@ -130,7 +130,7 @@ public class Card_03_090_ErrataTests
 		var anduril = scn.GetFreepsCard("anduril");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, anduril, bow, pipe);
 		scn.FreepsDrawCards(2);
 

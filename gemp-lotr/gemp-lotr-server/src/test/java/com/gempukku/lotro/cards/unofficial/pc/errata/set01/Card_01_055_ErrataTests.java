@@ -70,7 +70,7 @@ public class Card_01_055_ErrataTests
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
 		PhysicalCardImpl allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-		scn.MoveCompanionToTable(galadriel, allyHome3_1, allyHome6_1);
+		scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_1);
 		scn.MoveCardsToHand(mirror);
 
 		scn.StartGame();
@@ -91,7 +91,7 @@ public class Card_01_055_ErrataTests
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 		scn.MoveCardsToSupportArea(mirror);
 
 		PhysicalCardImpl card1 = scn.GetShadowCard("allyHome3_1");
@@ -127,7 +127,7 @@ public class Card_01_055_ErrataTests
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 		scn.MoveCardsToSupportArea(mirror);
 
 		PhysicalCardImpl card1 = scn.GetShadowCard("allyHome3_1");

@@ -17,12 +17,15 @@ public class RequirementFactory {
         requirementProducers.put("not", new NotRequirementProducer());
         requirementProducers.put("or", new OrRequirementProducer());
         requirementProducers.put("isequal", new IsEqual());
+        requirementProducers.put("isnotequal", new IsNotEqual());
         requirementProducers.put("isgreaterthan", new IsGreaterThan());
         requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
         requirementProducers.put("islessthan", new IsLessThan());
         requirementProducers.put("islessthanorequal", new IsLessThanOrEqual());
-        requirementProducers.put("canplayfromdiscard", new CanPlayFromDiscard());
-        requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
+
+        requirementProducers.put("alwaysavailable", new AlwaysAvailableRequirement());
+
+        requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("cantspot", new CantSpot());
         requirementProducers.put("canspotburdens", new CanSpotBurdens());
@@ -45,6 +48,7 @@ public class RequirementFactory {
         requirementProducers.put("hascardinadventuredeck", new HasCardInAdventureDeck());
         requirementProducers.put("hascardindeadpile", new HasCardInDeadPile());
         requirementProducers.put("hascardindiscard", new HasCardInDiscard());
+        requirementProducers.put("hascardindrawdeck", new HasCardInDrawDeck());
         requirementProducers.put("hascardinhand", new HasCardInHand());
         requirementProducers.put("hascardinremoved", new HasCardInRemoved());
         requirementProducers.put("hascardstacked", new HasCardStacked());
@@ -65,7 +69,7 @@ public class RequirementFactory {
         requirementProducers.put("opponentdoesnotcontrolsite", new OpponentDoesNotControlSite());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
-        requirementProducers.put("playablefromdiscard", new PlayableFromDiscard());
+        requirementProducers.put("playable", new Playable());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
         requirementProducers.put("ringisactive", new RingIsActive());

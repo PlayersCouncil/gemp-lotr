@@ -28,7 +28,88 @@
 			}
 		}
 		gametext: Bearer must be a Man or [gondor] companion. <br>Bearer takes no more than 1 wound during each skirmish phase.
-		lore: “Then Elendil the Tall and his mighty sons, Isildur and Anárion, became great lords; and the North-realm they made in Arnor, and the South-realm in Gondor....”
+		lore: "Then Elendil the Tall and his mighty sons, Isildur and Anárion, became great lords; and the North-realm they made in Arnor, and the South-realm in Gondor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	51_98: {
+		cardInfo: {
+			//id: 1_98.1
+			parent: 1_98
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E098.1_card.jpg
+			collInfo: 1U98
+			rarity: U
+		}
+		title: Boromir's Cloak
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Cloak
+		target: name(Boromir)
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: skirmish
+					player: shadow
+				}
+				requires: {
+					type: CanSpot
+					filter: name(Boromir), InSkirmish
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: timeword(skirmish),event
+				}
+				requires: {
+					type: CanSpot
+					filter: name(Boromir), InSkirmish
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: cancelEvent
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(weather,condition)
+				}
+			}
+		]
+		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition.\Response: If a skirmish event or special ability is used during a skirmish involving Boromir, discard this to prevent that.
+		lore: He was cloaked and booted as if for a journey on horseback; and indeed though his garments were rich, and his cloak was lined with fur, they were stained with 'long travel.
 		promotext: ""
 		alts: {
 			promos: {
@@ -186,7 +267,7 @@
 			}
 		}
 		gametext: If a skirmish event is played during a skirmish involving a [gondor] companion, cancel that event.
-		lore: “‘Believe not that in the land of Gondor the blood of Númenor is spent, nor all its pride and dignity forgotten.'”
+		lore: "'Believe not that in the land of Gondor the blood of Númenor is spent, nor all its pride and dignity forgotten.'"
 		promotext: ""
 		alts: {
 			promos: {

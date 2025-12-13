@@ -1158,8 +1158,10 @@
 					times: 2
 				}
 				effect: {
-					type: setupExtraAssignmentAndSkirmishes
-					filter: bearer
+					type: AddKeyword
+					select: bearer
+					keyword: Relentless
+					until: start(regroup)
 				}
 			}
 		]

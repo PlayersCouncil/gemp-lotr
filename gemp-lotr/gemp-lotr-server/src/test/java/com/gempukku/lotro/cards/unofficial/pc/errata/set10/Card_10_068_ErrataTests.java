@@ -71,7 +71,7 @@ public class Card_10_068_ErrataTests
 
 		var rider = scn.GetFreepsCard("rider");
 		var mount = scn.GetFreepsCard("mount");
-		scn.MoveCompanionToTable(rider);
+		scn.MoveCompanionsToTable(rider);
 		scn.AttachCardsTo(rider, mount);
 
 		var enquea = scn.GetShadowCard("enquea");
@@ -106,6 +106,7 @@ public class Card_10_068_ErrataTests
 		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.AddWoundsToChar(enquea, 2);
 
 		scn.SkipToAssignments();

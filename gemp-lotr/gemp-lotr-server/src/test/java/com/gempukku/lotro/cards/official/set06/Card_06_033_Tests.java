@@ -75,7 +75,7 @@ public class Card_06_033_Tests
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCardsToHand(quickbeam);
-		scn.MoveCompanionToTable(merry, pippin);
+		scn.MoveCompanionsToTable(merry, pippin);
 
 		scn.StartGame();
 

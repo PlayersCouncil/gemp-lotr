@@ -84,8 +84,8 @@ public class Card_V1_014_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var sleep = scn.GetFreepsCard("sleep");
 
-		scn.MoveCompanionToTable(gandalf);
-		scn.MoveCompanionToTable("galadriel", "orophin");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCompanionsToTable("galadriel", "orophin");
 		scn.MoveCardsToDiscard(boats, bb, defiance, sleep);
 
 		scn.StartGame();
@@ -97,7 +97,7 @@ public class Card_V1_014_Tests
 		//only 2 elven allies
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		scn.MoveCompanionToTable("celeborn");
+		scn.MoveCompanionsToTable("celeborn");
 
 		scn.SkipCurrentSite(); //Also skips through Shadow turn
 
@@ -128,7 +128,7 @@ public class Card_V1_014_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(elrondcomp, galadriel, celeborn);
 
 		var saruman = scn.GetShadowCard("saruman");

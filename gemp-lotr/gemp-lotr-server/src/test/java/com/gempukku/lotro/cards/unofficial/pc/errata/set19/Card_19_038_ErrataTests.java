@@ -75,7 +75,7 @@ public class Card_19_038_ErrataTests
 
         scn.MoveCardsToHand(nertea);
 
-        scn.MoveCompanionToTable(aragorn, boromir, arwen, legolas);
+        scn.MoveCompanionsToTable(aragorn, boromir, arwen, legolas);
 
         scn.StartGame();
 
@@ -98,7 +98,7 @@ public class Card_19_038_ErrataTests
         try {
             scn.FreepsAssignToMinions(boromir, nertea);
         }
-        catch (DecisionResultInvalidException ex) {
+        catch (RuntimeException ex) {
             exc = true;
         }
         assertTrue(exc); // If an exception wasn't thrown, then assigning to a Man was permitted.

@@ -72,7 +72,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -96,7 +96,7 @@ public class Card_01_265_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var sword = scn.GetFreepsCard("sword");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.AttachCardsTo(sam, sword);
 
 		scn.StartGame();
@@ -121,7 +121,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(sam, 3);
@@ -147,10 +147,11 @@ public class Card_01_265_ErrataTests
 		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToFreepsDiscard("sword", "guard1", "guard2");
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(sam, slayer);
@@ -176,7 +177,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -209,10 +210,11 @@ public class Card_01_265_ErrataTests
 		var sam = scn.GetFreepsCard("sam");
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToDeadPile(guard1, guard2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(sam, slayer);

@@ -1,9 +1,8 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ public class Card_V1_066_Tests
 		/**
 		 * Set: V1
 		 * Name: Writhing Tentacle
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Moria
 		 * Twilight Cost: 2
@@ -42,8 +41,8 @@ public class Card_V1_066_Tests
 		 * Strength: 6
 		 * Vitality: 1
 		 * Site Number: 4
-		 * Game Text: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.
-		* 	Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles from your discard pile on that card.
+		 * Game Text: Tentacle. This minion may not bear items and is discarded if not at a marsh.
+		* 	Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles (except Writhing Tentacle) from your discard pile on that card.
 		*/
 
 		var scn = GetScenario();
@@ -72,10 +71,20 @@ public class Card_V1_066_Tests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

@@ -109,7 +109,7 @@ public class Card_V1_038_Tests
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCompanionToTable(aragorn, farin, pippin);
+		scn.MoveCompanionsToTable(aragorn, farin, pippin);
 
 		scn.StartGame();
 

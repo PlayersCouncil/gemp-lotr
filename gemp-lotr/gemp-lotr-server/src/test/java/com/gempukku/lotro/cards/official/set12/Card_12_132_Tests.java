@@ -66,7 +66,7 @@ public class Card_12_132_Tests
 		var fury = scn.GetFreepsCard("fury");
 		var merry = scn.GetFreepsCard("merry");
 		scn.MoveCardsToSupportArea(fury);
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveMinionsToTable(savage);
@@ -97,7 +97,7 @@ public class Card_12_132_Tests
 		var fury = scn.GetFreepsCard("fury");
 		var merry = scn.GetFreepsCard("merry");
 		scn.MoveCardsToSupportArea(fury);
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveMinionsToTable(savage);

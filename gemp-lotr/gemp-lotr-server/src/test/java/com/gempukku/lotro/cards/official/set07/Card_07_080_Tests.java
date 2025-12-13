@@ -84,7 +84,7 @@ public class Card_07_080_Tests
 
 		var anduril = scn.GetFreepsCard("anduril");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, anduril);
 
 		scn.StartGame();

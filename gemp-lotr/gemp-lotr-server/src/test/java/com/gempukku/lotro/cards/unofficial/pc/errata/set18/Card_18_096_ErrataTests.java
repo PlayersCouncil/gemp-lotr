@@ -89,7 +89,7 @@ public class Card_18_096_ErrataTests
 		var eomer = scn.GetFreepsCard("eomer");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, horn);
 
 		scn.StartGame();
@@ -115,7 +115,7 @@ public class Card_18_096_ErrataTests
 		var erkenbrand = scn.GetFreepsCard("erkenbrand");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.MoveCompanionToTable(erkenbrand);
+		scn.MoveCompanionsToTable(erkenbrand);
 		scn.AttachCardsTo(erkenbrand, horn);
 		scn.MoveCardsToSupportArea(worker);
 
@@ -144,7 +144,7 @@ public class Card_18_096_ErrataTests
 		var eomer = scn.GetFreepsCard("eomer");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, horn);
 		scn.MoveCardsToSupportArea(worker);
 

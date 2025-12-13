@@ -57,7 +57,7 @@
 			}
 		]
 		gametext: <b>Enduring.</b> <br>Shadow cards cannot exert Ulaire Enquea during a skirmish phase. <br><b>Skirmish:</b> If Ulaire Enquea is skirmishing, remove (1) and heal him to add a burden.
-		lore: “Ever they circled above the City, like vultures that expect their fill of doomed men's flesh.”
+		lore: "Ever they circled above the City, like vultures that expect their fill of doomed men's flesh."
 		promotext: ""
 		alts: {
 			promos: {

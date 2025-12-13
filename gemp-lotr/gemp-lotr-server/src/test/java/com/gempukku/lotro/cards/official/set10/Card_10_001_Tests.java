@@ -67,7 +67,7 @@ public class Card_10_001_Tests
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(great);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var troll = scn.GetShadowCard("troll");
 		scn.MoveCardsToHand(troll);
@@ -97,7 +97,7 @@ public class Card_10_001_Tests
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(great);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var assassin = scn.GetShadowCard("assassin");
 		scn.MoveCardsToHand(assassin);
@@ -127,7 +127,7 @@ public class Card_10_001_Tests
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(great);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var assassin = scn.GetShadowCard("assassin");
 		var towers = scn.GetShadowCard("towers");

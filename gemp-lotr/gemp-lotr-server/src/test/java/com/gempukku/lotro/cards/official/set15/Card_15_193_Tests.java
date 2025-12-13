@@ -88,7 +88,7 @@ public class Card_15_193_Tests
 		var smeagol = scn.GetFreepsCard("smeagol");
 		var anotherway = scn.GetFreepsCard("anotherway");
 		scn.MoveCardsToSupportArea(anotherway);
-		scn.MoveCompanionToTable(smeagol);
+		scn.MoveCompanionsToTable(smeagol);
 		scn.MoveCardsToHand(onegoodturn);
 
 		var site1 = scn.GetFreepsSite("East Road");

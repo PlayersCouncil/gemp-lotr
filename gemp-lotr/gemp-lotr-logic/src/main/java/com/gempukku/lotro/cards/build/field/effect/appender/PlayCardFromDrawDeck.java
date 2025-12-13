@@ -47,7 +47,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
             // DO NOT WANT to pretend that there is a card in the draw deck if it's not actually there.  Else the
             // player will be offered a "play from draw deck" button that lies to them and will cause the effect to
             // fizzle.
-            countSource = actionContext -> new ConstantEvaluator(1);;
+            countSource = actionContext -> new ConstantEvaluator(1);
         }
 
 
@@ -63,9 +63,9 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
+                                return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
-                            return Filters.playable(actionContext.getGame(), costModifier, false, false, true);
+                            return Filters.playable(costModifier, 0, false, false, true);
                         },
                         countSource, memorize, "you", "you", showAll, "Choose card to play", environment));
         result.addEffectAppender(

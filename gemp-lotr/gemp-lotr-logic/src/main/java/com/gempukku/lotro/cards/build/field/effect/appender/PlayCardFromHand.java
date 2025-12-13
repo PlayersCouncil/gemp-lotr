@@ -24,7 +24,7 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "ignorePlayability", "extraEffects", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
@@ -33,12 +33,18 @@ public class PlayCardFromHand implements EffectAppenderProducer {
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
         final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
+        final boolean ignorePlayability = FieldUtils.getBoolean(effectObject.get("ignorePlayability"), "ignorePlayability", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
+        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
         MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
+        if(!ignorePlayability) {
+            result.setPlayabilityCheckedForEffect(true);
+        }
 
         result.addEffectAppender(
                 CardResolver.resolveCardsInHand(select,
@@ -47,18 +53,18 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, costModifier, onFilterable));
+                                return Filters.and(Filters.playable(costModifier, 0, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
-                            return Filters.playable(game, 0, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(costModifier, 0, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
                             }
-                            return Filters.playable(game, removedTwilight, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(
@@ -73,6 +79,10 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, ignoreRoamingPenalty);
+                            for (EffectAppender extraEffectsAppender : extraEffectsAppenders) {
+                                extraEffectsAppender.appendEffect(false, playCardAction, actionContext);
+                            }
+
                             return new StackActionEffect(playCardAction);
                         } else {
                             return new FailedEffect();

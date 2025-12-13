@@ -270,11 +270,78 @@
 		}
 	}
 
+	# 101_49: {
+	# 	cardInfo: {
+	# 		//id: 101_49
+	# 		image: sets/vset1/LOTR-ENV1S049.0_card.jpg
+	# 		collInfo: V1R49
+	# 		rarity: R
+	# 	}
+	# 	title: A Shadow of the Past
+	# 	unique: true
+	# 	side: Shadow
+	# 	culture: Sauron
+	# 	twilight: 1
+	# 	type: Condition
+	# 	keywords: Support Area
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: addKeyword
+	# 				filter: culture(sauron),orc
+	# 				keyword: fierce
+	# 				requires: {
+	# 					type: canSpotburdens
+	# 					amount: 4
+	# 				}
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: addKeyword
+	# 				filter: culture(sauron),orc
+	# 				keyword: damage+1
+	# 				requires: {
+	# 					type: canSpotburdens
+	# 					amount: 6
+	# 				}
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: {
+	# 				type: startOfPhase
+	# 				phase: regroup
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				select: self
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: While you can spot 4 burdens, each [sauron] Orc is <b>fierce</b>.<br>While you can spot 6 burdens, each [Sauron] Orc is damage +1.<br>Discard this condition at the start of the regroup phase.
+	# 	lore: "'He has indeed arisen again... and returned to his ancient fastness in the Dark Tower of Mordor.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_49: {
 		cardInfo: {
-			//id: 101_49
-			image: sets/vset1/LOTR-ENV1S049.0_card.jpg
-			collInfo: V1R49
+			//id: 101_49.1
+			parent: 101_49
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 1
+			image: sets/vset1/LOTR-ENV1S049.1_card.jpg
+			collInfo: V3_49
 			rarity: R
 		}
 		title: A Shadow of the Past
@@ -313,16 +380,31 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: startOfPhase
-					phase: regroup
+					type: EndOfPhase
+					phase: Shadow
 				}
 				effect: {
-					type: discard
-					select: self
+					type: Choice
+					texts: [
+						Exert 2 {Sauron} Orcs
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: Exert
+							select: choose(Sauron, Orc)
+							count: 2
+							times: 1
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
 		]
-		gametext: While you can spot 4 burdens, each [sauron] Orc is <b>fierce</b>.<br>While you can spot 6 burdens, each [Sauron] Orc is damage +1.<br>Discard this condition at the start of the regroup phase.
+		gametext: While you can spot 4 burdens, each [sauron] Orc is <b>damage +1</b>.\While you can spot 6 burdens, each [Sauron] Orc is <b>fierce</b>.\At the end of each Shadow phase, exert 2 [sauron] Orcs or hinder this condition.
 		lore: "'He has indeed arisen again... and returned to his ancient fastness in the Dark Tower of Mordor.'"
 		promotext: ""
 		alts: {

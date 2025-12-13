@@ -30,7 +30,7 @@ public class CanSpotDifferentCultures implements RequirementProducer {
 
             var cards = Filters.filterActive(game, filterable);
             for(var card : cards) {
-                foundCultures.add(card.getBlueprint().getCulture());
+                foundCultures.addAll(game.getModifiersQuerying().getCultures(game, card));
             }
 
             return foundCultures.size() >= amount;

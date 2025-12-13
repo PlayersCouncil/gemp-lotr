@@ -78,7 +78,7 @@ public class Card_02_028_Tests
 
         var wielder = scn.GetFreepsCard("wielder");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.MoveCompanionToTable(gandalf);
+        scn.MoveCompanionsToTable(gandalf);
         scn.MoveCardsToHand(wielder);
 
         PhysicalCardImpl runner = scn.GetShadowCard("runner");

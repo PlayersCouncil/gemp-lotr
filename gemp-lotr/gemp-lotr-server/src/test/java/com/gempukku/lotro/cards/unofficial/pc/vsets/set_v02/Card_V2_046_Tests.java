@@ -78,7 +78,7 @@ public class Card_V2_046_Tests
 		var veomer = scn.GetFreepsCard("veomer");
 		scn.MoveCardsToHand(end);
 		scn.MoveCardsToSupportArea(fortress, none, doom);
-		scn.MoveCompanionToTable(vhaldir, vgimli, veowyn, veomer);
+		scn.MoveCompanionsToTable(vhaldir, vgimli, veowyn, veomer);
 		scn.AddTokensToCard(fortress, 3);
 		scn.AddTokensToCard(none, 3);
 		scn.AddTokensToCard(doom, 3);
@@ -169,7 +169,7 @@ public class Card_V2_046_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		scn.MoveCardsToHand(end);
 		scn.MoveCardsToSupportArea(fortress, none, doom);
-		scn.MoveCompanionToTable(vhaldir, vgimli, veowyn);
+		scn.MoveCompanionsToTable(vhaldir, vgimli, veowyn);
 		scn.AddTokensToCard(fortress, 3);
 		scn.AddTokensToCard(none, 3);
 		scn.AddTokensToCard(doom, 3);

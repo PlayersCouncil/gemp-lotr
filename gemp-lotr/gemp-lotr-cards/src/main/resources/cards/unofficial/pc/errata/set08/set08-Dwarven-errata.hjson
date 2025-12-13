@@ -55,4 +55,59 @@
 			}
 		}
 	}
+	
+	58_3: {
+		cardInfo: {
+			//id: 58_3.1
+			parent: 8_3
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN08E003.1_card.jpg
+			collInfo: 8R3
+			rarity: R
+		}
+		title: Blood Runs Chill
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: ResponseEvent
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: exert
+					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					times: 1
+					memorize: exertedDwarf
+				},
+				effect: [
+					{
+						type: Hinder
+						player: shadow
+						select: choose(side(shadow))
+						count: {
+							type: forEachKeywordOnCardInMemory
+							memory: exertedDwarf
+							keyword: damage
+						}
+					}
+				]
+			}
+		]
+		gametext: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf to make an opponent hinder X Shadow cards.
+		lore: "...the Dark Door gaped before them like the mouth of night."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

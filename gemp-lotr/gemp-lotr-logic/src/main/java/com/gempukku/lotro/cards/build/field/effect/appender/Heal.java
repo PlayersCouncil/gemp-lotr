@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -35,6 +36,7 @@ public class Heal implements EffectAppenderProducer {
 
         result.addEffectAppender(
                 CardResolver.resolveCards(select,
+                        SpotOverride.NONE,
                         (actionContext) -> Filters.canHeal,
                         (actionContext) -> (Filter) (game, physicalCard) -> {
                             final int healTimes = times.getEvaluator(actionContext).evaluateExpression(game, physicalCard);

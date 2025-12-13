@@ -78,7 +78,7 @@ public class Card_V1_009_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gornbow = scn.GetFreepsCard("gornbow");
 
-		scn.MoveCompanionToTable(legolas, lorien, aragorn);
+		scn.MoveCompanionsToTable(legolas, lorien, aragorn);
 		scn.AttachCardsTo(aragorn, gornbow);
 		scn.AttachCardsTo(lorien, bow);
 

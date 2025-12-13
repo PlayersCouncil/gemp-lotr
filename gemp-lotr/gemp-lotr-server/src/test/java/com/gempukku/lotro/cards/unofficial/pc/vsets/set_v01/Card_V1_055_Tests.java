@@ -78,7 +78,7 @@ public class Card_V1_055_Tests
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(boromir, sam, merry, pippin, gimli);
+		scn.MoveCompanionsToTable(boromir, sam, merry, pippin, gimli);
 		scn.MoveCardsToHand(yet);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
@@ -107,7 +107,7 @@ public class Card_V1_055_Tests
 
 		PhysicalCardImpl yet = scn.GetFreepsCard("yet");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(yet);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");

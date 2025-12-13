@@ -47,10 +47,10 @@ public interface ZoneManipulation extends TestBase{
 	}
 
 
-	default void MoveCompanionToTable(String...names) {
-		Arrays.stream(names).forEach(name -> MoveCompanionToTable(GetFreepsCard(name)));
+	default void MoveCompanionsToTable(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCompanionsToTable(GetFreepsCard(name)));
 	}
-	default void MoveCompanionToTable(PhysicalCardImpl...cards) {
+	default void MoveCompanionsToTable(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.FREE_CHARACTERS));
 	}
 	default void MoveMinionsToTable(String...names) {
@@ -58,6 +58,14 @@ public interface ZoneManipulation extends TestBase{
 	}
 	default void MoveMinionsToTable(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.SHADOW_CHARACTERS));
+	}
+
+	default void MoveFreepsCardsToSupportArea(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCardsToSupportArea(GetFreepsCard(name)));
+	}
+
+	default void MoveShadowCardsToSupportArea(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCardsToSupportArea(GetShadowCard(name)));
 	}
 
 	default void MoveCardsToSupportArea(PhysicalCardImpl...cards) {

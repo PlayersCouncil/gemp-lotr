@@ -72,7 +72,7 @@ public class Card_01_139_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var savagery = scn.GetShadowCard("savagery");
 		var uruk = scn.GetShadowCard("uruk");
@@ -105,7 +105,7 @@ public class Card_01_139_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var savagery = scn.GetShadowCard("savagery");
 		var uruk = scn.GetShadowCard("uruk");

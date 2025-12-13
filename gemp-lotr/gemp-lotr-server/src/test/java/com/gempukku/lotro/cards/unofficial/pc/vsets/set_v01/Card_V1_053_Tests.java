@@ -75,10 +75,10 @@ public class Card_V1_053_Tests
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		//PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.MoveCompanionToTable(nazgul);
+		scn.MoveCompanionsToTable(nazgul);
 
 		scn.StartGame();
 
@@ -111,10 +111,10 @@ public class Card_V1_053_Tests
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(pippin, sam);
+		scn.MoveCompanionsToTable(pippin, sam);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.MoveCompanionToTable(nazgul);
+		scn.MoveCompanionsToTable(nazgul);
 
 		scn.StartGame();
 

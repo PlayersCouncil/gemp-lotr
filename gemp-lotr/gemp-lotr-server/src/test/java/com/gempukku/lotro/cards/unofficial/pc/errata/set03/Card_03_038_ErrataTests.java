@@ -71,7 +71,7 @@ public class Card_03_038_ErrataTests
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.StartGame();
         scn.SetTwilight(2);
@@ -100,7 +100,7 @@ public class Card_03_038_ErrataTests
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.StartGame();
 

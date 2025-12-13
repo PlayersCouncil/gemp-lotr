@@ -381,6 +381,7 @@
 						type: repeat
 						times: {
 							type: forEachInMemory
+							memory: revealedCards
 							filter: culture(elven)
 						}
 						effect: {

@@ -107,7 +107,7 @@ public class Card_V2_028_Tests
 		scn.MoveCardsToHand(machinery);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -130,7 +130,7 @@ public class Card_V2_028_Tests
 		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -159,7 +159,7 @@ public class Card_V2_028_Tests
 		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.AddTokensToCard(machinery, 2);
 
@@ -192,7 +192,7 @@ public class Card_V2_028_Tests
 		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.AddTokensToCard(machinery, 1);
 

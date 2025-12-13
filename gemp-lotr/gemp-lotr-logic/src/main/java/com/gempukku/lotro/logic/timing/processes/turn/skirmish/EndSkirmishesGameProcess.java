@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.timing.results.AfterAllSkirmishesResult;
 
 public class EndSkirmishesGameProcess implements GameProcess {
     private final AfterAllSkirmishesResult _afterAllSkirmishesResult = new AfterAllSkirmishesResult();
+    private LotroGame _game;
 
     @Override
     public void process(LotroGame game) {
@@ -18,15 +19,23 @@ public class EndSkirmishesGameProcess implements GameProcess {
         action.appendEffect(
                 new TriggeringResultEffect(null, _afterAllSkirmishesResult, "After all skirmishes"));
         game.getActionsEnvironment().addActionToStack(action);
+        _game = game;
     }
 
     @Override
     public GameProcess getNextProcess() {
-        if (_afterAllSkirmishesResult.isCreateAnExtraAssignmentAndSkirmishPhases()) {
+        if (_afterAllSkirmishesResult.isCreateAnExtraAssignmentAndSkirmishPhases(_game)) {
             return new GameProcess() {
                 @Override
                 public void process(LotroGame game) {
-                    game.getGameState().setExtraSkirmishes(true);
+                    if(_afterAllSkirmishesResult.isRelentlessPhase(game)) {
+                        game.getGameState().setRelentlessSkirmishes(true);
+                        game.getGameState().sendMessage("Relentless skirmishes.");
+                    }
+                    else {
+                        game.getGameState().setExtraSkirmishes(true);
+                        game.getGameState().sendMessage("Extra skirmish.");
+                    }
                 }
 
                 @Override

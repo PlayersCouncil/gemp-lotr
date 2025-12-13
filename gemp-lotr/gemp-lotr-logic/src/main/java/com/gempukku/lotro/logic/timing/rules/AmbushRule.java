@@ -38,7 +38,7 @@ public class AmbushRule {
                                     action.setMessage(playerId + " uses Ambush (" + count + ") from " + GameUtils.getCardLink(assignedCard));
                                     action.setText("Ambush - add " + count);
                                     action.appendEffect(
-                                            new AddTwilightEffect(assignedCard, count));
+                                            new AddTwilightEffect(assignedCard, AddTwilightEffect.Cause.AMBUSH, count));
                                     return Collections.singletonList(action);
                                 }
                             }

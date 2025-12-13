@@ -103,6 +103,8 @@ public class Card_01_001_Tests
 
 		scn.StartGame();
 
+		scn.AddBurdens(1);
+
 		scn.FreepsUseCardAction(frodo);
 
 		assertEquals(1, scn.GetBurdens());
@@ -183,6 +185,8 @@ public class Card_01_001_Tests
 		scn.MoveMinionsToTable(picket);
 
 		scn.StartGame();
+
+		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 

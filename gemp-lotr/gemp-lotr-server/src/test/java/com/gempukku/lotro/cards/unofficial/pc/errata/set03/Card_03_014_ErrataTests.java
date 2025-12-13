@@ -91,7 +91,7 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(erestor);
 
 		var enquea = scn.GetShadowCard("enquea");
@@ -122,7 +122,7 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(erestor);
 
 		var enquea = scn.GetShadowCard("enquea");
@@ -153,7 +153,7 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(erestor);
 
 		var hate = scn.GetShadowCard("hate");
@@ -186,7 +186,7 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(erestor);
 
 		var orc = scn.GetShadowCard("orc");

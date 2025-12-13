@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects.choose;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -19,7 +20,7 @@ public class ChooseAndDiscardCardsFromPlayEffect extends ChooseActiveCardsEffect
     private CostToEffectAction _resultSubAction;
 
     public ChooseAndDiscardCardsFromPlayEffect(Action action, String playerId, int minimum, int maximum, Filterable... filters) {
-        super(action.getActionSource(), playerId, "Choose cards to discard", minimum, maximum, filters);
+        super(action.getActionSource(), playerId, "Choose cards to discard", minimum, maximum, SpotOverride.NONE, filters);
         _action = action;
         _playerId = playerId;
     }

@@ -76,7 +76,7 @@ public class Card_V2_007_Tests
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
 		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionToTable(elf);
+		scn.MoveCompanionsToTable(elf);
 		scn.MoveCardsToSupportArea(notched);
 		scn.AddTokensToCard(notched, 1);
 
@@ -108,7 +108,7 @@ public class Card_V2_007_Tests
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
 		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionToTable(dwarf);
+		scn.MoveCompanionsToTable(dwarf);
 		scn.MoveCardsToSupportArea(count);
 		scn.AddTokensToCard(count, 1);
 
@@ -166,7 +166,7 @@ public class Card_V2_007_Tests
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
 		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCompanionsToTable(gimli, legolas);
 		scn.MoveCardsToSupportArea(count, notched);
 		scn.AddTokensToCard(notched, 1);
 		scn.AddTokensToCard(count, 1);
@@ -202,7 +202,7 @@ public class Card_V2_007_Tests
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
 		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCompanionsToTable(gimli, legolas);
 		scn.MoveCardsToSupportArea(count, notched);
 		scn.AddTokensToCard(notched, 1);
 		scn.AddTokensToCard(count, 1);

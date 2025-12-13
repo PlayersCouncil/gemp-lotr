@@ -71,7 +71,7 @@ public class Card_V1_034_Tests
 		scn.MoveCardsToSupportArea(darkwaters);
 		scn.MoveCardsToHand(tentacle2);
 
-		scn.MoveCompanionToTable("greenleaf");
+		scn.MoveCompanionsToTable("greenleaf");
 
 		scn.StartGame();
 		scn.SetTwilight(4);
@@ -104,7 +104,7 @@ public class Card_V1_034_Tests
 		scn.MoveCardsToSupportArea(darkwaters);
 		scn.MoveCardsToHand(tentacle1);
 
-		scn.MoveCompanionToTable("greenleaf");
+		scn.MoveCompanionsToTable("greenleaf");
 
 		scn.StartGame();
 		scn.SetTwilight(4);

@@ -84,7 +84,7 @@ public class Card_V1_039_Tests
 		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe = scn.GetFreepsCard("axe");
-		scn.MoveCompanionToTable(arwen, gimli);
+		scn.MoveCompanionsToTable(arwen, gimli);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.AttachCardsTo(gimli, axe);
 
@@ -135,7 +135,7 @@ public class Card_V1_039_Tests
 		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe = scn.GetFreepsCard("axe");
-		scn.MoveCompanionToTable(arwen, gimli);
+		scn.MoveCompanionsToTable(arwen, gimli);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.AttachCardsTo(gimli, axe);
 

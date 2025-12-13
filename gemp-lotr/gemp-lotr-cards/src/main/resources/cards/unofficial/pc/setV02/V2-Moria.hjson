@@ -186,7 +186,8 @@
 				phase: Shadow
 				requires: [
 					{
-						type: CanPlayFromDiscard
+						type: Playable
+						fromZone: DISCARD
 						filter: name(The Balrog)
 						discount: {
 							type: ForEachThreat
@@ -527,7 +528,8 @@
 				phase: Shadow
 				requires: [
 					{
-						type: canSelfBePlayed
+						type: Playable
+						filter: self
 					}
 					{
 						type: Location

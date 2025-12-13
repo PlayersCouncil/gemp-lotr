@@ -65,7 +65,7 @@ public class Card_02_121_ErrataTests
         VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
 
         scn.StartGame();
 
@@ -83,7 +83,7 @@ public class Card_02_121_ErrataTests
         VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
 
         scn.StartGame();
 
@@ -99,7 +99,7 @@ public class Card_02_121_ErrataTests
         VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
 
         scn.StartGame();
 

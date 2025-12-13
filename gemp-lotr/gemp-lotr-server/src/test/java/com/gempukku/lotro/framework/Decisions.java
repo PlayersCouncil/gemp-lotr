@@ -1,7 +1,10 @@
 package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A set of functions within the test rig that pertain to decisions.  Decisions in Gemp are a catch-all term referring
@@ -82,6 +85,68 @@ public interface Decisions extends TestBase  {
 	default Boolean ShadowAnyDecisionsAvailable() { return AnyDecisionsAvailable(P2); }
 
 	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Fellowship phase, or else false.
+	 */
+	default boolean AwaitingFellowshipPhaseActions() { return FreepsDecisionAvailable("Play Fellowship action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Shadow phase, or else false.
+	 */
+	default boolean AwaitingShadowPhaseActions() { return ShadowDecisionAvailable("Play Shadow action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Maneuver phase, or else false.
+	 */
+	default boolean AwaitingFreepsManeuverPhaseActions() { return FreepsDecisionAvailable("Play Maneuver action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Maneuver phase, or else false.
+	 */
+	default boolean AwaitingShadowManeuverPhaseActions() { return ShadowDecisionAvailable("Play Maneuver action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Archery phase, or else false.
+	 */
+	default boolean AwaitingFreepsArcheryPhaseActions() { return FreepsDecisionAvailable("Play Archery action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Archery phase, or else false.
+	 */
+	default boolean AwaitingShadowArcheryPhaseActions() { return ShadowDecisionAvailable("Play Archery action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Assignment phase, or else false.
+	 */
+	default boolean AwaitingFreepsAssignmentPhaseActions() { return FreepsDecisionAvailable("Play Assignment action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Assignment phase, or else false.
+	 */
+	default boolean AwaitingShadowAssignmentPhaseActions() { return ShadowDecisionAvailable("Play Assignment action or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
+	 */
+	default boolean AwaitingFreepsSkirmishPhaseActions() { return FreepsDecisionAvailable("Choose action to play or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
+	 */
+	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Choose action to play or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
+	 */
+	default boolean AwaitingFreepsRegroupPhaseActions() { return FreepsDecisionAvailable("Play Regroup action or Pass"); }
+
+	/**
+	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
+	 */
+	default boolean AwaitingShadowRegroupPhaseActions() { return ShadowDecisionAvailable("Play Regroup action or Pass"); }
+
+
+
+	/**
 	 * Returns whether the given player is currently presented with any decision at all.
 	 * @param player The player to check for pending decisions
 	 * @return True if the given player has a pending decision, else false.
@@ -93,22 +158,50 @@ public interface Decisions extends TestBase  {
 
 	/**
 	 * Causes the Free Peoples player to pass the current decision.
-	 * @throws DecisionResultInvalidException This operation will fail if the current decision is not passable.
 	 */
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
-	default void FreepsPass() throws DecisionResultInvalidException {
+	default void FreepsPass() {
 		if(FreepsAnyDecisionsAvailable()) {
 			PlayerDecided(P1, "");
 		}
 	}
 	/**
-	 * Causes the Shadow player to pass the current decision.
-	 * @throws DecisionResultInvalidException This operation will fail if the current decision is not passable.
+	 * Causes the Free Peoples player to pass a decision with a given description.
+	 * @param text The action text to be passing for.
 	 */
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
-	default void ShadowPass() throws DecisionResultInvalidException {
+	default void FreepsPass(String text) {
+		if(FreepsDecisionAvailable(text)) {
+			PlayerDecided(P1, "");
+		}
+	}
+	/**
+	 * Causes the Shadow player to pass the current decision.
+	 */
+	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
+	default void ShadowPass() {
 		if(ShadowAnyDecisionsAvailable()) {
 			PlayerDecided(P2, "");
+		}
+	}
+	/**
+	 * Causes the Shadow player to pass the current decision.
+	 * @param text The action text to be passing for.
+	 */
+	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
+	default void ShadowPass(String text) {
+		if(ShadowDecisionAvailable(text)) {
+			PlayerDecided(P2, "");
+		}
+	}
+
+	/**
+	 * Causes the given player to pass whatever decision they are currently being presented with, if any.
+	 * @param player The player who is currently pending a decision.
+	 */
+	default void PlayerPass(String player) {
+		if(AnyDecisionsAvailable(player)) {
+			PlayerDecided(player, "");
 		}
 	}
 
@@ -116,46 +209,114 @@ public interface Decisions extends TestBase  {
 	 * Causes Free Peoples to decide to use the given answer.  Integers usually indicate an index between multiple choices,
 	 * but they may be literal integers if the player is asked to choose a number.
 	 * @param answer The integer answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void FreepsDecided(int answer) throws DecisionResultInvalidException { PlayerDecided(P1, String.valueOf(answer));}
+	default void FreepsDecided(int answer) { PlayerDecided(P1, String.valueOf(answer));}
 
 	/**
 	 * Causes Free Peoples to decide to use the given answer.  Answers may take different forms depending on the exact
 	 * nature of the decision at hand.
 	 * @param answer The answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void FreepsDecided(String answer) throws DecisionResultInvalidException { PlayerDecided(P1, answer);}
+	default void FreepsDecided(String answer) { PlayerDecided(P1, answer);}
 
 	/**
 	 * Causes Shadow to decide to use the given answer.  Integers usually indicate an index between multiple choices,
 	 * but they may be literal integers if the player is asked to choose a number.
 	 * @param answer The integer answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void ShadowDecided(int answer) throws DecisionResultInvalidException { PlayerDecided(P2, String.valueOf(answer));}
+	default void ShadowDecided(int answer) { PlayerDecided(P2, String.valueOf(answer));}
 	/**
 	 * Causes Shadow to decide to use the given answer.  Answers may take different forms depending on the exact
 	 * nature of the decision at hand.
 	 * @param answer The answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void ShadowDecided(String answer) throws DecisionResultInvalidException { PlayerDecided(P2, answer);}
+	default void ShadowDecided(String answer) { PlayerDecided(P2, answer);}
 
 	// As this is actually related to the heart of the table simulation, this is left to be implemented on the main Scenario class.
-	void PlayerDecided(String player, String answer) throws DecisionResultInvalidException;
+	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
 
-	default void FreepsAcceptOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P1, "0"); }
-	default void FreepsDeclineOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P1, ""); }
-	default void ShadowAcceptOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P2, "0"); }
-	default void ShadowDeclineOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P2, ""); }
+	default boolean FreepsHasOptionalTriggerAvailable(String text) {
+		if(!FreepsDecisionAvailable("Optional"))
+			return false;
+
+		var texts = GetADParamAsList(P1, "actionText");
+
+		for(var choice : texts) {
+			if(choice.toLowerCase().contains(text.toLowerCase()))
+				return true;
+		}
+
+		return false;
+	}
+
+	default boolean ShadowHasOptionalTriggerAvailable(String text) {
+		if(!ShadowDecisionAvailable("Optional"))
+			return false;
+
+		var texts = GetADParamAsList(P2, "actionText");
+
+		for(var choice : texts) {
+			if(choice.toLowerCase().contains(text.toLowerCase()))
+				return true;
+		}
+
+		return false;
+	}
+
+	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1, "0"); }
+	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1, ""); }
+
+
+
+	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2, "0"); }
+	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2, ""); }
+
+
+	/**
+	 * Gets all of the options for a particular parameter of the current awaiting decision as an array of strings.
+	 * @param playerID The player making the current decision.
+	 * @param paramName The parameter options to return.
+	 * @return An array of strings, which are all options for the given parameter.  This list is indexed according to the
+	 * options on the current decision, so option 0 is tied to the first choice on the decision, option 1 is the second
+	 * choice on the decision, etc.
+	 */
+	default String[] GetADParam(String playerID, String paramName) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters().get(paramName);
+	}
+
+	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
+	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
+	default List<String> GetADParamAsList(String playerID, String paramName) {
+		var paramList = GetAwaitingDecisionParam(playerID, paramName);
+		if(paramList == null)
+			return null;
+
+		return Arrays.asList(paramList);
+	}
+
+	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
+		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
+	}
+	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName); }
+	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName); }
+	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName)[0]; }
+	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName)[0]; }
+	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters().get(paramName);
+	}
+
+	default Map<String, String[]> GetAwaitingDecisionParams(String playerID) {
+		var decision = userFeedback().getAwaitingDecision(playerID);
+		return decision.getDecisionParameters();
+	}
 
 }

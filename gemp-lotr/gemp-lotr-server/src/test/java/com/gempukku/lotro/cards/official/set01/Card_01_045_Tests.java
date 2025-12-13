@@ -76,7 +76,7 @@ public class Card_01_045_Tests
 
         var galadriel = scn.GetFreepsCard("galadriel");
         var elrond = scn.GetFreepsCard("elrond");
-        scn.MoveCompanionToTable(galadriel);
+        scn.MoveCompanionsToTable(galadriel);
         scn.MoveCardsToHand(elrond);
 
         scn.StartGame();
@@ -107,7 +107,7 @@ public class Card_01_045_Tests
         var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
         var allyHome6_3 = scn.GetFreepsCard("allyHome6_3");
 
-        scn.MoveCompanionToTable(galadriel, allyHome3_1, allyHome6_3, allyHome6_1, allyHome6_2);
+        scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_3, allyHome6_1, allyHome6_2);
 
         scn.AddWoundsToChar(galadriel, 1);
         scn.AddWoundsToChar(allyHome3_1, 1);

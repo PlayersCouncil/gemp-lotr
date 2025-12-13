@@ -180,7 +180,7 @@ public class Card_17_140_Tests
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var endgame = scn.GetFreepsCard("endgame");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(endgame);
 
 		var troop = scn.GetShadowCard("troop");

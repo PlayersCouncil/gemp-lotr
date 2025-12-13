@@ -65,7 +65,7 @@ public class Card_V1_004_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCardsToHand(friend);
-		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCompanionsToTable(gimli, legolas);
 
 		scn.MoveMinionsToTable("runner");
 

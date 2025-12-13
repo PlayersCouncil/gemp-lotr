@@ -83,7 +83,7 @@ public class Card_13_080_Tests
 		scn.MoveCardsToSupportArea(radagast);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(saruman, 1);

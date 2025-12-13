@@ -71,7 +71,7 @@ public class Card_V2_041_Tests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		scn.SkipPastAllAssignments();
@@ -110,7 +110,7 @@ public class Card_V2_041_Tests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		scn.SkipPastAllAssignments();

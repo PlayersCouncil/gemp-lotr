@@ -71,7 +71,7 @@ public class Card_V2_017_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var vcompanion = scn.GetFreepsCard("vcompanion");
 		scn.MoveCardsToHand(die);
-		scn.MoveCompanionToTable(aragorn, theoden, vcompanion);
+		scn.MoveCompanionsToTable(aragorn, theoden, vcompanion);
 
 		var sauron = scn.GetShadowCard("sauron");
 		scn.MoveMinionsToTable(sauron);

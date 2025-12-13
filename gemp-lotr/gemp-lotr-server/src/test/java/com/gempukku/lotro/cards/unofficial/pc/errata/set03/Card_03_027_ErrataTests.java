@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_027_ErrataTests
 {
@@ -33,15 +33,14 @@ public class Card_03_027_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Vilya
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Elven
-		 * Twilight Cost: 1
+		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
 		 * Vitality: 1
-		 * Game Text: Bearer must be Elrond.
-		* 	Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
+		 * Game Text: Bearer must be Elrond.<br><b>Maneuver:</b> Exert Elrond twice to hinder a Shadow condition.
 		*/
 
 		var scn = GetScenario();
@@ -55,7 +54,7 @@ public class Card_03_027_ErrataTests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RING));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
@@ -67,10 +66,20 @@ public class Card_03_027_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(1, scn.GetTwilight());
+		
+		assertFalse(true);
 	}
 }

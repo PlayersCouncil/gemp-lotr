@@ -78,7 +78,7 @@ public class Card_V1_059_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var merry = scn.GetFreepsCard("merry");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(legolas, merry, boromir);
+		scn.MoveCompanionsToTable(legolas, merry, boromir);
 
 		scn.StartGame();
 
@@ -125,7 +125,7 @@ public class Card_V1_059_Tests
 
 		var merry = scn.GetFreepsCard("merry");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(boromir, merry);
+		scn.MoveCompanionsToTable(boromir, merry);
 
 		scn.StartGame();
 

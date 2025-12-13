@@ -121,7 +121,7 @@ public class Card_V2_023_Tests
 		scn.MoveCardsToHand(fires);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

@@ -75,7 +75,7 @@ public class Card_V2_077_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(crutch, glamdring2);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, glamdring);
 
 		scn.StartGame();
@@ -99,7 +99,7 @@ public class Card_V2_077_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var crutch = scn.GetFreepsCard("crutch");
 		var betrayal = scn.GetFreepsCard("betrayal");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, crutch);
 		scn.MoveCardsToSupportArea(betrayal);
 

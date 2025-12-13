@@ -2,6 +2,8 @@ package com.gempukku.lotro.logic.modifiers;
 
 import com.gempukku.lotro.common.Keyword;
 
+import java.util.HashSet;
+
 public interface KeywordAffectingModifier {
-    public Keyword getKeyword();
+    HashSet<Keyword> getKeywords();
 }

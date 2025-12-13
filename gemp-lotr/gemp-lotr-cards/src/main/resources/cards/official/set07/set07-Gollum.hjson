@@ -267,7 +267,8 @@
 						side: shadow
 					}
 					{
-						type: canSelfBePlayed
+						type: Playable
+						filter: self
 					}
 				]
 				effect: {
@@ -421,7 +422,8 @@
 						side: shadow
 					}
 					{
-						type: canSelfBePlayed
+						type: Playable
+						filter: self
 					}
 				]
 				effect: {
@@ -541,7 +543,8 @@
 						side: shadow
 					}
 					{
-						type: canSelfBePlayed
+						type: Playable
+						filter: self
 					}
 				]
 				effect: {

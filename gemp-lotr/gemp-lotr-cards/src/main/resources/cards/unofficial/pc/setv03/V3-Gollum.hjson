@@ -1,0 +1,516 @@
+{
+
+	103_11: {
+		cardInfo: {
+			//id: 103_11.0
+			parent: 103_11
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S011.0_card.jpg
+			collInfo: V3_11
+			rarity: _
+		}
+		title: Fickle Loyalties
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ExtraCost
+				cost: {
+					type: Spot
+					filter: Shire, companion
+					count: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: title(Gollum)
+				}
+				effect: {
+					type: ModifyStrength
+					select: choose(minion, not(title(Gollum)))
+					amount: -1
+					until: start(regroup)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: LosesSkirmish
+					filter: title(Shelob)
+				}
+				effect: {
+					type: Kill
+					select: choose(title(Gollum))
+				}
+			}
+		]
+		gametext: To play, spot 2 [shire] companions.<br>Each time Gollum loses a skirmish, make another minion strength -1 until the regroup phase.<br>Each time Shelob loses a skirmish, kill Gollum.
+		lore: "So he thought in an inner chamber of his cunning, which he still hoped to hide from her..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_12: {
+		cardInfo: {
+			//id: 103_12.0
+			parent: 103_12
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S012.0_card.jpg
+			collInfo: V3_12
+			rarity: _
+		}
+		title: Pass of the Spider
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Possession
+		keywords: Support Area
+		effects: [
+			{
+				type: Activated
+				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: title(Shelob), InSkirmish
+				}
+				limitPerPhase: 1
+				cost: {
+					type: StackCardsFromPlay
+					select: choose(minion,not(title(Shelob)))
+					where: self
+				}
+				effect: {
+					type: ModifyStrength
+					amount: -2
+					select: choose(character, InSkirmishAgainst(title(Shelob)))
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: UsesSpecialAbility
+					filter: side(Free Peoples), condition
+					memorize: activatedCondition
+				}
+				cost: {
+					type: DiscardStackedCards
+					on: self
+					select: choose(minion)
+				}
+				effect: [
+					{
+						type: Hinder
+						select: memory(activatedCondition)
+					}
+					{
+						type: Heal
+						select: choose(title(Shelob))
+					}
+				]
+			}
+		]
+		gametext: Each time a special ability on a Free Peoples condition is used, you may discard a minion stacked here to hinder that condition and heal Shelob.<br>Skirmish: If Shelob is skirmishing, stack another minion from play here to make a character skirmishing her strength -2 (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_13: {
+		cardInfo: {
+			//id: 103_13.0
+			parent: 103_13
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S013.0_card.jpg
+			collInfo: V3_13
+			rarity: _
+		}
+		title: Shelob
+		subtitle: Terror of Cirith Ungol
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 6
+		type: Minion
+		race: Spider
+		strength: 8
+		vitality: 8
+		site: 8
+		keywords: [
+			Fierce
+			Enduring
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: SkirmishAboutToEnd
+					involving: title(Shelob)
+				}
+				effect: {
+					type: Hinder
+					select: all(character,InSkirmishAgainst(title(Shelob)))
+				}
+				requires: {
+					type: CanSpot
+					filter: InSkirmishAgainst(title(Shelob))
+				}
+			}
+			{
+				type: Activated
+				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: title(Gollum), InSkirmish
+				}
+				cost: [
+					{
+						type: Exert
+						select: choose(title(Gollum))
+					}
+					{
+						type: Exert
+						select: choose(title(Shelob))
+					}
+				]
+				effect: {
+					type: Hinder
+					select: choose(character, InSkirmishAgainst(title(Gollum)))
+				}
+			}
+		]
+		gametext: Fierce.  Enduring.<br>Each time a skirmish involving Shelob ends, you may hinder each character she was skirmishing.<br>Skirmish: If Gollum is skirmishing, exert Gollum and Shelob to hinder a character he is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_14: {
+		cardInfo: {
+			//id: 103_14.0
+			parent: 103_14
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S014.0_card.jpg
+			collInfo: V3_14
+			rarity: _
+		}
+		title: Sticky Strands of Spider-silk
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Possession
+		strength: -1
+		keywords: Support Area
+		effects: [			
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: SkirmishAboutToEnd
+						involving: bearer
+					}
+				]
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: -1
+					until: EndOfTurn
+				}
+			}
+			
+			{
+				type: Activated
+				phase: Skirmish
+				requires: {
+					type: CanSpot
+					filter: companion, InSkirmishAgainst(culture(Gollum))
+				}
+				cost: {
+					type: Hinder
+					select: choose(your, culture(Gollum))
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(companion, or(InSkirmishAgainst(title(Shelob)), and(InSkirmishAgainst(culture(gollum), minion),Limit1PerBearer)) )
+				}
+			}
+		]
+		gametext: At the end of each skirmish involving bearer, make bearer strength -1 until the end of the turn.\Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion. Limit 1 per bearer unless they are skirmishing Shelob.
+		lore: "Never yet had any fly escaped from Shelob's webs, and the greater now was her rage and hunger."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_15: {
+		cardInfo: {
+			//id: 103_15.0
+			parent: 103_15
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S015.0_card.jpg
+			collInfo: V3_15
+			rarity: _
+		}
+		title: Two-faced
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: [
+			Shadow
+			Maneuver
+			Skirmish
+		]
+		effects: [
+			{
+				type: event
+				effect: [
+					{
+						type: Restore
+						select: choose(culture(Gollum))
+					}
+					{
+						type: Memorize
+						filter: culture(Gollum), minion
+						memory: gollumMinionsInPlay
+					}
+					{
+						type: Optional
+						text: Would you like to remove a threat to replace your {Gollum} minion with another from your discard pile?
+						requires: [
+							{
+								type: HasCardInDiscard
+								ignoreCostCheckFailure: true
+								filter: TitleFromMemory(gollumMinionsInPlay), not(SubtitleFromMemory(gollumMinionsInPlay))
+							}
+						]
+						cost: [
+							{
+								type: RemoveThreats
+								amount: 1
+							}
+							{
+								type: ChooseActiveCards
+								select: choose(culture(Gollum), minion)
+								memorize: chosenMinion
+								text: Choose a {Gollum} minion to replace
+							}
+						]
+						effect: [
+							{
+								type: ReplaceCardInPlayWithCardInDiscard
+								selectInPlay: memory(chosenMinion)
+								selectInDiscard: choose(TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore a [gollum] card.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and borne cards).
+		lore: "Too little did he or his master know of the craft of Shelob. She had many exits from her lair."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_16: {
+		cardInfo: {
+			//id: 103_16.0
+			parent: 103_16
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S016.0_card.jpg
+			collInfo: V3_16
+			rarity: _
+		}
+		title: Two Minds of It
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: [
+			Fellowship
+			Maneuver
+			Skirmish
+		]
+		effects: [
+			{
+				type: event
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(title(Smeagol))
+						text: Choose a Smeagol to restore
+						hindered: true
+						memorize: activeSmeagol
+					}
+					{
+						type: Restore
+						select: memory(activeSmeagol)
+					}
+					{
+						type: Optional
+						text: Would you like to add a threat to replace Smeagol with another in your discard pile?
+						requires: [
+							{
+								type: CanSpot
+								filter: title(Smeagol), not(ring-bearer)
+							}
+							{
+								type: HasCardInDiscard
+								filter: title(Smeagol), not(SubtitleFromMemory(activeSmeagol))
+							}
+						]
+						cost: {
+							type: AddThreats
+							amount: 1
+						}
+						effect: [
+							{
+								type: ReplaceCardInPlayWithCardInDiscard
+								selectInPlay: memory(activeSmeagol)
+								selectInDiscard: choose(title(Smeagol), not(SubtitleFromMemory(activeSmeagol)))
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Smeagol.  Then you may spot Smeagol (if he is not the Ring-bearer) and add a threat to replace him with another Smeagol from your discard pile (keep all tokens and borne cards).
+		lore: "'All the same, I'd rather have him under my eye,' said Sam. 'All the more so, if he's false.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_17: {
+		cardInfo: {
+			//id: 103_17.0
+			parent: 103_17
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S017.0_card.jpg
+			collInfo: V3_17
+			rarity: _
+		}
+		title: Ungoliant's Get
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: LosesSkirmish
+					filter: title(Shelob)
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(Gollum, item)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: WinsSkirmish
+					filter: title(Shelob)
+				}
+				requires: [
+					{
+						type: IsGreaterThanOrEqual
+						firstNumber: {
+							type: forEachStacked
+							filter: minion
+							on: culture(Gollum),item
+						}
+						secondNumber: 4
+					}
+				]
+				cost: [
+					{
+						type: Hinder
+						select: self
+					}
+				]
+				effect: [
+					{
+						type: AddKeyword
+						select: choose(title(Shelob))
+						keyword: relentless
+						until: start(regroup)
+					}
+					
+				]
+			}
+		]
+		gametext: Each time Shelob loses a skirmish, you may play a [gollum] item from your discard pile.<br>Response: If Shelob wins a skirmish and there are 4 minions stacked on [gollum] items, hinder this to make her <b>relentless</b> until the regroup phase <i>(she participates in 1 extra round of skirmishes after fierce)</i>. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

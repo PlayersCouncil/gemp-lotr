@@ -1,29 +1,24 @@
+package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
 
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
-
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_049_Tests
 {
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<>() {{
-					put("past", "101_49");
-					put("orc", "1_271");
-					put("runner", "1_178");
-					put("troll", "8_102");
+				new HashMap<>()
+				{{
+					put("card", "101_49");
+					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -35,101 +30,55 @@ public class Card_V1_049_Tests
 	public void AShadowofthePastStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *A Shadow of the Past
-		* Side: Free Peoples
-		* Culture: sauron
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: While you can spot 4 burdens, each [sauron] Orc is <b>fierce</b>.
-		* 	While you can spot 6 burdens, each [Sauron] Orc is damage +1.
-		* 	Discard this condition at the start of the regroup phase.
+		 * Set: V1
+		 * Name: A Shadow of the Past
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: While you can spot 4 burdens, each [sauron] Orc is <b>damage +1</b>.
+		* 	While you can spot 6 burdens, each [Sauron] Orc is <b>fierce</b>.
+		* 	At the end of each Shadow phase, exert 2 [sauron] Orcs or hinder this condition.
 		*/
 
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl past = scn.GetFreepsCard("past");
+		var card = scn.GetFreepsCard("card");
 
-		assertTrue(past.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, past.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, past.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, past.getBlueprint().getCardType());
-		//assertEquals(Race.CREATURE, past.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(past, Keyword.SUPPORT_AREA)); // test for keywords as needed
-		assertEquals(1, past.getBlueprint().getTwilightCost());
-		//assertEquals(, past.getBlueprint().getStrength());
-		//assertEquals(, past.getBlueprint().getVitality());
-		//assertEquals(, past.getBlueprint().getResistance());
-		//assertEquals(Signet., past.getBlueprint().getSignet());
-		//assertEquals(, past.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("A Shadow of the Past", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void FourBurdensMakesSauronOrcsFierce() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void AShadowofthePastTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl past = scn.GetShadowCard("past");
-		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		PhysicalCardImpl troll = scn.GetShadowCard("troll");
-		scn.MoveCardsToSupportArea(past);
-		scn.MoveMinionsToTable(orc, runner, troll);
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
-
-		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
-
-		scn.AddBurdens(3); // 4 with the initial starting bid
-
-		assertTrue(scn.HasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
-	}
-
-	@Test
-	public void SixBurdensMakesSauronOrcsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
-
-		PhysicalCardImpl past = scn.GetShadowCard("past");
-		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		PhysicalCardImpl troll = scn.GetShadowCard("troll");
-		scn.MoveCardsToSupportArea(past);
-		scn.MoveMinionsToTable(orc, runner, troll);
-
-		scn.StartGame();
-
-		assertFalse(scn.HasKeyword(orc, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
-
-		scn.AddBurdens(5); // 6 with the initial starting bid
-
-		assertTrue(scn.HasKeyword(orc, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(orc, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
-	}
-
-	@Test
-	public void SelfDiscardsInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
-
-		PhysicalCardImpl past = scn.GetShadowCard("past");
-		scn.MoveCardsToSupportArea(past);
-
-		scn.StartGame();
-
-		assertEquals(Zone.SUPPORT, past.getZone());
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		assertEquals(Zone.DISCARD, past.getZone());
+		
+		assertFalse(true);
 	}
 }

@@ -78,7 +78,7 @@ public class Card_V2_010_Tests
 		var armaments = scn.GetFreepsCard("armaments");
 		var haldir = scn.GetFreepsCard("haldir");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(haldir, arwen);
+		scn.MoveCompanionsToTable(haldir, arwen);
 		scn.MoveCardsToHand(armaments);
 
 		scn.StartGame();
@@ -98,7 +98,7 @@ public class Card_V2_010_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var bow = scn.GetFreepsCard("bow");
 		var sword = scn.GetFreepsCard("sword");
-		scn.MoveCompanionToTable(haldir, troop);
+		scn.MoveCompanionsToTable(haldir, troop);
 		scn.AttachCardsTo(haldir, sword);
 		scn.AttachCardsTo(troop, bow);
 		scn.MoveCardsToHand(armaments);
@@ -121,7 +121,7 @@ public class Card_V2_010_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var troop = scn.GetFreepsCard("troop");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(haldir, troop, arwen);
+		scn.MoveCompanionsToTable(haldir, troop, arwen);
 		scn.AttachCardsTo(haldir, armaments);
 
 		scn.AddWoundsToChar(haldir, 1);

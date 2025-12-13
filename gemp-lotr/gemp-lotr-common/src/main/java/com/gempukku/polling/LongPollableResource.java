@@ -7,7 +7,7 @@ public interface LongPollableResource {
      * @param waitingRequest
      * @return
      */
-    public boolean registerRequest(WaitingRequest waitingRequest);
+    boolean registerRequest(WaitingRequest waitingRequest);
 
-    public void deregisterRequest(WaitingRequest waitingRequest);
+    void deregisterRequest(WaitingRequest waitingRequest);
 }

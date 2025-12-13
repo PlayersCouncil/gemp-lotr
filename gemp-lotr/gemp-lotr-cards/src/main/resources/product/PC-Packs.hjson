@@ -168,20 +168,21 @@
 			1x8_127
 			#Evil-smelling Fens FA
 			1x5_129
-			#To be released after the 2024 WC concludes
 			#Legolas, Greenleaf FA
 			1x1_391
 			#Goblin Runner FA 
 			1x1_392
+			#They Are Coming FA
+			1x1_393
 			# The Balrog, Flame of Udun MW, 2024 Playtest Promo
 			1x2_129
 			# 2024 Yuletide Frodo, Reluctant Adventurer
 			1x2_130
 			# 2024 Yuletide Sam, Resolute Halfling
 			1x7_369
-			// Watcher in the Water FA
+			# Watcher in the Water FA
 			1x2_131
-			// V2 Saruman FA
+			# V2 Saruman FA
 			1x102_100
 			#FA Sam, Great Elf Warrior
 			1x10_129
@@ -189,6 +190,12 @@
 			1x15_211
 			#August 2025 WC Circuit: Ringwraith in Twilight
 			1x101_104
+			#Rosie Cotton FA - To be released after the 2026 WC
+			#1x1_398
+			#Holiday Gandalf, Friend of the Shirefolk
+			1x1_403
+			#Holiday Hobbit Stealth
+			1x1_404
 		]
 	}
 	
@@ -288,11 +295,11 @@
 			1x1_391
 			#Goblin Runner FA 
 			1x1_392
-			#To be released after the 2025 WC concludes
-			#1x1_393
+			#They Are Coming FA
+			1x1_393
 			# Watcher in the Water FA
 			1x2_131
-			// V2 Saruman FA
+			# V2 Saruman FA
 			1x102_100
 			#FA Sam, Great Elf Warrior
 			1x10_129
@@ -300,6 +307,9 @@
 			1x15_211
 			#August 2025 WC Circuit: Ringwraith in Twilight
 			1x101_104
+			#Rosie Cotton FA - To be released after the 2026 WC
+			#1x1_398
+			
 		]
 	}
 	
@@ -431,6 +441,10 @@
 			1x1_390
 			# The Balrog, Flame of Udun MW, 2024 Playtest Promo
 			1x2_129
+			#Holiday Gandalf, Friend of the Shirefolk
+			1x1_403
+			#Holiday Hobbit Stealth
+			1x1_404
 		]
 	}
 	
@@ -560,6 +574,10 @@
 			1x8_126
 			# The Balrog, Flame of Udun MW, 2024 Playtest Promo
 			1x2_129
+			#Holiday Gandalf, Friend of the Shirefolk
+			1x1_403
+			#Holiday Hobbit Stealth
+			1x1_404
 		]
 	}
 	

@@ -364,7 +364,7 @@
 			}
 		}
 		gametext: Spot Gandalf and Frodo to draw X cards, where X is Frodo's vitality.
-		lore: "'You’ll keep an eye on Frodo, won’t you?'"
+		lore: "'You'll keep an eye on Frodo, won't you?'"
 		promotext: ""
 		alts: {
 			promos: {

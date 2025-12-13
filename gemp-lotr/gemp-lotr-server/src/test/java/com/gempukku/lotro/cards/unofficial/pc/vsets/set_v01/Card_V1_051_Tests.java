@@ -74,7 +74,7 @@ public class Card_V1_051_Tests
 		PhysicalCardImpl griffo = scn.GetFreepsCard("griffo");
 		PhysicalCardImpl farmer1 = scn.GetFreepsCard("farmer1");
 		PhysicalCardImpl farmer2 = scn.GetFreepsCard("farmer2");
-		scn.MoveCompanionToTable(griffo);
+		scn.MoveCompanionsToTable(griffo);
 		scn.MoveCardsToHand(farmer1);
 
 		scn.StartGame();

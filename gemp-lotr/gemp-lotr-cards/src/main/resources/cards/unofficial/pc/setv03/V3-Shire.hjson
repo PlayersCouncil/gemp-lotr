@@ -1,0 +1,1231 @@
+{
+
+	103_105: {
+		cardInfo: {
+			//id: 103_105.0
+			parent: 103_105
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S105.0_card.jpg
+			collInfo: V3_105
+			rarity: _
+		}
+		title: Driven By Her Own Cruel Will
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 5
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				effect: [
+					{
+						type: ModifyStrength
+						select: choose(hobbit,InSkirmish,HasAttached(hand weapon),not(Ring-bearer))
+						amount: {
+							type: ForEachVitality
+							filter: InSkirmish
+						}
+						memorize: pumpedHobbit
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: SkirmishAboutToEnd
+							involving: memory(pumpedHobbit)
+						}
+						requires: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						effect: {
+							type: Hinder
+							select: choose(minion, InSkirmishAgainst(memory(pumpedHobbit)))
+						}
+					}
+				]
+			}
+		]
+		gametext: Make a skirmishing Hobbit bearing a hand weapon (except the Ring-bearer) strength +X, where X is the total vitality of all characters in that skirmish.  At the end of that skirmish, hinder a minion involved in that skirmish if you cannot spot more than 4 companions.
+		lore: "'You've hurt my master, you brute, and you'll pay!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_106: {
+		cardInfo: {
+			//id: 103_106.0
+			parent: 103_106
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S106.0_card.jpg
+			collInfo: V3_106
+			rarity: _
+		}
+		title: Flotsam
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		target: hasAttached(pipe)
+		keywords: Pipeweed
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: ShuffleCardsFromDiscardIntoDrawDeck
+					select: choose(or(pipe,pipeweed))
+					count: 0-2
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: oldBearer
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+				effect: {
+					type: Heal
+					select: memory(oldBearer)
+				}
+			}
+		]
+		gametext: Pipeweed. Bearer must bear a pipe.<br>When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.<br>Skirmish: Discard this possession to heal bearer.
+		lore: "'We have heaps of it,' he said; 'and you can all pack as much as you wish, when we go.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_107: {
+		cardInfo: {
+			//id: 103_107.0
+			parent: 103_107
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S107.0_card.jpg
+			collInfo: V3_107
+			rarity: _
+		}
+		title: For Frodo
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: Exert
+					select: choose(unique, or(Gondor, Shire), companion, not(title(Frodo)))
+					memorize: exertedComp
+				}
+				effect: [
+					{
+						type: ModifyStrength
+						select: memory(exertedComp)
+						amount: {
+							type: Sum
+							source: [
+								{
+									type: Conditional
+									requires: {
+										type: CanSpot
+										filter: title(Frodo), Ring-bearer
+									}
+									true: {
+										type: ForEachBurden
+									}
+									false: 0
+								}
+							]
+							limit: {
+								type: Conditional
+								requires: {
+									type: CantSpot
+									filter: companion
+									count: 5
+								}
+								true: 100
+								false: 3
+							}
+						}
+					}
+					{
+						type: RemovePlayedEventFromTheGame
+						filter: self
+					}
+				]
+			}
+		]
+		gametext: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
+		lore: "'His Eye is now straining towards us, blind almost to all else that is moving....Therein lies all our hope.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_108: {
+		cardInfo: {
+			//id: 103_108.0
+			parent: 103_108
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S108.0_card.jpg
+			collInfo: V3_108
+			rarity: _
+		}
+		title: For the Shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: event
+				cost: {
+					type: Spot
+					select: choose(Hobbit, companion, not(Ring-bearer))
+					memorize: chosenHobbit
+				}
+				effect: [
+					{
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 1
+						}
+						true: {
+							type: Hinder
+							select: all(Hobbit, not(memory(chosenHobbit)))
+						}
+					}
+					{
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 2
+						}
+						true: {
+							type: AddKeyword
+							keyword: defender+2
+							select: memory(chosenHobbit)
+							until: start(regroup)
+						}
+					}
+					
+					{
+						type: If
+						check: {
+							type: IsEqual
+							firstNumber: {
+								type: RegionNumber
+							}
+							secondNumber: 3
+						}
+						true: {
+							type: AddKeyword
+							keyword: enduring
+							select: memory(chosenHobbit)
+							until: start(regroup)
+						}
+					}
+				]
+			}
+		]
+		gametext: Spot a Hobbit companion (except the Ring-bearer).<br>In region 1, hinder all other Hobbits.<br>In region 2, make that Hobbit defender +2 until the regroup phase.<br>In region 3, make that Hobbit <b>enduring</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_109: {
+		cardInfo: {
+			//id: 103_109.0
+			parent: 103_109
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S109.0_card.jpg
+			collInfo: V3_109
+			rarity: _
+		}
+		title: For My Old Gaffer
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: [
+					{
+						type: Spot
+						filter: minion, InSkirmishAgainst(hobbit)
+						count: 2
+					}
+				]
+				effect: [
+					{
+						type: Memorize
+						filter: Hobbit, InSkirmish
+						memory: skirmisher
+					}
+					{
+						type: ResolveSkirmishSeparately
+						filter: memory(skirmisher)
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: LosesSkirmish
+							filter: memory(skirmisher)
+						}
+						until: start(regroup)
+						effect: {
+							type: AddBurdens
+							amount: 1
+						}
+					}
+					{
+						type: AddTrigger
+						trigger: {
+							type: WinsSkirmish
+							filter: memory(skirmisher)
+						}
+						until: start(regroup)
+						effect: {
+							type: AddThreats
+							amount: 1
+						}
+					}
+				]
+			}
+		]
+		gametext: Spot a Hobbit skirmishing more than 1 minion.  Resolve skirmishes between that Hobbit and those minions individually.  Until the regroup phase, add a burden each time that Hobbit loses a skirmish and a threat each time that Hobbit wins.
+		lore: "The orc wheeled round, but before it could make a move Sam slashed its whip-hand from its arm."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_110: {
+		cardInfo: {
+			//id: 103_110.0
+			parent: 103_110
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S110.0_card.jpg
+			collInfo: V3_110
+			rarity: _
+		}
+		title: Frodo
+		subtitle: Bereft of Hope
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 2
+		vitality: 4
+		resistance: 7
+		canStartWithRing: true
+		keywords: Ring-bound
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachBurden
+					}
+				}
+			}
+		]
+		gametext: Ring-bearer (resistance 7).  Ring-bound.<br>Frodo is strength +1 for each burden.
+		lore: "'Look here, Sam dear lad,' said Frodo: 'I am tired, weary, I haven't a hope left. But I have to go on trying to get to the Mountain, as long as I can move. The Ring is enough. This extra weight is killing me. It must go.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_111: {
+		cardInfo: {
+			//id: 103_111.0
+			parent: 103_111
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S111.0_card.jpg
+			collInfo: V3_111
+			rarity: _
+		}
+		title: Get Up, Mister Frodo
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: Spot
+					filter: title(Frodo)
+				}
+				effect: [
+					{
+						type: Restore
+						select: choose(Shire)
+					}
+					{
+						type: Optional
+						text: Would you like to add (3) to reconcile your hand and heal 2 {shire} companions?
+						requires: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						cost: {
+							type: AddTwilight
+							amount: 3
+						}
+						effect: [
+							{
+								type: ReconcileHand
+							}
+							{
+								type: Heal
+								count: 0-2
+								select: choose(Shire, companion)
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: Spot Frodo to restore a [shire] card.  If you cannot spot more than 4 companions, you may add (3) to reconcile your hand and heal up to 2 [shire] companions.
+		lore: "'I'll get there, if I leave everything but my bones behind,' said Sam. 'And I'll carry Mr. Frodo up myself, if it breaks my back and heart.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_112: {
+		cardInfo: {
+			//id: 103_112.0
+			parent: 103_112
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S112.0_card.jpg
+			collInfo: V3_112
+			rarity: _
+		}
+		title: Hornblower Barrel
+		unique: 2
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: DiscardCardsFromDrawDeck
+					select: choose(side(Free Peoples))
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: SelfRemovedFromPlayTrigger
+				method: discarded
+				optional: true
+				source: pipe
+				cost: {
+					type: Spot
+					filter: another, title(Hornblower Barrel)
+				}
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(side(Free Peoples), not(event), not(title(Hornblower Barrel)))
+					count: 2
+					discard: you
+				}
+			}
+		]
+		gametext: Pipeweed.<br>When you play this, you may discard a Free Peoples card from your draw deck.<br>When you discard this with a pipe, you may spot another Hornblower Barrel to take 2 other Free Peoples cards (except events or Hornblower Barrels) from your discard pile into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_113: {
+		cardInfo: {
+			//id: 103_113.0
+			parent: 103_113
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S113.0_card.jpg
+			collInfo: V3_113
+			rarity: _
+		}
+		title: Merry's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: unbound,Hobbit
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Discarded
+					filter: pipeweed
+					source: any
+					memorize: discardedPipeweed
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: memory(discardedPipeweed)
+					}
+					{
+						type: Hinder
+						select: memory(discardedPipeweed)
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit.<br>Each time a pipeweed is discarded, you may exert bearer to play that pipeweed from your discard pile.  Hinder it and this pipe.
+		lore: "'But Ents only drink, and drink is not enough for content. Treebeard's draughts may be nourishing, but one feels the need of something solid.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_114: {
+		cardInfo: {
+			//id: 103_114.0
+			parent: 103_114
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S114.0_card.jpg
+			collInfo: V3_114
+			rarity: _
+		}
+		title: Pippin's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: unbound, Hobbit
+		effects: [
+			{
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: Discard
+					select: choose(pipeweed)
+				}
+				effect: [
+					{
+						type: RemoveThreats
+						amount: {
+							type: ForEachYouCanSpot
+							filter: pipe
+						}
+					}
+					{
+						type: Choice
+						texts: [
+							Hinder {self}
+							Hinder {bearer}
+						]
+						effects: [
+							{
+								type: Hinder
+								select: self
+							}
+							{
+								type: Hinder
+								select: bearer
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: Bearer must be an unbound Hobbit.<br>Fellowship: Discard a pipeweed to remove X threats, where X is the number of pipes you can spot. Hinder this pipe or hinder bearer.
+		lore: "'I have carried it a long way, though I don't know why. I never really expected to find any pipe-weed on the journey, when my own ran out.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_115: {
+		cardInfo: {
+			//id: 103_115.0
+			parent: 103_115
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S115.0_card.jpg
+			collInfo: V3_115
+			rarity: _
+		}
+		title: Sam
+		subtitle: Undaunted
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: Ring-bound
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyResistance
+					filter: title(Frodo)
+					amount: 2
+				}
+			}
+			{
+				type: Activated
+				phase: Maneuver
+				limitPerTurn: 1
+				requires: {
+					type: CantSpot
+					count: 5
+					filter: companion
+				}
+				cost: {
+					type: AddBurdens
+					amount: 1
+				}
+				effect: [
+					{
+						type: Choice
+						texts: [
+							Hinder Shadow support conditions
+							Hinder Shadow support possessions
+						]
+						effects: [
+							{
+								type: MemorizeInfo
+								memory: chosenType
+								info: condition
+							}
+							{
+								type: MemorizeInfo
+								memory: chosenType
+								info: possession
+							}
+						]
+					}
+					{
+						type: Choice
+						texts: [
+							Hinder all odd-numbered Shadow support {chosenType}s
+							Hinder all even-numbered Shadow support {chosenType}s
+						]
+						effects: [
+							{
+								type: If
+								check: {
+									type: MemoryIs
+									value: condition
+								}
+								true: {
+									type: Hinder
+									select: all(side(Shadow), support, oddTwilight, condition)
+								}
+								false: {
+									type: Hinder
+									select: all(side(Shadow), support, oddTwilight, possession)
+								}
+							}
+							
+							{
+								type: If
+								check: {
+									type: MemoryIs
+									value: condition
+								}
+								true: {
+									type: Hinder
+									select: all(side(Shadow), support, evenTwilight, condition)
+								}
+								false: {
+									type: Hinder
+									select: all(side(Shadow), support, evenTwilight, possession)
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: Ring-bound. Frodo is resistance +2.<br>Maneuver: If you cannot spot more than 4 companions, add a burden to choose condition or possession, then choose odd or even.  Hinder all Shadow support cards with a type and twilight cost matching your choice. Limit once per turn.
+		lore: "'I can't carry it for you, but I can carry you...!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_116: {
+		cardInfo: {
+			//id: 103_116.0
+			parent: 103_116
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S116.0_card.jpg
+			collInfo: V3_116
+			rarity: _
+		}
+		title: Smeagol
+		subtitle: Once Like Us
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		keywords: Ring-bound
+		effects: [
+			{
+				type: ExtraCost
+				cost: {
+					type: AddBurdens
+					amount: 1
+				}
+			}
+			{
+				type: Activated
+				phase: Assignment
+				requires: {
+					type: CantSpot
+					filter: companion, not(culture(shire))
+				}						
+				cost: [
+					{
+						type: Exert
+						select: self
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+				effect: [
+					{
+						type: Spot
+						select: choose(minion)
+						memorize: chosenMinion
+					}
+					{
+						type: CostToEffect
+						cost: [
+							{
+								type: AddTwilight
+								amount: 2
+							}
+							{
+								type: If
+								check: {
+									type: IsGreaterThanOrEqual
+									firstNumber: {
+										type: TwilightCostInMemory
+										memory: chosenMinion
+									}
+									secondNumber: 5
+								}
+								true: {
+									type: AddThreats
+									amount: 2
+								}
+							}
+						]
+						effect: {
+							type: Hinder
+							select: memory(chosenMinion)
+						}
+					}
+				]
+			}
+		]
+		gametext: Ring-bound. To play, add a burden.<br>Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
+		lore: "...thought that they beheld an old weary hobbit..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_117: {
+		cardInfo: {
+			//id: 103_117.0
+			parent: 103_117
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S117.0_card.jpg
+			collInfo: V3_117
+			rarity: _
+		}
+		title: Sting
+		subtitle: Sharp Elven-blade
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 1
+		resistance: 1
+		itemclass: Hand weapon
+		target: Ring-bound,Hobbit
+		effects: [
+			{
+				type: Activated
+				phase: Skirmish
+				requires: {
+					type: CantSpot
+					filter: companion
+					count: 5
+				}
+				cost: {
+					type: AddThreats
+					amount: 1
+				}
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: {
+						type: ForEachThreat
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: Transfer
+					select: self
+					where: choose(Hobbit,Ring-bearer)
+					checkTarget: true
+				}
+			}
+			{
+				type: Response
+				fromDiscard: true
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+					on: Hobbit,Ring-bearer
+				}
+			}
+		]
+		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot. <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		lore: "Sting flashed out...but at its edges a blue fire flicked."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_118: {
+		cardInfo: {
+			//id: 103_118.0
+			parent: 103_118
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S118.0_card.jpg
+			collInfo: V3_118
+			rarity: _
+		}
+		title: The Sooner We're Rid of It
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: Hobbit, companion
+					count: 2
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: Exert
+						select: choose(companion)
+						memorize: exertedComp
+					}
+					{
+						type: Hinder
+						ignoreCostCheckFailure: true
+						select: all(AttachedTo(memory(exertedComp)), not(hindered))
+						memorize: hinderedCards
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
+						select: memory(exertedComp)
+						amount: {
+							type: Sum
+							source: [
+								{
+									type: ForEachInMemory
+									memory: hinderedCards
+									filter: not(weapon)
+								}
+								{
+									type: ForEachInMemory
+									memory: hinderedCards
+									filter: weapon
+									multiplier: 3
+								}
+							]
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: companion
+							count: 5
+						}
+						true: {
+							type: Discard
+							select: self
+						}
+						
+						false: {
+							type: Hinder
+							select: self
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_119: {
+		cardInfo: {
+			//id: 103_119.0
+			parent: 103_119
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S119.0_card.jpg
+			collInfo: V3_119
+			rarity: _
+		}
+		title: Treasured Pipe
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: companion
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: or(pipe, and(unbound,Hobbit))
+				}
+			}
+			{
+				type: Activated
+				phase: Fellowship
+				cost: [
+					{
+						type: Discard
+						select: choose(pipeweed)
+					}
+					{
+						type: chooseHowManyToSpot
+						filter: pipe
+						memorize: spottedPipes
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
+						count: {
+							type: fromMemory
+							memory: spottedPipes
+						}
+						amount: 1
+						select: choose(companion)
+						until: start(regroup)
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+			}
+		]
+		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Fellowship: Discard a pipeweed and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.
+		lore: "'I keep a treasure or two near my skin, as precious as Rings to me. Here's one: my old wooden pipe.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_120: {
+		cardInfo: {
+			//id: 103_120.0
+			parent: 103_120
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S120.0_card.jpg
+			collInfo: V3_120
+			rarity: _
+		}
+		title: Worth Fighting For
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: [
+			{
+				type: Event
+				requires: {
+					type: CanSpot
+					filter: Hobbit, companion
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						player: Shadow
+						select: choose(side(Free Peoples), character, CanExert)
+						memorize: exhaustedComp
+						text: Choose a Free Peoples character to exhaust
+					}
+					{
+						type: MemorizeNumber
+						amount: {
+							type: Subtract
+							firstNumber: {
+								type: ForEachVitality
+								filter: memory(exhaustedComp)
+							}
+							secondNumber: 1
+						}	
+						memory: exertions
+					}
+					{
+						type: Exhaust
+						player: Shadow
+						select: memory(exhaustedComp)
+					}
+					{
+						type: Repeat
+						times: {
+							type: FromMemory
+							memory: exertions
+						}
+						effect: 
+						{
+							type: Hinder
+							select: choose(side(Shadow), support)
+						}
+					}
+					{
+						type: If
+						check: {
+							type: CantSpot
+							filter: companion
+							count: 5
+						}
+						true: [
+							{
+								type: ChooseActiveCards
+								player: Shadow
+								text: Choose a hindered Shadow card to shuffle into your draw deck
+								select: choose(side(Shadow), hindered)
+								hindered: true
+								memorize: chosenHindered
+							}
+							{
+								type: ShuffleCardsFromPlayIntoDrawDeck
+								player: Shadow
+								select: memory(chosenHindered)
+								includeStacked: true
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: To play, spot a Hobbit companion.<br>Make the Shadow player exhaust 1 of your characters.  For each exertion made, hinder a Shadow support card.  If you cannot spot more than 4 companions, you may make the Shadow player shuffle one of their hindered cards (and all cards stacked on it) into their owner's draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

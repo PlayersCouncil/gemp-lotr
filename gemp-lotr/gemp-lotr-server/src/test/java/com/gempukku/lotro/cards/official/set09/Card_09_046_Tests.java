@@ -70,7 +70,7 @@ public class Card_09_046_Tests
 		var eomer = scn.GetFreepsCard("eomer");
 		var spear = scn.GetFreepsCard("spear");
 		scn.MoveCardsToSupportArea(arrow);
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(eomer, spear);
 
 		scn.MoveMinionsToTable("runner");
@@ -104,7 +104,7 @@ public class Card_09_046_Tests
 		var eomer = scn.GetFreepsCard("eomer");
 		var spear = scn.GetFreepsCard("spear");
 		scn.MoveCardsToSupportArea(arrow);
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(eomer, spear);
 
 		scn.MoveMinionsToTable("runner");

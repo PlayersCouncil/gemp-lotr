@@ -79,9 +79,9 @@ public class Card_03_042_ErrataTests
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl horn = scn.GetFreepsCard("horn");
 
-        scn.MoveCompanionToTable(elrond);
+        scn.MoveCompanionsToTable(elrond);
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(horn);
         scn.MoveCardsToHand(boromir);
 
@@ -105,8 +105,8 @@ public class Card_03_042_ErrataTests
         PhysicalCardImpl horn = scn.GetFreepsCard("horn");
         PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 
-        scn.MoveCompanionToTable(elrond);
-        scn.MoveCompanionToTable(boromir);
+        scn.MoveCompanionsToTable(elrond);
+        scn.MoveCompanionsToTable(boromir);
         scn.MoveCardsToHand(horn);
 
         scn.MoveMinionsToTable(runner1);

@@ -74,7 +74,7 @@ public class Card_V2_070_Tests
 
 		var wall = scn.GetShadowSite(5);
 		var haldir = scn.GetFreepsCard("haldir");
-		scn.MoveCompanionToTable(haldir);
+		scn.MoveCompanionsToTable(haldir);
 
 		var hillman = scn.GetShadowCard("hillman");
 		var mob = scn.GetShadowCard("mob");

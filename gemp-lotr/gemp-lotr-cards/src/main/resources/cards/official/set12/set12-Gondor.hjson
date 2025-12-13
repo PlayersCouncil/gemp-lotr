@@ -573,7 +573,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -582,7 +582,7 @@
 				]
 				effect: {
 					type: discard
-					select: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(bearer))))
+					select: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(oldBearer))))
 				}
 			}
 

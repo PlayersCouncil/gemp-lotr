@@ -65,7 +65,7 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var nelya = scn.GetShadowCard("nelya");
@@ -92,7 +92,7 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var nelya = scn.GetShadowCard("nelya");
@@ -119,7 +119,7 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var toto = scn.GetShadowCard("toto");

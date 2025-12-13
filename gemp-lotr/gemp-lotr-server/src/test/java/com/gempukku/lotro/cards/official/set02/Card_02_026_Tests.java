@@ -105,7 +105,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		scn.StartGame();
 
@@ -124,7 +124,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site2 = scn.GetFreepsSite(2);
 
@@ -143,7 +143,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site3 = scn.GetFreepsSite(3);
 
@@ -165,7 +165,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site2 = scn.GetFreepsSite(2);
 		var shadow2 = scn.GetShadowSite(2);
@@ -189,7 +189,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site1 = scn.GetFreepsSite("site1");
 		var site2 = scn.GetFreepsSite("site2");
@@ -211,7 +211,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		scn.MoveCardsToHand(speak);
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site1 = scn.GetFreepsSite("site1");
 		var site3 = scn.GetFreepsSite("site3");

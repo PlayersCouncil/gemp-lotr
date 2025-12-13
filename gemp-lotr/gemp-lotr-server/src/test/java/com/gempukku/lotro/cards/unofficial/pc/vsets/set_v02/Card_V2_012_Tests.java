@@ -69,7 +69,7 @@ public class Card_V2_012_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCardsToSupportArea(friends);
-		scn.MoveCompanionToTable(aragorn, gimli, legolas);
+		scn.MoveCompanionsToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);
@@ -114,7 +114,7 @@ public class Card_V2_012_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCardsToSupportArea(friends);
-		scn.MoveCompanionToTable(aragorn, gimli, legolas);
+		scn.MoveCompanionsToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);
@@ -162,7 +162,7 @@ public class Card_V2_012_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCardsToSupportArea(friends);
-		scn.MoveCompanionToTable(aragorn, gimli, legolas);
+		scn.MoveCompanionsToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);

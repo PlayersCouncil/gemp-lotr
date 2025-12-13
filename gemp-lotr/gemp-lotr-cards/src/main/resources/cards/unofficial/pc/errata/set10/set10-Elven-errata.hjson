@@ -286,21 +286,90 @@
 	# 	}
 	# }
 	
+	# 60_11: {
+	# 	cardInfo: {
+	# 		//id: 0_11.3
+	# 		revision: 3
+	# 		image: errata/60_11.jpg
+	# 		collInfo: 10R11
+	# 		rarity: R
+	# 	}
+	# 	title: Galadriel
+	# 	subtitle: Lady Redeemed
+	# 	unique: true
+	# 	culture: elven
+	# 	twilight: 3
+	# 	type: companion
+	# 	race: elf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: modifyOwnCost
+	# 			requires: {
+	# 				type: phase
+	# 				phase: play starting fellowship
+	# 			}
+	# 			amount: -3
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: regroup
+	# 			requires: {
+	# 					type: perPhaseLimit
+	# 					limit: 1
+	# 				}
+	# 			cost: [
+	# 				{
+	# 					type: discardFromHand
+	# 					count: 1
+	# 					forced: false
+	# 					select: choose(culture(elven),event)
+	# 				}
+	# 			]
+	# 			effect: [
+	# 				{
+	# 					type: discard
+	# 					select: choose(side(shadow),or(condition,possession))
+	# 				}
+	# 				{
+	# 					type: incrementPerPhaseLimit
+	# 					limit: 1
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: When Galadriel is in your starting fellowship, her twilight cost is –3.<br>Regroup: Exert Galadriel and discard an [elven] event from hand to discard a Shadow condition or Shadow possession (limit once per phase).
+	# 	lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_11: {
 		cardInfo: {
-			//id: 0_11.3
-			revision: 3
-			image: errata/60_11.jpg
+			//id: 60_11.4
+			parent: 10_11
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 4
+			image: errata/LOTR-EN10E011.4_card.jpg
 			collInfo: 10R11
 			rarity: R
 		}
 		title: Galadriel
 		subtitle: Lady Redeemed
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 3
-		type: companion
-		race: elf
+		type: Companion
+		race: Elf
 		strength: 3
 		vitality: 3
 		resistance: 6
@@ -315,32 +384,22 @@
 			}
 			{
 				type: activated
-				phase: regroup
-				requires: {
-						type: perPhaseLimit
-						limit: 1
-					}
-				cost: [
-					{
-						type: discardFromHand
-						count: 1
-						forced: false
-						select: choose(culture(elven),event)
-					}
+				phase: [
+					fellowship
+					regroup
 				]
-				effect: [
-					{
-						type: discard
-						select: choose(side(shadow),or(condition,possession))
-					}
-					{
-						type: incrementPerPhaseLimit
-						limit: 1
-					}
-				]
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(elven),event)
+				}
+				effect: {
+					type: Hinder
+					select: choose(side(shadow),or(condition,possession))
+				}
 			}
 		]
-		gametext: When Galadriel is in your starting fellowship, her twilight cost is –3.<br>Regroup: Exert Galadriel and discard an [elven] event from hand to discard a Shadow condition or Shadow possession (limit once per phase).
+		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
 		lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
 		promotext: ""
 		alts: {

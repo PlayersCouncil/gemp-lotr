@@ -69,7 +69,7 @@ public interface AdHocEffects extends TestBase, Decisions {
         game().getActionsEnvironment().addAlwaysOnActionProxy(action);
     }
 
-	default void ShadowTakeControlOfSite() throws DecisionResultInvalidException {
+	default void ShadowTakeControlOfSite() {
 		ShadowExecuteAdHocEffect(new TakeControlOfASiteEffect(null, P2));
 	}
 
@@ -80,10 +80,9 @@ public interface AdHocEffects extends TestBase, Decisions {
 	 * or other side-effects to be respected.  It is finicky tho.
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
-	 * @throws DecisionResultInvalidException This error will be thrown if the effect cannot for whatever reason be
 	 * executed as part of the current player decision.
 	 */
-	default void FreepsExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P1, effect); }
+	default void FreepsExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P1, effect); }
 	/**
 	 * Causes the Shadow player to execute an arbitrary effect.  Note that there are nuances to how and whether this
 	 * ever works; in particular it seems to only work if there are 0 legal actions to take on the current decision.
@@ -91,10 +90,9 @@ public interface AdHocEffects extends TestBase, Decisions {
 	 * or other side-effects to be respected.  It is finicky tho.
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
-	 * @throws DecisionResultInvalidException This error will be thrown if the effect cannot for whatever reason be
 	 * executed as part of the current player decision.
 	 */
-	default void ShadowExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P2, effect); }
+	default void ShadowExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P2, effect); }
 
 	/**
 	 * Causes the given player to execute an arbitrary effect.  Note that there are nuances to how and whether this
@@ -104,10 +102,9 @@ public interface AdHocEffects extends TestBase, Decisions {
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param playerId The player who will execute the effect.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
-	 * @throws DecisionResultInvalidException This error will be thrown if the effect cannot for whatever reason be
 	 * executed as part of the current player decision.
 	 */
-	default void ExecuteAdHocEffect(String playerId, Effect effect) throws DecisionResultInvalidException {
+	default void ExecuteAdHocEffect(String playerId, Effect effect) {
         carryOutEffectInPhaseActionByPlayer(playerId, effect);
         assertTrue(effect.wasCarriedOut());
     }
@@ -180,13 +177,13 @@ public interface AdHocEffects extends TestBase, Decisions {
 		});
 	}
 
-	default void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) throws DecisionResultInvalidException {
+	default void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) {
 		var action = new SystemQueueAction();
 		action.appendEffect(effect);
 		carryOutEffectInPhaseActionByPlayer(playerId, action);
 	}
 
-	default void carryOutEffectInPhaseActionByPlayer(String playerId, Action action) throws DecisionResultInvalidException {
+	default void carryOutEffectInPhaseActionByPlayer(String playerId, Action action) {
 		var awaitingDecision = (CardActionSelectionDecision) userFeedback().getAwaitingDecision(playerId);
 		awaitingDecision.addAction(action);
 

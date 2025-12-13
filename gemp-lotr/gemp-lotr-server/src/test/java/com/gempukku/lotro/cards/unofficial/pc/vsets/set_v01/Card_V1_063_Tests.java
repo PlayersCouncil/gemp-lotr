@@ -91,7 +91,7 @@ public class Card_V1_063_Tests
 		PhysicalCardImpl guard4 = scn.GetFreepsCard("guard4");
 		PhysicalCardImpl guard5 = scn.GetFreepsCard("guard5");
 		PhysicalCardImpl guard6 = scn.GetFreepsCard("guard6");
-		scn.MoveCompanionToTable(guard1, guard2, guard3, guard4, guard5, guard6);
+		scn.MoveCompanionsToTable(guard1, guard2, guard3, guard4, guard5, guard6);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));

@@ -1,0 +1,116 @@
+{
+	54_92: {
+		cardInfo: {
+			//id: 54_92.1
+			parent: 4_92
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E092.1_card.jpg
+			collInfo: 4R92
+			rarity: R
+		}
+		title: Grown Suddenly Tall
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Response
+		keywords: Spell
+		effects: [
+			{
+				type: ResponseEvent
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: Spot
+					filter: title(Gandalf)
+				},
+				effect: [
+					{
+						type: Hinder
+						select: all(condition)
+						memorize: hinderedCards
+					}
+					{
+						type: AddTwilight
+						amount: {
+							type: ForEachInMemory
+							memory: hinderedCards
+							filter: side(Shadow)
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Spell</b>.<br>Spot Gandalf to hinder all conditions.  Add (1) for each Shadow condition hindered (limit (5)).
+		lore: "His hood and grey rags were flung away. His white garments shone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	54_99: {
+		cardInfo: {
+			//id: 54_99.1
+			parent: 4_99
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E099.1_card.jpg
+			collInfo: 4U99
+			rarity: U
+		}
+		title: Roll of Thunder
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: [
+			Fellowship
+			Maneuver
+		]
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: [
+				{
+					type: Choice
+					texts: [
+						Discard a Shadow possession
+						Hinder a Shadow artifact
+					]
+					effects: [
+						{
+							type: Discard
+							select: choose(side(shadow),possession)
+						}
+						{
+							type: Hinder
+							select: choose(side(shadow),artifact)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Fellowship</b> <i>or</i> Maneuver: Spot Gandalf to discard a Shadow possession or hinder a Shadow artifact.
+		lore: "'I have not passed through fire and death to bandy crooked words with a serving-man till the lightning falls.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

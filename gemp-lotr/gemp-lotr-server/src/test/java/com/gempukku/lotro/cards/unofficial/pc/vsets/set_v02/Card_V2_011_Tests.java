@@ -73,7 +73,7 @@ public class Card_V2_011_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var bow = scn.GetFreepsCard("bow");
 		scn.MoveCardsToHand(honour);
-		scn.MoveCompanionToTable(veowyn, troop);
+		scn.MoveCompanionsToTable(veowyn, troop);
 
 		scn.StartGame();
 
@@ -108,7 +108,7 @@ public class Card_V2_011_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var bow = scn.GetFreepsCard("bow");
 		scn.MoveCardsToHand(honour);
-		scn.MoveCompanionToTable(veowyn, troop);
+		scn.MoveCompanionsToTable(veowyn, troop);
 
 		scn.StartGame();
 
@@ -143,7 +143,7 @@ public class Card_V2_011_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var bow = scn.GetFreepsCard("bow");
 		scn.MoveCardsToHand(honour);
-		scn.MoveCompanionToTable(veowyn, troop, than);
+		scn.MoveCompanionsToTable(veowyn, troop, than);
 
 		scn.StartGame();
 
@@ -178,7 +178,7 @@ public class Card_V2_011_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var bow = scn.GetFreepsCard("bow");
 		scn.MoveCardsToHand(honour);
-		scn.MoveCompanionToTable(veowyn, troop, than);
+		scn.MoveCompanionsToTable(veowyn, troop, than);
 
 		scn.StartGame();
 

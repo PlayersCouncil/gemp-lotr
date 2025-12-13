@@ -1,13 +1,12 @@
 package com.gempukku.lotro.logic.effects;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
+import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.results.AddThreatResult;
 
 public class AddThreatsEffect extends AbstractEffect {
@@ -27,7 +26,7 @@ public class AddThreatsEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return evaluateCount(game) <= getThreatsPossibleToAdd(game);
+        return PlayConditions.canAddThreat(game, null, evaluateCount(game));
     }
 
     private int evaluateCount(LotroGame game) {
@@ -45,15 +44,10 @@ public class AddThreatsEffect extends AbstractEffect {
         return null;
     }
 
-    private int getThreatsPossibleToAdd(LotroGame game) {
-        return Filters.countActive(game, CardType.COMPANION)
-                - game.getGameState().getThreats();
-    }
-
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         int count = evaluateCount(game);
-        int toAdd = Math.min(count, getThreatsPossibleToAdd(game));
+        int toAdd = Math.min(count, PlayConditions.getMaxAddThreatCount(game));
         if (toAdd > 0) {
             game.getGameState().sendMessage(_performingPlayer + " adds " + GameUtils.formatNumber(toAdd, count) + " threat" + ((toAdd > 1) ? "s" : "") + " with " + GameUtils.getCardLink(_source));
             game.getGameState().addThreats(game.getGameState().getCurrentPlayerId(), toAdd);

@@ -111,7 +111,7 @@ public class Card_V2_027_Tests
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var naith = scn.GetFreepsCard("naith");
-		scn.MoveCompanionToTable(gimli, naith);
+		scn.MoveCompanionsToTable(gimli, naith);
 
 		var site2 = scn.GetShadowSite(2);
 

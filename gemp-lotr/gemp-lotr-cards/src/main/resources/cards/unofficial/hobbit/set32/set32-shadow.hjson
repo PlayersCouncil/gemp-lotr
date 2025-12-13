@@ -781,23 +781,23 @@
 				}
 			effect: [
 		  {
-			type: chooseActiveCards
-			text: Choose card to discard
-			select: choose(culture(dwarven),weapon)
-			memorize: chosenWeapon
+				type: chooseActiveCards
+				text: Choose card to discard
+				select: choose(culture(dwarven),weapon)
+				memorize: chosenWeapon
 		  }
 		  {
-			type: memorize
-			memory: bearer
-			filter: hasAttached(memory(chosenWeapon))
+				type: memorize
+				memory: oldBearer
+				filter: hasAttached(memory(chosenWeapon))
 		  }
 		  {
 			type: preventable
-			text: Would you like to exert {bearer} to prevent discarding of {chosenWeapon}?
+			text: Would you like to exert {oldBearer} to prevent discarding of {chosenWeapon}?
 			player: fp
 			cost: {
 			  type: exert
-			  select: choose(memory(bearer))
+			  select: choose(memory(oldBearer))
 			}
 			effect: {
 			  type: discard

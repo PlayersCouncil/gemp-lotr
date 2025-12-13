@@ -81,7 +81,7 @@ public class Card_V1_042_Tests
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(guard1, guard2, arwen);
+		scn.MoveCompanionsToTable(guard1, guard2, arwen);
 		scn.AttachCardsTo(arwen, scn.GetFreepsCard("gwemegil"));
 
 		var walks = scn.GetShadowCard("walks");

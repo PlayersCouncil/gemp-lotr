@@ -26,6 +26,9 @@ public interface GameProperties extends TestBase {
 	default int GetThreats() {
 		return gameState().getThreats();
 	}
+	default int GetThreatLimit() {
+		return PlayConditions.getThreatLimit(game());
+	}
 	default void AddThreats(int count) {
 		gameState().addThreats(gameState().getCurrentPlayerId(), count);
 	}
@@ -67,11 +70,34 @@ public interface GameProperties extends TestBase {
 	 * @return Gets the player whose turn it isn't.
 	 */
 	default String GetOffPlayer() {
-		return gameState()
+		var order = gameState()
 				.getPlayerOrder()
-				.getCounterClockwisePlayOrder(GetCurrentPlayer(), true)
-				.getNextPlayer();
+				.getCounterClockwisePlayOrder(GetCurrentPlayer(), true);
+
+		//Skip the first player in the order, as that is the decider.
+		order.getNextPlayer();
+		return order.getNextPlayer();
 	}
+
+	/**
+	 * @return Gets the player who is currently making a decision.
+	 */
+	default String GetDecidingPlayer() { return userFeedback().getUsersPendingDecision().stream().findFirst().get(); }
+
+	/**
+	 * @return Gets the player who is not currently making a decision.
+	 */
+	default String GetNextDecider() {
+		var order = gameState()
+			.getPlayerOrder()
+			.getCounterClockwisePlayOrder(GetDecidingPlayer(), true);
+
+		//Skip the first player in the order, as that is the decider.
+		order.getNextPlayer();
+		return order.getNextPlayer();
+	}
+
+
 
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {

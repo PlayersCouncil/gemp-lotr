@@ -7,6 +7,8 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
+import com.gempukku.lotro.logic.timing.results.HinderedResult;
 import org.json.simple.JSONObject;
 
 import java.util.List;
@@ -40,8 +42,11 @@ public interface LotroCardBlueprint {
 
     boolean isUnique();
 
+    int getUniqueRestriction();
+
     String getTitle();
     String getSanitizedTitle();
+    String getSanitizedSubtitle();
     String getFullName();
     String getSanitizedFullName();
 
@@ -111,6 +116,8 @@ public interface LotroCardBlueprint {
     List<? extends ActivateCardAction> getOptionalInPlayBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self);
 
     List<? extends ActivateCardAction> getOptionalInPlayAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
+    List<? extends ActivateCardAction> getOptionalInDiscardBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self);
+    List<? extends ActivateCardAction> getOptionalInDiscardAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
 
 
     List<PlayEventAction> getPlayResponseEventAfterActions(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
@@ -121,9 +128,13 @@ public interface LotroCardBlueprint {
     List<OptionalTriggerAction> getOptionalInHandAfterTriggers(String playerId, LotroGame game, EffectResult effectResult, PhysicalCard self);
 
 
-    RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, PhysicalCard self);
+    RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result);
 
-    OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(String playerId, LotroGame game, PhysicalCard self);
+    OptionalTriggerAction getDiscardedFromPlayOptionalTrigger(LotroGame game, DiscardCardsFromPlayResult result);
+
+    RequiredTriggerAction getHinderedFromPlayRequiredTrigger(LotroGame game, HinderedResult result);
+
+    OptionalTriggerAction getHinderedFromPlayOptionalTrigger(LotroGame game, HinderedResult result);
 
 
     RequiredTriggerAction getKilledRequiredTrigger(LotroGame game, PhysicalCard self);

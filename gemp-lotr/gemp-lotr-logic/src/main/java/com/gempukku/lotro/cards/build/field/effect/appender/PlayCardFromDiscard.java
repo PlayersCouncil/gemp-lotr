@@ -57,20 +57,20 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
+                                return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
 
-                            return Filters.playable(game, costModifier);
+                            return Filters.playable(costModifier);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, maxDiscountModifier, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
                             }
 
-                            return Filters.playable(actionContext.getGame(), removedTwilight, maxDiscountModifier, false, false, true);
+                            return Filters.playable(maxDiscountModifier, removedTwilight, false, false, true);
                         },
                         actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
         result.addEffectAppender(

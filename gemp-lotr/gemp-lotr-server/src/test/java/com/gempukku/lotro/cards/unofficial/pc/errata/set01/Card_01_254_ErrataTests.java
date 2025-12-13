@@ -70,7 +70,7 @@ public class Card_01_254_ErrataTests
 		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.MoveCompanionToTable(greenleaf);
+		scn.MoveCompanionsToTable(greenleaf);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(wraith, 1);
@@ -115,7 +115,7 @@ public class Card_01_254_ErrataTests
 		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.MoveCompanionToTable(greenleaf);
+		scn.MoveCompanionsToTable(greenleaf);
 
 		scn.StartGame();
 
@@ -142,7 +142,7 @@ public class Card_01_254_ErrataTests
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(greenleaf, arwen);
+		scn.MoveCompanionsToTable(greenleaf, arwen);
 		scn.AttachCardsTo(arwen, scn.GetFreepsCard("bow"));
 
 		scn.StartGame();

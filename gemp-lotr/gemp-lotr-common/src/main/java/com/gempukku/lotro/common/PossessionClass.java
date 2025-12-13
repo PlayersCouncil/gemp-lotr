@@ -7,7 +7,7 @@ public enum PossessionClass implements Filterable {
     CLASSLESS("Classless"),
 
     //PC Classes
-    PONY("Pony")
+    HORN("Horn"), PONY("Pony")
 
     ;
     

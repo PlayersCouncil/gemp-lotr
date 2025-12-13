@@ -1,0 +1,98 @@
+{
+
+	103_1: {
+		cardInfo: {
+			//id: 103_1.0
+			parent: 103_1
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3S001.0_card.jpg
+			collInfo: V3_1
+			rarity: _
+		}
+		title: Phial of Galadriel
+		subtitle: Bane of Darkness
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Artifact
+		vitality: 1
+		itemclass: Phial
+		target: Ring-bound,Hobbit
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: CanSpot
+						filter: companion
+						count: 5
+					}
+				}
+				effect: {
+					type: Discard
+					select: self
+				}
+			}
+			{
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: AddBurdens
+					amount: 2
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(side(Shadow),support)
+						memorize: chosenCard
+						text: Choose a Shadow support card's title
+					}
+					{
+						type: Hinder
+						select: all(NameFromMemory(chosenCard))
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: Transfer
+					select: self
+					where: choose(Hobbit,Ring-bearer)
+					checkTarget: true
+				}
+			}
+			
+			{
+				type: Response
+				fromDiscard: true
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+					on: Hobbit,Ring-bearer
+				}
+			}
+		]
+		gametext: Bearer must be a Ring-bound Hobbit. Discard this if you can spot more than 4 companions.<br>Maneuver: Add 2 burdens to hinder all Shadow support cards with a title you spot.<br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

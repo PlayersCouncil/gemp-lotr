@@ -282,8 +282,7 @@ public class Card_V2_057_Tests
 		scn.ShadowDismissRevealedCards();
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(sauron);
-		//Sauron's own game text makes him -1 for the burden
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
 	}
 

@@ -8,22 +8,42 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.Preventable;
+import com.gempukku.lotro.logic.timing.results.AddTwilightResult;
 
 public class AddTwilightEffect extends AbstractEffect implements Preventable {
+    public enum Cause {
+        AMBUSH, CARD_EFFECT, CARD_PLAY, MOVE;
+
+        public static AddTwilightEffect.Cause parse(String name) {
+            String nameCaps = name.toUpperCase().trim()
+                    .replace(' ', '_')
+                    .replace('-', '_');
+
+            for (AddTwilightEffect.Cause cause : values()) {
+                if (cause.toString().equals(nameCaps))
+                    return cause;
+            }
+            return null;
+        }
+    }
+
     private final PhysicalCard _source;
     private final Evaluator _twilight;
     private boolean _prevented;
     private String _sourceText;
 
-    public AddTwilightEffect(PhysicalCard source, Evaluator twilight) {
+    private final Cause _cause;
+
+    public AddTwilightEffect(PhysicalCard source, Cause cause, Evaluator twilight) {
         _source = source;
         _twilight = twilight;
         if (source != null)
             _sourceText = GameUtils.getCardLink(source);
+        _cause = cause;
     }
 
-    public AddTwilightEffect(PhysicalCard source, int twilight) {
-        this(source, new ConstantEvaluator(twilight));
+    public AddTwilightEffect(PhysicalCard source, Cause cause, int twilight) {
+        this(source, cause, new ConstantEvaluator(twilight));
     }
 
     public void setSourceText(String sourceText) {
@@ -37,6 +57,10 @@ public class AddTwilightEffect extends AbstractEffect implements Preventable {
     @Override
     public String getText(LotroGame game) {
         return "Add (" + getTwilightToAdd(game) + ")";
+    }
+
+    public Cause getCause() {
+        return _cause;
     }
 
     @Override
@@ -65,6 +89,7 @@ public class AddTwilightEffect extends AbstractEffect implements Preventable {
             int count = getTwilightToAdd(game);
             game.getGameState().sendMessage(_sourceText + " added " + count + " twilight");
             game.getGameState().addTwilight(count);
+            game.getActionsEnvironment().emitEffectResult(new AddTwilightResult(_source, _cause, count));
             return new FullEffectResult(true);
         }
         return new FullEffectResult(false);

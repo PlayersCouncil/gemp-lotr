@@ -35,6 +35,55 @@
 		}
 	}
 	
+	51_136: {
+		cardInfo: {
+			//id: 51_136.1
+			parent: 1_136
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E136.1_card.jpg
+			collInfo: 1U136
+			rarity: U
+		}
+		title: Saruman's Power
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		keywords: Spell
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				count: 1
+				select: choose(culture(isengard),minion)
+			}
+			effect: [
+				{
+					type: Discard
+					count: 1
+					select: choose(side(Free Peoples), condition)
+				}
+				{
+					type: Hinder
+					select: all(condition)
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all conditions.
+		lore: "The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_138: {
 		cardInfo: {
 			//id: 1_138.1
@@ -246,6 +295,92 @@
 		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and strength +2 more until the regroup phase).
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	51_142: {
+		cardInfo: {
+			//id: 1_142.1
+			parent: 1_142
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E142.1.jpg
+			collInfo: 1U142
+			rarity: U
+		}
+		title: Traitor's Voice
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: isengard, minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: perTurnLimit
+							limit: 1
+						}
+						{
+							type: or
+							requires: [
+								{
+									type: CanSpot
+									filter: Isengard, minion
+									count: 4
+								}
+								{
+									type: canSpot
+									filter: exhausted,ring bearer
+								}
+								{
+									type: canSpotBurdens
+									amount: 5
+								}
+							]
+						}
+					]
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: -1
+						}
+						until: endOfTurn
+					}
+				]
+			}
+		]
+		gametext: <b>Search</b>. To play, spot an [isengard] minion.\Regroup: Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
+		lore: "'In all the long wars with the Dark Tower treason has ever been our greatest foe.'"
 		promotext: ""
 		alts: {
 			promos: {

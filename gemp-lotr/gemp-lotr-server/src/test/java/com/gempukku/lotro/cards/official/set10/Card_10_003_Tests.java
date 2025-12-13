@@ -64,7 +64,7 @@ public class Card_10_003_Tests
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var more = scn.GetFreepsCard("more");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(more);
 
 		var runner = scn.GetShadowCard("runner");

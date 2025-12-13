@@ -6,8 +6,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
-import com.gempukku.lotro.logic.timing.EffectResult;
-import com.gempukku.lotro.logic.timing.results.ReconcileResult;
+import com.gempukku.lotro.logic.timing.TriggerConditions;
 import org.json.simple.JSONObject;
 
 public class Reconciles implements TriggerCheckerProducer {
@@ -22,12 +21,10 @@ public class Reconciles implements TriggerCheckerProducer {
         return new TriggerChecker() {
             @Override
             public boolean accepts(ActionContext actionContext) {
-                EffectResult effectResult = actionContext.getEffectResult();
                 if (playerSource != null) {
-                    String playerId = playerSource.getPlayer(actionContext);
-                    return effectResult.getType() == EffectResult.Type.RECONCILE && ((ReconcileResult) effectResult).getPlayerId().equals(playerId);
+                    return TriggerConditions.playerReconciles(actionContext.getGame(), actionContext.getEffectResult(), playerSource.getPlayer(actionContext));
                 } else {
-                    return effectResult.getType() == EffectResult.Type.RECONCILE;
+                    return TriggerConditions.reconciles(actionContext.getGame(), actionContext.getEffectResult());
                 }
             }
 

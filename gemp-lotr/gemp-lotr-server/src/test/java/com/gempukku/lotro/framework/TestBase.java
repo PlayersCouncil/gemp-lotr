@@ -93,6 +93,7 @@ public interface TestBase {
 	 * Fellowship: Exert another companion who has the Frodo signet to heal Frodo.
 	 */
 	String FOTRFrodo = "1_290";
+	String MDFrodo = "10_121";
 	/**
 	 * Gimli, Bearer of Grudges
 	 * 6 strength
@@ -111,6 +112,17 @@ public interface TestBase {
 	 * While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
 	 */
 	String GaladrielRB = "9_14";
+
+	/**
+	 * Smeagol, Bearer of Great Secrets
+	 * 3 strength
+	 * 4 vitality
+	 * 8 resistance
+	 * Ring-bound. To play, add a burden.
+	 * Each time the fellowship moves, place an unbound companion in the dead pile.
+	 * Regroup: If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
+	 */
+	String SmeagolRB = "9_30";
 
 	/**
 	 * The One Ring, The Ruling Ring

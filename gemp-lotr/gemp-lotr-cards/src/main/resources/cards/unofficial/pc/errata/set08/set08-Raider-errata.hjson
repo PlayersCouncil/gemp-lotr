@@ -202,7 +202,7 @@
 		}
 		
 		gametext: <b>Corsair.</b> <br>When you play this minion, if you can spot another corsair, you may discard a Shadow possession to reinforce a [raider] card twice.
-		lore: “Umbar remained at war with Gondor for many lives of men....”
+		lore: "Umbar remained at war with Gondor for many lives of men...."
 		promotext: ""
 		alts: {
 			promos: {

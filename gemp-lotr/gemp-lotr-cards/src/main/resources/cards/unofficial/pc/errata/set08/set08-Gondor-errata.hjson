@@ -53,7 +53,7 @@
 			}
 		]
 		gametext: <b>Enduring.</b> To play, spot 2 [gondor] Wraiths and add 2 threats. <br>While Shadow Host is exhausted, it is defender +1.
-		lore: “...fear went on before them, until they came to Calembel upon Ciril, and the sun went down like blood behind Pinnath Gelin....”
+		lore: "...fear went on before them, until they came to Calembel upon Ciril, and the sun went down like blood behind Pinnath Gelin...."
 		promotext: ""
 		alts: {
 			promos: {

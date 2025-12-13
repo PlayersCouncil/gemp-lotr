@@ -74,7 +74,7 @@ public class Card_01_282_ErrataTests
 		scn.MoveCardsToHand(legacy, orc);
 
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(boromir);
+		scn.MoveCompanionsToTable(boromir);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -106,7 +106,7 @@ public class Card_01_282_ErrataTests
 		var tale1 = scn.GetFreepsCard("tale1");
 		var tale2 = scn.GetFreepsCard("tale2");
 		scn.MoveCardsToHand(tale1, tale2);
-		scn.MoveCompanionToTable(boromir);
+		scn.MoveCompanionsToTable(boromir);
 		scn.AttachCardsTo(boromir, legacy);
 
 		scn.StartGame();

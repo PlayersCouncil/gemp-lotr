@@ -86,9 +86,10 @@ public class Card_V2_035_Tests
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCardsToHand(unheeded);
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(evil);
@@ -121,7 +122,7 @@ public class Card_V2_035_Tests
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCardsToHand(unheeded, sting, orcbane);
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(sting);
@@ -154,8 +155,8 @@ public class Card_V2_035_Tests
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCardsToHand(unheeded);
-		scn.MoveCompanionToTable(pippin);
-		scn.MoveCompanionToTable(greenleaf);
+		scn.MoveCompanionsToTable(pippin);
+		scn.MoveCompanionsToTable(greenleaf);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -187,8 +188,8 @@ public class Card_V2_035_Tests
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCardsToHand(unheeded);
-		scn.MoveCompanionToTable(pippin);
-		scn.MoveCompanionToTable(lindenroot);
+		scn.MoveCompanionsToTable(pippin);
+		scn.MoveCompanionsToTable(lindenroot);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -226,7 +227,7 @@ public class Card_V2_035_Tests
 		// B: lethal damage doesn't bypass shield wall
 		var gilgalad = scn.GetFreepsCard("gilgalad");
 		//not bothering with unheeded since the multi-wound part is what's important
-		scn.MoveCompanionToTable(gilgalad);
+		scn.MoveCompanionsToTable(gilgalad);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

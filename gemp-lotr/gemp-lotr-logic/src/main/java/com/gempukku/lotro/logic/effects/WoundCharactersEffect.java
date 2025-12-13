@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.WoundResult;
+import com.gempukku.lotro.logic.timing.rules.ThreatRule;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -76,7 +77,8 @@ public class WoundCharactersEffect extends AbstractPreventableCardEffect {
         for (PhysicalCard woundedCard : cards) {
             game.getGameState().addWound(woundedCard);
             game.getModifiersEnvironment().addedWound(woundedCard);
-            game.getActionsEnvironment().emitEffectResult(new WoundResult(_sources, woundedCard));
+            boolean threat = _sourceText.equals(ThreatRule.ThreatRuleSource);
+            game.getActionsEnvironment().emitEffectResult(new WoundResult(_sources, threat, woundedCard));
         }
     }
 

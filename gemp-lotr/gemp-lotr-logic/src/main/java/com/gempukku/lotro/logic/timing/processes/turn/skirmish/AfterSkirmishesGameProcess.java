@@ -15,18 +15,29 @@ public class AfterSkirmishesGameProcess implements GameProcess {
     @Override
     public void process(LotroGame game) {
         GameState gameState = game.getGameState();
-        if (gameState.isExtraSkirmishes()) {
+        // Extra skirmishes are the final round of skirmishes; we are done with skirmishing at this point.
+        // This flag will be set for us during the EndSkirmishesGameProcess if an effect like The Witch-king's Beast
+        // is triggered (or if Relentless minions are on the board).
+        if (gameState.isExtraSkirmishes() || gameState.isRelentlessSkirmishes()) {
             gameState.setExtraSkirmishes(false);
+            gameState.setRelentlessSkirmishes(false);
             _followingGameProcess = new RegroupGameProcess();
-        } else if (!gameState.isFierceSkirmishes() && Filters.countActive(game, CardType.MINION, Keyword.FIERCE)>0) {
+            return;
+        }
+        // If we haven't yet processed fierce skirmishes, we will do so now
+        if (!gameState.isFierceSkirmishes() && Filters.countActive(game, CardType.MINION, Keyword.FIERCE) > 0) {
             gameState.setFierceSkirmishes(true);
             gameState.sendMessage("Fierce skirmishes.");
             _followingGameProcess = new AssignmentGameProcess();
-        } else {
-            if (gameState.isFierceSkirmishes())
-                gameState.setFierceSkirmishes(false);
-            _followingGameProcess = new EndSkirmishesGameProcess();
+            return;
         }
+
+        if (gameState.isFierceSkirmishes()) {
+            gameState.setFierceSkirmishes(false);
+        }
+        _followingGameProcess = new EndSkirmishesGameProcess();
+
+        //Relentless skirmishes are handled in EndSkirmishesGameProcess, as we need to permit TWK's Beast to respond
     }
 
     @Override

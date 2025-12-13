@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -10,9 +11,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 public abstract class ChooseActiveCardsEffect extends AbstractEffect {
     private final PhysicalCard _source;
@@ -21,16 +20,19 @@ public abstract class ChooseActiveCardsEffect extends AbstractEffect {
     private final int _minimum;
     private final int _maximum;
     private final Filterable[] _filters;
+    private final Map<InactiveReason, Boolean> _spotOverrides = new HashMap<>();
 
     private boolean _shortcut = true;
 
-    public ChooseActiveCardsEffect(PhysicalCard source, String playerId, String choiceText, int minimum, int maximum, Filterable... filters) {
+    public ChooseActiveCardsEffect(PhysicalCard source, String playerId, String choiceText, int minimum, int maximum,
+            Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         _source = source;
         _playerId = playerId;
         _choiceText = choiceText;
         _minimum = minimum;
         _maximum = maximum;
         _filters = filters;
+        _spotOverrides.putAll(spotOverrides);
     }
 
     public void setUseShortcut(boolean shortcut) {
@@ -51,7 +53,7 @@ public abstract class ChooseActiveCardsEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.countActive(game, Filters.and(_filters, getExtraFilterForPlayabilityCheck(game))) >= _minimum;
+        return Filters.countActive(game, _spotOverrides, Filters.and(_filters, getExtraFilterForPlayabilityCheck(game))) >= _minimum;
     }
 
     @Override
@@ -66,7 +68,7 @@ public abstract class ChooseActiveCardsEffect extends AbstractEffect {
 
     @Override
     protected FullEffectResult playEffectReturningResult(final LotroGame game) {
-        final Collection<PhysicalCard> matchingCards = Filters.filterActive(game, Filters.and(_filters, getExtraFilterForPlaying(game)));
+        final Collection<PhysicalCard> matchingCards = Filters.filterActive(game, _spotOverrides, Filters.and(_filters, getExtraFilterForPlaying(game)));
         // Lets get the count realistic
         int maximum = Math.min(_maximum, matchingCards.size());
 

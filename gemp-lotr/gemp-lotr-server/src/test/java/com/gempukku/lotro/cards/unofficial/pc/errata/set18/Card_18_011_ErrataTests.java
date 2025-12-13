@@ -73,6 +73,7 @@ public class Card_18_011_ErrataTests
 		scn.MoveCardsToHand(ewer);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		//3 base +1 from ring
 		assertEquals(4, scn.GetStrength(galadriel));

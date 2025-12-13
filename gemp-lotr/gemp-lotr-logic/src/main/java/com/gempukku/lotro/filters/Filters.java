@@ -27,6 +27,9 @@ public class Filters {
     private static final Map<Keyword, Filter> _keywordFilterMap = new HashMap<>();
     private static final Map<Timeword, Filter> _timewordFilterMap = new HashMap<>();
 
+    public static final Filter unhindered = (game, physicalCard) ->  !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.HINDERED);
+    public static final Filter hindered = Filters.keyword(Keyword.HINDERED);
+
     static {
         for (Culture culture : Culture.values())
             _cultureFilterMap.put(culture, culture(culture));
@@ -49,14 +52,20 @@ public class Filters {
         }
 
 
+        //TODO: WTF is this doing?  There's no rule that says only companions can be rangers, etc.
+        // Is it an optimization? Not bothering to check non-companions? But then every card still needs
+        // checked for the right type.  Hmm, but then the modifiers don't needs checked and evaluated...
+
         // Some simple shortcuts for filters
         // Only companions can be rangers
-        _keywordFilterMap.put(Keyword.RANGER, Filters.and(CardType.COMPANION, keyword(Keyword.RANGER)));
+        //_keywordFilterMap.put(Keyword.RANGER, Filters.and(CardType.COMPANION, keyword(Keyword.RANGER)));
         // Only allies can be villagers
         _keywordFilterMap.put(Keyword.VILLAGER, Filters.and(CardType.ALLY, keyword(Keyword.VILLAGER)));
 
         // Minion groups
-        _keywordFilterMap.put(Keyword.SOUTHRON, Filters.and(CardType.MINION, keyword(Keyword.SOUTHRON)));
+        // This is the kind of crap I'm talking about.  We now have Bladetusk Mumakil that start as items and
+        // grant themselves Southron as they transform, but this stupid thing keeps that from working.
+        //_keywordFilterMap.put(Keyword.SOUTHRON, Filters.and(CardType.MINION, keyword(Keyword.SOUTHRON)));
         _keywordFilterMap.put(Keyword.EASTERLING, Filters.and(CardType.MINION, keyword(Keyword.EASTERLING)));
         _keywordFilterMap.put(Keyword.CORSAIR, Filters.and(CardType.MINION, keyword(Keyword.CORSAIR)));
         _keywordFilterMap.put(Keyword.TRACKER, Filters.and(CardType.MINION, keyword(Keyword.TRACKER)));
@@ -69,17 +78,41 @@ public class Filters {
     }
 
     public static boolean canSpot(LotroGame game, int count, Filterable... filters) {
-        return countSpottable(game, filters) >= count;
+        return countSpottable(game, SpotOverride.NONE, filters) >= count;
+    }
+
+    public static boolean canSpot(LotroGame game, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, spotOverrides, filters) >= count;
     }
 
     public static boolean hasActive(LotroGame game, Filterable... filters) {
-        return findFirstActive(game, filters) != null;
+        return findFirstActive(game, SpotOverride.NONE, filters) != null;
     }
 
-    public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) {
+    public static boolean hasActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return findFirstActive(game, spotOverrides, filters) != null;
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) { return filterActive(game, SpotOverride.NONE, filters); }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         Filter filter = Filters.and(filters);
-        GetCardsMatchingFilterVisitor getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
-        game.getGameState().iterateActiveCards(getCardsMatchingFilter);
+        var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, spotOverrides);
+        return getCardsMatchingFilter.getPhysicalCards();
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
+        Filter filter = Filters.and(filters);
+        var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, SpotOverride.NONE, cards);
+        return getCardsMatchingFilter.getPhysicalCards();
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Iterable<? extends PhysicalCard> cards, Filterable... filters) {
+        Filter filter = Filters.and(filters);
+        var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, spotOverrides, cards);
         return getCardsMatchingFilter.getPhysicalCards();
     }
 
@@ -93,15 +126,18 @@ public class Filters {
         return result;
     }
 
-    public static PhysicalCard findFirstActive(LotroGame game, Filterable... filters) {
+    public static PhysicalCard findFirstActive(LotroGame game, Filterable... filters) { return findFirstActive(game, SpotOverride.NONE, filters); }
+
+    public static PhysicalCard findFirstActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         FindFirstActiveCardInPlayVisitor visitor = new FindFirstActiveCardInPlayVisitor(game, Filters.and(filters));
-        game.getGameState().iterateActiveCards(visitor);
+        game.getGameState().iterateActiveCards(visitor, spotOverrides);
         return visitor.getCard();
     }
 
-    public static int countSpottable(LotroGame game, Filterable... filters) {
+    public static int countSpottable(LotroGame game, Filterable... filters) { return countSpottable(game, SpotOverride.NONE, filters); }
+    public static int countSpottable(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
-        game.getGameState().iterateActiveCards(matchingFilterVisitor);
+        game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         int result = matchingFilterVisitor.getCounter();
         //TODO: make this less dependent on how the definition is arranged
         if (filters.length == 1)
@@ -109,9 +145,10 @@ public class Filters {
         return result;
     }
 
-    public static int countActive(LotroGame game, Filterable... filters) {
+    public static int countActive(LotroGame game, Filterable... filters) { return countActive(game, SpotOverride.NONE, filters); }
+    public static int countActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters));
-        game.getGameState().iterateActiveCards(matchingFilterVisitor);
+        game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         return matchingFilterVisitor.getCounter();
     }
 
@@ -172,8 +209,8 @@ public class Filters {
         };
     }
 
-    public static Filter printedTwilightCost(final int printedTwilightCost) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == printedTwilightCost;
+    public static Filter printedTwilightCost(final Evaluator evaluator) {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == evaluator.evaluateExpression(game, null);
     }
 
     public static Filter maxPrintedTwilightCost(final int printedTwilightCost) {
@@ -182,6 +219,14 @@ public class Filters {
 
     public static Filter minPrintedTwilightCost(final int printedTwilightCost) {
         return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost;
+    }
+
+    public static Filter evenPrintedTwilightCost() {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() % 2 == 0;
+    }
+
+    public static Filter oddPrintedTwilightCost() {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() % 2 != 0;
     }
 
     public static Filter hasToken(final Token token) {
@@ -201,7 +246,7 @@ public class Filters {
         return Filters.and(
                 assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish),
                 (Filter) (game, physicalCard) -> {
-                    for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
+                    for (PhysicalCard card : Filters.filterActive(game, SpotOverride.NONE, againstFilter)) {
                         if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
                                 && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish).accepts(game, card)) {
                             Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
@@ -243,16 +288,39 @@ public class Filters {
                         }),
                 Filters.and(
                         CardType.COMPANION,
-                        (Filter) (game, physicalCard) -> assignedBySide == Side.SHADOW || !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.UNHASTY)
+                        (Filter) (game, physicalCard) ->
+                                //Shadow can always assign regardless of other factors
+                                assignedBySide == Side.SHADOW
+                                //non-unhasty companions can be assigned
+                                || !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.UNHASTY)
+                                //hasty companions who have been explicitly allowed can be assigned
                                 || game.getModifiersQuerying().isUnhastyCompanionAllowedToParticipateInSkirmishes(game, physicalCard)),
                 Filters.and(
                         CardType.MINION,
-                        new Filter() {
-                            @Override
-                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                return (game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT || !game.getGameState().isFierceSkirmishes()) || game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+						(Filter) (game, physicalCard) -> {
+
+                            //If we are in a situation like evaluating targets for A Dark Shape Sprang, we automatically pass
+                            if(game.getGameState().getCurrentPhase() != Phase.ASSIGNMENT)
+                                return true;
+
+                            if(game.getGameState().isNormalSkirmishes()) {
+                                return true;
                             }
-                        }));
+
+                            if(game.getGameState().isExtraSkirmishes()) {
+                                return game.getModifiersQuerying().canBeAssignedToSkirmish(game,null, physicalCard);
+                            }
+
+                            if(game.getGameState().isRelentlessSkirmishes()) {
+                                return game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.RELENTLESS);
+                            }
+
+                            if(game.getGameState().isFierceSkirmishes()) {
+                                return game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.FIERCE);
+                            }
+
+							return false; //shouldn't ever hit this
+						}));
 
         return Filters.and(
                 assignableFilter,
@@ -308,7 +376,7 @@ public class Filters {
         return false;
     };
 
-    public static final Filter inPlay = (game, physicalCard) -> physicalCard.getZone().isInPlay();
+    public static final Filter inPlay = (game, physicalCard) -> physicalCard.getZone() != null && physicalCard.getZone().isInPlay();
 
     public static final Filter active = (game, physicalCard) -> game.getGameState().isCardInPlayActive(physicalCard);
 
@@ -347,6 +415,15 @@ public class Filters {
 
     public static Filter canBeReturnedToHand(final PhysicalCard source) {
         return (game, physicalCard) -> game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, source);
+    }
+
+    public static Filter canBeHindered(final PhysicalCard source) {
+        return (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard)
+            && game.getModifiersQuerying().canBeHinderedBy(game, null, physicalCard, source);
+    }
+
+    public static Filter canBeRestored(final PhysicalCard source) {
+        return (game, physicalCard) -> game.getGameState().isHindered(physicalCard);
     }
 
     public static Filter canExert(final PhysicalCard source) {
@@ -394,36 +471,31 @@ public class Filters {
         };
     }
 
-    public static Filter playable(final LotroGame game, final int twilightModifier) {
-        return playable(game, twilightModifier, false);
+    public static Filter playable(final int twilightModifier) {
+        return playable(twilightModifier, 0, false, false, false);
     }
 
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty) {
-        return playable(game, twilightModifier, ignoreRoamingPenalty, false);
-    }
-
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile) {
-        return playable(game, 0, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, false);
-    }
-
-    public static Filter playable(final LotroGame game, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
-        return playable(game, 0, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
-    }
-
-    public static Filter playable(final LotroGame game, final int withTwilightRemoved, final int twilightModifier, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
-        return (game1, physicalCard) -> {
-            Side expectedSide = (physicalCard.getOwner().equals(game1.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
+    public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
+        return (game, physicalCard) -> {
+            Side expectedSide = (physicalCard.getOwner().equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
             final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
             if (blueprint.getSide() != expectedSide)
                 return false;
 
-            return PlayUtils.checkPlayRequirements(game1, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
         };
     }
 
     public static final Filter any = (game, physicalCard) -> true;
     public static final Filter none = (game, physicalCard) -> false;
     public static final Filter unique = (game, physicalCard) -> physicalCard.getBlueprint().isUnique();
+
+    public static final Filter twodot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 2;
+    public static final Filter threedot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 3;
+
+    public static Filter restricted(int amount) {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == amount;
+    }
 
     private static Filter signet(final Signet signet) {
         return (game, physicalCard) -> game.getModifiersQuerying().hasSignet(game, physicalCard, signet);
@@ -534,7 +606,7 @@ public class Filters {
     public static Filter hasAttached(int count, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filter(game, physicalCardList, filters).size() >= count);
+            return (Filters.filterActive(game, physicalCardList, filters).size() >= count);
         };
     }
 
@@ -606,7 +678,7 @@ public class Filters {
     public static Filter uncontrolledSite = (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() == null;
 
     private static Filter culture(final Culture culture) {
-        return (game, physicalCard) -> (physicalCard.getBlueprint().getCulture() == culture);
+        return (game, card) -> (game.getModifiersQuerying().isCulture(game, card, culture));
     }
 
     private static Filter keyword(final Keyword keyword) {
@@ -727,7 +799,7 @@ public class Filters {
     public static final Filter unboundCompanion = Filters.and(CardType.COMPANION, Filters.not(Keyword.RING_BOUND));
     public static final Filter mounted = Filters.or(Filters.hasAttached(PossessionClass.MOUNT), Keyword.MOUNTED);
 
-    public static Filter spottable = (game, physicalCard) -> true;
+    public static Filter spottable =  (game, physicalCard) -> true;
 
     private static class FindFirstActiveCardInPlayVisitor implements PhysicalCardVisitor {
         private final LotroGame game;

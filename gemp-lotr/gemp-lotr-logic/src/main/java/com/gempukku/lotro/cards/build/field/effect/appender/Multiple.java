@@ -14,6 +14,11 @@ public class Multiple implements EffectAppenderProducer {
 
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effects"), "effects");
 
+        return createEffectAppender(cost, effectArray, environment);
+    }
+
+    public EffectAppender createEffectAppender(boolean cost, JSONObject[] effectArray, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
 
         MultiEffectAppender multiEffectAppender = new MultiEffectAppender();

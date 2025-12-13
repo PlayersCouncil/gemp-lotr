@@ -78,7 +78,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToHand(balrog1);
 		scn.MoveCardsToShadowDiscard("balrog2"); // So we don't draw it later
 
-		scn.MoveCompanionToTable("fodder1");
+		scn.MoveCompanionsToTable("fodder1");
 
 		scn.StartGame();
 
@@ -151,7 +151,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToSupportArea(dungeon);
 		scn.MoveCardsToDiscard(balrog1);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -185,7 +185,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToSupportArea(dungeon);
 		scn.MoveCardsToDiscard(balrog1);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -219,7 +219,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToSupportArea(dungeon);
 		scn.MoveCardsToDiscard(balrog1);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -253,7 +253,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToSupportArea(dungeon);
 		scn.MoveCardsToDiscard(balrog1);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -286,7 +286,7 @@ public class Card_V2_039_Tests
 		scn.MoveCardsToSupportArea(dungeon);
 		scn.MoveCardsToDiscard(balrog1);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 

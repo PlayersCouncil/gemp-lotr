@@ -4,6 +4,8 @@ var GempLotrGameUI = Class.extend({
     initialized: false,
     
     pregamePanel: null,
+    
+    useOldStackingVisuals: false,
 
     bottomPlayerId: null,
     replayMode: null,
@@ -118,6 +120,7 @@ var GempLotrGameUI = Class.extend({
         //     return message;
         // };
 
+        //Defines a cardId function usable by jquery to filter all .card instances by card id
         $.expr[':'].cardId = function (obj, index, meta, stack) {
             var cardIds = meta[3].split(",");
             var cardData = $(obj).data("card");
@@ -315,7 +318,8 @@ var GempLotrGameUI = Class.extend({
         });
         if (!this.spectatorMode) {
             this.hand = new NormalCardGroup($("#main"), function (card) {
-                return (card.zone == "HAND") || (card.zone == "EXTRA");
+                //cards with a negative card ID in the Extra zone are part of special skirmishes
+                return (card.zone == "HAND") || (card.zone == "EXTRA" && !card.cardId.includes("-"));
             });
         }
 
@@ -549,11 +553,18 @@ var GempLotrGameUI = Class.extend({
 
     addBottomLeftTabPane: function () {
         var that = this;
-        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li>";
-        var tabsBodies = "<div id='chatBox' class='slimPanel'></div>";
-        if (!this.replayMode) {
-            tabsLabels += "<li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
-            tabsBodies += "<div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
+        var tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        
+        if(this.spectatorMode) {
+            //No Options box
+            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
+            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+        }
+        else if (this.replayMode) {
+            //No options or connected players boxes
+            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li>";
+            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div>";
         }
         
         if(!this.autoZoom.isTouchDevice) {
@@ -608,6 +619,21 @@ var GempLotrGameUI = Class.extend({
             that.settingsAutoAccept = selected;
             $.cookie("autoAccept", "" + selected, {expires: 365});
         });
+        
+        $("#settingsBox").append("<input id='use-old-stack-checkbox' type='checkbox' value='' /><label for='use-old-stack-checkbox'>Use old visuals for stacked cards</label><br />");
+
+        var useOldStack = loadFromCookie("use-old-stack", "false");
+        if (useOldStack === "true" || useOldStack == null) {
+            $("#use-old-stack-checkbox").prop("checked", true);
+            this.useOldStackingVisuals = true;
+        }
+
+        $("#use-old-stack-checkbox").bind("change", function () {
+            var selected = $("#use-old-stack-checkbox").prop("checked");
+            that.useOldStackingVisuals = selected;
+            saveToCookie("use-old-stack", selected);
+        });
+        
         
         $("#settingsBox").append("<label for='animation-slider'>Animation Speed</label><br /><div id='animation-slider'></div>");
         
@@ -1309,6 +1335,8 @@ var GempLotrGameUI = Class.extend({
             this.animations.putCardInPlay(gameEvent, animate);
         } else if (eventType == "MCIP") {
             this.animations.moveCardInPlay(gameEvent, animate);
+        } else if (eventType == "FCIP") {
+            this.animations.flipCardsInPlay(gameEvent, animate);
         } else if (eventType == "P") {
             this.participant(gameEvent);
         } else if (eventType == "RCFP") {
@@ -1661,8 +1689,10 @@ var GempLotrGameUI = Class.extend({
         $(".card").each(
             function () {
                 var card = $(this).data("card");
-                if (card.zone == "EXTRA")
+                //Negative IDs are handled in the assignment removal
+                if (card.zone == "EXTRA" && !card.cardId.includes("-")) {
                     $(this).remove();
+                }
             });
         if (this.hand != null)
             this.hand.layoutCards();
@@ -1722,8 +1752,7 @@ var GempLotrGameUI = Class.extend({
         var results = this.getDecisionParameters(decision, "results");
 
         var that = this;
-        this.smallDialog
-            .html(text);
+        this.smallDialog.html(text);
 
         if (results.length > 2 || this.settingsAlwaysDropDown) {
             var html = "<br /><select id='multipleChoiceDecision' selectedIndex='0'>";
@@ -1746,8 +1775,14 @@ var GempLotrGameUI = Class.extend({
             for (var i = 0; i < results.length; i++) {
                 if (i > 0)
                     this.smallDialog.append(" ");
+                
+                //Since we will be presenting the text as buttons, we don't
+                // want any card hints that will cause a click on that button
+                // to also open a card info box.
+                var content = results[i].replace("cardHint", "");
+                content = content.replace("<div", "<div style='display:inline'");
 
-                var but = $("<button></button>").html(results[i]).button();
+                var but = $("<button></button>").html(content).button();
                 if (!this.replayMode) {
                     but.click(
                         (function (ind) {
@@ -1901,7 +1936,7 @@ var GempLotrGameUI = Class.extend({
     },
 
     createCardDiv: function (card, text) {
-        var cardDiv = Card.CreateCardDiv(card.imageUrl, card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
+        var cardDiv = Card.CreateCardDiv(card.getVisibleFace(), card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
 
         cardDiv.data("card", card);
 
@@ -2107,8 +2142,10 @@ var GempLotrGameUI = Class.extend({
             $(".card").each(
                 function () {
                     var card = $(this).data("card");
-                    if (card.zone == "EXTRA")
+                    //Negative IDs are handled in the assignment removal
+                    if (card.zone == "EXTRA" && !card.cardId.includes("-")) {
                         $(this).remove();
+                    }
                 });
             that.hand.layoutCards();
             that.decisionFunction(id, "" + selectedCardIds);
@@ -2149,15 +2186,10 @@ var GempLotrGameUI = Class.extend({
                     actions.push({actionId: actionId, actionText: actionText});
                 } else {
                     hasVirtual = true;
-                    cardIds[i] = "extra" + cardId;
-                    var card = new Card(blueprintId, testingText, backSideTestingText, "EXTRA", "extra" + cardId, null);
-
-                    var cardDiv = that.createCardDiv(card);
-                    $(cardDiv).css({opacity: "0.8"});
-
-                    $("#main").append(cardDiv);
-
-                    var cardIdElem = $(".card:cardId(extra" + cardId + ")");
+                    
+                    var id = that.createVirtualCard(cardId, blueprintId, testingText, backSideTestingText);
+                    cardIds[i] = id;
+                    var cardIdElem = $(".card:cardId(" + id + ")");
                     if (cardIdElem.data("action") == null) {
                         cardIdElem.data("action", new Array());
                     }
@@ -2205,6 +2237,20 @@ var GempLotrGameUI = Class.extend({
         }
 
         $(':button').blur();
+    },
+    
+    //For creating fake cards to represent various situations such as an action
+    // on a card in the discard pile
+    createVirtualCard: function(cardId, blueprintId, testingText, backSideTestingText) {
+        var vId = "extra" + cardId;
+        var card = new Card(blueprintId, testingText, backSideTestingText, "EXTRA", vId, null);
+
+        var cardDiv = this.createCardDiv(card);
+        $(cardDiv).css({opacity: "0.7"});
+
+        $("#main").append(cardDiv);
+        
+        return vId;
     },
     
     PlaySound: function(soundObj) {
@@ -2494,12 +2540,15 @@ var GempLotrGameUI = Class.extend({
     },
 
     unassignMinion: function (minionId) {
-        var previousCharacterId = $(".card:cardId(" + minionId + ")").data("card").assign;
-        delete $(".card:cardId(" + minionId + ")").data("card").assign;
+        var minion = $(".card:cardId(" + minionId + ")").data("card");
+        var previousCharacterId = minion.assign;
+        delete minion.assign;
 
         var characterHasMinion = false;
         $(".card").each(function () {
-            if ($(this).data("card").assign == previousCharacterId) characterHasMinion = true;
+            if ($(this).data("card").assign == previousCharacterId) {
+                characterHasMinion = true;
+            }
         });
 
         if (!characterHasMinion) {
@@ -2508,11 +2557,19 @@ var GempLotrGameUI = Class.extend({
 
             this.assignGroupDivs[0].remove();
             this.assignGroupDivs.splice(0, 1);
+            
+            if(previousCharacterId.includes("-")) {
+                var ghost = $(".card:cardId(extra" + previousCharacterId + ")");
+                if(ghost != null && ghost.length > 0) {
+                    ghost.remove();
+                }
+            }
         }
     },
 
     assignMinion: function (minionId, characterId) {
-        if ($(".card:cardId(" + minionId + ")").data("card").assign != null)
+        var minion = $(".card:cardId(" + minionId + ")").data("card");
+        if (minion.assign != null)
             this.unassignMinion(minionId);
 
         var that = this;
@@ -2522,7 +2579,8 @@ var GempLotrGameUI = Class.extend({
                 return (card.zone == "SHADOW_CHARACTERS" && card.assign == characterId);
             }, false);
             this.freePeopleAssignGroups[characterId] = new NormalCardGroup($("#main"), function (card) {
-                return (card.cardId == characterId);
+                return (card.cardId == characterId || 
+                        (characterId.includes("-") && card.cardId.includes(characterId)) );
             }, false);
 
             var newDiv = $("<div class='ui-widget-content'></div>");
@@ -2531,7 +2589,7 @@ var GempLotrGameUI = Class.extend({
             this.assignGroupDivs.push(newDiv);
         }
 
-        $(".card:cardId(" + minionId + ")").data("card").assign = characterId;
+        minion.assign = characterId;
     },
 
     doAssignments: function (freeCharacters, minions) {

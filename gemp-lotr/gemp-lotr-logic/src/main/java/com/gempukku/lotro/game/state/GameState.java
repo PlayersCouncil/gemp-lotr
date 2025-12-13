@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class GameState {
     private static final Logger _log = LogManager.getLogger(GameState.class);
-    private static final int LAST_MESSAGE_STORED_COUNT = 15;
+    private static final int LAST_MESSAGE_STORED_COUNT = 50;
     private PlayerOrder _playerOrder;
 
     private LotroFormat _format;
@@ -47,6 +47,7 @@ public class GameState {
     private int _moveCount;
     private int turnNumber;
     private boolean _fierceSkirmishes;
+    private boolean _relentlessSkirmishes;
     private boolean _extraSkirmishes;
 
     private boolean _wearingRing;
@@ -225,9 +226,18 @@ public class GameState {
     }
 
     public void addGameStateListener(String playerId, GameStateListener gameStateListener, GameStats gameStats) {
+        terminateOldListener(playerId);
         _gameStateListeners.add(gameStateListener);
         sendStateToPlayer(playerId, gameStateListener, gameStats);
         _mostRecentGameStats = gameStats;
+    }
+
+    private void terminateOldListener(String playerId) {
+        for(var listener : new HashSet<>(_gameStateListeners)) {
+            if(listener.isLiveConnection() && listener.getAssignedPlayerId().equals(playerId)) {
+                _gameStateListeners.remove(listener);
+            }
+        }
     }
 
     public void removeGameStateListener(GameStateListener gameStateListener) {
@@ -305,8 +315,18 @@ public class GameState {
                     listener.cardCreated(physicalCard);
             }
 
-            for (Assignment assignment : _assignments)
-                listener.addAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
+            for (Assignment assignment : _assignments) {
+                if(assignment instanceof NestedAssignment nested) {
+                    for(var pending : nested.getPendingSubskirmishes()) {
+                        if(!pending.getShadowCharacters().isEmpty()) {
+                            listener.addPendingAssignment(pending.getFellowshipCharacter(), pending.getShadowCharacters().stream().findFirst().get());
+                        }
+                    }
+                }
+                else {
+                    listener.addAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
+                }
+            }
 
             if (_skirmish != null)
                 listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
@@ -361,8 +381,18 @@ public class GameState {
             ((PhysicalCardImpl) card).setZone(Zone.ATTACHED);
 
         ((PhysicalCardImpl) card).attachTo((PhysicalCardImpl) transferTo);
-        for (GameStateListener listener : getAllGameStateListeners())
+        for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardMoved(card);
+        }
+    }
+
+    public void transferCardAsMinion(PhysicalCard card) {
+        if (card.getZone() != Zone.SHADOW_CHARACTERS)
+            ((PhysicalCardImpl) card).setZone(Zone.SHADOW_CHARACTERS);
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardMoved(card);
+        }
     }
 
     public void takeControlOfCard(String playerId, LotroGame game, PhysicalCard card, Zone zone) {
@@ -430,7 +460,7 @@ public class GameState {
         return _maps.get(playerId);
     }
 
-    private List<PhysicalCardImpl> getZoneCards(String playerId, CardType type, Zone zone) {
+    private List<PhysicalCardImpl> getZoneCards(String playerId, Zone zone) {
         if (zone == Zone.DECK)
             return _decks.get(playerId);
         else if (zone == Zone.ADVENTURE_DECK)
@@ -453,10 +483,13 @@ public class GameState {
             return _inPlay;
     }
 
-
     public void removeCardsFromZone(String playerPerforming, Collection<PhysicalCard> cards) {
+        removeCardsFromZone(playerPerforming, cards, false);
+    }
+
+    public void removeCardsFromZone(String playerPerforming, Collection<PhysicalCard> cards, boolean skipSkirmishReset) {
         for (PhysicalCard card : cards) {
-            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), card.getZone());
+            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getZone());
             if (!zoneCards.contains(card))
                 _log.error("Card was not found in the expected zone");
         }
@@ -473,7 +506,7 @@ public class GameState {
             else if (zone == Zone.DISCARD)
                 stopAffectingInDiscard(card);
 
-            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), zone);
+            var zoneCards = getZoneCards(card.getOwner(), zone);
             zoneCards.remove(card);
 
             if (zone == Zone.ATTACHED)
@@ -482,8 +515,10 @@ public class GameState {
             if (zone == Zone.STACKED)
                 ((PhysicalCardImpl) card).stackOn(null);
 
-            removeFromAssignment(card);
-            removeFromSkirmish(card, false);
+            if (!skipSkirmishReset) {
+                removeFromAssignment(card);
+                removeFromSkirmish(card, false);
+            }
 
             removeAllTokens(card);
             //If this is reset, then there is no way for self-discounting effects (which are evaluated while in the void)
@@ -508,17 +543,26 @@ public class GameState {
         if (zone == Zone.DISCARD && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD))
             zone = Zone.REMOVED;
 
-        if (zone.isInPlay())
+        //Hindered cards that are being discarded, banished, moved to a deck, or killed do not remain hindered
+        if(card.isFlipped() && !zone.isInPlay()) {
+            card.setFlipped(false);
+        }
+
+        if (zone.isInPlay()) {
             assignNewCardId(card);
+        }
 
-        List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), zone);
-        if (end)
+        List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), zone);
+        if (end) {
             zoneCards.add((PhysicalCardImpl) card);
-        else
+        }
+        else {
             zoneCards.addFirst((PhysicalCardImpl) card);
+        }
 
-        if (card.getZone() != null)
+        if (card.getZone() != null) {
             _log.error("Card was in " + card.getZone() + " when tried to add to zone: " + zone);
+        }
 
         ((PhysicalCardImpl) card).setZone(zone);
 
@@ -551,8 +595,13 @@ public class GameState {
     private void assignNewCardId(PhysicalCard card) {
         _allCards.remove(card.getCardId());
         int newCardId = nextCardId();
-        ((PhysicalCardImpl) card).setCardId(newCardId);
-        _allCards.put(newCardId, ((PhysicalCardImpl) card));
+        card.setCardId(newCardId);
+        _allCards.put(newCardId, (PhysicalCardImpl)card);
+    }
+
+    public void reassignCardId(PhysicalCard card, int newCardId) {
+        card.setCardId(newCardId);
+        _allCards.put(newCardId, (PhysicalCardImpl)card);
     }
 
     private void removeAllTokens(PhysicalCard card) {
@@ -567,11 +616,115 @@ public class GameState {
         }
     }
 
+    /**
+     * Replaces a character on table with another character.  The calling function should handle discarding the old one.
+     * @param oldCard the old card
+     * @param newCard the new card
+     */
+    public void replaceCharacterOnTable(LotroGame game,  PhysicalCard oldCard, PhysicalCard newCard) {
+        int oldCardId = oldCard.getCardId();
+
+        // Remove new card from zone
+        removeCardsFromZone(null, Collections.singleton(newCard));
+
+        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first.
+        var assignment = findAssignment(oldCard);
+        var skirmish = findSkirmish(oldCard);
+        var tokens = new HashMap<>(getTokens(oldCard));
+        var zone = oldCard.getZone();
+
+        // Put the card where the old card was
+        newCard.copyCardStats(oldCard);
+        if(oldCard.getAttachedTo() != null) {
+            attachCard(game, newCard, oldCard.getAttachedTo());
+        }
+
+        // Remove old card from zone
+        removeCardsFromZone(null, Collections.singleton(oldCard), true);
+        addCardToZone(game, oldCard, Zone.VOID);
+        assignNewCardId(oldCard);
+
+        addCardToZone(game, newCard, zone);
+        // Give new card the card ID of the replaced card
+        reassignCardId(newCard, oldCardId);
+
+        // Add new card to zone
+        getZoneCards(newCard.getOwner(), zone).add((PhysicalCardImpl) newCard);
+
+        for(var pair : tokens.entrySet()) {
+            addTokens(newCard, pair.getKey(), pair.getValue());
+        }
+
+        if(assignment != null) {
+            replaceCardInAssignment(oldCard, newCard);
+        }
+
+        if(skirmish != null) {
+            _skirmish.replaceCharacterInSkirmish(oldCard, newCard);
+            restartSkirmish(_skirmish);
+        }
+
+
+        var attachedCardList = getAttachedCards(oldCard);
+        var stackedCardList = getStackedCards(oldCard);
+
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.cardCreated(newCard);
+
+        // Transfer attached cards to the new card
+        for (PhysicalCard attachedCard : attachedCardList) {
+            attachCard(game, attachedCard, newCard);
+        }
+
+        // Transfer stacked cards to the new card
+        for (PhysicalCard stackedCard : stackedCardList) {
+            stackCard(game, stackedCard, newCard);
+        }
+
+        startAffecting(game, newCard);
+        for (PhysicalCard attachedCard : getAttachedCards(newCard)) {
+            reapplyAffectingForCard(game, attachedCard);
+        }
+    }
+
     public void replaceInSkirmish(PhysicalCard card) {
         _skirmish.setFellowshipCharacter(card);
         for (GameStateListener gameStateListener : getAllGameStateListeners()) {
             gameStateListener.finishSkirmish();
             gameStateListener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+        }
+    }
+
+    public void breakSkirmishIntoSubSkirmishes(PhysicalCard fp, PhysicalCard firstMinion) {
+        var minions = new HashSet<>(_skirmish.getShadowCharacters());
+        if(!minions.contains(firstMinion))
+            return;
+
+        var pendingMinions = new HashSet<PhysicalCard>();
+
+        //We can't use any of the premade functions for any of this stuff because they will result in cancelling
+        // the skirmish or assignments.
+        for(var minion : minions) {
+            if(minion == firstMinion)
+                continue;
+
+            if (_skirmish.getShadowCharacters().remove(minion)) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
+                    listener.removeFromSkirmish(minion);
+                }
+            }
+
+            pendingMinions.add(minion);
+        }
+
+        var nested = new NestedAssignment(fp, pendingMinions);
+
+        _assignments.add(nested);
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            for(var pending : nested.getPendingSubskirmishes()) {
+                listener.addPendingAssignment(pending.getFellowshipCharacter(), pending.getShadowCharacters().stream().findFirst().get());
+            }
         }
     }
 
@@ -601,15 +754,19 @@ public class GameState {
         if (_skirmish.getFellowshipCharacter() == card) {
             _skirmish.setFellowshipCharacter(null);
             _skirmish.addRemovedFromSkirmish(card);
-            if (notify)
-                for (GameStateListener listener : getAllGameStateListeners())
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
+                }
+            }
         }
         if (_skirmish.getShadowCharacters().remove(card)) {
             _skirmish.addRemovedFromSkirmish(card);
-            if (notify)
-                for (GameStateListener listener : getAllGameStateListeners())
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
+                }
+            }
         }
     }
 
@@ -618,6 +775,18 @@ public class GameState {
             return;
 
         for (var assignment : new LinkedList<>(_assignments)) {
+            //Nested assignments handle their own removal
+            if(assignment instanceof NestedAssignment nested) {
+                if(nested.getFellowshipCharacter() == card) {
+                    for(var subAssignment : nested.getPendingSubskirmishes()) {
+                        removeAssignment(subAssignment);
+                        removeSubAssignment(subAssignment);
+                    }
+                    removeAssignment(assignment);
+                }
+                continue;
+            }
+
             if (assignment.getFellowshipCharacter() == card) {
                 removeAssignment(assignment);
             }
@@ -638,9 +807,16 @@ public class GameState {
             removeFromSkirmish(minion);
 
             for (Assignment assignment : new LinkedList<>(_assignments)) {
-                if (assignment.getShadowCharacters().remove(minion))
-                    if (assignment.getShadowCharacters().isEmpty())
+                if (assignment.getShadowCharacters().remove(minion)) {
+                    if(assignment instanceof NestedAssignment nested) {
+                        if(nested.getPendingSubskirmishes().isEmpty()) {
+                            removeAssignment(nested);
+                        }
+                    }
+                    else if (assignment.getShadowCharacters().isEmpty()) {
                         removeAssignment(assignment);
+                    }
+                }
             }
         }
 
@@ -655,7 +831,9 @@ public class GameState {
     }
 
     public void refreshAssignment(Assignment assignment) {
-        removeAssignment(assignment);
+        if(!(assignment instanceof NestedAssignment)) {
+            removeAssignment(assignment);
+        }
         assignToSkirmishes(assignment.getFellowshipCharacter(), assignment.getShadowCharacters());
     }
 
@@ -666,8 +844,52 @@ public class GameState {
         }
     }
 
+    //This should only be used to communicate that a split-up subskirmish assignment is now active
+    public void removeSubAssignment(Assignment assignment) {
+        //As the parent NestedListener is still in the assignment group, we won't remove it
+        //from local tracking; instead just inform the client so they don't display the character wrong
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.removePendingAssignment(assignment.getFellowshipCharacter(), assignment.getShadowCharacters().stream().findFirst().get());
+        }
+    }
+
     public List<Assignment> getAssignments() {
         return _assignments;
+    }
+
+    private Skirmish findSkirmish(PhysicalCard card) {
+        if(_skirmish == null)
+            return null;
+
+        if(_skirmish.getFellowshipCharacter() == card)
+            return _skirmish.copySkirmish();
+
+        if(_skirmish.getShadowCharacters().contains(card))
+            return _skirmish.copySkirmish();
+
+        return null;
+    }
+
+    private Assignment replaceCardInAssignment(PhysicalCard oldCard, PhysicalCard newCard) {
+        for(var assignment : new ArrayList<>(_assignments)) {
+            var newAssignment = assignment.replaceCharacter(oldCard, newCard);
+            if(newAssignment != null) {
+                removeAssignment(assignment);
+                refreshAssignment(newAssignment);
+                return newAssignment;
+            }
+        }
+
+        return null;
+    }
+
+
+    private Assignment findAssignment(PhysicalCard card) {
+        var fp = findFreepsAssignment(card);
+        if(fp != null)
+            return fp;
+
+        return findShadowAssignment(card);
     }
 
     private Assignment findFreepsAssignment(PhysicalCard fp) {
@@ -677,8 +899,19 @@ public class GameState {
         return null;
     }
 
+    private Assignment findShadowAssignment(PhysicalCard sh) {
+        for (Assignment assignment : _assignments)
+            if (assignment.getShadowCharacters().contains(sh))
+                return assignment;
+        return null;
+    }
+
     public void startSkirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
-        _skirmish = new Skirmish(fellowshipCharacter, new HashSet<>(shadowCharacters));
+        startSkirmish(new Skirmish(fellowshipCharacter, new HashSet<>(shadowCharacters)));
+    }
+
+    private void startSkirmish(Skirmish skirmish) {
+        _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
             listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
     }
@@ -720,12 +953,53 @@ public class GameState {
     public void putCardOnTopOfDeck(PhysicalCard card) {
         addCardToZone(null, card, Zone.DECK, false);
     }
+    public boolean iterateActiveCards(PhysicalCardVisitor visitor) {
+        return iterateActiveCards(visitor, SpotOverride.NONE, _inPlay);
+    }
+    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides) {
+        var cards = _inPlay;
+        if(spotOverrides.get(InactiveReason.STACKED) != null && spotOverrides.get(InactiveReason.STACKED)) {
+            cards = Stream.concat(
+                    _inPlay.stream(),
+                    _stacked.values().stream().flatMap(List::stream)
+            ).toList();
+        }
+        return iterateActiveCards(physicalCardVisitor, spotOverrides, cards);
+    }
 
-    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor) {
-        for (PhysicalCardImpl physicalCard : _inPlay) {
-            if (isCardInPlayActive(physicalCard))
-                if (physicalCardVisitor.visitPhysicalCard(physicalCard))
+    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides, Iterable<? extends PhysicalCard> cards) {
+
+        //These represent all the ways a card might be inactive and thus excluded from iteration.
+        // However, sometimes card effects wish to pierce the veil of inactivity for one reason or another; such cards
+        // need to manually override the default behavior.
+        boolean includeOutOfTurn = false;
+        boolean includeAttachedToInactive = false;
+        boolean includeStacked = false;
+        boolean includeHindered = false;
+
+        // If any spotOverrides were supplied, then apply them
+        if (spotOverrides != null) {
+            if (spotOverrides.get(InactiveReason.OUT_OF_TURN) != null) {
+                includeOutOfTurn = spotOverrides.get(InactiveReason.OUT_OF_TURN);
+            }
+            if (spotOverrides.get(InactiveReason.ATTACHED_TO_INACTIVE) != null) {
+                includeAttachedToInactive = spotOverrides.get(InactiveReason.ATTACHED_TO_INACTIVE);
+            }
+            if (spotOverrides.get(InactiveReason.STACKED) != null) {
+                includeStacked = spotOverrides.get(InactiveReason.STACKED);
+            }
+            if (spotOverrides.get(InactiveReason.HINDERED) != null) {
+                includeHindered = spotOverrides.get(InactiveReason.HINDERED);
+            }
+        }
+
+        for (var card : cards) {
+            // Check if the card can be spotted as "active" and include it if it can be.
+            if (isCardInPlayActive(card, includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+                if (physicalCardVisitor.visitPhysicalCard(card)) {
                     return true;
+                }
+            }
         }
 
         return false;
@@ -902,6 +1176,66 @@ public class GameState {
         removeTokens(card, Token.WOUND, 1);
     }
 
+    public void hinder(Collection<PhysicalCard> cards) {
+        for(var card : cards) {
+            card.setFlipped(true);
+            stopAffecting(card);
+            removeFromAssignment(card);
+            removeFromSkirmish(card);
+        }
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardsFlipped(cards, true);
+        }
+    }
+
+    public void restore(LotroGame game, Collection<PhysicalCard> cards) {
+        for(var card : cards) {
+            card.setFlipped(false);
+            startAffecting(game, card);
+        }
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardsFlipped(cards, false);
+        }
+    }
+
+    public boolean isHindered(PhysicalCard card) {
+        return card.isFlipped();
+    }
+
+    public boolean canBeHindered(PhysicalCard card) {
+        //Cannot hinder if it is already hindered
+        if(card.isFlipped())
+            return false;
+
+        var zone = card.getZone();
+
+        //Cards in hand can be hindered
+//        if(zone == Zone.HAND)
+//            return true;
+
+        //Cards stacked on active cards can be hindered
+        if(zone == Zone.STACKED && isCardInPlayActive(card.getStackedOn()))
+            return true;
+
+        //Cards can be intercepted on being played and preemptively hindered
+//        if(zone == Zone.VOID)
+//            return true;
+
+        var bp = card.getBlueprint();
+        //An event card that is in the process of being resolved can be hindered (to cancel its effect)
+//        if(bp.getCardType() == CardType.EVENT)
+//            return zone == Zone.VOID_FROM_HAND;
+
+        if(bp.getCardType() == CardType.SITE)
+            return false;
+
+        //Finally, anything currently active on the table can be hindered
+        return isCardInPlayActive(card);
+    }
+
+
     public void addTokens(PhysicalCard card, Token token, int count) {
         Map<Token, Integer> tokens = _cardTokens.get(card);
         if (tokens == null) {
@@ -962,7 +1296,7 @@ public class GameState {
 
     public Set<PhysicalCard> getInactiveCards() {
         return Stream.concat(_inPlay.stream(), _stacked.values().stream().flatMap(Collection::stream))
-                .filter(x -> !isCardInPlayActive(x))
+                .filter(x -> !isCardInPlayActive(x, false, false, false, true))
                 .collect(Collectors.toSet());
     }
 
@@ -978,6 +1312,14 @@ public class GameState {
         _extraSkirmishes = extraSkirmishes;
     }
 
+    public void setRelentlessSkirmishes(boolean value) {
+        _relentlessSkirmishes = value;
+    }
+
+    public boolean isRelentlessSkirmishes() {
+        return _relentlessSkirmishes;
+    }
+
     public void setFierceSkirmishes(boolean value) {
         _fierceSkirmishes = value;
     }
@@ -987,11 +1329,25 @@ public class GameState {
     }
 
     public boolean isNormalSkirmishes() {
-        return !_fierceSkirmishes && !_extraSkirmishes;
+        return !_fierceSkirmishes && !_relentlessSkirmishes && !_extraSkirmishes;
     }
 
-    public boolean isCardInPlayActive(PhysicalCard card) {
+    public boolean isCardInPlayActive(PhysicalCard card) { return isCardInPlayActive(card, false, false, false, false); }
+    public boolean isCardInPlayActive(PhysicalCard card, boolean includeOutOfTurn, boolean includeAttachedToInactive,
+            boolean includeStacked, boolean includeHindered) {
         Side side = card.getBlueprint().getSide();
+
+        //Hindered cards do not count as active for most purposes
+        if(!includeHindered && card.isFlipped())
+            return false;
+
+//        //out-of-play zones should of course be disqualified, but we make an exception for stack
+//        // since there's so many edge cases for it; it will be handled below
+//        var zone = card.getZone();
+//        if(zone != null && !zone.isInPlay() && zone != Zone.STACKED)
+//            return false;
+
+
         // Either it's not attached or attached to active card
         // AND is a site or fp/ring of current player or shadow of any other player
         if (card.getBlueprint().getCardType() == CardType.SITE)
@@ -1000,17 +1356,25 @@ public class GameState {
         if (card.getBlueprint().getCardType() == CardType.THE_ONE_RING)
             return card.getOwner().equals(_currentPlayerId);
 
-        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE)
-            return isCardInPlayActive(card.getAttachedTo());
+        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE) {
+            //We override the activity check to include hindered cards, as being attached to a hindered card does not inactivate attached cards
+            if(!isCardInPlayActive(card.getAttachedTo(), includeOutOfTurn, includeAttachedToInactive, includeStacked, true)) {
+                return includeAttachedToInactive;
+            }
+        }
 
-        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE)
-            return isCardInPlayActive(card.getStackedOn());
+        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE){
+            //We override the activity check to include hindered cards, as being stacked on a hindered card does not inactivate stacked cards
+            if(!isCardInPlayActive(card.getStackedOn(), includeOutOfTurn, includeAttachedToInactive, includeStacked, true)) {
+                return includeStacked;
+            }
+        }
 
         if (card.getOwner().equals(_currentPlayerId) && side == Side.SHADOW)
-            return false;
+            return includeOutOfTurn;
 
         if (!card.getOwner().equals(_currentPlayerId) && side == Side.FREE_PEOPLE)
-            return false;
+            return includeOutOfTurn;
 
         return true;
     }
@@ -1118,6 +1482,12 @@ public class GameState {
         _currentPhase = phase;
         for (GameStateListener listener : getAllGameStateListeners())
             listener.setCurrentPhase(getPhaseString());
+    }
+
+    public Phase setFakePhase(Phase phase) {
+        var realPhase = _currentPhase;
+        _currentPhase = phase;
+        return realPhase;
     }
 
     public Phase getCurrentPhase() {

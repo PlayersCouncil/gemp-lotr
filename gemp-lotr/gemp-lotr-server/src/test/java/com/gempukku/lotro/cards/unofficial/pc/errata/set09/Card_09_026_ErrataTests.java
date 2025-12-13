@@ -120,7 +120,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.FREE_CHARACTERS, radagast.getZone());
 		scn.FreepsUseCardAction(frodo);
 		assertEquals(Zone.DEAD, radagast.getZone());
-		scn.FreepsChoose("0");
+		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetMoveLimit());
 	}
 
@@ -189,7 +189,7 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.MoveCompanionToTable(radagast);
+		scn.MoveCompanionsToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");
@@ -224,7 +224,7 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.MoveCompanionToTable(radagast);
+		scn.MoveCompanionsToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");

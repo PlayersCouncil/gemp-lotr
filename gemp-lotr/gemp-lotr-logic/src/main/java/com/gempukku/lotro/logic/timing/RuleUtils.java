@@ -10,8 +10,6 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -148,10 +146,17 @@ public class RuleUtils {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                         final CardType thisType = blueprint.getCardType();
+                        if(game.getGameState().isHindered(physicalCard))
+                            return false;
+
                         if (thisType == CardType.POSSESSION || thisType == CardType.ARTIFACT) {
-                            final CardType targetType = physicalCard.getBlueprint().getCardType();
-                            return targetType == CardType.COMPANION || targetType == CardType.ALLY
-                                    || targetType == CardType.MINION;
+                            var types = game.getModifiersQuerying().getCardTypes(game, physicalCard);
+
+                            for(var type : types) {
+                                if(type == CardType.COMPANION || type == CardType.ALLY || type == CardType.MINION)
+                                    return true;
+                            }
+                            return false;
                         }
                         return true;
                     }
@@ -161,17 +166,24 @@ public class RuleUtils {
                     public boolean accepts(LotroGame game, PhysicalCard attachedTo) {
                         Set<PossessionClass> possessionClasses = blueprint.getPossessionClasses();
                         if (possessionClasses != null) {
-                            for (PossessionClass possessionClass : possessionClasses) {
+                            for (PossessionClass itemClass : possessionClasses) {
                                 List<PhysicalCard> attachedCards = game.getGameState().getAttachedCards(attachedTo);
 
-                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
-                                if (matchingClassPossessions.size() > 1)
+                                int allowedItemsOfClass = game.getModifiersQuerying().bearableItemsOfClass(game, attachedTo, itemClass);
+
+                                var matchingClassItems = Filters.filter(game, attachedCards, Filters.item, itemClass);
+                                if (matchingClassItems.size() > allowedItemsOfClass)
                                     return false;
 
                                 boolean extraPossessionClass = self.getBlueprint().isExtraPossessionClass(game, self, attachedTo);
-                                if (!extraPossessionClass && matchingClassPossessions.size() == 1) {
-                                    final PhysicalCard attachedPossession = matchingClassPossessions.iterator().next();
-                                    if (!attachedPossession.getBlueprint().isExtraPossessionClass(game, attachedPossession, attachedTo))
+                                if (!extraPossessionClass && matchingClassItems.size() == allowedItemsOfClass) {
+                                    boolean anyExtraClasses = false;
+                                    for(var item : matchingClassItems) {
+                                        if(item.getBlueprint().isExtraPossessionClass(game, item, attachedTo)) {
+                                            anyExtraClasses = true;
+                                        }
+                                    }
+                                    if(!anyExtraClasses)
                                         return false;
                                 }
                             }

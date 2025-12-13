@@ -78,7 +78,7 @@ public class Card_12_184_Tests
 		var fodder1 = scn.GetFreepsCard("fodder1");
 		var fodder2 = scn.GetFreepsCard("fodder2");
 		var fodder3 = scn.GetFreepsCard("fodder3");
-		scn.MoveCompanionToTable(fodder1, fodder2, fodder3);
+		scn.MoveCompanionsToTable(fodder1, fodder2, fodder3);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);

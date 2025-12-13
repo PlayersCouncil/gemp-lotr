@@ -73,7 +73,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -81,7 +81,7 @@ public class Card_08_119_Tests
 
 		assertEquals(0, scn.GetThreats());
 		assertFalse(scn.IsSiteControlled(site1));
-		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		scn.FreepsChooseOption("threat");
@@ -97,7 +97,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -105,7 +105,7 @@ public class Card_08_119_Tests
 
 		assertEquals(0, scn.GetThreats());
 		assertFalse(scn.IsSiteControlled(site1));
-		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		scn.FreepsChooseOption("opponent");
@@ -123,7 +123,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -135,7 +135,7 @@ public class Card_08_119_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertEquals(0, scn.GetThreats());
-		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		scn.FreepsChooseOption("opponent");
@@ -152,7 +152,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -176,7 +176,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);

@@ -85,7 +85,7 @@ public class Card_08_103_ErrataTests
 
 		scn.StartGame();
 
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(elrond);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.AttachCardsTo(elrond, bow);

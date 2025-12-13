@@ -79,7 +79,7 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.MoveCompanionToTable(aragorn, veowyn);
+		scn.MoveCompanionsToTable(aragorn, veowyn);
 
 		scn.StartGame();
 
@@ -95,7 +95,7 @@ public class Card_V2_016_Tests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 
@@ -111,7 +111,7 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.MoveCompanionToTable(aragorn, veowyn);
+		scn.MoveCompanionsToTable(aragorn, veowyn);
 
 		var twk = scn.GetShadowCard("twk");
 		scn.MoveMinionsToTable(twk);
@@ -140,7 +140,7 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(aragorn, gandalf);
+		scn.MoveCompanionsToTable(aragorn, gandalf);
 
 		var twk = scn.GetShadowCard("twk");
 		scn.MoveMinionsToTable(twk);

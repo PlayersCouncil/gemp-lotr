@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EventSerializer {
     public Node serializeEvent(Document doc, GameEvent gameEvent) {
@@ -33,10 +34,14 @@ public class EventSerializer {
             eventElem.setAttribute("allParticipantIds", listToCommaSeparated(gameEvent.getAllParticipantIds()));
         if (gameEvent.getPhase() != null)
             eventElem.setAttribute("phase", gameEvent.getPhase());
-        if (gameEvent.getTargetCardId() != null)
+        if (gameEvent.getTargetCardId() != null) {
             eventElem.setAttribute("targetCardId", gameEvent.getTargetCardId().toString());
+            eventElem.setAttribute("targetType", gameEvent.getTargetType());
+        }
         if (gameEvent.getZone() != null)
             eventElem.setAttribute("zone", gameEvent.getZone().name());
+        if (gameEvent.getHindered() != null)
+            eventElem.setAttribute("hindered", gameEvent.getHindered().toString());
         if (gameEvent.getToken() != null)
             eventElem.setAttribute("token", gameEvent.getToken().name());
         if (gameEvent.getCount() != null)
@@ -179,9 +184,16 @@ public class EventSerializer {
             eventElem.appendChild(threatsElem);
         }
 
-        Map<Integer, Integer> charVitalities = gameStats.getCharVitalities();
-        Map<Integer, Integer> charSiteNumbers = gameStats.getSiteNumbers();
-        Map<Integer, String> charResistances = gameStats.getCharResistances();
+        for (Map.Entry<String, Integer> playerThreatEntry : gameStats.getThreatTotals().entrySet()) {
+            Element threatsElem = doc.createElement("threatTotals");
+            threatsElem.setAttribute("name", playerThreatEntry.getKey());
+            threatsElem.setAttribute("value", playerThreatEntry.getValue().toString());
+            eventElem.appendChild(threatsElem);
+        }
+
+        var charVitalities = gameStats.getCharVitalities();
+        var charSiteNumbers = gameStats.getSiteNumbers();
+        var charResistances = gameStats.getCharResistances();
 
         StringBuilder charStr = new StringBuilder();
         for (Map.Entry<Integer, Integer> characters : gameStats.getCharStrengths().entrySet()) {
@@ -197,6 +209,10 @@ public class EventSerializer {
 
         if (!charStr.isEmpty())
             eventElem.setAttribute("charStats", charStr.toString());
+
+        var hindered = gameStats.getHindered();
+        var hinderStr = hindered.stream().map(String::valueOf).collect(Collectors.joining(","));
+        eventElem.setAttribute("hindered", hinderStr);
     }
 
     public static void main(String[] args) {

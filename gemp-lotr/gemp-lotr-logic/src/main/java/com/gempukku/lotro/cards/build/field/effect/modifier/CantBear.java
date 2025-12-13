@@ -2,7 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.logic.modifiers.MayNotBearModifier;
+import com.gempukku.lotro.logic.modifiers.CantBearModifier;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import org.json.simple.JSONObject;
 
@@ -23,7 +23,7 @@ public class CantBear implements ModifierSourceProducer {
         return new ModifierSource() {
             @Override
             public Modifier getModifier(ActionContext actionContext) {
-                return new MayNotBearModifier(actionContext.getSource(), filterableSource.getFilterable(actionContext),
+                return new CantBearModifier(actionContext.getSource(), filterableSource.getFilterable(actionContext),
                         RequirementCondition.createCondition(requirements, actionContext),
                         cardFilterSource.getFilterable(actionContext));
             }

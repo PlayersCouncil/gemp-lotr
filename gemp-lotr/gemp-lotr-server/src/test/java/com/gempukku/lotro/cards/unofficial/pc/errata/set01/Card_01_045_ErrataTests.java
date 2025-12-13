@@ -77,7 +77,7 @@ public class Card_01_045_ErrataTests
         VirtualTableScenario scn = GetSimplePlayScenario();
 
         PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-        scn.MoveCompanionToTable(galadriel);
+        scn.MoveCompanionsToTable(galadriel);
         scn.MoveCardsToFreepsHand("elrond");
 
         scn.StartGame();
@@ -106,7 +106,7 @@ public class Card_01_045_ErrataTests
         var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
         var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
         var allyHome6_3 = scn.GetFreepsCard("allyHome6_3");
-        scn.MoveCompanionToTable(galadriel, allyHome3_1, allyHome6_1, allyHome6_2, allyHome6_3);
+        scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_1, allyHome6_2, allyHome6_3);
 
         scn.AddWoundsToChar(galadriel, 1);
         scn.AddWoundsToChar(allyHome3_1, 1);

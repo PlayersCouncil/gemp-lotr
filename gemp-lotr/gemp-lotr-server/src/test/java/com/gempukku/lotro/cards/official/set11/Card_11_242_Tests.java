@@ -72,7 +72,7 @@ public class Card_11_242_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var gaffer = scn.GetFreepsCard("gaffer");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToTopOfDeck(gaffer);
 
 		var greendragon = scn.GetFreepsCard("greendragon");

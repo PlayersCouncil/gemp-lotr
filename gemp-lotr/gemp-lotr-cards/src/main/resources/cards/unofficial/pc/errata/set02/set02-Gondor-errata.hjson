@@ -46,7 +46,7 @@
 	# 				{
 	# 					type: memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: discard
@@ -56,12 +56,12 @@
 	# 			effect: [
 	# 				{
 	# 					type: modifyStrength
-	# 					select: memory(bearer)
+	# 					select: memory(oldBearer)
 	# 					amount: 3
 	# 				}
 	# 				{
 	# 					type: addKeyword
-	# 					select: memory(bearer)
+	# 					select: memory(oldBearer)
 	# 					keyword: damage+2
 	# 				}
 	# 			]
@@ -159,6 +159,81 @@
 		]
 		gametext: Bearer must be a ranger. This weapon may be borne in addition to 1 other hand weapon.<br>Skirmish: Make bearer strength +2 and <b>damage +1</b> while bearing this item and skirmishing a Nazgul until the regroup phase (limit once per turn).  Discard this possession at the start of the regroup phase.
 		lore: "...a glimpse of Strider leaping out of the darkness with a flaming brand of wood in either hand."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	52_38: {
+		cardInfo: {
+			//id: 2_38.1
+			parent: 2_38
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E038.1.jpg
+			collInfo: 2R38
+			rarity: R
+		}
+		title: Shield of Boromir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: minion,inSkirmishAgainst(bearer,name(Boromir))
+					from: weapon
+				}
+			}
+			
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: oldBearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: addTrigger
+					trigger: {
+						type: aboutToTakeWound
+						filter: memory(oldBearer)
+					}
+					effect: {
+						type: preventWound
+						select: choose(memory(oldBearer))
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons.\Skirmish: If bearer is Boromir, discard this to make him take no wounds.
+		lore: "Boromir bore the heirlooms of the Steward's house with pride."
 		promotext: ""
 		alts: {
 			promos: {

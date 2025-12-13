@@ -26,6 +26,12 @@
 					filter: self,zone(support)
 				}
 				effect: [
+					# Decipher ruling that clears any cards which managed to get 
+					# attached while the game text was disabled.
+					{
+						type: Discard
+						select: all(AttachedTo(self))
+					}
 					{
 						type: turnIntoMinion
 						select: self
@@ -95,6 +101,12 @@
 					filter: self,zone(support)
 				}
 				effect: [
+					# Decipher ruling that clears any cards which managed to get 
+					# attached while the game text was disabled.
+					{
+						type: Discard
+						select: all(AttachedTo(self))
+					}
 					{
 						type: turnIntoMinion
 						select: self
@@ -157,6 +169,12 @@
 					filter: self,zone(support)
 				}
 				effect: [
+					# Decipher ruling that clears any cards which managed to get 
+					# attached while the game text was disabled.
+					{
+						type: Discard
+						select: all(AttachedTo(self))
+					}
 					{
 						type: turnIntoMinion
 						select: self

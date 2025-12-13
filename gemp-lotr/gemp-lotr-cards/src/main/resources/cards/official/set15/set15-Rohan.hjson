@@ -203,7 +203,7 @@
 				cost: [
 					{
 						type: memorizeActive
-						memory: bearer
+						memory: oldBearer
 						filter: bearer
 					}
 					{
@@ -213,7 +213,7 @@
 				]
 				effect: {
 					type: wound
-					select: choose(minion,inSkirmishAgainst(memory(bearer)))
+					select: choose(minion,inSkirmishAgainst(memory(oldBearer)))
 				}
 			}
 		]
@@ -1049,7 +1049,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -1062,7 +1062,7 @@
 						type: Conditional
 						requires: {
 							type: memoryMatches
-							memory: bearer
+							memory: oldBearer
 							filter: mounted
 						}
 						true: 2

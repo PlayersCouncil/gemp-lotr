@@ -73,7 +73,7 @@ public class Card_09_027_ErrataTests
 		var gandalf = scn.GetFreepsCard("gandalf1");
 		var radagast = scn.GetFreepsCard("radagast1");
 		scn.MoveCardsToSupportArea(sentback);
-		scn.MoveCompanionToTable(gandalf, radagast);
+		scn.MoveCompanionsToTable(gandalf, radagast);
 
 		var saruman = scn.GetShadowCard("saruman");
 		var staff = scn.GetShadowCard("staff");

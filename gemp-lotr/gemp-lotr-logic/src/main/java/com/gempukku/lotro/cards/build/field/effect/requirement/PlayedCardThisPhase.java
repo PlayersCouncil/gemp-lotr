@@ -1,11 +1,8 @@
 package com.gempukku.lotro.cards.build.field.effect.requirement;
 
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.FilterableSource;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
-import com.gempukku.lotro.cards.build.Requirement;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.EffectResult;
@@ -15,23 +12,30 @@ import org.json.simple.JSONObject;
 public class PlayedCardThisPhase implements RequirementProducer {
     @Override
     public Requirement getPlayRequirement(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter");
+        FieldUtils.validateAllowedFields(object, "filter", "min", "max");
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
+        final ValueSource minSource = ValueResolver.resolveEvaluator(object.get("min"), 1, environment);
+        final ValueSource maxSource = ValueResolver.resolveEvaluator(object.get("max"), 100, environment);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         return (actionContext) -> {
-            final Filterable filterable = filterableSource.getFilterable(actionContext);
+            var filterable = Filters.changeToFilter(filterableSource.getFilterable(actionContext));
+            int min = minSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+            int max = maxSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+
+            int total = 0;
             LotroGame game = actionContext.getGame();
             for (EffectResult effectResult : game.getActionsEnvironment().getPhaseEffectResults()) {
                 if (effectResult instanceof PlayCardResult playResult) {
-                    if (Filters.changeToFilter(filterable).accepts(game, playResult.getPlayedCard()))
-                        return true;
+                    if (filterable.accepts(game, playResult.getPlayedCard())) {
+                        ++total;
+                    }
                 }
             }
 
-            return false;
+            return total >= min && total <= max;
         };
     }
 }

@@ -654,6 +654,83 @@
 		}
 	}
 	
+	# 101_66: {
+	# 	cardInfo: {
+	# 		//id: 101_66.1
+	# 		revision: 0
+	# 		image: sets/vset1/LOTR-ENV1E066.0_card.jpg
+	# 		collInfo: V1_66
+	# 		rarity: C
+	# 	}
+	# 	title: Writhing Tentacle
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Moria
+	# 	twilight: 2
+	# 	type: Minion
+	# 	race: Creature
+	# 	strength: 6
+	# 	vitality: 1
+	# 	site: 4
+	# 	keywords: Tentacle
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: cantBear
+	# 				filter: self
+	# 				cardFilter: possession
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: {
+	# 				type: ConstantlyCheck
+	# 				requires: {
+	# 					type: location
+	# 					filter: not(marsh)
+	# 				}
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activatedFromStacked
+	# 			phase: shadow
+	# 			stackedOn: side(shadow)
+	# 			cost: [
+	# 				{
+	# 					type: Memorize
+	# 					filter: HasStacked(self)
+	# 					memory: stacker
+	# 				}
+	# 				{
+	# 					type: PlayCardFromStacked
+	# 					select: self
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: StackCardsFromDiscard
+	# 				select: choose(other,tentacle)
+	# 				count: 2
+	# 				where: memory(stacker)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles from your discard pile on that card.
+	# 	lore: "Many coiling arms seized the doors on either side, and with horrible strength, swung them round."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_66: {
 		cardInfo: {
 			//id: 101_66.1
@@ -714,13 +791,13 @@
 				]
 				effect: {
 					type: StackCardsFromDiscard
-					select: choose(other,tentacle)
+					select: choose(other,tentacle,not(title(Writhing Tentacle)))
 					count: 2
 					where: memory(stacker)
 				}
 			}
 		]
-		gametext: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles from your discard pile on that card.
+		gametext: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles (except Writhing Tentacle) from your discard pile on that card.
 		lore: "Many coiling arms seized the doors on either side, and with horrible strength, swung them round."
 		promotext: ""
 		alts: {

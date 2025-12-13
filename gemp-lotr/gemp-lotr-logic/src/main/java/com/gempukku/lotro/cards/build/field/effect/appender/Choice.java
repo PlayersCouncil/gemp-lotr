@@ -20,17 +20,27 @@ import java.util.List;
 public class Choice implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "effects", "texts", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "player",  "texts", "effects", "requires", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effects"), "effects");
         final String[] textArray = FieldUtils.getStringArray(effectObject.get("texts"), "texts");
+        final JSONObject[][] effectArrayOfArrays = FieldUtils.getNestedObjectArray(effectObject.get("effects"), "effects");
+        final JSONObject[] requirementArray = FieldUtils.getObjectArray(effectObject.get("requires"), "requires");
+
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        if (effectArray.length != textArray.length)
-            throw new InvalidCardDefinitionException("Number of texts and effects does not match in choice effect");
+        if (effectArrayOfArrays.length != textArray.length)
+            throw new InvalidCardDefinitionException("Number of texts and effects does not match in Choice effect.");
 
-        EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
+        //If requirements are not omitted (and they are for the vast majority of Choices), then we expect that all
+        // choice options include a requirement; this can be the simple string "AlwaysAvailable" to mark choices which
+        // are not conditional.
+        if (requirementArray.length > 0 && requirementArray.length != textArray.length)
+            throw new InvalidCardDefinitionException("Number of requirements must either be zero or include 1 requirement per text item in Choice effect.");
+
+        //Choices now support arrays of effects so that the developer does not need to wrap everything manually in a Multiple
+        EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getNestedEffectAppenders(cost, effectArrayOfArrays, environment);
+        Requirement[] possibleRequirements = environment.getRequirementFactory().getRequirements(requirementArray, environment);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
@@ -38,24 +48,29 @@ public class Choice implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final String choosingPlayer = playerSource.getPlayer(actionContext);
-                ActionContext delegateActionContext = new DelegateActionContext(actionContext,
+                ActionContext delegate = new DelegateActionContext(actionContext,
                         choosingPlayer, actionContext.getGame(), actionContext.getSource(),
                         actionContext.getEffectResult(), actionContext.getEffect());
 
                 int textIndex = 0;
                 List<EffectAppender> playableEffectAppenders = new LinkedList<>();
                 List<String> effectTexts = new LinkedList<>();
-                for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
-                    if (possibleEffectAppender.isPlayableInFull(delegateActionContext)) {
-                        playableEffectAppenders.add(possibleEffectAppender);
+
+                for (textIndex = 0; textIndex < textArray.length; ++textIndex) {
+                    boolean prereqs = true;
+                    if(possibleRequirements != null && possibleRequirements.length != 0) {
+                        prereqs = possibleRequirements[textIndex].accepts(delegate);
+                    }
+
+                    if(prereqs && possibleEffectAppenders[textIndex].isPlayableInFull(delegate)){
+                        playableEffectAppenders.add(possibleEffectAppenders[textIndex]);
                         effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
                     }
-                    textIndex++;
                 }
 
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
-                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegateActionContext);
+                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegate);
                     actionContext.setValueToMemory(memorize, textArray[0]);
                     return new StackActionEffect(subAction);
                 }
@@ -85,7 +100,7 @@ public class Choice implements EffectAppenderProducer {
                                 new MultipleChoiceAwaitingDecision(1, "Choose action to perform", effectTexts.toArray(new String[0])) {
                                     @Override
                                     protected void validDecisionMade(int index, String result) {
-                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, delegateActionContext);
+                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, delegate);
                                         actionContext.setValueToMemory(memorize, result);
                                     }
                                 }));
@@ -95,14 +110,21 @@ public class Choice implements EffectAppenderProducer {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final String choosingPlayer = playerSource.getPlayer(actionContext);
-                ActionContext delegateActionContext = new DelegateActionContext(actionContext,
+                ActionContext delegate = new DelegateActionContext(actionContext,
                         choosingPlayer, actionContext.getGame(), actionContext.getSource(),
                         actionContext.getEffectResult(), actionContext.getEffect());
 
-                for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
-                    if (possibleEffectAppender.isPlayableInFull(delegateActionContext))
+                for (int i = 0; i < textArray.length; ++i) {
+
+                    boolean prereqs = true;
+                    if(possibleRequirements != null && possibleRequirements.length != 0) {
+                        prereqs = possibleRequirements[i].accepts(delegate);
+                    }
+
+                    if(prereqs && possibleEffectAppenders[i].isPlayableInFull(delegate))
                         return true;
                 }
+
                 return false;
             }
         };

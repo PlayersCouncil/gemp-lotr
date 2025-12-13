@@ -71,7 +71,7 @@ public class Card_01_313_ErrataTests
         var sam = scn.GetFreepsCard("sam");
         var sting = scn.GetFreepsCard("sting");
 
-        scn.MoveCompanionToTable(sam);
+        scn.MoveCompanionsToTable(sam);
         scn.MoveCardsToHand(sting);
 
         scn.StartGame();
@@ -138,7 +138,7 @@ public class Card_01_313_ErrataTests
 
         var orc1 = scn.GetShadowCard("orc1");
 
-        scn.MoveCompanionToTable(sam, merry);
+        scn.MoveCompanionsToTable(sam, merry);
         scn.AttachCardsTo(frodo, sting);
 
         scn.MoveCardsToHand(orc1);

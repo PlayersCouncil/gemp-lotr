@@ -44,6 +44,8 @@ public class ValueResolver {
                 return actionContext -> new RangeEvaluator(min, max);
             } else if (stringValue.equalsIgnoreCase("any")) {
                 return actionContext -> new RangeEvaluator(0, Integer.MAX_VALUE);
+            } else if (stringValue.equalsIgnoreCase("anyNonZero")) {
+                return actionContext -> new RangeEvaluator(1, Integer.MAX_VALUE);
             } else if (stringValue.startsWith("memory(") && stringValue.endsWith(")")) {
                 String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
                 return new ValueSource() {
@@ -152,13 +154,13 @@ public class ValueResolver {
                     }
                 };
             } else if (type.equalsIgnoreCase("sum")) {
-                FieldUtils.validateAllowedFields(object, "source");
+                FieldUtils.validateAllowedFields(object, "source", "over", "limit", "multiplier", "divider");
                 final JSONArray sourceArray = FieldUtils.getArray(object.get("source"), "source");
                 ValueSource[] sources = new ValueSource[sourceArray.size()];
                 for (int i = 0; i < sources.length; i++)
                     sources[i] = ValueResolver.resolveEvaluator(sourceArray.get(i), 0, environment);
 
-                return new ValueSource() {
+                var sumSource =  new ValueSource() {
                     @Override
                     public Evaluator getEvaluator(ActionContext actionContext) {
                         Evaluator[] evaluators = new Evaluator[sources.length];
@@ -176,13 +178,15 @@ public class ValueResolver {
 
                     @Override
                     public boolean canPreEvaluate() {
-                        for (int i = 0; i < sources.length; i++) {
-                            if (!sources[i].canPreEvaluate())
-                                return false;
-                        }
+						for (ValueSource source : sources) {
+							if (!source.canPreEvaluate())
+								return false;
+						}
                         return true;
                     }
                 };
+
+                return new SmartValueSource(environment, object, sumSource);
             } else if (type.equalsIgnoreCase("abs")) {
                 FieldUtils.validateAllowedFields(object, "value");
                 ValueSource source = resolveEvaluator(object.get("value"), 0, environment);
@@ -370,6 +374,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("fromMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "limit", "over", "multiplier", "divider");
                 String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to FromMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> Integer.parseInt(actionContext.getValueFromMemory(memory)));
             } else if (type.equalsIgnoreCase("forEachBurden")) {
@@ -402,11 +408,13 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("forEachCultureInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachCultureInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             Set<Culture> cultures = new HashSet<>();
                             for (PhysicalCard card : actionContext.getCardsFromMemory(memory)) {
-                                cultures.add(card.getBlueprint().getCulture());
+                                cultures.addAll(game.getModifiersQuerying().getCultures(game, card));
                             }
                             return cultures.size();
                         });
@@ -495,6 +503,9 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "memory", "filter", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachInMemory value.");
+
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) ->
@@ -502,9 +513,14 @@ public class ValueResolver {
                                         filterableSource.getFilterable(actionContext)).size());
             } else if (type.equalsIgnoreCase("forEachKeyword")) {
                 FieldUtils.validateAllowedFields(object, "filter", "keyword", "over", "limit", "multiplier", "divider");
-                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                if (filter.equals("any")) {
+                    return new SmartValueSource(environment, object,
+                            actionContext -> (game, cardAffected) -> game.getModifiersQuerying().getKeywordCount(game, cardAffected, keyword));
+
+                }
                 return new SmartValueSource(environment, object,
                         actionContext -> {
                             Filterable filterable = filterableSource.getFilterable(actionContext);
@@ -520,8 +536,10 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "memory", "keyword", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
                 final Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to ForEachKeywordOnCardInMemory value.");
                 if (keyword == null)
-                    throw new InvalidCardDefinitionException("Keyword cannot be null");
+                    throw new InvalidCardDefinitionException("keyword must be provided to ForEachKeywordOnCardInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             int count = 0;
@@ -624,11 +642,19 @@ public class ValueResolver {
                             });
                 }
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                FieldUtils.validateAllowedFields(object, "filter", "hindered", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final boolean hindered = FieldUtils.getBoolean(object.get("hindered"), "hindered", false);
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
+                return new SmartValueSource(environment, object,
+                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, override, filterableSource.getFilterable(actionContext)));
+            } else if (type.equalsIgnoreCase("forEachHinderedYouCanSpot")) {
+                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, SpotOverride.INCLUDE_HINDERED, Filters.hindered, filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("maxOfRaces")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
@@ -656,6 +682,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("siteNumberInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to SiteNumberInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> actionContext.getCardFromMemory(memory).getSiteNumber());
             } else if (type.equalsIgnoreCase("regionNumber")) {
@@ -665,6 +693,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("printedStrengthFromMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to PrintedStrengthFromMemory value.");
 
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
@@ -681,6 +711,8 @@ public class ValueResolver {
             } else if (type.equalsIgnoreCase("twilightCostInMemory")) {
                 FieldUtils.validateAllowedFields(object, "memory", "over", "limit", "multiplier", "divider");
                 final String memory = FieldUtils.getString(object.get("memory"), "memory");
+                if(memory == null)
+                    throw new InvalidCardDefinitionException("memory must be provided to TwilightCostInMemory value.");
                 return new SmartValueSource(environment, object,
                         actionContext -> (game, cardAffected) -> {
                             int total = 0;

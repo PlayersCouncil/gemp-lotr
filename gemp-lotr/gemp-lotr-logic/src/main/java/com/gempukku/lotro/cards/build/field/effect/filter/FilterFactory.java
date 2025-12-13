@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -26,10 +27,30 @@ public class FilterFactory {
             appendFilter(value);
         for (Keyword value : Keyword.values())
             appendFilter(value);
+
+        appendFilter("support", "support", Filters.zone(Zone.SUPPORT));
+
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);
         for (Race value : Race.values())
             appendFilter(value);
+        for (Culture value : Culture.values()) {
+            // Since there is already a Race of Orc and Uruk-hai, we can't add the Orc/Uruk-hai cultures as standalone filters
+            if(value == Culture.ORC || value == Culture.URUK_HAI)
+                continue;
+
+            // The HDG runs into this same issue with the Spider and Troll cultures
+            if(value == Culture.SPIDER || value == Culture.TROLL)
+                continue;
+
+            // Wraith is a race, but the original Ringwraith is not, so we'll support both "culture(wraith)" and "Ringwraith"
+            if(value == Culture.WRAITH) {
+                appendFilter("ringwraith", "ringwraith", value);
+            }
+            else {
+                appendFilter(value);
+            }
+        }
 
         simpleFilters.put("another", (actionContext) -> Filters.not(actionContext.getSource()));
         simpleFilters.put("other", (actionContext) -> Filters.not(actionContext.getSource()));
@@ -109,6 +130,10 @@ public class FilterFactory {
                 }));
         simpleFilters.put("hasrace",
                 (actionContext -> (Filter) (game, physicalCard) -> !game.getModifiersQuerying().getRaces(game, physicalCard).isEmpty()));
+        simpleFilters.put("hinderable",
+                (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard)));
+        simpleFilters.put("hindered",
+                (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().isHindered(physicalCard)));
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {
@@ -133,7 +158,11 @@ public class FilterFactory {
                 (actionContext) -> Filters.notAssignedToSkirmish);
         simpleFilters.put("oneperbearer", (actionContext) ->
                 Filters.not(Filters.hasAttached(Filters.name(actionContext.getSource().getBlueprint().getTitle()))));
-        simpleFilters.put("playable", (actionContext) -> Filters.playable(actionContext.getGame(), 0));
+        simpleFilters.put("limitoneperbearer", simpleFilters.get("oneperbearer"));
+        simpleFilters.put("limit1perbearer", simpleFilters.get("oneperbearer"));
+        simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
+        simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
+        simpleFilters.put("playable", (actionContext) -> Filters.playable(0));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",
@@ -151,10 +180,10 @@ public class FilterFactory {
                     return lostSkirmish.getLoser();
                 });
         simpleFilters.put("storedculture",
-                (actionContext) -> (Filter) (game, physicalCard) -> {
+                (actionContext) -> (Filter) (game, card) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();
                     if (data != null) {
-                        return physicalCard.getBlueprint().getCulture() == Culture.findCultureByHumanReadable(data.getHumanReadable());
+                        return game.getModifiersQuerying().isCulture(game, card, Culture.findCultureByHumanReadable(data.getHumanReadable()));
                     }
                     return false;
                 });
@@ -258,6 +287,13 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.stackedOn(filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("cardtypefrommemory", ((parameter, environment) -> actionContext -> {
+            Set<CardType> cardtypes = new HashSet<>();
+            for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter)) {
+                cardtypes.add(physicalCard.getBlueprint().getCardType());
+            }
+            return Filters.or(cardtypes.toArray(new CardType[0]));
+        }));
         parameterFilters.put("culture", (parameter, environment) -> {
             final Culture culture = Culture.findCulture(parameter);
             if (culture == null)
@@ -265,17 +301,11 @@ public class FilterFactory {
 
             return (actionContext) -> culture;
         });
-        parameterFilters.put("timeword", (parameter, environment) -> {
-            final Timeword timeword = Timeword.findTimeword(parameter);
-            if (timeword == null)
-                throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
-
-            return (actionContext) -> timeword;
-        });
         parameterFilters.put("culturefrommemory", ((parameter, environment) -> actionContext -> {
             Set<Culture> cultures = new HashSet<>();
-            for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter)) {
-                cultures.add(physicalCard.getBlueprint().getCulture());
+            var game = actionContext.getGame();
+            for (PhysicalCard card : actionContext.getCardsFromMemory(parameter)) {
+                cultures.addAll(game.getModifiersQuerying().getCultures(game, card));
             }
             return Filters.or(cultures.toArray(new Culture[0]));
         }));
@@ -412,7 +442,7 @@ public class FilterFactory {
                     return actionContext -> {
                         final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
                         return Filters.and(
-                                sourceFilterable, Filters.strengthEqual(
+                                sourceFilterable, Filters.printedTwilightCost(
                                         new SingleMemoryEvaluator(
                                                 new Evaluator() {
                                                     @Override
@@ -434,7 +464,7 @@ public class FilterFactory {
                     return actionContext -> {
                         final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
                         return Filters.and(
-                                sourceFilterable, Filters.strengthEqual(
+                                sourceFilterable, Filters.printedTwilightCost(
                                         new SingleMemoryEvaluator(
                                                 new Evaluator() {
                                                     @Override
@@ -478,17 +508,14 @@ public class FilterFactory {
                         return actionContext -> {
                             try {
                                 final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
-                                return Filters.printedTwilightCost(value);
+                                return Filters.printedTwilightCost(new ConstantEvaluator(value));
                             } catch (IllegalArgumentException ex) {
                                 return Filters.minPrintedTwilightCost(0);
                             }
                         };
                     } else {
                         final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                        return actionContext -> {
-                            final int value = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                            return Filters.printedTwilightCost(value);
-                        };
+                        return actionContext -> Filters.printedTwilightCost(valueSource.getEvaluator(actionContext));
                     }
                 });
         parameterFilters.put("maxtwilight",
@@ -603,6 +630,7 @@ public class FilterFactory {
                         titles.add(physicalCard.getBlueprint().getSanitizedTitle());
                     return (Filter) (game, physicalCard) -> titles.contains(physicalCard.getBlueprint().getSanitizedTitle());
                 });
+        parameterFilters.put("titlefrommemory", parameterFilters.get("namefrommemory"));
         parameterFilters.put("nameinstackedon",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
@@ -640,7 +668,7 @@ public class FilterFactory {
                     if (bp.getCardType() == CardType.THE_ONE_RING || bp.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    return Filters.printedTwilightCost(bp.getTwilightCost());
+                    return Filters.printedTwilightCost(new ConstantEvaluator(bp.getTwilightCost()));
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {
@@ -750,6 +778,28 @@ public class FilterFactory {
                         return Filters.maxStrength(strength - 1);
                     };
                 });
+        parameterFilters.put("subtitle",
+                (parameter, environment) -> {
+                    String sub = Names.SanitizeName(Sanitize(parameter));
+                    return (actionContext) -> (Filter)
+                            (game, physicalCard) -> sub != null
+                                    && physicalCard.getBlueprint().getSanitizedSubtitle() != null
+                                    && sub.equals(Sanitize(physicalCard.getBlueprint().getSanitizedSubtitle()));
+                });
+        parameterFilters.put("subtitlefrommemory",
+                (parameter, environment) -> actionContext -> {
+                    Set<String> subtitles = new HashSet<>();
+                    for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter))
+                        subtitles.add(physicalCard.getBlueprint().getSanitizedSubtitle());
+                    return (Filter) (game, physicalCard) -> subtitles.contains(physicalCard.getBlueprint().getSanitizedSubtitle());
+                });
+        parameterFilters.put("timeword", (parameter, environment) -> {
+            final Timeword timeword = Timeword.findTimeword(parameter);
+            if (timeword == null)
+                throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
+
+            return (actionContext) -> timeword;
+        });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");
@@ -758,13 +808,15 @@ public class FilterFactory {
     }
 
     private void appendFilter(Filterable value) {
-        final String filterName = Sanitize(value.toString());
-        final String optionalFilterName = value.toString().toLowerCase().replace("_", "-");
+        appendFilter(Sanitize(value.toString()), Hyphenize(value.toString()), value);
+    }
+
+    private void appendFilter(String filterName, String hyphenName, Filterable value) {
         if (simpleFilters.containsKey(filterName))
             throw new RuntimeException("Duplicate filter name: " + filterName);
         simpleFilters.put(filterName, (actionContext) -> value);
-        if (!optionalFilterName.equals(filterName))
-            simpleFilters.put(optionalFilterName, (actionContext -> value));
+        if (!hyphenName.equals(filterName))
+            simpleFilters.put(hyphenName, (actionContext -> value));
     }
 
     public FilterableSource generateFilter(String value, CardGenerationEnvironment environment) throws
@@ -805,11 +857,11 @@ public class FilterFactory {
                 sb.append(ch);
             } else {
                 if (ch == ',') {
-                    parts.add(sb.toString());
+                    parts.add(sb.toString().trim());
                     sb = new StringBuilder();
                 } else {
                     if (ch == ')')
-                        throw new InvalidCardDefinitionException("Invalid filter definition: " + value);
+                        throw new InvalidCardDefinitionException("Mismatched closing parenthesis in filter: " + value);
                     if (ch == '(')
                         depth++;
                     sb.append(ch);
@@ -820,7 +872,7 @@ public class FilterFactory {
         if (depth != 0)
             throw new InvalidCardDefinitionException("Not matching number of opening and closing brackets: " + value);
 
-        parts.add(sb.toString());
+        parts.add(sb.toString().trim());
 
         return parts.toArray(new String[0]);
     }
@@ -856,5 +908,12 @@ public class FilterFactory {
                 .toLowerCase()
                 .replace(" ", "")
                 .replace("_", "");
+    }
+
+    public static String Hyphenize(String input) {
+        return input
+                .toLowerCase()
+                .replace(" ", "-")
+                .replace("_", "-");
     }
 }

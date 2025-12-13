@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.effects;
 
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -7,6 +8,7 @@ import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
 import com.gempukku.lotro.logic.timing.AbstractSuccessfulEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.results.RevealedCardFromDeckResult;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +34,7 @@ public class RevealCardEffect extends AbstractSuccessfulEffect {
 
     @Override
     public void playEffect(LotroGame game) {
-        if (_cards.size() > 0) {
+        if (!_cards.isEmpty()) {
             final PlayOrder playerOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_source.getOwner(), false);
 
             String nextPlayer;
@@ -46,6 +48,12 @@ public class RevealCardEffect extends AbstractSuccessfulEffect {
             }
 
             game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed cards - " + getAppendedNames(_cards));
+
+            for (var card : _cards) {
+                if(card.getZone() == Zone.DECK) {
+                    game.getActionsEnvironment().emitEffectResult(new RevealedCardFromDeckResult(card.getOwner(), _source, card));
+                }
+            }
         }
     }
 }

@@ -73,7 +73,7 @@ public class Card_V2_026_Tests
 		scn.MoveMinionsToTable(grunt, worker);
 
 		var mithrandir = scn.GetFreepsCard("mithrandir");
-		scn.MoveCompanionToTable(mithrandir);
+		scn.MoveCompanionsToTable(mithrandir);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

@@ -70,7 +70,7 @@ public class Card_04_078_ErrataTests
 		var scn = GetScenario();
 
 		var swordsman = scn.GetFreepsCard("swordsman");
-		scn.MoveCompanionToTable(swordsman);
+		scn.MoveCompanionsToTable(swordsman);
 
 		var savage = scn.GetShadowCard("savage");
 		var runner = scn.GetShadowCard("runner");

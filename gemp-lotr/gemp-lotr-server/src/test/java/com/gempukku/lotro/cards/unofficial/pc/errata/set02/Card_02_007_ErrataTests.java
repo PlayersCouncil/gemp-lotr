@@ -73,7 +73,7 @@ public class Card_02_007_ErrataTests
 		var scn = GetScenario();
 
 		var gloin = scn.GetFreepsCard("gloin");
-		scn.MoveCompanionToTable(gloin);
+		scn.MoveCompanionsToTable(gloin);
 		var tale1 = scn.GetFreepsCard("tale1");
 		var tale2 = scn.GetFreepsCard("tale2");
 		var tale3 = scn.GetFreepsCard("tale3");

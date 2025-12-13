@@ -15,10 +15,11 @@ import org.json.simple.JSONObject;
 public class TakesWound implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "source", "memorize");
+        FieldUtils.validateAllowedFields(value, "filter", "source", "threat", "memorize");
 
         String source = FieldUtils.getString(value.get("source"), "source", "any");
         String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
+        boolean threat = FieldUtils.getBoolean(value.get("threat"), "threat", false);
 
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
 
@@ -35,7 +36,7 @@ public class TakesWound implements TriggerCheckerProducer {
             public boolean accepts(ActionContext actionContext) {
                 final Filterable filterable = targetFilterable.getFilterable(actionContext);
                 final Filterable sourceFilterable = sourceFilter.getFilterable(actionContext);
-                final boolean result = TriggerConditions.forEachWounded(actionContext.getGame(), actionContext.getEffectResult(), filterable);
+                final boolean result = TriggerConditions.forEachWounded(actionContext.getGame(), actionContext.getEffectResult(), threat, filterable);
                 if(result && !source.equals("any")) {
                     var sources = ((WoundResult) actionContext.getEffectResult()).getSources();
                     if (sources.stream().noneMatch(woundSource -> Filters.accepts(actionContext.getGame(), woundSource,

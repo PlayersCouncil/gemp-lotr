@@ -113,7 +113,7 @@ public class Card_V2_048_Tests
 
 		var stronghold = scn.GetFreepsCard("stronghold");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.MoveCardsToSupportArea(stronghold);
 
 		var bowman = scn.GetShadowCard("bowman");
@@ -143,7 +143,7 @@ public class Card_V2_048_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var sword = scn.GetFreepsCard("sword");
 		var helm = scn.GetFreepsCard("helm");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.AttachCardsTo(eowyn, sword);
 		scn.AttachCardsTo(eowyn, helm);
 		scn.MoveCardsToSupportArea(stronghold);

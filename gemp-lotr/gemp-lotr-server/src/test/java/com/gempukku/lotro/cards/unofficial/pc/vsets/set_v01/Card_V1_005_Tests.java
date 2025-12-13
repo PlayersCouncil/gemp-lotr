@@ -71,8 +71,8 @@ public class Card_V1_005_Tests
 		var onedwarf = scn.GetFreepsCard("onedwarf");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(onedwarf);
-		scn.MoveCompanionToTable(gimli);
-		scn.MoveCompanionToTable("guard");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli, scn.GetFreepsCard("handaxe1"), scn.GetFreepsCard("handaxe2"));
 
 		scn.MoveMinionsToTable("runner");
@@ -95,8 +95,8 @@ public class Card_V1_005_Tests
 		var onedwarf = scn.GetFreepsCard("onedwarf");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(onedwarf);
-		scn.MoveCompanionToTable(gimli);
-		scn.MoveCompanionToTable("guard");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli,
 				scn.GetFreepsCard("handaxe1"),
 				scn.GetFreepsCard("handaxe2"),
@@ -140,8 +140,8 @@ public class Card_V1_005_Tests
 		var onedwarf = scn.GetFreepsCard("onedwarf");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(onedwarf);
-		scn.MoveCompanionToTable(gimli);
-		scn.MoveCompanionToTable("guard");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli,
 				scn.GetFreepsCard("handaxe1"),
 				scn.GetFreepsCard("handaxe2"),
@@ -183,8 +183,8 @@ public class Card_V1_005_Tests
 		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(onedwarf);
-		scn.MoveCompanionToTable(gimli);
-		scn.MoveCompanionToTable("guard");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli, scn.GetFreepsCard("handaxe1"));
 
 		scn.MoveMinionsToTable("runner");

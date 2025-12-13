@@ -67,9 +67,9 @@ public class Card_01_316_ErrataTests
         PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
         PhysicalCardImpl talent = scn.GetFreepsCard("talent");
 
-        scn.MoveCompanionToTable(sam);
-        scn.MoveCompanionToTable(merry);
-        scn.MoveCompanionToTable(pippin);
+        scn.MoveCompanionsToTable(sam);
+        scn.MoveCompanionsToTable(merry);
+        scn.MoveCompanionsToTable(pippin);
         scn.MoveCardsToHand(talent);
 
         scn.StartGame();
@@ -90,7 +90,7 @@ public class Card_01_316_ErrataTests
         PhysicalCardImpl merry = scn.GetFreepsCard("merry");
         PhysicalCardImpl talent = scn.GetFreepsCard("talent");
 
-        scn.MoveCompanionToTable(merry);
+        scn.MoveCompanionsToTable(merry);
         scn.MoveCardsToHand(talent);
 
         scn.StartGame();

@@ -76,7 +76,7 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("dh", "merry");
+		scn.MoveCompanionsToTable("dh", "merry");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
@@ -108,7 +108,7 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("dh", "merry", "pippin");
+		scn.MoveCompanionsToTable("dh", "merry", "pippin");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
@@ -139,7 +139,7 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("dh", "merry", "pippin", "fatty");
+		scn.MoveCompanionsToTable("dh", "merry", "pippin", "fatty");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
@@ -170,7 +170,7 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("dh", "merry");
+		scn.MoveCompanionsToTable("dh", "merry");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");

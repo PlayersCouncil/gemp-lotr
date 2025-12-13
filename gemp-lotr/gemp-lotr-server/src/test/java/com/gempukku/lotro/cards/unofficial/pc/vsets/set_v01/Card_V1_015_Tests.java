@@ -103,7 +103,7 @@ public class Card_V1_015_Tests
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.MoveCompanionToTable(gwaihir, aragorn);
+		scn.MoveCompanionsToTable(gwaihir, aragorn);
 		scn.MoveCardsToHand(pathfinder);
 
 		scn.StartGame();
@@ -132,7 +132,7 @@ public class Card_V1_015_Tests
 		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
-		scn.MoveCompanionToTable(gwaihir);
+		scn.MoveCompanionsToTable(gwaihir);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");

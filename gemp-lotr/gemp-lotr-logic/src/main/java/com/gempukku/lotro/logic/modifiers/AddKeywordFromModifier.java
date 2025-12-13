@@ -6,24 +6,30 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
+import java.util.HashSet;
+
 public class AddKeywordFromModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Filterable from;
     private final boolean terrainOnly;
+    private final boolean unloadedOnly;
 
-    public AddKeywordFromModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Filterable from, boolean terrainOnly) {
+    public AddKeywordFromModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Filterable from, boolean terrainOnly, boolean unloadedOnly) {
         super(physicalCard, "Has added keywords from other cards", affectFilter, condition, ModifierEffect.GIVE_KEYWORD_MODIFIER);
         this.from = from;
         this.terrainOnly = terrainOnly;
+        this.unloadedOnly = unloadedOnly;
     }
 
     @Override
-    public Keyword getKeyword() {
+    public HashSet<Keyword> getKeywords() {
         return null;
     }
 
     @Override
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         if (terrainOnly && !keyword.isTerrain())
+            return false;
+        if (unloadedOnly && !keyword.isUnloaded())
             return false;
         return Filters.hasActive(game, from, keyword);
     }

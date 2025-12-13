@@ -62,7 +62,6 @@
 		culture: Raider
 		twilight: 2
 		type: Possession
-		#target: 
 		keywords: Support Area
 		effects: [
 			{
@@ -82,7 +81,8 @@
 				type: activated
 				phase: shadow
 				requires: {
-					type: canPlayFromDiscard
+					type: Playable
+					fromZone: DISCARD
 					filter: corsair
 					discount: {
 						type: ForEachCultureToken

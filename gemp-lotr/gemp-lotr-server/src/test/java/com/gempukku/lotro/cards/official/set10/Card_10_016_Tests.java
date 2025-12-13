@@ -69,7 +69,7 @@ public class Card_10_016_Tests
 		var wind = scn.GetFreepsCard("wind");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(wind);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var one1 = scn.GetShadowCard("one1");
 		var two1 = scn.GetShadowCard("two1");

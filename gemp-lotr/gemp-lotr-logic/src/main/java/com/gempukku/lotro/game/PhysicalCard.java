@@ -4,6 +4,8 @@ import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Zone;
 
 public interface PhysicalCard extends Filterable {
+    boolean isFlipped();
+    void setFlipped(boolean flipped);
     Zone getZone();
     void setPlayedFromZone(Zone zone);
     Zone getPlayedFromZone();
@@ -14,6 +16,7 @@ public interface PhysicalCard extends Filterable {
 
     String getCardController();
 
+    void setCardId(int cardId);
     int getCardId();
 
     LotroCardBlueprint getBlueprint();
@@ -35,4 +38,6 @@ public interface PhysicalCard extends Filterable {
 
         String getHumanReadable();
     }
+
+    void copyCardStats(PhysicalCard other);
 }

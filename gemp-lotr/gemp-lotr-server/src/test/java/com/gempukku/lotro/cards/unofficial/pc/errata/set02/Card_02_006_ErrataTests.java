@@ -85,7 +85,7 @@ public class Card_02_006_ErrataTests
 		VirtualTableScenario scn = GetScenario();
 
 		var fror = scn.GetFreepsCard("fror");
-		scn.MoveCompanionToTable(fror);
+		scn.MoveCompanionsToTable(fror);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var nazgul = scn.GetShadowCard("nazgul");

@@ -68,7 +68,7 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(elrond);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.MoveCardsToHand(enmity);
@@ -106,7 +106,7 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(elrond);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.MoveCardsToHand(enmity);
@@ -164,7 +164,7 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToSupportArea(elrond);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.MoveCardsToHand(enmity);

@@ -554,7 +554,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -565,11 +565,11 @@
 					type: addTrigger
 					trigger: {
 						type: aboutToTakeWound
-						filter: memory(bearer)
+						filter: memory(oldBearer)
 					}
 					effect: {
 						type: preventWound
-						select: choose(memory(bearer))
+						select: choose(memory(oldBearer))
 					}
 				}
 			}

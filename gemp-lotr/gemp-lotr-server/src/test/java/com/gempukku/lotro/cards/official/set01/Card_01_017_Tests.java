@@ -75,7 +75,7 @@ public class Card_01_017_Tests
 		var grimir = scn.GetFreepsCard("grimir");
 		var guard = scn.GetFreepsCard("guard");
 		var event = scn.GetFreepsCard("event");
-		scn.MoveCompanionToTable(grimir);
+		scn.MoveCompanionsToTable(grimir);
 		scn.MoveCardsToDiscard(guard, event);
 
 		scn.StartGame();

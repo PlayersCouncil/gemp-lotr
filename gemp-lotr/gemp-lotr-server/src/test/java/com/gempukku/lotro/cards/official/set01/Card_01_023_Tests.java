@@ -72,7 +72,7 @@ public class Card_01_023_Tests
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(nobody);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);
@@ -94,7 +94,7 @@ public class Card_01_023_Tests
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(nobody);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);

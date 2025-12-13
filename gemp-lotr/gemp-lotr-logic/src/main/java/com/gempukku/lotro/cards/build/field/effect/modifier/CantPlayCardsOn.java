@@ -2,7 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.logic.modifiers.MayNotBePlayedOnModifier;
+import com.gempukku.lotro.logic.modifiers.CantBePlayedOnModifier;
 import org.json.simple.JSONObject;
 
 public class CantPlayCardsOn implements ModifierSourceProducer {
@@ -18,7 +18,7 @@ public class CantPlayCardsOn implements ModifierSourceProducer {
         final FilterableSource onFilterableSource = environment.getFilterFactory().generateFilter(onFilter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
-        return (actionContext) -> new MayNotBePlayedOnModifier(actionContext.getSource(),
+        return (actionContext) -> new CantBePlayedOnModifier(actionContext.getSource(),
                 RequirementCondition.createCondition(requirements, actionContext),
                 onFilterableSource.getFilterable(actionContext), filterableSource.getFilterable(actionContext));
     }

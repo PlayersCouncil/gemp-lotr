@@ -230,7 +230,7 @@
 				{
 					type: memorize
 					filter: bearer
-					memory: bearer
+					memory: oldBearer
 				}
 				{
 					type: discard
@@ -248,13 +248,13 @@
 						type: If
 						check: {
 							type: CanSpot
-							filter: memory(bearer),InSkirmishAgainst(Nazgul)
+							filter: memory(oldBearer),InSkirmishAgainst(Nazgul)
 						}
 						true: {
 							type: addmodifier
 							modifier: {
 								type: modifyStrength
-								filter: memory(bearer),inSkirmishAgainst(nazgul)
+								filter: memory(oldBearer),inSkirmishAgainst(nazgul)
 								amount: 4
 							}
 						}

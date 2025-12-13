@@ -110,7 +110,7 @@ public class Card_V2_020_Tests
 		scn.MoveCardsToSupportArea(machine);
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.MoveCompanionToTable(treebeard);
+		scn.MoveCompanionsToTable(treebeard);
 
 		scn.StartGame();
 

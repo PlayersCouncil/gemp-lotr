@@ -99,6 +99,8 @@ public class Card_01_002_Tests
 
 		scn.StartGame();
 
+		scn.AddBurdens(1);
+
 		scn.FreepsUseCardAction(frodo);
 
 		assertEquals(1, scn.GetBurdens());
@@ -184,6 +186,8 @@ public class Card_01_002_Tests
 		scn.MoveCardsToHand(snuffler);
 
 		scn.StartGame();
+
+		scn.AddBurdens(1);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));

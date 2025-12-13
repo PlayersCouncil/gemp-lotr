@@ -243,7 +243,7 @@
 			}
 		]
 		gametext: <b>Valiant.</> <br>While no opponent controls a site, Haldir is strength +2. <br><b>Regroup:</b> Exert Haldir at a battleground and exert another Elf to liberate a site.
-		lore: “‘In days of old, my people stood beside the King of Gondor – we come to honor that allegiance.'”
+		lore: "'In days of old, my people stood beside the King of Gondor – we come to honor that allegiance.'"
 		promotext: ""
 		alts: {
 			promos: {

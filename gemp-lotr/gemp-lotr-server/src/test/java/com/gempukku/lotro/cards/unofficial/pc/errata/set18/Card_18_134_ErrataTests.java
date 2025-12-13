@@ -78,7 +78,7 @@ public class Card_18_134_ErrataTests
 
 		var onegoodturn = scn.GetFreepsCard("onegoodturn");
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.MoveCompanionToTable(smeagol);
+		scn.MoveCompanionsToTable(smeagol);
 		scn.MoveCardsToHand(onegoodturn);
 
 		var site1 = scn.GetFreepsSite("East Road");

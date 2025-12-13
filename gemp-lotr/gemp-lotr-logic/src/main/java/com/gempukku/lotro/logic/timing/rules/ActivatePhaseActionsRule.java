@@ -50,14 +50,14 @@ public class ActivatePhaseActionsRule {
     private Filter getActivatableCardsFilter(String playerId) {
         return Filters.or(
                 Filters.and(CardType.SITE,
-                        new Filter() {
-                            @Override
-                            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                                if (game.getGameState().getCurrentPhase().isRealPhase())
-                                    return Filters.currentSite.accepts(game, physicalCard);
-                                return false;
-                            }
-                        }),
-                Filters.and(Filters.not(CardType.SITE), Filters.owner(playerId), Filters.active));
+						(Filter) (game, physicalCard) -> {
+							if (game.getGameState().getCurrentPhase().isRealPhase())
+								return Filters.currentSite.accepts(game, physicalCard);
+							return false;
+						}),
+                Filters.and(Filters.not(CardType.SITE), Filters.owner(playerId), Filters.active),
+                Filters.and(Filters.not(CardType.SITE), Filters.active,
+                        (Filter) (game, physicalCard) -> game.getModifiersQuerying().hasExtraPhaseActionsFromOtherPlayer(game, physicalCard))
+        );
     }
 }

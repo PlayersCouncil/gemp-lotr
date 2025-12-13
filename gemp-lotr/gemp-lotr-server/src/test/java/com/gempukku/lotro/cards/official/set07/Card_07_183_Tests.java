@@ -77,7 +77,7 @@ public class Card_07_183_Tests
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.MoveCompanionToTable(sam, merry, pippin, greenleaf);
+        scn.MoveCompanionsToTable(sam, merry, pippin, greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
@@ -133,7 +133,7 @@ public class Card_07_183_Tests
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.MoveCompanionToTable(sam, merry, pippin, greenleaf);
+        scn.MoveCompanionsToTable(sam, merry, pippin, greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
@@ -181,7 +181,7 @@ public class Card_07_183_Tests
         var sam = scn.GetFreepsCard("sam");
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
-        scn.MoveCompanionToTable(sam, merry, pippin);
+        scn.MoveCompanionsToTable(sam, merry, pippin);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
@@ -219,7 +219,7 @@ public class Card_07_183_Tests
         var bounder = scn.GetFreepsCard("bounder");
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
-        scn.MoveCompanionToTable(merry, pippin);
+        scn.MoveCompanionsToTable(merry, pippin);
         scn.MoveCardsToSupportArea(bounder);
 
         var mind = scn.GetShadowCard("mind");
@@ -256,7 +256,7 @@ public class Card_07_183_Tests
 
         var frodo = scn.GetRingBearer();
         var sam = scn.GetFreepsCard("sam");
-        scn.MoveCompanionToTable(sam);
+        scn.MoveCompanionsToTable(sam);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
@@ -294,7 +294,7 @@ public class Card_07_183_Tests
 
         var frodo = scn.GetRingBearer();
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.MoveCompanionToTable( greenleaf);
+        scn.MoveCompanionsToTable( greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var charge = scn.GetShadowCard("charge");

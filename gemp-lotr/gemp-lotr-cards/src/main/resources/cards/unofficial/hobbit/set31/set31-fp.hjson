@@ -264,7 +264,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: discard
@@ -273,7 +273,7 @@
 				]
 				effect: {
 					type: preventWound
-					select: choose(memory(bearer))
+					select: choose(memory(oldBearer))
 				}
 			}
 		]
@@ -663,7 +663,7 @@
 					{
 						type: memorize
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: transferToSupport
@@ -678,7 +678,7 @@
 					}
 					true: {
 						type: cancelSkirmish
-						filter: memory(bearer)
+						filter: memory(oldBearer)
 					}
 				}
 			}

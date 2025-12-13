@@ -93,7 +93,7 @@ public class Card_V1_022_Tests
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToSupportArea(memorial);
 
 		scn.StartGame();
@@ -118,13 +118,13 @@ public class Card_V1_022_Tests
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
-		scn.MoveCompanionToTable(aragorn, sam);
+		scn.MoveCompanionsToTable(aragorn, sam);
 		scn.MoveCardsToSupportArea(memorial);
 
 		scn.StartGame();
 
-		//There is already 1 burden from bidding, we add enough for 2 actions
-		scn.AddBurdens(1);
+		//We add enough for 2 actions
+		scn.AddBurdens(2);
 
 		assertTrue(scn.FreepsActionAvailable(memorial));
 		assertEquals(2, scn.GetBurdens());

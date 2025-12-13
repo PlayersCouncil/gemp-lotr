@@ -12,7 +12,7 @@
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 			30, 31, 32, 33
 			51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
-			100, 101, 102
+			100, 101, 102, 103
 		]
 		hall: false
 	}
@@ -26,7 +26,7 @@
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 			30, 31, 32, 33
 			50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
-			100, 101, 102
+			100, 101, 102, 103
 		]
 		blocks: [
 			Promotional|Promotional:0
@@ -36,7 +36,7 @@
 			war_block
 			hunter_block
 			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
-			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - The Pelennor Fields:103
 			Player's Council Errata|Promotional Errata:50,The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60,Shadows Errata:61,Black Rider Errata:62,Bloodlines Errata:63,Expanded Middle-earth Errata:64,The Hunters Errata:65,The Wraith Collection Errata:66,Rise of Saruman Errata:67,Treachery & Deceit Errata:68,Age's End Errata:69
 			Latest PC Errata|Latest PC Errata:pc_errata
 			hobbit
@@ -104,7 +104,7 @@
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		sets: [
-			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101, 102
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101, 102, 103
 		]
 		valid: [
 			"0_56", "0_57", "0_58", "0_59", "0_60"
@@ -114,7 +114,7 @@
 			pc_ttt_block
 			pc_king_block
 			Additional Sets|Promotional:0,Reflections:9
-			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - The Pelennor Fields:103
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60
 			Latest PC Errata|Latest PC Errata:pc_errata
 		]
@@ -151,7 +151,7 @@
 			"7_49"
 		]
 		sets: [
-			7, 8, 10
+			7, 8, 10, 103
 		]
 		errataSets: [
 			57,58,60
@@ -167,11 +167,17 @@
 		hall: false
 		# Fill this up with the current batch of errata for it to show up on the playtest server.
 		valid: [
-			"51_44",
-			"52_104",
-			"53_74",
-			"60_28",
-			"102_13", "102_77"
+			'51_5', '51_17', '51_24', '51_25', '51_84', '51_256', '51_136',
+			'52_11', '52_20', 
+			'53_3', '53_4', '53_27', '53_30','53_67', 
+			'54_154','54_92','54_99', '54_153',
+			'55_51', 
+			'56_8', 
+			'57_35', '57_54', '57_80', '57_82', 
+			'58_3', 
+			'59_46', 
+			'60_11', '60_17', '60_72',
+			'101_1', '101_3', '101_49', '101_54'
 		]
 		sets: [
 			100
@@ -212,7 +218,7 @@
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		sets: [
-			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101, 102
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101, 102, 103
 		]
 		blocks: [
 			Promotional|Promotional:0
@@ -222,7 +228,7 @@
 			war_block
 			hunter_block
 			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
-			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - The Pelennor Fields:103
 			Player's Council Errata|Promotional Errata:50,The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60,Shadows Errata:61,Black Rider Errata:62,Bloodlines Errata:63,Expanded Middle-earth Errata:64,The Hunters Errata:65,The Wraith Collection Errata:66,Rise of Saruman Errata:67,Treachery & Deceit Errata:68,Age's End Errata:69
 		]
 		errataSets: [

@@ -115,7 +115,7 @@
 			}
 		]
 		gametext: <b>Ranger. Hunter 1.</b><br>While you can spot 2 [gondor] rangers, Madril is twilight cost –2.<br>At the start of the Maneuver phase, for each threat you can spot, make a minion's site number +1 until the start of the regroup phase.
-		lore: “‘For that is the ruin of Osgiliath...'”
+		lore: "'For that is the ruin of Osgiliath...'"
 		promotext: ""
 		alts: {
 			promos: {

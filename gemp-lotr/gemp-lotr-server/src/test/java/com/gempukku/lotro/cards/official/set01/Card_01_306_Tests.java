@@ -74,7 +74,7 @@ public class Card_01_306_Tests
 		var frodo = scn.GetRingBearer();
 		var pippin = scn.GetFreepsCard("pippin");
 		var taba = scn.GetFreepsCard("taba");
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 		scn.AttachCardsTo(frodo, taba);
 
 		var power = scn.GetShadowCard("power");
@@ -98,7 +98,7 @@ public class Card_01_306_Tests
 		var frodo = scn.GetRingBearer();
 		var pippin = scn.GetFreepsCard("pippin");
 		var taba = scn.GetFreepsCard("taba");
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 		scn.AttachCardsTo(frodo, taba);
 
 		var power = scn.GetShadowCard("power");

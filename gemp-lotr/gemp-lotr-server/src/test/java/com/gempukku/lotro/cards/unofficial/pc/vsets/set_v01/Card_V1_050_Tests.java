@@ -114,7 +114,7 @@ public class Card_V1_050_Tests
 		var sting = scn.GetFreepsCard("sting");
 		var phial = scn.GetFreepsCard("phial");
 		scn.MoveCardsToSupportArea(bilbo, greenleaf);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		//Cheat the sanctuary so we don't have to move and swap
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.SANCTUARY));

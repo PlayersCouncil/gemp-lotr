@@ -77,6 +77,7 @@ public class Card_04_141_Tests
 		scn.MoveCardsToHand(gandalf);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SetTwilight(20);
 

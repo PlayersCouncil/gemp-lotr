@@ -85,13 +85,14 @@ public class Card_11_170_Tests
 		var pippin = scn.GetFreepsCard("pippin");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCompanionToTable(pippin, gimli, legolas);
+		scn.MoveCompanionsToTable(pippin, gimli, legolas);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -136,13 +137,14 @@ public class Card_11_170_Tests
 
 		var pippin = scn.GetFreepsCard("pippin");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(pippin, gimli);
+		scn.MoveCompanionsToTable(pippin, gimli);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -169,12 +171,13 @@ public class Card_11_170_Tests
 
 		var pippin = scn.GetFreepsCard("pippin");
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(pippin, sam);
+		scn.MoveCompanionsToTable(pippin, sam);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		scn.MoveMinionsToTable(runner1);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(

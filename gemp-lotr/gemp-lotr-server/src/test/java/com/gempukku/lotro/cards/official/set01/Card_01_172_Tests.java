@@ -79,7 +79,7 @@ public class Card_01_172_Tests
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(7, scn.GetFreepsArcheryTotal());
-		scn.MoveCompanionToTable(archer);
+		scn.MoveCompanionsToTable(archer);
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}
 

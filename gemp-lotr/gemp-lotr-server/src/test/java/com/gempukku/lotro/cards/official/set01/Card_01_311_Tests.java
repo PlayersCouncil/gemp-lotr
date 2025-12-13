@@ -70,7 +70,7 @@ public class Card_01_311_Tests
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("card");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.StartGame();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();

@@ -1,14 +1,13 @@
 package com.gempukku.lotro.logic.timing;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
+
+import java.util.Map;
 
 public class PlayConditions {
     public static boolean canLiberateASite(LotroGame game, String performingPlayer, PhysicalCard source, String controlledByPlayerId) {
@@ -52,6 +51,10 @@ public class PlayConditions {
         return Filters.canSpot(game, count, filters);
     }
 
+    public static boolean canSpot(LotroGame game, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return Filters.canSpot(game, count, spotOverrides, filters);
+    }
+
     public static boolean hasInitiative(LotroGame game, Side side) {
         return game.getModifiersQuerying().hasInitiative(game) == side;
     }
@@ -61,17 +64,34 @@ public class PlayConditions {
     }
 
     public static int getMaxAddThreatCount(LotroGame game) {
-        return Filters.countActive(game, CardType.COMPANION) - game.getGameState().getThreats();
+        int threatLimit = getThreatLimit(game);
+        return threatLimit - game.getGameState().getThreats();
     }
 
-    public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {
-        return canPlayFromDiscard(playerId, game, 0, filters);
+    public static int getThreatLimit(LotroGame game) {
+        int companionCount = Filters.countActive(game, SpotOverride.INCLUDE_HINDERED, CardType.COMPANION);
+        int threatLimit = game.getModifiersQuerying().getThreatLimit(game, companionCount);
+        return threatLimit;
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, Filterable... filters) {
         if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
             return false;
-        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId), Filters.and(filters, Filters.playable(game, modifier)));
+        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId), Filters.and(filters, Filters.playable(modifier)));
+    }
+
+    public static boolean canPlayFromDrawDeck(String playerId, LotroGame game, int modifier, Filterable... filters) {
+        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
+            return false;
+        return Filters.acceptsAny(game, game.getGameState().getDeck(playerId), Filters.and(filters, Filters.playable(modifier)));
+    }
+
+    public static boolean canPlayFromHand(String playerId, LotroGame game, int modifier, Filterable... filters) {
+        return Filters.acceptsAny(game, game.getGameState().getHand(playerId), Filters.and(filters, Filters.playable(modifier)));
+    }
+
+    public static boolean canPlayFromStacked(String playerId, LotroGame game, int modifier, Filterable... filters) {
+        return Filters.acceptsAny(game, game.getGameState().getStacked(playerId), Filters.and(filters, Filters.playable(modifier)));
     }
 
     public static boolean canDiscardFromPlay(final PhysicalCard source, LotroGame game, int count, final Filterable... filters) {

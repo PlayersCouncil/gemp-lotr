@@ -67,5 +67,7 @@ public class RuleSet {
 
         new TakeOffRingRule(_actionsEnvironment).applyRule();
         new ConcealedRule(_actionsEnvironment).applyRule();
+        new HinderedRule(_modifiersLogic, _actionsEnvironment).applyRule();
+        new RestoreRule(_actionsEnvironment).applyRule();
     }
 }

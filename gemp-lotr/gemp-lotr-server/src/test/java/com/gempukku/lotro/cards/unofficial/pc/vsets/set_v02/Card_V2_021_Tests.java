@@ -76,7 +76,7 @@ public class Card_V2_021_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);
@@ -114,7 +114,7 @@ public class Card_V2_021_Tests
 		scn.MoveMinionsToTable(fighter, guard);
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 2);
@@ -160,7 +160,7 @@ public class Card_V2_021_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 4);
@@ -201,7 +201,7 @@ public class Card_V2_021_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 2);
@@ -226,7 +226,7 @@ public class Card_V2_021_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);

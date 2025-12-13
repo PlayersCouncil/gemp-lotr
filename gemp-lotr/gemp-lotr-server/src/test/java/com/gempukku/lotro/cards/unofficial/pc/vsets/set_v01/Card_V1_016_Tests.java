@@ -78,7 +78,7 @@ public class Card_V1_016_Tests
 		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
 
 		scn.MoveCardsToHand(gandalf);
-		scn.MoveCompanionToTable(greenleaf);
+		scn.MoveCompanionsToTable(greenleaf);
 		scn.MoveCardsToSupportArea(myheart);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
@@ -93,7 +93,7 @@ public class Card_V1_016_Tests
 		scn.FreepsChooseCard(runner1);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.ShadowPassCurrentPhaseAction();
 		scn.FreepsUseCardAction(greenleaf);
 		//scn.FreepsChooseCard(runner2); //Only one choice, so it's made for us
@@ -111,7 +111,7 @@ public class Card_V1_016_Tests
 		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
 
 		scn.MoveCardsToHand(gandalf);
-		scn.MoveCompanionToTable(greenleaf, gandalf);
+		scn.MoveCompanionsToTable(greenleaf, gandalf);
 		scn.MoveCardsToSupportArea(myheart);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");

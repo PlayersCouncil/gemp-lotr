@@ -9,7 +9,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResol
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
-import com.gempukku.lotro.logic.effects.RemoveCardsFromDeadPileEffect;
+import com.gempukku.lotro.logic.effects.RemoveCardsFromTheGameEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -19,25 +19,26 @@ import java.util.Collection;
 public class RemoveCardsInDeadPileFromGame implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+        final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeadPile(select, null, null, valueSource, "_temp", player, "Choose cards from dead pile to remove from game", environment));
+                CardResolver.resolveCardsInDeadPile(select, null, null, valueSource, memory, player, "Choose cards from dead pile to remove from game", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory("_temp");
+                        final Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory(memory);
                         String player = playerSource.getPlayer(actionContext);
-                        return new RemoveCardsFromDeadPileEffect(player, actionContext.getSource(), new ArrayList<>(cards));
+                        return new RemoveCardsFromTheGameEffect(player, actionContext.getSource(), new ArrayList<>(cards));
                     }
                 });
 

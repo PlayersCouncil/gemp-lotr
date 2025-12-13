@@ -73,9 +73,10 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));
@@ -100,10 +101,11 @@ public class Card_01_311_ErrataTests
 		var sam = scn.GetFreepsCard("sam");
 		var proudfoot = scn.GetFreepsCard("proudfoot");
 		var gaffer = scn.GetFreepsCard("gaffer");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToSupportArea(proudfoot, gaffer);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));
@@ -127,10 +129,11 @@ public class Card_01_311_ErrataTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToSupportArea(rosie);
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(sam));
@@ -154,7 +157,7 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
@@ -176,7 +179,7 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var twk = scn.GetShadowCard("twk");
 		scn.MoveMinionsToTable(twk);
@@ -203,7 +206,7 @@ public class Card_01_311_ErrataTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var stealth = scn.GetFreepsCard("stealth");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(stealth);
 
 		var twk = scn.GetShadowCard("twk");

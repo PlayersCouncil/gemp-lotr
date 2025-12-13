@@ -461,7 +461,7 @@
 				cost: [
 					{
 						type: memorizeActive
-						memory: bearer
+						memory: oldBearer
 						filter: bearer
 					}
 					{
@@ -471,7 +471,7 @@
 				]
 				effect: {
 					type: alterOverwhelmMultiplier
-					select: memory(bearer)
+					select: memory(oldBearer)
 					multiplier: 3
 				}
 			}

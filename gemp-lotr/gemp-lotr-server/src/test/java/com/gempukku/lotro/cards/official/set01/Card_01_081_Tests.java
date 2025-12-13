@@ -70,7 +70,7 @@ public class Card_01_081_Tests
 		var questions = scn.GetFreepsCard("questions");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(questions);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var chaff1 = scn.GetFreepsCard("chaff1");
 		var chaff2 = scn.GetFreepsCard("chaff2");

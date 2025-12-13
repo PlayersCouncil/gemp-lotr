@@ -186,7 +186,7 @@
 			}
 		]
 		gametext: At the start of each of your turns, you may spot an ally whose home is site 3 to heal that ally up to 2 times.  Add (1) per wound healed.<br>Regroup: Exert Elrond twice to heal a companion.
-		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
+		lore: "Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -573,8 +573,8 @@
 				}
 			}
 		]
-		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
-		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
+		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer's resistance is +2.
+		lore: "'May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -798,7 +798,78 @@
 	# 		}
 	# 	]
 	# 	gametext: Bearer must be Elrond.<br><b>Maneuver:</b> Spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.  Return Vilya to your hand.
-	# 	lore: “Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
+	# 	lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
+	# 53_27: {
+	# 	cardInfo: {
+	# 		//id: 3_27.2
+	# 		parent: 3_27
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 2
+	# 		image: errata/LOTR-EN03E027.2_card.jpg
+	# 		collInfo: 3R27
+	# 		rarity: R
+	# 	}
+	# 	title: Vilya
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 1
+	# 	type: Artifact
+	# 	itemclass: Ring
+	# 	target: name(Elrond)
+	# 	#keyword: support area
+	# 	vitality: 1
+	# 	effects: [
+	# 		{
+	# 			type: Activated
+	# 			phase: Maneuver
+	# 			requires: {
+	# 				type: CanSpot
+	# 				filter: condition,side(shadow)
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: bearer
+	# 				times: 2
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: ChooseActiveCards
+	# 					select: choose(condition,side(shadow))
+	# 					memorize: chosenShadowCondition
+	# 					text: Choose a Shadow condition to return to its owner's hand.
+	# 				}
+	# 				{
+	# 					type: ReturnToHand
+	# 					select: memory(chosenShadowCondition)
+	# 				}
+	# 				{
+	# 					type: optional
+	# 					player: shadow
+	# 					text: Would you like to discard a card from hand?
+	# 					effect: {
+	# 						type: DiscardFromHand
+	# 						forced: false
+	# 						player: OwnerFromMemory(chosenShadowCondition)
+	# 						hand: OwnerFromMemory(chosenShadowCondition)
+	# 						count: 1
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Bearer must be Elrond.<br>Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
+	# 	lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {
@@ -810,12 +881,12 @@
 	
 	53_27: {
 		cardInfo: {
-			//id: 3_27.2
+			//id: 53_27.3
 			parent: 3_27
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 2
-			image: errata/LOTR-EN03E027.2_card.jpg
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E027.3_card.jpg
 			collInfo: 3R27
 			rarity: R
 		}
@@ -823,52 +894,25 @@
 		unique: true
 		side: Free Peoples
 		culture: Elven
-		twilight: 1
+		twilight: 0
 		type: Artifact
+		vitality: 1
 		itemclass: Ring
 		target: name(Elrond)
-		#keyword: support area
-		vitality: 1
-		effects: [
-			{
-				type: Activated
-				phase: Maneuver
-				requires: {
-					type: CanSpot
-					filter: condition,side(shadow)
-				}
-				cost: {
-					type: exert
-					select: bearer
-					times: 2
-				}
-				effect: [
-					{
-						type: ChooseActiveCards
-						select: choose(condition,side(shadow))
-						memorize: chosenShadowCondition
-						text: Choose a Shadow condition to return to its owner's hand.
-					}
-					{
-						type: ReturnToHand
-						select: memory(chosenShadowCondition)
-					}
-					{
-						type: optional
-						player: shadow
-						text: Would you like to discard a card from hand?
-						effect: {
-							type: DiscardFromHand
-							forced: false
-							player: OwnerFromMemory(chosenShadowCondition)
-							hand: OwnerFromMemory(chosenShadowCondition)
-							count: 1
-						}
-					}
-				]
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: Exert
+				select: bearer
+				times: 2
 			}
-		]
-		gametext: Bearer must be Elrond.<br>Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
+			effect: {
+				type: Hinder
+				select: choose(side(shadow),condition)
+			}
+		}
+		gametext: Bearer must be Elrond.<br><b>Maneuver:</b> Exert Elrond twice to hinder a Shadow condition.
 		lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
 		promotext: ""
 		alts: {
@@ -878,4 +922,5 @@
 			}
 		}
 	}
+	
 }

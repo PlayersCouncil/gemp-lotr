@@ -72,7 +72,7 @@ public class Card_18_118_Tests
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         PhysicalCardImpl lurtz = scn.GetShadowCard("lurtz");
         scn.MoveMinionsToTable(lurtz);

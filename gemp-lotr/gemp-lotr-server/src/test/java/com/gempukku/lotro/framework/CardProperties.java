@@ -3,6 +3,7 @@ package com.gempukku.lotro.framework;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -149,6 +150,18 @@ public interface CardProperties extends TestBase {
 	default boolean IsRace(PhysicalCardImpl card, Race race)
 	{
 		return  game().getModifiersQuerying().isRace(game(), card, race);
+	}
+
+	default boolean IsHindered(PhysicalCardImpl card) { return HasKeyword(card, Keyword.HINDERED); }
+	default void HinderCard(PhysicalCardImpl...cards) {
+		for(var card : cards) {
+			game().getGameState().hinder(Collections.singletonList(card));
+		}
+	}
+	default void RestoreCard(PhysicalCardImpl...cards) {
+		for(var card: cards) {
+			game().getGameState().restore(game(), Collections.singletonList(card));
+		}
 	}
 
 }

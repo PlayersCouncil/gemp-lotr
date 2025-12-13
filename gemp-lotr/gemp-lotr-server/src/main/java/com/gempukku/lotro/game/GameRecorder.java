@@ -49,7 +49,7 @@ public class GameRecorder {
         final ZonedDateTime startDate = ZonedDateTime.now(ZoneOffset.UTC);
         final Map<String, GameCommunicationChannel> recordingChannels = new HashMap<>();
         for (String playerId : lotroGame.getPlayersPlaying()) {
-            var recordChannel = new GameCommunicationChannel(playerId, 0, format);
+            var recordChannel = new GameCommunicationChannel(playerId, 0, false, format);
             lotroGame.addGameStateListener(playerId, recordChannel);
             recordingChannels.put(playerId, recordChannel);
         }

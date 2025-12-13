@@ -148,7 +148,7 @@
 					{
 						type: memorizeActive
 						filter: bearer
-						memory: bearer
+						memory: oldBearer
 					}
 					{
 						type: transferToSupport
@@ -157,7 +157,7 @@
 				]
 				effect: {
 					type: preventWound
-					select: memory(bearer)
+					select: memory(oldBearer)
 				}
 			}
 		]

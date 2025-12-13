@@ -68,7 +68,7 @@ public class Card_V1_003_Tests
 	}
 
 	@Test
-	public void GimliHasStrengthBonusWith2Items() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GimliHasStrengthBonusWith3Items() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		VirtualTableScenario scn = GetScenario();
 
@@ -88,12 +88,16 @@ public class Card_V1_003_Tests
 		// Base 6 + 2 from the axe
 		assertEquals(8, scn.GetStrength(gimli));
 		scn.FreepsPlayCard(ring);
-		// Base 6 + 2 from Dwarven Axe + 1 from Ring + 2 from game text
-		assertEquals(11, scn.GetStrength(gimli));
+		// Base 6 + 2 from Dwarven Axe + 1 from Ring
+		assertEquals(9, scn.GetStrength(gimli));
+		scn.FreepsPlayCard(handaxe1);
+		// Base 6 + 2 from Dwarven Axe + 1 from Ring + 1 from hand axe +2 from game text
+		assertEquals(12, scn.GetStrength(gimli));
+
 	}
 
 	@Test
-	public void GimliHasDamageBonusWith3Items() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GimliHasDamageBonusWith2Items() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		VirtualTableScenario scn = GetScenario();
 
@@ -113,8 +117,6 @@ public class Card_V1_003_Tests
 		scn.FreepsPlayCard(dwaxe);
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		scn.FreepsPlayCard(ring);
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
-		scn.FreepsPlayCard(handaxe1);
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 	}
 }

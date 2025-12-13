@@ -203,6 +203,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getThreatLimitModifier(LotroGame game) {
+        return 0;
+    }
+
+    @Override
     public boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion) {
         return true;
     }

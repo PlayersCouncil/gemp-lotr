@@ -116,7 +116,7 @@
 	# 					# little more elegant.
 	# 					type: Memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: If
@@ -124,12 +124,12 @@
 	# 						type: HasCardInHand
 	# 						player: freeps
 	# 						count: 1
-	# 						filter: CultureFromMemory(bearer)
+	# 						filter: CultureFromMemory(oldBearer)
 	# 					}
 	# 					true: {
 	# 						type: Optional
 	# 						player: freeps
-	# 						text: Would you like to discard 1 card from hand matching {bearer}'s culture to discard Too Great and Terrible?
+	# 						text: Would you like to discard 1 card from hand matching {oldBearer}'s culture to discard Too Great and Terrible?
 	# 						effect: {
 	# 							type: CostToEffect
 	# 							cost: {
@@ -138,7 +138,7 @@
 	# 								hand: freeps
 	# 								forced: false
 	# 								count: 1
-	# 								select: choose(CultureFromMemory(bearer))
+	# 								select: choose(CultureFromMemory(oldBearer))
 	# 							}
 	# 							effect: {
 	# 								type: Discard
@@ -152,7 +152,7 @@
 	# 		}
 	# 	]
 	# 	gametext: To play, exert a [ringwraith] minion.  Bearer must be a companion or ally. Bearer cannot be exerted by Free Peoples cards.<br>At the start of the regroup phase, the Free Peoples player may discard 1 card from hand of bearer's culture to discard this condition.
-	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	lore: "'I do not wish to become like the Dark Lord himself.'"
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {
@@ -209,7 +209,7 @@
 	# 		}
 	# 	}
 	# 	gametext: Spot a Nazgul to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
-	# 	lore: “‘I do not wish to become like the Dark Lord himself.'”
+	# 	lore: "'I do not wish to become like the Dark Lord himself.'"
 	# 	promotext: ""
 	# 	alts: {
 	# 		promos: {
@@ -257,23 +257,23 @@
 	# 					# We do this just to make the option prompt a little more elegant.
 	# 					type: Memorize
 	# 					filter: bearer
-	# 					memory: bearer
+	# 					memory: oldBearer
 	# 				}
 	# 				{
 	# 					type: Preventable
-	# 					text: Discard a card from hand sharing a culture with {bearer} to prevent exhausting {bearer}?
+	# 					text: Discard a card from hand sharing a culture with {oldBearer} to prevent exhausting {oldBearer}?
 	# 					player: Freeps
 	# 					cost: {
 	# 						type: DiscardFromHand
 	# 						player: freeps
 	# 						hand: freeps
-	# 						select: choose(CultureFromMemory(bearer))
+	# 						select: choose(CultureFromMemory(oldBearer))
 	# 						forced: false
 	# 					}
 	# 					effect: [
 	# 						{
 	# 							type: Exhaust
-	# 							select: bearer
+	# 							select: oldBearer
 	# 						}
 	# 					]
 	# 				}					
@@ -330,7 +330,7 @@
 						# We do this just to make the option prompt a little more elegant.
 						type: Memorize
 						filter: bearer
-						memory: bearer
+						memory: theBearer
 					}
 					{
 						type: Preventable
@@ -340,7 +340,7 @@
 							type: DiscardFromHand
 							player: freeps
 							hand: freeps
-							select: choose(CultureFromMemory(bearer))
+							select: choose(CultureFromMemory(theBearer))
 							forced: false
 						}
 						effect: [
@@ -354,7 +354,7 @@
 			}
 		]
 		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
-		lore: “‘Do not tempt me!'”
+		lore: "'Do not tempt me!'"
 		promotext: ""
 		alts: {
 			promos: {

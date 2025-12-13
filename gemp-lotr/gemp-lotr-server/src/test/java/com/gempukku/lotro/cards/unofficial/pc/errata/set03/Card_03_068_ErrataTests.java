@@ -75,7 +75,7 @@ public class Card_03_068_ErrataTests
         PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
 
 
-        scn.MoveCompanionToTable(legolas);
+        scn.MoveCompanionsToTable(legolas);
 
         scn.MoveMinionsToTable(saruman);
         scn.MoveMinionsToTable(uruk1);

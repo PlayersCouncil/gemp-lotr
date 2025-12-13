@@ -83,6 +83,7 @@ public interface Modifier {
     int getArcheryTotalModifier(LotroGame game, Side side);
 
     int getMoveLimitModifier(LotroGame game);
+    int getThreatLimitModifier(LotroGame game);
 
     boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion);
 

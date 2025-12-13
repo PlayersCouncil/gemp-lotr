@@ -48,6 +48,8 @@ public interface ModifiersQuerying {
     // Movement
     int getMoveLimit(LotroGame game, int baseMoveLimit);
 
+    int getThreatLimit(LotroGame game, int baseThreatLimit);
+
     boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion);
 
     // Twilight cost
@@ -73,6 +75,8 @@ public interface ModifiersQuerying {
     boolean isCardType(LotroGame game, PhysicalCard card, CardType cardType);
     List<Race> getRaces(LotroGame game, PhysicalCard card);
     boolean isRace(LotroGame game, PhysicalCard card, Race race);
+    List<Culture> getCultures(LotroGame game, PhysicalCard card);
+    boolean isCulture(LotroGame game, PhysicalCard card, Culture culture);
 
     // Wounds/exertions
     boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard card, int woundsToTake);
@@ -118,10 +122,14 @@ public interface ModifiersQuerying {
     boolean canHaveTransferredOn(LotroGame game, PhysicalCard playedCard, PhysicalCard target);
 
     boolean canBeTransferred(LotroGame game, PhysicalCard attachment);
+    int bearableItemsOfClass(LotroGame game, PhysicalCard attachedTo, PossessionClass itemClass);
 
     boolean shouldSkipPhase(LotroGame game, Phase phase, String playerId);
 
     List<? extends Action> getExtraPhaseActions(LotroGame game, PhysicalCard target);
+    Collection<PhysicalCard> getGameTextCardsToDuplicate(LotroGame game, PhysicalCard target);
+
+    boolean hasExtraPhaseActionsFromOtherPlayer(LotroGame game, PhysicalCard target);
 
     List<? extends Action> getExtraPhaseActionsFromStacked(LotroGame game, PhysicalCard target);
 
@@ -131,6 +139,7 @@ public interface ModifiersQuerying {
 
     // Others
     boolean canBeDiscardedFromPlay(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source);
+    boolean canBeHinderedBy(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source);
 
     boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source);
 

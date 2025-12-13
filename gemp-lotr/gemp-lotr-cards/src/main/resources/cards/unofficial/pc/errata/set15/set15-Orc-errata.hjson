@@ -68,7 +68,7 @@
 			}
 		]
 		gametext: When you play this minion, you may discard 5 [orc] minions from play to make it strength +10 and <b>fierce</b> until the regroup phase. <br>Shadow: Remove (2) to play an [orc] Orc from your discard pile. It comes into play exhausted.
-		lore: “Suddenly on the last stroke the Gate of Gondor broke.”
+		lore: "Suddenly on the last stroke the Gate of Gondor broke."
 		promotext: ""
 		alts: {
 			promos: {

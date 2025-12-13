@@ -14,7 +14,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -69,8 +68,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                             int strengthValue = strength.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), card);
                             int vitalityValue = vitality.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), card);
                             effects.add(
-                                    new DiscardCardsFromPlayEffect(action.getPerformingPlayer(), action.getActionSource(), Filters.attachedTo(card)));
-                            effects.add(
                                     new TransferToShadowEffect(card) {
                                         @Override
                                         protected void cardTransferredCallback() {
@@ -84,8 +81,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             for (Keyword keyword : keywordsList) {
                                                 addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);
                                             }
-
-                                            addModifier(action, new MayNotBearModifier(card, card, null, Filters.any), until);
                                         }
                                     });
                             Effect cleanupEffect = createCleanupEffect(card, until);
@@ -108,9 +103,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                     new AbstractActionProxy() {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
-                            if (TriggerConditions.endOfTurn(game, effectResult) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
-                            }
                             return null;
                         }
                     }
@@ -121,7 +113,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                             if (TriggerConditions.startOfPhase(game, effectResult, until.getPhase()) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
+                                return createReturnToSupportCleanupTrigger(card);
                             }
                             return null;
                         }
@@ -133,7 +125,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                             if (TriggerConditions.endOfPhase(game, effectResult, until.getPhase()) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
+                                return createReturnToSupportCleanupTrigger(card);
                             }
                             return null;
                         }
@@ -142,7 +134,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
         }
     }
 
-    private static List<RequiredTriggerAction> createCleanupTrigger(PhysicalCard card) {
+    private static List<RequiredTriggerAction> createReturnToSupportCleanupTrigger(PhysicalCard card) {
         RequiredTriggerAction action = new RequiredTriggerAction(card);
         action.appendEffect(
                 new TransferToSupportEffect(card));

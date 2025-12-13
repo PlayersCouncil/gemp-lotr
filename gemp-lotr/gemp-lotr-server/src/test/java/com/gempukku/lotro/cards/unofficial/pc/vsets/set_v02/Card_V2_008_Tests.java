@@ -80,7 +80,7 @@ public class Card_V2_008_Tests
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
 		scn.MoveCardsToHand(bow1);
-		scn.MoveCompanionToTable(haldir, troop, veowyn);
+		scn.MoveCompanionsToTable(haldir, troop, veowyn);
 		scn.AttachCardsTo(troop, bow2);
 
 		var smith = scn.GetShadowCard("smith");
@@ -111,7 +111,7 @@ public class Card_V2_008_Tests
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
 		scn.MoveCardsToHand(bow1);
-		scn.MoveCompanionToTable(haldir, troop);
+		scn.MoveCompanionsToTable(haldir, troop);
 		scn.AttachCardsTo(troop, bow1);
 
 		var smith = scn.GetShadowCard("smith");
@@ -147,7 +147,7 @@ public class Card_V2_008_Tests
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
 		scn.MoveCardsToHand(bow1);
-		scn.MoveCompanionToTable(haldir, troop);
+		scn.MoveCompanionsToTable(haldir, troop);
 		scn.AttachCardsTo(troop, bow1);
 
 		var smith = scn.GetShadowCard("smith");

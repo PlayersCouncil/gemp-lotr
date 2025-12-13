@@ -78,7 +78,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToTopOfDeck(freeps1, freeps2);
 
 		scn.StartGame();
@@ -119,7 +119,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(shadow1,shadow2);
@@ -161,7 +161,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
@@ -209,7 +209,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(freeps1,freeps2);
@@ -256,7 +256,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
@@ -308,7 +308,7 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 

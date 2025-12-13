@@ -91,7 +91,7 @@ public class Card_V2_029_Tests
 		var saruman = scn.GetShadowCard("saruman");
 		scn.MoveMinionsToTable(saruman);
 
-		scn.MoveCompanionToTable("legolas");
+		scn.MoveCompanionsToTable("legolas");
 
 		scn.StartGame();
 		scn.SkipToArcheryWounds();
@@ -110,7 +110,7 @@ public class Card_V2_029_Tests
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var axe = scn.GetFreepsCard("axe");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		scn.StartGame();
@@ -134,7 +134,7 @@ public class Card_V2_029_Tests
 		var worker = scn.GetShadowCard("worker");
 		scn.MoveMinionsToTable(saruman, worker);
 
-		scn.MoveCompanionToTable("legolas");
+		scn.MoveCompanionsToTable("legolas");
 
 		scn.StartGame();
 		scn.SkipToArcheryWounds();

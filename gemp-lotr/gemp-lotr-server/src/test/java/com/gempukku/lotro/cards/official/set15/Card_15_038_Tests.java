@@ -77,7 +77,7 @@ public class Card_15_038_Tests
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.MoveCompanionToTable(treebeard);
+		scn.MoveCompanionsToTable(treebeard);
 
 		var orc1 = scn.GetShadowCard("orc1");
 		var orc2 = scn.GetShadowCard("orc2");
@@ -111,7 +111,7 @@ public class Card_15_038_Tests
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.MoveCompanionToTable(treebeard);
+		scn.MoveCompanionsToTable(treebeard);
 
 		var enduring = scn.GetShadowCard("enduring");
 		var orc1 = scn.GetShadowCard("orc1"); //only here to slow down choices

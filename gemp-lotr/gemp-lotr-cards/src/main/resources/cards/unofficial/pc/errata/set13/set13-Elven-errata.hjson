@@ -52,7 +52,7 @@
 			}
 		]
 		gametext: <b>Valiant.</b> <br>While another companion is assigned to a skirmish, during each skirmish, prevent all wounds to this companion after the first wound.
-		lore: “There was a sound of soft laughter over their heads, and then another clear voice spoke in an elven-tongue.”
+		lore: "There was a sound of soft laughter over their heads, and then another clear voice spoke in an elven-tongue."
 		promotext: ""
 		alts: {
 			promos: {

@@ -70,7 +70,7 @@
 			}
 		]
 		gametext: <b>Ring-bound.</b> <br>Each time the fellowship moves, if the twilight pool has 2 or fewer twilight tokens, add 2 burdens or add (3). <br><b>Regroup:</b> Add a burden to play a [shire] tale.
-		lore: “‘But what has it got in its pocketses, eh?'”
+		lore: "'But what has it got in its pocketses, eh?'"
 		promotext: ""
 		alts: {
 			promos: {

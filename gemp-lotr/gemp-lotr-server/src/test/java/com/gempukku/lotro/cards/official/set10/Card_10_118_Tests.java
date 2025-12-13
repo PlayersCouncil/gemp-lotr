@@ -79,12 +79,13 @@ public class Card_10_118_Tests
 		var pippin = scn.GetFreepsCard("pippin");
 		var bowmen = scn.GetFreepsCard("bowmen");
 		var knows = scn.GetFreepsCard("knows");
-		scn.MoveCompanionToTable(pippin);
+		scn.MoveCompanionsToTable(pippin);
 		scn.MoveCardsToSupportArea(bowmen, knows);
 
 		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
+		scn.AddBurdens(1);
 
 		scn.SkipToSite(3);
 		scn.MoveMinionsToTable(savage);

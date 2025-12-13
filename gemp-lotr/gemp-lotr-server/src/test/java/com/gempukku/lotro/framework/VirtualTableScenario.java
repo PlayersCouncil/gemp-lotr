@@ -61,7 +61,7 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         }
 
         if(ringBearerID == null ) {
-            ringBearerID = FOTRFrodo;
+            ringBearerID = MDFrodo;
         }
 
         if(ringID == null) {
@@ -75,9 +75,6 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         // Strictly speaking, the names don't matter all that much, but in the event that the tester wants to retrieve
         // a specific card from deck by name, then if there are any duplicates the one returned will be random, which
         // can lead to stochastic tests that randomly fail.
-
-        decks.put(P1, new LotroDeck(P1));
-        decks.put(P2, new LotroDeck(P2));
 
         for(String name : siteIDs.keySet()) {
             String id = siteIDs.get(name);
@@ -198,13 +195,25 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * @param cardName The human-readable name assigned at the top of each test class.
      * @return The physical card that was instantiated for the game.
      */
-    public PhysicalCardImpl GetFreepsCard(String cardName) { return Cards.get(P1).get(cardName); }
+    public PhysicalCardImpl GetFreepsCard(String cardName) {
+        var card =  Cards.get(P1).get(cardName);
+        if(card == null) {
+            throw new NullPointerException("Card '" + cardName + "' does not exist for Free Peoples.");
+        }
+        return card;
+    }
     /**
      * Returns a card from the Shadow player's deck by its human-readable test alias.
      * @param cardName The human-readable name assigned at the top of each test class.
      * @return The physical card that was instantiated for the game.
      */
-    public PhysicalCardImpl GetShadowCard(String cardName) { return Cards.get(P2).get(cardName); }
+    public PhysicalCardImpl GetShadowCard(String cardName) {
+        var card =  Cards.get(P2).get(cardName);
+        if(card == null) {
+            throw new NullPointerException("Card '" + cardName + "' does not exist for Shadow.");
+        }
+        return card;
+    }
     /**
      * Returns a given player's card by its human-readable test alias.
      * @param player The player to look up a card for.
@@ -227,9 +236,8 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * complicated test scenarios.  The vast majority of the time you do not need this.
      * @param decks A map of decks for each player in the game; key is the player name.
      * @param formatName Name of the format this table should be following.
-     * @throws DecisionResultInvalidException
      */
-    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) throws DecisionResultInvalidException {
+    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) {
         _userFeedback = new DefaultUserFeedback();
 
         var format = _formatLibrary.getFormat(formatName);
@@ -244,7 +252,7 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
     /**
      * Handles the bidding and seating placement of both players, then removes the burdens that were bid for consistency.
      */
-    public void BidAndSeatPlayers() throws DecisionResultInvalidException {
+    public void BidAndSeatPlayers() {
         FreepsDecided("1");
         PlayerDecided(P2, "0");
 
@@ -256,9 +264,8 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
      * Fellowship phase.  Resets the hand so that the only cards in hand are those the tester defines manually
      * before calling this function.
-     * @throws DecisionResultInvalidException
      */
-    public void StartGame() throws DecisionResultInvalidException {
+    public void StartGame() {
         StartGame(true);
     }
 
@@ -267,9 +274,8 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * Fellowship phase.  Auto-selects the provided site as the first site 1; this is only useful when using the
      * Shadow path.  Will reset the hand back to replace the initial drawn hand.
      * @param site1 The site that Free Peoples should start on.
-     * @throws DecisionResultInvalidException
      */
-    public void StartGame(PhysicalCardImpl site1) throws DecisionResultInvalidException {
+    public void StartGame(PhysicalCardImpl site1) {
         FreepsChooseCardBPFromSelection(site1);
         StartGame(true);
     }
@@ -281,9 +287,8 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      *                  ensuring that each player only has the cards in their hand that the tester manually places
      *                  before calling StartGame.  This ensures that there are no confounding variables.
      *                  If false, the default drawn hand will remain untouched.
-     * @throws DecisionResultInvalidException
      */
-    public void StartGame(boolean resetHand) throws DecisionResultInvalidException {
+    public void StartGame(boolean resetHand) {
         var freepsHand = GetFreepsHand().stream().toList();
         var shadowHand = GetShadowHand().stream().toList();
 
@@ -307,13 +312,15 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         }
 
         SkipMulligans();
+        //Get rid of the bidded burden so that tests don't have to remember it exists all the time
+        RemoveBurdens(1);
     }
 
     /**
      * When both players are asked to select a starting fellowship, this can be used to skip past the prompt and choose
      * 0 companions to go down (since you can cheat in any companions you may need for the test scenario anyway).
      */
-    public void SkipStartingFellowships() throws DecisionResultInvalidException {
+    public void SkipStartingFellowships() {
         if(FreepsDecisionAvailable("Starting fellowship")) {
             FreepsChoose("");
         }
@@ -325,7 +332,7 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
     /**
      * When both players are prompted to mulligan their hand, this can be used to choose "no" for both players.
      */
-    public void SkipMulligans() throws DecisionResultInvalidException {
+    public void SkipMulligans() {
         if(FreepsDecisionAvailable("Do you wish to mulligan")) {
             FreepsChooseNo();
         }
@@ -339,17 +346,15 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * beating heart of what is essentially a headless client.  You do not need to call this manually during tests.
      * @param player The player making the decision
      * @param answer What decision is being returned to the server
-     * @throws DecisionResultInvalidException If there is any mismatch between what the server is expecting and your
-     * answer, this test will fail.
      */
-    public void PlayerDecided(String player, String answer) throws DecisionResultInvalidException {
+    public void PlayerDecided(String player, String answer) {
         var decision = userFeedback().getAwaitingDecision(player);
         userFeedback().participantDecided(player);
         try {
             decision.decisionMade(answer);
         } catch (DecisionResultInvalidException exp) {
             userFeedback().sendAwaitingDecision(player, decision);
-            throw exp;
+            throw new RuntimeException(exp);
         }
         game().carryOutPendingActionsUntilDecisionNeeded();
     }

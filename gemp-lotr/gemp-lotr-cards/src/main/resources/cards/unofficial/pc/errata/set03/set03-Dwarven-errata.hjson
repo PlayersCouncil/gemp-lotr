@@ -1,21 +1,94 @@
 {
+	
+	# 53_4: {
+	# 	cardInfo: {
+	# 		//id: 3_4.1
+	# 		parent: 3_4
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E004.1.jpg
+	# 		collInfo: 3U4
+	# 		rarity: U
+	# 	}
+	# 	title: A Royal Welcome
+	# 	unique: false
+	# 	culture: dwarven
+	# 	twilight: 2
+	# 	type: condition
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: fellowship
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),companion)
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(culture(dwarven),ally)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			requires: {
+	# 				type: CanSpot
+	# 				filter: culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10))
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),ally)
+	# 			}
+	# 			effect: {
+	# 				type: ModifyStrength
+	# 				select: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
+	# 				amount: 2
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: regroup
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),ally)
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(culture(dwarven),companion)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Spot a [dwarven] companion skirmishing a minion of strength 10 or more and exert a [dwarven] ally to make that companion strength +2. \Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_4: {
 		cardInfo: {
-			//id: 3_4.1
+			//id: 53_4.2
 			parent: 3_4
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
-			image: errata/LOTR-EN03E004.1.jpg
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN03E004.2_card.jpg
 			collInfo: 3U4
 			rarity: U
 		}
 		title: A Royal Welcome
 		unique: false
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: activated
@@ -32,19 +105,32 @@
 			{
 				type: activated
 				phase: skirmish
-				requires: {
-					type: CanSpot
-					filter: culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10))
-				}
 				cost: {
 					type: exert
 					select: choose(culture(dwarven),ally)
+					memorize: chosenAlly
 				}
-				effect: {
-					type: ModifyStrength
-					select: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
-					amount: 2
-				}
+				effect: [
+					{
+						type: ModifyStrength
+						select: choose(unbound,culture(dwarven),companion)
+						amount: {
+							type: ForEachStrength
+							filter: memory(chosenAlly)
+						}
+						memorize: chosenComp
+					}
+					{
+						type: AddKeyword
+						select: memory(chosenComp)
+						keyword: damage
+						amount: {
+							type: ForEachKeywordOnCardInMemory
+							memory: chosenAlly
+							keyword: damage
+						}
+					}
+				]
 			}
 			{
 				type: activated
@@ -59,7 +145,7 @@
 				}
 			}
 		]
-		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Spot a [dwarven] companion skirmishing a minion of strength 10 or more and exert a [dwarven] ally to make that companion strength +2. \Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
+		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Exert a [dwarven] ally to add that ally's strength and <b>damage</b> bonuses to an unbound [dwarven] companion.\Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -70,5 +156,89 @@
 		}
 	}
 	
-	
+	53_5: {
+		cardInfo: {
+			//id: 53_5.1
+			parent: 3_5
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E005.1_card.jpg
+			collInfo: 3U5
+			rarity: U
+		}
+		title: Song of Durin
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(dwarf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(moria),weapon
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: moria, condition
+					}
+					true: {
+						type: Choice
+						texts: [
+							Hinder a Shadow condition
+							Discard up to 2 {Moria} conditions
+						]
+						effects: [
+							{
+								type: Hinder
+								select: choose(side(Shadow), condition)
+							}
+							{
+								type: Discard
+								select: choose(Moria, condition)
+								count: 0-2
+							}
+						]
+					}
+					false: {
+						type: Hinder
+						select: choose(side(Shadow), condition)
+					}
+				}
+			}
+		]
+		gametext: <b>Tale</b>. To play, exert a Dwarf. \The twilight cost of each [moria] weapon is +1.\Fellowship: Discard this condition to hinder a Shadow condition (or discard up to 2 [moria] conditions).
+		lore: "No harp is wrung, no hammer falls: / The darkness dwells in Durin's halls...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

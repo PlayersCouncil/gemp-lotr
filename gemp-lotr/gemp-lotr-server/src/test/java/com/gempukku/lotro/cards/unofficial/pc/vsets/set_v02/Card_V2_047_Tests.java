@@ -120,7 +120,7 @@ public class Card_V2_047_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var veteran = scn.GetFreepsCard("veteran");
 		var dwarfguard = scn.GetFreepsCard("dwarfguard");
-		scn.MoveCompanionToTable(elite, rider, guard, dwarfguard);
+		scn.MoveCompanionsToTable(elite, rider, guard, dwarfguard);
 		scn.MoveCardsToHand(erkenbrand);
 
 		scn.StartGame();

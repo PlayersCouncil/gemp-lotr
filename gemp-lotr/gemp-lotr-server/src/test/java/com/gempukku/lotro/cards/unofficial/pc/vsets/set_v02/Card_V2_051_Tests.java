@@ -76,7 +76,7 @@ public class Card_V2_051_Tests
 		var javelin = scn.GetFreepsCard("javelin");
 		var sam = scn.GetFreepsCard("sam");
 		scn.MoveCardsToHand(javelin);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToSupportArea(wrath);
 
 		//cheating to get around Sam's initiative requirement
@@ -101,7 +101,7 @@ public class Card_V2_051_Tests
 		var deor = scn.GetFreepsCard("deor");
 		var bounder = scn.GetFreepsCard("bounder");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.MoveCardsToSupportArea(wrath, deor, bounder);
 
 		scn.AddWoundsToChar(deor, 1);
@@ -135,7 +135,7 @@ public class Card_V2_051_Tests
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.AttachCardsTo(eowyn, javelin);
 		scn.MoveCardsToSupportArea(wrath);
 
@@ -160,7 +160,7 @@ public class Card_V2_051_Tests
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.AttachCardsTo(eowyn, javelin);
 		scn.MoveCardsToSupportArea(wrath);
 
@@ -232,7 +232,7 @@ public class Card_V2_051_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var castout = scn.GetFreepsCard("castout");
 
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.MoveCardsToSupportArea(wrath, castout);
 		scn.AddTokensToCard(wrath, 1);
 
@@ -297,7 +297,7 @@ public class Card_V2_051_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var castout = scn.GetFreepsCard("castout");
 
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.MoveCardsToSupportArea(wrath, castout);
 		scn.AddTokensToCard(wrath, 3);
 

@@ -64,7 +64,7 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
@@ -98,7 +98,7 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
@@ -128,7 +128,7 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
@@ -158,7 +158,7 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
