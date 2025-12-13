@@ -20,6 +20,18 @@ public class Assertions {
 	}
 
 	/**
+	 * Asserts that one or more cards are all NOT contained within the provided zone.  If any are there, an AssertionError
+	 * will be thrown with no message.
+	 * @param zone The zone to check.
+	 * @param cards One or more cards which must all be in that zone.
+	 */
+	public static void assertNotInZone(Zone zone, PhysicalCardImpl...cards) {
+		for(var card : cards) {
+			assertNotEquals(zone, card.getZone());
+		}
+	}
+
+	/**
 	 * Asserts that one or more cards are all in zones considered in play.  If any are not there, an AssertionError
 	 * will be thrown with no message.
 	 * @param cards One or more cards which must all be in that zone.
