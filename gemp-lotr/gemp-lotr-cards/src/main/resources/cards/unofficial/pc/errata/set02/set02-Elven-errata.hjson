@@ -114,7 +114,7 @@
 					true: {
 						type: Hinder
 						count: 1
-						select: choose(condition)
+						select: choose(side(Shadow),condition)
 					}
 				}
 			]
