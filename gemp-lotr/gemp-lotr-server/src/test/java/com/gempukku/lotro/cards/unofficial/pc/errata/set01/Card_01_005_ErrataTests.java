@@ -14,12 +14,21 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_01_005_ErrataTests
 {
 
+// ----------------------------------------
+// CLEAVING BLOW (ERRATA) TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_5");
-					// put other cards in here as needed for the test case
+					put("blow", "51_5");          // Cleaving Blow (Errata)
+					put("gimli", "1_13");         // Gimli, Son of Gloin
+
+					put("orc1", "1_271");         // Orc Soldier
+					put("orc2", "1_271");         // Second Orc Soldier
+					put("vileblade", "2_95");     // Vile Blade - attaches to orc
+					put("ships", "8_65");         // Ships of Great Draught - support area
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +53,7 @@ public class Card_01_005_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("blow");
 
 		assertEquals("Cleaving Blow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +65,118 @@ public class Card_01_005_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CleavingBlowTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+	@Test
+	public void CleavingBlowMakesDwarfStrengthPlus2AndDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var blow = scn.GetFreepsCard("blow");
+		var gimli = scn.GetFreepsCard("gimli");
+		var orc = scn.GetShadowCard("orc1");
+		scn.MoveCardsToHand(blow);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, orc);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+
+		int gimliStrength = scn.GetStrength(gimli);
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+
+		scn.FreepsPlayCard(blow);
+		// Gimli auto-selected as only Dwarf
+
+		assertEquals(gimliStrength + 2, scn.GetStrength(gimli));
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+	}
+
+	@Test
+	public void CleavingBlowDiscardsItemOnSkirmishingMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var blow = scn.GetFreepsCard("blow");
+		var gimli = scn.GetFreepsCard("gimli");
+		var orc = scn.GetShadowCard("orc1");
+		var vileblade = scn.GetShadowCard("vileblade");
+		scn.MoveCardsToHand(blow);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveMinionsToTable(orc);
+		scn.AttachCardsTo(orc, vileblade);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, orc);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertInZone(Zone.ATTACHED, vileblade);
+
+		scn.FreepsPlayCard(blow);
+		// Gimli auto-selected
+		// Vile Blade auto-selected as only valid item
+
+		assertInZone(Zone.DISCARD, vileblade);
+	}
+
+	@Test
+	public void CleavingBlowCannotTargetSupportAreaItems() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var blow = scn.GetFreepsCard("blow");
+		var gimli = scn.GetFreepsCard("gimli");
+		var orc = scn.GetShadowCard("orc1");
+		var ships = scn.GetShadowCard("ships");
+		scn.MoveCardsToHand(blow);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToSupportArea(ships);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, orc);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+
+		scn.FreepsPlayCard(blow);
+		// Gimli auto-selected
+		// No valid items to discard - effect should fizzle
+
+		// Ships should still be in support area
+		assertInZone(Zone.SUPPORT, ships);
+	}
+
+
+
+	@Test
+	public void CleavingBlowCannotTargetItemOnNonSkirmishingMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var blow = scn.GetFreepsCard("blow");
+		var gimli = scn.GetFreepsCard("gimli");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		var vileblade = scn.GetShadowCard("vileblade");
+		scn.MoveCardsToHand(blow);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveMinionsToTable(orc1, orc2);
+		scn.AttachCardsTo(orc2, vileblade);  // Blade on orc2
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, orc1);  // Gimli fights orc1
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+
+		scn.FreepsPlayCard(blow);
+		// Gimli auto-selected
+		// No valid items - vileblade is on orc2 who isn't in this skirmish
+
+		// Vile Blade should still be attached to orc2
+		assertInZone(Zone.ATTACHED, vileblade);
+		assertAttachedTo(vileblade, orc2);
 	}
 }
