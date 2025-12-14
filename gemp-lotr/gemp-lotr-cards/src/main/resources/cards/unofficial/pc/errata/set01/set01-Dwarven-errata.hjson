@@ -33,7 +33,7 @@
 				}
 				{
 					type: discard
-					select: choose(side(Shadow), item, InSkirmishAgainst(memory(chosenDwarf)))
+					select: choose(side(Shadow), item, AttachedTo(minion, InSkirmishAgainst(memory(chosenDwarf))))
 				}
 			]
 		}

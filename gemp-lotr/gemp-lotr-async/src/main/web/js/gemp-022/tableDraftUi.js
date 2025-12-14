@@ -22,6 +22,13 @@ var GempLotrTableDraftUI = Class.extend({
         var that = this;
 
         this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError.bind(that));
+        
+        //Defines a cardId function usable by jquery to filter all .card instances by card id
+        $.expr[':'].cardId = function (obj, index, meta, stack) {
+            var cardIds = meta[3].split(",");
+            var cardData = $(obj).data("card");
+            return (cardData != null && ($.inArray(cardData.cardId, cardIds) > -1));
+        };
 
         this.eventId = getUrlParam("eventId");
 
@@ -100,6 +107,8 @@ var GempLotrTableDraftUI = Class.extend({
         this.getDraftState();
 
         this.chatBox.beginGameChat();
+        
+        
     },
 
     addBottomLeftTabPane: function () {

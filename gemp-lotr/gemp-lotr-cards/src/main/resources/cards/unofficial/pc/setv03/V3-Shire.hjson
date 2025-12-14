@@ -735,6 +735,10 @@
 						]
 					}
 					{
+						type: SendMessage
+						text: "{you} chooses {chosenType}"
+					}
+					{
 						type: Choice
 						texts: [
 							Hinder all odd-numbered Shadow support {chosenType}s
@@ -745,32 +749,58 @@
 								type: If
 								check: {
 									type: MemoryIs
+									memory: chosenType
 									value: condition
 								}
-								true: {
-									type: Hinder
-									select: all(side(Shadow), support, oddTwilight, condition)
-								}
-								false: {
-									type: Hinder
-									select: all(side(Shadow), support, oddTwilight, possession)
-								}
+								true: [
+									{
+										type: SendMessage
+										text: "{you} chooses odd-numbered."
+									}
+									{
+										type: Hinder
+										select: all(side(Shadow), support, oddTwilight, condition)
+									}
+								]
+								false: [
+									{
+										type: SendMessage
+										text: "{you} chooses odd-numbered."
+									}
+									{
+										type: Hinder
+										select: all(side(Shadow), support, oddTwilight, possession)
+									}
+								]
 							}
 							
 							{
 								type: If
 								check: {
 									type: MemoryIs
+									memory: chosenType
 									value: condition
 								}
-								true: {
-									type: Hinder
-									select: all(side(Shadow), support, evenTwilight, condition)
-								}
-								false: {
-									type: Hinder
-									select: all(side(Shadow), support, evenTwilight, possession)
-								}
+								true: [
+									{
+										type: SendMessage
+										text: "{you} chooses even-numbered."
+									}
+									{
+										type: Hinder
+										select: all(side(Shadow), support, evenTwilight, condition)
+									}
+								]
+								false: [
+									{
+										type: SendMessage
+										text: "{you} chooses even-numbered."
+									}
+									{
+										type: Hinder
+										select: all(side(Shadow), support, evenTwilight, possession)
+									}
+								]
 							}
 						]
 					}
