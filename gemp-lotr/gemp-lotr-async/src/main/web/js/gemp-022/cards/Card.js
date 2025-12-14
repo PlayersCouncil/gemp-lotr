@@ -193,7 +193,7 @@ class Card {
         // If there's no cardId, we can't target a specific card div.
         // This is fine for draft/deckbuilder where cards are created with the correct
         // image already set in CreateCardDiv, and never flip during use.
-        if (this.cardId == null) {
+        if (this.cardId == null || this.cardId === "deck") {
             return;
         }
         
