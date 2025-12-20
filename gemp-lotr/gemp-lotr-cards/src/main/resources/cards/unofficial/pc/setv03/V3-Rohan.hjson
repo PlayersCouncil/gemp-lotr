@@ -766,6 +766,10 @@
 					type: WinsSkirmish
 					filter: bearer
 				}
+				requires: {
+					type: CanSpot
+					filter: bearer, mounted
+				}
 				cost: {
 					type: Exert
 					select: bearer
