@@ -163,6 +163,7 @@ public class FilterFactory {
         simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
         simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
         simpleFilters.put("playable", (actionContext) -> Filters.playable(0));
+        simpleFilters.put("playablefromdeadpile", (actionContext) -> Filters.playable(0, 0, false, true, false));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",

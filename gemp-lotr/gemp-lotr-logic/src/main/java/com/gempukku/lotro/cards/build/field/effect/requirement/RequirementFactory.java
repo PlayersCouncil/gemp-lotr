@@ -77,6 +77,8 @@ public class RequirementFactory {
         requirementProducers.put("sarumanfirstsentenceactive", new SarumanFirstSentenceActive());
         requirementProducers.put("shadowplayerreplacedcurrentsite", new ShadowPlayerReplacedCurrentSite());
         requirementProducers.put("siteavailabletocontrol", new SiteAvailableToControl());
+        requirementProducers.put("threatlimit", new ThreatLimit());
+        requirementProducers.put("threatsremaining", new ThreatsRemaining());
         requirementProducers.put("twilightpoollessthan", new TwilightPoolLessThan());
         requirementProducers.put("wasassignedtoskirmish", new WasAssignedToSkirmish());
         requirementProducers.put("wasplayedfromzone", new WasPlayedFromZone());
