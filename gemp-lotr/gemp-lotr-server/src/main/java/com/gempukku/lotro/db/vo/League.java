@@ -3,11 +3,11 @@ package com.gempukku.lotro.db.vo;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.league.*;
+import com.gempukku.lotro.league.ConstructedLeague;
+import com.gempukku.lotro.league.LeagueData;
+import com.gempukku.lotro.league.SealedLeague;
+import com.gempukku.lotro.league.SoloDraftLeague;
 import com.gempukku.lotro.packs.ProductLibrary;
-
-import java.io.IOException;
-import java.util.Objects;
 
 public class League {
 
@@ -95,16 +95,19 @@ public class League {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         League league = (League) o;
 
-        return Objects.equals(_type, league._type);
+        return _code == league._code;
     }
 
     @Override
     public int hashCode() {
-        return _type != null ? _type.hashCode() : 0;
+        return Long.hashCode(_code);
     }
 }
