@@ -135,7 +135,7 @@ public class Card_V3_062_Tests
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger first
 		scn.ShadowUseCardAction(charger);
@@ -147,7 +147,7 @@ public class Card_V3_062_Tests
 		assertTrue(scn.HasKeyword(charger, Keyword.MOUNTED));
 		assertTrue(scn.HasKeyword(charger, Keyword.SOUTHRON));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Now transfer Howdah to Charger
 		assertTrue(scn.ShadowActionAvailable(howdah));
@@ -191,12 +191,12 @@ public class Card_V3_062_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger
 		scn.ShadowUseCardAction(charger);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transfer first Howdah
 		scn.ShadowUseCardAction(howdah1);
@@ -206,7 +206,7 @@ public class Card_V3_062_Tests
 		// Heal Charger so it can exert again
 		scn.RemoveWoundsFromChar(charger, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Second Howdah should not be able to target Charger (limit 1 per bearer)
 		assertFalse(scn.ShadowActionAvailable(howdah2));
@@ -233,7 +233,7 @@ public class Card_V3_062_Tests
 
 		assertFalse(scn.HasKeyword(southron2, Keyword.AMBUSH));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(howdah));
 		scn.ShadowUseCardAction(howdah);
@@ -260,7 +260,7 @@ public class Card_V3_062_Tests
 		scn.MoveMinionsToTable(stackedMan);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger
 		scn.ShadowUseCardAction(charger);
@@ -268,7 +268,7 @@ public class Card_V3_062_Tests
 			scn.ShadowChooseCards(stackedMan);
 		}
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transfer Howdah to Charger, copying stackedMan's text
 		scn.ShadowUseCardAction(howdah);
