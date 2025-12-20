@@ -22,6 +22,7 @@ public class Card_V3_024_Tests
 					put("aragorn", "1_89");
 					put("anduril", "103_18"); // Anduril, Legend Remade
 					put("deadman", "10_27"); // Dead Man of Dunharrow - adds 1 threat on play
+					put("king", "103_27"); // Dead Man of Dunharrow - adds 2 threats on play
 					put("boromir", "1_97");
 					put("legolas", "1_50");
 					put("gimli", "1_13");
@@ -90,6 +91,37 @@ public class Card_V3_024_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertInZone(Zone.FREE_CHARACTERS, deadman);
 		assertEquals(2, scn.GetThreats());
+	}
+
+	@Test
+	public void ICallOnYouCanPlayKingOfTheDead() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var icall = scn.GetFreepsCard("icall");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(icall);
+		scn.MoveCardsToDeadPile(king);
+
+		scn.StartGame();
+
+		// Site 1 = Region 1
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.DEAD, king);
+
+		assertTrue(scn.FreepsPlayAvailable(icall));
+		scn.FreepsPlayCard(icall);
+
+		// Aragorn exerted, 2 threats added (region 1)
+		// Dead Man played from dead pile (adds 1 more threat)
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertInZone(Zone.FREE_CHARACTERS, king);
+		assertEquals(3, scn.GetThreats());
 	}
 
 	@Test

@@ -523,7 +523,7 @@
 				type: event
 				requires: {
 					type: HasCardInDeadPile
-					filter: Wraith, playable
+					filter: Wraith, PlayableFromDeadPile
 				}
 				cost: [
 					{
