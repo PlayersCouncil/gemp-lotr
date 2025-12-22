@@ -1309,7 +1309,7 @@
 						}
 						{
 							type: Hinder
-							select: choose(item, AttachedTo(bearer))
+							select: choose(item, side(freeps), AttachedTo(bearer))
 						}
 					]
 				}
