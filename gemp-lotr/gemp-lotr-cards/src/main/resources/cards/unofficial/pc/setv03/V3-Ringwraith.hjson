@@ -610,7 +610,7 @@
 				type: responseEvent
 				trigger: {
 					type: WinsSkirmish
-					filter: your, Nazgul
+					filter: your, Nazgul, CanExert
 					memorize: winner
 					memorizeLoser: loser
 				}
@@ -954,7 +954,6 @@
 					type: StartOfSkirmishInvolving
 					filter: Nazgul
 				}
-				limitPerPhase: 1
 				cost: {
 					type: Exert
 					select: self
@@ -1052,38 +1051,62 @@
 						type: If
 						check: {
 							type: HasCardInDiscard
-							filter: side(shadow),artifact,Playable
+							filter: side(shadow),possession,Playable
 						}
 						true: {
-							type: Choice
-							texts: [
-								Play a possession from discard on {playedMinion}
-								Exert {self} to play an artifact from discard on {playedMinion}
-							]
-							effects: [
-								{
-									type: PlayCardFromDiscard
-									select: choose(side(shadow),possession)
-									on: memory(playedMinion)
-								}
-								{
-									type: CostToEffect
-									cost: {
-										type: Exert
-										select: self
-									}
-									effect: {
+							// Has possession - check if also has artifact
+							type: If
+							check: {
+								type: HasCardInDiscard
+								filter: side(shadow),artifact,Playable
+							}
+							true: {
+								// Both available - real choice
+								type: Choice
+								texts: [
+									Play a possession from discard on {playedMinion}
+									Exert {self} to play an artifact from discard on {playedMinion}
+								]
+								effects: [
+									{
 										type: PlayCardFromDiscard
-										select: choose(side(shadow),artifact)
+										select: choose(side(shadow),possession)
 										on: memory(playedMinion)
 									}
-								}
-							]
+									{
+										type: CostToEffect
+										cost: {
+											type: Exert
+											select: self
+										}
+										effect: {
+											type: PlayCardFromDiscard
+											select: choose(side(shadow),artifact)
+											on: memory(playedMinion)
+										}
+									}
+								]
+							}
+							false: {
+								// Only possession - just play it
+								type: PlayCardFromDiscard
+								select: choose(side(shadow),possession)
+								on: memory(playedMinion)
+							}
 						}
 						false: {
-							type: PlayCardFromDiscard
-							select: choose(side(shadow),possession)
-							on: memory(playedMinion)
+							// No possession, only artifact (requires already verified an item exists)
+							type: Optional
+							text: Would you like to exert {self} to play an artifact from discard?
+							cost: {
+								type: Exert
+								select: self
+							}
+							effect: {
+								type: PlayCardFromDiscard
+								select: choose(side(shadow),artifact)
+								on: memory(playedMinion)
+							}
 						}
 					}
 				]
