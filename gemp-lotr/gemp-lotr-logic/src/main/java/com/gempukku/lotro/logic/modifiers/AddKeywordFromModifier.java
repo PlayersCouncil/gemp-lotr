@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.modifiers;
 
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -31,7 +32,21 @@ public class AddKeywordFromModifier extends AbstractModifier implements KeywordA
             return false;
         if (unloadedOnly && !keyword.isUnloaded())
             return false;
-        return Filters.hasActive(game, from, keyword);
+
+        //If the card we are copying is active then we use the normal active checking
+        if(Filters.hasActive(game, from, keyword))
+            return true;
+
+        //If the card we are copying is inactive (from a stack or other source), we do not want
+        // to actually copy modifiers, only printed blueprint keywords.
+        var fromCards = Filters.filterActive(game, SpotOverride.INCLUDE_STACKED, from, keyword);
+
+        for(var card : fromCards) {
+            if(card.getBlueprint().hasKeyword(keyword))
+                return true;
+        }
+
+        return false;
     }
 
     @Override

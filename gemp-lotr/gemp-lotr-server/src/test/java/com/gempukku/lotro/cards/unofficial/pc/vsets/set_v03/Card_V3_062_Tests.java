@@ -116,7 +116,7 @@ public class Card_V3_062_Tests
 		assertTrue(scn.HasKeyword(southron, Keyword.ARCHER));
 	}
 
-	//@Test
+	@Test
 	public void WarHowdahTransfersToMountedSouthronAndCopiesStackedManGameText() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -165,13 +165,13 @@ public class Card_V3_062_Tests
 		// Charger now has Stalker's text: "Southrons gain ambush (1)", as well as its keywords
 		assertTrue(scn.HasKeyword(charger, Keyword.TRACKER));
 		// Check that other Southron gains ambush
-		//assertTrue(scn.HasKeyword(southron, Keyword.AMBUSH));
+		assertTrue(scn.HasKeyword(southron, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(southron, Keyword.AMBUSH));
 
 		// Charger itself should also have ambush (it's a Southron)
 		assertTrue(scn.HasKeyword(charger, Keyword.AMBUSH));
 		//It gets 1 from its own text
-		assertEquals(2, scn.GetKeywordCount(southron, Keyword.AMBUSH));
+		assertEquals(2, scn.GetKeywordCount(charger, Keyword.AMBUSH));
 	}
 
 	@Test
