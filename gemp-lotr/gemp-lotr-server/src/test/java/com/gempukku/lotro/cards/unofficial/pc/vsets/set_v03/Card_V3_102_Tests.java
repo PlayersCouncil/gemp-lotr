@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_102_Tests
 {
@@ -18,8 +17,12 @@ public class Card_V3_102_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_102");
-					// put other cards in here as needed for the test case
+					put("mouth", "103_102");      // The Mouth of Sauron
+					put("runner", "1_178");       // Goblin Runner - weak minion
+					put("sauron", "9_48");        // Sauron - strong minion to beat companions
+
+					put("aragorn", "1_89");       // Strength 8
+					put("boromir", "1_97");       // Strength 7
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -49,7 +52,7 @@ public class Card_V3_102_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("mouth");
 
 		assertEquals("The Mouth of Sauron", card.getBlueprint().getTitle());
 		assertEquals("Emissary of Mordor", card.getBlueprint().getSubtitle());
@@ -65,28 +68,142 @@ public class Card_V3_102_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void MouthTriggerLetsFPChooseThreatOrBurdenWhenCompanionLoses() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var mouth = scn.GetShadowCard("mouth");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, mouth);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		int threats = scn.GetThreats();
+		int burdens = scn.GetBurdens();
+
+		// Aragorn (8) loses to Mouth (9)
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		// FP must choose threat or burden
+		assertTrue(scn.FreepsChoiceAvailable("threat"));
+		assertTrue(scn.FreepsChoiceAvailable("burden"));
+
+		scn.FreepsChoose("threat");
+
+		assertEquals(threats + 1, scn.GetThreats());
+		assertEquals(burdens, scn.GetBurdens());
+	}
+
+	@Test
+	public void MouthTriggerAllowsBurdenChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, mouth);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		int threats = scn.GetThreats();
+		int burdens = scn.GetBurdens();
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		// FP must choose threat or burden
+		assertTrue(scn.FreepsChoiceAvailable("threat"));
+		assertTrue(scn.FreepsChoiceAvailable("burden"));
+
+		scn.FreepsChoose("burden");
+
+		assertEquals(threats, scn.GetThreats());
+		assertEquals(burdens + 1, scn.GetBurdens());
+	}
+
+	@Test
+	public void MouthTriggerFiresWhenCompanionLosesToOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var sauron = scn.GetShadowCard("sauron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		// Mouth is Lurker, but trigger still fires when companion loses to Sauron
+		scn.MoveMinionsToTable(mouth, sauron);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		// Assign Aragorn to Sauron, not Mouth
+		scn.FreepsAssignToMinions(aragorn, sauron);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		int burdens = scn.GetBurdens();
+
+		// Aragorn loses to Sauron (8 vs 24, overwhelmed and killed)
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		// Mouth's trigger still fires
+		assertTrue(scn.FreepsChoiceAvailable("threat"));
+		scn.FreepsChoose("burden");
+
+		assertEquals(burdens + 1, scn.GetBurdens());
+	}
+
+	@Test
+	public void MouthSkirmishAbilityDebuffsWoundedCompanionOnly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddWoundsToChar(aragorn, 1);  // Aragorn wounded
+		// Boromir unwounded
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(boromir, mouth);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(boromir);
+
+		int aragornStr = scn.GetStrength(aragorn);
+		int boromirStr = scn.GetStrength(boromir);
+
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(mouth));
+		scn.ShadowUseCardAction(mouth);
+
+		// Only wounded Aragorn is valid target
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(boromir));
+
+		scn.ShadowChooseCard(aragorn);
+
+		assertEquals(aragornStr - 1, scn.GetStrength(aragorn));
+		assertEquals(boromirStr, scn.GetStrength(boromir));
+		assertEquals(1, scn.GetWoundsOn(mouth));
 	}
 }
