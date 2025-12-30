@@ -18,8 +18,14 @@ public class Card_V3_090_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_90");
-					// put other cards in here as needed for the test case
+					put("herb", "103_90");       // Teach Me Your Herb-lore
+					put("frodospipe", "3_107");  // Frodo's Pipe - plays on Frodo
+					put("gandalfspipe", "1_74"); // Gandalf's Pipe - plays on Gandalf
+					put("aragornspipe", "1_91"); // Aragorn's Pipe - plays on Aragorn
+
+					put("aragorn", "1_89");
+					put("gandalf", "1_364");     // Gandalf, The Grey Wizard
+					put("theoden", "4_292");     // Théoden, King of the Golden Hall
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +50,7 @@ public class Card_V3_090_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("herb");
 
 		assertEquals("Teach Me Your Herb-lore", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +62,143 @@ public class Card_V3_090_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TeachMeYourHerbloreTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+
+	@Test
+	public void TeachMePlays2PipesFromDeckAndAdds2BurdensWithoutTheoden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var herb = scn.GetFreepsCard("herb");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(herb);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPlayCard(herb);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(frodospipe);
+
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(aragornspipe);
+
+		assertAttachedTo(frodospipe, scn.GetRingBearer());
+		assertAttachedTo(aragornspipe, aragorn);
+		assertEquals(2, scn.GetBurdens());
+	}
+
+	@Test
+	public void TeachMeAddsNoBurdensWhenTheodenPresent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var herb = scn.GetFreepsCard("herb");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var theoden = scn.GetFreepsCard("theoden");
+
+		scn.MoveCardsToHand(herb);
+		scn.MoveCompanionsToTable(aragorn, theoden);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPlayCard(herb);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(frodospipe);
+
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(aragornspipe);
+
+		assertAttachedTo(frodospipe, scn.GetRingBearer());
+		assertAttachedTo(aragornspipe, aragorn);
+		assertEquals(0, scn.GetBurdens());
+	}
+
+	@Test
+	public void TeachMeAdds1BurdenWhenOnly1PipeInDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var herb = scn.GetFreepsCard("herb");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var gandalfspipe = scn.GetFreepsCard("gandalfspipe");
+
+		scn.MoveCardsToHand(herb);
+		scn.MoveCardsToDiscard(aragornspipe, gandalfspipe);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPlayCard(herb);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(frodospipe);
+
+		scn.DismissRevealedCards();  // Second reveal still happens, just empty
+
+		assertAttachedTo(frodospipe, scn.GetRingBearer());
+		assertEquals(1, scn.GetBurdens());
+	}
+
+	@Test
+	public void TeachMeAddsNoBurdensWhenNoPipesInDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var herb = scn.GetFreepsCard("herb");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var gandalfspipe = scn.GetFreepsCard("gandalfspipe");
+
+		scn.MoveCardsToHand(herb);
+		scn.MoveCardsToDiscard(frodospipe, aragornspipe, gandalfspipe);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPlayCard(herb);
+		scn.DismissRevealedCards();  // First reveal - nothing there
+		scn.DismissRevealedCards();  // Second reveal - still nothing
+
+		assertEquals(0, scn.GetBurdens());
+		assertInDiscard(herb);
+	}
+
+	@Test
+	public void TeachMeCanDeclineToPlayPipeWhenAvailable() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var herb = scn.GetFreepsCard("herb");
+		var frodospipe = scn.GetFreepsCard("frodospipe");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveCardsToHand(herb);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		scn.FreepsPlayCard(herb);
+		scn.DismissRevealedCards();
+
+		// Decline first pipe
+		scn.FreepsPass();
+
+		scn.DismissRevealedCards();
+
+		// Decline second pipe
+		scn.FreepsChoose("");
+
+		// No pipes played, no burdens
+		assertInZone(Zone.DECK, frodospipe);
+		assertInZone(Zone.DECK, aragornspipe);
+		assertEquals(0, scn.GetBurdens());
 	}
 }
