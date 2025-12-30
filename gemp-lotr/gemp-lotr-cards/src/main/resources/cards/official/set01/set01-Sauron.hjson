@@ -179,6 +179,7 @@
 						select: all(memory(revealedCards),not(culture(sauron)))
 						showAll: false
 						shuffle: false
+						forced: false
 					}
 					{
 						type: If

@@ -733,6 +733,7 @@
 								select: choose(side(shadow),memory(revealedFreepsCards))
 								showAll: false
 								shuffle: false
+								forced: false
 							}
 						}
 						{
@@ -764,6 +765,7 @@
 								select: choose(side(shadow),memory(revealedShadowCards))
 								showAll: false
 								shuffle: false
+								forced: false
 							}
 						}
 						{
@@ -1259,6 +1261,7 @@
 					select: all(memory(revealedCards),not(side(free people)))
 					showAll: false
 					shuffle: false
+					forced: false
 				}
 			]
 		}
