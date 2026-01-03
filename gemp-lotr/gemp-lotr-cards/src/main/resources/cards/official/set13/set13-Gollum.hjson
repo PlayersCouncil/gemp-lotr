@@ -742,6 +742,7 @@
 					select: choose(culture(gollum))
 					showAll: true
 					shuffle: true
+					forced: false
 				}
 			}
 		]

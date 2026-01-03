@@ -512,6 +512,7 @@
 					select: choose(side(Free Peoples))
 					showAll: true
 					shuffle: true
+					forced: false
 				}
 			}
 			{

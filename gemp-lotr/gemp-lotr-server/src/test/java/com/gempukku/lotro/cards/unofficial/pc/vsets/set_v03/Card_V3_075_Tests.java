@@ -17,14 +17,24 @@ public class Card_V3_075_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_75");
-					// put other cards in here as needed for the test case
+					put("lemenya", "103_75");
+					put("rider1", "12_161");
+					put("rider2", "12_161");
+					put("witchking", "1_237");
+
+					put("aragorn", "1_89");    // Strength 8
+					put("boromir", "1_96");    // Strength 7
+					put("gandalf", "1_364");    // Strength 7
+					put("gimli", "1_13");      // Strength 6
+					put("sam", "1_311");       // Strength 3
+					put("merry", "1_302");     // Need ID - hobbit
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
+
 
 	@Test
 	public void UlaireLemenyaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
@@ -47,7 +57,7 @@ public class Card_V3_075_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lemenya");
 
 		assertEquals("Úlairë Lemenya", card.getBlueprint().getTitle());
 		assertEquals("Anointed with Terror", card.getBlueprint().getSubtitle());
@@ -63,28 +73,126 @@ public class Card_V3_075_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireLemenyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+// ======== NAZGUL COUNT MODE (< 6 COMPANIONS) ========
+
+	@Test
+	public void LemenyaReducesStrengthByNazgulCountWhenFewerThan6Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var lemenya = scn.GetShadowCard("lemenya");
+		var rider1 = scn.GetShadowCard("rider1");
+		var rider2 = scn.GetShadowCard("rider2");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// Frodo + Aragorn = 2 companions (under threshold)
+		scn.MoveMinionsToTable(lemenya, rider1, rider2);  // 3 Nazgul
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Aragorn should be -3 strength (3 Nazgul spotted)
+		assertEquals(aragornBaseStrength - 3, scn.GetStrength(aragorn));
+	}
+
+
+// ======== COMPANION COUNT MODE (>= 6 COMPANIONS) ========
+
+	@Test
+	public void LemenyaSwitchesToCompanionCountAt6Companions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var lemenya = scn.GetShadowCard("lemenya");
+		var rider1 = scn.GetShadowCard("rider1");  // 2 Nazgul total
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		// Frodo (RB) + 5 = 6 companions
+
+		scn.MoveMinionsToTable(lemenya, rider1);
+		scn.MoveCompanionsToTable(aragorn, boromir, gandalf, gimli, sam);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// 6 companions spotted, so -6 strength (not -2 for Nazgul)
+		assertEquals(aragornBaseStrength - 6, scn.GetStrength(aragorn));
+	}
+
+	@Test
+	public void LemenyaUsesNazgulCountAt5Companions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var lemenya = scn.GetShadowCard("lemenya");
+		var rider1 = scn.GetShadowCard("rider1");
+		var rider2 = scn.GetShadowCard("rider2");  // 3 Nazgul
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+
+		var gimli = scn.GetFreepsCard("gimli");
+		// Frodo (RB) + 4 = 5 companions (under threshold)
+
+		scn.MoveMinionsToTable(lemenya, rider1, rider2);
+		scn.MoveCompanionsToTable(aragorn, boromir, gandalf, gimli);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// 5 companions (under threshold), so -3 for Nazgul count
+		assertEquals(aragornBaseStrength - 3, scn.GetStrength(aragorn));
+	}
+
+	@Test
+	public void LemenyaCompanionModeScalesWithMoreCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		// Frodo (RB) + 6 = 7 companions
+
+		scn.MoveMinionsToTable(lemenya);  // Just 1 Nazgul
+		scn.MoveCompanionsToTable(aragorn, boromir, gandalf, gimli, sam, merry);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		int aragornBaseStrength = scn.GetStrength(aragorn);
+
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// 7 companions spotted, so -7 strength (even though only 1 Nazgul)
+		assertEquals(aragornBaseStrength - 7, scn.GetStrength(aragorn));
 	}
 }

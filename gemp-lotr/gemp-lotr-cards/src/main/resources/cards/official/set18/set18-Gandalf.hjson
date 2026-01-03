@@ -550,6 +550,7 @@
 						select: all(memory(revealedCards),not(side(free people)))
 						showAll: false
 						shuffle: false
+						forced: false
 					}
 				]
 			}

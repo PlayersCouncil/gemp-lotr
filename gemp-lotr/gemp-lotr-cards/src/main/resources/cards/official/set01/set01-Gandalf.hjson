@@ -685,6 +685,7 @@
 					select: all(memory(cardsOnTop),zone(deck))
 					showAll: false
 					shuffle: false
+					forced: false
 				}
 			]
 		}
@@ -744,6 +745,7 @@
 					select: all(memory(cardsOnTop),zone(deck))
 					showAll: false
 					shuffle: false
+					forced: false
 				}
 			]
 		}

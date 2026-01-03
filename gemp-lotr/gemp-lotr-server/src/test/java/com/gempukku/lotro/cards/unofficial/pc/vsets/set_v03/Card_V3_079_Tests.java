@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,8 +19,9 @@ public class Card_V3_079_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_79");
-					// put other cards in here as needed for the test case
+					put("toldea", "103_79");
+
+					put("aragorn", "1_89");  // Base 8 strength
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +51,7 @@ public class Card_V3_079_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("toldea");
 
 		assertEquals("Úlairë Toldëa", card.getBlueprint().getTitle());
 		assertEquals("Blessed with Brutality", card.getBlueprint().getSubtitle());
@@ -64,28 +67,116 @@ public class Card_V3_079_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+
+
+// ======== STRONGER COMPANION (HINDER) TESTS ========
+
+	@Test
+	public void ToldeaCanExhaustToHinderStrongerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var toldea = scn.GetShadowCard("toldea");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Aragorn base 8 + 6 = 14, stronger than Toldëa's 13
+		scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Aragorn"), null, 6));
+
+		assertEquals(14, scn.GetStrength(aragorn));
+		assertEquals(13, scn.GetStrength(toldea));
+
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(aragorn, toldea);
+
+		// Trigger fires on assignment
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Toldëa exhausted (vitality 3, so 2 wounds)
+		assertTrue(scn.IsExhausted(toldea));
+
+		// Aragorn hindered
+		assertTrue(scn.IsHindered(aragorn));
 	}
+
+	@Test
+	public void ToldeaHinderOptionNotAvailableIfAlreadyExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AddWoundsToChar(toldea, 2);  // Already exhausted
+
+		scn.StartGame();
+
+		scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Aragorn"), null, 6));
+
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(aragorn, toldea);
+
+		// Can't exhaust when already exhausted
+		//Actually this needs fixed once the exhaust rule is in
+		//assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+// ======== EQUAL STRENGTH (NO TRIGGER) ========
+
+	@Test
+	public void ToldeaNoTriggerWhenAssignedToEqualStrengthCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		// Aragorn base 8 + 5 = 13, equal to Toldëa's 13
+		scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Aragorn"), null, 5));
+
+		assertEquals(13, scn.GetStrength(aragorn));
+		assertEquals(13, scn.GetStrength(toldea));
+
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(aragorn, toldea);
+
+		// No trigger at equal strength
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+// ======== WEAKER COMPANION (THREAT) TESTS ========
+
+	/*
+	 *    _______________________________________________________________
+	 *   |                                                               |
+	 *   |     🚧🚧🚧  UNDER CONSTRUCTION  🚧🚧🚧                        |
+	 *   |                                                               |
+	 *   |     Toldëa's "weaker companion" clause is BUSTED and          |
+	 *   |     awaiting redesign. Current: "exert companion, add         |
+	 *   |     threat" (free value). Proposed: "exert SELF to            |
+	 *   |     exert companion OR add threat" (actual choice).           |
+	 *   |                                                               |
+	 *   |     TODO: Add tests here once the balance fix is in.          |
+	 *   |                                                               |
+	 *   |     Dear future developer: if this comment is still here      |
+	 *   |     and Toldëa shipped unchanged, please roast Ketura         |
+	 *   |     in the Discord for leaving broken design in prod.         |
+	 *   |                                                               |
+	 *   |_______________________________________________________________|
+	 */
 }

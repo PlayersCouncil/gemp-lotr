@@ -346,6 +346,7 @@
 								select: all(side(freeps),memory(cardsOnTop))
 								showAll: false
 								shuffle: false
+								forced: false
 							}
 							text: Discard all revealed Free Peoples cards to prevent exerting {chosenComp}?
 							effect: {

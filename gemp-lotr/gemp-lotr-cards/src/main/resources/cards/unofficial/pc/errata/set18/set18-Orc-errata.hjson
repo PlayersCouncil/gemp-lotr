@@ -99,6 +99,7 @@
 						count: 2
 						showAll: true
 						shuffle: true
+						forced: true
 					}
 				]
 			}

@@ -20,8 +20,15 @@ public class Card_V3_098_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_98");
-					// put other cards in here as needed for the test case
+					put("assassin", "103_98");    // Red Eye Assassin
+					put("runner", "1_178");       // Goblin Runner
+					put("hollowing", "3_54");     // Hollowing of Isengard - Shadow condition
+
+					put("aragorn", "1_89");
+					put("anduril", "7_79");       // Anduril - Hand Weapon Artifact
+					put("bow", "1_90");           // Aragorn's Bow - Ranged Weapon Possession
+					put("athelas", "1_94");       // Athelas - non-weapon Possession
+					put("lastalliance", "1_49");  // Last Alliance - Condition on Gondor Man
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,7 +57,7 @@ public class Card_V3_098_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("assassin");
 
 		assertEquals("Red Eye Assassin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -65,28 +72,74 @@ public class Card_V3_098_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RedEyeAssassinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+	@Test
+	public void AssassinStrengthScalesWithHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var assassin = scn.GetShadowCard("assassin");
+		var runner = scn.GetShadowCard("runner");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		var lastalliance = scn.GetFreepsCard("lastalliance");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(assassin, runner);
+		scn.MoveCardsToSupportArea(hollowing);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril, lastalliance);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Base strength with 0 hindered
+		assertEquals(6, scn.GetStrength(assassin));
+
+		// Hinder FP cards
+		scn.HinderCard(anduril);
+		assertEquals(7, scn.GetStrength(assassin));
+
+		scn.HinderCard(lastalliance);
+		assertEquals(8, scn.GetStrength(assassin));
+
+		// Hinder Shadow card - should also count
+		scn.HinderCard(hollowing);
+		assertEquals(9, scn.GetStrength(assassin));
+	}
+
+	@Test
+	public void AssassinHindersWeaponsAndConditionsButNotOtherPossessions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var assassin = scn.GetShadowCard("assassin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");       // Hand Weapon Artifact - valid
+		var bow = scn.GetFreepsCard("bow");               // Ranged Weapon Possession - valid
+		var lastalliance = scn.GetFreepsCard("lastalliance"); // Condition - valid
+		var athelas = scn.GetFreepsCard("athelas");       // Non-weapon Possession - invalid
+
+		scn.MoveMinionsToTable(assassin);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril, bow, lastalliance, athelas);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, assassin);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		//Removing the arrow from the bow
+		scn.RemoveWoundsFromChar(assassin, 1);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(assassin);
+
+		// Weapons and condition choosable, non-weapon possession not
+		assertTrue(scn.ShadowHasCardChoiceAvailable(anduril));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(bow));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(lastalliance));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(athelas));
+
+		scn.ShadowChooseCard(anduril);
+
+		assertEquals(1, scn.GetWoundsOn(assassin));
+		assertTrue(scn.IsHindered(anduril));
 	}
 }

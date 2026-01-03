@@ -671,6 +671,7 @@
 					select: all(memory(revealedCards),not(culture(wraith)))
 					showAll: false
 					shuffle: false
+					forced: false
 				}
 			]
 		}

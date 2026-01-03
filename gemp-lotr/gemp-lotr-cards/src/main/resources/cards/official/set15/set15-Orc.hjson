@@ -984,6 +984,7 @@
 							select: memory(revealedCard)
 							showAll: false
 							shuffle: false
+							forced: false
 						}
 					}
 				]
