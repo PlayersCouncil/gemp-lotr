@@ -119,7 +119,6 @@ public class Card_V3_101_Tests
 
 		assertTrue(scn.ShadowPlayAvailable(reach));
 		scn.ShadowPlayCard(reach);
-		scn.ShadowChooseCards(slayer1, slayer2, slayer3);
 
 		assertEquals(1, scn.GetWoundsOn(slayer1));
 		assertEquals(1, scn.GetWoundsOn(slayer2));
@@ -181,9 +180,6 @@ public class Card_V3_101_Tests
 		assertTrue(scn.IsHindered(lordofmoria));
 		assertTrue(scn.IsHindered(elrond));
 		assertTrue(scn.IsHindered(vilya));
-
-		// Shadow must choose 3 of their supports to hinder
-		scn.ShadowChooseCards(hollowing1, hollowing2, stone);
 
 		assertTrue(scn.IsHindered(hollowing1));
 		assertTrue(scn.IsHindered(hollowing2));

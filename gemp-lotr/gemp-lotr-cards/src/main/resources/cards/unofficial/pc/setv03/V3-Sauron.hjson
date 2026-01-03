@@ -829,6 +829,10 @@
 						select: choose(culture(Sauron), minion)
 						count: 3
 					}
+					false: {
+						type: Spot
+						filter: title(Sauron)
+					}
 				}
 				effect: [
 					{
