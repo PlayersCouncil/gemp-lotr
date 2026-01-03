@@ -23,9 +23,11 @@ public class ReplayMetadata {
         public List<String> StartingFellowship = new ArrayList<>();
     }
 
-    //Version 1: First tracked version; original version was completely different
+    // This field looks like it's unused, but it gets serialized.
+    //Version 1: First tracked version
     //Version 2: Adding the highest achieved sites by player, game IDs, and game timer length information
-    public Integer MetadataVersion = 2;
+    //Version 3: Fixed a bug where attached cards were never added to the PlayedCards collection
+    public Integer MetadataVersion = 3;
 
     public DBDefs.GameHistory GameReplayInfo;
 
@@ -140,12 +142,12 @@ public class ReplayMetadata {
                     }
 
                     switch (zone) {
-                        case FREE_CHARACTERS, SUPPORT, SHADOW_CHARACTERS, ADVENTURE_PATH, VOID_FROM_HAND, VOID -> {
+                        case ATTACHED, FREE_CHARACTERS, SUPPORT, SHADOW_CHARACTERS, ADVENTURE_PATH, VOID_FROM_HAND, VOID -> {
                             AllCards.put(cardID.toString(), bpID);
                             SeenCards.add(cardID);
                             PlayedCards.add(cardID);
                         }
-                        case ATTACHED, HAND, STACKED, DEAD, DISCARD, ADVENTURE_DECK, DECK, REMOVED -> {
+                        case HAND, STACKED, DEAD, DISCARD, ADVENTURE_DECK, DECK, REMOVED -> {
                             AllCards.put(cardID.toString(), bpID);
                             SeenCards.add(cardID);
                         }
