@@ -3,13 +3,8 @@ package com.gempukku.lotro.tournament;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
-import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.packs.ProductLibrary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DailyTournamentPrizes implements TournamentPrizes {
     private final String _registryRepresentation;
@@ -21,16 +16,23 @@ public class DailyTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
 
         DefaultCardCollection prize = new DefaultCardCollection();
         int hasBye = playerStanding.byeRound > 0 ? 1 : 0;
-        if (playerStanding.playerWins + hasBye >= 2) {
-            prize.addItem("Placement Random Chase Card Selector", getMajorPrizeCount(playerStanding.standing), true);
-            prize.addItem("(S)Tengwar", getTengwarPrizeCount(playerStanding.standing), true);
+
+        int effectiveStanding = playerStanding.standing;
+        if (playerStanding.points == firstPlacePoints) {
+            // Tie for first place, everyone with first place points considered as tied for first
+            effectiveStanding = 1;
         }
 
-        prize.addAndOpenPack("Any Random Foil", getMinorPrizeCount(playerStanding.standing), _productLibrary);
+        if (playerStanding.playerWins + hasBye >= 2) {
+            prize.addItem("Placement Random Chase Card Selector", getMajorPrizeCount(effectiveStanding), true);
+            prize.addItem("(S)Tengwar", getTengwarPrizeCount(effectiveStanding), true);
+        }
+
+        prize.addAndOpenPack("Any Random Foil", getMinorPrizeCount(effectiveStanding), _productLibrary);
 
         if (prize.getAll().iterator().hasNext())
             return prize;
@@ -38,7 +40,7 @@ public class DailyTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
         return null;
     }
 

@@ -325,11 +325,17 @@ public abstract class BaseTournament implements Tournament {
 
     protected void awardPrizes(CollectionsManager collectionsManager) {
         List<PlayerStanding> list = getCurrentStandings();
+
+        if (list.isEmpty()) {
+            return;
+        }
+        int firstPlacePoints = list.getFirst().points;
+
         for (PlayerStanding playerStanding : list) {
-            CardCollection prizes = _tournamentInfo.Prizes.getPrizeForTournament(playerStanding, list.size());
+            CardCollection prizes = _tournamentInfo.Prizes.getPrizeForTournament(playerStanding, list.size(), firstPlacePoints);
             if (prizes != null)
                 collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " prize", playerStanding.playerName, CollectionType.MY_CARDS, prizes.getAll());
-            CardCollection trophies = _tournamentInfo.Prizes.getTrophyForTournament(playerStanding, list.size());
+            CardCollection trophies = _tournamentInfo.Prizes.getTrophyForTournament(playerStanding, list.size(), firstPlacePoints);
             if (trophies != null)
                 collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " trophy", playerStanding.playerName, CollectionType.TROPHY, trophies.getAll());
         }
