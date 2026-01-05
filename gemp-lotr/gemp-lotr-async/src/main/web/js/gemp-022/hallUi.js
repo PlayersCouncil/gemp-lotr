@@ -804,7 +804,7 @@ var GempLotrHallUI = Class.extend({
 									}
 								};
 							}
-							)(tournament));
+							)(tournament)).css("color", "#d44");
 						actionsField.append(but);
 					}
 					else if(!abandoned){
