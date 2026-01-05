@@ -399,7 +399,7 @@ public class TournamentService {
     public List<Tournament> getOldTournaments(ZonedDateTime since) {
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getFinishedTournamentsSince(since)) {
-            var tournament = upsertTournamentInCache(dbinfo);
+            var tournament = upsertTournamentInCache(dbinfo, false);
             result.add(tournament);
         }
         return result;
@@ -410,7 +410,7 @@ public class TournamentService {
 
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getUnfinishedTournaments()) {
-            var tournament = upsertTournamentInCache(dbinfo);
+            var tournament = upsertTournamentInCache(dbinfo, true);
             result.add(tournament);
         }
         return result;
@@ -427,7 +427,7 @@ public class TournamentService {
             if (dbinfo == null)
                 return null;
 
-            tournament = upsertTournamentInCache(dbinfo);
+            tournament = upsertTournamentInCache(dbinfo, !dbinfo.stage.equals(Tournament.Stage.FINISHED.getHumanReadable()));
         }
         return tournament;
     }
@@ -490,7 +490,7 @@ public class TournamentService {
         return tournament;
     }
 
-    private Tournament upsertTournamentInCache(DBDefs.Tournament data) {
+    private Tournament upsertTournamentInCache(DBDefs.Tournament data, boolean putToActive) {
         Tournament tournament;
         try {
             String tid = data.tournament_id;
@@ -510,7 +510,9 @@ public class TournamentService {
                     tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid, _chatServer);
                 }
 
-                _activeTournaments.put(tid, tournament);
+                if (putToActive) {
+                    _activeTournaments.put(tid, tournament);
+                }
             }
             else {
                 tournament.RefreshTournamentInfo();
