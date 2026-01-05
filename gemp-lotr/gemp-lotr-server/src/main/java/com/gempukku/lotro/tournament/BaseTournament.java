@@ -320,7 +320,16 @@ public abstract class BaseTournament implements Tournament {
         }
         Set<String> activePlayers = new HashSet<>(_players);
         activePlayers.removeAll(_droppedPlayers);
-        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.", activePlayers);
+
+        List<PlayerStanding> list = getCurrentStandings();
+        StringBuilder standingsMessage = new StringBuilder("Final Standings:<br>");
+        for (int i = 0; i < list.size(); i++) {
+            PlayerStanding playerStanding = list.get(i);
+            standingsMessage.append((i + 1)).append(". ").append(playerStanding.playerName)
+                    .append(" - ").append(playerStanding.points).append(" points<br>");
+        }
+
+        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.<br><br>" + standingsMessage, activePlayers);
     }
 
     protected void awardPrizes(CollectionsManager collectionsManager) {
