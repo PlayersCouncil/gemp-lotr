@@ -15,7 +15,7 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
         // If atleast 4 players, get one reward for each win or bye
         if (playersCount < 4) {
             return null;
@@ -26,7 +26,7 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
         int numberOfWins = playerStanding.playerWins + hasBye;
         prize.addItem("Placement Random Chase Card Selector", numberOfWins, true);
         // The winner also gets one tengwar card
-        if (playerStanding.standing == 1) {
+        if (playerStanding.points == firstPlacePoints) {
             prize.addItem("(S)Tengwar", 1, true);
         }
 
@@ -36,7 +36,7 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
         return null;
     }
 

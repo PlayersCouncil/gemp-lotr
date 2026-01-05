@@ -5,12 +5,12 @@ import com.gempukku.lotro.game.CardCollection;
 
 public class NoPrizes implements TournamentPrizes{
     @Override
-    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getPrizeForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
         return null;
     }
 
     @Override
-    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount) {
+    public CardCollection getTrophyForTournament(PlayerStanding playerStanding, int playersCount, int firstPlacePoints) {
         return null;
     }
 

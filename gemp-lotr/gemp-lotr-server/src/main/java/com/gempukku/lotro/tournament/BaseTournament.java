@@ -320,16 +320,31 @@ public abstract class BaseTournament implements Tournament {
         }
         Set<String> activePlayers = new HashSet<>(_players);
         activePlayers.removeAll(_droppedPlayers);
-        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.", activePlayers);
+
+        List<PlayerStanding> list = getCurrentStandings();
+        StringBuilder standingsMessage = new StringBuilder("Final Standings:<br>");
+        for (int i = 0; i < list.size(); i++) {
+            PlayerStanding playerStanding = list.get(i);
+            standingsMessage.append((i + 1)).append(". ").append(playerStanding.playerName)
+                    .append(" - ").append(playerStanding.points).append(" points<br>");
+        }
+
+        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.<br><br>" + standingsMessage, activePlayers);
     }
 
     protected void awardPrizes(CollectionsManager collectionsManager) {
         List<PlayerStanding> list = getCurrentStandings();
+
+        if (list.isEmpty()) {
+            return;
+        }
+        int firstPlacePoints = list.getFirst().points;
+
         for (PlayerStanding playerStanding : list) {
-            CardCollection prizes = _tournamentInfo.Prizes.getPrizeForTournament(playerStanding, list.size());
+            CardCollection prizes = _tournamentInfo.Prizes.getPrizeForTournament(playerStanding, list.size(), firstPlacePoints);
             if (prizes != null)
                 collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " prize", playerStanding.playerName, CollectionType.MY_CARDS, prizes.getAll());
-            CardCollection trophies = _tournamentInfo.Prizes.getTrophyForTournament(playerStanding, list.size());
+            CardCollection trophies = _tournamentInfo.Prizes.getTrophyForTournament(playerStanding, list.size(), firstPlacePoints);
             if (trophies != null)
                 collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " trophy", playerStanding.playerName, CollectionType.TROPHY, trophies.getAll());
         }
