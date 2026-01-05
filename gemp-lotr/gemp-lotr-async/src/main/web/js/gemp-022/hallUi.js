@@ -231,9 +231,9 @@ var GempLotrHallUI = Class.extend({
 
 		// Fallback insert
 		if (!inserted) {
-			const $anchor = $("#finishedTablesHeader");
-			$header.insertAfter($anchor);
-			$content.insertAfter($anchor);
+			const $anchor = $("#recurringQueuesHeader");
+			$header.insertBefore($anchor);
+			$content.insertBefore($anchor);
 		}
 
 		// Load settings
