@@ -283,11 +283,13 @@ class CreateTournament {
 					that.readyCheckDropdown.val("-1");
 					that.readyCheckDropdown.prop("disabled", true);
 					that.earlyStartCheckbox.prop("checked", false);
+					that.pairingDropdown.prop("disabled", true);
 				} else {
 					// Enable all options and select 90 seconds
 					that.readyCheckDropdown.prop("disabled", false);
 					that.readyCheckDropdown.val("120");
                     that.earlyStartCheckbox.prop("checked", true);
+					that.pairingDropdown.prop("disabled", false);
 				}
 
 				that.validateTournamentForm(that);

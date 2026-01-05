@@ -636,12 +636,14 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
 					let htmlTd = "<td>";
 					if (isWC) {
-						htmlTd += "World Championship";
+						htmlTd += "World Championship - ";
+					} else if (queue.getAttribute("start") === "When 2 players join") {
+
 					} else {
 						// For system, ignore all after ',' (min players)
-						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament";
+						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament - ";
 					}
-					htmlTd += " - " + type + " - <div style='display:inline'"
+					htmlTd += type + " - <div style='display:inline'"
 					if (type.includes("Table") && queue.hasAttribute("draftCode")) {
 						htmlTd += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
 					}
@@ -836,6 +838,8 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
 					if (isWC) {
 						tablesRow.append("<td>World Championship - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					} else if (tournament.getAttribute("playerCount") == 2) {
+						tablesRow.append("<td>Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else {
 						tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					}
