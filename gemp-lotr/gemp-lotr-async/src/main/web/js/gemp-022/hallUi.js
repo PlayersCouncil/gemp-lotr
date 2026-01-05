@@ -688,8 +688,8 @@ var GempLotrHallUI = Class.extend({
 								$("table.waitingTables", this.tablesDiv).append(tablesRow);
 							}
 						} else {
-							// Remove tournaments displayed as tables
-							$(".table" + id, this.tablesDiv).remove();
+							// Remove queue rows displayed as tables from Waiting Tables section
+							$(".table" + id, $("table.waitingTables", this.tablesDiv)).remove();
 						}
 					}
 
@@ -698,7 +698,8 @@ var GempLotrHallUI = Class.extend({
 				} else if (action == "remove") {
 					// Remove from both the Waiting Tables Section and Queue Sections
 					$(".queue" + id, this.tablesDiv).remove();
-					$(".table" + id, this.tablesDiv).remove();
+					// Only remove from waiting tables, not playing tables (tournaments have same ID)
+					$(".table" + id, $("table.waitingTables", this.tablesDiv)).remove();
 				}
 			}
 			
@@ -861,7 +862,7 @@ var GempLotrHallUI = Class.extend({
 					if (action == "add") {
 						// Display running tournaments as playing tables
 						$("table.playingTables", this.tablesDiv)
-							.append(tablesRow)
+							.append(tablesRow);
 
 						if (joined == "true") {
 							// Open draft window
