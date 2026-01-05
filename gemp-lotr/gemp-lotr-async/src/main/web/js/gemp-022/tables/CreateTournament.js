@@ -282,10 +282,12 @@ class CreateTournament {
 					// Set to -1 (no ready check) and disable other options
 					that.readyCheckDropdown.val("-1");
 					that.readyCheckDropdown.prop("disabled", true);
+					that.earlyStartCheckbox.prop("checked", false);
 				} else {
 					// Enable all options and select 90 seconds
 					that.readyCheckDropdown.prop("disabled", false);
 					that.readyCheckDropdown.val("120");
+                    that.earlyStartCheckbox.prop("checked", true);
 				}
 
 				that.validateTournamentForm(that);
