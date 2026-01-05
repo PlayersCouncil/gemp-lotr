@@ -840,7 +840,7 @@ var GempLotrHallUI = Class.extend({
 						tablesRow.append("<td>World Championship - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else if (tournament.getAttribute("playerCount") == 2) {
 						tablesRow.append("<td>Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
-					} else if (tournament.getAttribute("playerCount") == 1) {
+					} else if (tournament.getAttribute("playerList").includes(',') == false) {
 						tablesRow.append("<td>Practice - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else {
 						tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
