@@ -637,7 +637,7 @@ var GempLotrHallUI = Class.extend({
 					let htmlTd = "<td>";
 					if (isWC) {
 						htmlTd += "World Championship - ";
-					} else if (queue.getAttribute("start") === "When 2 players join") {
+					} else if (queue.getAttribute("start") === "When 2 players join" || queue.getAttribute("start") === "When 1 players join") {
 
 					} else {
 						// For system, ignore all after ',' (min players)
@@ -840,6 +840,8 @@ var GempLotrHallUI = Class.extend({
 						tablesRow.append("<td>World Championship - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else if (tournament.getAttribute("playerCount") == 2) {
 						tablesRow.append("<td>Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					} else if (tournament.getAttribute("playerCount") == 1) {
+						tablesRow.append("<td>Practice - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else {
 						tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					}
