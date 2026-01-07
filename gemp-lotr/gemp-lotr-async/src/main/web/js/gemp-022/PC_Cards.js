@@ -245,7 +245,7 @@ var PCCards = {
 	//Durin III, Dwarven Lord MW
 	'9_55':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_09003.jpg',
 	//Eowyn, Lady of Ithilien MW
-	//'10_124':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_10072.jpg',
+	'10_124':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_10072.jpg',
 	//Halbarad, Ranger of the North MW
 	'14_16':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_14009.jpg',
 	//Gandalf, Leader of the Company MW
