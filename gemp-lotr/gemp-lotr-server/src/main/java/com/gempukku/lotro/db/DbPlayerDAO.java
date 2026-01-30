@@ -3,7 +3,6 @@ package com.gempukku.lotro.db;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
-import org.sql2o.Sql2o;
 
 import java.security.MessageDigest;
 import java.sql.Connection;
@@ -299,7 +298,7 @@ public class DbPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public synchronized boolean registerUser(String login, String password, String remoteAddr) throws SQLException, LoginInvalidException {
+    public synchronized boolean registerUser(String login, String password, String remoteAddr) throws LoginInvalidException {
         if (!validLoginName(login))
             return false;
 
@@ -421,11 +420,11 @@ public class DbPlayerDAO implements PlayerDAO {
                 return def != null;
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Unable to retrieve password reset entries", ex);
+            throw new RuntimeException("Unable to confirm that login exists", ex);
         }
     }
 
-    private boolean needsPasswordReset(String login) throws SQLException {
+    private boolean needsPasswordReset(String login){
         try {
             var db = _dbAccess.openDB();
 
@@ -440,11 +439,8 @@ public class DbPlayerDAO implements PlayerDAO {
                         .executeAndFetch(DBDefs.Player.class);
 
                 var def = result.stream().findFirst().orElse(null);
-                if (def.type.contains("b")) {
-                    return false;
-                }
-                return def != null;
-            }
+				return def != null && !def.type.contains(Player.Type.BOT.getValue());
+			}
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve password reset entries", ex);
         }
