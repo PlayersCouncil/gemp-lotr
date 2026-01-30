@@ -29,7 +29,10 @@ public class ActionChoiceAction implements SemanticAction {
 
         String[] actionTexts = decision.getDecisionParameters().get("actionText");
         for (int i = 0; i < actionTexts.length; i++) {
-            if (actionText.equals(actionTexts[i])) {
+            if(actionText == null && actionTexts[i] == null) {
+                return String.valueOf(i);
+            }
+            if (actionText != null && actionText.equals(actionTexts[i])) {
                 return String.valueOf(i);
             }
         }
