@@ -54,7 +54,8 @@ public class RandomDecisionBot implements BotPlayer {
             return String.valueOf(min);
         }
 
-        int choice = random.nextInt((max - min + 1)) + min;
+        int range = Math.min(max - min + 1, 1);
+        int choice = random.nextInt(range) + min;
         return String.valueOf(choice);
     }
 
