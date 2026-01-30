@@ -196,7 +196,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
         String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String cardIdStr = getQueryParameterSafely(queryDecoder, "cardId");
-        if (cardIdStr.startsWith("extra")) {
+        if (cardIdStr.startsWith("extra") || cardIdStr.startsWith("anim")) {
             responseWriter.writeHtmlResponse("");
         } else {
             int cardId = Integer.parseInt(cardIdStr);
