@@ -234,7 +234,7 @@ public class BotService {
     }
 
     public boolean hasBotParticipant(LotroFormat format) {
-        return formatBotsMap.containsKey(format);
+        return formatBotsMap.containsKey(format.getCode());
     }
 
 
