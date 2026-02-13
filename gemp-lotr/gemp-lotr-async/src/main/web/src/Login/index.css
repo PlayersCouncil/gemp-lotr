@@ -73,22 +73,6 @@ body {
     color: #ffffff;
 }
 
-.info {
-    text-align: center; 
-    background-color: #222222CC; 
-    margin-bottom: 150px; 
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    color: #FFFFFF;
-}
-
-.sw-shoutout {
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 input {
     font-size: 90%;
 }
