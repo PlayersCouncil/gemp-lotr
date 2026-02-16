@@ -898,6 +898,59 @@
 		]
 	}
 	{
+		name: Movie Block - Czech
+		code: movie_czech
+		order: 44
+		sites: KING
+		// Unbanned: Flaming Brand, Relics of Moria, Saruman KoI, Savagery to Match Their Numbers, Frying Pan
+		// Banned: Galadriel LR, Vilya
+		banned: [
+			"8_1", "3_38", "3_106", "1_40", "1_248", "1_45", "7_96", "3_42",
+			"10_2", "10_91", "1_108", "1_80", "3_67", "7_49", "1_313", "1_234",
+			"10_11", "3_27"
+		]
+		blocks: [
+			fotr_block
+			ttt_block
+			king_block
+			Additional Sets|Reflections:9
+		]
+		sets: [
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+		]
+	}
+	{
+		name: Expanded - Czech
+		code: expanded_czech
+		order: 45
+		sites: SHADOWS
+		// Banned: Leaving Forever, Steward's Tomb, New Chapter, Mountain Troll, Shadowfax 17R, Grimbeorn, Mithlond, Secluded Homestead
+		// R-list: Deceit
+		banned: [
+			"1_45", "1_138", "1_234", "1_311", "1_313", "1_316", "2_121", "3_17", "3_38", "3_42",
+			"3_67", "3_68", "3_108", "3_113", "4_73", "7_49", "8_1", "10_2", "10_11", "10_91",
+			"11_31", "11_100", "11_132",
+			"7_24", "18_139", "13_154", "15_112", "17_24", "14_6", "18_136", "13_22"
+		]
+		restricted: [
+			"1_40", "1_80", "1_108", "1_139", "1_195", "1_248", "2_32", "2_75", "3_106", "4_276", "4_304",
+			"18_29"
+		]
+		sets: [
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+		]
+		blocks: [
+			Promotional|Promotional:0
+			fotr_block
+			ttt_block
+			king_block
+			war_block
+			hunter_block
+			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
+			Latest PC Errata|Latest PC Errata:pc_errata
+		]
+	}
+	{
 		name: Fellowship Block - Poorman's
 		code: fotr_poorman
 		sites: FELLOWSHIP
