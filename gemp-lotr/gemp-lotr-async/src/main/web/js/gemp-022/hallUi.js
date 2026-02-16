@@ -540,6 +540,7 @@ var GempLotrHallUI = Class.extend({
 								that.showDialog("Ready Check", "Ready Check started for the <b>" + queue.getAttribute("queue")
 									+ "</b> tournament.<br><br>To confirm you are present, click the Ready Check button in the Waiting Tables Section within the next "
 									+ queue.getAttribute("readyCheckSecsRemaining") + " seconds.", 230);
+								that.PlaySound("gamestart");
 							}
 							var checkBut = $("<button>READY CHECK - " + queue.getAttribute("readyCheckSecsRemaining") + " s</button>");
 							$(checkBut).button().click((
