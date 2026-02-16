@@ -1681,4 +1681,208 @@
 			]
 		]
 	}
+	{
+		name: 52 Battle for Site Control Sealed
+		id:sitecontrol_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Site Control - Starter
+				1xTTT - Booster
+				1xEoF - Booster	
+				1xRotK - Booster
+				1xMD - Booster
+			],
+		]
+	}
+	{
+		name: 53 Romance Sealed
+		id:romance_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Romance - Starter
+				2xFotR - Booster
+				2xTTT - Booster
+				1xEoF - Booster	
+				2xRotK - Booster
+				2xBR - Booster
+			],
+		]
+	}
+	{
+		name: 54 Bromance Sealed
+		id:bromance_sealed
+		format: limited_hunters
+		seriesProduct: [
+			[
+				1x(S)Bromance - Starter
+				2xSH - Booster
+				2xBR - Booster
+				2xBL - Booster	
+			],
+		]
+	}
+	{
+		name: 55 Forbidden Love Sealed
+		id:forbiddenlove_sealed
+		format: limited_ttt
+		seriesProduct: [
+			[
+				1x(S)Forbidden Love - Starter
+				1xRotEL - Booster
+				2xTTT - Booster
+				1xRotK - Booster
+				1xSH - Booster
+				1xTaD - Booster
+			],
+		]
+	}
+	{
+		name: 56 True Love Sealed
+		id:truelove_sealed
+		format: limited_hunters
+		seriesProduct: [
+			[
+				1x(S)True Love - Starter
+				1xSH - Booster
+				2xBR - Booster
+				1xBL - Booster
+				1xHU - Booster
+				1xRoS - Booster
+				1xTaD - Booster
+			],
+		]
+	}
+	{
+		name: 57 Lineage Sealed
+		id:lineage_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Lineage - Starter
+				1xRotEL - Booster
+				1xTTT - Booster
+				1xBoHD - Booster
+				1xEoF - Booster
+				1xRotK - Booster
+				1xSoG - Booster
+			],
+		]
+	}
+	{
+		name: 58 Shelob's Lair Sealed
+		id:shelobslair_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Shelob's Lair - Starter
+				1xFotR - Booster
+				1xMoM - Booster
+				1xTTT - Booster
+				1xEoF - Booster
+				1xRotK - Booster
+				1xSoG - Booster
+				#The Numbers Must be Few
+				1x1_260
+			],
+		]
+	}
+	{
+		name: 59 Knighted Sealed
+		id:knighted_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Knighted - Starter
+				2xRotEL - Booster
+				1xTTT - Booster
+				1xSoG - Booster
+				1xBR - Booster
+				1xBL - Booster
+				#The Numbers Must be Few
+				1x1_260
+			],
+		]
+	}
+	{
+		name: 60 Move Limit Sealed
+		id:movelimit_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Move Limit - Starter
+				1xMoM - Booster
+				1xTTT - Booster
+				1xEoF - Booster
+				1xRotK - Booster
+				1xSoG - Booster
+				2xSH - Booster
+			],
+		]
+	}
+	{
+		name: 61 The Great Eye Sealed
+		id:greateye_sealed
+		format: limited_ttt
+		seriesProduct: [
+			[
+				1x(S)The Great Eye - Starter
+				2xFotR - Booster
+				2xTTT - Booster
+				2xRotK - Booster
+				1xREF - Booster
+			],
+		]
+	}
+	{
+		name: 62 Alphabet DEGR Sealed
+		id:alphabetdegr_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Alphabet DEGR - Starter
+				1xMoM - Booster
+				1xTTT - Booster
+				1xBoHD - Booster
+				1xRotK - Booster
+				1xREF - Booster
+				2xBR - Booster
+				1xRoS - Booster
+				#Ulaire Enquea, Lieutenant of Morgul
+				1x1_231
+			],
+		]
+	}
+	{
+		name: 63 Alphabet AHST Sealed
+		id:alphabetahst_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Alphabet AHST - Starter
+				1xMoM - Booster
+				2xTTT - Booster
+				1xEoF - Booster
+				1xMD - Booster
+				1xSH - Booster
+				2xHU - Booster
+				1xRoS - Booster
+			],
+		]
+	}
+	{
+		name: 64 Alphabet BFLW Sealed
+		id:alphabetbflw_sealed
+		format: limited_multipath
+		seriesProduct: [
+			[
+				1x(S)Alphabet BFLW - Starter
+				1xSH - Booster
+				1xBR - Booster
+				1xBL - Booster
+				1xTaD - Booster
+			],
+		]
+	}
 ]

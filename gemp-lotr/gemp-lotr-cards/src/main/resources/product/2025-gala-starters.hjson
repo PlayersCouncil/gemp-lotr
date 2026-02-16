@@ -506,10 +506,12 @@
 			2x4_282
 			#    Fey He Seemed
 			1x7_231
+			#    Helm! Helm!
+			1x4_279
 			#    Morning Came
 			1x7_243
-			#    No Living Man
-			2x8_90
+			#    Unyielding
+			1x10_74
 			#    Noble Intentions
 			1x1_304
 			#    With Strength to Fight
@@ -672,9 +674,9 @@
 		type: pack
 		items: [
 			#Ring-bearer (2 cards)
-			#    Frodo, Tired Traveller
+			#    Frodo, Courteous Halfling
 			#    The One Ring, The Ruling Ring
-			1x4_302
+			1x4_301
 			1x1_2
 			#Adventure Deck (9 cards) 
 			#    Rohirrim Road
@@ -726,18 +728,16 @@
 			1x9_34
 			#    Ancient Enmity
 			2x1_29
-			#    Flee in Terror
-			1x2_33
 			#    Might of Numenor
 			1x3_43
+			#    Reckless Counter
+			2x7_117
 			#    Stout Resistance
 			2x7_121
 			#    Halfling Deftness
 			1x1_293
 			#    Ancient Blade
 			1x7_15
-			#    Hosts of the Last Alliance
-			1x2_18
 			#    The Last Alliance of Elves and Men
 			1x1_49
 			#    Foes of Mordor
@@ -748,7 +748,7 @@
 			#    Desert Fighter
 			3x7_131
 			#    Desert Villain
-			3x7_138
+			2x7_138
 			#    Easterling Guard
 			3x4_226
 			#    Easterling Lieutenant
@@ -759,12 +759,14 @@
 			2x7_145
 			#    Easterling Sergeant
 			1x7_146
+			#    Gorgoroth Stormer
+			3x8_101
 			#    Sauron, The Lord of the Ring
 			4x9_48
+			#    Men of Rhun
+			1x4_239
 			#    War Towers
-			4x7_173
-			#    Rallying Call
-			1x10_47
+			2x7_173
 			#    Surging Up
 			2x7_169
 			#    Window of the Eye
@@ -804,6 +806,8 @@
 			1x8_27
 			#    Sam, Great Elf Warrior
 			1x10_122
+			#    Frying Pan
+			1x3_108
 			#    Hobbit Sword
 			2x1_299
 			#    Orc Armor
@@ -827,7 +831,7 @@
 			#    Narrow Escape
 			1x10_111
 			#    Nine-fingered Frodo and the Ring of Doom
-			2x10_112
+			1x10_112
 			#    Orc-bane
 			1x2_109
 			#    Severed His Bonds
@@ -1852,9 +1856,9 @@
 			#    Kept Safe
 			1x6_111
 			#    Southfarthing Leaf
-			2x17_110
+			3x17_110
 			#    Sudden Fury
-			2x12_132
+			1x12_132
 			#    There and Back Again
 			1x1_317
 			#Shadow (30 cards)
@@ -2104,8 +2108,8 @@
 			3x12_135
 			#    Crushing Uruk
 			1x12_140
-			#    Isengard Infiltrator
-			1x13_165
+			#    Morgul Vanguard
+			1x10_63
 			#    Relentless Uruk
 			1x11_199
 			#    Uruk-hai Guard
@@ -2156,7 +2160,7 @@
 			#    Elven Defender
 			1x18_9
 			#    Galadriel, Sorceress of the Hidden Land
-			2x13_15
+			1x13_15
 			#    Haldir, Sentry of the Golden Wood
 			1x15_17
 			#    Legolas, Nimble Warrior
@@ -2167,14 +2171,16 @@
 			1x18_4
 			#    Arwen's Dagger
 			1x18_5
+			#    Asfaloth, Elven Steed
+			1x7_17
+			#    Elven Sword
+			1x4_64
 			#    Naith Longbow
 			2x6_21
 			#    Hobbit Sword
 			1x1_299
-			#    Galadriel's Silver Ewer
-			1x18_11
 			#    Attunement
-			2x12_16
+			3x12_16
 			#    Fleet-footed
 			2x10_10
 			#    Inside a Song
@@ -2185,16 +2191,16 @@
 			2x7_29
 			#    Uncertain Paths
 			2x7_30
-			#    City of the Trees
-			2x13_12
+			#    Weapons of Lothlorien
+			1x17_14
 			#    Hope Comes
 			1x7_22
 			#    Secluded Homestead
 			1x13_22
 			#    Uncertain Future
 			1x11_26
-			#    Wells of Deep Memory
-			1x13_27
+			#    Uruviel, Woodland Maid
+			1x15_26
 			#Shadow (30 cards)
 			#    Easterling Shield Wall
 			1x11_76
