@@ -1671,6 +1671,7 @@
 						select: choose(side(shadow),memory(revealedCards))
 						showAll: false
 						shuffle: false
+						forced: true
 					}
 					{
 						type: discardCardsFromDrawDeck
@@ -1678,6 +1679,7 @@
 						select: choose(side(free),memory(revealedCards))
 						showAll: false
 						shuffle: false
+						forced: true
 					}
 					{
 						type: shuffleDeck

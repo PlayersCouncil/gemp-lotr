@@ -116,64 +116,6 @@ public class Card_V3_062_Tests
 		assertTrue(scn.HasKeyword(southron, Keyword.ARCHER));
 	}
 
-	//@Test
-	public void WarHowdahTransfersToMountedSouthronAndCopiesStackedManGameText() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var howdah = scn.GetShadowCard("howdah1");
-		var charger = scn.GetShadowCard("charger");
-		var stalker = scn.GetShadowCard("stalker");
-		var southron = scn.GetShadowCard("southron1");
-		var orc = scn.GetShadowCard("orc");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(howdah, charger);
-		scn.StackCardsOn(charger);
-		scn.MoveMinionsToTable(stalker, southron, orc);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		// Transform Charger first
-		scn.ShadowUseCardAction(charger);
-		scn.ShadowChooseCards(stalker);
-
-		// Southron has no ambush before Stalker's text is active
-		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
-
-		assertTrue(scn.HasKeyword(charger, Keyword.MOUNTED));
-		assertTrue(scn.HasKeyword(charger, Keyword.SOUTHRON));
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		// Now transfer Howdah to Charger
-		assertTrue(scn.ShadowActionAvailable(howdah));
-		scn.ShadowUseCardAction(howdah);
-		// Charger exerts and is auto-selected as only mounted Southron with limit available
-
-		// Choose Stalker as the Man to copy
-		// Stalker auto-selected as only stacked Man
-
-		assertAttachedTo(howdah, charger);
-		assertEquals(1, scn.GetWoundsOn(charger));
-
-		assertTrue(scn.game().getModifiersQuerying().isCardType(GetScenario().game(), charger, CardType.MINION));
-
-		// Charger now has Stalker's text: "Southrons gain ambush (1)", as well as its keywords
-		assertTrue(scn.HasKeyword(charger, Keyword.TRACKER));
-		// Check that other Southron gains ambush
-		//assertTrue(scn.HasKeyword(southron, Keyword.AMBUSH));
-		assertEquals(1, scn.GetKeywordCount(southron, Keyword.AMBUSH));
-
-		// Charger itself should also have ambush (it's a Southron)
-		assertTrue(scn.HasKeyword(charger, Keyword.AMBUSH));
-		//It gets 1 from its own text
-		assertEquals(2, scn.GetKeywordCount(southron, Keyword.AMBUSH));
-	}
-
 	@Test
 	public void WarHowdahLimitOnePerBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -191,12 +133,12 @@ public class Card_V3_062_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger
 		scn.ShadowUseCardAction(charger);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transfer first Howdah
 		scn.ShadowUseCardAction(howdah1);
@@ -206,7 +148,7 @@ public class Card_V3_062_Tests
 		// Heal Charger so it can exert again
 		scn.RemoveWoundsFromChar(charger, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Second Howdah should not be able to target Charger (limit 1 per bearer)
 		assertFalse(scn.ShadowActionAvailable(howdah2));
@@ -233,7 +175,7 @@ public class Card_V3_062_Tests
 
 		assertFalse(scn.HasKeyword(southron2, Keyword.AMBUSH));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(howdah));
 		scn.ShadowUseCardAction(howdah);
@@ -252,15 +194,13 @@ public class Card_V3_062_Tests
 	}
 
 
-
-
 	// Helper to set up Charger transformed with Howdah and a specific Man stacked
 	private void SetupTransformedChargerWithHowdah(VirtualTableScenario scn, PhysicalCardImpl howdah, PhysicalCardImpl charger, PhysicalCardImpl stackedMan) throws DecisionResultInvalidException {
 		scn.MoveCardsToSupportArea(howdah, charger);
 		scn.MoveMinionsToTable(stackedMan);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger
 		scn.ShadowUseCardAction(charger);
@@ -268,7 +208,7 @@ public class Card_V3_062_Tests
 			scn.ShadowChooseCards(stackedMan);
 		}
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transfer Howdah to Charger, copying stackedMan's text
 		scn.ShadowUseCardAction(howdah);
@@ -276,7 +216,7 @@ public class Card_V3_062_Tests
 	}
 
 	@Test
-	public void WarHowdahCopiesModifier_StalkerAmbushGrant() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarHowdahCopiesModifier_StalkerKeywordsAndKeywordModifier() throws DecisionResultInvalidException, CardNotFoundException {
 		// Test: Modifier copying (Stalker's "Southrons gain ambush (1)")
 		var scn = GetDuplicateScenario();
 
@@ -296,14 +236,18 @@ public class Card_V3_062_Tests
 		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
 
 		SetupTransformedChargerWithHowdah(scn, howdah, charger, stalker);
+		assertTrue(scn.game().getModifiersQuerying().isCardType(GetScenario().game(), charger, CardType.MINION));
 
-		// Charger now copies Stalker's text: "Southrons gain ambush (1)"
+		// Charger now has Stalker's text: "Southrons gain ambush (1)", as well as its keywords
+		assertTrue(scn.HasKeyword(charger, Keyword.TRACKER));
 		// Southron should now have ambush
 		assertTrue(scn.HasKeyword(southron, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(southron, Keyword.AMBUSH));
 
-		// Charger itself is a Southron too
+		// Charger itself should also have ambush (it's a Southron)
 		assertTrue(scn.HasKeyword(charger, Keyword.AMBUSH));
+		//It gets 1 from its own text
+		assertEquals(2, scn.GetKeywordCount(charger, Keyword.AMBUSH));
 	}
 
 	@Test

@@ -30,6 +30,7 @@ public class Card_V3_057_Tests
 
 					put("aragorn", "1_89");
 					put("athelas", "1_94");       // FP possession (item) on Aragorn
+					put("anduril", "7_79");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -111,9 +112,10 @@ public class Card_V3_057_Tests
 		var helmsman1 = scn.GetShadowCard("helmsman1");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var athelas = scn.GetFreepsCard("athelas");
+		var anduril = scn.GetFreepsCard("anduril");
 		scn.MoveMinionsToTable(helmsman1);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, harpoon, athelas); // Harpoon already attached
+		scn.AttachCardsTo(aragorn, harpoon, athelas, anduril); // Harpoon already attached
 
 		scn.StartGame();
 
@@ -124,11 +126,15 @@ public class Card_V3_057_Tests
 		scn.PassCurrentPhaseActions();
 		scn.FreepsResolveRuleFirst(); //bree gate
 
-		// FP must choose to hinder bearer or item
+		// FP must choose to hinder bearer or free peoples item
 		scn.FreepsChoose("item");
+		assertFalse(scn.FreepsHasCardChoicesAvailable(harpoon));
+		assertTrue(scn.FreepsHasCardChoicesAvailable(athelas, anduril));
 		scn.FreepsChooseCard(athelas);
 
 		assertTrue(scn.IsHindered(athelas));
+		assertFalse(scn.IsHindered(anduril));
+		assertFalse(scn.IsHindered(harpoon));
 		assertFalse(scn.IsHindered(aragorn));
 	}
 

@@ -96,10 +96,20 @@ public class LotroServer extends AbstractServer {
     public LotroGameMediator createNewGame(String tournamentName, final LotroGameParticipant[] participants, GameSettings gameSettings) {
         _lock.writeLock().lock();
         try {
-            if (participants.length < 2 && !gameSettings.isSolo())
-                throw new IllegalArgumentException("There has to be at least two players");
-            if (participants.length < 1 && gameSettings.isSolo())
-                throw new IllegalArgumentException("There has to be at least one player in a solo game");
+            if(gameSettings.isSolo()) {
+                if (participants.length < 1) {
+                    throw new IllegalArgumentException("There has to be at least one player in a solo game");
+                }
+                if (participants.length == 1 && !_botService.hasBotParticipant(gameSettings.format())) {
+                    throw new IllegalArgumentException("Deck was not provided for untrained format; bot cannot be initialized");
+                }
+            }
+            else {
+                if (participants.length < 2) {
+                    throw new IllegalArgumentException("There has to be at least two players");
+                }
+            }
+
             final String gameId = String.valueOf(_nextGameId);
 
             if (gameSettings.competitive()) {

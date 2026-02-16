@@ -17,9 +17,14 @@ public class Card_V3_080_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("twk", "103_80");
+					put("witchking", "103_80");
 
 					put("aragorn", "1_89");
+					put("boromir", "1_96");
+					put("athelas1", "1_94");   // Possession
+					put("athelas2", "1_94");   // Possession
+					put("lastalliance", "1_49"); // Condition
+
 					put("sting", "1_313");
 					put("anduril", "7_79");
 					put("coat", "2_105");
@@ -52,7 +57,7 @@ public class Card_V3_080_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("twk");
+		var card = scn.GetFreepsCard("witchking");
 
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Empowered by His Master", card.getBlueprint().getSubtitle());
@@ -71,6 +76,219 @@ public class Card_V3_080_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
+
+
+// ======== BASIC HINDER FUNCTIONALITY ========
+
+	@Test
+	public void WitchKingHindersAllCardsOfChosenType() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+		var athelas2 = scn.GetFreepsCard("athelas2");
+		var lastalliance = scn.GetFreepsCard("lastalliance");
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, athelas1, lastalliance);
+		scn.AttachCardsTo(boromir, athelas2);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.IsHindered(athelas1));
+		assertFalse(scn.IsHindered(athelas2));
+		assertFalse(scn.IsHindered(lastalliance));
+
+		// Play Witch-king - required trigger fires
+		scn.ShadowPlayCard(witchking);
+
+		// Shadow chooses a card to determine type - pick a possession
+		assertTrue(scn.ShadowHasCardChoicesAvailable(athelas1, athelas2, lastalliance));
+		scn.ShadowChooseCard(athelas1);
+
+		// All possessions hindered, condition not hindered
+		assertTrue(scn.IsHindered(athelas1));
+		assertTrue(scn.IsHindered(athelas2));
+		assertFalse(scn.IsHindered(lastalliance));
+
+		// FP gets restore prompt - decline by choosing none
+		scn.FreepsDeclineChoosing();
+
+		// Cards remain hindered
+		assertTrue(scn.IsHindered(athelas1));
+		assertTrue(scn.IsHindered(athelas2));
+	}
+
+	@Test
+	public void FreepsCanRestoreByExertingCharacters() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+		var athelas2 = scn.GetFreepsCard("athelas2");
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, athelas1);
+		scn.AttachCardsTo(boromir, athelas2);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(witchking);
+
+		// Shadow picks possession type
+		scn.ShadowChooseCard(athelas1);
+
+		assertTrue(scn.IsHindered(athelas1));
+		assertTrue(scn.IsHindered(athelas2));
+
+		// FP chooses to restore one card
+		scn.FreepsChooseCard(athelas1);
+
+		// Athelas1 restored
+		assertFalse(scn.IsHindered(athelas1));
+		assertTrue(scn.IsHindered(athelas2));  // Still hindered
+
+		// FP must exert a character
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void FreepsCanRestoreMultipleAndSpreadExertions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+		var athelas2 = scn.GetFreepsCard("athelas2");
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, athelas1);
+		scn.AttachCardsTo(boromir, athelas2);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(witchking);
+		scn.ShadowChooseCard(athelas1);
+
+		// FP chooses to restore both cards
+		scn.FreepsChooseCards(athelas1, athelas2);
+
+		// Both restored
+		assertFalse(scn.IsHindered(athelas1));
+		assertFalse(scn.IsHindered(athelas2));
+
+		// FP must exert twice - can spread across characters
+		scn.FreepsChooseCard(aragorn);
+		scn.FreepsChooseCard(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(boromir));
+	}
+
+	@Test
+	public void FreepsCanDeclineToRestore() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, athelas1);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(witchking);
+
+		assertTrue(scn.IsHindered(athelas1));
+
+		// FP declines to restore (chooses 0 cards)
+		scn.FreepsDeclineChoosing();
+
+		// Athelas still hindered, no exertions
+		assertTrue(scn.IsHindered(athelas1));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void ShadowCanChooseBetweenCardTypes() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+		var lastalliance = scn.GetFreepsCard("lastalliance");
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, athelas1, lastalliance);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(witchking);
+
+		// Shadow can choose between possession and condition
+		assertTrue(scn.ShadowHasCardChoicesAvailable(athelas1, lastalliance));
+
+		// Choose condition this time
+		scn.ShadowChooseCard(lastalliance);
+
+		// Condition hindered, possession not
+		assertTrue(scn.IsHindered(lastalliance));
+		assertFalse(scn.IsHindered(athelas1));
+
+		scn.FreepsDeclineChoosing();
+	}
+
+	@Test
+	public void WitchKingTriggerNoOpsWithNoNonCompanionFPCards() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		// No possessions or conditions attached
+
+		scn.MoveCardsToHand(witchking);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(witchking);
+
+		// Trigger fires but nothing to choose from - should skip straight through
+		// and return to Shadow phase actions
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
 	@Test
 	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -87,7 +305,7 @@ public class Card_V3_080_Tests
 		scn.AttachCardsTo(frodo, sting, coat);
 		scn.AttachCardsTo(aragorn, anduril, bow);
 
-		var twk = scn.GetShadowCard("twk");
+		var twk = scn.GetShadowCard("witchking");
 		scn.MoveCardsToHand(twk);
 
 		scn.StartGame();

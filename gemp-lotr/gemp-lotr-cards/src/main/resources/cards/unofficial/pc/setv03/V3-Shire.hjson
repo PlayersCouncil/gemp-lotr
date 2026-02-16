@@ -512,6 +512,7 @@
 					select: choose(side(Free Peoples))
 					showAll: true
 					shuffle: true
+					forced: false
 				}
 			}
 			{
@@ -874,6 +875,22 @@
 					}
 					{
 						type: CostToEffect
+						requires: {
+							type: ThreatsRemaining
+							amount: {
+								type: Conditional
+								requires: {
+									type: IsGreaterThanOrEqual
+									firstNumber: {
+										type: TwilightCostInMemory
+										memory: chosenMinion
+									}
+									secondNumber: 5
+								}
+								true: 2
+								false: 0
+							}
+						}
 						cost: [
 							{
 								type: AddTwilight

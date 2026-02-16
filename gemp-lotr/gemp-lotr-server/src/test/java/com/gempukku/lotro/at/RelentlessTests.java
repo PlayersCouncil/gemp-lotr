@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 public class RelentlessTests {
 	@Test
-	public void HinderingACompanionInPlayFlipsItOver() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NonFierceNonRelentlessMinionsDoNotParticipateInRelentlessSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = new VirtualTableScenario(
 				new HashMap<>() {{

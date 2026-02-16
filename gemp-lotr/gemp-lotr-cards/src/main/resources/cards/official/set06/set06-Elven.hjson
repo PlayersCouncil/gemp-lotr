@@ -333,6 +333,7 @@
 							select: memory(revealedCard)
 							showAll: false
 							shuffle: false
+							forced: false
 						}
 					}
 				]
@@ -455,6 +456,7 @@
 							select: memory(revealedCard)
 							showAll: false
 							shuffle: false
+							forced: false
 						}
 						{
 							type: multiple
@@ -518,6 +520,7 @@
 						select: memory(revealedCard)
 						showAll: false
 						shuffle: false
+						forced: false
 					}
 				}
 			]

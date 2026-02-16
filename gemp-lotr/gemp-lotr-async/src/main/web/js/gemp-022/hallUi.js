@@ -231,9 +231,9 @@ var GempLotrHallUI = Class.extend({
 
 		// Fallback insert
 		if (!inserted) {
-			const $anchor = $("#finishedTablesHeader");
-			$header.insertAfter($anchor);
-			$content.insertAfter($anchor);
+			const $anchor = $("#recurringQueuesHeader");
+			$header.insertBefore($anchor);
+			$content.insertBefore($anchor);
 		}
 
 		// Load settings
@@ -540,6 +540,7 @@ var GempLotrHallUI = Class.extend({
 								that.showDialog("Ready Check", "Ready Check started for the <b>" + queue.getAttribute("queue")
 									+ "</b> tournament.<br><br>To confirm you are present, click the Ready Check button in the Waiting Tables Section within the next "
 									+ queue.getAttribute("readyCheckSecsRemaining") + " seconds.", 230);
+								that.PlaySound("gamestart");
 							}
 							var checkBut = $("<button>READY CHECK - " + queue.getAttribute("readyCheckSecsRemaining") + " s</button>");
 							$(checkBut).button().click((
@@ -636,12 +637,14 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
 					let htmlTd = "<td>";
 					if (isWC) {
-						htmlTd += "World Championship";
+						htmlTd += "World Championship - ";
+					} else if (queue.getAttribute("start") === "When 2 players join" || queue.getAttribute("start") === "When 1 players join") {
+
 					} else {
 						// For system, ignore all after ',' (min players)
-						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament";
+						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament - ";
 					}
-					htmlTd += " - " + type + " - <div style='display:inline'"
+					htmlTd += type + " - <div style='display:inline'"
 					if (type.includes("Table") && queue.hasAttribute("draftCode")) {
 						htmlTd += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
 					}
@@ -688,8 +691,8 @@ var GempLotrHallUI = Class.extend({
 								$("table.waitingTables", this.tablesDiv).append(tablesRow);
 							}
 						} else {
-							// Remove tournaments displayed as tables
-							$(".table" + id, this.tablesDiv).remove();
+							// Remove queue rows displayed as tables from Waiting Tables section
+							$(".table" + id, $("table.waitingTables", this.tablesDiv)).remove();
 						}
 					}
 
@@ -698,7 +701,8 @@ var GempLotrHallUI = Class.extend({
 				} else if (action == "remove") {
 					// Remove from both the Waiting Tables Section and Queue Sections
 					$(".queue" + id, this.tablesDiv).remove();
-					$(".table" + id, this.tablesDiv).remove();
+					// Only remove from waiting tables, not playing tables (tournaments have same ID)
+					$(".table" + id, $("table.waitingTables", this.tablesDiv)).remove();
 				}
 			}
 			
@@ -803,7 +807,7 @@ var GempLotrHallUI = Class.extend({
 									}
 								};
 							}
-							)(tournament));
+							)(tournament)).css("color", "#d44");
 						actionsField.append(but);
 					}
 					else if(!abandoned){
@@ -835,6 +839,10 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
 					if (isWC) {
 						tablesRow.append("<td>World Championship - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					} else if (tournament.getAttribute("playerCount") == 2) {
+						tablesRow.append("<td>Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					} else if (tournament.getAttribute("playerList").includes(',') == false) {
+						tablesRow.append("<td>Practice - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					} else {
 						tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
 					}
@@ -861,7 +869,7 @@ var GempLotrHallUI = Class.extend({
 					if (action == "add") {
 						// Display running tournaments as playing tables
 						$("table.playingTables", this.tablesDiv)
-							.append(tablesRow)
+							.append(tablesRow);
 
 						if (joined == "true") {
 							// Open draft window

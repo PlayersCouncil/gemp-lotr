@@ -121,6 +121,7 @@
 						select: all(memory(revealedCards),not(culture(gandalf)))
 						showAll: false
 						shuffle: false
+						forced: false
 					}
 				]
 			}
@@ -402,6 +403,7 @@
 					select: choose(culture(gandalf))
 					showAll: true
 					shuffle: true
+					forced: false
 				}
 			}
 			{
@@ -546,6 +548,7 @@
 								select: memory(revealedCards)
 								showAll: false
 								shuffle: false
+								forced: false
 							}
 						}
 						false: {
@@ -568,6 +571,7 @@
 								select: memory(revealedCards)
 								showAll: false
 								shuffle: false
+								forced: false
 							}
 						}
 					}

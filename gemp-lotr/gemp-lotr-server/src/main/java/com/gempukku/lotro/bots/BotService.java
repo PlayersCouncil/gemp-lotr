@@ -233,6 +233,11 @@ public class BotService {
         return botList.get(random.nextInt(botList.size()));
     }
 
+    public boolean hasBotParticipant(LotroFormat format) {
+        return formatBotsMap.containsKey(format.getCode());
+    }
+
+
     public BotWithDeck getBotForDeck(LotroDeck deck) {
         // TODO something better than making starter bot play anything
         return new BotWithDeck(new FotrStarterBot(new FotrStartersRLGameStateFeatures(), GENERAL_BOT_NAME, modelRegistry, null), deck);
@@ -266,7 +271,7 @@ public class BotService {
 
             formatBotsMap.put("fotr_block", fotrBots);
         } catch (LoginInvalidException e) {
-            throw new IllegalStateException("Wrong bot name - must start with # character.");
+            throw new IllegalStateException("Wrong bot name - must start with ~ character.");
         }
     }
 

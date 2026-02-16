@@ -1595,6 +1595,7 @@
 					select: all(memory(revealedCards),zone(deck))
 					showAll: false
 					shuffle: false
+					forced: false
 				}
 			]
 		}

@@ -1,0 +1,5633 @@
+[
+	{
+		name: Site Control - Elves/Besiegers Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Courteous Halfling
+			#    The One Ring, The Ruling Ring
+			1x4_301
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Woods
+			1x2_116
+			#    Trollshaw Forest
+			1x1_334
+			#    Rivendell Valley
+			1x1_341
+			#    Eregion Hills
+			1x3_116
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Valley of the Silverlode
+			1x2_120
+			#    Anduin Confluence
+			1x1_353
+			#    Gates of Argonath
+			1x3_117
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#    Aegnor, Elven Escort
+			1x10_4
+			#    Arwen, Reflection of Lúthien
+			1x13_9
+			#    Haldir, Warrior Messenger
+			1x18_14
+			#    Legolas, Nimble Warrior
+			1x7_26
+			#    Naith Warband
+			1x6_23
+			#    Woodland Sentinel
+			1x11_27
+			#    Banner of Elbereth
+			2x6_14
+			#    Blade of Lindon
+			1x11_16
+			#    Elven Bow
+			4x1_41
+			#    Elven Sword
+			1x4_64
+			#    Naith Longbow
+			1x6_21
+			#    Sword of the Fallen
+			1x15_25
+			#    Hobbit Sword
+			1x1_299
+			#    Kindreds Estranged
+			2x13_17
+			#    Point Blank Range
+			2x15_23
+			#    Sword-wall
+			1x4_84
+			#    That Is No Orc Horn
+			1x5_14
+			#    The Lady's Blessing
+			2x11_20
+			#    Valor
+			2x4_87
+			#    Hobbit Intuition
+			1x1_296
+			#    Severed His Bonds
+			1x4_319
+			#    The Tale of Gil-galad
+			1x1_66
+			#Shadow (30 cards)
+			#    Gorgoroth Breaker
+			2x8_97
+			#    Gorgoroth Garrison
+			2x7_273
+			#    Gorgoroth Keeper
+			2x10_86
+			#    Gorgoroth Officer
+			2x7_274
+			#    Gorgoroth Patrol
+			1x8_99
+			#    Gorgoroth Pillager
+			2x7_275
+			#    Gorgoroth Ransacker
+			2x7_276
+			#    Gorgoroth Swarm
+			1x10_87
+			#    Gorgoroth Troop
+			2x7_279
+			#    Gothmog, Lieutenant of Morgul
+			1x10_88
+			#    Orc Fighter
+			2x5_105
+			#    Orc Infantry
+			2x5_106
+			#    Siege Troop
+			1x8_106
+			#    Vile Blade
+			1x2_95
+			#    Beaten Back
+			2x10_80
+			#    Great Siege-towers
+			2x7_281
+			#    Troop Tower
+			3x7_316
+		]
+	},
+	{
+		name: Site Control - Ents/Uruks Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Courteous Halfling
+			#    The One Ring, The Ruling Ring
+			1x4_301
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Western Emyn Muil
+			1x4_329
+			#    Fangorn Forest
+			1x4_332
+			#    Golden Hall
+			1x4_338
+			#    White Rocks
+			1x4_346
+			#    Deep of Helm
+			1x4_347
+			#    Caves of Aglarond
+			1x4_352
+			#    Hornburg Wall
+			1x5_118
+			#    Nan Curunir
+			1x5_119
+			#   Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#   Leaflock, Finglas
+			2x15_30
+			#   Quickbeam, Hastiest of All Ents
+			3x15_34
+			#   Shadow of the Wood
+			1x15_35
+			#   Shepherd of the Trees
+			1x15_36
+			#   Skinbark, Elder Ent
+			2x15_37
+			#   Woodland Onod
+			2x17_26
+			#   Sméagol, Hurried Guide
+			1x7_72
+			#   Sméagol, Pitiable Guide
+			1x19_11
+			#   Sméagol, Poor Creature
+			1x6_45
+			#   Treebeard, Oldest Living Thing
+			2x4_104
+			#   Hobbit Sword
+			1x1_299
+			#   Crack Into Rubble
+			4x6_25
+			#   Momentous Gathering
+			2x15_32
+			#   Return to Us
+			1x13_39
+			#   The Sap is in the Bough
+			2x17_25
+			#   Hobbit Intuition
+			1x1_296
+			#   Severed His Bonds
+			1x4_319
+			#   With Doom We Come
+			1x12_36
+			#   Days Growing Dark
+			1x7_55
+			#Shadow (30 cards)
+			#   Advance Uruk Patrol
+			2x4_136
+			#   Band of Uruk Bowmen
+			2x4_138
+			#   Uruk Assault Band
+			1x4_179
+			#   Uruk Besieger
+			2x4_180
+			#   Uruk Stormer
+			2x4_198
+			#   Uruk Trooper
+			1x4_199
+			#   Uruk Veteran
+			2x4_201
+			#   Uruk-hai Band
+			2x4_202
+			#   Uruk-hai Horde
+			2x4_203
+			#   Uruk-hai Marauder
+			2x4_204
+			#   Uruk-hai Mob
+			2x4_205
+			#   No Dawn for Men
+			2x4_163
+			#   Sack of the Shire
+			2x9_40
+			#   We Are the Fighting Uruk-hai
+			1x4_210
+			#   Attack on Helm's Deep
+			3x4_137
+			#   Down to the Last Child
+			2x4_148
+		]
+	},
+	{
+		name: Site Control - Gondor/Raider Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Courteous Halfling
+			#    The One Ring, The Ruling Ring
+			1x4_301
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Western Emyn Muil
+			1x4_329
+			#    Wold of Rohan
+			1x4_336
+			#    Barrows of Edoras
+			1x4_337
+			#    Ered Nimrais
+			1x4_343
+			#    Hornburg Courtyard
+			1x4_350
+			#    Hornburg Armory
+			1x4_354
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Orthanc Library
+			1x4_362
+			#Free Peoples (30 cards)
+			#   Boromir, Steward's Heir
+			1x0_65
+			#   Duilin, Ranger From Blackroot Vale
+			1x14_7
+			#   Guard of the White Tree
+			1x13_67
+			#   Isildur, Heir of Elendil
+			1x13_71
+			#   Knight of Dol Amroth
+			1x8_39
+			#   Watcher at Sarn Ford, Ranger of the North
+			1x18_59
+			#   Armor of the White City
+			1x18_39
+			#   Banner of Westernesse
+			2x6_51
+			#   Gondorian Blade
+			1x11_59
+			#   Gondorian Steed
+			1x12_49
+			#   Gondorian Sword
+			1x7_98
+			#   Kingsfoil
+			1x13_73
+			#   Knight's Mount
+			1x8_40
+			#   Shield of Boromir
+			1x2_38
+			#   Hobbit Sword
+			1x1_299
+			#   Banners Blowing
+			1x13_61
+			#   City of Men
+			1x7_83
+			#   For Gondor!
+			1x18_51
+			#   Reckless Counter
+			2x7_117
+			#   Hobbit Intuition
+			1x1_296
+			#   Severed His Bonds
+			1x4_319
+			#   Blood of Númenor
+			1x2_31
+			#   Forests of Ithilien
+			1x4_121
+			#   Garrison of Osgiliath
+			1x6_52
+			#   Gondor Still Stands
+			1x7_95
+			#   Hardy Garrison
+			1x10_33
+			#   Natural Cover
+			1x2_35
+			#   No Stranger to the Shadows
+			1x1_108
+			#Shadow (30 cards)
+			#   Desert Lancers
+			3x4_217
+			#   Desert Lord
+			1x4_219
+			#   Elite Archer
+			1x4_232
+			#   Regiment of Haradrim
+			3x4_244
+			#   Southron Archer
+			4x4_245
+			#   Southron Bowman
+			2x4_248
+			#   Southron Conqueror
+			1x7_164
+			#   Southron Explorer
+			3x4_250
+			#   Southron Sentry
+			2x4_253
+			#   Southron Veterans
+			1x4_257
+			#   Raider Bow
+			1x7_155
+			#   Southron Bow
+			3x4_247
+			#   Fearless
+			1x4_233
+			#   New Strength Came Now
+			2x7_154
+			#   Men of Harad
+			1x4_238
+			#   Seasoned Leader
+			1x10_48
+		]
+	},
+	{
+		name: Site Control - Rohan/Dunland Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Courteous Halfling
+			#    The One Ring, The Ruling Ring
+			1x4_301
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Rohirrim Village
+			1x4_334
+			#    Throne Room
+			1x4_341
+			#    White Mountains
+			1x4_345
+			#    Deeping Wall
+			1x4_348
+			#    Great Hall
+			1x4_353
+			#    King's Room
+			1x4_357
+			#    Ring of Isengard
+			1x4_358
+			#   Orthanc Balcony
+			1x4_361
+			#Free Peoples (30 cards)
+			#    Haethen, Veteran Fighter
+			1x12_116
+			#    Haleth, Son of Háma
+			1x15_128
+			#    Horseman of the North
+			1x15_130
+			#    Léofric, Defender of the Mark
+			1x12_117
+			#    Théoden, Ednew
+			1x18_105
+			#    Veteran Horseman
+			1x7_257
+			#    Léod, Westfold Herdsman
+			1x4_285
+			#    Banner of the Mark
+			2x6_90
+			#    Coif
+			1x12_111
+			#    Herugrim
+			1x4_280
+			#    Horse of Great Stature
+			1x15_129
+			#    Rider's Mount
+			1x4_287
+			#    Rohirrim Mount
+			1x11_156
+			#    Rohirrim Shield
+			1x5_91
+			#    Snowmane
+			1x7_250
+			#    Swift Steed
+			1x7_253
+			#    Sword of Rohan
+			1x4_291
+			#    Hobbit Sword
+			1x1_299
+			#    Helm! Helm!
+			1x4_279
+			#    Hurried Barrows
+			2x13_130
+			#    Rally Cry
+			2x11_150
+			#    White Hot Fury
+			2x7_258
+			#    Work for the Sword
+			2x4_297
+			#    Hobbit Intuition
+			1x1_296
+			#    Severed His Bonds
+			1x4_319
+			#Shadow (30 cards)
+			#    Dunlending Elder
+			2x6_2
+			#    Dunlending Looter
+			3x4_11
+			#    Dunlending Ransacker
+			2x4_14
+			#    Freca, Hungry Savage
+			3x9_2
+			#    Hillman Horde
+			1x4_22
+			#    Hillman Rabble
+			3x4_24
+			#    Hillman Tribe
+			4x4_25
+			#    Saruman, Rabble-rouser
+			1x4_33
+			#    Wulf, Dunlending Chieftain
+			2x4_40
+			#    War Club
+			2x4_36
+			#    Burn Every Village
+			2x4_5
+			#    Death to the Strawheads
+			1x4_8
+			#    Bound By Rage
+			2x6_1
+			#    No Refuge
+			2x4_29
+		]
+	},
+	{
+		name: Romance - Arwen+Aragorn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Master of the Precious
+			#    The One Ring, The Ruling Ring
+			1x5_111
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Westfold
+			1x6_116
+			#    Plains of Rohan Camp
+			1x4_333
+			#    Barrows of Edoras
+			1x4_337
+			#    White Rocks
+			1x4_346
+			#    Helm's Gate
+			1x4_349
+			#    Hornburg Armory
+			1x4_354
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#    Arwen, Echo of Lúthien
+			3x10_5
+			#    Elven Warrior
+			4x15_14
+			#    Aragorn, King in Exile
+			1x1_365
+			#    Asfaloth
+			1x1_31
+			#    Elven Armaments
+			1x18_8
+			#    Elven Bow
+			1x1_41
+			#    Elven Sword
+			2x4_64
+			#    Hadafang
+			1x12_18
+			#    Lembas Bread
+			1x18_15
+			#    Hobbit Sword
+			1x1_299
+			#    Gift of the Evenstar, Blessed Light
+			1x15_16
+			#    Andúril, King's Blade
+			1x7_80
+			#    Ring of Barahir
+			1x6_55
+			#    Back to the Light
+			2x18_6
+			#    Must Be a Dream
+			2x6_20
+			#    Arwen's Fate
+			2x1_93
+			#    No Mere Ranger
+			1x2_36
+			#    Mallorn-trees
+			3x1_54
+			#    The Choice of Lúthien
+			1x1_100
+			#Shadow (30 cards)
+			#    Goblin Aggressor
+			4x12_87
+			#    Mordor Aggressor
+			2x12_89
+			#    Orc Artisan
+			4x12_91
+			#    Orkish Assassin
+			2x17_72
+			#    Picket Denizen
+			2x13_118
+			#    Pitiless Orc
+			2x12_99
+			#    Scavenging Goblins
+			4x12_102
+			#    Mordor Scimitar
+			1x11_128
+			#    Orc Hammer
+			1x11_130
+			#    Orc Spear
+			1x12_96
+			#    Orkish Ax
+			1x18_84
+			#    Orkish Hunting Spear
+			1x15_114
+			#    Armed for Battle
+			1x11_106
+			#    Massing Strength
+			1x13_111
+			#    Unreasonable Choice
+			1x15_119
+			#    Whatever Means
+			1x13_121
+			#    Retribution
+			1x12_101
+		]
+	},
+	{
+		name: Romance - Faramir+Eowyn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Resolute Hobbit
+			#    The One Ring, The Ruling Ring
+			1x10_121
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Town Center
+			1x2_117
+			#    Bree Streets
+			1x1_328
+			#    Ford of Bruinen
+			1x1_338
+			#    Moria Lake
+			1x1_346
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Caras Galadhon
+			1x3_115
+			#    Anduin Wilderland
+			1x1_354
+			#    Gates of Argonath
+			1x3_117
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Anborn, Skilled Huntsman
+			1x6_48
+			#   Faramir, Ithilien Ranger
+			1x6_121
+			#   Mablung, Soldier of Gondor
+			1x4_127
+			#   Madril, Faramir's Aide
+			1x7_110
+			#   Unyielding Ranger
+			1x15_71
+			#   Éowyn, Daughter of Éomund
+			1x5_122
+			#   Gondorian Sword
+			1x7_98
+			#   Ranger's Bow
+			2x4_131
+			#   Ranger's Cloak
+			1x15_68
+			#   Horse of Rohan
+			3x4_283
+			#   Hobbit Sword
+			1x1_299
+			#   Concealment
+			2x12_44
+			#   New Errand
+			1x4_128
+			#   Stand to Arms
+			1x7_120
+			#   While We Yet Live
+			2x7_128
+			#   Guarded
+			1x7_101
+			#   Invigorated
+			2x12_51
+			#   Long Prepared
+			1x7_109
+			#   Man the Walls
+			2x7_111
+			#   Second Level
+			1x7_118
+			#   Soldier's Cache
+			1x17_35
+			#   Third Level
+			1x7_125
+			#   Tremendous Wall
+			1x15_70
+			#Shadow (30 cards)
+			#   Black Rider
+			2x12_161
+			#   The Witch-king, Black Lord
+			1x12_183
+			#   Úlairë Attëa, Black Predator
+			1x12_173
+			#   Úlairë Attëa, Desirous of Power
+			1x15_184
+			#   Úlairë Cantëa, Duplicitous Assassin
+			1x17_139
+			#   Úlairë Enquëa, Faster Than Winds
+			1x7_212
+			#   Úlairë Enquëa, Sixth of the Nine Riders
+			1x13_182
+			#   Úlairë Lemenya, Black Enemy
+			1x12_176
+			#   Úlairë Lemenya, Wraith on Wings
+			1x7_214
+			#   Úlairë Nelya, Fell Rider
+			2x15_186
+			#   Úlairë Nertëa, Black Horseman
+			1x12_178
+			#   Úlairë Nertëa, Servant of the Shadow
+			1x13_184
+			#   Úlairë Otsëa, Black Specter
+			1x12_179
+			#   Úlairë Otsëa, Seventh of the Nine Riders
+			1x11_224
+			#   Úlairë Toldëa, Wraith on Wings
+			1x7_219
+			#   Shadowy Mount
+			2x12_171
+			#   Mind and Body
+			2x7_183
+			#   Black Breath
+			1x1_207
+			#   Black Dart
+			2x8_69
+			#   Feel His Blade
+			1x7_177
+			#   Sauron's Gaze
+			2x12_169
+			#   They Came From Mordor
+			1x13_181
+			#   Too Late
+			2x7_209
+		]
+	},
+	{
+		name: Romance - Galadriel+Celeborn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Son of Drogo
+			#    The One Ring, The Ruling Ring
+			1x1_290
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Rohirrim Road
+			1x7_332
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Pelennor Prairie
+			1x10_118
+			#    Crashed Gate
+			1x8_119
+			#    Minas Tirith Seventh Circle
+			1x7_350
+			#    Osgiliath Crossing
+			1x7_353
+			#    Northern Ithilien
+			1x7_359
+			#   Slag Mounds
+			1x7_363
+			#Free Peoples (30 cards)
+			#   Celeborn, Lord of the Galadhrim
+			1x10_7
+			#   Elven Scout
+			1x11_18
+			#   Gildor Inglorion, Of the House of Finrod
+			1x14_4
+			#   Glorfindel, Revealed in Wrath
+			1x9_16
+			#   Lórien Guardian
+			2x4_76
+			#   Galadriel, Keeper of Nenya
+			3x6_18
+			#   Hobbit Sword
+			1x1_299
+			#   Nenya, Ring of Adamant
+			2x9_20
+			#   The Mirror of Galadriel, Dangerous Guide
+			1x15_22
+			#   Forearmed
+			2x6_16
+			#   Gift of Foresight
+			2x6_19
+			#   Might of the Elf-lords
+			1x11_24
+			#   Mirkwood Bowman
+			2x7_27
+			#   Miruvóre
+			2x18_16
+			#   Still Needed
+			3x7_29
+			#   Crashing Cavalry
+			2x13_13
+			#   Forewarned
+			2x6_17
+			#   Uncertain Future
+			1x11_26
+			#Shadow (30 cards)
+			#   Band of Uruk Bowmen
+			2x4_138
+			#   Uruk Fanatic
+			1x4_185
+			#   Uruk Follower
+			2x4_186
+			#   Uruk Rear Guard
+			1x4_191
+			#   Uruk Runner
+			1x4_193
+			#   Uruk Spy
+			1x1_155
+			#   Uruk Stormer
+			4x4_198
+			#   Uruk-hai Mob
+			2x4_205
+			#   Lurtz, Halfling Hunter
+			2x18_118
+			#   Uruk Village Rager
+			1x15_177
+			#   White Hand Intruder
+			2x17_127
+			#   Beyond All Hope
+			1x4_140
+			#   Beyond Dark Mountains
+			2x4_141
+			#   Cruel Caradhras
+			2x1_124
+			#   We Are the Fighting Uruk-hai
+			2x4_210
+			#   Land Had Changed
+			1x17_114
+			#   Down to the Last Child
+			2x4_148
+			#   Traitor's Voice
+			1x1142
+		]
+	},
+	{
+		name: Romance - Sam+Rosie Tom+Goldberry Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Sam, Bearer of Great Need
+			#    The One Ring, The Ruling Ring
+			1x13_156
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Bag End
+			1x1_319
+			#    Buckleberry Ferry
+			1x1_330
+			#    Frodo's Bedroom
+			1x1_339
+			#    Dwarrowdelf Chamber
+			1x1_344
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Valley of the Silverlode
+			1x2_120
+			#    The Great River
+			1x3_118
+			#    Shores of Nen Hithoel
+			1x1_359
+			#   Tol Brandir
+			1x1_363
+			#Free Peoples (30 cards)
+			#   Gimli, Unbidden Guest
+			2x4_49
+			#   Gandalf, Returned
+			2x17_17
+			#   Járnsmid, Barding Emissary
+			1x12_30
+			#   Boromir, Destined Guide
+			1x19_13
+			#   Rosie Cotton, Barmaid
+			1x12_129
+			#   Goldberry, River-daughter
+			3x9_51
+			#   Tom Bombadil, The Master
+			3x9_52
+			#   Gimli's Battle Axe, Vicious Weapon
+			1x11_9
+			#   Radagast's Herb Bag
+			1x18_26
+			#   Wizard Staff
+			1x2_29
+			#   Armor of the White City
+			1x18_39
+			#   Denethor's Sword
+			1x18_43
+			#   Gondorian Steed
+			1x12_49
+			#   Horn of Boromir, The Great Horn
+			1x18_53
+			#   Hobbit Sword
+			1x1_299
+			#   Salt from the Shire
+			1x11_171
+			#   Drawn to Full Height
+			1x18_19
+			#   Long I Fell
+			1x4_97
+			#   One Last Surprise
+			1x15_33
+			#   Staff Asunder
+			1x2_27
+			#   Diversion
+			1x12_120
+			#   Fearing the Worst
+			1x2_100
+			#   Little Golden Flower
+			1x15_148
+			#   The Gaffer, Master Gardener
+			1x13_151
+			#Shadow (30 cards)
+			#   Gate Picket
+			1x6_101
+			#   Gorgoroth Stormer
+			2x8_101
+			#   Mordor Wretch
+			1x10_93
+			#   Orc Archer Troop
+			2x7_294
+			#   Orc Chaser
+			3x7_298
+			#   Orc Cutthroat
+			1x5_104
+			#   Orc Guard
+			1x3_95
+			#   Orc Insurgent
+			1x6_104
+			#   Orc Patrol
+			1x5_107
+			#   Orc Pursuer(2)
+			3x7_303
+			#   Orc Seeker
+			2x7_306
+			#   Orc Stalker
+			3x7_307
+			#   Besieging Pike
+			4x7_265
+			#   Flames Within
+			1x10_85
+			#   Morgai
+			1x8_104
+			#   Some Secret Art of Flame
+			3x7_313
+		]
+	},
+	{
+		name: Bromance - Aragorn+Boromir Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Abandoned Mine Shaft
+			1x13_185
+			#    The Angle
+			1x12_185
+			#    Woody-End
+			1x11_266
+			#    Hill of Sight
+			1x12_188
+			#    Slag Mounds
+			1x11_258
+			#    Fords of Isen
+			1x13_191
+			#    Westemnet Village
+			1x11_264
+			#    Falls of Rauros
+			1x17_146
+			#   Trollshaw Forest
+			1x11_260
+			#Free Peoples (30 cards)
+			#   Aragorn, Strider
+			1x11_54
+			#   Boromir, Hero of Osgiliath
+			1x11_57
+			#   Knight of Gondor
+			1x5_36
+			#   Ranger of the South
+			1x18_56
+			#   Armor
+			1x1_92
+			#   Armor of the White City
+			1x18_39
+			#   Boromir's Gauntlets
+			1x4_112
+			#   Bow of Minas Tirith
+			1x11_58
+			#   Dúnadan's Bow
+			1x18_45
+			#   Flaming Brand
+			1x2_32
+			#   Gondorian Sword
+			1x7_98
+			#   Horn of Boromir, The Great Horn
+			1x18_53
+			#   Knight's Spear
+			1x7_108
+			#   Shield of Boromir
+			1x2_38
+			#   Hobbit Sword
+			1x1_299
+			#   Andúril, King's Blade
+			1x7_80
+			#   Crown of Gondor
+			1x18_41
+			#   Sapling of the White Tree
+			1x9_35
+			#   For Gondor!
+			2x18_51
+			#   Gondor Will See It Done
+			1x2_34
+			#   Hidden Knowledge
+			1x7_104
+			#   Swordarm of the White Tower
+			1x1_116
+			#   Citadel of Minas Tirith
+			1x3_40
+			#   Gondor Still Stands
+			1x7_95
+			#   Noble Leaders
+			2x7_112
+			#   Ranger of the North
+			1x18_55
+			#   Pallando, Far-travelling One
+			1x13_37
+			#   Gondorian Servant, Denethor's Handman
+			1x18_52
+			#Shadow (30 cards)
+			#   Gollum, Mad Thing
+			3x10_21
+			#   The Witch-king, Dark Lord
+			3x19_40
+			#   Úlairë Attëa, Black Predator
+			3x12_173
+			#   Úlairë Enquëa, Dark Threat
+			3x19_36
+			#   Úlairë Lemenya, Fifth of the Nine Riders
+			1x11_221
+			#   Úlairë Nertëa, Servant of the Shadow
+			2x13_184
+			#   Úlairë Otsëa, Duplicitous Specter
+			3x17_141
+			#   Úlairë Toldëa, Black Shadow
+			2x12_180
+			#   A Dark Shape Sprang
+			1x10_19
+			#   Frenzied Attack
+			2x11_41
+			#   We Must Have It
+			3x5_30
+			#   From Hideous Eyrie
+			2x13_179
+			#   Not Yet Vanquished
+			2x11_48
+		]
+	},
+	{
+		name: Bromance - Frodo+Sam Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Old Bilbo's Heir
+			#    The One Ring, The Ruling Ring
+			1x1_289
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Anduin Banks
+			1x11_227
+			#    East Road
+			1x11_236
+			#    Ettenmoors
+			1x11_237
+			#    Northern Pelennor
+			1x12_190
+			#    Caras Galadhon
+			1x11_231
+			#    Helm's Gate
+			1x11_245
+			#    Hobbiton Market
+			1x12_189
+			#    Green Dragon Inn
+			1x11_242
+			#   Valley of the Silverlode
+			1x11_261
+			#Free Peoples (30 cards)
+			#    Bilbo, Aged Ring-bearer
+			1x13_142
+			#    Sam, Great Elf Warrior
+			1x10_122
+			#    Bounder
+			1x1_286
+			#    Rosie Cotton, Hobbiton Lass
+			1x1_309
+			#    The Gaffer, Sam's Father
+			1x1_291
+			#    Frying Pan
+			1x3_108
+			#    Golden Perch Ale
+			1x18_108
+			#    Hobbit Sword
+			1x1_299
+			#    Sam's Pack
+			1x4_317
+			#    Sting, Weapon of Heritage
+			1x11_173
+			#    Phial of Galadriel, The Light of Eärendil
+			1x13_155
+			#    Dagger Strike
+			2x1_102
+			#    Chance Observation
+			1x10_106
+			#    Community Living
+			1x15_143
+			#    Everything but My Bones
+			1x13_146
+			#    Hobbit Stealth
+			1x1_298
+			#    Impatient and Angry
+			2x4_307
+			#    Light Shining Faintly
+			1x4_309
+			#    Narrow Escape
+			1x10_111
+			#    Practically Everyone Was Invited
+			1x2_111
+			#    A Promise
+			2x2_112
+			#    Home and Hearth
+			1x12_122
+			#    New Chapter
+			1x13_154
+			#    Stone Trolls
+			1x1_314
+			#    Daddy Twofoot, Next-door Neighbor
+			1x13_144
+			#    Frodo Gamgee, Son of Samwise
+			1x13_150
+			#    Hobbiton Brewer, Maker of Fine Ales
+			1x15_146
+			#Shadow (30 cards)
+			#    Advancing Uruk
+			3x12_134
+			#    Assault Denizen
+			3x13_159
+			#    Crushing Uruk
+			2x12_140
+			#    Entranced Uruk
+			1x13_163
+			#    Sentinel Uruk
+			2x11_201
+			#    Uruk Distractor
+			1x13_170
+			#    Uruk Reserve
+			1x13_173
+			#    Uruk Slaughterer
+			1x12_154
+			#    Uruk Tactician
+			2x13_175
+			#    Uruk-hai Healer
+			1x14_14
+			#    Vigilant Uruk
+			2x11_205
+			#    White Hand Marchers
+			1x18_126
+			#    Isengard Sword
+			1x11_192
+			#    Spear of the White Hand
+			1x17_117
+			#    Weapon of Opportunity
+			1x12_159
+			#    Broken in Defeat
+			1x12_139
+			#    Furor
+			1x11_187
+			#    Quelling Force
+			1x12_143
+			#    War Machine
+			2x13_176
+			#    Dark Alliance
+			1x12_141
+			#    Signs of War
+			1x13_167
+		]
+	},
+	{
+		name: Bromance - Legolas+Gimli Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Doors of Durin
+			1x13_190
+			#    Fortress of Orthanc
+			1x11_241
+			#    Isengard Ruined
+			1x15_192
+			#    Morannon Plains
+			1x18_137
+			#    Shores of Nen Hithoel
+			1x12_191
+			#    Barazinbar
+			1x11_229
+			#    Osgiliath Reclaimed
+			1x11_252
+			#    CrossRoads of the Fallen Kings
+			1x13_189
+			#   Moria Guardroom
+			1x11_247
+			#Free Peoples (30 cards)
+			#   Farin, Emissary of Erebor
+			1x11_7
+			#   Gimli, Unbidden Guest
+			1x4_49
+			#   Glóin, Friend to Thorin
+			1x2_7
+			#   Grimir, Dwarven Emissary
+			1x11_10
+			#   Legolas, Elven Comrade
+			1x4_74
+			#   Arod, Rohirrim Steed
+			1x13_1
+			#   Heavy Axe
+			2x15_7
+			#   Well-crafted Armor
+			1x15_9
+			#   Hobbit Sword
+			1x15_145
+			#   Awkward Moment
+			1x13_2
+			#   Counts But One
+			2x8_4
+			#   Khazâd Ai-mênu
+			2x4_51
+			#   Quick As May Be
+			1x4_53
+			#   Sorrow Shared
+			2x13_7
+			#   The Fortunes of Balin's Folk
+			2x15_4
+			#   Balin Avenged
+			1x17_2
+			#   Chamber of Records
+			1x15_3
+			#   Loud and Strong
+			1x12_9
+			#   Memories of Darkness
+			1x10_2
+			#   My Axe Is Notched
+			1x4_52
+			#   Run Until Found
+			1x18_2
+			#   Stout and Strong
+			1x4_57
+			#   Suspended Palaces
+			1x6_10
+			#   Final Count
+			1x4_69
+			#   Shoulder to Shoulder
+			1x1_59
+			#Shadow (30 cards)
+			#   Desolation Orc
+			1x15_107
+			#   Emboldened Orc
+			1x11_119
+			#   Frenzied Orc
+			2x11_122
+			#   Half-troll of Far Harad
+			2x14_12
+			#   Horror of Harad
+			2x14_13
+			#   Isengard Marauder
+			2x15_110
+			#   Orc Line-breaker
+			2x13_113
+			#   Orc Raid Commander
+			1x13_115
+			#   Orkish Assassin
+			1x17_72
+			#   Orkish Invader
+			1x17_79
+			#   Orkish Lackey
+			2x17_80
+			#   Orkish Maurader
+			2x17_81
+			#   Vile Goblin
+			2x12_106
+			#   Chaotic Clash
+			4x17_68
+			#   Coordinated Effort
+			2x15_106
+			#   Spurred to Battle
+			3x11_139
+		]
+	},
+	{
+		name: Bromance - Merry+Pippin Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Old Bilbo's Heir
+			#    The One Ring, The Ruling Ring
+			1x1_289
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Anduin Banks
+			1x11_227
+			#    Emyn Muil
+			1x12_187
+			#    Northern Pelennor
+			1x12_190
+			#    Pelennor Fields
+			1x11_253
+			#    Hobbiton Market
+			1x12_189
+			#    Wold Battlefield
+			1x12_194
+			#    Heights of Isengard
+			1x11_244
+			#   Pinnacle of Zirakzigil
+			1x11_255
+			#    Valley of the Silverlode
+			1x11_261
+			#Free Peoples (30 cards)
+			#   Birchseed, Tall Statesman
+			1x5_15
+			#   Gandalf, Friend of the Shirefolk
+			1x1_72
+			#   Merry, Resolute Friend
+			1x19_29
+			#   Pippin, Steadfast Friend
+			1x19_30
+			#   Tolman Cotton, Farmer of Bywater
+			1x12_133
+			#   Farmer Maggot, Chaser of Rascals
+			1x1_288
+			#   Merry's Dagger
+			1x9_18
+			#   Pippin's Dagger
+			1x9_21
+			#   Hobbit Sword
+			1x7_319
+			#   A Marvel
+			2x10_110
+			#   Hobbit Sword-play
+			1x2_103
+			#   Hope is Kindled
+			1x12_123
+			#   Long Slow Wrath
+			2x6_112
+			#   Unharmed
+			1x11_176
+			#   Escape
+			2x4_300
+			#   Everyone Knows
+			4x9_50
+			#   Faith in Friendship
+			1x13_147
+			#   Fates Entwined
+			1x13_148
+			#   Good Work
+			1x4_305
+			#   Hornblower Leaf
+			1x17_108
+			#   Kept Safe
+			1x6_111
+			#   Little Golden Flower
+			1x15_148
+			#   Daddy Twofoot, Next-door Neighbor
+			1x13_144
+			#   Frodo Gamgee, Son of Samwise
+			1x13_150
+			#Shadow (30 cards)
+			#   Column of Easterlings
+			2x11_72
+			#   Dunlending Trapper
+			2x13_89
+			#   Easterling Host
+			2x11_75
+			#   Easterling Shield Wall
+			2x11_76
+			#   Gríma, Betrayer of Rohan
+			2x12_68
+			#   Harrying Hillman
+			2x12_69
+			#   Hunting Herdsman
+			2x15_83
+			#   Merciless Dunlending
+			3x13_96
+			#   Rampaging Easterling
+			2x11_98
+			#   Ravaging Wild Man
+			2x15_91
+			#   Vicious Dunlending
+			2x13_100
+			#   Bloodthirsty
+			1x11_70
+			#   Fires Brightly Burning
+			1x13_91
+			#   Lying Counsel
+			1x15_85
+			#   Overrun
+			1x11_92
+			#   Lying in Wait
+			2x13_95
+			#   Whisper in the Dark
+			1x18_77
+		]
+	},
+	{
+		name: Forbidden Love - Eowyn+Aragorn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_117
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Westfold
+			1x6_116
+			#    Wold of Rohan
+			1x4_336
+			#    Stables
+			1x4_339
+			#    Westemnet Hills
+			1x4_344
+			#    Hornburg Courtyard
+			1x4_350
+			#    Great Hall
+			1x4_353
+			#    Hornburg Causeway
+			1x4_356
+			#    Nan Curunir
+			1x5_119
+			#   Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#   Aragorn, Defender of Rohan
+			3x17_93
+			#   Guthláf, Herald
+			1x7_235
+			#   Haleth, Son of Háma
+			1x15_128
+			#   Háma, Northman
+			1x17_99
+			#   Éowyn, Sister-daughter of Théoden
+			1x4_271
+			#   Ecglaf, Courageous Farmer
+			1x5_81
+			#   Rohirrim Herdsman
+			1x7_247
+			#   Brego
+			1x4_263
+			#   Coif
+			1x12_111
+			#   Rider's Bow
+			1x13_135
+			#   Rohirrim Axe
+			1x15_136
+			#   Rohirrim Javelin
+			1x7_248
+			#   Rohirrim Shield
+			1x5_91
+			#   Windfola
+			1x7_260
+			#   Éowyn's Shield
+			1x8_88
+			#   Éowyn's Sword
+			1x4_272
+			#   Hobbit Sword
+			1x7_319
+			#   Brilliant Light
+			2x15_121
+			#   Fight for the Villagers
+			2x4_273
+			#   Fury of the Northmen
+			2x8_89
+			#   Where Now The Horse
+			2x17_103
+			#   For Death and Glory
+			1x17_97
+			#   Into the Caves
+			1x17_100
+			#   We Left None Alive
+			1x6_97
+			#Shadow (30 cards)
+			#   Advance Regular
+			2x10_77
+			#   Gate Sentry
+			1x6_102
+			#   Gate Soldier
+			1x5_97
+			#   Mordor Brute
+			1x10_90
+			#   Morgul Warden
+			1x1_259
+			#   Orc Assault Band
+			2x7_295
+			#   Orc Chieftain
+			2x1_266
+			#   Orc Fanatic
+			1x7_300
+			#   Orc Pillager
+			1x3_96
+			#   Orc Savage
+			1x7_305
+			#   Orc Slaughterer
+			1x10_95
+			#   Orc Swordsman
+			3x3_98
+			#   Orc Taskmaster
+			2x2_90
+			#   Orc Scimitar
+			4x1_269
+			#   Vile Blade
+			4x2_95
+			#   Flames Within
+			1x10_85
+			#   You Bring Great Evil
+			2x1_283
+		]
+	},
+	{
+		name: Forbidden Love - Gimli+Galadriel Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Galadriel, Bearer of Wisdom
+			#    The One Ring, The Ruling Ring
+			1x9_14
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Plains of Rohan
+			1x4_327
+			#    Rohirrim Village
+			1x4_334
+			#    Westemnet Plains
+			1x4_342
+			#    White Rocks
+			1x4_346
+			#    Hornburg Parapet
+			1x4_351
+			#    Hornburg Hall
+			1x6_118
+			#    Hornburg Wall
+			1x5_118
+			#    Ring of Isengard
+			1x4_358
+			#   Orthanc Library
+			1x4_362
+			#Free Peoples (30 cards)
+			#   Gimli, Opinionated Guide
+			1x19_2
+			#   Elven Defender
+			3x18_9
+			#   Fereveldir, Son of Thandronen
+			1x4_67
+			#   Gimli's Battle Axe
+			1x1_14
+			#   Asfaloth, Swift Blossom
+			1x13_10
+			#   Elven Armaments
+			1x18_8
+			#   Strands of Elven Hair
+			2x9_22
+			#   Sword of the Fallen
+			1x15_25
+			#   Galadriel's Silver Ewer
+			2x18_11
+			#   Fallen Lord
+			2x11_6
+			#   Khazâd Ai-mênu
+			1x4_51
+			#   Lend Us Your Aid
+			1x6_9
+			#   That's Two!
+			1x19_4
+			#   Final Shot
+			2x13_14
+			#   Spring Forth Nimbly
+			2x13_24
+			#   Still Needed
+			1x7_29
+			#   Supporting Fire
+			1x4_83
+			#   Dwarven Heart
+			1x1_10
+			#   Endurance of Dwarves
+			1x2_4
+			#   Agility
+			2x6_12
+			#   Strength of Arms
+			2x4_82
+			#Shadow (30 cards)
+			#   Band of Wild Men
+			2x4_4
+			#   Dunlending Headman
+			2x6_4
+			#   Dunlending Looter
+			2x4_11
+			#   Dunlending Ransacker
+			2x4_14
+			#   Dunlending Ravager
+			1x4_15
+			#   Dunlending Robber
+			2x4_16
+			#   Dunlending Savage
+			2x4_17
+			#   Dunlending Warrior
+			2x4_18
+			#   Hillman Band
+			2x4_21
+			#   Hillman Rabble
+			2x4_24
+			#   Hillman Tribe
+			2x4_25
+			#   Iron Axe
+			1x4_26
+			#   Burn Every Village
+			1x4_5
+			#   Dark Fury
+			1x4_7
+			#   Death to the Strawheads
+			1x4_8
+			#   Wild Man Raid
+			1x4_39
+			#   Bound By Rage
+			1x6_1
+			#   Living Off Rock
+			1x4_27
+			#   No Defense
+			1x4_28
+			#   No Refuge
+			1x4_29
+		]
+	},
+	{
+		name: Forbidden Love - Grima+Eowyn Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Mr. Underhill
+			#    The One Ring, The Ruling Ring
+			1x0_67
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Wold of Rohan
+			1x4_336
+			#    Stables
+			1x4_339
+			#    White Mountains
+			1x4_345
+			#    Hornburg Parapet
+			1x4_351
+			#    Hornburg Armory
+			1x4_354
+			#    King's Room
+			1x4_357
+			#    Valley of Saruman
+			1x6_119
+			#   Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#   Gandalf, Defender of the West
+			2x7_36
+			#   Rohirrim Scout
+			1x5_90
+			#   Rohirrim Soldier
+			1x15_138
+			#   Théoden, Rekindled King
+			1x7_255
+			#   Éowyn, Daughter of Éomund
+			1x5_122
+			#   Banner of the Mark
+			1x6_90
+			#   Coif
+			1x12_111
+			#   Heavy Chain
+			1x4_278
+			#   Herugrim
+			1x4_280
+			#   Rider's Mount
+			1x4_287
+			#   Riding Armor
+			1x7_245
+			#   Rohirrim Helm
+			2x5_89
+			#   Snowmane, Noble Mearas
+			1x13_136
+			#   Sturdy Shield
+			1x15_141
+			#   Sword of Rohan
+			1x4_291
+			#   Windfola
+			1x7_260
+			#   Éowyn's Shield
+			1x8_88
+			#   Éowyn's Sword, Dernhelm's Blade
+			1x7_230
+			#   Hobbit Sword
+			1x15_145
+			#   Halfling Deftness
+			1x1_293
+			#   Hearken to Me
+			1x4_94
+			#   Brought Down from Inside
+			1x19_24
+			#   Freely Across Our Land
+			1x13_127
+			#   Rohirrim Diadem
+			3x18_102
+			#   Surrendered Weapons
+			2x18_104
+			#Shadow (30 cards)
+			#   Corsair Champion
+			4x13_84
+			#   Dunlending Patriarch
+			3x13_88
+			#   Easterling Banner-bearer
+			4x12_63
+			#   Gríma, Footman of Saruman
+			3x13_92
+			#   Southron Murderer
+			3x13_98
+			#   Vengeful Wild Man
+			4x17_63
+			#   Gríma's Dagger
+			1x17_44
+			#   Bring Down the Wall
+			2x13_82
+			#   Whistling Death
+			2x11_104
+			#   Hemmed In
+			2x12_70
+			#   Oath Sworn
+			2x11_91
+		]
+	},
+	{
+		name: Forbidden Love - Saruman+Pipeweed Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Son of Drogo
+			#    The One Ring, The Ruling Ring
+			1x1_290
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Rocks of Emyn Muil
+			1x6_115
+			#    Derndingle
+			1x4_330
+			#    Barrows of Edoras
+			1x4_337
+			#    White Rocks
+			1x4_346
+			#    Deeping Wall
+			1x4_348
+			#    Hornburg Armory
+			1x4_354
+			#    Cavern Entrance
+			1x4_355
+			#    Valley of Saruman
+			1x6_119
+			#   Orthanc Balcony
+			1x4_361
+			#Free Peoples (30 cards)
+			#   Gandalf, Friend of the Shirefolk
+			4x1_72
+			#   Farmer Maggot, Hobbit of the Marish
+			1x11_163
+			#   Fredegar Bolger, Fatty
+			1x18_107
+			#   Merry, Impatient Hobbit
+			1x6_113
+			#   Pippin, Woolly-footed Rascal
+			1x4_314
+			#   Gandalf's Pipe
+			1x1_74
+			#   Glamdring, Orc Beater
+			1x17_18
+			#   Shadowfax, Greatheart
+			1x8_21
+			#   Frodo's Pipe
+			1x3_107
+			#   Hobbit Sword
+			3x4_306
+			#   Longbottom Leaf
+			1x1_300
+			#   Old Toby
+			1x1_305
+			#   Gandalf's Staff, Ash-staff
+			1x11_34
+			#   Borne Far Away
+			1x10_14
+			#   Final Account
+			1x11_31
+			#   Out of the High Airs
+			2x10_17
+			#   Knocked on the Head
+			3x4_308
+			#   Ship of Smoke
+			1x18_27
+			#   Southfarthing Leaf
+			2x17_110
+			#   Southlinch Leaf
+			2x17_111
+			#Shadow (30 cards)
+			#   Isengard Artisan
+			1x6_65
+			#   Isengard Plodder
+			1x6_69
+			#   Isengard Retainer
+			2x3_57
+			#   Isengard Servant
+			2x3_58
+			#   Isengard Warrior
+			1x3_61
+			#   Saruman, Black Traitor
+			1x4_173
+			#   Saruman, Instigator of Insurrection
+			1x17_37
+			#   Saruman, Of Many Colours
+			1x12_54
+			#   Saruman, Servant of the Eye
+			1x3_69
+			#   Strange-looking Men
+			1x11_100
+			#   Goblin Flankers
+			1x2_61
+			#   Tower Assassin
+			1x2_93
+			#   Saruman, Master of the White Hand
+			1x17_116
+			#   Saruman's Staff, Wizard's Device
+			4x4_174
+			#   Staff of Saruman, Fallen Istar's Stave
+			2x13_81
+			#   Throne of Isengard
+			2x17_39
+			#   New Power Rising
+			1x4_162
+			#   Alatar Deceived
+			1x13_78
+			#   Banished
+			1x4_139
+			#   Leechcraft
+			2x4_157
+			#   Pallando Deceived
+			1x13_79
+			#   Radagast Deceived
+			1x13_80
+		]
+	},
+	{
+		name: True Love - Sam+Oliphant Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Old Bilbo's Heir
+			#    The One Ring, The Ruling Ring
+			1x1_289
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Anduin Banks
+			1x11_227
+			#    East Road
+			1x11_236
+			#    Morannon Plains
+			1x18_137
+			#    Pelennor Fields
+			1x11_253
+			#    Caras Galadhon
+			1x11_231
+			#    Wold Battlefield
+			1x12_194
+			#    Crossroads of the Fallen Kings
+			1x13_189
+			#   Trollshaw Forest
+			1x11_260
+			#    Valley of the Silverlode
+			1x11_261
+			#Free Peoples (30 cards)
+			#   Gandalf, Powerful Guide
+			3x15_29
+			#   Sméagol, Old Noser
+			1x5_28
+			#   Fredegar Bolger, Fatty
+			1x18_107
+			#   Rosie Cotton, Barmaid
+			1x12_129
+			#   Sam, Loyal Friend
+			1x19_32
+			#   The Gaffer, Sam's Father
+			1x1_291
+			#   Glamdring, Lightning Brand
+			1x6_31
+			#   Frying Pan
+			1x3_108
+			#   Hobbit Sword
+			1x1_299
+			#   Sting, Bane of the Eight Legs
+			1x8_113
+			#   Depart Silently
+			1x3_31
+			#   Intimidate
+			1x1_76
+			#   Long I Fell
+			1x4_97
+			#   Mysterious Wizard
+			1x1_78
+			#   Strength of Spirit
+			2x1_85
+			#   Turn of the Tide
+			1x5_20
+			#   Concerning Hobbits
+			2x11_161
+			#   It Burns Us
+			2x6_110
+			#   Slunk Out of Sight
+			1x10_115
+			#   Scintillating Bird
+			1x17_23
+			#   A Promise
+			3x2_112
+			#   Don't Let Go
+			1x13_145
+			#   Rare Good Ballast
+			1x5_114
+			#Shadow (30 cards)
+			#   Archer of Harad
+			2x11_67
+			#   Desert Wind
+			2x13_86
+			#   Easterling Runner
+			3x13_90
+			#   Ferocious Haradrim
+			1x11_80
+			#   Fletcher of Harad
+			2x11_81
+			#   Gríma, Witless Worm
+			1x18_67
+			#   Mûmak Rider
+			1x12_74
+			#   Pirate Cutthroat
+			2x13_97
+			#   Southron Murderer
+			3x13_98
+			#   Swarthy Hillman
+			2x15_93
+			#   Beast of War
+			3x17_40
+			#   Corsair Boarding Axe
+			1x18_60
+			#   Corsair Grappling Hook
+			1x18_62
+			#   Corsair Scimitar
+			1x18_64
+			#   Fleet of Corsair Ships
+			2x18_66
+			#   Worn Battleaxe
+			1x13_102
+			#   Harmless
+			1x13_93
+			#   Howdah
+			1x13_94
+		]
+	},
+	{
+		name: True Love - Shagrat+Shiny Things Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Anduin Banks
+			1x11_227
+			#    Fangorn Glade
+			1x11_239
+			#    Morannon Plains
+			1x18_137
+			#    Pelennor Fields
+			1x11_253
+			#    Barazinbar
+			1x11_229
+			#    Wold Battlefield
+			1x12_194
+			#    Chamber of Mazarbul
+			1x11_233
+			#   Moria Guardroom
+			1x11_247
+			#    Starkhorn
+			1x12_193
+			#Free Peoples (30 cards)
+			#   Farin, Emissary of Erebor
+			1x11_7
+			#   Gimli, Lord of the Glittering Caves
+			1x13_5
+			#   Thorin III, Stonehelm
+			1x17_6
+			#   Thrarin, Smith of Erebor
+			1x12_15
+			#   Úri, Dwarven Lord
+			1x9_11
+			#   Dwarven Armor
+			1x1_8
+			#   Dwarven Axe
+			2x1_9
+			#   Dwarven Bracers
+			2x2_3
+			#   Gimli's Battle Axe
+			1x1_14
+			#   Hobbit Sword
+			1x1_299
+			#   Ring of Accretion
+			1x9_6
+			#   Ring of Artifice
+			1x17_4
+			#   Ring of Fury
+			1x9_7
+			#   Ring of Guile
+			1x9_8
+			#   Ring of Retribution
+			1x9_9
+			#   Mithril-coat, Dwarf-mail
+			1x13_153
+			#   Delving
+			2x1_6
+			#   Dwarf-lords
+			1x13_4
+			#   Honed
+			2x8_6
+			#   Mithril Shaft
+			2x1_22
+			#   Unheard of
+			2x8_7
+			#   Wealth of Moria
+			1x1_28
+			#   Run Until Found
+			1x18_2
+			#   Still Twitching
+			1x19_3
+			#Shadow (30 cards)
+			#   Sunland Guard
+			3x17_55
+			#   Sunland Scout
+			2x17_56
+			#   Sunland Skirmisher
+			2x17_57
+			#   Sunland Trooper
+			2x17_59
+			#   Sunland Warrior
+			2x17_60
+			#   Vengeful Savage
+			3x17_62
+			#   Covetous Uruk
+			4x15_158
+			#   Shagrat, Tower Captain
+			4x18_122
+			#   Primitive Brand
+			2x17_47
+			#   Wildman's Oath
+			4x17_66
+			#   Deathly Roar
+			2x17_113
+		]
+	},
+	{
+		name: True Love - Smeagol+Forbidden Pool Fish Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Tired Traveller
+			#    The One Ring, The Ruling Ring
+			1x4_302
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Emyn Muil
+			1x12_187
+			#    Woody-End
+			1x11_266
+			#    Doorway to Doom
+			1x18_134
+			#    Foot of Mount Doom
+			1x18_135
+			#    Hobbiton Market
+			1x12_189
+			#    Window on the West
+			1x11_265
+			#    Dammed Gate-Stream
+			1x11_235
+			#   Mount Doom
+			1x15_193
+			#    Sirannon Ruins
+			1x18_138
+			#Free Peoples (30 cards)
+			#   Sméagol, Simple Stoor
+			1x13_55
+			#   Faramir, Ithilien Ranger
+			1x6_121
+			#   Gondorian Prowler
+			2x15_61
+			#   Ranger of Ithilien
+			2x4_130
+			#   Faramir's Bow
+			1x4_118
+			#   Sword of Gondor
+			2x4_134
+			#   Don't Follow the Lights
+			1x6_38
+			#   Naked Waste
+			2x13_53
+			#   Out of All Knowledge
+			2x13_54
+			#   Arrows Thick in the Air
+			1x4_110
+			#   Defenses Long Held
+			2x18_44
+			#   Nice Fish
+			3x15_46
+			#   Forbidden Pool
+			1x4_120
+			#   Garrison of Osgiliath
+			1x6_52
+			#   Henneth Annûn
+			1x4_125
+			#   Houses of Healing
+			1x11_61
+			#   Ithilien Trap
+			1x4_126
+			#   Soldier's Cache
+			1x17_35
+			#   Déagol, Fateful Finder
+			4x13_46
+			#Shadow (30 cards)
+			#   Gollum, Her Sneak
+			4x13_50
+			#   Shelob, Last Child of Ungoliant
+			2x8_26
+			#   Barrow-wight Stalker
+			2x16_1
+			#   Candle Corpses
+			4x16_2
+			#   Dead Faces
+			1x16_4
+			#   Morgul Vanguard
+			1x10_63
+			#   Spirit of Dread
+			2x16_5
+			#   The Witch-king, Conqueror of Arthedain
+			1x17_144
+			#   Undead of Angmar
+			2x16_6
+			#   Úlairë Enquëa, Lieutenant of Morgul
+			2x1_231
+			#   From Deep in Shadow
+			3x12_38
+			#   Sudden Strike
+			1x15_51
+			#   It's Mine
+			2x7_62
+			#   Not Easily Avoided
+			2x18_32
+			#   Slippery as Fishes
+			1x9_29
+		]
+	},
+	{
+		name: True Love - Warg+Gimli Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected By Many
+			#    The One Ring, The Ruling Ring
+			1x11_3164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Isenwash
+			1x13_193
+			#    City Gates
+			1x15_189
+			#    Ettenmoors
+			1x11_237
+			#    Rohan Uplands
+			1x11_257
+			#    Barazinbar
+			1x11_229
+			#    Flats of Rohan
+			1x11_240
+			#    Westfold Village
+			1x15_194
+			#   Harrowdale
+			1x11_243
+			#    Moria Guardroom
+			1x11_247
+			#Free Peoples (30 cards)
+			#   Gimli, Lively Combatant
+			1x11_8
+			#   Sindri, Dwarven Lord
+			1x9_10
+			#   Aragorn, Defender of Rohan
+			1x17_93
+			#   Elfhelm, Marshal of Rohan
+			1x7_224
+			#   Éored Warrior
+			1x12_113
+			#   Éothain, Scout of the Mark
+			1x4_269
+			#   Axe of Erebor
+			1x4_41
+			#   Brego
+			1x4_263
+			#   Riddermark Javelin
+			2x11_151
+			#   Swift Steed
+			1x7_253
+			#   Sword of Rohan
+			1x4_291
+			#   Hobbit Sword
+			1x1_299
+			#   Battle to the Last
+			2x11_4
+			#   Fallen Lord
+			2x11_6
+			#   Their Halls of Stone
+			2x1_26
+			#   Well-equipped
+			1x11_14
+			#   Fall Back to Helm's Deep
+			3x18_98
+			#   Where Now The Horse
+			1x17_103
+			#   Hall of Our Fathers
+			2x11_11
+			#   Here Is Good Rock
+			2x4_50
+			#   Cleaving a Path
+			1x12_110
+			#   Dispatched With Haste
+			1x17_94
+			#Shadow (30 cards)
+			#   Black Land Commander
+			2x15_100
+			#   Black Land Spy
+			3x15_105
+			#   Frenzied Orc
+			2x11_122
+			#   Howling Orc
+			1x13_109
+			#   Isengard Underling
+			1x11_125
+			#   Orc Reaper
+			2x13_116
+			#   Orkish Cavalry
+			1x17_74
+			#   Orkish Flanker
+			1x17_77
+			#   Orkish Traveler
+			1x17_85
+			#   Orkish Warg-master
+			1x17_87
+			#   Pitiless Orc
+			2x12_99
+			#   Scavenging Goblins
+			2x12_102
+			#   Orkish Ax
+			2x18_84
+			#   Rider's Gear
+			1x17_90
+			#   Threatening Warg
+			4x17_91
+			#   Vicious Warg
+			2x17_92
+			#   Feral Ride
+			2x17_70
+		]
+	},
+	{
+		name: Lineage - House of Eorl Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Wold of Rohan
+			1x4_336
+			#    Stables
+			1x4_339
+			#    White Mountains
+			1x4_345
+			#    Hornburg Parapet
+			1x4_351
+			#    Great Hall
+			1x4_353
+			#    King's Room
+			1x4_357
+			#    Non Curunir
+			1x5_119
+			#   Orthanc Library
+			1x4_362
+			#Free Peoples (30 cards)
+			#   Théoden, The Renowned
+			2x13_137
+			#   Théodred, Second Marshal of the Mark
+			2x13_138
+			#   Éomer, Sister-son of Théoden
+			2x4_266
+			#   Éowyn, Sister-daughter of Théoden
+			2x4_271
+			#   Léod, Westfold Herdsman
+			1x4_285
+			#   Firefoot, Mearas of The Mark
+			1x13_126
+			#   Herugrim
+			1x4_280
+			#   Snowmane, Noble Mearas
+			1x13_136
+			#   Windfola
+			1x7_260
+			#   Éomer's Bow
+			1x18_95
+			#   Éomer's Spear, Trusty Weapon
+			1x15_124
+			#   Éowyn's Shield
+			1x8_88
+			#   Éowyn's Sword
+			1x4_272
+			#   Hobbit Sword
+			1x15_145
+			#   Throne of the Golden Hall
+			1x17_98
+			#   Bitter Tidings
+			1x13_122
+			#   Ride With Me
+			3x13_134
+			#   Simbelmynë
+			1x4_289
+			#   Where Now The Horse
+			1x17_103
+			#   Cast from the Hall
+			1x18_94
+			#   Golden Glimmer
+			1x12_115
+			#   King's Board
+			2x13_131
+			#   Wind-swept Homestead
+			1x13_139
+			#Shadow (30 cards)
+			#   Desert Stalker
+			1x5_72
+			#   Southron Commander
+			2x4_249
+			#   Southron Conqueror
+			3x7_164
+			#   Southron Fighter
+			2x4_251
+			#   Southron Intruder
+			2x7_165
+			#   Southron Invaders
+			2x6_81
+			#   Southron Traveler
+			4x5_76
+			#   Southron Veterans
+			2x4_257
+			#   Southron Wanderer
+			2x4_258
+			#   Mûmak
+			3x5_73
+			#   Raider Bow
+			2x7_155
+			#   Fierce in Despair
+			1x7_148
+			#   On the March
+			1x4_241
+			#   Red Wrath
+			1x7_157
+			#   Strength in Numbers
+			2x5_77
+		]
+	},
+	{
+		name: Lineage - House of Hurin Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Resolute Hobbit
+			#    The One Ring, The Ruling Ring
+			1x10_121
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Steps of Edoras
+			1x7_334
+			#    Rohirrim Camp
+			1x7_336
+			#    Hall of the Kings
+			1x7_339
+			#    Pelennor Prairie
+			1x10_118
+			#    Steward's Tomb
+			1x10_119
+			#    Minas Tirith Sixth Circle
+			1x7_351
+			#    Osgiliath Crossing
+			1x7_353
+			#    Morgul Vale
+			1x7_357
+			#   Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#   Boromir, Doomed Heir
+			2x13_62
+			#   Cirion
+			2x7_82
+			#   Denethor, On the Edge of Madness
+			2x18_42
+			#   Faramir, Prince of Ithilien
+			2x13_66
+			#   Blade of Gondor
+			1x1_95
+			#   Boromir's Cloak
+			1x1_98
+			#   Denethor's Sword
+			1x18_43
+			#   Faramir's Bow
+			1x4_118
+			#   Faramir's Sword
+			1x12_48
+			#   Horn of Boromir, The Great Horn
+			1x18_53
+			#   Shield of Boromir
+			1x2_38
+			#   Hobbit Sword
+			2x1_299
+			#   Throne of Minas Tirith
+			1x17_36
+			#   Dagger Strike
+			2x1_102
+			#   Hidden Knowledge
+			2x7_104
+			#   Away on the Wind
+			1x13_60
+			#   Boromir, My Brother
+			1x4_111
+			#   Noble Leaders
+			2x7_112
+			#   Stewards' Legacy
+			2x13_75
+			#   Faramir's Company
+			1x18_49
+			#   Gondorian Servant, Denethor's Handman
+			1x18_52
+			#Shadow (30 cards)
+			#   Gorgoroth Agitator
+			2x8_94
+			#   Gorgoroth Assassin
+			2x8_95
+			#   Gorgoroth Servitor
+			2x8_100
+			#   Gorgoroth Soldier
+			2x7_278
+			#   Grishnákh, Orc Captain
+			1x5_100
+			#   Morgul Hunter
+			1x1_256
+			#   Morgul Warden
+			1x1_259
+			#   Orc Cutthroat
+			1x5_104
+			#   Orc Marauder
+			1x7_301
+			#   Orc Savage
+			2x7_305
+			#   Orc Slaughterer
+			2x10_95
+			#   Orc Trooper
+			1x3_99
+			#   Sauron, Dark Lord of Mordor
+			1x13_140
+			#   Siege Commander
+			2x7_311
+			#   The Witch-king, Black Captain
+			1x8_84
+			#   Úlairë Attëa, Dark Predator
+			1x19_35
+			#   Úlairë Nelya, Black Hunter
+			1x12_177
+			#   Úlairë Otsëa, Seventh of the Nine Riders
+			1x11_224
+			#   Great Siege-towers
+			2x7_281
+			#   Peril
+			2x6_105
+			#   Spied From Above
+			1x6_84
+		]
+	},
+	{
+		name: Lineage - House of Telcontar Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Reluctant Adventurer
+			#    The One Ring, The Ruling Ring
+			1x2_102
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Steps of Edoras
+			1x7_334
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    Steward's Tomb
+			1x10_119
+			#    Minas Tirith Sixth Circle
+			1x7_351
+			#    Osgiliath Crossing
+			1x7_353
+			#    Watchers of Cirith Ungol
+			1x10_120
+			#   Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#   Anárion, Lord of Anórien
+			2x0_58
+			#   Aragorn, Isildur's Heir
+			2x13_59
+			#   Elendil, The Tall
+			2x9_32
+			#   Isildur, Sword-bearer
+			2x18_54
+			#   Knife of the Galadhrim
+			1x9_17
+			#   Aragorn's Bow, Ranger's Longbow
+			1x15_56
+			#   Brego, Loyal Steed
+			1x13_63
+			#   Flaming Brand
+			1x2_32
+			#   Hobbit Sword
+			2x1_299
+			#   Andúril, Sword That Was Broken
+			1x17_27
+			#   Crown of Gondor
+			1x18_41
+			#   Narsil, Forged by Telchar
+			1x17_31
+			#   Ring of Barahir
+			1x6_55
+			#   Elendil's Valor
+			1x1_103
+			#   No Mere Ranger
+			2x2_36
+			#   Heirs of Gondor
+			1x13_69
+			#   Houses of Healing
+			1x11_61
+			#   Kings' Legacy
+			2x13_72
+			#   Not Bound to His Fate
+			1x19_14
+			#   Ranger of the North
+			1x18_55
+			#   Storied Homestead
+			1x13_76
+			#   The Saga of Elendil
+			1x1_114
+			#   Elendil's Army
+			1x18_47
+			#Shadow (30 cards)
+			#   Isengard Artisan
+			2x6_65
+			#   Isengard Mechanics
+			2x6_68
+			#   Isengard Plodder
+			3x6_69
+			#   Isengard Retainer
+			3x3_57
+			#   Isengard Servant
+			3x3_58
+			#   Isengard Smith
+			2x3_60
+			#   Isengard Tender
+			1x6_70
+			#   Isengard Tinker
+			1x6_71
+			#   Isengard Worker
+			2x3_62
+			#   Orc Commander
+			2x3_64
+			#   Orc Overseer
+			1x3_65
+			#   Isengard Axe
+			2x3_55
+			#   Library of Orthanc
+			2x9_39
+			#   Gnawing, Biting, Hacking, Burning
+			2x6_63
+			#   Trapped and Alone
+			2x3_72
+		]
+	},
+	{
+		name: Lineage - Line of the Half-Elves Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Galadriel, Bearer of Wisdom
+			#    The One Ring, The Ruling Ring
+			1x9_14
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Westfarthing
+			1x1_326
+			#    Bree Streets
+			1x1_328
+			#    Ford of Bruinen
+			1x1_338
+			#    Eregion Hills
+			1x3_116
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Caram Galadhon
+			1x3_115
+			#    Silverlode Banks
+			1x1_355
+			#    Gates of Argonath
+			1x3_117
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Arwen, Daughter of Elrond
+			2x1_30
+			#   Elladan, Son of Elrond
+			2x14_2
+			#   Elrohir, Son of Elrond
+			2x14_3
+			#   Elrond, Venerable Lord
+			2x10_9
+			#   Arwen's Bow
+			1x18_4
+			#   Arwen's Dagger
+			1x18_5
+			#   Asfaloth, Elven Steed
+			1x7_17
+			#   Gwemegil
+			1x1_47
+			#   Hadafang
+			1x12_18
+			#   Galadriel's Silver Ewer
+			1x18_11
+			#   Gift of the Evenstar, Blessed Light
+			1x15_16
+			#   Nenya
+			1x3_23
+			#   The Mirror of Galadriel, Dangerous Guide
+			1x15_22
+			#   Vilya, Ring of Air
+			1x9_23
+			#   Defiance
+			1x1_37
+			#   Final Shot
+			1x13_14
+			#   Fleet-footed
+			1x10_10
+			#   Spring Forth Nimbly
+			1x13_24
+			#   Still Needed
+			2x7_29
+			#   Supporting Fire
+			1x4_83
+			#   Sword-wall
+			1x4_84
+			#   The Lady's Blessing
+			1x11_20
+			#   Uncertain Paths
+			1x7_30
+			#   Secluded Homestead
+			1x13_22
+			#   Strength of Arms
+			1x4_82
+			#Shadow (30 cards)
+			#   The Witch-king, Black Lord
+			2x12_183
+			#   Úlairë Attëa, Second of the Nine Riders
+			2x11_219
+			#   Úlairë Cantëa, Fourth of the Nine Riders
+			2x11_220
+			#   Úlairë Enquëa, Sixth of the Nine Riders
+			2x13_182
+			#   Úlairë Lemenya, Fifth of the Nine Riders
+			1x11_221
+			#   Úlairë Lemenya, Winged Hunter
+			1x6_86
+			#   Úlairë Nelya, Ringwraith in Twilight
+			1x2_84
+			#   Úlairë Nertëa, Ninth of the Nine Riders
+			1x11_223
+			#   Úlairë Otsëa, Duplicitous Specter
+			2x17_141
+			#   Úlairë Toldëa, Black Shadow
+			4x12_180
+			#   Nazgûl Sword
+			2x1_218
+			#   The Pale Blade, Sword of Flame
+			1x11_214
+			#   Ring of Asperity
+			1x9_42
+			#   Ring of Savagery
+			1x17_142
+			#   Dark Whispers
+			1x1_210
+			#   Foul Clutches
+			1x7_178
+			#   Houses of Lamentation
+			1x10_61
+			#   Stricken Dumb
+			1x2_80
+			#   They Will Find the Ring
+			1x2_81
+			#   They Will Never Stop Hunting You
+			1x3_84
+			#   Sense of Obligation
+			1x12_170
+		]
+	},
+	{
+		name: Shelob's Lair - Cirith Ungol Orcs/Mountains Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Shire Lookout Point
+			1x1_325
+			#    Bree Streets
+			1x1_328
+			#    Ford of Bruinen
+			1x1_338
+			#    Dwarrowdelf Chamber
+			1x1_344
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Lothlorien Woods
+			1x1_352
+			#    The Great River
+			1x3_118
+			#    Shores of Nen Hithoel
+			1x1_359
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Gimli, Dwarf of the Mountain-race
+			1x2_121
+			#   Glóin, Friend to Thorin
+			1x2_7
+			#   Sindri, Dwarven Lord
+			1x9_10
+			#   Úri, Dwarven Lord
+			1x9_11
+			#   Gandalf, Stormcrow
+			3x0_64
+			#   Axe of Khazad-dûm
+			2x11_3
+			#   Dwarven Bracers
+			1x2_3
+			#   Gimli's Helm
+			1x1_15
+			#   Gandalf's Hat
+			1x12_28
+			#   Wizard Staff
+			1x2_29
+			#   Hobbit Sword
+			1x1_299
+			#   Durability
+			2x12_4
+			#   Citadel to Gate
+			1x7_33
+			#   Final Account
+			2x11_31
+			#   His First Serious Check
+			2x3_33
+			#   The Board Is Set
+			1x7_32
+			#   Hope is Kindled
+			1x12_123
+			#   His Father's Charge
+			2x12_8
+			#   Mountain Homestead
+			2x11_12
+			#   Thorin's Harp
+			2x18_3
+			#   Salve
+			1x12_32
+			#Shadow (30 cards)
+			#   Cirith Ungol Scavenger
+			2x10_54
+			#   Cirith Ungol Soldier
+			1x10_55
+			#   Cirith Ungol Warrior
+			1x10_56
+			#   Cirith Ungol Watchman
+			2x10_57
+			#   Gorbag, Lieutenant of Cirith Ungol
+			3x7_180
+			#   Morgul Destroyer
+			4x7_190
+			#   The Witch-king, Conqueror of Arthedain
+			2x17_144
+			#   Úlairë Cantëa, Faster Than Winds
+			1x7_211
+			#   Úlairë Lemenya, Eternally Threatening
+			2x15_185
+			#   Úlairë Otsëa, Seventh of the Nine Riders
+			1x11_224
+			#   Úlairë Toldëa, Black Shadow
+			2x12_180
+			#   Gorbag's Sword
+			1x10_60
+			#   Houses of Lamentation
+			2x10_61
+			#   There Came a Cry
+			3x7_208
+			#   Called
+			1x7_174
+			#   Held Ground
+			2x7_181
+		]
+	},
+	{
+		name: Shelob's Lair - Cirith Ungol Uruks/Last Alliance Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Hope of Free Peoples
+			#    The One Ring, The Ruling Ring
+			1x7_317
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    East Wall of Rohan
+			1x4_323
+			#    Plains of Rohan Camp
+			1x4_333
+			#    Barrows of Edoras
+			1x4_337
+			#    Ered Nimrais
+			1x4_343
+			#    Deep of Helm
+			1x4_347
+			#    Caves of Aglarond
+			1x4_352
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#   Elrond, Elven Lord
+			1x7_21
+			#   Elven Warrior
+			1x15_14
+			#   Gil-galad, High King of the Noldor
+			1x18_12
+			#   Lórien Protector
+			1x13_20
+			#   Isildur, Heir of Elendil
+			3x13_71
+			#   Elven Armaments
+			2x18_8
+			#   Sword of the Fallen
+			1x15_25
+			#   Hobbit Sword
+			1x15_145
+			#   Aiglos
+			1x9_12
+			#   Vilya, Ring of Air
+			1x9_23
+			#   Narsil, Blade of the Faithful
+			1x9_34
+			#   The Shards of Narsil
+			2x3_44
+			#   Fleet-footed
+			1x10_10
+			#   Master of Healing
+			2x3_22
+			#   Valor
+			1x4_87
+			#   Might of Númenor
+			2x3_43
+			#   Still Sharp
+			2x3_46
+			#   Ancient Blade
+			1x7_15
+			#   Hosts of the Last Alliance
+			2x2_18
+			#   The Last Alliance of Elves and Men
+			1x1_49
+			#   Foes of Mordor
+			1x1_105
+			#   Celebring, Elven-smith
+			1x18_7
+			#Shadow (30 cards)
+			#   Cirith Ungol Guard
+			4x10_81
+			#   Cirith Ungol Patroller
+			3x10_82
+			#   Cirith Ungol Sentinel
+			3x10_83
+			#   Cirith Ungol Sentry
+			4x10_84
+			#   Shagrat, Captain of Cirith Ungol
+			2x10_99
+			#   Shagrat, Tower Captain
+			1x18_122
+			#   White Hand Intruder
+			2x17_127
+			#   White Hand Marshal
+			2x18_127
+			#   Uruk Axe
+			1x10_102
+			#   Bred for Battle
+			1x1_121
+			#   Land Had Changed
+			2x17_114
+			#   Down to the Last Child
+			1x4_148
+			#   Saruman's Ambition
+			1x1_133
+			#   Uruk-hai Rampage
+			1x1_159
+			#   Barren Land
+			1x10_79
+			#   Stronghold of Cirith Ungol
+			1x7_314
+		]
+	},
+	{
+		name: Shelob's Lair - Shelob/Smeagol Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Master of the Precious
+			#    The One Ring, The Ruling Ring
+			1x5_111
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Sleeping Quarters
+			1x7_333
+			#    King's Tent
+			1x7_335
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    City Gates
+			1x7_344
+			#    Minas Tirith Third Circle
+			1x7_352
+			#    Pelennor Grassland
+			1x7_354
+			#    Northern Ithilien
+			1x7_359
+			#   Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#   Sméagol, Pitiable Guide
+			1x19_11
+			#   Faramir, Dúnadan of Gondor
+			3x12_47
+			#   Madril, Faramir's Aide
+			1x7_110
+			#   Bilbo, Aged Ring-bearer
+			1x13_142
+			#   Sam, Loyal Friend
+			1x19_32
+			#   Faramir's Bow, Ithilien Longbow
+			1x17_29
+			#   Faramir's Sword
+			1x12_48
+			#   Flaming Brand
+			1x2_32
+			#   Gondorian Blade
+			1x11_59
+			#   Hobbit Sword
+			2x1_299
+			#   Sting, Elven Long Knife
+			1x18_113
+			#   Don't Follow the Lights
+			1x6_38
+			#   Duality
+			4x13_47
+			#   Sneaking!
+			2x7_73
+			#   Battle Cry
+			1x11_56
+			#   Dagger Strike
+			1x1_102
+			#   Swordsman of the Northern Kingdom
+			1x1_117
+			#   Come Away
+			2x12_37
+			#   Scouting
+			2x7_68
+			#   Secret Paths
+			1x7_69
+			#   Boromir, My Brother
+			1x4_111
+			#Shadow (30 cards)
+			#   Gollum, Dark as Darkness
+			1x9_28
+			#   Gollum, Mad Thing
+			1x10_21
+			#   Gollum, Threatening Guide
+			1x19_10
+			#   Gollum, Vile Creature
+			1x7_59
+			#   Shelob, Eater of Light
+			1x8_25
+			#   Shelob, Her Ladyship
+			1x10_23
+			#   Shelob, Last Child of Ungoliant
+			1x8_26
+			#   Shelob, Menace
+			1x18_34
+			#   Spider Poison
+			2x8_28
+			#   Web
+			2x8_30
+			#   Captured by the Ring
+			3x7_53
+			#   Countless Cords
+			2x18_28
+			#   Master Broke His Promise
+			1x6_41
+			#   Sting of Shelob
+			2x18_35
+			#   Unseen Foe
+			2x15_53
+			#   Fat One Wants It
+			1x7_57
+			#   Not Easily Avoided
+			1x18_32
+			#   Not This Time!
+			1x15_47
+			#   Plotting
+			2x7_67
+			#   Treacherous Little Toad
+			2x12_41
+			#   Unabated in Malice
+			1x10_24
+		]
+	},
+	{
+		name: Knighted - Sir Billy+Peter Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Little Master
+			#    The One Ring, The Ruling Ring
+			1x19_28
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Woods
+			1x2_116
+			#    Trollshaw Forest
+			1x1_334
+			#    Rivendell Terrace
+			1x1_340
+			#    Moria Lake
+			1x1_346
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Lothlorien Woods
+			1x1_352
+			#    Anduin Wilderland
+			1x1_354
+			#    Anduin Banks
+			1x1_356
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Dwarven Warrior
+			1x12_7
+			#   Dáin Ironfoot, King Under the Mountain
+			1x14_1
+			#   Thorin III, Stonehelm
+			1x17_6
+			#   Brand, King of Dale
+			1x14_5
+			#   Ghân-buri-Ghân, Chieftain of the Woses
+			1x0_56
+			#   Grimbeorn, Beorning Chieftain
+			1x14_6
+			#   Axe of Khazad-dûm
+			2x11_3
+			#   Dwarven Bracers
+			1x2_3
+			#   Hand Axe
+			2x2_10
+			#   Beorning Axe
+			1x18_18
+			#   Hobbit Sword
+			2x1_299
+			#   Ring of Fury
+			1x9_7
+			#   Battle to the Last
+			1x11_4
+			#   Best Company
+			1x4_42
+			#   Durability
+			1x12_4
+			#   Fallen Lord
+			1x11_6
+			#   Great Day, Great Hour
+			1x10_1
+			#   No Pauses, No Spills
+			1x12_10
+			#   On Guard
+			1x11_13
+			#   For a While Less Dark
+			2x13_32
+			#   Guidance of the Istari
+			1x17_19
+			#   The Flame of Anor
+			1x13_31
+			#   The Terror of His Coming
+			1x12_33
+			#   Dwarven Skill
+			1x12_6
+			#   Stalwart Support
+			1x12_14
+			#   Vapour and Steam
+			1x13_43
+			#Shadow (30 cards)
+			#   Castamir of Umbar
+			4x8_51
+			#   Corsair Freebooter
+			2x8_54
+			#   Corsair Marauder
+			1x8_57
+			#   Corsair Plunderer
+			3x8_58
+			#   Corsair Ruffian
+			4x10_39
+			#   Elite Archer
+			2x4_232
+			#   Southron Bowman
+			2x4_248
+			#   Southron Conqueror
+			2x7_164
+			#   Southron Intruder
+			2x7_165
+			#   Red Wrath
+			2x7_157
+			#   Wind That Sped Ships
+			2x8_66
+			#   Arrow From the South
+			1x4_216
+			#   Raiders From the East
+			3x4_242
+		]
+	},
+	{
+		name: Knighted - Sir Ian M+Peter+Christopher Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Little Master
+			#    The One Ring, The Ruling Ring
+			1x19_28
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    The Riddermark
+			1x4_328
+			#    Uruk Camp
+			1x4_335
+			#    Barrows of Edoras
+			1x4_337
+			#    White Rocks
+			1x4_346
+			#    Deep of Helm
+			1x4_347
+			#    Great Hall
+			1x4_353
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Orthanc Balcony
+			1x4_361
+			#Free Peoples (30 cards)
+			#   Arwen, She-Elf
+			1x15_11
+			#   Elven Defender
+			2x18_9
+			#   Fereveldir, Son of Thandronen
+			1x4_67
+			#   Gandalf, Returned
+			3x17_17
+			#   Aragorn, Defender of Free Peoples
+			1x6_50
+			#   Albert Dreary, Entertainer from Bree
+			1x1_69
+			#   Elven Armaments
+			1x18_8
+			#   Elven Sword
+			1x4_64
+			#   Gwemegil
+			1x1_47
+			#   Naith Longbow
+			1x6_21
+			#   Shadowfax, Greatheart
+			1x8_21
+			#   Hobbit Sword
+			2x1_299
+			#   Gift of the Evenstar, Blessed Light
+			1x15_16
+			#   Inside a Song
+			2x13_16
+			#   Spring Forth Nimbly
+			2x13_24
+			#   Supporting Fire
+			2x4_83
+			#   All Save One
+			2x7_31
+			#   Hobbit Intuition
+			1x1_296
+			#   Agility
+			1x6_12
+			#   Shake Off the Shadow
+			1x8_13
+			#   Strength of Arms
+			1x4_82
+			#   Uncertain Future
+			1x11_26
+			#Shadow (30 cards)
+			#   Saruman, Servant of the Eye
+			1x3_69
+			#   Uruk Defender
+			2x4_184
+			#   Uruk Engineer
+			1x5_61
+			#   Uruk Rear Guard
+			2x4_191
+			#   Uruk Sapper
+			1x6_62
+			#   Feral Uruk
+			2x11_183
+			#   Force of Uruk-hai
+			1x11_184
+			#   Saruman, Agent of the Dark Lord
+			1x12_144
+			#   Uruk Common
+			2x12_149
+			#   Uruk-hai Scout
+			3x14_15
+			#   Watchman Uruk
+			2x11_206
+			#   White Hand Attacker(2)
+			2x18_124
+			#   Lurtz's Bow, Black-fletch Bow
+			2x18_119
+			#   Bred for Battle
+			1x1_121
+			#   Still They Came
+			1x4_175
+			#   Assault Ladder
+			1x6_58
+			#   Saruman's Ambition
+			2x1_133
+			#   Saruman's Frost
+			1x1_135
+			#   Urgency
+			2x19_17
+		]
+	},
+	{
+		name: Knighted - Sir Ian M+Ian H+Christopher Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Old Bilbo's Heir
+			#    The One Ring, The Ruling Ring
+			1x1_289
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Party Field
+			1x2_115
+			#    Trollshaw Forest
+			1x1_334
+			#    Rivendell Waterfall
+			1x1_342
+			#    Pass of Caradhras
+			1x1_348
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Lothlorien Woods
+			1x1_352
+			#    Anduin Wilderland
+			1x1_354
+			#    Anduin Banks
+			1x1_356
+			#   Wastes of Emyn Muil
+			1x3_120
+			#Free Peoples (30 cards)
+			#   Gandalf, Mithrandir
+			1x6_30
+			#   Éowyn, Lady of Rohan
+			1x4_270
+			#   Farmer Maggot, Hobbit of the Marish
+			1x11_163
+			#   Merry, Rohirrim Squire
+			1x7_320
+			#   Pippin, Sworn to Service
+			1x7_323
+			#   Sam, Great Elf Warrior
+			1x10_122
+			#   Elrond, Herald to Gil-galad
+			1x3_13
+			#   Bilbo, Retired Adventurer
+			2x1_284
+			#   Bounder
+			1x1_286
+			#   Glamdring, Elven Blade
+			2x7_39
+			#   Hobbit Sword
+			3x1_299
+			#   Sting, Elven Long Knife
+			1x18_113
+			#   Narya, Ring of Fire
+			1x9_19
+			#   Vilya, Ring of Air
+			1x9_23
+			#   Gandalf's Staff, Ash-staff
+			1x11_34
+			#   Intimidate
+			1x1_76
+			#   Servant of the Secret Fire
+			2x1_83
+			#   Hobbit Intuition
+			1x1_296
+			#   Hobbit Stealth
+			1x1_298
+			#   Practically Everyone Was Invited
+			3x2_111
+			#   Second Breakfast
+			2x15_154
+			#   There and Back Again
+			1x1_317
+			#Shadow (30 cards)
+			#   Isengard Artisan
+			2x6_65
+			#   Isengard Journeyman
+			2x6_67
+			#   Isengard Mechanics
+			2x6_68
+			#   Isengard Plodder
+			3x6_69
+			#   Isengard Retainer
+			3x3_57
+			#   Isengard Servant
+			3x3_58
+			#   Isengard Shaman
+			2x3_59
+			#   Isengard Warrior
+			1x3_61
+			#   Orc Commander
+			1x3_64
+			#   Saruman, Of Many Colours
+			1x12_54
+			#   Saruman, Servant of the Eye
+			2x3_69
+			#   Fires and Foul Fumes
+			2x6_62
+			#   Servants to Saruman
+			3x3_70
+			#   Iron Fist of the Orc
+			1x6_64
+			#   Trapped and Alone
+			1x3_72
+			#   Wizard Storm
+			1x2_48
+		]
+	},
+	{
+		name: Knighted - Sir Peter+Christopher Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Little Master
+			#    The One Ring, The Ruling Ring
+			1x19_28
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Edoras Hall
+			1x7_330
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Pelennor Plain
+			1x7_343
+			#    Pelennor Flat
+			1x7_345
+			#    Minas Tirith First Circle
+			1x7_347
+			#    Pelennor Grassland
+			1x7_354
+			#    Northern Ithilien
+			1x7_359
+			#   Dagorlad
+			1x7_360
+			#Free Peoples (30 cards)
+			#   Elfhelm, Marshal of Rohan
+			1x7_224
+			#   Grimbold, Marshal of Rohan
+			1x7_233
+			#   Rohirrim Recruit
+			1x18_103
+			#   Rohirrim Warrior
+			1x15_139
+			#   Théoden, King of the Golden Hall
+			1x5_93
+			#   Éomer, Valiant Warchief
+			1x7_365
+			#   Éowyn, Lady of the Mark
+			1x19_26
+			#   Ecglaf, Courageous Farmer
+			1x5_81
+			#   Sigewulf, Brave Volunteer
+			1x5_92
+			#   Brego
+			1x4_263
+			#   Rider's Mount
+			1x4_287
+			#   Rider's Spear
+			1x4_288
+			#   Rohirrim Javelin
+			1x7_248
+			#   Swift Steed
+			1x7_253
+			#   Éomer's Bow
+			1x18_95
+			#   Éomer's Spear, Trusty Weapon
+			1x15_124
+			#   Éowyn's Sword
+			1x4_272
+			#   Hobbit Sword
+			2x1_299
+			#   Fight for the Villagers
+			2x4_273
+			#   Grim Trophy
+			3x15_127
+			#   Helm! Helm!
+			1x4_279
+			#   No Rest for the Weary
+			1x5_86
+			#   Wind in His Face
+			1x7_259
+			#   Hobbit Intuition
+			1x1_296
+			#   We Left None Alive
+			1x6_97
+			#   With Strength to Fight
+			1x7_261
+			#Shadow (30 cards)
+			#   Castamir of Umbar, Corsair Vandal
+			4x12_56
+			#   Column of Easterlings
+			1x11_72
+			#   Detachment of Haradrim
+			1x11_74
+			#   Dunlending Zealot
+			1x12_62
+			#   Easterling Banner-bearer
+			1x12_63
+			#   Easterling Host
+			1x11_75
+			#   Easterling Shield Wall
+			1x11_76
+			#   Elder of Dunland
+			1x11_77
+			#   Gríma, Betrayer of Rohan
+			1x12_68
+			#   Harad Standard-bearer
+			1x11_84
+			#   Legion of Harad
+			1x11_88
+			#   Raging Dunlending
+			2x11_97
+			#   Saruman, Coldly Still
+			2x17_48
+			#   Savage Southron
+			1x15_92
+			#   Strange-looking Men
+			1x11_100
+			#   Vengeful Wild Man
+			3x17_63
+			#   Gríma's Dagger
+			1x17_44
+			#   Long Battle Bow
+			1x11_89
+			#   Poleaxe
+			1x11_95
+			#   War Trident
+			1x12_77
+			#   Bold and Cunning
+			2x11_71
+			#   Gathering Strength
+			1x12_66
+		]
+	},
+	{
+		name: Move Limit - Gandalf Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Plains of Rohan
+			1x4_327
+			#    Rohirrim Village
+			1x4_334
+			#    Westemnet Plains
+			1x4_342
+			#    White Rocks
+			1x4_346
+			#    Deeping Wall
+			1x4_348
+			#    Hornburg Armory
+			1x4_354
+			#    Hornburg Causeway
+			1x4_356
+			#    Ring of Isengard
+			1x4_358
+			#   Orthanc Balcony
+			1x4_361
+			#Free Peoples (30 cards)
+			#   Gimli, Dwarven Delegate
+			1x0_62
+			#   Glóin, Son of Gróin
+			1x15_6
+			#   Arwen, Royal Maiden
+			1x19_6
+			#   Legolas, Fearless Marksman
+			1x7_25
+			#   Gandalf, Leader of the Company
+			3x11_33
+			#   Radagast, The Brown
+			1x9_26
+			#   Dwarven Axe
+			1x1_9
+			#   Dwarven Bracers
+			1x2_3
+			#   Gimli's Battle Axe, Trusted Weapon
+			1x7_9
+			#   Hand Axe
+			1x2_10
+			#   Arwen's Bow
+			1x18_4
+			#   Gwemegil
+			1x1_47
+			#   Shadowfax
+			1x4_100
+			#   Hobbit Sword
+			2x1_299
+			#   Gandalf's Staff
+			1x2_22
+			#   Radagast's Staff
+			1x0_57
+			#   Disquiet of Our People
+			1x2_2
+			#   Dwarf-lords
+			2x13_4
+			#   Search Far and Wide
+			1x4_56
+			#   Durin's Secret
+			4x1_71
+			#   Look to My Coming
+			2x13_34
+			#   Servant of the Secret Fire
+			1x1_83
+			#Shadow (30 cards)
+			#   Band of Wild Men
+			2x4_4
+			#   Dunlending Headman
+			3x6_4
+			#   Dunlending Ransacker
+			3x4_14
+			#   Hillman Band
+			3x4_21
+			#   Hillman Rabble
+			2x4_24
+			#   Hillman Tribe
+			3x4_25
+			#   Saruman, Rabble-rouser
+			1x4_33
+			#   Enraged Southron
+			4x12_64
+			#   War Club
+			1x4_36
+			#   Burn Every Village
+			1x4_5
+			#   Dark Fury
+			1x4_7
+			#   Bound By Rage
+			2x6_1
+			#   No Retreat
+			4x4_30
+		]
+	},
+	{
+		name: Move Limit - Gondor Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    The Riddermark
+			1x4_328
+			#    Wold of Rohan
+			1x4_336
+			#    Barrows of Edoras
+			1x4_337
+			#    White Rocks
+			1x4_346
+			#    Hornburg Courtyard
+			1x4_350
+			#    Great Hall
+			1x4_353
+			#    Hornburg Causeway
+			1x4_356
+			#    Nan Curunir
+			1x5_119
+			#   Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#   Radagast, The Brown
+			1x9_26
+			#   Aragorn, Guide and Protector
+			1x11_53
+			#   Denethor, Wizened Steward
+			1x7_86
+			#   Elendil, The Tall
+			3x9_32
+			#   Faramir, Prince of Ithilien
+			1x13_66
+			#   Halbarad, Ranger of the North
+			1x14_9
+			#   Bow of Minas Tirith
+			2x11_58
+			#   Faramir's Bow
+			1x4_118
+			#   Faramir's Sword
+			1x12_48
+			#   Flaming Brand
+			1x2_32
+			#   Knight's Spear
+			1x7_108
+			#   Ranger's Sword
+			1x1_112
+			#   Hobbit Sword
+			2x1_299
+			#   Narsil, Forged by Telchar
+			1x17_31
+			#   Seeing Stone of Minas Anor
+			1x9_37
+			#   Seeing Stone of Orthanc
+			1x9_38
+			#   Banners Blowing
+			4x13_61
+			#   Dagger Strike
+			1x1_102
+			#   Every Little is a Gain
+			1x10_31
+			#   Last Throw
+			3x10_34
+			#   Boromir, My Brother
+			1x4_111
+			#Shadow (30 cards)
+			#   Axeman of Harad
+			2x11_69
+			#   Corrupted Spy
+			2x12_57
+			#   Crazed Hillman
+			1x12_60
+			#   Detachment of Haradrim
+			2x11_74
+			#   Easterling Banner-bearer
+			2x12_63
+			#   Fearsome Dunlending
+			2x11_79
+			#   Invading Haradrim
+			2x11_86
+			#   Patroller of Haradrim
+			2x11_93
+			#   Squad of Haradrim
+			2x11_99
+			#   Swarming Hillman
+			2x14_11
+			#   Throng of Harad
+			2x11_102
+			#   War Trident
+			2x12_77
+			#   Overrun
+			3x11_92
+			#   Driven From the Plains
+			1x13_87
+			#   Trail of Terror
+			3x12_76
+		]
+	},
+	{
+		name: Move Limit - Rohan Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Plains of Rohan Camp
+			1x4_333
+			#    Throne Room
+			1x4_341
+			#    Westemnet Hills
+			1x4_344
+			#    Hornburg Parapet
+			1x4_351
+			#    Great Hall
+			1x4_353
+			#    King's Room
+			1x4_357
+			#    Valley of Saruman
+			1x6_119
+			#   Orthanc Library
+			1x4_362
+			#Free Peoples (30 cards)
+			#   Radagast, The Brown
+			1x9_26
+			#   Gamling, Defender of the Hornburg
+			1x11_147
+			#   Haleth, Son of Háma
+			1x15_128
+			#   Théoden, King of the Eorlingas
+			1x11_159
+			#   Éomer, Éored Leader
+			1x12_112
+			#   Éowyn, Lady of Rohan
+			1x4_270
+			#   Brego
+			1x4_263
+			#   Firefoot
+			1x4_274
+			#   Herugrim
+			1x4_280
+			#   Rider's Bow
+			1x13_135
+			#   Rider's Mount
+			2x4_287
+			#   Rider's Spear
+			1x4_288
+			#   Rohirrim Axe
+			1x15_136
+			#   Rohirrim Bow
+			1x5_88
+			#   Windfola
+			1x7_260
+			#   Éomer's Spear, Trusty Weapon
+			1x15_124
+			#   Hobbit Sword
+			2x1_299
+			#   Helm! Helm!
+			2x4_279
+			#   Hurried Barrows
+			4x13_130
+			#   News From the Mark
+			2x6_96
+			#   Where Now The Horse
+			1x17_103
+			#   Riding Like the Wind
+			2x11_155
+			#Shadow (30 cards)
+			#   Advance Marauder
+			2x10_76
+			#   Gorgoroth Agitator
+			2x8_94
+			#   Gorgoroth Assassin
+			1x8_95
+			#   Gorgoroth Engineer
+			2x7_272
+			#   Gorgoroth Patrol
+			2x8_99
+			#   Gorgoroth Troop
+			2x7_279
+			#   Mordor Regular
+			2x7_288
+			#   Orc Butcher
+			1x3_94
+			#   Orc Fighter
+			2x5_105
+			#   Orc Ravager
+			2x10_94
+			#   Siege Troop
+			2x8_106
+			#   Rope and Winch
+			1x7_309
+			#   Sauron's Defenses
+			2x1_274
+			#   Sauron's Hatred
+			1x7_310
+			#   Their Marching Companies
+			2x8_107
+			#   Troop Tower
+			2x7_316
+			#   Window of the Eye
+			2x10_103
+		]
+	},
+	{
+		name: Move Limit - Smeagol Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Party Field
+			1x2_115
+			#    Bree Gate
+			1x1_327
+			#    Rivendell Waterfall
+			1x1_342
+			#    Balin's Tomb
+			1x1_343
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Valley of the Silverlode
+			1x2_120
+			#    Silverlode Banks
+			1x1_355
+			#    Anduin Banks
+			1x1_356
+			#   Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Radagast, The Brown
+			1x9_26
+			#   Sméagol, Pitiable Guide
+			1x19_11
+			#   Faramir, Son of Denethor
+			1x4_117
+			#   Ranger of Ithilien
+			1x4_130
+			#   Bilbo, Melancholy Hobbit
+			1x12_119
+			#   Sam, Nice Sensible Hobbit
+			1x5_115
+			#   Gondorian Blade
+			1x11_59
+			#   Hobbit Sword
+			2x1_299
+			#   Don't Follow the Lights
+			2x6_38
+			#   Duality
+			3x13_47
+			#   Naked Waste
+			4x13_53
+			#   Safe Paths
+			1x6_44
+			#   Herbs and Stewed Rabbit
+			4x15_44
+			#   Poor Wretch
+			4x5_27
+			#   Secret Paths
+			3x7_69
+			#Shadow (30 cards)
+			#   Gollum, Old Villain
+			1x6_40
+			#   Gollum, Threatening Guide
+			1x19_10
+			#   Gollum, Vile Creature
+			1x7_59
+			#   Shelob, Last Child of Ungoliant
+			2x8_26
+			#   Company of Haradrim
+			2x5_71
+			#   Desert Fighter
+			2x7_131
+			#   Desert Villain
+			2x7_138
+			#   Southron Veterans
+			2x4_257
+			#   Troop of Haradrim
+			2x7_172
+			#   Web
+			2x8_30
+			#   Raider Bow
+			4x7_155
+			#   Captured by the Ring
+			1x7_53
+			#   Desperate Move
+			2x15_42
+			#   Master Broke His Promise
+			2x6_41
+			#   Sweeter Meats
+			2x7_75
+			#   War Towers
+			2x7_173
+		]
+	},
+	{
+		name: The Great Eye - Dwarves+Gondor/Nazgul Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Little Master
+			#    The One Ring, The Ruling Ring
+			1x19_28
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Plains of Rohan
+			1x4_327
+			#    Fangorn Forest
+			1x4_332
+			#    Barrows of Edoras
+			1x4_337
+			#    Ered Nimrais
+			1x4_343
+			#    Hornburg Parapet
+			1x4_351
+			#    Hornburg Armory
+			1x4_354
+			#    Cavern Entrance
+			1x4_355
+			#    Valley of Saruman
+			1x6_119
+			#   Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#   Gimli, Feared Axeman
+			1x7_7
+			#   Thorin III, Stonehelm
+			1x17_6
+			#   Boromir, Son of Denethor
+			1x1_97
+			#   Denethor, Steward of the City
+			1x7_85
+			#   Faramir, Defender of Osgiliath
+			1x8_34
+			#   Halbarad, Ranger of the North
+			1x14_9
+			#   Isildur, Heir of Elendil
+			1x13_71
+			#   Denethor's Sword
+			1x18_43
+			#   Gondorian Sword
+			2x7_98
+			#   Hobbit Sword
+			1x1_299
+			#   Ring of Fury
+			1x9_7
+			#   Ring of Guile
+			1x9_8
+			#   Seeing Stone of Minas Anor
+			2x9_37
+			#   Seeing Stone of Orthanc
+			2x9_38
+			#   Battle in Earnest
+			2x8_2
+			#   Come Here Lad
+			2x4_43
+			#   Restless Axe
+			2x4_55
+			#   That's Two!
+			2x19_4
+			#   Courtesy of My Hall
+			1x4_44
+			#   Here Is Good Rock
+			1x4_50
+			#   Loyalty Unshaken
+			1x7_10
+			#   More to My Liking
+			1x5_9
+			#   Hardy Garrison
+			1x10_33
+			#Shadow (30 cards)
+			#   Black Rider
+			1x12_161
+			#   The Witch-king, Conqueror of Arthedain
+			1x17_144
+			#   The Witch-king, Morgul King
+			1x7_221
+			#   Úlairë Attëa, Black Predator
+			1x12_173
+			#   Úlairë Attëa, Second of the Nine Riders
+			1x11_219
+			#   Úlairë Cantëa, Thrall of The One
+			1x10_67
+			#   Úlairë Enquëa, Lieutenant of Morgul
+			1x1_231
+			#   Úlairë Enquëa, Sixth of the Nine Riders
+			1x13_182
+			#   Úlairë Lemenya, Lieutenant of Morgul
+			2x1_232
+			#   Úlairë Nelya, Black Hunter
+			1x12_177
+			#   Úlairë Nelya, Black-Mantled Wraith
+			1x7_216
+			#   Úlairë Nertëa, Servant of the Shadow
+			1x13_184
+			#   Úlairë Otsëa, Black Specter
+			1x12_179
+			#   Úlairë Otsëa, Duplicitous Specter
+			1x17_141
+			#   Úlairë Toldëa, Thrall of The One
+			1x10_71
+			#   Úlairë Toldëa, Winged Sentry
+			1x6_88
+			#   Nazgûl Sword
+			1x1_218
+			#   Mind and Body
+			4x7_183
+			#   Lingering Shadow
+			2x12_166
+			#   Lost in the Woods
+			1x11_212
+			#   Sauron's Gaze
+			2x12_169
+			#   Sense of Obligation
+			1x12_170
+			#   Too Late
+			2x7_209
+		]
+	},
+	{
+		name: The Great Eye - Elves+Hobbits/Sauron Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Galadriel, Bearer of Wisdom
+			#    The One Ring, The Ruling Ring
+			1x9_14
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Eastemnet Gullies
+			1x4_325
+			#    Derndingle
+			1x4_330
+			#    Barrows of Edoras
+			1x4_337
+			#    White Mountains
+			1x4_345
+			#    Hornburg Parapet
+			1x4_351
+			#    Hornburg Armory
+			1x4_354
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#   Erethón, Naith Lieutenant
+			1x4_65
+			#   Fereveldir, Son of Thandronen
+			1x4_67
+			#   Glorfindel, Eldarin Lord
+			1x18_13
+			#   Legolas, Fearless Marksman
+			1x7_25
+			#   Orophin, Silvan Elf
+			1x17_11
+			#   Merry, Rohirrim Squire
+			1x7_320
+			#   Pippin, Woolly-footed Rascal
+			1x4_314
+			#   Elven Sword
+			3x4_64
+			#   Lembas
+			2x4_75
+			#   Lembas Bread
+			1x18_15
+			#   Naith Longbow
+			2x6_21
+			#   Pippin's Dagger
+			1x9_21
+			#   Attunement
+			2x12_16
+			#   Defiance
+			1x1_37
+			#   Uncertain Paths
+			1x7_30
+			#   Knocked on the Head
+			2x4_308
+			#   We Shall Meet Again Soon
+			1x8_116
+			#   Agility
+			1x6_12
+			#   Glimpse of Fate
+			1x10_12
+			#   A Light in his Mind
+			1x10_108
+			#   Closer and Closer He Bent
+			2x8_109
+			#   The Shire Countryside
+			2x3_113
+			#Shadow (30 cards)
+			#   Gorgoroth Stormer
+			2x8_101
+			#   Orc Chaser
+			3x7_298
+			#   Orc Patrol
+			2x5_107
+			#   Orc Pursuer(2)
+			3x7_303
+			#   Orc Scouting Band
+			3x1_270
+			#   Orc Seeker
+			2x7_306
+			#   Orc Stalker
+			4x7_307
+			#   Sauron, Dark Lord of Mordor
+			2x13_140
+			#   Ithil Stone
+			1x9_47
+			#   Eye of Barad-Dûr
+			1x5_96
+			#   Flames Within
+			1x10_85
+			#   Some Secret Art of Flame
+			2x7_313
+			#   The Number Must Be Few
+			1x1_260
+			#   Under the Watching Eye
+			3x1_281
+		]
+	},
+	{
+		name: The Great Eye - Gandalf+Theoden/Sauron Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected By Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Uruk Camp
+			1x4_335
+			#    Throne Room
+			1x4_341
+			#    White Mountains
+			1x4_345
+			#    Helm's Gate
+			1x4_349
+			#    Great Hall
+			1x4_353
+			#    King's Room
+			1x4_357
+			#    Valley of Saruman
+			1x6_119
+			#   Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#   Gandalf, Stormcrow
+			1x0_64
+			#   Sméagol, Pitiable Guide
+			1x19_11
+			#   Haethen, Veteran Fighter
+			1x12_116
+			#   Rohirrim Guard
+			2x7_246
+			#   Théoden, King of the Eorlingas
+			2x11_159
+			#   Glamdring, Orc Beater
+			2x17_18
+			#   Brego
+			1x4_263
+			#   Herugrim
+			2x4_280
+			#   Rider's Mount
+			1x4_287
+			#   Sword of Rohan
+			1x4_291
+			#   Hobbit Sword
+			2x1_299
+			#   Gandalf's Staff, Ash-staff
+			1x11_34
+			#   The Palantír of Orthanc, Recovered Seeing Stone
+			2x13_36
+			#   All Save One
+			1x7_31
+			#   King's Advisor
+			1x7_42
+			#   Mysterious Wizard
+			1x1_78
+			#   On Your Doorstep
+			1x8_19
+			#   Strength of Spirit
+			2x1_85
+			#   The Board Is Set
+			1x7_32
+			#   Naked Waste
+			1x13_53
+			#   Sneaking!
+			1x7_73
+			#   An Honorable Charge
+			1x4_282
+			#   Hearken to Me
+			1x4_94
+			#Shadow (30 cards)
+			#   Gollum, Threatening Guide
+			1x19_10
+			#   Shelob, Last Child of Ungoliant
+			1x8_26
+			#   Band of the Eye
+			1x1_240
+			#   Gorgoroth Agitator
+			2x8_94
+			#   Gorgoroth Servitor
+			1x8_100
+			#   Grishnákh, Orc Captain
+			1x5_100
+			#   Mordor Defender
+			2x7_285
+			#   Mordor Regular
+			2x7_288
+			#   Mordor Savage
+			2x7_289
+			#   Siege Commander
+			1x7_311
+			#   The Mouth of Sauron, Lieutenant of Barad-dûr
+			2x12_118
+			#   Captured by the Ring
+			4x7_53
+			#   Unseen Foe
+			2x15_53
+			#   Eye of Barad-Dûr
+			1x5_96
+			#   Mordor's Strength
+			1x1_255
+			#   The Eye of Sauron
+			1x2_87
+			#   Sauron's Defenses
+			1x1_274
+			#   The Number Must Be Few
+			1x1_260
+			#   Window of the Eye
+			3x10_103
+		]
+	},
+	{
+		name: The Great Eye - Gondor/Isengard Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Tired Traveller
+			#    The One Ring, The Ruling Ring
+			1x4_302
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    The Riddermark
+			1x4_328
+			#    Wold of Rohan
+			1x4_336
+			#    Barrows of Edoras
+			1x4_337
+			#    Ered Nimrais
+			1x4_343
+			#    Deep of Helm
+			1x4_347
+			#    Caves of Aglarond
+			1x4_352
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#   Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#   Anborn, Skilled Huntsman
+			1x6_48
+			#   Aragorn, Isildur's Heir
+			1x13_59
+			#   Boromir, Doomed Heir
+			1x13_62
+			#   Faramir, Dúnadan of Gondor
+			1x12_47
+			#   Isildur, Sword-bearer
+			1x18_54
+			#   Mablung, Soldier of Gondor
+			1x4_127
+			#   Ranger of Ithilien
+			1x4_130
+			#   Bow of Minas Tirith
+			3x11_58
+			#   Gondorian Sword
+			2x7_98
+			#   Knight's Spear
+			1x7_108
+			#   Bill the Pony
+			1x3_106
+			#   Hobbit Sword
+			2x1_299
+			#   Let Folly Be Our Cloak
+			2x1_77
+			#   Drawing His Eye
+			4x10_29
+			#   New Errand
+			1x4_128
+			#   Hobbit Stealth
+			1x1_298
+			#   Confronting the Eye
+			4x12_45
+			#   Gondor Bowmen
+			2x3_41
+			#Shadow (30 cards)
+			#   Advance Uruk Patrol
+			1x4_136
+			#   Orthanc Assassin
+			1x1_131
+			#   Orthanc Berserker
+			1x3_66
+			#   Saruman, Servant of the Eye
+			2x3_69
+			#   Uruk Defender
+			2x4_184
+			#   Uruk Fighter
+			1x1_146
+			#   Uruk Guard
+			1x1_147
+			#   Uruk Plains Runner
+			2x4_189
+			#   Uruk Ravager
+			1x3_75
+			#   Uruk Rear Guard
+			2x4_191
+			#   Uruk Sapper
+			2x5_62
+			#   Uruk Shaman
+			1x1_152
+			#   Uruk Slayer
+			1x1_153
+			#   Uruk-hai Raiding Party
+			1x1_158
+			#   The Mouth of Sauron, Lieutenant of Barad-dûr
+			1x12_118
+			#   Broad-bladed Sword
+			2x4_142
+			#   Saruman's Staff, Wizard's Device
+			1x4_174
+			#   The Palantír of Orthanc
+			1x3_67
+			#   The Palantír of Orthanc, Seventh Seeing-stone
+			1x4_166
+			#   Ferocity
+			2x4_151
+			#   Suffered Much Loss
+			2x10_35
+			#   The Number Must Be Few
+			1x1_260
+		]
+	},
+	{
+		name: Alphabet DEGR - DDD Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Woods
+			1x2_116
+			#    Bree Gate
+			1x1_327
+			#    Rivendell Terrace
+			1x1_340
+			#    Eregion Hills
+			1x3_116
+			#    The Bridge of Khazad-dûm
+			1x1_349
+			#    Lothlórien Woods
+			1x1_352
+			#    Anduin Wilderland
+			1x1_354
+			#    Gates of Argonath
+			1x3_117
+			#    Summit of Amon Hen
+			1x1_362
+			#Free Peoples (30 cards)
+			#   Durin III, Dwarven Lord
+			1x9_3
+			#   Dwarven Warrior
+			1x12_7
+			#   Dáin Ironfoot, King Under the Mountain
+			1x14_1
+			#   Damrod, Dúnadan of Gondor
+			1x15_57
+			#   Denethor, Last Ruling Steward
+			1x13_64
+			#   Duilin, Ranger From Blackroot Vale
+			1x14_7
+			#   Dúnedain of the South
+			1x15_59
+			#   Dwarven Axe
+			2x1_9
+			#   Dwarven Bracers
+			2x2_3
+			#   Denethor's Sword
+			1x18_43
+			#   Dúnadan's Bow
+			2x18_45
+			#   Durability
+			2x12_4
+			#   Dwarf-lords
+			2x13_4
+			#   Dagger Strike
+			1x1_102
+			#   Defend It and Hope
+			1x4_115
+			#   Defenses Long Held
+			1x18_44
+			#   Dark Ways
+			1x7_5
+			#   Dwarven Embassy
+			1x11_5
+			#   Dwarven Heart
+			1x1_10
+			#   Dwarven Skill
+			1x12_6
+			#   Decorated Barricade
+			1x15_58
+			#   Disarmed
+			2x2_46
+			#   Don't Let Go
+			2x13_145
+			#Shadow (30 cards)
+			#   Dunlending Elder
+			3x6_2
+			#   Dunlending Headman
+			2x6_4
+			#   Dunlending Looter
+			2x4_11
+			#   Dunlending Madman
+			2x4_12
+			#   Dunlending Pillager
+			2x4_13
+			#   Dunlending Ransacker
+			3x4_14
+			#   Dunlending Robber
+			2x4_16
+			#   Desolation Orc
+			2x15_107
+			#   Desert Legion
+			2x4_218
+			#   Desert Lord
+			2x4_219
+			#   Desert Stalker
+			2x5_72
+			#   Dark Fury
+			3x4_7
+			#   Death to the Strawheads
+			2x4_8
+			#   Discovered
+			1x4_223
+		]
+	},
+	{
+		name: Alphabet DEGR - EEE Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Rohirrim Road
+			1x7_332
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    Pelennor Flat
+			1x7_345
+			#    Minas Tirith Seventh Circle
+			1x7_350
+			#    Pelennor Grassland
+			1x7_354
+			#    Cross Roads
+			1x7_356
+			#    Slag Mounds
+			1x7_363
+			#Free Peoples (30 cards)
+			#    Elladan, Son of Elrond
+			1x14_2
+			#    Elrohir, Son of Elrond
+			1x14_3
+			#    Elrond, Venerable Lord
+			1x10_9
+			#    Elven Guardian
+			1x17_7
+			#    Elven Warrior
+			1x15_14
+			#    Elite Rider
+			1x4_265
+			#    Erkenbrand, Master of Westfold
+			1x0_59
+			#    Éomer, Rohirrim Captain
+			1x6_92
+			#    Erestor, Chief Advisor to Elrond
+			2x3_14
+			#    Elven Armaments
+			2x18_8
+			#    Elven Bow
+			3x15_13
+			#    Elven Cloak
+			2x1_42
+			#    Elven Rope
+			1x9_13
+			#    Elven Sword
+			3x4_64
+			#    Erkenbrand's Horn
+			1x18_96
+			#    Erkenbrand's Shield
+			1x18_97
+			#    Elf-song
+			3x1_39
+			#    Elven Marksmanship
+			3x11_17
+			#    Elendil's Army
+			1x18_47
+			#Shadow (30 cards)
+			#    Emboldened Orc
+			2x11_119
+			#    Easterling Army
+			2x6_78
+			#    Easterling Axeman
+			2x4_224
+			#    Easterling Berserker
+			1x10_40
+			#    Easterling Captain
+			1x4_225
+			#    Easterling Footman
+			2x7_143
+			#    Easterling Guard
+			4x4_226
+			#    Easterling Lieutenant
+			4x4_228
+			#    Easterling Pillager
+			2x10_41
+			#    Easterling Regiment
+			1x7_145
+			#    Easterling Skirmisher
+			1x4_229
+			#    Entranced Uruk
+			2x13_163
+			#    Easterling Polearm
+			2x6_79
+			#    Evil Afoot
+			2x2_41
+			#    Enemy Upon Enemy
+			1x13_106
+			#    Eastern Emyn Muil
+			1x4_231
+		]
+	},
+	{
+		name: Alphabet DEGR - GGG Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Shire Lookout Point
+			1x1_325
+			#    Midgewater Marshes
+			1x1_332
+			#    Rivendell Terrace
+			1x1_340
+			#    Moria Lake
+			1x1_346
+			#    The Bridge of Khazad-dûm
+			1x1_349
+			#    Dimrill Dale
+			1x1_350
+			#    Anduin Confluence
+			1x1_353
+			#    Gates of Argonath
+			1x3_117
+			#    Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#   Gandalf, The White Wizard
+			2x4_90
+			#   Ghân-buri-Ghân, Chieftain of the Woses
+			1x0_56
+			#   Grimbeorn, Beorning Chieftain
+			1x14_6
+			#   Garrison of Gondor
+			1x8_36
+			#   Gondorian Captain
+			1x7_96
+			#   Gondorian Knight
+			1x5_35
+			#   Guard of the White Tree
+			1x13_67
+			#   Gandalf's Cart
+			1x1_73
+			#   Gandalf's Hat
+			1x12_28
+			#   Glamdring, Foe-hammer
+			1x11_35
+			#   Gondor Bow
+			2x7_94
+			#   Gondorian Blade
+			1x11_59
+			#   Gondorian Steed
+			2x12_49
+			#   Gondorian Sword
+			1x7_98
+			#   Gandalf's Staff, Walking Stick
+			1x4_91
+			#   Guidance of the Istari
+			1x17_19
+			#   Great Gate
+			3x7_99
+			#   G for Grand
+			2x11_32
+			#   Garrison of Osgiliath
+			1x6_52
+			#   Gondor Bowmen
+			1x3_41
+			#   Gondor Still Stands
+			1x7_95
+			#   Great Heart
+			1x10_107
+			#   Gwaihir, The Windlord
+			1x17_20
+			#   Gondorian Servant, Denethor's Handman
+			1x18_52
+			#Shadow (30 cards)
+			#   Gollum, Skulker
+			1x11_42
+			#   Goblin Marksman
+			3x1_176
+			#   Goblin Scavengers
+			4x1_179
+			#   Goblin Warrior
+			1x1_185
+			#   Gorbag, Filthy Rebel
+			1x15_109
+			#   Gothmog, Morgul Leader
+			2x18_80
+			#   Gate Picket
+			1x6_101
+			#   Gorgoroth Agitator
+			2x8_94
+			#   Gorgoroth Assassin
+			2x8_95
+			#   Gorgoroth Soldier
+			2x7_278
+			#   Gorgoroth Swarm
+			2x10_87
+			#   Great Hill Troll
+			1x8_102
+			#   Gorbag, Covetous Captain
+			1x10_59
+			#   Goblin Scimitar
+			3x1_180
+			#   Goblin Armory
+			1x1_173
+			#   Goblin Domain
+			1x1_175
+			#   Goblin Swarms
+			1x1_183
+			#   Great Siege-towers
+			1x7_281
+		]
+	},
+	{
+		name: Alphabet DEGR - RRR Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Edoras Hall
+			1x7_330
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Pelennor Prairie
+			1x10_118
+			#    Pelennor Flat
+			1x7_345
+			#    Minas Tirith Fourth Circle
+			1x7_348
+			#    Osgiliath Crossing
+			1x7_353
+			#    Northern Ithilien
+			1x7_359
+			#    Haunted Pass
+			1x7_361
+			#Free Peoples (30 cards)
+			#    Radagast, The Brown
+			1x9_26
+			#    Ranger of Ithilien
+			1x4_130
+			#    Ranger of Minas Tirith
+			1x7_115
+			#    Riddermark Soldier
+			1x11_152
+			#    Riders of the Mark
+			1x11_154
+			#    Rohirrim Guard
+			1x7_246
+			#    Rohirrim Soldier
+			1x15_138
+			#    Rúmil, Elven Protector
+			1x1_57
+			#    Ranger's Bow
+			1x4_131
+			#    Ranger's Cloak
+			1x15_68
+			#    Riddermark Javelin
+			1x11_151
+			#    Rider's Mount
+			2x4_287
+			#    Rider's Spear
+			1x11_153
+			#    Rohirrim Axe
+			2x15_136
+			#    Rohirrim Bow
+			1x5_88
+			#    Rohirrim Helm
+			1x5_89
+			#    Rohirrim Mount
+			1x11_156
+			#    Rohirrim Shield
+			1x5_91
+			#    Radagast's Staff
+			1x0_57
+			#    Rally the Company
+			2x13_74
+			#    Rally Cry
+			2x11_150
+			#    Ride With Me
+			2x13_134
+			#    Ruins of Osgiliath
+			1x4_133
+			#    Rohan Stable Master
+			1x15_134
+			#    Rohirrim Doorwarden
+			1x15_137
+			#Shadow (30 cards)
+			#    Ranged Commander
+			2x4_169
+			#    Raging Dunlending
+			3x11_97
+			#    Rampaging Easterling
+			3x11_98
+			#    Rapt Hillman
+			1x15_90
+			#    Ravaging Wild Man
+			3x15_91
+			#    Rough Man of the South
+			2x18_73
+			#    Ruffian
+			2x18_72
+			#    Rallying Orc
+			4x12_100
+			#    Relentless Uruk
+			2x11_199
+			#    Ruthless Uruk
+			2x11_200
+			#    Relentless Warg
+			2x17_89
+			#    Rider's Gear
+			1x17_90
+			#    Radagast Deceived
+			1x13_80
+			#    Rapid Reload
+			2x15_89
+		]
+	},
+	{
+		name: Alphabet AHST - AAA Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary from the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    The Riddermark
+			1x4_328
+			#    Uruk Camp
+			1x4_335
+			#    Barrows of Edoras
+			1x4_337
+			#    White Rocks
+			1x4_346
+			#    Hornburg Courtyard
+			1x4_350
+			#    Caves of Aglarond
+			1x4_352
+			#    Hornburg Causeway
+			1x4_356
+			#    Valley of Saruman
+			1x6_119
+			#    Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#    Aegnor, Elven Escort
+			1x10_4
+			#    Arwen, Evenstar of Her People
+			1x6_13
+			#    Alcarin, Warrior of Lamedon
+			1x5_31
+			#    Anborn, Skilled Huntsman
+			1x6_48
+			#    Anárion, Lord of Anórien
+			1x0_58
+			#    Aragorn, King in Exile
+			2x1_365
+			#    Aldred, Éored Soldier
+			1x12_107
+			#    Arwen's Bow
+			1x18_4
+			#    Arwen's Dagger
+			1x18_5
+			#    Asfaloth, Elven Steed
+			1x7_17
+			#    Aragorn's Bow, Ranger's Longbow
+			1x15_56
+			#    Armor
+			1x1_92
+			#    Armor of the White City
+			2x18_39
+			#    Athelas
+			1x1_94
+			#    Aiglos
+			2x9_12
+			#    Andúril, King's Blade
+			1x7_80
+			#    Ancient Enmity
+			1x1_29
+			#    Attunement
+			2x12_16
+			#    A Ranger's Versatility
+			1x1_113
+			#    Arwen's Fate
+			2x1_93
+			#    At His Command
+			1x8_31
+			#    A Blended Race
+			1x2_16
+			#    Agility
+			1x6_12
+			#    Ancient Blade
+			1x7_15
+			#    A Dragon's Tale
+			1x18_106
+			#Shadow (30 cards)
+			#    Advance Uruk Patrol
+			2x4_136
+			#    Archer of Harad
+			2x11_67
+			#    Axeman of Harad
+			2x11_69
+			#    Advance Captain
+			2x10_75
+			#    Advance Marauder
+			2x10_76
+			#    Advance Regular
+			2x10_77
+			#    Advance Scout
+			1x10_78
+			#    Advancing Horde
+			2x15_155
+			#    Advancing Uruk
+			2x12_134
+			#    Army of Uruk-hai
+			1x11_177
+			#    Assault Commander
+			3x13_158
+			#    Assault Denizen
+			2x13_159
+			#    A Host Avails Little
+			2x1_251
+			#    All Thought Bent on It
+			1x1_239
+			#    Assault Ladder
+			2x6_58
+			#    Attack on Helm's Deep
+			2x4_137
+		]
+	},
+	{
+		name: Alphabet AHST - HHH Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Protected by Many
+			#    The One Ring, The Ruling Ring
+			1x11_164
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Wold of Rohan
+			1x4_336
+			#    Westemnet Plains
+			1x4_342
+			#    Westemnet Hills
+			1x4_344
+			#    Deeping Wall
+			1x4_348
+			#    Great Hall
+			1x4_353
+			#    King's Room
+			1x4_357
+			#    Ring of Isengard
+			1x4_358
+			#    Orthanc Library
+			1x4_362
+			#Free Peoples (30 cards)
+			#    Halbarad, Ranger of the North
+			1x14_9
+			#    Haethen, Veteran Fighter
+			1x12_116
+			#    Haleth, Son of Háma
+			1x15_128
+			#    Horseman of the North
+			1x15_130
+			#    Hrethel, Rider of Rohan
+			1x6_95
+			#    Hrothlac, Man of Rohan
+			1x11_148
+			#    Háma, Captain of the King's Guard
+			1x13_128
+			#    Hlafwine, Village Farmhand
+			1x4_281
+			#    Heavy Chain
+			1x4_278
+			#    Horse of Great Stature
+			2x15_129
+			#    Horse of Rohan
+			2x4_283
+			#    Hobbit Sword
+			2x7_319
+			#    Hamstrung
+			2x13_129
+			#    Helm! Helm!
+			1x4_279
+			#    His Golden Shield
+			1x7_237
+			#    Hurried Barrows
+			2x13_130
+			#    Hobbit Intuition
+			2x1_296
+			#    Hobbit Sword-play
+			2x2_103
+			#    Hope is Kindled
+			2x12_123
+			#    Help in Doubt and Need
+			1x4_124
+			#    Houses of Healing
+			1x11_61
+			#    Hobbiton Brewer, Maker of Fine Ales
+			1x15_146
+			#Shadow (30 cards)
+			#    Hill Chief
+			2x4_20
+			#    Hill Clan
+			2x6_6
+			#    Hillman Band
+			2x4_21
+			#    Hillman Horde
+			2x4_22
+			#    Hillman Rabble
+			2x4_24
+			#    Hillman Tribe
+			4x4_25
+			#    Harad Standard-bearer
+			1x11_84
+			#    Harry Goatleaf
+			3x18_68
+			#    Harrying Hillman
+			2x12_69
+			#    Horde of Harad
+			2x11_85
+			#    Hunting Herdsman
+			2x15_83
+			#    Hides
+			2x4_19
+			#    Harmless
+			4x13_93
+		]
+	},
+	{
+		name: Alphabet AHST - SSS Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary From the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Sleeping Quarters
+			1x7_333
+			#    West Road
+			1x7_337
+			#    Hall of the Kings
+			1x7_339
+			#    Pelennor Prairie
+			1x10_118
+			#    Pelennor Flat
+			1x7_345
+			#    Minas Tirith First Circle
+			1x7_347
+			#    Pelennor Grassland
+			1x7_354
+			#    Cross Roads
+			1x7_356
+			#    Haunted Pass
+			1x7_361
+			#Free Peoples (30 cards)
+			#    Shrouded Elf
+			1x13_23
+			#    Shadow of the Wood
+			2x15_35
+			#    Shepherd of the Trees
+			2x15_36
+			#    Skinbark, Fladrif
+			1x6_35
+			#    Sméagol, Pitiable Guide
+			1x19_11
+			#    Sam, Loyal Friend
+			1x19_32
+			#    Sam's Pack
+			1x4_317
+			#    Sting, Baggins Heirloom
+			2x5_116
+			#    Stand Against Darkness
+			1x1_63
+			#    Sneaking!
+			2x7_73
+			#    Second Breakfast
+			2x15_154
+			#    Severed His Bonds
+			2x4_319
+			#    Stout and Sturdy
+			2x1_315
+			#    Sworn Companion
+			2x11_174
+			#    Safe Passage
+			2x11_50
+			#    Strength in My Blood
+			1x19_15
+			#    Shadowplay
+			2x10_114
+			#    Simple Living
+			2x12_130
+			#    Sudden Fury
+			1x12_132
+			#Shadow (30 cards)
+			#    Shelob, Last Child of Ungoliant
+			2x8_26
+			#    Stampeding Chief
+			1x17_49
+			#    Stampeding Shepherd
+			2x17_54
+			#    Swarthy Hillman
+			3x15_93
+			#    Southron Archer
+			1x4_245
+			#    Southron Assassin
+			1x4_246
+			#    Southron Brigand
+			1x7_161
+			#    Southron Commander
+			2x4_249
+			#    Southron Fanatic
+			2x10_49
+			#    Southron Fighter
+			1x4_251
+			#    Southron Invaders
+			1x6_81
+			#    Southron Traveler
+			2x5_76
+			#    Southron Wanderer
+			2x4_258
+			#    Shagrat, Captain of Cirith Ungol
+			1x10_99
+			#    Siege Troop
+			1x8_106
+			#    Shagrat, Tower Captain
+			1x18_122
+			#    Southron Spear
+			2x4_255
+			#    Sting of Shelob
+			1x18_35
+			#    Strength in Numbers
+			2x5_77
+			#    Saruman, Servant of Sauron
+			1x17_38
+		]
+	},
+	{
+		name: Alphabet AHST - TTT Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Old Bilbo's Heir
+			#    The One Ring, The Ruling Ring
+			1x1_289
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Bag End
+			1x1_319
+			#    Ettenmoors
+			1x1_331
+			#    Rivendell Terrace
+			1x1_340
+			#    Eregion Hills
+			1x3_116
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Caras Galadhon
+			1x3_115
+			#    The Great River
+			1x3_118
+			#    Gates of Argonath
+			1x3_117
+			#    Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#    Thorin III, Stonehelm
+			1x17_6
+			#    Thrarin, Smith of Erebor
+			1x12_15
+			#    Targon
+			1x7_124
+			#    Tradesman From Lebennin
+			2x13_77
+			#    Théoden, Northman, King of Rohan
+			1x17_102
+			#    Théodred, Second Marshal of the Mark
+			1x13_138
+			#    Tolman Cotton, Farmer of Bywater
+			1x12_133
+			#    Thrarin, Dwarven Smith
+			1x1_27
+			#    Tom Bombadil, The Master
+			1x9_52
+			#    Tom Bombadil's Hat
+			1x0_60
+			#    The Red Arrow
+			1x9_46
+			#    Their Halls of Stone
+			2x1_26
+			#    The Highest Quality
+			1x11_60
+			#    Trust
+			3x6_56
+			#    The More, The Merrier
+			2x11_169
+			#    The Faithful Stone
+			1x18_50
+			#    The Saga of Elendil
+			1x1_114
+			#    Tireless
+			2x12_52
+			#    Tremendous Wall
+			1x15_70
+			#    The Shire Countryside
+			2x3_113
+			#    The Tale of the Great Ring
+			1x10_116
+			#    There and Back Again
+			1x1_317
+			#    The Gaffer, Master Gardener
+			1x13_151
+			#Shadow (30 cards)
+			#    Throng of Harad
+			2x11_102
+			#    The Balrog, The Terror of Khazad-dûm
+			1x12_79
+			#    Tower Troll
+			2x15_117
+			#    Troll of the Deep, Cave Troll
+			2x19_23
+			#    Troll's Keyward, Keeper of the Beast
+			3x12_105
+			#    The Mouth of Sauron, Lieutenant of Barad-dûr
+			3x12_118
+			#    Tower Assassin
+			1x2_93
+			#    Troll of Cirith Gorgor
+			1x10_101
+			#    Troll of Udûn
+			4x6_106
+			#    The Witch-king, Conqueror of Arthedain
+			1x17_144
+			#    The Witch-king, Morgul King
+			2x7_221
+			#    Troll's Chain
+			2x6_107
+			#    The Pale Blade
+			1x1_221
+			#    The Pale Blade, Sword of Flame
+			1x11_214
+			#    The Witch-king's Beast, Fell Creature
+			1x12_184
+			#    The Balrog's Sword
+			1x2_50
+			#    There Came a Cry
+			2x7_208
+		]
+	},
+	{
+		name: Alphabet BFLW - BBB Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary From the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Hobbiton Party Field
+			1x2_115
+			#    Bree Streets
+			1x1_328
+			#    Ford of Bruinen
+			1x1_338
+			#    Dwarrowdelf Chamber
+			1x1_344
+			#    The Bridge of Khazad-dum
+			1x1_349
+			#    Caras Galadhon
+			1x3_115
+			#    Anduin Wilderland
+			1x1_354
+			#    Gates of Argonath
+			1x3_117
+			#    Emyn Muil
+			1x1_360
+			#Free Peoples (30 cards)
+			#    Barliman Butterbur, Red-faced Landlord
+			1x17_16
+			#    Birchseed, Tall Statesman
+			2x5_15
+			#    Brand, King of Dale
+			1x14_5
+			#    Boromir, Bearer of Council
+			4x9_31
+			#    Bilbo, Aged Ring-bearer
+			1x13_142
+			#    Bounder
+			3x1_286
+			#    Beorning Axe
+			1x18_18
+			#    Blade of Gondor
+			2x1_95
+			#    Bow of Minas Tirith
+			2x11_58
+			#    Bill the Pony
+			1x3_106
+			#    Brace of Coneys
+			1x4_298
+			#    Be Gone!
+			2x15_27
+			#    Banner of the White Tree
+			2x3_39
+			#    Banners Blowing
+			3x13_61
+			#    Battle Cry
+			3x11_56
+			#    Brooding on Tomorrow
+			1x10_15
+			#Shadow (30 cards)
+			#    Berserk Savage
+			1x5_46
+			#    Barbarous Orc
+			1x11_107
+			#    Battlefield Recruit
+			2x15_95
+			#    Battlefield Veteran
+			2x15_96
+			#    Beastly Olog-hai
+			1x11_108
+			#    Black Gate Sentry
+			1x15_98
+			#    Black Land Chieftain
+			1x15_99
+			#    Black Land Commander
+			1x15_100
+			#    Black Land Overlord
+			1x15_102
+			#    Black Land Spy
+			1x15_105
+			#    Black Númenorean
+			1x8_49
+			#    Barbaric Uruk
+			1x12_135
+			#    Bloodthirsty Uruk
+			1x11_178
+			#    Breeding Pit Conscript
+			1x12_137
+			#    Bill Ferny, Swarthy Sneering Fellow
+			1x2_75
+			#    Black Rider
+			4x12_161
+			#    Bladed Gauntlets
+			1x11_109
+			#    Black Sails of Umbar
+			1x8_50
+			#    Barrage
+			1x12_82
+			#    Broken in Defeat
+			1x12_139
+			#    Beyond All Darkness
+			1x8_68
+			#    Black Breath
+			2x1_207
+			#    Blade Tip
+			2x1_209
+		]
+	},
+	{
+		name: Alphabet BFLW - FFF Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary From the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Eastemnet Downs
+			1x4_324
+			#    Derndingle
+			1x4_330
+			#    Westemnet Plains
+			1x4_342
+			#    White Rocks
+			1x4_346
+			#    Deep of Helm
+			1x4_347
+			#    Great Hall
+			1x4_353
+			#    Hornburg Causeway
+			1x4_356
+			#    Nan Curunir
+			1x5_119
+			#    Fortress of Orthanc
+			1x4_360
+			#Free Peoples (30 cards)
+			#    Farin, Emissary of Erebor
+			2x11_7
+			#    Frór, Gimli's Kinsman
+			1x2_6
+			#    Forest Guardian
+			2x5_17
+			#    Faramir, Captain of Ithilien
+			1x18_48
+			#    Farmer Maggot, Hobbit of the Marish
+			1x11_163
+			#    Fredegar Bolger, Fatty
+			1x18_107
+			#    Filibert Bolger, Wily Rascal
+			1x2_101
+			#    Faramir's Bow
+			1x4_118
+			#    Faramir's Sword
+			1x12_48
+			#    Flaming Brand
+			1x2_32
+			#    Frodo's Cloak
+			1x4_303
+			#    Frying Pan
+			3x3_108
+			#    Fallen Lord
+			2x11_6
+			#    Flurry of Blows
+			1x2_5
+			#    For a While Less Dark
+			2x13_32
+			#    Flee in Terror
+			1x2_33
+			#    Flotsam and Jetsam
+			2x12_121
+			#    Foes of Mordor
+			1x1_105
+			#    Faith in Friendship
+			1x13_147
+			#    Fates Entwined
+			2x13_148
+			#    Faramir's Company
+			1x18_49
+			#    Frodo Gamgee, Son of Samwise
+			1x13_150
+			#Shadow (30 cards)
+			#    Ferocious Haradrim
+			2x11_80
+			#    Fletcher of Harad
+			4x11_81
+			#    Footman of Dunland
+			2x11_82
+			#    Force of Harad
+			2x11_83
+			#    Frenzied Dunlending
+			2x12_65
+			#    Furious Hillman
+			2x14_10
+			#    Feral Uruk
+			2x11_183
+			#    Following Uruk
+			2x15_160
+			#    Force of Uruk-hai
+			2x11_184
+			#    Furious Uruk
+			2x11_186
+			#    Ferocity
+			1x4_151
+			#    Fires Brightly Burning
+			3x13_91
+			#    Final Triumph
+			1x18_115
+			#    Furor
+			2x11_187
+			#    Fortitude
+			1x11_185
+		]
+	},
+	{
+		name: Alphabet BFLW - LLL Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary From the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Rohirrim Road
+			1x7_332
+			#    Rohirrim Camp
+			1x7_336
+			#    Hall of the Kings
+			1x7_339
+			#    Anduin Banks
+			1x7_341
+			#    Steward's Tomb
+			1x10_119
+			#    Minas Tirith Seventh Circle
+			1x7_350
+			#    Ruined Capitol
+			1x7_355
+			#    Cross Roads
+			1x7_356
+			#    Haunted Pass
+			1x7_361
+			#Free Peoples (30 cards)
+			#    Legolas, Of the Grey Company
+			1x13_18
+			#    Lórien Guardian
+			1x4_76
+			#    Lórien Protector
+			1x13_20
+			#    Lórien Swordsman
+			2x4_78
+			#    Librarian, Keeper of Ancient Texts
+			2x18_22
+			#    Lindenroot, Elder Shepherd
+			1x5_19
+			#    Léofric, Defender of the Mark
+			1x12_117
+			#    Léowyn
+			1x7_239
+			#    Legolas' Bow
+			1x11_23
+			#    Legolas' Sword
+			1x5_12
+			#    Lembas
+			1x4_75
+			#    Lembas Bread
+			1x18_15
+			#    Long-knives of Legolas
+			2x3_21
+			#    Long Spear
+			1x7_240
+			#    Let Fly
+			3x13_19
+			#    Life of the Eldar
+			1x8_11
+			#    Lothlórien Guides
+			2x17_9
+			#    Leaving Forever
+			1x7_24
+			#    Lórien Is Most Welcome
+			2x4_77
+			#    Last Stand
+			2x18_21
+			#    Long Live the Halflings
+			2x12_124
+			#Shadow (30 cards)
+			#    Lieutenant of Orthanc
+			2x4_158
+			#    Lurtz, Servant of Isengard
+			2x1_127
+			#    Legion of Harad
+			4x11_88
+			#    Lookout Uruk
+			4x11_193
+			#    Lurtz, Halfling Hunter
+			1x18_118
+			#    Lurtz, Minion of the White Wizard
+			2x11_194
+			#    Lurtz, Now Perfected
+			2x15_162
+			#    Lurtz, Resilient Captain
+			1x19_33
+			#    Lurtz's Sword
+			1x2_43
+			#    Long Battle Bow
+			2x11_89
+			#    Lurtz's Bow, Black-fletch Bow
+			3x18_119
+			#    Lurtz's Sword, Mighty Longsword
+			2x15_163
+			#    Lurtz's Battle Cry
+			2x1_128
+			#    Lying Counsel
+			1x15_85
+			#    Land Had Changed
+			1x17_114
+		]
+	},
+	{
+		name: Alphabet BFLW - WWW Starter
+		type: pack
+		items: [
+			#Ring-bearer (2 cards)
+			#    Frodo, Weary From the Journey
+			#    The One Ring, The Ruling Ring
+			1x15_144
+			1x1_2
+			#Adventure Deck (9 cards)
+			#    Horse-Country
+			1x4_326
+			#    Uruk Camp
+			1x4_335
+			#    Stables
+			1x4_339
+			#    White Rocks
+			1x4_346
+			#    Deep of Helm
+			1x4_347
+			#    Great Hall
+			1x4_353
+			#    Hornburg Causeway
+			1x4_356
+			#    Nan Curunir
+			1x5_119
+			#    Palantir Chamber
+			1x4_363
+			#Free Peoples (30 cards)
+			#    Woodland Onod
+			4x17_26
+			#    Watcher at Sarn Ford, Ranger of the North
+			1x18_59
+			#    Warrior of Rohan
+			4x17_104
+			#    Westfarthing Businessman
+			3x13_157
+			#    Weland, Smith of the Riddermark
+			1x4_295
+			#    Windfola
+			1x7_260
+			#    War Must Be
+			2x5_43
+			#    War and Valor
+			2x4_135
+			#    War Now Calls Us
+			2x11_160
+			#    Where Now The Horse
+			2x17_103
+			#    White Hot Fury
+			1x7_258
+			#    Wind in His Face
+			2x7_259
+			#    Work for the Sword
+			2x4_297
+			#    Warmed Up a Bit
+			2x4_322
+			#    We Left None Alive
+			1x6_97
+			#Shadow (30 cards)
+			#    Wandering Hillman
+			2x15_94
+			#    Warrior of Dunland
+			3x11_103
+			#    Watchman Uruk
+			2x11_206
+			#    White Hand Aggressor
+			1x17_119
+			#    White Hand Attacker
+			2x17_120
+			#    White Hand Attacker(2)
+			2x18_124
+			#    White Hand Berserker
+			2x17_121
+			#    White Hand Enforcer
+			2x17_125
+			#    White Hand Intruder
+			2x17_127
+			#    White Hand Invader
+			2x17_128
+			#    White Hand Marchers
+			1x18_126
+			#    White Hand Marshal
+			2x18_127
+			#    White Hand Sieger
+			2x18_129
+			#    White Hand Veteran
+			1x17_135
+			#    We Are the Fighting Uruk-hai
+			1x4_210
+			#    Whistling Death
+			1x11_104
+			#    Worry
+			1x1_162
+			#    Weapons of Control
+			1x13_177
+		]
+	},

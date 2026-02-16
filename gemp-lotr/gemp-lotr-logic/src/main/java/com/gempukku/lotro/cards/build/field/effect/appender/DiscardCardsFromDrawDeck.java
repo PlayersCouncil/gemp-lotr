@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -23,7 +24,7 @@ import java.util.List;
 public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "player", "deck", "showAll", "shuffle");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "player", "deck", "showAll", "shuffle", "forced");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
@@ -31,7 +32,9 @@ public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
         final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
+        boolean forced = FieldUtils.getBoolean(effectObject.get("forced"), "forced");
 
+        final var playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
@@ -45,7 +48,7 @@ public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> cardsToDiscard = actionContext.getCardsFromMemory(memorize);
                         List<Effect> result = new LinkedList<>();
                         for (PhysicalCard physicalCard : cardsToDiscard) {
-                            result.add(new DiscardCardFromDeckEffect(physicalCard));
+                            result.add(new DiscardCardFromDeckEffect(actionContext.getSource(), playerSource.getPlayer(actionContext), physicalCard, forced));
                         }
 
                         return result;

@@ -58,8 +58,9 @@ public class DiscardTopCardFromDeckEffect extends AbstractEffect {
                 cardsDiscardedCallback(cardsDiscarded);
             }
 
-            for (PhysicalCard discardedCard : cardsDiscarded)//PhysicalCard source, PhysicalCard card, String handPlayerId, boolean forced
+            for (PhysicalCard discardedCard : cardsDiscarded) {
                 game.getActionsEnvironment().emitEffectResult(new DiscardCardFromDeckResult(_source, discardedCard, _forced));
+            }
 
             return new FullEffectResult(_count == cardsDiscarded.size());
         }

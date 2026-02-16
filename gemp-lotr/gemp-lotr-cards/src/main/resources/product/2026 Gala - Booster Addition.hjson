@@ -1,0 +1,142 @@
+{
+		name: (S)Site Control - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xSite Control - Elves/Besiegers Starter
+			1xSite Control - Ents/Uruks Starter
+			1xSite Control - Gondor/Raider Starter
+			1xSite Control - Rohan/Dunland Starter
+		]
+	}
+	{
+		name: (S)Romance - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xRomance - Arwen+Aragorn Starter
+			1xRomance - Faramir+Eowyn Starter
+			1xRomance - Galadriel+Celeborn Starter
+			1xRomance - Sam+Rosie Tom+Goldberry Starter
+		]
+	}
+	{
+		name: (S)Bromance - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xBromance - Aragorn+Boromir Starter
+			1xBromance - Frodo+Sam Starter
+			1xBromance - Legolas+Gimli Starter
+			1xBromance - Merry+Pippin Starter
+		]
+	}
+	{
+		name: (S)Forbidden Love - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xForbidden Love - Eowyn+Aragorn Starter
+			1xForbidden Love - Gimli+Galadriel Starter
+			1xForbidden Love - Grima+Eowyn Starter
+			1xForbidden Love - Saruman+Pipeweed Starter
+		]
+	}
+	{
+		name: (S)True Love - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xTrue Love - Sam+Oliphant Starter
+			1xTrue Love - Shagrat+Shiny Things Starter
+			1xTrue Love - Smeagol+Forbidden Pool Fish Starter
+			1xTrue Love - Warg+Gimli Starter
+		]
+	}
+	{
+		name: (S)Lineage - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xLineage - House of Eorl Starter
+			1xLineage - House of Hurin Starter
+			1xLineage - House of Telcontar Starter
+			1xLineage - Line of the Half-Elves Starter
+		]
+	}
+	{
+		name: (S)Shelob's Lair - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xShelob's Lair - Cirith Ungol Orcs/Mountains Starter
+			1xShelob's Lair - Cirith Ungol Uruks/Last Alliance Starter
+			1xShelob's Lair - Shelob/Smeagol Starter
+		]
+	}
+	{
+		name: (S)Knighted - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xKnighted - Sir Billy+Peter Starter
+			1xKnighted - Sir Ian M+Peter+Christopher Starter
+			1xKnighted - Sir Ian M+Ian H+Christopher Starter
+			1xKnighted - Sir Peter+Christopher Starter
+		]
+	}
+	{
+		name: (S)Move Limit - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xMove Limit - Gandalf Starter
+			1xMove Limit - Gondor Starter
+			1xMove Limit - Rohan Starter
+			1xMove Limit - Smeagol Starter
+		]
+	}
+	{
+		name: (S)The Great Eye - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xThe Great Eye - Dwarves+Gondor/Nazgul Starter
+			1xThe Great Eye - Elves+Hobbits/Sauron Starter
+			1xThe Great Eye - Gandalf+Theoden/Sauron Starter
+			1xThe Great Eye - Gondor/Isengard Starter
+		]
+	}
+	{
+		name: (S)Alphabet DEGR - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xAlphabet DEGR - DDD Starter
+			1xAlphabet DEGR - EEE Starter
+			1xAlphabet DEGR - GGG Starter
+			1xAlphabet DEGR - RRR Starter
+		]
+	}
+	{
+		name: (S)Alphabet AHST - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xAlphabet AHST - AAA Starter
+			1xAlphabet AHST - HHH Starter
+			1xAlphabet AHST - SSS Starter
+			1xAlphabet AHST - TTT Starter
+		]
+	}
+	{
+		name: (S)Alphabet BFLW - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xAlphabet BFLW - BBB Starter
+			1xAlphabet BFLW - FFF Starter
+			1xAlphabet BFLW - LLL Starter
+			1xAlphabet BFLW - WWW Starter
+		]
+	}
