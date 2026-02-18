@@ -156,8 +156,8 @@ public class ProductLibrary {
             }
 
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Pack parsing error in file " + file + ".\n" + e.getMessage());
         }
     }
 
