@@ -770,7 +770,7 @@
 			#   Down to the Last Child
 			2x4_148
 			#   Traitor's Voice
-			1x1142
+			1x1_142
 		]
 	},
 	{
@@ -1362,7 +1362,7 @@
 			#Ring-bearer (2 cards)
 			#    Frodo, Hope of Free Peoples
 			#    The One Ring, The Ruling Ring
-			1x7_117
+			1x7_317
 			1x1_2
 			#Adventure Deck (9 cards)
 			#    Westfold
@@ -2126,7 +2126,7 @@
 			#Ring-bearer (2 cards)
 			#    Frodo, Protected By Many
 			#    The One Ring, The Ruling Ring
-			1x11_3164
+			1x11_164
 			1x1_2
 			#Adventure Deck (9 cards)
 			#    Isenwash
@@ -2686,7 +2686,7 @@
 		]
 	},
 	{
-		name: Shelob's Lair - Cirith Ungol Orcs/Mountains Starter
+		name: Shelobs Lair - Cirith Ungol Orcs/Mountains Starter
 		type: pack
 		items: [
 			#Ring-bearer (2 cards)
@@ -2792,7 +2792,7 @@
 		]
 	},
 	{
-		name: Shelob's Lair - Cirith Ungol Uruks/Last Alliance Starter
+		name: Shelobs Lair - Cirith Ungol Uruks/Last Alliance Starter
 		type: pack
 		items: [
 			#Ring-bearer (2 cards)
@@ -2900,7 +2900,7 @@
 		]
 	},
 	{
-		name: Shelob's Lair - Shelob/Smeagol Starter
+		name: Shelobs Lair - Shelob/Smeagol Starter
 		type: pack
 		items: [
 			#Ring-bearer (2 cards)
@@ -3208,7 +3208,7 @@
 			#   Uruk Rear Guard
 			2x4_191
 			#   Uruk Sapper
-			1x6_62
+			1x5_62
 			#   Feral Uruk
 			2x11_183
 			#   Force of Uruk-hai
@@ -4413,7 +4413,7 @@
 			#   Decorated Barricade
 			1x15_58
 			#   Disarmed
-			2x2_46
+			2x18_46
 			#   Don't Let Go
 			2x13_145
 			#Shadow (30 cards)
@@ -5630,5 +5630,4 @@
 			#    Weapons of Control
 			1x13_177
 		]
-	},
-]
+	},]
