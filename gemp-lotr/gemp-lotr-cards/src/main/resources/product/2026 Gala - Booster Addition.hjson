@@ -1,5 +1,5 @@
 [
-	{
+{
 		name: (S)Site Control - Starter
 		type: selection
 		selectionCount: 1
@@ -66,13 +66,13 @@
 		]
 	}
 	{
-		name: (S)Shelob's Lair - Starter
+		name: (S)Shelobs Lair - Starter
 		type: selection
 		selectionCount: 1
 		items: [
-			1xShelob's Lair - Cirith Ungol Orcs/Mountains Starter
-			1xShelob's Lair - Cirith Ungol Uruks/Last Alliance Starter
-			1xShelob's Lair - Shelob/Smeagol Starter
+			1xShelobs Lair - Cirith Ungol Orcs/Mountains Starter
+			1xShelobs Lair - Cirith Ungol Uruks/Last Alliance Starter
+			1xShelobs Lair - Shelob/Smeagol Starter
 		]
 	}
 	{
@@ -140,5 +140,4 @@
 			1xAlphabet BFLW - LLL Starter
 			1xAlphabet BFLW - WWW Starter
 		]
-	}
-]
+	}]

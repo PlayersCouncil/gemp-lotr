@@ -1746,7 +1746,7 @@
 			[
 				1x(S)True Love - Starter
 				1xSH - Booster
-				2xBR - Booster
+				1xBR - Booster
 				1xBL - Booster
 				1xHU - Booster
 				1xRoS - Booster
@@ -1771,12 +1771,12 @@
 		]
 	}
 	{
-		name: 58 Shelob's Lair Sealed
+		name: 58 Shelobs Lair Sealed
 		id:shelobslair_sealed
 		format: limited_multipath
 		seriesProduct: [
 			[
-				1x(S)Shelob's Lair - Starter
+				1x(S)Shelobs Lair - Starter
 				1xFotR - Booster
 				1xMoM - Booster
 				1xTTT - Booster
@@ -1866,7 +1866,7 @@
 				1xEoF - Booster
 				1xMD - Booster
 				1xSH - Booster
-				2xHU - Booster
+				1xHU - Booster
 				1xRoS - Booster
 			],
 		]
