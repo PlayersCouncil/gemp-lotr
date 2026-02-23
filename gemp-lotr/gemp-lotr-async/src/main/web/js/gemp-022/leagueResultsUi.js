@@ -54,7 +54,7 @@ var LeagueResultsUI = Class.extend({
             });
     },
 
-    loadedLeague:function (xml) {
+        loadedLeague:function (xml) {
         var that = this;
         log(xml);
         var root = xml.documentElement;
@@ -71,16 +71,18 @@ var LeagueResultsUI = Class.extend({
             var member = league.getAttribute("member");
             var joinable = league.getAttribute("joinable");
             var draftable = league.getAttribute("draftable");
-            
+
             var id = league.getAttribute("id");
             var desc = league.getAttribute("desc");
             var inviteOnly = league.getAttribute("inviteOnly");
+
+            var isRTMD = league.getAttribute("type") === "RTMD"; // RTMD
 
             $("#leagueExtraInfo").append("<div class='leagueName'>" + leagueName + "</div>");
 
             var costStr = formatPrice(cost);
             $("#leagueExtraInfo").append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div><br>");
-            
+
 
             if (member == "true") {
                 var memberDiv = $("<div class='leagueMembership'>You are already a member of this league. </div>");
@@ -90,7 +92,6 @@ var LeagueResultsUI = Class.extend({
                         return function() {
                             var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + leagueCode, '_blank');
                             if (win) {
-                                //Browser has allowed it to be opened
                                 win.focus();
                             }
                         };
@@ -128,12 +129,63 @@ var LeagueResultsUI = Class.extend({
                 var joinDiv = $("<div class='leagueMembership'><b>Invitation-only. See below for how to join.</b></div>");
                 $("#leagueExtraInfo").append(joinDiv);
             }
-            
+
             if(desc) {
                 let descDiv = $("<div></div>");
                 descDiv.html(desc);
                 $("#leagueExtraInfo").append(descDiv);
                 $("#leagueExtraInfo").append("<br><hr><br>");
+            }
+
+            // RTMD: Race path display
+            if (isRTMD) {
+                var pathLength = parseInt(league.getAttribute("pathLength"));
+                var playerPosition = league.getAttribute("playerPosition");
+                var cumulative = league.getAttribute("cumulative") === "true";
+                var advancementMode = league.getAttribute("advancementMode");
+                var advanceFactor = parseInt(league.getAttribute("advanceFactor"));
+
+                var pathDiv = $("<div class='rtmd-path-display'></div>");
+                pathDiv.append("<h3>Race to Mount Doom</h3>");
+
+                if (playerPosition) {
+                    pathDiv.append("<div class='rtmd-player-position'>Your position: <b>" + playerPosition + "</b> of " + pathLength + "</div>");
+                }
+
+                var advanceDesc = advancementMode === "SCORE" ? "points" : "win(s)";
+                if (advanceFactor > 1) {
+                    pathDiv.append("<div style='color:#888; margin-bottom:8px;'>Advance every " + advanceFactor + " " + advanceDesc + "</div>");
+                }
+
+                var pathTable = $("<table class='rtmd-path-table'><tr><th>Pos</th><th>Meta-Site</th><th>Blueprint</th></tr></table>");
+                var metaSites = league.getElementsByTagName("metaSite");
+                for (var i = 0; i < metaSites.length; i++) {
+                    var site = metaSites[i];
+                    var pos = site.getAttribute("position");
+                    var name = site.getAttribute("name") || "(unknown)";
+                    var bpId = site.getAttribute("blueprintId");
+
+                    var rowClass = "";
+                    if (playerPosition) {
+                        var posInt = parseInt(pos);
+                        var playerPosInt = parseInt(playerPosition);
+                        if (posInt === playerPosInt) {
+                            rowClass = " class='rtmd-current'";
+                        } else if (cumulative && posInt < playerPosInt) {
+                            rowClass = " class='rtmd-active'";
+                        }
+                    }
+
+                    pathTable.append("<tr" + rowClass + "><td>" + pos + "</td><td>" + name + "</td><td>" + bpId + "</td></tr>");
+                }
+                pathDiv.append(pathTable);
+
+                if (cumulative) {
+                    pathDiv.append("<div style='color:#888; font-size:0.9em; margin-top:4px;'>Cumulative mode: all prior meta-sites remain active</div>");
+                }
+
+                pathDiv.append("<br><hr><br>");
+                $("#leagueExtraInfo").append(pathDiv);
             }
 
             var tabDiv = $("<div width='100%'></div>");
@@ -145,7 +197,7 @@ var LeagueResultsUI = Class.extend({
 
             var standings = league.getElementsByTagName("leagueStanding");
             if (standings.length > 0)
-                tabContent.append(this.createStandingsTable(standings));
+                tabContent.append(this.createStandingsTable(standings, isRTMD)); // RTMD: pass flag
             tabDiv.append(tabContent);
 
             tabNavigation.append("<li><a href='#leagueoverall'>Overall results</a></li>");
@@ -202,7 +254,7 @@ var LeagueResultsUI = Class.extend({
 
                 var standings = serie.getElementsByTagName("standing");
                 if (standings.length > 0)
-                    tabContent.append(this.createStandingsTable(standings));
+                    tabContent.append(this.createStandingsTable(standings, false)); // Serie standings don't need position
                 tabDiv.append(tabContent);
 
                 tabNavigation.append("<li><a href='#leagueserie" + j + "'>Serie " + (j + 1) + "</a></li>");
@@ -283,46 +335,58 @@ var LeagueResultsUI = Class.extend({
         this.questionDialog.dialog("open");
     },
 
-    createStandingsTable:function (xmlstandings) {
+    createStandingsTable:function (xmlstandings, showPosition) {
         var standingsTable = $("<table class='standings'></table>");
 
-        standingsTable.append("<tr><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th><th></th><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>");
+        var headerRow = "<tr><th>Standing</th>";
+        if (showPosition) headerRow += "<th>Position</th>";
+        headerRow += "<th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th>";
+        headerRow += "<th></th><th>Standing</th>";
+        if (showPosition) headerRow += "<th>Position</th>";
+        headerRow += "<th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>";
+        standingsTable.append(headerRow);
 
         var standings = [];
         for (var k = 0; k < xmlstandings.length; k++) {
             var standing = {};
             var xmlstanding = xmlstandings[k];
-            
+
             standing.currentStanding = xmlstanding.getAttribute("standing");
             standing.player = xmlstanding.getAttribute("player");
             standing.points = parseInt(xmlstanding.getAttribute("points"));
             standing.gamesPlayed = parseInt(xmlstanding.getAttribute("gamesPlayed"));
             standing.opponentWinPerc = xmlstanding.getAttribute("opponentWin");
-            
+            standing.position = xmlstanding.getAttribute("position"); // RTMD
+
             standings.push(standing);
         }
-        
+
         standings.sort((a, b) => a.currentStanding - b.currentStanding);
-        
+
         var secondColumnBaseIndex = Math.ceil(standings.length / 2);
 
         for (var k = 0; k < secondColumnBaseIndex; k++) {
             var standing = standings[k];
 
-            standingsTable.append("<tr><td>" + standing.currentStanding 
-                                  + "</td><td>" + standing.player + "</td><td>" 
-                                  + standing.points + "</td><td>" + standing.gamesPlayed 
-                                  + "</td><td>" + standing.opponentWinPerc + "</td></tr>");
+            var row = "<tr><td>" + standing.currentStanding + "</td>";
+            if (showPosition) row += "<td>" + (standing.position || "-") + "</td>";
+            row += "<td>" + standing.player + "</td><td>"
+                + standing.points + "</td><td>" + standing.gamesPlayed
+                + "</td><td>" + standing.opponentWinPerc + "</td></tr>";
+            standingsTable.append(row);
         }
 
         for (var k = secondColumnBaseIndex; k < standings.length; k++) {
             var standing = standings[k];
 
+            var cells = "<td></td><td>" + standing.currentStanding + "</td>";
+            if (showPosition) cells += "<td>" + (standing.position || "-") + "</td>";
+            cells += "<td>" + standing.player + "</td><td>" + standing.points
+                + "</td><td>" + standing.gamesPlayed + "</td><td>"
+                + standing.opponentWinPerc + "</td>";
+
             $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable)
-                .append("<td></td><td>" + standing.currentStanding + "</td><td>" 
-                        + standing.player + "</td><td>" + standing.points 
-                        + "</td><td>" + standing.gamesPlayed + "</td><td>" 
-                        + standing.opponentWinPerc + "</td>");
+                .append(cells);
         }
 
         return standingsTable;

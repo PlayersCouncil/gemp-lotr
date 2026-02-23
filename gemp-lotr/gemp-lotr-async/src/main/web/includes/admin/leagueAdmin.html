@@ -300,6 +300,82 @@ $(document).ready(
 					$(".serieData").last().clone().appendTo(".series");
 				});
 		
+		// RTMD League
+		$("#rtmd-start").val(now.toISOString().substr(0, 10));
+		updateDescPreview("#rtmd-desc", "#rtmd-desc-preview");
+
+		// Live path counter
+		$("#rtmd-path").on("input", function() {
+			var lines = $(this).val().split('\n').filter(function(l) { return l.trim() !== ''; });
+			var count = lines.length;
+			var valid = (count === 5 || count === 9);
+			$("#rtmd-path-count").html(count + " modifiers" + (valid ? " ✓" : " (need 5 or 9)"));
+			$("#rtmd-path-count").css("color", valid ? "#0a0" : "#888");
+		});
+		
+		$("#rtmd-path").trigger("input");
+
+		function gatherRTMDPath() {
+			return $("#rtmd-path").val().split('\n')
+				.map(function(l) { return l.trim(); })
+				.filter(function(l) { return l !== ''; });
+		}
+
+		function submitRTMDLeague(preview) {
+			let resultdiv = $("#rtmd-league-result");
+			resultdiv.html("Processing...");
+
+			var serieData = gatherData($(".rtmd-series"));
+
+			hall.comm.processRTMDLeague(
+				preview,
+				$("#rtmd-start").val().replaceAll("-",""),
+				$("#rtmd-name").val(),
+				$("#rtmd-cost").val(),
+				$("#rtmd-repeat-games").val(),
+				$("#rtmd-invite-only").prop('checked'),
+				$("#rtmd-desc").val(),
+
+				$("#rtmd-top-prize").val(),
+				$("#rtmd-top-pos").val(),
+				$("#rtmd-part-prize").val(),
+				$("#rtmd-part-games").val(),
+
+				serieData.format,
+				serieData.serieDuration,
+				serieData.maxMatches,
+
+				gatherRTMDPath(),
+				$("#rtmd-cumulative").prop('checked'),
+				$("#rtmd-intensity-floor").val(),
+				$("#rtmd-intensity-ceiling").val(),
+				$("#rtmd-advancement-mode").val(),
+				$("#rtmd-advance-factor").val(),
+
+				function (xml) {
+					if(preview) {
+						previewDialog.html("");
+						displayPreview(xml);
+						resultdiv.html("OK");
+						previewDialog.dialog("open");
+					} else {
+						resultdiv.html("League created successfully.");
+					}
+				}, leagueErrorMap(resultdiv));
+		}
+
+		$("#preview-rtmd-league-button").button().click(function () {
+			submitRTMDLeague(true);
+		});
+
+		$("#add-rtmd-league-button").button().click(function () {
+			submitRTMDLeague(false);
+		});
+
+		$("#add-rtmd-series-button").button().click(function () {
+			$(".rtmdSerieData").last().clone().appendTo(".rtmd-series");
+		});
+		
 		$("#add-league-players-button").button().click(
 			function () {
 				let resultdiv = $("#league-add-result");
@@ -356,6 +432,25 @@ $(document).ready(
 					//console.log(this);
 					let newText = $(this).text().replace(/\d+ - /, '');
 					//console.log(newText);
+					$(this).text(newText);
+				});
+				
+				for (var prop in formats) {
+					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
+						if(formats[prop].name.includes("Limited"))
+							continue;
+
+						let num = ("0000" + formats[prop].order).substr(-4);
+
+						var item = $("<option/>")
+							.attr("value", prop)
+							.text("" + num + " - " + formats[prop].name);
+						$("#rtmd-format").append(item);
+					}
+				}
+				sortOptionsByName("#rtmd-format");
+				$("#rtmd-format option").each(function(index) {
+					let newText = $(this).text().replace(/\d+ - /, '');
 					$(this).text(newText);
 				});
 				
@@ -796,6 +891,156 @@ function leagueErrorMap(outputControl, callback=null) {
 				<b>Result:</b>
 			</div>
 			<div id="constructed-league-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+	
+	<br/><br/><hr><br/><br/>
+
+	<div id="rtmd-league-section" class="league-form">
+		<h1>Add Race to Mount Doom League</h1>
+		<div class="flex-horiz">
+			<div class="label-column">Name: </div>
+			<input type="text" id="rtmd-name" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Description: </div>
+			<div class="label-column flex-horiz flex-fill desc-div">
+				<div class="flex-vert" style="flex-basis:50%;">
+					<textarea type="text" id="rtmd-desc" class="desc-area"></textarea>
+				</div>
+				<div id="rtmd-desc-preview" class="desc-preview"></div>
+			</div>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Cost (in silver): </div>
+			<input type="number" min="0" id="rtmd-cost" value="0" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Start Date: </div>
+			<input type="date" id="rtmd-start" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Max games against same opponent: </div>
+			<input type="number" min="1" id="rtmd-repeat-games" value="1" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Invite only: </div>
+			<input type="checkbox" id="rtmd-invite-only" />
+		</div>
+
+		<div style="display:none">
+		<div class="flex-horiz">
+			<div class="label-column">Top Prizes:</div>
+			<input type="text" id="rtmd-top-prize" value="" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Top Prize Cutoff:</div>
+			<input type="number" min="1" id="rtmd-top-pos" value="10" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Participation Prizes:</div>
+			<input type="text" id="rtmd-part-prize" value="" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Participation Games:</div>
+			<input type="number" min="1" id="rtmd-part-games" value="3" class="flex-fill">
+		</div>
+		</div>
+
+		<h3>Race Configuration</h3>
+
+		<div class="flex-horiz">
+			<div class="label-column">Advancement Mode: </div>
+			<select id="rtmd-advancement-mode" class="flex-fill">
+				<option value="WIN">Win-based</option>
+				<option value="SCORE">Score-based</option>
+			</select>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Advance Factor: </div>
+			<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
+			<span style="margin-left:8px; color:#888;">(wins or points needed per position advance)</span>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Cumulative: </div>
+			<input type="checkbox" id="rtmd-cumulative" />
+			<span style="margin-left:8px; color:#888;">(all prior meta-sites remain active)</span>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Intensity Range: </div>
+			<input type="number" min="1" max="10" id="rtmd-intensity-floor" value="1" style="width:60px;">
+			<span style="margin:0 8px;"> to </span>
+			<input type="number" min="1" max="10" id="rtmd-intensity-ceiling" value="10" style="width:60px;">
+			<span style="margin-left:8px; color:#888;">(for auto-generation filtering)</span>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Race Path (blueprint IDs, 1 per line): </div>
+			<div class="flex-vert flex-fill">
+				<textarea rows="10" cols="30" id="rtmd-path" class="flex-fill" placeholder="90_1&#10;90_2&#10;90_3&#10;...">90_1
+90_2
+90_3
+90_4
+90_5
+90_6
+90_7
+90_8
+90_9</textarea>
+				<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers (need 5 or 9)</div>
+			</div>
+		</div>
+
+		<h3>Series</h3>
+
+		<div class="rtmd-series" class="flex-vert">
+			<div class="rtmdSerieData" >
+				<div><b>Serie</b></div>
+				<div class="flex-horiz">
+					<div class="label-column">Format: </div>
+					<select id="rtmd-format" name="format" class="flex-fill"></select>
+				</div>
+
+				<div class="flex-horiz">
+					<div class="label-column">Serie duration in days: </div>
+					<input type="number" min="1" name="serieDuration" value="7" class="flex-fill">
+				</div>
+
+				<div class="flex-horiz">
+					<div class="label-column">Max matches per serie: </div>
+					<input type="number" min="1" name="maxMatches" value="10" class="flex-fill">
+				</div>
+			</div>
+		</div>
+
+		<button id="add-rtmd-series-button">
+			Add Another Serie
+		</button>
+
+		<button id="preview-rtmd-league-button">
+			Preview RTMD League
+		</button>
+
+		<button id="add-rtmd-league-button" >
+			Add RTMD League
+		</button>
+		<div id="rtmd-league-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="rtmd-league-result" class="flex-fill result-box">
 				Ready.
 			</div>
 		</div>
