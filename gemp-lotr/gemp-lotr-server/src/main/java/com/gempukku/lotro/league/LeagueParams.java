@@ -6,7 +6,6 @@ import com.gempukku.util.JsonUtils;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LeagueParams {
 
@@ -20,6 +19,14 @@ public class LeagueParams {
     public String description;
     public ArrayList<SerieData> series = new ArrayList<>();
     public PrizeData extraPrizes;
+
+    // RTMD-specific fields (null/ignored for non-RTMD leagues)
+    public ArrayList<String> racePath;           // Ordered list of modifier blueprint IDs
+    public boolean raceCumulative = false;        // If true, all sites 1..current are active
+    public int raceIntensityFloor = 1;            // Min intensity for auto-generation pool
+    public int raceIntensityCeiling = 10;         // Max intensity for auto-generation pool
+    public RTMDLeague.AdvanceType raceAdvancementMode = RTMDLeague.AdvanceType.WIN;    // "win" or "points"
+    public int raceAdvanceFactor = 1;      // How many wins or points to advance
 
     public record SerieData(String format, int duration, int matches) {
     }
@@ -37,11 +44,3 @@ public class LeagueParams {
         return JsonUtils.Serialize(this);
     }
 }
-
-//
-//String parameters = start + "," + collectionType + "," + maxRepeatMatches
-//        + "," + topPrizeStr + "," + topCutoff + "," + participationPrizeStr + "," + participationGames
-//        + "," + formats.size();
-//        for (int i = 0; i < formats.size(); i++) {
-//parameters += "," + formats.get(i) + "," + serieDurations.get(i) + "," + maxMatches.get(i);
-//        }

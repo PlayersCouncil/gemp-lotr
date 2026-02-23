@@ -1,8 +1,8 @@
 package com.gempukku.lotro.async.handler;
 
-import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
@@ -13,13 +13,15 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueData;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
+import com.gempukku.lotro.league.RTMDLeague;
 import com.gempukku.lotro.packs.ProductLibrary;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
+import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -119,6 +121,40 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         leagueElem.setAttribute("start", DateUtils.FormatDate(start));
         leagueElem.setAttribute("end", DateUtils.FormatDate(end));
 
+        // Detect RTMD league and add path/position data
+        boolean isRTMD = leagueData instanceof RTMDLeague;
+        RTMDLeague rtmdLeague = isRTMD ? (RTMDLeague) leagueData : null;
+        List<PlayerStanding> leagueStandings = _leagueService.getLeagueStandings(league);
+
+        if (isRTMD) {
+            leagueElem.setAttribute("type", "RTMD");
+            leagueElem.setAttribute("pathLength", String.valueOf(rtmdLeague.getPathLength()));
+            leagueElem.setAttribute("cumulative", String.valueOf(rtmdLeague.isCumulative()));
+            leagueElem.setAttribute("advancementMode", rtmdLeague.getParameters().raceAdvancementMode.toString());
+            leagueElem.setAttribute("advanceFactor", String.valueOf(rtmdLeague.getAdvanceFactor()));
+
+            // Current player's position
+            if (inLeague) {
+                int playerPosition = rtmdLeague.getPlayerPosition(resourceOwner.getName(), leagueStandings);
+                leagueElem.setAttribute("playerPosition", String.valueOf(playerPosition));
+            }
+
+            // Path definition
+            List<String> path = rtmdLeague.getPath();
+            for (int i = 0; i < path.size(); i++) {
+                Element siteElem = doc.createElement("metaSite");
+                siteElem.setAttribute("position", String.valueOf(i + 1));
+                siteElem.setAttribute("blueprintId", path.get(i));
+                try {
+                    var bp = _library.getLotroCardBlueprint(path.get(i));
+                    if (bp != null) {
+                        siteElem.setAttribute("name", bp.getFullName());
+                    }
+                } catch (Exception ignored) {}
+                leagueElem.appendChild(siteElem);
+            }
+        }
+
         for (LeagueSerieInfo serie : series) {
             Element serieElem = doc.createElement("serie");
             serieElem.setAttribute("type", serie.getName());
@@ -140,8 +176,8 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             }
             serieElem.appendChild(matchesElem);
 
-            final List<PlayerStanding> standings = _leagueService.getLeagueSerieStandings(league, serie);
-            for (PlayerStanding standing : standings) {
+            final List<PlayerStanding> serieStandings = _leagueService.getLeagueSerieStandings(league, serie);
+            for (PlayerStanding standing : serieStandings) {
                 Element standingElem = doc.createElement("standing");
                 setStandingAttributes(standing, standingElem);
                 serieElem.appendChild(standingElem);
@@ -150,10 +186,16 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             leagueElem.appendChild(serieElem);
         }
 
-        List<PlayerStanding> leagueStandings = _leagueService.getLeagueStandings(league);
         for (PlayerStanding standing : leagueStandings) {
             Element standingElem = doc.createElement("leagueStanding");
             setStandingAttributes(standing, standingElem);
+
+            // Add position for RTMD leagues
+            if (isRTMD) {
+                int position = rtmdLeague.getPlayerPosition(standing.playerName, leagueStandings);
+                standingElem.setAttribute("position", String.valueOf(position));
+            }
+
             leagueElem.appendChild(standingElem);
         }
 
