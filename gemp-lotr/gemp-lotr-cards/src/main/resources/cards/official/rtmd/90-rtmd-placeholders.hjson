@@ -1,0 +1,571 @@
+{
+	90_1: {
+		cardInfo: {
+			//id: 90_1.0
+			parent: 90_1
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN90S01.0_card.jpg
+			collInfo: 90_1
+			rarity: _
+		}
+		title: The Shire
+		type: MetaSite
+		site: 1
+		intensity: 1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_2: {
+		cardInfo: {
+			//id: 90_2.0
+			parent: 90_2
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S02.0_card.jpg
+			collInfo: 90_2
+			rarity: _
+		}
+		title: Rivendell
+		type: MetaSite
+		site: 2
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_3: {
+		cardInfo: {
+			//id: 90_3.0
+			parent: 90_3
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S03.0_card.jpg
+			collInfo: 90_3
+			rarity: _
+		}
+		title: Isengard
+		type: MetaSite
+		site: 3
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_4: {
+		cardInfo: {
+			//id: 90_4.0
+			parent: 90_4
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S04.0_card.jpg
+			collInfo: 90_4
+			rarity: _
+		}
+		title: Helm's Gate
+		type: MetaSite
+		site: 4
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_5: {
+		cardInfo: {
+			//id: 90_5.0
+			parent: 90_5
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S05.0_card.jpg
+			collInfo: 90_5
+			rarity: _
+		}
+		title: Emyn Muil
+		type: MetaSite
+		site: 5
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_6: {
+		cardInfo: {
+			//id: 90_6.0
+			parent: 90_6
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S06.0_card.jpg
+			collInfo: 90_6
+			rarity: _
+		}
+		title: Dead Marshes
+		type: MetaSite
+		site: 6
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_7: {
+		cardInfo: {
+			//id: 90_7.0
+			parent: 90_7
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S07.0_card.jpg
+			collInfo: 90_7
+			rarity: _
+		}
+		title: Osgiliath
+		type: MetaSite
+		site: 7
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_8: {
+		cardInfo: {
+			//id: 90_8.0
+			parent: 90_8
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S08.0_card.jpg
+			collInfo: 90_8
+			rarity: _
+		}
+		title: Minas Morgul
+		type: MetaSite
+		site: 8
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_9: {
+		cardInfo: {
+			//id: 90_9.0
+			parent: 90_9
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S09.0_card.jpg
+			collInfo: 90_9
+			rarity: _
+		}
+		title: Mount Doom
+		type: MetaSite
+		site: 9
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_10: {
+		cardInfo: {
+			//id: 90_10.0
+			parent: 90_10
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S010.0_card.jpg
+			collInfo: 90_10
+			rarity: _
+		}
+		title: Green Dragon Inn
+		type: MetaSite
+		site: 1
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_11: {
+		cardInfo: {
+			//id: 90_11.0
+			parent: 90_11
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S011.0_card.jpg
+			collInfo: 90_11
+			rarity: _
+		}
+		title: Rohan Camp
+		type: MetaSite
+		site: 2
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_12: {
+		cardInfo: {
+			//id: 90_12.0
+			parent: 90_12
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S012.0_card.jpg
+			collInfo: 90_12
+			rarity: _
+		}
+		title: Path of the Dead
+		type: MetaSite
+		site: 3
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_13: {
+		cardInfo: {
+			//id: 90_13.0
+			parent: 90_13
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S013.0_card.jpg
+			collInfo: 90_13
+			rarity: _
+		}
+		title: Minas Tirith
+		type: MetaSite
+		site: 4
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_14: {
+		cardInfo: {
+			//id: 90_14.0
+			parent: 90_14
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S014.0_card.jpg
+			collInfo: 90_14
+			rarity: _
+		}
+		title: Osgiliath
+		type: MetaSite
+		site: 5
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_15: {
+		cardInfo: {
+			//id: 90_15.0
+			parent: 90_15
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S015.0_card.jpg
+			collInfo: 90_15
+			rarity: _
+		}
+		title: Shelob's Lair
+		type: MetaSite
+		site: 6
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_16: {
+		cardInfo: {
+			//id: 90_16.0
+			parent: 90_16
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S016.0_card.jpg
+			collInfo: 90_16
+			rarity: _
+		}
+		title: Cirith Ungol
+		type: MetaSite
+		site: 7
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_17: {
+		cardInfo: {
+			//id: 90_17.0
+			parent: 90_17
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S017.0_card.jpg
+			collInfo: 90_17
+			rarity: _
+		}
+		title: Black Gate
+		type: MetaSite
+		site: 8
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_18: {
+		cardInfo: {
+			//id: 90_18.0
+			parent: 90_18
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: RTMD/LOTR-EN90S018.0_card.jpg
+			collInfo: 90_18
+			rarity: _
+		}
+		title: Mount Doom
+		type: MetaSite
+		site: 9
+		intensity: 1
+		effects: {
+			type: DisplayableInformation
+			text: This is a Race to Mount Doom league card.
+		}
+		gametext: ""
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	
+
+}

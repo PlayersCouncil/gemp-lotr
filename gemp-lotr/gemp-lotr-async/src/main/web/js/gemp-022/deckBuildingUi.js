@@ -1041,7 +1041,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 			this.deckContentsDirty = true;
 			$("#editingDeck").html("<font color='orange'>*" + name + " - modified</font>");
 
-            //Enable the errata button if user starts adding cards to empty 'Anything Goes' deck after the page was initialized
+      //Enable the errata button if user starts adding cards to empty 'Anything Goes' deck after the page was initialized
 			let formatCode = this.formatSelect.val();
             if(formatCode == "rev_tow_sta") {
                 $("#convertErrataBut").button("option", "disabled", false);
