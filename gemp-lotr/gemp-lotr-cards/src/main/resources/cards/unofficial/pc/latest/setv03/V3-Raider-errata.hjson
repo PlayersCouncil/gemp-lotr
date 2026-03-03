@@ -1,0 +1,427 @@
+{
+
+	103_41: {
+		cardInfo: {
+			//id: 103_41.1
+			parent: 103_41
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S041.1_card.jpg
+			collInfo: V3_41
+			rarity: _
+		}
+		title: Bladetusk Charger
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Possession
+		strength: 4
+		vitality: 4
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Maneuver: Stack 1 or more Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +4 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_42: {
+		cardInfo: {
+			//id: 103_42.1
+			parent: 103_42
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S042.1_card.jpg
+			collInfo: V3_42
+			rarity: _
+		}
+		title: Bladetusk Matriarch
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Artifact
+		strength: 6
+		vitality: 6
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time a Southron is played, you may stack a [raider] Man from play or hand here.<br>Maneuver: Remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_47: {
+		cardInfo: {
+			//id: 103_47.1
+			parent: 103_47
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S047.1_card.jpg
+			collInfo: V3_47
+			rarity: _
+		}
+		title: Desert Wind Initiate
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 7
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+			Ambush 3
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron.</b>  Tracker. Ambush (3).<br>Other Southrons are twilight cost -1.<br>When you play this minion, remove (3) or hinder this minion.
+		lore: "'From the North to the field of Dagorlad there is skirmish and rumour of war. In the South the Haradrim are moving, and fear has fallen on all our coastlands, so that little help will come to us thence.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_48: {
+		cardInfo: {
+			//id: 103_48.1
+			parent: 103_48
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S048.1_card.jpg
+			collInfo: V3_48
+			rarity: _
+		}
+		title: Desert Wind Scout
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+			Ambush 2
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time this minion is hindered, you may hinder or restore another [raider] minion.
+		lore: "All the Southrons had been accounted for...Of the enemy no movement could be seen; not even an orc-spy was abroad."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_50: {
+		cardInfo: {
+			//id: 103_50.1
+			parent: 103_50
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S050.1_card.jpg
+			collInfo: V3_50
+			rarity: _
+		}
+		title: Desert Wind Whisper
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 15
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (4) or hinder this minion.<br>Each minion with ambush (X) is strength +X.
+		lore: "But they saw nothing, and heard no sound but the sigh of withered leaves and grass."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_56: {
+		cardInfo: {
+			//id: 103_56.1
+			parent: 103_56
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S056.1_card.jpg
+			collInfo: V3_56
+			rarity: _
+		}
+		title: Sandcraft Trap
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Restore all trackers and minions with ambush.  If you restored any, make each Southron <b>ambush (1)</b> and strength +1 until the regroup phase.
+		lore: "'We were outnumbered, for Mordor has allied itself with the Easterlings and the cruel Haradrim; but it was not by numbers that we were defeated. A power was there that we have not felt before.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_59: {
+		cardInfo: {
+			//id: 103_59.1
+			parent: 103_59
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S059.1_card.jpg
+			collInfo: V3_59
+			rarity: _
+		}
+		title: Strength of Men
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Spot 2 [raider] cards to restore 2 [raider] cards (or reconcile your hand if you can spot 5 burdens or 6 [raider] cards).
+		lore: "Hard fighting and long labour they had still; for the Southrons were bold men and grim, and fierce in despair; and the Easterlings were strong and war-hardened and asked for no quarter."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_60: {
+		cardInfo: {
+			//id: 103_60.1
+			parent: 103_60
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S060.1_card.jpg
+			collInfo: V3_60
+			rarity: _
+		}
+		title: The Mouth of Sauron
+		subtitle: Herald of the Dark Lord
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Lurker.<br>Your Shadow events are twilight cost -2. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
+		lore: "'Thou shalt see what comes to him who sets his foolish webs before the feet of Sauron the Great.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_61: {
+		cardInfo: {
+			//id: 103_61.1
+			parent: 103_61
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S061.1_card.jpg
+			collInfo: V3_61
+			rarity: _
+		}
+		title: Ulaire Attea
+		subtitle: Khamul of the East
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: [
+			Easterling
+			Fierce
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +3.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
+		lore: "The second to the Chief, Khamul the Shadow of the East, abode in Dol Guldur as Sauron's lieutenant."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

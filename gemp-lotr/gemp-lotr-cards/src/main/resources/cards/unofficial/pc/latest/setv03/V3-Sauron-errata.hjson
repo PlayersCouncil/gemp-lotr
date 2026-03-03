@@ -1,0 +1,229 @@
+{
+
+	103_92: {
+		cardInfo: {
+			//id: 103_92.1
+			parent: 103_92
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S092.1_card.jpg
+			collInfo: V3_92
+			rarity: _
+		}
+		title: Cirith Ungol Watcher
+		subtitle: Hideous Warden
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Artifact
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a [sauron] card.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 2 threats and hinder that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_97: {
+		cardInfo: {
+			//id: 103_97.1
+			parent: 103_97
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S097.1_card.jpg
+			collInfo: V3_97
+			rarity: _
+		}
+		title: Ominous Sky
+		unique: 3
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		target: self
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
+		lore: "'No...not at sunrise. The Darkness has begun. There will be no dawn.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_95: {
+		cardInfo: {
+			//id: 103_95.1
+			parent: 103_95
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S095.1_card.jpg
+			collInfo: V3_95
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Horror
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		target: self
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Skirmish: Exert an Orc or Troll and hinder a twilight condition to make that minion strength +2.  
+		lore: "The shadows closed on men again, and their hearts went cold, and the valour of Gondor withered into ash."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_96: {
+		cardInfo: {
+			//id: 103_96.1
+			parent: 103_96
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S096.1_card.jpg
+			collInfo: V3_96
+			rarity: _
+		}
+		title: Endless Night
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Condition
+		target: self
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 4 twilight conditions. This cannot be discarded or hindered. Orcs gain <b>fierce</b>. Trolls gain <b>enduring</b>. Nazgul gain <b>damage +1</b>. Your Men and Uruk-hai gain <b>archer</b>. <br>Shadow: Hinder X of your other Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_99: {
+		cardInfo: {
+			//id: 103_99.1
+			parent: 103_99
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S099.1_card.jpg
+			collInfo: V3_99
+			rarity: _
+		}
+		title: Release the Prisoners!
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert every character sharing a culture with that companion.  Hinder this condition.
+		lore: "It tumbled down, small round shot that did not burn. But when men ran to learn what it might be, they cried aloud or wept."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

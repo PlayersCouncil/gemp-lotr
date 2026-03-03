@@ -1,0 +1,93 @@
+{
+
+	51_17: {
+		cardInfo: {
+			//id: 51_17.3
+			parent: 1_17
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN01E017.3_card.jpg
+			collInfo: 1U17
+			rarity: U
+		}
+		title: Grimir
+		subtitle: Dwarven Elder
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Ally
+		allyHome: 3
+		race: Dwarf
+		strength: 3
+		vitality: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir twice to play a [dwarven] skirmish event from your discard pile, then remove it from the game.
+		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	51_15: {
+		cardInfo: {
+			//id: 51_15.1
+			parent: 1_15
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E015.1_card.jpg
+			collInfo: 1R15
+			rarity: R
+		}
+		title: Gimli's Helm
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Possession
+		itemclass: Helm
+		target: self
+		#target: title(Gimli)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be Gimli.<br>He takes no more than 1 wound during each skirmish phase.<br><b>Skirmish:</b> Discard Gimli's Helm to make Gimli unable to take wounds.
+		lore: "A helm fashioned under the Lonely Mountain protects the head of Gimli the Dwarf."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

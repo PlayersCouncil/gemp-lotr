@@ -1,0 +1,138 @@
+{
+
+	103_106: {
+		cardInfo: {
+			//id: 103_106.1
+			parent: 103_106
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S106.1_card.jpg
+			collInfo: V3_106
+			rarity: _
+		}
+		title: Flotsam
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: 
+		target: self
+		keywords: Pipeweed
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Pipeweed. Bearer must bear a pipe.<br>When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
+		lore: "'We have heaps of it,' he said; 'and you can all pack as much as you wish, when we go.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_117: {
+		cardInfo: {
+			//id: 103_117.1
+			parent: 103_117
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S117.1_card.jpg
+			collInfo: V3_117
+			rarity: _
+		}
+		title: Sting
+		subtitle: Sharp Elven-blade
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 1
+		resistance: 1
+		itemclass: Hand weapon
+		target: self
+		#target: a Ring-bound Hobbit
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot (limit +6). <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_119: {
+		cardInfo: {
+			//id: 103_119.1
+			parent: 103_119
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S119.1_card.jpg
+			collInfo: V3_119
+			rarity: _
+		}
+		title: Treasured Pipe
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: self
+		#target: a companion
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Fellowship: Discard 2 pipeweeds and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.
+		lore: "'I keep a treasure or two near my skin, as precious as Rings to me. Here's one: my old wooden pipe.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

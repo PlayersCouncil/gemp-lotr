@@ -1,0 +1,218 @@
+{
+
+	103_122: {
+		cardInfo: {
+			//id: 103_122.1
+			parent: 103_122
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S122.1_card.jpg
+			collInfo: V3_122
+			rarity: _
+		}
+		title: Desolation of Ash
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of each phase, the Shadow player may remove (1) to take a Shadow event for that phase into hand from discard.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_123: {
+		cardInfo: {
+			//id: 103_123.1
+			parent: 103_123
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S123.1_card.jpg
+			collInfo: V3_123
+			rarity: _
+		}
+		title: Gorgoroth Highway
+		unique: false
+		twilight: 7
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of the maneuver phase, hinder all weapons. All characters gain <b>enduring</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_124: {
+		cardInfo: {
+			//id: 103_124.1
+			parent: 103_124
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S124.1_card.jpg
+			collInfo: V3_124
+			rarity: _
+		}
+		title: Gorgoroth Wastes
+		unique: false
+		twilight: 5
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When moving here, for each Free Peoples card borne by companions, the Free Peoples player must discard it or add (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_126: {
+		cardInfo: {
+			//id: 103_126.1
+			parent: 103_126
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S126.1_card.jpg
+			collInfo: V3_126
+			rarity: _
+		}
+		title: Cracks of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: [
+			Mountain
+			Underground
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain.  Underground. Game text on Free Peoples items and The One Ring does not apply. Each minion is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_129: {
+		cardInfo: {
+			//id: 103_129.1
+			parent: 103_129
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S129.1_card.jpg
+			collInfo: V3_129
+			rarity: _
+		}
+		title: Pinnacle of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain. At the start of each phase, the Shadow player may remove (1) to hinder a card (except companions or The One Ring).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

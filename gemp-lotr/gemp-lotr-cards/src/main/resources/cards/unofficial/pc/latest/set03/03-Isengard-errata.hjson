@@ -1,0 +1,180 @@
+{
+
+	53_70: {
+		cardInfo: {
+			//id: 53_70.1
+			parent: 3_70
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E070.1_card.jpg
+			collInfo: 3C70
+			rarity: C
+		}
+		title: Servants to Saruman
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: <b>Skirmish:</b> Make an [isengard] Orc strength +2 (or +4 if that Orc is strength 7 or less).
+		lore: "'This is grievous news concerning Saruman... for we trusted him and he is deep in all our counsels.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	53_72: {
+		cardInfo: {
+			//id: 53_72.1
+			parent: 3_72
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E072.1_card.jpg
+			collInfo: 3U72
+			rarity: U
+		}
+		title: Trapped and Alone
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each character skirmishing an [isengard] Orc loses all <b>damage</b> bonuses from weapons.<br>Skirmish: Spot a skirmishing [Isengard] Orc.  Make the Free Peoples shuffle another [Isengard] Orc into your draw deck to cancel the active skirmish.
+		lore: "'...I had no chance of escape, and my days were bitter.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	53_53: {
+		cardInfo: {
+			//id: 53_53.1
+			parent: 3_53
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E053.1_card.jpg
+			collInfo: 3U53
+			rarity: U
+		}
+		title: Hate and Anger
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Spot an Uruk-hai and an Orc to draw 3 cards.
+		lore: "The frenzy of Uruks is born of the fear of the very Goblins that work the pits."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	53_66: {
+		cardInfo: {
+			//id: 53_66.1
+			parent: 3_66
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E066.1_card.jpg
+			collInfo: 3R66
+			rarity: R
+		}
+		title: Orthanc Berserker
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 11
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens or 5 [isengard] cards and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
+		lore: "The voice of Saruman compels his minions to stop at nothing to earn his favor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,0 +1,46 @@
+{
+
+	53_4: {
+		cardInfo: {
+			//id: 53_4.3
+			parent: 3_4
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E004.3_card.jpg
+			collInfo: 3U4
+			rarity: U
+		}
+		title: A Royal Welcome
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.<br>Skirmish: Exert a [dwarven] ally to add that ally's strength or <b>damage</b> bonuses to an unbound [dwarven] companion (limit once per phase).<br>Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

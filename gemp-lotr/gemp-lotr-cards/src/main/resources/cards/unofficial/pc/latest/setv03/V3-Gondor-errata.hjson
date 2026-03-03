@@ -1,0 +1,191 @@
+{
+
+	103_19: {
+		cardInfo: {
+			//id: 103_19.1
+			parent: 103_19
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S019.1_card.jpg
+			collInfo: V3_19
+			rarity: _
+		}
+		title: Aragorn
+		subtitle: King of Gondor and Arnor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Aragorn is strength +1 for each other Man of a different culture you can spot.<br>Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
+		lore: "'Stand, Men of the West! This is the hour of doom.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_28: {
+		cardInfo: {
+			//id: 103_28.1
+			parent: 103_28
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S028.1_card.jpg
+			collInfo: V3_28
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Flame of Amon Din
+		unique: 2
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, hinder 2 beacons.<br>Response: If an unbound Man costing X is about to take a wound, spot X beacons to prevent that wound. Hinder a beacon.
+		lore: "'On, Shadowfax! We must hasten. Time is short. See! The beacons of Gondor are alight, calling for aid. War is kindled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_30: {
+		cardInfo: {
+			//id: 103_30.1
+			parent: 103_30
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S030.1_card.jpg
+			collInfo: V3_30
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Flame of Nardol
+		unique: 2
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, hinder 2 beacons.<br>Archery: Hinder X beacons and discard X [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +X.
+		lore: "'What is that?' cried Pippin suddenly, clutching at Gandalf's cloak. 'Look! Fire, red fire! Are there dragons in this land? Look, there is another!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_36: {
+		cardInfo: {
+			//id: 103_36.1
+			parent: 103_36
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S036.1_card.jpg
+			collInfo: V3_36
+			rarity: _
+		}
+		title: The Way is Shut
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: [
+			Maneuver
+			Skirmish
+		]
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Maneuver: Spot 3 [gondor] Wraiths to discard a Shadow condition.  You may exert a Wraith to hinder another Shadow condition.<br>Skirmish: Make your Wraith strength +1 for each threat you can spot (limit +3).
+		lore: "'Is it then your errand to seek death? For that is all that you will find on that road. They do not suffer the living to pass.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

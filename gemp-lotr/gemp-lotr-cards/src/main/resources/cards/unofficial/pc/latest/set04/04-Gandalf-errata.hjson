@@ -1,0 +1,92 @@
+{
+
+	54_96: {
+		cardInfo: {
+			//id: 54_96.1
+			parent: 4_96
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E096.1_card.jpg
+			collInfo: 4U96
+			rarity: U
+		}
+		title: Keep Your Forked Tongue
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: <b>Skirmish:</b> Spot Gandalf and 3 twilight tokens to make a companion who has the Gandalf signet unable to take wounds.
+		lore: "'A witless worm you have become.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	54_97: {
+		cardInfo: {
+			//id: 54_97.1
+			parent: 4_97
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E097.1_card.jpg
+			collInfo: 4C97
+			rarity: C
+		}
+		title: Long I Fell
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: [
+			{
+				type: Event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to make him unable to take wounds. Any Shadow player may make you wound a minion to prevent this.
+		lore: "'His fire was about me. I was burned.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

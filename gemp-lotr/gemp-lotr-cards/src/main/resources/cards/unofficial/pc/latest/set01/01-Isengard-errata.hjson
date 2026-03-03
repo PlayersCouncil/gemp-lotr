@@ -1,0 +1,138 @@
+{
+
+	51_158: {
+		cardInfo: {
+			//id: 51_158.1
+			parent: 1_158
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E158.1_card.jpg
+			collInfo: 1C158
+			rarity: C
+		}
+		title: Uruk-hai Raiding Party
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>While you can spot 2 Uruk-hai, each Uruk-hai is strength +1.<br>While you can spot 4 Uruk-hai, this minion is <b>fierce</b>.
+		lore: "'Imagine, Gandalf, an army – born from the earth of Isengard.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	51_152: {
+		cardInfo: {
+			//id: 51_152.1
+			parent: 1_152
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E152.1_card.jpg
+			collInfo: 1C152
+			rarity: C
+		}
+		title: Uruk Shaman
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Remove (2) to heal an [Isengard] minion.
+		lore: "Uruk shamans know the arts of healing as well as those of battle."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	51_157: {
+		cardInfo: {
+			//id: 51_157.1
+			parent: 1_157
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E157.1_card.jpg
+			collInfo: 1C157
+			rarity: C
+		}
+		title: Uruk-hai Armory
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: While you can spot an Uruk-hai, the fellowship archery total is -1.<br>Shadow: Discard this possession to play an [Isengard] possession from your discard pile.<br>Response: If your [Isengard] minion is about to take a wound, remove (1) and discard this possession to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}
