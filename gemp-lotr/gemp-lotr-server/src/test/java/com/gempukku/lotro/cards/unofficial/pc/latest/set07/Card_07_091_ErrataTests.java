@@ -18,8 +18,11 @@ public class Card_07_091_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "57_91");
-					// put other cards in here as needed for the test case
+					put("faramir", "57_91");
+					put("rohanman", "7_226");  // Enraged Horseman (Rohan Man, TWI 2, STR 5, VIT 3)
+					put("gandalf", "1_364");   // Gandalf, The Grey Wizard (STR 7, VIT 4)
+					put("pippin", "1_306");    // Pippin, Friend to Frodo (unbound Hobbit, STR 3, VIT 4)
+					put("lurtz", "1_127");     // Lurtz, Servant of Isengard (STR 13, VIT 3)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +46,14 @@ public class Card_07_091_ErrataTests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Frodo
-		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Play a [rohan] Man to heal Faramir.<br><b>Skirmish:</b> Exert Faramir to make an unbound Hobbit strength +2.<br><b>Skirmish:</b> Exert Gandalf to make Faramir unable to take wounds.
+		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Play a [rohan] Man to heal Faramir.
+		 *  <br><b>Skirmish:</b> Exert Faramir to make an unbound Hobbit strength +2.
+		 *  <br><b>Skirmish:</b> Exert Gandalf to make Faramir unable to take wounds.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("faramir");
 
 		assertEquals("Faramir", card.getBlueprint().getTitle());
 		assertEquals("Wizard's Pupil", card.getBlueprint().getSubtitle());
@@ -62,31 +67,86 @@ public class Card_07_091_ErrataTests
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FaramirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipPlayRohanManToHealFaramir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var faramir = scn.GetFreepsCard("faramir");
+		var rohanman = scn.GetFreepsCard("rohanman");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(faramir);
+		scn.MoveCardsToHand(rohanman);
+		scn.AddWoundsToChar(faramir, 1);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		assertEquals(1, scn.GetWoundsOn(faramir));
+
+		// Use Faramir's fellowship ability -- play a Rohan Man to heal Faramir
+		scn.FreepsUseCardAction(faramir);
+
+		// Choose the Rohan Man to play
+		scn.FreepsChooseCard(rohanman);
+
+		// Faramir should be healed
+		assertEquals(0, scn.GetWoundsOn(faramir));
+	}
+
+	@Test
+	public void SkirmishExertFaramirForHobbitStrengthBonus() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var pippin = scn.GetFreepsCard("pippin");
+		var lurtz = scn.GetShadowCard("lurtz");
+
+		scn.MoveCompanionsToTable(faramir, pippin);
+		scn.MoveMinionsToTable(lurtz);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(pippin, lurtz);
+
+		// During skirmish, use Faramir's ability to exert and boost Pippin
+		scn.FreepsUseCardAction(faramir);
+		// Choose Pippin as the unbound Hobbit to boost
+		scn.FreepsChooseCard(pippin);
+
+		// Faramir should have 1 wound from exertion
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		// Pippin should have +2 strength (base 3 + 2 = 5)
+		assertEquals(5, scn.GetStrength(pippin));
+	}
+
+	@Test
+	public void SkirmishExertGandalfForCantTakeWounds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var lurtz = scn.GetShadowCard("lurtz");
+
+		scn.MoveCompanionsToTable(faramir, gandalf);
+		scn.MoveMinionsToTable(lurtz);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(faramir, lurtz);
+
+		// During skirmish actions, use Faramir's third ability (exert Gandalf)
+		scn.FreepsUseCardAction(faramir);
+
+		// Gandalf should have 1 wound from being exerted
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+
+		// Resolve skirmish -- Faramir (STR 7) vs Lurtz (STR 13), Faramir loses
+		scn.PassSkirmishActions();
+
+		// Faramir should have 0 wounds despite losing the skirmish
+		// because CantTakeWounds prevents all wounds
+		assertEquals(0, scn.GetWoundsOn(faramir));
 	}
 }

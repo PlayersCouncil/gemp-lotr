@@ -18,8 +18,10 @@ public class Card_03_053_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "53_53");
-					// put other cards in here as needed for the test case
+					put("hate", "53_53");
+					put("uruk", "1_151");      // Uruk Lieutenant (Uruk-hai)
+					put("goblinman", "2_42");  // Goblin Man (Isengard Orc)
+					put("runner", "1_178");    // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,7 +30,7 @@ public class Card_03_053_ErrataTests
 	}
 
 	@Test
-	public void HateandAngerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HateAndAngerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
@@ -40,11 +42,11 @@ public class Card_03_053_ErrataTests
 		 * Type: Event
 		 * Subtype: Shadow
 		 * Game Text: Spot an Uruk-hai and an Orc to draw 3 cards.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hate");
 
 		assertEquals("Hate and Anger", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +58,26 @@ public class Card_03_053_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HateandAngerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void HateAndAngerDrawsThreeCardsWithUrukHaiAndOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var hate = scn.GetShadowCard("hate");
+		var uruk = scn.GetShadowCard("uruk");
+		var goblinman = scn.GetShadowCard("goblinman");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(uruk, goblinman);
+		scn.MoveCardsToHand(hate);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		int handBefore = scn.GetShadowHand().size();
+
+		// Shadow plays Hate and Anger
+		scn.ShadowPlayCard(hate);
+
+		// Card played from hand (-1), 3 cards drawn (+3) = net +2
+		assertEquals(handBefore + 2, scn.GetShadowHand().size());
 	}
 }

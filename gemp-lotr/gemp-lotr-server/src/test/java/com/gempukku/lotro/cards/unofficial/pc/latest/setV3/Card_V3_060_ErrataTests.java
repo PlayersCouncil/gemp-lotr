@@ -19,7 +19,9 @@ public class Card_V3_060_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_60");
-					// put other cards in here as needed for the test case
+					put("southron1", "4_222");   // Desert Warrior - Raider minion for spotting
+					put("event1", "103_59");     // Strength of Men - Shadow Raider event, cost 2
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,28 +66,33 @@ public class Card_V3_060_ErrataTests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheMouthofSauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheMouthofSauronReducesShadowEventCostBy2() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: ModifyCost is -2 (was -1 in original)
+		// Mouth of Sauron is a lurker, so he sits in the support area
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
+		var card = scn.GetShadowCard("card");
+		var southron1 = scn.GetShadowCard("southron1");
+		var event1 = scn.GetShadowCard("event1");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(southron1);
+		scn.MoveCardsToHand(event1);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		// Strength of Men normally costs 2, with -2 from Mouth of Sauron = 0
+		// Mouth (support area) + southron1 (in play) = 2 [raider] cards spotted
+		scn.ShadowPlayCard(event1);
+
+		// Event cost 2 - 2 (Mouth's modifier) = 0 twilight spent
+		assertEquals(twilightBefore, scn.GetTwilight());
 	}
 }

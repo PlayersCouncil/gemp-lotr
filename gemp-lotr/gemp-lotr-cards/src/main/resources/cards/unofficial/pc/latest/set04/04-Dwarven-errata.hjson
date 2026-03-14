@@ -17,21 +17,27 @@
 		culture: Dwarven
 		twilight: 0
 		type: Condition
-		target: self
 		keywords: Support Area
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: [
+				{
+					type: exert
+					select: choose(dwarf)
+					memorize: exertedDwarf
 				}
+				{
+					type: StackCardsFromHand
+					select: choose(side(free people))
+					where: self
+				}
+			]
+			effect: {
+				type: DisableWounds
+				select: memory(exertedDwarf)
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: <b>Skirmish:</b> Exert a Dwarf and stack a Free Peoples card from hand here to make that Dwarf unable to take wounds.
 		lore: "'It's a bit tight around the chest.'"
 		promotext: ""

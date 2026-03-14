@@ -18,10 +18,12 @@ public class Card_01_361_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_361");
-					// put other cards in here as needed for the test case
+					put("slopes", "51_361");
+					put("uruk", "1_151");   // Uruk Lieutenant (twilight 3)
+					put("runner", "1_178"); // Goblin Runner (twilight 2, not Isengard)
+					put("guard", "1_7");    // Dwarf Guard
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new String[] {"51_361", "1_337", "1_338", "1_339", "1_340", "1_341", "1_342", "1_343", "1_344"},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -34,20 +36,16 @@ public class Card_01_361_ErrataTests
 		 * Set: 1
 		 * Name: Slopes of Amon Hen
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
 		 * Shadow Number: 9
 		 * Type: Site
-		 * Subtype: 
 		 * Site Number: 9
-		 * Game Text: The twilight cost of each [isengard] minion is -2. Each time you play an [isengard] card, the Free Peoples player must exert a companion.
+		 * Game Text: The twilight cost of each [isengard] minion is -2. Each time you play
+		 * an [isengard] card, the Free Peoples player must exert a companion.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(9);
 
 		assertEquals("Slopes of Amon Hen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,30 +53,5 @@ public class Card_01_361_ErrataTests
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SlopesofAmonHenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		scn.StartGame();
-		
-		assertFalse(true);
 	}
 }

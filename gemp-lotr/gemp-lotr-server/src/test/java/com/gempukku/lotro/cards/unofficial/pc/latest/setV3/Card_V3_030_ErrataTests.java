@@ -18,8 +18,18 @@ public class Card_V3_030_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_30");
-					// put other cards in here as needed for the test case
+					put("nardol", "103_30");
+					put("beacon1", "103_35");
+					put("beacon2", "103_35");
+					put("beacon3", "103_35");
+
+					put("aragorn", "1_89");
+
+					// Valid discard targets (Gondor/Rohan conditions or possessions)
+					put("citadel", "5_32");          // Gondor support Condition
+					put("arrowslits", "5_80");       // Rohan support Condition
+
+					put("runner", "1_178");          // Generic minion for archery phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,7 +55,7 @@ public class Card_V3_030_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("nardol");
 
 		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
 		assertEquals("Flame of Nardol", card.getBlueprint().getSubtitle());
@@ -58,28 +68,43 @@ public class Card_V3_030_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NardolArcheryHindersXBeaconsAndDiscardsXCardsForPlusX() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
+		// Errata: cost changed from "hinder self + discard any" to "hinder X beacons + discard X cards"
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var nardol = scn.GetFreepsCard("nardol");
+		var beacon1 = scn.GetFreepsCard("beacon1");
+		var beacon2 = scn.GetFreepsCard("beacon2");
+		var citadel = scn.GetFreepsCard("citadel");
+		var arrowslits = scn.GetFreepsCard("arrowslits");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(nardol, beacon1, beacon2, citadel, arrowslits);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		int baseArchery = scn.GetFreepsArcheryTotal();
+		assertFalse(scn.IsHindered(beacon1));
+		assertFalse(scn.IsHindered(beacon2));
+
+		assertTrue(scn.FreepsActionAvailable(nardol));
+		scn.FreepsUseCardAction(nardol);
+		// Errata: choose X beacons to hinder (range-based cost)
+		scn.FreepsChooseCards(beacon1, beacon2);
+		// Then discard X (2) Gondor/Rohan conditions/possessions
+		scn.FreepsChooseCards(citadel, arrowslits);
+
+		// +2 archery for hindering 2 beacons and discarding 2 cards
+		assertEquals(baseArchery + 2, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.IsHindered(beacon1));
+		assertTrue(scn.IsHindered(beacon2));
+		assertInDiscard(citadel);
+		assertInDiscard(arrowslits);
 	}
 }

@@ -18,8 +18,11 @@ public class Card_03_072_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "53_72");
-					// put other cards in here as needed for the test case
+					put("trapped", "53_72");
+					put("uruk", "1_151");      // Uruk Lieutenant (Isengard Uruk-hai)
+					put("goblinman", "2_42");  // Goblin Man (Isengard Orc)
+					put("guard", "1_7");       // Dwarf Guard (companion)
+					put("runner", "1_178");    // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,7 +31,7 @@ public class Card_03_072_ErrataTests
 	}
 
 	@Test
-	public void TrappedandAloneStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TrappedAndAloneStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
@@ -40,12 +43,13 @@ public class Card_03_072_ErrataTests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each character skirmishing an [isengard] Orc loses all <b>damage</b> bonuses from weapons.
-		* 	Skirmish: Spot a skirmishing [Isengard] Orc.  Make the Free Peoples shuffle another [Isengard] Orc into your draw deck to cancel the active skirmish.
-		*/
+		 * 	Skirmish: Spot a skirmishing [Isengard] Orc.  Make the Free Peoples shuffle another
+		 *  [Isengard] Orc into your draw deck to cancel the active skirmish.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("trapped");
 
 		assertEquals("Trapped and Alone", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,28 +61,34 @@ public class Card_03_072_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TrappedandAloneTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityCancelsSkirmishByShufflingOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var trapped = scn.GetShadowCard("trapped");
+		var uruk = scn.GetShadowCard("uruk");
+		var goblinman = scn.GetShadowCard("goblinman");
+		var guard = scn.GetFreepsCard("guard");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(trapped);
+		scn.MoveMinionsToTable(uruk, goblinman);
+		scn.MoveCompanionsToTable(guard);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, uruk);
+
+		// Uruk is in a skirmish with Guard, Goblin Man is not in a skirmish
+		// Shadow uses Trapped and Alone ability during skirmish
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(trapped));
+		scn.ShadowUseCardAction(trapped);
+
+		// Freeps must choose another Isengard Orc to shuffle (Goblin Man)
+		scn.FreepsChooseCard(goblinman);
+
+		// Goblin Man should have been shuffled into Shadow's draw deck
+		// Skirmish should be cancelled -- Guard should survive unharmed
+		assertEquals(0, scn.GetWoundsOn(guard));
 	}
 }

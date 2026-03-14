@@ -19,9 +19,18 @@ public class Card_V3_124_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_124");
-					// put other cards in here as needed for the test case
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "103_124");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -34,8 +43,8 @@ public class Card_V3_124_ErrataTests
 		 * Set: V3
 		 * Name: Gorgoroth Wastes
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
+		 * Side:
+		 * Culture:
 		 * Shadow Number: 5
 		 * Type: Site
 		 * Subtype: Standard
@@ -45,9 +54,7 @@ public class Card_V3_124_ErrataTests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(8);
 
 		assertEquals("Gorgoroth Wastes", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,28 +65,23 @@ public class Card_V3_124_ErrataTests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GorgorothWastesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void GorgorothWastesCanBeMovedToWithNoBorneCards() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata changed the AddTwilight multiplier from 2 to 1 per remaining borne card.
+		// When there are no borne FP cards, the trigger has nothing to discard,
+		// so the fellowship should move to site 8 without any interaction.
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
+		// Ring bearer has The One Ring attached, but no other borne FP cards.
+		// Start game with bare-minimum fellowship (just Frodo with Ring).
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// SkipToSite(8) should work without issues since the trigger
+		// will find The One Ring (which gets memorized) and apply the discard-or-add choice.
+		// The SkipToSite auto-handler should process this.
+		scn.SkipToSite(8);
+
+		// Verify we arrived at site 8
+		assertEquals(8, scn.GetCurrentSiteNumber());
 	}
 }

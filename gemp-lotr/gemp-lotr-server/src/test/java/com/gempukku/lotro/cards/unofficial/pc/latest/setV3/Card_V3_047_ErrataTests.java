@@ -19,7 +19,8 @@ public class Card_V3_047_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_47");
-					// put other cards in here as needed for the test case
+					put("southron1", "4_222");   // Desert Warrior - Southron Man, cost 2
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -68,28 +69,28 @@ public class Card_V3_047_ErrataTests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertWindInitiateTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void DesertWindInitiateReducesOtherSouthronCostBy1() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata adds: Other Southrons are twilight cost -1
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
+		var card = scn.GetShadowCard("card");
+		var southron1 = scn.GetShadowCard("southron1");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(southron1);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		// Desert Warrior (southron1) normally costs 2, with -1 from Initiate = 1
+		// Plus 2 for roaming penalty = 3 total
+		scn.ShadowPlayCard(southron1);
+
+		assertEquals(twilightBefore - 3, scn.GetTwilight());
 	}
 }

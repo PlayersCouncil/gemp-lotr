@@ -19,7 +19,6 @@ public class Card_V3_122_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_122");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -34,8 +33,8 @@ public class Card_V3_122_ErrataTests
 		 * Set: V3
 		 * Name: Desolation of Ash
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
+		 * Side:
+		 * Culture:
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: Standard
@@ -45,8 +44,6 @@ public class Card_V3_122_ErrataTests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Desolation of Ash", card.getBlueprint().getTitle());
@@ -58,28 +55,9 @@ public class Card_V3_122_ErrataTests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesolationofAshTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		scn.StartGame();
-		
-		assertFalse(true);
-	}
+	// TODO: Behavior test for Desolation of Ash requires phase-matching filter
+	// to be implemented (currently marked as TODO in the HJSON definition).
+	// Once that filter is added, a test should verify that at the start of
+	// a phase, Shadow can remove (1) to retrieve a Shadow event for that
+	// specific phase from discard.
 }

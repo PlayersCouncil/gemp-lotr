@@ -19,19 +19,31 @@
 		type: Possession
 		strength: 3
 		itemclass: Hand weapon
-		target: self
-		#target: The Witch-king
+		target: name(The Witch-king)
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: addKeyword
+					keyword: damage+1
+					filter: bearer
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(side(free people),condition)
+				}
 			}
 		]
 		gametext: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br>Each time The Witch-king wins a skirmish, you may exert him to discard a Free Peoples condition.

@@ -19,7 +19,8 @@ public class Card_V3_119_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_119");
-					// put other cards in here as needed for the test case
+					put("pipeweed1", "1_300");
+					put("pipeweed2", "1_305");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -57,28 +58,30 @@ public class Card_V3_119_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TreasuredPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TreasuredPipeRequires2PipeweedsToDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata changes discard cost from 1 pipeweed to 2 pipeweeds
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var pipe = scn.GetFreepsCard("card");
+		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
+		var pipeweed2 = scn.GetFreepsCard("pipeweed2");
+		var frodo = scn.GetRingBearer();
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// Attach pipe to Frodo (who is an unbound Hobbit, satisfying play condition)
+		scn.AttachCardsTo(frodo, pipe);
+
+		// Put only 1 pipeweed in support area - should NOT be enough
+		scn.MoveCardsToSupportArea(pipeweed1);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// With only 1 pipeweed, the ability should not be available
+		// because the errata requires discarding 2 pipeweeds
+		assertFalse(scn.FreepsActionAvailable(pipe));
+
+		// Add a second pipeweed - now it should be enough
+		scn.MoveCardsToSupportArea(pipeweed2);
+		assertTrue(scn.FreepsActionAvailable(pipe));
 	}
 }

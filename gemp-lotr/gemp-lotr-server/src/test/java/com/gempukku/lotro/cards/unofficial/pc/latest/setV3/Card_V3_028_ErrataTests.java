@@ -18,8 +18,17 @@ public class Card_V3_028_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_28");
-					// put other cards in here as needed for the test case
+					put("signal", "103_28");
+					put("beacon1", "103_35");
+					put("beacon2", "103_35");
+					put("beacon3", "103_35");
+					put("beacon4", "103_35");
+
+					// Unbound Men with different twilight costs
+					put("strider", "11_54");    // Cost 1
+					put("aragorn", "1_89");     // Cost 4
+
+					put("slayer", "3_93");      // For wounding companions
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,7 +54,7 @@ public class Card_V3_028_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("signal");
 
 		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
 		assertEquals("Flame of Amon Din", card.getBlueprint().getSubtitle());
@@ -58,28 +67,45 @@ public class Card_V3_028_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NorthernSignalfireTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NorthernSignalFireResponseSpotsXBeaconsAndHinders1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
+		// Errata: cost changed from "hinder X beacons" to "spot X beacons + hinder 1 beacon"
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var signal = scn.GetFreepsCard("signal");
+		var beacon1 = scn.GetFreepsCard("beacon1");
+		var beacon2 = scn.GetFreepsCard("beacon2");
+		var beacon3 = scn.GetFreepsCard("beacon3");
+		var beacon4 = scn.GetFreepsCard("beacon4");
+		var aragorn = scn.GetFreepsCard("aragorn"); // Cost 4
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(signal, beacon1, beacon2, beacon3, beacon4);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		scn.ShadowUseCardAction(slayer);
+		// Only 1 valid target, auto-selected
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Northern Signal-fire"));
+
+		scn.FreepsAcceptOptionalTrigger();
+		// Errata: spot 4 beacons (Aragorn's cost), then hinder just 1 beacon
+		// Only 1 beacon to hinder, so auto-chosen or we pick one
+		scn.FreepsChooseCard(beacon1);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// Only 1 beacon should be hindered (not 4 like in original)
+		assertTrue(scn.IsHindered(beacon1));
+		assertFalse(scn.IsHindered(beacon2));
+		assertFalse(scn.IsHindered(beacon3));
+		assertFalse(scn.IsHindered(beacon4));
 	}
 }

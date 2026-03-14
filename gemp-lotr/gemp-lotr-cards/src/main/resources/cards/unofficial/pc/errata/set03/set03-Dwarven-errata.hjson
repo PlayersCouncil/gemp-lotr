@@ -71,90 +71,90 @@
 	# 	}
 	# }
 	
-	53_4: {
-		cardInfo: {
-			//id: 53_4.2
-			parent: 3_4
-			variant: ERRATA
-			variantPath: errata/pc
-			revision: 2
-			image: errata/LOTR-EN03E004.2_card.jpg
-			collInfo: 3U4
-			rarity: U
-		}
-		title: A Royal Welcome
-		unique: false
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 2
-		type: Condition
-		keywords: Support Area
-		effects: [
-			{
-				type: activated
-				phase: fellowship
-				cost: {
-					type: exert
-					select: choose(culture(dwarven),companion)
-				}
-				effect: {
-					type: heal
-					select: choose(culture(dwarven),ally)
-				}
-			}
-			{
-				type: activated
-				phase: skirmish
-				cost: {
-					type: exert
-					select: choose(culture(dwarven),ally)
-					memorize: chosenAlly
-				}
-				effect: [
-					{
-						type: ModifyStrength
-						select: choose(unbound,culture(dwarven),companion)
-						amount: {
-							type: ForEachStrength
-							filter: memory(chosenAlly)
-						}
-						memorize: chosenComp
-					}
-					{
-						type: AddKeyword
-						select: memory(chosenComp)
-						keyword: damage
-						amount: {
-							type: ForEachKeywordOnCardInMemory
-							memory: chosenAlly
-							keyword: damage
-						}
-					}
-				]
-			}
-			{
-				type: activated
-				phase: regroup
-				cost: {
-					type: exert
-					select: choose(culture(dwarven),ally)
-				}
-				effect: {
-					type: heal
-					select: choose(culture(dwarven),companion)
-				}
-			}
-		]
-		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Exert a [dwarven] ally to add that ally's strength and <b>damage</b> bonuses to an unbound [dwarven] companion.\Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 53_4: {
+	# 	cardInfo: {
+	# 		//id: 53_4.2
+	# 		parent: 3_4
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 2
+	# 		image: errata/LOTR-EN03E004.2_card.jpg
+	# 		collInfo: 3U4
+	# 		rarity: U
+	# 	}
+	# 	title: A Royal Welcome
+	# 	unique: false
+	# 	side: Free Peoples
+	# 	culture: Dwarven
+	# 	twilight: 2
+	# 	type: Condition
+	# 	keywords: Support Area
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: fellowship
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),companion)
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(culture(dwarven),ally)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),ally)
+	# 				memorize: chosenAlly
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: ModifyStrength
+	# 					select: choose(unbound,culture(dwarven),companion)
+	# 					amount: {
+	# 						type: ForEachStrength
+	# 						filter: memory(chosenAlly)
+	# 					}
+	# 					memorize: chosenComp
+	# 				}
+	# 				{
+	# 					type: AddKeyword
+	# 					select: memory(chosenComp)
+	# 					keyword: damage
+	# 					amount: {
+	# 						type: ForEachKeywordOnCardInMemory
+	# 						memory: chosenAlly
+	# 						keyword: damage
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: regroup
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(dwarven),ally)
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(culture(dwarven),companion)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Exert a [dwarven] ally to add that ally's strength and <b>damage</b> bonuses to an unbound [dwarven] companion.\Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	
 	53_5: {
 		cardInfo: {

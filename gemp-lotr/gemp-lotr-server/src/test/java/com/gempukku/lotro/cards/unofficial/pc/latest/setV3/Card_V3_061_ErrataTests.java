@@ -19,7 +19,7 @@ public class Card_V3_061_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_61");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,28 +66,27 @@ public class Card_V3_061_ErrataTests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireAtteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void UlaireAtteaGivesEasterlingsStrengthPlus3With3Burdens() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: STR modifier is +3 (was +2 in original)
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
+		var card = scn.GetShadowCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Base strength without burdens
+		int baseStrength = scn.GetStrength(card);
+		assertEquals(12, baseStrength);
+
+		// Add 3 burdens (Frodo starts with 1, so add 2 more)
+		scn.AddBurdens(2);
+		assertEquals(3, scn.GetBurdens());
+
+		// Errata: each Easterling should now be strength +3
+		assertEquals(baseStrength + 3, scn.GetStrength(card));
 	}
 }

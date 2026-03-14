@@ -19,21 +19,37 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		target: self
-		#target: title(Merry)
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		target: title(Merry)
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: [
+				{
+					type: chooseHowManyToSpot
+					filter: culture(rohan),companion
+					memorize: spotCount
+				}
+				{
+					type: exert
+					select: bearer
+					times: {
+						type: fromMemory
+						memory: spotCount
+					}
+				}
+			]
+			effect: {
+				type: repeat
+				times: {
+					type: fromMemory
+					memory: spotCount
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Bearer must be Merry.<br><b>Maneuver:</b> Exert Merry X times to exert a minion once for each [rohan] companion you spot (limit X).
 		lore: "Merry's sword had stabbed him from behind, shearing through the black mantle...."
 		promotext: ""

@@ -17,21 +17,94 @@
 		culture: Raider
 		twilight: 3
 		type: Possession
-		strength: 4
-		vitality: 4
 		target: self
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
 				requires: {
-					type: CanSpot
-					filter: any
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				effect: {
+					type: AddThreats
+					amount: {
+						type: Conditional
+						requires: {
+							type: HasCardStacked
+							count: 4
+							filter: Southron
+							on: self
+						}
+						true: 2
+						false: 1
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: canSpot
+						filter: self,zone(support)
+					}
+				]
+				cost: [
+					{
+						type: StackCardsFromPlay
+						select: choose(Southron, Man)
+						where: self
+						count: AnyNonZero
+					}
+				]
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 4
+						vitality: 4
+						keywords: [
+							fierce
+							mounted
+							southron
+						]
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyStrength
+							filter: self
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								multiplier: 4
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeyword
+							filter: self
+							keyword: ambush
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+							}
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: Maneuver: Stack 1 or more Southron Men here to make this a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +4 and <b>ambush (1)</b> for each Southron stacked here. At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
@@ -68,15 +141,101 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: Southron
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Stack a [raider] Man from play
+						Stack a [raider] Man from hand
+					]
+					effects: [
+						{
+							type: StackCardsFromPlay
+							select: choose(culture(raider),Man)
+							where: self
+						}
+						{
+							type: StackCardsFromHand
+							select: choose(culture(raider),Man)
+							where: self
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: canSpot
+						filter: self,zone(support)
+					}
+				]
+				cost: {
+					type: RemoveTwilight
+					amount: 6
+				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 6
+						vitality: 6
+						keywords: [
+							fierce
+							mounted
+							southron
+						]
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyStrength
+							filter: self
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								multiplier: 3
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeyword
+							filter: self
+							keyword: ambush
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyArcheryTotal
+							side: Shadow
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								limit: 6
+							}
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: Each time a Southron is played, you may stack a [raider] Man from play or hand here.<br>Maneuver: Remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to the Shadow archery total for each Southron stacked on her (limit 6).
@@ -118,15 +277,37 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: ModifyCost
+					filter: other,Southron
+					amount: -1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 3
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
+				}
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker. Ambush (3).<br>Other Southrons are twilight cost -1.<br>When you play this minion, remove (3) or hinder this minion.
@@ -168,15 +349,54 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 3
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToHinder
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Hinder another [raider] minion
+						Restore another [raider] minion
+					]
+					effects: [
+						{
+							type: Hinder
+							select: choose(another,culture(raider),minion)
+						}
+						{
+							type: Restore
+							select: choose(another,culture(raider),minion)
+						}
+					]
+				}
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time this minion is hindered, you may hinder or restore another [raider] minion.
@@ -217,15 +437,40 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (4)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 4
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: minion,ambush
+					amount: {
+						type: ForEachKeyword
+						keyword: ambush
+					}
+				}
 			}
 		]
 		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (4) or hinder this minion.<br>Each minion with ambush (X) is strength +X.
@@ -259,15 +504,36 @@
 		timewords: Assignment
 		effects: [
 			{
-				type: Event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+				type: event
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Restore
+						select: all(or(tracker,and(minion,ambush)))
+						memorize: restoredMinions
+					}
+					{
+						type: If
+						check: [
+							{
+								type: HasCardInMemory
+								memory: restoredMinions
+							}
+						]
+						true: [
+							{
+								type: AddKeyword
+								select: all(Southron)
+								keyword: ambush
+								amount: 1
+								until: start(regroup)
+							}
+							{
+								type: ModifyStrength
+								select: all(Southron)
+								amount: 1
+								until: start(regroup)
+							}
+						]
 					}
 				]
 			}
@@ -303,17 +569,37 @@
 		timewords: Maneuver
 		effects: [
 			{
-				type: Event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+				type: event
+				requires: {
+					type: CanSpot
+					filter: culture(raider)
+					count: 2
 				}
-				effect: [
-					{
-						type: SendMessage
-						text: Placeholder effect for development.
+				effect: {
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpotBurdens
+								amount: 5
+							}
+							{
+								type: CanSpot
+								filter: culture(raider)
+								count: 6
+							}
+						]
 					}
-				]
+					true: {
+						type: ReconcileHand
+					}
+					false: {
+						type: Restore
+						select: choose(culture(raider))
+						count: 2
+					}
+				}
 			}
 		]
 		gametext: Spot 2 [raider] cards to restore 2 [raider] cards (or reconcile your hand if you can spot 5 burdens or 6 [raider] cards).
@@ -352,15 +638,33 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: your, side(Shadow), event
+					amount: -2
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: AboutToTakeWound
+					filter: minion
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: [
+					{
+						type: PreventWound
+						select: choose(minion)
+					}
+					{
+						type: Hinder
+						select: choose(side(Free Peoples), weapon)
+					}
+				]
 			}
 		]
 		gametext: Lurker.<br>Your Shadow events are twilight cost -2. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
@@ -402,15 +706,28 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: Easterling
+					amount: 3
+					requires: {
+						type: CanSpotBurdens
+						amount: 3
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					filter: Easterling
+					keyword: damage+1
+					requires: {
+						type: CanSpotBurdens
+						amount: 5
+					}
+				}
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +3.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.

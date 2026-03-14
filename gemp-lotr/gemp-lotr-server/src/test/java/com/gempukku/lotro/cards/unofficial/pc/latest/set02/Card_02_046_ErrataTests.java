@@ -18,8 +18,10 @@ public class Card_02_046_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "52_46");
-					// put other cards in here as needed for the test case
+					put("captain", "52_46");
+					put("uruk", "1_151");    // Uruk Lieutenant (another Uruk-hai to exert)
+					put("brood", "1_154");   // Uruk Brood (Uruk-hai in discard to play)
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +44,13 @@ public class Card_02_046_ErrataTests
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai to play an Uruk-hai from your discard pile.
+		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai
+		 * to play an Uruk-hai from your discard pile.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("captain");
 
 		assertEquals("Uruk Captain", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,28 +67,37 @@ public class Card_02_046_ErrataTests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukCaptainTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukCaptainExertsAnyUrukHaiToPlayFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var captain = scn.GetShadowCard("captain");
+		var uruk = scn.GetShadowCard("uruk");
+		var brood = scn.GetShadowCard("brood");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(captain, uruk);
+		scn.MoveCardsToDiscard(brood);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.AddTwilight(4);
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		// Captain's ability should be available
+		assertTrue(scn.ShadowActionAvailable(captain));
+		scn.ShadowUseCardAction(captain);
+
+		// Choose which Uruk-hai to exert -- can pick the Lieutenant instead of self
+		// (Errata changed from "exert Uruk Captain" to "exert an Uruk-hai")
+		assertTrue(scn.ShadowCanChooseCharacter(uruk));
+		assertTrue(scn.ShadowCanChooseCharacter(captain));
+		scn.ShadowChooseCard(uruk);
+
+		// Uruk Brood should be auto-selected from discard and played
+		assertEquals(1, scn.GetWoundsOn(uruk));
+		assertEquals(0, scn.GetWoundsOn(captain));
+		assertInZone(Zone.SHADOW_CHARACTERS, brood);
 	}
 }

@@ -18,8 +18,11 @@ public class Card_V3_099_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_99");
-					// put other cards in here as needed for the test case
+					put("prisoners", "103_99");
+					put("slayer", "3_93");        // Morgul Slayer - [Sauron] Orc
+					put("sam", "1_311");          // Sam - [Shire] companion
+					put("merry", "1_302");        // Merry - [Shire] companion (the prisoner)
+					put("aragorn", "1_89");       // Aragorn - [Gondor] companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +47,7 @@ public class Card_V3_099_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("prisoners");
 
 		assertEquals("Release the Prisoners!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +59,54 @@ public class Card_V3_099_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ReleasethePrisonersTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ReleasethePrisonersHindersSelfInsteadOfDiscarding() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var prisoners = scn.GetShadowCard("prisoners");
+		var slayer = scn.GetShadowCard("slayer");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(prisoners);
+		scn.MoveMinionsToTable(slayer);
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.MoveCardsToDeadPile(merry);  // Merry is [Shire], our prisoner
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(slayer));
+		assertFalse(scn.IsHindered(prisoners));
+
+		assertTrue(scn.ShadowActionAvailable(prisoners));
+		scn.ShadowUseCardAction(prisoners);
+		// Slayer auto-selected as only [Sauron] minion
+		// Merry auto-selected as only companion in dead pile
+
+		// All [Shire] characters exerted
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+
+		// [Gondor] Aragorn NOT exerted
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// [Sauron] minion exerted as cost
+		assertEquals(1, scn.GetWoundsOn(slayer));
+
+		// Merry removed from game
+		assertEquals(0, scn.GetFreepsDeadCount());
+		assertInZone(Zone.REMOVED, merry);
+
+		// Errata: condition is hindered instead of discarded
+		assertInZone(Zone.SUPPORT, prisoners);
+		assertTrue(scn.IsHindered(prisoners));
 	}
 }

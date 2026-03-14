@@ -18,8 +18,10 @@ public class Card_V3_076_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_76");
-					// put other cards in here as needed for the test case
+					put("nelya", "103_76");
+					put("nazgul2", "1_234"); // Ulaire Nertea
+					put("guard", "1_7");
+					put("gimli", "1_12");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +45,13 @@ public class Card_V3_076_ErrataTests
 		 * Vitality: 3
 		 * Site Number: 2
 		 * Game Text: Fierce.
-		* 	Skirmish: Exert this minion to make a Nazgul strength +1 for each of your sites on the adventure path (limit +2, or limit +5 if you can spot another Nazgul).
+		* 	Skirmish: Exert this minion to make a Nazgul strength +1 for each of your sites on the adventure path
+		*   (limit +2, or limit +5 if you can spot another Nazgul).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("nelya");
 
 		assertEquals("Ulaire Nelya", card.getBlueprint().getTitle());
 		assertEquals("Glorified to Conquer", card.getBlueprint().getSubtitle());
@@ -64,28 +67,40 @@ public class Card_V3_076_ErrataTests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireNelyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NelyaActivatedAbilityExertsAndBoostsNazgulInSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var nelya = scn.GetShadowCard("nelya");
+		scn.MoveMinionsToTable(nelya);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// At site 1, shadow has 1 site on the adventure path.
+		// With no other Nazgul, limit is +2. So 1 site = +1 (capped at +2).
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, nelya);
+		scn.FreepsResolveSkirmish(gimli);
+
+		// Nelya base STR is 11
+		assertEquals(11, scn.GetStrength(nelya));
+		assertEquals(0, scn.GetWoundsOn(nelya));
+
+		// The errata changed this from a trigger to an activated ability.
+		// It should be available as a "Use" action during skirmish.
+		assertTrue(scn.ShadowActionAvailable(nelya));
+		scn.ShadowUseCardAction(nelya);
+
+		// Choose Nelya as the target Nazgul to boost
+		scn.ShadowChooseCard(nelya);
+
+		// Nelya should now be exerted (1 wound) and strength boosted
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		// At site 1 with 1 shadow site on path, and no other Nazgul => limit +2, boost = +1
+		assertEquals(12, scn.GetStrength(nelya));
 	}
 }

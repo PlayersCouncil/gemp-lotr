@@ -19,7 +19,11 @@ public class Card_V3_041_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_41");
-					// put other cards in here as needed for the test case
+					put("southron1", "4_222");  // Desert Warrior - Southron Man
+					put("southron2", "4_222");
+					put("southron3", "4_222");
+					put("orc", "1_271");        // Orc Soldier - not Southron, to keep in play
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,28 +64,44 @@ public class Card_V3_041_ErrataTests
 		assertEquals(4, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BladetuskChargerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BladetuskChargerStrengthMultiplierIs4PerStackedSouthron() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
+		var card = scn.GetShadowCard("card");
+		var southron1 = scn.GetShadowCard("southron1");
+		var southron2 = scn.GetShadowCard("southron2");
+		var southron3 = scn.GetShadowCard("southron3");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(southron1, southron2, southron3, orc);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Use the maneuver action - cost is stacking Southron Men from play
+		scn.ShadowUseCardAction(card);
+
+		// Stack all 3 Southron Men as cost
+		scn.ShadowChooseCards(southron1, southron2, southron3);
+
+		// Verify transformation
+		assertInZone(Zone.SHADOW_CHARACTERS, card);
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTED));
+		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
+
+		// Errata: multiplier is 4 (was 3 in original)
+		// Base strength 4 + (3 Southrons * 4) = 16
+		assertEquals(16, scn.GetStrength(card));
+
+		// Ambush (3) for 3 stacked Southrons
+		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
+		assertEquals(3, scn.GetKeywordCount(card, Keyword.AMBUSH));
 	}
 }

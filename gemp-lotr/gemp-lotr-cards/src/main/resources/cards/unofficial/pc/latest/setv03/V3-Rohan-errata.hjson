@@ -29,15 +29,61 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: AddRace
+					filter: self
+					race: Man
+					requires:
+					{
+						type: Or
+						requires: [
+							{
+								type: CanSpot
+								count: 3
+								filter: Rohan, companion
+							}
+							{
+								type: CanSpot
+								filter: title(Eowyn)
+							}
+						]
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Exerted
+					filter: another,Rohan,Man
+					memorize: exertedComp
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: Heal
+					select: memory(exertedComp)
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				requires: [
+					{
+						type: CanSpot
+						filter: self,notAssignedToSkirmish
+					}
+				]
+				cost: {
+					type: Hinder
+					select: self
+				}
+				effect: {
+						type: EndPhase
+					}
 			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] Man exerts, you may exert Merry to heal that Man.<br>Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [rohan] Man.
@@ -70,19 +116,39 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		target: self
-		#target: a [Rohan] companion
+		target: Rohan, companion
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: bearer
+					amount: 1
+					requires: {
+						type: CanSpot
+						filter: bearer, mounted
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				requires: {
+					type: CanSpot
+					filter: bearer, mounted
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: {
+					type: Wound
+					select: choose(minion)
+				}
 			}
 		]
 		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +1 and each time bearer wins a skirmish, you must exert them to wound a minion.

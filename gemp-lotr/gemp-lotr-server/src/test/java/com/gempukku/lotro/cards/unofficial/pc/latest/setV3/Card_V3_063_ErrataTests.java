@@ -18,8 +18,9 @@ public class Card_V3_063_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_63");
-					// put other cards in here as needed for the test case
+					put("watcher", "103_63");
+					put("runner", "1_178");
+					put("nazgul", "1_232"); // Ulaire Enquea
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_V3_063_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("watcher");
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
 		assertEquals("Spirit of Vigilance", card.getBlueprint().getSubtitle());
@@ -58,28 +59,48 @@ public class Card_V3_063_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void WatcherCannotPlayWithoutRingwraithSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var watcher = scn.GetShadowCard("watcher");
+		scn.MoveCardsToHand(watcher);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// No ringwraith cards on the table - only a runner (Sauron orc)
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Watcher requires spotting a ringwraith card to play -- runner is Sauron, not ringwraith
+		assertFalse(scn.ShadowPlayAvailable(watcher));
+	}
+
+	@Test
+	public void WatcherCanPlayWithRingwraithSpotAndDoesNotAddBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var watcher = scn.GetShadowCard("watcher");
+		var nazgul = scn.GetShadowCard("nazgul");
+		scn.MoveCardsToHand(watcher);
+		// Place a Nazgul (ringwraith card) on the table for the spot requirement
+		scn.MoveMinionsToTable(nazgul);
+
+		scn.StartGame();
+		int burdensBefore = scn.GetBurdens();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// With a Nazgul on the table, the watcher should be playable
+		assertTrue(scn.ShadowPlayAvailable(watcher));
+		scn.ShadowPlayCard(watcher);
+
+		// Errata removed AddBurdens from ExtraCost, so no burden should be added
+		assertEquals(burdensBefore, scn.GetBurdens());
+		assertEquals(Zone.SUPPORT, watcher.getZone());
 	}
 }

@@ -18,10 +18,19 @@ public class Card_V3_126_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_126");
-					// put other cards in here as needed for the test case
+					put("runner", "1_178");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "103_126");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -34,8 +43,8 @@ public class Card_V3_126_ErrataTests
 		 * Set: V3
 		 * Name: Cracks of Doom
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
+		 * Side:
+		 * Culture:
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: Standard
@@ -45,9 +54,7 @@ public class Card_V3_126_ErrataTests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(9);
 
 		assertEquals("Cracks of Doom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,28 +67,28 @@ public class Card_V3_126_ErrataTests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CracksofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CracksofDoomGivesMinionsPlusOneStrength() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata adds ModifyStrength +1 for all minions
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Goblin Runner is normally STR 5
+		assertEquals(5, scn.GetStrength(runner));
+
+		// Move to site 9 (Cracks of Doom)
+		scn.SkipToSite(8);
+		scn.FreepsPass();
+
+		// Verify we arrived at site 9
+		assertEquals(9, scn.GetCurrentSiteNumber());
+
+		// At Cracks of Doom, each minion is strength +1
+		// Runner should now be STR 5 + 1 = 6
+		assertEquals(6, scn.GetStrength(runner));
 	}
 }

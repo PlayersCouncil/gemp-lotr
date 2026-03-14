@@ -19,7 +19,8 @@ public class Card_V3_085_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_85");
-					// put other cards in here as needed for the test case
+					put("eowyn", "4_270");
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,31 +67,27 @@ public class Card_V3_085_ErrataTests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MerryBecomesRohanManWhenSpottingEowyn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var merry = scn.GetFreepsCard("card");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Without Eowyn, Merry should be a Hobbit but not a Man
+		assertFalse(scn.IsRace(merry, Race.MAN));
+
+		// Play Eowyn to satisfy the "or Eowyn" condition
+		scn.MoveCompanionsToTable(eowyn);
+
+		// Now Merry should also be considered a Man
+		assertTrue(scn.IsRace(merry, Race.MAN));
 	}
 }

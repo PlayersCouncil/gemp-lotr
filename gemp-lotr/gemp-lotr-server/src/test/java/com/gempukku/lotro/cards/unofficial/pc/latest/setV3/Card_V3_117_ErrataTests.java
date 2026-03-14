@@ -19,7 +19,7 @@ public class Card_V3_117_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_117");
-					// put other cards in here as needed for the test case
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,8 +41,8 @@ public class Card_V3_117_ErrataTests
 		 * Subtype: Hand weapon
 		 * Strength: 1
 		 * Resistance: 1
-		 * Game Text: Bearer must be a Ring-bound Hobbit. 
-		* 	Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot (limit +6). 
+		 * Game Text: Bearer must be a Ring-bound Hobbit.
+		* 	Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot (limit +6).
 		* 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		*/
 
@@ -62,28 +62,37 @@ public class Card_V3_117_ErrataTests
 		assertEquals(1, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StingStrengthBonusCapsAt6() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata adds limit: 6 to the ForEachThreat strength bonus
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var sting = scn.GetFreepsCard("card");
+		var frodo = scn.GetRingBearer();
+		var runner = scn.GetShadowCard("runner");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Add 7 threats so the limit of 6 can be tested
+		scn.AddThreats(7);
+		assertEquals(7, scn.GetThreats());
+
+		// Frodo base 3 + Ruling Ring 1 + Sting 1 = 5 before using ability
+		int baseStr = scn.GetStrength(frodo);
+		assertEquals(5, baseStr);
+
+		// Move to skirmish
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, runner);
+
+		// Use Sting's ability - it adds 1 threat, so now 8 threats
+		// Strength bonus is +1 for each threat, limit 6
+		scn.FreepsUseCardAction(sting);
+
+		// After activating: 8 threats exist, but limit is 6, so +6
+		// Frodo base 3 + Ring 1 + Sting 1 + ability 6 = 11
+		assertEquals(11, scn.GetStrength(frodo));
 	}
 }

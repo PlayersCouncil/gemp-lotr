@@ -20,15 +20,29 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(isengard),minion
+					amount: -2
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: your,culture(isengard)
+				}
+				requires: {
+					type: isSide
+					side: shadow
+				}
+				effect: {
+					type: exert
+					player: freeps
+					select: choose(companion)
+				}
 			}
 		]
 		gametext: The twilight cost of each [isengard] minion is -2. Each time you play an [isengard] card, the Free Peoples player must exert a companion.

@@ -17,20 +17,21 @@
 		culture: Shire
 		twilight: 1
 		type: Possession
-		itemclass: 
-		target: self
+		target: hasAttached(pipe)
 		keywords: Pipeweed
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: ShuffleCardsFromDiscardIntoDrawDeck
+					select: choose(or(pipe,pipeweed))
+					count: 0-2
+				}
 			}
 		]
 		gametext: Pipeweed. Bearer must bear a pipe.<br>When you play this possession, you may shuffle up to 2 pipes or pipeweed from your discard pile into your draw deck.
@@ -65,19 +66,52 @@
 		strength: 1
 		resistance: 1
 		itemclass: Hand weapon
-		target: self
-		#target: a Ring-bound Hobbit
+		target: Ring-bound,Hobbit
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: Skirmish
 				requires: {
-					type: CanSpot
-					filter: any
+					type: CantSpot
+					filter: companion
+					count: 5
+				}
+				cost: {
+					type: AddThreats
+					amount: 1
+				}
+				effect: {
+					type: ModifyStrength
+					select: bearer
+					amount: {
+						type: ForEachThreat
+						limit: 6
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: Transfer
+					select: self
+					where: choose(Hobbit,Ring-bearer)
+					checkTarget: true
+				}
+			}
+			{
+				type: Response
+				fromDiscard: true
+				trigger: {
+					type: NewRingBearer
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+					on: Hobbit,Ring-bearer
+				}
 			}
 		]
 		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat you can spot (limit +6). <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
@@ -109,19 +143,46 @@
 		twilight: 1
 		type: Possession
 		itemclass: Pipe
-		target: self
-		#target: a companion
+		target: companion
 		effects: [
 			{
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: or(pipe, and(unbound,Hobbit))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Fellowship
+				cost: [
+					{
+						type: Discard
+						select: choose(pipeweed)
+						count: 2
+					}
+					{
+						type: chooseHowManyToSpot
+						filter: pipe
+						memorize: spottedPipes
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
+						count: {
+							type: fromMemory
+							memory: spottedPipes
+						}
+						amount: 1
+						select: choose(companion)
+						until: start(regroup)
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
 			}
 		]
 		gametext: To play, spot a pipe or an unbound Hobbit. Bearer must be a companion.<br>Fellowship: Discard 2 pipeweeds and spot X pipes to make X companions strength +1 until the regroup phase.  Hinder this pipe.

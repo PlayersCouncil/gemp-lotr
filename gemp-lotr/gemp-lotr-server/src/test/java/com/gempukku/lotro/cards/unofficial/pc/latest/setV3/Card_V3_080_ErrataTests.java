@@ -18,8 +18,10 @@ public class Card_V3_080_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_80");
-					// put other cards in here as needed for the test case
+					put("witchking", "103_80");
+					put("nazgul2", "1_234"); // Ulaire Nertea
+					put("runner", "1_178");
+					put("guard", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +45,14 @@ public class Card_V3_080_ErrataTests
 		 * Vitality: 4
 		 * Site Number: 3
 		 * Game Text: Enduring. Damage +1.
-		* 	When you play this minion, spot another Nazgul to hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards, and must exert one of their characters for each card restored.
+		* 	When you play this minion, spot another Nazgul to hinder all Free Peoples cards of one type
+		*   (except companion). The Free Peoples player may restore any number of their cards,
+		*   and must exert one of their characters for each card restored.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("witchking");
 
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Empowered by His Master", card.getBlueprint().getSubtitle());
@@ -60,34 +64,56 @@ public class Card_V3_080_ErrataTests
 		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		// Errata removed Fierce keyword
+		assertFalse(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(10, card.getBlueprint().getTwilightCost());
 		assertEquals(15, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void WitchkingRequiresAnotherNazgulForOnPlayTrigger() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var witchking = scn.GetShadowCard("witchking");
+		scn.MoveCardsToHand(witchking);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// No other Nazgul on the table -- only a runner
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play Witch-king without another Nazgul -- the "spot another Nazgul" requirement should fail
+		scn.ShadowPlayCard(witchking);
+		// The trigger requires spotting another Nazgul (errata added this requirement)
+		// Without another Nazgul, the trigger should not fire
+		assertFalse(scn.ShadowDecisionAvailable("Choose a card type"));
+	}
+
+	@Test
+	public void WitchkingTriggerFiresWithAnotherNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		scn.MoveCardsToHand(witchking);
+		scn.MoveMinionsToTable(nazgul2);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play Witch-king with another Nazgul on the table
+		scn.ShadowPlayCard(witchking);
+
+		// The trigger should fire -- shadow gets a decision to choose a FP card to target
+		// (ChooseActiveCards with text "Choose a card type to hinder")
+		assertTrue(scn.ShadowDecisionAvailable("Choose a card type"));
 	}
 }

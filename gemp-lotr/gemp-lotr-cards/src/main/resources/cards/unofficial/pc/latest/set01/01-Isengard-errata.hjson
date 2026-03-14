@@ -24,15 +24,30 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: uruk-hai
+					amount: 1
+					requires: {
+						type: canSpot
+						count: 2
+						filter: uruk-hai
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: fierce
+					requires: {
+						type: canSpot
+						count: 4
+						filter: uruk-hai
+					}
+				}
 			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot 2 Uruk-hai, each Uruk-hai is strength +1.<br>While you can spot 4 Uruk-hai, this minion is <b>fierce</b>.
@@ -68,19 +83,18 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 2
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			effect: {
+				type: heal
+				select: choose(culture(isengard),minion)
 			}
-		]
+		}
 		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Remove (2) to heal an [Isengard] minion.
 		lore: "Uruk shamans know the arts of healing as well as those of battle."
 		promotext: ""
@@ -109,22 +123,55 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		target: self
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: free people
+					requires: {
+						type: canSpot
+						filter: uruk-hai
+					}
+					amount: -1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(culture(isengard),possession)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: your,culture(isengard),minion
+				}
+				cost: [
+					{
+						type: removeTwilight
+						amount: 1
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: preventWound
+					select: choose(your,culture(isengard),minion)
+				}
 			}
 		]
-		gametext: While you can spot an Uruk-hai, the fellowship archery total is -1.<br>Shadow: Discard this possession to play an [Isengard] possession from your discard pile.<br>Response: If your [Isengard] minion is about to take a wound, remove (1) and discard this possession to prevent that wound.
+		gametext: While you can spot an Uruk-hai, the fellowship archery total is -1.<br><b>Shadow:</b> Discard this condition to play an [Isengard] possession from your discard pile.<br><b>Response:</b> If your [Isengard] minion is about to take a wound, remove (1) and discard this condition to prevent that wound.
 		lore: ""
 		promotext: ""
 		alts: {

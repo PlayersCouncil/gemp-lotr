@@ -18,8 +18,12 @@ public class Card_V3_095_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_95");
-					// put other cards in here as needed for the test case
+					put("horror", "103_95");
+					put("sky1", "103_97");        // Ominous Sky - Twilight condition
+					put("sky2", "103_97");
+					put("sky3", "103_97");
+					put("orc", "1_271");          // Orc Soldier - [Sauron] Orc
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +45,12 @@ public class Card_V3_095_ErrataTests
 		 * Subtype: Support area
 		 * Game Text: Twilight.
 		* 	To play, hinder 2 twilight conditions.
-		* 	Skirmish: Exert an Orc or Troll and hinder a twilight condition to make that minion strength +2.  
+		* 	Skirmish: Exert an Orc or Troll and hinder a twilight condition to make that minion strength +2.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("horror");
 
 		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
 		assertEquals("Omen of Horror", card.getBlueprint().getSubtitle());
@@ -59,28 +63,41 @@ public class Card_V3_095_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void OmenOfHorrorSkirmishAbilityHindersOnly1TwilightCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var horror = scn.GetShadowCard("horror");
+		var sky1 = scn.GetShadowCard("sky1");
+		var sky2 = scn.GetShadowCard("sky2");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(horror, sky1, sky2);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, orc);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int orcStrengthBefore = scn.GetStrength(orc);
+		int orcWoundsBefore = scn.GetWoundsOn(orc);
+		assertFalse(scn.IsHindered(sky1));
+		assertFalse(scn.IsHindered(sky2));
+
+		assertTrue(scn.ShadowActionAvailable(horror));
+		scn.ShadowUseCardAction(horror);
+		// Orc auto-selected as only Orc/Troll
+		// Errata: only hinder 1 twilight condition (was 2 in original)
+		// sky1 or sky2 chosen; with 2 choices one should be auto-picked or we pick
+		scn.ShadowChooseCard(sky1);
+
+		assertEquals(orcWoundsBefore + 1, scn.GetWoundsOn(orc));
+		assertTrue(scn.IsHindered(sky1));
+		assertFalse(scn.IsHindered(sky2)); // Only 1 hindered, not 2
+		assertEquals(orcStrengthBefore + 2, scn.GetStrength(orc));
 	}
 }

@@ -479,63 +479,63 @@
 	# 	}
 	# }
 	
-	51_17: {
-		cardInfo: {
-			//id: 51_17.2
-			parent: 1_17
-			variant: ERRATA
-			variantPath: errata/pc
-			revision: 2
-			image: errata/LOTR-EN01E017.2_card.jpg
-			collInfo: 1U17
-			rarity: U
-		}
-		title: Grimir
-		subtitle: Dwarven Elder
-		unique: true
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 1
-		type: Ally
-		allyHome: 3F
-		race: Dwarf
-		strength: 3
-		vitality: 3
-		effects: [
-			{
-				type: Activated
-				phase: Skirmish
-				cost: [
-					{
-						type: Spot
-						filter: Dwarven, companion
-					}
-					{
-						type: Exert
-						select: self
-					}
-				]
-				effect: {
-					type: PlayCardFromDiscard
-					select: choose(Dwarven, event)
-					memorize: playedEvent
-					extraEffects: {
-						type: RemoveFromTheGame
-						select: memory(playedEvent)
-					}
-				}
-			}
-		]
-		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir to play a [dwarven] event from your discard pile, then remove it from the game.
-		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 51_17: {
+	# 	cardInfo: {
+	# 		//id: 51_17.2
+	# 		parent: 1_17
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 2
+	# 		image: errata/LOTR-EN01E017.2_card.jpg
+	# 		collInfo: 1U17
+	# 		rarity: U
+	# 	}
+	# 	title: Grimir
+	# 	subtitle: Dwarven Elder
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Dwarven
+	# 	twilight: 1
+	# 	type: Ally
+	# 	allyHome: 3F
+	# 	race: Dwarf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	effects: [
+	# 		{
+	# 			type: Activated
+	# 			phase: Skirmish
+	# 			cost: [
+	# 				{
+	# 					type: Spot
+	# 					filter: Dwarven, companion
+	# 				}
+	# 				{
+	# 					type: Exert
+	# 					select: self
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: PlayCardFromDiscard
+	# 				select: choose(Dwarven, event)
+	# 				memorize: playedEvent
+	# 				extraEffects: {
+	# 					type: RemoveFromTheGame
+	# 					select: memory(playedEvent)
+	# 				}
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Skirmish: Spot a [dwarven] companion and exert Grimir to play a [dwarven] event from your discard pile, then remove it from the game.
+	# 	lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	
 	51_23: {
 		cardInfo: {

@@ -19,7 +19,9 @@ public class Card_V3_056_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_56");
-					// put other cards in here as needed for the test case
+					put("initiate", "103_47");   // Desert Wind Initiate - Southron Tracker with Ambush (3)
+					put("southron1", "4_222");   // Desert Warrior - Southron (no tracker, no ambush)
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,28 +58,47 @@ public class Card_V3_056_ErrataTests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SandcraftTrapTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SandcraftTrapRestoresTrackersAndGrantsSouthronsBonuses() throws DecisionResultInvalidException, CardNotFoundException {
+		// Tests: restore trackers/ambush minions, then Southrons get +1 STR and ambush (1)
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var card = scn.GetShadowCard("card");
+		var initiate = scn.GetShadowCard("initiate");
+		var southron1 = scn.GetShadowCard("southron1");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// Put initiate in hand to play and hinder, southron1 on table
+		scn.MoveCardsToHand(card, initiate);
+		scn.MoveMinionsToTable(southron1);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play the Initiate and hinder it (tracker tax)
+		scn.ShadowPlayCard(initiate);
+		scn.ShadowChoose("Hinder");
+		assertTrue(scn.IsHindered(initiate));
+
+		int southronStrBefore = scn.GetStrength(southron1);
+
+		// Skip to assignment phase to play Sandcraft Trap
+		scn.ShadowPassCurrentPhaseAction();
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play the Sandcraft Trap
+		scn.ShadowPlayCard(card);
+
+		// Initiate is a tracker and was hindered, should be restored
+		assertFalse(scn.IsHindered(initiate));
+
+		// Since we restored at least one, all Southrons get strength +1
+		assertEquals(southronStrBefore + 1, scn.GetStrength(southron1));
+
+		// Southrons should also gain ambush (1)
+		assertTrue(scn.HasKeyword(southron1, Keyword.AMBUSH));
 	}
 }

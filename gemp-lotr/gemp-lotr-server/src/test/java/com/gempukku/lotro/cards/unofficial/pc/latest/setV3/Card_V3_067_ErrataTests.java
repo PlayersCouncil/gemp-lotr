@@ -18,8 +18,11 @@ public class Card_V3_067_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_67");
-					// put other cards in here as needed for the test case
+					put("illwind", "103_67");
+					put("nazgul1", "1_232"); // Ulaire Enquea
+					put("nazgul2", "1_234"); // Ulaire Nertea
+					put("guard", "1_7");
+					put("gimli", "1_12");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,12 +42,14 @@ public class Card_V3_067_ErrataTests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion.  The Free Peoples player may make you exert another companion to prevent this (or wound if you can spot The Witch-king).
+		 * Game Text: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion.
+		 *   The Free Peoples player may make you exert another companion to prevent this
+		 *   (or wound if you can spot The Witch-king).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("illwind");
 
 		assertEquals("Ill Wind", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +61,55 @@ public class Card_V3_067_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IllWindTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void IllWindDoesNotTriggerOnFirstNazgulPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var illwind = scn.GetShadowCard("illwind");
+		var nazgul1 = scn.GetShadowCard("nazgul1");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(nazgul1, nazgul2);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
+		scn.AddWoundsToChar(guard, 1);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play first Nazgul -- should NOT trigger Ill Wind
+		scn.ShadowPlayCard(nazgul1);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void IllWindTriggersOnSecondNazgulPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var nazgul1 = scn.GetShadowCard("nazgul1");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(nazgul1, nazgul2);
+
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
+		// Wound the guard so it can be a valid target for Ill Wind
+		scn.AddWoundsToChar(guard, 1);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play first Nazgul
+		scn.ShadowPlayCard(nazgul1);
+
+		// Play second Nazgul -- SHOULD trigger Ill Wind (errata: triggers on 2nd Nazgul played)
+		scn.ShadowPlayCard(nazgul2);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }

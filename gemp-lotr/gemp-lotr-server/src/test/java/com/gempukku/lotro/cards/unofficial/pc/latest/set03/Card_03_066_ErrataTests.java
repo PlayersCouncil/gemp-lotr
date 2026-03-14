@@ -18,8 +18,9 @@ public class Card_03_066_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "53_66");
-					// put other cards in here as needed for the test case
+					put("berserker", "53_66");
+					put("guard", "1_7");       // Dwarf Guard (companion, STR 4, VIT 2)
+					put("runner", "1_178");    // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +43,13 @@ public class Card_03_066_ErrataTests
 		 * Strength: 11
 		 * Vitality: 3
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens or 5 [isengard] cards and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
-		*/
+		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens or 5 [isengard] cards
+		 *  and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("berserker");
 
 		assertEquals("Orthanc Berserker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,28 +66,35 @@ public class Card_03_066_ErrataTests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrthancBerserkerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverAbilityExhaustsCompanionWith5Burdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var berserker = scn.GetShadowCard("berserker");
+		var guard = scn.GetFreepsCard("guard");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(berserker);
+		scn.MoveCompanionsToTable(guard);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.AddBurdens(5);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Guard starts unwounded (VIT 2)
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(berserker));
+
+		// Shadow uses Orthanc Berserker's maneuver ability
+		assertTrue(scn.ShadowActionAvailable(berserker));
+		scn.ShadowUseCardAction(berserker);
+
+		// Exert twice is auto-applied as cost
+		// Guard (only non-Ring-bearer companion) is auto-selected to exhaust
+
+		// Berserker should have 2 wounds (exerted twice, VIT 3 -> 1 remaining)
+		assertEquals(2, scn.GetWoundsOn(berserker));
+		// Guard should be exhausted (VIT 2, so 1 wound = exhausted)
+		assertTrue(scn.IsExhausted(guard));
 	}
 }

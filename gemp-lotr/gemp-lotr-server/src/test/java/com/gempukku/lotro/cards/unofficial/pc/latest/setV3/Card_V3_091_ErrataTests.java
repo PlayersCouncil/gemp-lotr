@@ -19,7 +19,9 @@ public class Card_V3_091_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_91");
-					// put other cards in here as needed for the test case
+					put("eomer", "4_267");
+					put("mount", "4_283");
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -59,28 +61,27 @@ public class Card_V3_091_ErrataTests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void VanguardsLanceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void VanguardsLanceGivesPlus1StrengthWhenMounted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var lance = scn.GetFreepsCard("card");
+		var eomer = scn.GetFreepsCard("eomer");
+		var mount = scn.GetFreepsCard("mount");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(eomer);
+		scn.AttachCardsTo(eomer, lance);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Eomer base 7 + lance 2 = 9 without mount
+		assertEquals(9, scn.GetStrength(eomer));
+
+		// Add mount, Eomer should get +1 from errata (was +2 before)
+		scn.AttachCardsTo(eomer, mount);
+		// Eomer base 7 + lance 2 + mounted bonus 1 = 10
+		assertEquals(10, scn.GetStrength(eomer));
 	}
 }

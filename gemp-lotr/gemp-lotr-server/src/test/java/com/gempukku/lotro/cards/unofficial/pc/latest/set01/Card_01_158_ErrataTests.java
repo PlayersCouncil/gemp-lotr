@@ -18,8 +18,11 @@ public class Card_01_158_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_158");
-					// put other cards in here as needed for the test case
+					put("raiding", "51_158");
+					put("uruk1", "1_151"); // Uruk Lieutenant
+					put("uruk2", "1_154"); // Uruk Brood
+					put("uruk3", "1_147"); // Uruk Messenger
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,14 +45,13 @@ public class Card_01_158_ErrataTests
 		 * Strength: 9
 		 * Vitality: 3
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.
-		* 	While you can spot 2 Uruk-hai, each Uruk-hai is strength +1.
-		* 	While you can spot 4 Uruk-hai, this minion is <b>fierce</b>.
+		 * Game Text: <b>Damage +1</b>.<br>While you can spot 2 Uruk-hai, each Uruk-hai is strength +1.
+		 * <br>While you can spot 4 Uruk-hai, this minion is <b>fierce</b>.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("raiding");
 
 		assertEquals("Uruk-hai Raiding Party", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -66,28 +68,39 @@ public class Card_01_158_ErrataTests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukhaiRaidingPartyTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void RaidingPartyGrantsStrengthBonusWith2UrukHaiAndFierceWith4() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var raiding = scn.GetShadowCard("raiding");
+		var uruk1 = scn.GetShadowCard("uruk1");
+		var uruk2 = scn.GetShadowCard("uruk2");
+		var uruk3 = scn.GetShadowCard("uruk3");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// Just raiding party alone -- no bonuses
+		scn.MoveMinionsToTable(raiding);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// 1 Uruk-hai: base strength, no fierce
+		assertEquals(9, scn.GetStrength(raiding));
+		assertFalse(scn.HasKeyword(raiding, Keyword.FIERCE));
+
+		// Add second Uruk-hai -- strength +1 to all Uruk-hai
+		scn.MoveMinionsToTable(uruk1);
+		assertEquals(10, scn.GetStrength(raiding));
+		assertFalse(scn.HasKeyword(raiding, Keyword.FIERCE));
+
+		// Add third Uruk-hai
+		scn.MoveMinionsToTable(uruk2);
+		assertEquals(10, scn.GetStrength(raiding));
+		assertFalse(scn.HasKeyword(raiding, Keyword.FIERCE));
+
+		// Add fourth Uruk-hai -- now raiding party gains fierce
+		scn.MoveMinionsToTable(uruk3);
+		assertEquals(10, scn.GetStrength(raiding));
+		assertTrue(scn.HasKeyword(raiding, Keyword.FIERCE));
 	}
 }

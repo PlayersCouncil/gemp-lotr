@@ -18,8 +18,10 @@ public class Card_01_152_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_152");
-					// put other cards in here as needed for the test case
+					put("shaman", "51_152");
+					put("uruk", "1_151");  // Uruk Lieutenant (Isengard Uruk-hai)
+					put("orc", "1_189");   // Goblin Sneak (Moria Goblin, not Isengard)
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +49,7 @@ public class Card_01_152_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("shaman");
 
 		assertEquals("Uruk Shaman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,28 +66,33 @@ public class Card_01_152_ErrataTests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukShamanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukShamanHealsIsengardMinionNotJustUrukHai() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var shaman = scn.GetShadowCard("shaman");
+		var uruk = scn.GetShadowCard("uruk");
+		var orc = scn.GetShadowCard("orc");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveMinionsToTable(shaman, uruk, orc);
+		scn.AddWoundsToChar(uruk, 1);
+		scn.AddWoundsToChar(orc, 1);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Add twilight for the cost
+		scn.AddTwilight(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Shaman ability should be available
+		assertTrue(scn.ShadowActionAvailable(shaman));
+		scn.ShadowUseCardAction(shaman);
+
+		// Only the Uruk Lieutenant is an [Isengard] minion. The Goblin Sneak is [Moria].
+		// Auto-selected since there's only one valid target.
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(1, scn.GetWoundsOn(orc));
 	}
 }

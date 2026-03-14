@@ -18,8 +18,11 @@ public class Card_01_157_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_157");
-					// put other cards in here as needed for the test case
+					put("armory", "51_157");
+					put("uruk", "1_151");    // Uruk Lieutenant
+					put("possession", "1_125"); // Lurtz's Sword (Isengard possession)
+					put("runner", "1_178");
+					put("guard", "1_7");     // Dwarf Guard (for archery)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,13 +43,14 @@ public class Card_01_157_ErrataTests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: While you can spot an Uruk-hai, the fellowship archery total is -1.
-		* 	Shadow: Discard this possession to play an [Isengard] possession from your discard pile.
-		* 	Response: If your [Isengard] minion is about to take a wound, remove (1) and discard this possession to prevent that wound.
+		 * <br><b>Shadow:</b> Discard this condition to play an [Isengard] possession from your discard pile.
+		 * <br><b>Response:</b> If your [Isengard] minion is about to take a wound, remove (1) and
+		 * discard this condition to prevent that wound.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("armory");
 
 		assertEquals("Uruk-hai Armory", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,28 +62,31 @@ public class Card_01_157_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukhaiArmoryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ArmoryReducesFellowshipArcheryAndShadowAbilityPlaysIsengardPossession() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var armory = scn.GetShadowCard("armory");
+		var uruk = scn.GetShadowCard("uruk");
+		var possession = scn.GetShadowCard("possession");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(armory);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToDiscard(possession);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// With Uruk-hai on the table, fellowship archery should be reduced by 1
+		assertEquals(-1, scn.GetArcheryTotal(Side.FREE_PEOPLE));
+
+		scn.SkipToPhase(Phase.SHADOW);
+
+		// Shadow ability: discard armory to play an Isengard possession from discard
+		assertTrue(scn.ShadowActionAvailable(armory));
+		scn.ShadowUseCardAction(armory);
+
+		// Armory discarded, Lurtz's Sword auto-selected and played from discard
+		assertInDiscard(armory);
 	}
 }

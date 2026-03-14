@@ -18,10 +18,19 @@ public class Card_V3_129_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_129");
-					// put other cards in here as needed for the test case
+					put("runner", "1_178");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "103_129");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -34,8 +43,8 @@ public class Card_V3_129_ErrataTests
 		 * Set: V3
 		 * Name: Pinnacle of Doom
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
+		 * Side:
+		 * Culture:
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Subtype: Standard
@@ -45,9 +54,7 @@ public class Card_V3_129_ErrataTests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(9);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(9);
 
 		assertEquals("Pinnacle of Doom", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,28 +66,44 @@ public class Card_V3_129_ErrataTests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PinnacleofDoomTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void PinnacleofDoomCostsOneTwilightToHinder() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata added RemoveTwilight(1) as a cost to use the hinder trigger
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Move to site 9 (Pinnacle of Doom)
+		scn.SkipToSite(8);
+		scn.FreepsPass();
+
+		// Verify we arrived at site 9
+		assertEquals(9, scn.GetCurrentSiteNumber());
+
+		// Set twilight to 3 (enough to use the trigger)
+		scn.SetTwilight(3);
+		int twilightBefore = scn.GetTwilight();
+
+		// At the start of the shadow phase, the optional trigger fires
+		// Skip through Fellowship phase
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Shadow should have the optional trigger from Pinnacle of Doom
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+
+		// Accept the trigger - should cost (1) twilight
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Choose the runner to hinder (it's not a companion or The One Ring)
+		scn.ShadowChooseCard(runner);
+
+		// The runner should now be hindered
+		assertTrue(scn.IsHindered(runner));
+
+		// Twilight should have been reduced by 1
+		assertEquals(twilightBefore - 1, scn.GetTwilight());
 	}
 }

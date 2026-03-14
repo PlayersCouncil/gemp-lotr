@@ -18,8 +18,10 @@ public class Card_01_221_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_221");
-					// put other cards in here as needed for the test case
+					put("blade", "51_221");
+					put("witchking", "1_237"); // The Witch-king, Lord of Angmar
+					put("condition", "1_108"); // Albert Dreary, FP Gandalf condition
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,12 +42,13 @@ public class Card_01_221_ErrataTests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 3
-		 * Game Text: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br>Each time The Witch-king wins a skirmish, you may exert him to discard a Free Peoples condition.
+		 * Game Text: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br>Each time
+		 * The Witch-king wins a skirmish, you may exert him to discard a Free Peoples condition.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("blade");
 
 		assertEquals("The Pale Blade", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,28 +61,63 @@ public class Card_01_221_ErrataTests
 		assertEquals(3, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ThePaleBladeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ThePaleBladeGrantsDamagePlusOneAndOptionallyDiscardsConditionOnWin() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var blade = scn.GetShadowCard("blade");
+		var witchking = scn.GetShadowCard("witchking");
+		var condition = scn.GetFreepsCard("condition");
+		var frodo = scn.GetRingBearer();
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(condition);
+		scn.MoveMinionsToTable(witchking);
+		scn.AttachCardsTo(witchking, blade);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Witch-king should have damage +1 from the blade
+		assertTrue(scn.HasKeyword(witchking, Keyword.DAMAGE));
+
+		// Frodo vs Witch-king -- WK wins easily
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, witchking);
+		scn.PassSkirmishActions();
+
+		// WK wins. Optional trigger should fire -- this is a Trigger, NOT a Response.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Condition should be auto-selected (only FP condition in play) and discarded
+		assertInDiscard(condition);
+	}
+
+	@Test
+	public void ThePaleBladeTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var blade = scn.GetShadowCard("blade");
+		var witchking = scn.GetShadowCard("witchking");
+		var condition = scn.GetFreepsCard("condition");
+		var frodo = scn.GetRingBearer();
+
+		scn.MoveCardsToSupportArea(condition);
+		scn.MoveMinionsToTable(witchking);
+		scn.AttachCardsTo(witchking, blade);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, witchking);
+		scn.PassSkirmishActions();
+
+		// WK wins. Decline the optional trigger.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowDeclineOptionalTrigger();
+
+		// Condition should still be in support area
+		assertInZone(Zone.SUPPORT, condition);
 	}
 }

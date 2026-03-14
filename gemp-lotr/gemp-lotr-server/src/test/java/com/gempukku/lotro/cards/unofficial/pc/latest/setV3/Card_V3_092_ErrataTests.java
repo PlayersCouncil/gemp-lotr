@@ -18,8 +18,13 @@ public class Card_V3_092_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_92");
-					// put other cards in here as needed for the test case
+					put("watcher1", "103_92");
+					put("watcher2", "103_92");
+					put("stone", "9_47");         // Ithil Stone - [Sauron] artifact to spot
+					put("aragorn", "1_89");       // Has Maneuver exert ability
+					put("boromir", "1_97");
+					put("gandalf", "1_364");
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_V3_092_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("watcher1");
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
 		assertEquals("Hideous Warden", card.getBlueprint().getSubtitle());
@@ -58,28 +63,37 @@ public class Card_V3_092_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CirithUngolWatcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void WatcherResponseAdds2ThreatsAndHindersCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var watcher1 = scn.GetShadowCard("watcher1");
+		var watcher2 = scn.GetShadowCard("watcher2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(watcher1, watcher2);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCompanionsToTable("gandalf", "boromir");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		int threats = scn.GetThreats();
+		assertFalse(scn.IsHindered(aragorn));
+
+		// Aragorn exerts via his own (FP) ability - triggers the Response
+		scn.FreepsUseCardAction(aragorn);
+
+		// Response should be available
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable("Watcher"));
+		scn.ShadowAcceptOptionalTrigger();
+		// One Watcher discarded as cost
+		assertEquals(1, scn.GetShadowDiscardCount());
+		// Errata: adds 2 threats (was 3 in original)
+		assertEquals(threats + 2, scn.GetThreats());
+		assertTrue(scn.IsHindered(aragorn));
 	}
 }

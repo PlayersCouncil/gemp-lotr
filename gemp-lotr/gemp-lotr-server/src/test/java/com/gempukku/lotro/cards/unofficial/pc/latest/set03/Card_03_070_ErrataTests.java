@@ -18,8 +18,11 @@ public class Card_03_070_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "53_70");
-					// put other cards in here as needed for the test case
+					put("servants", "53_70");
+					put("goblinman", "2_42");  // Goblin Man (Isengard Orc, STR 6, VIT 2)
+					put("lurtz", "1_127");     // Lurtz (Isengard Uruk-hai, STR 13, VIT 3)
+					put("guard", "1_7");       // Dwarf Guard (companion, STR 4, VIT 2)
+					put("runner", "1_178");    // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,7 +31,7 @@ public class Card_03_070_ErrataTests
 	}
 
 	@Test
-	public void ServantstoSarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ServantsToSarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
@@ -40,11 +43,11 @@ public class Card_03_070_ErrataTests
 		 * Type: Event
 		 * Subtype: Skirmish
 		 * Game Text: <b>Skirmish:</b> Make an [isengard] Orc strength +2 (or +4 if that Orc is strength 7 or less).
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("servants");
 
 		assertEquals("Servants to Saruman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +59,55 @@ public class Card_03_070_ErrataTests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ServantstoSarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ServantsMakesLowStrengthOrcPlusFour() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var servants = scn.GetShadowCard("servants");
+		var goblinman = scn.GetShadowCard("goblinman");
+		var guard = scn.GetFreepsCard("guard");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveMinionsToTable(goblinman);
+		scn.MoveCardsToHand(servants);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, goblinman);
+
+		// Goblin Man base STR 6 (7 or less), should get +4
+		assertEquals(6, scn.GetStrength(goblinman));
+
+		// Freeps passes, Shadow plays event
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(servants);
+		// Goblin Man auto-selected as only Isengard Orc
+		assertEquals(10, scn.GetStrength(goblinman));
+	}
+
+	@Test
+	public void ServantsMakesHighStrengthOrcPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var servants = scn.GetShadowCard("servants");
+		var lurtz = scn.GetShadowCard("lurtz");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveMinionsToTable(lurtz);
+		scn.MoveCardsToHand(servants);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, lurtz);
+
+		// Lurtz base STR 13 (greater than 7), should get +2
+		assertEquals(13, scn.GetStrength(lurtz));
+
+		// Freeps passes, Shadow plays event
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(servants);
+		// Lurtz auto-selected as only Isengard Orc/Uruk-hai
+		assertEquals(15, scn.GetStrength(lurtz));
 	}
 }

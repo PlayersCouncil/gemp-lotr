@@ -18,8 +18,11 @@ public class Card_V3_075_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_75");
-					// put other cards in here as needed for the test case
+					put("lemenya", "103_75");
+					put("nazgul2", "1_234"); // Ulaire Nertea
+					put("nazgul3", "1_231"); // Ulaire Cantea
+					put("guard", "1_7");
+					put("gimli", "1_12");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +46,13 @@ public class Card_V3_075_ErrataTests
 		 * Vitality: 2
 		 * Site Number: 3
 		 * Game Text: Fierce.
-		* 	Each character skirmishing this minion is strength -1 for each other Nazgul you can spot (or -1 for each other companion you can spot if you can spot 6 companions).
+		* 	Each character skirmishing this minion is strength -1 for each other Nazgul you can spot
+		*   (or -1 for each other companion you can spot if you can spot 6 companions).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lemenya");
 
 		assertEquals("Ulaire Lemenya", card.getBlueprint().getTitle());
 		assertEquals("Anointed with Terror", card.getBlueprint().getSubtitle());
@@ -64,28 +68,30 @@ public class Card_V3_075_ErrataTests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireLemenyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LemenyaReducesOpponentStrengthByOtherNazgulCount() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		var nazgul3 = scn.GetShadowCard("nazgul3");
+		scn.MoveMinionsToTable(lemenya, nazgul2, nazgul3);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Gimli base strength is 6.
+		// Lemenya's errata: -1 for each OTHER Nazgul (changed to other,Nazgul filter).
+		// We have 2 other Nazgul on table (nazgul2 and nazgul3).
+		// The debuff only applies during skirmish with Lemenya.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, lemenya);
+		scn.FreepsResolveSkirmish(gimli);
+
+		// During skirmish, Gimli should be STR 6 - 2 = 4 (2 other Nazgul spotted)
+		assertEquals(4, scn.GetStrength(gimli));
 	}
 }

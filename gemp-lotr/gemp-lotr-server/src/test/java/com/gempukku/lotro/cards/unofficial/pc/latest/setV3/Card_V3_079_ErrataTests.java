@@ -18,8 +18,10 @@ public class Card_V3_079_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_79");
-					// put other cards in here as needed for the test case
+					put("toldea", "103_79");
+					put("runner", "1_178");
+					put("guard", "1_7"); // STR 6, VIT 3
+					put("gimli", "1_12"); // STR 6, VIT 3
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -49,7 +51,7 @@ public class Card_V3_079_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("toldea");
 
 		assertEquals("Ulaire Toldea", card.getBlueprint().getTitle());
 		assertEquals("Blessed with Brutality", card.getBlueprint().getSubtitle());
@@ -65,28 +67,39 @@ public class Card_V3_079_ErrataTests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ToldeaAssignedToWeakerCompanionOffersChoiceOfExertOrThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var toldea = scn.GetShadowCard("toldea");
+		scn.MoveMinionsToTable(toldea);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		// Guard is STR 6, Toldea is STR 13. Guard is weaker.
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToAssignments();
+
+		// Assign guard to toldea. Guard (STR 6) is weaker than Toldea (STR 13).
+		scn.FreepsAssignToMinions(guard, toldea);
+
+		// The errata: when assigned to a weaker companion, may exert self to get a choice:
+		// exert that companion OR add a threat.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Toldea should be exerted
+		assertEquals(1, scn.GetWoundsOn(toldea));
+
+		// Shadow should be presented with a choice: exert the companion or add a threat
+		int threatsBefore = scn.GetThreats();
+		// Choose to add a threat
+		scn.ShadowChoose("Add a threat");
+		assertEquals(threatsBefore + 1, scn.GetThreats());
+		// Guard should not be exerted since we chose threat instead
+		assertEquals(0, scn.GetWoundsOn(guard));
 	}
 }

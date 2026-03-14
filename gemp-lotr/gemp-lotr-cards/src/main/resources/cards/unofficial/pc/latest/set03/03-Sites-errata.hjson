@@ -18,19 +18,22 @@
 		site: 9
 		block: Fellowship
 		direction: Left
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: isSide
+				side: shadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			cost: {
+				type: heal
+				select: choose(companion)
 			}
-		]
+			effect: {
+				type: playCardFromDiscard
+				select: choose(culture(isengard),orc)
+			}
+		}
 		gametext: <b>Shadow</b>: Heal a companion to play an [Isengard] Orc from your discard pile.
 		lore: ""
 		promotext: ""

@@ -19,7 +19,7 @@ public class Card_V3_065_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_65");
-					// put other cards in here as needed for the test case
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,28 +60,46 @@ public class Card_V3_065_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CoverofDarknessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ShadowAbilityNotAvailableWithZeroTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
+		var card = scn.GetShadowCard("card");
 		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		// Set twilight to 0 BEFORE shadow decision is created
+		scn.SetTwilight(0);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// The Shadow ability costs: hinder self + remove (1).
+		// With 0 twilight, the ability should not be available due to the RemoveTwilight(1) cost.
+		assertFalse(scn.ShadowActionAvailable(card));
+	}
+
+	@Test
+	public void ShadowAbilityAvailableWithOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		scn.MoveCardsToSupportArea(card);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+
+		// Set twilight to 1 BEFORE shadow decision is created
+		scn.SetTwilight(1);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// With 1 twilight, the ability should be available (hinder self is free, remove 1 is paid)
+		assertTrue(scn.ShadowActionAvailable(card));
 	}
 }

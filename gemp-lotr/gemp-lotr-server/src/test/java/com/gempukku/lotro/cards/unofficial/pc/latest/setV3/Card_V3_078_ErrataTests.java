@@ -18,8 +18,10 @@ public class Card_V3_078_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_78");
-					// put other cards in here as needed for the test case
+					put("otsea", "103_78");
+					put("nazgul2", "1_234"); // Ulaire Nertea
+					put("condition", "1_206"); // Bent on Discovery (Wraith Condition)
+					put("guard", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +45,13 @@ public class Card_V3_078_ErrataTests
 		 * Vitality: 3
 		 * Site Number: 3
 		 * Game Text: Fierce.
-		* 	Each time a Nazgul wins a skirmish, you may exert this minion and remove (1) to play a Shadow condition from your discard pile. Add a threat if it is [ringwraith].
+		* 	Each time a Nazgul wins a skirmish, you may exert this minion and remove (1) to play a Shadow condition
+		*   from your discard pile. Add a threat if it is [ringwraith].
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("otsea");
 
 		assertEquals("Ulaire Otsea", card.getBlueprint().getTitle());
 		assertEquals("Consecrated by Pestilence", card.getBlueprint().getSubtitle());
@@ -64,28 +67,67 @@ public class Card_V3_078_ErrataTests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireOtseaTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void OtseaTriggerRequiresRemovingOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var otsea = scn.GetShadowCard("otsea");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		var condition = scn.GetShadowCard("condition");
+		scn.MoveMinionsToTable(otsea, nazgul2);
+		scn.MoveCardsToDiscard(condition);
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToAssignments();
+		// Assign guard to nazgul2. Nazgul2 (Nertea) has STR 9, guard has STR 6.
+		// Nazgul should win.
+		scn.FreepsAssignToMinions(guard, nazgul2);
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassCurrentPhaseActions();
+
+		// After nazgul wins, Otsea's optional trigger fires.
+		// The errata added RemoveTwilight(1) to cost.
+		// With 0 twilight, the trigger should not be available.
+		scn.SetTwilight(0);
+
+		// No twilight means the cost cannot be paid
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void OtseaTriggerWorksWithSufficientTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var otsea = scn.GetShadowCard("otsea");
+		var nazgul2 = scn.GetShadowCard("nazgul2");
+		var condition = scn.GetShadowCard("condition");
+		scn.MoveMinionsToTable(otsea, nazgul2);
+		scn.MoveCardsToDiscard(condition);
+
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+		scn.SetTwilight(5);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, nazgul2);
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassCurrentPhaseActions();
+
+		// With twilight available, the trigger should be offered
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		int twilightBefore = scn.GetTwilight();
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Otsea should be exerted and 1 twilight removed
+		assertEquals(1, scn.GetWoundsOn(otsea));
+		assertEquals(twilightBefore - 1, scn.GetTwilight());
 	}
 }

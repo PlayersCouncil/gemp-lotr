@@ -18,8 +18,10 @@ public class Card_04_047_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "54_47");
-					// put other cards in here as needed for the test case
+					put("armory", "54_47");
+					put("gimli", "1_12");    // Gimli, Dwarf of Erebor (Dwarf companion, STR 6, VIT 3)
+					put("guard", "1_7");     // Dwarf Guard (FP card to stack from hand)
+					put("runner", "1_178");  // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,7 +30,7 @@ public class Card_04_047_ErrataTests
 	}
 
 	@Test
-	public void FromtheArmoryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FromTheArmoryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 4
@@ -39,12 +41,13 @@ public class Card_04_047_ErrataTests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: <b>Skirmish:</b> Exert a Dwarf and stack a Free Peoples card from hand here to make that Dwarf unable to take wounds.
-		*/
+		 * Game Text: <b>Skirmish:</b> Exert a Dwarf and stack a Free Peoples card from hand
+		 *  here to make that Dwarf unable to take wounds.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("armory");
 
 		assertEquals("From the Armory", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +59,37 @@ public class Card_04_047_ErrataTests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FromtheArmoryTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ArmoryMakesDwarfUnableToTakeWounds() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var armory = scn.GetFreepsCard("armory");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var runner = scn.GetShadowCard("runner");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToSupportArea(armory);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(guard);  // FP card in hand to stack
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, runner);
+
+		// During skirmish, use From the Armory
+		assertTrue(scn.FreepsActionAvailable(armory));
+		scn.FreepsUseCardAction(armory);
+		// Exert Gimli (only Dwarf -- auto-selected)
+		// Choose FP card from hand to stack
+		scn.FreepsChooseCard(guard);
+
+		// Gimli should have 1 wound (from exertion cost)
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		// Now resolve the skirmish -- Gimli should not take additional wounds
+		scn.PassSkirmishActions();
+		// Gimli should still only have 1 wound (the exertion), no combat wounds
+		assertEquals(1, scn.GetWoundsOn(gimli));
 	}
 }

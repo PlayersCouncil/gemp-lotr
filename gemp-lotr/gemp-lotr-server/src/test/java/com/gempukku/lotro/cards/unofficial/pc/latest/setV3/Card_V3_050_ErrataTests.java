@@ -19,7 +19,8 @@ public class Card_V3_050_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_50");
-					// put other cards in here as needed for the test case
+					put("initiate", "103_47");   // Desert Wind Initiate - Ambush (3)
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,28 +67,27 @@ public class Card_V3_050_ErrataTests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertWindWhisperTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void DesertWindWhisperRemoveTwilightTaxIs4() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata changes the tax from Remove (3) to Remove (4)
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetShadowCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		scn.ShadowPlayCard(card);
+		scn.ShadowChoose("Remove");
+
+		// 5 to play + 2 roaming + 4 tax = 11 total
+		assertEquals(twilightBefore - 11, scn.GetTwilight());
+		assertFalse(scn.IsHindered(card));
 	}
 }

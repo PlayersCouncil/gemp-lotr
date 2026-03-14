@@ -19,7 +19,6 @@ public class Card_V3_097_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_97");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,31 +54,7 @@ public class Card_V3_097_ErrataTests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		// Errata: twilight cost increased from 1 to 2
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OminousSkyTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		scn.StartGame();
-		
-		assertFalse(true);
 	}
 }

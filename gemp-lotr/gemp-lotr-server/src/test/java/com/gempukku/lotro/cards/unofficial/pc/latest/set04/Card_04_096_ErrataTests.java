@@ -18,8 +18,9 @@ public class Card_04_096_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "54_96");
-					// put other cards in here as needed for the test case
+					put("tongue", "54_96");
+					put("gandalf", "1_364");  // Gandalf, The Grey Wizard (STR 7, VIT 4, signet: Gandalf)
+					put("runner", "1_178");   // Goblin Runner
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,12 +40,13 @@ public class Card_04_096_ErrataTests
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: <b>Skirmish:</b> Spot Gandalf and 3 twilight tokens to make a companion who has the Gandalf signet unable to take wounds.
-		*/
+		 * Game Text: <b>Skirmish:</b> Spot Gandalf and 3 twilight tokens to make a companion
+		 *  who has the Gandalf signet unable to take wounds.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("tongue");
 
 		assertEquals("Keep Your Forked Tongue", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,28 +58,30 @@ public class Card_04_096_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void KeepYourForkedTongueTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void KeepYourForkedTonguePreventsWoundsToGandalfSignetCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var tongue = scn.GetFreepsCard("tongue");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var runner = scn.GetShadowCard("runner");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(tongue);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gandalf, runner);
+
+		// There should be at least 3 twilight from Gandalf's cost (4) + site
+		// Play Keep Your Forked Tongue
+		scn.FreepsPlayCard(tongue);
+		// Gandalf (only companion with Gandalf signet) auto-selected
+
+		// Gandalf should now be unable to take wounds
+		// Resolve skirmish -- Gandalf should take no wounds
+		scn.PassSkirmishActions();
+		assertEquals(0, scn.GetWoundsOn(gandalf));
 	}
 }

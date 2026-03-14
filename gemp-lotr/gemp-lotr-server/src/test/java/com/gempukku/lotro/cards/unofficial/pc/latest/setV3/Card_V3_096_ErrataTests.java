@@ -19,7 +19,6 @@ public class Card_V3_096_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_96");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,7 +38,7 @@ public class Card_V3_096_ErrataTests
 		 * Twilight Cost: 5
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 4 twilight conditions. This cannot be discarded or hindered. Orcs gain <b>fierce</b>. Trolls gain <b>enduring</b>. Nazgul gain <b>damage +1</b>. Your Men and Uruk-hai gain <b>archer</b>. 
+		 * Game Text: Twilight. To play, hinder 4 twilight conditions. This cannot be discarded or hindered. Orcs gain <b>fierce</b>. Trolls gain <b>enduring</b>. Nazgul gain <b>damage +1</b>. Your Men and Uruk-hai gain <b>archer</b>.
 		* 	Shadow: Hinder X of your other Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
 		*/
 
@@ -55,31 +54,7 @@ public class Card_V3_096_ErrataTests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		// Errata: twilight cost increased from 4 to 5
 		assertEquals(5, card.getBlueprint().getTwilightCost());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EndlessNightTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		scn.StartGame();
-		
-		assertFalse(true);
 	}
 }

@@ -19,7 +19,9 @@ public class Card_V3_059_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_59");
-					// put other cards in here as needed for the test case
+					put("initiate1", "103_47");  // Desert Wind Initiate - Raider minion (tracker tax)
+					put("initiate2", "103_47");  // Another one
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,28 +58,45 @@ public class Card_V3_059_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StrengthofMenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthofMenRestores2HinderedRaiderCards() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: complete rewrite as Maneuver event
+		// Spot 2 [raider] to restore 2 [raider] cards
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var card = scn.GetShadowCard("card");
+		var initiate1 = scn.GetShadowCard("initiate1");
+		var initiate2 = scn.GetShadowCard("initiate2");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(card, initiate1, initiate2);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play both initiates, choosing to hinder each
+		scn.ShadowPlayCard(initiate1);
+		scn.ShadowChoose("Hinder");
+		assertTrue(scn.IsHindered(initiate1));
+
+		scn.ShadowPlayCard(initiate2);
+		scn.ShadowChoose("Hinder");
+		assertTrue(scn.IsHindered(initiate2));
+
+		// Now skip to Maneuver phase to play the event
+		scn.ShadowPassCurrentPhaseAction();
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Can spot 2 [raider] cards (initiate1, initiate2) - meets spot 2 requirement
+		assertTrue(scn.ShadowActionAvailable(card));
+		scn.ShadowPlayCard(card);
+
+		// Choose both hindered initiates as restore targets
+		// With only 2 [raider] cards in play and count:2, they should be auto-selected
+		assertFalse(scn.IsHindered(initiate1));
+		assertFalse(scn.IsHindered(initiate2));
 	}
 }

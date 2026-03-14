@@ -20,15 +20,27 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				player: Shadow
+				trigger: {
+					type: StartOfPhase
+					#Intentionally left blank as we want to trigger in every phase
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: HasCardInDiscard
+					filter: side(Shadow), event
+					#TODO: Add phase-matching filter for "event for that phase"
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 1
+				}
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(side(Shadow), event)
+					#TODO: Add phase-matching filter for "event for that phase"
+				}
 			}
 		]
 		gametext: At the start of each phase, the Shadow player may remove (1) to take a Shadow event for that phase into hand from discard.
@@ -62,15 +74,24 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: Maneuver
+				}
+				effect: {
+					type: Hinder
+					select: all(weapon)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: character
+					keyword: enduring
+				}
 			}
 		]
 		gametext: At the start of the maneuver phase, hinder all weapons. All characters gain <b>enduring</b>.
@@ -104,15 +125,48 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: MovesTo
+					filter: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: Memorize
+						filter: side(Free Peoples), AttachedTo(companion)
+						memory: originallyAttached
+					}
+					{
+						type: SendMessage
+						text: "{freeps} enters the Gorgoroth Wastes and must choose which borne cards to leave behind."
+					}
+					{
+						type: Discard
+						player: Free Peoples
+						select: choose(side(Free Peoples), AttachedTo(companion))
+						count: any
+						memorize: discardedCards
+					}
+					{
+						type: FilterCardsInMemory
+						memory: originallyAttached
+						filter: zone(ATTACHED)
+						memorizeMatching: undiscardedCards
+					}
+					{
+						type: SendMessage
+						text: "{freeps} pays (1) for each of their remaining cards borne by companions: {undiscardedCards}"
+					}
+					{
+						type: AddTwilight
+						amount: {
+							type: ForEachInMemory
+							memory: undiscardedCards
+							multiplier: 1
+						}
+					}
+				]
 			}
 		]
 		gametext: When moving here, for each Free Peoples card borne by companions, the Free Peoples player must discard it or add (1).
@@ -150,15 +204,25 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: DisableGameText
+					filter: side(Free Peoples), item
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ringTextIsInactive
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: minion
+					amount: 1
+				}
 			}
 		]
 		gametext: Mountain.  Underground. Game text on Free Peoples items and The One Ring does not apply. Each minion is strength +1.
@@ -193,15 +257,22 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				player: Shadow
+				trigger: {
+					type: StartOfPhase
+					#Phase intentionally left blank as we want to trigger in every phase
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: RemoveTwilight
+					amount: 1
+				}
+				effect: {
+					type: Hinder
+					player: Shadow
+					select: choose(not(or(companion, The One Ring)))
+				}
 			}
 		]
 		gametext: Mountain. At the start of each phase, the Shadow player may remove (1) to hinder a card (except companions or The One Ring).

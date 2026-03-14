@@ -19,7 +19,9 @@ public class Card_V3_068_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "103_68");
-					// put other cards in here as needed for the test case
+					put("orc1", "7_188"); // Morgul Brute (Wraith Orc, twilight 2)
+					put("orc2", "7_188"); // Second Morgul Brute
+					put("guard", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,7 +42,8 @@ public class Card_V3_068_ErrataTests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: The second time you play a [ringwraith] Orc each Shadow phase, you may hinder a Free Peoples possession.
-		* 	Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.  Discard this condition.
+		* 	Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.
+		*   Discard this condition.
 		*/
 
 		var scn = GetScenario();
@@ -57,28 +60,25 @@ public class Card_V3_068_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulLegionsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MorgulLegionsDoesNotTriggerOnFirstOrcPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
+		var card = scn.GetShadowCard("card");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
 		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(orc1, orc2);
 
 		scn.StartGame();
-		
-		assertFalse(true);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play first Ringwraith Orc -- should NOT trigger Morgul Legions
+		scn.ShadowPlayCard(orc1);
+		// The errata added playedCardThisPhase requirement (min:2, max:2)
+		// So only the second orc played triggers it
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }

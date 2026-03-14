@@ -18,21 +18,34 @@
 		culture: Dwarven
 		twilight: 1
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Dwarf
 		strength: 3
 		vitality: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Skirmish
+				cost: [
+					{
+						type: Spot
+						filter: Dwarven, companion
+					}
+					{
+						type: Exert
+						select: self
+						times: 2
+					}
+				]
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(Dwarven, event, Timeword(skirmish))
+					memorize: playedEvent
+					extraEffects: {
+						type: RemovePlayedEventFromTheGame
+						filter: played
+					}
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir twice to play a [dwarven] skirmish event from your discard pile, then remove it from the game.
@@ -64,19 +77,34 @@
 		twilight: 0
 		type: Possession
 		itemclass: Helm
-		target: self
-		#target: title(Gimli)
+		target: title(Gimli)
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					filter: bearer
+					phase: skirmish
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: oldBearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: DisableWounds
+					select: memory(oldBearer)
+				}
 			}
 		]
 		gametext: Bearer must be Gimli.<br>He takes no more than 1 wound during each skirmish phase.<br><b>Skirmish:</b> Discard Gimli's Helm to make Gimli unable to take wounds.
