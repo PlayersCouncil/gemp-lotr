@@ -18,9 +18,11 @@ public class Card_01_157_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
+					put("greenleaf", "1_50");
+
 					put("armory", "51_157");
-					put("uruk", "1_151");    // Uruk Lieutenant
-					put("possession", "1_125"); // Lurtz's Sword (Isengard possession)
+					put("uruk", "3_66");    // Orthanc Berserker
+					put("possession", "52_43"); // Lurtz's Sword (Isengard possession)
 					put("runner", "1_178");
 					put("guard", "1_7");     // Dwarf Guard (for archery)
 				}},
@@ -67,26 +69,35 @@ public class Card_01_157_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
+		var greenleaf = scn.GetFreepsCard("greenleaf");
+
 		var armory = scn.GetShadowCard("armory");
 		var uruk = scn.GetShadowCard("uruk");
 		var possession = scn.GetShadowCard("possession");
 
-		scn.MoveCardsToSupportArea(armory);
+		scn.MoveCompanionsToTable(greenleaf);
+
 		scn.MoveMinionsToTable(uruk);
 		scn.MoveCardsToDiscard(possession);
 
 		scn.StartGame();
 
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+
+		scn.MoveCardsToSupportArea(armory);
+
 		// With Uruk-hai on the table, fellowship archery should be reduced by 1
-		assertEquals(-1, scn.GetArcheryTotal(Side.FREE_PEOPLE));
+		assertEquals(0, scn.GetFreepsArcheryTotal());
 
 		scn.SkipToPhase(Phase.SHADOW);
 
 		// Shadow ability: discard armory to play an Isengard possession from discard
+		assertInZone(Zone.DISCARD, possession);
 		assertTrue(scn.ShadowActionAvailable(armory));
 		scn.ShadowUseCardAction(armory);
 
 		// Armory discarded, Lurtz's Sword auto-selected and played from discard
 		assertInDiscard(armory);
+		assertAttachedTo(possession, uruk);
 	}
 }

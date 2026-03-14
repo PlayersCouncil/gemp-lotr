@@ -21,7 +21,7 @@ public class Card_01_015_ErrataTests
 					put("helm", "51_15");
 					put("gimli", "1_12"); // Gimli, Dwarf of Erebor (STR 6, VIT 3)
 					put("guard", "1_7");  // Dwarf Guard (STR 4, VIT 2, companion)
-					put("lurtz", "1_127"); // Lurtz, Servant of Isengard (STR 13, VIT 3, Damage+1, Archer)
+					put("berserker", "3_66"); // Orthanc Berserker (STR 11, VIT 3, Damage+1)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,11 +66,11 @@ public class Card_01_015_ErrataTests
 
 		var helm = scn.GetFreepsCard("helm");
 		var gimli = scn.GetFreepsCard("gimli");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var berserker = scn.GetShadowCard("berserker");
 
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, helm);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 
@@ -78,7 +78,7 @@ public class Card_01_015_ErrataTests
 		// Without the helm, Gimli would be overwhelmed (13 >= 2*6) and die.
 		// With the helm's passive, Gimli takes no more than 1 wound during the skirmish phase.
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gimli, lurtz);
+		scn.FreepsAssignAndResolve(gimli, berserker);
 		scn.PassSkirmishActions();
 
 		assertEquals(1, scn.GetWoundsOn(gimli));
@@ -91,18 +91,18 @@ public class Card_01_015_ErrataTests
 
 		var helm = scn.GetFreepsCard("helm");
 		var gimli = scn.GetFreepsCard("gimli");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var berserker = scn.GetShadowCard("berserker");
 
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, helm);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 
 		// Gimli (STR 6) vs Lurtz (STR 13, Damage+1).
 		// During skirmish, discard the helm to make Gimli unable to take wounds.
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gimli, lurtz);
+		scn.FreepsAssignAndResolve(gimli, berserker);
 
 		// Use the helm's activated ability
 		assertTrue(scn.FreepsActionAvailable(helm));
@@ -124,24 +124,21 @@ public class Card_01_015_ErrataTests
 		var helm = scn.GetFreepsCard("helm");
 		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var berserker = scn.GetShadowCard("berserker");
 		var frodo = scn.GetRingBearer();
 
 		scn.MoveCompanionsToTable(gimli, guard);
 		scn.AttachCardsTo(gimli, helm);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 
 		scn.AddThreats(1);
 
-		// Assign Guard (STR 4) vs Lurtz (STR 13) -- Guard will be overwhelmed and die.
+		// Assign Guard (STR 4) vs Berserker (STR 11) -- Guard will be overwhelmed and die.
 		// Gimli is NOT assigned to any skirmish.
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(guard, lurtz);
-		scn.FreepsDeclineAssignments();
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(guard);
+		scn.FreepsAssignAndResolve(guard, berserker);
 
 		// During skirmish, use helm to make Gimli unable to take wounds
 		assertTrue(scn.FreepsActionAvailable(helm));
@@ -150,6 +147,9 @@ public class Card_01_015_ErrataTests
 
 		scn.ShadowPassCurrentPhaseAction();
 		scn.FreepsPassCurrentPhaseAction();
+
+		//The One Ring
+		scn.FreepsDeclineOptionalTrigger();
 
 		// Guard is overwhelmed by Lurtz and dies.
 		// 1 threat fires -- Gimli can't take wounds, so Frodo is the only valid target.

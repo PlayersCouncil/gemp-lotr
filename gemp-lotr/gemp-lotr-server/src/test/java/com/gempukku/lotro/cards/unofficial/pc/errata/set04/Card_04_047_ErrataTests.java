@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_04_047_ErrataTests
 {
@@ -81,8 +83,7 @@ public class Card_04_047_ErrataTests
 		assertTrue(scn.FreepsActionAvailable(armory));
 		scn.FreepsUseCardAction(armory);
 		// Exert Gimli (only Dwarf -- auto-selected)
-		// Choose FP card from hand to stack
-		scn.FreepsChooseCard(guard);
+		// Choose FP card from hand to stack--Dwarf Guard selected automatically
 
 		// Gimli should have 1 wound (from exertion cost)
 		assertEquals(1, scn.GetWoundsOn(gimli));

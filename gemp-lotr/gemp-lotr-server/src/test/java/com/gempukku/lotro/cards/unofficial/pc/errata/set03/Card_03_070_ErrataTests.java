@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_070_ErrataTests
 {
@@ -20,7 +22,7 @@ public class Card_03_070_ErrataTests
 				{{
 					put("servants", "53_70");
 					put("goblinman", "2_42");  // Goblin Man (Isengard Orc, STR 6, VIT 2)
-					put("lurtz", "1_127");     // Lurtz (Isengard Uruk-hai, STR 13, VIT 3)
+					put("smith", "3_60");     // Isengard Smith (Isenorc, STR 8)
 					put("guard", "1_7");       // Dwarf Guard (companion, STR 4, VIT 2)
 					put("runner", "1_178");    // Goblin Runner
 				}},
@@ -90,24 +92,24 @@ public class Card_03_070_ErrataTests
 		var scn = GetScenario();
 
 		var servants = scn.GetShadowCard("servants");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var smith = scn.GetShadowCard("smith");
 		var guard = scn.GetFreepsCard("guard");
 
 		scn.MoveCompanionsToTable(guard);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(smith);
 		scn.MoveCardsToHand(servants);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(guard, lurtz);
+		scn.FreepsAssignAndResolve(guard, smith);
 
-		// Lurtz base STR 13 (greater than 7), should get +2
-		assertEquals(13, scn.GetStrength(lurtz));
+		// Smith base strength 8, should get +2
+		assertEquals(8, scn.GetStrength(smith));
 
 		// Freeps passes, Shadow plays event
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(servants);
-		// Lurtz auto-selected as only Isengard Orc/Uruk-hai
-		assertEquals(15, scn.GetStrength(lurtz));
+		// Warrior auto-selected as only Isengard Orc
+		assertEquals(10, scn.GetStrength(smith));
 	}
 }

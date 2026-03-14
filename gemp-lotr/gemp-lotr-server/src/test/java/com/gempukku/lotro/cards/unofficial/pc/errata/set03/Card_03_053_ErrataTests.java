@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_053_ErrataTests
 {
@@ -22,6 +21,11 @@ public class Card_03_053_ErrataTests
 					put("uruk", "1_151");      // Uruk Lieutenant (Uruk-hai)
 					put("goblinman", "2_42");  // Goblin Man (Isengard Orc)
 					put("runner", "1_178");    // Goblin Runner
+
+					put("chaff1", "1_180");
+					put("chaff2", "1_181");
+					put("chaff3", "1_182");
+					put("chaff4", "1_183");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,10 +68,35 @@ public class Card_03_053_ErrataTests
 
 		var hate = scn.GetShadowCard("hate");
 		var uruk = scn.GetShadowCard("uruk");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.MoveMinionsToTable(uruk, runner);
+		scn.MoveCardsToHand(hate);
+		scn.MoveCardsToTopOfShadowDeck("chaff1", "chaff2", "chaff3", "chaff4");
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.SHADOW);
+
+		int handBefore = scn.GetShadowHand().size();
+
+		// Shadow plays Hate and Anger
+		scn.ShadowPlayCard(hate);
+
+		// Card played from hand (-1), 3 cards drawn (+3) = net +2
+		assertEquals(handBefore + 2, scn.GetShadowHand().size());
+	}
+
+	@Test
+	public void HateAndAngerDrawsThreeCardsWithUrukHaiAndIsenOrc() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hate = scn.GetShadowCard("hate");
+		var uruk = scn.GetShadowCard("uruk");
 		var goblinman = scn.GetShadowCard("goblinman");
 
 		scn.MoveMinionsToTable(uruk, goblinman);
 		scn.MoveCardsToHand(hate);
+		scn.MoveCardsToTopOfShadowDeck("chaff1", "chaff2", "chaff3", "chaff4");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.SHADOW);

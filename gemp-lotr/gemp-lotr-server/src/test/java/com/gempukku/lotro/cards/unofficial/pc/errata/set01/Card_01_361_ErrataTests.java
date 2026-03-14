@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_361_ErrataTests
 {
@@ -23,7 +22,17 @@ public class Card_01_361_ErrataTests
 					put("runner", "1_178"); // Goblin Runner (twilight 2, not Isengard)
 					put("guard", "1_7");    // Dwarf Guard
 				}},
-				new String[] {"51_361", "1_337", "1_338", "1_339", "1_340", "1_341", "1_342", "1_343", "1_344"},
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "51_361");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);

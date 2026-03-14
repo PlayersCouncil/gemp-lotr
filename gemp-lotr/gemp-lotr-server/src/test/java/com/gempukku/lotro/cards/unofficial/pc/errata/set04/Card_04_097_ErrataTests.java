@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_04_097_ErrataTests
 {
@@ -20,7 +19,7 @@ public class Card_04_097_ErrataTests
 				{{
 					put("fell", "54_97");
 					put("gandalf", "1_364");  // Gandalf, The Grey Wizard (STR 7, VIT 4, signet: Gandalf)
-					put("runner", "1_178");   // Goblin Runner
+					put("overseer", "3_65");   // 10 str
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -65,15 +64,15 @@ public class Card_04_097_ErrataTests
 
 		var fell = scn.GetFreepsCard("fell");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var runner = scn.GetShadowCard("runner");
+		var overseer = scn.GetShadowCard("overseer");
 
 		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(fell);
-		scn.MoveMinionsToTable(runner);
+		scn.MoveMinionsToTable(overseer);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gandalf, runner);
+		scn.FreepsAssignAndResolve(gandalf, overseer);
 
 		// Play Long I Fell
 		scn.FreepsPlayCard(fell);
@@ -84,6 +83,7 @@ public class Card_04_097_ErrataTests
 		// Gandalf should now be unable to take wounds
 		// Resolve skirmish -- Gandalf should take no wounds
 		scn.PassSkirmishActions();
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 	}
 
@@ -93,30 +93,28 @@ public class Card_04_097_ErrataTests
 
 		var fell = scn.GetFreepsCard("fell");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var runner = scn.GetShadowCard("runner");
+		var overseer = scn.GetShadowCard("overseer");
 
 		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(fell);
-		scn.MoveMinionsToTable(runner);
+		scn.MoveMinionsToTable(overseer);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gandalf, runner);
+		scn.FreepsAssignAndResolve(gandalf, overseer);
 
 		// Play Long I Fell
 		scn.FreepsPlayCard(fell);
 
 		// Shadow chooses to prevent (wounds a minion)
 		scn.ShadowChooseYes();
-		// Runner is auto-selected as only minion to wound
+		// Overseer is auto-selected as only minion to wound
 
 		// Gandalf should NOT be protected
-		// Runner should have 1 wound from the prevention cost
-		assertEquals(1, scn.GetWoundsOn(runner));
+		// Berserker should be wounded
+		assertEquals(1, scn.GetWoundsOn(overseer));
 
 		// Resolve skirmish -- Gandalf should take wounds normally
 		scn.PassSkirmishActions();
-		// Gandalf was fighting Runner, Runner is weaker, so Gandalf likely wins
-		// But the key test is that the protection was removed
 	}
 }

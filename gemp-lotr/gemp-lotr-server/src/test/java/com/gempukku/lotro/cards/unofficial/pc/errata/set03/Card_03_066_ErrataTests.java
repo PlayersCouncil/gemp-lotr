@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_03_066_ErrataTests
 {
@@ -67,7 +66,7 @@ public class Card_03_066_ErrataTests
 	}
 
 	@Test
-	public void ManeuverAbilityExhaustsCompanionWith5Burdens() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OrthancBerserkerManeuverAbilityExhaustsCompanionWith5Burdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var berserker = scn.GetShadowCard("berserker");

@@ -81,7 +81,7 @@ public class Card_02_046_ErrataTests
 
 		scn.StartGame();
 
-		scn.AddTwilight(4);
+		scn.SetTwilight(4);
 
 		scn.SkipToPhase(Phase.SHADOW);
 

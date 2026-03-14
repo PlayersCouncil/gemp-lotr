@@ -20,8 +20,11 @@ public class Card_01_221_ErrataTests
 				{{
 					put("blade", "51_221");
 					put("witchking", "1_237"); // The Witch-king, Lord of Angmar
-					put("condition", "1_108"); // Albert Dreary, FP Gandalf condition
 					put("runner", "1_178");
+
+					put("guard", "1_7"); // Dwarf Guard
+					put("condition1", "1_21"); // Lord of Moria, FP condition
+					put("condition2", "1_21"); // Lord of Moria, FP condition
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,35 +65,65 @@ public class Card_01_221_ErrataTests
 	}
 
 	@Test
-	public void ThePaleBladeGrantsDamagePlusOneAndOptionallyDiscardsConditionOnWin() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThePaleBladeGrantsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var blade = scn.GetShadowCard("blade");
 		var witchking = scn.GetShadowCard("witchking");
-		var condition = scn.GetFreepsCard("condition");
+
+		scn.MoveMinionsToTable(witchking);
+		scn.MoveCardsToHand(blade);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetKeywordCount(witchking, Keyword.DAMAGE));
+		scn.AttachCardsTo(witchking, blade);
+
+		assertEquals(1, scn.GetKeywordCount(witchking, Keyword.DAMAGE));
+	}
+
+	@Test
+	public void ThePaleBladeOptionalTriggerExertsToDiscardOnlyOneConditionOnWin() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+
+		var blade = scn.GetShadowCard("blade");
+		var witchking = scn.GetShadowCard("witchking");
+		var condition1 = scn.GetFreepsCard("condition1");
+		var condition2 = scn.GetFreepsCard("condition2");
 		var frodo = scn.GetRingBearer();
 
-		scn.MoveCardsToSupportArea(condition);
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveCardsToSupportArea(condition1, condition2);
 		scn.MoveMinionsToTable(witchking);
 		scn.AttachCardsTo(witchking, blade);
 
 		scn.StartGame();
 
-		// Witch-king should have damage +1 from the blade
-		assertTrue(scn.HasKeyword(witchking, Keyword.DAMAGE));
-
-		// Frodo vs Witch-king -- WK wins easily
+		// Dwarf Guard vs Witch-king -- WK wins easily
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(frodo, witchking);
+		scn.FreepsAssignAndResolve(guard, witchking);
 		scn.PassSkirmishActions();
 
-		// WK wins. Optional trigger should fire -- this is a Trigger, NOT a Response.
+		// WK wins.
+		assertEquals(0, scn.GetWoundsOn(witchking));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
 
-		// Condition should be auto-selected (only FP condition in play) and discarded
-		assertInDiscard(condition);
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(witchking));
+
+		assertInZone(Zone.SUPPORT, condition1);
+		assertInZone(Zone.SUPPORT, condition2);
+		assertTrue(scn.ShadowHasCardChoicesAvailable(condition1, condition2));
+
+		scn.ShadowChooseCard(condition1);
+		assertInDiscard(condition1);
+
+		// Optional trigger should fire, but only once -- this is a Trigger, NOT a Response.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 
 	@Test
@@ -98,26 +131,26 @@ public class Card_01_221_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
+		var guard = scn.GetFreepsCard("guard");
+
 		var blade = scn.GetShadowCard("blade");
 		var witchking = scn.GetShadowCard("witchking");
-		var condition = scn.GetFreepsCard("condition");
-		var frodo = scn.GetRingBearer();
 
-		scn.MoveCardsToSupportArea(condition);
+		scn.MoveCompanionsToTable(guard);
 		scn.MoveMinionsToTable(witchking);
 		scn.AttachCardsTo(witchking, blade);
 
 		scn.StartGame();
 
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(frodo, witchking);
+		scn.FreepsAssignAndResolve(guard, witchking);
 		scn.PassSkirmishActions();
 
 		// WK wins. Decline the optional trigger.
+		assertEquals(0, scn.GetWoundsOn(witchking));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowDeclineOptionalTrigger();
 
-		// Condition should still be in support area
-		assertInZone(Zone.SUPPORT, condition);
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(witchking));
 	}
 }

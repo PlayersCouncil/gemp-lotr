@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_152_ErrataTests
 {
@@ -82,9 +81,10 @@ public class Card_01_152_ErrataTests
 		scn.StartGame();
 
 		// Add twilight for the cost
-		scn.AddTwilight(4);
+		scn.SetTwilight(4);
 
 		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
 
 		// Shaman ability should be available
 		assertTrue(scn.ShadowActionAvailable(shaman));

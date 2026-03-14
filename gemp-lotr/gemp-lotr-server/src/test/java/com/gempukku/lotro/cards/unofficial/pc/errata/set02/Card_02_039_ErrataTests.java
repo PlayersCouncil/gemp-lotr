@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_02_039_ErrataTests
 {
@@ -21,7 +20,9 @@ public class Card_02_039_ErrataTests
 					put("beyond", "52_39");
 					put("uruk", "1_151");    // Uruk Lieutenant (for exert cost)
 					put("helm", "1_15");     // Gimli's Helm (FP helm possession)
-					put("armor", "1_101");   // Gondorian armor? We'll use whatever fits
+					put("armor", "1_8");   // Dwarven Armor
+					put("shield", "1_107"); // Great Shield
+
 					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -61,7 +62,7 @@ public class Card_02_039_ErrataTests
 	}
 
 	@Test
-	public void BeyondTheHeightDiscardsAFPArmorHelmOrShield() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BeyondTheHeightofMenDiscardsAFPArmorHelmOrShield() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

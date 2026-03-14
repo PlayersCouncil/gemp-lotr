@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_07_091_ErrataTests
 {
@@ -22,7 +22,7 @@ public class Card_07_091_ErrataTests
 					put("rohanman", "7_226");  // Enraged Horseman (Rohan Man, TWI 2, STR 5, VIT 3)
 					put("gandalf", "1_364");   // Gandalf, The Grey Wizard (STR 7, VIT 4)
 					put("pippin", "1_306");    // Pippin, Friend to Frodo (unbound Hobbit, STR 3, VIT 4)
-					put("lurtz", "1_127");     // Lurtz, Servant of Isengard (STR 13, VIT 3)
+					put("berserker", "3_66");     // Orthanc Berserker (STR 11, VIT 3)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -71,7 +71,7 @@ public class Card_07_091_ErrataTests
 	}
 
 	@Test
-	public void FellowshipPlayRohanManToHealFaramir() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FaramirFellowshipPlayRohanManToHealFaramir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var faramir = scn.GetFreepsCard("faramir");
@@ -96,24 +96,22 @@ public class Card_07_091_ErrataTests
 	}
 
 	@Test
-	public void SkirmishExertFaramirForHobbitStrengthBonus() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FaramirSkirmishExertFaramirForHobbitStrengthBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var faramir = scn.GetFreepsCard("faramir");
 		var pippin = scn.GetFreepsCard("pippin");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var berserker = scn.GetShadowCard("berserker");
 
 		scn.MoveCompanionsToTable(faramir, pippin);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(pippin, lurtz);
+		scn.FreepsAssignAndResolve(pippin, berserker);
 
 		// During skirmish, use Faramir's ability to exert and boost Pippin
 		scn.FreepsUseCardAction(faramir);
-		// Choose Pippin as the unbound Hobbit to boost
-		scn.FreepsChooseCard(pippin);
 
 		// Faramir should have 1 wound from exertion
 		assertEquals(1, scn.GetWoundsOn(faramir));
@@ -122,22 +120,22 @@ public class Card_07_091_ErrataTests
 	}
 
 	@Test
-	public void SkirmishExertGandalfForCantTakeWounds() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FaramirSkirmishExertGandalfForCantTakeWounds() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var faramir = scn.GetFreepsCard("faramir");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var lurtz = scn.GetShadowCard("lurtz");
+		var berserker = scn.GetShadowCard("berserker");
 
 		scn.MoveCompanionsToTable(faramir, gandalf);
-		scn.MoveMinionsToTable(lurtz);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(faramir, lurtz);
+		scn.FreepsAssignAndResolve(faramir, berserker);
 
 		// During skirmish actions, use Faramir's third ability (exert Gandalf)
-		scn.FreepsUseCardAction(faramir);
+		scn.FreepsChooseAction("Exert Gandalf");
 
 		// Gandalf should have 1 wound from being exerted
 		assertEquals(1, scn.GetWoundsOn(gandalf));
