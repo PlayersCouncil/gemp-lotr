@@ -289,9 +289,6 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasTextRemoved(LotroGame game, PhysicalCard card) {
-//        if(hasKeyword(game, card, Keyword.HINDERED))
-//            return true;
-
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TEXT_MODIFIER, card)) {
             if (modifier.hasRemovedText(game, card))
                 return true;
@@ -300,9 +297,6 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean hasAllKeywordsRemoved(LotroGame game, PhysicalCard card) {
-//        if(hasKeyword(game, card, Keyword.HINDERED))
-//            return true;
-
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.LOSE_ALL_KEYWORDS_MODIFIER, card)) {
             if (modifier.lostAllKeywords(game, card))
                 return true;
