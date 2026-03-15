@@ -46,7 +46,8 @@ public class Card_V3_069_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Maneuver/Skirmish
-		 * Game Text: Maneuver or Skirmish: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
+		 * Game Text: Maneuver or Skirmish: Restore a Nazgul.
+		 *   Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
 		*/
 
 		var scn = GetScenario();
@@ -59,14 +60,13 @@ public class Card_V3_069_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		// Errata added Maneuver timeword (was just Skirmish before)
 		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-
-
-// ======== PHASE AVAILABILITY TESTS ========
+	// ======== PHASE AVAILABILITY TESTS ========
 
 	@Test
 	public void NoManMayHinderMePlayableInManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
@@ -138,9 +138,12 @@ public class Card_V3_069_Tests
 
 		scn.ShadowPlayCard(noman);
 
-		// All Nazgul restored
+		scn.ShadowHasCardChoicesAvailable(witchking, rider1, rider2);
+		scn.ShadowChooseCard(witchking);
+
+		// Errata: only one Nazgul restored
 		assertFalse(scn.IsHindered(witchking));
-		assertFalse(scn.IsHindered(rider1));
+		assertTrue(scn.IsHindered(rider1));
 		assertFalse(scn.IsHindered(rider2));
 		assertTrue(scn.IsHindered(runner));
 	}

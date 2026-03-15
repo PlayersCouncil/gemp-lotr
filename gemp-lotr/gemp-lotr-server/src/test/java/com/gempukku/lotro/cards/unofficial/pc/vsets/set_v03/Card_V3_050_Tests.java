@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 public class Card_V3_050_Tests
 {
 
-// ----------------------------------------
-// DESERT WIND WHISPER TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -51,7 +47,7 @@ public class Card_V3_050_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. Tracker.
-		* 	When you play this minion, remove (3) or hinder this minion.
+		* 	When you play this minion, remove (4) or hinder this minion.
 		* 	Each minion with ambush (X) is strength +X.
 		*/
 
@@ -74,7 +70,6 @@ public class Card_V3_050_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-
 	@Test
 	public void DesertWindWhisperPayTaxOrHinderOnPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -93,8 +88,8 @@ public class Card_V3_050_Tests
 		scn.ShadowPlayCard(whisper);
 		scn.ShadowChoose("Remove");
 
-		// 5 to play + 2 roaming + 3 tax = 10 total
-		assertEquals(twilightBefore - 10, scn.GetTwilight());
+		// 5 to play + 2 roaming + 4 tax = 11 total
+		assertEquals(twilightBefore - 11, scn.GetTwilight());
 		assertFalse(scn.IsHindered(whisper));
 	}
 
@@ -194,5 +189,29 @@ public class Card_V3_050_Tests
 
 		// Orc has no ambush, no strength bonus
 		assertEquals(orcStrengthBefore, scn.GetStrength(orc));
+	}
+
+	@Test
+	public void DesertWindWhisperRemoveTwilightTaxIs4() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata changes the tax from Remove (3) to Remove (4)
+		var scn = GetScenario();
+
+		var whisper = scn.GetShadowCard("whisper");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(whisper);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		scn.ShadowPlayCard(whisper);
+		scn.ShadowChoose("Remove");
+
+		// 5 to play + 2 roaming + 4 tax = 11 total
+		assertEquals(twilightBefore - 11, scn.GetTwilight());
+		assertFalse(scn.IsHindered(whisper));
 	}
 }

@@ -248,6 +248,9 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 			if(attempts == 20)
 			{
+				if(current == Phase.ARCHERY)
+					throw new RuntimeException("You left an archer in the scenario; can't reach '" + target + "' after 20 attempts because of the archery assignment.");
+
 				throw new RuntimeException("Could not arrive at target '" + target + "' after 20 attempts!");
 			}
 		}
