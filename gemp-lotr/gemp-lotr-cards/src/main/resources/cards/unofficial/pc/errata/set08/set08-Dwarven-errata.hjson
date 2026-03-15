@@ -82,7 +82,7 @@
 				}
 				cost: {
 					type: exert
-					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					select: choose(dwarf,damage,CanExert,MinVitality(2))
 					times: 1
 					memorize: exertedDwarf
 				},
