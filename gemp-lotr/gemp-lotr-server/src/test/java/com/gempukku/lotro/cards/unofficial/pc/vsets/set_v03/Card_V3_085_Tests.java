@@ -51,9 +51,10 @@ public class Card_V3_085_Tests
 		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: Valiant. Enduring.
-		* 	While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.
-		* 	Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
-		*/
+		 * 	While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.
+		 * 	Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
+		 * 	Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [Rohan] Man.
+		 */
 
 		var scn = GetScenario();
 
@@ -72,7 +73,7 @@ public class Card_V3_085_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
 

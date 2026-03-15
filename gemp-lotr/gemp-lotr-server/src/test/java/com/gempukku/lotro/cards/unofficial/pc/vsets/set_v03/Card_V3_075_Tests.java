@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V3_075_Tests
 {
@@ -35,7 +36,6 @@ public class Card_V3_075_Tests
 		);
 	}
 
-
 	@Test
 	public void UlaireLemenyaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -52,14 +52,15 @@ public class Card_V3_075_Tests
 		 * Vitality: 2
 		 * Site Number: 3
 		 * Game Text: Fierce.
-		* 	Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
+		* 	Each character skirmishing this minion is strength -1 for each other Nazgul you can spot
+		*   (or -1 for each other companion you can spot if you can spot 6 companions).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("lemenya");
 
-		assertEquals("Úlairë Lemenya", card.getBlueprint().getTitle());
+		assertEquals("Ulaire Lemenya", card.getBlueprint().getTitle());
 		assertEquals("Anointed with Terror", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -73,7 +74,7 @@ public class Card_V3_075_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-// ======== NAZGUL COUNT MODE (< 6 COMPANIONS) ========
+	// ======== NAZGUL COUNT MODE (< 6 COMPANIONS) ========
 
 	@Test
 	public void LemenyaReducesStrengthByNazgulCountWhenFewerThan6Companions() throws DecisionResultInvalidException, CardNotFoundException {
@@ -98,8 +99,8 @@ public class Card_V3_075_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// Aragorn should be -3 strength (3 Nazgul spotted)
-		assertEquals(aragornBaseStrength - 3, scn.GetStrength(aragorn));
+		// Aragorn should be -2 strength (2 Nazgul besides Lemenya spotted)
+		assertEquals(aragornBaseStrength - 2, scn.GetStrength(aragorn));
 	}
 
 
@@ -131,8 +132,8 @@ public class Card_V3_075_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// 6 companions spotted, so -6 strength (not -2 for Nazgul)
-		assertEquals(aragornBaseStrength - 6, scn.GetStrength(aragorn));
+		// 6 companions spotted, so -5 strength (not -2 for Nazgul)
+		assertEquals(aragornBaseStrength - 5, scn.GetStrength(aragorn));
 	}
 
 	@Test
@@ -163,7 +164,7 @@ public class Card_V3_075_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 
 		// 5 companions (under threshold), so -3 for Nazgul count
-		assertEquals(aragornBaseStrength - 3, scn.GetStrength(aragorn));
+		assertEquals(aragornBaseStrength - 2, scn.GetStrength(aragorn));
 	}
 
 	@Test
@@ -192,7 +193,8 @@ public class Card_V3_075_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// 7 companions spotted, so -7 strength (even though only 1 Nazgul)
-		assertEquals(aragornBaseStrength - 7, scn.GetStrength(aragorn));
+		// 7 companions spotted, so -6 strength (even though only 1 Nazgul)
+		// Errata makes us not consider the companion we are skirmishing against.
+		assertEquals(aragornBaseStrength - 6, scn.GetStrength(aragorn));
 	}
 }

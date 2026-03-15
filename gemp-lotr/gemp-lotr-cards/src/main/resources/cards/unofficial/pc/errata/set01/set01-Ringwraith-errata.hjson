@@ -1,4 +1,61 @@
 {
+	
+	51_221: {
+		cardInfo: {
+			//id: 51_221.1
+			parent: 1_221
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E221.1_card.jpg
+			collInfo: 1R221
+			rarity: R
+		}
+		title: The Pale Blade
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: name(The Witch-king)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					keyword: damage+1
+					filter: bearer
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(side(free people),condition)
+				}
+			}
+		]
+		gametext: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br>Each time The Witch-king wins a skirmish, you may exert him to discard a Free Peoples condition.
+		lore: "In his wretched grip, the Captain raised a Pale Sword."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	51_234: {
 		cardInfo: {

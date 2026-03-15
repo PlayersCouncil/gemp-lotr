@@ -44,10 +44,10 @@ public class Card_V3_063_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [ringwraith] card and add a burden.
+		 * Game Text: To play, spot a [ringwraith] card.
 		 * 		Each time a companion exerts, draw a card (limit once per site).
-		 * 		Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to
-		 * 		add (6) and hinder that companion.
+		 * 		Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher
+		 * 		to add (4) and hinder that companion.
 		*/
 
 		var scn = GetScenario();
@@ -64,9 +64,7 @@ public class Card_V3_063_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-
-
-// ======== EXTRA COST TESTS ========
+	// ======== EXTRA COST TESTS ========
 
 	@Test
 	public void WatcherRequiresSpottingRingwraithToPlay() throws DecisionResultInvalidException, CardNotFoundException {
@@ -103,7 +101,8 @@ public class Card_V3_063_Tests
 
 		scn.ShadowPlayCard(watcher1);
 
-		assertEquals(1, scn.GetBurdens());
+		//Errata removed the burden-adding
+		assertEquals(0, scn.GetBurdens());
 		assertInZone(Zone.SUPPORT, watcher1);
 	}
 
@@ -247,8 +246,8 @@ public class Card_V3_063_Tests
 
 		// One Watcher discarded
 		assertEquals(1, scn.GetShadowDiscardCount());
-		// +6 twilight added
-		assertEquals(twilightBefore + 6, scn.GetTwilight());
+		// +4 twilight added
+		assertEquals(twilightBefore + 4, scn.GetTwilight());
 		// Aragorn hindered
 		assertTrue(scn.IsHindered(aragorn));
 	}
