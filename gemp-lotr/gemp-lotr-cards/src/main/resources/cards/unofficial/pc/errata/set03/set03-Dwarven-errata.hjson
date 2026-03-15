@@ -168,7 +168,7 @@
 			rarity: U
 		}
 		title: A Royal Welcome
-		unique: true
+		unique: false
 		side: Free Peoples
 		culture: Dwarven
 		twilight: 2
