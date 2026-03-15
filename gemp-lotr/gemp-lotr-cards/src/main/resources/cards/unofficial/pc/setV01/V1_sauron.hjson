@@ -360,7 +360,7 @@
 					keyword: fierce
 					requires: {
 						type: canSpotburdens
-						amount: 4
+						amount: 6
 					}
 				}
 			}
@@ -372,7 +372,7 @@
 					keyword: damage+1
 					requires: {
 						type: canSpotburdens
-						amount: 6
+						amount: 4
 					}
 				}
 			}
