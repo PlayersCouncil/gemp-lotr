@@ -53,8 +53,8 @@ public class Card_V3_095_Tests
 		 * Subtype: Support area
 		 * Game Text: Twilight.
 		 *		To play, hinder 2 twilight conditions.
-		 *		Skirmish: Exert an Orc or Troll and hinder 2 twilight conditions to make that minion strength +2.
-		*/
+		 *		Skirmish: Exert an Orc or Troll and hinder a twilight condition to make that minion strength +2.
+		 */
 
 		var scn = GetScenario();
 
@@ -142,11 +142,11 @@ public class Card_V3_095_Tests
 		assertTrue(scn.ShadowActionAvailable(horror));
 		scn.ShadowUseCardAction(horror);
 		// Orc auto-selected as only Orc/Troll
-		scn.ShadowChooseCards(sky1, sky2);
+		scn.ShadowChooseCards(sky1);
 
 		assertEquals(orcWoundsBefore + 1, scn.GetWoundsOn(orc));
 		assertTrue(scn.IsHindered(sky1));
-		assertTrue(scn.IsHindered(sky2));
+		assertFalse(scn.IsHindered(sky2));
 		assertEquals(orcStrengthBefore + 2, scn.GetStrength(orc));
 	}
 
@@ -174,7 +174,7 @@ public class Card_V3_095_Tests
 
 		assertTrue(scn.ShadowActionAvailable(horror));
 		scn.ShadowUseCardAction(horror);
-		scn.ShadowChooseCards(sky1, sky2);
+		scn.ShadowChooseCards(sky1);
 
 		assertEquals(trollWoundsBefore + 1, scn.GetWoundsOn(troll));
 		assertEquals(trollStrengthBefore + 2, scn.GetStrength(troll));
@@ -204,13 +204,14 @@ public class Card_V3_095_Tests
 	}
 
 	@Test
-	public void OmenOfHorrorSkirmishAbilityRequires2UnhinderedTwilightConditions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OmenOfHorrorSkirmishAbilityRequires1UnhinderedTwilightCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horror = scn.GetShadowCard("horror");
 		var orc = scn.GetShadowCard("orc");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(horror);
+		scn.HinderCard(horror);
 		scn.MoveMinionsToTable(orc);
 		scn.MoveCompanionsToTable(aragorn);
 
@@ -220,7 +221,7 @@ public class Card_V3_095_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPassCurrentPhaseAction();
 
-		// Only 1 unhindered twilight condition - can't afford cost of 2
+		// No unhindered twilight condition - can't afford cost of 2
 		assertFalse(scn.ShadowActionAvailable(horror));
 	}
 
@@ -284,12 +285,12 @@ public class Card_V3_095_Tests
 
 		// Should be able to choose which 3 of 4 twilight conditions to hinder
 		assertEquals(4, scn.ShadowGetCardChoiceCount());
-		scn.ShadowChooseCards(sky1, sky3);
+		scn.ShadowChooseCards(sky1);
 
 		assertEquals(trollWoundsBefore + 1, scn.GetWoundsOn(troll));
 		assertTrue(scn.IsHindered(sky1));
 		assertFalse(scn.IsHindered(sky2));
-		assertTrue(scn.IsHindered(sky3));
+		assertFalse(scn.IsHindered(sky3));
 		assertEquals(trollStrengthBefore + 2, scn.GetStrength(troll));
 	}
 }

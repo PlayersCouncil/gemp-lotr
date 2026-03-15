@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 public class Card_V3_060_Tests
 {
 
-// ----------------------------------------
-// THE MOUTH OF SAURON, HERALD OF THE DARK LORD TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -50,7 +46,8 @@ public class Card_V3_060_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: Lurker.
-		* 	Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
+		 * 			Your Shadow events are twilight cost -2. Response: If a minion is about to take a wound, exert this
+		 * 			minion to prevent that wound and hinder a Free Peoples weapon.
 		*/
 
 		var scn = GetScenario();
@@ -71,8 +68,6 @@ public class Card_V3_060_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-
-
 	@Test
 	public void MouthOfSauronReducesShadowEventCost() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -91,8 +86,8 @@ public class Card_V3_060_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// Red Wrath normally costs 5, should cost 4 with Mouth
-		scn.SetTwilight(4);
+		// Red Wrath normally costs 5, should cost 3 with Mouth
+		scn.SetTwilight(3);
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(redwrath));

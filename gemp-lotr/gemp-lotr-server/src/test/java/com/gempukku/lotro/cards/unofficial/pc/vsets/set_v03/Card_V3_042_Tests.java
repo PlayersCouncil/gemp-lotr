@@ -1,20 +1,18 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_042_Tests
 {
-
 // ----------------------------------------
 // BLADETUSK MATRIARCH TESTS
 // ----------------------------------------
@@ -59,7 +57,7 @@ public class Card_V3_042_Tests
 		 * 		Maneuver: Remove (6) to make this artifact a <b>fierce</b> mounted Southron minion until the end of
 		 * 		the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on her. She adds 1 to
 		 * 		the Shadow archery total for each Southron stacked on her (limit 6).
-		*/
+		 */
 
 		var scn = GetScenario();
 
@@ -107,7 +105,7 @@ public class Card_V3_042_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// Should be offered choice between play and hand
-		assertTrue(scn.ShadowChoiceAvailable("Stack a Southron"));
+		assertTrue(scn.ShadowChoiceAvailable("Stack a [raider] Man"));
 		scn.ShadowChoose("hand");
 
 		// southron3 should be auto-selected as only Southron in hand

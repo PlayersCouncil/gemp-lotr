@@ -18,8 +18,13 @@ public class Card_03_066_ErrataTests
 				new HashMap<>()
 				{{
 					put("berserker", "53_66");
-					put("guard", "1_7");       // Dwarf Guard (companion, STR 4, VIT 2)
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North (companion, VIT 4)
+					put("guard", "1_7");       // Dwarf Guard (companion, VIT 2)
 					put("runner", "1_178");    // Goblin Runner
+					put("demands1", "2_40");   // Demands of the Sackville-Bagginses (Isengard SA condition)
+					put("demands2", "2_40");
+					put("demands3", "2_40");
+					put("demands4", "2_40");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,34 +71,103 @@ public class Card_03_066_ErrataTests
 	}
 
 	@Test
-	public void OrthancBerserkerManeuverAbilityExhaustsCompanionWith5Burdens() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ManeuverAbilityNotAvailableBelow5BurdensAnd5IsengardCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var berserker = scn.GetShadowCard("berserker");
 		var guard = scn.GetFreepsCard("guard");
 
+		// 4 Isengard cards: berserker + 3 demands
+		var demands1 = scn.GetShadowCard("demands1");
+		var demands2 = scn.GetShadowCard("demands2");
+		var demands3 = scn.GetShadowCard("demands3");
+
 		scn.MoveMinionsToTable(berserker);
 		scn.MoveCompanionsToTable(guard);
+		scn.MoveCardsToSupportArea(demands1, demands2, demands3);
+
+		scn.StartGame();
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// 4 burdens and 4 Isengard cards — neither threshold met
+		assertFalse(scn.ShadowActionAvailable(berserker));
+	}
+
+	@Test
+	public void ManeuverAbilityExhaustsNonRingBearerCompanionWith5Burdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var berserker = scn.GetShadowCard("berserker");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var frodo = scn.GetRingBearer();
+
+		scn.MoveMinionsToTable(berserker);
+		scn.MoveCompanionsToTable(aragorn, guard);
 
 		scn.StartGame();
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
 
-		// Guard starts unwounded (VIT 2)
-		assertEquals(0, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(berserker));
-
-		// Shadow uses Orthanc Berserker's maneuver ability
 		assertTrue(scn.ShadowActionAvailable(berserker));
 		scn.ShadowUseCardAction(berserker);
 
-		// Exert twice is auto-applied as cost
-		// Guard (only non-Ring-bearer companion) is auto-selected to exhaust
+		// Should be prompted to choose a companion to exhaust (not Frodo)
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		assertTrue(scn.ShadowCanChooseCharacter(aragorn));
+		assertTrue(scn.ShadowCanChooseCharacter(guard));
+		assertFalse(scn.ShadowCanChooseCharacter(frodo));
 
-		// Berserker should have 2 wounds (exerted twice, VIT 3 -> 1 remaining)
+		// Choose Aragorn (VIT 4); exhausting means VIT-1 = 3 wounds
+		scn.ShadowChooseCard(aragorn);
+
 		assertEquals(2, scn.GetWoundsOn(berserker));
-		// Guard should be exhausted (VIT 2, so 1 wound = exhausted)
-		assertTrue(scn.IsExhausted(guard));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.IsExhausted(aragorn));
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityExhaustsCompanionWith5IsengardCards() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var berserker = scn.GetShadowCard("berserker");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+
+		// 5 Isengard cards: berserker + 4 demands
+		var demands1 = scn.GetShadowCard("demands1");
+		var demands2 = scn.GetShadowCard("demands2");
+		var demands3 = scn.GetShadowCard("demands3");
+		var demands4 = scn.GetShadowCard("demands4");
+
+		scn.MoveMinionsToTable(berserker);
+		scn.MoveCompanionsToTable(aragorn, guard);
+		scn.MoveCardsToSupportArea(demands1, demands2, demands3, demands4);
+
+		scn.StartGame();
+		// No burdens added — proving the Isengard path works independently
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(berserker));
+		scn.ShadowUseCardAction(berserker);
+
+		// Choose Aragorn to exhaust
+		scn.ShadowChooseCard(aragorn);
+
+		assertEquals(2, scn.GetWoundsOn(berserker));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.IsExhausted(aragorn));
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }
