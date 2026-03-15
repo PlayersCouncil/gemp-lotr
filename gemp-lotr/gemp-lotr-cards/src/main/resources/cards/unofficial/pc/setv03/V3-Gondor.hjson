@@ -537,6 +537,7 @@
 				trigger: {
 					type: UsesSpecialAbility
 					filter: side(Shadow)
+					fromZone: SUPPORT
 					memorize: activatedCard
 				}
 				cost: {

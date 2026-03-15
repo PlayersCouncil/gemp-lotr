@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.actions;
 
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -18,12 +19,14 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
     protected boolean _activated;
 
     protected boolean _prevented;
+    protected Zone _originalZone;
 
     public ActivateCardAction(PhysicalCard physicalCard, String performingPlayer) {
         _physicalCard = physicalCard;
         _player = performingPlayer;
         setText("Use " + GameUtils.getFullName(_physicalCard));
         _message = GameUtils.getCardLink(_physicalCard) + " is used";
+        _originalZone = physicalCard.getZone();
     }
 
     public String getPerformingPlayer() {
@@ -80,6 +83,6 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
     }
 
     protected void generateCardEffect() {
-        _activateCardEffect = new ActivateCardEffect(_physicalCard, _player, getActionTimeword());
+        _activateCardEffect = new ActivateCardEffect(_physicalCard, _player, getActionTimeword(), _originalZone);
     }
 }
