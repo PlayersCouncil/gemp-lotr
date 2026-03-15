@@ -108,7 +108,6 @@
 			{
 				type: Activated
 				phase: Assignment
-				limitPerPhase: 1
 				cost: {
 					type: AddThreats
 				}
