@@ -129,7 +129,8 @@
 				optional: true
 				trigger: {
 					type: removesBurden
-					filter: your,not(hobbit)
+					player: you
+					filter: not(hobbit)
 				}
 				requires: {
 					type: perPhaseLimit
