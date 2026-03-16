@@ -206,7 +206,7 @@ var PCCards = {
 	'52_7': 'https://i.lotrtcgpc.net/errata/balancing/52_007.jpg',
 	'52_55': 'https://i.lotrtcgpc.net/errata/balancing/52_007.jpg',
 	
-	'53_120': 'https://i.lotrtcgpc.net/errata/balancing/53_120.jpg',
+	//'53_120': 'https://i.lotrtcgpc.net/errata/balancing/53_120.jpg',
 	
 	'57_359': 'https://i.lotrtcgpc.net/errata/balancing/57_359.jpg',
 	
@@ -1039,7 +1039,7 @@ var PCCards = {
 	// Anduril, Legend Remade (V3_18)
 	'103_18' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S018.0_card.jpg',
 	// Aragorn, King of Gondor and Arnor (V3_19)
-	'103_19' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S019.0_card.jpg',
+	//'103_19' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S019.0_card.jpg',
 	// Domain of the Dead King (V3_20)
 	'103_20' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S020.0_card.jpg',
 	// Ethereal Banner (V3_21)
@@ -1057,11 +1057,11 @@ var PCCards = {
 	// King of the Dead, Dead Keeper (V3_27)
 	'103_27' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S027.0_card.jpg',
 	// Northern Signal-fire, Flame of Amon Din (V3_28)
-	'103_28' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S028.0_card.jpg',
+	//'103_28' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S028.0_card.jpg',
 	// Northern Signal-fire, Flame of Eilenach (V3_29)
 	'103_29' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S029.0_card.jpg',
 	// Northern Signal-fire, Flame of Nardol (V3_30)
-	'103_30' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S030.0_card.jpg',
+	//'103_30' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S030.0_card.jpg',
 	// Pippin, Trollslayer (V3_31)
 	'103_31' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S031.0_card.jpg',
 	// Tormented Revenant (V3_32)
@@ -1073,7 +1073,7 @@ var PCCards = {
 	// War-beacon (V3_35)
 	'103_35' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S035.0_card.jpg',
 	// The Way is Shut (V3_36)
-	'103_36' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S036.0_card.jpg',
+	//'103_36' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S036.0_card.jpg',
 	// Nor is He Early (V3_37)
 	'103_37' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S037.0_card.jpg',
 	// One Ill Turn Deserves Another (V3_38)
@@ -1083,9 +1083,9 @@ var PCCards = {
 	// A Wizard Knows Better (V3_40)
 	'103_40' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S040.0_card.jpg',
 	// Bladetusk Charger (V3_41)
-	'103_41' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S041.0_card.jpg',
+	//'103_41' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S041.0_card.jpg',
 	// Bladetusk Matriarch (V3_42)
-	'103_42' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S042.0_card.jpg',
+	//'103_42' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S042.0_card.jpg',
 	// Bladetusk Rearguard (V3_43)
 	'103_43' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S043.0_card.jpg',
 	// Burn and Pillage (V3_44)
@@ -1095,13 +1095,13 @@ var PCCards = {
 	// Corsair Slinkthief (V3_46)
 	'103_46' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S046.0_card.jpg',
 	// Desert Wind Initiate (V3_47)
-	'103_47' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S047.0_card.jpg',
+	//'103_47' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S047.0_card.jpg',
 	// Desert Wind Scout (V3_48)
-	'103_48' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S048.0_card.jpg',
+	//'103_48' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S048.0_card.jpg',
 	// Desert Wind Stalker (V3_49)
 	'103_49' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S049.0_card.jpg',
 	// Desert Wind Whisper (V3_50)
-	'103_50' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S050.0_card.jpg',
+	//'103_50' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S050.0_card.jpg',
 	// Duty No Less Than Yours (V3_51)
 	'103_51' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S051.0_card.jpg',
 	// Hailing from the Far South (V3_52)
@@ -1113,33 +1113,33 @@ var PCCards = {
 	// Raiding Schooner (V3_55)
 	'103_55' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S055.0_card.jpg',
 	// Sandcraft Ambush (V3_56)
-	'103_56' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S056.0_card.jpg',
+	//'103_56' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S056.0_card.jpg',
 	// Savage Harpoon (V3_57)
 	'103_57' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S057.0_card.jpg',
 	// Shifting Sands (V3_58)
 	'103_58' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S058.0_card.jpg',
 	// Strength of Men (V3_59)
-	'103_59' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S059.0_card.jpg',
+	//'103_59' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S059.0_card.jpg',
 	// The Mouth of Sauron, Herald of the Dark Lord (V3_60)
-	'103_60' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S060.0_card.jpg',
+	//'103_60' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S060.0_card.jpg',
 	// Ulaire Attea, Khamul of the East (V3_61)
-	'103_61' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S061.0_card.jpg',
+	//'103_61' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S061.0_card.jpg',
 	// War Howdah (V3_62)
 	'103_62' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S062.0_card.jpg',
 	// Cirith Ungol Watcher, Spirit of Vigilence (V3_63)
-	'103_63' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S063.0_card.jpg',
+	//'103_63' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S063.0_card.jpg',
 	// Cover of Darkness, Omen of Fear (V3_64)
 	'103_64' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S064.0_card.jpg',
 	// Cover of Darkness, Omen of Gloom (V3_65)
-	'103_65' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S065.0_card.jpg',
+	//'103_65' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S065.0_card.jpg',
 	// Gollum, Half a Wraith Himself (V3_66)
 	'103_66' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S066.0_card.jpg',
 	// Ill Wind (V3_67)
-	'103_67' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S067.0_card.jpg',
+	//'103_67' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S067.0_card.jpg',
 	// Morgul Legions (V3_68)
-	'103_68' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S068.0_card.jpg',
+	//'103_68' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S068.0_card.jpg',
 	// No Man May Hinder Me (V3_69)
-	'103_69' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S069.0_card.jpg',
+	//'103_69' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S069.0_card.jpg',
 	// The Mouth of Sauron, Bearer of Dread News (V3_70)
 	'103_70' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S070.0_card.jpg',
 	// This is My Hour (V3_71)
@@ -1151,17 +1151,17 @@ var PCCards = {
 	// Ulaire Enquea, Magnified through Suffering (V3_74)
 	'103_74' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S074.0_card.jpg',
 	// Ulaire Lemenya, Anointed with Terror (V3_75)
-	'103_75' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S075.0_card.jpg',
+	//'103_75' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S075.0_card.jpg',
 	// Ulaire Nelya, Glorified to Conquer (V3_76)
-	'103_76' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S076.0_card.jpg',
+	//'103_76' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S076.0_card.jpg',
 	// Ulaire Nertea, Sanctified for Cruelty (V3_77)
 	'103_77' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S077.0_card.jpg',
 	// Ulaire Otsea, Consecrated by Pestilence (V3_78)
-	'103_78' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S078.0_card.jpg',
+	//'103_78' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S078.0_card.jpg',
 	// Ulaire Toldea, Blessed with Brutality (V3_79)
-	'103_79' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S079.0_card.jpg',
+	//'103_79' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S079.0_card.jpg',
 	// The Witch-king, Empowered by His Master (V3_80)
-	'103_80' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S080.0_card.jpg',
+	//'103_80' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S080.0_card.jpg',
 	// Winged Nazgul (V3_81)
 	'103_81' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S081.0_card.jpg',
 	// Death Take Us All (V3_82)
@@ -1171,7 +1171,7 @@ var PCCards = {
 	// I Am No Man (V3_84)
 	'103_84' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S084.0_card.jpg',
 	// Merry, Master Holbytla (V3_85)
-	'103_85' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S085.0_card.jpg',
+	//'103_85' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S085.0_card.jpg',
 	// Northern Signal-fire, Flame of Calenhad (V3_86)
 	'103_86' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S086.0_card.jpg',
 	// Northern Signal-fire, Flame of Halifirien (V3_87)
@@ -1183,23 +1183,23 @@ var PCCards = {
 	// Teach Me Your Herb-lore (V3_90)
 	'103_90' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S090.0_card.jpg',
 	// Vanguard's Lance (V3_91)
-	'103_91' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S091.0_card.jpg',
+	//'103_91' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S091.0_card.jpg',
 	// Cirith Ungol Watcher, Hideous Warden (V3_92)
-	'103_92' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S092.0_card.jpg',
+	//'103_92' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S092.0_card.jpg',
 	// Cover of Darkness, Omen of Despair (V3_93)
 	'103_93' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S093.0_card.jpg',
 	// Cover of Darkness, Omen of Dread (V3_94)
 	'103_94' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S094.0_card.jpg',
 	// Cover of Darkness, Omen of Horror (V3_95)
-	'103_95' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S095.0_card.jpg',
+	//'103_95' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S095.0_card.jpg',
 	// Endless Night (V3_96)
-	'103_96' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S096.0_card.jpg',
+	//'103_96' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S096.0_card.jpg',
 	// Ominous Sky (V3_97)
-	'103_97' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S097.0_card.jpg',
+	//'103_97' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S097.0_card.jpg',
 	// Red Eye Assassin (V3_98)
 	'103_98' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S098.0_card.jpg',
 	// Release the Prisoners! (V3_99)
-	'103_99' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S099.0_card.jpg',
+	//'103_99' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S099.0_card.jpg',
 	// Sauron, Lord of All Middle-earth (V3_100)
 	'103_100': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S100.0_card.jpg',
 	// Sauron's Reach (V3_101)
@@ -1213,7 +1213,7 @@ var PCCards = {
 	// Driven By Her Own Cruel Will (V3_105)
 	'103_105': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S105.0_card.jpg',
 	// Flotsam (V3_106)
-	'103_106': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S106.0_card.jpg',
+	//'103_106': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S106.0_card.jpg',
 	// For Frodo (V3_107)
 	'103_107': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S107.0_card.jpg',
 	// For the Shire (V3_108)
@@ -1235,31 +1235,31 @@ var PCCards = {
 	// Smeagol, Once Like Us (V3_116)
 	'103_116': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S116.0_card.jpg',
 	// Sting, Spider-bane (V3_117)
-	'103_117': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S117.0_card.jpg',
+	//'103_117': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S117.0_card.jpg',
 	// The Sooner We’re Rid of It (V3_118)
 	'103_118': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S118.0_card.jpg',
 	// Treasured Pipe (V3_119)
-	'103_119': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S119.0_card.jpg',
+	//'103_119': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S119.0_card.jpg',
 	// Worth Fighting For (V3_120)
 	'103_120': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S120.0_card.jpg',
 	// Gates of Isengard (V3_121)
 	'103_121': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S121.0_card.jpg',
 	// Desolation of Ash (V3_122)
-	'103_122': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S122.0_card.jpg',
+	//'103_122': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S122.0_card.jpg',
 	// Gorgoroth Highway (V3_123)
-	'103_123': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S123.0_card.jpg',
+	//'103_123': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S123.0_card.jpg',
 	// Gorgoroth Wastes (V3_124)
-	'103_124': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S124.0_card.jpg',
+	//'103_124': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S124.0_card.jpg',
 	// Muster of Gorgoroth (V3_125)
 	'103_125': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S125.0_card.jpg',
 	// Cracks of Doom (V3_126)
-	'103_126': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S126.0_card.jpg',
+	//'103_126': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S126.0_card.jpg',
 	// Doom Causeway (V3_127)
 	'103_127': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S127.0_card.jpg',
 	// Orodruin (V3_128)
 	'103_128': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S128.0_card.jpg',
 	// Pinnacle of Doom (V3_129)
-	'103_129': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S129.0_card.jpg',
+	//'103_129': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S129.0_card.jpg',
 	// Threshold of Doom (V3_130)
 	'103_130': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S130.0_card.jpg',
 	
@@ -1297,7 +1297,7 @@ var PCCards = {
 	// Cleaving Blow (1C5) [Errata]
 	'51_5'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E005.1_card.jpg',
 	// Grimir, Dwarven Elder (1U17) [Errata]
-	'51_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.2_card.jpg',
+	//'51_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.2_card.jpg',
 	// Song of Durin (3U5) [Errata]
 	'53_5'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E005.1_card.jpg',
 	// Still Draws Breath (1C25) [Errata]
@@ -1305,7 +1305,7 @@ var PCCards = {
 	// Make Light of Burdens (2R11) [Errata]
 	'52_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E011.1_card.jpg',
 	// A Royal Welcome (3U4) [Errata]
-	'53_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.2_card.jpg',
+	//'53_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.2_card.jpg',
 	// Hospitality of the Dwarves (V1C1) [Errata]
 	'101_1'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E001.1_card.jpg',
 	// The Palantir of Orthanc (3R67) [Errata]
@@ -1351,7 +1351,127 @@ var PCCards = {
 	//Holiday Gandalf, Friend of the Shirefolk
 	'1_403': 'https://i.lotrtcgpc.net/promos/LOTR-EN01H072.0_card.jpg',
 	//Holiday Hobbit Stealth
-	'1_404': 'https://i.lotrtcgpc.net/promos/LOTR-EN01H298.0_card.jpg'
+	'1_404': 'https://i.lotrtcgpc.net/promos/LOTR-EN01H298.0_card.jpg',
+	
+	
+	//2026 V3 Errata
+	// Grimir, Dwarven Elder (1U17) [Errata]
+	'51_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.3_card.jpg',
+	// A Royal Welcome (3U4) [Errata]
+	'53_4'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E004.3_card.jpg',
+	// The Pale Blade (1R221) [Errata]
+	'51_221' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E221.1_card.jpg',
+	// Merry's Sword (7R242) [Errata]
+	'57_242' : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E242.1_card.jpg',
+	// Slopes of Amon Hen (1U361) [Errata]
+	'51_361' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E361.1_card.jpg',
+	// Wastes of Emyn Muil (3U120) [Errata]
+	'53_120' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E120.1_card.jpg',
+	// Servants to Saruman (3C70) [Errata]
+	'53_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E070.1_card.jpg',
+	// Trapped and Alone (3U72) [Errata]
+	'53_72'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E072.1_card.jpg',
+	// Beyond the Height of Men (2R39) [Errata]
+	'52_39'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E039.1_card.jpg',
+	// Uruk-hai Raiding Party (1C158) [Errata]
+	'51_158' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E158.1_card.jpg',
+	// Hate and Anger (3U53) [Errata]
+	'53_53'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E053.1_card.jpg',
+	// Uruk Shaman (1C152) [Errata]
+	'51_152' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E152.1_card.jpg',
+	// Uruk-hai Armory (1C157) [Errata]
+	'51_157' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E157.1_card.jpg',
+	// Orthanc Berserker (3R66) [Errata]
+	'53_66'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E066.1_card.jpg',
+	// Uruk Captain (2R46) [Errata]
+	'52_46'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E046.1_card.jpg',
+	// Gimli's Helm (1R15) [Errata]
+	'51_15'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E015.1_card.jpg',
+	// From the Armory (4U47) [Errata]
+	'54_47'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E047.1_card.jpg',
+	// Keep Your Forked Tongue (4U96) [Errata]
+	'54_96'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E096.1_card.jpg',
+	// Faramir, Wizard's Pupil (7R91) [Errata]
+	'57_91'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E091.1_card.jpg',
+	// Long I Fell (4C97) [Errata]
+	'54_97'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E097.1_card.jpg',
+	// Aragorn, King of Gondor and Arnor (V3_19) [Errata]
+	'103_19' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S019.1_card.jpg',
+	// Northern Signal-fire, Flame of Amon Din (V3_28) [Errata]
+	'103_28' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S028.1_card.jpg',
+	// Northern Signal-fire, Flame of Nardol (V3_30) [Errata]
+	'103_30' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S030.1_card.jpg',
+	// The Way is Shut (V3_36) [Errata]
+	'103_36' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S036.1_card.jpg',
+	// Bladetusk Charger (V3_41) [Errata]
+	'103_41' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S041.1_card.jpg',
+	// Bladetusk Matriarch (V3_42) [Errata]
+	'103_42' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S042.1_card.jpg',
+	// Desert Wind Initiate (V3_47) [Errata]
+	'103_47' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S047.1_card.jpg',
+	// Desert Wind Scout (V3_48) [Errata]
+	'103_48' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S048.1_card.jpg',
+	// Desert Wind Whisper (V3_50) [Errata]
+	'103_50' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S050.1_card.jpg',
+	// Sandcraft Trap (V3_56) [Errata]
+	'103_56' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S056.1_card.jpg',
+	// Strength of Men (V3_59) [Errata]
+	'103_59' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S059.1_card.jpg',
+	// The Mouth of Sauron, Herald of the Dark Lord (V3_60) [Errata]
+	'103_60' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S060.1_card.jpg',
+	// Ulaire Attea, Khamul of the East (V3_61) [Errata]
+	'103_61' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S061.1_card.jpg',
+	// Cirith Ungol Watcher, Spirit of Vigilance (V3_63) [Errata]
+	'103_63' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S063.1_card.jpg',
+	// Ill Wind (V3_67) [Errata]
+	'103_67' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S067.1_card.jpg',
+	// Morgul Legions (V3_68) [Errata]
+	'103_68' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S068.1_card.jpg',
+	// No Man May Hinder Me (V3_69) [Errata]
+	'103_69' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S069.1_card.jpg',
+	// Ulaire Lemenya, Anointed with Terror (V3_75) [Errata]
+	'103_75' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S075.1_card.jpg',
+	// Ulaire Nelya, Glorified to Conquer (V3_76) [Errata]
+	'103_76' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S076.1_card.jpg',
+	// Ulaire Otsea, Consecrated by Pestilence (V3_78) [Errata]
+	'103_78' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S078.1_card.jpg',
+	// Ulaire Toldea, Blessed with Brutality (V3_79) [Errata]
+	'103_79' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S079.1_card.jpg',
+	// The Witch-king, Empowered by His Master (V3_80) [Errata]
+	'103_80' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S080.1_card.jpg',
+	// Cirith Ungol Watcher, Hideous Warden (V3_92) [Errata]
+	'103_92' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S092.1_card.jpg',
+	// Ominous Sky (V3_97) [Errata]
+	'103_97' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S097.1_card.jpg',
+	// Cover of Darkness, Omen of Horror (V3_95) [Errata]
+	'103_95' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S095.1_card.jpg',
+	// Cover of Darkness, Omen of Gloom (V3_65) [Errata]
+	'103_65' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S065.1_card.jpg',
+	// Endless Night (V3_96) [Errata]
+	'103_96' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S096.1_card.jpg',
+	// Release the Prisoners! (V3_99) [Errata]
+	'103_99' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S099.1_card.jpg',
+	// Merry, Master Holbytla (V3_85) [Errata]
+	'103_85' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S085.1_card.jpg',
+	// Vanguard's Lance (V3_91) [Errata]
+	'103_91' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S091.1_card.jpg',
+	// Flotsam (V3_106) [Errata]
+	'103_106': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S106.1_card.jpg',
+	// Sting, Sharp Elven-blade (V3_117) [Errata]
+	'103_117': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S117.1_card.jpg',
+	// Treasured Pipe (V3_119) [Errata]
+	'103_119': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S119.1_card.jpg',
+	// Desolation of Ash (V3_122) [Errata]
+	'103_122': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S122.1_card.jpg',
+	// Gorgoroth Highway (V3_123) [Errata]
+	'103_123': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S123.1_card.jpg',
+	// Gorgoroth Wastes (V3_124) [Errata]
+	'103_124': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S124.1_card.jpg',
+	// Cracks of Doom (V3_126) [Errata]
+	'103_126': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S126.1_card.jpg',
+	// Pinnacle of Doom (V3_129) [Errata]
+	'103_129': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3S129.1_card.jpg',
+
 
 }
 

@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -16,11 +17,11 @@ public class ActivateCardEffect extends AbstractEffect {
 
     protected ActivateCardResult _activateCardResult;
 
-    public ActivateCardEffect(PhysicalCard source, String performingPlayer, Timeword actionTimeword) {
+    public ActivateCardEffect(PhysicalCard source, String performingPlayer, Timeword actionTimeword, Zone originalZone) {
         _source = source;
         _actionTimeword = actionTimeword;
         _player = performingPlayer;
-        _activateCardResult = new ActivateCardResult(_source, performingPlayer, _actionTimeword, source.getZone());
+        _activateCardResult = new ActivateCardResult(_source, performingPlayer, _actionTimeword, originalZone);
     }
 
     public ActivateCardResult getActivateCardResult() {
