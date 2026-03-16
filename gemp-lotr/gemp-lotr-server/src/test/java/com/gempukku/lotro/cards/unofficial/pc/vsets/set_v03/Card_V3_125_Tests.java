@@ -1,7 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +11,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_125_Tests
 {
@@ -18,10 +19,20 @@ public class Card_V3_125_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "103_125");
-					// put other cards in here as needed for the test case
+					put("runner1", "1_178");
+					put("runner2", "1_178");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "103_125");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -34,8 +45,8 @@ public class Card_V3_125_Tests
 		 * Set: V3
 		 * Name: Muster of Gorgoroth
 		 * Unique: false
-		 * Side: 
-		 * Culture: 
+		 * Side:
+		 * Culture:
 		 * Shadow Number: 8
 		 * Type: Site
 		 * Subtype: Standard
@@ -45,9 +56,7 @@ public class Card_V3_125_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(8);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(8);
 
 		assertEquals("Muster of Gorgoroth", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,28 +68,41 @@ public class Card_V3_125_Tests
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MusterofGorgorothTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void MinionStrengthScalesWithThreats() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
-
-		//var card = scn.GetShadowCard("card");
-		scn.MoveCardsToHand(card);
-		scn.MoveMinionsToTable(card);
-		scn.MoveCardsToSupportArea(card);
-		scn.MoveCardsToDiscard(card);
-		scn.MoveCardsToTopOfDeck(card);
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
 
 		scn.StartGame();
-		
-		assertFalse(true);
+
+		scn.SkipToSite(7);
+		scn.MoveMinionsToTable(runner1, runner2);
+
+		// At site 7: no bonus yet (not at Muster of Gorgoroth)
+		// Goblin Runner base STR 5
+		assertEquals(5, scn.GetStrength(runner1));
+		assertEquals(5, scn.GetStrength(runner2));
+
+		scn.FreepsPass(); // move to site 8
+		assertEquals(8, scn.GetCurrentSiteNumber());
+
+		// At Muster of Gorgoroth with 0 threats: no bonus
+		assertEquals(0, scn.GetThreats());
+		assertEquals(5, scn.GetStrength(runner1));
+		assertEquals(5, scn.GetStrength(runner2));
+
+		// Add 1 threat: each minion +1
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(6, scn.GetStrength(runner1));
+		assertEquals(6, scn.GetStrength(runner2));
+
+		// Add 2 more threats (3 total): each minion +3
+		scn.AddThreats(2);
+		assertEquals(3, scn.GetThreats());
+		assertEquals(8, scn.GetStrength(runner1));
+		assertEquals(8, scn.GetStrength(runner2));
 	}
 }

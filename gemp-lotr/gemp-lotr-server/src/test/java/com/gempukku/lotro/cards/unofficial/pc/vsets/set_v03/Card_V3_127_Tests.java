@@ -19,7 +19,8 @@ public class Card_V3_127_Tests
 				new HashMap<>()
 				{{
 					put("initiate", "103_47");
-					// put other cards in here as needed for the test case
+					put("savage", "1_151");
+					put("reach", "1_137");
 				}},
 				new HashMap<>() {{
 					put("site1", "1_319");
@@ -95,5 +96,36 @@ public class Card_V3_127_Tests
 		scn.ShadowChoose("hinder");
 
 		assertInZone(Zone.DISCARD, initiate);
+	}
+
+	@Test
+	public void DoomCausewayWoundsExertedCharacters() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var savage = scn.GetShadowCard("savage");
+		var reach = scn.GetShadowCard("reach");
+
+		scn.StartGame();
+
+		scn.SkipToSite(8);
+		scn.MoveMinionsToTable(savage);
+		scn.AddWoundsToChar(savage, 1);
+		scn.MoveCardsToHand(reach);
+
+		scn.FreepsPass(); // move to site 9
+		assertEquals(9, scn.GetCurrentSiteNumber());
+
+		// Maneuver: Shadow plays Saruman's Reach (cost 0)
+		// Cost: exert Savage (Uruk-hai) — 1 wound from exertion
+		// Site trigger: wound Savage — 1 more wound
+		// Effect: FP must exert 2 companions OR put on Ring
+		// With only Frodo, forced to put on Ring
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(reach);
+
+		// Savage started with 1 wound, got exerted, then wounded, so it should be dead
+		assertInDiscard(savage);
 	}
 }
