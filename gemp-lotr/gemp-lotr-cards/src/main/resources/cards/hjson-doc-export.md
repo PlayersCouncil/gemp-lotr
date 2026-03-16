@@ -1623,7 +1623,7 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
     Matches all cards which share a subtitle with one of the cards stored in the given `memory` location.
 * Timeword
     * [0]: timeword
-    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  
+    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  If "current" is provided, it will match cards with a timeword matching the current phase.
 * Zone
     * [0]: zone
     Matches all cards within the given `zone`.  See `Zone` for a list of acceptable values.

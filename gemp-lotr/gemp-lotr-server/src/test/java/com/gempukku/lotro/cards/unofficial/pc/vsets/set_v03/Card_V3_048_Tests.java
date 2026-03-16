@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 public class Card_V3_048_Tests
 {
 
-// ----------------------------------------
-// DESERT WIND SCOUT TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -51,9 +47,9 @@ public class Card_V3_048_Tests
 		 * Strength: 10
 		 * Vitality: 2
 		 * Site Number: 4
-		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (2). 
+		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (2).
 		* 	When you play this minion, remove (3) or hinder this minion.
-		* 	Each time this minion is hindered, you may hinder another [raider] minion.
+		* 	Each time this minion is hindered, you may hinder or restore another [raider] minion.
 		*/
 
 		var scn = GetScenario();
@@ -76,8 +72,6 @@ public class Card_V3_048_Tests
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
-
-
 
 	@Test
 	public void DesertWindScoutPayTaxOrHinderOnPlay() throws DecisionResultInvalidException, CardNotFoundException {
@@ -187,5 +181,45 @@ public class Card_V3_048_Tests
 
 		assertTrue(scn.IsHindered(scout));
 		assertFalse(scn.IsHindered(initiate)); // Not dragged along
+	}
+
+	@Test
+	public void DesertWindScoutCanRestoreAnotherRaiderWhenHindered() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata changes: when hindered, offers choice of hinder OR restore another [raider] minion
+		// (original only offered hinder)
+		var scn = GetScenario();
+
+		var scout = scn.GetShadowCard("scout");
+		var initiate = scn.GetShadowCard("initiate");
+		var southron = scn.GetShadowCard("southron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(scout, initiate);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveMinionsToTable(southron);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// First play the Initiate and hinder it (so we have a hindered raider to restore)
+		scn.ShadowPlayCard(initiate);
+		scn.ShadowChoose("Hinder");
+		assertTrue(scn.IsHindered(initiate));
+
+		// Now play the Scout and choose to hinder self
+		scn.ShadowPlayCard(scout);
+		scn.ShadowChoose("Hinder");
+
+		// The AboutToHinder trigger fires - offering choice of hinder or restore
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Errata: choose to restore the hindered initiate, or hinder the other southron
+		scn.ShadowChoose("Restore");
+
+		// Initiate should now be restored
+		assertFalse(scn.IsHindered(initiate));
+		// Scout should still be hindered
+		assertTrue(scn.IsHindered(scout));
 	}
 }

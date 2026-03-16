@@ -13,16 +13,12 @@ import static org.junit.Assert.*;
 public class Card_V3_047_Tests
 {
 
-// ----------------------------------------
-// DESERT WIND INITIATE TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("initiate", "103_47");    // Desert Wind Initiate
-
+					put("initiate", "103_47");
+					put("southron1", "4_222");   // Desert Warrior - Southron Man, cost 2
 					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -43,10 +39,11 @@ public class Card_V3_047_Tests
 		 * Twilight Cost: 1
 		 * Type: Minion
 		 * Subtype: Man
-		 * Strength: 6
+		 * Strength: 7
 		 * Vitality: 2
 		 * Site Number: 4
-		 * Game Text: <b>Southron.</b>  Tracker.  Ambush (3). 
+		 * Game Text: <b>Southron.</b>  Tracker. Ambush (3).
+		* 	Other Southrons are twilight cost -1.
 		* 	When you play this minion, remove (3) or hinder this minion.
 		*/
 
@@ -66,11 +63,10 @@ public class Card_V3_047_Tests
 		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
 		assertEquals(3, scn.GetKeywordCount(card, Keyword.AMBUSH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
-
 
 	@Test
 	public void DesertWindInitiateCanPayTwilightTaxToRemainActive() throws DecisionResultInvalidException, CardNotFoundException {
@@ -140,4 +136,28 @@ public class Card_V3_047_Tests
 		assertTrue(scn.IsHindered(initiate));
 	}
 
+	@Test
+	public void DesertWindInitiateReducesOtherSouthronCostBy1() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata adds: Other Southrons are twilight cost -1
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("initiate");
+		var southron1 = scn.GetShadowCard("southron1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToHand(southron1);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		int twilightBefore = scn.GetTwilight();
+
+		// Desert Warrior (southron1) normally costs 2, with -1 from Initiate = 1
+		// Plus 2 for roaming penalty = 3 total
+		scn.ShadowPlayCard(southron1);
+
+		assertEquals(twilightBefore - 3, scn.GetTwilight());
+	}
 }

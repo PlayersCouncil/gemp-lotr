@@ -44,12 +44,12 @@ public class Card_V3_097_Tests
 		 * Unique: 3
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 1
+		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).
-		* 	<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
-		*/
+		 * 	<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
+		 */
 
 		var scn = GetScenario();
 
@@ -63,7 +63,7 @@ public class Card_V3_097_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 
@@ -286,8 +286,8 @@ public class Card_V3_097_Tests
 
 		scn.ShadowChooseYes(); // Choose to play sky2
 
-		// sky2 costs 1 twilight to play
-		assertEquals(twilight - 2 - 1, scn.GetTwilight());
+		// sky2 costs 2 twilight to play
+		assertEquals(twilight - 2 - 2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sky2); // Played, not shuffled
 	}
 

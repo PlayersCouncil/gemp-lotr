@@ -46,14 +46,15 @@ public class Card_V3_076_Tests
 		 * Vitality: 3
 		 * Site Number: 2
 		 * Game Text: Fierce.
-		* 	At the start of each skirmish involving a Nazgul, you may exert this minion to make that Nazgul strength +1 for each of your sites on the adventure path (limit +3 unless you can spot another Nazgul).
+		* 	Skirmish: Exert this minion to make a Nazgul strength +1 for each of your sites on the adventure path
+		*   (limit +2, or limit +5 if you can spot another Nazgul).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("nelya");
 
-		assertEquals("Úlairë Nelya", card.getBlueprint().getTitle());
+		assertEquals("Ulaire Nelya", card.getBlueprint().getTitle());
 		assertEquals("Glorified to Conquer", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -67,13 +68,10 @@ public class Card_V3_076_Tests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-
-
-
-// ======== SITE COUNTING TESTS ========
+	// ======== SITE COUNTING TESTS ========
 
 	@Test
-	public void NelyaPumpsNazgulByNumberOfShadowOwnedSitesWithNoLimitWhenAnotherNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NelyaPumpsNazgulByNumberOfShadowOwnedSitesWithPlus5LimitWhenAnotherNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -82,7 +80,7 @@ public class Card_V3_076_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 
 		scn.StartGame();
-		scn.SkipToSite(4);  // Sites 2-4 owned by Shadow (4 sites), site 1 owned by Freeps, site 5 about to be shadow
+		scn.SkipToSite(6);  // Sites 2-6 owned by Shadow (5 sites), site 1 owned by Freeps, site 7 about to be shadow
 		scn.MoveMinionsToTable(nelya, witchking);
 		scn.MoveCompanionsToTable(aragorn);
 		scn.SkipToAssignments();
@@ -92,19 +90,18 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, witchking);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPassCurrentPhaseAction();
 
-		// Trigger at start of skirmish
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
-		// Witch-king auto-selected as only Nazgul in skirmish
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(witchking);
 
-		// 2 Nazgul spotted, no limit - should be +4 (Shadow owns sites 2-5)
-		// NOT +5 (which would incorrectly count Freeps' site 1)
-		assertEquals(witchkingBaseStrength + 4, scn.GetStrength(witchking));
+		// 2 Nazgul spotted, limit +5 - should be +5 (Shadow owns sites 2-6)
+		// NOT +6 (which would incorrectly count Freeps' site 1)
+		assertEquals(witchkingBaseStrength + 5, scn.GetStrength(witchking));
 	}
 
 	@Test
-	public void NelyaLimitedToPlus3WithOnlyOneNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NelyaLimitedToPlus2WithOnlyOneNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -122,12 +119,12 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, nelya);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-
-		scn.ShadowAcceptOptionalTrigger();
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(nelya);
 		// Nelya auto-selected as only Nazgul in skirmish
 
-		// Only 1 Nazgul spotted, so limited to +3 (even though 4 Shadow sites)
-		assertEquals(nelyaBaseStrength + 3, scn.GetStrength(nelya));
+		// Only 1 Nazgul spotted, so limited to +2 (even though 4 Shadow sites)
+		assertEquals(nelyaBaseStrength + 2, scn.GetStrength(nelya));
 	}
 
 	@Test
@@ -175,11 +172,15 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, witchking);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPassCurrentPhaseAction();
 
-		scn.ShadowAcceptOptionalTrigger();
-		// Witch-king auto-selected as only Nazgul in skirmish
+		assertEquals(0, scn.GetWoundsOn(nelya));
+		assertEquals(witchkingBaseStrength, scn.GetStrength(witchking));
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(witchking);
 
 		// Only +1 at site 2 (Shadow owns just site 2)
+		assertEquals(1, scn.GetWoundsOn(nelya));
 		assertEquals(witchkingBaseStrength + 1, scn.GetStrength(witchking));
 	}
 
@@ -213,10 +214,15 @@ public class Card_V3_076_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		scn.ShadowAcceptOptionalTrigger();
-		// Witch-king auto-selected as only Nazgul in skirmish
+		scn.FreepsPassCurrentPhaseAction();
 
-		// Shadow owns 0 sites, so +0 bonus
+		assertEquals(0, scn.GetWoundsOn(nelya));
+		assertEquals(witchkingBaseStrength, scn.GetStrength(witchking));
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(witchking);
+
+		// Only +0(Shadow owns no sites)
+		assertEquals(1, scn.GetWoundsOn(nelya));
 		assertEquals(witchkingBaseStrength, scn.GetStrength(witchking));
 	}
 }
