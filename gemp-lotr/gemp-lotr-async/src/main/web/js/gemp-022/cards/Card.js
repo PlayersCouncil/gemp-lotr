@@ -640,7 +640,7 @@ class Card {
     static isMetaSiteModifier(blueprintId) {
         if (!blueprintId) return false;
         var setNum = parseInt(blueprintId.split("_")[0]);
-        return setNum >= 91 && setNum <= 93;
+        return setNum >= 90 && setNum <= 93;
     }
 
     /**

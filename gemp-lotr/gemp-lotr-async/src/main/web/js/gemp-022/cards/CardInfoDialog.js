@@ -35,6 +35,7 @@ class CardInfoDialog {
 			.dialog({
 				autoOpen: false,
 				closeOnEscape: true,
+				closeText: "",
 				resizable: false,
 				title: "Card Information"
 			});
@@ -131,7 +132,9 @@ class CardInfoDialog {
 				return false;
 			}
 		};
-		this.infoDialog.swipe(swipeOptions);
+		if (typeof this.infoDialog.swipe === "function") {
+			this.infoDialog.swipe(swipeOptions);
+		}
 
 		this.updateMaxBoundaries(maxWidth, maxHeight);
 	}
@@ -264,7 +267,10 @@ class CardInfoDialog {
 			this.cardDisplay.setInvert(true);
 		}
 
-		this.cardDisplay.addInvertClick();
+		// Don't add click-to-flip for meta-site cards (split rendering doesn't support it)
+		if (!Card.isMetaSiteModifier(card.bareBlueprint)) {
+			this.cardDisplay.addInvertClick();
+		}
 
 		this.updateCurrentZoom();
 		this.resize();

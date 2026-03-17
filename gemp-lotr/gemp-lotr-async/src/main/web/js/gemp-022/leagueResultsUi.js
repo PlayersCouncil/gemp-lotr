@@ -3,6 +3,7 @@ var LeagueResultsUI = Class.extend({
     questionDialog:null,
     formatDialog:null,
     joinCallback:null,
+    cardInfoDialog:null,
 
     init:function (url, joinCallback) {
         this.communication = new GempLotrCommunication(url,
@@ -147,9 +148,13 @@ var LeagueResultsUI = Class.extend({
 
                 var pathDiv = $("<div class='rtmd-path-display'></div>");
                 pathDiv.append("<h3>Race to Mount Doom</h3>");
+                pathDiv.append(`<div style='color:#888; margin-bottom:8px;'><p>Race to Mount Doom is a meta-progression constructed league.  Every player starts at the first meta-site, which will be played automatically to your support area whenever you play matches in this league.  Such meta-sites tend to have game text which is beneficial at low levels, detrimental at middle levels, and catastrophic at high levels.</p>
+                    <p>As you play matches, good performance will push you to harder and harder meta-sites.  Each time you get promoted, you will leave the old meta-site behind permanently and start using the next meta-site.  Some meta-sites impose deckbuilding restrictions, so watch out!</p>
+                    <p>There are dozens of different meta-site modifiers, so no two Races will ever be the same!</p>
+                    <p>NOTE: Any meta-site that says "you" or "yours" <i>only</i> affects that player.  If it does not have one of those words, it affects both players.</p></div>`);
 
                 if (playerPosition) {
-                    pathDiv.append("<div class='rtmd-player-position'>Your position: <b>" + playerPosition + "</b> of " + pathLength + "</div>");
+                    pathDiv.append("<div class='rtmd-player-position'>Your level: <b>" + playerPosition + "</b> of " + pathLength + "</div>");
                 }
 
                 var advanceDesc = advancementMode === "SCORE" ? "points" : "win(s)";
@@ -157,28 +162,70 @@ var LeagueResultsUI = Class.extend({
                     pathDiv.append("<div style='color:#888; margin-bottom:8px;'>Advance every " + advanceFactor + " " + advanceDesc + "</div>");
                 }
 
-                var pathTable = $("<table class='rtmd-path-table'><tr><th>Pos</th><th>Meta-Site</th><th>Blueprint</th></tr></table>");
+                var cardRow = $("<div style='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px auto;max-width:700px;'></div>");
                 var metaSites = league.getElementsByTagName("metaSite");
                 for (var i = 0; i < metaSites.length; i++) {
                     var site = metaSites[i];
-                    var pos = site.getAttribute("position");
-                    var name = site.getAttribute("name") || "(unknown)";
-                    var bpId = site.getAttribute("blueprintId");
+                    var pos = parseInt(site.getAttribute("position"));
+                    var modBpId = site.getAttribute("blueprintId");
+                    var visBpId = site.getAttribute("visualBlueprintId");
 
-                    var rowClass = "";
+                    // Determine highlight state
+                    var borderStyle = "2px solid transparent";
                     if (playerPosition) {
-                        var posInt = parseInt(pos);
                         var playerPosInt = parseInt(playerPosition);
-                        if (posInt === playerPosInt) {
-                            rowClass = " class='rtmd-current'";
-                        } else if (cumulative && posInt < playerPosInt) {
-                            rowClass = " class='rtmd-active'";
+                        if (pos === playerPosInt) {
+                            borderStyle = "3px solid gold";
+                        } else if (cumulative && pos < playerPosInt) {
+                            borderStyle = "2px solid rgba(255,215,0,0.4)";
                         }
                     }
 
-                    pathTable.append("<tr" + rowClass + "><td>" + pos + "</td><td>" + name + "</td><td>" + bpId + "</td></tr>");
+                    // Build composite card thumbnail
+                    var visualUrl = visBpId ? Card.getImageUrl(visBpId) : Card.getImageUrl(modBpId);
+                    var modifierUrl = Card.getImageUrl(modBpId);
+                    var overlayHeight = Card.MetaSiteOverlayHeight;
+
+                    var thumbWrapper = $("<div style='position:relative;width:120px;height:167px;border:" + borderStyle
+                        + ";border-radius:8px;overflow:hidden;cursor:pointer;flex-shrink:0;'></div>");
+                    thumbWrapper.append("<img src='" + visualUrl + "' style='width:100%;height:100%;object-fit:cover;'>");
+                    if (visBpId) {
+                        thumbWrapper.append("<div style='position:absolute;bottom:0;width:100%;height:" + overlayHeight
+                            + "%;overflow:hidden;'><img src='" + modifierUrl
+                            + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'></div>");
+                    }
+                    thumbWrapper.append("<div style='position:absolute;top:30%;left:10%;font-size:11px;font-weight:bold;"
+                        + "color:white;text-shadow:0 0 3px black,0 0 3px black;'>" + pos + "</div>");
+
+                    // Click handler: open card in the shared CardInfoDialog
+                    (function(vBpId, mBpId) {
+                        thumbWrapper.click(function(event) {
+                            if (!that.cardInfoDialog) {
+                                that.cardInfoDialog = new CardInfoDialog(window.innerWidth, window.innerHeight);
+                                // Close dialog on click outside (same pattern as deckbuilder/game)
+                                $(document).on("mouseup", function(e) {
+                                    if (that.cardInfoDialog && that.cardInfoDialog.isOpen()) {
+                                        // Don't close if clicking inside the dialog
+                                        if ($(e.target).closest(".ui-dialog").length === 0) {
+                                            that.cardInfoDialog.mouseUp();
+                                        }
+                                    }
+                                });
+                            }
+                            // Create a Card from the visual blueprint (or modifier if no visual)
+                            var card = new Card(vBpId || mBpId, "", "", "SPECIAL", null, "");
+                            if (vBpId) {
+                                Card.metaSiteOverlays[mBpId] = card.imageUrl;
+                                card.overlayImageUrl = Card.getImageUrl(mBpId);
+                            }
+                            that.cardInfoDialog.showCard(card);
+                            event.stopPropagation();
+                        });
+                    })(visBpId, modBpId);
+
+                    cardRow.append(thumbWrapper);
                 }
-                pathDiv.append(pathTable);
+                pathDiv.append(cardRow);
 
                 if (cumulative) {
                     pathDiv.append("<div style='color:#888; font-size:0.9em; margin-top:4px;'>Cumulative mode: all prior meta-sites remain active</div>");
@@ -339,10 +386,14 @@ var LeagueResultsUI = Class.extend({
         var standingsTable = $("<table class='standings'></table>");
 
         var headerRow = "<tr><th>Standing</th>";
-        if (showPosition) headerRow += "<th>Position</th>";
+        if (showPosition) {
+            headerRow += "<th>Level</th>";
+        }
         headerRow += "<th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th>";
         headerRow += "<th></th><th>Standing</th>";
-        if (showPosition) headerRow += "<th>Position</th>";
+        if (showPosition) {
+            headerRow += "<th>Level</th>";
+        }
         headerRow += "<th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>";
         standingsTable.append(headerRow);
 
