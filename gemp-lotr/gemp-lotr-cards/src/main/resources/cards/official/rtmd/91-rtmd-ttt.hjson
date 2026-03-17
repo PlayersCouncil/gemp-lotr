@@ -146,7 +146,7 @@
 				}
 			}
 		]
-		gametext: Your weapons lose all Damage bonuses.
+		gametext: Your weapons lose all damage bonuses.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -191,7 +191,7 @@
 				}
 			}
 		]
-		gametext: For each companion over 4, each of your opponents may draw a card at the start of his or her Shadow phase.
+		gametext: For each companion over 4, each of your opponents may draw a card at the start of their Shadow phase.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -512,7 +512,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: You may not perform a maneuver phase action.
+		gametext: You may not perform maneuver phase actions.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -590,7 +590,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: You may not play a Man.
+		gametext: You may not play Men.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -668,7 +668,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Each time your fellowship moves, add (3) (or (6) if you can spot 6 companions).
+		gametext: Each time your fellowship moves, add (3) \(or (6) if you can spot 6 companions).
 		lore: ""
 		promotext: ""
 		helptext: ""

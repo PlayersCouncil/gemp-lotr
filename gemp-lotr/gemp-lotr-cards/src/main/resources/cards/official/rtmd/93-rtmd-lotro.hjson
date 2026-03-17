@@ -65,7 +65,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Your Ring-bearer (except Frodo or Sam) is resistance +3.
+		gametext: Your Ring-bearer&nbsp;(except Frodo or Sam) is resistance +3.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -338,7 +338,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Fellowship: Add (3) to play a companion from your draw deck; he or she comes into play exhausted.
+		gametext: Fellowship: Add (3) to play a companion from your draw deck; they come into play exhausted.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -377,7 +377,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: At the start of the regroup phase, you may discard your Dunland possession to take control of a site.
+		gametext: At the start of the regroup phase, you may discard your [Dunland] possession to take control of a site.
 		lore: ""
 		promotext: ""
 		helptext: ""

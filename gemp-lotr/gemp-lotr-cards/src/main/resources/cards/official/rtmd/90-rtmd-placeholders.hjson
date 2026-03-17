@@ -1,18 +1,17 @@
 {
 	90_1: {
 		cardInfo: {
-			//id: 90_1.0
-			parent: 90_1
+			//id: RT_1.0
+			parent: RT_1
 			variant: ORIGINAL
-			variantPath: decipher/rtmd
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S01.0_card.jpg
-			collInfo: 90_1
+			image: race/RT/LOTR-ENRTS001.0_card.jpg
+			collInfo: RT_1
 			rarity: _
 		}
 		title: The Shire
 		type: MetaSite
-		site: 1
 		intensity: 1
 		effects: [
 			{
@@ -28,7 +27,7 @@
 			}
 		]
 		gametext: ""
-		lore: ""
+		lore: `"Forty leagues it stretched from the Far Downs to the Brandywine Bridge, and fifty from the northern moors to the marshes in the south.  The Hobbits named it the Shire..."`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -41,25 +40,33 @@
 
 	90_2: {
 		cardInfo: {
-			//id: 90_2.0
-			parent: 90_2
+			//id: RT_2.0
+			parent: RT_2
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S02.0_card.jpg
-			collInfo: 90_2
+			image: race/RT/LOTR-ENRTS002.0_card.jpg
+			collInfo: RT_2
 			rarity: _
 		}
 		title: Rivendell
 		type: MetaSite
-		site: 2
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 2
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"'Here in Rivendell there live still some of his chief foes: the Elven-wise, lords of the Eldar from beyond the furthest seas.  They do not fear the Ringwraiths...'"`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -70,27 +77,74 @@
 		}
 	}
 
-	90_3: {
+	90_1: {
 		cardInfo: {
-			//id: 90_3.0
-			parent: 90_3
+			//id: RP_1.0
+			parent: RP_1
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S03.0_card.jpg
-			collInfo: 90_3
+			image: race/RP/LOTR-ENRPS001.0_card.jpg
+			collInfo: RP_1
 			rarity: _
 		}
-		title: Isengard
+		title: Lothlorien
 		type: MetaSite
-		site: 3
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"`There lie the woods of Lothlórien! ' said Legolas. `That is the fairest of all the dwellings of my people. There are no trees like the trees of that land...and the floor of the wood is golden, and golden is the roof, and its pillars are of silver, for the bark of the trees is smooth and grey."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_2: {
+		cardInfo: {
+			//id: RP_2.0
+			parent: RP_2
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RP/LOTR-ENRPS002.0_card.jpg
+			collInfo: RP_2
+			rarity: _
+		}
+		title: Edoras
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"'Edoras those courts are called,' said Gandalf, 'and Meduseld is that golden hall. There dwells Théoden son of Thengel, King of the Mark of Rohan...But we must ride more warily; for war is abroad, and the Rohirrim, the Horse-lords, do not sleep, even if it seem so from afar.'"`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -103,25 +157,72 @@
 
 	90_4: {
 		cardInfo: {
-			//id: 90_4.0
-			parent: 90_4
+			//id: RK_4.0
+			parent: RK_4
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S04.0_card.jpg
-			collInfo: 90_4
+			image: race/RK/LOTR-ENRKS004.0_card.jpg
+			collInfo: RK_4
+			rarity: _
+		}
+		title: Minas Tirith
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"For the fashion of Minas Tirith was such that it was built on seven levels, each delved into the hill, and about each was set a wall, and in each was a gate. But the gates were not set in a line..."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_4: {
+		cardInfo: {
+			//id: RT_4.0
+			parent: RT_4
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RT/LOTR-ENRTS004.0_card.jpg
+			collInfo: RT_4
 			rarity: _
 		}
 		title: Helm's Gate
 		type: MetaSite
-		site: 4
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"At Helm's Gate, before the mouth of the Deep, there was a heel of rock thrust outward by the northern cliff.  There upon its spur stood high walls of ancient stone, and within them was a lofty tower."`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -134,25 +235,111 @@
 
 	90_5: {
 		cardInfo: {
-			//id: 90_5.0
-			parent: 90_5
+			//id: RK_5.0
+			parent: RK_5
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S05.0_card.jpg
-			collInfo: 90_5
+			image: race/RK/LOTR-ENRKS005.0_card.jpg
+			collInfo: RK_5
+			rarity: _
+		}
+		title: Ruins of Osgiliath
+		type: MetaSite
+		intensity: 7
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"...Osgiliath, through the midst of which the Great River flowed; and the Numenoreans built there a great bridge, upon which tehre were towers and houses of stone wonderful to behold..."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_5: {
+		cardInfo: {
+			//id: RT_5.0
+			parent: RT_5
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RT/LOTR-ENRTS005.0_card.jpg
+			collInfo: RT_5
 			rarity: _
 		}
 		title: Emyn Muil
 		type: MetaSite
-		site: 5
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 8
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"'On the further side are the bleak hills of the Emyn Muil.  The wind blows from the East there, for they look out over the Dead Marshes and the Noman-lands to Cirith Gorgor and the black gates of Mordor.'"`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_3: {
+		cardInfo: {
+			//id: RP_3.0
+			parent: RP_3
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RP/LOTR-ENRPS003.0_card.jpg
+			collInfo: RP_3
+			rarity: _
+		}
+		title: Caradhras the Cruel
+		type: MetaSite
+		intensity: 9
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"'The heights away north are whiter than they were; snow is lying far down their shoulders. Tonight we shall be on our way high up towards the Redhorn Gate. We may well be seen by watchers on that narrow path...but the weather may prove a more deadly enemy than any.'"`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -165,25 +352,111 @@
 
 	90_6: {
 		cardInfo: {
-			//id: 90_6.0
-			parent: 90_6
+			//id: RT_6.0
+			parent: RT_6
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S06.0_card.jpg
-			collInfo: 90_6
+			image: race/RT/LOTR-ENRTS006.0_card.jpg
+			collInfo: RT_6
 			rarity: _
 		}
-		title: Dead Marshes
+		title: The Dead Marshes
 		type: MetaSite
-		site: 6
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 10
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"'Unless indeed it is some lying trick of the Enemy.  I have seen the faces of fair warriors of old laid in sleep beneath the pools of the Dead Marshes, or seeming so by his foul arts.'"`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_3: {
+		cardInfo: {
+			//id: RK_3.0
+			parent: RK_3
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RK/LOTR-ENRKS003.0_card.jpg
+			collInfo: RK_3
+			rarity: _
+		}
+		title: The Paths of the Dead
+		type: MetaSite
+		intensity: 11
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"...and there stood a sheer wall of rock, and in the wall the Dark Door gaped before them like the mouth of night. Signs and figures were carved above its wide arch...and fear flowed from it like a grey vapour."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_3: {
+		cardInfo: {
+			//id: RT_3.0
+			parent: RT_3
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RT/LOTR-ENRTS003.0_card.jpg
+			collInfo: RT_3
+			rarity: _
+		}
+		title: Isengard
+		type: MetaSite
+		intensity: 12
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"Beneath the mountain's arm within the Wizard's Vale through years uncounted had stood that ancient place that Men called Isengard....Saruman had dwelt there long and had not been idle."`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -196,25 +469,72 @@
 
 	90_7: {
 		cardInfo: {
-			//id: 90_7.0
-			parent: 90_7
+			//id: RK_7.0
+			parent: RK_7
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S07.0_card.jpg
-			collInfo: 90_7
+			image: race/RK/LOTR-ENRKS007.0_card.jpg
+			collInfo: RK_7
 			rarity: _
 		}
-		title: Osgiliath
+		title: Cirith Ungol
 		type: MetaSite
-		site: 7
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 13
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"...they were out in the open again now, and terror ran along the walls.  All might be dead in the Tower of Cirith Ungol, but it was steeped in fear and evil still."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_4: {
+		cardInfo: {
+			//id: RP_4.0
+			parent: RP_4
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RP/LOTR-ENRPS004.0_card.jpg
+			collInfo: RP_4
+			rarity: _
+		}
+		title: The Black Pit of Moria
+		type: MetaSite
+		intensity: 14
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"Only once before have I seen them from afar in waking life, but I know them and their names, for under them lies Khazad-dûm, the Dwarrowdelf, that is now called the Black Pit, Moria in the Elvish tongue.'"`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -227,25 +547,111 @@
 
 	90_8: {
 		cardInfo: {
-			//id: 90_8.0
-			parent: 90_8
+			//id: RT_8.0
+			parent: RT_8
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S08.0_card.jpg
-			collInfo: 90_8
+			image: race/RT/LOTR-ENRTS008.0_card.jpg
+			collInfo: RT_8
 			rarity: _
 		}
 		title: Minas Morgul
 		type: MetaSite
-		site: 8
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 15
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"'And on a time evil things came forth, and they took Minas Ithil and abode in it, and they made it into a place of dread; and it is called Minas Morgul, the Tower of Sorcery.'"`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_6: {
+		cardInfo: {
+			//id: RK_6.0
+			parent: RK_6
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RK/LOTR-ENRKS006.0_card.jpg
+			collInfo: RK_6
+			rarity: _
+		}
+		title: Shelob's Lair
+		type: MetaSite
+		intensity: 16
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"'This is the entrance to the tunnel.' He did not speak its name: Torech Ungol, Shelob's Lair.  Out of it came a stench... a foul reek, as if filth unnameable were piled and hoarded in the dark within."`
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	90_8: {
+		cardInfo: {
+			//id: RK_8.0
+			parent: RK_8
+			variant: ORIGINAL
+			variantPath: rtmd
+			revision: 0
+			image: race/RK/LOTR-ENRKS008.0_card.jpg
+			collInfo: RK_8
+			rarity: _
+		}
+		title: The Black Gate
+		type: MetaSite
+		intensity: 17
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: ""
+		lore: `"Across the mouth of the pass, from cliff to cliff, the Dark Lord had built a rampart of stone.  In it there was a single gate of iron, and upon its battlement sentinels paced unceasingly."`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -258,25 +664,33 @@
 
 	90_9: {
 		cardInfo: {
-			//id: 90_9.0
-			parent: 90_9
+			//id: RK_9.0
+			parent: RK_9
 			variant: ORIGINAL
-			variantPath: promos/pc
+			variantPath: rtmd
 			revision: 0
-			image: RTMD/LOTR-EN90S09.0_card.jpg
-			collInfo: 90_9
+			image: race/RK/LOTR-ENRKS009.0_card.jpg
+			collInfo: RK_9
 			rarity: _
 		}
 		title: Mount Doom
 		type: MetaSite
-		site: 9
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
+		intensity: 18
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
 		gametext: ""
-		lore: ""
+		lore: `"...and it looked upon Gorgoroth, the valley of terror in the Land of Mordor.  Darkness lay there under the Sun.  Fire glowed amid the smoke.  Mount Doom was burning, and a great reek rising."`
 		promotext: ""
 		helptext: ""
 		alts: {
@@ -286,286 +700,5 @@
 			}
 		}
 	}
-
-	90_10: {
-		cardInfo: {
-			//id: 90_10.0
-			parent: 90_10
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S010.0_card.jpg
-			collInfo: 90_10
-			rarity: _
-		}
-		title: Green Dragon Inn
-		type: MetaSite
-		site: 1
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_11: {
-		cardInfo: {
-			//id: 90_11.0
-			parent: 90_11
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S011.0_card.jpg
-			collInfo: 90_11
-			rarity: _
-		}
-		title: Rohan Camp
-		type: MetaSite
-		site: 2
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_12: {
-		cardInfo: {
-			//id: 90_12.0
-			parent: 90_12
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S012.0_card.jpg
-			collInfo: 90_12
-			rarity: _
-		}
-		title: Path of the Dead
-		type: MetaSite
-		site: 3
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_13: {
-		cardInfo: {
-			//id: 90_13.0
-			parent: 90_13
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S013.0_card.jpg
-			collInfo: 90_13
-			rarity: _
-		}
-		title: Minas Tirith
-		type: MetaSite
-		site: 4
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_14: {
-		cardInfo: {
-			//id: 90_14.0
-			parent: 90_14
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S014.0_card.jpg
-			collInfo: 90_14
-			rarity: _
-		}
-		title: Osgiliath
-		type: MetaSite
-		site: 5
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_15: {
-		cardInfo: {
-			//id: 90_15.0
-			parent: 90_15
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S015.0_card.jpg
-			collInfo: 90_15
-			rarity: _
-		}
-		title: Shelob's Lair
-		type: MetaSite
-		site: 6
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_16: {
-		cardInfo: {
-			//id: 90_16.0
-			parent: 90_16
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S016.0_card.jpg
-			collInfo: 90_16
-			rarity: _
-		}
-		title: Cirith Ungol
-		type: MetaSite
-		site: 7
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_17: {
-		cardInfo: {
-			//id: 90_17.0
-			parent: 90_17
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S017.0_card.jpg
-			collInfo: 90_17
-			rarity: _
-		}
-		title: Black Gate
-		type: MetaSite
-		site: 8
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	90_18: {
-		cardInfo: {
-			//id: 90_18.0
-			parent: 90_18
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: RTMD/LOTR-EN90S018.0_card.jpg
-			collInfo: 90_18
-			rarity: _
-		}
-		title: Mount Doom
-		type: MetaSite
-		site: 9
-		intensity: 1
-		effects: {
-			type: DisplayableInformation
-			text: This is a Race to Mount Doom league card.
-		}
-		gametext: ""
-		lore: ""
-		promotext: ""
-		helptext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	
 
 }

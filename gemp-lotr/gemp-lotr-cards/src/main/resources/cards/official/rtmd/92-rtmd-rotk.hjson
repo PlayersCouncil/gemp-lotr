@@ -26,7 +26,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Your draw deck may contain up to six copies of any card (instead of four).
+		gametext: Your draw deck may contain up to 6 copies of any card (instead of 4).
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -65,7 +65,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Shadow: Once per turn, exert your Isengard Man to play an Isengard condition from your draw deck.
+		gametext: Shadow: Once per turn, exert your [Isengard] Man to play an [Isengard] condition from your draw deck.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -104,7 +104,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: All sites are underground.
+		gametext: All sites gain <b>underground</b>.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -377,7 +377,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Shadow: Discard three cards from hand to play a minion from your discard pile.
+		gametext: Shadow: Discard 3 cards from hand to play a minion from your discard pile.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -533,7 +533,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Shadow: Play 3 Raider minions to discard Sam.
+		gametext: Shadow: Play 3 [Raider] minions to discard Sam.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -572,7 +572,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Your Dwarves are each strength +1 and cannot take more than one wound during each skirmish phase.
+		gametext: Your Dwarves are strength +1 and cannot take more than one wound during each skirmish phase.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -689,7 +689,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Each time your fellowship moves, discard one non-Hobbit companion (two if at site 7 or higher).
+		gametext: Each time your fellowship moves, discard 1 non-Hobbit companion (or 2 if at site 7 or higher).
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -806,7 +806,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Fellowship: Play a companion. Its twilight cost is -4.
+		gametext: Fellowship: Play a companion; their twilight cost is -4.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -845,7 +845,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Shadow: Play a weather condition to draw a card. Its twilight cost is -2.
+		gametext: Shadow: Play a weather condition to draw a card; its twilight cost is -2.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -1079,7 +1079,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Fellowship or Shadow: Play an artifact from your draw deck (once per turn).
+		gametext: <b>Fellowship</b> <i>or</i> Shadow: Play an artifact from your draw deck (limit once per turn).
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -1118,7 +1118,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: Shadow: Open and reveal a sealed booster pack (once per turn). You may play one shadow card revealed, ignoring all costs.
+		gametext: Shadow: Open and reveal a sealed booster pack (limit once per turn). You may play one shadow card revealed, ignoring all costs.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -1274,7 +1274,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: At the start of each of your Shadow phases, you may take one card with \"initiative\" in its game text into hand from your draw deck.
+		gametext: At the start of each of your Shadow phases, you may take one card with "initiative" in its game text into hand from your draw deck.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -1391,7 +1391,7 @@
 				text: Placeholder effect for development.
 			}
 		]
-		gametext: You cannot have more than 5 companions in your fellowship. Fellowship: Exert the Ring-bearer to discard another companion.
+		gametext: You cannot have more than 5 companions in your fellowship.\Fellowship: Exert the Ring-bearer to discard another companion.
 		lore: ""
 		promotext: ""
 		helptext: ""
