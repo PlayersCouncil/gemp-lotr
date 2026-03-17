@@ -42,6 +42,13 @@ public class RTMDLeague extends ConstructedLeague {
     }
 
     /**
+     * Returns the ordered list of visual position card blueprint IDs (set 90), parallel to racePath.
+     */
+    public List<String> getVisualPath() {
+        return Collections.unmodifiableList(_parameters.raceVisualPath);
+    }
+
+    /**
      * Returns the number of sites on the path (5 or 9 typically).
      */
     public int getPathLength() {
@@ -96,6 +103,21 @@ public class RTMDLeague extends ConstructedLeague {
             return Collections.unmodifiableList(_parameters.racePath.subList(0, position));
         } else {
             return List.of(_parameters.racePath.get(position - 1));
+        }
+    }
+
+    /**
+     * Returns the visual position card blueprint ID(s) for the given position.
+     * Parallel to getMetaSitesForPosition — same index, same cumulative logic.
+     */
+    public List<String> getVisualCardsForPosition(int position) {
+        if (position < 1 || position > getPathLength())
+            throw new IllegalArgumentException("Position " + position + " is out of range for path of length " + getPathLength());
+
+        if (_parameters.raceCumulative) {
+            return Collections.unmodifiableList(_parameters.raceVisualPath.subList(0, position));
+        } else {
+            return List.of(_parameters.raceVisualPath.get(position - 1));
         }
     }
 

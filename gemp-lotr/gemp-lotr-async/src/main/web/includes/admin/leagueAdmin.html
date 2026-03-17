@@ -315,8 +315,28 @@ $(document).ready(
 		
 		$("#rtmd-path").trigger("input");
 
+		// Live visual path counter
+		$("#rtmd-visual-path").on("input", function() {
+			var lines = $(this).val().split('\n').filter(function(l) { return l.trim() !== ''; });
+			var count = lines.length;
+			var modCount = $("#rtmd-path").val().split('\n').filter(function(l) { return l.trim() !== ''; }).length;
+			var match = (count === modCount);
+			$("#rtmd-visual-path-count").html(count + " visual cards" + (match ? " ✓" : " (must match modifier count: " + modCount + ")"));
+			$("#rtmd-visual-path-count").css("color", match ? "#0a0" : "#c00");
+		});
+
+		$("#rtmd-visual-path").trigger("input");
+		// Re-validate visual count when modifier path changes
+		$("#rtmd-path").on("input", function() { $("#rtmd-visual-path").trigger("input"); });
+
 		function gatherRTMDPath() {
 			return $("#rtmd-path").val().split('\n')
+				.map(function(l) { return l.trim(); })
+				.filter(function(l) { return l !== ''; });
+		}
+
+		function gatherRTMDVisualPath() {
+			return $("#rtmd-visual-path").val().split('\n')
 				.map(function(l) { return l.trim(); })
 				.filter(function(l) { return l !== ''; });
 		}
@@ -346,6 +366,7 @@ $(document).ready(
 				serieData.maxMatches,
 
 				gatherRTMDPath(),
+				gatherRTMDVisualPath(),
 				$("#rtmd-cumulative").prop('checked'),
 				$("#rtmd-intensity-floor").val(),
 				$("#rtmd-intensity-ceiling").val(),
@@ -1000,6 +1021,22 @@ function leagueErrorMap(outputControl, callback=null) {
 91_9
 91_10</textarea>
 				<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers (need 5 or 9)</div>
+			</div>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Visual Cards (set 90 IDs, 1 per line): </div>
+			<div class="flex-vert flex-fill">
+				<textarea rows="10" cols="30" id="rtmd-visual-path" class="flex-fill" placeholder="90_1&#10;90_2&#10;90_3&#10;...">90_1
+90_2
+90_3
+90_4
+90_5
+90_6
+90_7
+90_8
+90_9</textarea>
+				<div id="rtmd-visual-path-count" style="color:#888; margin-top:4px;">0 visual cards</div>
 			</div>
 		</div>
 

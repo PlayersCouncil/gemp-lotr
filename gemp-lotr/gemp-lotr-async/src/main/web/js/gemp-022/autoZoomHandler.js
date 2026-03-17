@@ -269,6 +269,7 @@ class AutoZoom {
 		const testingText = target.attr("data-testingText");
 		const backSideTestingText = target.attr("data-backSideTestingText");
 		const card = new Card(blueprintId, testingText, backSideTestingText, "SPECIAL", "hint", "");
+		Card.applyMetaSiteOverlay(card);
 
 		this.baseImageDiv = target[0];
 		this.displayPreviewImage(card, this.baseImageDiv);

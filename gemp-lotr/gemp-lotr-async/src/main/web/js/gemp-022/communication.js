@@ -1233,7 +1233,7 @@ var GempLotrCommunication = Class.extend({
                                        inviteOnly, description,
                                        topPrize, topCutoff, participationPrize, participationGames,
                                        formats, serieDurations, maxMatches,
-                                       racePath, raceCumulative, raceIntensityFloor, raceIntensityCeiling,
+                                       racePath, raceVisualPath, raceCumulative, raceIntensityFloor, raceIntensityCeiling,
                                        raceAdvancementMode, raceAdvanceFactor,
                                        callback, errorMap) {
         let url = this.url + "/admin/addRTMDLeague";
@@ -1261,6 +1261,7 @@ var GempLotrCommunication = Class.extend({
                 inviteOnly:inviteOnly,
                 description:description,
                 racePath:racePath,
+                raceVisualPath:raceVisualPath,
                 raceCumulative:raceCumulative,
                 raceIntensityFloor:raceIntensityFloor,
                 raceIntensityCeiling:raceIntensityCeiling,

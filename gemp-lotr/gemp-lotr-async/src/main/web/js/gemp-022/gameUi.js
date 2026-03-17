@@ -761,6 +761,7 @@ var GempLotrGameUI = Class.extend({
             var testingText = tar.attr("data-testingText");
             var backSideTestingText = tar.attr("data-backSideTestingText");
             var card = new Card(blueprintId, testingText, backSideTestingText, "SPECIAL", "hint", "");
+            Card.applyMetaSiteOverlay(card);
             this.displayCardInfo(card);
             event.stopPropagation();
             return false;
@@ -1557,9 +1558,42 @@ var GempLotrGameUI = Class.extend({
     },
     
     preGameSetup: function (element) {
+        // Always build the meta-site overlay lookup, even on reconnect,
+        // so that cards recreated via PCIP events get their visual overlays.
+        var metaSites = element.getAttribute("metaSites");
+        if (metaSites != null && metaSites !== "") {
+            var playerEntries = metaSites.split(",");
+            for (var i = 0; i < playerEntries.length; i++) {
+                var colonIdx = playerEntries[i].indexOf(":");
+                var pairsStr = playerEntries[i].substring(colonIdx + 1);
+                var pairs = pairsStr.split(";");
+                for (var j = 0; j < pairs.length; j++) {
+                    var ids = pairs[j].split("|");
+                    Card.metaSiteOverlays[ids[1]] = Card.getImageUrl(ids[0]);
+                }
+            }
+        }
+
+        // Retroactively fix up any meta-site cards already rendered (PCIP can arrive before PGS on reconnect)
+        $(".card").each(function () {
+            var card = $(this).data("card");
+            if (card && Card.isMetaSiteModifier(card.bareBlueprint) && !card.overlayImageUrl) {
+                if (Card.applyMetaSiteOverlay(card)) {
+                    // Update the rendered img src to the visual card
+                    $(this).children("img").first().attr("src", card.imageUrl);
+                    // Add the modifier overlay div
+                    var overlayHeight = Card.MetaSiteOverlayHeight;
+                    var overlayDiv = $("<div class='metaSiteOverlay' style='position:absolute;bottom:0;width:100%;height:" + overlayHeight + "%;overflow:hidden;'>"
+                        + "<img src='" + card.overlayImageUrl + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'>"
+                        + "</div>");
+                    $(this).append(overlayDiv);
+                }
+            }
+        });
+
         if(this.initialized) {
             this.pregamePanel.hide();
-            
+
             return;
         }
         
@@ -1600,28 +1634,97 @@ var GempLotrGameUI = Class.extend({
         rightTitle.html(rightPlayer);
         rightContent.html("");
 
-        if(maps != null && maps !== "") {
-            maps = maps.split(",");
-            mapA = maps[0].split(":");
-            mapB = maps[1].split(":");
-            
-            var cardA = new Card(mapA[1], "", "", "SPECIAL", -1, null);
-            var cardB = new Card(mapB[1], "", "", "SPECIAL", -2, null);
-            var mapADiv = this.createCardDiv(cardA);
-            var mapBDiv = this.createCardDiv(cardB);
-            
-            if(mapA[0] === leftPlayer) {
-                leftContent.append(mapADiv);
-                rightContent.append(mapBDiv);
+        // Collect per-player pregame cards: maps and/or RTMD meta-sites
+        var leftCards = [];
+        var rightCards = [];
+        var cardIdCounter = -1;
+
+        // Maps (e.g., PC-Movie map card)
+        if (maps != null && maps !== "") {
+            var mapEntries = maps.split(",");
+            var playerMaps = {};
+            for (var i = 0; i < mapEntries.length; i++) {
+                var parts = mapEntries[i].split(":");
+                playerMaps[parts[0]] = parts[1];
             }
-            else {
-                leftContent.append(mapBDiv);
-                rightContent.append(mapADiv);
+            if (playerMaps[leftPlayer]) {
+                leftCards.push({ blueprintId: playerMaps[leftPlayer], label: "Map" });
             }
-            
-            $(".borderOverlay").remove(); //It's super long for some reason.
+            if (playerMaps[rightPlayer]) {
+                rightCards.push({ blueprintId: playerMaps[rightPlayer], label: "Map" });
+            }
         }
-        
+
+        // RTMD meta-sites
+        var metaSites = element.getAttribute("metaSites");
+        if (metaSites != null && metaSites !== "") {
+            // Format: "player1:vis1|mod1;vis2|mod2,player2:vis1|mod1"
+            var playerEntries = metaSites.split(",");
+            var playerMetaSites = {};
+            for (var i = 0; i < playerEntries.length; i++) {
+                var colonIdx = playerEntries[i].indexOf(":");
+                var playerId = playerEntries[i].substring(0, colonIdx);
+                var pairsStr = playerEntries[i].substring(colonIdx + 1);
+                var pairs = pairsStr.split(";");
+                playerMetaSites[playerId] = pairs.map(function(p) {
+                    var ids = p.split("|");
+                    return { visual: ids[0], modifier: ids[1] };
+                });
+            }
+
+            // Build modifier→visual lookup for in-game split card rendering
+            for (var player in playerMetaSites) {
+                var sites = playerMetaSites[player];
+                for (var i = 0; i < sites.length; i++) {
+                    Card.metaSiteOverlays[sites[i].modifier] = Card.getImageUrl(sites[i].visual);
+                }
+            }
+
+            var addMetaSiteCards = function(player, targetArray) {
+                var sites = playerMetaSites[player];
+                if (!sites) return;
+                for (var i = 0; i < sites.length; i++) {
+                    targetArray.push({
+                        blueprintId: sites[i].visual,
+                        overlayBlueprintId: sites[i].modifier,
+                        label: "Meta-Site"
+                    });
+                }
+            };
+            addMetaSiteCards(leftPlayer, leftCards);
+            addMetaSiteCards(rightPlayer, rightCards);
+        }
+
+        // Render collected cards into pregame content areas
+        var self = this;
+        var renderCards = function(cards, container) {
+            if (cards.length === 0) return;
+            var wrapper = $("<div style='display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:8px;'></div>");
+            for (var i = 0; i < cards.length; i++) {
+                var cardInfo = cards[i];
+                var card = new Card(cardInfo.blueprintId, "", "", "SPECIAL", cardIdCounter--, null);
+                var cardDiv = self.createCardDiv(card);
+                cardDiv.find(".borderOverlay").remove();
+
+                // If this is a meta-site with an overlay, add the modifier overlay
+                if (cardInfo.overlayBlueprintId) {
+                    var overlayUrl = Card.getImageUrl(cardInfo.overlayBlueprintId);
+                    var overlayHeight = Card.MetaSiteOverlayHeight;
+                    var overlayDiv = $("<div class='metaSiteOverlay' style='position:absolute;bottom:0;width:100%;height:" + overlayHeight + "%;overflow:hidden;'>"
+                        + "<img src='" + overlayUrl + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'>"
+                        + "</div>");
+                    cardDiv.css("position", "relative");
+                    cardDiv.append(overlayDiv);
+                }
+
+                wrapper.append(cardDiv);
+            }
+            container.append(wrapper);
+        };
+
+        renderCards(leftCards, leftContent);
+        renderCards(rightCards, rightContent);
+
         if(notes != null && notes !== "") {
             leftContent.append("<div>" + notes + "</div>");
         }
@@ -1936,7 +2039,13 @@ var GempLotrGameUI = Class.extend({
     },
 
     createCardDiv: function (card, text) {
-        var cardDiv = Card.CreateCardDiv(card.getVisibleFace(), card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
+        var cardDiv;
+        if (card.overlayImageUrl && Card.isMetaSiteModifier(card.bareBlueprint)) {
+            // card.imageUrl is already the visual card, card.overlayImageUrl is the modifier
+            cardDiv = Card.CreateSplitCardDiv(card.getVisibleFace(), card.overlayImageUrl, card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
+        } else {
+            cardDiv = Card.CreateCardDiv(card.getVisibleFace(), card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
+        }
 
         cardDiv.data("card", card);
 

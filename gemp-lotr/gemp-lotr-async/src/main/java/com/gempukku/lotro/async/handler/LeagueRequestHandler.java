@@ -139,12 +139,16 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
                 leagueElem.setAttribute("playerPosition", String.valueOf(playerPosition));
             }
 
-            // Path definition
+            // Path definition (modifier + visual card pairs)
             List<String> path = rtmdLeague.getPath();
+            List<String> visualPath = rtmdLeague.getVisualPath();
             for (int i = 0; i < path.size(); i++) {
                 Element siteElem = doc.createElement("metaSite");
                 siteElem.setAttribute("position", String.valueOf(i + 1));
                 siteElem.setAttribute("blueprintId", path.get(i));
+                if (visualPath != null && i < visualPath.size()) {
+                    siteElem.setAttribute("visualBlueprintId", visualPath.get(i));
+                }
                 try {
                     var bp = _library.getLotroCardBlueprint(path.get(i));
                     if (bp != null) {
@@ -244,6 +248,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
                 List<PlayerStanding> standings = _leagueService.getLeagueStandings(league);
                 int position = rtmd.getPlayerPosition(resourceOwner.getName(), standings);
                 List<String> metasites = rtmd.getMetaSitesForPosition(position);
+                List<String> visualCards = rtmd.getVisualCardsForPosition(position);
                 leagueElem.setAttribute("pathLength", String.valueOf(rtmd.getPathLength()));
                 leagueElem.setAttribute("cumulative", String.valueOf(rtmd.isCumulative()));
                 leagueElem.setAttribute("advancementMode", rtmd.getParameters().raceAdvancementMode.toString());
@@ -253,6 +258,9 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
                     Element siteElem = doc.createElement("metaSite");
                     siteElem.setAttribute("position", String.valueOf(i + 1));
                     siteElem.setAttribute("blueprintId", metasites.get(i));
+                    if (visualCards != null && i < visualCards.size()) {
+                        siteElem.setAttribute("visualBlueprintId", visualCards.get(i));
+                    }
                     try {
                         var bp = _library.getLotroCardBlueprint(metasites.get(i));
                         if (bp != null) {

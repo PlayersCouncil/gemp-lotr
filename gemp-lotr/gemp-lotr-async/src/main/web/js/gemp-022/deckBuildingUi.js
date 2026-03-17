@@ -128,8 +128,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 					// Race visibility: based on whether this is an RTMD league
 					if (that.rtmdLeagues && that.rtmdLeagues[val]) {
-						var raceSites = that.rtmdLeagues[val].raceSites;
-						that.setRaceVisibility(true, raceSites);
+						that.setRaceVisibility(true, that.rtmdLeagues[val].metaSites);
 					} else {
 						that.setRaceVisibility(false, null);
 					}
@@ -380,19 +379,36 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.layoutUI(true);
 	},
 	
-	setRaceVisibility:function(value, siteBlueprintIds) {
+	setRaceVisibility:function(value, metaSites) {
 		this.showRace = value;
-		
+		this.currentMetaSites = metaSites || null;
+
 		// Clear previous race card display
 		$(".card", this.raceDiv).remove();
-		
-		if (value && siteBlueprintIds) {
-			// Display the last (current) meta-site card image
-			var sites = siteBlueprintIds.split(",");
-			var currentSite = sites[sites.length - 1];
-			this.addCardToContainer(currentSite, "deck", this.raceDiv, false);
+
+		if (value && metaSites && metaSites.length > 0) {
+			var current = metaSites[metaSites.length - 1];
+
+			// Use the visual position card as the base image
+			var baseId = current.visual || current.modifier;
+			var cardDiv = this.addCardToContainer(baseId, "deck", this.raceDiv, false);
+
+			// Overlay the modifier's bottom portion (game text area) on top
+			if (current.visual && current.modifier) {
+				var modifierCard = new Card(current.modifier, null, null, "deck", 0, "player");
+				var overlayDiv = $("<div class='metaSiteOverlay' style='position:absolute;bottom:0;width:100%;height:" + Card.MetaSiteOverlayHeight + "%;overflow:hidden;pointer-events:none;'>"
+					+ "<img src='" + modifierCard.imageUrl + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'>"
+					+ "</div>");
+				cardDiv.append(overlayDiv);
+
+				// Stash overlay URL on card data so the hover preview can use it
+				var card = cardDiv.data("card");
+				if (card) {
+					card.overlayImageUrl = modifierCard.imageUrl;
+				}
+			}
 		}
-		
+
 		this.layoutUI(true);
 	},
 	
@@ -565,15 +581,26 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 				var leagueCode = league.getAttribute("code");
 				var formatCode = league.getAttribute("formatCode");
-				var raceSites = league.getAttribute("raceSites") || "";
-				var racePosition = league.getAttribute("racePosition") || "1";
-				var racePathLength = league.getAttribute("racePathLength") || "0";
+				var racePosition = league.getAttribute("playerPosition") || "1";
+				var racePathLength = league.getAttribute("pathLength") || "0";
+
+				// Parse metaSite child elements into paired arrays
+				var metaSiteElems = league.getElementsByTagName("metaSite");
+				var metaSites = [];
+				for (var j = 0; j < metaSiteElems.length; j++) {
+					var site = metaSiteElems[j];
+					metaSites.push({
+						position: parseInt(site.getAttribute("position")),
+						modifier: site.getAttribute("blueprintId"),
+						visual: site.getAttribute("visualBlueprintId")
+					});
+				}
 
 				// Store league data keyed by league code
 				that.rtmdLeagues[leagueCode] = {
 					leagueCode: leagueCode,
 					formatCode: formatCode,
-					raceSites: raceSites,
+					metaSites: metaSites,
 					racePosition: parseInt(racePosition),
 					racePathLength: parseInt(racePathLength)
 				};
@@ -584,7 +611,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 				var option = $("<option/>")
 					.attr("value", leagueCode)
 					.attr("data-rtmd", "true")
-					.attr("data-rtmd-sites", raceSites)
 					.text(displayName);
 
 				$("#formatSelect").append(option);

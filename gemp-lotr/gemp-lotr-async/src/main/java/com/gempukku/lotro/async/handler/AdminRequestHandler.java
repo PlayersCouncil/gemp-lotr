@@ -659,6 +659,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         // RTMD-specific fields
         List<String> racePath = getFormMultipleParametersSafely(postDecoder, "racePath[]");
+        List<String> raceVisualPath = getFormMultipleParametersSafely(postDecoder, "raceVisualPath[]");
         String raceCumulativeStr = getFormParameterSafely(postDecoder, "raceCumulative");
         String raceIntensityFloorStr = getFormParameterSafely(postDecoder, "raceIntensityFloor");
         String raceIntensityCeilingStr = getFormParameterSafely(postDecoder, "raceIntensityCeiling");
@@ -706,6 +707,23 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
                         "Blueprint '" + blueprintId + "' not found.");
             } catch (Exception ex) {
                 throw new HttpProcessingException(400, "Invalid blueprint ID in race path: " + blueprintId);
+            }
+        }
+
+        // Visual path validation
+        Throw400IfValidationFails("raceVisualPath", String.valueOf(raceVisualPath),
+                raceVisualPath != null && !raceVisualPath.isEmpty(), "Visual path must contain at least one card.");
+        Throw400IfValidationFails("raceVisualPath", raceVisualPath.size() + " vs " + pathLength,
+                raceVisualPath.size() == pathLength,
+                "Visual path must have the same number of entries as the modifier path (" + pathLength + ").");
+
+        for (String blueprintId : raceVisualPath) {
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(blueprintId);
+                Throw400IfValidationFails("raceVisualPath", blueprintId, bp != null,
+                        "Blueprint '" + blueprintId + "' not found.");
+            } catch (Exception ex) {
+                throw new HttpProcessingException(400, "Invalid blueprint ID in visual path: " + blueprintId);
             }
         }
 
@@ -758,6 +776,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         }
 
         params.racePath = new ArrayList<>(racePath);
+        params.raceVisualPath = new ArrayList<>(raceVisualPath);
         params.raceCumulative = raceCumulative;
         params.raceIntensityFloor = raceIntensityFloor;
         params.raceIntensityCeiling = raceIntensityCeiling;
@@ -808,11 +827,14 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         leagueElem.setAttribute("intensityFloor", String.valueOf(raceIntensityFloor));
         leagueElem.setAttribute("intensityCeiling", String.valueOf(raceIntensityCeiling));
 
-        // Path modifiers
+        // Path modifiers + visual cards
         for (int i = 0; i < racePath.size(); i++) {
             Element siteElem = doc.createElement("metaSite");
             siteElem.setAttribute("position", String.valueOf(i + 1));
             siteElem.setAttribute("blueprintId", racePath.get(i));
+            if (i < raceVisualPath.size()) {
+                siteElem.setAttribute("visualBlueprintId", raceVisualPath.get(i));
+            }
             try {
                 var bp = _cardLibrary.getLotroCardBlueprint(racePath.get(i));
                 if (bp != null) {

@@ -22,6 +22,7 @@ public class LeagueParams {
 
     // RTMD-specific fields (null/ignored for non-RTMD leagues)
     public ArrayList<String> racePath;           // Ordered list of modifier blueprint IDs
+    public ArrayList<String> raceVisualPath = new ArrayList<>();  // Ordered list of visual position card blueprint IDs (set 90), parallel to racePath
     public boolean raceCumulative = false;        // If true, all sites 1..current are active
     public int raceIntensityFloor = 1;            // Min intensity for auto-generation pool
     public int raceIntensityCeiling = 10;         // Max intensity for auto-generation pool

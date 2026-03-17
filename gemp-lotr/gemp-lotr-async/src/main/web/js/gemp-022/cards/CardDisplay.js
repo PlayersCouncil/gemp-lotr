@@ -10,6 +10,7 @@ class CardDisplay {
 	cardImage = null;
 
 	foilDiv = null;
+	overlayDiv = null;
 	testingTextDiv = null;
 	borderDiv = null;
 
@@ -57,8 +58,25 @@ class CardDisplay {
 			position: "absolute"
 		}).appendTo(this.baseDiv);
 
-		// Actual card image		
+		// Actual card image
 		this.cardImage = $('<img>').appendTo(this.fullCardDiv)[0];
+
+		// Optional meta-site modifier overlay (bottom portion of modifier card)
+		this.overlayDiv = $('<div>', {
+			class: 'metaSiteOverlay'
+		}).css({
+			position: "absolute",
+			bottom: 0,
+			overflow: "hidden",
+			display: "none"
+		}).appendTo(this.baseDiv);
+
+		this.overlayImage = $('<img>').css({
+			width: "100%",
+			height: "100%",
+			objectFit: "cover",
+			objectPosition: "bottom"
+		}).appendTo(this.overlayDiv)[0];
 
 		// Optional foil layer
 		this.foilDiv = $('<div>', {
@@ -152,17 +170,25 @@ class CardDisplay {
 			}
 		}
 
-		this.reload(maxWidth, maxHeight, this.frontside, 
-			card.horizontal || card.effectivelyHorizontal(), card.foil, false, card.testingText);
+		this.reload(maxWidth, maxHeight, this.frontside,
+			card.horizontal || card.effectivelyHorizontal(), card.foil, false, card.testingText,
+			card.overlayImageUrl);
 	}
 
-	reload(maxWidth, maxHeight, image, horizontal, foil, noborder, testingText) {
+	reload(maxWidth, maxHeight, image, horizontal, foil, noborder, testingText, overlayImageUrl) {
 		this.cardImage.src = image;
 		this.cardImage.style.transform = "rotate(0deg)";
 
 		this.foilDiv.css({
 			display: foil ? "initial" : "none"
 		});
+
+		if (overlayImageUrl) {
+			this.overlayImage.src = overlayImageUrl;
+			this.overlayDiv.css({ display: "block" });
+		} else {
+			this.overlayDiv.css({ display: "none" });
+		}
 
 		this.testingTextDiv.css({
 			display: testingText ? "initial" : "none"
@@ -211,6 +237,11 @@ class CardDisplay {
 		this.foilDiv.css({
 			width: px(widthSide),
 			height: px(heightSide)
+		});
+
+		this.overlayDiv.css({
+			width: px(widthSide),
+			height: px(Math.floor(heightSide * Card.MetaSiteOverlayHeight / 100))
 		});
 
 		this.testingTextDiv.css({

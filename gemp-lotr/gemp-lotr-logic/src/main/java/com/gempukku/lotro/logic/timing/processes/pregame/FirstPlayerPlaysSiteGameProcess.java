@@ -30,6 +30,12 @@ public class FirstPlayerPlaysSiteGameProcess implements GameProcess {
             }
         }
 
+        for (String playerId : gameState.getPlayerOrder().getAllPlayers()) {
+            for (var metaSite : gameState.getMetaSites(playerId)) {
+                gameState.addCardToZone(game, metaSite, Zone.SUPPORT);
+            }
+        }
+
         SystemQueueAction action = new SystemQueueAction();
         action.appendEffect(
                 new PlaySiteEffect(action, _firstPlayer, null, 1));
