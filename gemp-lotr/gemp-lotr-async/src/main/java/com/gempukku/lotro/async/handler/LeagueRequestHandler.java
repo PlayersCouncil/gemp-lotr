@@ -67,18 +67,18 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
     private void joinLeague(HttpRequest request, String leagueType, ResponseWriter responseWriter, String remoteIp) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        League league = _leagueService.getLeagueByType(leagueType);
-        if (league == null)
-            throw new HttpProcessingException(404);
+            League league = _leagueService.getLeagueByType(leagueType);
+            if (league == null)
+                throw new HttpProcessingException(404);
 
-        if (!_leagueService.playerJoinsLeague(league, resourceOwner, remoteIp))
-            throw new HttpProcessingException(409);
+            if (!_leagueService.playerJoinsLeague(league, resourceOwner, remoteIp))
+                throw new HttpProcessingException(409);
 
-        responseWriter.writeXmlResponse(null);
+            responseWriter.writeXmlResponse(null);
         } finally {
             postDecoder.destroy();
         }
@@ -236,6 +236,38 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             leagueElem.setAttribute("inviteOnly", String.valueOf(league.inviteOnly()));
             leagueElem.setAttribute("start", DateUtils.FormatDate(series.getFirst().getStart()));
             leagueElem.setAttribute("end", DateUtils.FormatDate(series.getLast().getEnd()));
+            leagueElem.setAttribute("type", league.getType().toString());
+            leagueElem.setAttribute("formatCode", series.getFirst().getFormat().getCode());
+
+            if (league.getType() == League.LeagueType.RTMD) {
+                RTMDLeague rtmd = (RTMDLeague) leagueData;
+                List<PlayerStanding> standings = _leagueService.getLeagueStandings(league);
+                int position = rtmd.getPlayerPosition(resourceOwner.getName(), standings);
+                List<String> metasites = rtmd.getMetaSitesForPosition(position);
+                leagueElem.setAttribute("pathLength", String.valueOf(rtmd.getPathLength()));
+                leagueElem.setAttribute("cumulative", String.valueOf(rtmd.isCumulative()));
+                leagueElem.setAttribute("advancementMode", rtmd.getParameters().raceAdvancementMode.toString());
+                leagueElem.setAttribute("advanceFactor", String.valueOf(rtmd.getAdvanceFactor()));
+
+                for (int i = 0; i < metasites.size(); i++) {
+                    Element siteElem = doc.createElement("metaSite");
+                    siteElem.setAttribute("position", String.valueOf(i + 1));
+                    siteElem.setAttribute("blueprintId", metasites.get(i));
+                    try {
+                        var bp = _library.getLotroCardBlueprint(metasites.get(i));
+                        if (bp != null) {
+                            siteElem.setAttribute("name", bp.getFullName());
+                        }
+                    } catch (Exception ignored) {}
+                    leagueElem.appendChild(siteElem);
+                }
+
+                // Current player's position
+                if (inLeague) {
+                    int playerPosition = rtmd.getPlayerPosition(resourceOwner.getName(), standings);
+                    leagueElem.setAttribute("playerPosition", String.valueOf(playerPosition));
+                }
+            }
 
             leagues.appendChild(leagueElem);
         }

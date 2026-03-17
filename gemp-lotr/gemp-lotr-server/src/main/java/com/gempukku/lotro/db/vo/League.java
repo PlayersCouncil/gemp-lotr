@@ -51,6 +51,8 @@ public class League {
 
     public String getDescription() { return _leagueData.getParameters().description; }
 
+    public LeagueType getType() { return _type; }
+
     public int getCost() {
         return _cost;
     }

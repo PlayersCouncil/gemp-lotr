@@ -15,6 +15,11 @@ var GempLotrDeckBuildingUI = Class.extend({
 	mapGroup:null,
 	showMap:false,
 
+	raceDiv:null,
+	raceGroup:null,
+	showRace:false,
+	rtmdLeagues:null,
+
 	siteDiv:null,
 	siteGroup:null,
 
@@ -110,23 +115,34 @@ var GempLotrDeckBuildingUI = Class.extend({
 						that.deckModified(true);
 					}
 					
-					let formatCode = that.formatSelect.val();
-					if(formatCode == "pc_movie" || formatCode == "test_pc_movie") {
+					let effectiveFormat = that.getEffectiveFormatCode();
+					let val = that.formatSelect.val();
+
+					// Map visibility: based on effective format code
+					if(effectiveFormat == "pc_movie" || effectiveFormat == "test_pc_movie") {
 						that.setMapVisibility(true);
 					}
 					else {
 						that.setMapVisibility(false);
 					}
+
+					// Race visibility: based on whether this is an RTMD league
+					if (that.rtmdLeagues && that.rtmdLeagues[val]) {
+						var raceSites = that.rtmdLeagues[val].raceSites;
+						that.setRaceVisibility(true, raceSites);
+					} else {
+						that.setRaceVisibility(false, null);
+					}
 					
 					//PC format or Anything Goes (if chosen, not when being default when page loads)
-					if((formatCode.includes("pc") || formatCode == "rev_tow_sta") && that.formatsInitialized) {
+					if((effectiveFormat.includes("pc") || effectiveFormat == "rev_tow_sta") && that.formatsInitialized) {
 						$("#convertErrataBut").button("option", "disabled", false);
 					}
 					else {
 						$("#convertErrataBut").button("option", "disabled", true);
 					}
 
-					that.cardFilter.updateFormat(formatCode, that.formats[formatCode].blockFilters);
+					that.cardFilter.updateFormat(effectiveFormat, that.formats[effectiveFormat].blockFilters);
 				});
 		
 		this.autoZoom = new AutoZoom("autoZoomInDeckbuilder");
@@ -260,6 +276,12 @@ var GempLotrDeckBuildingUI = Class.extend({
 			return true;
 		}, false, $("#map-content"));
 
+		// Race quadrant: display-only (not clickable for selection)
+		this.raceDiv = $("#raceDiv");
+		this.raceGroup = new NormalCardGroup(this.raceDiv, function (card) {
+			return true;
+		}, false, $("#race-content"));
+
 		this.siteDiv = $("#sitesDiv");
 		this.siteDiv.click(
 				function () {
@@ -358,6 +380,39 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.layoutUI(true);
 	},
 	
+	setRaceVisibility:function(value, siteBlueprintIds) {
+		this.showRace = value;
+		
+		// Clear previous race card display
+		$(".card", this.raceDiv).remove();
+		
+		if (value && siteBlueprintIds) {
+			// Display the last (current) meta-site card image
+			var sites = siteBlueprintIds.split(",");
+			var currentSite = sites[sites.length - 1];
+			this.addCardToContainer(currentSite, "deck", this.raceDiv, false);
+		}
+		
+		this.layoutUI(true);
+	},
+	
+	// Returns the real format code for server calls (validation, filtering, etc).
+	// For RTMD league entries, resolves to the league's underlying format code.
+	// For normal entries, returns the dropdown value directly.
+	getEffectiveFormatCode:function() {
+		var val = this.formatSelect.val();
+		if (this.rtmdLeagues && this.rtmdLeagues[val]) {
+			return this.rtmdLeagues[val].formatCode;
+		}
+		return val;
+	},
+
+	// Returns true if the currently selected format is an RTMD league entry.
+	isRtmdFormat:function() {
+		var val = this.formatSelect.val();
+		return this.rtmdLeagues != null && this.rtmdLeagues[val] != null;
+	},
+	
 	savePrompt:function() {
 		return !this.deckContentsDirty || (confirm("Your deck has been modified.  Would you like to save your deck before proceeding?") && this.saveCurrentDeck())
 	},
@@ -440,7 +495,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 	convertErrata:function() {		
 		var that = this;
 		var deckContents = this.getDeckContents();
-		this.comm.convertErrata(that.formatSelect.val(), deckContents, function (xml) {
+		this.comm.convertErrata(that.getEffectiveFormatCode(), deckContents, function (xml) {
 				that.setupDeck(xml, that.deckName);
 				that.deckModified(true);
 				$("#convertErrataBut").button("option", "disabled", true);
@@ -478,7 +533,63 @@ var GempLotrDeckBuildingUI = Class.extend({
 					
 					$("#collectionSelect").val("default");
 					that.deckModified(false);
+					
+					// After collections are loaded, fetch RTMD leagues
+					that.getRtmdLeagues();
 				});
+	},
+	
+	// Fetches active leagues and appends RTMD entries to the format dropdown.
+	// The league code (a numeric string) is used directly as the option value,
+	// which is also what gets stored in the DB as the deck's target format.
+	getRtmdLeagues:function () {
+		var that = this;
+		this.comm.getLeagues(function (xml) {
+			var root = xml.documentElement;
+			if (root.tagName != "leagues")
+				return;
+
+			var leagues = root.getElementsByTagName("league");
+			var hasRtmd = false;
+			that.rtmdLeagues = {};
+
+			for (var i = 0; i < leagues.length; i++) {
+				var league = leagues[i];
+				if (league.getAttribute("type") !== "RTMD") continue;
+				if (league.getAttribute("member") !== "true") continue;
+
+				if (!hasRtmd) {
+					$("#formatSelect").append("<option disabled>---Race to Mount Doom---</option>");
+					hasRtmd = true;
+				}
+
+				var leagueCode = league.getAttribute("code");
+				var formatCode = league.getAttribute("formatCode");
+				var raceSites = league.getAttribute("raceSites") || "";
+				var racePosition = league.getAttribute("racePosition") || "1";
+				var racePathLength = league.getAttribute("racePathLength") || "0";
+
+				// Store league data keyed by league code
+				that.rtmdLeagues[leagueCode] = {
+					leagueCode: leagueCode,
+					formatCode: formatCode,
+					raceSites: raceSites,
+					racePosition: parseInt(racePosition),
+					racePathLength: parseInt(racePathLength)
+				};
+
+				var displayName = league.getAttribute("name") +
+					" (pos " + racePosition + "/" + racePathLength + ")";
+
+				var option = $("<option/>")
+					.attr("value", leagueCode)
+					.attr("data-rtmd", "true")
+					.attr("data-rtmd-sites", raceSites)
+					.text(displayName);
+
+				$("#formatSelect").append(option);
+			}
+		});
 	},
 	
 	importDecklist:function () {
@@ -517,7 +628,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		for (var i = 0; i < rawTextList.length; i++) {
 			if (rawTextList[i] != "") {
 				var line = that.removeNotes(rawTextList[i]).toLowerCase();
-				line = line.replace(/[\*•]/g,"").replace(/’/g,"'")
+				line = line.replace(/[\*•]/g,"").replace(/'/g,"'")
 						.replace(/starting|start|map:|ring-bearer:|ring:/g,"")
 				formattedText = formattedText + line.trim() + "~";
 			}
@@ -948,8 +1059,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 				});
 		result += cards;
 		
-		let formatCode = this.formatSelect.val();
-		if(formatCode == "pc_movie" || formatCode == "test_pc_movie") {
+		// Use effective format code to determine if Map should be included
+		let effectiveFormat = this.getEffectiveFormatCode();
+		if(effectiveFormat == "pc_movie" || effectiveFormat == "test_pc_movie") {
 			result += "|";
 			var map = $(".card", this.mapDiv);
 			if (map.length > 0)
@@ -967,6 +1079,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 		if (deckContents == null)
 			alert("Deck must contain at least Ring-bearer, The One Ring and 9 sites");
 		else
+			// For RTMD decks, the dropdown value is the league code (numeric string).
+			// The server resolves this to the underlying format for validation,
+			// but stores the league code so the deck stays associated with the league.
 			this.comm.saveDeck(this.deckName, that.formatSelect.val(), this.notes, deckContents, function (xml) {
 				that.deckModified(false);
 				alert("Deck was saved.  Refresh the Game Hall to see it!");
@@ -1042,7 +1157,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 			$("#editingDeck").html("<font color='orange'>*" + name + " - modified</font>");
 
       //Enable the errata button if user starts adding cards to empty 'Anything Goes' deck after the page was initialized
-			let formatCode = this.formatSelect.val();
+			let formatCode = this.getEffectiveFormatCode();
             if(formatCode == "rev_tow_sta") {
                 $("#convertErrataBut").button("option", "disabled", false);
             }
@@ -1076,12 +1191,14 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	updateDeckStats:function () {
 		var that = this;
-		var selectedOption = $("#formatSelect option:selected");
 		var deckContents = this.getDeckContents();
 		if (deckContents != null && deckContents != "") 
 		{
+			// Use effective format code for validation, not the composite RTMD key
+			var effectiveFormat = this.getEffectiveFormatCode();
+			var selectedOption = $("#formatSelect option:selected");
 			this.comm.getDeckStats(deckContents, 
-				  selectedOption.val(), // format
+				  effectiveFormat, // format
 				  selectedOption.data("type"), // collection name
 					function (html) 
 					{
@@ -1200,11 +1317,17 @@ var GempLotrDeckBuildingUI = Class.extend({
 			var targetFormat = root.getElementsByTagName("targetFormat");
 			if (targetFormat.length > 0)
 			{
-				var formatName = targetFormat[0].getAttribute("formatName");
 				var formatCode = targetFormat[0].getAttribute("formatCode");
-				//$('#formatSelect option[value="' + formatName + '"]').prop('selected', true);
- 
-				this.formatSelect.val(formatCode);
+				var leagueCode = targetFormat[0].getAttribute("leagueCode");
+
+				// If the deck is associated with an active RTMD league,
+				// select that league entry in the dropdown instead of the
+				// underlying format.
+				if (leagueCode && this.rtmdLeagues && this.rtmdLeagues[leagueCode]) {
+					this.formatSelect.val(leagueCode);
+				} else {
+					this.formatSelect.val(formatCode);
+				}
 				this.formatSelect.change();
 			}
 			
@@ -1291,25 +1414,44 @@ var GempLotrDeckBuildingUI = Class.extend({
 			var rowHeight = Math.floor((deckHeight - 6 * padding) / 5);
 			var sitesWidth = Math.floor(1.5 * deckHeight / 5);
 			sitesWidth = Math.min(sitesWidth, 250);
+			
+			var halfWidth = Math.floor((sitesWidth - padding) / 2);
+			var rightHalfLeft = Math.floor((sitesWidth + 3 * padding) / 2);
 
 			this.manageDecksDiv.css({position:"absolute", left:padding, top:padding, width:deckWidth, height:manageHeight});
 
-			this.ringBearerDiv.css({ position:"absolute", left:padding, top:manageHeight + 2 * padding, width:Math.floor((sitesWidth - padding) / 2), height:rowHeight });
-			this.ringBearerGroup.setBounds(0, 0, Math.floor((sitesWidth - padding) / 2), rowHeight);
-			this.ringDiv.css({ display:"block", position:"absolute", left:Math.floor((sitesWidth + 3 * padding) / 2), top:manageHeight + 2 * padding, width:Math.floor((sitesWidth - padding) / 2), height:rowHeight });
-			this.ringGroup.setBounds(0, 0, Math.floor((sitesWidth - padding) / 2), rowHeight);
+			// Row 1: Ring-bearer (left) and One Ring (right) — always visible
+			this.ringBearerDiv.css({ position:"absolute", left:padding, top:manageHeight + 2 * padding, width:halfWidth, height:rowHeight });
+			this.ringBearerGroup.setBounds(0, 0, halfWidth, rowHeight);
+			this.ringDiv.css({ display:"block", position:"absolute", left:rightHalfLeft, top:manageHeight + 2 * padding, width:halfWidth, height:rowHeight });
+			this.ringGroup.setBounds(0, 0, halfWidth, rowHeight);
 			
-			if(this.showMap) {
-				this.mapDiv.css({ display:"block", position:"absolute", left:padding, top:manageHeight + 2 * padding+ rowHeight, width:Math.floor((sitesWidth - padding) / 2), height:rowHeight });
-				this.mapGroup.setBounds(0, 0, Math.floor((sitesWidth - padding) / 2), rowHeight);
-
+			// Row 2: Map (left) and/or Race (right) — conditional
+			var showSpecialRow = this.showMap || this.showRace;
+			var specialRowTop = manageHeight + 2 * padding + rowHeight;
+			
+			if (this.showMap) {
+				this.mapDiv.css({ display:"block", position:"absolute", left:padding, top:specialRowTop, width:halfWidth, height:rowHeight });
+				this.mapGroup.setBounds(0, 0, halfWidth, rowHeight);
+			} else {
+				this.mapDiv.css({ display:"none" });
+				this.mapGroup.setBounds(0, 0, halfWidth, rowHeight);
+			}
+			
+			if (this.showRace) {
+				// Race always goes on the right half of row 2
+				this.raceDiv.css({ display:"block", position:"absolute", left:rightHalfLeft, top:specialRowTop, width:halfWidth, height:rowHeight });
+				this.raceGroup.setBounds(0, 0, halfWidth, rowHeight);
+			} else {
+				this.raceDiv.css({ display:"none" });
+				this.raceGroup.setBounds(0, 0, halfWidth, rowHeight);
+			}
+			
+			// Sites: positioned below the special row (or directly below row 1 if no special row)
+			if (showSpecialRow) {
 				this.siteDiv.css({ position:"absolute", left:padding, top:manageHeight + 3 * padding + 2 * rowHeight, width:sitesWidth, height:deckHeight - 2*rowHeight - 2 * padding});
 				this.siteGroup.setBounds(0, 0, sitesWidth, deckHeight - 2*rowHeight - 2 * padding);
-			}
-			else {
-				this.mapDiv.css({ display:"none"});
-				this.mapGroup.setBounds(0, 0, Math.floor((sitesWidth - padding) / 2), rowHeight);
-
+			} else {
 				this.siteDiv.css({ position:"absolute", left:padding, top:manageHeight + 3 * padding + rowHeight, width:sitesWidth, height:deckHeight - rowHeight - 2 * padding});
 				this.siteGroup.setBounds(0, 0, sitesWidth, deckHeight - rowHeight - 2 * padding);
 			}
@@ -1336,6 +1478,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.siteGroup.layoutCards();
 		if(this.showMap) {
 			this.mapGroup.layoutCards();
+		}
+		if(this.showRace) {
+			this.raceGroup.layoutCards();
 		}
 	},
 

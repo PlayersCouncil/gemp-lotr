@@ -83,6 +83,39 @@ public class DbLeagueDAO implements LeagueDAO {
     }
 
 
+    public League loadLeagueByCode(long code) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT
+                             id
+                            ,name
+                            ,code
+                            ,`type`
+                            ,parameters
+                            ,start_date
+                            ,end_date
+                            ,status
+                            ,cost
+                        FROM gemp_db.league
+                        WHERE code = :code;
+                        """;
+                List<DBDefs.League> result = conn.createQuery(sql)
+                        .addParameter("code", code)
+                        .executeAndFetch(DBDefs.League.class);
+
+                if (result.isEmpty())
+                    return null;
+
+                return new League(result.getFirst());
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve league by code", ex);
+        }
+    }
+
     public boolean setStatus(League league, int newStatus)  {
         try {
             var db = _dbAccess.openDB();

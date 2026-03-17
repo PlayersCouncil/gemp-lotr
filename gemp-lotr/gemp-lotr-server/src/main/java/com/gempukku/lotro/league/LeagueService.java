@@ -134,6 +134,16 @@ public class LeagueService {
         return null;
     }
 
+    /**
+     * Loads a league by its code from the database, regardless of whether it is
+     * currently active. Used to resolve expired league codes stored in deck
+     * target formats so we can extract the underlying format before stripping
+     * the league association.
+     */
+    public League getLeagueByCode(long code) {
+        return _leagueDao.loadLeagueByCode(code);
+    }
+
     public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {
         for (League league : getActiveLeagues()) {
             for (LeagueSerieInfo leagueSerieInfo : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
