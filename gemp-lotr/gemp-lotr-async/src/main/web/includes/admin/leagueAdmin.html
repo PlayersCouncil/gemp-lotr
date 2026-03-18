@@ -373,7 +373,13 @@ $(document).ready(
 			var sel = $("#rtmd-add-modifier");
 			sel.empty();
 			sel.append("<option value=''>-- Select a modifier to add --</option>");
-			pool.sort(function(a, b) { return a.intensity - b.intensity || a.title.localeCompare(b.title); });
+			pool.sort(function(a, b) {
+				var aParts = a.blueprintId.split("_");
+				var bParts = b.blueprintId.split("_");
+				var setDiff = parseInt(aParts[0]) - parseInt(bParts[0]);
+				if (setDiff !== 0) return setDiff;
+				return parseInt(aParts[1]) - parseInt(bParts[1]);
+			});
 			for (var i = 0; i < pool.length; i++) {
 				sel.append("<option value='" + pool[i].blueprintId + "'>"
 					+ pool[i].blueprintId + ": " + pool[i].gameText + "</option>");
