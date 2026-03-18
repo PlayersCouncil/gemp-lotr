@@ -51,7 +51,7 @@
 		}
 		title: Race Text 91_2
 		type: MetaSite
-		intensity: 6
+		intensity: -6
 		effects: [
 			{
 				type: Trigger
@@ -98,7 +98,7 @@
 		}
 		title: Race Text 91_3
 		type: MetaSite
-		intensity: 5
+		intensity: -5
 		effects: [
 			{
 				type: Trigger
@@ -140,7 +140,7 @@
 		}
 		title: Race Text 91_4
 		type: MetaSite
-		intensity: 4
+		intensity: -3
 		effects: [
 			{
 				type: Modifier
@@ -177,7 +177,7 @@
 		}
 		title: Race Text 91_5
 		type: MetaSite
-		intensity: 3
+		intensity: -1
 		effects: [
 			{
 				type: Trigger
@@ -232,7 +232,7 @@
 		}
 		title: Race Text 91_6
 		type: MetaSite
-		intensity: 5
+		intensity: 8
 		effects: [
 			{
 				type: Trigger
@@ -274,7 +274,7 @@
 		}
 		title: Race Text 91_7
 		type: MetaSite
-		intensity: 3
+		intensity: 4
 		// NOTE: Roaming is a pseudokeyword auto-added by rule to qualifying minions.
 		// RemoveKeyword strips it entirely, which also removes the penalty.
 		effects: [
@@ -312,7 +312,7 @@
 		}
 		title: Race Text 91_8
 		type: MetaSite
-		intensity: 4
+		intensity: 7
 		effects: [
 			{
 				type: Modifier
@@ -352,7 +352,7 @@
 		}
 		title: Race Text 91_9
 		type: MetaSite
-		intensity: 3
+		intensity: 6
 		effects: [
 			{
 				type: Trigger
@@ -397,7 +397,7 @@
 		}
 		title: Race Text 91_10
 		type: MetaSite
-		intensity: -2
+		intensity: -4
 		effects: [
 			{
 				type: Activated
