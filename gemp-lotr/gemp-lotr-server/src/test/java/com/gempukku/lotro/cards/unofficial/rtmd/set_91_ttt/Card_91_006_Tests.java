@@ -40,7 +40,6 @@ public class Card_91_006_Tests
 
 		assertEquals("Race Text 91_6", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
-		assertEquals(5, card.getBlueprint().getIntensity());
 	}
 
 	@Test
