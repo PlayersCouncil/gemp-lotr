@@ -850,6 +850,76 @@ table.standings {
 	padding-bottom: 50px;
 }
 
+/* RTMD Admin Form */
+.rtmd-slot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 240px;
+	border: 1px solid #555;
+	border-radius: 4px;
+	background: #222;
+	cursor: move;
+}
+.rtmd-slot.locked {
+	border-color: #cc0;
+	background: #2a2a1a;
+}
+.rtmd-slot-card {
+	width: 240px;
+	height: 112px;
+	overflow: hidden;
+	border-radius: 3px;
+	position: relative;
+}
+.rtmd-slot-card img {
+	width: 130%;
+	position: absolute;
+	bottom: 0;
+	left: -15%;
+}
+.rtmd-slot-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 2px;
+	font-size: 10px;
+	line-height: 1.2;
+	text-align: center;
+	max-width: 85px;
+	overflow: hidden;
+}
+.rtmd-slot-title {
+	color: #ccc;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 85px;
+}
+.rtmd-slot-intensity {
+	color: #888;
+}
+.rtmd-slot-controls {
+	display: flex;
+	gap: 4px;
+	margin-top: 3px;
+}
+.rtmd-lock-btn, .rtmd-delete-btn {
+	background: none;
+	border: 1px solid #555;
+	color: #ccc;
+	cursor: pointer;
+	padding: 1px 5px;
+	font-size: 11px;
+	border-radius: 3px;
+}
+.rtmd-lock-btn:hover, .rtmd-delete-btn:hover {
+	background: #444;
+}
+.rtmd-slot.ui-sortable-helper {
+	box-shadow: 0 0 8px rgba(255,255,0,0.3);
+}
+
 #announcement-dialog img{
     width:90%;
     max-width:600px;

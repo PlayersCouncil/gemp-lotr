@@ -304,41 +304,429 @@ $(document).ready(
 		$("#rtmd-start").val(now.toISOString().substr(0, 10));
 		updateDescPreview("#rtmd-desc", "#rtmd-desc-preview");
 
-		// Live path counter
-		$("#rtmd-path").on("input", function() {
-			var lines = $(this).val().split('\n').filter(function(l) { return l.trim() !== ''; });
-			var count = lines.length;
-			var valid = (count === 5 || count === 9);
-			$("#rtmd-path-count").html(count + " modifiers" + (valid ? " ✓" : " (need 5 or 9)"));
-			$("#rtmd-path-count").css("color", valid ? "#0a0" : "#888");
+		// ---- RTMD State ----
+		var rtmdAllModifiers = [];   // Full list from server {blueprintId, title, intensity, gameText}
+		var rtmdAllVisualCards = [];  // Full list from server {blueprintId, title, intensity}
+		var rtmdPath = [];           // Current path: array of modifier objects (or null for empty slots)
+		var rtmdLocked = [];         // Boolean array: which slots are locked
+		var rtmdDataLoaded = false;
+
+		// ---- Intensity Slider (init before fetch so it exists when data arrives) ----
+		$("#rtmd-intensity-slider").slider({
+			range: true,
+			min: 0,
+			max: 1,
+			values: [0, 1],
+			disabled: true,
+			slide: function(event, ui) {
+				$("#rtmd-intensity-floor").val(ui.values[0]);
+				$("#rtmd-intensity-ceiling").val(ui.values[1]);
+				$("#rtmd-intensity-display").text(ui.values[0] + " to " + ui.values[1]);
+				updateAvailablePool();
+			}
 		});
-		
-		$("#rtmd-path").trigger("input");
 
-		// Live visual path counter
-		$("#rtmd-visual-path").on("input", function() {
-			var lines = $(this).val().split('\n').filter(function(l) { return l.trim() !== ''; });
-			var count = lines.length;
-			var modCount = $("#rtmd-path").val().split('\n').filter(function(l) { return l.trim() !== ''; }).length;
-			var match = (count === modCount);
-			$("#rtmd-visual-path-count").html(count + " visual cards" + (match ? " ✓" : " (must match modifier count: " + modCount + ")"));
-			$("#rtmd-visual-path-count").css("color", match ? "#0a0" : "#c00");
+		// ---- Fetch modifier/visual card data ----
+		$("#rtmd-path-container").html("<em>Loading modifier data...</em>");
+		hall.comm.getRTMDModifiers(function(data) {
+			rtmdAllModifiers = data.modifiers || [];
+			rtmdAllVisualCards = (data.visualCards || []).sort(function(a, b) { return a.intensity - b.intensity; });
+			rtmdDataLoaded = true;
+			$("#rtmd-path-container").html("");
+
+			// Set intensity slider range from actual data
+			var intensities = rtmdAllModifiers.map(function(m) { return m.intensity; });
+			if (intensities.length === 0) {
+				console.warn("RTMD: No modifiers loaded — slider left disabled.");
+				$("#rtmd-intensity-display").text("No modifiers found");
+				return;
+			}
+			var minI = Math.min.apply(null, intensities);
+			var maxI = Math.max.apply(null, intensities);
+			if (minI === maxI) { maxI = minI + 1; } // Prevent degenerate range
+			var slider = $("#rtmd-intensity-slider");
+			console.log("RTMD slider init: min=" + minI + ", max=" + maxI + ", slider element count=" + slider.length);
+			slider.slider("option", "min", minI);
+			slider.slider("option", "max", maxI);
+			slider.slider("option", "values", [minI, maxI]);
+			slider.slider("option", "disabled", false);
+			$("#rtmd-intensity-floor").val(minI);
+			$("#rtmd-intensity-ceiling").val(maxI);
+			$("#rtmd-intensity-display").text(minI + " to " + maxI);
+
+			updateAvailablePool();
+		}, {});
+
+		// ---- Available Pool ----
+		function getAvailablePool() {
+			var floor = parseInt($("#rtmd-intensity-floor").val()) || -10;
+			var ceiling = parseInt($("#rtmd-intensity-ceiling").val()) || 10;
+			var usedIds = new Set(rtmdPath.filter(function(m) { return m != null; })
+				.map(function(m) { return m.blueprintId; }));
+			return rtmdAllModifiers.filter(function(m) {
+				return m.intensity >= floor && m.intensity <= ceiling && !usedIds.has(m.blueprintId);
+			});
+		}
+
+		function updateAvailablePool() {
+			var pool = getAvailablePool();
+			var sel = $("#rtmd-add-modifier");
+			sel.empty();
+			sel.append("<option value=''>-- Select a modifier to add --</option>");
+			pool.sort(function(a, b) { return a.intensity - b.intensity || a.title.localeCompare(b.title); });
+			for (var i = 0; i < pool.length; i++) {
+				sel.append("<option value='" + pool[i].blueprintId + "'>"
+					+ pool[i].blueprintId + ": " + pool[i].gameText + "</option>");
+			}
+		}
+
+		// ---- Visual Card Auto-Assignment ----
+		function assignVisualCards() {
+			if (rtmdPath.length === 0) return [];
+			var validMods = [];
+			for (var i = 0; i < rtmdPath.length; i++) {
+				if (rtmdPath[i]) validMods.push({ mod: rtmdPath[i], idx: i });
+			}
+			if (validMods.length === 0) return new Array(rtmdPath.length);
+
+			// Sort by intensity for assignment
+			validMods.sort(function(a, b) { return a.mod.intensity - b.mod.intensity; });
+			var available = rtmdAllVisualCards.slice(); // already sorted by intensity
+			var visMin = available.length > 0 ? available[0].intensity : 1;
+			var visMax = available.length > 0 ? available[available.length - 1].intensity : 18;
+
+			// Use the GLOBAL modifier intensity range, not just the path's range,
+			// so the visual assignment reflects where these modifiers sit in the
+			// overall intensity spectrum rather than stretching to fill 1-18.
+			var globalModMin = Infinity, globalModMax = -Infinity;
+			for (var i = 0; i < rtmdAllModifiers.length; i++) {
+				globalModMin = Math.min(globalModMin, rtmdAllModifiers[i].intensity);
+				globalModMax = Math.max(globalModMax, rtmdAllModifiers[i].intensity);
+			}
+
+			var assignments = new Array(rtmdPath.length);
+			var usedVisual = new Set();
+
+			for (var i = 0; i < validMods.length; i++) {
+				var modIntensity = validMods[i].mod.intensity;
+				var targetVis;
+				if (globalModMax === globalModMin) {
+					// All modifiers have same intensity — spread evenly across visual range
+					targetVis = visMin + (visMax - visMin) * (i / Math.max(1, validMods.length - 1));
+				} else {
+					// Map proportionally: modifier's position in global range → visual range
+					var t = (modIntensity - globalModMin) / (globalModMax - globalModMin);
+					targetVis = visMin + (visMax - visMin) * t;
+				}
+
+				var bestDist = Infinity;
+				var bestCard = null;
+				for (var j = 0; j < available.length; j++) {
+					if (usedVisual.has(available[j].blueprintId)) continue;
+					var dist = Math.abs(available[j].intensity - targetVis);
+					if (dist < bestDist) {
+						bestDist = dist;
+						bestCard = available[j];
+					}
+				}
+				if (bestCard) {
+					assignments[validMods[i].idx] = bestCard;
+					usedVisual.add(bestCard.blueprintId);
+				}
+			}
+
+			// Enforce 90_1 (The Shire) must be first, 90_18 (Mount Doom) must be last
+			var shire = null, doom = null;
+			var shireIdx = -1, doomIdx = -1;
+			for (var i = 0; i < assignments.length; i++) {
+				if (!assignments[i]) continue;
+				if (assignments[i].blueprintId === "90_1") { shire = assignments[i]; shireIdx = i; }
+				if (assignments[i].blueprintId === "90_18") { doom = assignments[i]; doomIdx = i; }
+			}
+			// If Shire is assigned but not to first slot, swap with first slot's visual
+			if (shire && shireIdx !== 0 && assignments[0]) {
+				assignments[shireIdx] = assignments[0];
+				assignments[0] = shire;
+			}
+			// If Mount Doom is assigned but not to last occupied slot, swap
+			var lastOccupied = -1;
+			for (var i = assignments.length - 1; i >= 0; i--) {
+				if (assignments[i]) { lastOccupied = i; break; }
+			}
+			// Re-find doom index after possible Shire swap
+			doomIdx = -1;
+			for (var i = 0; i < assignments.length; i++) {
+				if (assignments[i] && assignments[i].blueprintId === "90_18") { doomIdx = i; break; }
+			}
+			if (doom && doomIdx !== lastOccupied && lastOccupied >= 0 && assignments[lastOccupied]) {
+				assignments[doomIdx] = assignments[lastOccupied];
+				assignments[lastOccupied] = doom;
+			}
+
+			return assignments;
+		}
+
+		// ---- Path Rendering ----
+		function renderRTMDPath() {
+			var container = $("#rtmd-path-container").empty();
+
+			for (var i = 0; i < rtmdPath.length; i++) {
+				var mod = rtmdPath[i];
+				if (!mod) continue;
+
+				var slot = $("<div class='rtmd-slot" + (rtmdLocked[i] ? " locked" : "") + "' data-index='" + i + "'></div>");
+
+				// Card thumbnail with right-click preview
+				var imgUrl = Card.getImageUrl(mod.blueprintId);
+				slot.append("<div class='rtmd-slot-card'><img src='" + imgUrl + "'></div>");
+				(function(bpId) {
+					slot.on("contextmenu", function(e) { showCardPreview(bpId, null, e); });
+				})(mod.blueprintId);
+
+				// Info
+				slot.append("<div class='rtmd-slot-info'>"
+					+ "<span class='rtmd-slot-title'>" + mod.title + "</span>"
+					+ "<span class='rtmd-slot-intensity'>Position: " + (i + 1) + " | Intensity: " + mod.intensity + "</span>"
+					+ "</div>");
+
+				// Controls
+				var controls = $("<div class='rtmd-slot-controls'></div>");
+				var lockBtn = $("<button class='rtmd-lock-btn' data-index='" + i + "' title='Lock/Unlock'>"
+					+ (rtmdLocked[i] ? "🔒" : "🔓") + "</button>");
+				var deleteBtn = $("<button class='rtmd-delete-btn' data-index='" + i + "' title='Remove'>✕</button>");
+				controls.append(lockBtn).append(deleteBtn);
+				slot.append(controls);
+
+				container.append(slot);
+			}
+
+			// Count indicator
+			var count = rtmdPath.filter(function(m) { return m != null; }).length;
+			$("#rtmd-path-count").html(count + " modifiers");
+			$("#rtmd-path-count").css("color", count > 0 ? "#0a0" : "#888");
+
+			// Lock button handlers
+			$(".rtmd-lock-btn").click(function(e) {
+				e.stopPropagation();
+				var idx = parseInt($(this).data("index"));
+				rtmdLocked[idx] = !rtmdLocked[idx];
+				renderRTMDPath();
+			});
+
+			// Delete button handlers
+			$(".rtmd-delete-btn").click(function(e) {
+				e.stopPropagation();
+				var idx = parseInt($(this).data("index"));
+				rtmdPath.splice(idx, 1);
+				rtmdLocked.splice(idx, 1);
+				renderRTMDPath();
+				renderPreview();
+				updateAvailablePool();
+			});
+
+			// jQuery UI Sortable for drag-to-reorder
+			container.sortable({
+				items: ".rtmd-slot",
+				tolerance: "pointer",
+				update: function() {
+					var newPath = [];
+					var newLocked = [];
+					container.find(".rtmd-slot").each(function() {
+						var idx = parseInt($(this).data("index"));
+						newPath.push(rtmdPath[idx]);
+						newLocked.push(rtmdLocked[idx]);
+					});
+					rtmdPath = newPath;
+					rtmdLocked = newLocked;
+					renderRTMDPath();
+					renderPreview();
+				}
+			});
+
+			renderPreview();
+		}
+
+		// ---- Preview Rendering ----
+		// Shared CardInfoDialog for right-click preview
+		var rtmdInfoDialog = null;
+		function ensureInfoDialog() {
+			if (!rtmdInfoDialog) {
+				rtmdInfoDialog = new CardInfoDialog(window.innerWidth, window.innerHeight);
+				$(document).on("mouseup", function(e) {
+					if (rtmdInfoDialog && rtmdInfoDialog.isOpen()) {
+						if ($(e.target).closest(".ui-dialog").length === 0) {
+							rtmdInfoDialog.mouseUp();
+						}
+					}
+				});
+			}
+			return rtmdInfoDialog;
+		}
+
+		function showCardPreview(modBpId, visBpId, event) {
+			var dialog = ensureInfoDialog();
+			var card = new Card(visBpId || modBpId, "", "", "SPECIAL", null, "");
+			if (visBpId) {
+				Card.metaSiteOverlays[modBpId] = card.imageUrl;
+				card.overlayImageUrl = Card.getImageUrl(modBpId);
+			}
+			dialog.showCard(card);
+			event.stopPropagation();
+			event.preventDefault();
+		}
+
+		function renderPreview() {
+			var preview = $("#rtmd-preview").empty();
+			if (rtmdPath.length === 0) return;
+
+			var visualAssignments = assignVisualCards();
+			var overlayHeight = Card.MetaSiteOverlayHeight;
+			// The modifier image needs to be scaled so that its bottom portion
+			// fills the overlay area. height = 100/overlayHeight * 100%
+			var modImgHeight = (100 / overlayHeight * 100).toFixed(1);
+
+			// Calculate row layout for even distribution
+			var count = rtmdPath.filter(function(m) { return m != null; }).length;
+			var perRow = count <= 5 ? count : Math.ceil(count / 2);
+
+			var currentRow = $("<div style='display:flex;gap:6px;justify-content:center;margin-bottom:6px;'></div>");
+			var rowCount = 0;
+
+			for (var i = 0; i < rtmdPath.length; i++) {
+				if (!rtmdPath[i]) continue;
+
+				if (rowCount > 0 && rowCount >= perRow) {
+					preview.append(currentRow);
+					currentRow = $("<div style='display:flex;gap:6px;justify-content:center;'></div>");
+					rowCount = 0;
+				}
+
+				var modBpId = rtmdPath[i].blueprintId;
+				var visBpId = visualAssignments[i] ? visualAssignments[i].blueprintId : null;
+				var modImage = Card.getImageUrl(modBpId);
+				var visImage = visBpId ? Card.getImageUrl(visBpId) : null;
+
+				var wrapper = $("<div style='position:relative;width:80px;height:112px;border-radius:4px;overflow:hidden;cursor:pointer;'></div>");
+
+				if (visImage) {
+					wrapper.append("<img src='" + visImage + "' style='width:100%;height:100%;'>");
+					wrapper.append("<div style='position:absolute;bottom:0;width:100%;height:" + overlayHeight
+						+ "%;overflow:hidden;'><img src='" + modImage
+						+ "' style='width:100%;height:" + modImgHeight + "%;position:absolute;bottom:0;'></div>");
+				} else {
+					wrapper.append("<img src='" + modImage + "' style='width:100%;height:100%;'>");
+				}
+
+				wrapper.append("<div style='position:absolute;top:2px;left:4px;font-size:10px;font-weight:bold;"
+					+ "color:white;text-shadow:0 0 3px black,0 0 3px black;'>" + (i + 1) + "</div>");
+
+				// Right-click preview
+				(function(mId, vId) {
+					wrapper.on("contextmenu", function(e) { showCardPreview(mId, vId, e); });
+				})(modBpId, visBpId);
+
+				currentRow.append(wrapper);
+				rowCount++;
+			}
+			if (rowCount > 0) preview.append(currentRow);
+		}
+
+		// ---- Randomizer ----
+		$("#rtmd-randomize-btn").button().click(function() {
+			if (!rtmdDataLoaded) return;
+
+			var pathLength = parseInt($("#rtmd-path-length").val());
+			var floor = parseInt($("#rtmd-intensity-floor").val());
+			var ceiling = parseInt($("#rtmd-intensity-ceiling").val());
+
+			var pool = rtmdAllModifiers.filter(function(m) {
+				return m.intensity >= floor && m.intensity <= ceiling;
+			});
+
+			// Ensure arrays are correct length
+			while (rtmdPath.length < pathLength) { rtmdPath.push(null); rtmdLocked.push(false); }
+			rtmdPath.length = pathLength;
+			rtmdLocked.length = pathLength;
+
+			// Track used IDs from locked slots
+			var usedIds = new Set();
+			for (var i = 0; i < pathLength; i++) {
+				if (rtmdLocked[i] && rtmdPath[i]) {
+					usedIds.add(rtmdPath[i].blueprintId);
+				}
+			}
+
+			// Generate target intensities with linear interpolation
+			var targets = [];
+			for (var i = 0; i < pathLength; i++) {
+				targets.push(floor + (ceiling - floor) * (i / Math.max(1, pathLength - 1)));
+			}
+
+			// For each unlocked slot, pick best match with jitter
+			for (var i = 0; i < pathLength; i++) {
+				if (rtmdLocked[i] && rtmdPath[i]) continue;
+
+				var target = targets[i];
+				var jitter = (Math.random() - 0.5) * 2;
+				var adjustedTarget = target + jitter;
+
+				var available = pool.filter(function(m) { return !usedIds.has(m.blueprintId); });
+				available.sort(function(a, b) {
+					return Math.abs(a.intensity - adjustedTarget) - Math.abs(b.intensity - adjustedTarget);
+				});
+
+				if (available.length > 0) {
+					var topN = Math.min(3, available.length);
+					var pick = available[Math.floor(Math.random() * topN)];
+					rtmdPath[i] = pick;
+					usedIds.add(pick.blueprintId);
+				} else {
+					rtmdPath[i] = null;
+				}
+			}
+
+			// Swap two random pairs of unlocked adjacent modifiers for a dash of nonlinearity
+			for (var swap = 0; swap < 2; swap++) {
+				var candidates = [];
+				for (var i = 0; i < rtmdPath.length - 1; i++) {
+					if (!rtmdLocked[i] && !rtmdLocked[i + 1] && rtmdPath[i] && rtmdPath[i + 1]) {
+						candidates.push(i);
+					}
+				}
+				if (candidates.length > 0) {
+					var idx = candidates[Math.floor(Math.random() * candidates.length)];
+					var tmp = rtmdPath[idx];
+					rtmdPath[idx] = rtmdPath[idx + 1];
+					rtmdPath[idx + 1] = tmp;
+				}
+			}
+
+			renderRTMDPath();
+			updateAvailablePool();
 		});
 
-		$("#rtmd-visual-path").trigger("input");
-		// Re-validate visual count when modifier path changes
-		$("#rtmd-path").on("input", function() { $("#rtmd-visual-path").trigger("input"); });
+		// ---- Manual Add ----
+		$("#rtmd-add-modifier-btn").button().click(function() {
+			var bpId = $("#rtmd-add-modifier").val();
+			if (!bpId) return;
+			var mod = rtmdAllModifiers.find(function(m) { return m.blueprintId === bpId; });
+			if (!mod) return;
+			rtmdPath.push(mod);
+			rtmdLocked.push(false);
+			renderRTMDPath();
+			updateAvailablePool();
+		});
 
+		// ---- Data Gathering for Submission ----
 		function gatherRTMDPath() {
-			return $("#rtmd-path").val().split('\n')
-				.map(function(l) { return l.trim(); })
-				.filter(function(l) { return l !== ''; });
+			return rtmdPath.filter(function(m) { return m != null; })
+				.map(function(m) { return m.blueprintId; });
 		}
 
 		function gatherRTMDVisualPath() {
-			return $("#rtmd-visual-path").val().split('\n')
-				.map(function(l) { return l.trim(); })
-				.filter(function(l) { return l !== ''; });
+			var assignments = assignVisualCards();
+			return assignments.filter(function(v) { return v != null; })
+				.map(function(v) { return v.blueprintId; });
 		}
 
 		function submitRTMDLeague(preview) {
@@ -994,51 +1382,38 @@ function leagueErrorMap(outputControl, callback=null) {
 			<span style="margin-left:8px; color:#888;">(wins or points needed per position advance)</span>
 		</div>
 
-		<div class="flex-horiz">
+		<div class="flex-horiz" style="display:none">
 			<div class="label-column">Cumulative: </div>
 			<input type="checkbox" id="rtmd-cumulative" />
 			<span style="margin-left:8px; color:#888;">(all prior meta-sites remain active)</span>
 		</div>
 
-		<div class="flex-horiz">
+		<div class="flex-horiz" style="align-items:center;">
 			<div class="label-column">Intensity Range: </div>
-			<input type="number" min="1" max="10" id="rtmd-intensity-floor" value="1" style="width:60px;">
-			<span style="margin:0 8px;"> to </span>
-			<input type="number" min="1" max="10" id="rtmd-intensity-ceiling" value="10" style="width:60px;">
-			<span style="margin-left:8px; color:#888;">(for auto-generation filtering)</span>
+			<div class="flex-fill" style="padding:0 10px;">
+				<div id="rtmd-intensity-slider" style="margin:10px 0;"></div>
+			</div>
+			<span id="rtmd-intensity-display" style="margin-left:8px; color:#aaa; min-width:60px;">-10 to 10</span>
+			<input type="hidden" id="rtmd-intensity-floor" value="-10">
+			<input type="hidden" id="rtmd-intensity-ceiling" value="10">
 		</div>
 
-		<div class="flex-horiz">
-			<div class="label-column">Race Path (blueprint IDs, 1 per line): </div>
-			<div class="flex-vert flex-fill">
-				<textarea rows="10" cols="30" id="rtmd-path" class="flex-fill" placeholder="90_1&#10;90_2&#10;90_3&#10;...">91_2
-91_3
-91_4
-91_5
-91_6
-91_7
-91_8
-91_9
-91_10</textarea>
-				<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers (need 5 or 9)</div>
-			</div>
+		<div class="flex-horiz" style="gap:8px; margin:8px 0; align-items:center;">
+			<button id="rtmd-randomize-btn">Randomize</button>
+			<label>Path length: </label>
+			<input type="number" id="rtmd-path-length" value="9" min="1" max="18" style="width:50px;">
+			<span style="flex-grow:1;"></span>
+			<select id="rtmd-add-modifier" style="max-width:500px;">
+				<option value="">-- Select a modifier to add --</option>
+			</select>
+			<button id="rtmd-add-modifier-btn">Add</button>
 		</div>
 
-		<div class="flex-horiz">
-			<div class="label-column">Visual Cards (set 90 IDs, 1 per line): </div>
-			<div class="flex-vert flex-fill">
-				<textarea rows="10" cols="30" id="rtmd-visual-path" class="flex-fill" placeholder="90_1&#10;90_2&#10;90_3&#10;...">90_1
-90_2
-90_3
-90_4
-90_5
-90_6
-90_7
-90_8
-90_9</textarea>
-				<div id="rtmd-visual-path-count" style="color:#888; margin-top:4px;">0 visual cards</div>
-			</div>
-		</div>
+		<div id="rtmd-path-container" style="display:flex;flex-wrap:wrap;gap:8px;min-height:120px;padding:8px;border:1px solid #444;border-radius:4px;background:#1a1a1a;"></div>
+		<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers (need 5 or 9)</div>
+
+		<h4 style="margin-top:12px;">Path Preview</h4>
+		<div id="rtmd-preview" style="padding:8px;border:1px solid #333;border-radius:4px;background:#111;min-height:60px;"></div>
 
 		<h3>Series</h3>
 

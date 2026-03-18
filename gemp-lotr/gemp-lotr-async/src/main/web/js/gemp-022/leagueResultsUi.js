@@ -55,7 +55,7 @@ var LeagueResultsUI = Class.extend({
             });
     },
 
-        loadedLeague:function (xml) {
+    loadedLeague:function (xml) {
         var that = this;
         log(xml);
         var root = xml.documentElement;

@@ -14,6 +14,7 @@ import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.CardCollection;
+import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -106,6 +107,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             processRTMDLeague(request, responseWriter, true);
         } else if (uri.equals("/addRTMDLeague") && request.method() == HttpMethod.POST) {
             processRTMDLeague(request, responseWriter, false);
+        } else if (uri.equals("/rtmdModifiers") && request.method() == HttpMethod.GET) {
+            getRTMDModifiers(request, responseWriter);
         } else if (uri.equals("/processScheduledTournament") && request.method() == HttpMethod.POST) {
             processScheduledTournament(request, responseWriter);
         } else if (uri.equals("/setTournamentStage") && request.method() == HttpMethod.POST) {
@@ -738,8 +741,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             raceIntensityCeiling = Throw400IfNullOrNonInteger("raceIntensityCeiling", raceIntensityCeilingStr);
 
         Throw400IfValidationFails("raceIntensity", raceIntensityFloor + "-" + raceIntensityCeiling,
-                raceIntensityFloor >= 1 && raceIntensityCeiling <= 10 && raceIntensityFloor <= raceIntensityCeiling,
-                "Intensity range must be between 1-10 with floor <= ceiling.");
+                raceIntensityFloor <= raceIntensityCeiling,
+                "Intensity floor must be <= ceiling.");
 
         RTMDLeague.AdvanceType advancementMode = RTMDLeague.AdvanceType.WIN;
         if (raceAdvancementModeStr != null && !raceAdvancementModeStr.isBlank()) {
@@ -1200,6 +1203,50 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      * @param responseWriter the response writer
      * @throws Exception
      */
+    private void getRTMDModifiers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var modifiers = new ArrayList<Map<String, Object>>();
+        var visualCards = new ArrayList<Map<String, Object>>();
+
+        // Visual cards: set 90. Modifiers: sets 91-94 (94 reserved for future modifiers)
+        var visualSets = Set.of(90);
+        var modifierSets = Set.of(91, 92, 93, 94);
+
+        // Iterate all loaded blueprints rather than rarity files (which may not exist for these sets)
+        for (var mapEntry : _cardLibrary.getBaseCards().entrySet()) {
+            String blueprintId = mapEntry.getKey();
+            int setId;
+            try {
+                setId = Integer.parseInt(blueprintId.split("_")[0]);
+            } catch (NumberFormatException e) {
+                continue;
+            }
+
+            var bp = mapEntry.getValue();
+            if (visualSets.contains(setId)) {
+                var entry = new LinkedHashMap<String, Object>();
+                entry.put("blueprintId", blueprintId);
+                entry.put("title", bp.getFullName());
+                entry.put("intensity", bp.getIntensity());
+                visualCards.add(entry);
+            } else if (modifierSets.contains(setId)) {
+                var entry = new LinkedHashMap<String, Object>();
+                entry.put("blueprintId", blueprintId);
+                entry.put("title", bp.getFullName());
+                entry.put("intensity", bp.getIntensity());
+                entry.put("gameText", bp.getGameText());
+                modifiers.add(entry);
+            }
+        }
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("modifiers", modifiers);
+        result.put("visualCards", visualCards);
+
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
+
     private void processScheduledTournament(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
 

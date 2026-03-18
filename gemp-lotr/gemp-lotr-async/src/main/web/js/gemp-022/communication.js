@@ -1275,6 +1275,20 @@ var GempLotrCommunication = Class.extend({
     },
     
     
+    getRTMDModifiers:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/rtmdModifiers",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     processScheduledTournament:function (preview, name, type, wc, tournamentId, 
                                          formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
                                          soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,
