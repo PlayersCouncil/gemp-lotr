@@ -1,0 +1,740 @@
+{
+	91_1: {
+		cardInfo: {
+			//id: 91_1.0
+			parent: 91_1
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S01.0_card.jpg
+			collInfo: 91_1
+			rarity: _
+		}
+		title: Race Text 91_1
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Your starting companions may have a total twilight cost of 6 instead of 4.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_2: {
+		cardInfo: {
+			//id: 91_2.0
+			parent: 91_2
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S02.0_card.jpg
+			collInfo: 91_2
+			rarity: _
+		}
+		title: Race Text 91_2
+		type: MetaSite
+		intensity: 6
+		effects: [
+			{
+				type: Trigger
+				trigger: {
+					type: StartOfPhase
+					phase: Fellowship
+				}
+				requires: {
+					type: OwnerIsFreeps
+				}
+				optional: true
+				effect: {
+					type: PutCardsFromDeckIntoHand
+					select: choose(your)
+					count: 1
+					shuffle: true
+					reveal: true
+					showAll: false
+				}
+			}
+		]
+		gametext: At the start of each of your fellowship phases, you may take any card into hand from your draw deck.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_3: {
+		cardInfo: {
+			//id: 91_3.0
+			parent: 91_3
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S03.0_card.jpg
+			collInfo: 91_3
+			rarity: _
+		}
+		title: Race Text 91_3
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Moves
+				}
+				requires: {
+					type: OwnerIsFreeps
+				}
+				effect: {
+					type: DrawCards
+					count: 1
+				}
+			}
+		]
+		gametext: Each time your fellowship moves, you may draw a card.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_4: {
+		cardInfo: {
+			//id: 91_4.0
+			parent: 91_4
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S04.0_card.jpg
+			collInfo: 91_4
+			rarity: _
+		}
+		title: Race Text 91_4
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: CancelKeywordBonus
+					filter: character
+					from: your,weapon
+					keyword: damage
+				}
+			}
+		]
+		gametext: Your weapons lose all damage bonuses.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_5: {
+		cardInfo: {
+			//id: 91_5.0
+			parent: 91_5
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S05.0_card.jpg
+			collInfo: 91_5
+			rarity: _
+		}
+		title: Race Text 91_5
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: shadow
+				trigger: {
+					type: StartOfPhase
+					phase: shadow
+				}
+				requires: [
+					{
+						type: OwnerIsFreeps
+					}
+					{
+						type: CanSpot
+						filter: companion
+						count: 5
+					}
+				]
+				effect: {
+					type: DrawCards
+					count: {
+						type: ForEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			}
+		]
+		gametext: For each companion over 4, each of your opponents may draw a card at the start of their Shadow phase.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_6: {
+		cardInfo: {
+			//id: 91_6.0
+			parent: 91_6
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S06.0_card.jpg
+			collInfo: 91_6
+			rarity: _
+		}
+		title: Race Text 91_6
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Moves
+				}
+				requires: {
+					type: OwnerIsFreeps
+				}
+				effect: {
+					type: AddBurdens
+					amount: 1
+				}
+			}
+		]
+		gametext: Each time your fellowship moves, add a burden.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_7: {
+		cardInfo: {
+			//id: 91_7.0
+			parent: 91_7
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S07.0_card.jpg
+			collInfo: 91_7
+			rarity: _
+		}
+		title: Race Text 91_7
+		type: MetaSite
+		intensity: 3
+		// NOTE: Roaming is a pseudokeyword auto-added by rule to qualifying minions.
+		// RemoveKeyword strips it entirely, which also removes the penalty.
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: RemoveKeyword
+					filter: minion,not(your)
+					keyword: roaming
+				}
+			}
+		]
+		gametext: Your opponent's minions are not roaming.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_8: {
+		cardInfo: {
+			//id: 91_8.0
+			parent: 91_8
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S08.0_card.jpg
+			collInfo: 91_8
+			rarity: _
+		}
+		title: Race Text 91_8
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyMoveLimit
+					amount: -1
+					requires: {
+						type: CanSpot
+						filter: your,companion
+						count: 5
+					}
+				}
+			}
+		]
+		gametext: While you can spot 5 or more companions, your move limit is -1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_9: {
+		cardInfo: {
+			//id: 91_9.0
+			parent: 91_9
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S09.0_card.jpg
+			collInfo: 91_9
+			rarity: _
+		}
+		title: Race Text 91_9
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: companion
+					memorize: playedCompanion
+				}
+				requires: {
+					type: Location
+					filter: not(siteNumber(1))
+				}
+				effect: {
+					type: Exhaust
+					select: memory(playedCompanion)
+				}
+			}
+		]
+		gametext: Each time a companion is played, that companion comes into play exhausted (except at site 1).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_10: {
+		cardInfo: {
+			//id: 91_10.0
+			parent: 91_10
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S10.0_card.jpg
+			collInfo: 91_10
+			rarity: _
+		}
+		title: Race Text 91_10
+		type: MetaSite
+		intensity: -2
+		effects: [
+			{
+				type: Activated
+				phase: skirmish
+				cost: {
+					type: DiscardFromHand
+					count: 3
+					forced: false
+				}
+				effect: {
+					type: ModifyStrength
+					select: choose(your,or(companion,minion))
+					amount: 1
+				}
+			}
+		]
+		gametext: Skirmish: Discard 3 cards from hand to make your companion or minion strength +1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_11: {
+		cardInfo: {
+			//id: 91_11.0
+			parent: 91_11
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S11.0_card.jpg
+			collInfo: 91_11
+			rarity: _
+		}
+		title: Race Text 91_11
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Shadow: Discard 3 cards from hand to play a condition from your discard pile.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_12: {
+		cardInfo: {
+			//id: 91_12.0
+			parent: 91_12
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S12.0_card.jpg
+			collInfo: 91_12
+			rarity: _
+		}
+		title: Race Text 91_12
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: While you can spot a Dwarf companion, an Elf companion, and Gandalf, your move limit is +1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_13: {
+		cardInfo: {
+			//id: 91_13.0
+			parent: 91_13
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S13.0_card.jpg
+			collInfo: 91_13
+			rarity: _
+		}
+		title: Race Text 91_13
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: You may not perform maneuver phase actions.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_14: {
+		cardInfo: {
+			//id: 91_14.0
+			parent: 91_14
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S14.0_card.jpg
+			collInfo: 91_14
+			rarity: _
+		}
+		title: Race Text 91_14
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Your starting companions must have a total twilight cost of 3 or less.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_15: {
+		cardInfo: {
+			//id: 91_15.0
+			parent: 91_15
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S15.0_card.jpg
+			collInfo: 91_15
+			rarity: _
+		}
+		title: Race Text 91_15
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: You may not play Men.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_16: {
+		cardInfo: {
+			//id: 91_16.0
+			parent: 91_16
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S16.0_card.jpg
+			collInfo: 91_16
+			rarity: _
+		}
+		title: Race Text 91_16
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of each regroup phase, you must discard a card from your hand.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_17: {
+		cardInfo: {
+			//id: 91_17.0
+			parent: 91_17
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S17.0_card.jpg
+			collInfo: 91_17
+			rarity: _
+		}
+		title: Race Text 91_17
+		type: MetaSite
+		intensity: 7
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time your fellowship moves, add (3) \(or (6) if you can spot 6 companions).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	91_18: {
+		cardInfo: {
+			//id: 91_18.0
+			parent: 91_18
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN91S18.0_card.jpg
+			collInfo: 91_18
+			rarity: _
+		}
+		title: Race Text 91_18
+		type: MetaSite
+		intensity: 8
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: You must bid at least 6 burdens.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

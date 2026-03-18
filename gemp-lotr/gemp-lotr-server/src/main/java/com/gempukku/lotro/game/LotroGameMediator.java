@@ -9,6 +9,7 @@ import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.state.GameCommunicationChannel;
 import com.gempukku.lotro.game.state.GameEvent;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.GameUtils;
@@ -59,7 +60,8 @@ public class LotroGameMediator {
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
-                             String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo) {
+                             String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo,
+                             GameExtraInfo extraInfo) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
@@ -108,7 +110,7 @@ public class LotroGameMediator {
 
         _userFeedback = new DefaultUserFeedback();
         _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(),
-                _allowSpectators, tournamentName);
+                _allowSpectators, tournamentName, extraInfo);
 
         if (_botPlayer != null) {
             _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this));

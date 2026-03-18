@@ -1229,7 +1229,66 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    processRTMDLeague:function (preview, start, name, cost, maxRepeatMatches,
+                                       inviteOnly, description,
+                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       formats, serieDurations, maxMatches,
+                                       racePath, raceVisualPath, raceCumulative, raceIntensityFloor, raceIntensityCeiling,
+                                       raceAdvancementMode, raceAdvanceFactor,
+                                       callback, errorMap) {
+        let url = this.url + "/admin/addRTMDLeague";
+
+        if(preview) {
+            url = this.url + "/admin/previewRTMDLeague";
+        }
+
+        $.ajax({
+            type:"POST",
+            url:url,
+            cache:false,
+            data:{
+                start:start,
+                name:name,
+                cost:cost,
+                maxRepeatMatches:maxRepeatMatches,
+                topPrize:topPrize,
+                topCutoff:topCutoff,
+                participationPrize:participationPrize,
+                participationGames:participationGames,
+                format:formats,
+                serieDuration:serieDurations,
+                maxMatches:maxMatches,
+                inviteOnly:inviteOnly,
+                description:description,
+                racePath:racePath,
+                raceVisualPath:raceVisualPath,
+                raceCumulative:raceCumulative,
+                raceIntensityFloor:raceIntensityFloor,
+                raceIntensityCeiling:raceIntensityCeiling,
+                raceAdvancementMode:raceAdvancementMode,
+                raceAdvanceFactor:raceAdvanceFactor
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     
+    
+    getRTMDModifiers:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/rtmdModifiers",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     processScheduledTournament:function (preview, name, type, wc, tournamentId, 
                                          formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
                                          soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,

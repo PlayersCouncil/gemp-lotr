@@ -3,10 +3,7 @@ package com.gempukku.lotro.db.vo;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.league.ConstructedLeague;
-import com.gempukku.lotro.league.LeagueData;
-import com.gempukku.lotro.league.SealedLeague;
-import com.gempukku.lotro.league.SoloDraftLeague;
+import com.gempukku.lotro.league.*;
 import com.gempukku.lotro.packs.ProductLibrary;
 
 public class League {
@@ -18,7 +15,8 @@ public class League {
     public enum LeagueType {
         CONSTRUCTED,
         SEALED,
-        SOLODRAFT;
+        SOLODRAFT,
+        RTMD;
 
         public static LeagueType parse(String name) {
             String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
@@ -53,6 +51,8 @@ public class League {
 
     public String getDescription() { return _leagueData.getParameters().description; }
 
+    public LeagueType getType() { return _type; }
+
     public int getCost() {
         return _cost;
     }
@@ -79,6 +79,8 @@ public class League {
                             _leagueData = SealedLeague.fromRawParameters(productLibrary, formatLibrary, _unparsedParams);
                     case SOLODRAFT ->
                             _leagueData = SoloDraftLeague.fromRawParameters(productLibrary,  formatLibrary, soloDraftDefinitions, _unparsedParams);
+                    case RTMD ->
+                            _leagueData = RTMDLeague.fromRawParameters(productLibrary, formatLibrary, _unparsedParams);
                     default ->
                             throw new IllegalArgumentException("Unrecognized league type '" + _type + "'.");
                 }

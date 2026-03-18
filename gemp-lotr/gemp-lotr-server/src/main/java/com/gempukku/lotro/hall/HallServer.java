@@ -16,6 +16,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
@@ -882,7 +883,15 @@ public class HallServer extends AbstractServer {
     }
 
     private LotroGameMediator createGameMediator(LotroGameParticipant[] participants, GameResultListener listener, String tournamentName, GameSettings gameSettings) {
-        final LotroGameMediator lotroGameMediator = _lotroServer.createNewGame(tournamentName, participants, gameSettings);
+        // Build RTMD game info if this is an RTMD league game
+        GameExtraInfo extraInfo = null;
+        if (gameSettings.league() != null) {
+            var playerNames = new ArrayList<String>();
+            for (var p : participants) playerNames.add(p.getPlayerId());
+            extraInfo = _leagueService.buildRTMDGameInfo(gameSettings.league(), playerNames);
+        }
+
+        final LotroGameMediator lotroGameMediator = _lotroServer.createNewGame(tournamentName, participants, gameSettings, extraInfo);
         if (listener != null)
             lotroGameMediator.addGameResultListener(listener);
         lotroGameMediator.startGame();

@@ -14,6 +14,7 @@ import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.CardCollection;
+import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -102,6 +103,12 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             processConstructedLeague(request, responseWriter, true);
         } else if (uri.equals("/addConstructedLeague") && request.method() == HttpMethod.POST) {
             processConstructedLeague(request, responseWriter, false);
+        } else if (uri.equals("/previewRTMDLeague") && request.method() == HttpMethod.POST) {
+            processRTMDLeague(request, responseWriter, true);
+        } else if (uri.equals("/addRTMDLeague") && request.method() == HttpMethod.POST) {
+            processRTMDLeague(request, responseWriter, false);
+        } else if (uri.equals("/rtmdModifiers") && request.method() == HttpMethod.GET) {
+            getRTMDModifiers(request, responseWriter);
         } else if (uri.equals("/processScheduledTournament") && request.method() == HttpMethod.POST) {
             processScheduledTournament(request, responseWriter);
         } else if (uri.equals("/setTournamentStage") && request.method() == HttpMethod.POST) {
@@ -620,6 +627,273 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
     }
 
     /**
+     * Processes the passed parameters for a theoretical RTMD League.  Based on the preview parameter, this will
+     * either create the league for real, or just return the parsed values to the client so the admin can preview
+     * the input.
+     * @param request the request
+     * @param responseWriter the response writer
+     * @param preview If true, no league will be created and the client will have an XML payload returned representing
+     *                what the league would be upon creation.  If false, the league will be created for real.
+     * @throws Exception
+     */
+    private void processRTMDLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
+        validateEventAdmin(request);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+
+        // Standard league fields
+        String name = getFormParameterSafely(postDecoder, "name");
+        String description = getFormParameterSafely(postDecoder, "description");
+        String costStr = getFormParameterSafely(postDecoder, "cost");
+        String startStr = getFormParameterSafely(postDecoder, "start");
+        String maxRepeatMatchesStr = getFormParameterSafely(postDecoder, "maxRepeatMatches");
+        String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
+
+        // Prize fields
+        String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
+        String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
+        String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
+        String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
+
+        // Series fields — per-serie format, duration, and match limits (same as constructed)
+        List<String> formats = getFormMultipleParametersSafely(postDecoder, "format[]");
+        List<String> serieDurationsStr = getFormMultipleParametersSafely(postDecoder, "serieDuration[]");
+        List<String> maxMatchesStr = getFormMultipleParametersSafely(postDecoder, "maxMatches[]");
+
+        // RTMD-specific fields
+        List<String> racePath = getFormMultipleParametersSafely(postDecoder, "racePath[]");
+        List<String> raceVisualPath = getFormMultipleParametersSafely(postDecoder, "raceVisualPath[]");
+        String raceCumulativeStr = getFormParameterSafely(postDecoder, "raceCumulative");
+        String raceIntensityFloorStr = getFormParameterSafely(postDecoder, "raceIntensityFloor");
+        String raceIntensityCeilingStr = getFormParameterSafely(postDecoder, "raceIntensityCeiling");
+        String raceAdvancementModeStr = getFormParameterSafely(postDecoder, "raceAdvancementMode");
+        String raceAdvanceFactorStr = getFormParameterSafely(postDecoder, "raceAdvanceFactor");
+
+        // --- Validation ---
+
+        // Standard fields
+        Throw400IfStringNull("name", name);
+        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
+        int cost = Throw400IfNullOrNonInteger("cost", costStr);
+        if (startStr.length() != 8)
+            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
+        int start = Throw400IfNullOrNonInteger("start", startStr);
+        int maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
+        boolean inviteOnly = inviteOnlyStr != null && inviteOnlyStr.equalsIgnoreCase("true");
+        int topCutoff = Throw400IfNullOrNonInteger("topCutoff", topCutoffStr);
+        int participationGames = Throw400IfNullOrNonInteger("participationGames", participationGamesStr);
+
+        // Series fields
+        Throw400IfAnyStringNull("formats", formats);
+        List<Integer> serieDurations = Throw400IfAnyNullOrNonInteger("serieDurations", serieDurationsStr);
+        List<Integer> maxMatches = Throw400IfAnyNullOrNonInteger("maxMatches", maxMatchesStr);
+
+        if (formats.size() != serieDurations.size() || formats.size() != maxMatches.size())
+            throw new HttpProcessingException(400, "Size mismatch between provided formats, serieDurations, and maxMatches.");
+
+        if (formats.isEmpty())
+            throw new HttpProcessingException(400, "At least one series must be defined.");
+
+        // RTMD fields
+        Throw400IfValidationFails("racePath", String.valueOf(racePath),
+                racePath != null && !racePath.isEmpty(), "Race path must contain at least one modifier.");
+
+        int pathLength = racePath.size();
+        Throw400IfValidationFails("racePath", String.valueOf(pathLength),
+                pathLength == 5 || pathLength == 9,
+                "Race path must contain exactly 5 or 9 modifiers (got " + pathLength + ").");
+
+        for (String blueprintId : racePath) {
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(blueprintId);
+                Throw400IfValidationFails("racePath", blueprintId, bp != null,
+                        "Blueprint '" + blueprintId + "' not found.");
+            } catch (Exception ex) {
+                throw new HttpProcessingException(400, "Invalid blueprint ID in race path: " + blueprintId);
+            }
+        }
+
+        // Visual path validation
+        Throw400IfValidationFails("raceVisualPath", String.valueOf(raceVisualPath),
+                raceVisualPath != null && !raceVisualPath.isEmpty(), "Visual path must contain at least one card.");
+        Throw400IfValidationFails("raceVisualPath", raceVisualPath.size() + " vs " + pathLength,
+                raceVisualPath.size() == pathLength,
+                "Visual path must have the same number of entries as the modifier path (" + pathLength + ").");
+
+        for (String blueprintId : raceVisualPath) {
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(blueprintId);
+                Throw400IfValidationFails("raceVisualPath", blueprintId, bp != null,
+                        "Blueprint '" + blueprintId + "' not found.");
+            } catch (Exception ex) {
+                throw new HttpProcessingException(400, "Invalid blueprint ID in visual path: " + blueprintId);
+            }
+        }
+
+        boolean raceCumulative = raceCumulativeStr != null && raceCumulativeStr.equalsIgnoreCase("true");
+
+        int raceIntensityFloor = 1;
+        if (raceIntensityFloorStr != null && !raceIntensityFloorStr.isBlank())
+            raceIntensityFloor = Throw400IfNullOrNonInteger("raceIntensityFloor", raceIntensityFloorStr);
+
+        int raceIntensityCeiling = 10;
+        if (raceIntensityCeilingStr != null && !raceIntensityCeilingStr.isBlank())
+            raceIntensityCeiling = Throw400IfNullOrNonInteger("raceIntensityCeiling", raceIntensityCeilingStr);
+
+        Throw400IfValidationFails("raceIntensity", raceIntensityFloor + "-" + raceIntensityCeiling,
+                raceIntensityFloor <= raceIntensityCeiling,
+                "Intensity floor must be <= ceiling.");
+
+        RTMDLeague.AdvanceType advancementMode = RTMDLeague.AdvanceType.WIN;
+        if (raceAdvancementModeStr != null && !raceAdvancementModeStr.isBlank()) {
+            try {
+                advancementMode = RTMDLeague.AdvanceType.valueOf(raceAdvancementModeStr.toUpperCase().trim());
+            } catch (IllegalArgumentException e) {
+                throw new HttpProcessingException(400, "Invalid advancement mode: " + raceAdvancementModeStr
+                        + ". Must be WIN or SCORE.");
+            }
+        }
+
+        int raceAdvanceFactor = 1;
+        if (raceAdvanceFactorStr != null && !raceAdvanceFactorStr.isBlank())
+            raceAdvanceFactor = Throw400IfNullOrNonInteger("raceAdvanceFactor", raceAdvanceFactorStr);
+        Throw400IfValidationFails("raceAdvanceFactor", String.valueOf(raceAdvanceFactor),
+                raceAdvanceFactor >= 1, "Advance factor must be at least 1.");
+
+        // --- Build params ---
+
+        var params = new LeagueParams();
+        params.name = name;
+        params.code = System.currentTimeMillis();
+        params.start = DateUtils.ParseDate(start).toLocalDateTime();
+        params.cost = cost;
+        params.collectionName = "default";
+        params.inviteOnly = inviteOnly;
+        params.maxRepeatMatches = maxRepeatMatches;
+        params.description = description;
+        params.extraPrizes = new LeagueParams.PrizeData(topPrizeStr, topCutoff, participationPrizeStr, participationGames);
+
+        params.series = new ArrayList<>();
+        for (int i = 0; i < formats.size(); i++) {
+            params.series.add(new LeagueParams.SerieData(formats.get(i), serieDurations.get(i), maxMatches.get(i)));
+        }
+
+        params.racePath = new ArrayList<>(racePath);
+        params.raceVisualPath = new ArrayList<>(raceVisualPath);
+        params.raceCumulative = raceCumulative;
+        params.raceIntensityFloor = raceIntensityFloor;
+        params.raceIntensityCeiling = raceIntensityCeiling;
+        params.raceAdvancementMode = advancementMode;
+        params.raceAdvanceFactor = raceAdvanceFactor;
+
+        // --- Construct and validate ---
+
+        var leagueData = new RTMDLeague(_productLibrary, _formatLibrary, params);
+        List<LeagueSerieInfo> series = leagueData.getSeries();
+
+        var leagueStart = series.getFirst().getStart();
+        var displayEnd = series.getLast().getEnd().plusDays(2);
+
+        if (!preview) {
+            _leagueDao.addLeague(name, params.code, League.LeagueType.RTMD, params, leagueStart, displayEnd, cost);
+
+            _leagueService.clearCache();
+
+            responseWriter.sendXmlOK();
+            return;
+        }
+
+        // --- Preview XML ---
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+        Document doc = documentBuilder.newDocument();
+
+        Element leagueElem = doc.createElement("league");
+
+        leagueElem.setAttribute("name", name);
+        leagueElem.setAttribute("type", "RTMD");
+        leagueElem.setAttribute("code", String.valueOf(params.code));
+        leagueElem.setAttribute("cost", String.valueOf(cost));
+        leagueElem.setAttribute("start", String.valueOf(series.getFirst().getStart()));
+        leagueElem.setAttribute("end", String.valueOf(displayEnd));
+        leagueElem.setAttribute("inviteOnly", String.valueOf(inviteOnly));
+        leagueElem.setAttribute("maxRepeatMatches", String.valueOf(maxRepeatMatches));
+        leagueElem.setAttribute("description", description);
+
+        // RTMD-specific preview attributes
+        leagueElem.setAttribute("pathLength", String.valueOf(pathLength));
+        leagueElem.setAttribute("cumulative", String.valueOf(raceCumulative));
+        leagueElem.setAttribute("advancementMode", advancementMode.toString());
+        leagueElem.setAttribute("advanceFactor", String.valueOf(raceAdvanceFactor));
+        leagueElem.setAttribute("intensityFloor", String.valueOf(raceIntensityFloor));
+        leagueElem.setAttribute("intensityCeiling", String.valueOf(raceIntensityCeiling));
+
+        // Path modifiers + visual cards
+        for (int i = 0; i < racePath.size(); i++) {
+            Element siteElem = doc.createElement("metaSite");
+            siteElem.setAttribute("position", String.valueOf(i + 1));
+            siteElem.setAttribute("blueprintId", racePath.get(i));
+            if (i < raceVisualPath.size()) {
+                siteElem.setAttribute("visualBlueprintId", raceVisualPath.get(i));
+            }
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(racePath.get(i));
+                if (bp != null) {
+                    siteElem.setAttribute("name", bp.getFullName());
+                }
+            } catch (Exception ignored) {}
+            leagueElem.appendChild(siteElem);
+        }
+
+        // Prize display
+        var topPrize = CardCollection.Item.createItem(topPrizeStr);
+        var partPrize = CardCollection.Item.createItem(participationPrizeStr);
+        leagueElem.setAttribute("topPrize", resolvePrizeDisplay(topPrize));
+        leagueElem.setAttribute("topCutoff", String.valueOf(topCutoff));
+        leagueElem.setAttribute("participationPrize", resolvePrizeDisplay(partPrize));
+        leagueElem.setAttribute("participationGames", String.valueOf(participationGames));
+
+        // Series info
+        for (LeagueSerieInfo serie : series) {
+            Element serieElem = doc.createElement("serie");
+            serieElem.setAttribute("type", serie.getName());
+            serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
+            serieElem.setAttribute("start", String.valueOf(serie.getStart()));
+            serieElem.setAttribute("end", String.valueOf(serie.getEnd()));
+            serieElem.setAttribute("format", serie.getFormat().getName());
+            serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
+
+            leagueElem.appendChild(serieElem);
+        }
+
+        doc.appendChild(leagueElem);
+
+        responseWriter.writeXmlResponse(doc);
+    }
+
+    /**
+     * Resolves a prize item to a display string for preview purposes.
+     */
+    private String resolvePrizeDisplay(CardCollection.Item prizeItem) {
+        String id = prizeItem.getBlueprintId();
+        if (StringUtils.isBlank(id))
+            return "";
+
+        try {
+            if (_cardLibrary.getLotroCardBlueprint(id) != null) {
+                return prizeItem.getCount() + "x " + GameUtils.getDeluxeCardLink(id, _cardLibrary.getLotroCardBlueprint(id));
+            } else if (_productLibrary.GetProduct(id) != null) {
+                return prizeItem.getCount() + "x " + GameUtils.getProductLink(id);
+            }
+        } catch (Exception ex) {
+            return prizeItem.getCount() + "x " + "[UNKNOWN: " + id + "]";
+        }
+        return "";
+    }
+
+    /**
      * Processes the passed parameters for a theoretical Solo Draft League.  Based on the preview parameter, this will
      * either create the league for real, or just return the parsed values to the client so the admin can preview
      * the input.
@@ -929,6 +1203,50 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      * @param responseWriter the response writer
      * @throws Exception
      */
+    private void getRTMDModifiers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var modifiers = new ArrayList<Map<String, Object>>();
+        var visualCards = new ArrayList<Map<String, Object>>();
+
+        // Visual cards: set 90. Modifiers: sets 91-94 (94 reserved for future modifiers)
+        var visualSets = Set.of(90);
+        var modifierSets = Set.of(91, 92, 93, 94);
+
+        // Iterate all loaded blueprints rather than rarity files (which may not exist for these sets)
+        for (var mapEntry : _cardLibrary.getBaseCards().entrySet()) {
+            String blueprintId = mapEntry.getKey();
+            int setId;
+            try {
+                setId = Integer.parseInt(blueprintId.split("_")[0]);
+            } catch (NumberFormatException e) {
+                continue;
+            }
+
+            var bp = mapEntry.getValue();
+            if (visualSets.contains(setId)) {
+                var entry = new LinkedHashMap<String, Object>();
+                entry.put("blueprintId", blueprintId);
+                entry.put("title", bp.getFullName());
+                entry.put("intensity", bp.getIntensity());
+                visualCards.add(entry);
+            } else if (modifierSets.contains(setId)) {
+                var entry = new LinkedHashMap<String, Object>();
+                entry.put("blueprintId", blueprintId);
+                entry.put("title", bp.getFullName());
+                entry.put("intensity", bp.getIntensity());
+                entry.put("gameText", bp.getGameText());
+                modifiers.add(entry);
+            }
+        }
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("modifiers", modifiers);
+        result.put("visualCards", visualCards);
+
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
+
     private void processScheduledTournament(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
 

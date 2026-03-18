@@ -31,6 +31,9 @@ public class PhysicalCardImpl implements PhysicalCard {
 
     private Integer _siteNumber;
 
+    // Optional display name override (e.g., meta-site modifiers display the visual card's name)
+    private String _displayName;
+
     public PhysicalCardImpl(int cardId, String blueprintId, String owner, LotroCardBlueprint blueprint) {
         _cardId = cardId;
         _blueprintId = blueprintId;
@@ -46,6 +49,18 @@ public class PhysicalCardImpl implements PhysicalCard {
     @Override
     public String getBlueprintId() {
         return _blueprintId;
+    }
+
+    /**
+     * Returns a display name override, or null if the card should use its blueprint name.
+     * Used by meta-site modifiers to display the visual position card's name instead.
+     */
+    public String getDisplayName() {
+        return _displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        _displayName = displayName;
     }
 
     public void setZone(Zone zone) {

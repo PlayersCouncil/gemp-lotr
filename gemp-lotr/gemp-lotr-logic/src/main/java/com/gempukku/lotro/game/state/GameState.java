@@ -61,6 +61,7 @@ public class GameState {
     private final Map<String, PhysicalCard> _ringBearers = new HashMap<>();
     private final Map<String, PhysicalCard> _rings = new HashMap<>();
     private final Map<String, PhysicalCard> _maps = new HashMap<>();
+    private final Map<String, List<PhysicalCard>> _metaSites = new HashMap<>();
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
 
@@ -97,6 +98,7 @@ public class GameState {
 
     public void init(PlayerOrder playerOrder, String firstPlayer, Map<String, List<String>> cards,
             Map<String, String> ringBearers, Map<String, String> rings, Map<String, String> maps,
+            Map<String, List<String>> metaSiteBlueprintIds,
             LotroCardBlueprintLibrary library, LotroFormat format) {
         _isInit = true;
         _playerOrder = playerOrder;
@@ -127,6 +129,15 @@ public class GameState {
 
                 if(format.usesMaps()) {
                     _maps.put(playerId, createPhysicalCardImpl(playerId, library, maps.get(playerId)));
+                }
+
+                List<String> playerMetaSiteIds = metaSiteBlueprintIds.get(playerId);
+                if (playerMetaSiteIds != null && !playerMetaSiteIds.isEmpty()) {
+                    List<PhysicalCard> metaSiteCards = new ArrayList<>();
+                    for (String blueprintId : playerMetaSiteIds) {
+                        metaSiteCards.add(createPhysicalCardImpl(playerId, library, blueprintId));
+                    }
+                    _metaSites.put(playerId, metaSiteCards);
                 }
             } catch (CardNotFoundException exp) {
                 throw new RuntimeException("Unable to create game, due to either ring-bearer or ring being invalid cards");
@@ -458,6 +469,10 @@ public class GameState {
 
     public PhysicalCard getMap(String playerId) {
         return _maps.get(playerId);
+    }
+
+    public List<PhysicalCard> getMetaSites(String playerId) {
+        return _metaSites.getOrDefault(playerId, Collections.emptyList());
     }
 
     private List<PhysicalCardImpl> getZoneCards(String playerId, Zone zone) {

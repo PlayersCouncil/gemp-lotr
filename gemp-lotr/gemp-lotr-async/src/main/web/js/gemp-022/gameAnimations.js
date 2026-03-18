@@ -238,6 +238,11 @@ var GameAnimations = Class.extend({
                 else
                     card = new Card(blueprintId, testingText, backSideTestingText, zone, cardId, participantId, undefined, hindered);
 
+                // For meta-site modifier cards, swap images so the visual card
+                // is the base and the modifier is the bottom overlay.
+                // This affects both the board rendering and hover/card info.
+                Card.applyMetaSiteOverlay(card);
+
                 var cardDiv = that.game.createCardDiv(card, null, card.isFoil(), card.hasErrata());
                 if (zone == "DISCARD")
                     that.game.discardPileDialogs[participantId].append(cardDiv);

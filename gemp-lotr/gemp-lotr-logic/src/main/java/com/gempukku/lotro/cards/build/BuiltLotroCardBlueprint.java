@@ -50,6 +50,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private Map<Keyword, Integer> keywords;
     private Set<Timeword> timewords;
     private int cost = -1;
+    private int intensity;
     private int strength;
     private int vitality;
     private int resistance;
@@ -63,6 +64,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String formattedGameText;
     private String loreText;
     private String promoText;
+    private String helpText;
+
     private String displayableInformation;
 
     private List<Requirement> requirements;
@@ -385,6 +388,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.promoText = GameText.ConvertTextToHTML(text.trim());
     }
 
+    public void setHelpText(String text) { this.helpText = GameText.ConvertTextToHTML(text.trim()); }
+
     public void setInfo(CardInfo info) {
         this.info = info;
     }
@@ -423,6 +428,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     public void setCost(int cost) {
         this.cost = cost;
     }
+    public void setIntensity(int intensity) { this.intensity = intensity; }
 
     public void setStrength(int strength) {
         this.strength = strength;
@@ -543,6 +549,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     public String getLore()  { return loreText; }
     @Override
     public String getPromoText() { return promoText; }
+    public String getHelpText() { return helpText; }
 
 
     @Override
@@ -564,6 +571,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     public int getTwilightCost() {
         return cost;
     }
+
+    public int getIntensity() { return intensity; }
 
     @Override
     public int getStrength() {
@@ -1468,15 +1477,16 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Card has to have a title");
         if (cardType == null)
             throw new InvalidCardDefinitionException("Card has to have a type");
-        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && side == null)
-            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps must have a side defined");
-        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && culture == null)
-            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps have a culture defined");
+        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && cardType != CardType.METASITE && side == null)
+            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, Maps, and Meta-Sites must have a side defined");
+        if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && cardType != CardType.METASITE && culture == null)
+            throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, Maps, and Meta-Sites have a culture defined");
         if (siteNumber != 0
                 && cardType != CardType.SITE
                 && cardType != CardType.MINION
-                && cardType != CardType.CONDITION)
-            throw new InvalidCardDefinitionException("Only minions, sites, and conditions have a site number, use siteHome for allies");
+                && cardType != CardType.CONDITION
+                && cardType != CardType.METASITE)
+            throw new InvalidCardDefinitionException("Only minions, sites, conditions, and meta-sites have a site number, use siteHome for allies");
         if (cardType == CardType.EVENT) {
             List<Timeword> requiredTimewords = Arrays.asList(
                     Timeword.RESPONSE, Timeword.FELLOWSHIP, Timeword.SHADOW, Timeword.MANEUVER, Timeword.ARCHERY, Timeword.ASSIGNMENT,
@@ -1496,7 +1506,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Only events should have timewords");
         if (cardType != CardType.EVENT && playEventAction != null)
             throw new InvalidCardDefinitionException("Only events should have an event type effect");
-        if (cost == -1)
+        if (cost == -1 && cardType != CardType.METASITE)
             throw new InvalidCardDefinitionException("Cost was not assigned to card");
         if (Arrays.asList(CardType.MINION, CardType.COMPANION, CardType.ALLY).contains(cardType)) {
             if (vitality == 0)

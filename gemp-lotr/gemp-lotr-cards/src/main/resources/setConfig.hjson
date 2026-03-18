@@ -524,6 +524,56 @@
 		needsLoading: false
 		playable: true
 	}
+	
+	{
+		setId: 90
+		setName: Race to Mount Doom Locations
+		rarityFile: /set90-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
+	
+	{
+		setId: 91
+		setName: Race to Mount Doom TTT Modifiers
+		rarityFile: /set91-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
+	
+	{
+		setId: 92
+		setName: Race to Mount Doom ROTK Modifiers
+		rarityFile: /set92-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
+	
+	{
+		setId: 93
+		setName: Race to Mount Doom LOTRO Modifiers
+		rarityFile: /set93-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
+	
+	{
+		setId: 94
+		setName: Race to Mount Doom PC Modifiers
+		rarityFile: /set94-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
 
 	{
 		setId: 100
@@ -565,34 +615,5 @@
 		playable: true
 	}
 
-	{
-		setId: 150
-		setName: TEST-PC Supplements
-		rarityFile: /set150-rarity.txt
-		originalSet: false
-		merchantable: false
-		needsLoading: false
-		playable: true
-	}
-
-	{
-		setId: 151
-		setName: TEST-Shadow of the Past
-		rarityFile: /set151-rarity.txt
-		originalSet: false
-		merchantable: false
-		needsLoading: false
-		playable: true
-	}
-	
-	{
-		setId: 152
-		setName: TEST-King of the Golden Hall
-		rarityFile: /set152-rarity.txt
-		originalSet: false
-		merchantable: false
-		needsLoading: false
-		playable: true
-	}
 
 ]

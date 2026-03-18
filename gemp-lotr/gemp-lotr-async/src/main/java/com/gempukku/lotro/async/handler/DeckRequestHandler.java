@@ -14,7 +14,11 @@ import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.db.vo.League;
+import com.gempukku.lotro.league.LeagueSerieInfo;
+import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.league.SealedEventDefinition;
+import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.util.JsonUtils;
@@ -47,6 +51,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final MarkdownParser _markdownParser;
     private final TableDraftDefinitions _tableDraftDefinitions;
     private final CollectionsManager _collectionsManager;
+    private final LeagueService _leagueService;
+    private final ProductLibrary _productLibrary;
 
     private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
@@ -61,6 +67,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         _markdownParser = extractObject(context, MarkdownParser.class);
         _tableDraftDefinitions = extractObject(context, TableDraftDefinitions.class);
         _collectionsManager = extractObject(context, CollectionsManager.class);
+        _leagueService = extractObject(context, LeagueService.class);
+        _productLibrary = extractObject(context, ProductLibrary.class);
     }
 
     @Override
@@ -291,7 +299,13 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             if (lotroDeck == null)
                 throw new HttpProcessingException(400);
 
-            _deckDao.saveDeckForPlayer(resourceOwner, deckName, validatedFormat.getName(), notes, lotroDeck);
+            // If the target format is a league code, preserve it as-is in the DB
+            // so the deckbuilder can re-associate the deck with the league on load.
+            // Otherwise store the validated format name (existing behavior).
+            String storedFormat = resolveLeagueFormat(targetFormat) != null
+                    ? targetFormat
+                    : validatedFormat.getName();
+            _deckDao.saveDeckForPlayer(resourceOwner, deckName, storedFormat, notes, lotroDeck);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -536,64 +550,82 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         responseWriter.writeXmlResponse(serializeDeck(getLibrarian(), deckName));
     }
 
+    private record DeckEntry(LotroFormat format, String displayFormat, String deckName, boolean isRtmd) {}
+
     private void listDecks(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
         String participantId = getQueryParameterSafely(queryDecoder, "participantId");
 
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        List<Map.Entry<LotroFormat, String>> decks = GetDeckNamesAndFormats(resourceOwner);
+        List<DeckEntry> decks = GetDeckNamesAndFormats(resourceOwner);
         SortDecks(decks);
 
         Document doc = ConvertDeckNamesToXML(decks);
         responseWriter.writeXmlResponse(doc);
     }
 
-    private Document ConvertDeckNamesToXML(List<Map.Entry<LotroFormat, String>> deckNames) throws ParserConfigurationException {
+    private Document ConvertDeckNamesToXML(List<DeckEntry> deckNames) throws ParserConfigurationException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document doc = documentBuilder.newDocument();
         Element decksElem = doc.createElement("decks");
 
-        for (Map.Entry<LotroFormat, String> pair : deckNames) {
+        for (DeckEntry entry : deckNames) {
             Element deckElem = doc.createElement("deck");
-            deckElem.setTextContent(pair.getValue());
-            deckElem.setAttribute("targetFormat", pair.getKey().getName());
+            deckElem.setTextContent(entry.deckName);
+            deckElem.setAttribute("targetFormat", entry.displayFormat);
             decksElem.appendChild(deckElem);
         }
         doc.appendChild(decksElem);
         return doc;
     }
 
-    private List<Map.Entry<LotroFormat, String>> GetDeckNamesAndFormats(Player player)
+    /**
+     * Returns deck entries with resolved format info.
+     * RTMD league decks get a "Race: " prefix on the display format name.
+     */
+    private List<DeckEntry> GetDeckNamesAndFormats(Player player)
     {
         Set<Map.Entry<String, String>> names = new HashSet(_deckDao.getPlayerDeckNames(player));
 
         return names.stream()
-                .map(pair -> new AbstractMap.SimpleEntry<>(_formatLibrary.getFormatByName(pair.getKey()), pair.getValue()))
+                .map(pair -> {
+                    String storedFormat = pair.getKey();
+                    LotroFormat format = validateFormat(storedFormat);
+                    boolean rtmd = isLeagueCode(storedFormat);
+                    String displayName = rtmd
+                            ? "Race: " + format.getName()
+                            : format.getName();
+                    return new DeckEntry(format, displayName, pair.getValue(), rtmd);
+                })
                 .collect(Collectors.toList());
     }
 
-    private void SortDecks(List<Map.Entry<LotroFormat, String>> decks)
+    /**
+     * Sorts decks by format order, then name, then deck name.
+     * RTMD decks sort after non-RTMD decks within the same format order.
+     */
+    private void SortDecks(List<DeckEntry> decks)
     {
-        decks.sort(Comparator.comparing((deck) -> {
-            LotroFormat format = deck.getKey();
-            return String.format("%02d", format.getOrder()) + format.getName() + deck.getValue();
-        }));
+        decks.sort(Comparator.comparing((DeckEntry deck) -> String.format("%02d", deck.format.getOrder()))
+                .thenComparing(deck -> deck.isRtmd ? 1 : 0)
+                .thenComparing(deck -> deck.format.getName())
+                .thenComparing(deck -> deck.deckName));
     }
 
     private void listLibraryDecks(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {
-        List<Map.Entry<LotroFormat, String>> starterDecks = new ArrayList<>();
-        List<Map.Entry<LotroFormat, String>> championshipDecks = new ArrayList<>();
+        List<DeckEntry> starterDecks = new ArrayList<>();
+        List<DeckEntry> championshipDecks = new ArrayList<>();
 
-        List<Map.Entry<LotroFormat, String>> decks = GetDeckNamesAndFormats(getLibrarian());
+        List<DeckEntry> decks = GetDeckNamesAndFormats(getLibrarian());
 
-        for (Map.Entry<LotroFormat, String> pair : decks) {
+        for (DeckEntry entry : decks) {
 
-            if (pair.getValue().contains("Starter"))
-                starterDecks.add(pair);
+            if (entry.deckName.contains("Starter"))
+                starterDecks.add(entry);
             else
-                championshipDecks.add(pair);
+                championshipDecks.add(entry);
         }
 
         SortDecks(starterDecks);
@@ -611,24 +643,99 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private Document serializeDeck(Player player, String deckName) throws ParserConfigurationException {
         LotroDeck deck = _deckDao.getDeckForPlayer(player, deckName);
 
+        // If the deck's target format is an expired league code, resolve it
+        // to the league's underlying format and permanently update the DB.
+        if (deck != null) {
+            String storedTarget = deck.getTargetFormat();
+            if (storedTarget != null && isLeagueCode(storedTarget)
+                    && _leagueService.getLeagueByType(storedTarget) == null) {
+                // League no longer active — look it up from DB to get its format,
+                // then strip the league association permanently.
+                String resolvedFormat = null;
+                try {
+                    long code = Long.parseLong(storedTarget);
+                    League expiredLeague = _leagueService.getLeagueByCode(code);
+                    if (expiredLeague != null) {
+                        var leagueData = expiredLeague.getLeagueData(_productLibrary, _formatLibrary, _draftLibrary);
+                        var series = leagueData.getSeries();
+                        if (series != null && !series.isEmpty()) {
+                            resolvedFormat = series.getFirst().getFormat().getName();
+                        }
+                    }
+                } catch (Exception ex) {
+                    _log.warn("Failed to resolve expired league code '{}': {}", storedTarget, ex.getMessage());
+                }
+
+                if (resolvedFormat == null) {
+                    resolvedFormat = _formatLibrary.getFormatByName("Anything Goes").getName();
+                }
+
+                deck.setTargetFormat(resolvedFormat);
+                _deckDao.saveDeckForPlayer(player, deckName, resolvedFormat, deck.getNotes(), deck);
+            }
+        }
+
         return serializeDeck(deck);
+    }
+
+    /**
+     * Returns true if the string looks like a league code (all digits / unix timestamp).
+     * Format codes and names are always alphabetic/underscore, so this is unambiguous.
+     */
+    private boolean isLeagueCode(String value) {
+        if (value == null || value.isEmpty())
+            return false;
+        for (int i = 0; i < value.length(); i++) {
+            if (!Character.isDigit(value.charAt(i)))
+                return false;
+        }
+        return true;
     }
 
     private LotroFormat validateFormat(String name)
     {
+        // Try by format code first
         LotroFormat validatedFormat = _formatLibrary.getFormat(name);
-        if(validatedFormat == null)
-        {
+
+        // Try by format name
+        if (validatedFormat == null) {
             try {
                 validatedFormat = _formatLibrary.getFormatByName(name);
-            }
-            catch(Exception ex)
-            {
-                validatedFormat = _formatLibrary.getFormatByName("Anything Goes");
-            }
+            } catch (Exception ignored) {}
+        }
+
+        // Try as a league code
+        if (validatedFormat == null) {
+            validatedFormat = resolveLeagueFormat(name);
+        }
+
+        // Fall back to Anything Goes
+        if (validatedFormat == null) {
+            validatedFormat = _formatLibrary.getFormatByName("Anything Goes");
         }
 
         return validatedFormat;
+    }
+
+    /**
+     * Attempts to resolve a string as a league code and return the format
+     * from that league's current serie. Returns null if not a valid league code.
+     */
+    private LotroFormat resolveLeagueFormat(String leagueCode) {
+        if (leagueCode == null || leagueCode.isEmpty())
+            return null;
+
+        League league = _leagueService.getLeagueByType(leagueCode);
+        if (league == null)
+            return null;
+
+        var leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _draftLibrary);
+        var series = leagueData.getSeries();
+        if (series == null || series.isEmpty())
+            return null;
+
+        // Use the first serie's format (RTMD leagues typically have one serie)
+        return series.getFirst().getFormat();
     }
 
     private Document serializeDeck(LotroDeck deck) throws ParserConfigurationException {
@@ -642,11 +749,20 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         if (deck == null)
             return doc;
 
-        LotroFormat validatedFormat = validateFormat(deck.getTargetFormat());
+        String storedTarget = deck.getTargetFormat();
+        LotroFormat validatedFormat = validateFormat(storedTarget);
 
         Element targetFormat = doc.createElement("targetFormat");
         targetFormat.setAttribute("formatName", validatedFormat.getName());
         targetFormat.setAttribute("formatCode", validatedFormat.getCode());
+
+        // If the stored target is a league code, include it so the client
+        // can re-associate the deck with the league in the deckbuilder.
+        League associatedLeague = _leagueService.getLeagueByType(storedTarget);
+        if (associatedLeague != null) {
+            targetFormat.setAttribute("leagueCode", storedTarget);
+        }
+
         deckElem.appendChild(targetFormat);
 
         Element notes = doc.createElement("notes");

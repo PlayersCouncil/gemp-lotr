@@ -14,7 +14,8 @@ public record PreGameInfo (
         //String tableDescription,
         String formatAddenda,
         Map<String, String> notes,
-        Map<String, String> maps) {
+        Map<String, String> maps,
+        GameExtraInfo extraInfo) {
 
     public String perPlayerNotes(String playerId) {
         if(!notes.containsKey(playerId))
@@ -24,8 +25,15 @@ public record PreGameInfo (
     }
 
     public String getGameSummary() {
-        var summary = tournamentName.split("-")[0] + " - a " + (privateGame ? "private" : "public") + " game of <b>"
-                + format.getName() + "</b>. " + timingInfo + "<br/><br/>" + formatAddenda;
+        var leagueType = "";
+        var metaSiteNote = "";
+        if (extraInfo instanceof RTMDGameInfo) {
+            leagueType = "Race to Mount Doom league ";
+            metaSiteNote = " Each player has their own meta-site card based on their league performance, shown below.";
+        }
+
+        var summary = tournamentName.split("-")[0] + " - a " + (privateGame ? "private" : "public") + " " + leagueType
+                + "game of <b>" + format.getName() + "</b>." + metaSiteNote + " " + timingInfo + "<br/><br/>" + formatAddenda;
 
         return summary;
     }

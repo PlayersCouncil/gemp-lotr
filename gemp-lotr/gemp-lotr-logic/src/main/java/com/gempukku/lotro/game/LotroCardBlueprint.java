@@ -77,6 +77,8 @@ public interface LotroCardBlueprint {
 
     int getResistance();
 
+    default int getIntensity() { return 0; }
+
     Set<AllyHome> getAllyHomes();
     boolean hasAllyHome(AllyHome home);
 

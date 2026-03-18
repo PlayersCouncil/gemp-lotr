@@ -15,6 +15,7 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.io.IOException;
@@ -132,6 +133,16 @@ public class LeagueService {
                 return league;
         }
         return null;
+    }
+
+    /**
+     * Loads a league by its code from the database, regardless of whether it is
+     * currently active. Used to resolve expired league codes stored in deck
+     * target formats so we can extract the underlying format before stripping
+     * the league association.
+     */
+    public League getLeagueByCode(long code) {
+        return _leagueDao.loadLeagueByCode(code);
     }
 
     public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {
@@ -260,5 +271,34 @@ public class LeagueService {
                 totalGames++;
         }
         return totalGames < maxGames;
+    }
+
+    /**
+     * Builds an RTMDGameInfo for the given league and players, resolving each player's
+     * current position and active meta-site pairs from standings.
+     * Returns null if the league is not RTMD.
+     */
+    public synchronized RTMDGameInfo buildRTMDGameInfo(League league, Collection<String> playerNames) {
+        var leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        if (!(leagueData instanceof RTMDLeague rtmd))
+            return null;
+
+        var standings = getLeagueStandings(league);
+        var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
+
+        for (String playerName : playerNames) {
+            int position = rtmd.getPlayerPosition(playerName, standings);
+            var modifiers = rtmd.getMetaSitesForPosition(position);
+            var visuals = rtmd.getVisualCardsForPosition(position);
+
+            var pairs = new ArrayList<RTMDGameInfo.MetaSitePair>();
+            for (int i = 0; i < modifiers.size(); i++) {
+                String visualId = (i < visuals.size()) ? visuals.get(i) : "";
+                pairs.add(new RTMDGameInfo.MetaSitePair(visualId, modifiers.get(i)));
+            }
+            playerMetaSites.put(playerName, pairs);
+        }
+
+        return new RTMDGameInfo(playerMetaSites);
     }
 }

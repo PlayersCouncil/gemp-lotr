@@ -63,6 +63,13 @@ public class EventSerializer {
                 eventElem.setAttribute("maps", maps);
             }
 
+            if (preGameInfo.extraInfo() instanceof RTMDGameInfo rtmdInfo) {
+                var metaSites = rtmdMetaSitesToString(rtmdInfo, gameEvent.getParticipantId());
+                if (metaSites != null) {
+                    eventElem.setAttribute("metaSites", metaSites);
+                }
+            }
+
         }
         if (gameEvent.getGameStats() != null)
             serializeGameStats(doc, eventElem, gameEvent.getGameStats());
@@ -99,6 +106,27 @@ public class EventSerializer {
         }
 
         return String.join(",", pairs);
+    }
+
+    /**
+     * Serializes RTMD meta-site pairs for all players.
+     * Format: "player1:vis1|mod1;vis2|mod2,player2:vis1|mod1"
+     */
+    private static String rtmdMetaSitesToString(RTMDGameInfo rtmdInfo, String participantId) {
+        var allMetaSites = rtmdInfo.getAllMetaSites();
+        if (allMetaSites.isEmpty()) return null;
+
+        var playerEntries = new ArrayList<String>();
+        for (var entry : allMetaSites.entrySet()) {
+            var pairs = entry.getValue();
+            if (pairs.isEmpty()) continue;
+            var pairStrings = new ArrayList<String>();
+            for (var pair : pairs) {
+                pairStrings.add(pair.visualBlueprintId() + "|" + pair.modifierBlueprintId());
+            }
+            playerEntries.add(entry.getKey() + ":" + String.join(";", pairStrings));
+        }
+        return playerEntries.isEmpty() ? null : String.join(",", playerEntries);
     }
 
     private static String listToCommaSeparated(List<String> strings) {

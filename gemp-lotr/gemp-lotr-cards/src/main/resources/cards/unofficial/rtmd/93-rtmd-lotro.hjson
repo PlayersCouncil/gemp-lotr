@@ -1,0 +1,391 @@
+{
+	93_1: {
+		cardInfo: {
+			//id: 93_1.0
+			parent: 93_1
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S01.0_card.jpg
+			collInfo: 93_1
+			rarity: _
+		}
+		title: Race Text 93_1
+		type: MetaSite
+		intensity: -2
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Skirmish: Play a possession on your minion.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_2: {
+		cardInfo: {
+			//id: 93_2.0
+			parent: 93_2
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S02.0_card.jpg
+			collInfo: 93_2
+			rarity: _
+		}
+		title: Race Text 93_2
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Your Ring-bearer&nbsp;(except Frodo or Sam) is resistance +3.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_3: {
+		cardInfo: {
+			//id: 93_3.0
+			parent: 93_3
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S03.0_card.jpg
+			collInfo: 93_3
+			rarity: _
+		}
+		title: Race Text 93_3
+		type: MetaSite
+		intensity: -1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time your fellowship moves, you may kill a companion (except the Ring-bearer) to make the move limit +1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_4: {
+		cardInfo: {
+			//id: 93_4.0
+			parent: 93_4
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S04.0_card.jpg
+			collInfo: 93_4
+			rarity: _
+		}
+		title: Race Text 93_4
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Wound one of your characters after each skirmish in which you did not play a skirmish event.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_5: {
+		cardInfo: {
+			//id: 93_5.0
+			parent: 93_5
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S05.0_card.jpg
+			collInfo: 93_5
+			rarity: _
+		}
+		title: Race Text 93_5
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each companion with resistance 3 or less is strength -1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_6: {
+		cardInfo: {
+			//id: 93_6.0
+			parent: 93_6
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S06.0_card.jpg
+			collInfo: 93_6
+			rarity: _
+		}
+		title: Race Text 93_6
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Skirmishes are resolved in an order decided by the Shadow player.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_7: {
+		cardInfo: {
+			//id: 93_7.0
+			parent: 93_7
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S07.0_card.jpg
+			collInfo: 93_7
+			rarity: _
+		}
+		title: Race Text 93_7
+		type: MetaSite
+		intensity: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time your fellowship moves, the Shadow player may draw a card for each companion you can spot over 4.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_8: {
+		cardInfo: {
+			//id: 93_8.0
+			parent: 93_8
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S08.0_card.jpg
+			collInfo: 93_8
+			rarity: _
+		}
+		title: Race Text 93_8
+		type: MetaSite
+		intensity: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each Wraith is strength +1 for each wound on a character in its skirmish.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_9: {
+		cardInfo: {
+			//id: 93_9.0
+			parent: 93_9
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S09.0_card.jpg
+			collInfo: 93_9
+			rarity: _
+		}
+		title: Race Text 93_9
+		type: MetaSite
+		intensity: -1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fellowship: Add (3) to play a companion from your draw deck; they come into play exhausted.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	93_10: {
+		cardInfo: {
+			//id: 93_10.0
+			parent: 93_10
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN93S10.0_card.jpg
+			collInfo: 93_10
+			rarity: _
+		}
+		title: Race Text 93_10
+		type: MetaSite
+		intensity: -1
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of the regroup phase, you may discard your [Dunland] possession to take control of a site.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}
