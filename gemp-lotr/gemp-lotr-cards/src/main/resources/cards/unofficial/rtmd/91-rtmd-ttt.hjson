@@ -59,6 +59,9 @@
 					type: StartOfPhase
 					phase: Fellowship
 				}
+				requires: {
+					type: OwnerIsFreeps
+				}
 				optional: true
 				effect: {
 					type: PutCardsFromDeckIntoHand
@@ -66,7 +69,7 @@
 					count: 1
 					shuffle: true
 					reveal: true
-					showAll: true
+					showAll: false
 				}
 			}
 		]
@@ -102,6 +105,9 @@
 				optional: true
 				trigger: {
 					type: Moves
+				}
+				requires: {
+					type: OwnerIsFreeps
 				}
 				effect: {
 					type: DrawCards
@@ -176,16 +182,26 @@
 			{
 				type: Trigger
 				optional: true
-				player: shadowPlayer
+				player: shadow
 				trigger: {
 					type: StartOfPhase
 					phase: shadow
 				}
+				requires: [
+					{
+						type: OwnerIsFreeps
+					}
+					{
+						type: CanSpot
+						filter: companion
+						count: 5
+					}
+				]
 				effect: {
 					type: DrawCards
 					count: {
 						type: ForEachYouCanSpot
-						filter: your,companion
+						filter: companion
 						over: 4
 					}
 				}
@@ -223,6 +239,9 @@
 				optional: false
 				trigger: {
 					type: Moves
+				}
+				requires: {
+					type: OwnerIsFreeps
 				}
 				effect: {
 					type: AddBurdens

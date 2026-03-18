@@ -66,6 +66,8 @@ public class RequiredTriggersRule {
                                 return false;
                             }
                         }),
-                Filters.and(Filters.not(CardType.SITE), Filters.active));
+                Filters.and(Filters.not(CardType.SITE), Filters.active),
+                Filters.and(CardType.METASITE)
+        );
     }
 }

@@ -95,6 +95,8 @@ public class ActivateResponseAbilitiesRule {
                                 return false;
                             }
                         }),
-                Filters.and(Filters.not(CardType.SITE), Filters.owner(playerId), Filters.active));
+                Filters.and(Filters.not(CardType.SITE), Filters.owner(playerId), Filters.active),
+                Filters.and(CardType.METASITE)
+        );
     }
 }
