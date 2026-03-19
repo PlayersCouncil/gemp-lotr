@@ -12,17 +12,27 @@ import static org.junit.Assert.*;
 
 public class Card_91_003_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_3");
-					put("filler1", "1_3");
-					put("filler2", "1_3");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		put("filler1", "1_3");
+		put("filler2", "1_3");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_3", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_3"
 		);
 	}
 
@@ -32,11 +42,10 @@ public class Card_91_003_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_3
 		 * Type: MetaSite
-		 * Intensity: 5
 		 * Game Text: Each time your fellowship moves, you may draw a card.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -49,10 +58,7 @@ public class Card_91_003_Tests
 		// 91_3: "Each time your fellowship moves, you may draw a card."
 		// When the FP player moves, they should get an optional trigger to draw.
 
-		var scn = GetScenario();
-
-		var freepsMod = scn.GetFreepsCard("mod");
-		scn.MoveCardsToSupportArea(freepsMod);
+		var scn = GetFreepsScenario();
 
 		scn.StartGame();
 
@@ -70,14 +76,9 @@ public class Card_91_003_Tests
 	@Test
 	public void FreepsDoesNotDrawForShadowMod() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_3: "Each time your fellowship moves, you may draw a card."
-		// BUG: Shadow player's copy of the modifier also triggers when FP moves.
-		// The Shadow player should NOT get an optional trigger from their copy,
-		// because "your fellowship" should only refer to the FP player's fellowship.
+		// Shadow player's copy should NOT trigger when FP moves.
 
-		var scn = GetScenario();
-
-		var shadowMod = scn.GetShadowCard("mod");
-		scn.MoveCardsToSupportArea(shadowMod);
+		var scn = GetShadowScenario();
 
 		scn.StartGame();
 

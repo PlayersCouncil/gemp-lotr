@@ -72,6 +72,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         modifierProducers.put("modifycost", new ModifyCost());
         modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
+        modifierProducers.put("minimumbid", new ModifyMinimumBid());
         modifierProducers.put("modifymovelimit", new ModifyMoveLimit());
         modifierProducers.put("modifyplayoncost", new ModifyPlayOnCost());
         modifierProducers.put("modifyracespotcount", new ModifyRaceSpotCount());
@@ -92,6 +93,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("sitecontrolcount", new SiteControlCount());
         modifierProducers.put("skipphase", new SkipPhase());
         modifierProducers.put("skirmishesresolvedinorderbyfirstshadowplayer", new AddModifierFlag(ModifierFlag.SKIRMISH_ORDER_BY_FIRST_SHADOW_PLAYER));
+        modifierProducers.put("startingfellowshipcost", new StartingFellowshipCost());
         modifierProducers.put("threatlimit", new ThreatLimit());
         modifierProducers.put("transferforfree", new AddModifierFlag(ModifierFlag.TRANSFERS_FOR_FREE));
         modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());

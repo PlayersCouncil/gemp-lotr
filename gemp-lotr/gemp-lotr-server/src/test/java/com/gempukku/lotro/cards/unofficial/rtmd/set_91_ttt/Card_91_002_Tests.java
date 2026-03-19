@@ -14,17 +14,27 @@ import static org.junit.Assert.*;
 
 public class Card_91_002_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_2");
-					put("freepscard", "1_3");
-					put("shadowcard", "1_151");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		put("freepscard", "1_3");
+		put("shadowcard", "1_151");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_2", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_2"
 		);
 	}
 
@@ -34,11 +44,10 @@ public class Card_91_002_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_2
 		 * Type: MetaSite
-		 * Intensity: 6
 		 * Game Text: At the start of each of your fellowship phases, you may take any card into hand from your draw deck.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -52,12 +61,10 @@ public class Card_91_002_Tests
 		// into hand from your draw deck."
 		// FP should get an optional trigger at the start of fellowship to search deck.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var mod = scn.GetFreepsCard("mod");
 		var freepsCard = scn.GetFreepsCard("freepscard");
 		var shadowCard = scn.GetFreepsCard("shadowcard");
-		scn.MoveCardsToSupportArea(mod);
 
 		scn.StartGame();
 
@@ -73,12 +80,8 @@ public class Card_91_002_Tests
 	@Test
 	public void ShadowDoesNotGetSearchAtStartOfFreepsFellowship() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_2: Should only trigger for the FP player's fellowship phase.
-		// BUG: Shadow's copy may also trigger at the start of fellowship.
 
-		var scn = GetScenario();
-
-		var shadowMod = scn.GetShadowCard("mod");
-		scn.MoveCardsToSupportArea(shadowMod);
+		var scn = GetShadowScenario();
 
 		scn.StartGame();
 

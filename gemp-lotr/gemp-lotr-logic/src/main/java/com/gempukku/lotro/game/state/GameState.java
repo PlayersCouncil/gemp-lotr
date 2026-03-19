@@ -84,11 +84,33 @@ public class GameState {
     }
 
     //This happens before the bidding, so it has to be done separately from init
-    public void initPreGame(PreGameInfo preGameInfo, Map<String, LotroDeck> decks) {
+    public void initPreGame(PreGameInfo preGameInfo, Map<String, LotroDeck> decks,
+            Map<String, List<String>> metaSiteBlueprintIds, LotroCardBlueprintLibrary library, LotroGame game) {
         _preGameInfo = preGameInfo;
         _lotroDecks = decks;
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.initializePregameBoard(preGameInfo);
+        }
+
+        // Create meta-site cards early so their modifiers are active during bidding
+        if (metaSiteBlueprintIds != null) {
+            for (var entry : metaSiteBlueprintIds.entrySet()) {
+                String playerId = entry.getKey();
+                List<String> blueprintIds = entry.getValue();
+                if (blueprintIds != null && !blueprintIds.isEmpty()) {
+                    List<PhysicalCard> metaSiteCards = new ArrayList<>();
+                    for (String blueprintId : blueprintIds) {
+                        try {
+                            var card = createPhysicalCardImpl(playerId, library, blueprintId);
+                            card.startAffectingGame(game);
+                            metaSiteCards.add(card);
+                        } catch (CardNotFoundException exp) {
+                            throw new RuntimeException("Unable to create meta-site card: " + blueprintId);
+                        }
+                    }
+                    _metaSites.put(playerId, metaSiteCards);
+                }
+            }
         }
     }
 
@@ -131,13 +153,22 @@ public class GameState {
                     _maps.put(playerId, createPhysicalCardImpl(playerId, library, maps.get(playerId)));
                 }
 
-                List<String> playerMetaSiteIds = metaSiteBlueprintIds.get(playerId);
-                if (playerMetaSiteIds != null && !playerMetaSiteIds.isEmpty()) {
-                    List<PhysicalCard> metaSiteCards = new ArrayList<>();
-                    for (String blueprintId : playerMetaSiteIds) {
-                        metaSiteCards.add(createPhysicalCardImpl(playerId, library, blueprintId));
+                // Meta-sites may have been created early in initPreGame for bid-modifying effects.
+                // If so, stop their early modifier hooks — the normal game flow will re-establish them.
+                // If not, create them now.
+                if (_metaSites.containsKey(playerId)) {
+                    for (var metaSite : _metaSites.get(playerId)) {
+                        ((PhysicalCardImpl) metaSite).stopAffectingGame();
                     }
-                    _metaSites.put(playerId, metaSiteCards);
+                } else {
+                    List<String> playerMetaSiteIds = metaSiteBlueprintIds.get(playerId);
+                    if (playerMetaSiteIds != null && !playerMetaSiteIds.isEmpty()) {
+                        List<PhysicalCard> metaSiteCards = new ArrayList<>();
+                        for (String blueprintId : playerMetaSiteIds) {
+                            metaSiteCards.add(createPhysicalCardImpl(playerId, library, blueprintId));
+                        }
+                        _metaSites.put(playerId, metaSiteCards);
+                    }
                 }
             } catch (CardNotFoundException exp) {
                 throw new RuntimeException("Unable to create game, due to either ring-bearer or ring being invalid cards");

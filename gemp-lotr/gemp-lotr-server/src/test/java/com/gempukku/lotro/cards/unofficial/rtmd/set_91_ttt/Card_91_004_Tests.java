@@ -13,21 +13,31 @@ import static org.junit.Assert.*;
 
 public class Card_91_004_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_4");
-					// Gimli, Dwarf of Erebor: 6 str, 3 vit, Damage +1
-					put("gimli", "1_13");
-					// Gimli's Battle Axe: Damage +1 weapon
-					put("axe", "1_14");
-					put("lurtz", "15_162");
-					put("sword", "2_43");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		// Gimli, Dwarf of Erebor: 6 str, 3 vit, Damage +1
+		put("gimli", "1_13");
+		// Gimli's Battle Axe: Damage +1 weapon
+		put("axe", "1_14");
+		put("lurtz", "15_162");
+		put("sword", "2_43");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_4", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_4"
 		);
 	}
 
@@ -37,11 +47,10 @@ public class Card_91_004_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_4
 		 * Type: MetaSite
-		 * Intensity: 4
 		 * Game Text: Your weapons lose all damage bonuses.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -52,15 +61,13 @@ public class Card_91_004_Tests
 	@Test
 	public void YourWeaponsDamageIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_4: "Your weapons lose all damage bonuses."
-		// A weapon with Damage +1 should lose it when the modifier is active.
+		// FP's weapons lose damage, Shadow's weapons unaffected.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
 		var axe = scn.GetFreepsCard("axe");
 
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
@@ -74,7 +81,6 @@ public class Card_91_004_Tests
 
 		// Gimli has innate Damage +1, axe grants Damage +1, so normally Damage +2.
 		// With the modifier, the axe's damage bonus should be cancelled.
-		// Gimli should still have his innate Damage +1, only weapon bonuses are removed.
 		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
@@ -85,16 +91,13 @@ public class Card_91_004_Tests
 	@Test
 	public void OpponentWeaponsDamageIsNotAffected() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_4: "Your weapons lose all damage bonuses."
-		// The opponent's weapons should NOT be affected by this modifier.
 		// When Shadow has this modifier, Freeps weapons should be unaffected.
 
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
-		var shadowMod = scn.GetShadowCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
 		var axe = scn.GetFreepsCard("axe");
 
-		scn.MoveCardsToSupportArea(shadowMod);
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 

@@ -13,17 +13,27 @@ import static org.junit.Assert.*;
 
 public class Card_91_007_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_7");
-					// Ulaire Enquea, Lieutenant of Morgul: Nazgul minion (home 3)
-					put("enquea", "1_231");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		// Ulaire Enquea, Lieutenant of Morgul: Nazgul minion (home 3)
+		put("enquea", "1_231");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_7", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_7"
 		);
 	}
 
@@ -33,11 +43,10 @@ public class Card_91_007_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_7
 		 * Type: MetaSite
-		 * Intensity: 3
 		 * Game Text: Your opponent's minions are not roaming.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -50,12 +59,9 @@ public class Card_91_007_Tests
 		// 91_7: "Your opponent's minions are not roaming."
 		// When Freeps has this modifier, Shadow's minions should lose roaming.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
 		var enquea = scn.GetShadowCard("enquea");
-
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCardsToHand(enquea);
 
 		scn.StartGame();
@@ -74,22 +80,17 @@ public class Card_91_007_Tests
 	@Test
 	public void OwnMinionsStillRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_7: "Your opponent's minions are not roaming."
-		// When Shadow has this modifier, Shadow's OWN minions should still be roaming
-		// (the card says "opponent's", not "your").
+		// When Shadow has this modifier, Shadow's OWN minions should still be roaming.
 
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
-		var shadowMod = scn.GetShadowCard("mod");
 		var enquea = scn.GetShadowCard("enquea");
-
-		scn.MoveCardsToSupportArea(shadowMod);
 
 		scn.StartGame();
 		scn.FreepsPass(); // move to site 2
 		scn.MoveMinionsToTable(enquea);
 
 		// Shadow's own minions should NOT be affected by their own copy
-		// (it says "opponent's minions")
 		assertTrue(scn.HasKeyword(enquea, Keyword.ROAMING));
 	}
 }

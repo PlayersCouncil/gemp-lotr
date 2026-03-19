@@ -18,6 +18,10 @@ public class GameUtils {
     }
 
     public static boolean isSide(LotroGame game, Side side, String playerId) {
+        if(game.getGameState().getCurrentPhase() == Phase.PUT_RING_BEARER
+            || game.getGameState().getCurrentPhase() == Phase.PLAY_STARTING_FELLOWSHIP )
+            return false;
+
         if (side == Side.FREE_PEOPLE)
             return game.getGameState().getCurrentPlayerId().equals(playerId);
         else

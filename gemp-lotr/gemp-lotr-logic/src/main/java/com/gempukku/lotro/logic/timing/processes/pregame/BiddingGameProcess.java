@@ -24,13 +24,12 @@ public class BiddingGameProcess implements GameProcess {
     public void process(LotroGame game) {
         for (String player : _players) {
             final String decidingPlayer = player;
-            game.getUserFeedback().sendAwaitingDecision(decidingPlayer, new IntegerAwaitingDecision(1, "Choose a number of burdens to bid", 0) {
+            int minimumBid = game.getModifiersQuerying().getMinimumBid(game, decidingPlayer);
+            game.getUserFeedback().sendAwaitingDecision(decidingPlayer, new IntegerAwaitingDecision(1, "Choose a number of burdens to bid", minimumBid) {
                 @Override
                 public void decisionMade(String result) throws DecisionResultInvalidException {
                     try {
-                        int bid = Integer.parseInt(result);
-                        if (bid < 0)
-                            throw new DecisionResultInvalidException();
+                        int bid = getValidatedResult(result);
                         playerPlacedBid(decidingPlayer, bid);
                     } catch (NumberFormatException exp) {
                         throw new DecisionResultInvalidException();

@@ -53,6 +53,10 @@ public class DefaultLotroGame implements LotroGame {
         this(format, decks, userFeedback, library, "No timer", false, "Test Match", null);
     }
 
+    public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library, GameExtraInfo extraInfo) {
+        this(format, decks, userFeedback, library, "No timer", false, "Test Match", extraInfo);
+    }
+
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library,
             String timerInfo, boolean allowSpectators, String tournamentName, GameExtraInfo extraInfo) {
         _library = library;
@@ -148,7 +152,7 @@ public class DefaultLotroGame implements LotroGame {
                         var preGameInfo = new PreGameInfo(decks.keySet().stream().toList(), tournamentName, timerInfo,
                                 !allowSpectators, format, formatInfo.toString(), notes, maps, extraInfo);
 
-                        _gameState.initPreGame(preGameInfo, decks);
+                        _gameState.initPreGame(preGameInfo, decks, metaSiteBlueprintIds, library, DefaultLotroGame.this);
                     }
                 }, characterDeathRule);
         _userFeedback = userFeedback;

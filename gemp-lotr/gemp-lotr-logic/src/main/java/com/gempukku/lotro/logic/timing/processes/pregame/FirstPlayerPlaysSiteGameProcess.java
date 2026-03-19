@@ -1,7 +1,6 @@
 package com.gempukku.lotro.logic.timing.processes.pregame;
 
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.effects.PlaySiteEffect;
@@ -53,6 +52,6 @@ public class FirstPlayerPlaysSiteGameProcess implements GameProcess {
 
     @Override
     public GameProcess getNextProcess() {
-        return new PlayRingBearerRingAndAddBurdersGameProcess(_bids, _firstPlayer);
+        return new PlayRingBearerRingAndAddBurdensGameProcess(_bids, _firstPlayer);
     }
 }
