@@ -49,7 +49,7 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
     public ActionContext ShadowFilterContext() { return _shadowFilterContext; }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, null, null, null, Multipath, null, null);
+        this(cardIDs, null, null, null, Multipath, null, null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID) throws CardNotFoundException, DecisionResultInvalidException {
