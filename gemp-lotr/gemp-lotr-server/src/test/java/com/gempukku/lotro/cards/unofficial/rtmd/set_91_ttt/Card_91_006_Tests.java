@@ -12,15 +12,23 @@ import static org.junit.Assert.*;
 
 public class Card_91_006_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_6");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>();
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_6", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_6"
 		);
 	}
 
@@ -30,11 +38,10 @@ public class Card_91_006_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_6
 		 * Type: MetaSite
-		 * Intensity: 5
 		 * Game Text: Each time your fellowship moves, add a burden.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -45,12 +52,8 @@ public class Card_91_006_Tests
 	@Test
 	public void FreepsAddsBurdenWhenMoving() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_6: "Each time your fellowship moves, add a burden."
-		// When FP moves, a burden should be added.
 
-		var scn = GetScenario();
-
-		var freepsMod = scn.GetFreepsCard("mod");
-		scn.MoveCardsToSupportArea(freepsMod);
+		var scn = GetFreepsScenario();
 
 		scn.StartGame();
 
@@ -64,14 +67,9 @@ public class Card_91_006_Tests
 
 	@Test
 	public void ShadowCopyDoesNotAddBurdenWhenFreepsMoves() throws DecisionResultInvalidException, CardNotFoundException {
-		// 91_6: "Each time your fellowship moves, add a burden."
-		// BUG: Shadow's copy also triggers when FP moves, doubling the burden.
-		// Only the FP player's copy should fire.
+		// 91_6: Shadow's copy should NOT add a burden when FP moves.
 
-		var scn = GetScenario();
-
-		var shadowMod = scn.GetShadowCard("mod");
-		scn.MoveCardsToSupportArea(shadowMod);
+		var scn = GetShadowScenario();
 
 		scn.StartGame();
 

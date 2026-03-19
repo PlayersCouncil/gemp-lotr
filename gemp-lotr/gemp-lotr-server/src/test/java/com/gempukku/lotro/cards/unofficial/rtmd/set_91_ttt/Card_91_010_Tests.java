@@ -13,24 +13,25 @@ import static org.junit.Assert.*;
 
 public class Card_91_010_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_10");
-					// Gimli, Dwarf of Erebor: 6 str, 3 vit
-					put("gimli", "1_13");
-					// Ulaire Enquea: Nazgul, 11 str, 4 vit
-					put("enquea", "1_231");
-					// Filler cards to discard from hand
-					put("filler1", "1_3");
-					put("filler2", "1_3");
-					put("filler3", "1_3");
-					put("filler4", "1_3");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		// Gimli, Dwarf of Erebor: 6 str, 3 vit
+		put("gimli", "1_13");
+		// Ulaire Enquea: Nazgul, 11 str, 4 vit
+		put("enquea", "1_231");
+		// Filler cards to discard from hand
+		put("filler1", "1_3");
+		put("filler2", "1_3");
+		put("filler3", "1_3");
+		put("filler4", "1_3");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_10", null
 		);
 	}
 
@@ -40,11 +41,10 @@ public class Card_91_010_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_10
 		 * Type: MetaSite
-		 * Intensity: -2
 		 * Game Text: Skirmish: Discard 3 cards from hand to make your companion or minion strength +1.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -55,15 +55,13 @@ public class Card_91_010_Tests
 	@Test
 	public void FreepsCanPumpCompanionDuringSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_10: "Skirmish: Discard 3 cards from hand to make your companion or minion strength +1."
-		// FP should be able to use this to pump a companion during a skirmish.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var freepsMod = scn.GetFreepsCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
 		var enquea = scn.GetShadowCard("enquea");
 
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCompanionsToTable(gimli);
 		scn.MoveMinionsToTable(enquea);
 		scn.MoveCardsToFreepsHand("filler1", "filler2", "filler3");
@@ -98,13 +96,12 @@ public class Card_91_010_Tests
 	public void CannotUseWithoutThreeCardsInHand() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_10: Should not be usable without 3 cards in hand.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var freepsMod = scn.GetFreepsCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
 		var enquea = scn.GetShadowCard("enquea");
 
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCompanionsToTable(gimli);
 		scn.MoveMinionsToTable(enquea);
 		// Only 2 filler cards in hand, not enough

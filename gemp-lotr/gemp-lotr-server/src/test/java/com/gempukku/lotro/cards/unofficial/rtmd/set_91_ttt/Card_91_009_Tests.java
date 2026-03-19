@@ -12,19 +12,29 @@ import static org.junit.Assert.*;
 
 public class Card_91_009_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_9");
-					// Gimli, Dwarf of Erebor: 6 str, 3 vit, twilight 2
-					put("gimli", "1_13");
-					// Aragorn, Ranger of the North: 8 str, 4 vit, twilight 4
-					put("aragorn", "1_89");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		// Gimli, Dwarf of Erebor: 6 str, 3 vit, twilight 2
+		put("gimli", "1_13");
+		// Aragorn, Ranger of the North: 8 str, 4 vit, twilight 4
+		put("aragorn", "1_89");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_9", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_9"
 		);
 	}
 
@@ -34,11 +44,10 @@ public class Card_91_009_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_9
 		 * Type: MetaSite
-		 * Intensity: 3
 		 * Game Text: Each time a companion is played, that companion comes into play exhausted (except at site 1).
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -48,15 +57,11 @@ public class Card_91_009_Tests
 
 	@Test
 	public void CompanionExhaustedWhenPlayedAfterSite1() throws DecisionResultInvalidException, CardNotFoundException {
-		// 91_9: "Each time a companion is played, that companion comes into play
-		// exhausted (except at site 1)."
-		// Playing a companion at site 2+ should exhaust them.
+		// 91_9: Playing a companion at site 2+ should exhaust them.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCardsToHand(gimli);
 
 		scn.StartGame();
@@ -73,11 +78,9 @@ public class Card_91_009_Tests
 	public void CompanionNotExhaustedWhenPlayedAtSite1() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_9: Exception — companions played at site 1 should NOT be exhausted.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCardsToHand(gimli);
 
 		scn.StartGame();
@@ -92,15 +95,11 @@ public class Card_91_009_Tests
 
 	@Test
 	public void ShadowCopyAffectsFreePeoples() throws DecisionResultInvalidException, CardNotFoundException {
-		// 91_9: "Each time a companion is played, that companion comes into play
-		// exhausted (except at site 1)."
-		// Playing a companion at site 2+ should exhaust them.
+		// 91_9: Uses generic "a companion" — Shadow's copy DOES affect FP.
 
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
-		var shadowMod = scn.GetShadowCard("mod");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToSupportArea(shadowMod);
 		scn.MoveCardsToHand(gimli);
 
 		scn.StartGame();

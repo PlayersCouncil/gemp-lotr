@@ -260,6 +260,16 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getStartingFellowshipCostModifier(LotroGame game, String playerId) {
+        return delegate.getStartingFellowshipCostModifier(game, playerId);
+    }
+
+    @Override
+    public int getMinimumBidModifier(LotroGame game, String playerId) {
+        return delegate.getMinimumBidModifier(game, playerId);
+    }
+
+    @Override
     public Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter) {
         return delegate.getShadowSkirmishStrengthOverrideEvaluator(game, fpCharacter);
     }

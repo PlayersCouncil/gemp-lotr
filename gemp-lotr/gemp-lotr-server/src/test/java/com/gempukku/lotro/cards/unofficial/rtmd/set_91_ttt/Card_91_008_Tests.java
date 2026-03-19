@@ -12,19 +12,29 @@ import static org.junit.Assert.*;
 
 public class Card_91_008_Tests
 {
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("mod", "91_8");
-					put("gimli", "1_13");
-					put("aragorn", "1_89");
-					put("legolas", "1_50");
-					put("boromir", "1_97");
-				}},
+	private final HashMap<String, String> cards = new HashMap<>()
+	{{
+		put("gimli", "1_13");
+		put("aragorn", "1_89");
+		put("legolas", "1_50");
+		put("boromir", "1_97");
+	}};
+
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				"91_8", null
+		);
+	}
+
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "91_8"
 		);
 	}
 
@@ -34,11 +44,10 @@ public class Card_91_008_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_8
 		 * Type: MetaSite
-		 * Intensity: 4
 		 * Game Text: While you can spot 5 or more companions, your move limit is -1.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
 
@@ -48,13 +57,10 @@ public class Card_91_008_Tests
 
 	@Test
 	public void MoveLimitReducedWith5Companions() throws DecisionResultInvalidException, CardNotFoundException {
-		// 91_8: "While you can spot 5 or more companions, your move limit is -1."
-		// With 5 companions (Frodo + 4), move limit should be reduced from 2 to 1.
+		// 91_8: With 5 companions (Frodo + 4), move limit should be reduced from 2 to 1.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
-		scn.MoveCardsToSupportArea(freepsMod);
 		scn.MoveCompanionsToTable("gimli", "aragorn", "legolas", "boromir");
 
 		scn.StartGame();
@@ -67,10 +73,8 @@ public class Card_91_008_Tests
 	public void MoveLimitUnchangedWithFewerThan5Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_8: Move limit should remain normal with < 5 companions.
 
-		var scn = GetScenario();
+		var scn = GetFreepsScenario();
 
-		var freepsMod = scn.GetFreepsCard("mod");
-		scn.MoveCardsToSupportArea(freepsMod);
 		// Only Frodo + 3 = 4 companions
 		scn.MoveCompanionsToTable("gimli", "aragorn", "legolas");
 
@@ -82,12 +86,10 @@ public class Card_91_008_Tests
 
 	@Test
 	public void ShadowCopyDoesNotAffectFreePeoples() throws DecisionResultInvalidException, CardNotFoundException {
-		// 91_8: "While you can spot 5 or more companions, your move limit is -1."
+		// 91_8: Shadow's copy should not reduce FP's move limit.
 
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
-		var shadowMod = scn.GetShadowCard("mod");
-		scn.MoveCardsToSupportArea(shadowMod);
 		scn.MoveCompanionsToTable("gimli", "aragorn", "legolas", "boromir");
 
 		scn.StartGame();

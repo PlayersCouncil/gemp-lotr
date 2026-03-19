@@ -15,15 +15,12 @@
 		intensity: 4
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: StartingFellowshipCost
+					player: owner
+					amount: 2
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Your starting companions may have a total twilight cost of 6 instead of 4.
@@ -442,15 +439,20 @@
 		intensity: -3
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: shadow
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsShadow
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: DiscardFromHand
+					count: 3
+					forced: false
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(your,condition)
+				}
 			}
 		]
 		gametext: Shadow: Discard 3 cards from hand to play a condition from your discard pile.
@@ -481,15 +483,28 @@
 		intensity: -3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyMoveLimit
+					amount: 1
+					requires: [
+						{
+							type: OwnerIsFreeps
+						}
+						{
+							type: CanSpot
+							filter: dwarf,companion
+						}
+						{
+							type: CanSpot
+							filter: elf,companion
+						}
+						{
+							type: CanSpot
+							filter: name(Gandalf)
+						}
+					]
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: While you can spot a Dwarf companion, an Elf companion, and Gandalf, your move limit is +1.
@@ -520,15 +535,12 @@
 		intensity: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantPlayPhaseEventsOrPhaseSpecialAbilities
+					phase: maneuver
+					player: owner
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: You may not perform maneuver phase actions.
@@ -559,15 +571,12 @@
 		intensity: 5
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: StartingFellowshipCost
+					player: owner
+					amount: -1
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Your starting companions must have a total twilight cost of 3 or less.
@@ -598,15 +607,11 @@
 		intensity: 5
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantPlayCards
+					filter: your,man
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: You may not play Men.
@@ -637,15 +642,18 @@
 		intensity: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				player: owner
+				trigger: {
+					type: StartOfPhase
+					phase: regroup
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: discardFromHand
+					forced: true
+					count: 1
+				}
 			}
 		]
 		gametext: At the start of each regroup phase, you must discard a card from your hand.
@@ -676,15 +684,27 @@
 		intensity: 7
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Moves
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: OwnerIsFreeps
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							count: 6
+							filter: companion
+						}
+						true: 6
+						false: 3
+					}
+				}
 			}
 		]
 		gametext: Each time your fellowship moves, add (3) \(or (6) if you can spot 6 companions).
@@ -715,15 +735,11 @@
 		intensity: 8
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: MinimumBid
+					amount: 6
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: You must bid at least 6 burdens.

@@ -4,14 +4,19 @@ import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DefaultActionContext;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, CardProperties, Choices, Decisions,
         GameProcedures, GameProperties, PileProperties, Skirmishes, ZoneManipulation {
@@ -44,17 +49,41 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
     public ActionContext ShadowFilterContext() { return _shadowFilterContext; }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, null, null, null, Multipath);
+        this(cardIDs, null, null, null, Multipath, null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath);
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, null,null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs,
             HashMap<String, String> siteIDs,
             String ringBearerID, String ringID,
             String format) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, null);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String freepsMetaSiteId, String shadowMetaSiteId) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, freepsMetaSiteId, shadowMetaSiteId, null);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, freepsMetaSiteId, shadowMetaSiteId, bidHandler);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
 
         if(siteIDs == null ) {
             siteIDs = KingSites;
@@ -96,12 +125,15 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         decks.get(P1).setRing(ringID);
         decks.get(P2).setRing(ringID);
 
-        InitializeGameWithDecks(decks, format);
+        InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId);
 
         //We want to handle this at this time before the game start process because certain game properties aren't
         // available until the player order has been determined.
-        BidAndSeatPlayers();
-
+        if (bidHandler != null) {
+            bidHandler.accept(this);
+        } else {
+            BidAndSeatPlayers();
+        }
 
         Cards.put(P1, new HashMap<>());
         Cards.put(P2, new HashMap<>());
@@ -188,6 +220,16 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
                 Cards.get(P2).put(name, (PhysicalCardImpl) card);
             }
         }
+
+        // Create and place meta-site modifiers in SUPPORT zone if provided
+        if (freepsMetaSiteId != null) {
+            var freepsMod = _gameState.getMetaSites(P1).getFirst();
+            Cards.get(P1).put("mod", (PhysicalCardImpl)freepsMod);
+        }
+        if (shadowMetaSiteId != null) {
+            var shadowMod = _gameState.getMetaSites(P2).getFirst();
+            Cards.get(P2).put("mod", (PhysicalCardImpl)shadowMod);
+        }
     }
 
     /**
@@ -236,13 +278,27 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * complicated test scenarios.  The vast majority of the time you do not need this.
      * @param decks A map of decks for each player in the game; key is the player name.
      * @param formatName Name of the format this table should be following.
+     * @param freepsMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null
+     * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
      */
-    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) {
+    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId) {
         _userFeedback = new DefaultUserFeedback();
 
         var format = _formatLibrary.getFormat(formatName);
 
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
+        GameExtraInfo info = null;
+        if(freepsMetaSiteId != null || shadowMetaSiteId != null) {
+            var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
+            if(freepsMetaSiteId != null) {
+                playerMetaSites.put(P1, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
+            }
+            if(shadowMetaSiteId != null) {
+                playerMetaSites.put(P2, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
+            }
+            info = new RTMDGameInfo(playerMetaSites);
+        }
+
+        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary, info);
         _userFeedback.setGame(_game);
         _game.startGame();
 
@@ -254,10 +310,10 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      */
     public void BidAndSeatPlayers() {
         FreepsDecided("1");
-        PlayerDecided(P2, "0");
+        ShadowDecided( "0");
 
         // Seating choice
-        PlayerDecided(P1, "0");
+        FreepsDecided("0");
     }
 
     /**
@@ -289,10 +345,24 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      *                  If false, the default drawn hand will remain untouched.
      */
     public void StartGame(boolean resetHand) {
+        StartGame(resetHand, true);
+    }
+
+    /**
+     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
+     * Fellowship phase.
+     * @param resetHand If true, any cards drawn at the start of the game will be placed back on top of the draw deck.
+     * @param skipStartingFellowships If true, auto-skips the starting fellowship selection for both players.
+     *                                 If false, the test must handle starting fellowship selection manually before
+     *                                 this method proceeds to mulligans.
+     */
+    public void StartGame(boolean resetHand, boolean skipStartingFellowships) {
         var freepsHand = GetFreepsHand().stream().toList();
         var shadowHand = GetShadowHand().stream().toList();
 
-        SkipStartingFellowships();
+        if (skipStartingFellowships) {
+            SkipStartingFellowships();
+        }
 
         // As a convenience, we want the tester to be able to stack their hand and other piles before the game begins.
         // However, since a new hand will be drawn, this tramples over the careful stacking, so we will reset the

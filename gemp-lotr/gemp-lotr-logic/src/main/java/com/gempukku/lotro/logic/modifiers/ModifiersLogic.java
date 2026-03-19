@@ -1275,6 +1275,24 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public int getStartingFellowshipCostModifier(LotroGame game, String playerId) {
+        int result = 0;
+        for (Modifier modifier : getModifiers(game, ModifierEffect.STARTING_FELLOWSHIP_COST_MODIFIER))
+            result += modifier.getStartingFellowshipCostModifier(game, playerId);
+
+        return result;
+    }
+
+    @Override
+    public int getMinimumBid(LotroGame game, String playerId) {
+        int result = 0;
+        for (Modifier modifier : getModifiers(game, ModifierEffect.MINIMUM_BID_MODIFIER))
+            result = Math.max(result, modifier.getMinimumBidModifier(game, playerId));
+
+        return result;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard playedCard) {
         int result = playedCard.getBlueprint().getPotentialDiscount(game, playedCard.getOwner(), playedCard);
 
