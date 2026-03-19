@@ -12,6 +12,8 @@ import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.DeckValidationContext;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -300,5 +302,36 @@ public class LeagueService {
         }
 
         return new RTMDGameInfo(playerMetaSites);
+    }
+
+    /**
+     * Builds a DeckValidationContext for a player in a league, incorporating any
+     * deck building overrides from their RTMD meta-site modifiers.
+     * Returns null if the league is not RTMD or if no overrides apply.
+     */
+    public synchronized DeckValidationContext buildDeckValidationContext(League league, String playerName) {
+        var leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        if (!(leagueData instanceof RTMDLeague rtmd))
+            return null;
+
+        var standings = getLeagueStandings(league);
+        int position = rtmd.getPlayerPosition(playerName, standings);
+        var modifiers = rtmd.getMetaSitesForPosition(position);
+
+        DeckValidationContext merged = null;
+        for (String modBlueprintId : modifiers) {
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(modBlueprintId);
+                var overrides = bp.getDeckBuildingOverrides();
+                if (overrides != null) {
+                    if (merged == null) {
+                        merged = new DeckValidationContext();
+                    }
+                    merged.merge(overrides);
+                }
+            } catch (CardNotFoundException ignored) {}
+        }
+
+        return merged;
     }
 }

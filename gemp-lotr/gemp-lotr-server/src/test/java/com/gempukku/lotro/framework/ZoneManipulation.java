@@ -18,7 +18,7 @@ import java.util.Arrays;
  * decisions, meaning you may need to perform some other action (or a pass) to get Gemp to realize that you have moved
  * a card.
  */
-public interface ZoneManipulation extends TestBase{
+public interface ZoneManipulation extends TestBase, TestConstants {
 
 	/**
 	 * Removes a physical card's current zone.  This is a prerequisite to a card actually properly moving to a new zone.

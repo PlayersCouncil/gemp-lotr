@@ -79,6 +79,8 @@ public interface LotroCardBlueprint {
 
     default int getIntensity() { return 0; }
 
+    default DeckValidationContext getDeckBuildingOverrides() { return null; }
+
     Set<AllyHome> getAllyHomes();
     boolean hasAllyHome(AllyHome home);
 

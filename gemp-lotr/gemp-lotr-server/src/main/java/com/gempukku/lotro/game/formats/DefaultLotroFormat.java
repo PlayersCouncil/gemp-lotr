@@ -423,7 +423,12 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateDeckForHall(LotroDeck deck) {
-        List<String> validations = validateDeck(deck);
+        return validateDeckForHall(deck, null);
+    }
+
+    @Override
+    public String validateDeckForHall(LotroDeck deck, DeckValidationContext context) {
+        List<String> validations = validateDeck(deck, context);
         if(validations.size() == 0)
             return "";
 
@@ -440,6 +445,11 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public List<String> validateDeck(LotroDeck deck) {
+        return validateDeck(deck, null);
+    }
+
+    @Override
+    public List<String> validateDeck(LotroDeck deck, DeckValidationContext context) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<String> errataResult = new ArrayList<>();
         String valid = null;
@@ -518,9 +528,10 @@ public class DefaultLotroFormat implements LotroFormat {
         for (String blueprintId : deck.getSites())
             processCardCounts(blueprintId, cardCountByName, cardCountByBaseBlueprintId);
 
+        int effectiveMaxSameName = context != null ? context.getMaximumSameName(_maximumSameName) : _maximumSameName;
         for (Map.Entry<String, Integer> count : cardCountByName.entrySet()) {
-            if (count.getValue() > _maximumSameName) {
-                result.add("Deck contains more of the same card than allowed - " + count.getKey() + " (" + count.getValue() + ">" + _maximumSameName + "): " + count.getKey());
+            if (count.getValue() > effectiveMaxSameName) {
+                result.add("Deck contains more of the same card than allowed - " + count.getKey() + " (" + count.getValue() + ">" + effectiveMaxSameName + "): " + count.getKey());
             }
         }
 

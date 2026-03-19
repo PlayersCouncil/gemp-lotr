@@ -1223,19 +1223,23 @@ var GempLotrDeckBuildingUI = Class.extend({
 			// Use effective format code for validation, not the composite RTMD key
 			var effectiveFormat = this.getEffectiveFormatCode();
 			var selectedOption = $("#formatSelect option:selected");
-			this.comm.getDeckStats(deckContents, 
+			// Pass the league code if this is an RTMD league, so the server
+			// can apply deck building overrides from the player's meta-site
+			var leagueCode = this.isRtmdFormat() ? this.formatSelect.val() : null;
+			this.comm.getDeckStats(deckContents,
 				  effectiveFormat, // format
 				  selectedOption.data("type"), // collection name
-					function (html) 
+					function (html)
 					{
 						$("#deckStats").html(html);
-					}, 
+					},
 					{
-						"400":function () 
+						"400":function ()
 						{
 							alert("Invalid deck for getting stats.");
 						}
-					});
+					},
+					leagueCode);
 		} else {
 			$("#deckStats").html("Deck has no Ring, Ring-bearer or all 9 sites");
 		}

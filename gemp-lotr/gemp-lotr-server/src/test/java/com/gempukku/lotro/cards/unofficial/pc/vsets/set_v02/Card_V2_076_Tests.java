@@ -1,54 +1,58 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.framework.DeckValidationScenario;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
-
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 public class Card_V2_076_Tests
 {
-
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("card", "102_76");
-					// put other cards in here as needed for the test case
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
+	protected DeckValidationScenario GetScenario() {
+		return new DeckValidationScenario(DeckValidationScenario.PCMovie);
 	}
 
 	@Test
-	public void JourneyoftheKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-
+	public void JourneyOfTheKingStatsAreCorrect() throws CardNotFoundException {
 		/**
 		 * Set: V2
 		 * Name: Journey of the King
-		 * Unique: False
-		 * Side: 
-		 * Culture: King
-		 * Twilight Cost: 
 		 * Type: Map
-		 * Subtype: 
-		 * Game Text: Before the game begins, place this Map in your support area.
-		* 	Your adventure deck must only contain cards from the King site path.
-		*/
+		 * Game Text: Your adventure deck must only contain cards from the King site path.
+		 */
 
-		var scn = GetScenario();
+		var bp = VirtualTableScenario.FindCard("102_76");
+		assertEquals("Journey of the King", bp.getTitle());
+		assertFalse(bp.isUnique());
+		assertEquals(CardType.MAP, bp.getCardType());
+	}
 
-		var card = scn.GetFreepsCard("card");
+	@Test
+	public void KingSitesPassWithKingMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_76", DeckValidationScenario.KingSites);
 
-		assertEquals("Journey of the King", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MAP, card.getBlueprint().getCardType());
+		var errors = dvs.validate(deck);
+		assertFalse("King sites should pass with King map", dvs.hasMapError(errors));
+	}
+
+	@Test
+	public void FellowshipSitesFailWithKingMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_76", DeckValidationScenario.FellowshipSites);
+
+		var errors = dvs.validate(deck);
+		assertTrue("Fellowship sites should fail with King map", dvs.hasMapError(errors));
+	}
+
+	@Test
+	public void TowersSitesFailWithKingMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_76", DeckValidationScenario.TowersSites);
+
+		var errors = dvs.validate(deck);
+		assertTrue("Towers sites should fail with King map", dvs.hasMapError(errors));
 	}
 }

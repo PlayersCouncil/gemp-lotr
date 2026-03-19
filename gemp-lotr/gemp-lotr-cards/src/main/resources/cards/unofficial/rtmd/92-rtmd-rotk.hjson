@@ -15,15 +15,8 @@
 		intensity: -4
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: DeckBuildingOverride
+				maximumSameName: 6
 			}
 		]
 		gametext: Your draw deck may contain up to 6 copies of any card (instead of 4).

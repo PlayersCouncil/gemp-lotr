@@ -612,7 +612,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    getDeckStats:function (contents, targetFormat, collectionName, callback, errorMap) {
+    getDeckStats:function (contents, targetFormat, collectionName, callback, errorMap, leagueCode) {
         $.ajax({
             type:"POST",
             url:this.url + "/deck/stats",
@@ -621,7 +621,8 @@ var GempLotrCommunication = Class.extend({
                 participantId:getUrlParam("participantId"),
                 targetFormat:targetFormat,
                 collectionName:collectionName,
-                deckContents:contents},
+                deckContents:contents,
+                leagueCode:leagueCode},
             success:this.deckbuilderDeliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"html"

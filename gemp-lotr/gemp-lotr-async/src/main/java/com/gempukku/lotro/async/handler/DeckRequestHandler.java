@@ -148,6 +148,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
             String collectionName = getFormParameterSafely(postDecoder, "collectionName");
             String contents = getFormParameterSafely(postDecoder, "deckContents");
+            String leagueCode = getFormParameterSafely(postDecoder, "leagueCode");
 
             //check for valid access
             Player player = getResourceOwnerSafely(request, participantId);
@@ -179,11 +180,20 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 return;
             }
 
-            List<String> validation = format.validateDeck(deck);
+            // Build RTMD deck validation context if a league code was provided
+            DeckValidationContext deckContext = null;
+            if (leagueCode != null && !leagueCode.isEmpty()) {
+                League league = _leagueService.getLeagueByType(leagueCode);
+                if (league != null) {
+                    deckContext = _leagueService.buildDeckValidationContext(league, player.getName());
+                }
+            }
+
+            List<String> validation = format.validateDeck(deck, deckContext);
             List<String> errataValidation = null;
             if (!format.getErrataCardMap().isEmpty()) {
                 LotroDeck deckWithErrata = format.applyErrata(deck);
-                errataValidation = format.validateDeck(deckWithErrata);
+                errataValidation = format.validateDeck(deckWithErrata, deckContext);
             }
 
             if (collectionName != null && !collectionName.equals("default")) {
