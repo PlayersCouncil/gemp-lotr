@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.build;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.DeckValidationContext;
 import com.gempukku.lotro.game.ExtraPlayCost;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -120,6 +121,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private ExtraPossessionClassTest extraPossessionClassTest;
 
     private PreGameDeckValidation deckValidation;
+    private DeckValidationContext deckBuildingOverrides;
 
 //    //Constructor used when creating a raw blueprint from scratch
 //    public BuiltLotroCardBlueprint() { }
@@ -147,6 +149,15 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setDeckValidation(PreGameDeckValidation validation) {
         this.deckValidation = validation;
+    }
+
+    public void setDeckBuildingOverrides(DeckValidationContext overrides) {
+        this.deckBuildingOverrides = overrides;
+    }
+
+    @Override
+    public DeckValidationContext getDeckBuildingOverrides() {
+        return deckBuildingOverrides;
     }
 
     public void setAllyHomeSites(AllyHome home) {

@@ -15,7 +15,7 @@ import java.util.Map;
  * the tools to make a decision properly.  See Choices for selecting among multiple options, and see Actions for
  * top-level card actions.
  */
-public interface Decisions extends TestBase  {
+public interface Decisions extends TestBase, TestConstants  {
 
 	/**
 	 * @return Gets the Free Peoples decision that Gemp is currently waiting on.  Will be null if Freeps is not currently

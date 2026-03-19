@@ -12,7 +12,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
 import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.modifiers.Modifier;
@@ -37,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  * become aware of the changes you have made).  While awaiting a decision Gemp is effectively paused and thus needs
  * that moment to become aware of changes.
  */
-public interface AdHocEffects extends TestBase, Decisions {
+public interface AdHocEffects extends TestBase, TestConstants, Decisions {
 
 
 	FilterFactory FilterFactory = new FilterFactory();

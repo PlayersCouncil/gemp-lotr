@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.PackBox;
 import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.Collections;
@@ -18,17 +19,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, CardProperties, Choices, Decisions,
+public class VirtualTableScenario implements TestBase, TestConstants, Actions, AdHocEffects, CardProperties, Choices, Decisions,
         GameProcedures, GameProperties, PileProperties, Skirmishes, ZoneManipulation {
 
-    public static LotroCardBlueprintLibrary _cardLibrary;
-    public static LotroFormatLibrary _formatLibrary;
-    public static ProductLibrary _productLibrary;
+    protected static LotroCardBlueprintLibrary _cardLibrary;
+    protected static LotroFormatLibrary _formatLibrary;
+    protected static ProductLibrary _productLibrary;
 
     static {
         _cardLibrary = new LotroCardBlueprintLibrary();
         _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
         _productLibrary = new ProductLibrary(_cardLibrary);
+    }
+
+    public static LotroCardBlueprint FindCard(String bpid) throws CardNotFoundException {
+        return _cardLibrary.getLotroCardBlueprint(bpid);
+    }
+
+    public static LotroFormat FindFormat(String code) throws CardNotFoundException {
+        return _formatLibrary.getFormat(code);
+    }
+
+    public static PackBox FindProduct(String name) throws CardNotFoundException {
+        return _productLibrary.GetProduct(name);
     }
 
     // Player key, then name/card

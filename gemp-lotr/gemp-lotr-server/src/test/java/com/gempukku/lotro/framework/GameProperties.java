@@ -10,7 +10,7 @@ import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.List;
 
-public interface GameProperties extends TestBase {
+public interface GameProperties extends TestBase, TestConstants {
 	default int GetBurdens() { return gameState().getBurdens(); }
 	default void AddBurdens(int count) {
 		gameState().addBurdens(count);

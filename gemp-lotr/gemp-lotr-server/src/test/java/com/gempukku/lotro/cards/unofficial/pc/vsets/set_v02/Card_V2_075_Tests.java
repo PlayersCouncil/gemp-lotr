@@ -1,54 +1,58 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.framework.DeckValidationScenario;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
-
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 public class Card_V2_075_Tests
 {
-
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("card", "102_75");
-					// put other cards in here as needed for the test case
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
+	protected DeckValidationScenario GetScenario() {
+		return new DeckValidationScenario(DeckValidationScenario.PCMovie);
 	}
 
 	@Test
-	public void RoadtotheTowersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-
+	public void RoadToTheTowersStatsAreCorrect() throws CardNotFoundException {
 		/**
 		 * Set: V2
 		 * Name: Road to the Towers
-		 * Unique: False
-		 * Side: 
-		 * Culture: Towers
-		 * Twilight Cost: 
 		 * Type: Map
-		 * Subtype: 
-		 * Game Text: Before the game begins, place this Map in your support area.
-		* 	Your adventure deck must only contain cards from the Towers site path.
-		*/
+		 * Game Text: Your adventure deck must only contain cards from the Towers site path.
+		 */
 
-		var scn = GetScenario();
+		var bp = VirtualTableScenario.FindCard("102_75");
+		assertEquals("Road to the Towers", bp.getTitle());
+		assertFalse(bp.isUnique());
+		assertEquals(CardType.MAP, bp.getCardType());
+	}
 
-		var card = scn.GetFreepsCard("card");
+	@Test
+	public void TowersSitesPassWithTowersMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_75", DeckValidationScenario.TowersSites);
 
-		assertEquals("Road to the Towers", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.MAP, card.getBlueprint().getCardType());
+		var errors = dvs.validate(deck);
+		assertFalse("Towers sites should pass with Towers map", dvs.hasMapError(errors));
+	}
+
+	@Test
+	public void FellowshipSitesFailWithTowersMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_75", DeckValidationScenario.FellowshipSites);
+
+		var errors = dvs.validate(deck);
+		assertTrue("Fellowship sites should fail with Towers map", dvs.hasMapError(errors));
+	}
+
+	@Test
+	public void KingSitesFailWithTowersMap() {
+		var dvs = GetScenario();
+		var deck = dvs.buildDeckWithMap("102_75", DeckValidationScenario.KingSites);
+
+		var errors = dvs.validate(deck);
+		assertTrue("King sites should fail with Towers map", dvs.hasMapError(errors));
 	}
 }
