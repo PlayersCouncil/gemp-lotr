@@ -116,6 +116,7 @@ public class DefaultLotroGame implements LotroGame {
         }
 
         _gameState = new GameState();
+        _gameState.setGame(this);
 
         CharacterDeathRule characterDeathRule = new CharacterDeathRule(_actionsEnvironment);
         characterDeathRule.applyRule();

@@ -270,21 +270,17 @@
 		intensity: 6
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: RevealHand
+					player: owner
 				}
-				}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: You must play with your hand revealed.
 		lore: ""
 		promotext: ""
-		helptext: ""
+		helptext: If your opponent has this card, click on the hand icon under their name (to the left of the threat display).  That window will update as their hand changes; you can either resize that window and keep it open or close/open the window as needed.
 		alts: {
 			promos: {
 			}

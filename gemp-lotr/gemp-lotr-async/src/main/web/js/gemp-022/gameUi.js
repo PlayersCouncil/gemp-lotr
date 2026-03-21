@@ -42,6 +42,8 @@ var GempLotrGameUI = Class.extend({
     removedPileGroups: null,
     miscPileDialogs: null,
     miscPileGroups: null,
+    revealedHandDialogs: null,
+    revealedHandGroups: null,
 
     statsDiv: null,
 
@@ -179,7 +181,9 @@ var GempLotrGameUI = Class.extend({
         this.removedPileGroups = {};
         this.miscPileDialogs = {};
         this.miscPileGroups = {};
-        
+        this.revealedHandDialogs = {};
+        this.revealedHandGroups = {};
+
         this.pregamePanel = $("#pregame-info");
         this.pregamePanel.hide();
 
@@ -319,7 +323,7 @@ var GempLotrGameUI = Class.extend({
         if (!this.spectatorMode) {
             this.hand = new NormalCardGroup($("#main"), function (card) {
                 //cards with a negative card ID in the Extra zone are part of special skirmishes
-                return (card.zone == "HAND") || (card.zone == "EXTRA" && !card.cardId.includes("-"));
+                return (card.zone == "HAND" && card.owner == that.bottomPlayerId) || (card.zone == "EXTRA" && !card.cardId.includes("-"));
             });
         }
 
@@ -1155,6 +1159,10 @@ var GempLotrGameUI = Class.extend({
             for (var playerId in this.miscPileGroups)
                 if (this.miscPileGroups.hasOwnProperty(playerId))
                     this.miscPileGroups[playerId].layoutCards();
+
+            for (var playerId in this.revealedHandGroups)
+                if (this.revealedHandGroups.hasOwnProperty(playerId))
+                    this.revealedHandGroups[playerId].layoutCards();
         }
         this.tabPane.css({
             position: "absolute",
@@ -1756,6 +1764,26 @@ var GempLotrGameUI = Class.extend({
         dialog.bind("dialogresize", function () {
             that.dialogResize(dialog, that[groupsName][playerId]);
         });
+    },
+
+    ensureRevealedHandDialog: function(playerId) {
+        if (this.revealedHandDialogs[playerId])
+            return;
+
+        this.createPile(playerId, "Revealed Hand", "revealedHandDialogs", "revealedHandGroups");
+
+        var that = this;
+        var playerIndex = this.getPlayerIndex(playerId);
+        if (playerIndex >= 0) {
+            $("#hand" + playerIndex).addClass("clickable").click(
+                function () {
+                    var dialog = that.revealedHandDialogs[playerId];
+                    var group = that.revealedHandGroups[playerId];
+                    openSizeDialog(dialog);
+                    that.dialogResize(dialog, group);
+                    group.layoutCards();
+                });
+        }
     },
 
     getDecisionParameter: function (decision, name) {

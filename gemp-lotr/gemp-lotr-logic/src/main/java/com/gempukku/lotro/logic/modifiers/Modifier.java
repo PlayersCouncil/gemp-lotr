@@ -166,6 +166,8 @@ public interface Modifier {
 
     int getMinimumBidModifier(LotroGame game, String playerId);
 
+    boolean isHandRevealed(LotroGame game, String playerId);
+
     int getPotentialDiscount(LotroGame game, PhysicalCard discountCard);
 
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard card);

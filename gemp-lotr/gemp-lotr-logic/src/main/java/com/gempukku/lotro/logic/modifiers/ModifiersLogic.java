@@ -1293,6 +1293,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public boolean isHandRevealed(LotroGame game, String playerId) {
+        for (Modifier modifier : getModifiers(game, ModifierEffect.HAND_REVEAL_MODIFIER))
+            if (modifier.isHandRevealed(game, playerId))
+                return true;
+        return false;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard playedCard) {
         int result = playedCard.getBlueprint().getPotentialDiscount(game, playedCard.getOwner(), playedCard);
 

@@ -53,6 +53,7 @@ public interface LotroCardBlueprint {
     String getSubtitle();
     String getGameText();
     String getFormattedGameText();
+    default String getHelpText() { return null; }
     String getLore();
     String getPromoText();
     CardInfo getCardInfo();

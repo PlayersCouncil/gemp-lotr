@@ -25,12 +25,7 @@ public class BotGameStateListener implements GameStateListener {
     public boolean isLiveConnection() { return false; }
 
     @Override
-    public void cardCreated(PhysicalCard card) {
-
-    }
-
-    @Override
-    public void cardCreated(PhysicalCard card, boolean overridePlayerVisibility) {
+    public void cardCreated(PhysicalCard card, boolean overrideOwnerVisibility, boolean forceVisible) {
 
     }
 
@@ -45,7 +40,7 @@ public class BotGameStateListener implements GameStateListener {
     }
 
     @Override
-    public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards) {
+    public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards, boolean forceVisible) {
 
     }
 
