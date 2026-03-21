@@ -47,15 +47,22 @@
 		intensity: -3
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: shadow
+				limitPerTurn: 1
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsShadow
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: Exert
+					select: choose(your, isengard, man)
+				}
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: choose(your, isengard, condition)
+					shuffle: true
+					showAll: true
+				}
 			}
 		]
 		gametext: Shadow: Once per turn, exert your [Isengard] Man to play an [Isengard] condition from your draw deck.
@@ -86,15 +93,12 @@
 		intensity: 2
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: site
+					keyword: underground
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: All sites gain <b>underground</b>.
@@ -125,15 +129,36 @@
 		intensity: -2
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: fellowship
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsFreeps
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: PlayCardFromHand
+					select: choose(or(pipe,pipeweed))
+					memorize: selectedCard
+				}
+				effect: {
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: selectedCard
+						filter: pipe
+					}
+					true: {
+						type: PlayCardFromDrawDeck
+						select: choose(pipeweed)
+						showAll: true
+						shuffle: true
+					}
+					false: {
+						type: PlayCardFromDrawDeck
+						select: choose(pipe)
+						showAll: true
+						shuffle: true
+					}
+				}
 			}
 		]
 		gametext: Fellowship: Play a pipe to play a pipeweed from your draw deck (or vice versa).
@@ -164,15 +189,21 @@
 		intensity: -3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: fellowship
+				cost: {
+					type: Exert
+					select: choose(companion)
+					count: anyNonZero
+					memorize: exertedCompanions
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: RemoveTwilight
+					amount: {
+						type: ForEachInMemory
+						memory: exertedCompanions
+					}
+				}
 			}
 		]
 		gametext: Fellowship: Exert X companions to remove (X).
@@ -203,15 +234,12 @@
 		intensity: -4
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: your,mount
+					amount: -5
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: The twilight cost of each of your mounts is -5.
@@ -247,7 +275,7 @@
 					type: CanSpot
 					filter: any
 				}
-			}
+				}
 			{
 				type: DisplayableInformation
 				text: Placeholder effect for development.
