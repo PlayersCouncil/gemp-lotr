@@ -256,6 +256,10 @@ var GameAnimations = Class.extend({
                     that.game.miscPileDialogs[participantId].append(cardDiv);
                     animate = false;
                 }
+                else if (zone == "HAND" && participantId != that.game.bottomPlayerId) {
+                    that.game.ensureRevealedHandDialog(participantId);
+                    that.game.revealedHandDialogs[participantId].append(cardDiv);
+                }
                 else
                     $("#main").append(cardDiv);
 

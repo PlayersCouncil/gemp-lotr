@@ -28,5 +28,7 @@ public enum ModifierEffect {
 
     MINIMUM_BID_MODIFIER,
 
+    HAND_REVEAL_MODIFIER,
+
     CANCEL_SKIRMISH_MODIFIER
 }

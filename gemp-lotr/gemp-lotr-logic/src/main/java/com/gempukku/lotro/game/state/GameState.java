@@ -65,6 +65,8 @@ public class GameState {
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
 
+    private LotroGame _lotroGame;
+
     private final List<Assignment> _assignments = new LinkedList<>();
     private Skirmish _skirmish = null;
 
@@ -78,6 +80,14 @@ public class GameState {
     private GameStats _mostRecentGameStats = null;
     private boolean _isInit = false;
     private Map<String, LotroDeck> _lotroDecks;
+
+    public void setGame(LotroGame game) {
+        _lotroGame = game;
+    }
+
+    private boolean isHandRevealed(String playerId) {
+        return _lotroGame != null && _lotroGame.getModifiersQuerying().isHandRevealed(_lotroGame, playerId);
+    }
 
     private int nextCardId() {
         return _nextCardId++;
@@ -153,23 +163,6 @@ public class GameState {
                     _maps.put(playerId, createPhysicalCardImpl(playerId, library, maps.get(playerId)));
                 }
 
-                // Meta-sites may have been created early in initPreGame for bid-modifying effects.
-                // If so, stop their early modifier hooks — the normal game flow will re-establish them.
-                // If not, create them now.
-                if (_metaSites.containsKey(playerId)) {
-                    for (var metaSite : _metaSites.get(playerId)) {
-                        ((PhysicalCardImpl) metaSite).stopAffectingGame();
-                    }
-                } else {
-                    List<String> playerMetaSiteIds = metaSiteBlueprintIds.get(playerId);
-                    if (playerMetaSiteIds != null && !playerMetaSiteIds.isEmpty()) {
-                        List<PhysicalCard> metaSiteCards = new ArrayList<>();
-                        for (String blueprintId : playerMetaSiteIds) {
-                            metaSiteCards.add(createPhysicalCardImpl(playerId, library, blueprintId));
-                        }
-                        _metaSites.put(playerId, metaSiteCards);
-                    }
-                }
             } catch (CardNotFoundException exp) {
                 throw new RuntimeException("Unable to create game, due to either ring-bearer or ring being invalid cards");
             }
@@ -205,7 +198,7 @@ public class GameState {
         for (String playerId : _playerOrder.getAllPlayers()) {
             for(var card : getDeck(playerId)) {
                 for (GameStateListener listener : getAllGameStateListeners()) {
-                    listener.cardCreated(card, true);
+                    listener.cardCreated(card, true, false);
                 }
             }
         }
@@ -337,6 +330,15 @@ public class GameState {
             if (hand != null) {
                 for (PhysicalCardImpl physicalCard : hand)
                     listener.cardCreated(physicalCard);
+            }
+
+            // Send revealed opponent hands
+            for (Map.Entry<String, List<PhysicalCardImpl>> entry : _hands.entrySet()) {
+                String handOwner = entry.getKey();
+                if (!handOwner.equals(playerId) && isHandRevealed(handOwner)) {
+                    for (PhysicalCardImpl physicalCard : entry.getValue())
+                        listener.cardCreated(physicalCard, false, true);
+                }
             }
 
             for (List<PhysicalCardImpl> physicalCards : _deadPiles.values())
@@ -573,8 +575,10 @@ public class GameState {
                 card.setWhileInZoneData(null);
         }
 
+        boolean forceVisible = cards.stream().anyMatch(
+                card -> card.getZone() == Zone.HAND && isHandRevealed(card.getOwner()));
         for (GameStateListener listener : getAllGameStateListeners())
-            listener.cardsRemoved(playerPerforming, cards);
+            listener.cardsRemoved(playerPerforming, cards, forceVisible);
 
         for (PhysicalCard card : cards) {
             ((PhysicalCardImpl) card).setZone(null);
@@ -619,8 +623,9 @@ public class GameState {
 
             ((PhysicalCardImpl) card).startAffectingGamePermanentSite(game);
         } else {
+            boolean forceVisible = zone == Zone.HAND && isHandRevealed(card.getOwner());
             for (GameStateListener listener : getAllGameStateListeners()) {
-                listener.cardCreated(card);
+                listener.cardCreated(card, false, forceVisible);
             }
         }
 
@@ -1428,7 +1433,9 @@ public class GameState {
     public void startAffectingCardsForCurrentPlayer(LotroGame game) {
         // Active non-sites are affecting
         for (PhysicalCardImpl physicalCard : _inPlay) {
-            if (isCardInPlayActive(physicalCard) && physicalCard.getBlueprint().getCardType() != CardType.SITE)
+            if (isCardInPlayActive(physicalCard) && physicalCard.getBlueprint().getCardType() != CardType.SITE
+                    && physicalCard.getBlueprint().getCardType() != CardType.METASITE
+            )
                 startAffecting(game, physicalCard);
             else if (physicalCard.getBlueprint().getCardType() == CardType.SITE &&
                     physicalCard.getCardController() != null) {
@@ -1462,7 +1469,9 @@ public class GameState {
 
     public void stopAffectingCardsForCurrentPlayer() {
         for (PhysicalCardImpl physicalCard : _inPlay) {
-            if (isCardInPlayActive(physicalCard) && physicalCard.getBlueprint().getCardType() != CardType.SITE)
+            if (isCardInPlayActive(physicalCard) && physicalCard.getBlueprint().getCardType() != CardType.SITE
+                    && physicalCard.getBlueprint().getCardType() != CardType.METASITE
+            )
                 stopAffecting(physicalCard);
             else if (physicalCard.getBlueprint().getCardType() == CardType.SITE &&
                     physicalCard.getCardController() != null) {

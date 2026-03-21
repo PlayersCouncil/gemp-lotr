@@ -312,6 +312,12 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Printed Game Text: </b><br>")
                         .append(card.getBlueprint().getFormattedGameText());
 
+                String helpText = card.getBlueprint().getHelpText();
+                if (helpText != null && !helpText.isEmpty()) {
+                    sb.append("<br><br><b>Additional Info: </b><br>")
+                            .append(helpText);
+                }
+
                 return sb.toString();
             } else {
                 return null;

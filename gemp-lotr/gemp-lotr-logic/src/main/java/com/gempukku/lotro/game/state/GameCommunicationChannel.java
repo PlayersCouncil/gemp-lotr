@@ -142,16 +142,12 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     }
 
     @Override
-    public void cardCreated(PhysicalCard card) {
+    public void cardCreated(PhysicalCard card, boolean overrideOwnerVisibility, boolean forceVisible) {
         boolean publicDiscard = card.getZone() == Zone.DISCARD && _format.discardPileIsPublic();
-        if (card.getZone().isPublic() || publicDiscard || (card.getZone().isVisibleByOwner() && card.getOwner().equals(_self)))
-            appendEvent(new GameEvent(PUT_CARD_INTO_PLAY).card(card));
-    }
-
-    @Override
-    public void cardCreated(PhysicalCard card, boolean overridePlayerVisibility) {
-        boolean publicDiscard = card.getZone() == Zone.DISCARD && _format.discardPileIsPublic();
-        if (card.getZone().isPublic() || publicDiscard || ((overridePlayerVisibility || card.getZone().isVisibleByOwner()) && card.getOwner().equals(_self)))
+        if (forceVisible
+                || card.getZone().isPublic()
+                || publicDiscard
+                || ((overrideOwnerVisibility || card.getZone().isVisibleByOwner()) && card.getOwner().equals(_self)))
             appendEvent(new GameEvent(PUT_CARD_INTO_PLAY).card(card));
     }
 
@@ -170,11 +166,14 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
 
 
     @Override
-    public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards) {
+    public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards, boolean forceVisible) {
         Set<PhysicalCard> removedCardsVisibleByPlayer = new HashSet<>();
         for (PhysicalCard card : cards) {
             boolean publicDiscard = card.getZone() == Zone.DISCARD && _format.discardPileIsPublic();
-            if (card.getZone().isPublic() || publicDiscard || (card.getZone().isVisibleByOwner() && card.getOwner().equals(_self)))
+            if (forceVisible
+                    || card.getZone().isPublic()
+                    || publicDiscard
+                    || (card.getZone().isVisibleByOwner() && card.getOwner().equals(_self)))
                 removedCardsVisibleByPlayer.add(card);
         }
         if (removedCardsVisibleByPlayer.size() > 0)
