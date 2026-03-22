@@ -134,6 +134,17 @@ public interface TestConstants {
 	String SmeagolRB = "9_30";
 
 	/**
+	 * Sam, Bearer of Great Need
+	 * 3 strength
+	 * 4 vitality
+	 * 5 resistance
+	 * Ring-bound.
+	 * Sam is resistance +1 for each Hobbit you can spot.
+	 * Regroup: Exert Sam and transfer a follower he is bearing to your support area to discard a minion from play.
+	 */
+	String SamRB = "13_156";
+
+	/**
 	 * The One Ring, The Ruling Ring
 	 * +1 strength
 	 * Response: If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.
