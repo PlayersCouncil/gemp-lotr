@@ -1105,6 +1105,20 @@ public class GameState {
         return Collections.unmodifiableList(_adventureDecks.get(playerId));
     }
 
+    /**
+     * Returns whether a given player is currently using Shadows sites or not.  This is used by Race to Mount Doom
+     * which has modifiers which can cause Shadows adventure decks to be mixed with Movie Block adventure decks.
+     * Note that this does not handle mixing of pre-Shadows and post-Shadows sites within the same adventure deck.
+     * @param playerId The player to look up
+     * @return true if a Shadows site is found in the adventure deck, else false
+     */
+    public boolean usesUnorderedSites(String playerId) {
+        var deck = _adventureDecks.get(playerId);
+        if (deck == null || deck.isEmpty())
+            return false;
+        return deck.getFirst().getBlueprint().getSiteNumber() == 0;
+    }
+
     public List<? extends PhysicalCard> getInPlay() {
         return Collections.unmodifiableList(_inPlay);
     }

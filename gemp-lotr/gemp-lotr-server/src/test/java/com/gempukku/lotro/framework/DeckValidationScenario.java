@@ -84,6 +84,27 @@ public class DeckValidationScenario implements TestConstants {
     }
 
     /**
+     * Builds a deck with a specific site set (no map), plus auto-generated filler.
+     */
+    public LotroDeck buildDeckWithSites(HashMap<String, String> sites) {
+        var deck = new LotroDeck("test");
+        deck.setTargetFormat(_format.getCode());
+        deck.setRingBearer(FOTRFrodo);
+        deck.setRing(RulingRing);
+
+        for (var entry : sites.entrySet()) {
+            if (entry.getKey().startsWith("site")) {
+                deck.addSite(entry.getValue());
+            }
+        }
+
+        addFiller(deck, FP_FILLER_PREFIX, FP_FILLER_START, FP_FILLER_END, 30);
+        addFiller(deck, SHADOW_FILLER_PREFIX, SHADOW_FILLER_START, SHADOW_FILLER_END, 30);
+
+        return deck;
+    }
+
+    /**
      * Builds a deck with a specific map and site set, plus auto-generated filler.
      */
     public LotroDeck buildDeckWithMap(String mapId, HashMap<String, String> sites) {
@@ -103,6 +124,14 @@ public class DeckValidationScenario implements TestConstants {
         addFiller(deck, SHADOW_FILLER_PREFIX, SHADOW_FILLER_START, SHADOW_FILLER_END, 30);
 
         return deck;
+    }
+
+    public boolean hasSiteBlockError(List<String> errors) {
+        return errors.stream().anyMatch(e ->
+                e.contains("same block") ||
+                e.contains("not allowed in Multipath") ||
+                e.contains("does not use supported block") ||
+                e.contains("cannot mix Movie block and Shadows block sites"));
     }
 
     public boolean hasMapError(List<String> errors) {

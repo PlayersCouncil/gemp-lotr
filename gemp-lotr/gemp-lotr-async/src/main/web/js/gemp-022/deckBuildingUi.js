@@ -383,6 +383,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.showRace = value;
 		this.currentMetaSites = metaSites || null;
 
+		// Check if any meta-site has siteOverride and pass to CardFilter
+		var hasSiteOverride = metaSites && metaSites.some(function(s) { return s.siteOverride; });
+		this.cardFilter.siteOverride = hasSiteOverride || false;
+
 		// Clear previous race card display
 		$(".card", this.raceDiv).remove();
 
@@ -592,7 +596,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 					metaSites.push({
 						position: parseInt(site.getAttribute("position")),
 						modifier: site.getAttribute("blueprintId"),
-						visual: site.getAttribute("visualBlueprintId")
+						visual: site.getAttribute("visualBlueprintId"),
+						siteOverride: site.getAttribute("siteOverride") === "true"
 					});
 				}
 

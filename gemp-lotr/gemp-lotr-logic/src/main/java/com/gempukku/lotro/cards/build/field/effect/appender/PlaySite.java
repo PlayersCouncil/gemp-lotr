@@ -43,7 +43,7 @@ public class PlaySite implements EffectAppenderProducer {
                 if (siteNumber > 9 || siteNumber < 1)
                     return false;
 
-                if (game.getFormat().isOrderedSites()) {
+                if (!game.getGameState().usesUnorderedSites(playerId)) {
                     Filter printedSiteNumber = new Filter() {
                         @Override
                         public boolean accepts(LotroGame game, PhysicalCard physicalCard) {

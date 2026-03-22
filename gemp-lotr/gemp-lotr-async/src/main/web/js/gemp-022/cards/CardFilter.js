@@ -76,6 +76,7 @@ var CardFilter = Class.extend({
 	currentFormat: null,
 	blocks: null,
 	overrideFilter: "",
+	siteOverride: false,
 	
 
 	init: function (pageElem, getCollectionFunc, clearCollectionFunc, addCardFunc, finishCollectionFunc) {
@@ -965,10 +966,16 @@ var CardFilter = Class.extend({
 			resistance = "";
 		}
 
-		var filterString = side + format + block + set + cardType + rarity + sort + product + culture 
+		var siteOverrideParam = "";
+		if (this.siteOverride && cardType.includes("SITE")) {
+			siteOverrideParam = " siteOverride:true";
+		}
+
+		var filterString = side + format + block + set + cardType + rarity + sort + product + culture
 				+ name + gametext
 				+ keyword + phase + race + itemClass
 				+ twilight + strength + vitality + resistance + siteNumber + signet
+				+ siteOverrideParam
 				+ " " + predefFilter;
 
 		console.log("Regenerating filter: " + filterString);

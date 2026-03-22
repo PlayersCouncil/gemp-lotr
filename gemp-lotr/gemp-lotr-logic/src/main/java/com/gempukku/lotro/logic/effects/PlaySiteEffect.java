@@ -52,7 +52,7 @@ public class PlaySiteEffect extends AbstractEffect {
         if (siteNumber > 9 || siteNumber < 1)
             return Collections.emptySet();
 
-        if (game.getFormat().isOrderedSites()) {
+        if (!game.getGameState().usesUnorderedSites(_playerId)) {
             Filter printedSiteNumber = new Filter() {
                 @Override
                 public boolean accepts(LotroGame game, PhysicalCard physicalCard) {

@@ -39,7 +39,8 @@ public class Card_03_017_Tests
 					put("siteX", "11_231"); //and a Shadows site
 				}},
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath
 		);
 	}
 
@@ -50,23 +51,20 @@ public class Card_03_017_Tests
 					put("galadriel", "3_17");
 					// put other cards in here as needed for the test case
 				}},
-				new HashMap<String, String>() {{
-					put("site1", "1_319");
-					put("site2", "1_332");
-					put("site3", "1_337");
-					put("site4", "1_343");
-					put("site5", "1_349");
-					put("site6", "1_350");
-					put("site7", "1_353");
-					put("site8", "1_356");
-					put("site2F", "1_329"); //We are cheating here and putting a second site 2 in
-					put("site2T", "4_330"); //and a Towers site 2
-					put("site2K", "7_337"); //and a King site 2
-					put("siteX", "11_231"); //and a Shadows site
+				new HashMap<>() {{
+					put("site1", "11_239");
+					put("site2", "13_185");
+					put("site3", "11_234");
+					put("site4", "17_148");
+					put("site5", "18_138");
+					put("site6", "11_230");
+					put("site7", "12_187");
+					put("site8", "12_185");
+					put("site9", "11_231"); // Forest
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
-				"expanded"
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -204,15 +202,14 @@ public class Card_03_017_Tests
 		var scn = GetExpandedScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
-		var forestSite = scn.GetFreepsSite("siteX");
+		var forestSite = scn.GetFreepsSite("site9");
 		var site1 = scn.GetFreepsSite("site1");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveCardsToSupportArea(galadriel);
 
-		var shadowSite2 = scn.GetShadowSite("siteX");
+		var shadowSite2 = scn.GetShadowSite("site8");
 
 		scn.FreepsChooseCardBPFromSelection(site1);
 		scn.StartGame();
-
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertTrue(scn.FreepsActionAvailable(galadriel));

@@ -562,7 +562,7 @@ public class Filters {
             (Filter) (game, physicalCard) -> {
                 int bpNumber = physicalCard.getBlueprint().getSiteNumber();
                 Integer siteNumber = physicalCard.getSiteNumber();
-                return Objects.requireNonNullElse(siteNumber, bpNumber) != 0;
+                return bpNumber != 0;
             });
 
     public static Filter siteNumberBetweenInclusive(final int minSiteNumber, final int maxSiteNumber) {

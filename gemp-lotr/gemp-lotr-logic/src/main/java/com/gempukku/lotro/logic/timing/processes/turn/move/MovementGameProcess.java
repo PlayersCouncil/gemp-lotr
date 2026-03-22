@@ -49,7 +49,11 @@ public class MovementGameProcess implements GameProcess {
                         GameState gameState = game.getGameState();
 
                         int siteTwilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, gameState.getCurrentSite(), null, 0, false);
-                        if (!game.getFormat().isOrderedSites()) {
+
+                        //We check both the format and the actual sites being used, because in the case of Race to Mount Doom,
+                        // we can have modifiers that permit the use of Shadows sites in otherwise movie-era formats.
+                        if (!game.getFormat().isOrderedSites()
+                                || gameState.getCurrentSite().getBlueprint().getSiteNumber() == 0) {
                             final int siteNumber = gameState.getCurrentSiteNumber();
                             if (siteNumber > 3 && siteNumber <= 6)
                                 siteTwilightCost += 3;
