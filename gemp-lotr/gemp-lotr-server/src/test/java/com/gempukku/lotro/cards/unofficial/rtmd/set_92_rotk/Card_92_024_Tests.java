@@ -56,6 +56,13 @@ public class Card_92_024_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_24
+		 * Type: MetaSite
+		 * Game Text: Your Nazgul are non-unique.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

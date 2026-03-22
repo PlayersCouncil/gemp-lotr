@@ -41,6 +41,13 @@ public class Card_92_021_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_21
+		 * Type: MetaSite
+		 * Game Text: Fellowship: Play a companion; their twilight cost is -4.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");

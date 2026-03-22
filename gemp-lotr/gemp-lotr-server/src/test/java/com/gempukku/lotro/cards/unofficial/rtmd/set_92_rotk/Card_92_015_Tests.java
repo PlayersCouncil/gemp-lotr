@@ -46,6 +46,13 @@ public class Card_92_015_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_15
+		 * Type: MetaSite
+		 * Game Text: Your Dwarves are strength +1 and cannot take more than one wound during each skirmish phase.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");

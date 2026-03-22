@@ -39,6 +39,13 @@ public class Card_92_017_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_17
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, add a threat.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");

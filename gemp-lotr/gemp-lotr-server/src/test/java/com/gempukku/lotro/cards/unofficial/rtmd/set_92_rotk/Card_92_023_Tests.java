@@ -43,6 +43,13 @@ public class Card_92_023_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_23
+		 * Type: MetaSite
+		 * Game Text: Skirmish: Exert your companion to make another companion of the same culture strength +1.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");

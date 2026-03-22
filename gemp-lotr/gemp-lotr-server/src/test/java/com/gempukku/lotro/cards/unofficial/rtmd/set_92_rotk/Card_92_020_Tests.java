@@ -44,6 +44,13 @@ public class Card_92_020_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_20
+		 * Type: MetaSite
+		 * Game Text: Shadow: Exert a Nazgul twice to play a Nazgul from your discard pile.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

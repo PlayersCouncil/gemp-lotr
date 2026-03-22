@@ -43,6 +43,13 @@ public class Card_92_022_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_22
+		 * Type: MetaSite
+		 * Game Text: Shadow: Play a weather condition to draw a card; its twilight cost is -2.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

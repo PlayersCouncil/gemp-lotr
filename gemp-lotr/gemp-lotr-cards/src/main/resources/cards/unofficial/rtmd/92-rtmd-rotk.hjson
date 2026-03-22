@@ -1118,19 +1118,26 @@
 		title: Race Text 92_28
 		type: MetaSite
 		intensity: -4
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Activated
+			phase: [
+				fellowship
+				shadow
+			]
+			effect: [
+				{
+					type: IncrementPerTurnLimit
+					limit: 1
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+				{
+					type: PlayCardFromDrawDeck
+					select: choose(artifact)
+					showAll: true
+					shuffle: true
+				}
+			]
+			limitPerTurn: 1
+		}
 		gametext: <b>Fellowship</b> <i>or</i> Shadow: Play an artifact from your draw deck (limit once per turn).
 		lore: ""
 		promotext: ""
@@ -1196,19 +1203,26 @@
 		title: Race Text 92_30
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Trigger
+			optional: true
+			player: shadow
+			trigger: {
+				type: StartOfPhase
+				phase: shadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			requires: {
+				type: OwnerIsShadow
 			}
-		]
+			cost: {
+				type: RemoveTwilight
+				amount: 2
+			}
+			effect: {
+				type: DrawCards
+				player: owner
+			}
+		}
 		gametext: At the start of each of your Shadow phases, you may remove (2) to draw a card.
 		lore: ""
 		promotext: ""
@@ -1235,19 +1249,20 @@
 		title: Race Text 92_31
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: fellowship
+			cost: {
+				type: Exert
+				select: choose(elf,companion)
+				count: 2
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			effect: {
+				type: Discard
+				player: shadow
+				select: choose(side(shadow),condition)
 			}
-		]
+		}
 		gametext: Fellowship: Exert two Elf companions to make a Shadow player discard a Shadow condition.
 		lore: ""
 		promotext: ""

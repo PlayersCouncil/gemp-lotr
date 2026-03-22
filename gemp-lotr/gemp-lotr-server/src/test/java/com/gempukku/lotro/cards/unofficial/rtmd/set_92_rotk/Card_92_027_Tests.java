@@ -40,6 +40,13 @@ public class Card_92_027_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_27
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, discard your hand.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");

@@ -44,6 +44,13 @@ public class Card_92_018_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_18
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, discard 1 non-Hobbit companion (or 2 if at site 7 or higher).
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
