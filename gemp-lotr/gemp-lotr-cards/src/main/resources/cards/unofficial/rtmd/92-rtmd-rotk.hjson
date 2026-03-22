@@ -305,15 +305,16 @@
 		intensity: 5
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: your,companion
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: Exert
+					select: choose(your,ring-bearer)
+				}
 			}
 		]
 		gametext: Each time you play a companion, you must exert the Ring-bearer.
@@ -344,15 +345,15 @@
 		intensity: 5
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantPlayCards
+					filter: your,companion
+					requires: {
+						type: Location
+						filter: siteNumber(6-9)
+					}
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: While your fellowship is at site 6 or higher, companions cannot be played.
@@ -381,19 +382,23 @@
 		title: Race Text 92_10
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: OwnerIsShadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: 3
+				memorize: discardedCards
 			}
-		]
+			effect: {
+				type: playCardFromDiscard
+				select: choose(minion,not(memory(discardedCards)))
+			}
+		}
 		gametext: Shadow: Discard 3 cards from hand to play a minion from your discard pile.
 		lore: ""
 		promotext: ""
@@ -420,19 +425,23 @@
 		title: Race Text 92_11
 		type: MetaSite
 		intensity: 3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Modifier
+			modifier: {
+				type: modifyStrength
+				filter: your,minion
+				amount: 1
+				requires: [
+					{
+						type: OwnerIsShadow
+					}
+					{
+						type: moveCountMinimum
+						amount: 2
+					}
+				]
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: If the fellowship has moved more than once this turn, your minions are each strength +1.
 		lore: ""
 		promotext: ""
@@ -459,19 +468,16 @@
 		title: Race Text 92_12
 		type: MetaSite
 		intensity: 2
-		effects: [
-			{
-				type: ToPlay
+		effects: {
+			type: Modifier
+			modifier: {
+				type: skipPhase
+				phase: archery
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsShadow
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: While you are the Shadow player, skip the archery phase.
 		lore: ""
 		promotext: ""
@@ -498,19 +504,19 @@
 		title: Race Text 92_13
 		type: MetaSite
 		intensity: 3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: shadow
+			cost: {
+				type: PlayCardFromHand
+				select: choose(possession)
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			effect: {
+				type: Exert
+				player: fp
+				select: choose(companion)
 			}
-		]
+		}
 		gametext: Shadow: Play a possession to make the Free Peoples player exert a companion.
 		lore: ""
 		promotext: ""
@@ -537,20 +543,26 @@
 		title: Race Text 92_14
 		type: MetaSite
 		intensity: 2
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Activated
+			phase: shadow
+			requires: [
+				{
+					type: PlayedCardThisPhase
+					filter: culture(raider),minion
+					min: 3
 				}
+				{
+					type: CanSpot
+					filter: name(Sam),not(Ring-bearer)
+				}
+			]
+			effect: {
+				type: discard
+				select: choose(name(Sam))
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
-		gametext: Shadow: Play 3 [Raider] minions to discard Sam.
+		}
+		gametext: Shadow: If 3 or more [Raider] minions have been played this phase, discard Sam.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -578,15 +590,27 @@
 		intensity: -4
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: modifyStrength
+					filter: your,dwarf
+					amount: 1
+					requires: {
+						type: OwnerIsFreeps
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: CantTakeMoreWoundsThan
+					filter: your,dwarf
+					amount: 1
+					phase: skirmish
+					requires: {
+						type: OwnerIsFreeps
+					}
+				}
 			}
 		]
 		gametext: Your Dwarves are strength +1 and cannot take more than one wound during each skirmish phase.
@@ -615,19 +639,13 @@
 		title: Race Text 92_16
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Modifier
+			modifier: {
+				type: CantTakeWounds
+				filter: or(name(Gollum),name(Sméagol))
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Gollum and Smeagol cannot take wounds.
 		lore: ""
 		promotext: ""
@@ -654,19 +672,19 @@
 		title: Race Text 92_17
 		type: MetaSite
 		intensity: 5
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Moves
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			requires: {
+				type: OwnerIsFreeps
 			}
-		]
+			effect: {
+				type: AddThreats
+			}
+		}
 		gametext: Each time your fellowship moves, add a threat.
 		lore: ""
 		promotext: ""
@@ -693,19 +711,30 @@
 		title: Race Text 92_18
 		type: MetaSite
 		intensity: 8
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: discard
+				player: fp
+				select: choose(companion,not(hobbit))
+				count: {
+					type: Conditional
+					requires: {
+						type: Location
+						filter: siteNumber(7-9)
+					}
+					true: 2
+					false: 1
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each time your fellowship moves, discard 1 non-Hobbit companion (or 2 if at site 7 or higher).
 		lore: ""
 		promotext: ""
