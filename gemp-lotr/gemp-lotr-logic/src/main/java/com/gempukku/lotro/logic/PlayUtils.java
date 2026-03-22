@@ -153,7 +153,7 @@ public class PlayUtils {
 
     private static boolean checkUniqueness(LotroGame game, PhysicalCard self, boolean ignoreCheckingDeadPile) {
         LotroCardBlueprint blueprint = self.getBlueprint();
-        final int restrictions = blueprint.getUniqueRestriction();
+        final int restrictions = game.getModifiersQuerying().getUniqueness(game, self);
         if (restrictions >= 4)
             return true;
 

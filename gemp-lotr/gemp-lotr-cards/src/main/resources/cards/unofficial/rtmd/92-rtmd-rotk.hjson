@@ -953,19 +953,17 @@
 		title: Race Text 92_24
 		type: MetaSite
 		intensity: -5
-		effects: [
-			{
-				type: ToPlay
+		effects: {
+			type: Modifier
+			modifier: {
+				type: OverrideUniqueness
+				filter: your,nazgul
+				uniqueness: 4
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsShadow
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Your Nazgul are non-unique.
 		lore: ""
 		promotext: ""

@@ -182,6 +182,8 @@ public interface ModifiersQuerying {
 
     boolean isHandRevealed(LotroGame game, String playerId);
 
+    int getUniqueness(LotroGame game, PhysicalCard card);
+
     int getPotentialDiscount(LotroGame game, PhysicalCard playedCard);
 
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard playedCard);
