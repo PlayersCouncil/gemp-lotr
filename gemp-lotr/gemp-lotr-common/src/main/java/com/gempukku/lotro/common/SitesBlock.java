@@ -2,7 +2,8 @@ package com.gempukku.lotro.common;
 
 public enum SitesBlock {
     FELLOWSHIP("Fellowship", "F"), TWO_TOWERS("Towers", "T"), KING("King", "K"),
-    SHADOWS("Shadows and onwards", "S"), MULTIPATH("Multipath", "*"),
+    SHADOWS("Shadows and onwards", "S"),
+    MULTIPATH("Multipath", "*"),
     SECOND_ED("2nd edition", "E"),
 	
 	//Additional Hobbit Draft block

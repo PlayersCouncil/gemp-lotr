@@ -763,18 +763,11 @@
 		intensity: -3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: DeckBuildingOverride
+				skipSiteBlockValidation: true
 			}
 		]
-		gametext: Your adventure deck may contain sites from any block.
+		gametext: Your adventure deck may contain sites from any block. (You may either mix any Movie block sites together, or use any Shadow sites, but not both.)
 		lore: ""
 		promotext: ""
 		helptext: ""

@@ -41,7 +41,7 @@ public class PlayNextSite implements EffectAppenderProducer {
                 if (nextSite != null && !game.getModifiersQuerying().canReplaceSite(game, actionContext.getPerformingPlayer(), nextSite))
                     return false;
 
-                if (game.getFormat().isOrderedSites()) {
+                if (!game.getGameState().usesUnorderedSites(playerId)) {
                     Filter printedSiteNumber = new Filter() {
                         @Override
                         public boolean accepts(LotroGame game, PhysicalCard physicalCard) {

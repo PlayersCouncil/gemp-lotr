@@ -153,6 +153,10 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
                     var bp = _library.getLotroCardBlueprint(path.get(i));
                     if (bp != null) {
                         siteElem.setAttribute("name", bp.getFullName());
+                        var overrides = bp.getDeckBuildingOverrides();
+                        if (overrides != null && overrides.shouldSkipSiteBlockValidation()) {
+                            siteElem.setAttribute("siteOverride", "true");
+                        }
                     }
                 } catch (Exception ignored) {}
                 leagueElem.appendChild(siteElem);

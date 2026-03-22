@@ -332,7 +332,6 @@
 		type: Ally
 		allyHome: 6F
 		race: Elf
-		#keyword: damage+1
 		strength: 3
 		vitality: 3
 		effects: [
@@ -375,7 +374,7 @@
 				}
 			}
 		]
-		gametext: At the start of each of your turns, you may heal another Elf.<br><b>Fellowship:</b> Exert Galadriel to play the fellowship's next site if it is a forest (replacing opponent's site if necessary).
+		gametext: Response: If the fellowship is about to move to an opponent's site during the Fellowship phase, exert Galadriel to replace that site with a forest site of the same site number from your adventure deck.
 		lore: "'There is in her and in this land no evil, unless a man bring it hither himself. Then let him beware!'"
 		promotext: ""
 		alts: {

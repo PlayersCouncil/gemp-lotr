@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class Card_03_017_ErrataTests
 {
 
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+	protected VirtualTableScenario GetFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
@@ -38,7 +38,8 @@ public class Card_03_017_ErrataTests
 					put("siteX", "11_231"); //and a Shadows site
 				}},
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath
 		);
 	}
 
@@ -50,22 +51,19 @@ public class Card_03_017_ErrataTests
 					// put other cards in here as needed for the test case
 				}},
 				new HashMap<>() {{
-					put("site1", "1_319");
-					put("site2", "1_332");
-					put("site3", "1_337");
-					put("site4", "1_343");
-					put("site5", "1_349");
-					put("site6", "1_350");
-					put("site7", "1_353");
-					put("site8", "1_356");
-					put("site2F", "1_329"); //We are cheating here and putting a second site 2 in
-					put("site2T", "4_330"); //and a Towers site 2
-					put("site2K", "7_337"); //and a King site 2
-					put("siteX", "11_231"); //and a Shadows site
+					put("site1", "11_239");
+					put("site2", "13_185");
+					put("site3", "11_234");
+					put("site4", "17_148");
+					put("site5", "18_138");
+					put("site6", "11_230");
+					put("site7", "12_187");
+					put("site8", "12_185");
+					put("site9", "11_231"); // Forest
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
-				"expanded"
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -90,7 +88,7 @@ public class Card_03_017_ErrataTests
 		*/
 
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 
@@ -109,7 +107,7 @@ public class Card_03_017_ErrataTests
 	@Test
 	public void MovingToOpponentsSiteWithMatchingFellowshipForestSiteTriggers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2F");
@@ -136,7 +134,7 @@ public class Card_03_017_ErrataTests
 	@Test
 	public void MovingToOpponentsSiteWithMatchingTowersForestSiteTriggers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2T");
@@ -162,7 +160,7 @@ public class Card_03_017_ErrataTests
 	@Test
 	public void MovingToOpponentsSiteWithMatchingKingForestSiteTriggers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2K");
@@ -189,38 +187,30 @@ public class Card_03_017_ErrataTests
 	}
 
 	@Test
-	public void MovingToOpponentsShadowsPathSiteTriggersButCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MovingToOpponentsShadowsPathSiteDoesNotTrigger() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetExpandedScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
-		var forestSite = scn.GetFreepsSite("site2K");
-		var freepsSiteX = scn.GetFreepsSite("siteX");
+		var freepsSite2 = scn.GetFreepsSite("site2");
 		scn.MoveCompanionsToTable(galadriel);
 
-		var shadowSite2 = scn.GetShadowSite("siteX");
+		var shadowForest = scn.GetShadowSite("site9");
 
-		scn.FreepsChooseCardBPFromSelection(freepsSiteX);
+		scn.FreepsChooseCardBPFromSelection(freepsSite2);
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
 
+		scn.ShadowChooseCardBPFromSelection(shadowForest);
+		assertEquals(shadowForest, scn.GetCurrentSite());
 
-		//We have to specify which site here since we cheated and included a second site 2
-		scn.ShadowChooseCardBPFromSelection(shadowSite2);
-		assertEquals(shadowSite2, scn.GetCurrentSite());
-
-		assertEquals(0, scn.GetWoundsOn(galadriel));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		//The cheated Towers and Fellowship site 2, but not the Shadows variant (as that doesn't have a site number until played)
-		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertEquals(1, scn.GetWoundsOn(galadriel));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 
 	@Test
 	public void ReplacedSiteDoesNotTriggerBeforeReplacement() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var frodo = scn.GetRingBearer();
 		var galadriel = scn.GetFreepsCard("galadriel");
@@ -245,7 +235,7 @@ public class Card_03_017_ErrataTests
 	@Test
 	public void HealAbilityDoesNotTriggerOnSelf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		scn.MoveCompanionsToTable(galadriel);
@@ -260,7 +250,7 @@ public class Card_03_017_ErrataTests
 	@Test
 	public void HealAbilityTriggersOnOtherElves() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
