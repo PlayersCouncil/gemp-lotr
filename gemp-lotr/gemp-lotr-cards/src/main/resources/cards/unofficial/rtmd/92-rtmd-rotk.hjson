@@ -793,19 +793,22 @@
 		title: Race Text 92_20
 		type: MetaSite
 		intensity: -2
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: Shadow
+			requires: {
+				type: OwnerIsShadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			cost: {
+				type: Exert
+				select: choose(nazgul)
+				times: 2
 			}
-		]
+			effect: {
+				type: playCardFromDiscard
+				select: choose(nazgul)
+			}
+		}
 		gametext: Shadow: Exert a Nazgul twice to play a Nazgul from your discard pile.
 		lore: ""
 		promotext: ""
@@ -832,19 +835,15 @@
 		title: Race Text 92_21
 		type: MetaSite
 		intensity: -5
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: Fellowship
+			effect: {
+				type: PlayCardFromHand
+				select: choose(companion)
+				discount: -4
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Fellowship: Play a companion; their twilight cost is -4.
 		lore: ""
 		promotext: ""
@@ -871,19 +870,20 @@
 		title: Race Text 92_22
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Activated
+			phase: Shadow
+			effect: [
+				{
+					type: PlayCardFromHand
+					select: choose(condition,weather)
+					discount: -2
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+				{
+					type: DrawCards
+				}
+			]
+		}
 		gametext: Shadow: Play a weather condition to draw a card; its twilight cost is -2.
 		lore: ""
 		promotext: ""
@@ -910,19 +910,23 @@
 		title: Race Text 92_23
 		type: MetaSite
 		intensity: -2
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: Skirmish
+			requires: {
+				type: OwnerIsFreeps
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			cost: {
+				type: Exert
+				select: choose(your,companion)
+				memorize: exertedComp
 			}
-		]
+			effect: {
+				type: modifyStrength
+				select: choose(companion,not(memory(exertedComp)),cultureFromMemory(exertedComp))
+				amount: 1
+			}
+		}
 		gametext: Skirmish: Exert your companion to make another companion of the same culture strength +1.
 		lore: ""
 		promotext: ""
