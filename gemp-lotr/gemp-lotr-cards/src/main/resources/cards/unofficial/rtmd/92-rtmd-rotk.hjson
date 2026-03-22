@@ -990,19 +990,22 @@
 		title: Race Text 92_25
 		type: MetaSite
 		intensity: 6
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: AddTwilight
+				amount: {
+					type: ForEachBurden
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each time your fellowship moves, add (1) for each burden on the Ring-bearer.
 		lore: ""
 		promotext: ""
@@ -1029,19 +1032,23 @@
 		title: Race Text 92_26
 		type: MetaSite
 		intensity: 5
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: AddTwilight
+				amount: {
+					type: ForEachYouCanSpot
+					filter: possession,side(freeps)
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each time your fellowship moves, add (1) for each Free Peoples possession.
 		lore: ""
 		promotext: ""
@@ -1068,19 +1075,23 @@
 		title: Race Text 92_27
 		type: MetaSite
 		intensity: 7
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			requires: {
+				type: OwnerIsFreeps
 			}
-		]
+			effect: {
+				type: DiscardFromHand
+				forced: true
+				player: owner
+				hand: owner
+				select: all(any)
+			}
+		}
 		gametext: Each time your fellowship moves, discard your hand.
 		lore: ""
 		promotext: ""
