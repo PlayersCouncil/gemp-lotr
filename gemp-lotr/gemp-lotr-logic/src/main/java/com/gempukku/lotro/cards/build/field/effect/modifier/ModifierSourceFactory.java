@@ -87,6 +87,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("removecardsgoingtodiscard", new AddModifierFlag(ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD));
         modifierProducers.put("removekeyword", new RemoveKeyword());
         modifierProducers.put("ringbearercanttakethreatwounds", new AddModifierFlag(ModifierFlag.RING_BEARER_CANT_TAKE_THREAT_WOUNDS));
+        modifierProducers.put("overrideuniqueness", new OverrideUniqueness());
         modifierProducers.put("revealhand", new RevealHand());
         modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
         modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));

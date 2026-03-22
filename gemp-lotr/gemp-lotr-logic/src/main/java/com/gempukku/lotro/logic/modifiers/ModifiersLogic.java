@@ -1301,6 +1301,18 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public int getUniqueness(LotroGame game, PhysicalCard card) {
+        int result = card.getBlueprint().getUniqueRestriction();
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.UNIQUENESS_MODIFIER, card)) {
+            int override = modifier.getOverrideUniqueness(game, card);
+            if (override > 0) {
+                result = Math.max(result, override);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard playedCard) {
         int result = playedCard.getBlueprint().getPotentialDiscount(game, playedCard.getOwner(), playedCard);
 

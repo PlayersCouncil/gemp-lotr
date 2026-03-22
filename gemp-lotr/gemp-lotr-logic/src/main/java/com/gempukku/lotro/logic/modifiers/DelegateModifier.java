@@ -275,6 +275,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getOverrideUniqueness(LotroGame game, PhysicalCard card) {
+        return delegate.getOverrideUniqueness(game, card);
+    }
+
+    @Override
     public Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter) {
         return delegate.getShadowSkirmishStrengthOverrideEvaluator(game, fpCharacter);
     }

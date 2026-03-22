@@ -488,13 +488,13 @@ public class Filters {
 
     public static final Filter any = (game, physicalCard) -> true;
     public static final Filter none = (game, physicalCard) -> false;
-    public static final Filter unique = (game, physicalCard) -> physicalCard.getBlueprint().isUnique();
+    public static final Filter unique = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 1;
 
-    public static final Filter twodot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 2;
-    public static final Filter threedot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 3;
+    public static final Filter twodot = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 2;
+    public static final Filter threedot = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 3;
 
     public static Filter restricted(int amount) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == amount;
+        return (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == amount;
     }
 
     private static Filter signet(final Signet signet) {

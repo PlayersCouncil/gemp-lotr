@@ -419,6 +419,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getOverrideUniqueness(LotroGame game, PhysicalCard card) {
+        return -1;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard discountCard) {
         return 0;
     }
