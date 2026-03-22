@@ -42,6 +42,13 @@ public class Card_92_013_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_13
+		 * Type: MetaSite
+		 * Game Text: Shadow: Play a possession to make the Free Peoples player exert a companion.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

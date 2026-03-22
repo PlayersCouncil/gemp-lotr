@@ -38,6 +38,13 @@ public class Card_92_011_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_11
+		 * Type: MetaSite
+		 * Game Text: If the fellowship has moved more than once this turn, your minions are each strength +1.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

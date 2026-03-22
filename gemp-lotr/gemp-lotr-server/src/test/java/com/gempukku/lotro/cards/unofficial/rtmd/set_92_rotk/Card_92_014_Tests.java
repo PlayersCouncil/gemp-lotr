@@ -57,6 +57,13 @@ public class Card_92_014_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_14
+		 * Type: MetaSite
+		 * Game Text: Shadow: If 3 or more [Raider] minions have been played this phase, discard Sam.
+		 */
+
 		var scn = GetScenario();
 
 		var card = scn.GetShadowCard("mod");

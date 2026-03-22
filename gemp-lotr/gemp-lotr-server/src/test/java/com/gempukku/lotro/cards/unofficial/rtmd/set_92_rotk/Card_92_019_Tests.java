@@ -45,6 +45,13 @@ public class Card_92_019_Tests
 
 	@Test
 	public void StatsAreCorrect() throws CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_19
+		 * Type: MetaSite
+		 * Game Text: Your adventure deck may contain sites from any block.
+		 */
+
 		var bp = VirtualTableScenario.FindCard("92_19");
 		assertEquals("Race Text 92_19", bp.getTitle());
 		assertEquals(CardType.METASITE, bp.getCardType());

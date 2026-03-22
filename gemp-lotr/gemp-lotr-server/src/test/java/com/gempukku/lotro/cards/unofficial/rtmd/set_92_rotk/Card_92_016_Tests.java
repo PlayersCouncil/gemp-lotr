@@ -35,6 +35,13 @@ public class Card_92_016_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_16
+		 * Type: MetaSite
+		 * Game Text: Gollum and Smeagol cannot take wounds.
+		 */
+
 		var scn = GetScenario();
 
 		var card = scn.GetShadowCard("mod");

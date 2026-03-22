@@ -38,6 +38,13 @@ public class Card_92_012_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_12
+		 * Type: MetaSite
+		 * Game Text: While you are the Shadow player, skip the archery phase.
+		 */
+
 		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");

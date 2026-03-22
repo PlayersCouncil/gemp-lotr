@@ -36,6 +36,13 @@ public class Card_92_025_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 92
+		 * Name: Race Text 92_25
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, add (1) for each burden on the Ring-bearer.
+		 */
+
 		var scn = GetFreepsScenario();
 
 		var card = scn.GetFreepsCard("mod");
