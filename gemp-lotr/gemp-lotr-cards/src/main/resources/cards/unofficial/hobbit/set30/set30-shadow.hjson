@@ -138,9 +138,6 @@
 			method: discarded
 			requires: [
 				{
-					type: isOwner
-				}
-				{
 					type: not
 					requires: {
 						type: phase
