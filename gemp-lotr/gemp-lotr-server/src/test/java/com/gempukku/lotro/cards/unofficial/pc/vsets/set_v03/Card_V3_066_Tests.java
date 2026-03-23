@@ -320,7 +320,7 @@ public class Card_V3_066_Tests
 		scn.ShadowChoose("4");
 
 		// Both Sam (cost 2) and Aragorn (cost 4) should be valid
-		assertTrue(scn.ShadowHasCardChoicesAvailable(sam, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, aragorn));
 
 		scn.ShadowChooseCard(aragorn);
 

@@ -75,8 +75,8 @@ public class Card_92_016_Tests
 		// Gollum can't take wounds, so Legolas's arrow auto-goes to Lurtz.
 		// Lurtz's arrow: Smeagol can't take wounds, so only Frodo/Legolas are valid.
 		// We should be prompted to assign Lurtz's arrow to Frodo or Legolas.
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(smeagol));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(smeagol));
 
 		scn.FreepsChooseCard(legolas);
 

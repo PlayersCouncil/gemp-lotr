@@ -206,8 +206,8 @@ public class Card_V3_093_Tests
 
 		// Verify targeting: 3 FP cards valid, Shadow condition (Black Breath) not valid
 		assertEquals(3, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(anduril, athelas, lastalliance));
-		assertTrue(scn.ShadowHasCardChoicesNotAvailable(breath));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(anduril, athelas, lastalliance));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(breath));
 
 		scn.ShadowChooseCard(anduril);
 

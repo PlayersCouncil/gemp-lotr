@@ -80,7 +80,7 @@ public class Card_92_031_Tests
 		scn.FreepsUseCardAction(mod);
 
 		// Choose the shadow condition to discard
-		scn.ShadowHasCardChoicesAvailable(summons, hollowing);
+		scn.ShadowHasCardChoiceAvailable(summons, hollowing);
 		scn.ShadowChooseCard(summons);
 
 		assertEquals(1, scn.GetWoundsOn(arwen));

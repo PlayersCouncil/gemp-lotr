@@ -127,15 +127,15 @@ public class Card_92_015_Tests
 		assertInZone(Zone.DEAD, legolas);
 
 		// 2 threat wounds to assign. Choose Gimli for the first.
-		assertTrue(scn.FreepsHasCardChoicesAvailable(gimli, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, aragorn));
 		scn.FreepsChooseCard(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 
 		// Second threat wound — Gimli already took 1 wound this skirmish phase,
 		// so he should NOT be offered as a choice. It goes to someone else.
 		// Aragorn or Frodo should take it.
-		assertTrue(scn.FreepsHasCardChoicesAvailable(aragorn));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(gimli));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
 		assertEquals(1, scn.GetWoundsOn(gimli));
 	}
 

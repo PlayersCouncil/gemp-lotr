@@ -132,7 +132,7 @@ public class Card_92_004_Tests
 		scn.FreepsUseCardAction(scn.GetFreepsCard("mod"));
 
 		// Should offer choice between pipe and weed1
-		assertTrue(scn.FreepsHasCardChoicesAvailable(pipe, weed1));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pipe, weed1));
 
 		// Choose pipe → should then search for pipeweed
 		scn.FreepsChooseCard(pipe);

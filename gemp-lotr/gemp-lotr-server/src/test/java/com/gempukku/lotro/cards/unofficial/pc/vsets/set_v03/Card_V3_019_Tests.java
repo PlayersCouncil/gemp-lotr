@@ -269,7 +269,7 @@ public class Card_V3_019_Tests
 
 		// Should have choice between Boromir and Eomer
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoicesAvailable(boromir, eomer));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, eomer));
 
 		// Choose Eomer
 		scn.FreepsChooseCard(eomer);

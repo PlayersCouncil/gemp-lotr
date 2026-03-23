@@ -117,8 +117,8 @@ public class Card_V3_124_Tests
 
 		// FP chooses which of their companion-borne cards to discard
 		// Blade Tip (Shadow) should not be offered
-		assertTrue(scn.FreepsHasCardChoicesAvailable(sting, anduril, lastalliance));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(bladeTip, oldToby, sapling, promise));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, anduril, lastalliance));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bladeTip, oldToby, sapling, promise));
 
 		// Discard Sting, keep Anduril and Last Alliance
 		scn.FreepsChooseCards(sting);

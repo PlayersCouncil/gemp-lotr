@@ -83,16 +83,16 @@ public class Card_91_014_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas, gimli, merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, gimli, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 
 		// Select Gimli (cost 2), total = 2
 		scn.FreepsChooseCard(gimli);
 
 		// Legolas (cost 2) should NOT be available since 2 + 2 = 4 > 3
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(legolas, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, aragorn));
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class Card_91_014_Tests
 
 		// Merry (cost 1) should still be available since 2 + 1 = 3 <= 3
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(merry));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
 
 		// Done — no more companions fit under 3
@@ -129,13 +129,13 @@ public class Card_91_014_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas, gimli, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, gimli, aragorn));
 
 		scn.FreepsChooseCard(gimli);
 
 		// Legolas (cost 2) should be available since 2 + 2 = 4 <= 4
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 	}
 
 	@Test
@@ -149,12 +149,12 @@ public class Card_91_014_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas, gimli, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, gimli, aragorn));
 
 		scn.FreepsChooseCard(gimli);
 
 		// Without FP having the modifier, normal limit of 4 applies: 2+2=4 <= 4
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 	}
 }

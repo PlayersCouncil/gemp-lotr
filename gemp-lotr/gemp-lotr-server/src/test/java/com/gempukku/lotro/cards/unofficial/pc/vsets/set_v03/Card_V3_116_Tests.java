@@ -288,7 +288,7 @@ public class Card_V3_116_Tests
 		scn.FreepsUseCardAction(smeagol);
 
 		// Should be asked to choose which minion to target
-		assertTrue(scn.FreepsHasCardChoicesAvailable(raider, hunter));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
 
 		// Choose the hunter (costs 5)
 		scn.FreepsChooseCard(hunter);

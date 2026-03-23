@@ -96,8 +96,8 @@ public class Card_V2_047_Tests
 
 		scn.FreepsPlayCard(erkenbrand);
 		assertEquals(4, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoicesAvailable(elite, rider, guard, veteran));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(eowyn, dwarfguard));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elite, rider, guard, veteran));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(eowyn, dwarfguard));
 
 		scn.FreepsChooseCards(elite, rider, guard);
 		assertEquals(Zone.DEAD, eowyn.getZone());

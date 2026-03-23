@@ -101,7 +101,7 @@ public class Card_V3_089_Tests
 		scn.FreepsPlayCard(takeitdown);
 
 		// Choose which to exert
-		assertTrue(scn.FreepsHasCardChoicesAvailable(theoden, eomer));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, eomer));
 		scn.FreepsChooseCard(theoden);
 
 		assertEquals(1, scn.GetWoundsOn(theoden));

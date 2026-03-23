@@ -92,7 +92,7 @@ public class Card_V3_070_Tests
 
 		// First archery wound - both minions are valid targets
 		scn.FreepsUseCardAction(legolas);
-		assertTrue(scn.FreepsHasCardChoicesAvailable(savage, mouth));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, mouth));
 		scn.FreepsChooseCard(savage);
 
 		assertEquals(1, scn.GetWoundsOn(savage));

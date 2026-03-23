@@ -215,7 +215,7 @@ public class Card_V3_078_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// Should have choice between conditions
-		assertTrue(scn.ShadowHasCardChoicesAvailable(armory, bladetip));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armory, bladetip));
 
 		// Choose Ringwraith condition
 		scn.ShadowChooseCard(bladetip);

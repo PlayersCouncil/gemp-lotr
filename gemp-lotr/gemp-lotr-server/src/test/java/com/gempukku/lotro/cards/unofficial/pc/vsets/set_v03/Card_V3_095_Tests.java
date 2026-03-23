@@ -280,7 +280,7 @@ public class Card_V3_095_Tests
 
 		// Should be able to choose between Orc and Troll
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(orc, troll));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(orc, troll));
 		scn.ShadowChooseCard(troll);
 
 		// Should be able to choose which 3 of 4 twilight conditions to hinder

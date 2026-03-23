@@ -128,8 +128,8 @@ public class Card_V3_057_Tests
 
 		// FP must choose to hinder bearer or free peoples item
 		scn.FreepsChoose("item");
-		assertFalse(scn.FreepsHasCardChoicesAvailable(harpoon));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(athelas, anduril));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(harpoon));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(athelas, anduril));
 		scn.FreepsChooseCard(athelas);
 
 		assertTrue(scn.IsHindered(athelas));

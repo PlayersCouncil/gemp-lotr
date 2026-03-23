@@ -89,9 +89,9 @@ public class Card_91_011_Tests
 		scn.ShadowUseCardAction(shadowMod);
 
 		// Should only be able to choose a condition, not possession or artifact
-		assertTrue(scn.ShadowHasCardChoicesAvailable(condition));
-		assertFalse(scn.ShadowHasCardChoicesAvailable(possession));
-		assertFalse(scn.ShadowHasCardChoicesAvailable(artifact));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(condition));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(possession));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(artifact));
 
 		scn.ShadowChooseCard(condition);
 

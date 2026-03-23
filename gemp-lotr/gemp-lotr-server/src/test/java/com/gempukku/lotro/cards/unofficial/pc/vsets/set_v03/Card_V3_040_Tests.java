@@ -123,8 +123,8 @@ public class Card_V3_040_Tests
 		assertEquals(1, scn.GetWoundsOn(uruk3));
 
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(boromir, legolas));
-		assertFalse(scn.ShadowHasCardChoicesAvailable(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(boromir, legolas));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(aragorn));
 		scn.ShadowChooseCard(boromir);
 
 		assertTrue(scn.IsHindered(boromir));

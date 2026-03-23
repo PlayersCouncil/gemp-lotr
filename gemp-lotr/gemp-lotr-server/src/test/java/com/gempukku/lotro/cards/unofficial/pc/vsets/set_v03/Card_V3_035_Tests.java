@@ -302,8 +302,8 @@ public class Card_V3_035_Tests
 
 		scn.DismissRevealedCards();
 
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(elven1, elven2));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(gondor1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(elven1, elven2));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gondor1));
 	}
 
 	@Test

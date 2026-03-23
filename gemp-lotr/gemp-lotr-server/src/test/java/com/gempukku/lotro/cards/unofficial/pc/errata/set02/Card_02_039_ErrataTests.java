@@ -109,10 +109,10 @@ public class Card_02_039_ErrataTests
 
 		// Only the armor/helm/shield should be valid targets, not Glamdring
 		assertEquals(3, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowCanChooseCharacter(helm));
-		assertTrue(scn.ShadowCanChooseCharacter(armor));
-		assertTrue(scn.ShadowCanChooseCharacter(shield));
-		assertFalse(scn.ShadowCanChooseCharacter(sword));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(helm));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shield));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(sword));
 
 		scn.ShadowChooseCard(helm);
 		assertInDiscard(helm);

@@ -93,8 +93,8 @@ public class Card_92_018_Tests
 		scn.FreepsChooseAny(); //Timing conflict between Bree Gate and the mod
 
 		//Freeps has to choose who to discard
-		assertTrue(scn.FreepsHasCardChoicesAvailable(aragorn, gimli));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(merry));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry));
 
 		scn.FreepsChooseCard(aragorn);
 

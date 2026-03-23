@@ -138,7 +138,7 @@ public class Card_V3_069_Tests
 
 		scn.ShadowPlayCard(noman);
 
-		scn.ShadowHasCardChoicesAvailable(witchking, rider1, rider2);
+		scn.ShadowHasCardChoiceAvailable(witchking, rider1, rider2);
 		scn.ShadowChooseCard(witchking);
 
 		// Errata: only one Nazgul restored

@@ -93,7 +93,7 @@ public class Card_V3_045_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 
 		// Should only be able to hinder items, not the condition
-		assertTrue(scn.FreepsHasCardChoicesAvailable(anduril, athelas));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(anduril, athelas));
 		assertFalse(scn.FreepsHasCardChoiceAvailable(lastalliance));
 
 		// FP is offered to hinder items - decline all

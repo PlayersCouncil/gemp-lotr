@@ -295,10 +295,6 @@ public interface Choices extends Decisions {
 		PlayerDecided(player, String.join(",", ids));
 	}
 
-	default boolean FreepsCanChooseCharacter(PhysicalCardImpl card) { return FreepsGetCardChoices().contains(String.valueOf(card.getCardId())); }
-	default boolean ShadowCanChooseCharacter(PhysicalCardImpl card) { return ShadowGetCardChoices().contains(String.valueOf(card.getCardId())); }
-
-
 	default int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
 	default int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
@@ -384,28 +380,22 @@ public interface Choices extends Decisions {
 		PlayerDecided(player, String.join(",", bps));
 	}
 
-	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) {
-		return HasCardChoiceAvailable(P1, card);
-	}
 	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
 		return HasCardChoiceAvailable(P1, card, selectable);
 	}
 
-	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) {
-		return HasCardChoiceAvailable(P2, card);
-	}
 	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
 		return HasCardChoiceAvailable(P2, card, selectable);
 	}
 
-	default boolean FreepsHasCardChoicesAvailable(PhysicalCardImpl...cards) {
+	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(!HasCardChoiceAvailable(P1, card))
 				return false;
 		}
 		return true;
 	}
-	default boolean ShadowHasCardChoicesAvailable(PhysicalCardImpl...cards) {
+	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(!HasCardChoiceAvailable(P2, card))
 				return false;
@@ -414,22 +404,14 @@ public interface Choices extends Decisions {
 	}
 
 
-
-	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl card) {
-		return !HasCardChoiceAvailable(P1, card);
-	}
-	default boolean ShadowHasCardChoicenotAvailable(PhysicalCardImpl card) {
-		return !HasCardChoiceAvailable(P2, card);
-	}
-
-	default boolean FreepsHasCardChoicesNotAvailable(PhysicalCardImpl...cards) {
+	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(HasCardChoiceAvailable(P1, card))
 				return false;
 		}
 		return true;
 	}
-	default boolean ShadowHasCardChoicesNotAvailable(PhysicalCardImpl...cards) {
+	default boolean ShadowHasCardChoiceNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(HasCardChoiceAvailable(P2, card))
 				return false;
