@@ -321,6 +321,13 @@ public class FilterFactory {
             }
             return Filters.or(signets.toArray(new Signet[0]));
         }));
+        parameterFilters.put("gametextcontains", ((parameter, environment) -> {
+            final String searchText = parameter.toLowerCase();
+            return actionContext -> (Filter) (game, physicalCard) -> {
+                var gameText = physicalCard.getBlueprint().getGameText();
+                return gameText != null && gameText.toLowerCase().contains(searchText);
+            };
+        }));
         parameterFilters.put("hasattached",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

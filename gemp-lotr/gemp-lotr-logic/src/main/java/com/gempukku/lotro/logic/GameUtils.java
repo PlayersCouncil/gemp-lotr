@@ -37,6 +37,9 @@ public class GameUtils {
     }
 
     public static String getFullName(PhysicalCard card) {
+        if (card instanceof PhysicalCardImpl impl && impl.getDisplayName() != null) {
+            return impl.getDisplayName();
+        }
         return getFullName(card.getBlueprint());
     }
 
