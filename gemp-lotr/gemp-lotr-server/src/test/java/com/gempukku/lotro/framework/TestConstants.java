@@ -99,6 +99,7 @@ public interface TestConstants {
 	 * 3 strength
 	 * 4 vitality
 	 * 10 resistance
+	 * Frodo Signet
 	 * Fellowship: Exert another companion who has the Frodo signet to heal Frodo.
 	 */
 	String FOTRFrodo = "1_290";

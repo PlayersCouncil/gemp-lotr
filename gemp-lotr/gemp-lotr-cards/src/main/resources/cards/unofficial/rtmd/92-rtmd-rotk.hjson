@@ -1289,19 +1289,19 @@
 		title: Race Text 92_32
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: fellowship
+			cost: {
+				type: Exert
+				select: choose(companion)
+				memorize: exertedComp
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			effect: {
+				type: Heal
+				select: choose(not(Memory(exertedComp)),companion,SignetFromMemory(exertedComp))
 			}
-		]
+		}
 		gametext: Fellowship: Exert a companion to heal another companion with the same signet.
 		lore: ""
 		promotext: ""
