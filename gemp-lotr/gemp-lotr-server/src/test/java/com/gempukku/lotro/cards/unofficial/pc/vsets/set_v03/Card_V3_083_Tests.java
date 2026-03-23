@@ -366,8 +366,6 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		//site / strider timing tie
-		scn.FreepsChoose("Strider");
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(strider, uruk);

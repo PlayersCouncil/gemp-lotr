@@ -154,7 +154,6 @@ public class Card_V3_028_Tests
 		scn.StartGame();
 
 		scn.FreepsPass();
-		scn.FreepsResolveRuleFirst();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
@@ -308,7 +307,6 @@ public class Card_V3_028_Tests
 		scn.StartGame();
 
 		scn.FreepsPass();
-		scn.FreepsResolveRuleFirst();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
