@@ -35,7 +35,7 @@ public interface TestConstants {
 	 */
 	HashMap<String, String> FellowshipSites = new HashMap<>() {{
 		put("site1", "1_319");
-		put("site2", "1_327");
+		put("site2", "1_331");
 		put("site3", "1_341");
 		put("site4", "1_343");
 		put("site5", "1_349");

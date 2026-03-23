@@ -27,7 +27,17 @@ public class Card_V1_065_Tests
 					put("aragorn", "1_89");
 
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327"); //Need Bree Gate; no terrain keyword for Dam
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);

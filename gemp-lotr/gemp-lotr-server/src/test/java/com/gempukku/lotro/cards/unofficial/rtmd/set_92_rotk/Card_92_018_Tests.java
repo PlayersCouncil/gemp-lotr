@@ -70,7 +70,6 @@ public class Card_92_018_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		scn.FreepsChooseAny(); //Timing conflict between Bree Gate and the mod
 
 		// Moving from site 1 to site 2 triggers the effect — discard 1 non-hobbit
 		// Merry is a hobbit so not a valid target; Aragorn auto-selected
@@ -90,7 +89,6 @@ public class Card_92_018_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		scn.FreepsChooseAny(); //Timing conflict between Bree Gate and the mod
 
 		//Freeps has to choose who to discard
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));

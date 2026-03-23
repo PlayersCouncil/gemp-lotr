@@ -87,7 +87,6 @@ public class Card_91_017_Tests
 		scn.StartGame();
 
 		scn.FreepsPass(); // move
-		scn.FreepsChooseAny(); // Timing collision between site and metasite
 
 		// Should include +6 from the modifier (6+ companions spotted)
 		// 2 from site, 6 from companions, +6 from meta-site

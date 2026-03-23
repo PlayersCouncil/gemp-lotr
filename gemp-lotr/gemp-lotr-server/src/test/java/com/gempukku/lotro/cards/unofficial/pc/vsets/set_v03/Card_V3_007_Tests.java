@@ -141,7 +141,6 @@ public class Card_V3_007_Tests
 		assertFalse(scn.FreepsActionAvailable(stash));
 
 		scn.FreepsPass();
-		scn.FreepsChooseAny(); //Aragorn and Site required triggers
 
 		scn.SkipToPhase(Phase.REGROUP);
 
