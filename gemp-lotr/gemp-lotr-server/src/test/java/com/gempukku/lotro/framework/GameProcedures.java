@@ -217,42 +217,43 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase the tester actually wants to be in
 	 */
     default void SkipToPhase(Phase target) {
-		for(int attempts = 1; attempts <= 20; attempts++)
-		{
-			Phase current = gameState().getCurrentPhase();
-			if(current == target)
-				break;
+		Phase current = gameState().getCurrentPhase();
+		try {
+			for (int attempts = 1; attempts <= 20; attempts++) {
+				current = gameState().getCurrentPhase();
+				if (current == target)
+					break;
 
-			if(current == Phase.FELLOWSHIP) {
-				FreepsPassCurrentPhaseAction();
-				if(game().getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
-					ShadowChooseAnyCard();
+				if (current == Phase.FELLOWSHIP) {
+					FreepsPassCurrentPhaseAction();
+					if (game().getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
+						ShadowChooseAnyCard();
+					}
+				} else if (current == Phase.SHADOW) {
+					ShadowPassCurrentPhaseAction();
+				} else {
+					var freeps = FreepsGetAwaitingDecision();
+					var shadow = ShadowGetAwaitingDecision();
+					if (freeps != null && freeps.getText().toLowerCase().contains("required")) {
+						FreepsChooseAction("0");
+					} else if (shadow != null && shadow.getText().toLowerCase().contains("required")) {
+						ShadowChooseAction("0");
+					} else {
+						PassCurrentPhaseActions();
+					}
 				}
-			}
-			else if(current == Phase.SHADOW) {
-				ShadowPassCurrentPhaseAction();
-			}
-			else {
-				var freeps = FreepsGetAwaitingDecision();
-				var shadow = ShadowGetAwaitingDecision();
-				if(freeps != null && freeps.getText().toLowerCase().contains("required")) {
-					FreepsChooseAction("0");
-				}
-				else if(shadow != null && shadow.getText().toLowerCase().contains("required")){
-					ShadowChooseAction("0");
-				}
-				else {
-					PassCurrentPhaseActions();
-				}
-			}
 
-			if(attempts == 20)
-			{
-				if(current == Phase.ARCHERY)
-					throw new RuntimeException("You left an archer in the scenario; can't reach '" + target + "' after 20 attempts because of the archery assignment.");
+				if (attempts == 20) {
+					if (current == Phase.ARCHERY)
+						throw new RuntimeException(
+								"You left an archer in the scenario; can't reach '" + target + "' after 20 attempts because of the archery assignment.");
 
-				throw new RuntimeException("Could not arrive at target '" + target + "' after 20 attempts!");
+					throw new RuntimeException("Could not arrive at target '" + target + "' after 20 attempts!");
+				}
 			}
+		}
+		catch(RuntimeException ex) {
+			throw new RuntimeException("Attempting to skip to phase " + target + ", halted in phase " + current, ex);
 		}
     }
 

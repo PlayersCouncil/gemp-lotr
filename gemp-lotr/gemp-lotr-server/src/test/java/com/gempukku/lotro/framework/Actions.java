@@ -117,6 +117,14 @@ public interface Actions extends Decisions, Choices {
 	 */
 	default void ShadowPlayCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card, "Play")); }
 
+
+	/**
+	 * Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a
+	 * copy of that character in play.
+	 * @return Whether a discard-to-heal action is currently available
+	 */
+	default boolean FreepsHasDiscardToHealAvailable() { return ActionAvailable(P1, "Heal by discard"); }
+
 	/**
 	 * Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a
 	 * copy of that character in play.

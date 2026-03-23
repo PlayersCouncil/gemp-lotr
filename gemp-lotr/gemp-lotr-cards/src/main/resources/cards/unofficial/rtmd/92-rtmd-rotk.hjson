@@ -1328,19 +1328,25 @@
 		title: Race Text 92_33
 		type: MetaSite
 		intensity: -2
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Trigger
+			optional: true
+			player: shadow
+			trigger: {
+				type: StartOfPhase
+				phase: shadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			requires: {
+				type: OwnerIsShadow
 			}
-		]
+			effect: {
+				type: PutCardsFromDeckIntoHand
+				select: choose(GameTextContains(initiative))
+				shuffle: true
+				reveal: true
+				showAll: true
+			}
+		}
 		gametext: At the start of each of your Shadow phases, you may take one card with "initiative" in its game text into hand from your draw deck.
 		lore: ""
 		promotext: ""
@@ -1367,19 +1373,14 @@
 		title: Race Text 92_34
 		type: MetaSite
 		intensity: 5
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: modifier
+			modifier: {
+				type: CantBear
+				filter: companion,HasAttached(possession)
+				cardFilter: possession
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each companion may bear no more than one possession.
 		lore: ""
 		promotext: ""
@@ -1406,19 +1407,36 @@
 		title: Race Text 92_35
 		type: MetaSite
 		intensity: 4
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Heals
+				filter: companion
+				memorize: healedComp
+			}
+			requires: [
+				{
+					type: Location
+					filter: sanctuary
 				}
+				{
+					type: OwnerIsFreeps
+				}
+			]
+			effect: {
+				type: AddModifier
+				modifier: {
+					type: CantHeal
+					filter: Memory(healedComp)
+					requires: {
+						type: Location
+						filter: sanctuary
+					}
+				}
+				until: end(regroup)
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: While at a sanctuary, you may heal no more than one wound from each character.
 		lore: ""
 		promotext: ""
@@ -1447,15 +1465,36 @@
 		intensity: 5
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantPlayCards
+					filter: companion
+					requires: [
+						{
+							type: OwnerIsFreeps
+						}
+						{
+							type: CanSpot
+							filter: companion
+							count: 5
+						}
+					]
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: fellowship
+				requires: {
+					type: OwnerIsFreeps
+				}
+				cost: {
+					type: Exert
+					select: choose(ringBearer)
+				}
+				effect: {
+					type: Discard
+					select: choose(your,companion,not(ringBearer))
+				}
 			}
 		]
 		gametext: You cannot have more than 5 companions in your fellowship.\Fellowship: Exert the Ring-bearer to discard another companion.
