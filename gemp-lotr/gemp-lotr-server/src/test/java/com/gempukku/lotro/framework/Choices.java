@@ -215,10 +215,26 @@ public interface Choices extends Decisions {
 		return GetADParamEqualsCount(P2, "selectable", "true");
 	}
 
+	/**
+	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
+	 */
+	default int FreepsGetTotalRevealedCardCount() {
+		return GetADParamEqualsCount(P1, "selectable", "true");
+	}
+
+	/**
+	 * @return Gets how many of the currently displayed cards are selectable for a Shadow decision.
+	 */
+	default int ShadowGetGetTotalRevealedCardCount() {
+		return GetADParamEqualsCount(P2, "selectable", "true");
+	}
+
 	default boolean FreepsHasBPChoice(PhysicalCardImpl card) { return FreepsGetBPChoices().contains(card.getBlueprintId()); }
 	default boolean ShadowHasBPChoice(PhysicalCardImpl card) { return ShadowGetBPChoices().contains(card.getBlueprintId()); }
 	default List<String> FreepsGetBPChoices() { return GetADParamAsList(P1, "blueprintId"); }
 	default List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
+	default int FreepsGetBPChoiceCount() { return FreepsGetADParamAsList("blueprintId").size(); }
+	default int ShadowGetBPChoiceCount() { return ShadowGetADParamAsList("blueprintId").size(); }
 	default List<String> FreepsGetActionChoices() { return GetADParamAsList(P1, "actionId"); }
 	default List<String> ShadowGetActionChoices() { return GetADParamAsList(P2, "actionId"); }
 	default List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
@@ -291,6 +307,12 @@ public interface Choices extends Decisions {
 	}
 	default void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardBPFromSelection(P2, cards);
+	}
+	default void FreepsChooseCardBPFromSelection(String...bpids) {
+		ChooseCardBPFromSelection(P1, bpids);
+	}
+	default void ShadowChooseCardBPFromSelection(String...bpids) {
+		ChooseCardBPFromSelection(P2, bpids);
 	}
 
 	/**
@@ -424,6 +446,36 @@ public interface Choices extends Decisions {
 	 * @return True if the given card is one of the options presented to the player, false otherwise.
 	 */
 	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) { return HasCardChoiceAvailable(player, card, true); }
+
+	default boolean FreepsHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P1, blueprintId, true); }
+	default boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P1, blueprintId, selectable); }
+	default boolean ShadowHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P2, blueprintId, true); }
+	default boolean ShadowHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P2, blueprintId, selectable); }
+
+	/**
+	 * Checks whether a card with the given blueprint ID is among the selectable options presented to the player.
+	 * Useful when the card was dynamically created (e.g. from a booster pack) and no PhysicalCardImpl reference is available.
+	 * @param player The player currently presented with a decision
+	 * @param blueprintId The blueprint ID to search for (e.g. "1_174")
+	 * @param selectable True if we are looking for a selectable card, false otherwise
+	 * @return True if a card with that blueprint ID is presented with the matching selectable state, false otherwise.
+	 */
+	default boolean HasBPChoiceAvailable(String player, String blueprintId, boolean selectable) {
+		String selectString = selectable ? "true" : "false";
+		String[] selectables = GetADParam(player, "selectable");
+		String[] choices = GetADParam(player, "blueprintId");
+		if (choices != null) {
+			for (int i = 0; i < choices.length; i++) {
+				if (blueprintId.equals(choices[i])) {
+					if (selectables != null) {
+						return selectables[i].equals(selectString);
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Checks whether the given card is one of the options being presented to the player.  Will work as either a blueprint

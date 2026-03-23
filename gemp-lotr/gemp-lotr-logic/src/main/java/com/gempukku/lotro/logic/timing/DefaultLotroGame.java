@@ -18,6 +18,7 @@ import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.PackOpener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +29,7 @@ public class DefaultLotroGame implements LotroGame {
 
     private final GameState _gameState;
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();
+    private PackOpener _packOpener;
     private final DefaultActionsEnvironment _actionsEnvironment;
     private final UserFeedback _userFeedback;
     private final TurnProcedure _turnProcedure;
@@ -304,6 +306,15 @@ public class DefaultLotroGame implements LotroGame {
     @Override
     public LotroCardBlueprintLibrary getLotroCardBlueprintLibrary() {
         return _library;
+    }
+
+    @Override
+    public PackOpener getPackOpener() {
+        return _packOpener;
+    }
+
+    public void setPackOpener(PackOpener packOpener) {
+        _packOpener = packOpener;
     }
 
     @Override

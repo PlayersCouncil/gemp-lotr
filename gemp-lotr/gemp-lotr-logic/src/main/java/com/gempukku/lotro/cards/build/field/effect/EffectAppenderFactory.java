@@ -117,6 +117,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("playcardfromdeadpile", new PlayCardFromDeadPile());
         effectAppenderProducers.put("playcardfromdiscard", new PlayCardFromDiscard());
         effectAppenderProducers.put("playcardfromdrawdeck", new PlayCardFromDrawDeck());
+        effectAppenderProducers.put("openandplayfromboosterpack", new OpenAndPlayFromBoosterPack());
         effectAppenderProducers.put("playcardfromstacked", new PlayCardFromStacked());
         effectAppenderProducers.put("playnextsite", new PlayNextSite());
         effectAppenderProducers.put("playsite", new PlaySite());

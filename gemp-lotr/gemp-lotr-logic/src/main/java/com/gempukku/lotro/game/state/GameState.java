@@ -39,6 +39,14 @@ public class GameState {
 
     private final Map<Integer, PhysicalCardImpl> _allCards = new HashMap<>();
 
+    /**
+     * Optional callback fired when a card is dynamically created mid-game via
+     * {@link #createPhysicalCard(String, LotroCardBlueprintLibrary, String)}.
+     * Not fired during initial game setup. Used by test infrastructure to capture
+     * references to cards spawned by effects like booster pack opening.
+     */
+    private java.util.function.Consumer<PhysicalCard> _cardCreationCallback;
+
     private String _currentPlayerId;
     private String _firstPlayerId;
     private Phase _currentPhase = Phase.PUT_RING_BEARER;
@@ -221,8 +229,16 @@ public class GameState {
         }
     }
 
+    public void setCardCreationCallback(java.util.function.Consumer<PhysicalCard> callback) {
+        _cardCreationCallback = callback;
+    }
+
     public PhysicalCard createPhysicalCard(String ownerPlayerId, LotroCardBlueprintLibrary library, String blueprintId) throws CardNotFoundException {
-        return createPhysicalCardImpl(ownerPlayerId, library, blueprintId);
+        PhysicalCard card = createPhysicalCardImpl(ownerPlayerId, library, blueprintId);
+        if (_cardCreationCallback != null) {
+            _cardCreationCallback.accept(card);
+        }
+        return card;
     }
 
     private PhysicalCardImpl createPhysicalCardImpl(String playerId, LotroCardBlueprintLibrary library, String blueprintId) throws CardNotFoundException {

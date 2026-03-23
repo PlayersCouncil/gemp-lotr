@@ -3,6 +3,7 @@ package com.gempukku.lotro.framework;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DefaultActionContext;
 import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
@@ -12,6 +13,7 @@ import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PackBox;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.packs.ProductLibraryPackOpener;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -314,8 +316,49 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
         _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary, info);
         _userFeedback.setGame(_game);
         _game.startGame();
-
+        _game.setPackOpener(new ProductLibraryPackOpener(_productLibrary));
         _gameState = _game.getGameState();
+    }
+
+    /**
+     * When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic
+     * booster pack results, which requires that we override the default pack opener with a custom one.
+     */
+    public void UseTestBoosters() {
+        _game.setPackOpener(new TestPackOpener(_productLibrary));
+    }
+
+    private final List<PhysicalCardImpl> _createdCards = new java.util.ArrayList<>();
+
+    /**
+     * Registers a callback on the game state that captures any cards created dynamically
+     * mid-game (e.g. from booster pack opening). Call this before the effect that creates cards.
+     * Retrieved cards can be accessed via {@link #GetCreatedCards()} or {@link #GetLastCreatedCard()}.
+     */
+    public void StartCardCapture() {
+        _createdCards.clear();
+        _gameState.setCardCreationCallback(card -> _createdCards.add((PhysicalCardImpl) card));
+    }
+
+    /**
+     * Stops capturing dynamically created cards and clears the callback.
+     */
+    public void StopCardCapture() {
+        _gameState.setCardCreationCallback(null);
+    }
+
+    /**
+     * Returns all cards captured since the last {@link #StartCardCapture()} call.
+     */
+    public List<PhysicalCardImpl> GetCreatedCards() {
+        return java.util.Collections.unmodifiableList(_createdCards);
+    }
+
+    /**
+     * Returns the most recently captured card, or null if none were captured.
+     */
+    public PhysicalCardImpl GetLastCreatedCard() {
+        return _createdCards.isEmpty() ? null : _createdCards.getLast();
     }
 
     /**

@@ -137,6 +137,58 @@ public class PlayUtils {
         return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty));
     }
 
+    /**
+     * Checks if a card can be played ignoring all costs (twilight, ToPlay requirements, ExtraCosts,
+     * roaming penalty) but still respecting uniqueness, Rule of Nine, and CantPlayCards modifiers.
+     */
+    public static boolean checkPlayRequirementsIgnoringCosts(LotroGame game, PhysicalCard card) {
+        final LotroCardBlueprint blueprint = card.getBlueprint();
+
+        // Still enforce CantPlayCards modifiers
+        if (!game.getModifiersQuerying().canPlayCard(game, card.getOwner(), card))
+            return false;
+
+        // Still enforce uniqueness
+        if (!blueprint.skipUniquenessCheck() && !checkUniqueness(game, card, false))
+            return false;
+
+        // Still enforce Rule of Nine and Ring-bearer restrictions for companions
+        if (blueprint.getCardType() == CardType.COMPANION
+                && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
+            return false;
+
+        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty, event timeword check
+        return true;
+    }
+
+    /**
+     * Creates a play action for a card ignoring all costs — no twilight payment, no extra costs,
+     * no roaming penalty. Used for "play ignoring all costs" effects.
+     */
+    public static CostToEffectAction getPlayCardActionIgnoringCosts(LotroGame game, PhysicalCard card) {
+        final LotroCardBlueprint blueprint = card.getBlueprint();
+
+        if (blueprint.getCardType() != CardType.EVENT) {
+            final Filterable validTargetFilter = blueprint.getValidTargetFilter(card.getOwner(), game, card);
+            if (validTargetFilter == null) {
+                // Massive negative modifier makes twilight cost 0; ignoreRoamingPenalty=true
+                PlayPermanentAction action = new PlayPermanentAction(card, getPlayToZone(card), -10000, true);
+                // Deliberately skip appendExtraCosts and appendPotentialDiscounts
+                return action;
+            } else {
+                // Attachable card — still needs a valid target, but ignore cost filters on target
+                final AttachPermanentAction action = new AttachPermanentAction(game, card,
+                        RuleUtils.getFullValidTargetFilter(card.getOwner(), game, card), -10000);
+                // Skip extra costs
+                return action;
+            }
+        } else {
+            final PlayEventAction action = blueprint.getPlayEventCardAction(card.getOwner(), game, card);
+            // Skip extra costs and discounts
+            return action;
+        }
+    }
+
     private static boolean canPayForShadowCard(LotroGame game, PhysicalCard self, Filterable validTargetFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty) {
         int minimumCost;
         if (validTargetFilter == null)

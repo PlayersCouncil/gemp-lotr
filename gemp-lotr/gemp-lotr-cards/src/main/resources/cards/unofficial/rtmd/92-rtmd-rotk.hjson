@@ -1164,19 +1164,19 @@
 		title: Race Text 92_29
 		type: MetaSite
 		intensity: -6
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: shadow
+			requires: {
+				type: OwnerIsShadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			limitPerTurn: 1
+			effect: {
+				type: OpenAndPlayFromBoosterPack
+				player: shadow
+				filter: side(shadow)
 			}
-		]
+		}
 		gametext: Shadow: Open and reveal a sealed booster pack (limit once per turn). You may play one shadow card revealed, ignoring all costs.
 		lore: ""
 		promotext: ""

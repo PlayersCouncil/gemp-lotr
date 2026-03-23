@@ -68,6 +68,7 @@ public class Card_92_010_Tests
 	public void PlaysMinionFromDiscardAfterDiscarding3() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var mod = scn.GetShadowCard("mod");
 		var runner = scn.GetShadowCard("runner");
 		var fodder1 = scn.GetShadowCard("fodder1");
 		var fodder2 = scn.GetShadowCard("fodder2");
@@ -81,8 +82,8 @@ public class Card_92_010_Tests
 		scn.SetTwilight(10);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertTrue(scn.ShadowActionAvailable("Use Race Text"));
-		scn.ShadowUseCardAction(scn.GetShadowCard("mod"));
+		assertTrue(scn.ShadowActionAvailable(mod));
+		scn.ShadowUseCardAction(mod);
 
 		// Discard 3 cards
 		scn.ShadowChooseCards(fodder1, fodder2, fodder3);
