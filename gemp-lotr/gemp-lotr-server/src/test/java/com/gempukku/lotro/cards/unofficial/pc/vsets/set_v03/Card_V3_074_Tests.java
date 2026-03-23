@@ -109,7 +109,7 @@ public class Card_V3_074_Tests
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// Choose companion to exert - both Aragorn and Boromir valid
-		assertTrue(scn.ShadowHasCardChoicesAvailable(aragorn, boromir, frodo));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir, frodo));
 		scn.ShadowChooseCard(boromir);
 
 		assertEquals(1, scn.GetWoundsOn(boromir));

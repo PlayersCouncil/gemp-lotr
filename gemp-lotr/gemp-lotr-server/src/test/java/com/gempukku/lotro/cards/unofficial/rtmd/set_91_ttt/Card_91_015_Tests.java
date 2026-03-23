@@ -98,9 +98,9 @@ public class Card_91_015_Tests
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 
 		// Aragorn (Man) should NOT be available for starting fellowship
-		assertFalse(scn.FreepsHasCardChoicesAvailable(aragorn));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(aragorn));
 		// Legolas (Elf) should be available
-		assertTrue(scn.FreepsHasCardChoicesAvailable(legolas));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
 	}
 
 	@Test

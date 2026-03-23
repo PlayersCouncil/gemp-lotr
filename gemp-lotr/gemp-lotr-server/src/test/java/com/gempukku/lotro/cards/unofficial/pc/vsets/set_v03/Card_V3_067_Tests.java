@@ -217,7 +217,7 @@ public class Card_V3_067_Tests
 
 		// FP accepts prevention
 		scn.FreepsChooseYes();
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo, guard));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, guard));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
 
 		scn.FreepsChooseCard(guard);

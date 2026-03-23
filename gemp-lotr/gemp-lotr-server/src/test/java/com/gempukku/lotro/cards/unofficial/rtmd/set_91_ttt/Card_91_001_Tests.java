@@ -87,20 +87,20 @@ public class Card_91_001_Tests
 		// Starting fellowship decision should be available
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 
-		assertTrue(scn.FreepsHasCardChoicesAvailable(elessar, gimli, boromir, merry));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elessar, gimli, boromir, merry));
 
 		// Select Gimli (cost 2), total = 2
 		scn.FreepsChooseCard(gimli);
 
 		// Boromir (cost 3) should still be available since 2 + 3 = 5 <= 6
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(boromir, merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(elessar));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(elessar));
 		scn.FreepsChooseCard(boromir);
 
 		// Merry (cost 1) still available
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(merry));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
 
 		// Done selecting, finish starting fellowship
@@ -134,7 +134,7 @@ public class Card_91_001_Tests
 
 		// Boromir (3) should NOT be available since 4 + 3 = 7 > 6
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(boromir));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(boromir));
 
 		// Done
 		scn.FreepsChoose("");
@@ -158,7 +158,7 @@ public class Card_91_001_Tests
 
 		// Boromir (cost 3) should NOT be available since 2 + 3 = 5 > 4
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(boromir));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(boromir));
 	}
 
 	@Test
@@ -174,15 +174,15 @@ public class Card_91_001_Tests
 		var elessar = scn.GetFreepsCard("elessar");
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(boromir, gimli, merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(elessar));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, gimli, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(elessar));
 
 		// Select Gimli (cost 2)
 		scn.FreepsChooseCard(gimli);
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 
 		// Without FP having the modifier, Boromir (3) should NOT be available: 2+3=5 > 4
-		assertFalse(scn.FreepsHasCardChoicesAvailable(boromir));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(boromir));
 	}
 
 	@Test
@@ -202,20 +202,20 @@ public class Card_91_001_Tests
 		// Starting fellowship decision should be available
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 
-		assertTrue(scn.ShadowHasCardChoicesAvailable(elessar, gimli, boromir, merry));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(elessar, gimli, boromir, merry));
 
 		// Select Gimli (cost 2), total = 2
 		scn.ShadowChooseCard(gimli);
 
 		// Boromir (cost 3) should still be available since 2 + 3 = 5 <= 6
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.ShadowHasCardChoicesAvailable(boromir, merry));
-		assertTrue(scn.ShadowHasCardChoicesNotAvailable(elessar));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(boromir, merry));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(elessar));
 		scn.ShadowChooseCard(boromir);
 
 		// Merry (cost 1) still available
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
-		assertTrue(scn.ShadowHasCardChoicesAvailable(merry));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(merry));
 		scn.ShadowChooseCard(merry);
 
 		// Done selecting, finish starting fellowship

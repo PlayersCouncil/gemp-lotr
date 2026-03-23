@@ -466,7 +466,7 @@ public class Card_V3_015_Tests
 
 		// Should have choice between gollum1 and shelob1
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(gollum1, shelob1));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum1, shelob1));
 
 		// Choose Shelob to replace
 		scn.ShadowChooseCard(shelob1);

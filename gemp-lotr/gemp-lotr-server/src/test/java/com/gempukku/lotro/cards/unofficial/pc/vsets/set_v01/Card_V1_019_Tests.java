@@ -104,8 +104,8 @@ public class Card_V1_019_Tests
 		scn.FreepsDismissRevealedCards();
 
 		//Orophin, Celeborn, or Arwen, but not Elrond (4) or Galadriel (3)
-		assertTrue(scn.FreepsHasCardChoicesAvailable(orophin, celeborn, arwen));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(elrond, galadriel));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(orophin, celeborn, arwen));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(elrond, galadriel));
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertEquals(Zone.DECK, orophin.getZone());
 		assertEquals(0, scn.GetFreepsHandCount());
@@ -143,7 +143,7 @@ public class Card_V1_019_Tests
 
 		scn.FreepsUseCardAction(aragorn);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arwen, defiance));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, defiance));
 		scn.FreepsChooseCard(defiance);
 
 		assertEquals(Zone.DISCARD, defiance.getZone());
@@ -182,7 +182,7 @@ public class Card_V1_019_Tests
 
 		scn.FreepsUseCardAction(aragorn);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arwen, defiance));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, defiance));
 		scn.FreepsChooseCard(defiance);
 
 		assertEquals(Zone.DISCARD, defiance.getZone());

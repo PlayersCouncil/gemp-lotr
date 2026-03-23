@@ -175,7 +175,7 @@ public class Card_V3_068_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// SH player should have choice of both possessions
-		assertTrue(scn.ShadowHasCardChoicesAvailable(mount, lance));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(mount, lance));
 
 		// SH chooses mount
 		scn.ShadowChooseCard(mount);
@@ -230,7 +230,7 @@ public class Card_V3_068_Tests
 
 		scn.ShadowUseCardAction(legions);
 
-		assertTrue(scn.ShadowHasCardChoicesAvailable(axe1, axe2));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axe1, axe2));
 		// Sword should NOT be offered - it goes on Nazgul, not [ringwraith] Orcs
 		assertFalse(scn.ShadowHasCardChoiceAvailable(sword));
 

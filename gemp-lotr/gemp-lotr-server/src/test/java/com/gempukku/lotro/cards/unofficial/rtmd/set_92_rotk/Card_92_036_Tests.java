@@ -129,9 +129,9 @@ public class Card_92_036_Tests
 		assertEquals(1, scn.GetWoundsOn(frodo));
 
 		// Should be choosing a companion to discard — ring-bearer should NOT be a choice
-		assertFalse(scn.FreepsHasCardChoicesAvailable(frodo));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(gimli));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(guard1));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1));
 
 		scn.FreepsChooseCard(guard1);
 

@@ -95,7 +95,7 @@ public class Card_V3_044_Tests
 		scn.ShadowPlayCard(burn);
 
 		// Should only offer Raider cards, not the Orc
-		assertTrue(scn.ShadowHasCardChoicesAvailable(southron1, southron2, ships));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(southron1, southron2, ships));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(orc));
 
 		scn.ShadowChooseCards(southron1, southron2);

@@ -143,7 +143,7 @@ public class Card_V3_080_Tests
 		scn.ShadowPlayCard(witchking);
 
 		// Shadow chooses a card to determine type - pick a possession
-		assertTrue(scn.ShadowHasCardChoicesAvailable(athelas1, athelas2, lastalliance));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(athelas1, athelas2, lastalliance));
 		scn.ShadowChooseCard(athelas1);
 
 		// All possessions hindered, condition not hindered
@@ -296,7 +296,7 @@ public class Card_V3_080_Tests
 		scn.ShadowPlayCard(witchking);
 
 		// Shadow can choose between possession and condition
-		assertTrue(scn.ShadowHasCardChoicesAvailable(athelas1, lastalliance));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(athelas1, lastalliance));
 
 		// Choose condition this time
 		scn.ShadowChooseCard(lastalliance);
@@ -372,9 +372,9 @@ public class Card_V3_080_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Choose a card type to hinder"));
 
 		//Companions are not valid targets
-		assertFalse(scn.ShadowHasCardChoicesAvailable(frodo, aragorn));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
 		//Possessions and Artifacts are
-		assertTrue(scn.ShadowHasCardChoicesAvailable(sting, anduril, coat, bow));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sting, anduril, coat, bow));
 
 		scn.ShadowChooseCard(anduril);
 
@@ -386,8 +386,8 @@ public class Card_V3_080_Tests
 
 		//Freeps now has a chance to restore any cards they want
 		assertTrue(scn.FreepsDecisionAvailable("Choose any number of cards to restore"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(anduril, coat));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(sting, bow));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(anduril, coat));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(sting, bow));
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(aragorn));

@@ -111,10 +111,10 @@ public class Card_92_035_Tests
 		scn.SkipToSite(3);
 
 		// Sanctuary healing heals Aragorn once
-		assertTrue(scn.FreepsHasCardChoicesAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(aragorn));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(aragorn));
 
 		// Now in fellowship phase. Athelas should not be able to heal Aragorn
 		// (already healed once at this sanctuary).
@@ -123,7 +123,7 @@ public class Card_92_035_Tests
 		scn.FreepsChoose("heal");
 		assertInDiscard(athelas);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(aragorn));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(aragorn));
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -143,7 +143,7 @@ public class Card_92_035_Tests
 		scn.SkipToSite(3);
 
 		// Sanctuary healing heals Aragorn once
-		assertTrue(scn.FreepsHasCardChoicesAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
@@ -174,7 +174,7 @@ public class Card_92_035_Tests
 		scn.MoveMinionsToTable(enquea);
 
 		// Sanctuary healing heals Frodo once
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo));
 		scn.FreepsChooseCard(frodo);
 		assertEquals(1, scn.GetWoundsOn(frodo));
 

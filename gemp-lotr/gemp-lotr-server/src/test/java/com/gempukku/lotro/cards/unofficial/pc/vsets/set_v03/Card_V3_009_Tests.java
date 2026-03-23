@@ -114,7 +114,7 @@ public class Card_V3_009_Tests
 
 		// Should have 4 valid targets (all Shadow cards)
 		assertEquals(4, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoicesAvailable(runner, ithilstone, ships, armory));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, ithilstone, ships, armory));
 
 		// Choose non-minion (condition)
 		scn.FreepsChooseCard(armory);

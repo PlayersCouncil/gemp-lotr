@@ -72,7 +72,7 @@ public class Card_91_002_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertTrue(scn.FreepsHasCardChoicesAvailable(freepsCard, shadowCard));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(freepsCard, shadowCard));
 		scn.FreepsChooseCard(freepsCard);
 		assertInZone(Zone.HAND, freepsCard);
 	}

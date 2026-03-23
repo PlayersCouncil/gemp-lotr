@@ -83,8 +83,8 @@ public class Card_V3_111_Tests
 
 		scn.FreepsPlayCard(getup);
 
-		assertTrue(scn.FreepsHasCardChoicesAvailable(sam, merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(pippin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin));
 		scn.FreepsChooseCard(sam);
 
 		assertFalse(scn.IsHindered(sam));

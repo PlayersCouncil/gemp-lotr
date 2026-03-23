@@ -99,8 +99,8 @@ public class Card_V3_129_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// Companions and The One Ring are excluded from targets
-		assertTrue(scn.ShadowHasCardChoicesAvailable(sting, toby, promise, runner));
-		assertTrue(scn.ShadowHasCardChoicesNotAvailable(frodo, ring));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sting, toby, promise, runner));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, ring));
 
 		scn.ShadowChooseCard(sting);
 		assertTrue(scn.IsHindered(sting));

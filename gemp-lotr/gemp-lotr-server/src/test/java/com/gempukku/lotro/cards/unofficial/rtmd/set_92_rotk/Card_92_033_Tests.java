@@ -81,8 +81,8 @@ public class Card_92_033_Tests
 
 		// Should be able to choose between blacknum and gimli (both have "initiative")
 		// but not enquea (no "initiative" in game text)
-		scn.ShadowHasCardChoicesAvailable(blacknum, gimli);
-		scn.ShadowHasCardChoicesNotAvailable(enquea);
+		scn.ShadowHasCardChoiceAvailable(blacknum, gimli);
+		scn.ShadowHasCardChoiceNotAvailable(enquea);
 		scn.ShadowChooseCard(blacknum);
 
 		assertInZone(Zone.HAND, blacknum);

@@ -144,9 +144,9 @@ public class Card_V3_003_Tests
 
 		// Choose companion to heal (should have 2 choices: Aragorn or Legolas, not Gandalf)
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsCanChooseCharacter(aragorn));
-		assertTrue(scn.FreepsCanChooseCharacter(legolas));
-		assertFalse(scn.FreepsCanChooseCharacter(gandalf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(gandalf));
 
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));

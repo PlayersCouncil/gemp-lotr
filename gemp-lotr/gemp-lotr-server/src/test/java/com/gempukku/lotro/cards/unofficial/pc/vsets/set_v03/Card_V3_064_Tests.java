@@ -263,12 +263,12 @@ public class Card_V3_064_Tests
 
 		// Choose which [ringwraith] minion to spare
 		assertEquals(3, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(squealer1, squealer2, witchking));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(squealer1, squealer2, witchking));
 		scn.ShadowChooseCard(witchking);
 
 		// Choose which unbound companion to spare
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(aragorn, gimli));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(frodo)); // Ring-bound, not valid
 		scn.ShadowChooseCard(aragorn);
 

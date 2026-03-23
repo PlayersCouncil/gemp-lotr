@@ -168,7 +168,7 @@ public class Card_V3_106_Tests
 		scn.FreepsAcceptOptionalTrigger();
 
 		// All 3 are valid targets
-		assertTrue(scn.FreepsHasCardChoicesAvailable(pipeweed1, pipeweed2, flotsam2));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pipeweed1, pipeweed2, flotsam2));
 
 		// Choose 2 of the 3 (limit enforced by "up to 2")
 		scn.FreepsChooseCards(pipeweed1, pipeweed2);

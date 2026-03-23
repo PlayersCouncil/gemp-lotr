@@ -144,7 +144,7 @@ public class Card_V3_010_Tests
 		// Should only have 2 valid targets: hindered Shadow cards (runner, ithilstone)
 		// NOT: runner2, ships, armory (not hindered), catapult, sapling (FP, even though hindered)
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoicesAvailable(runner, ithilstone));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, ithilstone));
 
 		// Choose runner to discard
 		scn.FreepsChooseCard(runner);

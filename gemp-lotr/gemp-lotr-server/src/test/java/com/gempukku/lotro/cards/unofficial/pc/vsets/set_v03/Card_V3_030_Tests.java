@@ -154,15 +154,15 @@ public class Card_V3_030_Tests
 		assertTrue(scn.FreepsActionAvailable(nardol));
 		scn.FreepsUseCardAction(nardol);
 		// Errata: choose X beacons to hinder (range-based cost)
-		assertTrue(scn.FreepsHasCardChoicesAvailable(nardol, beacon1, beacon2));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(nardol, beacon1, beacon2));
 		scn.FreepsChooseCards(beacon1, beacon2);
 		assertTrue(scn.IsHindered(beacon1));
 		assertTrue(scn.IsHindered(beacon2));
 		assertFalse(scn.IsHindered(nardol));
 
 		// Then discard X (2) Gondor/Rohan conditions/possessions
-		assertTrue(scn.FreepsHasCardChoicesAvailable(citadel, arrowslits, stronghold));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(sapling, lordofmoria, sting));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(citadel, arrowslits, stronghold));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sapling, lordofmoria, sting));
 		scn.FreepsChooseCards(citadel, arrowslits);
 		assertInDiscard(citadel);
 		assertInDiscard(arrowslits);

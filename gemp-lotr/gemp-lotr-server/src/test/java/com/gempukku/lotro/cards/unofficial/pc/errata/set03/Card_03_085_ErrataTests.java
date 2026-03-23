@@ -88,7 +88,7 @@ public class Card_03_085_ErrataTests
 		scn.ShadowPlayCard(tgat);
 
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(sam, bounder));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, bounder));
 
 		scn.ShadowChooseCard(bounder);
 		assertEquals(Zone.ATTACHED, tgat.getZone());

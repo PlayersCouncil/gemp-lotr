@@ -254,7 +254,7 @@ public class Card_V3_096_Tests
 		// Choose how many cards to hinder (0 to X)
 		// Should be able to select hollowing and ithilstone, but NOT night (can't be hindered)
 		// and NOT already-hindered sky cards
-		assertTrue(scn.ShadowHasCardChoicesAvailable(hollowing, ithilstone));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(hollowing, ithilstone));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(night));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(sky1)); // Already hindered
 

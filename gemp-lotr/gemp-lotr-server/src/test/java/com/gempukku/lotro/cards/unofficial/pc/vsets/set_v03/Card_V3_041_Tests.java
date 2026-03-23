@@ -89,7 +89,7 @@ public class Card_V3_041_Tests
 		scn.ShadowUseCardAction(charger);
 
 		// Should only be able to stack Southron Men, not the Orc
-		assertTrue(scn.ShadowHasCardChoicesAvailable(southron1, southron2));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(southron1, southron2));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(orc));
 	}
 

@@ -84,8 +84,8 @@ public class Card_92_032_Tests
 
 		// Choose companion to heal — only boromir should be available
 		// (same signet, different companion)
-		assertTrue(scn.FreepsHasCardChoicesAvailable(boromir, merry));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(arwen));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(arwen));
 		scn.FreepsChooseCard(boromir);
 
 		assertEquals(1, scn.GetWoundsOn(arwen));
