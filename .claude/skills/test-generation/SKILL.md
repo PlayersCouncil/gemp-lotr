@@ -150,6 +150,23 @@ scn.FreepsChooseCard(gimli);
 
 This applies to ALL choice-based effects: wounds, heals, discards, plays, assigns. If your effect says "choose N cards matching filter," put N+1 valid cards and at least 1 invalid card in the scenario.
 
+### 4b. Effect Fizzle: Costs Gate, Effects Attempt
+
+For any action to be usable, requirements must be met and costs must be payable — but effects only need to be *attempted*. If there is no valid target for the effect, or only part of the effect can be accomplished, the effect "fizzles" but the action still resolves (costs are still paid).
+
+This means you **cannot** test "action unavailable because the effect has no valid target." The action is available as long as the cost is payable. Instead, test that the effect fizzles: activate the action, pay the cost, then assert that the game returns to phase actions with the effect unapplied.
+
+```java
+// Exert Arwen (Aragorn signet), but only Gimli (Gandalf signet) could be healed — fizzles
+scn.FreepsUseCardAction(mod);
+scn.FreepsChooseCard(arwen);
+
+// Effect fizzles — back to fellowship actions, cost paid but no heal
+assertTrue(scn.AwaitingFellowshipPhaseActions());
+assertEquals(1, scn.GetWoundsOn(arwen));  // cost was paid
+assertEquals(1, scn.GetWoundsOn(gimli));  // not healed — wrong signet
+```
+
 ### 5. Progressive Act-Assert for Multi-Step Effects
 
 If a card triggers after several things happen, you don't need separate tests for each step. Write one test that progressively sets up and asserts at each stage, since each step's setup is congruent with the next step's precondition.

@@ -486,6 +486,14 @@ public class Filters {
         };
     }
 
+    /**
+     * Filter for cards that can be played ignoring all costs (twilight, ToPlay, ExtraCosts, roaming).
+     * Still respects uniqueness, Rule of Nine, and CantPlayCards modifiers.
+     */
+    public static Filter playableIgnoringCosts() {
+        return (game, physicalCard) -> PlayUtils.checkPlayRequirementsIgnoringCosts(game, physicalCard);
+    }
+
     public static final Filter any = (game, physicalCard) -> true;
     public static final Filter none = (game, physicalCard) -> false;
     public static final Filter unique = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 1;

@@ -15,6 +15,7 @@ import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.merchant.MerchantService;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.packs.ProductLibraryPackOpener;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import com.gempukku.lotro.bots.BotService;
@@ -137,7 +138,8 @@ public class ServerBuilder {
                         extract(objectMap, ChatServer.class),
                         extract(objectMap, GameRecorder.class),
                         extract(objectMap, MarkdownParser.class),
-                        extract(objectMap, BotService.class)));
+                        extract(objectMap, BotService.class),
+                        new ProductLibraryPackOpener(extract(objectMap, ProductLibrary.class))));
 
         objectMap.put(HallServer.class,
                 new HallServer(
