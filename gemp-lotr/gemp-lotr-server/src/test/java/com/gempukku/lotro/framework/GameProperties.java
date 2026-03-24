@@ -6,6 +6,7 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.List;
@@ -106,6 +107,9 @@ public interface GameProperties extends TestBase, TestConstants {
 	default PhysicalCardImpl GetShadowRing() { return (PhysicalCardImpl)gameState().getRing(P2); }
 	default PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P1); }
 	default PhysicalCardImpl GetShadowRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P2); }
+
+	default int GetFreepsControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P1)); }
+	default int GetShadowControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P2)); }
 
 	default PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)gameState().getCurrentSite(); }
 	default int GetCurrentSiteNumber() { return GetCurrentSite().getSiteNumber(); }

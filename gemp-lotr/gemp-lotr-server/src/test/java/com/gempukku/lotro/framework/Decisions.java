@@ -1,5 +1,7 @@
 package com.gempukku.lotro.framework;
 
+import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
 import java.util.Arrays;
@@ -240,7 +242,9 @@ public interface Decisions extends TestBase, TestConstants  {
 	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return FreepsHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return ShadowHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
 
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))

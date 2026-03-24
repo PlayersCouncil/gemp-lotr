@@ -108,7 +108,7 @@ public interface TestConstants {
 	 * Gimli, Bearer of Grudges
 	 * 6 strength
 	 * 3 vitality
-	 * 5 resistance
+	 * 4 resistance
 	 * Damage +1.
 	 * While Gimli is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats.
 	 * While Gimli is damage +X, he is resistance +X.
