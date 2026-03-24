@@ -44,9 +44,8 @@ public class Card_V3_019_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: While you can spot another [Gondor] Man, Aragorn is strength +1.
-		* 	While you can spot a [Rohan] Man, Aragorn is strength +2.
-		* 	Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.
+		 * Game Text: Aragorn is strength +1 for each other Man of a different culture you can spot.
+		* 	Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
 		*/
 
 		var scn = GetScenario();
@@ -64,11 +63,11 @@ public class Card_V3_019_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
 	@Test
-	public void AragornGainsStrengthPlus2WithRohanMan() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornGainsStrengthPlus1WithRohanMan() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -85,7 +84,7 @@ public class Card_V3_019_Tests
 		scn.MoveCompanionsToTable(eomer);
 
 		// Aragorn should be +2 strength
-		assertEquals(aragornBaseStrength + 2, scn.GetStrength(aragorn));
+		assertEquals(aragornBaseStrength + 1, scn.GetStrength(aragorn));
 	}
 
 	@Test
@@ -127,8 +126,8 @@ public class Card_V3_019_Tests
 		// Add both Boromir and Eomer
 		scn.MoveCompanionsToTable(boromir, eomer);
 
-		// Aragorn should be +3 strength (+1 Gondor Man, +2 Rohan Man)
-		assertEquals(aragornBaseStrength + 3, scn.GetStrength(aragorn));
+		// Aragorn should be +2 strength (+1 Gondor Man, +1 Rohan Man)
+		assertEquals(aragornBaseStrength + 2, scn.GetStrength(aragorn));
 	}
 
 

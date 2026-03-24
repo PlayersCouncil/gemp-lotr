@@ -1,15 +1,19 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
+import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_068_Tests
 {
@@ -49,8 +53,9 @@ public class Card_V3_068_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time you play a [ringwraith] Orc, the Free Peoples player must hinder one of their possessions.
-		* 	Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.  Discard this condition.
+		 * Game Text: The second time you play a [ringwraith] Orc each Shadow phase, you may hinder a Free Peoples possession.
+		* 	Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.
+		*   Discard this condition.
 		*/
 
 		var scn = GetScenario();
@@ -67,9 +72,27 @@ public class Card_V3_068_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
+	@Test
+	public void MorgulLegionsDoesNotTriggerOnFirstOrcPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
 
+		var card = scn.GetShadowCard("legions");
+		var squealer1 = scn.GetShadowCard("squealer1");
+		var squealer2 = scn.GetShadowCard("squealer2");
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToHand(squealer1, squealer2);
 
-// ======== TRIGGER TESTS ========
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Play first Ringwraith Orc -- should NOT trigger Morgul Legions
+		scn.ShadowPlayCard(squealer1);
+		// The errata added playedCardThisPhase requirement (min:2, max:2)
+		// So only the second orc played triggers it
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
 
 	@Test
 	public void MorgulLegionsTriggersFPHinderPossessionOnRingwraithOrcPlayed() throws DecisionResultInvalidException, CardNotFoundException {
@@ -78,21 +101,24 @@ public class Card_V3_068_Tests
 
 		var legions = scn.GetShadowCard("legions");
 		var squealer = scn.GetShadowCard("squealer1");
+		var squealer2 = scn.GetShadowCard("squealer2");
 		var mount = scn.GetFreepsCard("mount");
 		var rider = scn.GetFreepsCard("rider");
 
 		scn.MoveCardsToSupportArea(legions);
-		scn.MoveCardsToHand(squealer);
+		scn.MoveCardsToHand(squealer, squealer2);
 		scn.MoveCompanionsToTable(rider);
 		scn.AttachCardsTo(rider, mount);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPlayCard(squealer);
 
 		assertFalse(scn.IsHindered(mount));
 
-		scn.ShadowPlayCard(squealer);
+		scn.ShadowPlayCard(squealer2);
+		scn.ShadowAcceptOptionalTrigger();
 
 		assertTrue(scn.IsHindered(mount));
 	}
@@ -130,26 +156,29 @@ public class Card_V3_068_Tests
 
 		var legions = scn.GetShadowCard("legions");
 		var squealer = scn.GetShadowCard("squealer1");
+		var squealer2 = scn.GetShadowCard("squealer2");
 		var mount = scn.GetFreepsCard("mount");
 		var lance = scn.GetFreepsCard("lance");
 		var rider = scn.GetFreepsCard("rider");
 
 		scn.MoveCardsToSupportArea(legions);
-		scn.MoveCardsToHand(squealer);
+		scn.MoveCardsToHand(squealer, squealer2);
 		scn.MoveCompanionsToTable(rider);
 		scn.AttachCardsTo(rider, mount, lance);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(squealer);
+		scn.ShadowPlayCard(squealer2);
+		scn.ShadowAcceptOptionalTrigger();
 
-		// FP player should have choice of both possessions
-		assertTrue(scn.FreepsHasCardChoicesAvailable(mount, lance));
+		// SH player should have choice of both possessions
+		assertTrue(scn.ShadowHasCardChoicesAvailable(mount, lance));
 
-		// FP chooses mount
-		scn.FreepsChooseCard(mount);
+		// SH chooses mount
+		scn.ShadowChooseCard(mount);
 
 		assertTrue(scn.IsHindered(mount));
 		assertFalse(scn.IsHindered(lance));

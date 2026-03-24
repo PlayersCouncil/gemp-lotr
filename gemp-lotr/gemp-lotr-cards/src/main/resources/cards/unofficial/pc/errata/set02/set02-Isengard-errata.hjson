@@ -1,4 +1,69 @@
 {
+	52_39: {
+		cardInfo: {
+			//id: 52_39.1
+			parent: 2_39
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E039.1_card.jpg
+			collInfo: 2R39
+			rarity: R
+		}
+		title: Beyond the Height of Men
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(uruk-hai)
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(side(free people),or(armor,helm,shield))
+				}
+				{
+					type: If
+					check: {
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: companion
+								count: 6
+							}
+							{
+								type: canSpot
+								filter: culture(isengard)
+								count: 8
+							}
+						]
+					}
+					true: {
+						type: Hinder
+						count: 0-4
+						select: choose(side(free people),possession)
+					}
+				}
+			]
+		}
+		gametext: Exert an Uruk-hai to discard a Free Peoples armor, helm, or shield.  Hinder up to 4 Free Peoples possessions if you can spot 6 companions or 8 [Isengard] cards.
+		lore: "'Whom do you serve?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	52_40: {
 		cardInfo: {
 			//id: 52_40.1
@@ -243,4 +308,54 @@
 		}
 	}
 	
+	52_46: {
+		cardInfo: {
+			//id: 52_46.1
+			parent: 2_46
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E046.1_card.jpg
+			collInfo: 2R46
+			rarity: R
+		}
+		title: Uruk Captain
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		effects: {
+			type: activated
+			phase: shadow
+			cost: [
+				{
+					type: removeTwilight
+					amount: 1
+				}
+				{
+					type: exert
+					select: choose(uruk-hai)
+				}
+			]
+			effect: {
+				type: playCardFromDiscard
+				select: choose(uruk-hai)
+			}
+		}
+		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai to play an Uruk-hai from your discard pile.
+		lore: "The captains marched the Uruk-hai to the great river without halting."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

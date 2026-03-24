@@ -20,7 +20,9 @@ public class Card_V3_079_Tests
 				new HashMap<>()
 				{{
 					put("toldea", "103_79");
-
+					put("runner", "1_178");
+					put("guard", "1_7");     // STR 6, VIT 3
+					put("gimli", "1_12");    // STR 6, VIT 3
 					put("aragorn", "1_89");  // Base 8 strength
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -46,14 +48,14 @@ public class Card_V3_079_Tests
 		 * Site Number: 3
 		 * Game Text: Fierce.
 		* 	Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.
-		* 	Each time this minion is assigned to a weaker companion, you may exert that companion to add a threat.
+		* 	Each time this minion is assigned to a weaker companion, you may exert this minion to exert that companion or add a threat.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("toldea");
 
-		assertEquals("Úlairë Toldëa", card.getBlueprint().getTitle());
+		assertEquals("Ulaire Toldea", card.getBlueprint().getTitle());
 		assertEquals("Blessed with Brutality", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -66,8 +68,6 @@ public class Card_V3_079_Tests
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
-
-
 
 // ======== STRONGER COMPANION (HINDER) TESTS ========
 
@@ -159,24 +159,64 @@ public class Card_V3_079_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 
-// ======== WEAKER COMPANION (THREAT) TESTS ========
+// ======== WEAKER COMPANION (EXERT/THREAT) TESTS ========
 
-	/*
-	 *    _______________________________________________________________
-	 *   |                                                               |
-	 *   |     🚧🚧🚧  UNDER CONSTRUCTION  🚧🚧🚧                        |
-	 *   |                                                               |
-	 *   |     Toldëa's "weaker companion" clause is BUSTED and          |
-	 *   |     awaiting redesign. Current: "exert companion, add         |
-	 *   |     threat" (free value). Proposed: "exert SELF to            |
-	 *   |     exert companion OR add threat" (actual choice).           |
-	 *   |                                                               |
-	 *   |     TODO: Add tests here once the balance fix is in.          |
-	 *   |                                                               |
-	 *   |     Dear future developer: if this comment is still here      |
-	 *   |     and Toldëa shipped unchanged, please roast Ketura         |
-	 *   |     in the Discord for leaving broken design in prod.         |
-	 *   |                                                               |
-	 *   |_______________________________________________________________|
-	 */
+	@Test
+	public void ToldeaAssignedToWeakerCompanionCanExertSelfToExertCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+
+		// Guard STR 6, Toldea STR 13. Guard is weaker.
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(guard, toldea);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Toldea exerted as cost
+		assertEquals(1, scn.GetWoundsOn(toldea));
+
+		// Choose to exert the companion
+		scn.ShadowChoose("Exert that companion");
+		assertEquals(1, scn.GetWoundsOn(guard));
+	}
+
+	@Test
+	public void ToldeaAssignedToWeakerCompanionCanExertSelfToAddThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+
+		// Guard STR 6, Toldea STR 13. Guard is weaker.
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(guard, toldea);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Toldea exerted as cost
+		assertEquals(1, scn.GetWoundsOn(toldea));
+
+		// Choose to add a threat
+		int threatsBefore = scn.GetThreats();
+		scn.ShadowChoose("Add a threat");
+		assertEquals(threatsBefore + 1, scn.GetThreats());
+		// Guard should not be exerted since we chose threat instead
+		assertEquals(0, scn.GetWoundsOn(guard));
+	}
 }

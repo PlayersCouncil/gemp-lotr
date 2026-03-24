@@ -198,12 +198,11 @@ public class Card_V3_052_Tests
 		var hailing = scn.GetShadowCard("hailing");
 		var charger = scn.GetShadowCard("charger");
 		var southron = scn.GetShadowCard("southron1");
-		var legion = scn.GetShadowCard("legion");
 		var explorer = scn.GetShadowCard("explorer");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(hailing, charger);
+		scn.StackCardsOn(charger, southron);
 		scn.MoveMinionsToTable(explorer); // Bait to reach Maneuver
-		scn.StackCardsOn(charger, southron, legion);
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
@@ -217,7 +216,7 @@ public class Card_V3_052_Tests
 		assertTrue(scn.HasKeyword(charger, Keyword.MOUNTED));
 		assertTrue(scn.HasKeyword(charger, Keyword.SOUTHRON));
 
-		// Charger is str 4 base + 3 per stacked (2) = 10, need to beat Aragorn (8)
+		// Charger is str 4 base + 4 per stacked (2) = 12, need to beat Aragorn (8)
 
 		scn.PassCurrentPhaseActions(); // Finish Maneuver
 		scn.PassCurrentPhaseActions(); // Archery
@@ -227,6 +226,7 @@ public class Card_V3_052_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
+		assertEquals(12, scn.GetStrength(charger));
 		scn.PassCurrentPhaseActions();
 
 		// Charger should win - Response available

@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 public class Card_V3_056_Tests
 {
 
-// ----------------------------------------
-// SANDCRAFT TRAP TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -55,7 +51,8 @@ public class Card_V3_056_Tests
 		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, make each Southron gain ambush (1) until the regroup phase.
+		 * Game Text: Restore all trackers and minions with ambush.  If you restored any, make each Southron
+		 * 		<b>ambush (1)</b> and strength +1 until the regroup phase.
 		*/
 
 		var scn = GetScenario();
@@ -73,7 +70,7 @@ public class Card_V3_056_Tests
 	}
 
 	@Test
-	public void SandcraftTrapRestoresTrackersAndNativeAmbushMinions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SandcraftTrapRestoresTrackersAndGrantsSouthronsBonuses() throws DecisionResultInvalidException, CardNotFoundException {
 
 		//Pre-game setup
 		var scn = GetScenario();
@@ -93,7 +90,7 @@ public class Card_V3_056_Tests
 		scn.HinderCard(isengard_tracker, raider_tracker, ambush_southron, ambush_horror, southron, soldier);
 
 		scn.StartGame();
-		
+
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();
 
@@ -129,6 +126,16 @@ public class Card_V3_056_Tests
 		assertEquals(1, scn.GetKeywordCount(southron2, Keyword.AMBUSH));
 		// Ambush Southron: gains Ambush (2) + (1) = (3)
 		assertEquals(3, scn.GetKeywordCount(ambush_southron, Keyword.AMBUSH));
+
+		// All Southrons gain Strength +1
+		// Isengard Tracker got no bonus
+		assertEquals(8, scn.GetStrength(isengard_tracker));
+		// Horror of Harad got no bonus
+		assertEquals(9, scn.GetStrength(ambush_horror));
+		// Regular Southron: gains +1 strength
+		assertEquals(7, scn.GetStrength(southron2));
+		// Ambush Southron: gains +1 strength
+		assertEquals(4, scn.GetStrength(ambush_southron));
 	}
 
 	@Test
@@ -155,5 +162,4 @@ public class Card_V3_056_Tests
 		// Nothing to restore, so no ambush bonus
 		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
 	}
-
 }
