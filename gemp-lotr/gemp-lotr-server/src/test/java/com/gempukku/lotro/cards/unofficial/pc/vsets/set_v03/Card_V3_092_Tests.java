@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_092_Tests
 {
@@ -46,9 +46,9 @@ public class Card_V3_092_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [sauron] card.
+		 * Game Text: To play, spot a [sauron] card and add a threat.
 		* 	Each time a companion exerts, draw a card (limit once per site).
-		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 2 threats and hinder that companion.
+		* 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 3 threats and hinder that companion.
 		*/
 
 		var scn = GetScenario();
@@ -65,7 +65,7 @@ public class Card_V3_092_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Extra cost tests
+// Extra cost tests
 
 	@Test
 	public void WatcherCannotPlayWithoutSauronCardToSpot() throws DecisionResultInvalidException, CardNotFoundException {
@@ -108,7 +108,7 @@ public class Card_V3_092_Tests
 	}
 
 	@Test
-	public void WatcherPlaysSuccessfullyAndAddsNoThreats() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WatcherPlaysSuccessfullyAndAddsThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var watcher = scn.GetShadowCard("watcher1");
@@ -130,8 +130,7 @@ public class Card_V3_092_Tests
 		scn.ShadowPlayCard(watcher);
 
 		assertInZone(Zone.SUPPORT, watcher);
-		//Errata: no longer adds a threat when played
-		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetThreats());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -220,7 +219,7 @@ public class Card_V3_092_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		// One Watcher discarded
 		assertEquals(1, scn.GetShadowDiscardCount());
-		assertEquals(threats + 2, scn.GetThreats());
+		assertEquals(threats + 3, scn.GetThreats());
 		assertTrue(scn.IsHindered(aragorn));
 	}
 

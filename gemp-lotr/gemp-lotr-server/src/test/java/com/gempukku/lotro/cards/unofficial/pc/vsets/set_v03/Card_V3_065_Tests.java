@@ -50,10 +50,10 @@ public class Card_V3_065_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Twilight.
-		 * 	To play, hinder 2 twilight conditions.
-		 * 	Shadow: Hinder this condition and remove (1) to take a twilight card into hand from your draw deck.
-		 * 	Regroup: Hinder a twilight card to add (1).
-		 */
+		* 	To play, hinder 2 twilight conditions.
+		* 	Shadow: Hinder this condition to take a twilight card into hand from your draw deck.
+		* 	Regroup: Hinder a twilight card to add (1).
+		*/
 
 		var scn = GetScenario();
 
@@ -130,7 +130,7 @@ public class Card_V3_065_Tests
 		// sky3, marshwight, hollowing remain in deck
 
 		scn.StartGame();
-		scn.SetTwilight(17);
+		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
@@ -139,13 +139,10 @@ public class Card_V3_065_Tests
 		assertInZone(Zone.DECK, marshwight);
 
 		assertTrue(scn.ShadowActionAvailable(gloom));
-		assertEquals(20, scn.GetTwilight());
 		scn.ShadowUseCardAction(gloom);
 		scn.ShadowDismissRevealedCards();
 
 		assertTrue(scn.IsHindered(gloom));
-		//Errata: now removes 1 twilight to fetch
-		assertEquals(19, scn.GetTwilight());
 
 		// Should see twilight cards available (sky3 and marshwight), but not hollowing
 		assertTrue(scn.ShadowHasCardChoicesAvailable(sky3, marshwight));

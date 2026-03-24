@@ -49,15 +49,14 @@ public class Card_V3_078_Tests
 		 * Vitality: 3
 		 * Site Number: 3
 		 * Game Text: Fierce.
-		* 	Each time a Nazgul wins a skirmish, you may exert this minion and remove (1) to play a Shadow condition
-		*   from your discard pile. Add a threat if it is [ringwraith].
+		* 	Each time a Nazgul wins a skirmish, you may exert this minion to play a Shadow condition from your discard pile. Add a threat if it is a [ringwraith] condtion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("otsea");
 
-		assertEquals("Ulaire Otsea", card.getBlueprint().getTitle());
+		assertEquals("Úlairë Otsëa", card.getBlueprint().getTitle());
 		assertEquals("Consecrated by Pestilence", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -71,7 +70,8 @@ public class Card_V3_078_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// ======== BASIC TRIGGER TESTS ========
+
+// ======== BASIC TRIGGER TESTS ========
 
 	@Test
 	public void OtseaCanPlayConditionFromDiscardWhenNazgulWinsNormally() throws DecisionResultInvalidException, CardNotFoundException {
@@ -95,8 +95,6 @@ public class Card_V3_078_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
-		assertEquals(4, scn.GetTwilight());
-
 		// Witch-king wins, Otsëa trigger available
 		int threatsBefore = scn.GetThreats();
 
@@ -105,9 +103,6 @@ public class Card_V3_078_Tests
 
 		// Otsëa exerts
 		assertEquals(1, scn.GetWoundsOn(otsea));
-
-		//Errata: remove (1)
-		assertEquals(3, scn.GetTwilight());
 
 		// armory auto-selected, played to support area
 		assertInZone(Zone.SUPPORT, armory);

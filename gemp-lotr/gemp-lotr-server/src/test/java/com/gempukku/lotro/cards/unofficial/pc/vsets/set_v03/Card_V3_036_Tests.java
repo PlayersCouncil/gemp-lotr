@@ -1,32 +1,38 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_036_Tests
 {
+
+// ----------------------------------------
+// THE WAY IS SHUT TESTS
+// ----------------------------------------
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("shut", "103_36");
+					put("shut", "103_36");        // The Way is Shut
 					put("spectre", "103_33");     // Tormented Spectre - [Gondor] Wraith
 					put("warrior", "103_34");     // Tormented Warrior - [Gondor] Wraith
 					put("revenant", "103_32");    // Tormented Revenant - [Gondor] Wraith
+					put("citadel", "5_32");       // Citadel of the Stars - [Gondor] condition
+					put("lordofmoria", "1_21");   // Lord of Moria - [Dwarven] condition
 					put("aragorn", "1_89");       // Aragorn - [Gondor] companion (not Wraith)
 
-					put("condition1", "1_242");   // The Dark Lord's Summons - Shadow support area condition
-					put("condition2", "1_249");   // Gleaming Spires Will Crumble - Shadow support area condition
-
+					put("orc", "1_271");          // Orc Soldier - [Sauron] Orc for Shadow's Reach
+					put("reach", "1_277");        // Shadow's Reach - discards FP condition
 					put("runner", "1_178");       // Goblin Runner - for skirmish
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -44,10 +50,10 @@ public class Card_V3_036_Tests
 		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
-		 * Twilight Cost: 1
+		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Maneuver, Skirmish
-		 * Game Text: Maneuver: Spot 3 [gondor] Wraiths to discard a Shadow condition.  You may exert a Wraith to hinder another Shadow condition.
+		 * Subtype: Skirmish
+		 * Game Text: Response: If your [gondor] card is about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder that card instead.
 		* 	Skirmish: Make your Wraith strength +1 for each threat you can spot (limit +3).
 		*/
 
@@ -61,52 +67,144 @@ public class Card_V3_036_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		// Errata: changed from Response+Skirmish to Maneuver+Skirmish
-		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
-		// Errata: twilight cost changed from 0 to 1
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+
+
+// ========================================
+// RESPONSE TESTS - Prevent Discard
+// ========================================
+
+	@Test
+	public void TheWayIsShutResponseRequires3GondorWraiths() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shut = scn.GetFreepsCard("shut");
+		var spectre = scn.GetFreepsCard("spectre");
+		var warrior = scn.GetFreepsCard("warrior");
+		var citadel = scn.GetFreepsCard("citadel");
+		var orc = scn.GetShadowCard("orc");
+		var reach = scn.GetShadowCard("reach");
+		scn.MoveCardsToHand(shut);
+		scn.MoveCompanionsToTable(spectre, warrior); // Only 2 Gondor Wraiths
+		scn.MoveCardsToSupportArea(citadel);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(reach);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Shadow plays Shadow's Reach targeting the Gondor condition
+		scn.ShadowPlayCard(reach);
+		// citadel auto-selected as only FP condition
+
+		// Only 2 Gondor Wraiths - response should not be available
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInDiscard(citadel);
 	}
 
 	@Test
-	public void TheWayIsShutManeuverDiscardsShadowConditionWith3Wraiths() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheWayIsShutResponseDoesNotTriggerOnNonGondorCard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shut = scn.GetFreepsCard("shut");
 		var spectre = scn.GetFreepsCard("spectre");
 		var warrior = scn.GetFreepsCard("warrior");
 		var revenant = scn.GetFreepsCard("revenant");
-		var condition1 = scn.GetShadowCard("condition1");
-		var condition2 = scn.GetShadowCard("condition2");
-		var runner = scn.GetShadowCard("runner");
-
+		var lordofmoria = scn.GetFreepsCard("lordofmoria"); // Non-Gondor condition
+		var orc = scn.GetShadowCard("orc");
+		var reach = scn.GetShadowCard("reach");
 		scn.MoveCardsToHand(shut);
-		scn.MoveCompanionsToTable(spectre, warrior, revenant);
-		scn.MoveCardsToSupportArea(condition1, condition2);
-		scn.MoveMinionsToTable(runner);
+		scn.MoveCompanionsToTable(spectre, warrior, revenant); // 3 Gondor Wraiths
+		scn.MoveCardsToSupportArea(lordofmoria);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(reach);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertInZone(Zone.SUPPORT, condition1);
-		assertInZone(Zone.SUPPORT, condition2);
+		// Shadow discards the Dwarven condition
+		scn.ShadowPlayCard(reach);
+		// lordofmoria auto-selected as only FP condition
 
-		// Errata: Maneuver ability - spot 3 Gondor Wraiths to discard a Shadow condition
-		assertTrue(scn.FreepsPlayAvailable(shut));
-		scn.FreepsPlayCard(shut);
-		// Choose which Shadow condition to discard
-		scn.FreepsChooseCard(condition1);
-
-		// Optional: exert a Wraith to hinder another Shadow condition
-		// Decline the optional for this test
-		scn.FreepsChooseNo();
-
-		assertInDiscard(condition1);
-		assertInZone(Zone.SUPPORT, condition2);
+		// 3 Gondor Wraiths but target isn't Gondor - response should not be available
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInDiscard(lordofmoria);
 	}
 
-	// ========================================
+	@Test
+	public void TheWayIsShutResponsePreventsDiscardAndHindersGondorCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shut = scn.GetFreepsCard("shut");
+		var spectre = scn.GetFreepsCard("spectre");
+		var warrior = scn.GetFreepsCard("warrior");
+		var revenant = scn.GetFreepsCard("revenant");
+		var citadel = scn.GetFreepsCard("citadel");
+		var orc = scn.GetShadowCard("orc");
+		var reach = scn.GetShadowCard("reach");
+		scn.MoveCardsToHand(shut);
+		scn.MoveCompanionsToTable(spectre, warrior, revenant); // 3 Gondor Wraiths
+		scn.MoveCardsToSupportArea(citadel);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(reach);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.IsHindered(citadel));
+
+		// Shadow plays Shadow's Reach targeting the Gondor condition
+		scn.ShadowPlayCard(reach);
+
+		// Response should be available
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Citadel should be hindered instead of discarded
+		assertInZone(Zone.SUPPORT, citadel);
+		assertTrue(scn.IsHindered(citadel));
+	}
+
+	@Test
+	public void TheWayIsShutResponseCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shut = scn.GetFreepsCard("shut");
+		var spectre = scn.GetFreepsCard("spectre");
+		var warrior = scn.GetFreepsCard("warrior");
+		var revenant = scn.GetFreepsCard("revenant");
+		var citadel = scn.GetFreepsCard("citadel");
+		var orc = scn.GetShadowCard("orc");
+		var reach = scn.GetShadowCard("reach");
+		scn.MoveCardsToHand(shut);
+		scn.MoveCompanionsToTable(spectre, warrior, revenant);
+		scn.MoveCardsToSupportArea(citadel);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(reach);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(reach);
+
+		// Decline the response
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsDeclineOptionalTrigger();
+
+		// Citadel should be discarded normally
+		assertInDiscard(citadel);
+		assertFalse(scn.IsHindered(citadel));
+	}
+
+// ========================================
 // SKIRMISH ABILITY TESTS
 // ========================================
 

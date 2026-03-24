@@ -796,12 +796,8 @@ public class FilterFactory {
                 });
         parameterFilters.put("timeword", (parameter, environment) -> {
             final Timeword timeword = Timeword.findTimeword(parameter);
-            if (timeword == null) {
-                if(parameter.toLowerCase().equals("current")) {
-                    return (actionContext -> Timeword.findByPhase(actionContext.getGame().getGameState().getCurrentPhase()));
-                }
+            if (timeword == null)
                 throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
-            }
 
             return (actionContext) -> timeword;
         });

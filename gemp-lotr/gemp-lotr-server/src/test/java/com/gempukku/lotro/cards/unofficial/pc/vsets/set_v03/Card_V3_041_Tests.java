@@ -1,15 +1,16 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInDiscard;
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_041_Tests
 {
@@ -50,9 +51,9 @@ public class Card_V3_041_Tests
 		 * Strength: 4
 		 * Vitality: 4
 		 * Game Text: Maneuver: Stack 1 or more Southron Men here to make this a <b>fierce</b> mounted Southron minion
-		 * until the end of the turn that is strength +4 and <b>ambush (1)</b> for each Southron stacked here.
+		 * until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked here.
 		 * At the start of each skirmish involving this minion, add a threat (or 2 threats if there are 4 Southrons stacked here).
-		 */
+		*/
 
 		var scn = GetScenario();
 
@@ -122,8 +123,8 @@ public class Card_V3_041_Tests
 		// Verify stacking
 		assertEquals(2, scn.GetStackedCards(charger).size());
 
-		// Base strength 4 + (2 Southrons * 4) = 12
-		assertEquals(12, scn.GetStrength(charger));
+		// Base strength 4 + (2 Southrons * 3) = 10
+		assertEquals(10, scn.GetStrength(charger));
 
 		// Ambush (2) for 2 stacked Southrons
 		assertTrue(scn.HasKeyword(charger, Keyword.AMBUSH));
@@ -184,8 +185,8 @@ public class Card_V3_041_Tests
 		scn.ShadowUseCardAction(charger);
 		scn.ShadowChooseCards(southron1, southron2, southron3, southron4);
 
-		// Base 4 + (4 * 4) = 20 strength, ambush 4
-		assertEquals(20, scn.GetStrength(charger));
+		// Base 4 + (4 * 3) = 16 strength, ambush 4
+		assertEquals(16, scn.GetStrength(charger));
 		assertEquals(4, scn.GetKeywordCount(charger, Keyword.AMBUSH));
 
 		int threatsBefore = scn.GetThreats();

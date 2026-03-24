@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -18,14 +18,12 @@ public class Card_V3_080_Tests
 				new HashMap<>()
 				{{
 					put("witchking", "103_80");
-					put("nazgul2", "1_234");       // Ulaire Nertea (for "spot another Nazgul")
-					put("runner", "1_178");         // Goblin Runner (non-Nazgul minion)
 
 					put("aragorn", "1_89");
 					put("boromir", "1_96");
-					put("athelas1", "1_94");        // Possession
-					put("athelas2", "1_94");        // Possession
-					put("lastalliance", "1_49");    // Condition
+					put("athelas1", "1_94");   // Possession
+					put("athelas2", "1_94");   // Possession
+					put("lastalliance", "1_49"); // Condition
 
 					put("sting", "1_313");
 					put("anduril", "7_79");
@@ -53,10 +51,8 @@ public class Card_V3_080_Tests
 		 * Strength: 15
 		 * Vitality: 4
 		 * Site Number: 3
-		 * Game Text: Enduring. Damage +1.
-		* 	When you play this minion, spot another Nazgul to hinder all Free Peoples cards of one type
-		*   (except companion). The Free Peoples player may restore any number of their cards,
-		*   and must exert one of their characters for each card restored.
+		 * Game Text: Fierce. Enduring. Damage +1.
+		* 	When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards, and must exert one of their characters for each card restored.
 		*/
 
 		var scn = GetScenario();
@@ -70,45 +66,17 @@ public class Card_V3_080_Tests
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(card, Keyword.ENDURING));
 		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(10, card.getBlueprint().getTwilightCost());
 		assertEquals(15, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-// ======== ERRATA: SPOT ANOTHER NAZGUL ========
 
-	@Test
-	public void WitchkingRequiresAnotherNazgulForOnPlayTrigger() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var witchking = scn.GetShadowCard("witchking");
-		scn.MoveCardsToHand(witchking);
-
-		// Only a runner on the table — no other Nazgul
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
-
-		// FP cards in play so there would be valid targets if the trigger fired
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var athelas1 = scn.GetFreepsCard("athelas1");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, athelas1);
-
-		scn.StartGame();
-		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(witchking);
-
-		// Without another Nazgul, the trigger does not fire
-		assertFalse(scn.ShadowDecisionAvailable("Choose a card type"));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
 
 // ======== BASIC HINDER FUNCTIONALITY ========
 
@@ -118,7 +86,6 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var boromir = scn.GetFreepsCard("boromir");
 		var athelas1 = scn.GetFreepsCard("athelas1");
@@ -126,7 +93,6 @@ public class Card_V3_080_Tests
 		var lastalliance = scn.GetFreepsCard("lastalliance");
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn, boromir);
 		scn.AttachCardsTo(aragorn, athelas1, lastalliance);
 		scn.AttachCardsTo(boromir, athelas2);
@@ -165,14 +131,12 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var boromir = scn.GetFreepsCard("boromir");
 		var athelas1 = scn.GetFreepsCard("athelas1");
 		var athelas2 = scn.GetFreepsCard("athelas2");
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn, boromir);
 		scn.AttachCardsTo(aragorn, athelas1);
 		scn.AttachCardsTo(boromir, athelas2);
@@ -208,14 +172,12 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var boromir = scn.GetFreepsCard("boromir");
 		var athelas1 = scn.GetFreepsCard("athelas1");
 		var athelas2 = scn.GetFreepsCard("athelas2");
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn, boromir);
 		scn.AttachCardsTo(aragorn, athelas1);
 		scn.AttachCardsTo(boromir, athelas2);
@@ -248,12 +210,10 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var athelas1 = scn.GetFreepsCard("athelas1");
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, athelas1);
 
@@ -279,13 +239,11 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var athelas1 = scn.GetFreepsCard("athelas1");
 		var lastalliance = scn.GetFreepsCard("lastalliance");
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, athelas1, lastalliance);
 
@@ -314,12 +272,10 @@ public class Card_V3_080_Tests
 		var scn = GetScenario();
 
 		var witchking = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		// No possessions or conditions attached
 
 		scn.MoveCardsToHand(witchking);
-		scn.MoveMinionsToTable(nazgul2);
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
@@ -334,7 +290,7 @@ public class Card_V3_080_Tests
 	}
 
 	@Test
-	public void ComprehensiveTest() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 
 		//Pre-game setup
 		var scn = GetScenario();
@@ -350,12 +306,10 @@ public class Card_V3_080_Tests
 		scn.AttachCardsTo(aragorn, anduril, bow);
 
 		var twk = scn.GetShadowCard("witchking");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
 		scn.MoveCardsToHand(twk);
-		scn.MoveMinionsToTable(nazgul2);
 
 		scn.StartGame();
-
+		
 		scn.SetTwilight(20);
 		scn.SkipToPhase(Phase.SHADOW);
 

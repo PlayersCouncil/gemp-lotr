@@ -71,104 +71,19 @@
 	# 	}
 	# }
 	
-	# 53_4: {
-	# 	cardInfo: {
-	# 		//id: 53_4.2
-	# 		parent: 3_4
-	# 		variant: ERRATA
-	# 		variantPath: errata/pc
-	# 		revision: 2
-	# 		image: errata/LOTR-EN03E004.2_card.jpg
-	# 		collInfo: 3U4
-	# 		rarity: U
-	# 	}
-	# 	title: A Royal Welcome
-	# 	unique: false
-	# 	side: Free Peoples
-	# 	culture: Dwarven
-	# 	twilight: 2
-	# 	type: Condition
-	# 	keywords: Support Area
-	# 	effects: [
-	# 		{
-	# 			type: activated
-	# 			phase: fellowship
-	# 			cost: {
-	# 				type: exert
-	# 				select: choose(culture(dwarven),companion)
-	# 			}
-	# 			effect: {
-	# 				type: heal
-	# 				select: choose(culture(dwarven),ally)
-	# 			}
-	# 		}
-	# 		{
-	# 			type: activated
-	# 			phase: skirmish
-	# 			cost: {
-	# 				type: exert
-	# 				select: choose(culture(dwarven),ally)
-	# 				memorize: chosenAlly
-	# 			}
-	# 			effect: [
-	# 				{
-	# 					type: ModifyStrength
-	# 					select: choose(unbound,culture(dwarven),companion)
-	# 					amount: {
-	# 						type: ForEachStrength
-	# 						filter: memory(chosenAlly)
-	# 					}
-	# 					memorize: chosenComp
-	# 				}
-	# 				{
-	# 					type: AddKeyword
-	# 					select: memory(chosenComp)
-	# 					keyword: damage
-	# 					amount: {
-	# 						type: ForEachKeywordOnCardInMemory
-	# 						memory: chosenAlly
-	# 						keyword: damage
-	# 					}
-	# 				}
-	# 			]
-	# 		}
-	# 		{
-	# 			type: activated
-	# 			phase: regroup
-	# 			cost: {
-	# 				type: exert
-	# 				select: choose(culture(dwarven),ally)
-	# 			}
-	# 			effect: {
-	# 				type: heal
-	# 				select: choose(culture(dwarven),companion)
-	# 			}
-	# 		}
-	# 	]
-	# 	gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Exert a [dwarven] ally to add that ally's strength and <b>damage</b> bonuses to an unbound [dwarven] companion.\Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
-	# 	lore: ""
-	# 	promotext: ""
-	# 	alts: {
-	# 		promos: {
-	# 		}
-	# 		errata: {
-	# 		}
-	# 	}
-	# }
-	
 	53_4: {
 		cardInfo: {
-			//id: 53_4.3
+			//id: 53_4.2
 			parent: 3_4
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 3
-			image: errata/LOTR-EN03E004.3_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E004.2_card.jpg
 			collInfo: 3U4
 			rarity: U
 		}
 		title: A Royal Welcome
-		unique: true
+		unique: false
 		side: Free Peoples
 		culture: Dwarven
 		twilight: 2
@@ -190,39 +105,32 @@
 			{
 				type: activated
 				phase: skirmish
-				limitPerPhase: 1
 				cost: {
 					type: exert
 					select: choose(culture(dwarven),ally)
-					memorize: exertedAlly
+					memorize: chosenAlly
 				}
-				effect: {
-					type: Choice
-					texts: [
-						Add strength bonus
-						Add damage bonuses
-					]
-					effects: [
-						{
-							type: modifyStrength
-							select: choose(unbound,culture(dwarven),companion)
-							amount: {
-								type: ForEachStrength
-								filter: memory(exertedAlly)
-							}
+				effect: [
+					{
+						type: ModifyStrength
+						select: choose(unbound,culture(dwarven),companion)
+						amount: {
+							type: ForEachStrength
+							filter: memory(chosenAlly)
 						}
-						{
-							type: addKeyword
-							select: choose(unbound,culture(dwarven),companion)
+						memorize: chosenComp
+					}
+					{
+						type: AddKeyword
+						select: memory(chosenComp)
+						keyword: damage
+						amount: {
+							type: ForEachKeywordOnCardInMemory
+							memory: chosenAlly
 							keyword: damage
-							amount: {
-								type: ForEachKeywordOnCardInMemory
-								memory: exertedAlly
-								keyword: damage
-							}
 						}
-					]
-				}
+					}
+				]
 			}
 			{
 				type: activated
@@ -237,7 +145,7 @@
 				}
 			}
 		]
-		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.<br>Skirmish: Exert a [dwarven] ally to add that ally's strength or <b>damage</b> bonuses to an unbound [dwarven] companion (limit once per phase).<br>Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
+		gametext: Fellowship: Exert a [dwarven] companion to heal a [dwarven] ally.\Skirmish: Exert a [dwarven] ally to add that ally's strength and <b>damage</b> bonuses to an unbound [dwarven] companion.\Regroup: Exert a [dwarven] ally to heal a [dwarven] companion.
 		lore: ""
 		promotext: ""
 		alts: {

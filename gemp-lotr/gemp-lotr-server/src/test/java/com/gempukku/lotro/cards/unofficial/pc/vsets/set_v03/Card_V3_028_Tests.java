@@ -1,15 +1,15 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_028_Tests
 {
@@ -52,7 +52,7 @@ public class Card_V3_028_Tests
 		 * Type: Possession
 		 * Subtype: Support area
 		 * Game Text: Beacon. To play, hinder 2 beacons.
-		* 	Response: If an unbound Man costing X is about to take a wound, spot X beacons to prevent that wound. Hinder a beacon.
+		* 	Response: If an unbound Man costing X is about to take a wound, hinder X beacons to prevent that wound.
 		*/
 
 		var scn = GetScenario();
@@ -69,6 +69,7 @@ public class Card_V3_028_Tests
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
+
 
 //
 // Extra Cost tests - requires hindering 2 beacons
@@ -202,11 +203,11 @@ public class Card_V3_028_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Northern Signal-fire"));
 
 		scn.FreepsAcceptOptionalTrigger();
-		scn.FreepsChooseCards(beacon1); // Cost 2 = hinder 2 beacons
+		scn.FreepsChooseCards(beacon1, beacon2); // Cost 2 = hinder 2 beacons
 
 		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.IsHindered(beacon1));
-		assertFalse(scn.IsHindered(beacon2));
+		assertTrue(scn.IsHindered(beacon2));
 	}
 
 	@Test
@@ -237,13 +238,13 @@ public class Card_V3_028_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Northern Signal-fire"));
 
 		scn.FreepsAcceptOptionalTrigger();
-		scn.FreepsChooseCards(beacon1); // Cost 4 = hinder 4 beacons
+		scn.FreepsChooseCards(beacon1, beacon2, beacon3, beacon4); // Cost 4 = hinder 4 beacons
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.IsHindered(beacon1));
-		assertFalse(scn.IsHindered(beacon2));
-		assertFalse(scn.IsHindered(beacon3));
-		assertFalse(scn.IsHindered(beacon4));
+		assertTrue(scn.IsHindered(beacon2));
+		assertTrue(scn.IsHindered(beacon3));
+		assertTrue(scn.IsHindered(beacon4));
 	}
 
 	@Test
@@ -324,47 +325,5 @@ public class Card_V3_028_Tests
 		// Wound goes through, beacon not hindered
 		assertEquals(1, scn.GetWoundsOn(strider));
 		assertFalse(scn.IsHindered(beacon1));
-	}
-
-	@Test
-	public void NorthernSignalFireResponseSpotsXBeaconsAndHinders1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		// Errata: cost changed from "hinder X beacons" to "spot X beacons + hinder 1 beacon"
-		var scn = GetScenario();
-
-		var signal = scn.GetFreepsCard("signal");
-		var beacon1 = scn.GetFreepsCard("beacon1");
-		var beacon2 = scn.GetFreepsCard("beacon2");
-		var beacon3 = scn.GetFreepsCard("beacon3");
-		var beacon4 = scn.GetFreepsCard("beacon4");
-		var aragorn = scn.GetFreepsCard("aragorn"); // Cost 4
-		var slayer = scn.GetShadowCard("slayer");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(signal, beacon1, beacon2, beacon3, beacon4);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-
-		scn.ShadowUseCardAction(slayer);
-		// Only 1 valid target, auto-selected
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Northern Signal-fire"));
-
-		scn.FreepsAcceptOptionalTrigger();
-		// Errata: spot 4 beacons (Aragorn's cost), then hinder just 1 beacon
-		// Only 1 beacon to hinder, so auto-chosen or we pick one
-		scn.FreepsChooseCard(beacon1);
-
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-		// Only 1 beacon should be hindered (not 4 like in original)
-		assertTrue(scn.IsHindered(beacon1));
-		assertFalse(scn.IsHindered(beacon2));
-		assertFalse(scn.IsHindered(beacon3));
-		assertFalse(scn.IsHindered(beacon4));
 	}
 }

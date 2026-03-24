@@ -57,12 +57,12 @@ public class Card_V3_096_Tests
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 5
+		 * Twilight Cost: 4
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. To play, hinder 4 twilight conditions. This cannot be discarded or hindered. Orcs gain <b>fierce</b>. Trolls gain <b>enduring</b>. Nazgul gain <b>damage +1</b>. Your Men and Uruk-hai gain <b>archer</b>.
-		 * 	Shadow: Hinder X of your other Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
-		 */
+		 * Game Text: Twilight. To play, hinder 4 twilight conditions. This cannot be discarded or hindered. Orcs gain <b>fierce</b>. Trolls gain <b>enduring</b>. Nazgul gain <b>damage +1</b>. Your Men and Uruk-hai gain <b>archer</b>. 
+		* 	Shadow: Hinder X of your other Shadow support cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		*/
 
 		var scn = GetScenario();
 
@@ -76,7 +76,7 @@ public class Card_V3_096_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 	}
 
 

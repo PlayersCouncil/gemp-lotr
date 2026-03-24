@@ -13,6 +13,10 @@ import static org.junit.Assert.*;
 public class Card_V3_061_Tests
 {
 
+// ----------------------------------------
+// ULAIRE ATTEA, KHAMUL OF THE EAST TESTS
+// ----------------------------------------
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -45,7 +49,7 @@ public class Card_V3_061_Tests
 		 * Vitality: 3
 		 * Site Number: 3
 		 * Game Text: <b>Easterling.</b>  Fierce.
-		* 	While you can spot 3 burdens, each Easterling is strength +3.
+		* 	While you can spot 3 burdens, each Easterling is strength +2.
 		* 	While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
 		*/
 
@@ -53,7 +57,7 @@ public class Card_V3_061_Tests
 
 		var card = scn.GetFreepsCard("attea");
 
-		assertEquals("Ulaire Attea", card.getBlueprint().getTitle());
+		assertEquals("Úlairë Attëa", card.getBlueprint().getTitle());
 		assertEquals("Khamul of the East", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
@@ -67,6 +71,8 @@ public class Card_V3_061_Tests
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
+
+
 
 	@Test
 	public void AtteaGrantsStrengthToEasterlingsAtThreeBurdens() throws DecisionResultInvalidException, CardNotFoundException {
@@ -86,9 +92,9 @@ public class Card_V3_061_Tests
 
 		scn.AddBurdens(3);
 
-		// With 3 burdens, Easterlings get +3
-		assertEquals(15, scn.GetStrength(attea));
-		assertEquals(14, scn.GetStrength(captain));
+		// With 3 burdens, Easterlings get +2
+		assertEquals(14, scn.GetStrength(attea));
+		assertEquals(13, scn.GetStrength(captain));
 		// Southron is not Easterling - no bonus
 		assertEquals(6, scn.GetStrength(southron));
 	}
@@ -138,8 +144,8 @@ public class Card_V3_061_Tests
 		scn.AddBurdens(5);
 
 		// Both bonuses active
-		assertEquals(15, scn.GetStrength(attea)); // 12 + 3
-		assertEquals(14, scn.GetStrength(captain)); // 11 + 3
+		assertEquals(14, scn.GetStrength(attea)); // 12 + 2
+		assertEquals(13, scn.GetStrength(captain)); // 11 + 2
 		assertEquals(1, scn.GetKeywordCount(attea, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
 	}

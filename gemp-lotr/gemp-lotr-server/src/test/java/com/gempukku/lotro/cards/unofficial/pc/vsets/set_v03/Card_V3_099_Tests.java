@@ -45,8 +45,7 @@ public class Card_V3_099_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert
-		 * 		every character sharing a culture with that companion.  Hinder this condition.
+		 * Game Text: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert every character sharing a culture with that companion.  Discard this condition.
 		*/
 
 		var scn = GetScenario();
@@ -102,7 +101,7 @@ public class Card_V3_099_Tests
 	}
 
 	@Test
-	public void ReleasethePrisonersExertsAllCharactersOfMatchingCultureAndHindersItself() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ReleasethePrisonersExertsAllCharactersOfMatchingCultureAndDiscardsItself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var prisoners = scn.GetShadowCard("prisoners");
@@ -148,8 +147,7 @@ public class Card_V3_099_Tests
 		assertEquals(0, scn.GetFreepsDeadCount());
 		assertInZone(Zone.REMOVED, merry);
 
-		// Errata: condition is hindered instead of discarded
-		assertInZone(Zone.SUPPORT, prisoners);
-		assertTrue(scn.IsHindered(prisoners));
+		// Condition discarded
+		assertInDiscard(prisoners);
 	}
 }

@@ -14,6 +14,8 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_V3_030_Tests
 {
 
+	// Northern Signal-fire, Flame of Nardol (103_30) Tests
+
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -56,7 +58,7 @@ public class Card_V3_030_Tests
 		 * Type: Possession
 		 * Subtype: Support area
 		 * Game Text: Beacon. To play, hinder 2 beacons.
-		* 	Archery: Hinder X beacons and discard X [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +X.
+		* 	Archery: Hinder this beacon and discard any number of [Gondor] or [Rohan] conditions or possessions to make the fellowship archery total +1 for each card discarded.
 		*/
 
 		var scn = GetScenario();
@@ -73,6 +75,7 @@ public class Card_V3_030_Tests
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
+
 
 
 //
@@ -119,17 +122,97 @@ public class Card_V3_030_Tests
 		assertTrue(scn.IsHindered(beacon2));
 	}
 
+//
+// Archery ability tests - hinder self and discard to boost archery total
+//
+
 
 	@Test
-	public void NardolArcheryHinders2BeaconsAndDiscards2CardsForPlus2Archery() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		// Errata: cost changed from "hinder self + discard any" to "hinder X beacons + discard X cards"
+	public void NardolCanDiscardZeroCardsAndHindersSelf() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nardol = scn.GetFreepsCard("nardol");
+		var citadel = scn.GetFreepsCard("citadel");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(nardol, citadel);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		int baseArchery = scn.GetFreepsArcheryTotal();
+
+		scn.FreepsUseCardAction(nardol);
+		// Choose to discard nothing
+		scn.FreepsChoose("");
+
+		// Archery total unchanged (discarded 0 cards)
+		assertEquals(baseArchery, scn.GetFreepsArcheryTotal());
+		// Citadel still in play
+		assertInZone(Zone.SUPPORT, citadel);
+		assertTrue(scn.IsHindered(nardol));
+	}
+
+	@Test
+	public void NardolDiscardingOneGondorPossessionGivesPlus1Archery() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nardol = scn.GetFreepsCard("nardol");
+		var brego = scn.GetFreepsCard("brego"); // Gondor Possession
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, brego);
+		scn.MoveCardsToSupportArea(nardol);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		int baseArchery = scn.GetFreepsArcheryTotal();
+
+		scn.FreepsUseCardAction(nardol);
+		scn.FreepsChooseCard(brego);
+
+		assertEquals(baseArchery + 1, scn.GetFreepsArcheryTotal());
+		assertInZone(Zone.DISCARD, brego);
+	}
+
+	@Test
+	public void NardolDiscardingOneRohanConditionGivesPlus1Archery() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nardol = scn.GetFreepsCard("nardol");
+		var arrowslits = scn.GetFreepsCard("arrowslits"); // Rohan Condition
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(nardol, arrowslits);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		int baseArchery = scn.GetFreepsArcheryTotal();
+
+		scn.FreepsUseCardAction(nardol);
+		scn.FreepsChooseCard(arrowslits);
+
+		assertEquals(baseArchery + 1, scn.GetFreepsArcheryTotal());
+		assertInZone(Zone.DISCARD, arrowslits);
+	}
+
+	@Test
+	public void NardolDiscardingMultipleCardsGivesCorrespondingArcheryBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var nardol = scn.GetFreepsCard("nardol");
-		var beacon1 = scn.GetFreepsCard("beacon1");
-		var beacon2 = scn.GetFreepsCard("beacon2");
 		var citadel = scn.GetFreepsCard("citadel");       // Gondor Condition
 		var arrowslits = scn.GetFreepsCard("arrowslits"); // Rohan Condition
 		var stronghold = scn.GetFreepsCard("stronghold"); // Rohan Possession
@@ -140,7 +223,7 @@ public class Card_V3_030_Tests
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(frodo, sting);
-		scn.MoveCardsToSupportArea(nardol, beacon1, beacon2, citadel, arrowslits, stronghold, sapling, lordofmoria);
+		scn.MoveCardsToSupportArea(nardol, citadel, arrowslits, stronghold, sapling, lordofmoria);
 		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
@@ -148,26 +231,18 @@ public class Card_V3_030_Tests
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		int baseArchery = scn.GetFreepsArcheryTotal();
-		assertFalse(scn.IsHindered(beacon1));
-		assertFalse(scn.IsHindered(beacon2));
 
-		assertTrue(scn.FreepsActionAvailable(nardol));
 		scn.FreepsUseCardAction(nardol);
-		// Errata: choose X beacons to hinder (range-based cost)
-		assertTrue(scn.FreepsHasCardChoicesAvailable(nardol, beacon1, beacon2));
-		scn.FreepsChooseCards(beacon1, beacon2);
-		assertTrue(scn.IsHindered(beacon1));
-		assertTrue(scn.IsHindered(beacon2));
-		assertFalse(scn.IsHindered(nardol));
-
-		// Then discard X (2) Gondor/Rohan conditions/possessions
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoicesAvailable(citadel, arrowslits, stronghold));
 		assertTrue(scn.FreepsHasCardChoicesNotAvailable(sapling, lordofmoria, sting));
-		scn.FreepsChooseCards(citadel, arrowslits);
-		assertInDiscard(citadel);
-		assertInDiscard(arrowslits);
+		scn.FreepsChooseCards(citadel, arrowslits, stronghold);
 
-		// +2 archery for hindering 2 beacons and discarding 2 cards
-		assertEquals(baseArchery + 2, scn.GetFreepsArcheryTotal());
+		// +3 for discarding 3 cards
+		assertEquals(baseArchery + 3, scn.GetFreepsArcheryTotal());
+		assertInZone(Zone.DISCARD, citadel);
+		assertInZone(Zone.DISCARD, arrowslits);
+		assertInZone(Zone.DISCARD, stronghold);
 	}
+
 }

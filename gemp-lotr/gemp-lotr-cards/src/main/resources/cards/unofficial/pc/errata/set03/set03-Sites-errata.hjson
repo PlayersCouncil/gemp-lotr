@@ -1,105 +1,60 @@
 {
 
-	# 53_120: {
-	# 	cardInfo: {
-	# 		//id: 3_120.1
-	# 		parent: 3_120
-	# 		variant: ERRATA
-	# 		variantPath: promos/pc
-	# 		revision: 1
-	# 		image: errata/53_120.jpg
-	# 		collInfo: 3U120
-	# 		rarity: U
-	# 	}
-	# 	title: Wastes of Emyn Muil
-	# 	twilight: 9
-	# 	type: site
-	# 	site: 9
-	# 	block: fellowship
-	# 	effects: {
-	# 		type: activated
-	# 		phase: skirmish
-	# 		cost: {
-	# 			type: exert
-	# 			select: choose(your,culture(isengard),orc)
-	# 		}
-	# 		effect: {
-	# 			type: choice
-	# 			texts: [
-	# 				Make Free Peoples player wound a companion
-	# 				Make Free Peoples player wound 2 companions
-	# 			]
-	# 			effects: [
-	# 				{
-	# 					type: wound
-	# 					player: fp
-	# 					select: choose(companion)
-	# 				}
-	# 				{
-	# 					type: If
-	# 					check: {
-	# 						type: canSpot
-	# 						count: 6
-	# 						filter: companion
-	# 					}
-	# 					true: [
-	# 						{
-	# 							type: wound
-	# 							count: 2
-	# 							player: fp
-	# 							select: choose(companion)
-	# 						}
-	# 					]
-	# 				}
-	# 			]
-	# 		}
-	# 	}
-	# 	gametext: <b>Skirmish:</b> Exert your [isengard] Orc to make the Free Peoples player wound a companion (or 2 companions if you spot 6 companions).
-	# 	lore: ""
-	# 	promotext: ""
-	# 	alts: {
-	# 		promos: {
-	# 		}
-	# 		errata: {
-	# 		}
-	# 	}
-	# }
-	
 	53_120: {
 		cardInfo: {
-			//id: 53_120.1
+			//id: 3_120.1
 			parent: 3_120
 			variant: ERRATA
-			variantPath: errata/pc
+			variantPath: promos/pc
 			revision: 1
-			image: errata/LOTR-EN03E120.1_card.jpg
+			image: errata/53_120.jpg
 			collInfo: 3U120
 			rarity: U
 		}
 		title: Wastes of Emyn Muil
-		unique: false
 		twilight: 9
-		type: Site
+		type: site
 		site: 9
-		block: Fellowship
-		direction: Left
+		block: fellowship
 		effects: {
 			type: activated
-			phase: shadow
-			requires: {
-				type: isSide
-				side: shadow
-			}
+			phase: skirmish
 			cost: {
-				type: heal
-				select: choose(companion)
+				type: exert
+				select: choose(your,culture(isengard),orc)
 			}
 			effect: {
-				type: playCardFromDiscard
-				select: choose(culture(isengard),orc)
+				type: choice
+				texts: [
+					Make Free Peoples player wound a companion
+					Make Free Peoples player wound 2 companions
+				]
+				effects: [
+					{
+						type: wound
+						player: fp
+						select: choose(companion)
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							count: 6
+							filter: companion
+						}
+						true: [
+							{
+								type: wound
+								count: 2
+								player: fp
+								select: choose(companion)
+							}
+						]
+					}
+				]
 			}
 		}
-		gametext: <b>Shadow</b>: Heal a companion to play an [Isengard] Orc from your discard pile.
+		gametext: <b>Skirmish:</b> Exert your [isengard] Orc to make the Free Peoples player wound a companion (or 2 companions if you spot 6 companions).
 		lore: ""
 		promotext: ""
 		alts: {

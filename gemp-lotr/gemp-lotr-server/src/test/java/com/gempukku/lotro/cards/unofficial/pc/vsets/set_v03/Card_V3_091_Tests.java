@@ -53,8 +53,8 @@ public class Card_V3_091_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Game Text: Bearer must be a [Rohan] companion.
-		 * 	While bearer is mounted, bearer is strength +1 and each time bearer wins a skirmish, you must exert them to wound a minion.
-		 */
+		* 	While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
+		*/
 
 		var scn = GetScenario();
 
@@ -67,7 +67,7 @@ public class Card_V3_091_Tests
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
@@ -145,8 +145,8 @@ public class Card_V3_091_Tests
 
 		scn.AttachCardsTo(rider, lance, mount);
 
-		// Lance gives +2 base, +1 conditional when mounted = +3 total
-		assertEquals(baseStrength + 3, scn.GetStrength(rider));
+		// Lance gives +2 base, +2 conditional when mounted = +4 total
+		assertEquals(baseStrength + 4, scn.GetStrength(rider));
 	}
 
 	@Test
@@ -167,8 +167,8 @@ public class Card_V3_091_Tests
 		// Discard the mount
 		scn.MoveCardsToDiscard(mount);
 
-		// Should lose the +1 conditional bonus, keeping only the base +2
-		assertEquals(mountedStrength - 1, scn.GetStrength(rider));
+		// Should lose the +2 conditional bonus, keeping only the base +2
+		assertEquals(mountedStrength - 2, scn.GetStrength(rider));
 	}
 
 // ======== REQUIRED TRIGGER TESTS ========

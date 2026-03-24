@@ -345,65 +345,6 @@
 		}
 	}
 	
-		51_15: {
-		cardInfo: {
-			//id: 51_15.1
-			parent: 1_15
-			variant: ERRATA
-			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN01E015.1_card.jpg
-			collInfo: 1R15
-			rarity: R
-		}
-		title: Gimli's Helm
-		unique: true
-		side: Free Peoples
-		culture: Dwarven
-		twilight: 0
-		type: Possession
-		itemclass: Helm
-		target: title(Gimli)
-		effects: [
-			{
-				type: modifier
-				modifier: {
-					type: cantTakeMoreWoundsThan
-					filter: bearer
-					phase: skirmish
-				}
-			}
-			{
-				type: activated
-				phase: skirmish
-				cost: [
-					{
-						type: memorize
-						filter: bearer
-						memory: oldBearer
-					}
-					{
-						type: discard
-						select: self
-					}
-				]
-				effect: {
-					type: DisableWounds
-					select: memory(oldBearer)
-				}
-			}
-		]
-		gametext: Bearer must be Gimli.<br>He takes no more than 1 wound during each skirmish phase.<br><b>Skirmish:</b> Discard Gimli's Helm to make Gimli unable to take wounds.
-		lore: "A helm fashioned under the Lonely Mountain protects the head of Gimli the Dwarf."
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-	
 	51_16: {
 		cardInfo: {
 			//id: 1_16.1
@@ -538,72 +479,14 @@
 	# 	}
 	# }
 	
-	# 51_17: {
-	# 	cardInfo: {
-	# 		//id: 51_17.2
-	# 		parent: 1_17
-	# 		variant: ERRATA
-	# 		variantPath: errata/pc
-	# 		revision: 2
-	# 		image: errata/LOTR-EN01E017.2_card.jpg
-	# 		collInfo: 1U17
-	# 		rarity: U
-	# 	}
-	# 	title: Grimir
-	# 	subtitle: Dwarven Elder
-	# 	unique: true
-	# 	side: Free Peoples
-	# 	culture: Dwarven
-	# 	twilight: 1
-	# 	type: Ally
-	# 	allyHome: 3F
-	# 	race: Dwarf
-	# 	strength: 3
-	# 	vitality: 3
-	# 	effects: [
-	# 		{
-	# 			type: Activated
-	# 			phase: Skirmish
-	# 			cost: [
-	# 				{
-	# 					type: Spot
-	# 					filter: Dwarven, companion
-	# 				}
-	# 				{
-	# 					type: Exert
-	# 					select: self
-	# 				}
-	# 			]
-	# 			effect: {
-	# 				type: PlayCardFromDiscard
-	# 				select: choose(Dwarven, event)
-	# 				memorize: playedEvent
-	# 				extraEffects: {
-	# 					type: RemoveFromTheGame
-	# 					select: memory(playedEvent)
-	# 				}
-	# 			}
-	# 		}
-	# 	]
-	# 	gametext: Skirmish: Spot a [dwarven] companion and exert Grimir to play a [dwarven] event from your discard pile, then remove it from the game.
-	# 	lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
-	# 	promotext: ""
-	# 	alts: {
-	# 		promos: {
-	# 		}
-	# 		errata: {
-	# 		}
-	# 	}
-	# }
-	
-		51_17: {
+	51_17: {
 		cardInfo: {
-			//id: 51_17.3
+			//id: 51_17.2
 			parent: 1_17
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 3
-			image: errata/LOTR-EN01E017.3_card.jpg
+			revision: 2
+			image: errata/LOTR-EN01E017.2_card.jpg
 			collInfo: 1U17
 			rarity: U
 		}
@@ -630,21 +513,20 @@
 					{
 						type: Exert
 						select: self
-						times: 2
 					}
 				]
 				effect: {
 					type: PlayCardFromDiscard
-					select: choose(Dwarven, event, Timeword(skirmish))
+					select: choose(Dwarven, event)
 					memorize: playedEvent
 					extraEffects: {
-						type: RemovePlayedEventFromTheGame
-						filter: played
+						type: RemoveFromTheGame
+						select: memory(playedEvent)
 					}
 				}
 			}
 		]
-		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir twice to play a [dwarven] skirmish event from your discard pile, then remove it from the game.
+		gametext: Skirmish: Spot a [dwarven] companion and exert Grimir to play a [dwarven] event from your discard pile, then remove it from the game.
 		lore: Old and grey after many years spent in exile before the Lonely Mountain was reclaimed, Grimir can still wield his axe with strength.
 		promotext: ""
 		alts: {
