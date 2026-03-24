@@ -159,7 +159,9 @@ public class ChatRoomMediator {
             callbackForCommand.commandReceived(playerId, commandParameters, admin);
         } else {
             ChatCommandCallback callbackForNoCommand = _chatCommandCallbacks.get("nocommand");
-            callbackForNoCommand.commandReceived(playerId, commandString, false);
+            if (callbackForNoCommand != null) {
+                callbackForNoCommand.commandReceived(playerId, commandString, false);
+            }
         }
     }
 
