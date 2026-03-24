@@ -10,6 +10,8 @@ public class ShadowAssignmentTrainer extends AbstractAssignmentTrainer {
         return false;
     }
 
+    private static final int MAX_ASSIGNMENTS = 10_000;
+
     @Override
     protected void generateAssignmentsRecursive(Map<String, String> minionsToAssign,
                                                 List<String> minionKeys, int index,
@@ -17,6 +19,9 @@ public class ShadowAssignmentTrainer extends AbstractAssignmentTrainer {
                                                 AssignmentInfo current,
                                                 List<AssignmentInfo> results,
                                                 GameState gameState) {
+        if (results.size() >= MAX_ASSIGNMENTS)
+            return;
+
         if (index >= minionsToAssign.size()) {
             // Deep copy the current assignment
             AssignmentInfo copy = new AssignmentInfo(new HashMap<>(), new HashMap<>(), 0, 0);
@@ -39,6 +44,8 @@ public class ShadowAssignmentTrainer extends AbstractAssignmentTrainer {
             generateAssignmentsRecursive(minionsToAssign, minionKeys, index + 1, freeChars, current, results, gameState);
             current.physicalAssignment().get(fp.getKey()).remove(current.physicalAssignment().get(fp.getKey()).size() - 1); // backtrack
             current.blueprintAssignment().get(fp.getValue()).remove(current.blueprintAssignment().get(fp.getValue()).size() - 1); // backtrack
+            if (results.size() >= MAX_ASSIGNMENTS)
+                return;
         }
     }
 }

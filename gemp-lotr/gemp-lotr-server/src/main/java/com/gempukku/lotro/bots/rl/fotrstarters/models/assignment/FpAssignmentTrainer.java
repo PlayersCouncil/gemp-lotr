@@ -21,6 +21,8 @@ public class FpAssignmentTrainer extends AbstractAssignmentTrainer {
         generateAssignmentsRecursive(minionsToAssign, minionKeys, index, freeChars, current, results, new ArrayList<>(), gameState);
     }
 
+    private static final int MAX_ASSIGNMENTS = 10_000;
+
     private void generateAssignmentsRecursive(Map<String, String> minionsToAssign,
                                               List<String> minionKeys, int index,
                                               Map<String, String> freeChars,
@@ -28,6 +30,9 @@ public class FpAssignmentTrainer extends AbstractAssignmentTrainer {
                                               List<AssignmentInfo> results,
                                               List<String> unassignedMinions,
                                               GameState gameState) {
+        if (results.size() >= MAX_ASSIGNMENTS)
+            return;
+
         if (index >= minionKeys.size()) {
             // Deep copy the current assignment
             int unassignedStrength = unassignedMinions.stream().mapToInt(minionId -> {
@@ -71,6 +76,8 @@ public class FpAssignmentTrainer extends AbstractAssignmentTrainer {
                 current.physicalAssignment().get(fpPhysId).remove(current.physicalAssignment().get(fpPhysId).size() - 1);
                 current.blueprintAssignment().get(fpBlueprintId).remove(current.blueprintAssignment().get(fpBlueprintId).size() - 1);
             }
+            if (results.size() >= MAX_ASSIGNMENTS)
+                return;
         }
 
         // Let the current minion remain unassigned

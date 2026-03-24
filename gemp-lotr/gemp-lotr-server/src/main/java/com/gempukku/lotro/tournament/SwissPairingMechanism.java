@@ -49,6 +49,11 @@ public class SwissPairingMechanism implements PairingMechanism {
 
         List<List<String>> playersGroupedByBracket = groupPlayersByPointBracket(droppedPlayers, currentStandings, maxNumberOfPoints);
 
+        if (playersGroupedByBracket.isEmpty()) {
+            // No active players to pair — tournament is finished
+            return true;
+        }
+
         shufflePlayersWithinBrackets(playersGroupedByBracket);
 
         Set<String> playersWithByes = getPlayersWithByes(playerByes);
