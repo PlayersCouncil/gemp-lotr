@@ -49,7 +49,7 @@ public class RTMDLeague extends ConstructedLeague {
     }
 
     /**
-     * Returns the number of sites on the path (5 or 9 typically).
+     * Returns the number of sites on the path (1-18).
      */
     public int getPathLength() {
         return _parameters.racePath.size();

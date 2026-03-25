@@ -199,7 +199,8 @@ var LeagueResultsUI = Class.extend({
 
                     // Click handler: open card in the shared CardInfoDialog
                     (function(vBpId, mBpId) {
-                        thumbWrapper.click(function(event) {
+                        thumbWrapper.on("click contextmenu", function(event) {
+                            event.preventDefault();
                             if (!that.cardInfoDialog) {
                                 that.cardInfoDialog = new CardInfoDialog(window.innerWidth, window.innerHeight);
                                 // Close dialog on click outside (same pattern as deckbuilder/game)

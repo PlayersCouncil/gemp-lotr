@@ -1,7 +1,8 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.collection.TransferDAO;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.LeagueDAO;
@@ -11,11 +12,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.game.CardCollection;
-import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.DeckValidationContext;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
-import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.packs.ProductLibrary;
@@ -37,6 +34,7 @@ public class LeagueService {
     private final CachedLeagueParticipationDAO _leagueParticipationDAO;
 
     private final CollectionsManager _collectionsManager;
+    private final TransferDAO _transferDAO;
     private final SoloDraftDefinitions _soloDraftDefinitions;
 
     private final Map<String, List<PlayerStanding>> _leagueStandings = new ConcurrentHashMap<>();
@@ -47,6 +45,7 @@ public class LeagueService {
 
     public LeagueService(LeagueDAO leagueDao, LeagueMatchDAO leagueMatchDao,
                          LeagueParticipationDAO leagueParticipationDAO, CollectionsManager collectionsManager,
+                         TransferDAO transferDAO,
                          LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, SoloDraftDefinitions soloDraftDefinitions) {
         _leagueDao = leagueDao;
         _cardLibrary = library;
@@ -55,6 +54,7 @@ public class LeagueService {
         _leagueMatchDao = new CachedLeagueMatchDAO(leagueMatchDao);
         _leagueParticipationDAO = new CachedLeagueParticipationDAO(leagueParticipationDAO);
         _collectionsManager = collectionsManager;
+        _transferDAO = transferDAO;
         _soloDraftDefinitions = soloDraftDefinitions;
     }
 
@@ -170,6 +170,15 @@ public class LeagueService {
     }
 
     public synchronized void reportLeagueGameResult(League league, LeagueSerieInfo serie, String winner, String loser) {
+        // Capture RTMD position before recording the match
+        LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        RTMDLeague rtmdLeague = (leagueData instanceof RTMDLeague) ? (RTMDLeague) leagueData : null;
+        int oldPosition = 0;
+        if (rtmdLeague != null) {
+            List<PlayerStanding> oldStandings = getLeagueStandings(league);
+            oldPosition = rtmdLeague.getPlayerPosition(winner, oldStandings);
+        }
+
         _leagueMatchDao.addPlayedMatch(league.getCodeStr(), serie.getName(), winner, loser);
 
         _leagueStandings.remove(LeagueMapKeys.getLeagueMapKey(league));
@@ -177,6 +186,15 @@ public class LeagueService {
 
         awardPrizesToPlayer(league, serie, winner, true);
         awardPrizesToPlayer(league, serie, loser, false);
+
+        // Check if winner advanced in RTMD
+        if (rtmdLeague != null) {
+            List<PlayerStanding> newStandings = getLeagueStandings(league);
+            int newPosition = rtmdLeague.getPlayerPosition(winner, newStandings);
+            if (newPosition > oldPosition) {
+                notifyRTMDAdvancement(rtmdLeague, winner, oldPosition, newPosition);
+            }
+        }
     }
 
     private void awardPrizesToPlayer(League league, LeagueSerieInfo serie, String player, boolean winner) {
@@ -197,6 +215,26 @@ public class LeagueService {
         }
 
 
+    }
+
+    private void notifyRTMDAdvancement(RTMDLeague rtmdLeague, String player, int oldPosition, int newPosition) {
+        List<String> visualPath = rtmdLeague.getVisualPath();
+        List<String> modPath = rtmdLeague.getPath();
+
+        // Build structured contents: oldVisual|oldMod|newVisual|newMod
+        // For position 0 (starting position), use empty strings
+        StringBuilder contents = new StringBuilder();
+        if (visualPath != null && !visualPath.isEmpty()) {
+            String oldVisual = (oldPosition >= 1 && oldPosition <= visualPath.size()) ? visualPath.get(oldPosition - 1) : "";
+            String oldMod = (oldPosition >= 1 && oldPosition <= modPath.size()) ? modPath.get(oldPosition - 1) : "";
+            String newVisual = (newPosition >= 1 && newPosition <= visualPath.size()) ? visualPath.get(newPosition - 1) : "";
+            String newMod = (newPosition >= 1 && newPosition <= modPath.size()) ? modPath.get(newPosition - 1) : "";
+            contents.append(oldVisual).append("|").append(oldMod).append("|").append(newVisual).append("|").append(newMod);
+        }
+
+        String message = rtmdLeague.getParameters().name + ": You have arrived at level " + newPosition + "!";
+
+        _transferDAO.addTransferToRaw(true, player, "League", "Race to Mount Doom", 0, contents.toString(), message);
     }
 
     public synchronized Collection<LeagueMatchResult> getPlayerMatchesInSerie(League league, LeagueSerieInfo serie, String player) {

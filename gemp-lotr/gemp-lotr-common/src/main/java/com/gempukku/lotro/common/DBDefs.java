@@ -182,6 +182,7 @@ public class DBDefs {
         public String collection; //255
         public int currency;
         public String contents; //text
+        public String message; //text, nullable — human-readable note for the player
         public LocalDateTime date_recorded;
         public String direction; //45
 

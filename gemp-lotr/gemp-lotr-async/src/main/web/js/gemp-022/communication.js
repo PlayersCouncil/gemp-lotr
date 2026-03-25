@@ -62,6 +62,19 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    getLeagueDelivery:function (callback) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/delivery/league",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId") },
+            success:callback,
+            error:null,
+            dataType:"json"
+        });
+    },
+
     getAnnouncementDelivery:function (callback) {
         $.ajax({
             type:"GET",
@@ -148,6 +161,12 @@ var GempLotrCommunication = Class.extend({
             if (announceDelivery == "true" && window.announcementDeliveryService != null) {
                 that.getAnnouncementDelivery(function(json) {
                     window.announcementDeliveryService(that, json);
+                });
+            }
+            var leagueDelivery = request.getResponseHeader("Delivery-Service-League");
+            if (leagueDelivery == "true" && window.leagueDeliveryService != null) {
+                that.getLeagueDelivery(function(json) {
+                    window.leagueDeliveryService(json);
                 });
             }
             callback(xml);

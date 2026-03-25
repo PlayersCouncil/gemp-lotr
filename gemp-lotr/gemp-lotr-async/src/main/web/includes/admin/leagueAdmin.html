@@ -311,6 +311,17 @@ $(document).ready(
 		var rtmdLocked = [];         // Boolean array: which slots are locked
 		var rtmdDataLoaded = false;
 
+		// ---- Path Length Slider ----
+		$("#rtmd-path-length-slider").slider({
+			min: 1,
+			max: 18,
+			value: 9,
+			slide: function(event, ui) {
+				$("#rtmd-path-length").val(ui.value);
+				$("#rtmd-path-length-display").text(ui.value);
+			}
+		});
+
 		// ---- Intensity Slider (init before fetch so it exists when data arrives) ----
 		$("#rtmd-intensity-slider").slider({
 			range: true,
@@ -1371,56 +1382,7 @@ function leagueErrorMap(outputControl, callback=null) {
 			<input type="number" min="1" id="rtmd-part-games" value="3" class="flex-fill">
 		</div>
 		</div>
-
-		<h3>Race Configuration</h3>
-
-		<div class="flex-horiz">
-			<div class="label-column">Advancement Mode: </div>
-			<select id="rtmd-advancement-mode" class="flex-fill">
-				<option value="WIN">Win-based</option>
-				<option value="SCORE">Score-based</option>
-			</select>
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Advance Factor: </div>
-			<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
-			<span style="margin-left:8px; color:#888;">(wins or points needed per position advance)</span>
-		</div>
-
-		<div class="flex-horiz" style="display:none">
-			<div class="label-column">Cumulative: </div>
-			<input type="checkbox" id="rtmd-cumulative" />
-			<span style="margin-left:8px; color:#888;">(all prior meta-sites remain active)</span>
-		</div>
-
-		<div class="flex-horiz" style="align-items:center;">
-			<div class="label-column">Intensity Range: </div>
-			<div class="flex-fill" style="padding:0 10px;">
-				<div id="rtmd-intensity-slider" style="margin:10px 0;"></div>
-			</div>
-			<span id="rtmd-intensity-display" style="margin-left:8px; color:#aaa; min-width:60px;">-10 to 10</span>
-			<input type="hidden" id="rtmd-intensity-floor" value="-10">
-			<input type="hidden" id="rtmd-intensity-ceiling" value="10">
-		</div>
-
-		<div class="flex-horiz" style="gap:8px; margin:8px 0; align-items:center;">
-			<button id="rtmd-randomize-btn">Randomize</button>
-			<label>Path length: </label>
-			<input type="number" id="rtmd-path-length" value="9" min="1" max="18" style="width:50px;">
-			<span style="flex-grow:1;"></span>
-			<select id="rtmd-add-modifier" style="max-width:500px;">
-				<option value="">-- Select a modifier to add --</option>
-			</select>
-			<button id="rtmd-add-modifier-btn">Add</button>
-		</div>
-
-		<div id="rtmd-path-container" style="display:flex;flex-wrap:wrap;gap:8px;min-height:120px;padding:8px;border:1px solid #444;border-radius:4px;background:#1a1a1a;"></div>
-		<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers (need 5 or 9)</div>
-
-		<h4 style="margin-top:12px;">Path Preview</h4>
-		<div id="rtmd-preview" style="padding:8px;border:1px solid #333;border-radius:4px;background:#111;min-height:60px;"></div>
-
+		
 		<h3>Series</h3>
 
 		<div class="rtmd-series" class="flex-vert">
@@ -1446,6 +1408,63 @@ function leagueErrorMap(outputControl, callback=null) {
 		<button id="add-rtmd-series-button">
 			Add Another Serie
 		</button>
+
+		<h3>Race Configuration</h3>
+
+		<div class="flex-horiz">
+			<div class="label-column">Advancement Mode: </div>
+			<select id="rtmd-advancement-mode" class="flex-fill">
+				<option value="WIN">Win-based</option>
+				<option value="SCORE">Score-based</option>
+			</select>
+		</div>
+
+		<div class="flex-horiz">
+			<div class="label-column">Advance Factor: </div>
+			<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
+			<span style="margin-left:8px; color:#888;">(wins or points needed per position advance)</span>
+		</div>
+
+		<div class="flex-horiz" style="display:none">
+			<div class="label-column">Cumulative: </div>
+			<input type="checkbox" id="rtmd-cumulative" />
+			<span style="margin-left:8px; color:#888;">(all prior meta-sites remain active)</span>
+		</div>
+
+		<div class="flex-horiz" style="align-items:center;">
+			<div class="label-column">Path Length: </div>
+			<div class="flex-fill" style="padding:0 10px;">
+				<div id="rtmd-path-length-slider" style="margin:10px 0;"></div>
+			</div>
+			<span id="rtmd-path-length-display" style="margin-left:8px; color:#aaa; min-width:30px;">9</span>
+			<input type="hidden" id="rtmd-path-length" value="9">
+		</div>
+
+		<div class="flex-horiz" style="align-items:center;">
+			<div class="label-column">Intensity Range: </div>
+			<div class="flex-fill" style="padding:0 10px;">
+				<div id="rtmd-intensity-slider" style="margin:10px 0;"></div>
+			</div>
+			<span id="rtmd-intensity-display" style="margin-left:8px; color:#aaa; min-width:60px;">-10 to 10</span>
+			<input type="hidden" id="rtmd-intensity-floor" value="-10">
+			<input type="hidden" id="rtmd-intensity-ceiling" value="10">
+		</div>
+
+		<div class="flex-horiz" style="gap:8px; margin:8px 0; align-items:center;">
+			<button id="rtmd-randomize-btn">Randomize</button>
+			<span style="flex-grow:1;"></span>
+			<select id="rtmd-add-modifier" style="max-width:500px;">
+				<option value="">-- Select a modifier to add --</option>
+			</select>
+			<button id="rtmd-add-modifier-btn">Add</button>
+		</div>
+
+		<div id="rtmd-path-container" style="display:flex;flex-wrap:wrap;gap:8px;min-height:120px;padding:8px;border:1px solid #444;border-radius:4px;background:#1a1a1a;"></div>
+		<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers</div>
+
+		<h4 style="margin-top:12px;">Path Preview</h4>
+		<div id="rtmd-preview" style="padding:8px;border:1px solid #333;border-radius:4px;background:#111;min-height:60px;"></div>
+		
 
 		<button id="preview-rtmd-league-button">
 			Preview RTMD League
