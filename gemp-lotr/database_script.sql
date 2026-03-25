@@ -317,6 +317,7 @@ CREATE TABLE `transfer` (
   `collection` varchar(255) NOT NULL,
   `currency` INT(11) NOT NULL DEFAULT 0,
   `contents` text NOT NULL,
+  `message` text DEFAULT NULL,
   `date_recorded` DATETIME NOT NULL DEFAULT now(),
   `direction` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),

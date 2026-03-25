@@ -700,8 +700,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         int pathLength = racePath.size();
         Throw400IfValidationFails("racePath", String.valueOf(pathLength),
-                pathLength == 5 || pathLength == 9,
-                "Race path must contain exactly 5 or 9 modifiers (got " + pathLength + ").");
+                pathLength >= 1 && pathLength <= 18,
+                "Race path must contain between 1 and 18 modifiers (got " + pathLength + ").");
 
         for (String blueprintId : racePath) {
             try {

@@ -43,6 +43,8 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     public void handleRequest(String uri, HttpRequest request, Map<Type, Object> context, ResponseWriter responseWriter, String remoteIp) throws Exception {
         if (uri.startsWith("/packContents") && request.method() == HttpMethod.GET) {
             getPackContentDelivery(request, responseWriter);
+        } else if (uri.startsWith("/league") && request.method() == HttpMethod.GET) {
+            getLeagueDelivery(request, responseWriter);
         } else if (uri.startsWith("/announcements") && request.method() == HttpMethod.GET) {
             getAnnouncementDelivery(request, responseWriter);
         } else if (uri.startsWith("/announcements/add") && request.method() == HttpMethod.POST) {
@@ -163,6 +165,23 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
             _transferDAO.snoozeAnnouncement(_transferDAO.getCurrentAnnouncement(), resourceOwner);
 
             responseWriter.sendOK();
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void getLeagueDelivery(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            var notifications = _transferDAO.consumeUndeliveredLeagueNotifications(resourceOwner);
+
+            if (notifications == null || notifications.isEmpty())
+                throw new HttpProcessingException(404);
+
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(notifications));
         } finally {
             postDecoder.destroy();
         }

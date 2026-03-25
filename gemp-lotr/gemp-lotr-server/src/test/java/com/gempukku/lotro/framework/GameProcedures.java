@@ -29,6 +29,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 	default void FreepsResolveSkirmish(PhysicalCardImpl comp) { FreepsChooseCard(comp); }
+	default void ShadowResolveSkirmish(PhysicalCardImpl comp) { ShadowChooseCard(comp); }
 
 	default void SkipToMovementDecision() {
 		SkipToPhase(Phase.REGROUP);

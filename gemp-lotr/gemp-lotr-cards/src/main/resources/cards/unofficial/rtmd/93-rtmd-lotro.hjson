@@ -13,19 +13,18 @@
 		title: Race Text 93_1
 		type: MetaSite
 		intensity: -2
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Activated
+			phase: skirmish
+			requires: {
+				type: OwnerIsShadow
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			effect: {
+				type: PlayCardFromHand
+				select: choose(possession)
+				on: your,minion
 			}
-		]
+		}
 		gametext: Skirmish: Play a possession on your minion.
 		lore: ""
 		promotext: ""
@@ -52,19 +51,17 @@
 		title: Race Text 93_2
 		type: MetaSite
 		intensity: -3
-		effects: [
-			{
-				type: ToPlay
+		effects: {
+			type: Modifier
+			modifier: {
+				type: ModifyResistance
+				filter: your,ringBearer,not(name(Frodo)),not(name(Sam))
+				amount: 3
 				requires: {
-					type: CanSpot
-					filter: any
+					type: OwnerIsFreeps
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Your Ring-bearer&nbsp;(except Frodo or Sam) is resistance +3.
 		lore: ""
 		promotext: ""
@@ -91,19 +88,28 @@
 		title: Race Text 93_3
 		type: MetaSite
 		intensity: -1
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: Moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			cost: {
+				type: Kill
+				select: choose(companion,not(ringBearer))
+			}
+			effect: {
+				type: AddModifier
+				modifier: {
+					type: ModifyMoveLimit
+					amount: 1
 				}
+				until: end(regroup)
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each time your fellowship moves, you may kill a companion (except the Ring-bearer) to make the move limit +1.
 		lore: ""
 		promotext: ""
@@ -130,19 +136,29 @@
 		title: Race Text 93_4
 		type: MetaSite
 		intensity: 4
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: SkirmishAboutToEnd
+			}
+			requires: [
+				{
+					type: OwnerIsFreeps
 				}
+				{
+					type: Not
+					requires: {
+						type: PlayedCardThisPhase
+						filter: your,event,timeword(skirmish)
+					}
+				}
+			]
+			effect: {
+				type: Wound
+				select: choose(your,character)
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Wound one of your characters after each skirmish in which you did not play a skirmish event.
 		lore: ""
 		promotext: ""
@@ -169,19 +185,14 @@
 		title: Race Text 93_5
 		type: MetaSite
 		intensity: 3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Modifier
+			modifier: {
+				type: ModifyStrength
+				filter: companion,MaxResistance(3)
+				amount: -1
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each companion with resistance 3 or less is strength -1.
 		lore: ""
 		promotext: ""
@@ -208,19 +219,12 @@
 		title: Race Text 93_6
 		type: MetaSite
 		intensity: 5
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Modifier
+			modifier: {
+				type: SkirmishesResolvedInOrderByFirstShadowPlayer
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Skirmishes are resolved in an order decided by the Shadow player.
 		lore: ""
 		promotext: ""
@@ -247,19 +251,25 @@
 		title: Race Text 93_7
 		type: MetaSite
 		intensity: 4
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Trigger
+			optional: true
+			player: shadow
+			trigger: {
+				type: Moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: DrawCards
+				count: {
+					type: ForEachYouCanSpot
+					filter: companion
+					over: 4
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each time your fellowship moves, the Shadow player may draw a card for each companion you can spot over 4.
 		lore: ""
 		promotext: ""
@@ -286,19 +296,17 @@
 		title: Race Text 93_8
 		type: MetaSite
 		intensity: 3
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Modifier
+			modifier: {
+				type: ModifyStrength
+				filter: wraith
+				amount: {
+					type: ForEachWound
+					filter: InSkirmish
 				}
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+		}
 		gametext: Each Wraith is strength +1 for each wound on a character in its skirmish.
 		lore: ""
 		promotext: ""
@@ -325,19 +333,30 @@
 		title: Race Text 93_9
 		type: MetaSite
 		intensity: -1
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+		effects: {
+			type: Activated
+			phase: fellowship
+			requires: {
+				type: OwnerIsFreeps
+			}
+			cost: {
+				type: AddTwilight
+				amount: 3
+			}
+			effect: [
+				{
+					type: PlayCardFromDrawDeck
+					select: choose(companion)
+					showAll: true
+					shuffle: true
+					memorize: playedCompanion
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
-			}
-		]
+				{
+					type: Exhaust
+					select: memory(playedCompanion)
+				}
+			]
+		}
 		gametext: Fellowship: Add (3) to play a companion from your draw deck; they come into play exhausted.
 		lore: ""
 		promotext: ""
@@ -364,19 +383,24 @@
 		title: Race Text 93_10
 		type: MetaSite
 		intensity: -1
-		effects: [
-			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: StartOfPhase
+				phase: regroup
 			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+			requires: {
+				type: OwnerIsShadow
 			}
-		]
+			cost: {
+				type: Discard
+				select: choose(your,culture(dunland),possession)
+			}
+			effect: {
+				type: TakeControlOfSite
+			}
+		}
 		gametext: At the start of the regroup phase, you may discard your [Dunland] possession to take control of a site.
 		lore: ""
 		promotext: ""
