@@ -1,0 +1,2906 @@
+<big>''The '''Comprehensive Rules 4.2''' is a document maintained by the [[Legacy Rules Team]] on the [[Rules Council]].  At its core it is a branch off of the [[Comprehensive Rules 4.1]], which represents every known Decipher ruling.  Additional rulings as made by the Legacy team are included inline below. 
+
+''A blue background is used when a Legacy ruling has made an additive change to fill an unspoken gap in the rules:''
+{{Ruling
+|text= ''When a character has had its damage bonus reduced to below zero, it does not result in "negative damage", i.e. 1 wound is still applied if they win a skirmish.''
+|source= [[Legacy Ruling X]]
+}}
+
+''A green background is used when a Legacy ruling alters the wording or examples used to better explain what is going on:''
+
+{{Clarification
+|text= ''When a character has had its damage bonus reduced to below zero, it does not result in "negative damage", i.e. 1 wound is still applied if they win a skirmish.''
+|source= [[Legacy Ruling X]]
+}}
+
+''In both cases, bold text is used to indicate what has changed between this and the Comprehensive Rules 4.1.''
+
+''See [[Rules and Rulings]] for the various other rulebooks that have existed over the years.''</big>
+
+__TOC__
+
+==<div id="the lord of the rings trading card game comprehensive rules 4.2">The Lord of the Rings Trading Card Game Comprehensive Rules 4.2</div>==
+===<div id="if you have never played a trading card game...">If you have never played a trading card game...</div>===
+The best way to learn is from a friend who already knows how to play. If your friends aren't players yet, we suggest you begin with a [[Rulebooks|Starter Rulebook]], which is included in [[Starter Decks]] and available for download.
+
+===<div id="if you have played this game before...">If you have played this game before...</div>===
+
+These '''Comprehensive Rules''' provides complete documentation of all rules for [[The Lord of the Rings TCG]] as of August 2007. It replaces and supersedes all previous rulebooks. It is divided into three sections.
+
+'''Section One''' is a chronological overview of gameplay. '''Section Two''' provides complete rules to the game, organized alphabetically by topic. '''Section Three''' provides entries on individual cards, including errata and clarifications.  '''[''Section Four'' records the last updates to the X- and R-lists of each official format.]'''
+
+===<div id="what's new?">What's New?</div>===
+
+'''[''Note: this section has been rewritten to reflect the reality of version 4.1.'']'''
+
+All material from the [[Comprehensive Rules 4.0]] and later [[Current Rulings Document]]s, and pertinent information from the [[Tournament Guidelines]] is included here. The most important updates are:
+
+* Incorporating of all CRD rulings into the text
+* All errata, clarifications, and individual card rulings that were included in previous editions but accidentally omitted by Decipher have been reintroduced
+* Inclusion of material explanations from the starter rulebooks for [[The Hunters]] and [[Rise of Saruman]]
+* Inclusion of [[Mulligan]] rules imported from the Tournament Guidelines
+
+
+==<div id="section one">Section One: Overview</div>==
+
+This section of the Comprehensive Rules mirrors the presentation of a Starter Rulebook. Important concepts are explained first, followed by game setup and an explanation of the turn sequence in order. 
+
+This section is offered only as a chronological overview of gameplay. There are few examples of play, and few specific rulings. For such material, refer to Section Two. 
+
+Again, if you are not familiar with the game, we strongly suggest you begin with a Starter Rulebook, rather than the Comprehensive Rules.
+
+===<div id="important concepts">Important Concepts</div>===
+====<div id="kinds of cards 2">Kinds of Cards</div>====
+The Lord of the Rings TCG has three basic kinds of cards: site, Free Peoples, and Shadow. There is also The One Ring, which is different from all other cards.
+
+=====<div id="free peoples cards 2">Free Peoples Cards</div>=====
+Free Peoples cards represent the forces of good. Each player has his own fellowship, made up of a Ring-bearer and other companions. When you take your turn, you play and use your Free Peoples cards.
+
+'''Free Peoples cards have a light colored circular field in the upper left corner.'''
+
+=====<div id="shadow cards">Shadow Cards</div>=====
+Shadow cards represent the forces of evil and corruption. When another player takes his turn, you play and use your Shadow cards to hinder that player.
+
+'''Shadow cards have a dark colored diamond-shaped field in the upper left corner.'''
+
+====<div id="card types">Card Types</div>====
+There are ten different card types in the game: The One Ring, site, companion, ally, minion, follower, possession, artifact, event, and condition. Companion, ally, and minion cards are also collectively referred to as character cards.
+
+=====<div id="the one ring 2">The One Ring</div>=====
+This card type represents the uniquely powerful item that is the focus of the story of ''The Lord of the Rings''. In the middle of the card, The One Ring has its subtitle. It has no twilight cost, and its card type is "The One Ring.". 
+
+'''The One Ring is not a Free Peoples card and it is not a Shadow card'''.
+
+''There are several versions of The One Ring, represented by different cards, but you'll only use one version at a time.''
+
+=====<div id="site 2">Site</div>=====
+Site cards represent locations in Middle-earth, and are used to chart the progress of the game. Nine sites are placed in your adventure deck, and are kept separately from the other cards you draw and play during the game, which are placed in the draw deck.
+
+'''Site cards have a dark compass in the upper left corner.'''
+
+This symbol is used on sites from the ''[[Shadows]]'' expansion set onward, differentiating them from sites found in previous sets (which use a different compass symbol, and may also use a block symbol).
+
+=====<div id="companion 2">Companion</div>=====
+A companion is a Free Peoples character in your fellowship.
+
+=====<div id="ally 2">Ally</div>=====
+An ally is a character that helps your companions from afar but does not move with them.
+
+=====<div id="minion 2">Minion</div>=====
+A minion is a Shadow character that attacks other players' fellowships.
+
+=====<div id="follower 2">Follower</div>=====
+A follower represents help for your other characters that joins for a short time and then departs. They are not characters, although they are often named and depicted with images of people from the story. 
+
+=====<div id="possession 2">Possession</div>=====
+A possession is a weapon, suit of armor, or other kind of object used by a character. Most possessions tell you who their bearer can be, which is the kind of character you can play them on.
+
+=====<div id="artifact 2">Artifact</div>=====
+An artifact is a unique weapon, suit of armor, or other kind of special object used by a character. 
+
+Though artifacts are played and used much like possessions, they are a different card type. Artifacts are not affected by cards that affect possessions.
+
+=====<div id="event 2">Event</div>=====
+An event is a card played from your hand representing an important occurrence, which you discard after you play it.
+
+=====<div id="condition 2">Condition</div>=====
+A condition is a card representing a significant change in the world, which stays in play until discarded. Most conditions play to your support area, though some play on other cards, and tell you who or what their bearer can be.
+
+====<div id="culture 2">Culture</div>====
+Most cards are part of a specific culture. A card's color, its background texture, and an icon in its upper right corner indicate its culture. Your deck may contain cards from several different cultures.
+
+Site cards and The One Ring are not part of any culture.
+
+{{Culture_Table}}
+
+====<div id="vitality 2">Vitality</div>====
+All characters in the game have vitality. This number represents a character's life force, stamina, sturdiness, and will to live.
+
+=====<div id="wounds 2">Wounds</div>=====
+When a character is wounded by an enemy attack, his vitality is depleted. Place a wound token on the character to illustrate this. Glass beads (preferably blood red) make good tokens for this purpose. 
+
+When you "wound a character," you place only one wound.
+
+Each wound a character has reduces its vitality by 1. When a character's vitality is reduced to zero, that character is immediately killed. (Reducing 
+a character's strength to zero does not kill that character.)
+
+=====<div id="healing 2">Healing</div>=====
+When a wound is removed from a character, this represents resting or healing. When you "heal a character," you remove one wound.
+
+Generally, your fellowship only heals at a sanctuary – that is, a site 3 or site 6 – you reach on the adventure path. At the start of your turn when your fellowship is at a sanctuary, you may heal up to 5 wounds from your companions (not allies).
+
+=====<div id="killed 2">Killed</div>=====
+When a character's vitality is reduced to zero, that character is immediately killed. Place killed Free Peoples characters (companions and allies) in your dead pile. The dead pile is separate from and next to your discard pile. Place killed minions in your discard pile. 
+
+When you have a unique companion or ally in your dead pile, you cannot play another copy of that card, or any other card with the same title. (You may play another copy of a non-unique card that is in your dead pile.)
+
+=====<div id="exert 2">Exert</div>=====
+Sometimes you may exert a character by placing a wound on that card to show that the character takes an action that depletes his vitality.
+
+Exerting a character is different from wounding a character, even though both require placement of a wound token. Cards that prevent wounds cannot prevent a wound token placed by exerting.
+
+Once a wound token is placed, whether from exerting or wounding, it can be healed by any effect that heals a wound.
+
+No player may exert a character who is exhausted (who has only 1 vitality). If the effect of an action says a character "must exert" and that character is exhausted, then nothing happens. To exhaust a character means to exert that character as many times as you can.
+
+====<div id="resistance 2">Resistance</div>====
+Companion cards have resistance. This number represents a companion's ability to withstand the lure of The One Ring. Some characters have a ring around their resistance icon, meaning they can be chosen begin the game as your Ring-bearer.
+
+Companions preceding the ''Shadows'' expansion set (other than versions of Frodo or Sam) do not have their resistance printed on the card. These companions have a resistance of 6.
+
+Allies have a resistance of zero.
+
+=====<div id="burdens 2">Burdens</div>=====
+When your Ring-bearer loses will against the power of The One Ring, you place a burden token on him. Glass beads (preferably black) make good burden tokens, but anything you won't confuse with a wound will do.
+
+There are many cards that add or remove burdens. Burdens are only placed on your Ring-bearer. Each burden on your Ring-bearer reduces the resistance of every companion in your fellowship by 1.
+
+If your Ring-bearer's resistance is reduced to zero, he is corrupted, and you lose the game. Only your Ring-bearer can be corrupted. If the resistance of any of your other companions is reduced to zero, there is no immediate penalty, though your opponent may play Shadow cards to take advantage of this.
+
+====<div id="signet 2">Signet</div>====
+Some Free Peoples character cards have a signet, found in the lower left corner of the card. Cards with the same signet generally give bonuses to each other and work well in the same deck.
+
+Each signet is based around an important character in the story. The available signets are Aragorn, Frodo, Gandalf, and Théoden.
+
+====<div id="twilight pool 2">Twilight Pool</div>====
+The twilight pool is an area on the table where twilight tokens are placed. The tokens in the twilight pool represent how dangerous the world is for the fellowship. Glass beads (preferably black) make good twilight tokens, but any convenient tokens will do. Keep a large reserve of twilight tokens handy.
+
+=====<div id="twilight cost 2">Twilight Cost</div>=====
+In the upper left corner of each Free Peoples and Shadow card is that card's twilight cost. This is the number of twilight tokens that must be added to or removed from the twilight pool to play that card.
+
+When you play a Free Peoples card, you must add a number of twilight tokens (from the reserve) to the twilight pool equal to that card's twilight cost.
+
+When your opponent plays a Shadow card, he must remove a number of twilight tokens from the twilight pool equal to that card's twilight cost. A Shadow card cannot be played if its twilight cost cannot be met by the tokens available in the twilight pool.
+
+In game text, you will find phrases like "Add {{Twilight|1}}" which means, "Add 1 twilight token to the twilight pool."
+
+You must meet any requirements to play a card (or perform an action) before paying its costs.
+
+====<div id="phase actions 2">Phase Actions</div>====
+During each phase of a turn, one or more players are allowed to perform phase actions that use a word matching the name of that phase. These words are printed in boldface and followed by a colon.
+
+Each phase action lasts for the duration of the phase named in the boldface word (unless otherwise specified).
+''The effects of a phase action with the keyword '''Skirmish:''' last only for the skirmish phase in which it is used.''
+
+Each phase action must be completely performed before another phase action can be performed. Phase actions cannot be combined.
+
+An action labeled with the word "'''Response:'''" is not a phase action. Responses are explained later in this rulebook.
+
+====<div id="events 2">Events</div>====
+Most event cards have a phase action that defines when you may play that card from your hand. The game text on that event may be performed only once for each copy of that event played. You cannot play an event during a phase that does not match its phase action.
+
+Discard an event after you play it, and before the next action is taken. Even after being discarded, an event often has an ongoing or delayed effect 
+until the end of the phase, or until a specified phase or condition is met.
+
+====<div id="special abilities 2">Special Abilities</div>====
+Besides events, other types of cards may have a phase action as a part of their game text called a special ability, which may be used only while the card is in play. (The boldfaced word defines when you may do so.)
+
+Each special ability is optional; you don't have to use it if you don't want to. You may use each special ability as many times as you like (even repeatedly during the same phase), as long as you meet the requirements for it and pay its costs.
+
+====<div id="when each time and while">When, Each Time, and While</div>====
+A few special words or phrases you'll see in game text govern the timing of an action, just like the names of phases that are in phase actions. These 
+include when, each time, and while; each is described below with an example.
+* '''When''' is used if an effect can happen only once. ''When you play this possession, you may draw a card.'' his game text activates only once, when this card is played.
+* '''Each time''' is used if an effect can happen more than once. ''Each time you play a possession or artifact on your companion, draw a card.'' If you play one possession, this game text activates once; if you play a second possession, it activates again, and so on.
+* '''While''' is used if an effect is continuous. ''While Merry bears a weapon, he is strength +2.'' When you play a weapon on Merry, this game text is activated; if that weapon is discarded, then this game text "turns off."
+Each of these effects has a ''trigger'' describing what makes it happen. The trigger is always described first, and followed by a comma.
+
+===<div id="setting up the game 2">Setting Up the Game</div>===
+Players need a supply of wound tokens (preferably red) and twilight tokens (preferably black). Each player will also need a player marker (a differently-colored token) that shows where his fellowship is on the adventure path.
+=====<div id="who goes first">Who goes first?</div>=====
+In the Starter Rules, players decide randomly who goes first. Normally, however, players bid burdens to determine this.
+
+Players place secret bids for the right to determine who goes first in the game. The bidding is done with black tokens, which will become burdens on your Ring-bearer.
+
+Each player secretly places a number of burdens in his hand (you may bid zero). When all players are ready, simultaneously reveal the bids. The highest bid wins the right to choose where he goes in the turn order. Any choice is available.
+
+Next, the second highest bidder chooses from the remaining positions in the turn order, and so on. Keep track of each player's bid, as these tokens will become burdens on his Ring-bearer.
+
+If there are any ties, then the tied players resolve randomly who chooses first among them.
+
+''Tom, Chuck, Tim, and Mike are playing, and the initial bids are Tom 3, Chuck 4, Tim 3, and Mike 1. Chuck wins the right to choose, and he chooses to go first (placing 4 burdens on his Ring-bearer). Tom and Tim are tied, so they flip a coin, and Tom wins the tiebreak. He chooses second (placing 3 burdens on his Ring-bearer). Tim chooses to go fourth (3 burdens), leaving third for Mike (1 burden).''
+
+The first player sits down, and the others then sit in clockwise order around the table according to their choices.
+
+=====<div id="adventure deck 1">Adventure Deck</div>=====
+Take all 9 of your site cards and place them face down in a pile on the table. This is your adventure deck.
+
+No other player may look through your adventure deck during the game.
+
+You don't have to keep your adventure deck in any order. Just look through it to get a card when you need to.
+
+The first player chooses any site from his adventure deck and places it on the table to begin the adventure path. This becomes site 1. Each player places his player marker onto that site.
+
+All players use the same adventure path for their player markers. The cards that make up that path are taken from the adventure decks of the players.
+
+Place the adventure path off to the side, opposite from the twilight pool. That leaves room in the middle of the table for minions.
+
+=====<div id="starting fellowship 2">Starting Fellowship</div>=====
+In the Starter Rules, players select their starting fellowships based upon which deck they have. Normally, however, players customize their starting fellowships.
+
+Your fellowship begins with a character bearing The One Ring. This can be any character with the ringed resistance icon, or any version of Frodo. That character gains the keywords Ring-bearer and Ring-bound, if he does not already have them.
+
+Place your Ring-bearer face up on the table. Place The One Ring under your Ring-bearer (so the title is showing) and place on him the burdens that you bid.
+
+You may then play other companions (not allies, possessions, artifacts, or conditions) one at a time from your draw deck, as long as the total twilight cost of these companions is 4 or less. The twilight cost of your Ring-bearer is not included in this total.
+
+Don't place any tokens into the twilight pool for the cards in your starting fellowship. Site text is not active when the starting fellowships are played.
+
+Select and reveal starting fellowships in player order. (In tournament play, you may change your starting fellowship from game to game.)
+
+=====<div id="draw deck 2">Draw Deck</div>=====
+The rest of your cards form your draw deck. Shuffle your draw deck, give the opponent on your right the opportunity to cut it, and draw eight cards to form your starting hand.
+
+When you draw the last card from your draw deck, you don't lose the game. Continue with the cards you have in hand and in play.
+
+In the Starter Rules, if you have no cards in your draw deck, you are allowed to reshuffle your discard pile to make a new one once per game. Normally, however, you are not allowed to do this.
+
+=====<div id="game setup summary">Game Setup Summary</div>=====
+* Bid to determine who goes first.
+* Each player places his adventure deck on the table.
+* First player plays a site from his adventure deck.
+* Each player puts his player marker on that site.
+* Each player places his starting fellowship on the table, placing the burdens he bid on his Ring-bearer.
+* Each player shuffles his draw deck and draws 8 cards.
+
+===<div id="playing the game">Playing the Game</div>===
+Each player, going clockwise around the table, takes turns according to the following turn sequence.
+
+# [[Fellowship Phase]]
+# [[Shadow Phase]](s)
+# [[Maneuver Phase]]
+# [[Archery Phase]]
+# [[Assignment Phase]]
+# [[Skirmish Phase]](s)
+# [[Regroup Phase]]
+
+When one player finishes his turn, the next player in clockwise rotation (to his left) takes a turn and so on.
+
+Although the turn order rotates to the left (clockwise), note that many other procedures in the game actually rotate to the right (counter-clockwise).
+
+====<div id="start of turn 2">Start of Turn</div>====
+When your turn begins, remove all tokens from the twilight pool. (The pool begins the game empty, so this is not necessary on the first turn of the game.)
+
+Then you complete any "at the start of each turn" (or "at the start of each of your turns") actions. Each of these actions may be performed only once per turn.
+
+====<div id="fellowship phase 2">1. Fellowship Phase</div>====
+During your fellowship phase, you may perform fellowship actions, including playing most Free Peoples cards. Finally, move your fellowship forward along the adventure path.
+
+=====<div id="perform fellowship actions">Perform fellowship actions</div>=====
+If you are the Free Peoples player, you may perform fellowship actions during this phase, in any order.
+
+Two fellowship actions are always available:
+* Play a Free Peoples companion, ally, possession, artifact, or condition from your hand to the table.
+* "Discard to heal." Spot a unique companion or unique ally with at least one wound and discard a card from your hand with the same card title (it may have a different subtitle) to heal that character.
+
+You may find other fellowship actions on events in your hand, or as special abilities on cards you already have in play.
+
+Some card effects allow you to draw cards in the fellowship phase. You cannot draw (or take into hand) more than 4 cards during your fellowship phase. This is referred to as The Rule of 4.
+
+=====<div id="playing companions">Playing Companions</div>=====
+Play companion cards in a row, near the other members of your fellowship already in play. You cannot have more than nine total companions in play and in your dead pile at any time. (Each copy of a companion in play or in your dead pile counts as a separate companion, whether it is unique or non-unique.) This is referred to as The Rule of 9.
+
+=====<div id="playing allies">Playing Allies</div>=====
+Allies are characters that do not count as members of your fellowship. Play them to your support area (a row of cards behind your fellowship). There is no limit to the number of allies you may have in play.
+
+Ally cards have a home site number indicated just after the card's type, on the same line (such as Ally • Home 3 • Elf). These home site numbers all refer to adventure paths from the Fellowship block, Tower block, and King block. Allies have no home sites on adventure paths from the ''Shadows'' expansion set onward.
+
+Each ally in your support area is considered to be at his home site.
+
+=====<div id="playing possessions">Playing possessions</div>=====
+Play Free Peoples possessions under a character, with the left edge of the card visible for its card title and attribute bonuses (positive modifiers for the character's strength, vitality, and/or resistance, written with a plus sign like "+2"). Some possessions play to your support area.
+
+=====<div id="playing artifacts">Playing artifacts</div>=====
+Play Free Peoples artifacts just as you play Free Peoples possessions.
+
+=====<div id="class 2">Class</div>=====
+Each character may bear one possession or artifact of each class at one time. For example, a character may bear only one hand weapon, only one ranged weapon, only one armor, only one cloak, and only one staff.
+
+Some possessions and artifacts do not have a class. There is no limit to the number of cards without a class that a character may bear.
+
+=====<div id="playing conditions">Playing conditions</div>=====
+Play Free Peoples conditions either under a character (like a possession, if the card says, "Bearer must be...") or to your support area, as indicated by the condition card. Free Peoples conditions are always played during the fellowship phase, even if they provide a special ability that is performed during a different phase.
+
+=====<div id="moving your fellowship 2">Moving your fellowship</div>=====
+During each of your fellowship phases, when you are finished performing fellowship actions, your fellowship must move forward to the next site on the adventure path. 
+
+Place your player marker on the next site on the adventure path. If there is no site there yet (as is the case for the first player in the first turn), then a new site must be played from one of the Shadow players' adventure decks, as described below under "playing sites."
+
+When you move your player marker to the next site, first perform any actions triggered by leaving the old site. Then perform actions that say, "When the fellowship moves..." Then, perform actions that occur when moving to the new site. Finally, add tokens to the twilight pool, as described below under "adding twilight tokens for movement."
+
+Note that when you are playing using the Fellowship block, Tower block, or King block formats, the playing of sites and adding of twilight tokens works differently than what is explained below. Refer to "Formats," later in Section One under "Building Your Deck," for an explanation of these differences.
+
+=====<div id="playing sites">Playing sites</div>=====
+If your fellowship moves to a site that has not been played yet, one of the Shadow players must place a new site on the adventure path. To determine which player, look at the site you are moving from. Each site has an arrow at the bottom center of the card. This indicates who is to play the new site, with >> meaning the Shadow player to your right and << meaning the Shadow player to your left. (In a two-player game, there is only one Shadow player at a time, so that player always plays the new site.)
+
+That player looks through his adventure deck and chooses any site to play as the next site. It takes on the next consecutive number on the adventure path as its '''site number'''. It also takes on a '''region number''': sites 1-3 are in region 1, sites 4-6 are in region 2, and sites 7-9 are in region 3.
+
+''The first time the first player moves during the game, a Shadow player looks through his adventure deck and chooses the next site to place on the adventure path. It becomes site 2. The next time a site is added after that, it will be site 3. Both of those sites are in region 1.''
+
+You may play a copy of a site on the adventure path even if an opponent's copy was already played as an earlier site. The copies are treated as different sites, with each given a different site number.
+
+=====<div id="adding twilight tokens for movement">Adding twilight tokens for movement</div>=====
+Each time your fellowship moves to a new site, you must add twilight tokens to the twilight pool for each of the following:
+* Add the number of twilight tokens indicated by the Shadow number of the site you're moving to.
+* Add 3 twilight tokens if you are in region 2, or 6 twilight tokens if you are in region 3. (You may find it easier to remember this: add 3 if you've passed the sanctuary at site 3, or add 6 if you've passed the sanctuary at site 6).
+* Add 1 twilight token for each companion in your fellowship.
+
+''You move a fellowship of four companions to a site 5 that has a Shadow number of 2. You add 2 twilight tokens for the Shadow number, 3 tokens for the region (region 2), and 4 tokens for your companions, for a total of 9 twilight tokens added to the twilight pool.''
+
+=====<div id="movement summary">Movement Summary</div>=====
+* A Shadow player places the next site card, if needed.
+* Perform "When you move from..." actions.
+* Perform "When the fellowship moves..." actions.
+* Move your player marker to the next site.
+* Perform "When you move to..." actions.
+* Add twilight tokens equal to the new site's Shadow number.
+* Add 3 twilight tokens if the new site is in region 2; or 6 if it is in region 3.
+* Add 1 twilight token for each companion.
+
+====<div id="shadow phase(s)">2. Shadow Phase(s)</div>====
+Each other player in the game, starting with the player immediately to your right, has one Shadow phase. 
+
+During each player's Shadow phase, that player may perform Shadow actions in any order, including playing most Shadow cards.
+
+=====<div id="perform shadow actions">Perform Shadow actions</div>=====
+One Shadow action is always available:
+* Play a Shadow minion, possession, artifact, or condition from your hand to the table.
+
+A Shadow player may find other Shadow actions on events in his hand, or as special abilities on cards he already has in play.
+
+When one Shadow player has completed all of the Shadow actions he wishes to perform, the next Shadow player to his right (if any) then performs a Shadow phase.
+
+All Shadow players pay for cards by using the same twilight pool. The second Shadow player uses twilight tokens left over from the first Shadow player, and so on.
+
+You may use (and exert) another player's character to pay a cost for your Shadow card or special ability.
+
+=====<div id="playing shadow cards">Playing Shadow cards</div>=====
+A minion is played to the center of the table, across from the active fellowship. Artifacts, possessions, and conditions state in their game text where they play.
+
+Each minion is normally played to a certain range of sites beginning with the minion's site number. If the minion is played to (or is currently at) a site that has a lower site number, that minion is roaming. The player must pay a roaming penalty by removing an additional two twilight tokens when playing that minion.
+
+A Shadow player cannot play a Shadow artifact, condition, or possession on another Shadow player's minion, or to another player's support area. However, Shadow cards may give bonuses or other game effects to other players' Shadow cards, and Shadow players may play events for other players' Shadow cards as appropriate.
+
+When all Shadow players have each completed a Shadow phase, proceed to the maneuver phase. If there are no minions in play at the end of the final Shadow phase, then skip directly to the regroup phase.
+
+====<div id="maneuver phase 2">3. Maneuver Phase</div>====
+=====<div id="perform maneuver actions">Perform Maneuver actions</div>=====
+During this phase, players may perform maneuver actions (special abilities on cards in play with "'''Maneuver:'''" and events with that keyword) using the action procedure.
+
+======Action Procedure======
+As the Free Peoples player, you get the first opportunity to perform an action, and then the player on your right gets an opportunity, and so on counter-clockwise around the table.
+
+If a player does not wish to perform an action, he may simply pass. Passing does not prevent a player from performing an action later in the same phase.
+
+When all players consecutively pass, proceed to the archery phase. If there are no minions left after the maneuver phase, then skip directly to the regroup phase.
+
+====<div id=" archery phase 2">4. Archery Phase</div>====
+=====<div id="perform archery actions">Perform archery actions</div>=====
+During this phase, players may perform archery actions (special abilities on cards in play with "'''Archery:'''" and events with that keyword) using the action procedure. When all players consecutively pass, conduct archery fire.
+
+=====<div id="archery fire">Archery fire</div>=====
+All Shadow players count the number of all their minions with the keyword '''archer''' to determine the "minion archery total." No matter how many Shadow players there are, there is only one minion archery total.
+
+As the Free Peoples player, you also count the number of your Free Peoples archer companions to determine the "fellowship archery total."
+
+The Free Peoples player then assigns a number of wounds equal to the minion archery total to his companions (and participating allies), in any way he wishes.
+
+He then chooses one Shadow player who must assign a number of wounds equal to the fellowship archery total to his minions, in any way he wishes.
+
+There is always a "default" archery total of zero for each side. A card may add to your archery total even though you have no archers in play at that time.
+
+When the fellowship is at an ally's home site (or a card has allowed them to participate in archery fire), you may count archer allies for the fellowship archery total, and assign archery wounds to them.
+
+When all archery wounds have been assigned, proceed to the assignment phase. If there are no minions left after the archery phase, then skip directly to the regroup phase.
+
+=====<div id="archery phase summary">Archery Phase Summary</div>=====
+* Perform archery actions
+* Determine archery totals for each side.
+* Free Peoples player assigns archery wounds to his companions (and participating allies).
+* Free Peoples player chooses one Shadow player.
+* That Shadow player assigns archery wounds to his minions.
+
+====<div id="assignment phase 2">5. Assignment Phase</div>====
+=====<div id="perform assignment actions">Perform assignment actions</div>=====
+During the assignment phase, players may perform assignment actions (special abilities on cards in play with "'''Assignment:'''" and events with that keyword) using the action procedure.
+
+Many assignment actions assign a minion to a companion. You cannot do this unless both of them are unassigned.
+
+When all players consecutively pass, proceed to assign defenders. 
+
+=====<div id="assign defenders">Assign defenders</div>=====
+During your assignment phase, you may assign companions to defend against attacking minions.
+
+A player cannot assign more than one companion to the same minion.
+
+Inform the Shadow players when you are done making assignments.
+
+All assignments of characters are on a one-to-one basis, with the following two exceptions:
+* If your assigned companion has the keyword {{SL|defender +1}}, you may assign that character at this time to one additional unassigned minion. Defender +2 allows that companion to defend against two additional unassigned minions, and so on. A character with defender +2 (or greater) satisfies any requirement for defender +1.
+* When you have informed the Shadow players that you are done making assignments, they may assign any leftover unassigned minions to any companions (even if those companions are already assigned). The first Shadow player on your right may assign any of his unassigned minions, and so on, counter-clockwise around the table.
+
+When the fellowship is at an ally's home site (or if a card effect has allowed an ally to participate in skirmishes), that ally may be assigned to a skirmish in the same way that companions are assigned to skirmishes.
+
+When the assignment phase is complete, each companion being attacked will lead to a separate skirmish phase.
+
+=====<div id="assignment phase summary">Assignment Phase Summary</div>=====
+* Perform assignment actions
+* Free Peoples player may assign defending companions to minions.
+* Shadow players may assign leftover unassigned minions to any companions.
+
+====<div id="skirmish phase(s)">6. Skirmish Phase(s)</div>====
+When the assignment phase is complete, each defending character will fight in a separate skirmish phase. In an order decided by the Free Peoples player, skirmishes are resolved one at a time by conducting a skirmish phase for each.
+
+Once a skirmish phase has finished, the Free Peoples player must select another defending companion (one who is still assigned to a minion), and perform another skirmish phase.
+
+=====<div id="perform skirmish actions">Perform skirmish actions</div>=====
+During each skirmish phase, players may perform skirmish actions (special abilities on cards in play with "'''Skirmish:'''" and events with that keyword) using the action procedure. Each skirmish action lasts only for a single skirmish. When all players consecutively pass, proceed to resolve that skirmish.
+
+=====<div id="resolve that skirmish">Resolve that skirmish</div>=====
+If the total strength of one side is more than the strength of the other side (but less than double), the side with the most strength wins that skirmish. (If there is a tie, the Shadow side wins.) Place one wound on each character on the losing side.
+
+When the winning side has one or more characters with the keyword damage +1, then each losing character takes one additional wound for each {{SL|damage +1}}. (Damage +2 adds two wounds, and so on.) This is called a damage bonus, which may be added to or removed by various effects.
+
+If the total strength of one side is at least double the total strength of the other side, all the characters on the losing side are {{SL|overwhelmed}} and killed (regardless of how many wounds or how much vitality each has). When a character is overwhelmed, that character does not take any more wounds — he simply dies.
+
+A skirmish phase ends after all actions triggered by winning or losing that skirmish have resolved. A surviving minion or companion may skirmish again this turn if the fellowship makes another move (or if the minion has the keyword {{SL|fierce}}).
+
+=====<div id="skirmish phase summary">Skirmish Phase Summary</div>=====
+* Free Peoples player chooses a skirmish.
+* Players perform skirmish actions.
+* Resolve that skirmish and assign wounds.
+* If any skirmishes are unresolved, repeat this procedure.
+
+====<div id="fierce">Fierce</div>====
+After all normal skirmishes are resolved, surviving minions with the keyword {{SL|fierce}} must be defended against a second time.
+
+Players perform another assignment phase and then complete a separate skirmish phase for each fierce skirmish.
+
+=====<div id="assignment phase (fierce)">Assignment Phase (Fierce)</div>=====
+Players may again perform assignment actions (special abilities on cards in play with "'''Assignment:'''" and events with that keyword) using the action procedure.
+
+The Free Peoples player then assigns defenders just as during the regular assignment phase, and then Shadow players assign any fierce minions that remain unassigned.
+
+=====<div id="skirmish phase(s) (fierce)">Skirmish Phase(s) (Fierce)</div>=====
+Then each defending companion fights in a separate skirmish phase, just as during the regular skirmish phases, in an order decided by the Free Peoples player.
+
+When all skirmishes (both normal and fierce) have been resolved, proceed to the regroup phase.
+
+====<div id="regroup phase 2">7. Regroup Phase</div>====
+During the regroup phase, players may perform regroup actions (special abilities on cards in play with "'''Regroup:'''" and events with that keyword) using the action procedure. When all players consecutively pass, proceed to reconcile the Shadow players' hands.
+
+=====<div id="shadow players reconcile">Shadow players reconcile</div>=====
+Each Shadow player must reconcile his hand to eight cards, as follows:
+* He may first discard one card from his hand.
+* If he then has less than eight cards in his hand, he must draw cards until he has eight.
+* Otherwise (when he has more than eight cards in his hand), he must discard from his hand until he has only eight.
+
+=====<div id="free peoples player chooses">Free Peoples player chooses</div>=====
+At the end of the regroup phase, if you are the Free Peoples player, you must select one of the following two choices:
+* Move the fellowship to the next site (allowing the proper Shadow player to place a new site if needed), add tokens to the twilight pool (for the Shadow number of the new site, the region of that site, and the number of companions in the fellowship), and return to the Shadow phase(s).
+* Or, reconcile your hand (just as the Shadow players did above). Then the Shadow players discard all minions in play (and cards borne by them), and your turn ends.
+
+=====<div id="move limit 2">Move limit</div>=====
+During each of your turns, your fellowship must move once, and may move a number of times up to your move limit.
+
+In a two- or three-player game, your move limit is two. In a game with four or more players, your move limit is equal to the number of your opponents when the game begins. During your regroup phase, you may decide to move your fellowship again, subject to this move limit.
+
+=====<div id="regroup phase summary">Regroup Phase Summary</div>=====
+* Players perform regroup actions.
+* Shadow players reconcile.
+* The Free Peoples player chooses to move again if his move limit allows (returning to the Shadow phase), or to reconcile and end his turn.
+
+====<div id="winning the game 2">Winning the Game</div>====
+A player wins the game when his fellowship is at site 9 and his Ring-bearer survives all skirmish phases. The game ends, and there is no regroup phase on the last turn.
+
+A player may also win the game if he becomes the last player left in the game (see below).
+
+=====<div id="losing the game 2">Losing the Game</div>=====
+A player loses the game if his Ring-bearer is killed, unless he uses game text allowing another character to carry on as Ring-bearer.
+
+A player also loses the game if his Ring-bearer becomes corrupted by having burdens reduce his resistance to zero. There are cards that can corrupt the Ring-bearer, regardless of how many burdens he might have.
+
+If a player loses a game and there are at least two other players remaining, remove his player marker and all of his cards from play (and discard any opponent's cards that were on them).
+
+Remove his sites on the adventure path in numerical order, then each opponent, starting to the player's right and proceeding counter-clockwise, chooses a site from his adventure deck to replace each one removed.
+
+The other players complete the losing player's turn.
+
+===<div id="building your deck">Building Your Deck</div>===
+Each player brings to the game at least 71 cards:
+* a Ring-bearer, bearing The One Ring (2 cards),
+* a draw deck of at least 60 cards, and
+* a 9-card adventure deck.
+
+=====<div id="formats">Formats</div>=====
+Each game has one of the following formats:
+* Fellowship block – only cards from sets 1, 2, and 3,
+* Tower block – only cards from sets 4, 5, and 6, 
+* King block – only cards from sets 7, 8, and 10,
+* War of the Ring block – only cards from sets 11, 12, and 13,
+* Open – all cards allowed, including set 9 (Reflections), using only sites from set 11 onward (Shadows).
+* Standard – a tournament format similar to Open, but including the X-List (see the Current Rulings document, available for download).
+
+You and your opponents must each have a deck built for the same format.
+
+When you play a game using the Fellowship block, Tower block, or King block format, you cannot choose any site from your adventure deck when it is time to play a new site on the adventure path. Instead, the site which has the next consecutive site number must be played.
+
+When you play a game using the Fellowship block, Tower block, or King block format, you do not add pool for the fellowship's region number when you are moving your fellowship.
+
+=====<div id="ring-bearer and the one ring">Ring-bearer and The One Ring</div>=====
+You may choose any character with the ringed resistance icon, or any version of Frodo, to be your Ring-bearer. You may choose any version of The One Ring. These two cards are not part of your draw deck (they do not count against your total of Free Peoples cards).
+
+=====<div id="draw deck 3">Draw Deck</div>=====
+Your draw deck must have at least 60 cards and must have an equal number of Shadow cards and Free Peoples cards, shuffled together. You cannot have any copies of The One Ring or sites in your draw deck.
+
+You may have up to four copies of each card title (ignoring subtitles) in your draw deck.
+
+''Exception'': Since one copy of your Ring-bearer is always part of your starting fellowship, you may have only three copies of that character in your 
+draw deck.
+
+=====<div id="adventure deck 3">Adventure Deck</div>=====
+Your adventure deck must have exactly nine site cards in it. Each site must be different. The contents of your adventure deck depends on which format you are playing.
+
+In the Open format and War of the Ring block, your adventure deck may include no more than three sites that have the same given Shadow number.
+
+In the Fellowship block, Tower block, or King block, sites are numbered, and you must include one for each of the nine site numbers.
+
+====<div id="other important rules">Other Important Rules</div>====
+Refer to the entries in Section Two for active, block symbol, discard, discard pile, draw deck, keyword, loaded keyword, response, Ring-bearer, site, spot, and unique. These entries contain the most commonly used rules that have not already been described in Section One.
+
+
+
+----
+
+
+
+==<div id="section two">Section Two: Glossary of Terms</div>==
+This section of the Comprehensive Rules provides complete rules to the game, organized alphabetically by topic. All material in Section One is duplicated in this section under its appropriate heading, accompanied by rulings that cover less frequent gameplay situations and by more specific examples.
+
+Cross-references from one topic to others that provide additional rules on the same topic are listed in '''bold type'''. '''[In addition, each of these bold references are links to their corresponding section within this wiki page.]'''
+
+For entries on individual cards, refer to {{SL|Section Three}}.
+----
+===<div id="action">action</div>===
+Nearly everything that occurs during the game is some kind of action. Players perform actions to play cards, use special abilities, move their fellowships, reconcile, and so on.
+
+Every action is either optional or required. An optional action is defined as: an action that uses the word "may," an event, or a special ability. All other actions are required actions.
+
+If two or more required actions are occurring at the same time (for example, more than one "start of turn" action), the Free Peoples player decides in which order they occur.
+
+All required actions responding to a particular trigger are performed before any optional actions. After all such required actions have resolved, players may perform optional actions responding to that same trigger using the {{SL|action procedure}}. (See {{SL|response}}.)
+
+See also {{SL|cost}}, {{SL|effect}}, {{SL|loops}}.
+
+----
+===<div id="action procedure">action procedure</div>===
+As the Free Peoples player, you get the first opportunity to perform an action, and then the player on your right gets an opportunity, and so on counter-clockwise around the table.
+
+If a player does not wish to perform an action, he may simply pass. Passing does not prevent a player from performing an action later in the same phase.
+
+----
+===<div id="active">active</div>===
+During your turn, only these cards in play are active:
+* sites on the adventure path,
+* sites in any player's support area,
+* your Free Peoples cards,
+* your copy of The One Ring, and
+* your opponents' Shadow cards.
+
+All other cards in play are inactive. Inactive cards are not affected by the game and do not affect the game. Any tokens on them are ignored (such as burdens, culture tokens, threats, and wounds). 
+
+(See also {{SL|stack}}.)
+
+ ''Your companions and your opponent's minions are active. Your opponents' companions are not.''
+
+''Exception'':Any cards that are borne by inactive cards are also inactive.
+
+ ''An opponent's Shadow condition on another opponent's companion is not active because that companion is not.''
+
+{{Ruling|text=
+Sites are always active. '''A site's keywords are thus always available to be spotted while on the adventure path.'''  A site's '''non-keyword''' game text '''does not apply''' unless the fellowship is '''at that site''', although some cards may copy and use that game text. 
+|source= [[Legacy Ruling 3]]
+}}
+
+ ''If the game text of a site has a Shadow special ability, you may use that special ability only when the active fellowship is at that site and you are a Shadow player.''
+
+{{Ruling|text=
+''Exception'': Site text '''does not apply''' when the starting fellowships are played.
+|source= [[Legacy Ruling 3]]
+}}
+
+Occasionally in a multiplayer game, two copies of the same unique Shadow condition may be in play at the same time. Only the first copy of a unique Shadow condition (or the first 4 copies of a non-unique Shadow condition) closest to the right of the Free Peoples player are in effect at any time. All other copies are also active, but their game text is ignored.
+
+----
+
+===<div id="adventure deck">adventure deck</div>===
+Your adventure deck is kept separately from your draw deck during the game.
+
+No other player may look through your adventure deck during the game.
+
+You don't have to keep your adventure deck in any order. Just look through it to get a card when you need to.
+
+Sites in your adventure deck do not have a site number until they are played on the adventure path. ''Exception'': See {{SL|format}}.
+See also {{SL|building your deck}}, {{SL|moving your fellowship}} {{SL|setting up the game}}, {{SL|site}}. 
+
+----
+===<div id="adventure path">adventure path</div>===
+All players use the same adventure path for their player markers. The cards that make up that path are taken from the adventure decks of the players.
+
+See also {{SL|moving your fellowship}}, {{SL|setting up the game}}, {{SL|site}}.
+
+----
+===<div id="ahead">ahead</div>===
+A player is ahead on the adventure path when his or her site marker is at a higher site number than all other players’ site markers. 
+
+----
+===<div id="aid">aid</div>===
+This keyword has the form of "Aid – X," where "X" is the cost to use the aid keyword. You use the aid keyword as a maneuver action. At the start of the maneuver phase, you may pay the aid cost to transfer that follower to your character. Place it beneath the card, just like a possession or condition borne by that character. The follower is borne by the character for the rest of the turn, no matter how often the fellowship moves. You don't have to pay the aid cost again for a follower borne by a character in a subsequent maneuver phase.
+
+See also {{SL|follower}}.
+
+----
+===<div id="ally">ally</div>===
+An ally is a {{SL|character}} that helps your companions from afar but does not move with them.
+
+Allies do not count as members of your fellowship. Play them to your support area. There is no limit to the number of allies you may have in play.
+
+Ally cards have a home site number indicated just after the card's type, on the same line (such as Ally • Home 3 • Elf). These home site numbers all refer to adventure paths from the Fellowship block, Tower block, and King block. Allies have no home sites on adventure paths from the ''Shadows'' expansion set onward. (See {{SL|format}}.)
+
+Block symbol is a factor in determining an ally's home site.
+
+ ''An ally with a home site of 2{{Block|Tower}} has a home site only on the Tower block adventure path.''
+
+You may play an ally during any of your fellowship phases. You do not have to wait until your fellowship is at the ally's home site.
+
+Each ally in your support area is considered to be at his home site. When your fellowship is at your ally's home site, that ally is considered to be at the same site as the fellowship.
+
+Allies normally do not participate in archery fire and skirmishes. Special abilities on allies (such as archery actions or skirmish actions) may be used as normal.
+
+During the archery phase, if the fellowship is at an ally's home site (or a card has allowed them to participate in archery fire), you may count archer allies for the fellowship archery total, and assign archery wounds to them.
+
+During the assignment phase, if the fellowship is at an ally's home site (or if a card effect has allowed an ally to participate in skirmishes), that 
+ally may be assigned to a skirmish in the same way that companions are assigned to skirmishes.
+
+ ''This doesn't mean that such an ally must take an archery wound or be assigned by the Free Peoples player to defend a skirmish, but that character is eligible to do so if the Free Peoples player so chooses.''
+
+The Shadow player may assign an unassigned minion to an ally when the fellowship is at that ally's home site.
+
+An ally that was able to be assigned to a normal skirmish is also able to be assigned to a fierce skirmish.
+
+See also {{SL|resistance}}, {{SL|Ring-bound}}, {{SL|sanctuary}} {{SL|unbound}}.'''resistance''', '''Ring-bound''', '''sanctuary''', '''unbound'''.
+
+----
+===<div id="ambush">ambush</div>===
+When the Free Peoples player assigns one of his characters to skirmish a minion with the keyword "ambush {{Twilight|X}}," the Shadow player who owns that minion may add {{Twilight|x}}. (See {{SL|assignment phase}}.)
+
+ ''If your minion with ambush {{Twilight|2}} is assigned by the Free Peoples player, you may add two tokens to the twilight pool. The Free Peoples player may decide not to assign any characters to your minion with ambush, allowing you to assign it later in the assignment phase.''
+
+When a minion with the keyword ambush {{Twilight|X}} is given the keyword ambush {{Twilight|X}} by another card or special ability, each of those instances of ambush is resolved separately. When that minion is assigned to a skirmish by the Free Peoples player, the Shadow player has the option to add pool for each instance in the minion's text.
+
+ ''Desert Scout ("Ambush {{Twilight|1}}.") is equipped with Raider Bow ("Bearer is ... ambush {{Twilight|5}}."). When it is assigned to a skirmish by the Free Peoples player, the Shadow player may add {{Twilight|1}}, {{Twilight|5}}, neither, or both (as separate actions).''
+ 
+----
+===<div id="archery phase">archery phase</div>===
+During this phase, players may perform archery actions (special abilities on cards in play with "Archery:" and events with that keyword) using the {{SL|action procedure}}. When all players consecutively pass, conduct archery fire.
+
+All Shadow players count the number of all their minions with the keyword archer to determine the "minion archery total." No matter how many Shadow players there are, there is only one minion archery total.
+
+As the Free Peoples player, you also count the number of your Free Peoples archer companions to determine the "fellowship archery total." (See 
+{{SL|ally}}.)
+
+The Free Peoples player then assigns a number of wounds equal to the minion archery total to his companions (and participating allies), in any way 
+he wishes.
+
+He then chooses one Shadow player who must assign a number of wounds equal to the fellowship archery total to his minions, in any way he wishes.
+
+Since these tokens are assigned as wounds and not from exertion, any player may assign enough wounds to kill his own minion or companion. The wounds are assigned one at a time, so a character cannot have more wounds assigned than its vitality. Ignore any leftover wounds that cannot be assigned.
+
+There is always a "default" archery total of zero for each side. A card may add to your archery total even though you have no archers in play at that time.
+
+When all archery wounds have been assigned, proceed to the assignment phase. If there are no minions left after the archery phase, then skip directly to the regroup phase.
+See also {{SL|ally}}.
+
+----
+===<div id="artifact">artifact</div>===
+An artifact is a unique weapon, suit of armor, or other kind of special object used by a character. Most artifacts tell you who their {{SL|bearer}} can be. Other artifacts play to your support area.
+
+Though artifacts are played and used much like possessions, they are a different card type. Artifacts are not affected by cards that affect possessions.
+
+See also {{SL|transfer}}.
+
+----
+===<div id="assignment phase">assignment phase</div>===
+During the assignment phase, players may perform assignment actions (special abilities on cards in play with "Assignment:" and events with that keyword) using the {{SL|action procedure}}. Many assignment actions assign a minion to a companion. You cannot do this unless both of them are unassigned.
+
+When all players consecutively pass, proceed to assign defenders.
+
+During your assignment phase, you may assign companions to defend against attacking minions. A player cannot assign more than one companion to the same minion.
+
+ ''Frodo and Aragorn face a single Uruk-hai. The Free Peoples player assigns Aragorn to the Uruk-hai, protecting Frodo from harm. He cannot assign both companions to the Uruk-hai.''
+
+Inform the Shadow players when you are done making assignments. All assignments of characters are on a one-to-one basis, with the following two exceptions:
+* Companions who have the {{SL|defender +X}} keyword.
+* When you have informed the Shadow players that you are done making assignments, they may assign any leftover unassigned minions to any companions (even if those companions are already assigned). The first Shadow player on your right may assign any of his unassigned minions, and so on, counter-clockwise around the table.
+
+ ''Frodo and Aragorn face three Uruk-hai. The Free Peoples player assigns Aragorn to defend against one, and Frodo to another. This leaves one unassigned Uruk-hai, so the Shadow player assigns it, choosing to assign it to Frodo.''
+
+The creation of leftover minions happens only when the Free Peoples player is done making assignments. If an assigned minion subsequently becomes unassigned as a result of a card's game text (e.g. a triggered ability), it is not a leftover minion and is not eligible to be assigned by the Shadow player.
+
+A card which cannot participate in skirmishes:
+* cannot be assigned to a skirmish,
+* cannot be affected by assignment actions (except an assignment action that would allow such a card to skirmish), and
+* cannot be assigned leftover minions by a Shadow player.
+
+Once all assignments have been made, they take effect simultaneously. (See {{SL|action}}.)
+
+When the assignment phase is complete, each companion being attacked will lead to a separate skirmish phase.
+See also {{SL|ally}}, {{SL|ambush}}, {{SL|fierce}}, {{SL|unhasty}}.
+
+----
+===<div id="attribute bonus">attribute bonus</div>===
+An attribute bonus is a positive {{SL|modifier}} for a character's strength, vitality, and/or resistance, written with a plus sign (like "+2").
+
+----
+===<div id="bearer">bearer</div>===
+Most possessions and artifacts, and some conditions, tell you who or what their bearer can be, which is the sort of card you can play them on.
+
+Each character may bear one possession or artifact of each class at one time. (See {{SL|mounted}}.)
+
+ ''A character may bear only one hand weapon, only one ranged weapon, only one armor, only one cloak, and only one staff.''
+
+Some possessions and artifacts do not have a class. There is no limit to the number of cards without a class that a character may bear.
+
+When you play a card on a bearer, put it beneath the bearer with the left edge of the card visible, for its card title and any attribute bonuses it has.
+
+You cannot voluntarily discard a card borne by your character.
+
+See also {{SL|killed}}, {{SL|leaving play}}, {{SL|Man}}, {{SL|Shadow cards}}, {{SL|transfer}}.
+
+----
+===<div id="bid">bid</div>===
+Players place secret bids for the right to determine who goes first in the game. (See {{SL|setting up the game}}.) The bidding is done with black tokens, which will become burdens on your Ring-bearer.
+
+Each player secretly places a number of burdens in his hand (you may bid zero). When all players are ready, simultaneously reveal the bids. The highest bid wins the right to choose where he goes in the turn order. Any choice is available. Next, the second highest bidder chooses from the remaining positions in the turn order, and so on. Keep track of each player's bid, as these tokens will become burdens on his Ring-bearer.
+
+If there are any ties, then the tied players resolve randomly who chooses first among them.
+
+ ''Tom, Chuck, Tim, and Mike are playing, and the initial bids are Tom 3, Chuck 4, Tim 3, and Mike 1. Chuck wins the right to choose, and he chooses to go first (placing 4 burdens on his Ring-bearer). Tom and Tim are tied, so they flip a coin, and Tom wins the tiebreak. He chooses second (placing 3 burdens on his Ring-bearer). Tim chooses to go fourth (3 burdens), leaving third for Mike (1 burden).''
+
+The first player sits down, and the others then sit in clockwise order around the table according to their choices.
+
+If you bid a number of burdens equal to or higher than your Ring-bearer's resistance, your Ring-bearer becomes corrupted before the game starts and you lose the game.
+
+----
+===<div id="block symbol">block symbol</div>===
+The sites provided in sets from the ''[[Shadows]]'' expansion onward have a dark compass in the upper left corner. They have no site number.
+
+The sites provided in Fellowship block sets have no block symbol. The sites provided in Tower block sets have site numbers identified with the Tower symbol ({{Block|tower}}). The sites provided in King block sets have site numbers identified with the King symbol ({{Block|king}}).
+
+Sites with different block symbols are alternatives to each other, not an extension of one another. When a site's number is specifically mentioned in game text, that number uses a block symbol.
+
+ ''{{Card|Hobbit Stealth}} ("Skirmish: At sites 1 to 5, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +2.") can cancel a skirmish only at a Fellowship block site. However, this card adds its strength bonus at any other site.''
+
+When an effect says "site X or higher," it applies only to sites from the Fellowship block.
+
+When game text refers to "any site X," it applies to any adventure path, regardless of block symbol.
+
+ ''A card which says "any site 5" works at site 5 and at site 5{{Block|Tower}}.''
+See also {{SL|ally}}, {{SL|format}}, {{SL|roaming}}.
+
+----
+===<div id="building your deck">building your deck</div>===
+Each player brings to the game at least 71 cards:
+* a Ring-bearer, bearing The One Ring (2 cards),
+* a draw deck of at least 60 cards, and
+* a 9-card adventure deck.
+
+You and your opponents must each have a deck built for the same {{SL|format}}.
+
+You may choose any character with the ringed resistance icon, or any version of Frodo, to be your Ring-bearer. You may choose any version of The One Ring. These two cards are not part of your draw deck (they do not count against your total of Free Peoples cards).
+
+Your draw deck must have at least 60 cards and must have an equal number of Shadow cards and Free Peoples cards, shuffled together. You cannot have any copies of The One Ring or sites in your draw deck.
+
+You may have up to four copies of each card title (ignoring subtitles) in your draw deck.
+
+ ''You may have four copies of {{Card|Aragorn, King in Exile}} in your draw deck, or you may have two copies of that card and two copies of {{Card|Aragorn, Ranger of the North}}. You cannot have four copies of each of those cards, since they have the same title (although they have different subtitles).''
+
+''Exception'': Since one copy of your Ring-bearer is always part of your starting fellowship, you may have only three copies of that character in your draw deck.
+
+Your adventure deck must have exactly nine site cards in it. Each site must be different. The contents of your adventure deck depends on which format you are playing.
+
+----
+===<div id="burden">burden</div>===
+When your Ring-bearer loses will against the power of The One Ring, you place a burden token on him. Glass beads (preferably black) make good burden tokens, but anything you won't confuse with a wound will do.
+
+There are many cards that add or remove burdens. Burdens are only placed on your Ring-bearer.
+
+See also {{SL|active}}, {{SL|corrupted}}, {{SL|resistance}}.
+
+----
+===<div id="cancel">cancel</div>===
+When an action (such as playing an event or using a special ability) is canceled or prevented, its effects are ignored but its costs and requirements are still paid. If that action is playing an event, that event card is discarded. 
+
+See {{SL|cost}}, {{SL|effect}}.
+
+----
+===<div id="card type">card type</div>===
+There are ten different card types in the game: The One Ring, site, companion, ally, minion, follower, possession, artifact, event, and condition.
+
+----
+===<div id="character">character</div>===
+Companion, ally, and minion cards are also collectively referred to as character cards. 
+
+Followers are not characters.
+
+----
+===<div id="class">class</div>===
+See {{SL|bearer}}.
+
+----
+===<div id="collector's info">collector's info</div>===
+In the lower right corner of every card, you'll see a code like "4 R 12."
+
+The first number is the set number.
+
+The letter is the rarity code, with R for rare, U for uncommon, C for common, P for premium, and S for starter.
+
+Last is the number for that card in the set.
+
+The first time a card is printed, it gets a "{{Twilight|1}}" first printing mark at the end of its copyright line. This mark is removed on any subsequent printings. There is no way to tell a second printing from a third, for example.
+
+When a reprint card has its wording changed, that card gets an "A" revision mark at the end of its copyright line. When an "A" card is reprinted with a change, that card gets a "B." Cards have their wording changed for errata, clarifications, spelling errors, and game text convention changes.
+
+----
+===<div id="companion">companion</div>===
+A companion is a Free Peoples {{SL|character}} in your fellowship.
+
+Play companion cards in a row, near the other members of your fellowship already in play.
+
+See also {{SL|resistance}}, {{SL|The Rule of 9}}.
+
+----
+===<div id="condition">condition</div>===
+A condition is a card representing a significant change in the world, which stays in play until discarded. Most conditions play to your support area. Other conditions tell you who their {{SL|bearer}}can be.
+
+A condition is always played during the fellowship phase (if it is a Free Peoples card) or the Shadow phase (if it is a Shadow card), even if it provides a special ability that is performed during a different phase.
+
+----
+===<div id="control">control</div>===
+Shadow players may use effects to take control of sites on the adventure path. When you take control of a site, place that site in your support area, lengthwise.
+
+A controlled site, once placed in a player's support area, is no longer a site on the adventure path.
+
+A Shadow player may only take control of a site on the adventure path if all player markers are on sites with higher site numbers.
+
+ ''When all player markers are at site 2 or higher, you may take control of site 1.''
+
+When a Shadow player takes control of a site, the site on the adventure path with the lowest site number must be selected.
+
+ ''An opponent controls site 1 and all player markers are at site 3 or higher, so you must take control of site 2.''
+
+{{Ruling|text=
+The '''non-keyword''' game text of a controlled site '''does not apply unless that game text mentions that site being controlled'''. The keywords of a controlled site '''continue to''' apply.
+|source=[[Legacy Ruling 3]]
+}}
+
+
+ ''A player may "control a battleground."''
+
+When your opponent controls a site from your adventure deck, it's still your site. Some cards can replace a controlled site. Move any cards stacked on the site being replaced to the new site, then return the old site to its owner's adventure deck.
+
+See also {{SL|active}}, {{SL|liberate}}, {{SL|losing the game}}.
+
+----
+
+===<div id="corrupted">corrupted</div>===
+If your Ring-bearer's {{SL|resistance}} is reduced to zero, he is corrupted. (See {{SL|losing the game}}.) Only your Ring-bearer can be corrupted.
+
+There are cards that can corrupt the Ring-bearer, regardless of how many burdens he might have.
+
+See also {{SL|bid}}.
+
+----
+===<div id="cost">cost</div>===
+A cost of an {{SL|action}} could be adding or removing twilight tokens, exerting a character, discarding a card, or any number of other possibilities. The 
+costs for an action are usually listed before the word "to" (so the action takes the form of "pay X to do Y," with X being the cost and Y the {{SL|effect}}).
+
+If a card or special ability has a cost, you must pay that cost or you cannot use that card or special ability. (See {{SL|exert}}, {{SL|Shadow phase}}(s).)
+
+You must meet any requirements to play a card (or perform an action) before paying its costs. (See {{SL|spot}}.)
+
+If a Free Peoples event requires you to spot twilight tokens, they must be there before you add tokens to pay for that card's cost.
+
+ ''{{Card|Madril, Faramir's Aide}} says, "Skirmish: If you have initiative, discard 2 cards from hand to wound a roaming minion Madril is skirmishing." You check that you have at least four cards in hand before you discard cards to pay for that ability's cost.''
+
+When you pay the cost for an action, you cannot use that payment for more than one action.
+
+ ''If you have two copies of {{Card|Weapons of Isengard}} in play ("Shadow: Play an {{C|Isengard}} archer to place an {{C|Isengard}} token on this card."), playing a single {{C|Isengard}} archer allows you to place a token on only one of those copies.''
+
+If an action is prevented, its effects are ignored but its costs and requirements are still paid.
+
+If a player is paying costs for a card and a {{SL|response}} action occurs which modifies those costs, that player must continue to pay as many costs as he can, even if it is no longer possible to pay them all. If all the costs cannot be paid, that card has no effect.
+
+ ''A Shadow player attempts to pay the cost for the special ability on {{Card|Grishnakh, Orc Captain}} (A 3 vitality minion which reads: "Shadow: Exert Grishnákh twice and spot another {{C|Sauron}} Orc to draw 3 cards..."). After exerting Grishnákh once, the Free Peoples player plays {{Card|Unheeded}} to wound Grishnákh ("If a minion exerts, exert an unbound Hobbit to wound that minion."). In this case, the Shadow player is no longer able to exert Grishnákh the second time. Therefore, the Shadow player is not able to draw 3 cards.''
+
+See also {{SL|discard pile}}, {{SL|draw deck}}, {{SL|twilight cost}}.
+
+----
+
+===<div id="culture">culture</div>===
+Most cards are part of a specific culture. A card's color, its background texture, and an icon in its upper right corner indicate its culture. Your deck may contain cards from several different cultures. Site cards and The One Ring are not part of any culture.
+
+The culture names and icons are:
+
+{{Culture_Table}} 
+
+You don't have to memorize these names, since cultures are always referred to with icons in game text.
+
+See also {{SL|spot}}.
+
+----
+===<div id="culture tokens">culture tokens</div>===
+Some conditions tell you to "place an {{C|Elven}} token on this card" (or "a {{C|Raider}} token," and so on). You can use any convenient markers for these tokens. They don't have to be any particular color. You can use the same tokens you're using for burdens or wounds, since these tokens are not placed on a character card.
+
+See also {{SL|active}}, {{SL|leaving play}}.
+
+----
+===<div id="damage bonus">damage bonus</div>===
+When the winning side in a {{SL|skirmish phase}} has one or more characters with the keyword damage +1, then each losing character takes one additional wound for each damage +1. (Damage +2 adds two wounds, and so on.) This is called a damage bonus, which may be added to or removed by various effects.
+
+ ''Aragorn wins a skirmish while facing two Orcs. If Aragorn has damage +1, then each Orc takes two wounds. But if both Orcs have damage +1 and they win the skirmish, then Aragorn takes three wounds instead.''
+
+When a character with a damage bonus is given an additional damage bonus by a card or special ability, the bonuses are added together.
+
+When an effect says that a character "loses all damage bonuses," that character cannot gain a damage bonus due to some other effect.
+
+----
+===<div id="damage +x">damage +X</div>===
+see {{SL|damage bonus}}
+
+----
+===<div id="dead pile">dead pile</div>===
+Killed Free Peoples characters are placed in your dead pile. The dead pile is separate from and next to your discard pile.
+
+When you have a {{SL|unique}} companion or ally in your dead pile, you cannot play another copy of that card, or any other card with the same title. You may play another copy of a non-unique card that is in your dead pile.
+
+If you have more than one copy of a unique companion in your dead pile, you can't play one of them from your dead pile.
+
+When game text instructs you to place a character in the dead pile, that character has been killed.
+
+See also {{SL|discard}}, {{SL|leaving play}}, {{SL|The Rule of 9}}, {{SL|threats}}.
+
+----
+===<div id="defender +x">defender +X</div>===
+During the {{SL|assignment phase}}, if your assigned companion has the keyword defender +1, you may assign that character to one additional unassigned minion. Defender +2 allows that companion to defend against two additional unassigned minions, and so on. A character with defender +2 (or greater) satisfies any requirement for defender +1.
+
+ ''Frodo and Aragorn face two Uruk-hai. The Free Peoples player could assign Aragorn to one and Frodo to the other. However, this version of Aragorn has defender +1, so he may be assigned to defend against both minions, leaving Frodo unharmed.''
+
+When a character with defender +X is given an additional defender +X by a card or special ability, the bonuses are added together.
+
+----
+===<div id="discard">discard</div>===
+The default meaning of the word "discard" is "discard from play." Discarding from other locations (such as from your hand or from the top of your draw deck) is always specified.
+
+Cards are discarded one at a time so all players can see which cards are being discarded.
+
+When you discard a companion or ally to use its game text or as a result of some other effect, place that card in your discard pile (not your dead pile).
+
+If a card is discarded when it comes into play, ignore any effects triggered when it comes into play. This includes effects from a minion's own game text (such as "When you play this minion...") and effects from other cards in play (such as "Each time you play...").
+
+ ''If {{Card|Watcher in the Water, Keeper of Westgate}} is in play ("While you can spot Watcher in the Water, discard all other minions...") and you play {{Card|Goblin Runner}} ("When you play this minion, you may add {{Twilight|2}}."), {{Twilight|2}} is not added.''
+
+See also {{SL|bearer}}, {{SL|discard to heal}}, {{SL|killed}}, {{SL|leaving play}}.
+
+----
+===<div id="discard pile">discard pile</div>===
+Discard piles are always face-up. The order of your discard pile is irrelevant.
+
+You may look through your own discard pile at any time, but you cannot look through an opponent's discard pile.
+
+Some cards allow you to play a card directly from your discard pile. You must still pay any costs and meet requirements necessary for playing that 
+card.
+
+See also {{SL|discard}}, {{SL|effect}}, {{SL|moving cards}}.
+
+----
+===<div id="discard to heal">discard to heal</div>===
+As a fellowship action during your fellowship phase, you may spot a unique companion or unique ally with at least one wound and discard a card from your hand with the same card title(it may have a different subtitle) to heal that character. (See {{SL|healing}}.)
+
+----
+===<div id="draw deck">draw deck</div>===
+When you draw the last card from your draw deck, you don't lose the game. Continue with the cards you have in hand and in play.
+
+Some cards allow you to play a card directly from your draw deck. You must still pay any costs and meet requirements necessary for playing that card. When you finish looking through it, reshuffle it and give the player to your right the opportunity to cut it. There is no penalty if you 
+don't find (or choose not to play) a card you are looking for in your draw deck.
+
+In the Starter Rules, if you have no cards in your draw deck, you are allowed to reshuffle your discard pile to make a new one once per game. Normally, however, you are not allowed to do this.
+
+See also {{SL|building your deck}}, {{SL|moving cards}}.
+
+----
+===<div id="each time">each time</div>===
+This phrase you'll see in game text governs the timing of an action, just like the names of phases that are in phase actions. "Each time" is used if an effect can happen more than once. Each such effect has a trigger describing what makes it happen. The trigger is always described first, and followed by a comma.
+
+ ''"Each time you play a possession or artifact on your companion, draw a card." If you play one possession, this game text activates once; if you play a second possession, it activates again, and so on.''
+
+----
+===<div id="effect">effect</div>===
+A effect of an {{SL|action}} could be adding or removing twilight tokens, exerting a character, discarding a card, or any number of other possibilities. The effects of an action are usually listed after the word "to" (so the action takes the form of "pay X to do Y," with X being the {{SL|cost}} and Y the effect).
+
+The source of an effect is the card on which that effect is printed. Even though a card like an event may require a minion to exert to pay its cost, the source of that effect is the event card and not the minion.
+
+Some cards have multiple effects that respond to the same kind of trigger. They count something in play, and when there is more of that thing, more effects happen.
+
+ ''{{Card|Ugluk, Servant of Saruman}} reads:''
+ ''While you can spot 2 {{C|Isengard}} trackers, Uglúk is strength +3.''
+ ''While you can spot 3 {{C|Isengard}} trackers, Uglúk is damage +1.''
+ ''You don't have to spot 5 trackers to get both benefits. Three trackers is enough to satisfy the first requirement (if you have 3, you can spot 2) and the last requirement (spot 3).''
+
+When an effect says a player should look at a card, that card is shown only to that player.
+
+When an effect says to reveal a card, that card is shown to all players.
+
+If the effect of a card or special ability requires you to perform an action and you cannot, you must perform as much as you can and ignore the rest. (See {{SL|limit}}.)
+
+ ''If the effect of an event requires you to discard 2 cards from your hand and you only have 1 card in hand, just discard the 1 card and ignore the rest.''
+
+If the effect of a card or special ability requires you to choose one of two different actions, you must choose an action that you are fully capable of performing (if possible).
+
+If an action plays a card from your hand (or discard pile) as part of its effect, then that card must be in your hand (or discard pile) before you can begin to perform that action.
+
+ ''The Orc you play with {{Card|They Are Coming}} ("Shadow: Discard 3 cards from hand to play a {{C|Moria}} Orc from your discard pile.") cannot be one of the cards you discarded from your hand to pay the cost of that special ability.''
+
+If you meet all the requirements and pay all the costs for playing a card, you may play that card even if the card will have no effect. ''Exception'': If you perform an action that has playing a card from hand or discard pile as part of its effect, you must play that card. This exception applies to all kinds of actions and all the different ways you can play a card (except playing a card directly from your draw deck).
+
+If something happens to prevent one effect which in turn would have prevented a second effect, the second effect is performed.
+
+ ''{{Card|Morgul Destroyer}} is played. ("When you play this minion, you may spot a Nazgûl to add 2 threats. The Free Peoples player may wound the Ring-bearer to prevent this.") The Free Peoples player wounds the Ring-bearer to prevent the threats from being added. The Free Peoples player then discards {{Card|Sapling of the White Tree}}. ("Response: If a {{C|Gondor}} Man is about to take a wound, discard this artifact to prevent that.") Because Sapling has prevented the effect (a wound) that would have prevented Morgul Destroyer's effect, the threats are now added.See also discard, modifier, twilight cost.''
+
+If an effect tells you to reveal or look at one or more cards from somewhere (a draw deck, a hand, etc.) and doesn’t specify what to do with them afterward, return them to where they came from, in the same order.
+
+When a card has a conditional effect in parentheses, you can’t choose which one to use. You have to use the conditional effect if the condition is met.
+
+ ''{{Card|Sharp Defense}} adds no strength to a Dwarf who has resistance 4 or more and no possessions. You can't choose to use the +2 instead.''
+
+When you move a card from one area to another (except when drawing a card from your draw deck), you must reveal that card to all players to verify that it is of the correct type. ''Exception'': If an effect says you are to move "a card" with no other description, you don't have to reveal it.
+
+When an effect returns a card to a player's hand, that card must come from in play. Exception: Events can be returned to hand, even though they are never in play.
+
+ ''The Elf you return to your hand with {{Card|Taking the High Ground}} must come from in play, and can't come from your discard pile or anywhere else.}}
+
+See also {{SL|discard}}, {{SL|modifier}}, {{SL|twilight cost}}.
+
+----
+
+===<div id="enduring">enduring</div>===
+For each wound on a character with the enduring keyword, that character is strength +2.
+
+----
+===<div id="event">event</div>===
+An event is a card played from your hand representing an important occurrence, which you discard after you play it.
+
+Most event cards have a phase action that defines when you may play that card from your hand. The game text on that event may be performed only once for each copy of that event played. You cannot play an event during a phase that does not match its phase action.
+
+Place an event in your discard pile after you have played it from hand and carried out its effects, but before the next action is taken. (See {{SL|spot}}.) 
+
+ ''{{Card|Final Account}} reads: "Discard 2 cards from hand to take a Free Peoples card and a Shadow card from your discard pile into hand." At the time you choose which Free Peoples card to take into hand, you are still carrying out the effects of the card. Thus, Final Account has not yet been discarded, and cannot itself be the card you choose.''
+
+Even after being discarded, an event often has an ongoing or delayed effect until the end of the phase, or until a specified phase or condition is met.
+
+Some event cards affect only cards that are currently in play, even though their effects might seem to apply to cards played later in the 
+same turn. These events take a "snapshot" of the current game state, and only those cards are affected.
+
+ ''{{Card|Eregion's Trails}} ("Maneuver: Exert a ranger to make each roaming minion strength –3 until the regroup phase.") affects only minions that are roaming when that event is played.''
+ ''{{Card|Deft in Their Movements}} (Regroup: "Spot 2 Hobbits to make each site's Shadow number –2 until the end of the turn.") affects only sites that are in play when it is played.''
+
+See also {{SL|action}}.
+
+----
+===<div id="exert">exert</div>===
+Sometimes you may exert a character by placing a wound on that card to show that the character takes an action that depletes his vitality.
+
+If the cost of an action requires a character to exert X times, then that character must have X+1 or more vitality or that action cannot be performed. A character cannot exert 0 times to pay the cost of a card that requires a character to exert X times. 
+
+ ''You cannot pay for the cost of {{Card|They Sang As They Slew}} by exerting a character zero times.''
+
+Exerting a character is different from wounding a character, even though both require placement of a wound token. Cards that prevent wounds cannot prevent a wound token placed by exerting.
+
+ ''Conceptually, wearing armor protects you from a sword strike (taking a wound token), but it won't help you lift a heavy weight (placing an exertion token).''
+
+See also {{SL|exhausted}}, {{SL|for each}}, {{SL|healing}}.
+
+----
+===<div id="exhausted">exhausted</div>===
+A character who has only 1 vitality remaining is exhausted.
+
+ ''A character with a vitality of 2 is exhausted with a single wound. A character with a vitality of 1 is always exhausted.''
+
+No player may {{SL|exert}} a character who is exhausted. If the effect of an action says a character "must exert" and that character is exhausted, then nothing happens.
+
+ ''A mount says, "At the start of each skirmish involving bearer, each minion skirmishing bearer must exert." If an exhausted minion is skirmishing a character bearing this mount, this exertion is ignored.''
+
+To exhaust a character means to exert that character as many times as you can.
+
+ ''If a card tells you to exhaust a character with a vitality of 3, then you must exert that character 2 times by placing 2 wound tokens.''
+
+----
+===<div id="fellowship phase">fellowship phase</div>===
+During your fellowship phase, you may perform fellowship actions in any order, including playing most Free Peoples cards. Finally, move your fellowship forward along the adventure path.
+
+Two fellowship actions are always available:
+
+* Play a Free Peoples {{SL|companion}}, {{SL|ally}}, {{SL|possession}}, {{SL|artifact}}, or {{SL|condition}} from your hand to the table. (See {{SL|The Rule of 9}}, {{SL|unique}}.)
+* {{SL|Discard to heal}}.
+
+You may find other fellowship actions on events in your hand, or as special abilities on cards you already have in play. (See {{SL|The Rule of 4}}.)
+
+When you have completed all of the fellowship actions you wish to perform, proceed to {{SL|moving your fellowship}}.
+
+See also {{SL|transfer}}.
+
+----
+===<div id="fierce_2">fierce</div>===
+During a turn, after all normal skirmishes are resolved, surviving minions with the keyword fierce must be defended against a second time.
+
+Players perform another {{SL|assignment phase}} and then complete a separate {{SL|skirmish phase}} for each fierce skirmish.
+
+Players may again perform assignment actions (special abilities on cards in play with "Assignment:" and events with that keyword) using the {{SL|action procedure}}.
+
+The Free Peoples player then assigns defenders just as during the regular assignment phase, and then Shadow players assign any fierce minions that remain unassigned. (See {{SL|ally}}.)
+
+Then each defending companion fights in a separate skirmish phase, just as during the regular skirmish phases, in an order decided by the Free Peoples player.
+
+ ''Aragorn is assigned to defend against a fierce Uruk-hai. In the normal skirmish phase, Aragorn wins and the Uruk-hai takes one wound. During the following fierce skirmish phase, the Free Peoples player may once more assign a companion to defend against the Uruk-hai. This companion may be Aragorn or may be a different companion.''
+
+A minion must be in play and fierce at the start of the fierce assignment phase to participate in a fierce skirmish. During the fierce assignment phase, ignore any effect that results in assignment 
+with a minion that is not fierce.
+
+Once a minion is assigned in the fierce assignment phase, that minion's fierce skirmish must be resolved, even if that minion somehow becomes no longer fierce.
+
+----
+===<div id="follower">follower</div>===
+Follower is a new card type. A follower represents help that joins for a short time and then departs. Followers are not allies, companions, or minions. They are not characters, although they are often named and depicted with images of people from the story. Even though a follower may seem as if it were an Elf or Hobbit or Wizard, it can't be spotted as such because a follower doesn't have a race on its card type line. Followers can't bear other cards, including possessions or conditions.
+
+A follower is played to your support area. While your follower is in your support area, it has no effect on the game. Each follower has the keyword "{{SL|Aid}}" which you can use to transfer that follower to one of your characters. 
+
+When your follower is borne by a character, that follower will provide an ongoing effect or a special ability that may then be used. A character may bear more than one follower. If that character is killed, all of its followers are discarded, just like other cards borne by that character.
+
+During the regroup phase, each follower is returned to its owner's support area (at no cost) only after the Free Peoples player has reconciled, but before the Shadow player discards all minions in play.
+
+In later turns, that follower may again be transferred to a character (the same one or a different one, your choice) using the above procedure.
+
+See also {{SL|Aid}}, {{SL|character}}.
+
+----
+===<div id="for each">for each</div>===
+When something affects a character (or characters) using the phrase "for each", you may affect a single character more than once. This includes such things as wounding, exerting, healing, or strength modifiers. (See {{SL|toil}}.)
+
+ ''{{Card|Aragorn, Wingfoot}} says, "Each time the fellowship moves, you may wound a minion for each unbound Hobbit you spot." If you spot two unbound Hobbits, you may wound two minions each once or one minion twice.''
+
+When a card says "for each companion over X," that means the same as "do this Y times, where Y is the number of companions in the fellowship minus X."
+
+ ''{{Card|Anduin Banks}} says, "For each companion in the fellowship over 4, add 2 to the minion archery total." If there are 4 or less companions in the fellowship, nothing is added. For 5 companions, 2 is added; for 6 companions, 4 is added; and so on.''
+
+----
+===<div id="format">format</div>===
+Each game has one of the following formats:
+* [[Fellowship Block]] – only cards from sets 1, 2, and 3,
+* [[Tower Block]] – only cards from sets 4, 5, and 6, 
+* [[King Block]] – only cards from sets 7, 8, and 10,
+* [[War of the Ring Block]] – only cards from sets 11, 12, and 13,
+* [[Open]] – all cards allowed, including set 9 (Reflections) using only sites from set 11 onward (Shadows).
+* [[Standard]] – a tournament format similar to Open, but including the X-List (see the Current Rulings document, available for download).
+
+In the Open format and War of the Ring block, your adventure deck may include no more than three sites that have the same given Shadow number.
+
+In the Fellowship block, Tower block, or King block, sites are numbered, and you must include one for each of the nine site numbers. (See {{SL|block symbol}}.)
+
+When you play a game using the Fellowship block, Tower block, or King block format, you cannot choose any {{SL|site}} from your adventure 
+deck when it is time to play a new site on the adventure path. Instead, the site which has the next consecutive site number must be played.
+
+ ''When the first player moves for the first time, place a site with the site number of 2. If he moves again, place a site with the site number of 3''.
+
+When you play a game using the Fellowship block, Tower block, or King block format, you do not add pool for the fellowship's region number when you are {{SL|moving your fellowship}}.
+
+ ''Do not add 3 twilight tokens when the fellowship moves to a site in region 2, nor 6 when the fellowship moves to a site in region 3.''
+
+See also {{SL|building your deck}}, {{SL|losing the game}}.
+
+----
+===<div id="free peoples cards">Free Peoples cards</div>===
+Free Peoples cards represent the forces of good. Each player has his own fellowship, made up of a Ring-bearer and other companions. When 
+you take your turn, you play and use your Free Peoples cards.
+
+Free Peoples cards have a light colored circular field in the upper left corner.
+
+See also {{SL|twilight cost}}.
+
+----
+===<div id="frodo">Frodo</div>===
+See {{SL|Ring-bearer}}, {{SL|Ring-bound}}.
+
+----
+===<div id="game text">game text</div>===
+Game text includes all the text in the box below the card type line except for helper text, lore, collector's info, and marketing text (such as 
+"'''DGMA Premier Series – France'''"). On a site card, this box is located below the image (there is no card type line on a site). On The One Ring 
+cards, there is no box around the game text, but the concept is the same. 
+
+Any boldfaced keyword that appears in this box (such as '''Easterling''', '''Fierce''', or '''Defender +1''') is game text. 
+
+Card titles, subtitles, and items on the card type line (card types, races, and classes) are not game text. ''Exception'': On an event card, the word to 
+the right of the card type (such as MANEUVER or SKIRMISH) is game text. 
+
+Sometimes game text is added to a card by an effect, even though that text is not printed on that card.
+
+----
+===<div id="gollum smeagol">Gollum/Sméagol</div>===
+Character cards that represent the unique aspects of Gollum or Sméagol have no race. This does not mean that these cards have "a race of no race." When an effect tells you to count (or choose or spot) a race, Gollum/Sméagol can’t be counted (or chosen or spotted).
+
+ ''A Shadow player must spot a race for {{Card|Argument Ready to Hand}}. Gollum doesn’t have a race to be spotted.''
+
+Sméagol is not a companion whose race you cannot spot.
+
+ ''When {{Card|The Nine Walkers}} is in play, Sméagol does not have his cost reduced.''
+
+When an effect tells you to do something to minions of other races, that does not work on Gollum/Sméagol.
+
+ ''{{Card|Argument Ready to Hand}} can't discard Gollum, since he is not "of all other minion races" (he is not of any minion race).''
+
+When an effect tells you to do something to all minions who do not belong to a particular race, that does work on Gollum/Sméagol.
+
+ ''If an effect says, "Discard all minions not of the Orc race," then Gollum is discarded.''
+
+----
+===<div id="healing">healing</div>===
+When a wound is removed from a character, this represents resting or healing. When you "heal a character," you remove one wound.
+
+If a card tells you to "heal 2 companions," you must choose two different companions to heal one time each (you cannot heal one companion twice).
+
+Once a wound token is placed, whether from exerting or wounding, it can be healed by any effect that heals a wound.
+
+Generally, your fellowship only heals at a {{SL|sanctuary}} you reach on the adventure path.
+
+See also {{SL|discard to heal}}, {{SL|for each}}.
+
+----
+===<div id="helper text">helper text</div>===
+Helper text is found in the box below the card type line in italics and parentheses that provides a summary of a game rule. Helper text is not game text. 
+
+See {{SL|collector's info}}, {{SL|lore}}.
+
+----
+===<div id="home site">home site</div>===
+See {{SL|ally}}.
+
+----
+===<div id="hunter">hunter</div>===
+This keyword has the form of "'''Hunter X'''" where "X" is the strength bonus the character receives when skirmishing a character that does not have the hunter keyword.
+
+----
+===<div id="initiative">initiative</div>===
+At any time, either one side or the other side has initiative. The Free Peoples player has initiative while he has four or more cards in hand. 
+
+Otherwise, the Shadow has initiative. If there is more than one Shadow player, then all of those Shadow players have initiative when the Free Peoples player does not.
+
+ ''{{Card|Besieging Pike}} says, "If you have initiative, bearer is strength +3." Since this is a Shadow card, it only gets this bonus when the Free Peoples player has 3 or fewer cards in hand (the cards in the hands of the Shadow players don't matter).''
+
+See also {{SL|cost}}.
+
+----
+===<div id="instead">instead</div>===
+When a card uses the phrase "instead" or "instead of", the stated effect is replaced with a different effect. This does not mean that the original effect is prevented. If the second effect cannot happen for any reason, then the original effect occurs. 
+
+ ''{{Card|Smeagol, Bearer of Great Secrets}} is the ring-bearer and is bearing {{Card|The Dead City}} (If Sméagol is about to be killed in a skirmish, discard him instead). If Sméagol is about to be killed and the player discards The Dead City, Sméagol cannot be discarded, he would simply be killed. 
+
+See {{SL|response}}, {{SL|effect}}. 
+
+----
+===<div id="keyword">keyword</div>===
+Each card has one or more keywords that identify it. Most keywords are {{SL|unloaded keyword}}s, with no special rules (although they may be referenced by other cards). Keywords with rules are called {{SL|loaded keyword}}s.
+
+Though a word which appears in the title or subtitle of a card may be the same as a keyword that exists in the game, that title or subtitle does not confer the keyword on that card.
+
+ ''"{{Card|Ulaire Attea, The Easterling}}" does not have the keyword "Easterling" in his game text, so he is not an Easterling.''
+
+----
+===<div id="killed">killed</div>===
+This game term is used to describe a character that has had its vitality reduced to zero or that is specifically "killed" by the game text of another 
+card. Reducing a character's strength to zero does not kill that character. (See {{SL|wound}}, {{SL|overwhelmed}}.)
+
+ ''This is different from when a character is discarded from play. Other cards may force a character in play to be discarded. That character has not been killed, but only discarded. Cards that trigger when a character is killed will not trigger when a character is discarded, and vice-versa.''
+
+Place killed Free Peoples characters in your {{SL|dead pile}}. Place killed minions in your discard pile.
+
+When a card that provides a vitality bonus for its bearer is discarded, that bearer is immediately killed if his vitality is then reduced to zero.
+
+See also {{SL|leaving play}}, {{SL|losing the game 2}}.
+
+----
+===<div id="kinds of cards">kinds of cards</div>===
+Most cards in ''The Lord of the Rings'' TCG are one of two basic kinds: Free Peoples or Shadow. There are also sites and The One Ring, which are neither Free Peoples cards nor Shadow cards.
+
+----
+===<div id="leaving play">leaving play</div>===
+When a card (other than a {{SL|site}}) leaves play for any reason, any cards played on that card (or borne by or stacked on that card) are discarded. Any tokens on that card are removed.
+
+----
+===<div id="liberate">liberate</div>===
+A Free Peoples player may have a card effect that allows him to liberate a site. Only a site that another player {{SL|control}}s may be liberated. You cannot liberate a site on the adventure path, a site in any adventure deck, or a site you control.
+
+When you liberate a site, place it back on the adventure path. Any cards on that site are discarded. You must liberate the site with the 
+highest site number controlled by one of your opponents first, regardless of which opponent controls that site. (If you control the site with the highest site number, you must liberate the next highest site controlled by an opponent.)
+
+----
+===<div id="limit">limit</div>===
+When a card has a limit, such as "(limit +3)," the limit applies to that card for an entire phase.
+
+ ''{{Card|Trust Me As You Once Did}} reads: "Skirmish: Exert Gandalf to make a companion strength +1 for each companion with the Gandalf signet you can spot (limit +3)." With one copy in play, assuming you have sufficient signets and exertions, during a single skirmish phase:
+ * ''You may add +3 to one companion in a single action (if you can spot at least 3 signets).
+ * ''You may add +1 to three different companions in three different actions (if you can spot only 1 signet).
+ * ''You may add +2 to one companion and +1 to another in two different actions (if you can spot only 2 signets). Once the limit is reached, no more may be added, and the last +1 is ignored.
+
+A limit does not does not span multiple phases. 
+
+ ''{{Card|Trust Me As You Once Did}} could be used for +3 in each of two or more separate skirmish phases during the same turn.''
+
+A limit does not apply to a different copy of the same card.
+
+ ''With two copies of {{Card|Trust Me As You Once Did}} in play, you could give up to +6 in strength bonuses during a single skirmish phase (+3 from one copy, and +3 from the other).''
+
+See also {{SL|effect}}.
+
+----
+===<div id="loaded keyword">loaded keyword</div>===
+Card type and class (see {{SL|bearer}}) are loaded keywords. Other loaded keywords include {{SL|aid}}, {{SL|ambush}}, archer (see {{SL|archery phase}}), damage +X (see {{SL|damage bonus}}), {{SL|defender +X}}, {{SL|enduring}}, {{SL|fierce}}, {{SL|hunter}}, {{SL|lurker}}, {{SL|muster}}, {{SL|Ring-bearer}}, {{SL|sanctuary}}, {{SL|toil}}, and {{SL|unhasty}}.
+
+See also {{SL|keyword}}.
+
+----
+===<div id="look at">look at</div>===
+See {{SL|effect}}.
+
+----
+===<div id="loops">loops</div>===
+Occasionally, a game will reach a state in which a set of {{SL|action}}s can be repeated forever.
+
+If a loop contains one or more optional actions and one player controls them all, that player chooses a number. The loop is treated as repeating that number of times, or until another player intervenes with his own action, whichever comes first.
+
+ ''A player wishes to repeatedly use the ability of {{Card|Sam, Faithful Companion}} ("Fellowship: Play Bill the Pony from your draw deck."). He chooses a number of times this action will take place. The action is treated as repeating that number of times unless another player intervenes with a different action.''
+
+If a loop contains one or more optional actions each controlled by different players and actions by both are needed to continue the loop, the Free Peoples player chooses a number. The Shadow player then has two choices:
+* He or she can choose a lower number, in which case the loop continues that number of times, with a final action in that loop by the Free Peoples player.
+* He or she can agree to the number chosen by the active player, in which case the loop continues that number of times, with a final action in that loop by the Shadow player.
+
+ ''The Free Peoples player has {{Card|Smeagol, Slinker}} ("Skirmish: Add a burden to make Sméagol strength +2...") skirmishing a minion at {{Card|Anduin Banks}} ("Skirmish: Spot your minion and remove a burden to make that minion strength +2."). The repeated adding and removing of a burden for strength bonuses creates a loop, so the Free Peoples player names a number of iterations for these actions. The Shadow player then has two choices:
+  • ''He may name a lower number of iterations. The loop would continue for that many iterations, with the Free Peoples player taking the final action (adding one final action at the end of the loop, if necessary for the Free Peoples player to have the final action).''
+  • ''He may agree with the Free Peoples player's choice of iterations. The loop would continue for that number of iterations, with the Shadow player taking the final action (adding one final action at the end of the loop, if necessary for the Shadow player to have the final action).''
+
+When an infinite loop occurs that includes no voluntary actions, the loop ends immediately with no effect.
+
+ ''{{Card|Frodo, Weary from the Journey}} vs. {{Card|Black Land Observer}} or {{Card|Wandering Hillman}}. Neither the minions nor Frodo would get the strength bonuses.''
+
+----
+===<div id="lore">lore</div>===
+Lore is text found in the box below the card type line in italics (but not parentheses) that provides an interesting quote or fact but has no effect on 
+play. Lore is not {{SL|game text}}.
+
+See {{SL|collector's info}}, {{SL|helper text}}
+
+----
+===<div id="losing the game">losing the game</div>===
+A player loses the game if his Ring-bearer is {{SL|killed}} (see {{SL|overwhelmed}}), unless he uses game text allowing another character to carry on as Ring-bearer.
+
+ ''Many versions of Sam may become the Ring-bearer if Frodo is killed.''
+
+When a new character becomes your Ring-bearer, he is not wearing The One Ring, even if the old Ring-bearer was wearing it when he was killed.
+
+A player also loses the game if his Ring-bearer becomes {{SL|corrupted}}.
+
+If a player loses a game and there are at least two other players remaining, remove his player marker and all of his cards from play (and discard any opponent's cards that were on them).
+
+Remove his sites both on the adventure path and under another player's {{SL|control}} in numerical order, then each opponent, starting to the player's right and proceeding counter-clockwise, chooses a site from his adventure deck to replace each one removed. ''Exception'': In a game using the Fellowship block, Tower block, or King block {{SL|format}}, instead replace each site with the corresponding number from the appropriate opponent's deck.
+
+If a losing player has sites under his control, replace them first (using the above procedure) and then {{SL|liberate}} them.
+
+The other players complete the losing player's turn.
+
+See also {{SL|winning the game}}.
+
+----
+===<div id="lurker">lurker</div>===
+During the skirmish phase(s), the Free Peoples player must resolve all skirmishes involving minions who do ''not'' have the lurker keyword before he may choose to resolve any skirmishes involving one or more minions who do have it.
+
+----
+===<div id="man">Man</div>===
+The race of "Man" includes women of the appropriate culture.
+
+ ''A possession that requires a {{C|Rohan}} Man bearer may be borne by a {{C|Rohan}} female character who has the race of "Man."''
+
+----
+===<div id="maneuver phase">maneuver phase</div>===
+During this phase, players may perform maneuver actions (special abilities on cards in play with "Maneuver:" and events with that keyword) using the {{SL|action procedure}}.
+
+When all players consecutively pass, proceed to the archery phase. If there are no minions left after the maneuver phase, then skip directly to the regroup phase.
+
+----
+===<div id="may not">may not</div>===
+Some older cards use the phrase "may not." In all such cases, this means "cannot."
+
+----
+===<div id="minion">minion</div>===
+A minion is a Shadow {{SL|character}} that attacks other players' fellowships.
+
+A minion is played to the center of the table, across from the {{SL|active}} fellowship.
+
+See also {{SL|roaming}}.
+
+----
+===<div id="modifier">modifier</div>===
+When a card specifically names itself in its game text, that card can be modified by its own game text when played. Otherwise, the modification takes effect only after the card is in play.
+
+ ''{{Card|Orc Ambusher}} says, "The roaming penalty for each {{C|Sauron}} minion you play is –1." It does not specifically name itself, so this does not apply to Orc Ambusher when it is played.''
+
+ ''{{Card|Eomer, Third Marshal of Riddermark}} says, "While you can spot a {{C|Rohan}} Man, Éomer's twilight cost is –1." This specifically names Éomer himself, so it does apply to Éomer when he is played.''
+
+ ''{{Card|Grishnakh, Orc Captain}} says, "The site number of each {{C|Sauron}} Orc is –3." This does not apply to Grishnákh when you play him, but he is himself a {{C|Sauron}} Orc, so his site number would be reduced after he entered play.''
+
+Each time a card enters play, it is considered a new card for all purposes even if that card was previously in play on the same turn. 
+
+ ''If you play a second copy of {{Card|Radagast, the Brown}} in the same turn, the move limit is an additional +1. ''
+
+ ''{{Card|Shelob, Her Ladyship}} is played and prevents Gandalf from being assigned to a skirmish this turn. Shelob kills a companion in a skirmish and Gandalf dies when threat wounds are assigned. The Free Peoples player then plays Gandalf in the regroup phase with {{Card|Sent Back}} and Gandalf is now allowed to be assigned to a skirmish.''
+
+Each time a value is used, all applicable modifiers to that value are reapplied. If the result at that point is then less than zero, that result is changed to zero. (Numbers can go below zero until the final check is made.)
+
+ ''Frodo (strength 3) bears {{Card|The One Ring, The Ruling Ring}} (strength +1). His strength is 4. During a skirmish, {{Card|Enduring Evil}} is played ("Skirmish: Spot X burdens to make a character skirmishing a {{C|Sauron}} Orc strength –X."), spotting 6 burdens on Frodo. <br>Frodo's strength is 3 + 1 – 6 = –2. This is reset to zero. {{Card|Hobbit Intuition}} is played ("Skirmish: ...make a Hobbit strength +3.") All applicable modifiers are reapplied to Frodo's strength. He has strength 3 (Frodo) +1 (Ring) – 6 (Enduring Evil) + 3 (Intuition) = 1.''
+
+The order of modifiers doesn't matter, since every applicable modifier is reapplied each time a value is used.
+
+Modifiers are not recalculated when they are reapplied. The same modifiers are just applied again.
+
+ ''{{Card|Merry, Friend to Sam}} reads: "Skirmish: If Merry is not assigned to a skirmish, exert him twice to add his strength to another companion." If Merry's strength is changed later during a skirmish after you have used this ability, the amount already added to the other companion does not change.''
+
+See also {{SL|twilight cost}}.
+
+----
+===<div id="mounted">mounted</div>===
+A mounted character means one who is "bearing a possession with the class of mount." (See {{SL|bearer}}.)
+
+----
+===<div id="move limit 3">move limit</div>===
+During each of your turns, your fellowship must move once, and may move a number of times up to your move limit.
+
+In a two- or three-player game, your move limit is two. In a game with four or more players, your move limit is equal to the number of your opponents when the game begins. During your regroup phase, you may decide to move your fellowship again, subject to this move limit.
+
+If the move limit is modified for a turn, then that modification is in effect for the whole turn, even if the conditions for the modification change.
+
+----
+===<div id="moving cards">moving cards</div>===
+Whenever you move a card from one pile to another (such as shuffling a card from your discard pile into your draw deck), you must reveal that card to all players so they can verify that the correct card was moved.
+
+----
+===<div id="moving your fellowship">moving your fellowship</div>===
+During each of your fellowship phases, when you are finished performing fellowship actions, your fellowship must move forward to the next site on the adventure path. You may also move at the end of your regroup phase, subject to the {{SL|move limit}}.
+
+When you move, perform actions as follows:
+
+* A Shadow player places the next {{SL|site}} card from their adventure deck, if needed (as is the case for the first player in the first turn).
+* Perform "When you move from..." actions.
+* Perform "When the fellowship moves..." actions.
+* Move your player marker to the next site.
+* Perform "When you move to..." actions.
+* Add twilight tokens equal to the new site's Shadow number.
+* Add 3 twilight tokens if the new site is in region 2; or 6 if it is in region 3. (You may find it easier to remember this: add 3 if you've passed the sanctuary at site 3, or add 6 if you've passed the sanctuary at site 6). ''Exception'': See {{SL|format}}.
+* Add 1 twilight token for each companion.
+
+ ''You move a fellowship of four companions to a site 5 that has a Shadow number of 2. You add 2 twilight tokens for the Shadow number, 3 tokens for the region (region 2), and 4 tokens for your companions, for a total of 9 twilight tokens added to the twilight pool.''
+
+After you have completed any moving actions and have added twilight tokens to the twilight pool, the fellowship has moved to the new site 
+and the game text there can be used).
+
+When you have finished moving your fellowship, proceed to the Shadow phase(s).
+
+----
+===<div id="mulligan">mulligan</div>===
+After all players have drawn their starting hands (before the first turn begins), each player (in player order) may shuffle his or her hand into his or her draw deck and draw 6 cards. The cards in the original hand are not revealed to anyone. This redraw may be for any reason. Each player may redraw only once per game. A player who passes on the opportunity to redraw may not change his mind.
+
+----
+===<div id="muster">muster</div>===
+At the start of the regroup phase, for each of your characters who has the muster keyword, you may discard a card from hand, then draw a card. You must discard all at once.
+
+ ''If you have two muster characters, you cannot choose to discard a card, draw a card, then discard another card and draw a card. You must instead choose to discard 0, 1, or 2 cards, then draw that same number of cards.''
+
+----
+===<div id="non-unique">non-unique</div>===
+All cards that do not have a dot (•) before their card title are non-unique. This means that all players may have multiple copies of those cards in play at one time.
+
+If you have multiple copies of a non-unique card in play, the effects of those copies are cumulative.
+
+See also {{SL|unique}}.
+
+----
+===<div id="the one ring">The One Ring</div>===
+This card type represents the uniquely powerful item that is the focus of the story of ''The Lord of the Rings''. In the middle of the card, The One Ring has its subtitle. It has no twilight cost.
+
+ ''There are several versions of The One Ring, represented by different cards, but you'll only use one version at a time.''
+
+If your Ring-bearer puts on The One Ring (any version) during the regroup phase, he then takes it off at the end of that regroup phase.
+
+See also {{SL|building your deck}}, {{SL|culture}}, {{SL|kinds of cards}}, {{SL|overwhelmed}}, {{SL|Ring-bearer}}.
+
+----
+===<div id="opponent">opponent</div>===
+If you are the Free Peoples player, all Shadow players are your opponents. If you are a Shadow player, only the Free Peoples player is your opponent (not other Shadow players).
+
+----
+===<div id="overwhelmed">overwhelmed</div>===
+If the total strength of one side in a {{SL|skirmish phase}} is at least double the total strength of the other side, all the characters on the losing side are overwhelmed and {{SL|killed}} (regardless of how many wounds or how much vitality each has). When a character is overwhelmed, that character does not take any more wounds — he simply dies.
+
+A side with a total strength greater than zero will overwhelm a side whose total strength is zero. If the strength of both sides is zero, the Shadow side wins the skirmish (but does not overwhelm).
+
+When the Ring-bearer is overwhelmed, he is killed, regardless of whether he wears the Ring.
+
+See also {{SL|leaving play}}.
+
+----
+===<div id="phase action">phase action</div>===
+Phase actions include performing special abilities and playing {{SL|event}} cards.
+
+During each phase of a turn, one or more players are allowed to perform phase actions that use a word matching the name of that phase. These words are printed in boldface and followed by a colon. (See {{SL|condition}}.)
+
+Each phase action lasts for the duration of the phase named in the boldface word (unless otherwise specified).
+
+ ''The effects of a phase action with the keyword Skirmish: last only for the skirmish phase in which it is used.''
+
+Each phase action must be completely performed before another phase action can be performed. Phase actions cannot be combined.
+
+ ''If one card says, "Fellowship: Play an Elf from your draw deck" and another card says, "Fellowship: Play an Elf to draw a card," you cannot play one Elf from your draw deck to draw a card. You must choose one phase action or the other.''
+
+If a phase action can be played in multiple phases (for example, "Maneuver or Skirmish:"), its action type is of the phase during which the action is taken.
+
+See also {{SL|action}}, {{SL|cost}}, {{SL|effect}}, {{SL|response}}.
+
+----
+===<div id="playing a card">playing a card</div>===
+
+Following is a detailed procedure for playing a non-site card. This was prompted by questions about playing events that require initiative, but the procedure applies to other cards as well. We refer to the card you are playing as "The Card."
+
+# Reveal The Card from your hand, and it enters the void (not in your hand, not in your discard pile, not in play). You cannot count The Card for initiative. You cannot discard The Card to pay a cost. Effects that respond to The Card leaving your hand, like cards that trigger when you lose initiative, happen later (see below). Each player may examine The Card at this point. 
+# Meet requirements to play The Card. If you are the Free Peoples player and initiative is a requirement for playing The Card, you must have four cards in your hand not counting The Card. Checking to see that all costs can be paid is a requirement of playing a card. If you cannot meet all requirements, The Card returns to your hand. If The Card returns to hand, then you do not lose initiative and skip the remaining steps. 
+# Pay costs to play The Card. This includes both twilight costs and other costs included in game text. If adding or removing Twilight tokens to the pool is part of the cost, it is done first. If The Card references itself by name in its game text, it may modify its own cost. If discarding cards from your hand is a cost, then you cannot discard The Card. <br> It is possible for another card to interrupt the paying of costs so that you cannot finish paying them. If paying costs is interrupted in such a way that you cannot finish paying them all, The Card is placed in your discard pile and any costs already paid remain paid. Do not pay any further costs for that card. 
+# If The Card is not an event, place it in the appropriate place. If the card you are playing is a Character, Possession, Artifact, or Condition, place it on the playing surface. The Card is now in play. 
+# Respond to the playing of The Card (and to losing initiative if necessary). Responses or triggered actions that respond to the playing of The Card happen now. If The Card has game text on it that triggers "When you play..." The Card, it happens now. Other cards may respond to the card being played as well. These are handled in the manner described under {{SL|action}} and {{SL|action procedure}}. If The Card was a Free People's card and it leaving your hand causes you to lose initiative, each player may respond to you losing initiative now. 
+# Perform effects of The Card. This includes choosing cards to be affected, if necessary. If initiative is a requirement for an effect, you cannot count The Card. If an effect takes a card into your hand from your discard pile, The Card is not there yet. 
+# The card is played. Events go to the discard pile (or where they are instructed to go if the card specifies) and other cards are in play. 
+
+See {{SL|cost}}, {{SL|effect}}, {{SL|initiative}}, {{SL|void}}.
+
+----
+===<div id="possession">possession</div>===
+A possession is a weapon, suit of armor, or other kind of object used by a character.
+
+Most possessions tell you who their {{SL|bearer}} can be. Other possessions play to your support area.
+
+See also {{SL|transfer}}.
+
+----
+===<div id="prevent">prevent</div>===
+See {{SL|cancel}}, {{SL|cost}}, {{SL|effect}}, {{SL|preventing effects}}.
+
+----
+===<div id="preventing effects">preventing effects</div>===
+If something happens to prevent one effect which in turn would have prevented a second effect, the second effect is performed. 
+
+ ''Example: {{Card|Morgul Destroyer}} is played. ("When you play this minion, you may spot a Nazgûl to add 2 threats. The Free Peoples player may wound the Ring-bearer to prevent this.") The Free People player wounds the Ring-bearer to prevent the threats from being added. The Free Peoples player then discards {{Card|Sapling of the White Tree}}. (Response: If a {{C|Gondor}} Man is about to take a wound, discard this artifact to prevent that.) Because Sapling has prevented the effect (a wound) that would have prevented Morgul Destroyer's effect, the threats are now added.''
+
+----
+===<div id="race">race</div>===
+See {{SL|gollum smeagol|Gollum/Smeagol}}, {{SL|Man}}, {{SL|unloaded keyword}}, {{SL|Uruk-hai}}.
+
+----
+===<div id="reconcile">reconcile</div>===
+A player reconciles his hand as follows:
+* He may first discard one card from his hand.
+* If he then has less than eight cards in his hand, he must draw cards until he has eight.
+* Otherwise (when he has more than eight cards in his hand), he must discard from his hand until he has only eight.
+
+See also {{SL|regroup phase}}.
+
+----
+===<div id="redrawing your hand">redrawing your hand</div>===
+
+See {{SL|mulligan}}.
+
+----
+===<div id="region">region</div>===
+Sites 1-3 are in region 1, sites 4-6 are in region 2, and sites 7-9 are in region 3.
+
+See also {{SL|moving your fellowship}}.
+
+----
+===<div id="regroup phase">regroup phase</div>===
+During the regroup phase, players may perform regroup actions (special abilities on cards in play with "Regroup:" and events with that keyword) using the {{SL|action procedure}}.
+
+When all players consecutively pass, each Shadow player must {{SL|reconcile}} his hand.
+
+Then, at the end of the regroup phase, if you are the Free Peoples player, you must select one of the following two choices:
+* {{SL|Moving your fellowship}} to the next site, subject to the {{SL|move limit}}, and returning to the Shadow phase(s).
+* Or, reconciling your hand. Then the Shadow players discard all minions in play (and cards borne by them), and your turn ends.
+
+----
+===<div id="reinforce">reinforce</div>===
+This verb, used in game text, means to add a culture token to a card that already has a token of the same culture. You may choose any of your cards with the appropriate culture token if you have more than one. If an effect lets you reinforce more than one culture token, you may put them all on one card or divide them up however you choose.
+
+ ''Your card says, "When you play this possession, you may reinforce a {{C|Dwarven}} culture token." When you play this card, you may choose any of your Dwarven cards that currently has one or more {{C|Dwarven}} culture tokens and add another token to that card.''
+
+----
+===<div id="removed from game pile">removed from game pile</div>===
+This is a pile that is separate from the game play area.  Cards that have been removed from game are to go here instead of the discard or dead pile.  Cards in this pile may be viewed by either player at any time.
+
+----
+===<div id="replace">replace</div>===
+A character that is replaced in a skirmish by another character is removed from that skirmish. The skirmish continues with the new character. It does not start over.
+
+See also {{SL|replacing sites}}, {{SL|site}}, {{SL|unique}}.
+
+----
+===<div id="replacing sites">replacing sites</div>===
+Some cards allow a player to play the next site on the adventure path at times when the fellowship is not moving. These may be used even when the next site is already there. In such cases, the new site replaces the old one. The old one is returned to its owner's adventure deck. The new site takes the same site number the old site had, so that there is always only one site 1 in play, one site 2, and so on.
+
+If a player loses a game and there are at least two other players remaining, remove his sites on the adventure path in numerical order, and replace each with an opponent's corresponding site, in counter-clockwise order starting with the player on his right.
+
+See also {{SL|replace}}, {{SL|site}}.
+
+----
+===<div id="requirement">requirement</div>===
+See {{SL|cost}}.
+
+----
+===<div id="resistance">resistance</div>===
+Companion cards have resistance. This number represents a companion's ability to withstand the lure of The One Ring. Some characters have a 
+ring around their resistance icon, meaning they can be chosen begin the game as your Ring-bearer. (See {{SL|building your deck}}.)
+
+Companions preceding the ''[[Shadows]]'' expansion set (other than versions of Frodo or Sam) do not have their resistance printed on the card. These companions have a resistance of 6.
+
+Allies have a resistance of zero.
+
+Each {{SL|burden}} on your Ring-bearer reduces the resistance of ''every'' companion in your fellowship by 1.
+
+If your Ring-bearer's resistance is reduced to zero, he is {{SL|corrupted}}, and you lose the game. If the resistance of any of your other companions is reduced to zero, there is no immediate penalty, though your opponent may play Shadow cards to take advantage of this.
+
+----
+===<div id="response">response</div>===
+A special ability or event labeled with the word "Response:" indicates that you may perform that {{SL|action}} whenever the trigger described in its game text happens.
+
+You may respond more than once to the same situation.
+
+A response action is not a {{SL|phase action}} (because there is no "response phase").
+
+Some actions are preformed when a described situation "is about to" happen. Typically, only one of such action can be performed in a given situation, because its effect will "prevent" that situation or replace it with another effect "{{SL|instead}}."
+
+ ''Isildur is wearing {{Card|The One Ring, Answer to All Riddles}}. ("While wearing The One Ring,... each time he is about to take a wound in a skirmish, add a burden instead.") The Free Peoples player has {{Card|Sapling of the White Tree}} in play. ("Response: If a {{C|Gondor}} Man is about to take a wound, discard this artifact to prevent that.") Isildur loses a skirmish and is about to take a wound. Because the required action of The One Ring causes a burden to be added "instead" of a wound, the optional action of Sapling of the White Tree cannot be used, as the situation it responds to no longer exists.''
+
+See also {{SL|action procedure}}, {{SL|cost}}, {{SL|effect}}.
+
+----
+===<div id="reveal">reveal</div>===
+See {{SL|effect}}.
+
+----
+===<div id="ring-bearer">Ring-bearer</div>===
+One Free Peoples character always begins the game as your Ring-bearer. (See {{SL|building your deck}}.) He bears The One Ring for you, much as when Frodo carried the Ring in his pocket or on a chain around his neck.
+
+If a character other than Frodo is your Ring-bearer, you cannot play any version of Frodo with the Ring-bearer keyword during the game.
+
+While wearing The One Ring, your Ring-bearer can perform all normal actions such as moving and skirmishing. He may defend against attacking minions as usual.
+
+The Ring-bearer cannot be discarded or returned to your hand, and skirmishes involving the Ring-bearer cannot be cancelled.
+
+ ''If Sméagol is the Ring-bearer, you cannot play {{Card|Be Back Soon}} to discard him ("Maneuver: Discard Sméagol to discard a minion..."), or {{Card|Sneaking}} to cancel his skirmish ("...cancel Sméagol's skirmish if he has more vitality that the minion or minions he is skirmishing.").''
+ ''If Frodo is the Ring-bearer, you cannot use {{Card|Frodo's Cloak}} to cancel his skirmish ("...add a burden and discard Frodo's Cloak to cancel a skirmish involving Frodo.")''
+
+See also {{SL|losing the game}}, {{SL|overwhelmed}}, {{SL|starting fellowship}}.
+
+----
+===<div id="ring-bound">Ring-bound</div>===
+Only companions can be Ring-bound (not allies or minions).
+
+All versions of Frodo and Sam are Ring-bound.
+
+See also {{SL|starting fellowship}}, {{SL|unbound}}.
+
+----
+===<div id="roaming">roaming</div>===
+Each minion is normally played to a certain range of sites beginning with the minion's site number. If the minion is played to (or is currently at) a site that has a lower {{SL|site}} number, that minion is roaming. The player must pay a roaming penalty by removing an additional two twilight tokens when playing that minion.
+
+{{SL|Block symbol}} has no effect on whether a minion is roaming or not.
+
+ ''A minion with a site number of 4 must remove 2 more twilight tokens to play at site 3 (or site 3{{Block|Tower}}). If that same minion plays to site 4 (or site 4{{Block|Tower}}), there is no roaming penalty. If he survives the fellowship's first move to 3, he would no longer be roaming when the fellowship moves to site 4.''
+
+----
+===<div id="the rule of 4">The Rule of 4</div>===
+Some card {{SL|effect}}s allow you to draw cards in the fellowship phase. You cannot draw (or take into hand) more than 4 cards during your fellowship phase.
+
+This applies to cards taken into hand by any means. This does not apply to cards drawn "at the start of each of your turns."
+
+----
+===<div id="the rule of 9">The Rule of 9</div>===
+You cannot have more than nine total companions in play and in your dead pile at any time. (Each copy of a companion in play or in your dead pile counts as a separate companion, whether it is unique or non-unique.)
+
+ ''If you have •Merry (a unique companion) and two copies of {{Card|Dwarf Guard}} (a non-unique companion) in your dead pile, you cannot have more than 6 companions in your fellowship.''
+
+----
+===<div id="sam">Sam</div>===
+Any version of Sam that can become the Ring-bearer if Frodo dies can only become the Ring-bearer if Frodo was the Ring-bearer when he was killed.
+
+See also {{SL|losing the game}}, {{SL|Ring-bound}}.
+
+----
+===<div id="sanctuary">sanctuary</div>===
+A sanctuary is any {{SL|site}} 3 or site 6 on the adventure path. Sites preceding the Shadows expansion set mark this with a keyword.
+
+At the start of your turn when your fellowship is at a sanctuary, you may heal up to 5 wounds from your companions (not allies). (See {{SL|healing}}.) You may choose to heal 5 different companions once, or one companion twice and another three times, or any other combination. You don't have to heal any wounds at all – you may choose any number from zero to 5.
+
+----
+===<div id="setting up the game">setting up the game</div>===
+Players need a supply of wound tokens (preferably red) and twilight tokens (preferably black). Each player will also need a player marker 
+(a differently-colored token) that shows where his fellowship is on the adventure path.
+
+Players {{SL|bid}} to determine who goes first.
+
+Place your {{SL|adventure deck}} face down in a pile on the table.
+
+The first player chooses any site from his adventure deck and places it on the table to begin the adventure path. This becomes site 1. Each player places his player marker onto that site.
+
+Place the adventure path off to the side, opposite from the twilight pool. That leaves room in the middle of the table for minions.
+
+Players then select and reveal their {{SL|starting fellowship}}s in player order. (In tournament play, you may change your starting fellowship from game to game.)
+
+The rest of your cards form your draw deck. Shuffle your draw deck, give the opponent on your right the opportunity to cut it, and draw 
+eight cards to form your starting hand.
+
+----
+===<div id="shadow cards">Shadow cards</div>===
+Shadow cards represent the forces of evil and corruption. When another player takes his turn, you play and use your Shadow cards to hinder that player.
+
+Shadow cards have a dark colored diamond-shaped field in the upper left corner.
+
+A Shadow player cannot play a Shadow artifact, condition, or possession on another Shadow player's minion, or to another player's support area. However, Shadow cards may give bonuses or other game effects to other players' Shadow cards, and Shadow players may play events for other players' Shadow cards as appropriate.
+
+ ''A Shadow player's minion may receive a strength bonus from another Shadow player's condition.''
+
+See also {{SL|twilight cost}}.
+
+----
+===<div id="shadow phase(s)">Shadow phase(s)</div>===
+After your fellowship phase, each other player in the game, starting with the player immediately to your right, has one Shadow phase.
+
+During each player's Shadow phase, that player may perform Shadow actions in any order, including playing most Shadow cards.
+
+One Shadow action is always available:
+
+* Play a Shadow {{SL|minion}}, {{SL|possession}}, {{SL|artifact}}, or {{SL|condition}} from your hand to the table. (See {{SL|unique}}.)
+
+A Shadow player may find other Shadow actions on events in his hand, or as special abilities on cards he already has in play.
+
+When one Shadow player has completed all of the Shadow actions he wishes to perform, the next Shadow player to his right (if any) then 
+performs a Shadow phase.
+
+Shadow players may converse and plan among themselves. They may name cards in their hands, but they cannot actually show each other those 
+cards. They may make agreements, but those agreements are not binding.
+
+You may use (and exert) another player's character to pay a cost for your Shadow card or special ability.
+
+When all Shadow players have each completed a Shadow phase, proceed to the maneuver phase. If there are no minions in play at the end of the final Shadow phase, then skip directly to the regroup phase.
+
+See also {{SL|twilight cost}}.
+
+----
+===<div id="signet">signet</div>===
+Some Free Peoples character cards have a signet, found in the lower left corner of the card. Cards with the same signet generally give bonuses to each other and work well in the same deck.
+
+Each signet is based around an important character in the story. The available signets are Aragorn, Frodo, Gandalf, and Théoden.
+
+----
+===<div id="site">site</div>===
+Site cards represent locations in Middle-earth, and are used to chart the progress of the game. Nine sites are placed in your {{SL|adventure deck}}. (See {{SL|building your deck}}.)
+
+Site cards have a dark compass in the upper left corner. This symbol is used on sites from the ''Shadows'' expansion set onward, differentiating them from sites found in previous sets (which use a different compass symbol, and may also use a {{SL|block symbol}}).
+
+If your fellowship moves to a site that has not been played yet, one of the Shadow players must place a new site on the adventure path. (See {{SL|moving your fellowship}}.) To determine which player, look at the site you are moving from. Each site has an arrow at the bottom center of the card. This indicates who is to play the new site, with --> meaning the Shadow player to your right and <-- meaning the Shadow player to your left. In a two-player game, there is only one Shadow player at a time, so that player always plays the new site.
+
+That player looks through his adventure deck and chooses any site to play as the next site. It takes on the next consecutive number on the adventure path as its site number. It also takes on a {{SL|region}} number. ''Exception'': See {{SL|format}}.
+
+ ''The first time the first player moves during the game, a Shadow player looks through his adventure deck and chooses the next site to place on the adventure path. It becomes site 2. The next time a site is added after that, it will be site 3. Both of those sites are in region 1.''
+
+You may play a copy of a site on the adventure path even if an opponent's copy was already played as an earlier site and is still {{SL|active}}. The copies are treated as different sites, with each given a different site number.
+
+Some cards allow a player to play the next site on the adventure path at times when the fellowship is not moving. These may be used even when the next site is already there. In such cases, the new site replaces the old one; put the old site back in its owner's adventure deck. The new site takes the same site number the old site had, so that there is always only one site 1 in play, one site 2, and so on. When a site is replaced, all cards played on or stacked on the old site are moved to the new site.
+
+Shadow players may take {{SL|control}} of sites on the adventure path and the Free Peoples player may {{SL|liberate}} controlled sites. Various card effects refer to these controlled sites as well.
+
+An effect that allows the playing of the "next site" can't be used to play "site 10." The adventure path is limited to only nine sites.
+
+To replace a site, choose a new site from your adventure deck and place it on top of the site you are replacing on the adventure path. Take the old site from beneath the new site and place it in your adventure deck. You can't replace a site card with the same site card.
+
+See also {{SL|culture}} {{SL|kinds of cards}}.
+
+----
+===<div id="skirmish phase">skirmish phase(s)</div>===
+When the {{SL|assignment phase}} is complete, each defending character will fight in a separate skirmish phase. In an order decided by the Free Peoples player, skirmishes are resolved one at a time by conducting a skirmish phase for each.
+
+During each skirmish phase, players may perform skirmish actions (special abilities on cards in play with "Skirmish:" and events with 
+that keyword) using the {{SL|action procedure}}. Each skirmish action lasts only for a single skirmish. When all players consecutively pass, proceed to resolve that skirmish.
+
+If the total strength of one side is more than the strength of the other side (but less than double), the side with the most strength wins that skirmish. (If there is a tie, the Shadow side wins.) Place one wound on each character on the losing side. (See {{SL|damage bonus}}, {{SL|killed}}, {{SL|overwhelmed}}.)
+
+ ''If Aragorn, with strength of 8, faces two Orcs, each with strength of 3 (total strength of 6), then Aragorn wins that skirmish and each losing Orc takes one wound.''
+
+If all characters of one side are removed during a skirmish before strength has been totaled, the skirmish resolves and the other side wins.
+
+If all characters of one side are removed from a skirmish before that skirmish begins, that skirmish does not occur.
+
+A character is "skirmishing" or in a skirmish "involving" that character only while the skirmish phase that character is assigned to is happening.
+
+ ''{{Card|Smeagol, Slippery Sneak}} ("Skirmish: Add threats equal to the total vitality of minions Sméagol is skirmishing to discard Sméagol.") and Frodo are each assigned to different skirmishes. The Free Peoples player chooses to resolve Frodo's skirmish first. He cannot use Sméagol's ability during Frodo's skirmish.''
+
+{{Clarification|text=
+A losing character is any character on the losing side when a skirmish revolves. '''A character removed from his or her skirmish is a losing character, unless there are still one or more characters on each side of that skirmish, in which case the removed character is neither a losing nor a winning character.''' A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+
+
+''Boromir, bearing a Blade of Gondor (1R95) ("Skirmish: Exert Boromir to wound an Orc or Uruk-hai he is skirmishing."), faces two Uruk-hai who each have only 1 vitality remaining. Boromir exerts once to use the Blade and kill one of the Uruk-hai. That Uruk-hai is neither a losing nor a winning character. '''If Boromir exerts to use the Blade again to wound the second Uruk-hai, Boromir will be the winning character, and that second Uruk-hai will be a losing character.'''''
+|source=[[Legacy Ruling 2]]
+}}
+
+If a skirmish is canceled, it ends immediately with no winner or loser.
+
+When a skirmish resolves (or is canceled) for any reason, no more skirmish actions may be taken.
+
+A skirmish phase ends after all actions triggered by winning or losing that skirmish have resolved. At this point, characters who were involved in that skirmish are no longer assigned.
+
+A surviving minion or companion may skirmish again this turn if the fellowship makes another move (or if the minion has the keyword {{SL|fierce}}).
+
+Once a skirmish phase has finished, the Free Peoples player must select another defending companion (one who is still assigned to a minion), and perform another skirmish phase. 
+
+When all skirmishes (both normal and fierce) have been resolved, proceed to the regroup phase.
+
+See also {{SL|enduring}}, {{SL|lurker}}.
+
+----
+
+===<div id="special ability">special ability</div>===
+Besides events, other types of cards may have a {{SL|phase action}} as a part of their game text called a special ability, which may be used only while the card is in play. The boldfaced word defines when you may do so.
+
+Each special ability is optional; you don't have to use it if you don't want to. You may use each special ability as many times as you like (even repeatedly during the same phase), as long as you meet the requirements for it and pay its costs.
+
+See also {{SL|action}}.
+
+----
+===<div id="spot">spot</div>===
+The word spot sets up a requirement for playing a card or using a special ability in conjunction with a noun such as, "To play, spot an Elf." This is equivalent to, "An Elf must be in play and {{SL|active}} for you to play this card."
+
+ ''Cards in your dead pile are active during your turn, but they're not in play. You can't spot a card in your dead pile.''
+
+Normally, you don't have to spot all the cards in play that meet the requirement if you don't want to.
+
+ ''If a card says, "for each Elf you spot" and there are 2 Elves in play (and active), you may choose to spot 2 Elves, 1 Elf, or none.''
+
+However, if a card says, "you can spot," that means you don't have a choice and you have to spot anything and everything that meets the 
+requirement.
+
+ ''"While you can spot The Balrog, skip the archery phase" means you can't make a choice (it either works or it doesn't).''
+
+To spot a "Free Peoples culture" means to spot any Free Peoples card of that culture. You cannot spot a Gollum culture Shadow card to spot a Free Peoples culture.
+
+Events are not in play and can never be spotted.
+
+See also {{SL|stack}}.
+
+----
+===<div id="stack">stack</div>===
+Stacking a card is not playing a card. Stacked cards are placed face up and may be looked at by any player at any time.
+
+Stacked cards are not in play and are not active. You cannot spot them. They do not count for uniqueness. A stacked unique card may be in play elsewhere. Multiple copies of the same unique card may be stacked together.
+
+See also {{SL|leaving play}}, {{SL|liberate}}, {{SL|site}}.
+
+----
+===<div id="start of turn">start of turn</div>===
+When your turn begins, remove all tokens from the twilight pool. (The pool begins the game empty, so this is not necessary on the first turn of the game.)
+
+Then you complete any "at the start of each turn" (or "at the start of each of your turns") actions. Each of these actions may be performed only once per turn.
+
+See also {{SL|sanctuary}}.
+
+----
+===<div id="starting fellowship">starting fellowship</div>===
+Your fellowship begins with a character bearing The One Ring. This can be any character with the ringed resistance icon, or any version of Frodo. That character gains the keywords Ring-bearer and Ring-bound, if he does not already have them.
+
+Place your Ring-bearer face up on the table. Place The One Ring under your Ring-bearer (so the title is showing) and place on him the burdens that you {{SL|bid}}.
+
+You may then play other companions (not allies, possessions, artifacts, or conditions) one at a time from your draw deck, as long as the total twilight cost of these companions is 4 or less. The 
+twilight cost of your Ring-bearer is not included in this total.
+
+Don't place any tokens into the twilight pool for the cards in your starting fellowship. One companion you play may effect the play of a 
+later companion you play.
+
+ ''Some versions of Éomer cost 3, but read, "While you can spot a {{C|Rohan}} Man, Éomer's twilight cost is –1." If you play another {{C|Rohan}} Man who costs 2 first, you can spot him to play Éomer, as the total cost of your starting companions will be 4 instead of 5. You may use "When you play" game text on a starting companion.''
+
+In the Starter Rules, players select their starting fellowships based upon which deck they have.
+
+See also {{SL|active}}.
+
+----
+===<div id="strength">strength</div>===
+See {{SL|killed}}.
+
+----
+===<div id="support area">support area</div>===
+Your support area is a row of cards behind your fellowship.
+
+See also {{SL|Shadow cards}}.
+
+----
+===<div id="threats">threats</div>===
+A threat is a token placed on the dead pile by the Free Peoples player. The same tokens that are used for wounds can be used for threats. There are many cards that add or remove threats, much in the same way that burdens are added or removed. However, threats cannot be added if the number of threats on the dead pile is equal to or greater than the number of companions in play.
+
+ ''If the dead pile has four threats and there are four companions in play, no more threats may be added. Sometimes a companion will be discarded, and there will be more threats than companions in play.''
+
+When a companion or ally is killed and that card is placed in the dead pile, the Free Peoples player counts the number of threats on the dead pile and then removes them. Then the Free Peoples player must assign a number of wounds equal to the number of threats removed to his companions in any way he wishes.
+
+ ''If there are three threats on the dead pile when an ally is killed, the Free Peoples player must remove those tokens and assign three wounds to his companions (not allies). This may be three wounds to one companion, one wound each to three different companions, or any other possible combination.''
+
+See also {{SL|active}}.
+
+----
+===<div id="token">token</div>===
+See {{SL|burden}}, {{SL|culture tokens}}, {{SL|wound}}, {{SL|threats}}, {{SL|twilight pool}}.
+
+----
+===<div id="toil">toil</div>===
+When you play a card that has the toil keyword, you may reduce its twilight cost by the number specified. You do this by exerting one of your characters of the same culture as that card.
+
+You may exert multiple characters of the same culture. Each different character you exert reduces the twilight cost by the number specified. You may exert a given character only once when playing a toil card.
+
+----
+===<div id="transfer">transfer</div>===
+You may transfer an artifact or possession between your Free Peoples characters during your fellowship phase by paying the twilight cost for that artifact or possession again. (Minions cannot transfer artifacts or possessions.)
+
+Both characters involved in the transfer must be at the same site. (See {{SL|ally}}.)
+
+An artifact or possession may be transferred only to a character who may bear it. (See {{SL|bearer}}.)
+
+Transferring a card is not playing that card, even though you must pay its twilight cost. "When you play" game text is not performed when transferring a card.
+
+If an effect can transfer a card to another "eligible bearer," you must obey that card's requirements on both what may bear it and when it may be transferred. When a card is transferred in this way, you do not pay its twilight cost. 
+
+ ''You can use {{Card|Strange-Looking Men}} to transfer {{Card|Flaming Brand}} (“Bearer must be a Man”) to any Man, Free Peoples or Shadow, as this obeys Flaming Brand's normal requirements on who may bear it.''
+
+ ''You cannot use Strange-Looking Men to transfer {{Card|Black Breath}} ("Skirmish: Transfer this condition from your support area to a character skirmishing a Nazgûl."). Black Breath’s additional requirement that it be transferred to a character skirmishing a Nazgûl cannot be met during the maneuver phase.''
+
+----
+===<div id="turn sequence">turn sequence</div>===
+Each player, going clockwise around the table, takes turns according to the following turn sequence.
+
+Remove all tokens from the twilight pool.
+
+Perform any "start of turn" actions.
+
+# {{SL|Fellowship Phase}}
+#* Perform fellowship actions
+#* Move to the next site
+# {{SL|Shadow Phase}}(s) – one for each Shadow player
+#* Perform Shadow actions
+# {{SL|Maneuver Phase}}
+#* Perform maneuver actions
+# {{SL|Archery Phase}}
+#* Perform archery actions
+#* Conduct archery fire
+# {{SL|Assignment Phase}}
+#* Perform assignment actions
+#* Assign defenders
+# {{SL|Skirmish Phase}}(s) – one for each skirmish
+#* Perform skirmish actions
+#* Resolve that skirmish
+# {{SL|Regroup Phase}}
+#* Perform regroup actions
+#* Reconcile Shadow players' hands
+#* Free Peoples player chooses:
+#** move to the next site (''return to Shadow phase'')
+#** reconcile, and Shadow players discard all minions in play.
+
+When one player finishes his turn, the next player in clockwise rotation (to his left) takes a turn and so on.
+
+Although the turn order rotates to the left (clockwise), note that many other procedures in the game actually rotate to the right (counter-clockwise).
+
+----
+===<div id="twilight cost">twilight cost</div>===
+In the upper left corner of each Free Peoples and Shadow card is that card's twilight cost. This is the number of twilight tokens that must be added to or removed from the twilight pool to play that card.
+
+When you play a Free Peoples card, you must add a number of twilight tokens (from the reserve) to the twilight pool equal to that card's twilight cost.
+
+When your opponent plays a Shadow card, he must remove a number of twilight tokens from the twilight pool equal to that card's twilight cost. A Shadow card cannot be played if its twilight cost cannot be met by the tokens available in the twilight pool.
+
+All Shadow players pay for cards by using the same twilight pool. The second Shadow player uses twilight tokens left over from the first Shadow player, and so on.
+
+Cards already in play that affect another card's twilight cost have that effect only when the card to be modified is coming into play.
+
+ ''A Free Peoples player uses the site text of {{Card|Rohirrim Road}} ("Fellowship: Exert an Elf to make the twilight cost of each condition and possession +2 until the end of the turn.").That player then uses {{Card|Catapult}} during that turn ("Maneuver: Discard 2 cards from hand to reveal the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a twilight cost that is the same as the twilight cost of the revealed card."). Catapult reveals a condition from the top of an opponent's deck. The condition's twilight cost is not modified by the site text of Rohirrim Road, because the condition is not coming into play.''
+
+See also {{SL|cost}}, {{SL|discard pile}}, {{SL|draw deck}}.
+
+----
+===<div id="twilight pool">twilight pool</div>===
+The twilight pool is an area on the table where twilight tokens are placed. The tokens in the twilight pool represent how dangerous the world is for the fellowship. Glass beads (preferably black) make good twilight tokens, but any convenient tokens will do. Keep a large reserve of twilight tokens handy.
+
+In game text, you will find phrases like "Add {{Twilight|1}}" which means, "Add 1 twilight token to the twilight pool."
+
+See also {{SL|start of turn}}, {{SL|twilight cost}}.
+
+----
+===<div id="unbound">unbound</div>===
+Only companions can be unbound (not allies or minions). Any companion without the {{SL|Ring-bound}} keyword is an unbound companion.
+
+----
+===<div id="unhasty">unhasty</div>===
+The Free Peoples player cannot assign a character with this keyword to a skirmish unless it is at its home site (see {{SL|ally}}) or when a {{C|Gandalf}} card allows it do so.
+
+Shadow players may assign any leftover unassigned minions to unhasty companions.
+
+See also {{SL|assignment phase}}.
+
+----
+===<div id="unique">unique</div>===
+Many character, possession, artifact, and condition cards represent a thing that there is only one of. Such a card has a dot (•) before the 
+card title and is unique. When a unique card is in play and currently {{SL|active}}, you cannot play another card that has the same title.
+
+ ''You may have only one card with the card title of •Gandalf in play at one time. Other players may also have a card with the title of •Gandalf in play, but only one is allowed per player.''
+
+Two cards represent the same thing if they have the same card title (even if their subtitles or collector's info are different) or they have the same collector's info (even if their titles and subtitles are different). Two cards can have the same card title even if they are in different languages.
+
+''The cards {{Card|Gandalf's Staff, Walking Stick}} and {{Card|Gandalf's Staff}} (no subtitle) represent the same thing.''
+
+You cannot play a card from your hand to replace another card in play, even if those cards have the same card title or represent the same personality.
+
+See also {{SL|dead pile}}, {{SL|discard to heal}}, {{SL|non-unique}}, {{SL|stack}}.
+
+----
+===<div id="unloaded keyword">unloaded keyword</div>===
+Race (such as {{SL|Man}}, Elf, Ent, Orc, {{SL|Uruk-hai}}, or Wizard) is an unloaded {{SL|keyword}}.
+
+Sites have unloaded keywords like battleground, dwelling, forest, marsh, mountain, plains, river, and underground. Other unloaded 
+keywords include besieger, Corsair, Easterling, engine, fortification, knight, machine, ranger, {{SL|Ring-bound}}, search, Southron, spell, stealth, tale, tracker, valiant, villager, and warg-rider.
+
+----
+===<div id="uruk-hai">Uruk-hai</div>===
+In ''The Lord of the Rings'' TCG, Uruk-hai is a different race from Orc.
+
+----
+===<div id="vitality">vitality</div>===
+All characters in the game have vitality. This number represents a character's life force, stamina, sturdiness, and will to live.
+
+Each wound token on a character depletes that character's vitality by 1.
+
+See also {{SL|exhausted}}, {{SL|killed}}.
+
+----
+===<div id="void">void</div>===
+When a non-site card is played, it enters the void (not in your hand, not in your discard pile, and not in play) until all of its effects have resolved, and then it's placed in the appropriate place. Events go to the discard pile and other cards are placed in play. 
+
+See {{SL|playing a card}}. 
+
+----
+===<div id="when">when</div>===
+This word you'll see in game text governs the timing of an action, just like the names of phases that are in phase actions. "When" is used if an effect can happen only once. Each such effect has a trigger describing what makes it happen. The trigger is always described first, and followed by a comma.
+
+ ''"When you play this possession, you may draw a card." This game text activates only once, when this card is played.''
+
+----
+===<div id="while">while</div>===
+This word you'll see in game text governs the timing of an action, just like the names of phases that are in phase actions. "While" is used if an effect is continuous. Each such effect has a trigger describing what makes it happen. The trigger is always described first, and followed by a comma.
+
+ ''"While Merry bears a weapon, he is strength +2." When you play a weapon on Merry, this game text is activated; if that weapon is discarded, then this game text "turns off."''
+
+----
+===<div id="who goes first?">who goes first?</div>===
+In the Starter Rules, players decide randomly who goes first. Normally, however, players {{SL|bid}} burdens to determine this.
+
+----
+===<div id="winning the game">winning the game</div>===
+A player wins the game when his fellowship is at site 9 and his Ring-bearer survives all skirmish phases. The game ends, and there is no regroup phase on the last turn.
+
+A player may also win the game if he becomes the last player left in the game. (See {{SL|losing the game}}.)
+
+----
+===<div id="wound">wound</div>===
+When a character is wounded by an enemy attack, his {{SL|vitality}} is depleted. Place a wound token on the character to illustrate this. Glass beads (preferably blood red) make good tokens for this purpose.
+
+Wounds are always placed on a character one at a time.
+
+When you "wound a character," you place only one wound.
+
+If a card tells you to wound a number of companions, you must choose different companions to wound one time each (you cannot wound a single companion more than once).
+
+A wounded character is a character who has at least one wound token.
+
+If a character cannot take wounds, wounds cannot be assigned to that character. However, if a card prevents wounds, wounds may still be assigned to that character.
+
+ ''{{Card|Faramir, Wizard's Pupil}} reads: "Skirmish: Exert Gandalf to prevent all wounds to Faramir." This prevents wounds as they are assigned to Faramir, not the assignments themselves.''
+
+See also {{SL|active}}, {{SL|exert}}, {{SL|for each}}, {{SL|killed}}.
+
+----
+===<div id="x-list">X-List</div>===
+The X-List is maintained in the Current Rulings document, also available for download.  '''[This has been appended to the end of this document in {{SL|section four|Section Four}}'''.
+
+
+----
+
+
+==<div id="section three">Section Three: Individual Card Rulings</div>==
+This section of the Comprehensive Rules provides entries on individual cards, organized by collector's info.
+
+If an entry is marked "Erratum" or "Clarification," the text of the card has changed since it was first printed. If Decipher reprints the card in a future set, its text will be corrected.
+
+An "Erratum" is a text change which alters the original gameplay of the card. All versions should be played as stated in the entry.
+
+A "Clarification" is an update to the text made to ease comprehension. It does not alter the original gameplay.
+
+'''[A "Misprint" is a notice from Decipher that a card had the wrong version sent to printing.]'''
+
+'''[A "Ruling" is anything else, usually a decision that a card is to be interpreted in a certain manner.]'''
+
+For entries on general game topics, refer to [[#section two|Section Two]].
+
+
+{| class="wikitable"
+|-
+! Card !! Ruling Type !! Ruling Text
+|-
+| {{Card|0P7}}
+| Erratum
+| '''Tale'''. Bearer must be a Dwarf. <br>At the start of each fellowship phase when the fellowship is at site 4 or higher, you may draw a card for each Dwarf companion. 
+
+ ''Reprinted correctly as [[Realms of the Elf-lords]] card {{Card|3R1}}.''
+|-
+| {{Card|THE ONE RING, ISILDUR'S BANE}}<br> {{Card|THE ONE RING, THE RULING RING}}
+| '''[Ruling]'''
+| The One Rings first paragraph is a special ability, and therefore optional. The second paragraph of game text is not optional, so once The One Ring is "worn," all wounds taken must be "converted" to burdens. 
+
+When you are about to take a wound and put on The One Ring, you must take a burden (or burdens) for that wound.
+|-
+| {{Card|THE ONE RING, THE RULING RING}}
+| '''[Ruling]'''
+| You may use the special ability of this card in response to a wound placed by {{Card|The Witch-king, Lord of the Nazgul}} or {{Card|Ulaire Enquea, Ringwraith in Twilight}}.
+|-
+| {{Card|AXE STRIKE}}
+| Clarification
+| '''Skirmish''': Make a Dwarf strength +2 (or +3 if bearing a {{C|Dwarven}} hand weapon). 
+
+Only copies of this card from ''[[The Fellowship of the Ring]]'' set need this clarification.
+|-
+| {{Card|DWARVEN AXE}}
+| '''[Ruling]'''
+| This card can trigger only once for each Shadow player with a minion in that skirmish, regardless of how many minions that player had.
+|-
+| {{Card|GIMLI, DWARF OF EREBOR}}
+| Erratum
+| '''Damage +1'''. <br>'''Fellowship''': If the twilight pool has fewer than 2 twilight tokens, add {{Twilight|2}} to place a card from hand beneath your draw deck.
+ 
+ ''Reprinted correctly in the Legolas [[Starter Deck]] for [[Realms of the Elf-lords]].''
+|-
+| {{Card|FAR-SEEING EYES}}
+| Erratum
+| This Elven condition is unique (•FAR-SEEING EYES).
+
+ ''Reprinted correctly in the Legolas [[Starter Deck]] for [[Realms of the Elf-lords]].''
+|-
+| {{Card|GALADRIEL, LADY OF LIGHT}}
+| '''[Ruling]'''
+| The twilight cost of an Elf played using Galadriel's text is zero, and cannot be raised or lowered.
+|-
+| {{Card|GIFT OF BOATS}}
+| Erratum
+| To play, exert an Elf ally. Plays to your support area.<br>When the fellowship moves from a river during the fellowship phase, the move limit for this turn is +1.
+|-
+| {{Card|THE MIRROR OF GALADRIEL}}
+| Erratum
+| Plays to your support area. Each Elf ally whose home is site 6 is strength +1.<br>'''Maneuver''': If an opponent has at least 7 cards in hand, exert Galadriel to look at 2 of those cards at random. Discard one and replace the other.
+
+If you cannot look at a Shadow player's hand, the effect of The Mirror of Galadriel's special ability is ignored.
+
+ ''Reprinted correctly as a random rare in Fellowship beta [[Starter Decks]].''
+|-
+| {{Card|QUESTIONS THAT NEED ANSWERING}}
+|'''[Ruling]'''
+| Verify that the twilight pool has fewer than 3 tokens before paying this card's twilight cost.
+|-
+| {{Card|SLEEP, CARADHRAS}}
+|'''[Ruling]''' 
+| "Discard every condition" means to discard every active condition. Inactive conditions are not discarded.
+|-
+| {{Card|ONE WHOM MEN WOULD FOLLOW}}
+| Clarification
+| '''Maneuver''': Exert Aragorn to spot an ally. Until the regroup phase, that ally is strength +2 and participates in archery fire and skirmishes.
+|-
+| {{Card|A RANGER'S VERSATILITY}}
+| Erratum
+|'''Maneuver''': Exert a ranger at a river or forest to exhaust a minion.
+|-
+| {{Card|SARUMAN'S CHILL}}
+| '''[Misprint]'''
+| The cost of this condition is 1. Some copies of this card are misprinted.
+|-
+| {{Card|SARUMAN'S SNOWS}}
+| Clarification
+|'''Spell'''. '''Weather'''. To play, exert a {{C|Isengard}} minion. <br>Plays on a site. No player may play skirmish events or use skirmish special abilities during skirmishes at this site. Discard this condition at the end of the turn.
+|-
+| {{Card|SAVAGERY TO MATCH THEIR NUMBERS}}
+| '''[Ruling]''' 
+| The strength +4 bonus lasts until the regroup phase.
+|-
+| {{Card|WARINESS}}
+| '''[Ruling]''' 
+| This card exerts or discards one of your Uruk-hai.
+|-
+| {{Card|WORRY}}
+|Clarification
+|To play, exert an Uruk-hai. Plays to your support area. <br>Each time a companion or ally loses a skirmish involving an Uruk-hai, the opponent must choose to either exert the Ring-bearer or add a burden.
+|-
+| {{Card|GOBLIN MARKSMAN}}
+| '''[Ruling]'''
+| Italic text within parentheses is descriptive only, and has no added gameplay effect.
+|-
+| {{Card|PLUNDERED ARMORIES}}
+| '''[Ruling]'''
+| If a minion bearing a {{C|Moria}} weapon is discarded due to losing a skirmish, Plundered Armories takes effect before optional actions triggered by winning/losing that skirmish occur.
+
+When an effect discards "all" minions (thereby discarding their weapons), they are discarded at the same time. None of those minions may have weapons played on them with Plundered Armories.
+|-
+| {{Card|DRAWN TO ITS POWER}}
+| Clarification
+| Plays to your support area.<br> Each time a companion is killed in a skirmish involving a Nazgûl, add a burden.
+|-
+| {{Card|PATHS SELDOM TRODDEN}}
+| '''[Ruling]'''
+| This card can replace sites only in the Fellowship block format. See Section Two, '''adventure deck'''.
+|-
+| {{Card|RETURN TO ITS MASTER}}
+| '''[Ruling]''' 
+| This card creates a skirmish in addition to regular and fierce skirmishes.
+|-
+| {{Card|ULAIRE NELYA, LIEUTENANT OF MORGUL}}
+| '''[Ruling]'''
+|This card can replace sites only in the Fellowship block format. See Section Two, '''adventure deck'''.
+|-
+| {{Card|ULAIRE NERTEA, MESSENGER OF DOL GULDUR}}
+| '''[Ruling]''' 
+|If two or more minions are played, the Shadow player decides in what order those minions are played.
+|-
+| {{Card|ULAIRE OTSEA, LIEUTENANT OF MORGUL}}
+| '''[Misprint]''' 
+| '''Shadow''': Exert Úlairë Otsëa to make a {{C|Wraith}} minion '''fierce''' until the regroup phase.
+
+The name "Ostëa" in the title of this card should be "Otsëa." Future printings will have this correction. All versions of this card have the same card title for uniqueness purposes.
+|-
+| {{Card|A HOST AVAILS LITTLE}}
+| '''[Ruling]''' 
+| If you can spot 7 or more companions, you may wound the same companion more than once.
+|-
+| {{Card|ORC AMBUSHER}}
+| '''[Misprint]'''
+| This ''Fellowship of the Ring'' card was misprinted in the Gimli ''[[Mines of Moria]]'' [[Starter Deck]]. The word "non-native" should be "roaming."
+|-
+| {{Card|ORC ASSASSIN}}
+| '''[Misprint]'''
+|This ''Fellowship of the Ring'' card was misprinted in the Gimli ''[[Mines of Moria]]'' [[Starter Deck]]. The word "non-native" should be "roaming."
+|-
+| {{Card|ORC BANNER}}
+| Clarification
+| Plays to your support area. <br>Each time a companion or ally loses a skirmish involving a {{C|Sauron}} Orc, each {{C|Sauron}} Orc is strength +1 until the regroup phase.
+|-
+| {{Card|The Ring's Oppression}}
+| Clarification
+| A {{C|Sauron}} Orc kills a companion when the game text that kills that companion comes from a {{C|Sauron}} Orc minion card, or that companion is killed by losing a skirmish involving a {{C|Sauron}} Orc minion.
+|-
+| {{Card|BILBO, RETIRED ADVENTURER}}
+| '''[Errata / Misprint]''' 
+| This card's title should now be read as: •Bilbo, Retired Adventurer. '''[The original printed title was •Bilbo Baggins, Retired Adventurer.]'''
+|-
+| {{Card|MERRY, FRIEND TO SAM}}
+| '''[Ruling]''' 
+| After Merry’s skirmish has resolved, he is no longer assigned and you may use his special ability.
+
+The strength bonus another companion receives from Merry's skirmish special ability is equal to Merry's strength at that time. That bonus does not increase if Merry's strength is boosted at a later time during the same skirmish phase.
+|-
+| {{Card|ROSIE COTTON}}
+| Clarification
+| Sam is strength +1.<br>'''Fellowship''': Exert Rosie Cotton to heal Sam.
+|-
+| {{Card|THROR'S MAP}}
+| Erratum
+| Plays to your support area. <br> '''Fellowship''' ''or'' '''Regroup''': Exert 2 Hobbits and discard Thrór's Map to play the fellowship's next site (replacing opponent's site if necessary).
+
+ ''Reprinted correctly as a random rare in Fellowship beta [[Starter Decks]].''
+|-
+| {{Card|ETTENMOORS}}
+| Clarification
+|'''Plains'''. '''Skirmish''': Exert your companion or minion to make that character strength +2.
+|-
+| {{Card|FORD OF BRUINEN}}
+| Clarification
+| '''River'''. '''Sanctuary'''. The twilight cost of the first Nazgûl played to Ford of Bruinen each turn is –5.
+|-
+| {{Card|BALIN'S TOMB}}
+| Clarification
+| '''Underground'''. '''Maneuver''': Discard your tale from play or from hand to heal your companion.
+|-
+| {{Card|EMYN MUIL}}
+| Clarification
+| '''Maneuver''': Exert your minion to make that minion fierce until the regroup phase.
+|-
+| {{Card|WHAT ARE WE WAITING FOR?}}
+| '''[Ruling]''' 
+| If a second copy of this card is played and that Shadow player has already chosen to skip his or her next Shadow phase, that player may choose to skip the same Shadow phase again (which has no effect).
+|-
+| {{Card|DARK PLACES}}
+| '''[Ruling]''' 
+| This card can replace sites only in the Fellowship block format. See Section Two, '''adventure deck'''.
+|-
+| {{Card|URUK SCOUT}}
+| '''[Ruling]''' 
+| The special ability of this minion may only cancel an event that specifically requires a ranger in its game text.
+|-
+| {{Card|CAVE TROLL'S CHAIN}}
+| '''[Ruling]''' 
+| When an exhausted Cave Troll, armed with the Cave Troll's Chain, takes its last wound during the archery phase, the Chain cannot be used to wound an archer companion (since the wound is a required action and takes effect before the Chain can be used).
+|-
+| {{Card|ULAIRE ATTEA, THE EASTERLING}}
+| '''[Ruling]''' 
+| This card cannot be spotted by cards that require an Easterling. "The Easterling" is his subtitle, meaning "Man of the East." Keywords are not found in subtitles.
+|-
+| {{Card|ORC SCOUT}}
+| '''[Ruling]''' 
+| The special ability of this minion may only cancel an event that specifically requires a ranger in its game text.
+|-
+| {{Card|BILBO, WELL-SPOKEN GENTLEHOBBIT}}
+| '''[Errata / Misprint]''' 
+| This card's title should now be read as: •Bilbo, Well-spoken Gentlehobbit. '''[The original printed title was •Bilbo Baggins, Well-spoken Gentlehobbit.]'''
+|-
+| {{Card|O ELBERETH! GILTHONIEL!}}
+| '''[Ruling]''' 
+| As skirmishes involving the Ring-bearer cannot be cancelled, the skirmish action of this condition can only be used to take off The One Ring.
+|-
+| {{Card|WE MUST GO WARILY}}
+| Erratum
+| '''Response''': If the fellowship moves in the regroup phase, exert a {{C|Gondor}} companion twice to make each minion's twilight cost +1 until the next regroup phase.
+|-
+| {{Card|Saruman, Keeper of Isengard}}<br> {{Card|Saruman, Servant of the Eye}}
+| Clarification
+| Archery wounds may not be assigned to Saruman.
+|-
+| {{Card|ULAIRE OTSEA, RINGWRAITH IN TWILIGHT}}
+| '''[Ruling]''' 
+| If Frodo dies in a skirmish involving Otsëa with Sam also in play, The One Ring is transferred to Sam before {{Card|Blade Tip}} may be transferred with Otsëa's game text.
+|-
+| {{Card|MELILOT BRANDYBUCK, MERRY DANCER}}
+| Clarification
+| '''Response''': If a burden is about to be added by a Shadow card, exert Melilot Brandybuck to prevent that burden.
+|-
+| {{Card|OLD NOAKES, PURVEYOR OF WISDOMS}}
+| '''[Ruling]''' 
+| If a Shadow card gives you the choice of discarding a card from hand or taking a different action, that card does not activate Old Noakes' game text.
+|-
+| {{Card|4M1}}
+| '''[Ruling]''' 
+| A special, promotional version of this oversized card has been produced in regular card size. This card cannot be used to play the game.
+|-
+| {{Card|MY AXE IS NOTCHED}}
+| '''[Ruling]'''
+| The strength bonus derived from this condition is based on the lowest number of tokens on either card.
+
+ ''If there are two {{C|Elven}} tokens on Final Count and three {{C|Dwarven}} tokens on My Axe Is Notched, the strength bonus is +2.''
+|-
+| {{Card|FINAL COUNT}}
+| '''[Ruling]'''
+| See {{Card|My Axe Is Notched}}.
+|-
+| {{Card|ELVEN BROOCH}}
+| Clarification
+| To play, spot an Elf. Bearer must be a companion. <br>'''Response''':If another possession borne by bearer is about to be discarded by a Shadow card, discard this possession instead.
+
+ ''This clarification is a change from a previous ruling.''
+|-
+| {{Card|UNDER THE LIVING EARTH}}
+| '''[Ruling]'''
+| The twilight token added for the cost of this card adds to the strength bonus provided by its effect.
+
+ ''If the twilight pool is empty when this card is played, Gandalf is strength +1.''
+|-
+| {{Card|COME DOWN}}
+| '''[Ruling]'''
+| This card allows all allies to take wounds from archery fire.
+|-
+| {{Card|GET BACK}}
+| '''[Ruling]''' 
+| The phrase "by any player" means that no player can assign the selected minion to a skirmish.
+|-
+|{{Card|URUK REGULAR}}
+| '''[Ruling]'''
+|This card's special ability makes the twilight cost of an Uruk-hai –1 for each Uruk-hai you spot other than this card.
+
+ ''Example: If you have four Uruk Regulars in play and you use the special ability on one of them to play an {{Card|Uruk Searcher}} (twilight cost of 4), the Searcher's twilight cost is 1.''
+|-
+| {{Card|FORTRESS NEVER FALLEN}}
+| '''[Ruling]'''
+| The effect of this condition's special ability when the card has more than one token is simultaneous. Several conditions are discarded at the same time. {{Card|Siege Engine}} responds to these discards by preventing all of them. 
+
+ ''You have three tokens on Fortress Never Fallen when you use its special ability. You select three Shadow conditions to be discarded (including my Siege Engine), and discard Fortress Never Fallen. I use the response special ability on Siege Engine, which technically saves all three conditions, but 
+then I discard Siege Engine to pay its own cost.''
+|-
+| {{Card|SIEGE ENGINE}}
+| '''[Ruling]'''
+| Siege Engine can't prevent a Shadow player from discarding cards. 
+
+ ''Siege Engine can't prevent the effect of {{Card|Blood Runs Chill}}. Even though Blood Runs Chill is a Free Peoples card, it makes a Shadow player discard.''
+|-
+| {{Card|HOWL OF HARAD}}
+| Erratum
+| Plays to your support area. <br>Each time a companion or ally loses a skirmish involving a Southron, you may remove {{Twilight|4}} to make the Free Peoples Player wound a Ring-bound companion.
+|-
+| {{Card|ITHILIEN WILDERNESS}}
+| Erratum
+| Plays to your support area. <br>At the end of each phase during which the fellowship moved to 7{{Block|Tower}}, 8{{Block|Tower}}, or 9{{Block|Tower}} and the twilight pool has fewer than 7 twilight tokens, you may add {{Twilight|8}}. <br>Skirmish:Discard this condition to make a {{C|Raider}} Man strength +2.
+|-
+| {{Card|SOUTHRON FIGHTER}}
+| '''[Misprint]'''
+| The foil version of this card has a different image from the non-foil version.
+|-
+| {{Card|FRODO, COURTEOUS HALFLING}}
+| '''[Ruling]'''
+| This card only prevents Shadow cards that make you discard from hand or draw deck. If a Shadow card gives you a choice, you may choose to discard.
+
+ ''If a {{Card|Dunlending Rampager}} is played, Courteous Halfling does not prevent the Free Peoples player from discarding. Since the game text of the Rampager says "may discard," a choice is provided.''
+|-
+| {{Card|HORSE-COUNTRY}}
+| '''[Misprint]'''
+| This ''Two Towers'' card was misprinted in an ''Ents of Fangorn'' starter deck. The correct text follows:
+
+'''Plains'''. While you can spot a {{C|Rohan}} mount at Horse-country, the move limit is +1 for this turn.
+|-
+| {{Card|DERNDINGLE}}
+| '''[Misprint]'''
+| This ''Two Towers'' card was misprinted in an ''Ents of Fangorn'' starter deck. The correct text follows:
+
+'''Forest'''. While you can spot an unbound Hobbit at Derndingle, the move limit is +1 for this turn.
+|-
+| {{Card|ERED NIMRAIS}}
+| '''[Ruling]'''
+| When Sméagol is played to Ered Nimrais and {{Card|The Nine Walkers}} is in play, his twilight cost is 3. (This is a reversal of a previous ruling.)
+|-
+| {{Card|CAVES OF AGLAROND}}
+| Clarification
+| '''Underground'''. '''Sanctuary'''. '''Maneuver''': Spot your Uruk-hai and remove {{Twilight|2}} to make one of your Uruk-hai '''fierce''' until the regroup phase. 
+|-
+| {{Card|GREAT HALL}}
+| '''[Ruling]'''
+| Each {{C|Rohan}} ally participates in archery fire and skirmishes at this site as if this were his or her home site.
+|-
+| {{Card|BERSERK RAGER}}
+| '''[Ruling]'''
+| The strength bonus for this minion is increased for any wound on any minion, companion, or ally in its skirmish. 
+
+The tokens removed for the special ability on this card must all be removed from the same machine.
+|-
+| {{Card|BERSERK SAVAGE}}
+| '''[Ruling]'''
+| The strength bonus for this minion is increased for any wound on any minion, companion, or ally in its skirmish. 
+
+The tokens removed for the special ability on this card must all be removed from the same machine.
+|-
+| {{Card|BERSERK SLAYER}}
+| '''[Ruling]'''
+| The strength bonus for this minion is increased for any wound on any minion, companion, or ally in its skirmish.
+
+The tokens removed for the special ability on this card must all be removed from the same machine.
+
+|-
+| {{Card|URUK-HAI BERSERKER}}
+| '''[Ruling]''' 
+| The strength bonus for this minion is increased for any wound on any minion, companion, or ally in its skirmish.
+|-
+| {{Card|EYE OF BARAD-DUR}}
+| '''[Ruling]''' 
+| This card must be played in order to use its response text, which is affected by cards like {{Card|Legolas, Dauntless Hunter}}. The text "discard this card to" is superfluous.
+|-
+| {{Card|STING, BAGGINS HEIRLOOM}}
+| '''[Misprint]''' 
+| The collector's information printed on the Tengwar version of this card (a tournament promo card) was printed incorrectly as 4 R 100. This information should be read as 5 R 116.
+|-
+| {{Card|QUICKBEAM, BREGALAD}}
+| '''[Ruling]''' 
+| Like other similar cards, this card's game text should say "Ent or unbound Hobbit." For each Ent or each unbound Hobbit, the twilight cost is –1.
+|-
+| {{Card|SWORD OF DOL GULDUR}}
+| Clarification
+| Bearer must be a Nazgûl.<br>While bearer is Úlairë Toldëa, each time he wins a skirmish the Free Peoples player must discard a Free Peoples possession or a Free Peoples condition.
+|-
+| {{Card|HELD}}
+| '''[Ruling]'''  
+| The "site 9" referred to on this card is any site 9 card from any block.
+|-
+| {{Card|DON'T LOOK AT THEM}}
+| Clarification
+| Plays to your support area.<br> '''Skirmish''': Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a {{C|Wraith}} minion).
+|-
+| {{Card|THEY STOLE IT}}
+| Clarification
+| Plays to your support area.<br> '''Skirmish''': Spot Gollum and discard 3 cards from hand to wound a companion Gollum is skirmishing once (or twice if that companion is a {{C|Shire}} companion).
+|-
+| {{Card|IT BURNS US}}
+| '''[Ruling]''' 
+| This card counts both Free Peoples cultures and Shadow cultures when cards are revealed.
+|-
+| {{Card|LOYALTY UNSHAKEN}}
+| Clarification
+| When you play this condition, you may stack 2 cards from hand here and draw a card for each {{C|Dwarven}} card you stack.<br> '''Skirmish''': Make a Dwarf strength +2. Also, make that Dwarf '''damage +2''' for each {{C|Dwarven}} card stacked on this condition. Discard this condition.
+|-
+| {{Card|SLAKED THIRSTS}}
+| Clarification
+| Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a {{C|Dwarven}} condition, spot a Dwarf companion and discard this event to exert 
+a minion twice.
+|-
+| {{Card|TERRIBLE AND EVIL}}
+| '''[Ruling]''' 
+| If Gandalf is exhausted, he cannot exert to pay the cost of this card, even if X is equal to zero.
+|-
+| {{Card|NO SAFE PLACES}}
+| Clarification
+| Exert Sméagol to reveal an opponent's hand. That opponent must discard a card from hand for each culture revealed.
+|-
+| {{Card|CITY OF MEN}}
+| '''[Ruling]''' 
+| You may discard only one {{C|Sauron}} minion for each copy of this card played.
+|-
+| {{Card|FOOTMAN'S ARMOR}}
+| '''[Ruling]'''  
+| Each time the response for this card is activated, the conditions for being overwhelmed must be checked again.
+|-
+| {{Card|PIPPIN'S SWORD}}
+| Clarification
+| Bearer must be Pippin.<br> Skirmish:Exert Pippin twice to make him strength +1 for each {{C|Gondor}} companion you spot.
+|-
+| {{Card|DESERT RUNNER}}
+| Clarification
+| Southron. Ambush {{Twilight|1}}. <br> When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+|-
+| {{Card|DESERT SCOUT}}
+| Clarification
+|'''Southron'''. '''Ambush''' {{Twilight|1}}.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+|-
+| {{Card|DESERT SNEAK}}
+| Clarification
+| '''Southron'''. '''Ambush''' {{Twilight|1}}.<br> When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+|-
+| {{Card|LOATHSOME}}
+| Clarification
+| If a skirmish that involved a Nazgûl is about to end, discard a possession borne by a companion in that skirmish.
+
+This card is played as a response to the end of a skirmish that involved a Nazgûl, even if that skirmish ends before resolution. If the skirmish is ending because it is resolving normally, the discard of the possession does not effect the resolution of that skirmish.
+|-
+| {{Card|GRIMBOLD, MARSHAL OF ROHAN}}
+| '''[Ruling]''' 
+| This card can replace sites only in the King block format. See Section Two, '''adventure deck'''.
+|-
+| {{Card|ABOVE THE BATTLEMENT}}
+| '''[Ruling]''' 
+| When you play this card you must choose one of the following actions: (1) play a besieger stacked on a site you control; or (2) remove a burden to play a {{C|Sauron}} Orc from your discard pile.
+|-
+| {{Card|MORDOR ASSASSIN}}
+| Clarification
+| '''Response''': If a companion is overwhelmed during a skirmish involving a {{C|Sauron}} Orc and threat wounds are about to be placed, remove a threat to assign this minion to the Ring-bearer (even if the Ring-bearer is already assigned).
+
+Removing the threat is a cost that must be paid before threats are triggered.
+|-
+| {{Card|MORDOR DEFENDER}}
+| Clarification
+| '''Skirmish''': Exert this minion and spot another {{C|Sauron}} minion to add a threat.
+|-
+| {{Card|MORDOR SAVAGE}}
+| Clarification
+| '''Skirmish''': Exert this minion and spot another {{C|Sauron}} minion to add a threat.
+|-
+| {{Card|ORC OFFICER}}
+| Clarification
+| Each time a companion is overwhelmed in a skirmish that involves a {{C|Sauron}} Orc, add 3 burdens.
+|-
+| {{Card|7C303}}
+| '''[Misprint?]''' 
+| This card from ''[[The Return of the King]]'' set has the same name as card {{Card|5C108}} from the ''[[Battle of Helm's Deep]]'' set. You may have up to four copies of 5 C 108 and up to four copies of 7 C 303 in your deck.
+|-
+| {{Card|ISENGARD RUINED}}
+| Clarification
+| '''Fellowship''': Spot Gandalf to add {{Twilight|2}}. Each player may draw a card.
+|-
+| {{Card|7U341}}
+| '''[Misprint?]''' 
+| This card from ''[[The Return of the King]]'' set has the same name as card {{Card|1C356}} from ''[[The Fellowship of the Ring]]'' set.
+|-
+| {{Card|MORGUL VALE}}
+| Clarification
+| '''Skirmish''': Spot your {{C|Sauron}} minion and remove 2 threats to make your {{C|Sauron}} minion strength +3.
+|-
+| {{Card|SAVED FROM THE FIRE}}
+| Clarification
+| Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
+|-
+| {{Card|ELESSAR'S EDICT}}
+| Clarification
+| If a {{C|Gondor}} Wraith is about to be killed, discard him and either exhaust another {{C|Gondor}} Wraith or spot another exhausted {{C|Gondor}} Wraith to prevent that.
+|-
+| {{Card|BLACK DART}}
+| Clarification
+| '''Archery''': Spot your enduring or mounted Nazgûl to transfer this condition from your support area to an unbound companion. Discard a mount borne by that companion. <br>Bearer cannot heal or bear mounts.
+|-
+| {{Card|SMEAGOL, BEARER OF GREAT SECRETS}}
+| '''[Ruling]''' 
+| You do not add a burden when you start this card as your Ring-bearer. (Your Ring-bearer is placed on the table, not played.)
+|-
+| {{Card|CELEBORN, LORD OF THE GALADHRIM}}
+| '''[Misprint]'''
+| The correct collector number for this card is 10 R 7. This card's collector's info was misprinted as 10 R 6. 
+|-
+| {{Card|GATHERING WIND}}
+| '''[Ruling]'''
+| Exerting a Wizard and choosing a number are part of the cost of this card. 
+|-
+| {{Card|BIRTHDAY PRESENT}}
+| '''[Ruling]'''
+| If the Free Peoples player has only 1 event (or up to 4 copies of the same event, but no other {{C|Shire}} events) in his or her discard pile, that event is taken into hand. 
+|-
+| {{Card|GOLLUM, MAD THING}}
+| '''[Ruling]'''
+| Gollum's game text does not apply if a Shadow player assigns him to a skirmish.
+|-
+| {{Card|FIELD OF THE FALLEN}}
+| Clarification '''[(actually a Misprint)]'''
+| To play, spot a {{C|Raider}} Man.<br>While there is a character in the dead pile, each companion of the same culture as that character is strength –1. <br>'''Skirmish''': Exert your Southron to make him strength +1.
+|-
+| {{Card|A SHADOW RISES}}
+| '''[Ruling]'''
+| When you make this card a minion, move it out of your support area. When this card is no longer a minion, move it back to your support area.
+
+ ''If a character bearing {{Card|Phial of Galadriel, Starglass}} is skirmishing A Shadow Rises and discards the Phial of Galadriel, A Shadow Rises loses "Fierce" and can bear other cards. If A Shadow Rises bears cards when its maneuver special ability is used, those cards are discarded. 
+|-
+|{{Card|BOROMIR, DEFENDER OF MINAS TIRITH}}
+| '''[Ruling]'''
+| This card has the Gandalf signet.
+|-
+| {{Card|PIPPIN, HOBBIT OF SOME INTELLIGENCE}}
+| '''[Ruling]'''
+| This card has the Gandalf signet.
+|-
+| {{Card|GALADRIEL, SORCERESS OF THE HIDDEN LAND}}
+| '''[Ruling]'''
+| When you reveal cards from the top of your deck, you reveal one for each forest on the adventure path. 
+ ''If you have three forests, you would reveal the top three cards of your draw deck.''
+|-
+| {{Card|FRODO, FRENZIED FIGHTER}}
+| '''[Ruling]'''
+| This version of Frodo cannot become the Ring-bearer.
+|-
+| {{Card|NICE FISH}}
+| '''[Misprint]'''
+| This card reads:
+
+Each time Sméagol wins a skirmish, place a {{C|Gollum}} token here.<br>Regroup: Heal a Ring-bound companion for each token here. Discard this condition.
+|-
+| {{Ruling|text={{Card|Mount Doom}}}}
+| [[Legacy Ruling 3]]
+| {{Ruling|text=The game text on this card goes into effect the moment it enters play, even if no player has yet moved to it.
+}}
+|-
+| {{Card|A NEW LIGHT}}
+| Clarification
+|'''Spell'''. Spot a {{C|Gandalf}} Wizard to search a Shadow player's discard pile and choose a minion, then return that minion to its owner's hand. If you 
+do, you may reveal that Shadow player's hand and discard a minion found there.
+|-
+| {{Ruling|text= {{Card|Shadowfax, Greatest of the Mearas}} }}
+| [[Legacy Ruling 1]]
+| {{Ruling|text=This card continuously discards all possessions on its bearer. Possessions may still be played on or transferred to bearer, but they will immediately be discarded once attached}}
+|-
+| {{Card|ORKISH WARG-MASTER}}
+| Clarification
+| Each time a mounted {{C|Orc}} minion wins a skirmish, you may make the Free Peoples player place a card from his or her hand on top of his or her draw deck. <br>Shadow: Exert Orkish Warg-master to play an {{C|Orc}} mount from your discard pile.
+|-
+| {{Card|EOWYN, NORTHWOMAN}}
+| Clarification
+| Assignment: Exert Éowyn and assign a minion to the Ring-bearer to make that minion lose all game text keywords and unable to gain game text keywords until the regroup phase.
+|-
+| {{Card|VILE PIT}}
+| Clarification
+| To play, spot a {{C|Uruk-hai}} hunter. At the start of each Shadow phase, you may discard 2 {{C|Uruk-hai}} cards from hand to play an {{C|Uruk-hai}} hunter from your discard pile. <br>Regroup: Discard this possession to return an {{C|Uruk-hai}} hunter from play to your hand.
+|-
+| {{Card|NURN}}
+| '''[Ruling]'''
+| The game text on this card remains active once it is controlled and is in your support area.
+|-
+| {{Card|ELVEN ARMAMENTS}}
+| Errata '''[/ Ruling]'''
+| The card type for this card is both Hand Weapon and Shield. 
+
+To play, bearer must not be bearing any possessions. Bearer must be an {{C|Elven}} companion. Bearer cannot bear any other possessions. While a unique companion bears this possession, the Free Peoples player may not use archery special abilities and the minion archery total is –1.
+
+|-
+| {{Card|GIL-GALAD, HIGH KING OF THE NOLDOR}}
+| Erratum
+| To play, spot 2 {{C|Elven}} companions. <br>Maneuver: Add a threat to take an {{C|Elven}} skirmish event into hand from your discard pile. <br>Regroup: Remove an {{C|Elven}} token to play an {{C|Elven}} condition from your discard pile.
+|-
+| {{Card|ENTS MARCHING}}
+| Clarification
+| If the fellowship is in region 1 or region 2, exert 2 Ents to make an Ent defender +1 until the regroup phase. <br>If the fellowship is in region 3, spot a {{C|Gandalf}} companion to draw a card.
+|-
+| {{Card|PERSPECTIVE}}
+| Erratum
+| Maneuver: Add 2 threats and spot a Wizard to spot a minion in play. That minion cannot use special abilities until the regroup phase.
+|-
+| {{Card|STING OF SHELOB}}
+| Erratum
+| To play, spot Shelob. The Free Peoples player must choose two companions in play (except the Ring-bearer). He or she then chooses to place one of those companions in the dead pile and return the other to his or her hand.
+|-
+| {{Card|FARAMIR, CAPTAIN OF ITHILIEN}}
+| Erratum
+| Ranger. Hunter 2. If Faramir is in your starting fellowship, his twilight cost is –1.<br> Maneuver: Exert Faramir to heal another companion with resistance 5 or more.
+|-
+| {{Card|THE FAITHFUL STONE}}
+| Erratum
+| Tale. Each time a non-{{C|Ringwraith}} minion is played, you may spot a Man to add a {{C|Gondor}} token here. <br>Maneuver: Remove 3 {{C|Gondor}} tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase. Any Shadow player may remove {{Twilight|2}} to prevent this.
+|-
+| {{Card|18R55}}
+| Clarification
+| Bearer must be a {{C|Gondor}} Man. Maneuver: If the fellowship is in region 1 or region 2, you may exert bearer to make him or her defender +1 until the regroup phase. <br>Regroup: Discard this to heal a companion.
+|-
+| {{Card|GROND, FORGED WITH BLACK STEEL}}
+| Clarification
+| To play, spot an {{C|Orc}} minion.<br> Each time the fellowship moves in the regroup phase, you may discard this possession to search the Free Peoples player's draw deck and choose 2 Free Peoples cards found there. Remove those cards from the game.
+|-
+| {{Card|WHISPER IN THE DARK}}
+| Erratum
+|Bearer must be a follower.<br> At the start of the maneuver phase, if you can spot a {{C|Men}} Man, the Free Peoples player must exert an unbound companion.
+|-
+| {{Card|DESTROYERS AND USURPERS}}
+| Erratum
+| While you can spot an {{C|Orc}} minion and fewer minions than companions, each companion loses all defender bonuses and cannot gain defender bonuses.<br> Maneuver: Spot 2 {{C|Orc}} minions to make the fellowship's current site gain battleground until the regroup phase.
+|-
+| {{Card|FRENZY OF ARROWS}}
+| Erratum
+| Spot an {{C|Orc}} archer minion to add 2 to the minion archery total. If you do, you may add an additional 2 to the minion archery total for each follower you can spot. '''[It should be noted that there are no ways in the game for {{C|Orc}} minions to be made archers, so this errata renders the card literally unplayable.]'''
+|-
+| {{Card|GOTHMOG, MORGUL LEADER}}
+| Erratum
+| Each of the fellowship and minion archery totals is +3. <br>Regroup: Remove {{Twilight|2}} to play an {{C|Orc}} minion from your discard pile. That minion comes into play exhausted.
+|-
+| {{Card|CAST FROM THE HALL}}
+| Erratum
+| Each time you play a {{C|Rohan}} possession from hand, add a token here. <br>Skirmish: Remove 3 {{C|Rohan}} tokens from here to make a {{C|Rohan}} companion strength +1 and damage +1.
+|-
+| {{Card|ERKENBRAND'S SHIELD}}
+| Erratum
+| Bearer must be a {{C|Rohan}} Man. The minion archery total is –1.<br>Skirmish: If bearer is Erkenbrand, you may add {{Twilight|2}} to cancel a fierce skirmish involving him.<br>Response: If a {{C|Rohan}} Man is about to take a wound, spot Gandalf and exert bearer to prevent that wound.
+|-
+| {{Card|FINAL TRIUMPH}}
+|'''[Ruling]'''
+| The effect of this card changes the requirements for resolving a skirmish. As a result, none of the cards that previously had an effect on strength 
+during a skirmish have any effect on a skirmish in which this card is played. Only cards or effects that increase or decrease vitality directly would 
+alter the resolution of a skirmish in which this card was played.
+|-
+| {{Card|PULL OF THE RING}}
+| Clarification
+| Remove a burden to choose one: assign a {{C|Wraith}} minion to a companion who has resistance 0; or have a {{C|Wraith}} minion lose fierce and gain 
+hunter 2 until the regroup phase
+|}
+
+----
+
+==<div id="section four">Section Four: X-Lists</div>==
+
+'''''[This section was imported from the last [[Current Rulings Document]]s.]'''''
+
+This section of the Current Rulings lists cards which are X-listed or restricted in sanctioned format tournaments, organized by collector's info.
+
+Promotional cards (from set 0 with P rarity) that appear in other sets are X-listed and restricted as per their versions that appear in other sets.
+
+===<div id="standard format x-list">Standard Format X-List</div>===
+These cards cannot be included in a deck for a Standard format tournament. All cards from the Fellowship block (sets 1, 2, and 3; and promotional cards originally printed in those sets) and The Two Towers block (sets 4, 5, and 6; and promotional cards originally printed in those sets) are also X-listed for Standard format tournaments.
+
+* {{Card|Steadfast Champion}}
+* {{Card|Aggression}}
+* {{Card|Memories of Darkness}}
+* {{Card|Galadriel, Lady Redeemed}}
+* {{Card|Mordor Fiend}}
+* {{Card|Final Account}}
+* {{Card|Strange-Looking Men}}
+* {{Card|Demoralized}}
+* {{Card|Orkish Smith}}
+* {{Card|Courtyard Parapet}}
+* {{Card|Madril, Defender of Osgiliath}}
+
+===<div id="open and block format restricted list">Open and Block Format R-List</div>===
+
+No more than one copy of each of these cards may be included in a deck for an Open or Block format tournament.
+
+* {{Card|Forces of Mordor}}
+* {{Card|Steadfast Champion}}
+* {{Card|Memories of Darkness}}
+* {{Card|Mordor Fiend}}
+* {{Card|Strange-Looking Men}}
+* {{Card|Orkish Smith}}
+
+===<div id="expanded format x-list">Expanded Format X-List</div>===
+These cards cannot be included in a deck for an Expanded format tournament.
+
+* {{Card|Galadriel, Lady of Light}}
+* {{Card|Saruman's Snows}}
+* {{Card|Ulaire Nertea, Messenger of Dol Guldur}}
+* {{Card|Sam, Son of Hamfast}}
+* {{Card|Sting}}
+* {{Card|A Talent For Not Being Seen}}
+* {{Card|Gimli, Dwarf of the Mountain-race}}
+* {{Card|Galadriel, Lady of the Golden Wood}}
+* {{Card|Aragorn, Heir to the White City}}
+* {{Card|Horn of Boromir}}
+* {{Card|The Palantir of Orthanc}}
+* {{Card|Saruman, Keeper of Isengard}}
+* {{Card|Frying Pan}}
+* {{Card|The Shire Countryside}}
+* {{Card|Legolas, Dauntless Hunter}}
+* {{Card|Steadfast Champion}}
+* {{Card|Aggression}}
+* {{Card|Memories of Darkness}}
+* {{Card|Galadriel, Lady Redeemed}}
+* {{Card|Mordor Fiend}}
+* {{Card|Final Account}}
+* {{Card|Strange-Looking Men}}
+* {{Card|Orkish Smith}}
+
+===<div id="expanded format restricted list">Expanded Format R-List</div>===
+No more than one copy of each of these cards may be included in a deck for an Expanded format tournament.
+
+* {{Card|Elrond, Lord of Rivendell}}
+* {{Card|Ottar, Man of Laketown}}
+* {{Card|No Stranger to the Shadows}}
+* {{Card|Savagery to Match Their Numbers}}
+* {{Card|Relics of Moria}}
+* {{Card|Forces of Mordor}}
+* {{Card|Flaming Brand}}
+* {{Card|Bill Ferny, Swarthy Sneering Fellow}}
+* {{Card|Bill the Pony}}
+* {{Card|Fortress Never Fallen}}
+* {{Card|Get On and Get Away}}
+
+
+----
+
+
+{{Rules_Table}}

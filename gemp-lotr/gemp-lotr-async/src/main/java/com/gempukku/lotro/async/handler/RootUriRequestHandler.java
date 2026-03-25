@@ -36,6 +36,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final PlaytestRequestHandler _playtestRequestHandler;
     private final PlayerInfoRequestHandler _playerInfoRequestHandler;
     private final TableDraftRequestHandler _tableDraftRequestHandler;
+    private final RtmdFeedbackRequestHandler _rtmdFeedbackRequestHandler;
 
     private final Pattern originPattern;
 
@@ -64,6 +65,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _playtestRequestHandler = new PlaytestRequestHandler(context);
         _playerInfoRequestHandler = new PlayerInfoRequestHandler(context);
         _tableDraftRequestHandler = new TableDraftRequestHandler(context);
+        _rtmdFeedbackRequestHandler = new RtmdFeedbackRequestHandler(context);
     }
 
     @Override
@@ -122,6 +124,8 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _playerInfoRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 6), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "tableDraft")) {
                 _tableDraftRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
+            } else if (uri.startsWith(_serverContextPath + "rtmdFeedback")) {
+                _rtmdFeedbackRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 12), request, context, responseWriter, remoteIp);
             } else {
                 throw new HttpProcessingException(404);
             }

@@ -13,6 +13,9 @@ public enum CardType implements Filterable {
     //Unused
     ADVENTURE,
 
+    //Used by Race to Mount Doom
+    METASITE,
+
     //Player's Council card types
     MAP;
 

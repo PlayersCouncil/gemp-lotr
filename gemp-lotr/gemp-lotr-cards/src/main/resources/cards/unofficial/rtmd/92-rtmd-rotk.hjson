@@ -1,0 +1,1511 @@
+{
+	92_1: {
+		cardInfo: {
+			//id: 92_1.0
+			parent: 92_1
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S01.0_card.jpg
+			collInfo: 92_1
+			rarity: _
+		}
+		title: Race Text 92_1
+		type: MetaSite
+		intensity: -4
+		effects: [
+			{
+				type: DeckBuildingOverride
+				maximumSameName: 6
+			}
+		]
+		gametext: Your draw deck may contain up to 6 copies of any card (instead of 4).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_2: {
+		cardInfo: {
+			//id: 92_2.0
+			parent: 92_2
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S02.0_card.jpg
+			collInfo: 92_2
+			rarity: _
+		}
+		title: Race Text 92_2
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: Activated
+				phase: shadow
+				limitPerTurn: 1
+				requires: {
+					type: OwnerIsShadow
+				}
+				cost: {
+					type: Exert
+					select: choose(your, isengard, man)
+				}
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: choose(your, isengard, condition)
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: Shadow: Once per turn, exert your [Isengard] Man to play an [Isengard] condition from your draw deck.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_3: {
+		cardInfo: {
+			//id: 92_3.0
+			parent: 92_3
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S03.0_card.jpg
+			collInfo: 92_3
+			rarity: _
+		}
+		title: Race Text 92_3
+		type: MetaSite
+		intensity: 2
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: site
+					keyword: underground
+				}
+			}
+		]
+		gametext: All sites gain <b>underground</b>.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_4: {
+		cardInfo: {
+			//id: 92_4.0
+			parent: 92_4
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S04.0_card.jpg
+			collInfo: 92_4
+			rarity: _
+		}
+		title: Race Text 92_4
+		type: MetaSite
+		intensity: -2
+		effects: [
+			{
+				type: Activated
+				phase: fellowship
+				requires: {
+					type: OwnerIsFreeps
+				}
+				cost: {
+					type: PlayCardFromHand
+					select: choose(or(pipe,pipeweed))
+					memorize: selectedCard
+				}
+				effect: {
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: selectedCard
+						filter: pipe
+					}
+					true: {
+						type: PlayCardFromDrawDeck
+						select: choose(pipeweed)
+						showAll: true
+						shuffle: true
+					}
+					false: {
+						type: PlayCardFromDrawDeck
+						select: choose(pipe)
+						showAll: true
+						shuffle: true
+					}
+				}
+			}
+		]
+		gametext: Fellowship: Play a pipe to play a pipeweed from your draw deck (or vice versa).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_5: {
+		cardInfo: {
+			//id: 92_5.0
+			parent: 92_5
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S05.0_card.jpg
+			collInfo: 92_5
+			rarity: _
+		}
+		title: Race Text 92_5
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: Activated
+				phase: fellowship
+				cost: {
+					type: Exert
+					select: choose(companion)
+					count: anyNonZero
+					memorize: exertedCompanions
+				}
+				effect: {
+					type: RemoveTwilight
+					amount: {
+						type: ForEachInMemory
+						memory: exertedCompanions
+					}
+				}
+			}
+		]
+		gametext: Fellowship: Exert X companions to remove (X).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_6: {
+		cardInfo: {
+			//id: 92_6.0
+			parent: 92_6
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S06.0_card.jpg
+			collInfo: 92_6
+			rarity: _
+		}
+		title: Race Text 92_6
+		type: MetaSite
+		intensity: -4
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: your,mount
+					amount: -5
+				}
+			}
+		]
+		gametext: The twilight cost of each of your mounts is -5.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_7: {
+		cardInfo: {
+			//id: 92_7.0
+			parent: 92_7
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S07.0_card.jpg
+			collInfo: 92_7
+			rarity: _
+		}
+		title: Race Text 92_7
+		type: MetaSite
+		intensity: 6
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: RevealHand
+					player: owner
+				}
+			}
+		]
+		gametext: You must play with your hand revealed.
+		lore: ""
+		promotext: ""
+		helptext: If your opponent has this card, click on the hand icon under their name (to the left of the threat display).  That window will update as their hand changes; you can either resize that window and keep it open or close/open the window as needed.
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_8: {
+		cardInfo: {
+			//id: 92_8.0
+			parent: 92_8
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S08.0_card.jpg
+			collInfo: 92_8
+			rarity: _
+		}
+		title: Race Text 92_8
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: your,companion
+				}
+				effect: {
+					type: Exert
+					select: choose(your,ring-bearer)
+				}
+			}
+		]
+		gametext: Each time you play a companion, you must exert the Ring-bearer.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_9: {
+		cardInfo: {
+			//id: 92_9.0
+			parent: 92_9
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S09.0_card.jpg
+			collInfo: 92_9
+			rarity: _
+		}
+		title: Race Text 92_9
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: CantPlayCards
+					filter: your,companion
+					requires: {
+						type: Location
+						filter: siteNumber(6-9)
+					}
+				}
+			}
+		]
+		gametext: While your fellowship is at site 6 or higher, companions cannot be played.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_10: {
+		cardInfo: {
+			//id: 92_10.0
+			parent: 92_10
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S10.0_card.jpg
+			collInfo: 92_10
+			rarity: _
+		}
+		title: Race Text 92_10
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: OwnerIsShadow
+			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: 3
+				memorize: discardedCards
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(minion,not(memory(discardedCards)))
+			}
+		}
+		gametext: Shadow: Discard 3 cards from hand to play a minion from your discard pile.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_11: {
+		cardInfo: {
+			//id: 92_11.0
+			parent: 92_11
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S11.0_card.jpg
+			collInfo: 92_11
+			rarity: _
+		}
+		title: Race Text 92_11
+		type: MetaSite
+		intensity: 3
+		effects: {
+			type: Modifier
+			modifier: {
+				type: modifyStrength
+				filter: your,minion
+				amount: 1
+				requires: [
+					{
+						type: OwnerIsShadow
+					}
+					{
+						type: moveCountMinimum
+						amount: 2
+					}
+				]
+			}
+		}
+		gametext: If the fellowship has moved more than once this turn, your minions are each strength +1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_12: {
+		cardInfo: {
+			//id: 92_12.0
+			parent: 92_12
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S12.0_card.jpg
+			collInfo: 92_12
+			rarity: _
+		}
+		title: Race Text 92_12
+		type: MetaSite
+		intensity: 2
+		effects: {
+			type: Modifier
+			modifier: {
+				type: skipPhase
+				phase: archery
+				requires: {
+					type: OwnerIsShadow
+				}
+			}
+		}
+		gametext: While you are the Shadow player, skip the archery phase.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_13: {
+		cardInfo: {
+			//id: 92_13.0
+			parent: 92_13
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S13.0_card.jpg
+			collInfo: 92_13
+			rarity: _
+		}
+		title: Race Text 92_13
+		type: MetaSite
+		intensity: 3
+		effects: {
+			type: Activated
+			phase: shadow
+			cost: {
+				type: PlayCardFromHand
+				select: choose(possession)
+			}
+			effect: {
+				type: Exert
+				player: fp
+				select: choose(companion)
+			}
+		}
+		gametext: Shadow: Play a possession to make the Free Peoples player exert a companion.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_14: {
+		cardInfo: {
+			//id: 92_14.0
+			parent: 92_14
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S14.0_card.jpg
+			collInfo: 92_14
+			rarity: _
+		}
+		title: Race Text 92_14
+		type: MetaSite
+		intensity: 2
+		effects: {
+			type: Activated
+			phase: shadow
+			requires: [
+				{
+					type: PlayedCardThisPhase
+					filter: culture(raider),minion
+					min: 3
+				}
+				{
+					type: CanSpot
+					filter: name(Sam),not(Ring-bearer)
+				}
+			]
+			effect: {
+				type: discard
+				select: choose(name(Sam))
+			}
+		}
+		gametext: Shadow: If 3 or more [Raider] minions have been played this phase, discard Sam.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_15: {
+		cardInfo: {
+			//id: 92_15.0
+			parent: 92_15
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S15.0_card.jpg
+			collInfo: 92_15
+			rarity: _
+		}
+		title: Race Text 92_15
+		type: MetaSite
+		intensity: -4
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: modifyStrength
+					filter: your,dwarf
+					amount: 1
+					requires: {
+						type: OwnerIsFreeps
+					}
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: CantTakeMoreWoundsThan
+					filter: your,dwarf
+					amount: 1
+					phase: skirmish
+					requires: {
+						type: OwnerIsFreeps
+					}
+				}
+			}
+		]
+		gametext: Your Dwarves are strength +1 and cannot take more than one wound during each skirmish phase.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_16: {
+		cardInfo: {
+			//id: 92_16.0
+			parent: 92_16
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S16.0_card.jpg
+			collInfo: 92_16
+			rarity: _
+		}
+		title: Race Text 92_16
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: Modifier
+			modifier: {
+				type: CantTakeWounds
+				filter: or(name(Gollum),name(Sméagol))
+			}
+		}
+		gametext: Gollum and Smeagol cannot take wounds.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_17: {
+		cardInfo: {
+			//id: 92_17.0
+			parent: 92_17
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S17.0_card.jpg
+			collInfo: 92_17
+			rarity: _
+		}
+		title: Race Text 92_17
+		type: MetaSite
+		intensity: 5
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: AddThreats
+			}
+		}
+		gametext: Each time your fellowship moves, add a threat.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_18: {
+		cardInfo: {
+			//id: 92_18.0
+			parent: 92_18
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S18.0_card.jpg
+			collInfo: 92_18
+			rarity: _
+		}
+		title: Race Text 92_18
+		type: MetaSite
+		intensity: 8
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: discard
+				player: fp
+				select: choose(companion,not(hobbit))
+				count: {
+					type: Conditional
+					requires: {
+						type: Location
+						filter: siteNumber(7-9)
+					}
+					true: 2
+					false: 1
+				}
+			}
+		}
+		gametext: Each time your fellowship moves, discard 1 non-Hobbit companion (or 2 if at site 7 or higher).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_19: {
+		cardInfo: {
+			//id: 92_19.0
+			parent: 92_19
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S19.0_card.jpg
+			collInfo: 92_19
+			rarity: _
+		}
+		title: Race Text 92_19
+		type: MetaSite
+		intensity: -3
+		effects: [
+			{
+				type: DeckBuildingOverride
+				skipSiteBlockValidation: true
+			}
+		]
+		gametext: Your adventure deck may contain sites from any block. (You may either mix any Movie block sites together, or use any Shadow sites, but not both.)
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_20: {
+		cardInfo: {
+			//id: 92_20.0
+			parent: 92_20
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S20.0_card.jpg
+			collInfo: 92_20
+			rarity: _
+		}
+		title: Race Text 92_20
+		type: MetaSite
+		intensity: -2
+		effects: {
+			type: Activated
+			phase: Shadow
+			requires: {
+				type: OwnerIsShadow
+			}
+			cost: {
+				type: Exert
+				select: choose(nazgul)
+				times: 2
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(nazgul)
+			}
+		}
+		gametext: Shadow: Exert a Nazgul twice to play a Nazgul from your discard pile.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_21: {
+		cardInfo: {
+			//id: 92_21.0
+			parent: 92_21
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S21.0_card.jpg
+			collInfo: 92_21
+			rarity: _
+		}
+		title: Race Text 92_21
+		type: MetaSite
+		intensity: -5
+		effects: {
+			type: Activated
+			phase: Fellowship
+			effect: {
+				type: PlayCardFromHand
+				select: choose(companion)
+				discount: -4
+			}
+		}
+		gametext: Fellowship: Play a companion; their twilight cost is -4.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_22: {
+		cardInfo: {
+			//id: 92_22.0
+			parent: 92_22
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S22.0_card.jpg
+			collInfo: 92_22
+			rarity: _
+		}
+		title: Race Text 92_22
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: Activated
+			phase: Shadow
+			effect: [
+				{
+					type: PlayCardFromHand
+					select: choose(condition,weather)
+					discount: -2
+				}
+				{
+					type: DrawCards
+				}
+			]
+		}
+		gametext: Shadow: Play a weather condition to draw a card; its twilight cost is -2.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_23: {
+		cardInfo: {
+			//id: 92_23.0
+			parent: 92_23
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S23.0_card.jpg
+			collInfo: 92_23
+			rarity: _
+		}
+		title: Race Text 92_23
+		type: MetaSite
+		intensity: -2
+		effects: {
+			type: Activated
+			phase: Skirmish
+			requires: {
+				type: OwnerIsFreeps
+			}
+			cost: {
+				type: Exert
+				select: choose(your,companion)
+				memorize: exertedComp
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(companion,not(memory(exertedComp)),cultureFromMemory(exertedComp))
+				amount: 1
+			}
+		}
+		gametext: Skirmish: Exert your companion to make another companion of the same culture strength +1.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_24: {
+		cardInfo: {
+			//id: 92_24.0
+			parent: 92_24
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S24.0_card.jpg
+			collInfo: 92_24
+			rarity: _
+		}
+		title: Race Text 92_24
+		type: MetaSite
+		intensity: -5
+		effects: {
+			type: Modifier
+			modifier: {
+				type: OverrideUniqueness
+				filter: your,nazgul
+				uniqueness: 4
+				requires: {
+					type: OwnerIsShadow
+				}
+			}
+		}
+		gametext: Your Nazgul are non-unique.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_25: {
+		cardInfo: {
+			//id: 92_25.0
+			parent: 92_25
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S25.0_card.jpg
+			collInfo: 92_25
+			rarity: _
+		}
+		title: Race Text 92_25
+		type: MetaSite
+		intensity: 6
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: AddTwilight
+				amount: {
+					type: ForEachBurden
+				}
+			}
+		}
+		gametext: Each time your fellowship moves, add (1) for each burden on the Ring-bearer.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_26: {
+		cardInfo: {
+			//id: 92_26.0
+			parent: 92_26
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S26.0_card.jpg
+			collInfo: 92_26
+			rarity: _
+		}
+		title: Race Text 92_26
+		type: MetaSite
+		intensity: 5
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: AddTwilight
+				amount: {
+					type: ForEachYouCanSpot
+					filter: possession,side(freeps)
+				}
+			}
+		}
+		gametext: Each time your fellowship moves, add (1) for each Free Peoples possession.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_27: {
+		cardInfo: {
+			//id: 92_27.0
+			parent: 92_27
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S27.0_card.jpg
+			collInfo: 92_27
+			rarity: _
+		}
+		title: Race Text 92_27
+		type: MetaSite
+		intensity: 7
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: OwnerIsFreeps
+			}
+			effect: {
+				type: DiscardFromHand
+				forced: true
+				player: owner
+				hand: owner
+				select: all(any)
+			}
+		}
+		gametext: Each time your fellowship moves, discard your hand.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_28: {
+		cardInfo: {
+			//id: 92_28.0
+			parent: 92_28
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S28.0_card.jpg
+			collInfo: 92_28
+			rarity: _
+		}
+		title: Race Text 92_28
+		type: MetaSite
+		intensity: -4
+		effects: {
+			type: Activated
+			phase: [
+				fellowship
+				shadow
+			]
+			effect: [
+				{
+					type: IncrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: PlayCardFromDrawDeck
+					select: choose(artifact)
+					showAll: true
+					shuffle: true
+				}
+			]
+			limitPerTurn: 1
+		}
+		gametext: <b>Fellowship</b> <i>or</i> Shadow: Play an artifact from your draw deck (limit once per turn).
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_29: {
+		cardInfo: {
+			//id: 92_29.0
+			parent: 92_29
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S29.0_card.jpg
+			collInfo: 92_29
+			rarity: _
+		}
+		title: Race Text 92_29
+		type: MetaSite
+		intensity: -6
+		effects: {
+			type: Activated
+			phase: shadow
+			requires: {
+				type: OwnerIsShadow
+			}
+			limitPerTurn: 1
+			effect: {
+				type: OpenAndPlayFromBoosterPack
+				player: shadow
+				filter: side(shadow)
+			}
+		}
+		gametext: Shadow: Open and reveal a sealed booster pack (limit once per turn). You may play one shadow card revealed, ignoring all costs.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_30: {
+		cardInfo: {
+			//id: 92_30.0
+			parent: 92_30
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S30.0_card.jpg
+			collInfo: 92_30
+			rarity: _
+		}
+		title: Race Text 92_30
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: Trigger
+			optional: true
+			player: shadow
+			trigger: {
+				type: StartOfPhase
+				phase: shadow
+			}
+			requires: {
+				type: OwnerIsShadow
+			}
+			cost: {
+				type: RemoveTwilight
+				amount: 2
+			}
+			effect: {
+				type: DrawCards
+				player: owner
+			}
+		}
+		gametext: At the start of each of your Shadow phases, you may remove (2) to draw a card.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_31: {
+		cardInfo: {
+			//id: 92_31.0
+			parent: 92_31
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S31.0_card.jpg
+			collInfo: 92_31
+			rarity: _
+		}
+		title: Race Text 92_31
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: Activated
+			phase: fellowship
+			cost: {
+				type: Exert
+				select: choose(elf,companion)
+				count: 2
+			}
+			effect: {
+				type: Discard
+				player: shadow
+				select: choose(side(shadow),condition)
+			}
+		}
+		gametext: Fellowship: Exert two Elf companions to make a Shadow player discard a Shadow condition.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_32: {
+		cardInfo: {
+			//id: 92_32.0
+			parent: 92_32
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S32.0_card.jpg
+			collInfo: 92_32
+			rarity: _
+		}
+		title: Race Text 92_32
+		type: MetaSite
+		intensity: -3
+		effects: {
+			type: Activated
+			phase: fellowship
+			cost: {
+				type: Exert
+				select: choose(companion)
+				memorize: exertedComp
+			}
+			effect: {
+				type: Heal
+				select: choose(not(Memory(exertedComp)),companion,SignetFromMemory(exertedComp))
+			}
+		}
+		gametext: Fellowship: Exert a companion to heal another companion with the same signet.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_33: {
+		cardInfo: {
+			//id: 92_33.0
+			parent: 92_33
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S33.0_card.jpg
+			collInfo: 92_33
+			rarity: _
+		}
+		title: Race Text 92_33
+		type: MetaSite
+		intensity: -2
+		effects: {
+			type: Trigger
+			optional: true
+			player: shadow
+			trigger: {
+				type: StartOfPhase
+				phase: shadow
+			}
+			requires: {
+				type: OwnerIsShadow
+			}
+			effect: {
+				type: PutCardsFromDeckIntoHand
+				select: choose(GameTextContains(initiative))
+				shuffle: true
+				reveal: true
+				showAll: true
+			}
+		}
+		gametext: At the start of each of your Shadow phases, you may take one card with "initiative" in its game text into hand from your draw deck.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_34: {
+		cardInfo: {
+			//id: 92_34.0
+			parent: 92_34
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S34.0_card.jpg
+			collInfo: 92_34
+			rarity: _
+		}
+		title: Race Text 92_34
+		type: MetaSite
+		intensity: 5
+		effects: {
+			type: modifier
+			modifier: {
+				type: CantBear
+				filter: companion,HasAttached(possession)
+				cardFilter: possession
+			}
+		}
+		gametext: Each companion may bear no more than one possession.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_35: {
+		cardInfo: {
+			//id: 92_35.0
+			parent: 92_35
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S35.0_card.jpg
+			collInfo: 92_35
+			rarity: _
+		}
+		title: Race Text 92_35
+		type: MetaSite
+		intensity: 4
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: Heals
+				filter: companion
+				memorize: healedComp
+			}
+			requires: [
+				{
+					type: Location
+					filter: sanctuary
+				}
+				{
+					type: OwnerIsFreeps
+				}
+			]
+			effect: {
+				type: AddModifier
+				modifier: {
+					type: CantHeal
+					filter: Memory(healedComp)
+					requires: {
+						type: Location
+						filter: sanctuary
+					}
+				}
+				until: end(regroup)
+			}
+		}
+		gametext: While at a sanctuary, you may heal no more than one wound from each character.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	92_36: {
+		cardInfo: {
+			//id: 92_36.0
+			parent: 92_36
+			variant: ORIGINAL
+			variantPath: decipher/rtmd
+			revision: 0
+			image: RTMD/LOTR-EN92S36.0_card.jpg
+			collInfo: 92_36
+			rarity: _
+		}
+		title: Race Text 92_36
+		type: MetaSite
+		intensity: 5
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: CantPlayCards
+					filter: companion
+					requires: [
+						{
+							type: OwnerIsFreeps
+						}
+						{
+							type: CanSpot
+							filter: companion
+							count: 5
+						}
+					]
+				}
+			}
+			{
+				type: Activated
+				phase: fellowship
+				requires: {
+					type: OwnerIsFreeps
+				}
+				cost: {
+					type: Exert
+					select: choose(ringBearer)
+				}
+				effect: {
+					type: Discard
+					select: choose(your,companion,not(ringBearer))
+				}
+			}
+		]
+		gametext: You cannot have more than 5 companions in your fellowship.\Fellowship: Exert the Ring-bearer to discard another companion.
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

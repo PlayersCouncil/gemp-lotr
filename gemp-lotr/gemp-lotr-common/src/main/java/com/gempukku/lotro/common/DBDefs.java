@@ -182,6 +182,7 @@ public class DBDefs {
         public String collection; //255
         public int currency;
         public String contents; //text
+        public String message; //text, nullable — human-readable note for the player
         public LocalDateTime date_recorded;
         public String direction; //45
 
@@ -203,5 +204,31 @@ public class DBDefs {
         public ZonedDateTime GetUTCUntil() {
             return DateUtils.ParseDate(until);
         }
+    }
+
+    public static class RtmdComparisonVote {
+        public int id;
+        public String blueprint_a;
+        public String blueprint_b;
+        public String winner;
+        public String ip_address;
+        public LocalDateTime voted_at;
+    }
+
+    public static class RtmdIdeaSubmission {
+        public int id;
+        public String idea_text;
+        public String ip_address;
+        public LocalDateTime submitted_at;
+        public int upvotes;
+        public int downvotes;
+    }
+
+    public static class RtmdIdeaVote {
+        public int id;
+        public int submission_id;
+        public String ip_address;
+        public int vote;
+        public LocalDateTime voted_at;
     }
 }

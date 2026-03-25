@@ -1,4 +1,10 @@
 class Card {
+    // Percentage of card height used for the meta-site modifier overlay
+    static MetaSiteOverlayHeight = 27;
+
+    // Global map of modifier blueprint ID -> visual card image URL, populated by preGameSetup
+    static metaSiteOverlays = {};
+
     blueprintId = null;
     backsideBPId = null;
     bareBlueprint = null;
@@ -628,10 +634,102 @@ class Card {
         return cardDiv;
     }
 
-    //Used by non-game pages such as the deckbuilder and main hall
-    static CreateFullCardDiv(image, testingText, foil, horizontal, noBorder) {
+    /**
+     * Returns true if the given blueprint ID is a meta-site modifier (sets 91-93).
+     */
+    static isMetaSiteModifier(blueprintId) {
+        if (!blueprintId) return false;
+        var setNum = parseInt(blueprintId.split("_")[0]);
+        return setNum >= 90 && setNum <= 93;
+    }
+
+    /**
+     * If the card is a meta-site modifier and we have overlay data, swap its image URLs
+     * so the visual card is the main image and the modifier is the overlay.
+     * Returns true if the overlay was applied.
+     */
+    static applyMetaSiteOverlay(card) {
+        if (!Card.isMetaSiteModifier(card.bareBlueprint)) return false;
+        var visualUrl = Card.metaSiteOverlays[card.bareBlueprint];
+        if (!visualUrl) return false;
+        if (!card.overlayImageUrl) {
+            card.overlayImageUrl = card.imageUrl;
+            card.imageUrl = visualUrl;
+        }
+        return true;
+    }
+
+    /**
+     * Creates a card div for split-rendered meta-site cards (visual base + modifier overlay).
+     * Used in-game for meta-site cards in the support area.
+     * @param {string} visualImage - URL of the visual position card (base image)
+     * @param {string} modifierImage - URL of the modifier card (overlaid on bottom)
+     * @param {string} testingText - testing text overlay (if any)
+     * @param {string} text - action text (if any)
+     * @param {boolean} foil - whether the card is foil
+     * @param {boolean} tokens - whether to show token overlay
+     * @param {boolean} noBorder - whether to hide the border
+     * @param {boolean} errata - whether to show errata overlay
+     * @param {boolean} incomplete - whether the card is incomplete
+     */
+    static CreateSplitCardDiv(visualImage, modifierImage, testingText, text, foil, tokens, noBorder, errata, incomplete) {
+        // Base card uses the visual position card image
+        var cardDiv = $("<div class='card'><img src='" + visualImage + "' width='100%' height='100%'>" + ((text != null) ? text : "") + "</div>");
+
+        // Modifier overlay on the bottom portion
+        if (modifierImage) {
+            var overlayHeight = Card.MetaSiteOverlayHeight;
+            var overlayDiv = $("<div class='metaSiteOverlay' style='position:absolute;bottom:0;width:100%;height:" + overlayHeight + "%;overflow:hidden;'>"
+                + "<img src='" + modifierImage + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'>"
+                + "</div>");
+            cardDiv.append(overlayDiv);
+        }
+
+        if (errata) {
+            var errataDiv = $("<div class='errataOverlay'><img src='/gemp-lotr/images/errata-vertical.png' width='100%' height='100%'></div>");
+            cardDiv.append(errataDiv);
+        }
+
         var foilPresentation = Card.getFoilPresentation();
-        
+
+        if (foil && foilPresentation !== 'none') {
+            var foilImage = (foilPresentation === 'animated') ? "foil.gif" : "holo.jpg";
+            var foilDiv = $("<div class='foilOverlay'><img src='/gemp-lotr/images/" + foilImage + "' width='100%' height='100%'></div>");
+            cardDiv.append(foilDiv);
+        }
+
+        if (tokens === undefined || tokens) {
+            var overlayDiv = $("<div class='tokenOverlay'></div>");
+            cardDiv.append(overlayDiv);
+        }
+
+        if (testingText != null) {
+            var testingTextDiv = $("<div class='testingTextOverlay'></div>");
+            var firstPipe = testingText.indexOf('|');
+            if (firstPipe !== -1) {
+                testingTextDiv.html(testingText.substring(0, firstPipe));
+            }
+            else {
+                testingTextDiv.html(testingText);
+            }
+            cardDiv.append(testingTextDiv);
+        }
+
+        var borderDiv = $("<div class='borderOverlay actionArea' width='100%' height='100%'></div>");
+        if (noBorder)
+            borderDiv.addClass("noBorder");
+        cardDiv.append(borderDiv);
+
+        var cardPileCountDiv = $("<div class='cardPileCount'></div>");
+        cardDiv.append(cardPileCountDiv);
+
+        return cardDiv;
+    }
+
+    //Used by non-game pages such as the deckbuilder and main hall
+    static CreateFullCardDiv(image, testingText, foil, horizontal, noBorder, overlayImage) {
+        var foilPresentation = Card.getFoilPresentation();
+
         if (horizontal) {
             var cardDiv = $("<div style='position: relative;width:497px;height:357px;'></div>");
             cardDiv.append("<div class='fullcard' style='position:absolute'><img src='" + image + "' width='497' height='357'></div>");
@@ -655,7 +753,14 @@ class Card {
         } else {
             var cardDiv = $("<div style='position: relative;width:357px;height:497px;'></div>");
             cardDiv.append("<div class='fullcard' style='position:absolute'><img src='" + image + "' width='357' height='497'></div>");
-            
+
+            if (overlayImage) {
+                var overlayDiv = $("<div class='metaSiteOverlay' style='position:absolute;bottom:0;width:357px;height:" + Card.MetaSiteOverlayHeight + "%;overflow:hidden;'>"
+                    + "<img src='" + overlayImage + "' style='width:100%;height:100%;object-fit:cover;object-position:bottom;'>"
+                    + "</div>");
+                cardDiv.append(overlayDiv);
+            }
+
             if (foil && foilPresentation !== 'none') {
                 var foilImage = (foilPresentation === 'animated') ? "foil.gif" : "holo.jpg";
                 var foilDiv = $("<div class='foilOverlay' style='position:absolute;width:357px;height:497px'><img src='/gemp-lotr/images/" + foilImage + "' width='100%' height='100%'></div>");

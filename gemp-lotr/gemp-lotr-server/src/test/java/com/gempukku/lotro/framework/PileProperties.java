@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * These functions will help you determine pile counts or add/remove a card to a pile at a particular point.
  */
-public interface PileProperties extends TestBase{
+public interface PileProperties extends TestBase, TestConstants {
 	/**
 	 * @return Gets the current number of cards in the Free Peoples player's hand.
 	 */

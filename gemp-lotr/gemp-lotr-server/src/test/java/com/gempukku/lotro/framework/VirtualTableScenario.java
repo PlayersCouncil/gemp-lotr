@@ -3,27 +3,47 @@ package com.gempukku.lotro.framework;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DefaultActionContext;
 import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.PackBox;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.packs.ProductLibraryPackOpener;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, CardProperties, Choices, Decisions,
+public class VirtualTableScenario implements TestBase, TestConstants, Actions, AdHocEffects, CardProperties, Choices, Decisions,
         GameProcedures, GameProperties, PileProperties, Skirmishes, ZoneManipulation {
 
-    public static LotroCardBlueprintLibrary _cardLibrary;
-    public static LotroFormatLibrary _formatLibrary;
-    public static ProductLibrary _productLibrary;
+    protected static LotroCardBlueprintLibrary _cardLibrary;
+    protected static LotroFormatLibrary _formatLibrary;
+    protected static ProductLibrary _productLibrary;
 
     static {
         _cardLibrary = new LotroCardBlueprintLibrary();
         _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
         _productLibrary = new ProductLibrary(_cardLibrary);
+    }
+
+    public static LotroCardBlueprint FindCard(String bpid) throws CardNotFoundException {
+        return _cardLibrary.getLotroCardBlueprint(bpid);
+    }
+
+    public static LotroFormat FindFormat(String code) throws CardNotFoundException {
+        return _formatLibrary.getFormat(code);
+    }
+
+    public static PackBox FindProduct(String name) throws CardNotFoundException {
+        return _productLibrary.GetProduct(name);
     }
 
     // Player key, then name/card
@@ -44,17 +64,41 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
     public ActionContext ShadowFilterContext() { return _shadowFilterContext; }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, null, null, null, Multipath);
+        this(cardIDs, null, null, null, Multipath, null, null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath);
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, null,null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs,
             HashMap<String, String> siteIDs,
             String ringBearerID, String ringID,
             String format) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, null);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String freepsMetaSiteId, String shadowMetaSiteId) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, freepsMetaSiteId, shadowMetaSiteId, null);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, freepsMetaSiteId, shadowMetaSiteId, bidHandler);
+    }
+
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
 
         if(siteIDs == null ) {
             siteIDs = KingSites;
@@ -96,12 +140,15 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
         decks.get(P1).setRing(ringID);
         decks.get(P2).setRing(ringID);
 
-        InitializeGameWithDecks(decks, format);
+        InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId);
 
         //We want to handle this at this time before the game start process because certain game properties aren't
         // available until the player order has been determined.
-        BidAndSeatPlayers();
-
+        if (bidHandler != null) {
+            bidHandler.accept(this);
+        } else {
+            BidAndSeatPlayers();
+        }
 
         Cards.put(P1, new HashMap<>());
         Cards.put(P2, new HashMap<>());
@@ -188,6 +235,16 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
                 Cards.get(P2).put(name, (PhysicalCardImpl) card);
             }
         }
+
+        // Create and place meta-site modifiers in SUPPORT zone if provided
+        if (freepsMetaSiteId != null) {
+            var freepsMod = _gameState.getMetaSites(P1).getFirst();
+            Cards.get(P1).put("mod", (PhysicalCardImpl)freepsMod);
+        }
+        if (shadowMetaSiteId != null) {
+            var shadowMod = _gameState.getMetaSites(P2).getFirst();
+            Cards.get(P2).put("mod", (PhysicalCardImpl)shadowMod);
+        }
     }
 
     /**
@@ -236,17 +293,72 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      * complicated test scenarios.  The vast majority of the time you do not need this.
      * @param decks A map of decks for each player in the game; key is the player name.
      * @param formatName Name of the format this table should be following.
+     * @param freepsMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null
+     * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
      */
-    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName) {
+    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId) {
         _userFeedback = new DefaultUserFeedback();
 
         var format = _formatLibrary.getFormat(formatName);
 
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
+        GameExtraInfo info = null;
+        if(freepsMetaSiteId != null || shadowMetaSiteId != null) {
+            var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
+            if(freepsMetaSiteId != null) {
+                playerMetaSites.put(P1, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
+            }
+            if(shadowMetaSiteId != null) {
+                playerMetaSites.put(P2, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
+            }
+            info = new RTMDGameInfo(playerMetaSites);
+        }
+
+        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary, info);
         _userFeedback.setGame(_game);
         _game.startGame();
-
+        _game.setPackOpener(new ProductLibraryPackOpener(_productLibrary));
         _gameState = _game.getGameState();
+    }
+
+    /**
+     * When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic
+     * booster pack results, which requires that we override the default pack opener with a custom one.
+     */
+    public void UseTestBoosters() {
+        _game.setPackOpener(new TestPackOpener(_productLibrary));
+    }
+
+    private final List<PhysicalCardImpl> _createdCards = new java.util.ArrayList<>();
+
+    /**
+     * Registers a callback on the game state that captures any cards created dynamically
+     * mid-game (e.g. from booster pack opening). Call this before the effect that creates cards.
+     * Retrieved cards can be accessed via {@link #GetCreatedCards()} or {@link #GetLastCreatedCard()}.
+     */
+    public void StartCardCapture() {
+        _createdCards.clear();
+        _gameState.setCardCreationCallback(card -> _createdCards.add((PhysicalCardImpl) card));
+    }
+
+    /**
+     * Stops capturing dynamically created cards and clears the callback.
+     */
+    public void StopCardCapture() {
+        _gameState.setCardCreationCallback(null);
+    }
+
+    /**
+     * Returns all cards captured since the last {@link #StartCardCapture()} call.
+     */
+    public List<PhysicalCardImpl> GetCreatedCards() {
+        return java.util.Collections.unmodifiableList(_createdCards);
+    }
+
+    /**
+     * Returns the most recently captured card, or null if none were captured.
+     */
+    public PhysicalCardImpl GetLastCreatedCard() {
+        return _createdCards.isEmpty() ? null : _createdCards.getLast();
     }
 
     /**
@@ -254,10 +366,10 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      */
     public void BidAndSeatPlayers() {
         FreepsDecided("1");
-        PlayerDecided(P2, "0");
+        ShadowDecided( "0");
 
         // Seating choice
-        PlayerDecided(P1, "0");
+        FreepsDecided("0");
     }
 
     /**
@@ -289,10 +401,24 @@ public class VirtualTableScenario implements TestBase, Actions, AdHocEffects, Ca
      *                  If false, the default drawn hand will remain untouched.
      */
     public void StartGame(boolean resetHand) {
+        StartGame(resetHand, true);
+    }
+
+    /**
+     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
+     * Fellowship phase.
+     * @param resetHand If true, any cards drawn at the start of the game will be placed back on top of the draw deck.
+     * @param skipStartingFellowships If true, auto-skips the starting fellowship selection for both players.
+     *                                 If false, the test must handle starting fellowship selection manually before
+     *                                 this method proceeds to mulligans.
+     */
+    public void StartGame(boolean resetHand, boolean skipStartingFellowships) {
         var freepsHand = GetFreepsHand().stream().toList();
         var shadowHand = GetShadowHand().stream().toList();
 
-        SkipStartingFellowships();
+        if (skipStartingFellowships) {
+            SkipStartingFellowships();
+        }
 
         // As a convenience, we want the tester to be able to stack their hand and other piles before the game begins.
         // However, since a new hand will be drawn, this tramples over the careful stacking, so we will reset the

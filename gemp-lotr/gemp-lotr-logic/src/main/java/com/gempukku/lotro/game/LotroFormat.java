@@ -44,7 +44,9 @@ public interface LotroFormat {
     String validateSite(String cardId);
 
     List<String> validateDeck(LotroDeck deck);
+    List<String> validateDeck(LotroDeck deck, DeckValidationContext context);
     String validateDeckForHall(LotroDeck deck);
+    String validateDeckForHall(LotroDeck deck, DeckValidationContext context);
 
     LotroDeck applyErrata(LotroDeck deck);
 

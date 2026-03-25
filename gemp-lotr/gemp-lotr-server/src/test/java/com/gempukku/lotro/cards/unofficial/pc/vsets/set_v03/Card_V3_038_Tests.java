@@ -242,7 +242,6 @@ public class Card_V3_038_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		scn.FreepsChooseAny();
 		scn.FreepsChoose("threat"); //Cost for Leaving Forever
 		scn.SkipToPhase(Phase.REGROUP);
 
@@ -275,7 +274,6 @@ public class Card_V3_038_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		scn.FreepsChooseAny();
 		scn.FreepsChoose("threat"); //Cost for Leaving Forever
 		scn.SkipToPhase(Phase.REGROUP);
 

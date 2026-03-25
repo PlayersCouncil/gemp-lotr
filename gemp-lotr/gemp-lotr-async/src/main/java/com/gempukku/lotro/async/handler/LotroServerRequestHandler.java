@@ -100,6 +100,10 @@ public class LotroServerRequestHandler {
         if (_transferDAO.hasUndeliveredAnnouncement(player)) {
             headersToAdd.put("Delivery-Service-Announcement", "true");
         }
+
+        if (_transferDAO.hasUndeliveredLeagueNotifications(player)) {
+            headersToAdd.put("Delivery-Service-League", "true");
+        }
     }
 
     protected final Player getResourceOwnerSafely(HttpRequest request, String participantId) throws HttpProcessingException {

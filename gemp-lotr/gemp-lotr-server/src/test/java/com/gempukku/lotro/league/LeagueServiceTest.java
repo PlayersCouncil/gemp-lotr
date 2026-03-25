@@ -50,7 +50,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, _productLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, null, _cardLibrary, _formatLibrary, _productLibrary, null);
 
         assertTrue(leagueService.canPlayRankedGame(league, leagueSerie, "player1"));
         assertTrue(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player2"));
@@ -105,7 +105,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, _productLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, null, _cardLibrary, _formatLibrary, _productLibrary, null);
 
         assertTrue(leagueService.canPlayRankedGame(league, leagueSerie, "player1"));
         assertFalse(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player2"));
@@ -156,7 +156,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         Mockito.when(leagueParticipationDAO.getUsersParticipating(league.getCodeStr())).thenReturn(players);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary,  _productLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, null, _cardLibrary, _formatLibrary,  _productLibrary, null);
 
         leagueService.reportLeagueGameResult(league, leagueSerie, "player1", "player2");
         leagueService.reportLeagueGameResult(league, leagueSerie, "player1", "player3");

@@ -1,5 +1,7 @@
 package com.gempukku.lotro.framework;
 
+import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import java.util.Map;
  * the tools to make a decision properly.  See Choices for selecting among multiple options, and see Actions for
  * top-level card actions.
  */
-public interface Decisions extends TestBase  {
+public interface Decisions extends TestBase, TestConstants  {
 
 	/**
 	 * @return Gets the Free Peoples decision that Gemp is currently waiting on.  Will be null if Freeps is not currently
@@ -240,7 +242,9 @@ public interface Decisions extends TestBase  {
 	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return FreepsHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return ShadowHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
 
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))

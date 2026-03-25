@@ -36,6 +36,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("timeword", new TimewordFieldProcessor());
         fieldProcessors.put("timewords", new TimewordFieldProcessor());
         fieldProcessors.put("twilight", new TwilightCostFieldProcessor());
+        fieldProcessors.put("intensity", new IntensityFieldProcessor());
         fieldProcessors.put("strength", new StrengthFieldProcessor());
         fieldProcessors.put("vitality", new VitalityFieldProcessor());
         fieldProcessors.put("resistance", new ResistanceFieldProcessor());
@@ -51,6 +52,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("gametext", new GameTextFieldProcessor());
         fieldProcessors.put("lore", new LoreFieldProcessor());
         fieldProcessors.put("promotext", new PromoTextFieldProcessor());
+        fieldProcessors.put("helptext", new HelpTextFieldProcessor());
 
         fieldProcessors.put("cardinfo", new CardInfoFieldProcessor());
         fieldProcessors.put("alts", new NullProcessor());

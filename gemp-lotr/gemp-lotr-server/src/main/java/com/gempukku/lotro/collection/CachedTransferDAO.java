@@ -7,10 +7,7 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.Player;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CachedTransferDAO implements TransferDAO, Cached {
     private final TransferDAO _delegate;
@@ -91,8 +88,30 @@ public class CachedTransferDAO implements TransferDAO, Cached {
     }
 
     @Override
+    public int addTransferTo(boolean notifyPlayer, String player, String reason, String collectionName, int currency,
+            CardCollection items, String message) {
+        return _delegate.addTransferTo(notifyPlayer, player, reason, collectionName, currency, items, message);
+    }
+
+    @Override
+    public int addTransferToRaw(boolean notifyPlayer, String player, String reason, String collectionName, int currency,
+            String rawContents, String message) {
+        return _delegate.addTransferToRaw(notifyPlayer, player, reason, collectionName, currency, rawContents, message);
+    }
+
+    @Override
     public int addTransferFrom(String player, String reason, String collectionName, int currency, CardCollection items) {
         return _delegate.addTransferFrom(player, reason, collectionName, currency, items);
+    }
+
+    @Override
+    public boolean hasUndeliveredLeagueNotifications(Player player) {
+        return _delegate.hasUndeliveredLeagueNotifications(player);
+    }
+
+    @Override
+    public List<DBDefs.Transfer> consumeUndeliveredLeagueNotifications(Player player) {
+        return _delegate.consumeUndeliveredLeagueNotifications(player);
     }
 
     @Override

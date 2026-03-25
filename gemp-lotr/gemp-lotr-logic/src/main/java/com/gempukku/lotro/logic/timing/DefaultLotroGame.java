@@ -6,15 +6,19 @@ import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.communication.UserFeedback;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.state.GameState;
+import com.gempukku.lotro.game.state.GameExtraInfo;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.PreGameInfo;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.modifiers.ModifiersEnvironment;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.PackOpener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +29,7 @@ public class DefaultLotroGame implements LotroGame {
 
     private final GameState _gameState;
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();
+    private PackOpener _packOpener;
     private final DefaultActionsEnvironment _actionsEnvironment;
     private final UserFeedback _userFeedback;
     private final TurnProcedure _turnProcedure;
@@ -47,11 +52,15 @@ public class DefaultLotroGame implements LotroGame {
     private final LotroCardBlueprintLibrary _library;
 
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library) {
-        this(format, decks, userFeedback, library, "No timer", false, "Test Match");
+        this(format, decks, userFeedback, library, "No timer", false, "Test Match", null);
+    }
+
+    public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library, GameExtraInfo extraInfo) {
+        this(format, decks, userFeedback, library, "No timer", false, "Test Match", extraInfo);
     }
 
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library,
-            String timerInfo, boolean allowSpectators, String tournamentName) {
+            String timerInfo, boolean allowSpectators, String tournamentName, GameExtraInfo extraInfo) {
         _library = library;
         _adventure = format.getAdventure();
         _format = format;
@@ -65,6 +74,7 @@ public class DefaultLotroGame implements LotroGame {
         final Map<String, String> ringBearers = new HashMap<>();
         final Map<String, String> rings = new HashMap<>();
         final Map<String, String> maps = new HashMap<>();
+        final Map<String, List<String>> metaSiteBlueprintIds = new HashMap<>();
         final Map<String, String> notes = new HashMap<>();
         final StringBuilder formatInfo = new StringBuilder();
         for (String playerId : decks.keySet()) {
@@ -81,6 +91,14 @@ public class DefaultLotroGame implements LotroGame {
 
             if(format.usesMaps()) {
                 maps.put(playerId, lotroDeck.getMap());
+            }
+
+            if (extraInfo instanceof RTMDGameInfo rtmdInfo) {
+                var pairs = rtmdInfo.getMetaSites(playerId);
+                if (pairs != null && !pairs.isEmpty()) {
+                    metaSiteBlueprintIds.put(playerId,
+                            pairs.stream().map(RTMDGameInfo.MetaSitePair::modifierBlueprintId).toList());
+                }
             }
 
             var note = "Deck used: <a href='" + lotroDeck.getURL(playerId) + "' target='_blank'>" + lotroDeck.getDeckName() +
@@ -100,6 +118,7 @@ public class DefaultLotroGame implements LotroGame {
         }
 
         _gameState = new GameState();
+        _gameState.setGame(this);
 
         CharacterDeathRule characterDeathRule = new CharacterDeathRule(_actionsEnvironment);
         characterDeathRule.applyRule();
@@ -108,16 +127,35 @@ public class DefaultLotroGame implements LotroGame {
                 new PlayerOrderFeedback() {
                     @Override
                     public void setPlayerOrder(PlayerOrder playerOrder, String firstPlayer) {
-                        _gameState.init(playerOrder, firstPlayer, cards, ringBearers, rings, maps, library, format);
+                        _gameState.init(playerOrder, firstPlayer, cards, ringBearers, rings, maps, metaSiteBlueprintIds, library, format);
+
+                        // Set display names on meta-site modifier cards from visual card blueprints
+                        if (extraInfo instanceof RTMDGameInfo rtmdInfo) {
+                            for (String playerId : playerOrder.getAllPlayers()) {
+                                var pairs = rtmdInfo.getMetaSites(playerId);
+                                var metaSiteCards = _gameState.getMetaSites(playerId);
+                                if (pairs != null && metaSiteCards != null) {
+                                    for (int i = 0; i < Math.min(pairs.size(), metaSiteCards.size()); i++) {
+                                        var visualId = pairs.get(i).visualBlueprintId();
+                                        try {
+                                            var visualBp = library.getLotroCardBlueprint(visualId);
+                                            if (visualBp != null && metaSiteCards.get(i) instanceof PhysicalCardImpl impl) {
+                                                impl.setDisplayName(GameUtils.getFullName(visualBp));
+                                            }
+                                        } catch (CardNotFoundException ignored) {}
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 new PregameSetupFeedback() {
                     @Override
                     public void populatePregameInfo() {
                         var preGameInfo = new PreGameInfo(decks.keySet().stream().toList(), tournamentName, timerInfo,
-                                !allowSpectators, format, formatInfo.toString(), notes, maps);
+                                !allowSpectators, format, formatInfo.toString(), notes, maps, extraInfo);
 
-                        _gameState.initPreGame(preGameInfo, decks);
+                        _gameState.initPreGame(preGameInfo, decks, metaSiteBlueprintIds, library, DefaultLotroGame.this);
                     }
                 }, characterDeathRule);
         _userFeedback = userFeedback;
@@ -268,6 +306,15 @@ public class DefaultLotroGame implements LotroGame {
     @Override
     public LotroCardBlueprintLibrary getLotroCardBlueprintLibrary() {
         return _library;
+    }
+
+    @Override
+    public PackOpener getPackOpener() {
+        return _packOpener;
+    }
+
+    public void setPackOpener(PackOpener packOpener) {
+        _packOpener = packOpener;
     }
 
     @Override

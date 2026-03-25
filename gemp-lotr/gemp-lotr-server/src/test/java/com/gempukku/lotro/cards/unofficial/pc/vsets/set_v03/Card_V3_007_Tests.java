@@ -95,7 +95,7 @@ public class Card_V3_007_Tests
 
 		// Should have 2 valid targets (Gandalf and Radagast)
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoicesAvailable(gandalf, radagast));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast));
 
 		scn.FreepsChooseCard(gandalf); // Choose Gandalf as bearer
 
@@ -141,7 +141,6 @@ public class Card_V3_007_Tests
 		assertFalse(scn.FreepsActionAvailable(stash));
 
 		scn.FreepsPass();
-		scn.FreepsChooseAny(); //Aragorn and Site required triggers
 
 		scn.SkipToPhase(Phase.REGROUP);
 

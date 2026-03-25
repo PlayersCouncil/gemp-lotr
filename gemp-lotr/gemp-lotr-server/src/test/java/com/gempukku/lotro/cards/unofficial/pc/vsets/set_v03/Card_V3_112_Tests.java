@@ -65,6 +65,57 @@ public class Card_V3_112_Tests
 	}
 
 	@Test
+	public void HornblowerBarrelOptionallyDiscardsAFPCardFromDeckWhenPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var barrel1 = scn.GetFreepsCard("barrel1");
+		var fodder1 = scn.GetFreepsCard("fodder1");
+
+		scn.MoveCardsToHand(barrel1);
+		scn.MoveCardsToTopOfDeck(fodder1);
+
+		scn.StartGame();
+
+		// Play barrel during fellowship phase
+		scn.FreepsPlayCard(barrel1);
+
+		// Optional trigger fires — accept
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Deck is revealed (showAll), dismiss then choose a FP card to discard
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(fodder1);
+
+		assertInZone(Zone.DISCARD, fodder1);
+		assertInZone(Zone.SUPPORT, barrel1);
+	}
+
+	@Test
+	public void HornblowerBarrelCanDeclineOptionalDeckDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var barrel1 = scn.GetFreepsCard("barrel1");
+		var fodder1 = scn.GetFreepsCard("fodder1");
+
+		scn.MoveCardsToHand(barrel1);
+		scn.MoveCardsToTopOfDeck(fodder1);
+
+		scn.StartGame();
+
+		// Play barrel during fellowship phase
+		scn.FreepsPlayCard(barrel1);
+
+		// Optional trigger fires — decline
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsDeclineOptionalTrigger();
+
+		// Fodder stays in deck, barrel in support
+		assertInZone(Zone.DECK, fodder1);
+		assertInZone(Zone.SUPPORT, barrel1);
+	}
+
+	@Test
 	public void HornblowerBarrelRetrieves2CardsWhenDiscardedByPipe() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();

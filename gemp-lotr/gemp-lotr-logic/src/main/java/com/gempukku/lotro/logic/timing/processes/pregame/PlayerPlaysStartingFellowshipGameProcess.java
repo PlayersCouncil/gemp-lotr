@@ -31,7 +31,7 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
     @Override
     public void process(LotroGame game) {
         Collection<PhysicalCard> possibleCharacters = getPossibleCharacters(game, _playerId);
-        if (possibleCharacters.size() == 0) {
+        if (possibleCharacters.isEmpty()) {
             game.getActionsEnvironment().emitEffectResult(new FinishedPlayingFellowshipResult(_playerId));
             _nextProcess = _followingGameProcess;
         } else
@@ -45,7 +45,8 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                         int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, physicalCard, null, 0, false);
-                        return game.getGameState().getTwilightPool() + twilightCost <= 4
+                        int startingFellowshipLimit = 4 + game.getModifiersQuerying().getStartingFellowshipCostModifier(game, playerId);
+                        return game.getGameState().getTwilightPool() + twilightCost <= startingFellowshipLimit
                                 && PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, 0, 0, false, false, true);
                     }
                 });

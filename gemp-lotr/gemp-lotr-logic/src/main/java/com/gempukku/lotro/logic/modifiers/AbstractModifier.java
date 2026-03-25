@@ -404,6 +404,26 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getStartingFellowshipCostModifier(LotroGame game, String playerId) {
+        return 0;
+    }
+
+    @Override
+    public int getMinimumBidModifier(LotroGame game, String playerId) {
+        return 0;
+    }
+
+    @Override
+    public boolean isHandRevealed(LotroGame game, String playerId) {
+        return false;
+    }
+
+    @Override
+    public int getOverrideUniqueness(LotroGame game, PhysicalCard card) {
+        return -1;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard discountCard) {
         return 0;
     }

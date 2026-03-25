@@ -134,10 +134,10 @@ public class Card_V3_109_Tests
 		assertEquals(0, scn.GetBurdens());
 
 		//We are now presented with which minion to resolve the next subskirmish for
-		assertTrue(scn.FreepsHasCardChoicesAvailable(goblin_2, goblin_3));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(goblin_2, goblin_3));
 		//Frodo's skirmish is not an option
-		assertFalse(scn.FreepsHasCardChoicesAvailable(frodo));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(goblin_4));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(frodo));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(goblin_4));
 
 		scn.FreepsResolveSkirmish(goblin_2);
 		scn.FreepsPass();
@@ -150,10 +150,10 @@ public class Card_V3_109_Tests
 		assertEquals(0, scn.GetBurdens());
 
 		//We are now presented with only one remaining minion to resolve the next subskirmish for (but the choice must still be made)
-		assertTrue(scn.FreepsHasCardChoicesAvailable(goblin_3));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(goblin_3));
 		//Frodo's skirmish remains not an option
-		assertFalse(scn.FreepsHasCardChoicesAvailable(frodo));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(goblin_4));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(frodo));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(goblin_4));
 
 		scn.FreepsResolveSkirmish(goblin_3);
 		scn.FreepsPass();
@@ -167,7 +167,7 @@ public class Card_V3_109_Tests
 		assertEquals(1, scn.GetBurdens());
 
 		//Finally Frodo's skirmish can be resolved
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo));
 		scn.FreepsResolveSkirmish(frodo);
 
 		assertTrue(scn.IsCharSkirmishing(frodo));
@@ -249,9 +249,9 @@ public class Card_V3_109_Tests
 
 		//We are now presented with which skirmish to do next.  The other two minions should no longer be assigned
 		// and only Frodo's skirmish is left
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(goblin_1));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(goblin_2));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(goblin_1));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(goblin_2));
 		assertFalse(scn.IsCharAssigned(goblin_1));
 		assertFalse(scn.IsCharAssigned(goblin_2));
 

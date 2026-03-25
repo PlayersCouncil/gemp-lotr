@@ -148,7 +148,7 @@ public class Card_V3_065_Tests
 		assertEquals(19, scn.GetTwilight());
 
 		// Should see twilight cards available (sky3 and marshwight), but not hollowing
-		assertTrue(scn.ShadowHasCardChoicesAvailable(sky3, marshwight));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sky3, marshwight));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(hollowing));
 
 		scn.ShadowChooseCardBPFromSelection(marshwight);

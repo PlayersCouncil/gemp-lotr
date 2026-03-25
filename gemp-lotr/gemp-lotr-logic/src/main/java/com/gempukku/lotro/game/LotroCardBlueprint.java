@@ -53,6 +53,7 @@ public interface LotroCardBlueprint {
     String getSubtitle();
     String getGameText();
     String getFormattedGameText();
+    default String getHelpText() { return null; }
     String getLore();
     String getPromoText();
     CardInfo getCardInfo();
@@ -76,6 +77,10 @@ public interface LotroCardBlueprint {
     int getVitality();
 
     int getResistance();
+
+    default int getIntensity() { return 0; }
+
+    default DeckValidationContext getDeckBuildingOverrides() { return null; }
 
     Set<AllyHome> getAllyHomes();
     boolean hasAllyHome(AllyHome home);

@@ -159,8 +159,8 @@ public class Card_V3_083_Tests
 		scn.FreepsPlayCard(athelas);
 
 		// Should be able to choose both Aragorn (native Gondor) and Eowyn (considered Gondor)
-		assertTrue(scn.FreepsCanChooseCharacter(aragorn));
-		assertTrue(scn.FreepsCanChooseCharacter(eowyn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eowyn));
 	}
 
 	@Test
@@ -181,8 +181,8 @@ public class Card_V3_083_Tests
 		scn.FreepsPlayCard(ridermount);
 
 		// Should be able to choose both Eowyn (native Rohan) and Aragorn (considered Rohan)
-		assertTrue(scn.FreepsCanChooseCharacter(eowyn));
-		assertTrue(scn.FreepsCanChooseCharacter(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eowyn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 	}
 
 
@@ -252,8 +252,8 @@ public class Card_V3_083_Tests
 		scn.FreepsUseCardAction(gcfa);
 		scn.FreepsChooseCards(beacon1, beacon2, beacon3); // Hinder 3 beacons
 
-		assertTrue(scn.FreepsHasCardChoicesAvailable(ridermount, brego, athelas));
-		assertTrue(scn.FreepsHasCardChoicesNotAvailable(sting, sapling));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(ridermount, brego, athelas));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sting, sapling));
 
 		// First item
 		scn.FreepsChooseCard(brego);
@@ -366,8 +366,6 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 		scn.FreepsPass();
-		//site / strider timing tie
-		scn.FreepsChoose("Strider");
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(strider, uruk);
@@ -383,8 +381,8 @@ public class Card_V3_083_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertFalse(scn.FreepsHasCardChoicesAvailable(aid));
-		assertFalse(scn.FreepsHasCardChoicesAvailable(amondin));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(aid));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(amondin));
 		assertFalse(scn.IsHindered(aid));
 		assertTrue(scn.IsHindered(amondin));
 

@@ -220,7 +220,7 @@ public class Card_V3_091_Tests
 		scn.FreepsResolveRuleFirst();
 
 		// All 3 savages should be valid wound targets
-		assertTrue(scn.FreepsHasCardChoicesAvailable(savage1, savage2, savage3));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage1, savage2, savage3));
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 
 		// Choose to wound savage1 (the one Rider beat)

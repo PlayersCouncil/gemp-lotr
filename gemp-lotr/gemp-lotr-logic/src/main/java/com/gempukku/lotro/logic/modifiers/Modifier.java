@@ -162,6 +162,14 @@ public interface Modifier {
 
     int getSanctuaryHealModifier(LotroGame game);
 
+    int getStartingFellowshipCostModifier(LotroGame game, String playerId);
+
+    int getMinimumBidModifier(LotroGame game, String playerId);
+
+    boolean isHandRevealed(LotroGame game, String playerId);
+
+    int getOverrideUniqueness(LotroGame game, PhysicalCard card);
+
     int getPotentialDiscount(LotroGame game, PhysicalCard discountCard);
 
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard card);

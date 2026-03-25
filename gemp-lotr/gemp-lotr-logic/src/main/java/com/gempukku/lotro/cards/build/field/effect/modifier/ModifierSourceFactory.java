@@ -72,6 +72,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         modifierProducers.put("modifycost", new ModifyCost());
         modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
+        modifierProducers.put("minimumbid", new ModifyMinimumBid());
         modifierProducers.put("modifymovelimit", new ModifyMoveLimit());
         modifierProducers.put("modifyplayoncost", new ModifyPlayOnCost());
         modifierProducers.put("modifyracespotcount", new ModifyRaceSpotCount());
@@ -86,12 +87,15 @@ public class ModifierSourceFactory {
         modifierProducers.put("removecardsgoingtodiscard", new AddModifierFlag(ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD));
         modifierProducers.put("removekeyword", new RemoveKeyword());
         modifierProducers.put("ringbearercanttakethreatwounds", new AddModifierFlag(ModifierFlag.RING_BEARER_CANT_TAKE_THREAT_WOUNDS));
+        modifierProducers.put("overrideuniqueness", new OverrideUniqueness());
+        modifierProducers.put("revealhand", new RevealHand());
         modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
         modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("sitecontrolcount", new SiteControlCount());
         modifierProducers.put("skipphase", new SkipPhase());
         modifierProducers.put("skirmishesresolvedinorderbyfirstshadowplayer", new AddModifierFlag(ModifierFlag.SKIRMISH_ORDER_BY_FIRST_SHADOW_PLAYER));
+        modifierProducers.put("startingfellowshipcost", new StartingFellowshipCost());
         modifierProducers.put("threatlimit", new ThreatLimit());
         modifierProducers.put("transferforfree", new AddModifierFlag(ModifierFlag.TRANSFERS_FOR_FREE));
         modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());

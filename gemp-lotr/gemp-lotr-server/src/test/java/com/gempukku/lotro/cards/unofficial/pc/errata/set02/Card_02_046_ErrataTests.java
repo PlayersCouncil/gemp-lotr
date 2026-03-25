@@ -91,8 +91,8 @@ public class Card_02_046_ErrataTests
 
 		// Choose which Uruk-hai to exert -- can pick the Lieutenant instead of self
 		// (Errata changed from "exert Uruk Captain" to "exert an Uruk-hai")
-		assertTrue(scn.ShadowCanChooseCharacter(uruk));
-		assertTrue(scn.ShadowCanChooseCharacter(captain));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(uruk));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(captain));
 		scn.ShadowChooseCard(uruk);
 
 		// Uruk Brood should be auto-selected from discard and played

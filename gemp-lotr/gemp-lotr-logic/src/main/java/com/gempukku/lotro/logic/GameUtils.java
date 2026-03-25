@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 
@@ -17,6 +18,10 @@ public class GameUtils {
     }
 
     public static boolean isSide(LotroGame game, Side side, String playerId) {
+        if(game.getGameState().getCurrentPhase() == Phase.PUT_RING_BEARER
+            || game.getGameState().getCurrentPhase() == Phase.PLAY_STARTING_FELLOWSHIP )
+            return false;
+
         if (side == Side.FREE_PEOPLE)
             return game.getGameState().getCurrentPlayerId().equals(playerId);
         else
@@ -32,6 +37,9 @@ public class GameUtils {
     }
 
     public static String getFullName(PhysicalCard card) {
+        if (card instanceof PhysicalCardImpl impl && impl.getDisplayName() != null) {
+            return impl.getDisplayName();
+        }
         return getFullName(card.getBlueprint());
     }
 
@@ -126,6 +134,11 @@ public class GameUtils {
     }
 
     public static String getCardLink(PhysicalCard card) {
+        // Use display name override if set (e.g., meta-site modifiers show visual card name)
+        if (card instanceof PhysicalCardImpl impl && impl.getDisplayName() != null) {
+            return "<div class='cardHint' value='" + card.getBlueprintId() + "'>"
+                    + impl.getDisplayName() + "</div>";
+        }
         LotroCardBlueprint blueprint = card.getBlueprint();
         return getCardLink(card.getBlueprintId(), blueprint);
     }

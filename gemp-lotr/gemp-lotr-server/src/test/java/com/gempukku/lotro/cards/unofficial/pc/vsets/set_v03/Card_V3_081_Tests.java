@@ -100,8 +100,8 @@ public class Card_V3_081_Tests
 		// Auto-selected since only one valid target
 
 		// Choose unbound companion to assign to
-		assertTrue(scn.ShadowHasCardChoicesAvailable(aragorn, boromir));
-		assertFalse(scn.ShadowHasCardChoicesAvailable(frodo, sam));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(frodo, sam));
 		scn.ShadowChooseCard(aragorn);
 
 		// Nazgul2 returned to hand

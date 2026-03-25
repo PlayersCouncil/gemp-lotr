@@ -1,7 +1,8 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.collection.TransferDAO;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.LeagueDAO;
@@ -11,10 +12,9 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.game.CardCollection;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
-import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.io.IOException;
@@ -34,6 +34,7 @@ public class LeagueService {
     private final CachedLeagueParticipationDAO _leagueParticipationDAO;
 
     private final CollectionsManager _collectionsManager;
+    private final TransferDAO _transferDAO;
     private final SoloDraftDefinitions _soloDraftDefinitions;
 
     private final Map<String, List<PlayerStanding>> _leagueStandings = new ConcurrentHashMap<>();
@@ -44,6 +45,7 @@ public class LeagueService {
 
     public LeagueService(LeagueDAO leagueDao, LeagueMatchDAO leagueMatchDao,
                          LeagueParticipationDAO leagueParticipationDAO, CollectionsManager collectionsManager,
+                         TransferDAO transferDAO,
                          LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, SoloDraftDefinitions soloDraftDefinitions) {
         _leagueDao = leagueDao;
         _cardLibrary = library;
@@ -52,6 +54,7 @@ public class LeagueService {
         _leagueMatchDao = new CachedLeagueMatchDAO(leagueMatchDao);
         _leagueParticipationDAO = new CachedLeagueParticipationDAO(leagueParticipationDAO);
         _collectionsManager = collectionsManager;
+        _transferDAO = transferDAO;
         _soloDraftDefinitions = soloDraftDefinitions;
     }
 
@@ -134,6 +137,16 @@ public class LeagueService {
         return null;
     }
 
+    /**
+     * Loads a league by its code from the database, regardless of whether it is
+     * currently active. Used to resolve expired league codes stored in deck
+     * target formats so we can extract the underlying format before stripping
+     * the league association.
+     */
+    public League getLeagueByCode(long code) {
+        return _leagueDao.loadLeagueByCode(code);
+    }
+
     public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {
         for (League league : getActiveLeagues()) {
             for (LeagueSerieInfo leagueSerieInfo : league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries()) {
@@ -157,6 +170,15 @@ public class LeagueService {
     }
 
     public synchronized void reportLeagueGameResult(League league, LeagueSerieInfo serie, String winner, String loser) {
+        // Capture RTMD position before recording the match
+        LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        RTMDLeague rtmdLeague = (leagueData instanceof RTMDLeague) ? (RTMDLeague) leagueData : null;
+        int oldPosition = 0;
+        if (rtmdLeague != null) {
+            List<PlayerStanding> oldStandings = getLeagueStandings(league);
+            oldPosition = rtmdLeague.getPlayerPosition(winner, oldStandings);
+        }
+
         _leagueMatchDao.addPlayedMatch(league.getCodeStr(), serie.getName(), winner, loser);
 
         _leagueStandings.remove(LeagueMapKeys.getLeagueMapKey(league));
@@ -164,6 +186,15 @@ public class LeagueService {
 
         awardPrizesToPlayer(league, serie, winner, true);
         awardPrizesToPlayer(league, serie, loser, false);
+
+        // Check if winner advanced in RTMD
+        if (rtmdLeague != null) {
+            List<PlayerStanding> newStandings = getLeagueStandings(league);
+            int newPosition = rtmdLeague.getPlayerPosition(winner, newStandings);
+            if (newPosition > oldPosition) {
+                notifyRTMDAdvancement(rtmdLeague, winner, oldPosition, newPosition);
+            }
+        }
     }
 
     private void awardPrizesToPlayer(League league, LeagueSerieInfo serie, String player, boolean winner) {
@@ -184,6 +215,26 @@ public class LeagueService {
         }
 
 
+    }
+
+    private void notifyRTMDAdvancement(RTMDLeague rtmdLeague, String player, int oldPosition, int newPosition) {
+        List<String> visualPath = rtmdLeague.getVisualPath();
+        List<String> modPath = rtmdLeague.getPath();
+
+        // Build structured contents: oldVisual|oldMod|newVisual|newMod
+        // For position 0 (starting position), use empty strings
+        StringBuilder contents = new StringBuilder();
+        if (visualPath != null && !visualPath.isEmpty()) {
+            String oldVisual = (oldPosition >= 1 && oldPosition <= visualPath.size()) ? visualPath.get(oldPosition - 1) : "";
+            String oldMod = (oldPosition >= 1 && oldPosition <= modPath.size()) ? modPath.get(oldPosition - 1) : "";
+            String newVisual = (newPosition >= 1 && newPosition <= visualPath.size()) ? visualPath.get(newPosition - 1) : "";
+            String newMod = (newPosition >= 1 && newPosition <= modPath.size()) ? modPath.get(newPosition - 1) : "";
+            contents.append(oldVisual).append("|").append(oldMod).append("|").append(newVisual).append("|").append(newMod);
+        }
+
+        String message = rtmdLeague.getParameters().name + ": You have arrived at level " + newPosition + "!";
+
+        _transferDAO.addTransferToRaw(true, player, "League", "Race to Mount Doom", 0, contents.toString(), message);
     }
 
     public synchronized Collection<LeagueMatchResult> getPlayerMatchesInSerie(League league, LeagueSerieInfo serie, String player) {
@@ -260,5 +311,65 @@ public class LeagueService {
                 totalGames++;
         }
         return totalGames < maxGames;
+    }
+
+    /**
+     * Builds an RTMDGameInfo for the given league and players, resolving each player's
+     * current position and active meta-site pairs from standings.
+     * Returns null if the league is not RTMD.
+     */
+    public synchronized RTMDGameInfo buildRTMDGameInfo(League league, Collection<String> playerNames) {
+        var leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        if (!(leagueData instanceof RTMDLeague rtmd))
+            return null;
+
+        var standings = getLeagueStandings(league);
+        var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
+
+        for (String playerName : playerNames) {
+            int position = rtmd.getPlayerPosition(playerName, standings);
+            var modifiers = rtmd.getMetaSitesForPosition(position);
+            var visuals = rtmd.getVisualCardsForPosition(position);
+
+            var pairs = new ArrayList<RTMDGameInfo.MetaSitePair>();
+            for (int i = 0; i < modifiers.size(); i++) {
+                String visualId = (i < visuals.size()) ? visuals.get(i) : "";
+                pairs.add(new RTMDGameInfo.MetaSitePair(visualId, modifiers.get(i)));
+            }
+            playerMetaSites.put(playerName, pairs);
+        }
+
+        return new RTMDGameInfo(playerMetaSites);
+    }
+
+    /**
+     * Builds a DeckValidationContext for a player in a league, incorporating any
+     * deck building overrides from their RTMD meta-site modifiers.
+     * Returns null if the league is not RTMD or if no overrides apply.
+     */
+    public synchronized DeckValidationContext buildDeckValidationContext(League league, String playerName) {
+        var leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+        if (!(leagueData instanceof RTMDLeague rtmd))
+            return null;
+
+        var standings = getLeagueStandings(league);
+        int position = rtmd.getPlayerPosition(playerName, standings);
+        var modifiers = rtmd.getMetaSitesForPosition(position);
+
+        DeckValidationContext merged = null;
+        for (String modBlueprintId : modifiers) {
+            try {
+                var bp = _cardLibrary.getLotroCardBlueprint(modBlueprintId);
+                var overrides = bp.getDeckBuildingOverrides();
+                if (overrides != null) {
+                    if (merged == null) {
+                        merged = new DeckValidationContext();
+                    }
+                    merged.merge(overrides);
+                }
+            } catch (CardNotFoundException ignored) {}
+        }
+
+        return merged;
     }
 }

@@ -21,6 +21,7 @@ public class DbTransferDAO implements TransferDAO {
 
     public static String OPENED_PACK = "Opened pack";
     public static String ANNOUNCEMENT = "Announcement";
+    public static String LEAGUE = "League";
 
     public DbTransferDAO(DbAccess dbAccess) {
         _dbAccess = dbAccess;
@@ -62,7 +63,20 @@ public class DbTransferDAO implements TransferDAO {
 
     @Override
     public int addTransferTo(boolean notifyPlayer, String player, String reason, String collectionName, int currency, CardCollection items) {
+        return addTransferTo(notifyPlayer, player, reason, collectionName, currency, items, null);
+    }
+
+    @Override
+    public int addTransferTo(boolean notifyPlayer, String player, String reason, String collectionName, int currency, CardCollection items, String message) {
         if (currency <= 0 && !items.getAll().iterator().hasNext())
+            return -1;
+
+        return addTransferToRaw(notifyPlayer, player, reason, collectionName, currency, serializeContentsColumn(items), message);
+    }
+
+    @Override
+    public int addTransferToRaw(boolean notifyPlayer, String player, String reason, String collectionName, int currency, String rawContents, String message) {
+        if (currency <= 0 && (rawContents == null || rawContents.isEmpty()))
             return -1;
 
         try {
@@ -70,8 +84,8 @@ public class DbTransferDAO implements TransferDAO {
 
             //date_recorded is handled by a default value in the database
             String sql = """
-                        INSERT INTO transfer (notify, player, reason, collection, currency, contents, direction)
-                        VALUES (:notify, :player, :reason, :collection, :currency, :contents, :direction)
+                        INSERT INTO transfer (notify, player, reason, collection, currency, contents, message, direction)
+                        VALUES (:notify, :player, :reason, :collection, :currency, :contents, :message, :direction)
                         """;
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
@@ -81,7 +95,8 @@ public class DbTransferDAO implements TransferDAO {
                         .addParameter("reason", reason)
                         .addParameter("collection", collectionName)
                         .addParameter("currency", currency)
-                        .addParameter("contents", serializeContentsColumn(items))
+                        .addParameter("contents", rawContents)
+                        .addParameter("message", message)
                         .addParameter("direction", TO);
 
                 int id = query.executeUpdate()
@@ -107,7 +122,7 @@ public class DbTransferDAO implements TransferDAO {
                     WHERE player = :playerName 
                         AND notify = TRUE
                         AND date_recorded < NOW()
-                """ + " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "') ";;
+                """ + " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "', '" + LEAGUE + "') ";;
                 Integer result = conn.createQuery(sql)
                         .addParameter("playerName", player.getName())
                         .executeScalar(Integer.class);
@@ -122,6 +137,56 @@ public class DbTransferDAO implements TransferDAO {
     @Override
     public boolean hasUndeliveredSealedContents(Player player) {
         return hasUndeliveredPackagesOfType(player, OPENED_PACK);
+    }
+
+    @Override
+    public boolean hasUndeliveredLeagueNotifications(Player player) {
+        return hasUndeliveredPackagesOfType(player, LEAGUE);
+    }
+
+    @Override
+    public List<DBDefs.Transfer> consumeUndeliveredLeagueNotifications(Player player) {
+        try {
+            var db = _dbAccess.openDB();
+            String clause = " AND reason = '" + LEAGUE + "' ";
+
+            List<DBDefs.Transfer> rows;
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                    SELECT id, notify, player, reason, collection, currency, contents, message, date_recorded, direction
+                    FROM transfer
+                    WHERE player = :playerName
+                        AND notify = TRUE
+                        AND date_recorded < NOW()
+                """ + clause;
+
+                rows = conn.createQuery(sql)
+                        .addParameter("playerName", player.getName())
+                        .executeAndFetch(DBDefs.Transfer.class);
+            }
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                    UPDATE transfer
+                    SET notify = FALSE
+                    WHERE player = :playerName
+                        AND notify = TRUE
+                        AND date_recorded < NOW()
+                """ + clause;
+
+                Query query = conn.createQuery(sql)
+                        .addParameter("playerName", player.getName())
+                        .addToBatch();
+                query.executeBatch();
+                conn.commit();
+            }
+
+            return rows;
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to consume undelivered league notifications", ex);
+        }
     }
 
     @Override
@@ -159,7 +224,7 @@ public class DbTransferDAO implements TransferDAO {
     // Thus, this is intended to be used only by the game hall, and not the deckbuilder (where pack openings should go)
     @Override
     public synchronized Map<String, ? extends CardCollection> consumeUndeliveredPackages(Player player) {
-        String clause = " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "') ";
+        String clause = " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "', '" + LEAGUE + "') ";
         return consumePackages(player, clause);
     }
 

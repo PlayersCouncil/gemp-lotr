@@ -222,13 +222,13 @@ public class Card_V2_052_Tests
 		scn.FreepsUseCardAction(frodo);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arrowslits, maneuver));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arrowslits, maneuver));
 		scn.FreepsChooseCard(arrowslits);
 		assertEquals(Zone.SUPPORT, arrowslits.getZone());
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, sauron));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sauron));
 		scn.ShadowChooseCard(sauron);
 		assertEquals(Zone.DISCARD, runner.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
@@ -279,13 +279,13 @@ public class Card_V2_052_Tests
 		scn.FreepsUseCardAction(frodo);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arrowslits, archery));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arrowslits, archery));
 		scn.FreepsChooseCard(arrowslits);
 		assertEquals(Zone.SUPPORT, arrowslits.getZone());
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, sauron));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sauron));
 		scn.ShadowChooseCard(sauron);
 		assertEquals(Zone.DISCARD, runner.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
@@ -336,13 +336,13 @@ public class Card_V2_052_Tests
 		scn.FreepsUseCardAction(frodo);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arrowslits, skirmish));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arrowslits, skirmish));
 		scn.FreepsChooseCard(arrowslits);
 		assertEquals(Zone.SUPPORT, arrowslits.getZone());
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, sauron));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sauron));
 		scn.ShadowChooseCard(sauron);
 		assertEquals(Zone.DISCARD, runner.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
@@ -394,13 +394,13 @@ public class Card_V2_052_Tests
 		scn.FreepsUseCardAction(frodo);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(arrowslits, regroup));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arrowslits, regroup));
 		scn.FreepsChooseCard(arrowslits);
 		assertEquals(Zone.SUPPORT, arrowslits.getZone());
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose card from discard"));
 		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, sauron));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sauron));
 		scn.ShadowChooseCard(sauron);
 		assertEquals(Zone.DISCARD, runner.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());

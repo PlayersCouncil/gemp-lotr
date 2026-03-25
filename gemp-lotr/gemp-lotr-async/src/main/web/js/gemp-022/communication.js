@@ -62,6 +62,19 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    getLeagueDelivery:function (callback) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/delivery/league",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId") },
+            success:callback,
+            error:null,
+            dataType:"json"
+        });
+    },
+
     getAnnouncementDelivery:function (callback) {
         $.ajax({
             type:"GET",
@@ -148,6 +161,12 @@ var GempLotrCommunication = Class.extend({
             if (announceDelivery == "true" && window.announcementDeliveryService != null) {
                 that.getAnnouncementDelivery(function(json) {
                     window.announcementDeliveryService(that, json);
+                });
+            }
+            var leagueDelivery = request.getResponseHeader("Delivery-Service-League");
+            if (leagueDelivery == "true" && window.leagueDeliveryService != null) {
+                that.getLeagueDelivery(function(json) {
+                    window.leagueDeliveryService(json);
                 });
             }
             callback(xml);
@@ -612,7 +631,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    getDeckStats:function (contents, targetFormat, collectionName, callback, errorMap) {
+    getDeckStats:function (contents, targetFormat, collectionName, callback, errorMap, leagueCode) {
         $.ajax({
             type:"POST",
             url:this.url + "/deck/stats",
@@ -621,7 +640,8 @@ var GempLotrCommunication = Class.extend({
                 participantId:getUrlParam("participantId"),
                 targetFormat:targetFormat,
                 collectionName:collectionName,
-                deckContents:contents},
+                deckContents:contents,
+                leagueCode:leagueCode},
             success:this.deckbuilderDeliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"html"
@@ -1229,7 +1249,66 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    processRTMDLeague:function (preview, start, name, cost, maxRepeatMatches,
+                                       inviteOnly, description,
+                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       formats, serieDurations, maxMatches,
+                                       racePath, raceVisualPath, raceCumulative, raceIntensityFloor, raceIntensityCeiling,
+                                       raceAdvancementMode, raceAdvanceFactor,
+                                       callback, errorMap) {
+        let url = this.url + "/admin/addRTMDLeague";
+
+        if(preview) {
+            url = this.url + "/admin/previewRTMDLeague";
+        }
+
+        $.ajax({
+            type:"POST",
+            url:url,
+            cache:false,
+            data:{
+                start:start,
+                name:name,
+                cost:cost,
+                maxRepeatMatches:maxRepeatMatches,
+                topPrize:topPrize,
+                topCutoff:topCutoff,
+                participationPrize:participationPrize,
+                participationGames:participationGames,
+                format:formats,
+                serieDuration:serieDurations,
+                maxMatches:maxMatches,
+                inviteOnly:inviteOnly,
+                description:description,
+                racePath:racePath,
+                raceVisualPath:raceVisualPath,
+                raceCumulative:raceCumulative,
+                raceIntensityFloor:raceIntensityFloor,
+                raceIntensityCeiling:raceIntensityCeiling,
+                raceAdvancementMode:raceAdvancementMode,
+                raceAdvanceFactor:raceAdvanceFactor
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     
+    
+    getRTMDModifiers:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/rtmdModifiers",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     processScheduledTournament:function (preview, name, type, wc, tournamentId, 
                                          formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
                                          soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,

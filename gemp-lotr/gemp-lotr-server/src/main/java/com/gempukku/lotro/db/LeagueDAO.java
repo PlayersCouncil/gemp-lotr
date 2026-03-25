@@ -13,5 +13,7 @@ public interface LeagueDAO {
 
     List<League> loadActiveLeagues(ZonedDateTime currentTime) throws SQLException;
 
+    League loadLeagueByCode(long code);
+
     boolean setStatus(League league, int newStatus);
 }

@@ -117,7 +117,7 @@ public class Card_01_221_ErrataTests
 
 		assertInZone(Zone.SUPPORT, condition1);
 		assertInZone(Zone.SUPPORT, condition2);
-		assertTrue(scn.ShadowHasCardChoicesAvailable(condition1, condition2));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(condition1, condition2));
 
 		scn.ShadowChooseCard(condition1);
 		assertInDiscard(condition1);

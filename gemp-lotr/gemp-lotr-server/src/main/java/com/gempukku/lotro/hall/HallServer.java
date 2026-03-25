@@ -16,6 +16,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
@@ -299,7 +300,7 @@ public class HallServer extends AbstractServer {
 
         GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
 
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -319,12 +320,12 @@ public class HallServer extends AbstractServer {
 
         GameSettings gameSettings = createGameSettings(type, "slow", "Solo game", false, isPrivate, false, true);
 
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
 
 
         LotroDeck botDeck = null;
         if (botDeckName != null && !botDeckName.isEmpty()) {
-            botDeck = validateUserAndDeck(gameSettings.format(), player, botDeckName, gameSettings.collectionType());
+            botDeck = validateUserAndDeck(gameSettings.format(), player, botDeckName, gameSettings.collectionType(), gameSettings.league());
         }
 
         _hallDataAccessLock.writeLock().lock();
@@ -345,7 +346,7 @@ public class HallServer extends AbstractServer {
 
         GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
 
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType(), gameSettings.league());
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -463,7 +464,7 @@ public class HallServer extends AbstractServer {
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
         GameSettings gameSettings = tableHolder.getGameSettings(tableId);
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -484,7 +485,7 @@ public class HallServer extends AbstractServer {
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
         GameSettings gameSettings = tableHolder.getGameSettings(tableId);
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType(), gameSettings.league());
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -723,6 +724,10 @@ public class HallServer extends AbstractServer {
     }
 
     private LotroDeck validateUserAndDeck(LotroFormat format, Player player, String deckName, CollectionType collectionType) throws HallException {
+        return validateUserAndDeck(format, player, deckName, collectionType, null);
+    }
+
+    private LotroDeck validateUserAndDeck(LotroFormat format, Player player, String deckName, CollectionType collectionType, League league) throws HallException {
         LotroDeck lotroDeck = _lotroServer.getParticipantDeck(player, deckName);
         if (lotroDeck == null) {
             _log.debug("Player '" + player.getName() + "' attempting to use deck '" + deckName + "' but failed.");
@@ -731,7 +736,11 @@ public class HallServer extends AbstractServer {
 
         try {
             lotroDeck = format.applyErrata(lotroDeck);
-            lotroDeck = validateUserAndDeck(format, player, collectionType, lotroDeck);
+            DeckValidationContext context = null;
+            if (league != null) {
+                context = _leagueService.buildDeckValidationContext(league, player.getName());
+            }
+            lotroDeck = validateUserAndDeck(format, player, collectionType, lotroDeck, context);
         } catch (DeckInvalidException e) {
             throw new HallException("Your selected deck is not valid for this format: " + e.getMessage());
         }
@@ -739,8 +748,8 @@ public class HallServer extends AbstractServer {
         return lotroDeck;
     }
 
-    private LotroDeck validateUserAndDeck(LotroFormat format, Player player, CollectionType collectionType, LotroDeck lotroDeck) throws HallException, DeckInvalidException {
-        String validation = format.validateDeckForHall(lotroDeck);
+    private LotroDeck validateUserAndDeck(LotroFormat format, Player player, CollectionType collectionType, LotroDeck lotroDeck, DeckValidationContext context) throws HallException, DeckInvalidException {
+        String validation = format.validateDeckForHall(lotroDeck, context);
         if (validation == null || !validation.isEmpty()) {
             throw new DeckInvalidException(validation);
         }
@@ -882,7 +891,15 @@ public class HallServer extends AbstractServer {
     }
 
     private LotroGameMediator createGameMediator(LotroGameParticipant[] participants, GameResultListener listener, String tournamentName, GameSettings gameSettings) {
-        final LotroGameMediator lotroGameMediator = _lotroServer.createNewGame(tournamentName, participants, gameSettings);
+        // Build RTMD game info if this is an RTMD league game
+        GameExtraInfo extraInfo = null;
+        if (gameSettings.league() != null) {
+            var playerNames = new ArrayList<String>();
+            for (var p : participants) playerNames.add(p.getPlayerId());
+            extraInfo = _leagueService.buildRTMDGameInfo(gameSettings.league(), playerNames);
+        }
+
+        final LotroGameMediator lotroGameMediator = _lotroServer.createNewGame(tournamentName, participants, gameSettings, extraInfo);
         if (listener != null)
             lotroGameMediator.addGameResultListener(listener);
         lotroGameMediator.startGame();

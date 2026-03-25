@@ -12,7 +12,7 @@ import java.util.List;
  * If you are just checking the printed stats, then you can retrieve the blueprint of a card and check those values
  * directly.  These helper functions are more for live cards which may be affected by modifiers sourced from other cards.
  */
-public interface CardProperties extends TestBase {
+public interface CardProperties extends TestBase, TestConstants {
 
 	default int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
 	default int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }

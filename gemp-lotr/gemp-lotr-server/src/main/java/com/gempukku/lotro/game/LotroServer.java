@@ -6,7 +6,9 @@ import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.db.DeckDAO;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.hall.GameSettings;
+import com.gempukku.lotro.packs.PackOpener;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.bots.BotPlayer;
@@ -39,17 +41,20 @@ public class LotroServer extends AbstractServer {
     private final MarkdownParser _markdownParser;
 
     private final BotService _botService;
+    private final PackOpener _packOpener;
 
     private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
     public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
-            GameRecorder gameRecorder, MarkdownParser parser, BotService botService) {
+            GameRecorder gameRecorder, MarkdownParser parser, BotService botService,
+            PackOpener packOpener) {
         _deckDao = deckDao;
         _lotroCardBlueprintLibrary = library;
         _chatServer = chatServer;
         _gameRecorder = gameRecorder;
         _markdownParser = parser;
         _botService = botService;
+        _packOpener = packOpener;
     }
 
     protected void cleanup() {
@@ -93,7 +98,7 @@ public class LotroServer extends AbstractServer {
         return "Game" + gameId;
     }
 
-    public LotroGameMediator createNewGame(String tournamentName, final LotroGameParticipant[] participants, GameSettings gameSettings) {
+    public LotroGameMediator createNewGame(String tournamentName, final LotroGameParticipant[] participants, GameSettings gameSettings, GameExtraInfo extraInfo) {
         _lock.writeLock().lock();
         try {
             if(gameSettings.isSolo()) {
@@ -133,7 +138,8 @@ public class LotroServer extends AbstractServer {
 
             LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.format(), participants,
                     _lotroCardBlueprintLibrary, gameSettings.timeSettings(), spectate, !gameSettings.competitive(),
-                    gameSettings.hiddenGame(), tournamentName, _markdownParser, _botService, gameSettings.isSolo());
+                    gameSettings.hiddenGame(), tournamentName, _markdownParser, _botService, gameSettings.isSolo(),
+                    extraInfo, _packOpener);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override

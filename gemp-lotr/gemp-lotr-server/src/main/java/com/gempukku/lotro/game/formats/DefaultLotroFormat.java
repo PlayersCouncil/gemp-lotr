@@ -423,7 +423,12 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateDeckForHall(LotroDeck deck) {
-        List<String> validations = validateDeck(deck);
+        return validateDeckForHall(deck, null);
+    }
+
+    @Override
+    public String validateDeckForHall(LotroDeck deck, DeckValidationContext context) {
+        List<String> validations = validateDeck(deck, context);
         if(validations.size() == 0)
             return "";
 
@@ -440,6 +445,11 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public List<String> validateDeck(LotroDeck deck) {
+        return validateDeck(deck, null);
+    }
+
+    @Override
+    public List<String> validateDeck(LotroDeck deck, DeckValidationContext context) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<String> errataResult = new ArrayList<>();
         String valid = null;
@@ -457,7 +467,7 @@ public class DefaultLotroFormat implements LotroFormat {
         }
 
         // Map
-        valid = validateMap(deck);
+        valid = validateMap(deck, context);
         if(valid != null && !valid.isEmpty()) {
             result.add(valid);
         }
@@ -493,7 +503,7 @@ public class DefaultLotroFormat implements LotroFormat {
         }
 
         // Sites
-        valid = validateSites(deck);
+        valid = validateSites(deck, context);
         if(valid != null && !valid.isEmpty()) {
             result.add(valid);
         }
@@ -518,9 +528,10 @@ public class DefaultLotroFormat implements LotroFormat {
         for (String blueprintId : deck.getSites())
             processCardCounts(blueprintId, cardCountByName, cardCountByBaseBlueprintId);
 
+        int effectiveMaxSameName = context != null ? context.getMaximumSameName(_maximumSameName) : _maximumSameName;
         for (Map.Entry<String, Integer> count : cardCountByName.entrySet()) {
-            if (count.getValue() > _maximumSameName) {
-                result.add("Deck contains more of the same card than allowed - " + count.getKey() + " (" + count.getValue() + ">" + _maximumSameName + "): " + count.getKey());
+            if (count.getValue() > effectiveMaxSameName) {
+                result.add("Deck contains more of the same card than allowed - " + count.getKey() + " (" + count.getValue() + ">" + effectiveMaxSameName + "): " + count.getKey());
             }
         }
 
@@ -644,8 +655,34 @@ public class DefaultLotroFormat implements LotroFormat {
     }
 
     private String validateSitesStructure(LotroDeck deck)  {
-        String result = "";
-        if (isOrderedSites()) {
+        StringBuilder result = new StringBuilder();
+        boolean foundOrdered = false;
+        boolean foundShadows = false;
+
+        if(_siteBlock == SitesBlock.MULTIPATH) {
+            for (String site : deck.getSites()) {
+                try {
+                    var blueprint = _library.getLotroCardBlueprint(site);
+                    if(blueprint.getSiteBlock() == SitesBlock.SHADOWS)
+                        foundShadows = true;
+                    if(blueprint.getSiteNumber() != 0)
+                        foundOrdered = true;
+                }
+                catch(CardNotFoundException exception)
+                {
+                    result.append(CardRemovedError + ": ").append(site).append("\n");
+                }
+            }
+
+            if(foundOrdered && foundShadows) {
+				result.append("Deck combines both Shadows and Movie Block sites; it can only contain one or the other.");
+            }
+        }
+        else {
+            foundOrdered = isOrderedSites();
+        }
+
+        if (foundOrdered) {
             boolean[] sites = new boolean[9];
             for (String site : deck.getSites()) {
                 try {
@@ -653,16 +690,18 @@ public class DefaultLotroFormat implements LotroFormat {
                     if(blueprint.getSiteNumber() == 0)
                         continue; // a shadows site which will already have tripped a validation
                     if (sites[blueprint.getSiteNumber() - 1]) {
-                        result += "Deck has multiple of the same site number: " + blueprint.getSiteNumber() + "\n";
+                        result.append("Deck has multiple of the same site number: ").append(
+								blueprint.getSiteNumber()).append("\n");
                     }
                     sites[blueprint.getSiteNumber() - 1] = true;
                 }
                 catch(CardNotFoundException exception)
                 {
-                    result += CardRemovedError + ": " + site + "\n";
+                    result.append(CardRemovedError + ": ").append(site).append("\n");
                 }
             }
-        } else {
+        }
+        else {
             Set<LotroCardBlueprint> siteBlueprints = new HashSet<>();
 
             List<String> sites = deck.getSites();
@@ -673,12 +712,12 @@ public class DefaultLotroFormat implements LotroFormat {
                 }
                 catch(CardNotFoundException ex)
                 {
-                    result += CardRemovedError + ": " + site + "\n";
+                    result.append(CardRemovedError + ": ").append(site).append("\n");
                 }
             }
 
             if (siteBlueprints.size() < size) {
-                result += "Deck contains multiple of the same site.\n";
+                result.append("Deck contains multiple of the same site.\n");
             }
 
             Map<Integer, Integer> twilightCount = new HashMap<>();
@@ -692,15 +731,16 @@ public class DefaultLotroFormat implements LotroFormat {
 
             for (Map.Entry<Integer, Integer> twilightCountEntry : twilightCount.entrySet()) {
                 if (twilightCountEntry.getValue() > 3) {
-                    result += "Deck contains " + twilightCountEntry.getValue() + " sites with twilight number of " + twilightCountEntry.getKey() + ".\n";
+                    result.append("Deck contains ").append(twilightCountEntry.getValue()).append(
+							" sites with twilight number of ").append(twilightCountEntry.getKey()).append(".\n");
                 }
             }
         }
 
-        return result;
+        return result.toString();
     }
 
-    private String validateSites(LotroDeck deck)  {
+    private String validateSites(LotroDeck deck, DeckValidationContext context)  {
         List<String> sites = deck.getSites();
         String result = "";
         if (sites == null)
@@ -708,28 +748,58 @@ public class DefaultLotroFormat implements LotroFormat {
         if (sites.size() != 9) {
             result += "Deck has " + sites.size() + " sites instead of 9.\n";
         }
-        for (String site : sites) {
-            var valid = validateSite(site);
-            if(valid != null) {
-                result += valid;
-            }
-        }
-        if (_siteBlock == SitesBlock.MULTIPATH) {
-            SitesBlock usedBlock = null;
-            for (String site : deck.getSites()) {
+
+        boolean skipBlockValidation = context != null && context.shouldSkipSiteBlockValidation();
+
+        if (skipBlockValidation) {
+            // Meta-site override: skip normal block/set validation for sites.
+            // Only check that each card is actually a site, and enforce the
+            // "Movie-mix OR Shadows-only, not both" rule.
+            boolean hasMovieBlock = false;
+            boolean hasShadows = false;
+            for (String site : sites) {
                 try {
-                    LotroCardBlueprint siteBlueprint = _library.getLotroCardBlueprint(site);
-                    SitesBlock block = siteBlueprint.getSiteBlock();
-                    if (usedBlock == null)
-                        usedBlock = block;
-                    else if (usedBlock != block) {
-                        result += "All your sites have to be from the same block.\n";
-                        break;
+                    LotroCardBlueprint bp = _library.getLotroCardBlueprint(site);
+                    if (bp.getCardType() != CardType.SITE) {
+                        result += "Card assigned as Site is not really a site.\n";
+                        continue;
                     }
-                }
-                catch(CardNotFoundException ex)
-                {
+                    SitesBlock block = bp.getSiteBlock();
+                    if (block == SitesBlock.SHADOWS) {
+                        hasShadows = true;
+                    } else if (block == SitesBlock.FELLOWSHIP || block == SitesBlock.TWO_TOWERS || block == SitesBlock.KING) {
+                        hasMovieBlock = true;
+                    }
+                } catch (CardNotFoundException ex) {
                     result += CardRemovedError + "\n";
+                }
+            }
+            if (hasMovieBlock && hasShadows) {
+                result += "Adventure deck cannot mix Movie block and Shadows block sites.\n";
+            }
+        } else {
+            // Normal validation: check each site against format block/set rules
+            for (String site : sites) {
+                var valid = validateSite(site);
+                if (valid != null) {
+                    result += valid;
+                }
+            }
+            if (_siteBlock == SitesBlock.MULTIPATH) {
+                SitesBlock usedBlock = null;
+                for (String site : deck.getSites()) {
+                    try {
+                        LotroCardBlueprint siteBlueprint = _library.getLotroCardBlueprint(site);
+                        SitesBlock block = siteBlueprint.getSiteBlock();
+                        if (usedBlock == null)
+                            usedBlock = block;
+                        else if (usedBlock != block) {
+                            result += "All your sites have to be from the same block.\n";
+                            break;
+                        }
+                    } catch (CardNotFoundException ex) {
+                        result += CardRemovedError + "\n";
+                    }
                 }
             }
         }
@@ -754,9 +824,9 @@ public class DefaultLotroFormat implements LotroFormat {
         else if (bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
             return "Site does not use supported block: " + GameUtils.getFullName(bp);
         }
-        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
-            return "Post-Shadows site not allowed in Multipath: " + GameUtils.getFullName(bp);
-        }
+//        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
+//            return "Post-Shadows site not allowed in Multipath: " + GameUtils.getFullName(bp);
+//        }
         else {
             String invalid = validateCard(blueprintId);
             if(invalid != null && !invalid.isEmpty()) {
@@ -787,7 +857,7 @@ public class DefaultLotroFormat implements LotroFormat {
         return validateCard(ringbp);
     }
 
-    private String validateMap(LotroDeck deck) {
+    private String validateMap(LotroDeck deck, DeckValidationContext context) {
         String mapBP = deck.getMap();
         if (!_usesMaps)
             return null;
@@ -801,6 +871,11 @@ public class DefaultLotroFormat implements LotroFormat {
             var check = validateCard(mapBP);
             if(check != null)
                 return check;
+
+            // When site block validation is skipped (meta-site override),
+            // skip the map's site restriction check entirely.
+            if (context != null && context.shouldSkipSiteBlockValidation())
+                return null;
 
             var freeps = new ArrayList<PhysicalCardImpl>();
             var shadow = new ArrayList<PhysicalCardImpl>();

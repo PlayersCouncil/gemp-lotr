@@ -13,13 +13,18 @@ import java.util.Set;
 public interface GameStateListener {
 
     boolean isLiveConnection();
-    void cardCreated(PhysicalCard card);
-    void cardCreated(PhysicalCard card, boolean overridePlayerVisibility);
+    default void cardCreated(PhysicalCard card) {
+        cardCreated(card, false, false);
+    }
+    void cardCreated(PhysicalCard card, boolean overrideOwnerVisibility, boolean forceVisible);
 
     void cardMoved(PhysicalCard card);
     void cardsFlipped(Collection<PhysicalCard> cards, boolean down);
 
-    void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards);
+    default void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards) {
+        cardsRemoved(playerPerforming, cards, false);
+    }
+    void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards, boolean forceVisible);
 
     void initializeBoard(List<String> playerIds, boolean discardIsPublic);
     void initializePregameBoard(PreGameInfo preGameInfo);

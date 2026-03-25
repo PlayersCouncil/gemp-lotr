@@ -57,7 +57,8 @@ public class ActivatePhaseActionsRule {
 						}),
                 Filters.and(Filters.not(CardType.SITE), Filters.owner(playerId), Filters.active),
                 Filters.and(Filters.not(CardType.SITE), Filters.active,
-                        (Filter) (game, physicalCard) -> game.getModifiersQuerying().hasExtraPhaseActionsFromOtherPlayer(game, physicalCard))
+                        (Filter) (game, physicalCard) -> game.getModifiersQuerying().hasExtraPhaseActionsFromOtherPlayer(game, physicalCard)),
+                Filters.and(CardType.METASITE)
         );
     }
 }

@@ -9,6 +9,7 @@ import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.state.GameCommunicationChannel;
 import com.gempukku.lotro.game.state.GameEvent;
+import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.GameUtils;
@@ -17,6 +18,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.GameResultListener;
+import com.gempukku.lotro.packs.PackOpener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.bots.BotGameStateListener;
 import com.gempukku.lotro.bots.BotPlayer;
@@ -59,7 +61,8 @@ public class LotroGameMediator {
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
-                             String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo) {
+                             String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo,
+                             GameExtraInfo extraInfo, PackOpener packOpener) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
@@ -108,7 +111,10 @@ public class LotroGameMediator {
 
         _userFeedback = new DefaultUserFeedback();
         _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(),
-                _allowSpectators, tournamentName);
+                _allowSpectators, tournamentName, extraInfo);
+        if (packOpener != null) {
+            _lotroGame.setPackOpener(packOpener);
+        }
 
         if (_botPlayer != null) {
             _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this));
@@ -309,6 +315,12 @@ public class LotroGameMediator {
 
                 sb.append("<br><br><b>Printed Game Text: </b><br>")
                         .append(card.getBlueprint().getFormattedGameText());
+
+                String helpText = card.getBlueprint().getHelpText();
+                if (helpText != null && !helpText.isEmpty()) {
+                    sb.append("<br><br><b>Additional Info: </b><br>")
+                            .append(helpText);
+                }
 
                 return sb.toString();
             } else {

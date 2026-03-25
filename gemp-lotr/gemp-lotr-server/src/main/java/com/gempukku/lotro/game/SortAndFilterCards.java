@@ -53,6 +53,7 @@ public class SortAndFilterCards {
         var signets = getEnumFilter(Signet.values(), Signet.class, params.get("signet"), true);
         
         var canStartWithRing = getBoolean(params.get("canstartwithring"));
+        var siteOverride = Boolean.TRUE.equals(getBoolean(params.get("siteoverride")));
 
         List<T> result = new ArrayList<>();
         var cardBPCache = new HashMap<String, LotroCardBlueprint>();
@@ -89,13 +90,13 @@ public class SortAndFilterCards {
             var card = cardBPCache.get(blueprintId);
             boolean valid = true;
 
-            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary))
+            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
-            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary))
+            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
-            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary))
+            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
             if(!isFlagAccepted(canStartWithRing, card.canStartWithRing()))
@@ -276,7 +277,8 @@ public class SortAndFilterCards {
     }
 
     private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters,
-            LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+            LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary,
+            boolean siteOverride) {
 
         for (String set : setFilters) {
             if(isJSInvalidString(set))
@@ -287,6 +289,9 @@ public class SortAndFilterCards {
             if (format != null) {
                 String invalid = "";
                 if (card.getCardType() == CardType.SITE) {
+                    if(siteOverride)
+                        continue;
+
                     invalid = format.validateSite(blueprintId);
                 }
                 else {
@@ -301,8 +306,6 @@ public class SortAndFilterCards {
 
             int min = 0;
             int max = 0;
-
-            var errata = library.getErrata();
 
             if (set.contains("-")) {
                 final String[] split = set.split("-", 2);

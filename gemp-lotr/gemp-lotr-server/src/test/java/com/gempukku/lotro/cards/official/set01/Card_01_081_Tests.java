@@ -85,7 +85,7 @@ public class Card_01_081_Tests
 		scn.FreepsDismissRevealedCards();
 
 		assertInZone(Zone.DECK, chaff1, chaff2, chaff3, chaff4);
-		assertTrue(scn.FreepsHasCardChoicesAvailable(chaff1, chaff2, chaff3,  chaff4));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(chaff1, chaff2, chaff3,  chaff4));
 
 		scn.FreepsChooseCards(chaff3, chaff4);
 		assertInZone(Zone.HAND, chaff3, chaff4);

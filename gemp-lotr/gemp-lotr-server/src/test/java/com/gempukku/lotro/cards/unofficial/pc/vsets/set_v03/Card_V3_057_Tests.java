@@ -124,12 +124,11 @@ public class Card_V3_057_Tests
 
 		// Fellowship moves (start of game moved to site 1, now move to site 2)
 		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst(); //bree gate
 
 		// FP must choose to hinder bearer or free peoples item
 		scn.FreepsChoose("item");
-		assertFalse(scn.FreepsHasCardChoicesAvailable(harpoon));
-		assertTrue(scn.FreepsHasCardChoicesAvailable(athelas, anduril));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(harpoon));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(athelas, anduril));
 		scn.FreepsChooseCard(athelas);
 
 		assertTrue(scn.IsHindered(athelas));
@@ -153,7 +152,6 @@ public class Card_V3_057_Tests
 		scn.StartGame();
 		// Fellowship moves (start of game moved to site 1, now move to site 2)
 		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst(); //bree gate
 
 		scn.FreepsChoose("Aragorn");
 

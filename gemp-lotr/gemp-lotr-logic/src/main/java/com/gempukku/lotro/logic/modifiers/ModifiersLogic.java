@@ -289,9 +289,6 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasTextRemoved(LotroGame game, PhysicalCard card) {
-//        if(hasKeyword(game, card, Keyword.HINDERED))
-//            return true;
-
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TEXT_MODIFIER, card)) {
             if (modifier.hasRemovedText(game, card))
                 return true;
@@ -300,9 +297,6 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean hasAllKeywordsRemoved(LotroGame game, PhysicalCard card) {
-//        if(hasKeyword(game, card, Keyword.HINDERED))
-//            return true;
-
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.LOSE_ALL_KEYWORDS_MODIFIER, card)) {
             if (modifier.lostAllKeywords(game, card))
                 return true;
@@ -1277,6 +1271,44 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         for (Modifier modifier : getModifiers(game, ModifierEffect.SANCTUARY_HEAL_MODIFIER))
             result += modifier.getSanctuaryHealModifier(game);
 
+        return result;
+    }
+
+    @Override
+    public int getStartingFellowshipCostModifier(LotroGame game, String playerId) {
+        int result = 0;
+        for (Modifier modifier : getModifiers(game, ModifierEffect.STARTING_FELLOWSHIP_COST_MODIFIER))
+            result += modifier.getStartingFellowshipCostModifier(game, playerId);
+
+        return result;
+    }
+
+    @Override
+    public int getMinimumBid(LotroGame game, String playerId) {
+        int result = 0;
+        for (Modifier modifier : getModifiers(game, ModifierEffect.MINIMUM_BID_MODIFIER))
+            result = Math.max(result, modifier.getMinimumBidModifier(game, playerId));
+
+        return result;
+    }
+
+    @Override
+    public boolean isHandRevealed(LotroGame game, String playerId) {
+        for (Modifier modifier : getModifiers(game, ModifierEffect.HAND_REVEAL_MODIFIER))
+            if (modifier.isHandRevealed(game, playerId))
+                return true;
+        return false;
+    }
+
+    @Override
+    public int getUniqueness(LotroGame game, PhysicalCard card) {
+        int result = card.getBlueprint().getUniqueRestriction();
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.UNIQUENESS_MODIFIER, card)) {
+            int override = modifier.getOverrideUniqueness(game, card);
+            if (override > 0) {
+                result = Math.max(result, override);
+            }
+        }
         return result;
     }
 

@@ -120,9 +120,9 @@ public class Card_03_066_ErrataTests
 
 		// Should be prompted to choose a companion to exhaust (not Frodo)
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowCanChooseCharacter(aragorn));
-		assertTrue(scn.ShadowCanChooseCharacter(guard));
-		assertFalse(scn.ShadowCanChooseCharacter(frodo));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(guard));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(frodo));
 
 		// Choose Aragorn (VIT 4); exhausting means VIT-1 = 3 wounds
 		scn.ShadowChooseCard(aragorn);

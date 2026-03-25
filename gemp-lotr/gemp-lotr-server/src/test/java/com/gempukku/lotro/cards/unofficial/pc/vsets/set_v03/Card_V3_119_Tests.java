@@ -123,7 +123,7 @@ public class Card_V3_119_Tests
 		scn.FreepsPlayCard(treasure);
 
 		// Frodo and Aragorn are companions — valid bearers
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo, aragorn, merry));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, merry));
 		// Bilbo is an ally — not a valid bearer
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
 
@@ -191,7 +191,7 @@ public class Card_V3_119_Tests
 		scn.FreepsChoose("2");
 
 		// Choose 2 of 3 companions to buff
-		assertTrue(scn.FreepsHasCardChoicesAvailable(frodo, merry, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, merry, aragorn));
 		scn.FreepsChooseCards(merry, aragorn);
 
 		// Merry and Aragorn gained +1 strength

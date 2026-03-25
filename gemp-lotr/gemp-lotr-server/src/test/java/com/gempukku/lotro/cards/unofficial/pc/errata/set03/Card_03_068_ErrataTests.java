@@ -87,7 +87,7 @@ public class Card_03_068_ErrataTests
 
         //can't hit saruman
         scn.FreepsUseCardAction(legolas);
-        assertFalse(scn.FreepsCanChooseCharacter(saruman));
+        assertFalse(scn.FreepsHasCardChoiceAvailable(saruman));
 
         scn.FreepsChooseCard(uruk1);
         assertTrue(scn.ShadowActionAvailable(saruman));

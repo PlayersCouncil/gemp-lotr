@@ -101,7 +101,7 @@ public class Card_V3_052_Tests
 		assertEquals(1, scn.GetWoundsOn(legion));
 
 		// Can choose non-unique [raider] item or minion from discard
-		assertTrue(scn.ShadowHasCardChoicesAvailable(explorer, mumak));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, mumak));
 		scn.ShadowChooseCard(explorer);
 
 		assertInHand(explorer);
@@ -156,7 +156,7 @@ public class Card_V3_052_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// Both explorer and stalker should be valid (both non-unique)
-		assertTrue(scn.ShadowHasCardChoicesAvailable(explorer, stalker));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, stalker));
 	}
 
 	@Test
