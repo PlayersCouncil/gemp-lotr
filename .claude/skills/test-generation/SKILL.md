@@ -105,6 +105,16 @@ assertTrue(scn.AwaitingFreepsManeuverPhaseActions());  // bookend
 
 If you're in the skirmish phase, assert `AwaitingFreepsSkirmishPhaseActions()`. If the action should end the phase, assert the *next* phase. This is the most common source of test failures when a card has unexpected triggers or responses — the bookend catches them immediately.
 
+`AwaitingXYPhaseActions()` is not only for bookending after actions — it also serves as a "nothing happened" anchor. When testing that a trigger did NOT fire or an effect was NOT applied, assert the expected phase to confirm the game moved on without pausing for a decision:
+
+```java
+// Testing that a trigger does NOT fire (e.g., owner-gating blocks it)
+scn.FreepsPassCurrentPhaseAction();
+scn.ShadowPassCurrentPhaseAction();
+// If the trigger had fired, we'd be stuck on a wound choice — instead:
+assertTrue(scn.AwaitingFreepsRegroupPhaseActions());  // confirms nothing happened
+```
+
 ### 3. Combine Positive and Negative Cases
 
 Don't write separate tests for "works on valid target" and "doesn't work on invalid target." Put both in the same scenario and verify both simultaneously.
@@ -228,7 +238,20 @@ scn.ShadowUseCardAction(shadowCard);  // Now Shadow can act
 
 Forgetting this is one of the most common test failures. The action procedure for alternating phases (Maneuver, Archery, Skirmish, Regroup) always starts with the Free Peoples player.
 
-### 8. Reference Existing Tests for Similar Cards
+### 8. Dismiss Revealed Cards Before Choosing
+
+When a card effect searches the draw deck (or reveals cards from any hidden zone), the player is first shown the full set of revealed cards. This reveal popup must be dismissed before the player can make a selection from those cards. Use `FreepsDismissRevealedCards()` or `ShadowDismissRevealedCards()` before calling `FreepsChooseCardBPFromSelection()` or similar.
+
+```java
+// Card searches the draw deck for a companion
+scn.FreepsUseCardAction(deckSearchCard);
+scn.FreepsDismissRevealedCards();                    // dismiss the reveal popup
+scn.FreepsChooseCardBPFromSelection(targetCard);     // now choose from the revealed cards
+```
+
+Forgetting the dismiss step will cause the test to fail because the game is waiting on the reveal acknowledgment, not the selection decision.
+
+### 9. Reference Existing Tests for Similar Cards
 
 Before writing tests from scratch, search for tests of cards with similar effects. If you're testing a "wound prevention response," look at how other wound-prevention cards are tested. The pattern may already be established.
 
