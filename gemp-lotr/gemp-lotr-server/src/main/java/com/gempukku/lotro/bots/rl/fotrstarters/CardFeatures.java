@@ -298,10 +298,11 @@ public class CardFeatures {
             for (Object keyObj : obj.keySet()) {
                 String key = keyObj.toString();
                 if (key.equals("cost")) {
-                    if (targetCanExert &&
-                            ((JSONObject) obj.get(key)).get("type").equals("exert") &&
-                            ((JSONObject) obj.get(key)).containsKey("memorize")) {
-                        costSelect = (String) ((JSONObject) obj.get(key)).get("select");
+                    Object costObj = obj.get(key);
+                    if (targetCanExert && costObj instanceof JSONObject costJson &&
+                            "exert".equals(costJson.get("type")) &&
+                            costJson.containsKey("memorize")) {
+                        costSelect = (String) costJson.get("select");
                     }
                     continue; // Skip cost blocks
                 }
