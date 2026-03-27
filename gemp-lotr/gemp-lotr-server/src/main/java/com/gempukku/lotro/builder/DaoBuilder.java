@@ -57,6 +57,8 @@ public class DaoBuilder {
         CachedIpBanDAO ipBanDao = new CachedIpBanDAO(dbIpBanDao);
         objectMap.put(IpBanDAO.class, ipBanDao);
 
+        objectMap.put(RtmdFeedbackDAO.class, LoggingProxy.createLoggingProxy(RtmdFeedbackDAO.class, new DbRtmdFeedbackDAO(dbAccess)));
+
         CacheManager cacheManager = new CacheManager();
         cacheManager.addCache(merchantDao);
         cacheManager.addCache(deckDao);
