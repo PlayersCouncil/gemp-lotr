@@ -126,29 +126,26 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					filter: culture(isengard),minion
-					amount: -2
-				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: played
-					filter: your,culture(isengard)
-				}
-				requires: {
-					type: isSide
-					side: shadow
-				}
-				effect: {
-					type: exert
-					player: freeps
-					select: choose(companion)
+					filter: isengard,minion
+					requires: {
+						type: IsGreaterThan
+						firstNumber: {
+							type: ForEachYouCanSpot
+							filter: companion
+						}
+						secondNumber: {
+							type: ForEachYouCanSpot
+							filter: minion
+						}
+					}
+					amount: {
+						type: ForEachYouCanSpot
+						filter: isengard, minion
+					}
 				}
 			}
 		]
-		gametext: The twilight cost of each [isengard] minion is -2. Each time you play an [isengard] card, the Free Peoples player must exert a companion.
+		gametext: While you can spot more companions than minions, [isengard] minions are twilight cost -1 for each [isengard] minion you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
