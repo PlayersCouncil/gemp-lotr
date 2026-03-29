@@ -158,7 +158,7 @@
 				effect: [
 					{
 						type: AddTwilight
-						amount: 4
+						amount: 6
 					}
 					{
 						type: Hinder
@@ -167,7 +167,7 @@
 				]
 			}
 		]
-		gametext: To play, spot a [ringwraith] card.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (4) and hinder that companion.
+		gametext: To play, spot a [ringwraith] card.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (6) and hinder that companion.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -1366,7 +1366,7 @@ var PCCards = {
 	// Slopes of Amon Hen (1U361) [Errata]
 	'51_361' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E361.1_card.jpg',
 	// Wastes of Emyn Muil (3U120) [Errata]
-	'53_120' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E120.1_card.jpg',
+	'53_120' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E120.2_card.jpg',
 	// Servants to Saruman (3C70) [Errata]
 	'53_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E070.1_card.jpg',
 	// Trapped and Alone (3U72) [Errata]
