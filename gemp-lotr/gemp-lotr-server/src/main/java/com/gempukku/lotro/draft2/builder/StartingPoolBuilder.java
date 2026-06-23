@@ -46,25 +46,38 @@ public class StartingPoolBuilder {
         final JSONArray coreCards = (JSONArray) boosterDraftRun.get("coreCards");
         final JSONArray freePeoplesRuns = (JSONArray) boosterDraftRun.get("freePeoplesRuns");
         final JSONArray shadowRuns = (JSONArray) boosterDraftRun.get("shadowRuns");
+        final int fpRunLength = runLength / freePeoplesRuns.size();
+        final int shadowRunLength = runLength / shadowRuns.size();
 
         return seed -> {
             Random rnd = new Random(seed);
-            List<String> freePeoplesRun = (List<String>) freePeoplesRuns.get(rnd.nextInt(freePeoplesRuns.size()));
-            List<String> shadowRun = (List<String>) shadowRuns.get(rnd.nextInt(shadowRuns.size()));
-
-            int freePeopleLength = freePeoplesRun.size();
-            int freePeopleStart = rnd.nextInt(freePeopleLength);
-
-            int shadowLength = shadowRun.size();
-            int shadowStart = rnd.nextInt(shadowLength);
-
-            Iterable<String> freePeopleIterable = getCyclingIterable(freePeoplesRun, freePeopleStart, runLength);
-            Iterable<String> shadowIterable = getCyclingIterable(shadowRun, shadowStart, runLength);
 
             final DefaultCardCollection startingCollection = new DefaultCardCollection();
 
-            for (String card : Iterables.concat((List<String>) coreCards, freePeopleIterable, shadowIterable))
+            for (String card : (List<String>) coreCards)
                 startingCollection.addItem(card, 1);
+
+            for (Object run : freePeoplesRuns) {
+                List<String> freePeoplesRun = (List<String>) run;
+
+                int freePeopleLength = freePeoplesRun.size();
+                int freePeopleStart = rnd.nextInt(freePeopleLength);
+
+                Iterable<String> freePeopleIterable = getCyclingIterable(freePeoplesRun, freePeopleStart, fpRunLength);
+                for (String card : freePeopleIterable)
+                    startingCollection.addItem(card, 1);
+            }
+
+            for (Object run : shadowRuns) {
+                List<String> shadowRun = (List<String>) run;
+
+                int shadowLength = shadowRun.size();
+                int shadowStart = rnd.nextInt(shadowLength);
+
+                Iterable<String> shadowIterable = getCyclingIterable(shadowRun, shadowStart, shadowRunLength);
+                for (String card : shadowIterable)
+                    startingCollection.addItem(card, 1);
+            }
 
             return startingCollection;
         };
