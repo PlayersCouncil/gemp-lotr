@@ -1,0 +1,308 @@
+{
+  "code": "king_draft",
+  "format": "limited_king",
+  "startingPool": {
+    "type": "boosterDraftRun",
+    "data": {
+      "runLength": 14,
+      "coreCards": ["7_1","7_317", "7_319", "7_212"],
+      "freePeoplesRuns": [
+        ["8_39", "7_108", "7_81", "7_121", "7_81", "8_40", "8_39",
+          "7_124", "7_98", "7_90", "7_83", "7_83", "7_90", "7_98", "7_110",
+          "8_87", "7_253", "7_225", "7_259", "7_225", "7_253", "8_87",
+          "7_246", "7_240", "7_254", "7_243", "7_243", "7_254", "7_248", "7_246"],
+        ["7_36", "7_31", "7_40", "7_52", "7_40", "7_31", "7_36",
+          "7_26", "7_20", "8_13", "7_20", "7_26",
+          "7_6", "7_11", "8_1", "7_11", "7_6",
+          "7_72", "7_78", "8_29", "7_78", "7_72",
+          "7_320", "7_322", "10_112", "7_323", "7_320", "10_112", "7_322", "7_323"]
+      ],
+      "shadowRuns": [
+        ["10_54", "10_57", "10_56", "10_55", "7_186", "7_186", "10_55", "10_56", "10_57", "10_54",
+          "7_138", "7_132", "7_131", "7_172", "7_173", "7_173", "7_172", "7_131", "7_132", "7_138",
+          "7_288", "7_289", "7_291", "7_285", "7_292", "7_292", "7_285", "7_291", "7_289", "7_288",
+          "8_79", "7_217", "7_196", "7_201", "7_200", "7_200", "7_201", "7_196", "7_218", "7_214",
+          "10_49", "7_137", "7_136", "7_160", "7_155", "7_155", "7_160", "7_136", "7_137", "10_49",
+          "10_84", "10_81", "10_82", "10_83", "10_102", "10_102", "10_83", "10_82", "10_81", "10_84"]
+      ]
+    }
+  },
+  "choices": [
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:FREE_PEOPLE set:7,8,10 rarity:R"
+      }
+    },
+    {
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:FREE_PEOPLE set:7 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:FREE_PEOPLE set:7 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:FREE_PEOPLE set:7 rarity:C"
+            }
+          }
+        ]
+      }
+    },{
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:FREE_PEOPLE set:8 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:FREE_PEOPLE set:8 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:FREE_PEOPLE set:8 rarity:C"
+            }
+          }
+        ]
+      }
+    },{
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:FREE_PEOPLE set:10 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:FREE_PEOPLE set:10 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:FREE_PEOPLE set:10 rarity:C"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:SHADOW set:7,8,10 rarity:R"
+      }
+    },
+    {
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:SHADOW set:7 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:SHADOW set:7 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:SHADOW set:7 rarity:C"
+            }
+          }
+        ]
+      }
+    },{
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:SHADOW set:8 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:SHADOW set:8 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:SHADOW set:8 rarity:C"
+            }
+          }
+        ]
+      }
+    },{
+      "type": "weightedSwitch",
+      "repeat": 10,
+      "data": {
+        "switchResult": [
+          {
+            "weight": 0.1,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 5,
+              "filter": "side:SHADOW set:10 rarity:R"
+            }
+          },
+          {
+            "weight": 0.3,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 8,
+              "filter": "side:SHADOW set:10 rarity:U,P"
+            }
+          },
+          {
+            "weight": 0.6,
+            "type": "filterPick",
+            "data": {
+              "optionCount": 10,
+              "filter": "side:SHADOW set:10 rarity:C"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:1"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:2"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:3"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:4"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:5"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:6"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:7"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:8"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 3,
+        "filter": "cardType:SITE set:7,8,10 siteNumber:9"
+      }
+    }
+  ]
+}
