@@ -25,97 +25,75 @@
       }
     },
     {
-      "type": "weightedSwitch",
-      "repeat": 10,
+      "type": "filterPick",
+      "repeat": 1,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:FREE_PEOPLE set:4 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:FREE_PEOPLE set:4 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:FREE_PEOPLE set:4 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 5,
+        "filter": "side:FREE_PEOPLE set:4 rarity:R"
       }
-    },{
-      "type": "weightedSwitch",
-      "repeat": 10,
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:FREE_PEOPLE set:5 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:FREE_PEOPLE set:5 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:FREE_PEOPLE set:5 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 8,
+        "filter": "side:FREE_PEOPLE set:4 rarity:U,P"
       }
-    },{
-      "type": "weightedSwitch",
-      "repeat": 10,
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:FREE_PEOPLE set:6 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:FREE_PEOPLE set:6 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:FREE_PEOPLE set:6 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 10,
+        "filter": "side:FREE_PEOPLE set:4 rarity:C"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:FREE_PEOPLE set:5 rarity:R"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
+      "data": {
+        "optionCount": 8,
+        "filter": "side:FREE_PEOPLE set:5 rarity:U,P"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
+      "data": {
+        "optionCount": 10,
+        "filter": "side:FREE_PEOPLE set:5 rarity:C"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:FREE_PEOPLE set:6 rarity:R"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
+      "data": {
+        "optionCount": 8,
+        "filter": "side:FREE_PEOPLE set:6 rarity:U,P"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
+      "data": {
+        "optionCount": 10,
+        "filter": "side:FREE_PEOPLE set:6 rarity:C"
       }
     },
     {
@@ -127,97 +105,75 @@
       }
     },
     {
-      "type": "weightedSwitch",
-      "repeat": 10,
+      "type": "filterPick",
+      "repeat": 1,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:SHADOW set:4 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:SHADOW set:4 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:SHADOW set:4 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 5,
+        "filter": "side:SHADOW set:4 rarity:R"
       }
-    },{
-      "type": "weightedSwitch",
-      "repeat": 10,
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:SHADOW set:5 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:SHADOW set:5 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:SHADOW set:5 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 8,
+        "filter": "side:SHADOW set:4 rarity:U,P"
       }
-    },{
-      "type": "weightedSwitch",
-      "repeat": 10,
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
       "data": {
-        "switchResult": [
-          {
-            "weight": 0.1,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 5,
-              "filter": "side:SHADOW set:6 rarity:R"
-            }
-          },
-          {
-            "weight": 0.3,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 8,
-              "filter": "side:SHADOW set:6 rarity:U,P"
-            }
-          },
-          {
-            "weight": 0.6,
-            "type": "filterPick",
-            "data": {
-              "optionCount": 10,
-              "filter": "side:SHADOW set:6 rarity:C"
-            }
-          }
-        ]
+        "optionCount": 10,
+        "filter": "side:SHADOW set:4 rarity:C"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:SHADOW set:5 rarity:R"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
+      "data": {
+        "optionCount": 8,
+        "filter": "side:SHADOW set:5 rarity:U,P"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
+      "data": {
+        "optionCount": 10,
+        "filter": "side:SHADOW set:5 rarity:C"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 1,
+      "data": {
+        "optionCount": 5,
+        "filter": "side:SHADOW set:6 rarity:R"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 3,
+      "data": {
+        "optionCount": 8,
+        "filter": "side:SHADOW set:6 rarity:U,P"
+      }
+    },
+    {
+      "type": "filterPick",
+      "repeat": 6,
+      "data": {
+        "optionCount": 10,
+        "filter": "side:SHADOW set:6 rarity:C"
       }
     },
     {
