@@ -908,10 +908,16 @@
 					filter: ranger
 				}
 			}
-			requires: {
-				type: perTurnLimit
-				limit: 1
-			}
+			requires: [
+				{
+					type: perTurnLimit
+					limit: 1
+				}
+				{
+					type: IsSide
+					side: Freeps
+				}
+			]
 			effect: [
 				{
 					type: incrementPerTurnLimit
