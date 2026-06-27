@@ -24,6 +24,10 @@
 				trigger: {
 					type: Moves
 				}
+				requires: {
+					type: Phase
+					phase: Fellowship
+				}
 				cost: {
 					type: Spot
 					filter: title(Gandalf)
