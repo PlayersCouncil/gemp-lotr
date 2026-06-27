@@ -61,6 +61,12 @@ var GempLotrGameUI = Class.extend({
 
     selectionFunction: null,
 
+    // Touch-bounce guard: suppress a repeat tap on the same card within this window (ms).
+    // Prevents a finger resting on the edge of a touchscreen from registering one card twice.
+    selectionDebounceMs: 200,
+    lastSelectedCardId: null,
+    lastSelectionTime: 0,
+
     chatBoxDiv: null,
     chatBox: null,
     communication: null,
@@ -784,8 +790,18 @@ var GempLotrGameUI = Class.extend({
             if (!this.successfulDrag) {
                 if (event.shiftKey || event.which > 1) {
                     this.displayCardInfo(selectedCardElem.data("card"));
-                } else if ((selectedCardElem.hasClass("selectableCard") || selectedCardElem.hasClass("actionableCard")) && !this.replayMode)
-                    this.selectionFunction(selectedCardElem.data("card").cardId, event);
+                } else if ((selectedCardElem.hasClass("selectableCard") || selectedCardElem.hasClass("actionableCard")) && !this.replayMode) {
+                    var clickedCardId = selectedCardElem.data("card").cardId;
+                    var now = Date.now();
+                    if (clickedCardId === this.lastSelectedCardId && (now - this.lastSelectionTime) < this.selectionDebounceMs) {
+                        // Same card tapped again within the debounce window: treat as a bounce, ignore.
+                        event.stopPropagation();
+                        return false;
+                    }
+                    this.lastSelectedCardId = clickedCardId;
+                    this.lastSelectionTime = now;
+                    this.selectionFunction(clickedCardId, event);
+                }
                 event.stopPropagation();
             }
             return false;

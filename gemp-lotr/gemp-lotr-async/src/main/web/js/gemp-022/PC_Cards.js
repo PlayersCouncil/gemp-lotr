@@ -1562,5 +1562,14 @@ var PCCards = {
 	'93_8': 'https://i.lotrtcgpc.net/race/LOTR-EN93S008.0_card.jpg',
 	'93_9': 'https://i.lotrtcgpc.net/race/LOTR-EN93S009.0_card.jpg',
 	'93_10': 'https://i.lotrtcgpc.net/race/LOTR-EN93S010.0_card.jpg',
+	
+	
+	// A Promise FA
+	'2_132': 'https://i.lotrtcgpc.net/promos/LOTR-EN02U132.0_card.jpg',
+	//Host of Moria FA
+	'9_61': 'https://i.lotrtcgpc.net/promos/LOTR-EN09U061.0_card.jpg',
+	//Eomer, TMOR FA - 2026-06 WC Circuit
+	'4_370': 'https://i.lotrtcgpc.net/promos/LOTR-EN04U370.0_card.jpg',
+	
 }
 

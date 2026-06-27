@@ -14,7 +14,7 @@ public class IsSideRequirementProducer implements RequirementProducer{
     public Requirement getPlayRequirement(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(object, "side");
 
-        final Side side = FieldUtils.getEnum(Side.class, object.get("side"), "side");
+        final Side side = FieldUtils.getSide(object.get("side"), "side");
 
         return new Requirement() {
             @Override
