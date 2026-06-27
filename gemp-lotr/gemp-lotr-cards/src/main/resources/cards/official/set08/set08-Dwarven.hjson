@@ -127,8 +127,8 @@
 			type: event
 			cost: {
 				type: exert
-				select: choose(dwarf,damage,CanExert,MinVitality(3))
-				times: 2
+				select: choose(dwarf,damage,CanExert)
+				times: 1
 				memorize: exertedDwarf
 			},
 			effect: [
@@ -144,7 +144,7 @@
 				}
 			]
 		}
-		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent discard X Shadow cards.
+		gametext: Spot a Dwarf who is damage +X and exert that Dwarf to make an opponent discard X Shadow cards.
 		lore: "...the Dark Door gaped before them like the mouth of night."
 		promotext: ""
 		alts: {
