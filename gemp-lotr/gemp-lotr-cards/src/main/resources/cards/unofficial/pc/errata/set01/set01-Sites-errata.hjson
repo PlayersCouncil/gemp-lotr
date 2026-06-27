@@ -141,6 +141,7 @@
 					amount: {
 						type: ForEachYouCanSpot
 						filter: isengard, minion
+						multiplier: -1
 					}
 				}
 			}
