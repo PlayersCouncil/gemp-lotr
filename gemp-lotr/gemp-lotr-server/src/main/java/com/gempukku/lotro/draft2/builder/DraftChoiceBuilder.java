@@ -55,6 +55,32 @@ public class DraftChoiceBuilder {
 
         final List<CardCollection.Item> possibleCards = _sortAndFilterCards.process(filter, items, _cardLibrary, _formatLibrary);
 
+        // Possible cards can contain duplicates, same name from different sets are considered legal by the filter
+        // Different art would not be a problem, but it multiplies the odds of seeing the card
+        boolean filterContainsSet = filter.contains("set:");
+        List<String> sets = new ArrayList<>();
+        if (filterContainsSet) {
+            String[] filterParts = filter.split(" ");
+            for (String part : filterParts) {
+                if (part.startsWith("set:")) {
+                    String setPart = part.substring(4);
+                    String[] setNumbers = setPart.split(",");
+                    Collections.addAll(sets, setNumbers);
+                }
+            }
+        }
+        possibleCards.removeIf(item -> {
+            if (!filterContainsSet) {
+                return false;
+            }
+            for (String set : sets) {
+                if (item.getBlueprintId().startsWith(set + "_")) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
         return new DraftChoiceDefinition() {
             @Override
             public Iterable<SoloDraft.DraftChoice> getDraftChoice(long seed, int stage, DefaultCardCollection draftPool) {

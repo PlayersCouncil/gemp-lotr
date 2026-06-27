@@ -107,9 +107,10 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         Map<String, String> availableSoloDraftFormats = new HashMap<>();
         availableSoloDraftFormats.put("fotr_draft", "Fellowship Block");
         availableSoloDraftFormats.put("ttt_draft", "Towers Block");
+        availableSoloDraftFormats.put("king_draft", "Kings Block");
         availableSoloDraftFormats.put("hobbit_random_draft", "Hobbit");
 
-        List<String> orderedSoloDrafts = List.of("fotr_draft", "ttt_draft", "hobbit_random_draft");
+        List<String> orderedSoloDrafts = List.of("fotr_draft", "ttt_draft", "king_draft", "hobbit_random_draft");
 
         data.constructed = _formatLibrary.getHallFormats().values().stream()
                 .map(constructedFormat -> new JSONDefs.ItemStub(constructedFormat.getCode(), constructedFormat.getName()))
