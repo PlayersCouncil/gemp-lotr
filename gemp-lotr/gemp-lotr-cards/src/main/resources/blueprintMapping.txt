@@ -436,3 +436,9 @@ gl_theOneRing,1_2
 1_403,1_72
 #Holiday Hobbit Stealth
 1_404,1_298
+#A Promise FA
+2_132,2_112
+#Host of Moria FA
+9_61,9_41
+#Eomer, TMOR FA - 2026-06 WC Circuit
+4_370,4_267
