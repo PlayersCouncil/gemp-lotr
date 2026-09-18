@@ -24,6 +24,11 @@ public abstract class MultipleChoiceAwaitingDecision extends AbstractAwaitingDec
         } catch (NumberFormatException exp) {
             throw new DecisionResultInvalidException("Unknown response number");
         }
+        // A stale or duplicated answer (decision ids are reused, so a late answer to an earlier decision can pass
+        // the id check) must be rejected as an invalid answer rather than crashing the game with an
+        // ArrayIndexOutOfBoundsException (#1023).
+        if (index < 0 || index >= _possibleResults.length)
+            throw new DecisionResultInvalidException("Unknown response number");
         validDecisionMade(index, _possibleResults[index]);
     }
 

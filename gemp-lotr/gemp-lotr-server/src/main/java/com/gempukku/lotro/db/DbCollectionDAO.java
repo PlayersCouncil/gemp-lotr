@@ -218,6 +218,36 @@ public class DbCollectionDAO implements CollectionDAO {
         }
     }
 
+    @Override
+    public List<DBDefs.CollectionHolder> findHolders(String product) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT
+                            c.player_id AS player_id,
+                            p.name AS player_name,
+                            c.type AS collection_type,
+                            ce.quantity AS quantity
+                        FROM collection_entries ce
+                        INNER JOIN collection c
+                            ON c.id = ce.collection_id
+                        INNER JOIN player p
+                            ON p.id = c.player_id
+                        WHERE ce.product = :product
+                            AND ce.quantity > 0
+                        ORDER BY p.name, c.type;
+                        """;
+                return conn.createQuery(sql)
+                        .addParameter("product", product)
+                        .executeAndFetch(DBDefs.CollectionHolder.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to find holders of " + product, ex);
+        }
+    }
+
     public int getCollectionID(int playerId, String type)  {
         var coll = getCollectionInfo(playerId,  type);
         if(coll == null)

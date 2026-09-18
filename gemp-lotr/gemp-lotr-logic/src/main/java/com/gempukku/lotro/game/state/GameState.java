@@ -72,6 +72,7 @@ public class GameState {
     private final Map<String, List<PhysicalCard>> _metaSites = new HashMap<>();
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
+    private boolean _finished = false;
 
     private LotroGame _lotroGame;
 
@@ -196,6 +197,7 @@ public class GameState {
     }
 
     public void finish() {
+        _finished = true;
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.endGame();
         }
@@ -413,9 +415,15 @@ public class GameState {
             listener.initializePregameBoard(_preGameInfo);
         }
 
-        final AwaitingDecision awaitingDecision = _playerDecisions.get(playerId);
-        if (awaitingDecision != null)
-            listener.decisionRequired(playerId, awaitingDecision);
+        // Someone joining or refreshing after the end must see the game as over, not be handed the decision that was
+        // pending when it ended (a decision that timed out is never "finished" and would otherwise be re-sent)
+        if (_finished) {
+            listener.endGame();
+        } else {
+            final AwaitingDecision awaitingDecision = _playerDecisions.get(playerId);
+            if (awaitingDecision != null)
+                listener.decisionRequired(playerId, awaitingDecision);
+        }
     }
 
     public void sendMessage(String message) {

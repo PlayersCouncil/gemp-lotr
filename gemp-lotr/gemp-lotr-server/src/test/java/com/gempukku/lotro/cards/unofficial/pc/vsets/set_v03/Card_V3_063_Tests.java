@@ -246,8 +246,8 @@ public class Card_V3_063_Tests
 
 		// One Watcher discarded
 		assertEquals(1, scn.GetShadowDiscardCount());
-		// +4 twilight added
-		assertEquals(twilightBefore + 4, scn.GetTwilight());
+		// +6 twilight added
+		assertEquals(twilightBefore + 6, scn.GetTwilight());
 		// Aragorn hindered
 		assertTrue(scn.IsHindered(aragorn));
 	}

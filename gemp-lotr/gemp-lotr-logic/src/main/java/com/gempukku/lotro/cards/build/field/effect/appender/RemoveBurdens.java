@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.effects.RemoveBurdenEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
 
@@ -34,6 +35,14 @@ public class RemoveBurdens implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         Evaluator evaluator = valueSource.getEvaluator(actionContext);
+
+                        // As a cost, the full minimum must actually be payable; otherwise the cost fails and the
+                        // owning action does not proceed to its effects.  Without this, "remove a burden" with 0
+                        // burdens would silently resolve as removing nothing and the effect would still fire.
+                        // As an effect, removing fewer (or zero) burdens than requested is a fizzle, not a failure.
+                        if (cost && actionContext.getGame().getGameState().getBurdens() < evaluator.getMinimum(actionContext.getGame(), null))
+                            return new FailedEffect();
+
                         final int min = Math.min(actionContext.getGame().getGameState().getBurdens(), evaluator.getMinimum(actionContext.getGame(), null));
                         final int max = Math.min(actionContext.getGame().getGameState().getBurdens(), evaluator.getMaximum(actionContext.getGame(), null));
                         if (min != max) {

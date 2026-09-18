@@ -42,6 +42,15 @@ public class Card_92_028_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetDualScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"92_28", "92_28"
+		);
+	}
+
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 		/**
@@ -84,10 +93,10 @@ public class Card_92_028_Tests
 	@Test
 	public void ShadowPlaysArtifactFromDeckInShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		//Is not owner-gated
-		var scn = GetFreepsScenario();
+		var scn = GetShadowScenario();
 
 		var library = scn.GetShadowCard("library");
-		var mod = scn.GetFreepsCard("mod");
+		var mod = scn.GetShadowCard("mod");
 
 		// Leave library in draw deck
 		scn.StartGame();
@@ -105,5 +114,33 @@ public class Card_92_028_Tests
 		//Limit once per turn
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(mod));
+	}
+
+	@Test
+	public void OpponentCannotUse() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mithril = scn.GetFreepsCard("mithril");
+		var mod = scn.GetShadowCard("mod");
+
+		// Leave mithril in draw deck (default location)
+		scn.StartGame();
+
+		assertFalse(scn.FreepsActionAvailable(mod));
+	}
+
+	@Test
+	public void FreepsCannotUseOpponentsDuringFellowshipPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDualScenario();
+
+		var mod = scn.GetFreepsCard("mod");
+		var shadowMod = scn.GetShadowCard("mod");
+
+		// Leave mithril in draw deck (default location)
+		scn.StartGame();
+
+		assertTrue(scn.FreepsActionAvailable(mod));
+		//TODO: Need a better way of determining actions from cards with the same name
+		//assertFalse(scn.FreepsActionAvailable(shadowMod));
 	}
 }

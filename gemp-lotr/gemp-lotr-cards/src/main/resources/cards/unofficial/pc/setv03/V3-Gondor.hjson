@@ -192,25 +192,9 @@
 				modifier: {
 					type: ModifyStrength
 					filter: self
-					amount: 1
-					requires: {
-						type: CanSpot
-						filter: Rohan, Man
-						count: 1
-					}
-				}
-			}
-
-			{
-				type: Modifier
-				modifier: {
-					type: ModifyStrength
-					filter: self
-					amount: 1
-					requires: {
-						type: CanSpot
-						filter: other, Gondor, Man
-						count: 1
+					amount: {
+						type: ForEachCulture
+						filter: other,Man
 					}
 				}
 			}
@@ -249,8 +233,8 @@
 				}
 			}
 		]
-		gametext: Aragorn is strength +1 for each other Man of a different culture you can spot.<br>Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
-		lore: "'Stand, Men of the West! This is the hour of doom.'"
+		gametext: Aragorn is strength +1 for each culture among other Men you can spot.\Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
+		lore: "Out from the beleaguered hills knights of Gondor, Riders of Rohan, Dúnedain of the North, close-serried companies, drove against their wavering foes..."
 		promotext: ""
 		alts: {
 			promos: {

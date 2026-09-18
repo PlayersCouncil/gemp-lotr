@@ -130,8 +130,10 @@ public class FilterFactory {
                 }));
         simpleFilters.put("hasrace",
                 (actionContext -> (Filter) (game, physicalCard) -> !game.getModifiersQuerying().getRaces(game, physicalCard).isEmpty()));
+        // Must agree with what a Hinder effect from this card could actually hinder, i.e. it also honours
+        // CantBeHindered modifiers (Endless Night counting itself as hinderable, #1014).
         simpleFilters.put("hinderable",
-                (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard)));
+                (actionContext -> Filters.canBeHindered(actionContext.getSource())));
         simpleFilters.put("hindered",
                 (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().isHindered(physicalCard)));
         simpleFilters.put("idinstored",

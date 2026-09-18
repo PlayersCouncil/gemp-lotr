@@ -19,14 +19,14 @@ public class DbLeagueDAO implements LeagueDAO {
         _dbAccess = dbAccess;
     }
 
-    public int addLeague(String name, long code, League.LeagueType type, LeagueParams parameters, ZonedDateTime start, ZonedDateTime end, int cost) {
+    public int addLeague(String name, long code, League.LeagueType type, LeagueParams parameters, ZonedDateTime start, ZonedDateTime end, int cost, Integer scheduleId) {
         try {
             var db = _dbAccess.openDB();
 
             String sql = """
                         INSERT INTO gemp_db.league
-                            (name, code, `type`, parameters, start_date, end_date, status, cost)
-                        VALUES(:name, :code, :type, :parameters, :start, :end, :status, :cost);
+                            (name, code, `type`, parameters, start_date, end_date, status, cost, schedule_id)
+                        VALUES(:name, :code, :type, :parameters, :start, :end, :status, :cost, :scheduleId);
                         """;
 
             try (org.sql2o.Connection conn = db.beginTransaction()) {
@@ -38,7 +38,8 @@ public class DbLeagueDAO implements LeagueDAO {
                     .addParameter("start", start.format(DateUtils.DateFormat))
                     .addParameter("end", end.format(DateUtils.DateFormat))
                     .addParameter("status", 0)
-                    .addParameter("cost", cost);
+                    .addParameter("cost", cost)
+                    .addParameter("scheduleId", scheduleId);
 
                 int id = query.executeUpdate()
                         .getKey(Integer.class);
@@ -67,6 +68,7 @@ public class DbLeagueDAO implements LeagueDAO {
                             ,end_date
                             ,status
                             ,cost
+                            ,schedule_id
                         FROM gemp_db.league
                         WHERE end_date >= :after
                         ORDER BY start_date DESC;        
@@ -99,6 +101,7 @@ public class DbLeagueDAO implements LeagueDAO {
                             ,end_date
                             ,status
                             ,cost
+                            ,schedule_id
                         FROM gemp_db.league
                         WHERE code = :code;
                         """;
@@ -113,6 +116,36 @@ public class DbLeagueDAO implements LeagueDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve league by code", ex);
+        }
+    }
+
+    public void updateLeague(long code, String name, LeagueParams parameters, ZonedDateTime start, ZonedDateTime end, int cost) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                                UPDATE gemp_db.league
+                                SET name = :name
+                                    ,parameters = :parameters
+                                    ,start_date = :start
+                                    ,end_date = :end
+                                    ,cost = :cost
+                                WHERE code = :code
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("name", name)
+                        .addParameter("parameters", parameters.toString())
+                        .addParameter("start", start.format(DateUtils.DateFormat))
+                        .addParameter("end", end.format(DateUtils.DateFormat))
+                        .addParameter("cost", cost)
+                        .addParameter("code", code)
+                        .executeUpdate();
+
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to update league", ex);
         }
     }
 

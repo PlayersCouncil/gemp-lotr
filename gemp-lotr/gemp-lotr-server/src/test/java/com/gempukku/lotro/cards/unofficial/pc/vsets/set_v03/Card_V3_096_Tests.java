@@ -330,6 +330,85 @@ public class Card_V3_096_Tests
 		assertEquals(twilightBefore - 18 - 2, scn.GetTwilight());
 	}
 
+	/**
+	 * Sets up Endless Night with two hinderable support cards (Hollowing of Isengard, Ithil Stone) and Sauron in the
+	 * given zone, then passes into the Shadow phase.  Moving to site 2 adds 3 twilight on top of the amount given.
+	 */
+	private VirtualTableScenario GetDiscountScenario(Zone sauronZone, int twilightBeforeMove) throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var night = scn.GetShadowCard("night");
+		var sky1 = scn.GetShadowCard("sky1");
+		var sky2 = scn.GetShadowCard("sky2");
+		var sky3 = scn.GetShadowCard("sky3");
+		var sky4 = scn.GetShadowCard("sky4");
+		var sauron = scn.GetShadowCard("sauron");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var ithilstone = scn.GetShadowCard("ithilstone");
+		scn.MoveCardsToSupportArea(night, sky1, sky2, sky3, sky4, hollowing, ithilstone);
+		scn.HinderCard(sky1, sky2, sky3, sky4);
+		if (sauronZone == Zone.HAND)
+			scn.MoveCardsToHand(sauron);
+		else
+			scn.MoveCardsToDiscard(sauron);
+
+		scn.StartGame();
+		scn.SetTwilight(twilightBeforeMove);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowDeclineOptionalTrigger(); //Ithil Stone's draw
+
+		return scn;
+	}
+
+	@Test
+	public void EndlessNightShadowAbilityIsAvailableWhenSauronIsOnlyAffordableAfterHindering() throws DecisionResultInvalidException, CardNotFoundException {
+		// #1014: the ability's availability check must count the support cards that could be hindered as a
+		// discount, since that is the whole point of the ability.
+		// Sauron costs 18 + 2 roaming = 20.  Two support cards can be hindered, so 18 twilight is exactly enough
+		// with the full discount, and 17 is not.
+		var scn = GetDiscountScenario(Zone.HAND, 14);
+		assertEquals(17, scn.GetTwilight());
+		assertFalse(scn.ShadowActionAvailable(scn.GetShadowCard("night")));
+
+		scn = GetDiscountScenario(Zone.HAND, 15);
+		var night = scn.GetShadowCard("night");
+		var sauron = scn.GetShadowCard("sauron");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var ithilstone = scn.GetShadowCard("ithilstone");
+		assertEquals(18, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(night));
+
+		scn.ShadowUseCardAction(night);
+		scn.ShadowChooseCards(hollowing, ithilstone);
+
+		assertTrue(scn.IsHindered(hollowing));
+		assertTrue(scn.IsHindered(ithilstone));
+		assertInZone(Zone.SHADOW_CHARACTERS, sauron);
+		assertEquals(0, scn.GetTwilight());
+	}
+
+	@Test
+	public void EndlessNightShadowAbilityIsAvailableWhenSauronInDiscardIsOnlyAffordableAfterHindering() throws DecisionResultInvalidException, CardNotFoundException {
+		// #1014, discard pile variant
+		var scn = GetDiscountScenario(Zone.DISCARD, 14);
+		assertEquals(17, scn.GetTwilight());
+		assertFalse(scn.ShadowActionAvailable(scn.GetShadowCard("night")));
+
+		scn = GetDiscountScenario(Zone.DISCARD, 15);
+		var night = scn.GetShadowCard("night");
+		var sauron = scn.GetShadowCard("sauron");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var ithilstone = scn.GetShadowCard("ithilstone");
+		assertEquals(18, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(night));
+
+		scn.ShadowUseCardAction(night);
+		scn.ShadowChooseCards(hollowing, ithilstone);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, sauron);
+		assertEquals(0, scn.GetTwilight());
+	}
+
 	@Test
 	public void EndlessNightShadowAbilityNotAvailableIfSauronNotPlayable() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

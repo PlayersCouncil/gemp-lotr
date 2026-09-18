@@ -16,6 +16,7 @@ import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.prizes.PrizeService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,6 +37,8 @@ public class LeagueService {
     private final CollectionsManager _collectionsManager;
     private final TransferDAO _transferDAO;
     private final SoloDraftDefinitions _soloDraftDefinitions;
+    // Awards the configurable prize tiers when a league ends; null (tests) means no extra prizes are awarded.
+    private PrizeService _prizeService;
 
     private final Map<String, List<PlayerStanding>> _leagueStandings = new ConcurrentHashMap<>();
     private final Map<String, List<PlayerStanding>> _leagueSerieStandings = new ConcurrentHashMap<>();
@@ -47,6 +50,15 @@ public class LeagueService {
                          LeagueParticipationDAO leagueParticipationDAO, CollectionsManager collectionsManager,
                          TransferDAO transferDAO,
                          LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, SoloDraftDefinitions soloDraftDefinitions) {
+        this(leagueDao, leagueMatchDao, leagueParticipationDAO, collectionsManager, transferDAO, library, formatLibrary,
+                productLibrary, soloDraftDefinitions, null);
+    }
+
+    public LeagueService(LeagueDAO leagueDao, LeagueMatchDAO leagueMatchDao,
+                         LeagueParticipationDAO leagueParticipationDAO, CollectionsManager collectionsManager,
+                         TransferDAO transferDAO,
+                         LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, ProductLibrary productLibrary,
+                         SoloDraftDefinitions soloDraftDefinitions, PrizeService prizeService) {
         _leagueDao = leagueDao;
         _cardLibrary = library;
         _formatLibrary = formatLibrary;
@@ -56,6 +68,11 @@ public class LeagueService {
         _collectionsManager = collectionsManager;
         _transferDAO = transferDAO;
         _soloDraftDefinitions = soloDraftDefinitions;
+        _prizeService = prizeService;
+    }
+
+    public void setPrizeService(PrizeService prizeService) {
+        _prizeService = prizeService;
     }
 
     public synchronized void clearCache() {
@@ -96,10 +113,14 @@ public class LeagueService {
     private void processLoadedLeagues(ZonedDateTime currentDate) {
         for (League activeLeague : _activeLeagues) {
             int oldStatus = activeLeague.getStatus();
+            List<PlayerStanding> standings = getLeagueStandings(activeLeague);
             int newStatus = activeLeague.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions)
-                    .process(_collectionsManager, getLeagueStandings(activeLeague), oldStatus, currentDate);
+                    .process(_collectionsManager, standings, oldStatus, currentDate);
             if (newStatus != oldStatus)
                 _leagueDao.setStatus(activeLeague, newStatus);
+            // the league has just ended: hand out its configurable prize tiers on top of the automatic prizes
+            if (oldStatus == 0 && newStatus == 1 && _prizeService != null)
+                _prizeService.awardLeagueTiers(activeLeague, standings);
         }
     }
 

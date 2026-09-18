@@ -325,6 +325,11 @@ public class Card_V3_103_Tests
 
 		//Choose to discard a card
 		scn.FreepsChooseYes();
+		assertEquals(Zone.DECK, runner.getZone());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner));
+
+		//This test is stochastic for some reason, but I can't figure out what is causing it to randomly fail.
+		// It is almost certainly something stupid like deck shuffle reordering the cards, but I don't know where or why.
 		scn.FreepsChooseCardBPFromSelection(runner); //discarded
 		assertInDiscard(runner);
 

@@ -177,4 +177,42 @@ public class Card_07_262_Tests
 		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(1, scn.GetBurdens());
 	}
+
+	@Test
+	public void AbovetheBattlementDoesNotPlayOrcFromDiscardWhenThereAreNoBurdensToRemove() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var pillager = scn.GetShadowCard("pillager");
+		var assassin = scn.GetShadowCard("assassin");
+		var battlements = scn.GetShadowCard("battlements");
+		scn.MoveCardsToDiscard(assassin);
+		scn.MoveCardsToHand(pillager, battlements);
+
+		scn.StartGame();
+		// No burdens added, and no besieger stacked on a controlled site: neither branch can actually be paid for.
+
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.SkipToSite(4);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.HAND, pillager.getZone());
+		assertEquals(Zone.DISCARD, assassin.getZone());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.ShadowPlayAvailable(battlements));
+
+		scn.ShadowPlayCard(battlements);
+		// With no branch playable in full, Choice falls back to offering every option (see Choice.java).
+		// Picking the burden branch must still fail its cost rather than play the Orc for free.
+		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
+		scn.ShadowChooseOption("burden");
+
+		assertEquals(Zone.DISCARD, assassin.getZone());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(Zone.DISCARD, battlements.getZone());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }

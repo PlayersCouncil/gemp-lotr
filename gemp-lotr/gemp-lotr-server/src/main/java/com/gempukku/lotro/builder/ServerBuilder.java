@@ -11,11 +11,14 @@ import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallServer;
+import com.gempukku.lotro.league.LeagueFactory;
+import com.gempukku.lotro.league.LeagueScheduleService;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.merchant.MerchantService;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.packs.ProductLibraryPackOpener;
+import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import com.gempukku.lotro.bots.BotService;
@@ -82,6 +85,20 @@ public class ServerBuilder {
                         extract(objectMap, LotroFormatLibrary.class)
                 ));
 
+        objectMap.put(PrizeService.class,
+                new PrizeService(
+                        extract(objectMap, CollectionsManager.class),
+                        extract(objectMap, PlayerDAO.class),
+                        extract(objectMap, CollectionDAO.class),
+                        extract(objectMap, PrizePlaceholderDAO.class),
+                        extract(objectMap, PrizeAwardDAO.class),
+                        extract(objectMap, LeagueDAO.class),
+                        extract(objectMap, LeagueMatchDAO.class),
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, ProductLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, SoloDraftDefinitions.class)));
+
         objectMap.put(LeagueService.class,
                 new LeagueService(
                         extract(objectMap, LeagueDAO.class),
@@ -92,7 +109,24 @@ public class ServerBuilder {
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
                         extract(objectMap, ProductLibrary.class),
-                        extract(objectMap, SoloDraftDefinitions.class)));
+                        extract(objectMap, SoloDraftDefinitions.class),
+                        extract(objectMap, PrizeService.class)));
+
+        objectMap.put(LeagueFactory.class,
+                new LeagueFactory(
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, ProductLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, SoloDraftDefinitions.class),
+                        extract(objectMap, LeagueDAO.class),
+                        extract(objectMap, LeagueService.class)));
+        extract(objectMap, LeagueFactory.class).setPrizeService(extract(objectMap, PrizeService.class));
+
+        objectMap.put(LeagueScheduleService.class,
+                new LeagueScheduleService(
+                        extract(objectMap, LeagueScheduleDAO.class),
+                        extract(objectMap, LeagueFactory.class),
+                        extract(objectMap, LeagueService.class)));
 
         objectMap.put(AdminService.class,
                 new AdminService(
@@ -123,7 +157,8 @@ public class ServerBuilder {
                         extract(objectMap, LotroFormatLibrary.class),
                         extract(objectMap, SoloDraftDefinitions.class),
                         extract(objectMap, TableDraftDefinitions.class),
-                        extract(objectMap, ChatServer.class)));
+                        extract(objectMap, ChatServer.class),
+                        extract(objectMap, PrizeService.class)));
 
         objectMap.put(BotService.class,
                 new BotService(
@@ -152,7 +187,8 @@ public class ServerBuilder {
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
                         extract(objectMap, CollectionsManager.class),
-                        extract(objectMap, AdminService.class)
+                        extract(objectMap, AdminService.class),
+                        extract(objectMap, LeagueScheduleService.class)
                 ));
     }
 

@@ -1,6 +1,9 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.prizes.PrizeTier;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class TournamentParams {
     public String tournamentId;
@@ -19,6 +22,9 @@ public class TournamentParams {
     public Tournament.PrizeType prizes = Tournament.PrizeType.NONE;
 
     public boolean wc = false;
+
+    /** Extra prizes handed out when the tournament finishes, on top of the automatic {@link #prizes}. */
+    public ArrayList<PrizeTier> prizeTiers = new ArrayList<>();
 
     public Tournament.Stage getInitialStage() {
         if(manualKickoff)

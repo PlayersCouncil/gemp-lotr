@@ -18,8 +18,13 @@ public class Card_11_101_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_101");
-					// put other cards in here as needed for the test case
+					put("breelander", "11_101");
+					put("lost", "11_212");      // Lost in the Woods: support-area condition with no bearer definition
+					put("alliance1", "1_49");   // The Last Alliance of Elves and Men: bearer must be a [gondor] Man
+					put("alliance2", "1_49");
+					put("boromir", "1_97");
+					put("aragorn", "1_89");
+					put("faramir", "4_117");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +52,7 @@ public class Card_11_101_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("breelander");
 
 		assertEquals("Swarthy Bree-lander", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +67,44 @@ public class Card_11_101_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SwarthyBreelanderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverTriggerTransfersAConditionToAnotherEligibleBearerButNotOneWithNoBearerDefinition() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1025: Lost in the Woods (played to the support area, only ever attached by its own
+		// skirmish-phase transfer) has no "eligible bearer" at all, so it must not be selectable here. Previously it
+		// was selectable and the null bearer filter crashed the game when a destination was evaluated.
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var faramir = scn.GetFreepsCard("faramir");
+		var alliance1 = scn.GetFreepsCard("alliance1");
+		var alliance2 = scn.GetFreepsCard("alliance2");
+		scn.MoveCompanionsToTable(boromir, aragorn, faramir);
+		scn.AttachCardsTo(boromir, alliance1);
+		scn.AttachCardsTo(aragorn, alliance2);
+
+		var breelander = scn.GetShadowCard("breelander");
+		var lost = scn.GetShadowCard("lost");
+		scn.MoveMinionsToTable(breelander);
+		scn.AttachCardsTo(faramir, lost);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.SetTwilight(10);
+		scn.ShadowPassCurrentPhaseAction();          // start of maneuver
 
-		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(8, scn.GetTwilight());
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(alliance1, alliance2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(lost));
+		scn.ShadowChooseCard(alliance1);
+
+		// Boromir is the current bearer and Aragorn already bears one, so Faramir is the only eligible bearer
+		assertEquals(faramir, alliance1.getAttachedTo());
+		assertEquals(aragorn, alliance2.getAttachedTo());
+		assertEquals(faramir, lost.getAttachedTo());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

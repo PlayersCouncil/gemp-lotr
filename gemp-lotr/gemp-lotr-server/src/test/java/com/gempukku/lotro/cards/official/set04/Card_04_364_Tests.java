@@ -17,8 +17,15 @@ public class Card_04_364_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_364");
-					// put other cards in here as needed for the test case
+					put("aragorn", "4_364");
+					put("sam", "1_311");
+					put("merry", "1_303");
+					put("pippin", "1_306");
+					put("gaffer", "1_291");   // Hobbit ally: must never count as an unbound Hobbit
+					put("helpless", "2_76");  // "Sam's game text does not apply"
+
+					put("troop1", "1_177");
+					put("troop2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +54,7 @@ public class Card_04_364_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Wingfoot", card.getBlueprint().getSubtitle());
@@ -64,18 +71,107 @@ public class Card_04_364_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MovingWoundsOneMinionPerUnboundHobbitSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		scn.MoveCompanionsToTable(aragorn, sam, merry, pippin);
+		scn.MoveCardsToSupportArea(gaffer);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveMinionsToTable(troop1, troop2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		// Frodo (Ring-bearer) and Sam are Ring-bound by rule; the Gaffer is an ally, not a companion.
+		assertTrue(scn.HasKeyword(scn.GetRingBearer(), Keyword.RING_BOUND));
+		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
+		assertFalse(scn.HasKeyword(merry, Keyword.RING_BOUND));
+		assertFalse(scn.HasKeyword(pippin, Keyword.RING_BOUND));
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertEquals(0, scn.GetWoundsOn(troop2));
+
+		// Passing the fellowship phase at site 1 forces the move to site 2
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Only Merry and Pippin are unbound Hobbits
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsDecided(2);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, troop2));
+		scn.FreepsChooseCard(troop1);
+		assertEquals(1, scn.GetWoundsOn(troop1));
+		scn.FreepsChooseCard(troop2);
+		assertEquals(1, scn.GetWoundsOn(troop2));
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void MovingTriggerIsOptional() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(aragorn, merry);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		scn.MoveMinionsToTable(troop1);
+
+		scn.StartGame();
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SamIsStillRingBoundWhenHisGameTextIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1061: Helpless ("Sam's game text does not apply") was stripping Sam's rule-granted
+		// Ring-bound status, so he was being counted as an unbound Hobbit.
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var helpless = scn.GetShadowCard("helpless");
+		scn.MoveCompanionsToTable(aragorn, sam, merry, pippin);
+		scn.AttachCardsTo(sam, helpless);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveMinionsToTable(troop1, troop2);
+
+		scn.StartGame();
+
+		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsDecided(2);
+		scn.FreepsChooseCard(troop1);
+		scn.FreepsChooseCard(troop2);
+
+		assertEquals(1, scn.GetWoundsOn(troop1));
+		assertEquals(1, scn.GetWoundsOn(troop2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

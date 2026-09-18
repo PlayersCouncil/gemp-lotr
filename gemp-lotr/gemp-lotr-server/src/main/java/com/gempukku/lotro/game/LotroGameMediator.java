@@ -59,6 +59,10 @@ public class LotroGameMediator {
 
     private int botDecisions = 0;
 
+    // Any single decision that holds the game's write lock longer than this is logged with
+    // enough context (game, player, decision, answer, phase) to find it in the replay.
+    private static final long SLOW_ACTION_THRESHOLD_MS = 1000;
+
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
                              String tournamentName, MarkdownParser parser, BotService botService, boolean isSolo,
@@ -199,6 +203,11 @@ public class LotroGameMediator {
         try {
             PhysicalCard card = _lotroGame.getGameState().findCardById(cardId);
             if (card == null || card.getZone() == null)
+                return null;
+
+            boolean visible = card.getZone().isPublic()
+                    || (player.getName().equals(card.getOwner()) && card.getZone().isVisibleByOwner());
+            if (!visible)
                 return null;
 
             if (card.getZone().isInPlay() || card.getZone() == Zone.HAND) {
@@ -342,7 +351,11 @@ public class LotroGameMediator {
     }
 
     public void cleanup() {
-        _writeLock.lock();
+        // The cleaner runs every second. If this game is in the middle of processing a player
+        // action (which holds the write lock for the whole action), skip this pass instead of
+        // waiting for it; the next pass will pick it up.
+        if (!_writeLock.tryLock())
+            return;
         try {
             long currentTime = System.currentTimeMillis();
             Map<String, GameCommunicationChannel> channelsCopy = new HashMap<>(_communicationChannels);
@@ -421,6 +434,9 @@ public class LotroGameMediator {
                     AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(playerName);
                     if (awaitingDecision != null) {
                         if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
+                            long startedAt = System.currentTimeMillis();
+                            String decisionText = awaitingDecision.getText();
+
                             try {
                                 _userFeedback.participantDecided(playerName);
                                 awaitingDecision.decisionMade(answer);
@@ -438,6 +454,8 @@ public class LotroGameMediator {
                             } catch (RuntimeException runtimeException) {
                                 LOG.error("Error processing game decision", runtimeException);
                                 _lotroGame.cancelGame();
+                            } finally {
+                                logIfSlow("player", playerName, decisionId, decisionText, answer, startedAt);
                             }
                         }
                     }
@@ -513,6 +531,33 @@ public class LotroGameMediator {
         return _botDeck;
     }
 
+    /**
+     * Logs one line when a decision took longer than SLOW_ACTION_THRESHOLD_MS to process. The
+     * time covers everything that ran under the game's write lock as a result of the answer:
+     * the action itself, every triggered response, and for a human answer also any AI decisions
+     * that followed before the next human decision was needed (those are logged separately as
+     * kind "ai" so they can be told apart).
+     */
+    private void logIfSlow(String kind, String playerName, int decisionId, String decisionText, String answer, long startedAt) {
+        long elapsedMs = System.currentTimeMillis() - startedAt;
+        if (elapsedMs < SLOW_ACTION_THRESHOLD_MS)
+            return;
+        String phase = null;
+        String currentPlayer = null;
+        try {
+            if (_lotroGame.getGameState() != null) {
+                phase = String.valueOf(_lotroGame.getGameState().getCurrentPhase());
+                currentPlayer = _lotroGame.getGameState().getCurrentPlayerId();
+            }
+        } catch (RuntimeException ignored) {
+            // Diagnostics only; never let logging break the game.
+        }
+        LOG.warn("Slow action: took=" + elapsedMs + "ms kind=" + kind + " game=" + _gameId
+                + " player=" + playerName + " decisionId=" + decisionId
+                + " decision=\"" + decisionText + "\" answer=\"" + answer + "\""
+                + " phase=" + phase + " turnOf=" + currentPlayer);
+    }
+
     public GameCommunicationChannel getCommunicationChannel(Player player, int channelNumber) throws PrivateInformationException, SubscriptionConflictException, SubscriptionExpiredException {
         String playerName = player.getName();
         if (!player.hasType(Player.Type.ADMIN) && !_allowSpectators && !_playersPlaying.contains(playerName))
@@ -550,6 +595,8 @@ public class LotroGameMediator {
                 if (_decisionQuerySentTimes.containsKey(playerClockName))
                     secondsLeft.put("decisionClock", getCurrentUserPendingTime(playerClockName));
             }
+            // the decision time limit, so the client can show "elapsed / limit" and warn before a decision times out
+            secondsLeft.put("decisionLimit", _timeSettings.maxSecondsPerDecision());
             visitor.visitClock(secondsLeft);
         } finally {
             _readLock.unlock();
@@ -584,6 +631,7 @@ public class LotroGameMediator {
                 if (_decisionQuerySentTimes.containsKey(playerId))
                     secondsLeft.put("decisionClock", getCurrentUserPendingTime(playerId));
             }
+            secondsLeft.put("decisionLimit", _timeSettings.maxSecondsPerDecision());
 
             visitor.visitClock(secondsLeft);
         } finally {

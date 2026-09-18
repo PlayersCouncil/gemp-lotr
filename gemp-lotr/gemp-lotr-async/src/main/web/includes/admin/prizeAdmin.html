@@ -1,0 +1,314 @@
+<link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/leagueAdmin.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/prizeAdmin.css">
+<script type="text/javascript">
+$(document).ready(
+	function () {
+		var page = $("#prize-admin-page");
+		var resultdiv = $("#prize-result");
+		var LOOKUP_DELAY = 400;
+
+		var esc = function (text) {
+			return $("<div></div>").text(text == null ? "" : String(text)).html();
+		};
+		var toInt = function (value, fallback) {
+			var n = parseInt(value, 10);
+			return isNaN(n) ? fallback : n;
+		};
+		var whenText = function (iso) {
+			return iso ? String(iso).replace("T", " ").substr(0, 16) : "";
+		};
+		var EVENT_KIND_LABELS = {league: "league", tournament: "tournament", campaign: "campaign", manual: "added by hand"};
+		var originText = function (p) {
+			var kind = EVENT_KIND_LABELS[p.eventKind] || p.eventKind || "";
+			if (p.eventKind == "manual")
+				return kind;
+			var text = kind;
+			if (p.eventKind == "campaign") {
+				// event_id is the campaign tag; event_name the league whose end handed the prize out
+				text += " \"" + (p.eventId || "") + "\"" + (p.eventName ? " (awarded when " + p.eventName + " ended)" : "");
+			} else if (p.eventName)
+				text += " \"" + p.eventName + "\"";
+			else if (p.eventId)
+				text += " " + p.eventId;
+			if (p.tierIndex != null)
+				text += ", tier " + (p.tierIndex + 1);
+			return text;
+		};
+
+		// Same handling as leagueErrorMap in leagueAdmin.html; that one only exists once the League tab has been opened,
+		// so this tab carries its own copy.
+		var prizeErrorMap = function (outputControl) {
+			return {
+				"0":function() {
+					outputControl.html("0: Server has been shut down or there was a problem with your internet connection.");
+				},
+				"400":function(xhr, status, request) {
+					var message = xhr.getResponseHeader("message");
+					if(message != null) {
+						outputControl.html("400; malformed input: " + message);
+					}
+					else {
+						outputControl.html("400: One of the provided parameters was malformed.  Double-check your input and try again.");
+					}
+				},
+				"401":function() {
+					outputControl.html("401: You are not logged in.");
+				},
+				"403": function() {
+					outputControl.html("403: You do not have permission to perform such actions.");
+				},
+				"404": function() {
+					outputControl.html("404: Info not found.  Check that your input is correct with removed whitespace and try again.");
+				},
+				"410": function() {
+					outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+				},
+				"500": function() {
+					outputControl.html("500: Server error. One of the provided parameters was probably malformed.  Double-check your input and try again.");
+				}
+			};
+		};
+
+		// ---- (i) help toggles ----
+		page.on("click", ".info-toggle", function () {
+			var target = $("#" + $(this).data("for"));
+			target.prop("hidden", !target.prop("hidden"));
+		});
+
+		// ---- live card-name lookup shared by every blueprint id input on this page ----
+		// The answer is shown in nameSpan as a card hint (click shows the card) or "unknown"; the input remembers what
+		// the id resolved to (data lookupKind / lookupName) so the resolve button can name the card.
+		var bindLookup = function (input, nameSpan) {
+			var timer = null;
+			var serial = 0;
+			var lookup = function () {
+				var value = $.trim(input.val());
+				var mySerial = ++serial;
+				input.removeData("lookupKind").removeData("lookupName");
+				if (!value) {
+					nameSpan.empty();
+					return;
+				}
+				nameSpan.text("...");
+				hall.comm.getCardName(value, function (json) {
+					if (mySerial != serial)
+						return;
+					if (json == null || json.kind == null || json.kind == "unknown" || json.kind == "placeholder") {
+						input.data("lookupKind", "unknown");
+						nameSpan.html("<span class='prize-item-unknown'>unknown</span>");
+						return;
+					}
+					var name = json.name != null ? json.name : value;
+					input.data("lookupKind", json.kind).data("lookupName", name);
+					nameSpan.empty().append($("<div class='cardHint'></div>").attr("value", value).text(name));
+					if (json.kind == "pack")
+						nameSpan.append(" <span class='prize-item-kind'>(pack)</span>");
+				}, prizeErrorMap(nameSpan));
+			};
+			input.on("input", function () {
+				clearTimeout(timer);
+				timer = setTimeout(lookup, LOOKUP_DELAY);
+			});
+		};
+
+		// ---- unresolved promises ----
+		var renderUnresolved = function (list) {
+			var container = $("#prize-unresolved").empty();
+			if (list.length == 0) {
+				container.append("<i>No outstanding promises. Every prize handed out so far is a real card.</i>");
+				return;
+			}
+			for (var i = 0; i < list.length; i++) {
+				(function (p) {
+					var card = $("<div class='prize-card' id='prize-card-" + p.id + "'></div>");
+
+					var line1 = $("<div class='prize-line'></div>");
+					line1.append("<span class='prize-title'>" + esc(p.label) + "</span>");
+					line1.append("<span class='league-id'>" + p.count + "x &middot; placeholder " + esc(p.blueprintId) + "</span>");
+					card.append(line1);
+
+					var line2 = $("<div class='prize-line prize-meta'></div>");
+					line2.append("From " + esc(originText(p)));
+					line2.append("<span class='sep'>&middot;</span>created " + esc(whenText(p.created)) + (p.createdBy ? " by " + esc(p.createdBy) : ""));
+					var holdersToggle = $("<button type='button' class='prize-holders-toggle'>" + p.holders + " player" + (p.holders == 1 ? "" : "s") + " holding it</button>").button();
+					line2.append("<span class='sep'>&middot;</span>").append(holdersToggle);
+					card.append(line2);
+
+					var holdersBox = $("<div class='prize-holders' hidden></div>");
+					card.append(holdersBox);
+					holdersToggle.click(function () {
+						if (!holdersBox.prop("hidden")) {
+							holdersBox.prop("hidden", true);
+							return;
+						}
+						holdersBox.prop("hidden", false).html("Loading...");
+						hall.comm.getPrizeHolders(p.id, function (json) {
+							var holders = json.holders || [];
+							if (holders.length == 0) {
+								holdersBox.html("<i>Nobody holds this placeholder at the moment.</i>");
+								return;
+							}
+							var ul = $("<ul class='prize-holder-list'></ul>");
+							for (var h = 0; h < holders.length; h++) {
+								ul.append("<li>" + esc(holders[h].player) + " <span class='prize-holder-detail'>(" + holders[h].quantity + "x in " + esc(holders[h].collectionType) + ")</span></li>");
+							}
+							holdersBox.empty().append(ul);
+						}, prizeErrorMap(holdersBox));
+					});
+
+					var resolveRow = $("<div class='prize-line prize-resolve'></div>");
+					resolveRow.append("<span class='prize-resolve-label'>Resolve to</span>");
+					var idInput = $("<input type='text' class='prize-resolve-id' placeholder='card or pack id, e.g. 9_1*'>");
+					var nameSpan = $("<span class='prize-item-name'></span>");
+					bindLookup(idInput, nameSpan);
+					resolveRow.append(idInput).append(nameSpan);
+					var resolveResult = $("<span class='prize-resolve-result'></span>");
+					resolveRow.append($("<button type='button' class='prize-resolve-button'>Resolve and award</button>").button().click(function () {
+						var blueprintId = $.trim(idInput.val());
+						if (!blueprintId) {
+							resolveResult.html("Enter the id of the card to hand out.");
+							return;
+						}
+						var name = idInput.data("lookupName") || blueprintId;
+						if (!confirm("Replace every '" + p.label + "' placeholder with " + name + " (" + blueprintId + ")? "
+								+ p.holders + " player" + (p.holders == 1 ? "" : "s") + " will receive it."))
+							return;
+						resolveResult.html("Processing...");
+						hall.comm.resolvePrize(p.id, blueprintId, function (json) {
+							var cardName = json.cardName != null ? json.cardName : json.blueprintId;
+							resolveResult.html("Resolved: " + json.cardsSwapped + " card" + (json.cardsSwapped == 1 ? "" : "s")
+								+ " of " + esc(cardName) + " delivered to " + (json.players || []).length + " player" + ((json.players || []).length == 1 ? "" : "s") + ".");
+							resultdiv.html("'" + esc(json.label) + "' resolved to " + esc(cardName) + " (" + esc(json.blueprintId) + ").");
+							card.addClass("prize-card-done");
+							card.find("input, button").prop("disabled", true);
+							card.find("button").button("option", "disabled", true);
+							setTimeout(loadPrizes, 1500);
+						}, prizeErrorMap(resolveResult));
+					}));
+					resolveRow.append(resolveResult);
+					card.append(resolveRow);
+
+					container.append(card);
+				})(list[i]);
+			}
+		};
+
+		// ---- resolved list ----
+		var renderResolved = function (list) {
+			var container = $("#prize-resolved").empty();
+			if (list.length == 0) {
+				container.append("<i>Nothing has been resolved yet.</i>");
+				return;
+			}
+			var table = $("<table class='prize-resolved-table'></table>");
+			table.append("<tr><th>Promise</th><th>Resolved to</th><th>From</th><th>On</th><th>By</th></tr>");
+			for (var i = 0; i < list.length; i++) {
+				var p = list[i];
+				var cardName = p.resolvedCardName != null ? p.resolvedCardName : p.resolvedBlueprint;
+				var row = $("<tr></tr>");
+				row.append("<td>" + esc(p.label) + "</td>");
+				row.append("<td><div class='cardHint' value='" + esc(p.resolvedBlueprint) + "'>" + esc(cardName) + "</div> <span class='prize-holder-detail'>" + esc(p.resolvedBlueprint) + "</span></td>");
+				row.append("<td>" + esc(originText(p)) + "</td>");
+				row.append("<td>" + esc(whenText(p.resolvedOn)) + "</td>");
+				row.append("<td>" + esc(p.resolvedBy) + "</td>");
+				table.append(row);
+			}
+			container.append(table);
+		};
+
+		var loadPrizes = function () {
+			hall.comm.getPrizes(function (json) {
+				renderUnresolved(json.unresolved || []);
+				renderResolved(json.resolved || []);
+			}, prizeErrorMap($("#prize-unresolved")));
+		};
+
+		$("#prize-reload-button").button().click(loadPrizes);
+
+		// ---- add a promise by hand ----
+		var manualName = $("#promise-name-lookup");
+		$("#promise-add-button").button().click(function () {
+			var label = $.trim($("#promise-label").val());
+			var count = toInt($("#promise-count").val(), 1);
+			var players = $("#promise-players").val();
+			var resultBox = $("#promise-result");
+			if (!label) {
+				resultBox.html("The promise needs a description.");
+				return;
+			}
+			if (count < 1) {
+				resultBox.html("The count must be at least 1.");
+				return;
+			}
+			if (!$.trim(players)) {
+				resultBox.html("Name at least one player.");
+				return;
+			}
+			resultBox.html("Processing...");
+			hall.comm.addPromise(label, count, players, function (json) {
+				resultBox.html("Promise '" + esc(json.label) + "' created as " + esc(json.blueprintId) + " and handed to "
+					+ json.holders + " player" + (json.holders == 1 ? "" : "s") + ".");
+				$("#promise-label").val("");
+				$("#promise-count").val(1);
+				$("#promise-players").val("");
+				loadPrizes();
+			}, prizeErrorMap(resultBox));
+		});
+
+		loadPrizes();
+	});
+
+</script>
+<div class="article">
+	<div id="prize-admin-page" class="league-form">
+
+		<div class="mode-header flex-horiz">
+			<h1>Promised prizes <span class="info-toggle" data-for="help-promises">i</span></h1>
+			<button type="button" id="prize-reload-button">Reload</button>
+		</div>
+		<div id="help-promises" class="info-text" hidden>
+			A promise is a prize whose card did not exist when the event was set up ("2026 WC Champion promo"). Winners hold a
+			"Future Prize" placeholder card until the promise is resolved here: pick the real card and every holder's placeholder
+			is swapped for it, delivered as a new transfer so it shows up as fresh.
+		</div>
+
+		<h2>Unresolved promises</h2>
+		<div id="prize-unresolved"><i>Loading...</i></div>
+
+		<div id="prize-result-label" class="flex-horiz result-label">
+			<div class="label"><b>Result:</b></div>
+			<div id="prize-result" class="flex-fill result-box">Ready.</div>
+		</div>
+
+		<h2>Add a promise by hand <span class="info-toggle" data-for="help-manual">i</span></h2>
+		<div id="help-manual" class="info-text" hidden>
+			Hands a placeholder to the named players right away, outside any event: for prizes agreed elsewhere, or when a
+			winner was missed. Nothing is awarded unless every player name is known.
+		</div>
+		<div id="promise-form">
+			<div class="flex-horiz field-row">
+				<div class="label-column">Promise</div>
+				<input type="text" id="promise-label" class="flex-fill" maxlength="255" placeholder="what will be awarded, e.g. 2026 WC Champion promo">
+			</div>
+			<div class="flex-horiz field-row">
+				<div class="label-column">Copies per player</div>
+				<input type="number" min="1" id="promise-count" value="1" class="wide">
+			</div>
+			<div class="flex-horiz">
+				<div class="label-column">Players (1 per line)</div>
+				<textarea rows="4" id="promise-players" class="flex-fill"></textarea>
+			</div>
+			<div class="flex-horiz form-buttons">
+				<button type="button" id="promise-add-button">Add promise</button>
+			</div>
+			<div id="promise-result-label" class="flex-horiz result-label">
+				<div class="label"><b>Result:</b></div>
+				<div id="promise-result" class="flex-fill result-box">Ready.</div>
+			</div>
+		</div>
+
+		<h2>Resolved <span class="info-toggle" data-for="prize-resolved">i</span></h2>
+		<div id="prize-resolved" hidden><i>Loading...</i></div>
+	</div>
+</div>

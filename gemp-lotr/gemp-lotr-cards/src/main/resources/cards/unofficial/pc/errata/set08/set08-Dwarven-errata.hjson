@@ -80,21 +80,42 @@
 				trigger: {
 					type: Moves
 				}
-				cost: {
-					type: exert
-					select: choose(dwarf,damage,CanExert,MinVitality(2))
-					times: 1
-					memorize: exertedDwarf
-				},
+				cost: [
+					{
+						type: spot
+						select: choose(dwarf,damage,CanExert,MinVitality(2))
+						memorize: exertedDwarf
+						text: Choose a Dwarf to exert
+					}
+					{
+						# X is part of the cost, so it is locked in before the exertion happens; anything responding
+						# to the exertion (e.g. Cirith Ungol Watcher hindering the Dwarf) must not change it (#1026).
+						type: memorizeNumber
+						amount: {
+							type: forEachKeywordOnCardInMemory
+							memory: exertedDwarf
+							keyword: damage
+						}
+						memory: damageBonus
+					}
+					{
+						# A memorized selection cannot be pre-evaluated as a cost, so it goes through costToEffect
+						# (the Spot above already gates playability on an eligible Dwarf existing).
+						type: costToEffect
+						effect: {
+							type: exert
+							select: memory(exertedDwarf)
+						}
+					}
+				],
 				effect: [
 					{
 						type: Hinder
 						player: shadow
 						select: choose(side(shadow))
 						count: {
-							type: forEachKeywordOnCardInMemory
-							memory: exertedDwarf
-							keyword: damage
+							type: fromMemory
+							memory: damageBonus
 						}
 					}
 				]

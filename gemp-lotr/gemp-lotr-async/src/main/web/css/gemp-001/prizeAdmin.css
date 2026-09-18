@@ -1,0 +1,133 @@
+/* Prizes admin tab (includes/admin/prizeAdmin.html). Shares the form look of leagueAdmin.css; this file only
+   styles the promise cards and the resolved table. */
+
+#prize-admin-page h1 {
+	margin: 0.4em 0 0.2em 0;
+}
+
+#prize-admin-page h2 {
+	margin: 0.8em 0 0.3em 0;
+}
+
+#promise-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	padding: 0.5em 0.8em 0.6em 0.8em;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #1b1b1b;
+}
+
+/* ---- one unresolved promise ---- */
+.prize-card {
+	padding: 0.4em 0.6em;
+	margin: 0.3em 0;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #1b1b1b;
+}
+
+.prize-card.prize-card-done {
+	opacity: 0.55;
+}
+
+.prize-line {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	flex-wrap: wrap;
+	margin: 0.15em 0;
+}
+
+.prize-title {
+	font-weight: bold;
+	font-size: 110%;
+	color: #e8d9a8;
+}
+
+.prize-meta {
+	color: #bbb;
+	font-size: 90%;
+}
+
+.prize-meta .sep {
+	color: #666;
+	margin: 0 0.3em;
+}
+
+.prize-meta .prize-holders-toggle {
+	font-size: 90%;
+}
+
+.prize-holders {
+	margin: 0.2em 0 0.3em 1.2em;
+	color: #ccc;
+	font-size: 90%;
+}
+
+.prize-holder-list {
+	margin: 0.2em 0;
+	padding-left: 1.2em;
+	columns: 3;
+	column-gap: 1.5em;
+}
+
+.prize-holder-detail {
+	color: #888;
+}
+
+.prize-resolve {
+	margin-top: 0.3em;
+	padding-top: 0.3em;
+	border-top: 1px dashed #3a3a3a;
+}
+
+.prize-resolve-label {
+	color: #ccc;
+}
+
+.prize-resolve-id {
+	width: 14em;
+}
+
+.prize-resolve-result {
+	color: #9fd49f;
+	font-size: 90%;
+}
+
+/* shared with the tier editor's lookups */
+.prize-item-name {
+	color: #bbb;
+	font-size: 90%;
+	min-width: 6em;
+}
+
+.prize-item-unknown {
+	color: #e88;
+}
+
+.prize-item-kind {
+	color: #888;
+}
+
+/* ---- resolved list ---- */
+.prize-resolved-table {
+	border-collapse: collapse;
+	font-size: 90%;
+	margin: 0.3em 0;
+}
+
+.prize-resolved-table th {
+	text-align: left;
+	color: #aaa;
+	font-weight: normal;
+	border-bottom: 1px solid #444;
+	padding: 0.2em 0.8em 0.2em 0;
+}
+
+.prize-resolved-table td {
+	padding: 0.2em 0.8em 0.2em 0;
+	border-bottom: 1px solid #2a2a2a;
+	vertical-align: top;
+}

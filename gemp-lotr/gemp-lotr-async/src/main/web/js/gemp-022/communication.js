@@ -1145,7 +1145,7 @@ var GempLotrCommunication = Class.extend({
     
     processSealedLeague:function (preview, start, name, cost, format, serieDuration, maxMatches,
                                        maxRepeatMatches, inviteOnly, description,
-                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       campaign, prizeTiers,
                                        callback, errorMap) {
         let url = this.url + "/admin/addSealedLeague";
         
@@ -1166,20 +1166,18 @@ var GempLotrCommunication = Class.extend({
                 maxRepeatMatches:maxRepeatMatches,
                 inviteOnly:inviteOnly,
                 description:description,
-                topPrize:topPrize,
-                topCutoff:topCutoff, 
-                participationPrize:participationPrize, 
-                participationGames:participationGames,
+                campaign:campaign,
+                prizeTiers:prizeTiers
             },
             success:callback,
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"json"
         });
     },
     
     processSoloDraftLeague:function (preview, start, name, cost, format, serieDuration, maxMatches,
                                        maxRepeatMatches, inviteOnly, description,
-                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       campaign, prizeTiers,
                                        callback, errorMap) {
         let url = this.url + "/admin/addSoloDraftLeague";
         
@@ -1201,20 +1199,18 @@ var GempLotrCommunication = Class.extend({
                 maxRepeatMatches:maxRepeatMatches,
                 inviteOnly:inviteOnly,
                 description:description,
-                topPrize:topPrize,
-                topCutoff:topCutoff, 
-                participationPrize:participationPrize, 
-                participationGames:participationGames,
+                campaign:campaign,
+                prizeTiers:prizeTiers
             },
             success:callback,
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"json"
         });
     },
         
     processConstructedLeague:function (preview, start, collectionType, name, cost, maxRepeatMatches, 
                                        inviteOnly, description,
-                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       campaign, prizeTiers,
                                        formats, serieDurations, maxMatches,
                                        callback, errorMap) {
         let url = this.url + "/admin/addConstructedLeague";
@@ -1233,10 +1229,8 @@ var GempLotrCommunication = Class.extend({
                 name:name,
                 cost:cost,
                 maxRepeatMatches:maxRepeatMatches,
-                topPrize:topPrize,
-                topCutoff:topCutoff, 
-                participationPrize:participationPrize, 
-                participationGames:participationGames,
+                campaign:campaign,
+                prizeTiers:prizeTiers,
                 format:formats,
                 serieDuration:serieDurations,
                 maxMatches:maxMatches,
@@ -1245,13 +1239,13 @@ var GempLotrCommunication = Class.extend({
             },
             success:callback,
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"json"
         });
     },
     
     processRTMDLeague:function (preview, start, name, cost, maxRepeatMatches,
                                        inviteOnly, description,
-                                       topPrize, topCutoff, participationPrize, participationGames,
+                                       campaign, prizeTiers,
                                        formats, serieDurations, maxMatches,
                                        racePath, raceVisualPath, raceCumulative, raceIntensityFloor, raceIntensityCeiling,
                                        raceAdvancementMode, raceAdvanceFactor,
@@ -1271,10 +1265,8 @@ var GempLotrCommunication = Class.extend({
                 name:name,
                 cost:cost,
                 maxRepeatMatches:maxRepeatMatches,
-                topPrize:topPrize,
-                topCutoff:topCutoff,
-                participationPrize:participationPrize,
-                participationGames:participationGames,
+                campaign:campaign,
+                prizeTiers:prizeTiers,
                 format:formats,
                 serieDuration:serieDurations,
                 maxMatches:maxMatches,
@@ -1290,11 +1282,223 @@ var GempLotrCommunication = Class.extend({
             },
             success:callback,
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"json"
         });
     },
     
     
+    // ---- League schedules (admin) ----
+    getLeagueSchedules:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/leagueSchedules",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // definition: {id, name, leagueType, template (JSON string), events (JSON string), namePattern,
+    //              nextEventDate (yyyy-MM-dd), nextEventIndex, intervalMonths, leadDays, active}
+    saveLeagueSchedule:function (preview, definition, callback, errorMap) {
+        var data = $.extend({participantId:getUrlParam("participantId")}, definition);
+        $.ajax({
+            type:"POST",
+            url:this.url + (preview ? "/admin/previewLeagueSchedule" : "/admin/saveLeagueSchedule"),
+            cache:false,
+            data:data,
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    deleteLeagueSchedule:function (id, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/deleteLeagueSchedule",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                id:id
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    runLeagueSchedule:function (id, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/runLeagueSchedule",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                id:id
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // ---- League editing (admin) ----
+    // GET /admin/league?code=... -> {code, type, name, start, end, participants, started, params:{...LeagueParams}}
+    getLeagueForAdmin:function (code, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/league",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                code:code
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // data: {code} plus exactly the fields the add call for the league's type posts (name, description, cost,
+    //       start (YYYYMMDD), maxRepeatMatches, inviteOnly, format/serieDuration/maxMatches as scalars for
+    //       sealed/draft or as arrays (serialised as format[] etc.) for constructed/RTMD, campaign, prizeTiers (a JSON
+    //       string of PrizeTier objects, as PrizeTierEditor.getTiers() produces) and race fields).
+    updateLeague:function (data, callback, errorMap) {
+        var postData = $.extend({participantId:getUrlParam("participantId")}, data);
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/updateLeague",
+            cache:false,
+            data:postData,
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // POST /admin/markdownPreview {text} -> {html}: a description rendered the way players will see it
+    previewMarkdown:function (text, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/markdownPreview",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                text:text
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // ---- Event calendar (everyone; admins also get projected schedule events) ----
+    getCalendar:function (from, to, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/calendar",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                from:from,
+                to:to
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // ---- Prizes (admin) ----
+    // GET /admin/prizes -> {unresolved:[placeholder...], resolved:[placeholder...]} where a placeholder is
+    // {id, blueprintId, label, count, eventKind, eventId, eventName, tierIndex, created, createdBy, holders,
+    //  resolvedBlueprint, resolvedCardName, resolvedOn, resolvedBy}
+    getPrizes:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/prizes",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // GET /admin/prizeHolders?id=... -> {id, label, holders:[{player, collectionType, quantity}]}
+    getPrizeHolders:function (id, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/prizeHolders",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                id:id
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // POST /admin/resolvePrize {id, blueprintId} -> {placeholderId, label, blueprintId, cardName, players:[...], cardsSwapped}
+    resolvePrize:function (id, blueprintId, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/resolvePrize",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                id:id,
+                blueprintId:blueprintId
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // POST /admin/addPromise {label, count, players (one per line)} -> the created placeholder (see getPrizes)
+    addPromise:function (label, count, players, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/addPromise",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                label:label,
+                count:count,
+                players:players
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
+    // GET /admin/cardName?blueprintId=... -> {blueprintId, kind: card|pack|placeholder|unknown, name}
+    getCardName:function (blueprintId, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/admin/cardName",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                blueprintId:blueprintId
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     getRTMDModifiers:function (callback, errorMap) {
         $.ajax({
             type:"GET",
@@ -1314,8 +1518,9 @@ var GempLotrCommunication = Class.extend({
                                          soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,
                                          soloTableDraftFormatCode, soloTableDraftDeckbuildingDuration, soloTableDraftTurnInDuration,
                                          tableDraftFormatCode, tableDraftTimer, tableDraftDeckbuildingDuration, tableDraftTurnInDuration,
-                                         start, cost, playoff, tiebreaker, prizeStructure, minPlayers, manualKickoff,
+                                         start, cost, playoff, tiebreaker, prizeTiers, minPlayers, manualKickoff,
                                        callback, errorMap) {
+        // prizeTiers: JSON string of a PrizeTier array (from PrizeTierEditor.getTiers()), or "" for none
         $.ajax({
             type:"POST",
             url:this.url + "/admin/processScheduledTournament",
@@ -1344,7 +1549,7 @@ var GempLotrCommunication = Class.extend({
                 cost:cost,
                 playoff:playoff,
                 tiebreaker:tiebreaker,
-                prizeStructure:prizeStructure,
+                prizeTiers:prizeTiers,
                 minPlayers:minPlayers,
                 manualKickoff:manualKickoff
             },

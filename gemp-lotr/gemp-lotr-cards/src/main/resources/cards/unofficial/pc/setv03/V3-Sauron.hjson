@@ -741,8 +741,8 @@
 							fromZone: DISCARD
 							filter: name(Sauron)
 							discount: {
-								type: ForEachCultureToken
-								culture: Sauron
+								type: ForEachYouCanSpot
+								filter: your, hinderable, side(Shadow), support
 								multiplier: -1
 							}
 						}
@@ -751,8 +751,8 @@
 							fromZone: HAND
 							filter: name(Sauron)
 							discount: {
-								type: ForEachCultureToken
-								culture: Sauron
+								type: ForEachYouCanSpot
+								filter: your, hinderable, side(Shadow), support
 								multiplier: -1
 							}
 						}
@@ -781,6 +781,23 @@
 						{
 							type: PlayCardFromHand
 							select: choose(name(Sauron))
+							# Upper bound on the discount, used for the playability checks both before the cost is paid
+							# (nothing hindered yet, so count what could be) and after (the hindered cards are no longer
+							# hinderable, so count what was).
+							maxDiscount: {
+								type: Sum
+								source: [
+									{
+										type: ForEachYouCanSpot
+										filter: your, hinderable, side(Shadow), support
+									}
+									{
+										type: ForEachInMemory
+										memory: hinderedCards
+									}
+								]
+								multiplier: -1
+							}
 							discount: {
 								type: ForEachInMemory
 								memory: hinderedCards
@@ -790,9 +807,21 @@
 						{
 							type: PlayCardFromDiscard
 							select: choose(name(Sauron))
+							# Upper bound on the discount, used for the playability checks both before the cost is paid
+							# (nothing hindered yet, so count what could be) and after (the hindered cards are no longer
+							# hinderable, so count what was).
 							maxDiscount: {
-								type: ForEachYouCanSpot
-								filter: your, side(Shadow), support
+								type: Sum
+								source: [
+									{
+										type: ForEachYouCanSpot
+										filter: your, hinderable, side(Shadow), support
+									}
+									{
+										type: ForEachInMemory
+										memory: hinderedCards
+									}
+								]
 								multiplier: -1
 							}
 							discount: {

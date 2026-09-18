@@ -385,6 +385,8 @@ public class DefaultLotroFormat implements LotroFormat {
     @Override
     public String validateCard(String blueprintId) {
         blueprintId = _library.getBaseBlueprintId(blueprintId);
+        if (LotroCardBlueprintLibrary.isPlaceholderId(blueprintId))
+            return "Future prize placeholders cannot be played";
         try {
             _library.getLotroCardBlueprint(blueprintId);
             if (_validCards.contains(blueprintId) || _errataCardMap.containsValue(blueprintId))

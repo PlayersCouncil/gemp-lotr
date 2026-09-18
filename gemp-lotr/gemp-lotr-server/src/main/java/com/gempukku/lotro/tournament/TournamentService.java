@@ -18,6 +18,7 @@ import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 
 import java.io.IOException;
@@ -44,6 +45,8 @@ public class TournamentService {
     private final ChatServer _chatServer;
 
     private final CollectionsManager _collectionsManager;
+    /** Awards the configurable prize tiers of a finished tournament; may be null (tests), in which case no tiers are awarded. */
+    private PrizeService _prizeService;
 
     private static final Duration _tournamentRepeatPeriod = Duration.ofDays(2);
     private static final int _scheduledTournamentLoadTime = 7; // In days; one week
@@ -55,7 +58,17 @@ public class TournamentService {
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
                              GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,
                              SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions, ChatServer chatServer) {
+        this(collectionsManager, productLibrary, draftPackStorage, tournamentDao, tournamentPlayerDao, tournamentMatchDao,
+                gameHistoryDao, bpLibrary, formatLibrary, soloDraftLibrary, tableDraftDefinitions, chatServer, null);
+    }
+
+    public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
+                             TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
+                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,
+                             SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions, ChatServer chatServer,
+                             PrizeService prizeService) {
         _collectionsManager = collectionsManager;
+        _prizeService = prizeService;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
         _tournamentDao = tournamentDao;
@@ -67,6 +80,17 @@ public class TournamentService {
         _soloDraftLibrary = soloDraftLibrary;
         _tableDraftLibrary = tableDraftDefinitions;
         _chatServer = chatServer;
+    }
+
+    /**
+     * @return the service awarding configurable prize tiers, or null when none is wired in (tiers are then skipped)
+     */
+    public PrizeService getPrizeService() {
+        return _prizeService;
+    }
+
+    public void setPrizeService(PrizeService prizeService) {
+        _prizeService = prizeService;
     }
 
     public PairingMechanism getPairingMechanism(Tournament.PairingType pairing) {
@@ -530,6 +554,10 @@ public class TournamentService {
 
     public Map<String, Integer> retrieveTournamentByes(String tournamentId) {
         return _tournamentMatchDao.getPlayerByes(tournamentId);
+    }
+
+    public List<DBDefs.ScheduledTournament> getScheduledTournamentsBetween(ZonedDateTime from, ZonedDateTime to) {
+        return _tournamentDao.getScheduledTournamentsBetween(from, to);
     }
 
     public List<DBDefs.ScheduledTournament> retrieveUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {

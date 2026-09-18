@@ -15,11 +15,13 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.CreateGameAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
 
 import java.time.Duration;
 import java.util.*;
@@ -347,6 +349,28 @@ public abstract class BaseTournament implements Tournament {
             CardCollection trophies = _tournamentInfo.Prizes.getTrophyForTournament(playerStanding, list.size(), firstPlacePoints);
             if (trophies != null)
                 collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " trophy", playerStanding.playerName, CollectionType.TROPHY, trophies.getAll());
+        }
+
+        awardPrizeTiers(list);
+    }
+
+    /**
+     * Hands out the configurable prize tiers of the tournament's stored parameters ({@link TournamentParams#prizeTiers})
+     * on top of the automatic prizes.  The PrizeService never awards the same (tournament, tier, player) twice, so a
+     * repeated call is harmless.  Never throws: a prize problem must not stop the tournament from finishing.
+     */
+    protected void awardPrizeTiers(List<PlayerStanding> standings) {
+        PrizeService prizeService = _tournamentService.getPrizeService();
+        if (prizeService == null)
+            return;
+        var params = _tournamentInfo.Parameters();
+        if (params == null || params.prizeTiers == null || params.prizeTiers.isEmpty())
+            return;
+        try {
+            prizeService.awardTiers(new PrizeService.EventRef(PrizeService.KIND_TOURNAMENT, _tournamentId, getTournamentName(), null),
+                    params.prizeTiers, standings, null);
+        } catch (RuntimeException exp) {
+            LogManager.getLogger(BaseTournament.class).error("Unable to award the prize tiers of tournament " + getTournamentName(), exp);
         }
     }
 

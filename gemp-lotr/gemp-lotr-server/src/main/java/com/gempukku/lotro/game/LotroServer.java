@@ -87,10 +87,17 @@ public class LotroServer extends AbstractServer {
                 }
             }
 
-            for (LotroGameMediator lotroGameMediator : _runningGames.values())
-                lotroGameMediator.cleanup();
         } finally {
             _lock.writeLock().unlock();
+        }
+
+        // Per-game cleanup is done outside the server-wide lock. Each mediator's cleanup()
+        // needs that game's own write lock, which is held for the whole duration of a player
+        // action. Holding the server-wide write lock while waiting for a busy game blocked
+        // every getGameById() reader (all game long-polls and decision submits on the server)
+        // for as long as that one action took.
+        for (LotroGameMediator mediator : new ArrayList<>(_runningGames.values())) {
+            mediator.cleanup();
         }
     }
 

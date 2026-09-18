@@ -1118,26 +1118,49 @@
 		title: Race Text 92_28
 		type: MetaSite
 		intensity: -4
-		effects: {
-			type: Activated
-			phase: [
-				fellowship
-				shadow
-			]
-			effect: [
-				{
-					type: IncrementPerTurnLimit
-					limit: 1
+		effects: [
+			{
+				type: Activated
+				phase: fellowship
+				requires: {
+					type: OwnerIsFreeps
 				}
-				{
-					type: PlayCardFromDrawDeck
-					select: choose(artifact)
-					showAll: true
-					shuffle: true
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: choose(artifact)
+						showAll: true
+						shuffle: true
+					}
+				]
+				limitPerTurn: 1
+			}
+			
+			{
+				type: Activated
+				phase: shadow
+				requires: {
+					type: OwnerIsShadow
 				}
-			]
-			limitPerTurn: 1
-		}
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: choose(artifact)
+						showAll: true
+						shuffle: true
+					}
+				]
+				limitPerTurn: 1
+			}
+		]
 		gametext: <b>Fellowship</b> <i>or</i> Shadow: Play an artifact from your draw deck (limit once per turn).
 		lore: ""
 		promotext: ""

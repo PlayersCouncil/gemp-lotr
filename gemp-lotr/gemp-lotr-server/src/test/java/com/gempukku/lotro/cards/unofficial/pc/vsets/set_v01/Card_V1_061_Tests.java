@@ -25,6 +25,9 @@ public class Card_V1_061_Tests
 					put("pathfinder", "1_110");
 
 					put("runner", "1_178");
+					put("gimli", "1_13");
+					put("savage", "1_151");     // Uruk Savage: [isengard] minion to pay for One of You Must Do This
+					put("oneOfYou", "3_63");    // One of You Must Do This: the Free Peoples player exerts X companions
 
 				}},
 				new HashMap<>() {{
@@ -112,6 +115,50 @@ public class Card_V1_061_Tests
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void SimultaneousExertionsOfferOneLabelledTriggerPerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1079: One of You Must Do This exerts several companions in one batch, so the site offers
+		// its trigger once per companion. Each offer must say which companion it heals.
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(aragorn, gimli, orophin);
+
+		var savage = scn.GetShadowCard("savage");
+		var oneOfYou = scn.GetShadowCard("oneOfYou");
+
+		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		scn.MoveMinionsToTable(savage);
+		scn.MoveCardsToHand(oneOfYou);
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(6, scn.GetCurrentSiteNumber());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.SetTwilight(5);
+
+		// A Man and a Dwarf in the fellowship: X = 2
+		scn.ShadowPlayCard(oneOfYou);
+		scn.FreepsChooseCards(aragorn, gimli);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Aragorn, Ranger of the North"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Gimli, Son of Gl"));
+		scn.FreepsChooseAction("Gimli, Son of Gl");
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(orophin));
+		// Limit once per phase: the other copy is no longer offered
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 

@@ -4,9 +4,12 @@ import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.cache.CacheManager;
 import com.gempukku.lotro.chat.ChatServer;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.LeagueDAO;
+import com.gempukku.lotro.db.LeagueParticipationDAO;
 import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
@@ -21,14 +24,18 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.hall.HallServer;
 import com.gempukku.lotro.league.*;
-import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.prizes.PrizeDefinitionException;
+import com.gempukku.lotro.prizes.PrizeItem;
+import com.gempukku.lotro.prizes.PrizeService;
+import com.gempukku.lotro.prizes.PrizeTier;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.tournament.*;
 import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -57,11 +64,16 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
     private final HallServer _hallServer;
     private final LotroFormatLibrary _formatLibrary;
     private final LeagueDAO _leagueDao;
+    private final LeagueParticipationDAO _leagueParticipationDao;
     private final CollectionsManager _collectionManager;
     private final PlayerDAO _playerDAO;
     private final AdminService _adminService;
     private final ChatServer _chatServer;
     private final TableDraftDefinitions _tableDraftLibrary;
+    private final LeagueFactory _leagueFactory;
+    private final LeagueScheduleService _leagueScheduleService;
+    private final MarkdownParser _markdownParser;
+    private final PrizeService _prizeService;
 
     private static final Logger _log = LogManager.getLogger(AdminRequestHandler.class);
 
@@ -74,6 +86,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         _hallServer = extractObject(context, HallServer.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _leagueDao = extractObject(context, LeagueDAO.class);
+        _leagueParticipationDao = extractObject(context, LeagueParticipationDAO.class);
         _playerDAO = extractObject(context, PlayerDAO.class);
         _collectionManager = extractObject(context, CollectionsManager.class);
         _adminService = extractObject(context, AdminService.class);
@@ -81,6 +94,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         _productLibrary = extractObject(context, ProductLibrary.class);
         _chatServer = extractObject(context, ChatServer.class);
         _tableDraftLibrary = extractObject(context, TableDraftDefinitions.class);
+        _leagueFactory = extractObject(context, LeagueFactory.class);
+        _leagueScheduleService = extractObject(context, LeagueScheduleService.class);
+        _markdownParser = extractObject(context, MarkdownParser.class);
+        _prizeService = extractObject(context, PrizeService.class);
     }
 
     @Override
@@ -107,8 +124,34 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             processRTMDLeague(request, responseWriter, true);
         } else if (uri.equals("/addRTMDLeague") && request.method() == HttpMethod.POST) {
             processRTMDLeague(request, responseWriter, false);
+        } else if (uri.equals("/league") && request.method() == HttpMethod.GET) {
+            getLeague(request, responseWriter);
+        } else if (uri.equals("/updateLeague") && request.method() == HttpMethod.POST) {
+            updateLeague(request, responseWriter);
+        } else if (uri.equals("/markdownPreview") && request.method() == HttpMethod.POST) {
+            markdownPreview(request, responseWriter);
+        } else if (uri.equals("/leagueSchedules") && request.method() == HttpMethod.GET) {
+            getLeagueSchedules(request, responseWriter);
+        } else if (uri.equals("/saveLeagueSchedule") && request.method() == HttpMethod.POST) {
+            saveLeagueSchedule(request, responseWriter, false);
+        } else if (uri.equals("/previewLeagueSchedule") && request.method() == HttpMethod.POST) {
+            saveLeagueSchedule(request, responseWriter, true);
+        } else if (uri.equals("/deleteLeagueSchedule") && request.method() == HttpMethod.POST) {
+            deleteLeagueSchedule(request, responseWriter);
+        } else if (uri.equals("/runLeagueSchedule") && request.method() == HttpMethod.POST) {
+            runLeagueSchedule(request, responseWriter);
         } else if (uri.equals("/rtmdModifiers") && request.method() == HttpMethod.GET) {
             getRTMDModifiers(request, responseWriter);
+        } else if (uri.equals("/prizes") && request.method() == HttpMethod.GET) {
+            getPrizes(request, responseWriter);
+        } else if (uri.equals("/prizeHolders") && request.method() == HttpMethod.GET) {
+            getPrizeHolders(request, responseWriter);
+        } else if (uri.equals("/resolvePrize") && request.method() == HttpMethod.POST) {
+            resolvePrize(request, responseWriter);
+        } else if (uri.equals("/addPromise") && request.method() == HttpMethod.POST) {
+            addPromise(request, responseWriter);
+        } else if (uri.equals("/cardName") && request.method() == HttpMethod.GET) {
+            getCardName(request, responseWriter);
         } else if (uri.equals("/processScheduledTournament") && request.method() == HttpMethod.POST) {
             processScheduledTournament(request, responseWriter);
         } else if (uri.equals("/setTournamentStage") && request.method() == HttpMethod.POST) {
@@ -472,195 +515,473 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
     }
 
     /**
-     * Processes the passed parameters for a theoretical Constructed League.  Based on the preview parameter, this will
-     * either create the league for real, or just return the parsed values to the client so the admin can preview
-     * the input.
-     * @param request the request
-     * @param responseWriter the response writer
-     * @param preview If true, no league will be created and the client will have an XML payload returned representing
-     *                what the league would be upon creation.  If false, the league will be created for real.
-     * @throws Exception
+     * Turns the YYYYMMDD form value into the league start date.
      */
-    private void processConstructedLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
-        validateEventAdmin(request);
+    private java.time.LocalDateTime parseLeagueStart(String startStr) throws HttpProcessingException {
+        if (startStr == null || startStr.length() != 8)
+            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
+        int start = Throw400IfNullOrNonInteger("start", startStr);
+        try {
+            return DateUtils.ParseDate(start).toLocalDateTime();
+        } catch (DateTimeParseException exp) {
+            throw new HttpProcessingException(400, "Parameter 'start' is not a valid date: " + startStr);
+        }
+    }
 
-        var postDecoder = new HttpPostRequestDecoder(request);
-
+    /**
+     * Reads the fields every league form shares (name, description, cost, start, repeat matches, invite-only) into
+     * a fresh LeagueParams.  Type-specific fields are filled in by the caller.
+     */
+    private LeagueParams parseCommonLeagueFields(HttpPostRequestDecoder postDecoder) throws Exception {
         String name = getFormParameterSafely(postDecoder, "name");
         String description = getFormParameterSafely(postDecoder, "description");
         String costStr = getFormParameterSafely(postDecoder, "cost");
         String startStr = getFormParameterSafely(postDecoder, "start");
-        String collectionType = getFormParameterSafely(postDecoder, "collectionType");
-
         String maxRepeatMatchesStr = getFormParameterSafely(postDecoder, "maxRepeatMatches");
         String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
-        String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
-        String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
-        String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
-        String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
-        //Individual serie definitions
+
+        Throw400IfStringNull("name", name);
+
+        var params = new LeagueParams();
+        params.name = name;
+        params.description = description;
+        params.cost = Throw400IfNullOrNonInteger("cost", costStr);
+        params.start = parseLeagueStart(startStr);
+        params.maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
+        params.inviteOnly = inviteOnlyStr != null && inviteOnlyStr.equalsIgnoreCase("true");
+
+        String campaign = getFormParameterSafely(postDecoder, "campaign");
+        params.campaign = (campaign == null || campaign.isBlank()) ? null : campaign.trim();
+        params.prizeTiers = parsePrizeTiers(getFormParameterSafely(postDecoder, "prizeTiers"));
+        return params;
+    }
+
+    /**
+     * Reads the {@code prizeTiers} form value: a JSON array of {@link PrizeTier} objects, as the prize tier editor
+     * posts it.  Missing or empty means no extra prizes.  Only the syntax is checked here; the contents are
+     * validated by the LeagueFactory (through PrizeService.validateTiers).
+     */
+    private ArrayList<PrizeTier> parsePrizeTiers(String json) throws HttpProcessingException {
+        var tiers = new ArrayList<PrizeTier>();
+        if (json == null || json.isBlank())
+            return tiers;
+        try {
+            List<PrizeTier> parsed = com.alibaba.fastjson2.JSON.parseArray(json.trim(), PrizeTier.class);
+            if (parsed != null)
+                tiers.addAll(parsed);
+        } catch (RuntimeException exp) {
+            throw new HttpProcessingException(400, "Parameter 'prizeTiers' is not a valid prize tier list: " + exp.getMessage());
+        }
+        return tiers;
+    }
+
+    /**
+     * Reads the parallel format[] / serieDuration[] / maxMatches[] lists submitted by the multi-serie forms.
+     */
+    private ArrayList<LeagueParams.SerieData> parseSerieList(HttpPostRequestDecoder postDecoder) throws Exception {
         List<String> formats = getFormMultipleParametersSafely(postDecoder, "format[]");
         List<String> serieDurationsStr = getFormMultipleParametersSafely(postDecoder, "serieDuration[]");
         List<String> maxMatchesStr = getFormMultipleParametersSafely(postDecoder, "maxMatches[]");
 
-        Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
-        int cost = Throw400IfNullOrNonInteger("cost", costStr);
-        if(startStr.length() != 8)
-            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
-        int start = Throw400IfNullOrNonInteger("start", startStr);
-        Throw400IfStringNull("collectionType", collectionType);
-        int maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
-        boolean inviteOnly = inviteOnlyStr.equalsIgnoreCase("true");
-        int topCutoff = Throw400IfNullOrNonInteger("topCutoff", topCutoffStr);
-        int participationGames = Throw400IfNullOrNonInteger("participationGames", participationGamesStr);
         Throw400IfAnyStringNull("formats", formats);
         List<Integer> serieDurations = Throw400IfAnyNullOrNonInteger("serieDurations", serieDurationsStr);
         List<Integer> maxMatches = Throw400IfAnyNullOrNonInteger("maxMatches", maxMatchesStr);
 
-        if(formats.size() != serieDurations.size() || formats.size() != maxMatches.size())
+        if (formats.size() != serieDurations.size() || formats.size() != maxMatches.size())
             throw new HttpProcessingException(400, "Size mismatch between provided formats, serieDurations, and maxMatches");
 
-        var params = new LeagueParams();
-        params.name = name;
-        params.code = System.currentTimeMillis();
-        params.start = DateUtils.ParseDate(start).toLocalDateTime();
-        params.cost = cost;
-        params.collectionName = collectionType;
-        params.inviteOnly = inviteOnly;
-        params.maxRepeatMatches = maxRepeatMatches;
-        params.description = description;
-        params.series = new ArrayList<>();
+        var series = new ArrayList<LeagueParams.SerieData>();
         for (int i = 0; i < formats.size(); i++) {
-            params.series.add(new LeagueParams.SerieData(formats.get(i), serieDurations.get(i), maxMatches.get(i)));
+            series.add(new LeagueParams.SerieData(formats.get(i), serieDurations.get(i), maxMatches.get(i)));
         }
-        params.extraPrizes = new LeagueParams.PrizeData(topPrizeStr, topCutoff, participationPrizeStr, participationGames);
-
-        var leagueData = new ConstructedLeague(_productLibrary, _formatLibrary, params);
-        List<LeagueSerieInfo> series = leagueData.getSeries();
-
-        var leagueStart = series.getFirst().getStart();
-        var displayEnd = series.getLast().getEnd().plusDays(2);
-
-        if(!preview) {
-            _leagueDao.addLeague(name, params.code, League.LeagueType.CONSTRUCTED, params, leagueStart, displayEnd, cost);
-
-            _leagueService.clearCache();
-
-            responseWriter.sendXmlOK();
-            return;
-        }
-
-        //We aren't creating the league for real, so instead we will return the league in XML format for the
-        // admin panel preview.
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        Document doc = documentBuilder.newDocument();
-
-        Element leagueElem = doc.createElement("league");
-
-        leagueElem.setAttribute("name", name);
-        leagueElem.setAttribute("code", String.valueOf(params.code));
-        leagueElem.setAttribute("cost", String.valueOf(cost));
-        leagueElem.setAttribute("start", String.valueOf(series.getFirst().getStart()));
-        leagueElem.setAttribute("end", String.valueOf(displayEnd));
-        leagueElem.setAttribute("collection", collectionType);
-        leagueElem.setAttribute("inviteOnly", String.valueOf(inviteOnly));
-        leagueElem.setAttribute("maxRepeatMatches", String.valueOf(maxRepeatMatches));
-        leagueElem.setAttribute("description", description);
-        var topPrize = CardCollection.Item.createItem(topPrizeStr);
-        var partPrize = CardCollection.Item.createItem(participationPrizeStr);
-
-        String topID = topPrize.getBlueprintId();
-        String top = "";
-        try {
-            if(!StringUtils.isBlank(topID)) {
-                if (_cardLibrary.getLotroCardBlueprint(topID) != null) {
-                    top = topPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(topID, _cardLibrary.getLotroCardBlueprint(topID));
-                } else if (_productLibrary.GetProduct(topID) != null) {
-                    top = topPrize.getCount() + "x " + GameUtils.getProductLink(topID);
-                }
-            }
-        }
-        catch (Exception ex){
-            top = topPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-        }
-
-        String partID = partPrize.getBlueprintId();
-        String part = "";
-        try {
-            if(!StringUtils.isBlank(partID)) {
-                if (_cardLibrary.getLotroCardBlueprint(partID) != null) {
-                    part = partPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(partID, _cardLibrary.getLotroCardBlueprint(partID));
-                } else if (_productLibrary.GetProduct(partID) != null) {
-                    part = partPrize.getCount() + "x " + GameUtils.getProductLink(partID);
-                }
-            }
-        }
-        catch (Exception ex){
-            top = partPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-        }
-
-        leagueElem.setAttribute("topPrize", top);
-        leagueElem.setAttribute("topCutoff", String.valueOf(topCutoff));
-        leagueElem.setAttribute("participationPrize", part);
-        leagueElem.setAttribute("participationGames", String.valueOf(participationGames));
-
-        for (LeagueSerieInfo serie : series) {
-            Element serieElem = doc.createElement("serie");
-            serieElem.setAttribute("type", serie.getName());
-            serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
-            serieElem.setAttribute("start", String.valueOf(serie.getStart()));
-            serieElem.setAttribute("end", String.valueOf(serie.getEnd()));
-            serieElem.setAttribute("format", serie.getFormat().getName());
-
-            serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
-
-            leagueElem.appendChild(serieElem);
-        }
-
-        doc.appendChild(leagueElem);
-
-        responseWriter.writeXmlResponse(doc);
+        return series;
     }
 
     /**
-     * Processes the passed parameters for a theoretical RTMD League.  Based on the preview parameter, this will
-     * either create the league for real, or just return the parsed values to the client so the admin can preview
-     * the input.
-     * @param request the request
-     * @param responseWriter the response writer
+     * Reads the single format / serieDuration / maxMatches trio submitted by the sealed and solo draft forms.
+     */
+    private LeagueParams.SerieData parseSingleSerie(HttpPostRequestDecoder postDecoder) throws Exception {
+        String format = getFormParameterSafely(postDecoder, "format");
+        String serieDurationStr = getFormParameterSafely(postDecoder, "serieDuration");
+        String maxMatchesStr = getFormParameterSafely(postDecoder, "maxMatches");
+
+        Throw400IfStringNull("format", format);
+        int serieDuration = Throw400IfNullOrNonInteger("serieDuration", serieDurationStr);
+        int maxMatches = Throw400IfNullOrNonInteger("maxMatches", maxMatchesStr);
+        return new LeagueParams.SerieData(format, serieDuration, maxMatches);
+    }
+
+    /**
+     * Hands an assembled definition to the LeagueFactory: validation failures become HTTP 400; otherwise the league
+     * is either created for real or rendered as the JSON preview the admin panel displays.
      * @param preview If true, no league will be created and the client will have an XML payload returned representing
      *                what the league would be upon creation.  If false, the league will be created for real.
-     * @throws Exception
      */
-    private void processRTMDLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
+    private void processLeagueDefinition(League.LeagueType type, LeagueParams params, boolean preview, ResponseWriter responseWriter) throws Exception {
+        LeagueFactory.PreparedLeague prepared;
+        try {
+            prepared = _leagueFactory.prepare(type, params);
+        } catch (LeagueDefinitionException exp) {
+            throw new HttpProcessingException(400, exp.getMessage());
+        }
+
+        if (!preview) {
+            _leagueFactory.create(prepared);
+            responseWriter.sendJsonOK();
+            return;
+        }
+
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(buildLeaguePreview(prepared)));
+    }
+
+    /**
+     * Renders a prepared (but not created) league as the JSON object the admin panel's preview dialog consumes.
+     * Dates are ISO local dates (yyyy-MM-dd); prizes are returned as data for the client to render.
+     */
+    private Map<String, Object> buildLeaguePreview(LeagueFactory.PreparedLeague prepared) {
+        var params = prepared.params();
+
+        var league = new LinkedHashMap<String, Object>();
+        league.put("name", params.name);
+        league.put("type", prepared.type().toString());
+        league.put("code", String.valueOf(params.code));
+        league.put("cost", params.cost);
+        league.put("start", formatPreviewDate(prepared.start()));
+        league.put("end", formatPreviewDate(prepared.displayEnd()));
+        league.put("collection", params.collectionName);
+        league.put("inviteOnly", params.inviteOnly);
+        league.put("maxRepeatMatches", params.maxRepeatMatches);
+        league.put("description", params.description == null ? "" : params.description);
+        league.put("descriptionHtml", _markdownParser.renderDescription(params.description));
+
+        league.put("campaign", params.campaign);
+        league.put("prizeTiers", describePrizeTiers(params.prizeTiers));
+
+        Map<String, Object> race = null;
+        if (prepared.data() instanceof RTMDLeague) {
+            race = new LinkedHashMap<>();
+            race.put("pathLength", params.racePath.size());
+            race.put("cumulative", params.raceCumulative);
+            race.put("advancementMode", params.raceAdvancementMode.toString());
+            race.put("advanceFactor", params.raceAdvanceFactor);
+            race.put("intensityFloor", params.raceIntensityFloor);
+            race.put("intensityCeiling", params.raceIntensityCeiling);
+
+            var metaSites = new ArrayList<Map<String, Object>>();
+            for (int i = 0; i < params.racePath.size(); i++) {
+                var site = new LinkedHashMap<String, Object>();
+                site.put("position", i + 1);
+                site.put("blueprintId", params.racePath.get(i));
+                site.put("visualBlueprintId", i < params.raceVisualPath.size() ? params.raceVisualPath.get(i) : null);
+                String siteName = null;
+                try {
+                    var bp = _cardLibrary.getLotroCardBlueprint(params.racePath.get(i));
+                    if (bp != null)
+                        siteName = bp.getFullName();
+                } catch (Exception ignored) {}
+                site.put("name", siteName);
+                metaSites.add(site);
+            }
+            race.put("metaSites", metaSites);
+        }
+        league.put("race", race);
+
+        var series = new ArrayList<Map<String, Object>>();
+        for (LeagueSerieInfo serie : prepared.series()) {
+            var serieMap = new LinkedHashMap<String, Object>();
+            serieMap.put("name", serie.getName());
+            serieMap.put("maxMatches", serie.getMaxMatches());
+            serieMap.put("start", formatPreviewDate(serie.getStart()));
+            serieMap.put("end", formatPreviewDate(serie.getEnd()));
+            serieMap.put("format", serie.getFormat().getName());
+            serieMap.put("formatCode", serie.getFormat().getCode());
+            serieMap.put("collection", serie.getCollectionType().getFullName());
+            serieMap.put("limited", serie.isLimited());
+            series.add(serieMap);
+        }
+        league.put("series", series);
+
+        return league;
+    }
+
+    private static String formatPreviewDate(ZonedDateTime date) {
+        return date.toLocalDate().toString();
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // Prize tiers and promised prizes
+    // ------------------------------------------------------------------------------------------------
+
+    /**
+     * What a blueprint id stands for, as the admin pages show it:
+     * {@code {blueprintId, kind: card|pack|placeholder|unknown, name}}.  A placeholder ({@code 404_N}) reports the
+     * promise it stands for as its name; a pack is named after its id.
+     */
+    private Map<String, Object> describeProduct(String blueprintId) {
+        var result = new LinkedHashMap<String, Object>();
+        String id = blueprintId == null ? "" : blueprintId.trim();
+        result.put("blueprintId", id);
+        String kind = "unknown";
+        String name = null;
+        if (!id.isEmpty()) {
+            if (PrizeService.isPlaceholder(id)) {
+                kind = "placeholder";
+                try {
+                    var bp = _cardLibrary.getLotroCardBlueprint(id);
+                    if (bp != null)
+                        name = bp.getFullName();
+                } catch (Exception ignored) {}
+            } else if (id.contains("_")) {
+                try {
+                    var bp = _cardLibrary.getLotroCardBlueprint(id);
+                    if (bp != null) {
+                        kind = "card";
+                        name = bp.getFullName();
+                    }
+                } catch (Exception ignored) {}
+            } else if (_productLibrary.GetProduct(id) != null) {
+                kind = "pack";
+                name = id;
+            }
+        }
+        result.put("kind", kind);
+        result.put("name", name);
+        return result;
+    }
+
+    /**
+     * Renders prize tiers as the data the preview dialog displays: the tier fields plus a human description and,
+     * per item, what the id resolves to.
+     */
+    private List<Map<String, Object>> describePrizeTiers(List<PrizeTier> tiers) {
+        var result = new ArrayList<Map<String, Object>>();
+        if (tiers == null)
+            return result;
+        for (PrizeTier tier : tiers) {
+            if (tier == null)
+                continue;
+            var t = new LinkedHashMap<String, Object>();
+            t.put("kind", tier.kind == null ? null : tier.kind.toString());
+            t.put("from", tier.from);
+            t.put("to", tier.to);
+            t.put("games", tier.games);
+            t.put("scope", tier.scope == null ? null : tier.scope.toString());
+            t.put("label", tier.label);
+            t.put("description", _prizeService.describeTier(tier));
+            var items = new ArrayList<Map<String, Object>>();
+            if (tier.items != null) {
+                for (PrizeItem item : tier.items) {
+                    if (item == null)
+                        continue;
+                    var i = new LinkedHashMap<String, Object>();
+                    i.put("blueprintId", item.blueprintId);
+                    i.put("promise", item.promise);
+                    i.put("count", item.count);
+                    if (item.hasPromise()) {
+                        i.put("kind", "promise");
+                        i.put("name", item.promise.trim());
+                    } else {
+                        var product = describeProduct(item.blueprintId);
+                        String kind = (String) product.get("kind");
+                        i.put("kind", "placeholder".equals(kind) ? "unknown" : kind);
+                        i.put("name", product.get("name"));
+                    }
+                    items.add(i);
+                }
+            }
+            t.put("items", items);
+            result.add(t);
+        }
+        return result;
+    }
+
+    private Map<String, Object> describePlaceholder(DBDefs.PrizePlaceholder row) {
+        var p = new LinkedHashMap<String, Object>();
+        p.put("id", row.id);
+        p.put("blueprintId", PrizeService.placeholderBlueprint(row.id));
+        p.put("label", row.label);
+        p.put("count", row.count);
+        p.put("eventKind", row.event_kind);
+        p.put("eventId", row.event_id);
+        p.put("eventName", row.event_name);
+        p.put("tierIndex", row.tier_index);
+        p.put("created", row.created == null ? null : row.created.toString());
+        p.put("createdBy", row.created_by);
+        p.put("holders", _prizeService.holderCount(row.id));
+        p.put("resolvedBlueprint", row.resolved_blueprint);
+        String resolvedName = null;
+        if (row.resolved_blueprint != null)
+            resolvedName = (String) describeProduct(row.resolved_blueprint).get("name");
+        p.put("resolvedCardName", resolvedName);
+        p.put("resolvedOn", row.resolved_on == null ? null : row.resolved_on.toString());
+        p.put("resolvedBy", row.resolved_by);
+        return p;
+    }
+
+    private static final int RESOLVED_PRIZES_LIMIT = 50;
+
+    /**
+     * GET /prizes : every unresolved promise and the last few resolved ones, for the Prizes admin tab.
+     */
+    private void getPrizes(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var unresolved = new ArrayList<Map<String, Object>>();
+        for (var row : _prizeService.getUnresolved())
+            unresolved.add(describePlaceholder(row));
+        var resolved = new ArrayList<Map<String, Object>>();
+        for (var row : _prizeService.getResolved(RESOLVED_PRIZES_LIMIT))
+            resolved.add(describePlaceholder(row));
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("unresolved", unresolved);
+        result.put("resolved", resolved);
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
+
+    /**
+     * GET /prizeHolders?id=... : who holds a placeholder, one entry per (player, collection).
+     */
+    private void getPrizeHolders(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var queryDecoder = new QueryStringDecoder(request.uri());
+        int id = Throw400IfNullOrNonInteger("id", getQueryParameterSafely(queryDecoder, "id"));
+        var row = _prizeService.getPlaceholder(id);
+        if (row == null)
+            throw new HttpProcessingException(404, "There is no prize placeholder with id " + id + ".");
+
+        var holders = new ArrayList<Map<String, Object>>();
+        for (var holder : _prizeService.getHolders(id)) {
+            var h = new LinkedHashMap<String, Object>();
+            h.put("player", holder.player_name);
+            h.put("collectionType", holder.collection_type);
+            h.put("quantity", holder.quantity);
+            holders.add(h);
+        }
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("id", row.id);
+        result.put("label", row.label);
+        result.put("holders", holders);
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
+
+    /**
+     * POST /resolvePrize {id, blueprintId} : swaps a placeholder for the real card in every holder's collection.
+     */
+    private void resolvePrize(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+        Player admin = getResourceOwnerSafely(request, null);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            int id = Throw400IfNullOrNonInteger("id", getFormParameterSafely(postDecoder, "id"));
+            String blueprintId = getFormParameterSafely(postDecoder, "blueprintId");
+            Throw400IfStringNull("blueprintId", blueprintId);
+
+            PrizeService.ResolutionResult resolution;
+            try {
+                resolution = _prizeService.resolve(id, blueprintId, admin.getName());
+            } catch (PrizeDefinitionException exp) {
+                throw new HttpProcessingException(400, exp.getMessage());
+            }
+
+            var result = new LinkedHashMap<String, Object>();
+            result.put("placeholderId", resolution.placeholderId());
+            result.put("label", resolution.label());
+            result.put("blueprintId", resolution.blueprintId());
+            result.put("cardName", describeProduct(resolution.blueprintId()).get("name"));
+            result.put("players", resolution.players());
+            result.put("cardsSwapped", resolution.cardsSwapped());
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * POST /addPromise {label, count, players (one per line)} : creates a promise by hand and hands its placeholder
+     * to the named players.
+     */
+    private void addPromise(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+        Player admin = getResourceOwnerSafely(request, null);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String label = getFormParameterSafely(postDecoder, "label");
+            String countStr = getFormParameterSafely(postDecoder, "count");
+            String players = getFormParameterSafely(postDecoder, "players");
+            Throw400IfStringNull("label", label);
+            int count = (countStr == null || countStr.isBlank()) ? 1 : Throw400IfNullOrNonInteger("count", countStr);
+            Throw400IfStringNull("players", players);
+
+            DBDefs.PrizePlaceholder row;
+            try {
+                row = _prizeService.createManualPromise(label, count, getPlayerNames(players), admin.getName());
+            } catch (PrizeDefinitionException exp) {
+                throw new HttpProcessingException(400, exp.getMessage());
+            }
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(describePlaceholder(row)));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * GET /cardName?blueprintId=... : what an id stands for, for the editors' live lookups.
+     */
+    private void getCardName(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var queryDecoder = new QueryStringDecoder(request.uri());
+        String blueprintId = getQueryParameterSafely(queryDecoder, "blueprintId");
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(describeProduct(blueprintId)));
+    }
+
+    /**
+     * Reads the form fields the add/preview form for {@code type} posts into a LeagueParams.  Shared by league
+     * creation and league editing so that the two cannot drift apart.
+     */
+    private LeagueParams parseLeagueParams(League.LeagueType type, HttpPostRequestDecoder postDecoder) throws Exception {
+        return switch (type) {
+            case SEALED -> parseSealedLeagueParams(postDecoder);
+            case SOLODRAFT -> parseSoloDraftLeagueParams(postDecoder);
+            case CONSTRUCTED -> parseConstructedLeagueParams(postDecoder);
+            case RTMD -> parseRTMDLeagueParams(postDecoder);
+        };
+    }
+
+    /**
+     * Constructed league: common fields, a chosen collection, prizes and any number of series.
+     */
+    private LeagueParams parseConstructedLeagueParams(HttpPostRequestDecoder postDecoder) throws Exception {
+        var params = parseCommonLeagueFields(postDecoder);
+        String collectionType = getFormParameterSafely(postDecoder, "collectionType");
+        Throw400IfStringNull("collectionType", collectionType);
+        params.collectionName = collectionType;
+        params.series = parseSerieList(postDecoder);
+        return params;
+    }
+
+    private void processConstructedLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
         validateEventAdmin(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
+        var params = parseConstructedLeagueParams(postDecoder);
 
-        // Standard league fields
-        String name = getFormParameterSafely(postDecoder, "name");
-        String description = getFormParameterSafely(postDecoder, "description");
-        String costStr = getFormParameterSafely(postDecoder, "cost");
-        String startStr = getFormParameterSafely(postDecoder, "start");
-        String maxRepeatMatchesStr = getFormParameterSafely(postDecoder, "maxRepeatMatches");
-        String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
+        processLeagueDefinition(League.LeagueType.CONSTRUCTED, params, preview, responseWriter);
+    }
 
-        // Prize fields
-        String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
-        String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
-        String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
-        String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
+    /**
+     * Race to Mount Doom league: a constructed league plus the race path and advancement settings.
+     */
+    private LeagueParams parseRTMDLeagueParams(HttpPostRequestDecoder postDecoder) throws Exception {
+        var params = parseCommonLeagueFields(postDecoder);
+        params.collectionName = "default";
+        params.series = parseSerieList(postDecoder);
 
-        // Series fields — per-serie format, duration, and match limits (same as constructed)
-        List<String> formats = getFormMultipleParametersSafely(postDecoder, "format[]");
-        List<String> serieDurationsStr = getFormMultipleParametersSafely(postDecoder, "serieDuration[]");
-        List<String> maxMatchesStr = getFormMultipleParametersSafely(postDecoder, "maxMatches[]");
-
-        // RTMD-specific fields
         List<String> racePath = getFormMultipleParametersSafely(postDecoder, "racePath[]");
         List<String> raceVisualPath = getFormMultipleParametersSafely(postDecoder, "raceVisualPath[]");
         String raceCumulativeStr = getFormParameterSafely(postDecoder, "raceCumulative");
@@ -669,530 +990,337 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         String raceAdvancementModeStr = getFormParameterSafely(postDecoder, "raceAdvancementMode");
         String raceAdvanceFactorStr = getFormParameterSafely(postDecoder, "raceAdvanceFactor");
 
-        // --- Validation ---
+        params.racePath = racePath == null ? new ArrayList<>() : new ArrayList<>(racePath);
+        params.raceVisualPath = raceVisualPath == null ? new ArrayList<>() : new ArrayList<>(raceVisualPath);
+        params.raceCumulative = raceCumulativeStr != null && raceCumulativeStr.equalsIgnoreCase("true");
 
-        // Standard fields
-        Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
-        int cost = Throw400IfNullOrNonInteger("cost", costStr);
-        if (startStr.length() != 8)
-            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
-        int start = Throw400IfNullOrNonInteger("start", startStr);
-        int maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
-        boolean inviteOnly = inviteOnlyStr != null && inviteOnlyStr.equalsIgnoreCase("true");
-        int topCutoff = Throw400IfNullOrNonInteger("topCutoff", topCutoffStr);
-        int participationGames = Throw400IfNullOrNonInteger("participationGames", participationGamesStr);
-
-        // Series fields
-        Throw400IfAnyStringNull("formats", formats);
-        List<Integer> serieDurations = Throw400IfAnyNullOrNonInteger("serieDurations", serieDurationsStr);
-        List<Integer> maxMatches = Throw400IfAnyNullOrNonInteger("maxMatches", maxMatchesStr);
-
-        if (formats.size() != serieDurations.size() || formats.size() != maxMatches.size())
-            throw new HttpProcessingException(400, "Size mismatch between provided formats, serieDurations, and maxMatches.");
-
-        if (formats.isEmpty())
-            throw new HttpProcessingException(400, "At least one series must be defined.");
-
-        // RTMD fields
-        Throw400IfValidationFails("racePath", String.valueOf(racePath),
-                racePath != null && !racePath.isEmpty(), "Race path must contain at least one modifier.");
-
-        int pathLength = racePath.size();
-        Throw400IfValidationFails("racePath", String.valueOf(pathLength),
-                pathLength >= 1 && pathLength <= 18,
-                "Race path must contain between 1 and 18 modifiers (got " + pathLength + ").");
-
-        for (String blueprintId : racePath) {
-            try {
-                var bp = _cardLibrary.getLotroCardBlueprint(blueprintId);
-                Throw400IfValidationFails("racePath", blueprintId, bp != null,
-                        "Blueprint '" + blueprintId + "' not found.");
-            } catch (Exception ex) {
-                throw new HttpProcessingException(400, "Invalid blueprint ID in race path: " + blueprintId);
-            }
-        }
-
-        // Visual path validation
-        Throw400IfValidationFails("raceVisualPath", String.valueOf(raceVisualPath),
-                raceVisualPath != null && !raceVisualPath.isEmpty(), "Visual path must contain at least one card.");
-        Throw400IfValidationFails("raceVisualPath", raceVisualPath.size() + " vs " + pathLength,
-                raceVisualPath.size() == pathLength,
-                "Visual path must have the same number of entries as the modifier path (" + pathLength + ").");
-
-        for (String blueprintId : raceVisualPath) {
-            try {
-                var bp = _cardLibrary.getLotroCardBlueprint(blueprintId);
-                Throw400IfValidationFails("raceVisualPath", blueprintId, bp != null,
-                        "Blueprint '" + blueprintId + "' not found.");
-            } catch (Exception ex) {
-                throw new HttpProcessingException(400, "Invalid blueprint ID in visual path: " + blueprintId);
-            }
-        }
-
-        boolean raceCumulative = raceCumulativeStr != null && raceCumulativeStr.equalsIgnoreCase("true");
-
-        int raceIntensityFloor = 1;
         if (raceIntensityFloorStr != null && !raceIntensityFloorStr.isBlank())
-            raceIntensityFloor = Throw400IfNullOrNonInteger("raceIntensityFloor", raceIntensityFloorStr);
-
-        int raceIntensityCeiling = 10;
+            params.raceIntensityFloor = Throw400IfNullOrNonInteger("raceIntensityFloor", raceIntensityFloorStr);
         if (raceIntensityCeilingStr != null && !raceIntensityCeilingStr.isBlank())
-            raceIntensityCeiling = Throw400IfNullOrNonInteger("raceIntensityCeiling", raceIntensityCeilingStr);
+            params.raceIntensityCeiling = Throw400IfNullOrNonInteger("raceIntensityCeiling", raceIntensityCeilingStr);
 
-        Throw400IfValidationFails("raceIntensity", raceIntensityFloor + "-" + raceIntensityCeiling,
-                raceIntensityFloor <= raceIntensityCeiling,
-                "Intensity floor must be <= ceiling.");
-
-        RTMDLeague.AdvanceType advancementMode = RTMDLeague.AdvanceType.WIN;
         if (raceAdvancementModeStr != null && !raceAdvancementModeStr.isBlank()) {
             try {
-                advancementMode = RTMDLeague.AdvanceType.valueOf(raceAdvancementModeStr.toUpperCase().trim());
+                params.raceAdvancementMode = RTMDLeague.AdvanceType.valueOf(raceAdvancementModeStr.toUpperCase().trim());
             } catch (IllegalArgumentException e) {
                 throw new HttpProcessingException(400, "Invalid advancement mode: " + raceAdvancementModeStr
                         + ". Must be WIN or SCORE.");
             }
         }
-
-        int raceAdvanceFactor = 1;
         if (raceAdvanceFactorStr != null && !raceAdvanceFactorStr.isBlank())
-            raceAdvanceFactor = Throw400IfNullOrNonInteger("raceAdvanceFactor", raceAdvanceFactorStr);
-        Throw400IfValidationFails("raceAdvanceFactor", String.valueOf(raceAdvanceFactor),
-                raceAdvanceFactor >= 1, "Advance factor must be at least 1.");
+            params.raceAdvanceFactor = Throw400IfNullOrNonInteger("raceAdvanceFactor", raceAdvanceFactorStr);
 
-        // --- Build params ---
+        return params;
+    }
 
-        var params = new LeagueParams();
-        params.name = name;
-        params.code = System.currentTimeMillis();
-        params.start = DateUtils.ParseDate(start).toLocalDateTime();
-        params.cost = cost;
-        params.collectionName = "default";
-        params.inviteOnly = inviteOnly;
-        params.maxRepeatMatches = maxRepeatMatches;
-        params.description = description;
-        params.extraPrizes = new LeagueParams.PrizeData(topPrizeStr, topCutoff, participationPrizeStr, participationGames);
+    private void processRTMDLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
+        validateEventAdmin(request);
 
-        params.series = new ArrayList<>();
-        for (int i = 0; i < formats.size(); i++) {
-            params.series.add(new LeagueParams.SerieData(formats.get(i), serieDurations.get(i), maxMatches.get(i)));
-        }
+        var postDecoder = new HttpPostRequestDecoder(request);
+        var params = parseRTMDLeagueParams(postDecoder);
 
-        params.racePath = new ArrayList<>(racePath);
-        params.raceVisualPath = new ArrayList<>(raceVisualPath);
-        params.raceCumulative = raceCumulative;
-        params.raceIntensityFloor = raceIntensityFloor;
-        params.raceIntensityCeiling = raceIntensityCeiling;
-        params.raceAdvancementMode = advancementMode;
-        params.raceAdvanceFactor = raceAdvanceFactor;
-
-        // --- Construct and validate ---
-
-        var leagueData = new RTMDLeague(_productLibrary, _formatLibrary, params);
-        List<LeagueSerieInfo> series = leagueData.getSeries();
-
-        var leagueStart = series.getFirst().getStart();
-        var displayEnd = series.getLast().getEnd().plusDays(2);
-
-        if (!preview) {
-            _leagueDao.addLeague(name, params.code, League.LeagueType.RTMD, params, leagueStart, displayEnd, cost);
-
-            _leagueService.clearCache();
-
-            responseWriter.sendXmlOK();
-            return;
-        }
-
-        // --- Preview XML ---
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        Document doc = documentBuilder.newDocument();
-
-        Element leagueElem = doc.createElement("league");
-
-        leagueElem.setAttribute("name", name);
-        leagueElem.setAttribute("type", "RTMD");
-        leagueElem.setAttribute("code", String.valueOf(params.code));
-        leagueElem.setAttribute("cost", String.valueOf(cost));
-        leagueElem.setAttribute("start", String.valueOf(series.getFirst().getStart()));
-        leagueElem.setAttribute("end", String.valueOf(displayEnd));
-        leagueElem.setAttribute("inviteOnly", String.valueOf(inviteOnly));
-        leagueElem.setAttribute("maxRepeatMatches", String.valueOf(maxRepeatMatches));
-        leagueElem.setAttribute("description", description);
-
-        // RTMD-specific preview attributes
-        leagueElem.setAttribute("pathLength", String.valueOf(pathLength));
-        leagueElem.setAttribute("cumulative", String.valueOf(raceCumulative));
-        leagueElem.setAttribute("advancementMode", advancementMode.toString());
-        leagueElem.setAttribute("advanceFactor", String.valueOf(raceAdvanceFactor));
-        leagueElem.setAttribute("intensityFloor", String.valueOf(raceIntensityFloor));
-        leagueElem.setAttribute("intensityCeiling", String.valueOf(raceIntensityCeiling));
-
-        // Path modifiers + visual cards
-        for (int i = 0; i < racePath.size(); i++) {
-            Element siteElem = doc.createElement("metaSite");
-            siteElem.setAttribute("position", String.valueOf(i + 1));
-            siteElem.setAttribute("blueprintId", racePath.get(i));
-            if (i < raceVisualPath.size()) {
-                siteElem.setAttribute("visualBlueprintId", raceVisualPath.get(i));
-            }
-            try {
-                var bp = _cardLibrary.getLotroCardBlueprint(racePath.get(i));
-                if (bp != null) {
-                    siteElem.setAttribute("name", bp.getFullName());
-                }
-            } catch (Exception ignored) {}
-            leagueElem.appendChild(siteElem);
-        }
-
-        // Prize display
-        var topPrize = CardCollection.Item.createItem(topPrizeStr);
-        var partPrize = CardCollection.Item.createItem(participationPrizeStr);
-        leagueElem.setAttribute("topPrize", resolvePrizeDisplay(topPrize));
-        leagueElem.setAttribute("topCutoff", String.valueOf(topCutoff));
-        leagueElem.setAttribute("participationPrize", resolvePrizeDisplay(partPrize));
-        leagueElem.setAttribute("participationGames", String.valueOf(participationGames));
-
-        // Series info
-        for (LeagueSerieInfo serie : series) {
-            Element serieElem = doc.createElement("serie");
-            serieElem.setAttribute("type", serie.getName());
-            serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
-            serieElem.setAttribute("start", String.valueOf(serie.getStart()));
-            serieElem.setAttribute("end", String.valueOf(serie.getEnd()));
-            serieElem.setAttribute("format", serie.getFormat().getName());
-            serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
-
-            leagueElem.appendChild(serieElem);
-        }
-
-        doc.appendChild(leagueElem);
-
-        responseWriter.writeXmlResponse(doc);
+        processLeagueDefinition(League.LeagueType.RTMD, params, preview, responseWriter);
     }
 
     /**
-     * Resolves a prize item to a display string for preview purposes.
+     * Solo draft league: common fields plus a single draft type / duration / match limit.
      */
-    private String resolvePrizeDisplay(CardCollection.Item prizeItem) {
-        String id = prizeItem.getBlueprintId();
-        if (StringUtils.isBlank(id))
-            return "";
-
-        try {
-            if (_cardLibrary.getLotroCardBlueprint(id) != null) {
-                return prizeItem.getCount() + "x " + GameUtils.getDeluxeCardLink(id, _cardLibrary.getLotroCardBlueprint(id));
-            } else if (_productLibrary.GetProduct(id) != null) {
-                return prizeItem.getCount() + "x " + GameUtils.getProductLink(id);
-            }
-        } catch (Exception ex) {
-            return prizeItem.getCount() + "x " + "[UNKNOWN: " + id + "]";
-        }
-        return "";
+    private LeagueParams parseSoloDraftLeagueParams(HttpPostRequestDecoder postDecoder) throws Exception {
+        var params = parseCommonLeagueFields(postDecoder);
+        params.collectionName = params.name;
+        params.series.add(parseSingleSerie(postDecoder));
+        return params;
     }
 
-    /**
-     * Processes the passed parameters for a theoretical Solo Draft League.  Based on the preview parameter, this will
-     * either create the league for real, or just return the parsed values to the client so the admin can preview
-     * the input.
-     * @param request the request
-     * @param responseWriter the response writer
-     * @param preview If true, no league will be created and the client will have an XML payload returned representing
-     *                what the league would be upon creation.  If false, the league will be created for real.
-     * @throws Exception
-     */
     private void processSoloDraftLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
         validateEventAdmin(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
+        var params = parseSoloDraftLeagueParams(postDecoder);
 
-        String name = getFormParameterSafely(postDecoder, "name");
-        String description = getFormParameterSafely(postDecoder, "description");
-        String costStr = getFormParameterSafely(postDecoder, "cost");
-        String startStr = getFormParameterSafely(postDecoder, "start");
-
-        String maxRepeatMatchesStr = getFormParameterSafely(postDecoder, "maxRepeatMatches");
-        String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
-//        String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
-//        String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
-//        String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
-//        String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
-        //Individual serie definitions
-
-        String format = getFormParameterSafely(postDecoder, "format");
-        String serieDurationStr = getFormParameterSafely(postDecoder, "serieDuration");
-        String maxMatchesStr = getFormParameterSafely(postDecoder, "maxMatches");
-
-
-        Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
-        int cost = Throw400IfNullOrNonInteger("cost", costStr);
-        if(startStr.length() != 8)
-            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
-        int start = Throw400IfNullOrNonInteger("start", startStr);
-        int maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
-        boolean inviteOnly = inviteOnlyStr.equalsIgnoreCase("true");
-
-//        int topCutoff = Throw400IfNullOrNonInteger("topCutoff", topCutoffStr);
-//        int participationGames = Throw400IfNullOrNonInteger("participationGames", participationGamesStr);
-        Throw400IfStringNull("format", format);
-        int serieDuration = Throw400IfNullOrNonInteger("serieDurationStr", serieDurationStr);
-        int maxMatches = Throw400IfNullOrNonInteger("maxMatchesStr", maxMatchesStr);
-
-
-        var params = new LeagueParams();
-        params.name = name;
-        params.code = System.currentTimeMillis();
-        params.start = DateUtils.ParseDate(start).toLocalDateTime();
-        params.cost = cost;
-        params.collectionName = name;
-        params.inviteOnly = inviteOnly;
-        params.maxRepeatMatches = maxRepeatMatches;
-        params.description = description;
-        params.series = new ArrayList<>();
-        params.series.add(new LeagueParams.SerieData(format, serieDuration, maxMatches));
-        //params.extraPrizes = new LeagueParams.PrizeData(topPrizeStr, topCutoff, participationPrizeStr, participationGames);
-
-        var leagueData = new SoloDraftLeague(_productLibrary, _formatLibrary, _soloDraftDefinitions, params);
-        List<LeagueSerieInfo> series = leagueData.getSeries();
-
-        var leagueStart = series.getFirst().getStart();
-        var displayEnd = series.getLast().getEnd().plusDays(2);
-
-        if(!preview) {
-            _leagueDao.addLeague(name, params.code, League.LeagueType.SOLODRAFT, params, leagueStart, displayEnd, cost);
-
-            _leagueService.clearCache();
-
-            responseWriter.sendXmlOK();
-            return;
-        }
-
-        //We aren't creating the league for real, so instead we will return the league in XML format for the
-        // admin panel preview.
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        Document doc = documentBuilder.newDocument();
-
-        Element leagueElem = doc.createElement("league");
-
-        leagueElem.setAttribute("name", name);
-        leagueElem.setAttribute("code", String.valueOf(params.code));
-        leagueElem.setAttribute("cost", String.valueOf(cost));
-        leagueElem.setAttribute("start", String.valueOf(series.getFirst().getStart()));
-        leagueElem.setAttribute("end", String.valueOf(displayEnd));
-        leagueElem.setAttribute("inviteOnly", String.valueOf(inviteOnly));
-        leagueElem.setAttribute("maxRepeatMatches", String.valueOf(maxRepeatMatches));
-        leagueElem.setAttribute("description", description);
-//        var topPrize = CardCollection.Item.createItem(topPrizeStr);
-//        var partPrize = CardCollection.Item.createItem(participationPrizeStr);
-
-//        String topID = topPrize.getBlueprintId();
-//        String top = "";
-//        try {
-//            if(!StringUtils.isBlank(topID)) {
-//                if (_cardLibrary.getLotroCardBlueprint(topID) != null) {
-//                    top = topPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(topID, _cardLibrary.getLotroCardBlueprint(topID));
-//                } else if (_productLibrary.GetProduct(topID) != null) {
-//                    top = topPrize.getCount() + "x " + GameUtils.getProductLink(topID);
-//                }
-//            }
-//        }
-//        catch (Exception ex){
-//            top = topPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-//        }
-//
-//        String partID = partPrize.getBlueprintId();
-//        String part = "";
-//        try {
-//            if(!StringUtils.isBlank(partID)) {
-//                if (_cardLibrary.getLotroCardBlueprint(partID) != null) {
-//                    part = partPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(partID, _cardLibrary.getLotroCardBlueprint(partID));
-//                } else if (_productLibrary.GetProduct(partID) != null) {
-//                    part = partPrize.getCount() + "x " + GameUtils.getProductLink(partID);
-//                }
-//            }
-//        }
-//        catch (Exception ex){
-//            top = partPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-//        }
-//
-//        leagueElem.setAttribute("topPrize", top);
-//        leagueElem.setAttribute("topCutoff", String.valueOf(topCutoff));
-//        leagueElem.setAttribute("participationPrize", part);
-//        leagueElem.setAttribute("participationGames", String.valueOf(participationGames));
-
-        for (LeagueSerieInfo serie : series) {
-            Element serieElem = doc.createElement("serie");
-            serieElem.setAttribute("type", serie.getName());
-            serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
-            serieElem.setAttribute("start", String.valueOf(serie.getStart()));
-            serieElem.setAttribute("end", String.valueOf(serie.getEnd()));
-            serieElem.setAttribute("format", serie.getFormat().getName());
-            serieElem.setAttribute("collection", serie.getCollectionType().getFullName());
-            serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
-
-            leagueElem.appendChild(serieElem);
-        }
-
-        doc.appendChild(leagueElem);
-
-        responseWriter.writeXmlResponse(doc);
+        processLeagueDefinition(League.LeagueType.SOLODRAFT, params, preview, responseWriter);
     }
 
     /**
-     * Processes the passed parameters for a theoretical Sealed League.  Based on the preview parameter, this will
-     * either create the league for real, or just return the parsed values to the client so the admin can preview
-     * the input.
-     * @param request the request
-     * @param responseWriter the response writer
-     * @param preview If true, no league will be created and the client will have an XML payload returned representing
-     *                what the league would be upon creation.  If false, the league will be created for real.
-     * @throws Exception
+     * Sealed league: common fields plus a single sealed template / serie duration / match limit.
      */
+    private LeagueParams parseSealedLeagueParams(HttpPostRequestDecoder postDecoder) throws Exception {
+        var params = parseCommonLeagueFields(postDecoder);
+        params.collectionName = params.name;
+        params.series.add(parseSingleSerie(postDecoder));
+        return params;
+    }
+
     private void processSealedLeague(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
         validateEventAdmin(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
+        var params = parseSealedLeagueParams(postDecoder);
 
-        String name = getFormParameterSafely(postDecoder, "name");
-        String description = getFormParameterSafely(postDecoder, "description");
-        String costStr = getFormParameterSafely(postDecoder, "cost");
-        String startStr = getFormParameterSafely(postDecoder, "start");
+        processLeagueDefinition(League.LeagueType.SEALED, params, preview, responseWriter);
+    }
 
-        String maxRepeatMatchesStr = getFormParameterSafely(postDecoder, "maxRepeatMatches");
-        String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
-//        String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
-//        String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
-//        String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
-//        String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
-        //Individual serie definitions
+    // ------------------------------------------------------------------------------------------------
+    // Editing existing leagues
+    // ------------------------------------------------------------------------------------------------
 
-        String format = getFormParameterSafely(postDecoder, "format");
-        String serieDurationStr = getFormParameterSafely(postDecoder, "serieDuration");
-        String maxMatchesStr = getFormParameterSafely(postDecoder, "maxMatches");
+    /**
+     * Parses a league code form/query value; anything that is not a long is a 400.
+     */
+    private long parseLeagueCode(String codeStr) throws HttpProcessingException {
+        Throw400IfStringNull("code", codeStr);
+        try {
+            return Long.parseLong(codeStr.trim());
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400, "Parameter 'code' must be a league code (a whole number): " + codeStr);
+        }
+    }
 
+    /**
+     * Finds a league by code: the active-league cache first, then the database, so that leagues that have already
+     * ended can still be looked up.
+     * @throws HttpProcessingException 404 if there is no league with that code
+     */
+    private League findLeagueByCode(long code) throws HttpProcessingException {
+        League league = _leagueService.getLeagueByType(String.valueOf(code));
+        if (league == null)
+            league = _leagueService.getLeagueByCode(code);
+        if (league == null)
+            throw new HttpProcessingException(404, "League '" + code + "' does not exist.");
+        return league;
+    }
 
-        Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
-        int cost = Throw400IfNullOrNonInteger("cost", costStr);
-        if(startStr.length() != 8)
-            throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
-        int start = Throw400IfNullOrNonInteger("start", startStr);
-        int maxRepeatMatches = Throw400IfNullOrNonInteger("maxRepeatMatches", maxRepeatMatchesStr);
-        boolean inviteOnly = inviteOnlyStr.equalsIgnoreCase("true");
+    /**
+     * GET /league?code=... : the stored definition of one league, for the admin edit form.
+     */
+    private void getLeague(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
 
-//        int topCutoff = Throw400IfNullOrNonInteger("topCutoff", topCutoffStr);
-//        int participationGames = Throw400IfNullOrNonInteger("participationGames", participationGamesStr);
-        Throw400IfStringNull("format", format);
-        int serieDuration = Throw400IfNullOrNonInteger("serieDuration", serieDurationStr);
-        int maxMatches = Throw400IfNullOrNonInteger("maxMatches", maxMatchesStr);
+        var queryDecoder = new QueryStringDecoder(request.uri());
+        long code = parseLeagueCode(getQueryParameterSafely(queryDecoder, "code"));
+        League league = findLeagueByCode(code);
 
-
-        var params = new LeagueParams();
-        params.name = name;
-        params.code = System.currentTimeMillis();
-        params.start = DateUtils.ParseDate(start).toLocalDateTime();
-        params.cost = cost;
-        params.collectionName = name;
-        params.inviteOnly = inviteOnly;
-        params.maxRepeatMatches = maxRepeatMatches;
-        params.description = description;
-        params.series = new ArrayList<>();
-        params.series.add(new LeagueParams.SerieData(format, serieDuration, maxMatches));
-        //params.extraPrizes = new LeagueParams.PrizeData(topPrizeStr, topCutoff, participationPrizeStr, participationGames);
-
-        var leagueData = new SealedLeague(_productLibrary, _formatLibrary, params);
+        LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
         List<LeagueSerieInfo> series = leagueData.getSeries();
+        ZonedDateTime start = series.getFirst().getStart();
+        ZonedDateTime end = series.getLast().getEnd();
 
-        var leagueStart = series.getFirst().getStart();
-        var displayEnd = series.getLast().getEnd().plusDays(2);
+        var result = new LinkedHashMap<String, Object>();
+        result.put("code", league.getCodeStr());
+        result.put("type", league.getType().toString());
+        result.put("name", league.getName());
+        result.put("start", formatPreviewDate(start));
+        result.put("end", formatPreviewDate(end));
+        result.put("participants", _leagueParticipationDao.getUsersParticipating(league.getCodeStr()).size());
+        result.put("started", !start.isAfter(DateUtils.Today()));
+        result.put("scheduleId", league.getScheduleId());
+        result.put("params", leagueData.getParameters());
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
 
-        if(!preview) {
-            _leagueDao.addLeague(name, params.code, League.LeagueType.SEALED, params, leagueStart, displayEnd, cost);
+    /**
+     * POST /markdownPreview : renders a description the way players will see it (admin-level markdown, links
+     * allowed), for the live preview beside the description box.  Takes {@code text}; returns {@code {html}}.
+     */
+    private void markdownPreview(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
 
-            _leagueService.clearCache();
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String text = getFormParameterSafely(postDecoder, "text");
+            var result = new LinkedHashMap<String, Object>();
+            result.put("html", _markdownParser.renderDescription(text));
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
 
-            responseWriter.sendXmlOK();
-            return;
+    /**
+     * POST /updateLeague : replaces the definition of an existing league.  Takes the league code plus exactly the
+     * fields the add form for the league's (stored, unchangeable) type posts.
+     */
+    private void updateLeague(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        long code = parseLeagueCode(getFormParameterSafely(postDecoder, "code"));
+        League existing = findLeagueByCode(code);
+
+        var params = parseLeagueParams(existing.getType(), postDecoder);
+        try {
+            _leagueFactory.update(existing, params);
+        } catch (LeagueDefinitionException exp) {
+            throw new HttpProcessingException(400, exp.getMessage());
         }
 
-        //We aren't creating the league for real, so instead we will return the league in XML format for the
-        // admin panel preview.
+        responseWriter.sendJsonOK();
+    }
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+    // ------------------------------------------------------------------------------------------------
+    // League schedules
+    // ------------------------------------------------------------------------------------------------
 
-        Document doc = documentBuilder.newDocument();
+    private static final int SCHEDULE_UPCOMING_COUNT = 6;
 
-        Element leagueElem = doc.createElement("league");
+    private Map<String, Object> describeSchedule(LeagueSchedule schedule) {
+        var obj = new LinkedHashMap<String, Object>();
+        obj.put("id", schedule.getId());
+        obj.put("name", schedule.getName());
+        obj.put("leagueType", schedule.getType() == null ? null : schedule.getType().toString());
+        obj.put("template", schedule.getTemplate());
+        var events = new ArrayList<Map<String, Object>>();
+        for (var event : schedule.getEvents()) {
+            var e = new LinkedHashMap<String, Object>();
+            e.put("name", event.name());
+            e.put("params", event.overrides());
+            events.add(e);
+        }
+        obj.put("events", events);
+        obj.put("namePattern", schedule.getNamePattern());
+        obj.put("nextEventDate", schedule.getNextEventDate() == null ? null : schedule.getNextEventDate().toString());
+        obj.put("nextEventIndex", schedule.getNextEventIndex());
+        obj.put("intervalMonths", schedule.getIntervalMonths());
+        obj.put("leadDays", schedule.getLeadDays());
+        obj.put("active", schedule.isActive());
+        obj.put("lastCreatedLeagueId", schedule.getLastCreatedLeagueId());
+        obj.put("lastRun", schedule.getLastRun() == null ? null : schedule.getLastRun().toString());
+        obj.put("lastError", schedule.getLastError());
+        obj.put("upcoming", describeProjection(_leagueScheduleService.projectNext(schedule, SCHEDULE_UPCOMING_COUNT)));
+        return obj;
+    }
 
-        leagueElem.setAttribute("name", name);
-        leagueElem.setAttribute("code", String.valueOf(params.code));
-        leagueElem.setAttribute("cost", String.valueOf(cost));
-        leagueElem.setAttribute("start", String.valueOf(series.getFirst().getStart()));
-        leagueElem.setAttribute("end", String.valueOf(displayEnd));
-        leagueElem.setAttribute("inviteOnly", String.valueOf(inviteOnly));
-        leagueElem.setAttribute("maxRepeatMatches", String.valueOf(maxRepeatMatches));
-        leagueElem.setAttribute("description", description);
-//        var topPrize = CardCollection.Item.createItem(topPrizeStr);
-//        var partPrize = CardCollection.Item.createItem(participationPrizeStr);
+    static List<Map<String, Object>> describeProjection(List<LeagueScheduleService.ProjectedEvent> projected) {
+        var result = new ArrayList<Map<String, Object>>();
+        for (var event : projected) {
+            var e = new LinkedHashMap<String, Object>();
+            e.put("scheduleId", event.scheduleId());
+            e.put("scheduleName", event.scheduleName());
+            e.put("eventIndex", event.eventIndex());
+            e.put("eventName", event.eventName());
+            e.put("leagueName", event.leagueName());
+            e.put("start", event.start().toString());
+            e.put("end", event.end().toString());
+            e.put("createdOn", event.createdOn().toString());
+            e.put("error", event.error());
+            result.add(e);
+        }
+        return result;
+    }
 
-//        String topID = topPrize.getBlueprintId();
-//        String top = "";
-//        try {
-//            if(!StringUtils.isBlank(topID)) {
-//                if (_cardLibrary.getLotroCardBlueprint(topID) != null) {
-//                    top = topPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(topID, _cardLibrary.getLotroCardBlueprint(topID));
-//                } else if (_productLibrary.GetProduct(topID) != null) {
-//                    top = topPrize.getCount() + "x " + GameUtils.getProductLink(topID);
-//                }
-//            }
-//        }
-//        catch (Exception ex){
-//            top = topPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-//        }
-//
-//        String partID = partPrize.getBlueprintId();
-//        String part = "";
-//        try {
-//            if(!StringUtils.isBlank(partID)) {
-//                if (_cardLibrary.getLotroCardBlueprint(partID) != null) {
-//                    part = partPrize.getCount() + "x " + GameUtils.getDeluxeCardLink(partID, _cardLibrary.getLotroCardBlueprint(partID));
-//                } else if (_productLibrary.GetProduct(partID) != null) {
-//                    part = partPrize.getCount() + "x " + GameUtils.getProductLink(partID);
-//                }
-//            }
-//        }
-//        catch (Exception ex){
-//            top = partPrize.getCount() + "x " + "[UNKNOWN: " + topID + "]";
-//        }
-//
-//        leagueElem.setAttribute("topPrize", top);
-//        leagueElem.setAttribute("topCutoff", String.valueOf(topCutoff));
-//        leagueElem.setAttribute("participationPrize", part);
-//        leagueElem.setAttribute("participationGames", String.valueOf(participationGames));
+    private void getLeagueSchedules(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
 
-        for (LeagueSerieInfo serie : series) {
-            Element serieElem = doc.createElement("serie");
-            serieElem.setAttribute("type", serie.getName());
-            serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
-            serieElem.setAttribute("start", String.valueOf(serie.getStart()));
-            serieElem.setAttribute("end", String.valueOf(serie.getEnd()));
-            serieElem.setAttribute("format", serie.getFormat().getName());
-            serieElem.setAttribute("collection", serie.getCollectionType().getFullName());
-            serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
+        var schedules = new ArrayList<Map<String, Object>>();
+        for (var schedule : _leagueScheduleService.getSchedules())
+            schedules.add(describeSchedule(schedule));
 
-            leagueElem.appendChild(serieElem);
+        var result = new LinkedHashMap<String, Object>();
+        result.put("schedules", schedules);
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+    }
+
+    /**
+     * Reads a schedule definition from the form.  Template and events arrive as JSON strings (the admin page edits
+     * them as such), which the service validates.
+     */
+    private DBDefs.LeagueSchedule parseScheduleDefinition(HttpPostRequestDecoder postDecoder) throws Exception {
+        var row = new DBDefs.LeagueSchedule();
+
+        String idStr = getFormParameterSafely(postDecoder, "id");
+        row.id = (idStr == null || idStr.isBlank()) ? 0 : Throw400IfNullOrNonInteger("id", idStr);
+        row.name = getFormParameterSafely(postDecoder, "name");
+        row.league_type = getFormParameterSafely(postDecoder, "leagueType");
+        row.template = getFormParameterSafely(postDecoder, "template");
+        row.events = getFormParameterSafely(postDecoder, "events");
+        row.name_pattern = getFormParameterSafely(postDecoder, "namePattern");
+
+        String nextEventDateStr = getFormParameterSafely(postDecoder, "nextEventDate");
+        Throw400IfStringNull("nextEventDate", nextEventDateStr);
+        try {
+            row.next_event_date = java.time.LocalDate.parse(nextEventDateStr.trim());
+        } catch (DateTimeParseException exp) {
+            throw new HttpProcessingException(400, "Parameter 'nextEventDate' must be a date in yyyy-MM-dd form.");
         }
 
-        doc.appendChild(leagueElem);
+        String nextEventIndexStr = getFormParameterSafely(postDecoder, "nextEventIndex");
+        row.next_event_index = (nextEventIndexStr == null || nextEventIndexStr.isBlank()) ? 0 : Throw400IfNullOrNonInteger("nextEventIndex", nextEventIndexStr);
 
-        responseWriter.writeXmlResponse(doc);
+        String intervalStr = getFormParameterSafely(postDecoder, "intervalMonths");
+        row.interval_months = Throw400IfNullOrNonFloat("intervalMonths", intervalStr);
+
+        String leadDaysStr = getFormParameterSafely(postDecoder, "leadDays");
+        row.lead_days = (leadDaysStr == null || leadDaysStr.isBlank()) ? 7 : Throw400IfNullOrNonInteger("leadDays", leadDaysStr);
+
+        String activeStr = getFormParameterSafely(postDecoder, "active");
+        row.active = activeStr == null || activeStr.isBlank() || activeStr.equalsIgnoreCase("true");
+        return row;
+    }
+
+    /**
+     * Validates a schedule definition and either stores it or returns what it would produce.
+     * @param preview If true nothing is stored; the response carries the upcoming events and a full preview of the
+     *                next league.  If false the schedule is saved and returned.
+     */
+    private void saveLeagueSchedule(HttpRequest request, ResponseWriter responseWriter, boolean preview) throws Exception {
+        validateEventAdmin(request);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        var row = parseScheduleDefinition(postDecoder);
+
+        try {
+            if (preview) {
+                _leagueScheduleService.validateDefinition(row);
+                var schedule = new LeagueSchedule(row);
+                var upcoming = _leagueScheduleService.projectNext(schedule, SCHEDULE_UPCOMING_COUNT);
+
+                var result = new LinkedHashMap<String, Object>();
+                result.put("upcoming", describeProjection(upcoming));
+                var nextParams = LeagueScheduleService.buildEventParams(schedule, schedule.getNextEventIndex(), schedule.getNextEventDate());
+                result.put("nextLeague", buildLeaguePreview(_leagueFactory.prepare(schedule.getType(), nextParams)));
+                responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+                return;
+            }
+
+            var saved = _leagueScheduleService.saveSchedule(row);
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(describeSchedule(saved)));
+        } catch (LeagueDefinitionException exp) {
+            throw new HttpProcessingException(400, exp.getMessage());
+        }
+    }
+
+    private void deleteLeagueSchedule(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        int id = Throw400IfNullOrNonInteger("id", getFormParameterSafely(postDecoder, "id"));
+        if (_leagueScheduleService.getSchedule(id) == null)
+            throw new HttpProcessingException(404, "No league schedule with id " + id);
+
+        _leagueScheduleService.deleteSchedule(id);
+        responseWriter.sendJsonOK();
+    }
+
+    /**
+     * Creates the schedule's next league immediately, ignoring the lead time.
+     */
+    private void runLeagueSchedule(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+
+        var postDecoder = new HttpPostRequestDecoder(request);
+        int id = Throw400IfNullOrNonInteger("id", getFormParameterSafely(postDecoder, "id"));
+        if (_leagueScheduleService.getSchedule(id) == null)
+            throw new HttpProcessingException(404, "No league schedule with id " + id);
+
+        var created = _leagueScheduleService.runNow(id);
+        var schedule = _leagueScheduleService.getSchedule(id);
+        if (created == null)
+            throw new HttpProcessingException(409, schedule.getLastError() == null ? "The league could not be created." : schedule.getLastError());
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("league", buildLeaguePreview(created));
+        result.put("schedule", describeSchedule(schedule));
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
     }
 
     /**
@@ -1282,15 +1410,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         String costStr = getFormParameterSafely(postDecoder, "cost");
         String playoff = getFormParameterSafely(postDecoder, "playoff");
         String tiebreaker = getFormParameterSafely(postDecoder, "tiebreaker");
-        String prizeStructure = getFormParameterSafely(postDecoder, "prizeStructure");
         String minPlayersStr = getFormParameterSafely(postDecoder, "minPlayers");
         String manualKickoffStr = getFormParameterSafely(postDecoder, "manualKickoff");
-
-        //String inviteOnlyStr = getFormParameterSafely(postDecoder, "inviteOnly");
-        //String topPrizeStr = getFormParameterSafely(postDecoder, "topPrize");
-        //String topCutoffStr = getFormParameterSafely(postDecoder, "topCutoff");
-        //String participationPrizeStr = getFormParameterSafely(postDecoder, "participationPrize");
-        //String participationGamesStr = getFormParameterSafely(postDecoder, "participationGames");
+        // optional JSON array of PrizeTier, as the prize tier editor posts it
+        ArrayList<PrizeTier> prizeTiers = parsePrizeTiers(getFormParameterSafely(postDecoder, "prizeTiers"));
 
         Throw400IfStringNull("type", typeStr);
         var type = Tournament.TournamentType.parse(typeStr);
@@ -1316,8 +1439,12 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         int cost = Throw400IfNullOrNonInteger("cost", costStr);
 
         Throw400IfValidationFails("playoff", playoff,Tournament.getPairingMechanism(playoff) != null);
-        //Turns out prizes are busted at the moment and are always Daily.
-        //var prizes = Tournament.getTournamentPrizes(_productLibrary, prizeStructure);
+        // The automatic prize structure is always DAILY; extra prizes are the configurable tiers.
+        try {
+            PrizeService.validateTiers(prizeTiers, _cardLibrary, _productLibrary);
+        } catch (PrizeDefinitionException exp) {
+            throw new HttpProcessingException(400, exp.getMessage());
+        }
         int minPlayers = Throw400IfNullOrNonInteger("minPlayers", minPlayersStr);
         boolean manualKickoff = ParseBoolean("manualKickoff", manualKickoffStr, false);
 
@@ -1407,6 +1534,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         params.playoff = Tournament.PairingType.parse(playoff);
         params.tiebreaker = "owr";
         params.prizes = Tournament.PrizeType.DAILY;
+        params.prizeTiers = prizeTiers;
         params.minimumPlayers = minPlayers;
         params.manualKickoff = manualKickoff;
 
@@ -1434,14 +1562,19 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         if(!preview) {
             _tournamentService.addScheduledTournament(info);
+            // promises become placeholders now, so they can be resolved before the tournament even runs
+            _prizeService.registerPromises(new PrizeService.EventRef(PrizeService.KIND_TOURNAMENT, params.tournamentId,
+                    params.name, null), params.prizeTiers);
             responseWriter.sendJsonOK();
             return;
         }
 
         //We aren't creating the tournament for real, so instead we will return the tournament in JSON format for the
-        // admin panel preview.
-
-        responseWriter.writeJsonResponse(JsonUtils.Serialize(params));
+        // admin panel preview: the parameters as they would be stored, with the prize tiers described the way the
+        // league preview describes them (each tier gains a "description" and every item its kind and name).
+        Map<String, Object> previewMap = com.alibaba.fastjson2.JSON.parseObject(JsonUtils.Serialize(params));
+        previewMap.put("prizeTiers", describePrizeTiers(params.prizeTiers));
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(previewMap));
     }
 
     private void getMotd(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, IOException {

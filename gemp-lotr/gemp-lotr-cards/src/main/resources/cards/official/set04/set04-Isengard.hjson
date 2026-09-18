@@ -1903,11 +1903,12 @@
 			cost: {
 				type: exert
 				select: choose(urukHai,notAssignedToSkirmish)
+				memorize: exertedUrukHai
 			},
 			effect: [
 				{
 					type: modifyStrength
-					select: choose(urukHai)
+					select: choose(urukHai,not(memory(exertedUrukHai)))
 					amount: 3
 				}
 			]

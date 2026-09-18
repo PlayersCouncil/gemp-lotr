@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set08;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -21,7 +22,7 @@ public class Card_08_003_Tests
 				new HashMap<>()
 				{{
 					put("card", "8_3");
-					// put other cards in here as needed for the test case
+					put("gimli", "8_5");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +59,22 @@ public class Card_08_003_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
+	@Test
 	public void BloodRunsChillTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+	scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(2, scn.GetTwilight());
+		int twilightBeforePlay = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.FreepsPlayCard(card);
+		assertEquals(twilightBeforePlay + 2, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(gimli));
 	}
 }

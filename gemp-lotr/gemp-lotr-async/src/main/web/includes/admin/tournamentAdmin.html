@@ -1,4 +1,10 @@
+<link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/leagueAdmin.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/prizeTierEditor.css">
 <script type="text/javascript">
+// The prize tier editor of the scheduled-tournament form (created on load; used by processScheduledTournament)
+var tourneyPrizeEditor = null;
+
 function gatherData(formElem) {
 	var data = {};
 
@@ -36,6 +42,73 @@ $(document).ready(
 					title:"Preview window",
 					closeText: ''
 				});
+
+		var esc = function (text) {
+			return $("<div></div>").text(text == null ? "" : String(text)).html();
+		};
+
+		// Prize tiers of the scheduled tournament (no campaign: tournaments count games in the event only)
+		var prizeEditor = new PrizeTierEditor($("#sch-tourney-prize-tiers"), {comm: hall.comm});
+		tourneyPrizeEditor = prizeEditor;
+
+		$(".info-toggle", "#sch-tourney-section").on("click", function () {
+			$("#" + $(this).attr("data-for")).toggle();
+		});
+
+		// item / tier lines as the preview shows them; same shapes as the league preview (kind: card|pack|promise|unknown)
+		var prizeItemHtml = function (item) {
+			if (item.kind == "promise")
+				return item.count + "x <span class='preview-promise'>TBA: " + esc(item.name != null ? item.name : item.promise) + "</span>";
+			if (item.kind == "unknown")
+				return item.count + "x [UNKNOWN: " + esc(item.blueprintId) + "]";
+			if (item.kind == "pack")
+				return item.count + "x " + esc(item.name != null ? item.name : item.blueprintId) + " (pack)";
+			var label = (item.name != null) ? item.name : item.blueprintId;
+			return item.count + "x <div class='cardHint' value='" + esc(item.blueprintId) + "'>" + esc(label) + "</div>";
+		};
+
+		var prizeTierWhoHtml = function (tier) {
+			if (tier.kind == "PARTICIPATION") {
+				return "Anyone who plays at least <b>" + tier.games + "</b> game" + (tier.games == 1 ? "" : "s");
+			}
+			if (tier.from == tier.to)
+				return "Place <b>" + tier.from + "</b>";
+			return "Places <b>" + tier.from + "</b> to <b>" + tier.to + "</b>";
+		};
+
+		// json is the preview object returned by /admin/processScheduledTournament: the tournament parameters,
+		// with prizeTiers described (description + item kind/name) the way the league preview describes them
+		var renderTournamentPreview = function (container, json) {
+			if (typeof json === "string")
+				json = JSON.parse(json);
+
+			container.append("<div class='leagueName'>" + esc(json.name) + "</div>");
+			container.append("<div><b>Tournament ID:</b> " + esc(json.tournamentId) + "</div>");
+			container.append("<div><b>Type:</b> " + esc(json.type) + " - <b>Format:</b> " + esc(json.format) + "</div>");
+			container.append("<div><b>Start (UTC):</b> " + esc(json.startTime) + "</div>");
+			container.append("<div class='leagueCost'><b>Cost:</b> " + formatPrice(json.cost) + "</div>");
+			container.append("<div><b>Playoff:</b> " + esc(json.playoff) + ", at least " + esc(json.minimumPlayers) + " players"
+				+ (json.manualKickoff ? ", manual kickoff" : "") + (json.wc ? ", World Championship" : "") + "</div>");
+
+			var tiers = json.prizeTiers || [];
+			container.append("<div class='serieName'>Prizes</div>");
+			container.append("<div>Automatic prizes: " + esc(json.prizes) + "</div>");
+			if (tiers.length == 0) {
+				container.append("<div class='preview-prize-tier'>No extra prize tiers.</div>");
+			}
+			for (var t = 0; t < tiers.length; t++) {
+				var tier = tiers[t];
+				var items = (tier.items || []).map(prizeItemHtml).join(", ");
+				var line = $("<div class='preview-prize-tier'></div>");
+				line.append(prizeTierWhoHtml(tier) + (tier.label ? " (" + esc(tier.label) + ")" : "") + " receives " + items);
+				container.append(line);
+			}
+
+			var rest = $.extend({}, json);
+			delete rest.prizeTiers;
+			container.append($("<details class='tourney-preview-json'><summary>All parameters</summary></details>")
+				.append($("<pre></pre>").text(JSON.stringify(rest, null, 2))));
+		};
 
 		var displayPreview = function (xml) {
 			var root = xml.documentElement;
@@ -116,8 +189,8 @@ $(document).ready(
 
 				processScheduledTournament(true, resultdiv, function(json) {
 						previewDialog.html("");
-						//TODO: make this actually look pretty
-						previewDialog.html("<pre>" + JSON.stringify(json, null, 2) + "</pre>");
+						previewDialog.dialog("option", "title", "Tournament preview");
+						renderTournamentPreview(previewDialog, json);
 						
 						resultdiv.html("OK");
 						previewDialog.dialog("open");
@@ -329,6 +402,12 @@ function sortOptionsByName(selector) {
 }
 
 function processScheduledTournament(preview, resultdiv, callback) {
+	var prizeEditor = tourneyPrizeEditor;
+	var prizeProblem = prizeEditor.validate();
+	if (prizeProblem != null) {
+		resultdiv.text(prizeProblem);
+		return;
+	}
 	
 	hall.comm.processScheduledTournament(                          
 		preview, 
@@ -359,7 +438,7 @@ function processScheduledTournament(preview, resultdiv, callback) {
 		$("#sch-tourney-cost").val(),
 		$("#sch-tourney-playoff").val(),
 		"", //tiebreaker method
-		"", //prize structure
+		JSON.stringify(prizeEditor.getTiers()), //prizeTiers: JSON array of PrizeTier
 		$("#sch-tourney-min-players").val(),
 		$("#sch-tourney-kickoff").prop('checked'),
 		
@@ -636,44 +715,16 @@ function tourneyErrorMap(outputControl, callback=null) {
 		</div>	
 		
 		
-		<div id="prize-info" style="display:none">
-			Prizes are defined in the following format:
-			
-			<pre>2x 9_1*</pre>
-			
-			<ul>
-				<li>
-					"2x" indicates 2 awarded copies (up to 4x, please)
-				</li>
-				<li>
-					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
-				</li>
-				<li>
-					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
-				</li>
-			</ul> 
-		</div>
-		
-		<div style="display:none">
-		<div class="flex-horiz">
-			<div class="label-column">Top Prizes:</div>
-			<input type="text" id="sch-tourney-top-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz" style="display:none">
-			<div class="label-column">Top Prize Cutoff:</div>
-			<input type="number" min="1" id="sch-tourney-top-pos" value="10" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz" style="display:none">
-			<div class="label-column">Participation Prizes:</div>
-			<input type="text" id="sch-tourney-part-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz" style="display:none">
-			<div class="label-column">Participation Games:</div>
-			<input type="number" min="1" id="sch-tourney-part-games" value="3" class="flex-fill">
-		</div>
+		<div class="flex-vert">
+			<div class="section-title">Prizes <span class="info-toggle" data-for="help-tourney-prizes">i</span></div>
+			<div id="help-tourney-prizes" class="info-text" hidden>
+				Extra prizes handed out when the tournament finishes, on top of the automatic daily prizes. Each tier says
+				who qualifies (a range of final places, ties included, or a minimum number of games played in the tournament)
+				and what they get. An item is a card or pack id (<code>9_1</code> is set 9 card 1; add <code>*</code> for
+				foil or <code>T</code> for tengwar) or, when the card does not exist yet, "to be announced" with a description:
+				players receive a placeholder card that is swapped for the real one once it is resolved on the Prizes tab.
+			</div>
+			<div id="sch-tourney-prize-tiers"></div>
 		</div>
 		
 		<button id="preview-sch-tourney-button">

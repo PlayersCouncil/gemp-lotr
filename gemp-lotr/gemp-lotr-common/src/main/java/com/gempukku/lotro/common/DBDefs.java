@@ -155,6 +155,23 @@ public class DBDefs {
         public String winner; //45
     }
 
+    public static class LeagueSchedule {
+        public int id;
+        public String name; //45
+        public String league_type; //45
+        public String template; //LeagueParams JSON
+        public String events; //JSON array of {name, params}
+        public String name_pattern; //255
+        public LocalDate next_event_date;
+        public int next_event_index;
+        public double interval_months;
+        public int lead_days;
+        public boolean active;
+        public Integer last_created_league_id;
+        public LocalDateTime last_run;
+        public String last_error; //1000
+    }
+
     public static class League {
         public int id;
         public String name;
@@ -165,6 +182,7 @@ public class DBDefs {
         public LocalDate end_date;
         public int status;
         public int cost;
+        public Integer schedule_id;   // the league_schedule row that created this league, or null for a hand-made one
 
         public ZonedDateTime GetUTCStart() {
             return DateUtils.ParseDate(start_date);
@@ -172,6 +190,56 @@ public class DBDefs {
         public ZonedDateTime GetUTCEnd() {
             return DateUtils.ParseDate(end_date);
         }
+    }
+
+    /**
+     * A holder of one product in a collection: one row of collection_entries joined to its collection and player.
+     */
+    public static class CollectionHolder {
+        public int player_id;
+        public String player_name;
+        public String collection_type;
+        public int quantity;
+    }
+
+    /**
+     * A promised prize whose card does not exist yet.  Handed out as blueprint "404_&lt;id&gt;" until an admin
+     * resolves it to a real card.
+     */
+    public static class PrizePlaceholder {
+        public int id;
+        public String label; //255
+        public int count = 1;
+        public String event_kind; //20: league | tournament | campaign | manual
+        public String event_id; //45
+        public String event_name; //255
+        public Integer tier_index;
+        public LocalDateTime created;
+        public String created_by; //45
+        public String resolved_blueprint; //45
+        public LocalDateTime resolved_on;
+        public String resolved_by; //45
+        public String notes; //1000
+
+        public boolean isResolved() {
+            return resolved_blueprint != null;
+        }
+    }
+
+    /**
+     * Log of one prize tier awarded to one player.  Also the dedup record: the same (event, tier, player) is never
+     * awarded twice.
+     */
+    public static class PrizeAward {
+        public int id;
+        public String event_kind; //20
+        public String event_id; //45
+        public String event_name; //255
+        public Integer tier_index;
+        public String tier_label; //255
+        public String player; //45
+        public String items; //text: one "<count>x <blueprint>" per line
+        public LocalDateTime awarded_on;
     }
 
     public static class Transfer {

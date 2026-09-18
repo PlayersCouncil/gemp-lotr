@@ -121,6 +121,11 @@ public class CachedCollectionDAO implements CollectionDAO, Cached {
         recacheCollection(playerId, type);
     }
 
+    @Override
+    public List<DBDefs.CollectionHolder> findHolders(String product) {
+        return _delegate.findHolders(product);
+    }
+
     private void recacheCollection(int playerId, String type) throws SQLException, IOException {
         String id = constructCacheKey(playerId, type);
         _playerCollections.put(id, _delegate.getPlayerCollection(playerId, type));

@@ -51,5 +51,7 @@ public interface ITournamentService {
 
     List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
 
+    List<DBDefs.ScheduledTournament> getScheduledTournamentsBetween(ZonedDateTime from, ZonedDateTime to);
+
     void updateScheduledTournamentStarted(String scheduledTournamentId);
 }

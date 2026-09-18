@@ -238,6 +238,29 @@ public class DbTournamentDAO implements TournamentDAO {
     }
 
     @Override
+    public List<DBDefs.ScheduledTournament> getScheduledTournamentsBetween(ZonedDateTime from, ZonedDateTime to) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                    SELECT id, tournament_id, name, format, start_date, type, parameters, started
+                    FROM scheduled_tournament
+                    WHERE start_date >= :from
+                        AND start_date <= :to
+                    ORDER BY start_date;
+                        """;
+                return conn.createQuery(sql)
+                        .addParameter("from", from)
+                        .addParameter("to", to)
+                        .executeAndFetch(DBDefs.ScheduledTournament.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve scheduled tournaments between " + from + " and " + to, ex);
+        }
+    }
+
+    @Override
     public DBDefs.ScheduledTournament getScheduledTournament(String tournamentId) {
         try {
             var db = _dbAccess.openDB();

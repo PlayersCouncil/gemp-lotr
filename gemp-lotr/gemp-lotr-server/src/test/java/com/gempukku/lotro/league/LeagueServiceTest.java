@@ -8,7 +8,9 @@ import com.gempukku.lotro.db.LeagueMatchDAO;
 import com.gempukku.lotro.db.LeagueParticipationDAO;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
+import com.gempukku.lotro.prizes.PrizeService;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.ZonedDateTime;
@@ -121,6 +123,46 @@ public class LeagueServiceTest extends AbstractAtTest {
         assertFalse(leagueService.canPlayRankedGame(league, leagueSerie, "player1"));
         assertFalse(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player2"));
         assertFalse(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player3"));
+    }
+
+    @Test
+    public void prizeTiersAreAwardedWhenALeagueEnds() throws Exception {
+        LeagueDAO leagueDao = Mockito.mock(LeagueDAO.class);
+
+        // a league that ended long ago and is still at status 0, and one that has already been closed
+        League ended = new League("Ended league", 0, 123, League.LeagueType.CONSTRUCTED,
+                "20120502,default,0.7,1,1,lotr_block,7,2", 0);
+        League closed = new League("Closed league", 0, 124, League.LeagueType.CONSTRUCTED,
+                "20120502,default,0.7,1,1,lotr_block,7,2", 1);
+        Mockito.when(leagueDao.loadActiveLeagues(Mockito.any(ZonedDateTime.class))).thenReturn(List.of(ended, closed));
+
+        LeagueMatchDAO leagueMatchDAO = Mockito.mock(LeagueMatchDAO.class);
+        Mockito.when(leagueMatchDAO.getLeagueMatches(Mockito.anyString())).thenReturn(new HashSet<>());
+        LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
+        Mockito.when(leagueParticipationDAO.getUsersParticipating("123")).thenReturn(Set.of("player1", "player2"));
+        CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
+        PrizeService prizeService = Mockito.mock(PrizeService.class);
+
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager,
+                null, _cardLibrary, _formatLibrary, _productLibrary, null, prizeService);
+        leagueService.getActiveLeagues();
+
+        Mockito.verify(leagueDao).setStatus(ended, 1);
+        @SuppressWarnings("unchecked")
+        ArgumentCaptor<List<PlayerStanding>> standings = ArgumentCaptor.forClass(List.class);
+        Mockito.verify(prizeService).awardLeagueTiers(Mockito.same(ended), standings.capture());
+        assertEquals(2, standings.getValue().size());
+        Mockito.verifyNoMoreInteractions(prizeService);
+
+        // loading the leagues again on the same day does not re-process them
+        leagueService.getActiveLeagues();
+        Mockito.verifyNoMoreInteractions(prizeService);
+
+        // and a service without a prize service (the old constructor) still closes leagues
+        LeagueService plain = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager,
+                null, _cardLibrary, _formatLibrary, _productLibrary, null);
+        plain.getActiveLeagues();
+        Mockito.verify(leagueDao, Mockito.times(2)).setStatus(ended, 1);
     }
 
     @Test

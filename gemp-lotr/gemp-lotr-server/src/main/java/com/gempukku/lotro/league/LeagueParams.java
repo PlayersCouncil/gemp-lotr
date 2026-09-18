@@ -1,6 +1,7 @@
 package com.gempukku.lotro.league;
 
 import com.gempukku.lotro.common.DateUtils;
+import com.gempukku.lotro.prizes.PrizeTier;
 import com.gempukku.util.JsonUtils;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,15 @@ public class LeagueParams {
     public int maxRepeatMatches = 1;
     public String description;
     public ArrayList<SerieData> series = new ArrayList<>();
-    public PrizeData extraPrizes;
+    /**
+     * Tags leagues that belong together ("Yuletide 2026") so that campaign-scoped participation prizes can count
+     * games across all of them.  Null for a stand-alone league.
+     */
+    public String campaign;
+    /**
+     * Prize tiers awarded when the league ends, in addition to the automatic {@link FixedLeaguePrizes}.
+     */
+    public ArrayList<PrizeTier> prizeTiers = new ArrayList<>();
 
     // RTMD-specific fields (null/ignored for non-RTMD leagues)
     public ArrayList<String> racePath;           // Ordered list of modifier blueprint IDs
@@ -30,10 +39,6 @@ public class LeagueParams {
     public int raceAdvanceFactor = 1;      // How many wins or points to advance
 
     public record SerieData(String format, int duration, int matches) {
-    }
-
-    public record PrizeData(String topPrize, int topCutoff, String participationPrize, int participationGames) {
-
     }
 
     public ZonedDateTime GetUTCStart() {

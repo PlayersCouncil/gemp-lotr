@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.ActionContext;
+import com.gempukku.lotro.cards.build.FilterableSource;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
@@ -35,8 +36,25 @@ public class Transfer implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCard(select, memorizeTransferred, "you", "Choose card to transfer", environment));
+        final boolean whereIsFilter = where.startsWith("choose(") || where.startsWith("all(");
+        if (checkTarget && whereIsFilter) {
+            // Only offer cards that have at least one eligible bearer to go to; a card with no bearer definition at
+            // all (see RuleUtils.getFullValidTargetFilter) is never a legal choice (#1025).
+            final FilterableSource whereSource = environment.getFilterFactory().generateFilter(
+                    where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
+            result.addEffectAppender(
+                    CardResolver.resolveCard(select,
+                            actionContext -> (Filter) (game, candidate) -> {
+                                final Filter eligibleBearer = RuleUtils.getFullValidTargetFilter(candidate.getOwner(), game, candidate);
+                                return Filters.countActive(game, whereSource.getFilterable(actionContext), eligibleBearer,
+                                        Filters.not(Filters.hasAttached(candidate)),
+                                        (Filter) (g, bearer) -> g.getModifiersQuerying().canHaveTransferredOn(g, candidate, bearer)) > 0;
+                            },
+                            memorizeTransferred, "you", "Choose card to transfer", environment));
+        } else {
+            result.addEffectAppender(
+                    CardResolver.resolveCard(select, memorizeTransferred, "you", "Choose card to transfer", environment));
+        }
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
                         SpotOverride.NONE,

@@ -259,20 +259,29 @@
 					type: discard
 					select: self
 				}
-				effect: {
-					type: modifyStrength
-					select: choose(dwarf)
-					memorize: chosenDwarf
-					amount: {
-						type: Conditional
-						requires: {
-							type: memoryMatches
-							filter: minResistance(4)
+				effect: [
+					# {
+					# 	type: ChooseActiveCards
+					# 	select: choose(dwarf)
+					# 	memorize: chosenDwarf
+					# 	text: Choose a Dwarf to pump
+					# }
+					{
+						type: modifyStrength
+						select: choose(dwarf)
+						memorize: chosenDwarf
+						amount: {
+							type: Conditional
+							requires: {
+								type: memoryMatches
+								memory: chosenDwarf
+								filter: minResistance(4)
+							}
+							true: 4
+							false: 3
 						}
-						true: 4
-						false: 3
 					}
-				}
+				]
 			}
 		]
 		gametext: <b>Toil 2</b>. <helper>(For each [dwarven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Skirmish:</b> Discard this condition to make a Dwarf strength +3 (or +4 if he has resistance 4 or more).

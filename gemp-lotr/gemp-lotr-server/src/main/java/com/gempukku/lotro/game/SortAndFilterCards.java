@@ -55,6 +55,16 @@ public class SortAndFilterCards {
         var canStartWithRing = getBoolean(params.get("canstartwithring"));
         var siteOverride = Boolean.TRUE.equals(getBoolean(params.get("siteoverride")));
 
+        var blueprints = params.getOrDefault("blueprints", new ArrayList<>());
+        var okNames = new ArrayList<String>();
+        for (String blueprintId : blueprints) {
+            try {
+                okNames.add(cardLibrary.getLotroCardBlueprint(blueprintId).getFullName());
+            } catch (CardNotFoundException ignored) {
+
+            }
+        }
+
         List<T> result = new ArrayList<>();
         var cardBPCache = new HashMap<String, LotroCardBlueprint>();
         var setDefs = cardLibrary.getSetDefinitions();
@@ -66,7 +76,7 @@ public class SortAndFilterCards {
             String strippedId = BlueprintUtils.stripModifiers(blueprintId);
 
             if (isPack(blueprintId)) {
-                if (product == null || product.equals("pack")) {
+                if (product == null || product.equalsIgnoreCase("pack") || product.equalsIgnoreCase("special") || product.equalsIgnoreCase("specialfordeck")) {
                     result.add(item);
                 }
                 continue;
@@ -90,13 +100,17 @@ public class SortAndFilterCards {
             var card = cardBPCache.get(blueprintId);
             boolean valid = true;
 
-            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            // Future-prize placeholders (set 404) belong to no format, block or set, but a player must always be
+            // able to see the ones they hold, so those three filters do not apply to them (everything else does).
+            boolean placeholder = LotroCardBlueprintLibrary.isPlaceholderId(strippedId);
+
+            if(!placeholder && !formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
-            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            if(!placeholder && !blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
-            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            if(!placeholder && !sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary, siteOverride))
                 continue;
 
             if(!isFlagAccepted(canStartWithRing, card.canStartWithRing()))
@@ -118,6 +132,20 @@ public class SortAndFilterCards {
                     }
                     case "pack" -> {
                         continue;
+                    }
+                    case "special" -> {
+                        if (cardLibrary.getBaseCards().containsKey(blueprintId))
+                            continue;
+                        if (cardLibrary.getBaseCards().containsKey(strippedId) && !blueprintId.contains("T"))
+                            continue;
+                    }
+                    case "specialfordeck" -> {
+                        if (!okNames.contains(card.getFullName()))
+                            continue;
+                        if (cardLibrary.getBaseCards().containsKey(blueprintId))
+                            continue;
+                        if (cardLibrary.getBaseCards().containsKey(strippedId) && !blueprintId.contains("T"))
+                            continue;
                     }
                 }
             }

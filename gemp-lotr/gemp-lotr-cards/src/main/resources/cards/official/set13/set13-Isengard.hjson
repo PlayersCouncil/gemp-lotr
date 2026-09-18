@@ -26,36 +26,48 @@
 					filter: self,zone(support)
 				}
 				effect: [
-					# Decipher ruling that clears any cards which managed to get 
-					# attached while the game text was disabled.
 					{
-						type: Discard
-						select: all(AttachedTo(self))
-					}
-					{
-						type: turnIntoMinion
-						select: self
-						strength: 11
-						vitality: 1
-						keywords: [
-							fierce
-							damage
-						]
-						race: Wizard
-						until: regroup
-					}
-					{
-						type: disableWounds
-						select: self
-						until: regroup
-					}
-					{
-						type: addModifier
-						modifier: {
-							type: cantBear
-							filter: self
+						# The requirement above is only evaluated when the trigger is collected. If several Wizards win
+						# the same skirmish, every copy of this trigger is collected while this is still in the support
+						# area, so re-check at execution time to avoid stacking the transformation (#1062).
+						type: If
+						check: {
+							type: canSpot
+							filter: self,zone(support)
 						}
-						until: regroup
+						true: [
+							# Decipher ruling that clears any cards which managed to get 
+							# attached while the game text was disabled.
+							{
+								type: Discard
+								select: all(AttachedTo(self))
+							}
+							{
+								type: turnIntoMinion
+								select: self
+								strength: 11
+								vitality: 1
+								keywords: [
+									fierce
+									damage
+								]
+								race: Wizard
+								until: regroup
+							}
+							{
+								type: disableWounds
+								select: self
+								until: regroup
+							}
+							{
+								type: addModifier
+								modifier: {
+									type: cantBear
+									filter: self
+								}
+								until: regroup
+							}
+						]
 					}
 				]
 			}
@@ -101,33 +113,45 @@
 					filter: self,zone(support)
 				}
 				effect: [
-					# Decipher ruling that clears any cards which managed to get 
-					# attached while the game text was disabled.
 					{
-						type: Discard
-						select: all(AttachedTo(self))
-					}
-					{
-						type: turnIntoMinion
-						select: self
-						strength: 10
-						vitality: 1
-						keywords: fierce
-						race: Wizard
-						until: regroup
-					}
-					{
-						type: disableWounds
-						select: self
-						until: regroup
-					}
-					{
-						type: addModifier
-						modifier: {
-							type: cantBear
-							filter: self
+						# The requirement above is only evaluated when the trigger is collected. If several Wizards win
+						# the same skirmish, every copy of this trigger is collected while this is still in the support
+						# area, so re-check at execution time to avoid stacking the transformation (#1062).
+						type: If
+						check: {
+							type: canSpot
+							filter: self,zone(support)
 						}
-						until: regroup
+						true: [
+							# Decipher ruling that clears any cards which managed to get 
+							# attached while the game text was disabled.
+							{
+								type: Discard
+								select: all(AttachedTo(self))
+							}
+							{
+								type: turnIntoMinion
+								select: self
+								strength: 10
+								vitality: 1
+								keywords: fierce
+								race: Wizard
+								until: regroup
+							}
+							{
+								type: disableWounds
+								select: self
+								until: regroup
+							}
+							{
+								type: addModifier
+								modifier: {
+									type: cantBear
+									filter: self
+								}
+								until: regroup
+							}
+						]
 					}
 				]
 			}
@@ -169,33 +193,45 @@
 					filter: self,zone(support)
 				}
 				effect: [
-					# Decipher ruling that clears any cards which managed to get 
-					# attached while the game text was disabled.
 					{
-						type: Discard
-						select: all(AttachedTo(self))
-					}
-					{
-						type: turnIntoMinion
-						select: self
-						strength: 12
-						vitality: 1
-						keywords: fierce
-						race: Wizard
-						until: regroup
-					}
-					{
-						type: disableWounds
-						select: self
-						until: regroup
-					}
-					{
-						type: addModifier
-						modifier: {
-							type: cantBear
-							filter: self
+						# The requirement above is only evaluated when the trigger is collected. If several Wizards win
+						# the same skirmish, every copy of this trigger is collected while this is still in the support
+						# area, so re-check at execution time to avoid stacking the transformation (#1062).
+						type: If
+						check: {
+							type: canSpot
+							filter: self,zone(support)
 						}
-						until: regroup
+						true: [
+							# Decipher ruling that clears any cards which managed to get 
+							# attached while the game text was disabled.
+							{
+								type: Discard
+								select: all(AttachedTo(self))
+							}
+							{
+								type: turnIntoMinion
+								select: self
+								strength: 12
+								vitality: 1
+								keywords: fierce
+								race: Wizard
+								until: regroup
+							}
+							{
+								type: disableWounds
+								select: self
+								until: regroup
+							}
+							{
+								type: addModifier
+								modifier: {
+									type: cantBear
+									filter: self
+								}
+								until: regroup
+							}
+						]
 					}
 				]
 			}

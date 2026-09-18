@@ -141,7 +141,13 @@ public class RuleUtils {
 
     public static Filter getFullValidTargetFilter(String playerId, final LotroGame game, final PhysicalCard self) {
         final LotroCardBlueprint blueprint = self.getBlueprint();
-        return Filters.and(blueprint.getValidTargetFilter(playerId, game, self),
+        final Filterable validTargetFilter = blueprint.getValidTargetFilter(playerId, game, self);
+        // A card with no bearer definition (e.g. a support-area condition that only ever attaches itself through its
+        // own conditional transfer, like Lost in the Woods or Black Breath) has no "eligible bearer" for other effects
+        // to transfer it to. Previously the null filter crashed the game (#1025).
+        if (validTargetFilter == null)
+            return Filters.none;
+        return Filters.and(validTargetFilter,
                 new Filter() {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {

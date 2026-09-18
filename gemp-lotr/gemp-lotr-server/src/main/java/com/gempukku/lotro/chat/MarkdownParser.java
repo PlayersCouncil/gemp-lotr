@@ -24,6 +24,12 @@ public class MarkdownParser {
 
     private static Pattern QuoteExtender = Pattern.compile("^([ \t]*>[ \t]*.+)(?=\n[ \t]*[^>])", Pattern.MULTILINE);
 
+    // League descriptions were raw HTML before they became markdown; anything containing a tag from this list is
+    // treated as such and passed through unchanged (markdown would escape the tags and show them literally).
+    private static final Pattern LegacyHtml = Pattern.compile(
+            "</?(a|b|i|u|p|br|hr|ul|ol|li|div|span|h[1-6]|strong|em|img|table|tr|td|th|pre|code|blockquote)\\b[^>]*>",
+            Pattern.CASE_INSENSITIVE);
+
     public MarkdownParser() {
         List<Extension> extensions = Arrays.asList(StrikethroughExtension.create(), AutolinkExtension.create());
         _markdownParser = Parser.builder()
@@ -44,6 +50,19 @@ public class MarkdownParser {
                 .sanitizeUrls(true)
                 .softbreak("<br />")
                 .build();
+    }
+
+    /**
+     * Renders an event description (league, and later tournament) for players: markdown with links permitted, since
+     * only event admins write these.  Legacy descriptions that already contain HTML are returned as they are.
+     * @return HTML; an empty string for a null or blank description
+     */
+    public String renderDescription(String description) {
+        if (description == null || description.isBlank())
+            return "";
+        if (LegacyHtml.matcher(description).find())
+            return description;
+        return renderMarkdown(description, false);
     }
 
     public String renderMarkdown(String markdown, boolean shredLinks) {

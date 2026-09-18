@@ -748,7 +748,7 @@
 					amount: 2
 					requires: {
 						type: canSpot
-						filter: weather,attachedTo(site)
+						filter: weather,attachedTo(currentSite)
 					}
 				}
 			}

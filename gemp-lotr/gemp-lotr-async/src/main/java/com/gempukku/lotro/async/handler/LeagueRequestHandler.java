@@ -2,6 +2,7 @@ package com.gempukku.lotro.async.handler;
 
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.League;
@@ -38,6 +39,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
     private final LotroFormatLibrary _formatLibrary;
     private final LotroCardBlueprintLibrary _library;
     private final ProductLibrary _productLibrary;
+    private final MarkdownParser _markdownParser;
 
     private static final Logger _log = LogManager.getLogger(LeagueRequestHandler.class);
 
@@ -49,6 +51,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         _leagueService = extractObject(context, LeagueService.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _productLibrary = extractObject(context, ProductLibrary.class);
+        _markdownParser = extractObject(context, MarkdownParser.class);
     }
 
     @Override
@@ -115,7 +118,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         leagueElem.setAttribute("draftable", String.valueOf(inLeague && leagueData.isSoloDraftLeague() && DateUtils.IsAfterStart(currentDate, start)));
         leagueElem.setAttribute("code", league.getCodeStr());
         leagueElem.setAttribute("name", league.getName());
-        leagueElem.setAttribute("desc", league.getDescription());
+        leagueElem.setAttribute("desc", _markdownParser.renderDescription(league.getDescription()));
         leagueElem.setAttribute("inviteOnly", String.valueOf(league.inviteOnly()));
         leagueElem.setAttribute("cost", String.valueOf(league.getCost()));
         leagueElem.setAttribute("start", DateUtils.FormatDate(start));
@@ -240,7 +243,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             leagueElem.setAttribute("draftable", String.valueOf(inLeague && leagueData.isSoloDraftLeague() && DateUtils.IsAfterStart(currentDate, start)));
             leagueElem.setAttribute("code", league.getCodeStr());
             leagueElem.setAttribute("name", league.getName());
-            leagueElem.setAttribute("desc", league.getDescription());
+            leagueElem.setAttribute("desc", _markdownParser.renderDescription(league.getDescription()));
             leagueElem.setAttribute("inviteOnly", String.valueOf(league.inviteOnly()));
             leagueElem.setAttribute("start", DateUtils.FormatDate(series.getFirst().getStart()));
             leagueElem.setAttribute("end", DateUtils.FormatDate(series.getLast().getEnd()));

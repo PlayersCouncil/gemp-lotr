@@ -48,8 +48,8 @@ public class Card_01_361_ErrataTests
 		 * Shadow Number: 9
 		 * Type: Site
 		 * Site Number: 9
-		 * Game Text: The twilight cost of each [isengard] minion is -2. Each time you play
-		 * an [isengard] card, the Free Peoples player must exert a companion.
+		 * Game Text: While you can spot more companions than minions, [isengard] minions are twilight cost
+		 * -1 for each [isengard] minion you can spot.
 		*/
 
 		var scn = GetScenario();

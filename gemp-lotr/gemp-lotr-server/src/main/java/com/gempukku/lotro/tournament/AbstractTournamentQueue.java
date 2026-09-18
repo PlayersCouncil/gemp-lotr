@@ -190,6 +190,10 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.maximumPlayers = _tournamentInfo._params.maximumPlayers;
         tbr.requiresDeck = _tournamentInfo._params.requiresDeck;
         tbr.wc = _tournamentInfo._params.wc;
+        // the configurable prize tiers travel with the started tournament so they are stored in its own parameters
+        tbr.prizeTiers = new java.util.ArrayList<>();
+        if (_tournamentInfo._params.prizeTiers != null)
+            tbr.prizeTiers.addAll(_tournamentInfo._params.prizeTiers);
 
         return tbr;
     }

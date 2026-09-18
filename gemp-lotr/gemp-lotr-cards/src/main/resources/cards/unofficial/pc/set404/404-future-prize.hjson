@@ -1,0 +1,31 @@
+{
+	// Set 404 "Future Prizes": the placeholder card handed out for a promised prize whose real card does not exist
+	// yet.  There is exactly one definition; every 404_<n> id resolves to it through
+	// LotroCardBlueprintLibrary.getLotroCardBlueprint, which reports the promise's label as the title.
+	// The set is not playable, not merchantable and DefaultLotroFormat rejects it in every deck.
+	404_0: {
+		cardInfo: {
+			image: promos/future_prize.jpg
+			collInfo: 404_0
+			rarity: X
+		}
+		title: Future Prize
+		type: MetaSite
+		effects: [
+			{
+				type: DisplayableInformation
+				text: This card stands in for a promised prize.  Once the real card exists it will be swapped for it automatically.
+			}
+		]
+		gametext: "This card stands in for a promised prize.  Once the real card exists it will be swapped for it automatically."
+		lore: ""
+		promotext: ""
+		helptext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

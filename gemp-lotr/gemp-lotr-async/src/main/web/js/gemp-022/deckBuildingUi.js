@@ -100,7 +100,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 				},
 				function () {
 					that.finishCollection();
-				});
+				},
+                function () {
+                    return that.getCardsInDeck();
+                });
 		
 		//this.cardFilter.setFilterOverride(this.defaultSelection);
 
@@ -1124,6 +1127,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 	},
 
 	addCardToContainer:function (blueprintId, zone, container, tokens) {
+		// a future-prize placeholder that somehow ended up in a saved deck is dropped on load rather than shown
+		if (Card.isPlaceholder(blueprintId))
+			return $();
 		var card = new Card(blueprintId, null, null, zone, this.lastCardId++, "player");
 		var cardDiv = Card.CreateCardDiv(card.imageUrl, card.testingText, null, card.isFoil(), tokens, card.isPack(), card.hasErrata(), card.incomplete);
 		cardDiv.data("card", card);
@@ -1153,6 +1159,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	addCardToDeckDontLayout:function (blueprintId, side) {
 		var that = this;
+		if (Card.isPlaceholder(blueprintId))
+			return;
 		if (side == "FREE_PEOPLE") {
 			this.addCardToDeck(blueprintId, side);
 		} else if (side == "SHADOW") {
@@ -1165,6 +1173,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	addCardToDeckAndLayout:function (blueprintId, side) {
 		var that = this;
+		if (Card.isPlaceholder(blueprintId))
+			return;
 		if (side == "FREE_PEOPLE") {
 			this.addCardToDeck(blueprintId, side);
 			that.fpDeckGroup.layoutCards();
@@ -1202,6 +1212,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	addCardToDeck:function (blueprintId, side) {
 		var that = this;
+		if (Card.isPlaceholder(blueprintId))
+			return;
 		var added = false;
 		$(".card.cardInDeck", this.drawDeckDiv).each(
 				function () {
@@ -1342,29 +1354,22 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.deckModified(false);
 	},
 
+    getCardsInDeck:function () {
+        var cards = [];
+        $(".cardInDeck").each(
+            function () {
+                var cardData = $(this).data("card").bareBlueprint;
+                cards.push(cardData);
+            });
+        return cards;
+    },
+
 	setupDeck:function (xml, deckName) {
 		var root = xml.documentElement;
 		if (root.tagName == "deck") {
 			this.clearDeck();
 			this.deckName = deckName;
 			$("#editingDeck").text(deckName);
-			
-			var targetFormat = root.getElementsByTagName("targetFormat");
-			if (targetFormat.length > 0)
-			{
-				var formatCode = targetFormat[0].getAttribute("formatCode");
-				var leagueCode = targetFormat[0].getAttribute("leagueCode");
-
-				// If the deck is associated with an active RTMD league,
-				// select that league entry in the dropdown instead of the
-				// underlying format.
-				if (leagueCode && this.rtmdLeagues && this.rtmdLeagues[leagueCode]) {
-					this.formatSelect.val(leagueCode);
-				} else {
-					this.formatSelect.val(formatCode);
-				}
-				this.formatSelect.change();
-			}
 			
 			var notes = root.getElementsByTagName("notes");
 			this.notes = notes[0].innerHTML;
@@ -1388,6 +1393,23 @@ var GempLotrDeckBuildingUI = Class.extend({
 			var cards = root.getElementsByTagName("card");
 			for (var i = 0; i < cards.length; i++)
 				this.addCardToDeck(cards[i].getAttribute("blueprintId"), cards[i].getAttribute("side"));
+
+			var targetFormat = root.getElementsByTagName("targetFormat");
+			if (targetFormat.length > 0)
+			{
+				var formatCode = targetFormat[0].getAttribute("formatCode");
+				var leagueCode = targetFormat[0].getAttribute("leagueCode");
+
+				// If the deck is associated with an active RTMD league,
+				// select that league entry in the dropdown instead of the
+				// underlying format.
+				if (leagueCode && this.rtmdLeagues && this.rtmdLeagues[leagueCode]) {
+					this.formatSelect.val(leagueCode);
+				} else {
+					this.formatSelect.val(formatCode);
+				}
+				this.formatSelect.change();
+			}
 
 			this.layoutUI(false);
 
@@ -1414,6 +1436,15 @@ var GempLotrDeckBuildingUI = Class.extend({
 				cardDiv.addClass("packInCollection");
 			}
 			this.normalCollectionDiv.append(cardDiv);
+		} else if (type == "card" && Card.isPlaceholder(blueprintId)) {
+			// A promised prize: visible (and inspectable with shift/right-click) but not something to put in a deck,
+			// so it gets neither the cardInCollection class nor a deck count.
+			var placeholder = new Card(blueprintId, null, null, side, this.lastCardId++, "player");
+			placeholder.tokens = {"count":count};
+			var placeholderDiv = Card.CreateCardDiv(placeholder.imageUrl, null, null, false, true, false, false, false);
+			placeholderDiv.data("card", placeholder);
+			placeholderDiv.addClass("placeholderInCollection");
+			this.normalCollectionDiv.append(placeholderDiv);
 		} else if (type == "card") {
 			var card = new Card(blueprintId, null, null, side, this.lastCardId++, "player");
 			var countInDeck = 0;

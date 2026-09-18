@@ -19,11 +19,11 @@ var TournamentResultsUI = Class.extend({
         this.loadLiveTournaments();
     },
 
-    loadLiveTournaments:function () {
+    loadLiveTournaments:function (expandTournamentId) {
         var that = this;
         this.communication.getLiveTournaments(
             function (xml) {
-                that.loadedTournaments(xml);
+                that.loadedTournaments(xml, expandTournamentId);
             });
     },
 
@@ -62,7 +62,8 @@ var TournamentResultsUI = Class.extend({
         }
     },
 
-    loadedTournaments:function (xml) {
+    // expandTournamentId: optional; when given, that tournament's details are opened right away (calendar snap-to)
+    loadedTournaments:function (xml, expandTournamentId) {
         var that = this;
         log(xml);
         var root = xml.documentElement;
@@ -104,6 +105,11 @@ var TournamentResultsUI = Class.extend({
                                 });
                         };
                     })(tournamentId, extraInfoDiv));
+
+                if (expandTournamentId !== undefined && expandTournamentId == tournamentId) {
+                    detailsBut.click();
+                    detailsBut[0].scrollIntoView();
+                }
             }
             if (tournaments.length == 0)
                 $("#tournamentResults").append("<i>There is no running tournaments at the moment</i>");

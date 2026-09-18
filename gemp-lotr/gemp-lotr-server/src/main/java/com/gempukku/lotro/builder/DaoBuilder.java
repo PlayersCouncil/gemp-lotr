@@ -31,6 +31,7 @@ public class DaoBuilder {
         objectMap.put(MerchantDAO.class, merchantDao);
 
         objectMap.put(LeagueDAO.class, LoggingProxy.createLoggingProxy(LeagueDAO.class, new DbLeagueDAO(dbAccess)));
+        objectMap.put(LeagueScheduleDAO.class, LoggingProxy.createLoggingProxy(LeagueScheduleDAO.class, new DbLeagueScheduleDAO(dbAccess)));
         objectMap.put(GameHistoryDAO.class, LoggingProxy.createLoggingProxy(GameHistoryDAO.class, new DbGameHistoryDAO(dbAccess)));
 
         IgnoreDAO dbIgnoreDao = LoggingProxy.createLoggingProxy(IgnoreDAO.class, new DbIgnoreDAO(dbAccess));
@@ -58,6 +59,9 @@ public class DaoBuilder {
         objectMap.put(IpBanDAO.class, ipBanDao);
 
         objectMap.put(RtmdFeedbackDAO.class, LoggingProxy.createLoggingProxy(RtmdFeedbackDAO.class, new DbRtmdFeedbackDAO(dbAccess)));
+
+        objectMap.put(PrizePlaceholderDAO.class, LoggingProxy.createLoggingProxy(PrizePlaceholderDAO.class, new DbPrizePlaceholderDAO(dbAccess)));
+        objectMap.put(PrizeAwardDAO.class, LoggingProxy.createLoggingProxy(PrizeAwardDAO.class, new DbPrizeAwardDAO(dbAccess)));
 
         CacheManager cacheManager = new CacheManager();
         cacheManager.addCache(merchantDao);

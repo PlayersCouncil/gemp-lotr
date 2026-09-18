@@ -165,6 +165,7 @@ CREATE TABLE `league` (
   `end_date` date NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL,
   `cost` int(11) NOT NULL DEFAULT 0,
+  `schedule_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=478 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -339,6 +340,83 @@ CREATE TABLE `announcements` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+--
+-- Table structure for table `league_schedule`
+-- (db/2026-09-16_league-schedule.sql: recurring league definitions the server materialises into league rows)
+--
+
+DROP TABLE IF EXISTS `league_schedule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `league_schedule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `league_type` varchar(45) NOT NULL,
+  `template` text NOT NULL,
+  `events` text NOT NULL,
+  `name_pattern` varchar(255) NOT NULL DEFAULT '{series} - {event}',
+  `next_event_date` date NOT NULL,
+  `next_event_index` int(11) NOT NULL DEFAULT 0,
+  `interval_months` decimal(6,3) NOT NULL DEFAULT 1.000,
+  `lead_days` int(11) NOT NULL DEFAULT 7,
+  `active` bit(1) NOT NULL DEFAULT b'1',
+  `last_created_league_id` int(11) DEFAULT NULL,
+  `last_run` datetime DEFAULT NULL,
+  `last_error` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `prize_placeholder`
+-- (db/2026-09-17_prizes.sql: promised prizes handed out as set-404 placeholder cards until an admin resolves them)
+--
+
+DROP TABLE IF EXISTS `prize_placeholder`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prize_placeholder` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL DEFAULT 1,
+  `event_kind` varchar(20) NOT NULL,
+  `event_id` varchar(45) DEFAULT NULL,
+  `event_name` varchar(255) DEFAULT NULL,
+  `tier_index` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `created_by` varchar(45) DEFAULT NULL,
+  `resolved_blueprint` varchar(45) DEFAULT NULL,
+  `resolved_on` datetime DEFAULT NULL,
+  `resolved_by` varchar(45) DEFAULT NULL,
+  `notes` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prize_placeholder_event` (`event_kind`,`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `prize_award`
+-- (db/2026-09-17_prizes.sql: every prize tier awarded; also the "never award the same tier twice" record)
+--
+
+DROP TABLE IF EXISTS `prize_award`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prize_award` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_kind` varchar(20) NOT NULL,
+  `event_id` varchar(45) NOT NULL,
+  `event_name` varchar(255) DEFAULT NULL,
+  `tier_index` int(11) DEFAULT NULL,
+  `tier_label` varchar(255) DEFAULT NULL,
+  `player` varchar(45) NOT NULL,
+  `items` text NOT NULL,
+  `awarded_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prize_award_event` (`event_kind`,`event_id`,`player`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping routines for database 'gemp_db'

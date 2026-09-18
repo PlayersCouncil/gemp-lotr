@@ -372,6 +372,18 @@
 					}
 				}
 			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: not(your),site,nextSiteNumber
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: To play, spot an [uruk-hai] minion.<br>When you play this, if you spot a battleground site on the adventure path, reinforce 3 [uruk-hai] tokens.<br>Each time the Free Peoples player plays the fellowship's next site, you may discard a condition from play.
 		lore: ""

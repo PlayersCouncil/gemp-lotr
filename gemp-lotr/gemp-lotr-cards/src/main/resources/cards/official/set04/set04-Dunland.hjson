@@ -1490,7 +1490,7 @@
 						optional: true
 						trigger: {
 										type: losesSkirmish
-										filter: companion
+										filter: or(companion,ally)
 										against: culture(dunland),man
 								}
 								effect: {

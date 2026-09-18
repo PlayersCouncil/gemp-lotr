@@ -34,6 +34,47 @@ public class Card_92_003_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				null, "92_3"
+		);
+	}
+
+	@Test
+	public void GameStartsWhenTheOpponentHoldsAShadowConditionedModifier() throws DecisionResultInvalidException, CardNotFoundException {
+		// #1023 setup: the reported game had the first player holding 92_24 (Your Nazgul are non-unique,
+		// conditioned on OwnerIsShadow) while the second player held this modifier.  The crash itself turned out
+		// to be a pre-game decision problem (see PregameDecisionTests); this pins down that the modifiers
+		// themselves start up cleanly in that arrangement.
+		var scn = new VirtualTableScenario(cards,
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"92_24", "92_3"
+		);
+
+		scn.StartGame();
+
+		var site1 = scn.GetCurrentSite();
+		assertTrue(scn.HasKeyword(site1, Keyword.UNDERGROUND));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void GameStartsWhenTheSecondPlayerHoldsTheModifier() throws DecisionResultInvalidException, CardNotFoundException {
+		// #1023 setup: the player holding this modifier bid lower and was not going first.
+		var scn = GetShadowScenario();
+
+		scn.StartGame();
+
+		var site1 = scn.GetCurrentSite();
+		assertTrue(scn.HasKeyword(site1, Keyword.UNDERGROUND));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 		/**

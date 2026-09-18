@@ -25,6 +25,11 @@ public interface TournamentDAO {
     void updateTournamentRound(String tournamentId, int round);
 
     List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
+
+    /**
+     * Every scheduled tournament (started or not) whose start falls within [from, to], for calendar display.
+     */
+    List<DBDefs.ScheduledTournament> getScheduledTournamentsBetween(ZonedDateTime from, ZonedDateTime to);
     DBDefs.ScheduledTournament getScheduledTournament(String tournamentId);
 
     void updateScheduledTournamentStarted(String scheduledTournamentId);

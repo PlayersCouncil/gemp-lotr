@@ -284,14 +284,14 @@
 					count: 2
 					select: choose(nazgul)
 				}
-				{
-					type: exert
-					count: {
-						type: forEachBurden
-					}
-					select: choose(companion)
-				}
 			]
+			effect: {
+				type: exert
+				count: {
+					type: forEachBurden
+				}
+				select: choose(companion)
+			}
 		}
 		gametext: <b>Maneuver:</b> Exert 2 Nazgûl and spot X burdens to exert X companions.
 		lore: "...to the dismay of Frodo and his friends out from the trees and rocks away on the left four other Riders came flying."

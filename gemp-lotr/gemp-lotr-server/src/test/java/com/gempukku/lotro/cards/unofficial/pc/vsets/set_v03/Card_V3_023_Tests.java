@@ -30,6 +30,9 @@ public class Card_V3_023_Tests
 					put("hollowing3", "3_54");
 					put("hollowing4", "3_54");
 					put("runner", "1_178");
+
+					put("patrol", "5_107"); // Orc with a maneuver ability, should not be triggerable
+					put("orc", "7_307");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -269,5 +272,29 @@ public class Card_V3_023_Tests
 
 		// Gate not hindered
 		assertFalse(scn.IsHindered(gate));
+	}
+
+	@Test
+	public void GreatGateDoesNotRespondToCardsNotInSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gate = scn.GetFreepsCard("gate");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var patrol = scn.GetShadowCard("patrol");
+		var orc = scn.GetShadowCard("orc");
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gate);
+		scn.MoveMinionsToTable(patrol, orc);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// Shadow activates Patrol to discard a condition; should not be respondable by Gate
+		scn.ShadowUseCardAction(patrol);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 }

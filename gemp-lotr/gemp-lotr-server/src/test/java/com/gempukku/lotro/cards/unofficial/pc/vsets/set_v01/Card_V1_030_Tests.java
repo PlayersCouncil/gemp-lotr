@@ -144,6 +144,29 @@ public class Card_V1_030_Tests
 	}
 
 	@Test
+	public void SarumanDoesNotBoostIsengardMinionsWhenTheWeatherIsAtAnotherSite() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1070: the bonus checked for a weather on ANY site, not the fellowship's current site.
+		VirtualTableScenario scn = GetScenario();
+
+		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
+		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
+		PhysicalCardImpl weather = scn.GetShadowCard("weather");
+		scn.MoveMinionsToTable(saruman, uruk);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();          // fellowship moves 1 -> 2
+
+		PhysicalCardImpl site1 = scn.GetFreepsSite(1);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.AttachCardsTo(site1, weather);           // weather on the site the fellowship just left
+
+		assertEquals(Zone.ATTACHED, weather.getZone());
+		assertEquals(site1, weather.getAttachedTo());
+		assertEquals(6, scn.GetStrength(saruman));
+		assertEquals(5, scn.GetStrength(uruk));
+	}
+
+	@Test
 	public void ResponseSelfDiscardsToExertEveryCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		VirtualTableScenario scn = GetScenario();

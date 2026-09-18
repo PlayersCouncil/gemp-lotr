@@ -25,6 +25,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final DeliveryRequestHandler _deliveryRequestHandler;
     private final GameRequestHandler _gameRequestHandler;
     private final LeagueRequestHandler _leagueRequestHandler;
+    private final CalendarRequestHandler _calendarRequestHandler;
     private final MerchantRequestHandler _merchantRequestHandler;
     private final RegisterRequestHandler _registerRequestHandler;
     private final ReplayRequestHandler _replayRequestHandler;
@@ -54,6 +55,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _deliveryRequestHandler = new DeliveryRequestHandler(context);
         _gameRequestHandler = new GameRequestHandler(context, longPollingSystem);
         _leagueRequestHandler = new LeagueRequestHandler(context);
+        _calendarRequestHandler = new CalendarRequestHandler(context);
         _merchantRequestHandler = new MerchantRequestHandler(context);
         _registerRequestHandler = new RegisterRequestHandler(context);
         _replayRequestHandler = new ReplayRequestHandler(context);
@@ -110,6 +112,8 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _deliveryRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 8), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "game")) {
                 _gameRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 4), request, context, responseWriter, remoteIp);
+            } else if (uri.startsWith(_serverContextPath + "calendar")) {
+                _calendarRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 8), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "league")) {
                 _leagueRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 6), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "merchant")) {

@@ -31,4 +31,12 @@ public interface CollectionDAO {
     void removeFromCollectionContents(int playerId, String type, CardCollection collection, String source) throws SQLException, IOException;
 
     void updateCollectionInfo(int playerId, String type, Map<String, Object> extraInformation) throws SQLException, IOException;
+
+    /**
+     * Finds everyone holding a product, in any collection.  {@code product} is matched exactly against
+     * {@code collection_entries.product}, which stores the full blueprint id as awarded (modifiers such as the
+     * foil {@code *} included), so pass the id exactly as it was added.
+     * @return one entry per (player, collection type) with a positive quantity
+     */
+    List<DBDefs.CollectionHolder> findHolders(String product);
 }

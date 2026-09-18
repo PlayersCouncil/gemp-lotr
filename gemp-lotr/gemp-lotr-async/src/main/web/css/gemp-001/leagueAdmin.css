@@ -1,0 +1,354 @@
+/* League Admin page (includes/admin/leagueAdmin.html). Layout helpers come from hall.css; everything specific to
+   the unified league form, the schedule cards and the (i) help toggles lives here. */
+
+#league-admin-page h1 {
+	margin: 0.4em 0 0.2em 0;
+}
+
+#league-admin-page h2 {
+	margin: 0.6em 0 0.2em 0;
+}
+
+.page-hint {
+	color: #aaa;
+	font-size: 90%;
+	margin-bottom: 0.4em;
+}
+
+/* ---- (i) help toggles ---- */
+.info-toggle {
+	display: inline-block;
+	width: 1.1em;
+	height: 1.1em;
+	line-height: 1.1em;
+	margin-left: 0.35em;
+	border-radius: 50%;
+	border: 1px solid #8ab;
+	color: #8ab;
+	background: transparent;
+	font-size: 75%;
+	font-weight: bold;
+	font-style: italic;
+	font-family: Georgia, serif;
+	text-align: center;
+	cursor: pointer;
+	vertical-align: middle;
+	user-select: none;
+}
+
+.info-toggle:hover {
+	background: #8ab;
+	color: #111;
+}
+
+.info-text {
+	color: #aaa;
+	font-size: 85%;
+	margin: -0.2em 0 0.3em 0;
+	padding: 0.3em 0.6em;
+	border-left: 2px solid #567;
+}
+
+.info-text code {
+	color: #ddd;
+}
+
+/* ---- the league form ---- */
+#league-form {
+	border: 1px solid #444;
+	border-radius: 4px;
+	padding: 0.6em 0.8em 0.8em 0.8em;
+	background: #1b1b1b;
+}
+
+.mode-header {
+	align-items: center;
+	gap: 1em;
+}
+
+.mode-header h2 {
+	margin: 0;
+	flex-grow: 1;
+}
+
+.form-section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	padding: 0.5em 0;
+	border-top: 1px solid #333;
+}
+
+.form-section.first {
+	border-top: none;
+	padding-top: 0.2em;
+}
+
+.section-title {
+	font-weight: bold;
+	color: #ccc;
+	margin-bottom: 0.1em;
+}
+
+.field-row {
+	align-items: center;
+}
+
+.field-row input[type="checkbox"] {
+	margin: 0;
+}
+
+.field-inline {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	white-space: nowrap;
+}
+
+.field-inline input[type="number"] {
+	width: 4.5em;
+}
+
+.field-inline input[type="number"].wide {
+	width: 6em;
+}
+
+.league-warning {
+	background: #4a3d00;
+	border: 1px solid #b89a00;
+	color: #ffe680;
+	padding: 0.4em 0.6em;
+	border-radius: 3px;
+	margin: 0.3em 0;
+}
+
+/* ---- type selector ---- */
+.league-type-bar {
+	display: flex;
+	gap: 0;
+	flex-wrap: wrap;
+}
+
+.league-type-bar .type-btn {
+	margin: 0;
+	border-radius: 0;
+}
+
+.league-type-bar .type-btn:first-child {
+	border-radius: 4px 0 0 4px;
+}
+
+.league-type-bar .type-btn:last-child {
+	border-radius: 0 4px 4px 0;
+}
+
+.league-type-bar .type-btn.type-selected,
+.league-type-bar .type-btn.type-selected:hover {
+	background: #5a7fb0;
+	border-color: #7fa3d0;
+	color: #fff;
+	font-weight: bold;
+}
+
+/* ---- serie editor (one-off and per rotation row) ---- */
+.serie-editor {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3em;
+}
+
+.serie-rows {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+}
+
+.serie-row {
+	align-items: center;
+	gap: 0.6em;
+	flex-wrap: wrap;
+}
+
+.serie-row .serie-format {
+	flex-grow: 1;
+	min-width: 12em;
+}
+
+.serie-row .serie-index {
+	color: #888;
+	min-width: 1.4em;
+	text-align: right;
+}
+
+.serie-editor .serie-add {
+	align-self: flex-start;
+}
+
+/* ---- rotation rows (schedule events) ---- */
+#rotation-rows .rotation-row {
+	background: #202020;
+}
+
+.rotation-head {
+	align-items: center;
+	gap: 0.5em;
+	flex-wrap: wrap;
+}
+
+.rotation-index {
+	color: #aaa;
+	min-width: 1.4em;
+	text-align: right;
+}
+
+.rotation-name {
+	min-width: 12em;
+}
+
+.rotation-next-label {
+	color: #aaa;
+	font-size: 90%;
+	white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.2em;
+}
+
+.rotation-row.is-next {
+	border-color: #6a9;
+}
+
+.rotation-buttons {
+	margin-left: auto;
+	display: flex;
+	gap: 0.2em;
+}
+
+/* ---- buttons / result ---- */
+.form-buttons {
+	gap: 0.4em;
+	align-items: center;
+	flex-wrap: wrap;
+	padding-top: 0.5em;
+}
+
+/* ---- schedule cards ---- */
+#schedule-list .schedule-card {
+	padding: 0.4em 0.6em;
+	margin: 0.3em 0;
+}
+
+.schedule-line {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	flex-wrap: wrap;
+}
+
+.schedule-line .schedule-buttons {
+	margin-left: auto;
+	display: flex;
+	gap: 0.2em;
+}
+
+.schedule-meta {
+	color: #bbb;
+	font-size: 90%;
+}
+
+.schedule-meta .sep {
+	color: #666;
+	margin: 0 0.3em;
+}
+
+.schedule-card .schedule-upcoming {
+	margin: 0.2em 0 0.2em 1.2em;
+}
+
+.schedule-card .schedule-upcoming li {
+	margin: 0.1em 0;
+}
+
+/* ---- preview dialog extras ---- */
+.tech-toggle {
+	margin-top: 0.8em;
+	color: #8ab;
+	cursor: pointer;
+	font-size: 90%;
+	user-select: none;
+}
+
+.tech-toggle:hover {
+	text-decoration: underline;
+}
+
+.tech-json {
+	font-family: monospace;
+	font-size: 80%;
+	background: #111;
+	border: 1px solid #333;
+	padding: 0.5em;
+	max-height: 20em;
+	overflow: auto;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.preview-upcoming {
+	font-size: 90%;
+	margin: 0.3em 0 0.6em 1.2em;
+}
+
+/* ---- RTMD race editor ---- */
+#rtmd-race-block .race-hint {
+	color: #888;
+	margin-left: 8px;
+}
+
+#rtmd-path-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	min-height: 120px;
+	padding: 8px;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #1a1a1a;
+}
+
+#rtmd-preview {
+	padding: 8px;
+	border: 1px solid #333;
+	border-radius: 4px;
+	background: #111;
+	min-height: 60px;
+}
+
+#rtmd-path-count {
+	color: #888;
+	margin-top: 4px;
+}
+
+/* ---- add players mini-form ---- */
+#add-players-section {
+	margin-top: 1em;
+	padding-top: 0.5em;
+	border-top: 1px solid #444;
+}
+
+/* Rendered description inside the league preview dialog */
+.preview-desc {
+	margin: 0.4em 0;
+	padding: 0.3em 0.6em;
+	border-left: 3px solid #555;
+}
+
+/* Prize tiers inside the league preview dialog */
+.preview-prize-tier {
+	margin: 0.15em 0 0.15em 1em;
+}
+
+.preview-promise {
+	color: #d9b866;
+	font-style: italic;
+}

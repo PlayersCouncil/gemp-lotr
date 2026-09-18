@@ -372,8 +372,12 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private boolean isCandidateForKeywordRemovalWithTextRemoval(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         if (!keyword.isRealKeyword())
             return false;
-        // Ring-bearer is ALWAYS Ring-bound and cannot lose that
-        if (keyword == Keyword.RING_BOUND && game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard)
+        // The Ring-bearer, Frodo, and Sam are ALWAYS Ring-bound by rule (see RingRelatedRule), not by printed game text,
+        // so removing their game text or keywords cannot strip it.
+        if (keyword == Keyword.RING_BOUND
+                && (game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard
+                    || Filters.frodo.accepts(game, physicalCard)
+                    || Filters.sam.accepts(game, physicalCard)))
             return false;
         return true;
     }

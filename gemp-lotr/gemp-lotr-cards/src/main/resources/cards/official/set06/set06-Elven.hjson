@@ -133,6 +133,7 @@
 			{
 				type: Trigger
 				optional: true
+				text: Draw a card
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
@@ -143,6 +144,7 @@
 			}
 			{
 				type: Response
+				text: Discard to liberate a site
 				trigger: {
 					type: winsSkirmish
 					filter: bearer

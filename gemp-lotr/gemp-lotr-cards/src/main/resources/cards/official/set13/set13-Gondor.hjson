@@ -87,7 +87,7 @@
 					}
 					{
 						type: kill
-						select: choose(or(name(Boromir)),or(name(Denethor)))
+						select: choose(or(name(Boromir),name(Denethor)))
 					}
 				]
 				effect: [

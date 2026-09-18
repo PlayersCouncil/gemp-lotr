@@ -37,23 +37,39 @@ public class CopyCard implements EffectProcessor {
 
         blueprint.appendCopiedFilter(filterableSource);
 
-        //Now we add an automatic trigger that unapplies/reapplies this card so that
+        // The copied card can also stop matching without anything being played, most obviously when a copied site
+        // is replaced by an opponent's copy (#1054): the copied modifiers would otherwise stick until the next refresh.
+        final String siteReplacedRefreshTriggerString = """
+                {
+                    type: trigger
+                    trigger: {
+                        type: replacesSite
+                    }
+                    effect: {
+                        type: RefreshCard
+                    }
+                }
+                """;
+
+        //Now we add automatic triggers that unapply/reapply this card so that
         // modifiers etc do not get stuck.
 
-        try {
-            var action = FieldUtils.parseSubObject(autoRefreshTriggerString);
-            var trigger = (JSONObject) action.get("trigger");
-            final var triggerChecker = environment
-                    .getTriggerCheckerFactory().getTriggerChecker(trigger, environment);
+        for (String triggerString : new String[] { autoRefreshTriggerString, siteReplacedRefreshTriggerString }) {
+            try {
+                var action = FieldUtils.parseSubObject(triggerString);
+                var trigger = (JSONObject) action.get("trigger");
+                final var triggerChecker = environment
+                        .getTriggerCheckerFactory().getTriggerChecker(trigger, environment);
 
-            var triggerActionSource = new DefaultActionSource();
-            triggerActionSource.addPlayRequirement(triggerChecker);
-            EffectUtils.processRequirementsCostsAndEffects(action, environment, triggerActionSource);
+                var triggerActionSource = new DefaultActionSource();
+                triggerActionSource.addPlayRequirement(triggerChecker);
+                EffectUtils.processRequirementsCostsAndEffects(action, environment, triggerActionSource);
 
-            blueprint.appendRequiredAfterTrigger(triggerActionSource);
-        }
-        catch(Exception ex) {
-            throw new InvalidCardDefinitionException("CopyCard could not create auto refresh trigger.", ex);
+                blueprint.appendRequiredAfterTrigger(triggerActionSource);
+            }
+            catch(Exception ex) {
+                throw new InvalidCardDefinitionException("CopyCard could not create auto refresh trigger.", ex);
+            }
         }
 
     }

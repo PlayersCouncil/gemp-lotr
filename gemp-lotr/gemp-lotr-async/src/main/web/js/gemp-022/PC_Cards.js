@@ -1366,7 +1366,7 @@ var PCCards = {
 	// Slopes of Amon Hen (1U361) [Errata]
 	'51_361' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E361.1_card.jpg',
 	// Wastes of Emyn Muil (3U120) [Errata]
-	'53_120' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E120.1_card.jpg',
+	'53_120' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E120.2_card.jpg',
 	// Servants to Saruman (3C70) [Errata]
 	'53_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E070.1_card.jpg',
 	// Trapped and Alone (3U72) [Errata]
@@ -1562,5 +1562,16 @@ var PCCards = {
 	'93_8': 'https://i.lotrtcgpc.net/race/LOTR-EN93S008.0_card.jpg',
 	'93_9': 'https://i.lotrtcgpc.net/race/LOTR-EN93S009.0_card.jpg',
 	'93_10': 'https://i.lotrtcgpc.net/race/LOTR-EN93S010.0_card.jpg',
+	
+	
+	// A Promise FA
+	'2_132': 'https://i.lotrtcgpc.net/promos/LOTR-EN02U112.0_card.jpg',
+	//Host of Moria FA
+	'9_61': 'https://i.lotrtcgpc.net/promos/LOTR-EN09U041.0_card.jpg',
+	//Eomer, TMOR FA - 2026-06 WC Circuit
+	'4_370': 'https://i.lotrtcgpc.net/promos/LOTR-EN04U267.0_card.jpg',
+	//Hobbit Party Guest FA - 2026 WC Circuit
+	'1_405': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U297.0_card.jpg',
+
 }
 

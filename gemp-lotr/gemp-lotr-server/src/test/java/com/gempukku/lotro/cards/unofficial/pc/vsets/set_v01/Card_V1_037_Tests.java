@@ -30,6 +30,30 @@ public class Card_V1_037_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetGreatRiverScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>() {{
+					put("fell", "101_37");
+					put("nazgul", "1_232");
+					put("blade", "1_216");
+					put("ring", "9_44");
+				}},
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_331");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "3_118"); // The Great River: cards may not be played from draw decks or discard piles
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void FellVoicesCallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -102,5 +126,35 @@ public class Card_V1_037_Tests
 		assertEquals(Zone.ATTACHED, blade.getZone());
 		assertEquals(nazgul, blade.getAttachedTo());
 
+	}
+
+	@Test
+	public void FellVoicesCallCannotBePlayedAtTheGreatRiver() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1080: both branches play from a forbidden zone, but the event was still offered and the
+		// Choice fallback let the player pick one anyway.
+		VirtualTableScenario scn = GetGreatRiverScenario();
+
+		PhysicalCardImpl fell = scn.GetShadowCard("fell");
+		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+		PhysicalCardImpl blade = scn.GetShadowCard("blade");
+		PhysicalCardImpl ring = scn.GetShadowCard("ring");
+		scn.MoveCardsToDiscard(ring);
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+		// Placed after the traversal so the intervening draws and discards do not disturb them
+		scn.MoveCardsToHand(fell);
+		scn.MoveCardsToTopOfDeck(blade);
+		scn.MoveMinionsToTable(nazgul);
+		scn.FreepsPassCurrentPhaseAction();          // move 6 -> 7
+		if (scn.ShadowDecisionAvailable("Choose site to play"))
+			scn.ShadowChooseAnyCard();
+		scn.SetTwilight(10);
+
+		assertEquals("The Great River", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(Zone.DISCARD, ring.getZone());
+		assertEquals(Zone.DECK, blade.getZone());
+		assertFalse(scn.ShadowPlayAvailable(fell));
 	}
 }

@@ -115,15 +115,13 @@ public class Card_92_009_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
-		//We now kill Theoden, triggering his ability to play a companion from draw deck, which should fail
+		//We now kill Theoden. His ability plays a companion from draw deck or discard pile; with neither branch
+		// able to play anything, the optional trigger is not offered at all (same as any other play-from-zone
+		// effect with no legal play) and we go straight back to the Regroup phase action procedure.
 		scn.ShadowUseCardAction(slayer);
 		assertInZone(Zone.DEAD, theoden);
-		//Activate Theoden's trigger
-		scn.FreepsAcceptOptionalTrigger();
-		scn.FreepsChoose("draw deck");
-		scn.FreepsDismissRevealedCards();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		//No actual companion play option was permitted so we are back in the Regroup phase action procedure
 		assertInZone(Zone.DECK, eomer);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
@@ -149,14 +147,13 @@ public class Card_92_009_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
-		//We now kill Theoden, triggering his ability to play a companion from draw deck, which should fail
+		//We now kill Theoden. His ability plays a companion from draw deck or discard pile; with neither branch
+		// able to play anything, the optional trigger is not offered at all (same as any other play-from-zone
+		// effect with no legal play) and we go straight back to the Regroup phase action procedure.
 		scn.ShadowUseCardAction(slayer);
 		assertInZone(Zone.DEAD, theoden);
-		//Activate Theoden's trigger
-		scn.FreepsAcceptOptionalTrigger();
-		scn.FreepsChoose("discard");
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		//No actual companion play option was permitted so we are back in the Regroup phase action procedure
 		assertInZone(Zone.DISCARD, eomer);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

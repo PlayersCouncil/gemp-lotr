@@ -1197,17 +1197,7 @@ var GameAnimations = Class.extend({
         $("#main").queue(
             function (next) {
                 if(!that.game.replayMode) {
-                    that.game.countdownIntervalId = window.setInterval(function(){
-                        that.game.totalTime -= 1;
-                        that.game.decisionTime += 1;
-                        
-                        if(that.game.allPlayerIds == null)
-                            return;
-                        
-                        var index = that.game.getPlayerIndex(that.game.currentPlayerId);
-                        $("#clock-1").text(that.game.parseTime(that.game.decisionTime));
-                        $("#clock" + index).text(that.game.parseTime(that.game.totalTime));
-                    }, 1000);
+                    that.game.startTimerTick();
                 }
                 
                 var decisionType = decision.getAttribute("decisionType");

@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.BlueprintUtils;
 import com.gempukku.lotro.common.JSONDefs;
+import com.gempukku.lotro.common.Names;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
 import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
@@ -18,14 +19,30 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 public class LotroCardBlueprintLibrary {
     private static final Logger logger = LogManager.getLogger(LotroCardBlueprintLibrary.class);
 
+    /**
+     * Set number of the "Future Prizes" placeholder cards: a promised prize whose card does not exist yet is handed
+     * out as {@code 404_<placeholderId>}.  Every id in the set renders as the single base card {@link #PLACEHOLDER_BASE_ID}
+     * with the promise's label as its title (see {@link #registerPlaceholder}).
+     */
+    public static final String PLACEHOLDER_SET = "404";
+    public static final String PLACEHOLDER_BASE_ID = PLACEHOLDER_SET + "_0";
+    public static final String PLACEHOLDER_TITLE = "Future Prize";
+
     private final Map<String, LotroCardBlueprint> _blueprints = new HashMap<>();
+    // Registered placeholder titles and the proxies built for them.  Kept apart from _blueprints so that reloading
+    // the card definitions does not forget them.
+    private final Map<String, String> _placeholderTitles = new ConcurrentHashMap<>();
+    private final Map<String, LotroCardBlueprint> _placeholderBlueprints = new ConcurrentHashMap<>();
     private final Map<String, String> _blueprintMapping = new HashMap<>();
     private final Map<String, Set<String>> _fullBlueprintMapping = new HashMap<>();
     private final Map<String, SetDefinition> _allSets = new LinkedHashMap<>();
@@ -125,6 +142,8 @@ public class LotroCardBlueprintLibrary {
     private void reloadCards() {
         try {
             collectionReady.acquire();
+            // placeholder proxies wrap the base placeholder card, which is about to be replaced
+            _placeholderBlueprints.clear();
             loadCards(_cardPath, false);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -397,6 +416,9 @@ public class LotroCardBlueprintLibrary {
                 if(_blueprintMapping.containsKey(blueprintId)) {
                     bp = _blueprints.get(_blueprintMapping.get(blueprintId));
                 }
+                else if (isPlaceholderId(blueprintId)) {
+                    bp = getPlaceholderBlueprint(blueprintId);
+                }
                 else {
                     collectionReady.release();
                     throw new CardNotFoundException(blueprintId);
@@ -413,6 +435,105 @@ public class LotroCardBlueprintLibrary {
         } catch (InterruptedException exp) {
             throw new RuntimeException("LotroCardBlueprintLibrary.getLotroCardBlueprint() interrupted: ", exp);
         }
+    }
+
+    /**
+     * @return true for any id of the placeholder set ({@code 404_N}), whether or not it is registered
+     */
+    public static boolean isPlaceholderId(String blueprintId) {
+        if (blueprintId == null)
+            return false;
+        String[] parts = BlueprintUtils.stripModifiers(blueprintId).split("_");
+        return parts.length == 2 && PLACEHOLDER_SET.equals(parts[0]) && !parts[1].isEmpty()
+                && parts[1].chars().allMatch(Character::isDigit);
+    }
+
+    /**
+     * Gives a placeholder id a title: from now on {@code getLotroCardBlueprint(blueprintId)} returns a card that
+     * renders like {@link #PLACEHOLDER_BASE_ID} but is called {@code title}.  Registrations survive a reload of the
+     * card definitions.  Re-registering an id replaces its title.
+     */
+    public void registerPlaceholder(String blueprintId, String title) {
+        if (!isPlaceholderId(blueprintId))
+            throw new IllegalArgumentException("Not a placeholder blueprint id: " + blueprintId);
+        String id = BlueprintUtils.stripModifiers(blueprintId);
+        _placeholderTitles.put(id, (title == null || title.isBlank()) ? PLACEHOLDER_TITLE : title.trim());
+        _placeholderBlueprints.remove(id);
+    }
+
+    /**
+     * Forgets a placeholder's title.  The id keeps resolving, as a plain "Future Prize", so that a resolved (or
+     * forgotten) placeholder still held somewhere still renders.
+     */
+    public void unregisterPlaceholder(String blueprintId) {
+        if (blueprintId == null)
+            return;
+        String id = BlueprintUtils.stripModifiers(blueprintId);
+        _placeholderTitles.remove(id);
+        _placeholderBlueprints.remove(id);
+    }
+
+    /**
+     * @return the registered placeholder ids and their titles
+     */
+    public Map<String, String> getRegisteredPlaceholders() {
+        return Collections.unmodifiableMap(_placeholderTitles);
+    }
+
+    /**
+     * Builds (and caches) the blueprint for a placeholder id: a proxy over the base placeholder card that reports
+     * the id and the registered title.  Must be called with the collection lock held.
+     */
+    private LotroCardBlueprint getPlaceholderBlueprint(String blueprintId) {
+        LotroCardBlueprint cached = _placeholderBlueprints.get(blueprintId);
+        if (cached != null)
+            return cached;
+
+        final LotroCardBlueprint base = _blueprints.get(PLACEHOLDER_BASE_ID);
+        if (base == null) {
+            logger.error("Placeholder base card " + PLACEHOLDER_BASE_ID + " is not defined; cannot render " + blueprintId);
+            return null;
+        }
+        if (PLACEHOLDER_BASE_ID.equals(blueprintId))
+            return base;
+
+        final String title = _placeholderTitles.getOrDefault(blueprintId, PLACEHOLDER_TITLE);
+        final String sanitizedTitle = Names.SanitizeName(title);
+        final String id = blueprintId;
+
+        LotroCardBlueprint proxy = (LotroCardBlueprint) Proxy.newProxyInstance(
+                LotroCardBlueprint.class.getClassLoader(),
+                new Class<?>[]{LotroCardBlueprint.class},
+                (self, method, args) -> {
+                    switch (method.getName()) {
+                        case "getId":
+                            return id;
+                        case "getTitle":
+                        case "getFullName":
+                            return title;
+                        case "getSanitizedTitle":
+                        case "getSanitizedFullName":
+                            return sanitizedTitle;
+                        case "getParent":
+                            return base;
+                        case "setId":
+                            return null;
+                        case "equals":
+                            return self == args[0];
+                        case "hashCode":
+                            return System.identityHashCode(self);
+                        case "toString":
+                            return "Placeholder[" + id + ": " + title + "]";
+                        default:
+                            try {
+                                return method.invoke(base, args);
+                            } catch (InvocationTargetException exp) {
+                                throw exp.getCause();
+                            }
+                    }
+                });
+        _placeholderBlueprints.put(blueprintId, proxy);
+        return proxy;
     }
 
 //    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {

@@ -40,13 +40,6 @@ public class ConstructedLeague implements LeagueData {
             serieStart = serieStart.plusDays(serie.duration());
             count++;
         }
-
-//        var autoPrizes = new EventAutoPrizes(CardCollection.Item.createItems(params[3]),
-//                Integer.parseInt(params[4]),
-//                CardCollection.Item.createItems(params[5]),
-//                Integer.parseInt(params[6]));
-//
-//        _leaguePrizes = new IncentiveLeaguePrizes(productLibrary, autoPrizes);
     }
 
     public static ConstructedLeague fromRawParameters(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary, String parameters) {

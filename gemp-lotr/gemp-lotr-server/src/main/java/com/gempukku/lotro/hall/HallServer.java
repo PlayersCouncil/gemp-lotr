@@ -18,6 +18,7 @@ import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.league.LeagueSerieInfo;
+import com.gempukku.lotro.league.LeagueScheduleService;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
@@ -64,10 +65,18 @@ public class HallServer extends AbstractServer {
     private final ChatRoomMediator _hallChat;
     private final GameResultListener _notifyHallListeners = new NotifyHallListenersGameResultListener();
 
+    private final LeagueScheduleService _leagueScheduleService;
+
     private static final Logger _log = LogManager.getLogger(HallServer.class);
 
     public HallServer(IgnoreDAO ignoreDAO, LotroServer lotroServer, ChatServer chatServer, LeagueService leagueService, TournamentService tournamentService, LotroCardBlueprintLibrary library,
                       LotroFormatLibrary formatLibrary, CollectionsManager collectionsManager, AdminService adminService) {
+        this(ignoreDAO, lotroServer, chatServer, leagueService, tournamentService, library, formatLibrary, collectionsManager, adminService, null);
+    }
+
+    public HallServer(IgnoreDAO ignoreDAO, LotroServer lotroServer, ChatServer chatServer, LeagueService leagueService, TournamentService tournamentService, LotroCardBlueprintLibrary library,
+                      LotroFormatLibrary formatLibrary, CollectionsManager collectionsManager, AdminService adminService, LeagueScheduleService leagueScheduleService) {
+        _leagueScheduleService = leagueScheduleService;
         _lotroServer = lotroServer;
         _chatServer = chatServer;
         _leagueService = leagueService;
@@ -953,6 +962,11 @@ public class HallServer extends AbstractServer {
 
             changed |= _tournamentService.processTournamentQueues();
             changed |= _tournamentService.processTournaments(this);
+
+            // Materialise any scheduled leagues that are within their lead time (cheap: real work once a day)
+            if (_leagueScheduleService != null) {
+                _leagueScheduleService.processDueSchedulesDaily();
+            }
 
             if (_tickCounter == 60 || forceRefresh) {
                 _tickCounter = 0;

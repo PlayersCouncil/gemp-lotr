@@ -55,6 +55,7 @@
     
     <!-- Audio file downloaded from https://material.io/design/sound/sound-resources.html -->
     <audio id="awaitAction" src="/gemp-lotr/src/assets/awaiting_decision.mp3" type="audio/mpeg" preload="metadata"></audio>
+    <audio id="timerAlert" src="/gemp-lotr/src/assets/timer_alert.mp3" type="audio/mpeg" preload="auto"></audio>
 
     <link rel="stylesheet" type="text/css" href="src/Game/index.css">
     <script type="text/javascript" src="src/Game/game.js"></script>
@@ -77,6 +78,65 @@
                     <div id="right-pregame-content"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- Bottom-left tab box: chat, settings, options and player list.  gameUi.js (addBottomLeftTabPane) only
+             removes the tabs that do not apply (spectators, replays), positions it and wires the controls; the
+             timer controls are shown once the timer is known to apply (initializeTimerUI). -->
+        <div id="bottomLeftTabs">
+            <ul>
+                <li id="chatTab"><a href="#chatBox" class="slimTab">Chat</a></li>
+                <li id="settingsTab"><a href="#settingsBox" class="slimTab">Settings</a></li>
+                <li id="gameOptionsTab"><a href="#gameOptionsBox" class="slimTab">Options</a></li>
+                <li id="playersInRoomTab"><a href="#playersInRoomBox" class="slimTab">Players</a></li>
+                <li id="tab-extras">
+                    <div id="auto-zoom-control"><span>Auto-zoom: </span></div>
+                    <div id="timer-mute-control" class="timer-control"><span>Timer: </span><button id="timer-mute-toggle" title="Mute timer sounds">Mute timer sounds</button></div>
+                </li>
+            </ul>
+            <div id="chatBox" class="slimPanel"></div>
+            <div id="settingsBox" class="slimPanel">
+                <div class="setting-row">
+                    <label for="foilPresentation">Foil presentation:</label>
+                    <select id="foilPresentation">
+                        <option value="static">Static layer</option>
+                        <option value="animated">Animated layer</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label for="animation-slider">Animation speed</label>
+                    <div id="animation-slider"></div>
+                </div>
+                <div class="setting-row"><input id="autoAccept" type="checkbox" value="selected" /><label for="autoAccept">Auto-accept after selecting action or card</label></div>
+                <div class="setting-row"><input id="autoDismissDeckReveal" type="checkbox" value="selected" /><label for="autoDismissDeckReveal" title="When you search your own draw deck, skip the popup that shows its full contents and go straight to the choice">Auto-dismiss deck reveal when searching your own deck</label></div>
+                <div class="setting-row"><input id="use-old-stack-checkbox" type="checkbox" value="" /><label for="use-old-stack-checkbox">Use old visuals for stacked cards</label></div>
+                <div class="setting-row"><input id="alwaysDropDown" type="checkbox" value="selected" /><label for="alwaysDropDown">Always display drop-down in answer selection</label></div>
+                <div class="setting-row setting-group">
+                    <div class="setting-title">Phases when game auto-passes for you, if you have no phase actions to play</div>
+                    <div class="setting-choices">
+                        <span><input id="autoPassFELLOWSHIP" type="checkbox" value="selected" /><label for="autoPassFELLOWSHIP">Fellowship</label></span>
+                        <span><input id="autoPassSHADOW" type="checkbox" value="selected" /><label for="autoPassSHADOW">Shadow</label></span>
+                        <span><input id="autoPassMANEUVER" type="checkbox" value="selected" /><label for="autoPassMANEUVER">Maneuver</label></span>
+                        <span><input id="autoPassARCHERY" type="checkbox" value="selected" /><label for="autoPassARCHERY">Archery</label></span>
+                        <span><input id="autoPassASSIGNMENT" type="checkbox" value="selected" /><label for="autoPassASSIGNMENT">Assignment</label></span>
+                        <span><input id="autoPassSKIRMISH" type="checkbox" value="selected" /><label for="autoPassSKIRMISH">Skirmish</label></span>
+                        <span><input id="autoPassREGROUP" type="checkbox" value="selected" /><label for="autoPassREGROUP">Regroup</label></span>
+                    </div>
+                </div>
+                <div id="timerAlertSettings" class="setting-row setting-group timer-control">
+                    <div class="setting-title">Timer alert sound intervals</div>
+                    <div class="timerAlertRule">Below <input class="timerAlertBelow" type="number" min="0" max="999" /> min, every <input class="timerAlertEvery" type="number" min="0" max="600" /> s</div>
+                    <div class="timerAlertRule">Below <input class="timerAlertBelow" type="number" min="0" max="999" /> min, every <input class="timerAlertEvery" type="number" min="0" max="600" /> s</div>
+                    <div class="timerAlertRule">Below <input class="timerAlertBelow" type="number" min="0" max="999" /> min, every <input class="timerAlertEvery" type="number" min="0" max="600" /> s</div>
+                    <div class="timerAlertHint">(0 seconds disables a row)</div>
+                </div>
+            </div>
+            <div id="gameOptionsBox" class="slimPanel">
+                <div class="setting-row"><button id="concedeGame">Concede game</button></div>
+                <div class="setting-row"><button id="cancelGame">Request game cancel</button></div>
+            </div>
+            <div id="playersInRoomBox" class="slimPanel"></div>
         </div>
     </div>
 </body>

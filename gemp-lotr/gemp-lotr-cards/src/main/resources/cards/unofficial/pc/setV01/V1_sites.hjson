@@ -319,6 +319,9 @@
 		effects: {
 			type: Trigger
 			optional: true
+			# Several companions can exert at once (One of You Must Do This), which offers this trigger once per
+			# companion; the text names the companion so the player can tell the copies apart (#1079).
+			text: Exert an Elven ally to heal {exertedComp}
 			trigger: {
 				type: exerted
 				filter: your,companion

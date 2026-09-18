@@ -12,6 +12,21 @@
 				function() {
 					tourneyUI.loadHistoryTournaments();
 				});
+
+			// Sub-tab indexes: 0 = calendar, 1 = leagues, 2 = tournaments.  Clicking an event describes it in the
+			// panel under the calendar; its "Go to ..." button is what jumps to the tab.
+			var calendar = new EventCalendarUI(hall.comm, $("#eventCalendar"), {
+				details: $("#eventDetails"),
+				onLeague: function (leagueCode) {
+					$("#eventsMain").tabs("option", "active", 1);
+					leagueUI.loadResultsWithLeague(leagueCode);
+				},
+				onTournament: function (tournamentId) {
+					$("#eventsMain").tabs("option", "active", 2);
+					tourneyUI.loadLiveTournaments(tournamentId);
+				}
+			});
+			calendar.show();
 		});
 	
 	$("tournamentResults").ready(
@@ -24,9 +39,17 @@
 <div id="eventsMain" class="hall-tab flex-horiz">
 	<div id="event-tabs" class="sub-tabs">
 		<ol>
+			<li><a href="#calendar">Calendar</a></li>
 			<li><a href="#leagues">Current Leagues</a></li>
 			<li><a href="#tournaments">Current Tournaments</a></li>
 		</ol>
+	</div>
+	<div id="calendar" class="article">
+		<div class='top-of-league-form'>
+			All dates are server time (UTC / GMT). Click an event to see its details; events you have joined are in <b>bold</b>.
+		</div>
+		<div id="eventCalendar"></div>
+		<div id="eventDetails"></div>
 	</div>
 	<div id="leagues" class="article">
 		

@@ -61,6 +61,12 @@ var GempLotrGameUI = Class.extend({
 
     selectionFunction: null,
 
+    // Touch-bounce guard: suppress a repeat tap on the same card within this window (ms).
+    // Prevents a finger resting on the edge of a touchscreen from registering one card twice.
+    selectionDebounceMs: 200,
+    lastSelectedCardId: null,
+    lastSelectionTime: 0,
+
     chatBoxDiv: null,
     chatBox: null,
     communication: null,
@@ -71,6 +77,7 @@ var GempLotrGameUI = Class.extend({
     settingsFoilPresentation: "static",
     settingsAutoPass: false,
     settingsAutoAccept: false,
+    settingsAutoDismissDeckReveal: false,
     settingsAlwaysDropDown: false,
 
     windowWidth: null,
@@ -84,7 +91,17 @@ var GempLotrGameUI = Class.extend({
     
     decisionTime: 0,
     totalTime: 0,
+    decisionLimit: 0,          // seconds a single decision may take before it times out (0 = unknown)
+    lastClockValues: {},       // last bank clock value the server sent, per participant
+    gameEnded: false,
     countdownIntervalId: 0,
+
+    // Timer alerts (bank clock of the current user only; never for spectators or replays)
+    timerAudioMuted: false,
+    timerMuteToggle: null,
+    // Each rule: below N seconds remaining, play the alert cue every M seconds
+    timerAlertRules: [{below: 600, every: 30}, {below: 300, every: 10}, {below: 60, every: 1}],
+    timerLastTickSeconds: null,
     
     escFunction: null,
 
@@ -535,11 +552,16 @@ var GempLotrGameUI = Class.extend({
             });
 
         this.initialized = true;
+
+        this.initializeTimerUI();
     },
     
     
     processGameEnd: function() {
         var that = this;
+        this.gameEnded = true;
+        this.stopTimerTick();
+        this.markExpiredTimers();
         if(this.allPlayerIds == null)
             return;
         
@@ -555,62 +577,41 @@ var GempLotrGameUI = Class.extend({
             })(that.bottomPlayerId));
     },
 
+    // The tab box (#bottomLeftTabs) is declared in game.html; this trims it to the mode, turns it into a tab
+    // widget and wires the settings controls to their cookies.
     addBottomLeftTabPane: function () {
         var that = this;
-        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#gameOptionsBox' class='slimTab'>Options</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
-        var tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='gameOptionsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
-        
-        if(this.spectatorMode) {
-            //No Options box
-            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
-            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
-        }
-        else if (this.replayMode) {
-            //No options or connected players boxes
-            tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#settingsBox' class='slimTab'>Settings</a></li>";
-            tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='settingsBox' class='slimPanel'></div>";
-        }
-        
-        if(!this.autoZoom.isTouchDevice) {
-            tabsLabels += "<li id='auto-zoom-li'></li>";
-        }
-        
-        var tabsStr = "<div id='bottomLeftTabs'><ul>" + tabsLabels + "</ul>" + tabsBodies + "</div>";
 
-        this.tabPane = $(tabsStr).tabs();
-
-        $("#main").append(this.tabPane);
-        
-        if (this.autoZoom.autoZoomToggle != null) {
-            $("<span>Auto-zoom: </span>").appendTo("#auto-zoom-li");
-            this.autoZoom.autoZoomToggle.appendTo("#auto-zoom-li");
+        if (this.spectatorMode) {
+            // No Options box
+            $("#gameOptionsTab, #gameOptionsBox").remove();
+        } else if (this.replayMode) {
+            // No options or connected players boxes
+            $("#gameOptionsTab, #gameOptionsBox, #playersInRoomTab, #playersInRoomBox").remove();
         }
+
+        if (this.autoZoom.isTouchDevice || this.autoZoom.autoZoomToggle == null) {
+            $("#auto-zoom-control").remove();
+        } else {
+            this.autoZoom.autoZoomToggle.appendTo("#auto-zoom-control");
+        }
+
+        this.tabPane = $("#bottomLeftTabs").tabs().css("visibility", "visible");
 
         this.chatBoxDiv = $("#chatBox");
 
-        var foilSelection = $("<select id='foilPresentation' style='font-size: 80%;'>" +
-            "<option value='static'>Static layer</option>" +
-            "<option value='animated'>Animated layer</option>" +
-            "<option value='none'>None</option>" +
-            "</select>");
+        var foilSelection = $("#foilPresentation");
 
-        $("#settingsBox").append("Foil presentation: ");
-        $("#settingsBox").append(foilSelection);
-        $("#settingsBox").append("<br/>");
+        // Card.getFoilPresentation owns the default (static) and the cookie; the select just mirrors it
+        var foilPresentation = Card.getFoilPresentation();
+        foilSelection.val(foilPresentation);
+        this.settingsFoilPresentation = foilPresentation;
 
-        var foilPresentation = $.cookie("foilPresentation");
-        if (foilPresentation != null) {
-            foilSelection.val(foilPresentation);
-            this.settingsFoilPresentation = foilPresentation;
-        }
-
-        $("#foilPresentation").bind("change", function () {
+        foilSelection.bind("change", function () {
             var value = "" + foilSelection.val();
             that.settingsFoilPresentation = value;
             $.cookie("foilPresentation", value, {expires: 365});
         });
-
-        $("#settingsBox").append("<input id='autoAccept' type='checkbox' value='selected' /><label for='autoAccept'>Auto-accept after selecting action or card</label><br />");
 
         var autoAccept = $.cookie("autoAccept");
         if (autoAccept == "true" || autoAccept == null) {
@@ -623,8 +624,18 @@ var GempLotrGameUI = Class.extend({
             that.settingsAutoAccept = selected;
             $.cookie("autoAccept", "" + selected, {expires: 365});
         });
-        
-        $("#settingsBox").append("<input id='use-old-stack-checkbox' type='checkbox' value='' /><label for='use-old-stack-checkbox'>Use old visuals for stacked cards</label><br />");
+
+        // Searching your own deck shows the whole deck first (rules-wise you get to see it); this skips that step.
+        if (loadFromCookie("autoDismissDeckReveal", "false") === "true") {
+            $("#autoDismissDeckReveal").prop("checked", true);
+            this.settingsAutoDismissDeckReveal = true;
+        }
+
+        $("#autoDismissDeckReveal").bind("change", function () {
+            var selected = $("#autoDismissDeckReveal").prop("checked");
+            that.settingsAutoDismissDeckReveal = selected;
+            saveToCookie("autoDismissDeckReveal", "" + selected);
+        });
 
         var useOldStack = loadFromCookie("use-old-stack", "false");
         if (useOldStack === "true" || useOldStack == null) {
@@ -637,13 +648,10 @@ var GempLotrGameUI = Class.extend({
             that.useOldStackingVisuals = selected;
             saveToCookie("use-old-stack", selected);
         });
-        
-        
-        $("#settingsBox").append("<label for='animation-slider'>Animation Speed</label><br /><div id='animation-slider'></div>");
-        
+
         var animSpeed = loadFromCookie("animation-speed", 0);
         that.animations.replaySpeed = 2 ** (-1 * animSpeed);
-        
+
         $("#animation-slider").slider({
             min:-4,
             max:4,
@@ -652,21 +660,9 @@ var GempLotrGameUI = Class.extend({
                 let newAnimSpeed = ui.value;
                 saveToCookie("animation-speed", newAnimSpeed);
                 that.animations.replaySpeed = 2 ** (-1 * newAnimSpeed);
-                console.log("set: " + newAnimSpeed);
-                console.log("actual: " + (2 ** (-1 * newAnimSpeed)));
             },
             value: animSpeed
         });
-        
-        // $("#animation-slider").bind("change", function (event) {
-        //     let newAnimSpeed = $("#animation-slider").value;
-        //     $.cookie("animation-speed", "" + newAnimSpeed, {expires: 365});
-        //     that.animations.replaySpeed = 2 ^ newAnimSpeed;
-        //     console.log(newAnimSpeed);
-        //     console.log(2 ^ newAnimSpeed);
-        // });
-
-        $("#settingsBox").append("<input id='alwaysDropDown' type='checkbox' value='selected' /><label for='alwaysDropDown'>Always display drop-down in answer selection</label><br />");
 
         var alwaysDropDown = $.cookie("alwaysDropDown");
         if (alwaysDropDown == "true") {
@@ -679,15 +675,6 @@ var GempLotrGameUI = Class.extend({
             that.settingsAlwaysDropDown = selected;
             $.cookie("alwaysDropDown", "" + selected, {expires: 365});
         });
-        
-        $("#settingsBox").append("Phases when game auto-passes for you, if you have no phase actions to play<br />");
-        $("#settingsBox").append("<input id='autoPassFELLOWSHIP' type='checkbox' value='selected' /><label for='autoPassFELLOWSHIP'>Fellowship</label> ");
-        $("#settingsBox").append("<input id='autoPassSHADOW' type='checkbox' value='selected' /><label for='autoPassSHADOW'>Shadow</label> ");
-        $("#settingsBox").append("<input id='autoPassMANEUVER' type='checkbox' value='selected' /><label for='autoPassMANEUVER'>Maneuver</label> ");
-        $("#settingsBox").append("<input id='autoPassARCHERY' type='checkbox' value='selected' /><label for='autoPassARCHERY'>Archery</label> ");
-        $("#settingsBox").append("<input id='autoPassASSIGNMENT' type='checkbox' value='selected' /><label for='autoPassASSIGNMENT'>Assignment</label> ");
-        $("#settingsBox").append("<input id='autoPassSKIRMISH' type='checkbox' value='selected' /><label for='autoPassSKIRMISH'>Skirmish</label> ");
-        $("#settingsBox").append("<input id='autoPassREGROUP' type='checkbox' value='selected' /><label for='autoPassREGROUP'>Regroup</label>");
 
         var autoPassPhases = $.cookie("autoPassPhases");
         if (autoPassPhases == null)
@@ -744,12 +731,10 @@ var GempLotrGameUI = Class.extend({
         this.chatBox.chatUpdateInterval = 3000;
 
         if (!this.spectatorMode && !this.replayMode) {
-            $("#gameOptionsBox").append("<button id='concedeGame'>Concede game</button><br/>");
             $("#concedeGame").button().click(
                 function () {
                     that.communication.concede();
                 });
-            $("#gameOptionsBox").append("<button id='cancelGame'>Request game cancel</button>");
             $("#cancelGame").button().click(
                 function () {
                     that.communication.cancel();
@@ -784,8 +769,18 @@ var GempLotrGameUI = Class.extend({
             if (!this.successfulDrag) {
                 if (event.shiftKey || event.which > 1) {
                     this.displayCardInfo(selectedCardElem.data("card"));
-                } else if ((selectedCardElem.hasClass("selectableCard") || selectedCardElem.hasClass("actionableCard")) && !this.replayMode)
-                    this.selectionFunction(selectedCardElem.data("card").cardId, event);
+                } else if ((selectedCardElem.hasClass("selectableCard") || selectedCardElem.hasClass("actionableCard")) && !this.replayMode) {
+                    var clickedCardId = selectedCardElem.data("card").cardId;
+                    var now = Date.now();
+                    if (clickedCardId === this.lastSelectedCardId && (now - this.lastSelectionTime) < this.selectionDebounceMs) {
+                        // Same card tapped again within the debounce window: treat as a bounce, ignore.
+                        event.stopPropagation();
+                        return false;
+                    }
+                    this.lastSelectedCardId = clickedCardId;
+                    this.lastSelectionTime = now;
+                    this.selectionFunction(clickedCardId, event);
+                }
                 event.stopPropagation();
             }
             return false;
@@ -974,12 +969,20 @@ var GempLotrGameUI = Class.extend({
 
         var heightPerScale = (height - (padding * (heightScales.length + 1))) / scaleTotal;
 
-        var advPathWidth = Math.min(150, width * 0.1);
+        // Both left gutters are fixed: the site path no longer shrinks with the window, so the chat box below them
+        // always has its full width
+        var advPathWidth = 150;
         var specialUiWidth = 150;
+        var chatWidth = 302;
 
         var alertHeight = 180;
 
+        // The chat box shares the vertical band of the bottom player's hand (spectators have no hand: fixed height)
         var chatHeight = 200;
+        if (!this.spectatorMode) {
+            var handTop = padding * 6 + yScales[5] * heightPerScale;
+            chatHeight = height - padding - handTop;
+        }
 
         var assignmentsCount = this.assignGroupDivs.length + ((this.skirmishGroupDiv != null) ? 1 : 0);
 
@@ -1168,10 +1171,12 @@ var GempLotrGameUI = Class.extend({
             position: "absolute",
             left: padding,
             top: height - padding - chatHeight,
-            width: specialUiWidth + advPathWidth - padding,
+            width: chatWidth,
             height: chatHeight - padding
         });
-        this.chatBox.setBounds(4, 4 + 25, specialUiWidth + advPathWidth - 8, chatHeight - 8 - 25);
+        // the tab strip is taller when the auto-zoom and timer controls are stacked beside the tabs
+        var tabStripHeight = this.tabPane.children("ul").outerHeight(true);
+        this.chatBox.setBounds(4, 4 + tabStripHeight, chatWidth - 8, chatHeight - 8 - tabStripHeight);
 
         if (this.replayMode) {
             $(".replay").css({
@@ -1214,7 +1219,7 @@ var GempLotrGameUI = Class.extend({
     decisionFunction: function (decisionId, result) {
         var that = this;
         this.stopAnimatingTitle();
-        clearInterval(this.countdownIntervalId);
+        this.stopTimerTick();
         this.communication.gameDecisionMade(decisionId, result,
             this.channelNumber,
             function (xml) {
@@ -1423,15 +1428,31 @@ var GempLotrGameUI = Class.extend({
                         var index = this.getPlayerIndex(participantId);
 
                         var value = parseInt(clock.childNodes[0].nodeValue);
-                        
-                        if(this.bottomPlayerId == participantId)
-                            this.totalTime = value;
-                        else if(index == -1)
+
+                        if (participantId == "decisionLimit") {
+                            this.decisionLimit = value;
+                            this.renderDecisionClock();
+                            continue;
+                        }
+                        if (participantId == "decisionClock") {
                             this.decisionTime = value;
+                            this.renderDecisionClock();
+                            continue;
+                        }
+                        if (index == -1)
+                            continue;
+
+                        this.lastClockValues[participantId] = value;
+                        if(this.bottomPlayerId == participantId) {
+                            this.totalTime = value;
+                            this.updateTimerVisual(value);
+                        }
 
                         $("#clock" + index).text(this.parseTime(value));
                     }
                 }
+                if (this.gameEnded)
+                    this.markExpiredTimers();
             }
 
             if (!hasDecision) {
@@ -2113,6 +2134,14 @@ var GempLotrGameUI = Class.extend({
         var id = decision.getAttribute("id");
         var text = decision.getAttribute("text");
 
+        // The look-through-your-deck step of a search (nothing to pick, own deck): answer it at once when the player
+        // has asked not to see it.  Reveals of an opponent's deck, and reveals that are the point of an effect, are
+        // never tagged this way and always show.
+        if (this.settingsAutoDismissDeckReveal && this.getDecisionParameter(decision, "deckInspection") == "own") {
+            this.decisionFunction(id, "");
+            return;
+        }
+
         var min = this.getDecisionParameter(decision, "min");
         var max = this.getDecisionParameter(decision, "max");
         var cardIds = this.getDecisionParameters(decision, "cardId");
@@ -2396,6 +2425,303 @@ var GempLotrGameUI = Class.extend({
         {
             myAudio.play();    
         }
+    },
+
+    // Plays regardless of window focus (a timer warning is exactly for the focused-but-idle case).
+    // Browsers may reject play() before the user has interacted with the page; that is not an error.
+    PlaySoundAlways: function(soundObj) {
+        var myAudio = document.getElementById(soundObj);
+        if (myAudio == null)
+            return;
+        try {
+            myAudio.currentTime = 0;
+            var promise = myAudio.play();
+            if (promise !== undefined)
+                promise.catch(function () {});
+        } catch (e) {
+            // ignore
+        }
+    },
+
+    // ------------------------------------------------------------------------------------
+    // Timer: per-second tick of the current user's bank clock plus colour/pulse/audio cues.
+    // The server only sends clock values with each poll response (up to 5s apart), so the
+    // client ticks locally while the user has a pending decision and re-syncs on every response.
+    // ------------------------------------------------------------------------------------
+
+    timerAlertsApply: function () {
+        // spectatorMode is null until the participants event arrives; only a confirmed player gets cues
+        return this.spectatorMode === false && !this.replayMode;
+    },
+
+    // Called once the participant list is known: mute toggle in the tab bar, thresholds in Settings
+    initializeTimerUI: function () {
+        if (!this.timerAlertsApply()) {
+            $(".timer-control").remove();
+            return;
+        }
+        // Both controls are declared in game.html inside #bottomLeftTabs, hidden until the timer is known to apply
+        if (this.timerMuteToggle == null) {
+            this.initializeTimerMuteToggle();
+            this.initializeTimerAlertSettings();
+            $(".timer-control").show();
+        }
+    },
+
+    getOwnClockElem: function () {
+        if (this.allPlayerIds == null)
+            return null;
+        var index = this.getPlayerIndex(this.bottomPlayerId);
+        if (index < 0)
+            return null;
+        return $("#clock" + index);
+    },
+
+    startTimerTick: function () {
+        var that = this;
+        this.stopTimerTick();
+        if (this.gameEnded)
+            return;
+        this.timerLastTickSeconds = this.totalTime;
+        this.decisionLastRemaining = this.decisionRemaining();
+        this.countdownIntervalId = window.setInterval(function () {
+            if (that.gameEnded) {
+                that.stopTimerTick();
+                return;
+            }
+            that.totalTime -= 1;
+            that.decisionTime += 1;
+
+            if (that.allPlayerIds == null)
+                return;
+
+            // A clock that has run out has decided the game: freeze it, paint it and stop cueing rather than
+            // waiting for the server to confirm the loss.  A second of grace covers local/server drift; the
+            // server's own clock values still overwrite everything on the next response.
+            var decisionRemaining = that.decisionRemaining();
+            if (that.totalTime <= -1 || (decisionRemaining != null && decisionRemaining <= -1)) {
+                that.lastClockValues[that.bottomPlayerId] = that.totalTime;
+                that.renderDecisionClock();
+                var ownClock = that.getOwnClockElem();
+                if (ownClock != null)
+                    ownClock.text(that.parseTime(that.totalTime));
+                that.markExpiredTimers();
+                that.stopTimerTick();
+                return;
+            }
+
+            that.renderDecisionClock();
+            var clock = that.getOwnClockElem();
+            if (clock != null)
+                clock.text(that.parseTime(that.totalTime));
+
+            that.updateTimerVisual(that.totalTime);
+            that.fireTimerCues(that.timerLastTickSeconds, that.totalTime);
+            that.timerLastTickSeconds = that.totalTime;
+
+            // The tick only runs while a decision of ours is pending, so the decision clock cues are ours too
+            var remaining = that.decisionRemaining();
+            that.fireDecisionCues(that.decisionLastRemaining, remaining);
+            that.decisionLastRemaining = remaining;
+        }, 1000);
+    },
+
+    // Seconds left before the pending decision times out, or null when the limit is not known
+    decisionRemaining: function () {
+        if (!this.decisionLimit || this.decisionLimit <= 0)
+            return null;
+        return this.decisionLimit - this.decisionTime;
+    },
+
+    // "elapsed / limit" plus the same colour band as the bank clock, judged on the time left for the decision
+    renderDecisionClock: function () {
+        var clock = $("#clock-1");
+        var text = this.parseTime(this.decisionTime);
+        if (this.decisionLimit > 0)
+            text += " / " + this.parseTime(this.decisionLimit);
+        clock.text(text);
+
+        if (!this.timerAlertsApply() || this.gameEnded)
+            return;
+        var remaining = this.decisionRemaining();
+        clock.removeClass("timer-warn timer-danger");
+        if (remaining != null && remaining > 0)
+            clock.removeClass("timer-expired");
+        if (remaining != null) {
+            if (remaining < 30)
+                clock.addClass("timer-danger");
+            else if (remaining < 60 || remaining < this.decisionLimit / 4)
+                clock.addClass("timer-warn");
+        }
+    },
+
+    // Decision clock cues: at 60, 30 and 10 seconds left, then every second under 10.  Fixed points rather than the
+    // configurable bank-clock rules, since decision limits differ per game timer and are always short.
+    fireDecisionCues: function (previousRemaining, remaining) {
+        if (!this.timerAlertsApply() || previousRemaining == null || remaining == null || remaining >= previousRemaining)
+            return;
+        var cue = false;
+        for (var s = remaining; s < previousRemaining; s++) {
+            if (s == 60 || s == 30 || s == 10 || (s > 0 && s < 10)) {
+                cue = true;
+                break;
+            }
+        }
+        if (!cue)
+            return;
+        this.pulseClock($("#clock-1"));
+        if (!this.timerAudioMuted)
+            this.PlaySoundAlways("timerAlert");
+    },
+
+    // At the end of a game, a clock that ran out stays red and still: it is what decided the game
+    markExpiredTimers: function () {
+        if (this.allPlayerIds == null)
+            return;
+        for (var participantId in this.lastClockValues) {
+            if (!this.lastClockValues.hasOwnProperty(participantId))
+                continue;
+            var index = this.getPlayerIndex(participantId);
+            if (index >= 0 && this.lastClockValues[participantId] <= 0)
+                $("#clock" + index).removeClass("timer-warn timer-danger timer-pulse").addClass("timer-expired");
+        }
+        if (this.decisionLimit > 0 && this.decisionTime >= this.decisionLimit)
+            $("#clock-1").removeClass("timer-warn timer-danger timer-pulse").addClass("timer-expired");
+    },
+
+    stopTimerTick: function () {
+        if (this.countdownIntervalId) {
+            clearInterval(this.countdownIntervalId);
+            this.countdownIntervalId = 0;
+        }
+        this.timerLastTickSeconds = null;
+    },
+
+    // Background band: black normally, orange under 10 minutes, red under 5.
+    updateTimerVisual: function (secondsLeft) {
+        if (!this.timerAlertsApply())
+            return;
+        var clock = this.getOwnClockElem();
+        if (clock == null || this.gameEnded)
+            return;
+        clock.addClass("timer-own");
+        clock.removeClass("timer-warn timer-danger");
+        if (secondsLeft > 0)
+            clock.removeClass("timer-expired");   // the server disagreed with a locally expired clock
+        if (secondsLeft < 300)
+            clock.addClass("timer-danger");
+        else if (secondsLeft < 600)
+            clock.addClass("timer-warn");
+    },
+
+    pulseTimer: function () {
+        this.pulseClock(this.getOwnClockElem());
+    },
+
+    pulseClock: function (clock) {
+        if (clock == null || clock.length == 0)
+            return;
+        clock.removeClass("timer-pulse");
+        // Force a reflow so re-adding the class restarts the animation
+        void clock[0].offsetWidth;
+        clock.addClass("timer-pulse");
+    },
+
+    // Called once per local tick with the previous and current seconds remaining.
+    fireTimerCues: function (previous, current) {
+        if (!this.timerAlertsApply() || previous == null || current >= previous)
+            return;
+
+        // "Crossing a minute mark" = the clock landing on X:00 (the previous tick may be more than one
+        // second earlier after a server re-sync, hence the range check rather than an equality test)
+        var crossedMinute = false;
+        for (var s = current; s < previous; s++) {
+            if (s % 60 == 0 && s > 0) {
+                crossedMinute = true;
+                break;
+            }
+        }
+        if (crossedMinute) {
+            // visual only: the threshold cues below carry the audio
+            this.pulseTimer();
+            return;
+        }
+
+        // Most specific matching rule (smallest threshold the clock is under) wins
+        var rule = null;
+        for (var i = 0; i < this.timerAlertRules.length; i++) {
+            var candidate = this.timerAlertRules[i];
+            if (current < candidate.below && candidate.every > 0 && (rule == null || candidate.below < rule.below))
+                rule = candidate;
+        }
+        if (rule != null && current > 0 && current % rule.every == 0) {
+            this.pulseTimer();
+            if (!this.timerAudioMuted)
+                this.PlaySoundAlways("timerAlert");
+        }
+    },
+
+    initializeTimerMuteToggle: function () {
+        var that = this;
+        var onIcon = "ui-icon-volume-on";
+        var offIcon = "ui-icon-volume-off";
+
+        this.timerAudioMuted = loadFromCookie("timerAudioMuted", "false") === "true";
+
+        // Muted: the speaker icon with a red X drawn over it (#timer-mute-toggle.muted in game.css)
+        this.timerMuteToggle = $("#timer-mute-toggle").button({
+            icons: {primary: this.timerAudioMuted ? offIcon : onIcon},
+            text: false
+        }).toggleClass("muted", this.timerAudioMuted);
+        this.timerMuteToggle.click(function () {
+            that.timerAudioMuted = !that.timerAudioMuted;
+            saveToCookie("timerAudioMuted", "" + that.timerAudioMuted);
+            that.timerMuteToggle.button("option", "icons", {primary: that.timerAudioMuted ? offIcon : onIcon})
+                .toggleClass("muted", that.timerAudioMuted)
+                .attr("title", that.timerAudioMuted ? "Timer sounds are muted" : "Mute timer sounds");
+        });
+    },
+
+    // Settings tab: three "below X minutes, cue every Y seconds" rules, stored as "600:30,300:10,60:1"
+    initializeTimerAlertSettings: function () {
+        var that = this;
+        var stored = loadFromCookie("timerAlertRules", "600:30,300:10,60:1");
+        var parsed = [];
+        var parts = ("" + stored).split(",");
+        for (var i = 0; i < parts.length; i++) {
+            var pair = parts[i].split(":");
+            var below = parseInt(pair[0]);
+            var every = parseInt(pair[1]);
+            if (!isNaN(below) && !isNaN(every))
+                parsed.push({below: below, every: every});
+        }
+        if (parsed.length > 0)
+            this.timerAlertRules = parsed;
+
+        var belowInputs = $("#timerAlertSettings .timerAlertBelow");
+        var everyInputs = $("#timerAlertSettings .timerAlertEvery");
+        for (var r = 0; r < belowInputs.length; r++) {
+            var rule = this.timerAlertRules[r] || {below: 0, every: 0};
+            $(belowInputs[r]).val(Math.round(rule.below / 60));
+            $(everyInputs[r]).val(rule.every);
+        }
+
+        $("#timerAlertSettings input").bind("change", function () {
+            var rules = [];
+            var belows = $("#timerAlertSettings .timerAlertBelow");
+            var everys = $("#timerAlertSettings .timerAlertEvery");
+            for (var i = 0; i < belows.length; i++) {
+                var below = parseInt($(belows[i]).val()) * 60;
+                var every = parseInt($(everys[i]).val());
+                if (!isNaN(below) && !isNaN(every) && below > 0 && every > 0)
+                    rules.push({below: below, every: every});
+            }
+            that.timerAlertRules = rules;
+            var serialized = [];
+            for (var j = 0; j < rules.length; j++)
+                serialized.push(rules[j].below + ":" + rules[j].every);
+            saveToCookie("timerAlertRules", serialized.join(","));
+        });
     },
 
     createActionChoiceContextMenu: function (actions, event, selectActionFunction) {

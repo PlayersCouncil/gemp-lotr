@@ -113,7 +113,7 @@ var LegacyCardFilter = Class.extend({
         
         this.fullFilterDiv = $("<div id='filter-inputs' style='display:flex;flex-wrap:wrap;'></div>");
         this.setSelect = $("<select id='setSelect' style='width: 130px; font-size: 80%;'>"
-            + "<option value='0-34,50-200'>All Sets</option>"
+            + "<option value='0-34,50-200,404'>All Sets</option>"
             + "<option value='0-19'>Official Decipher Sets</option>"
             + "<option value='30-33'>The Hobbit Sets</option>"
             + "<option value='50-69,100'>Player's Council Errata</option>"
@@ -137,6 +137,7 @@ var LegacyCardFilter = Class.extend({
             + "<option value='pc_expanded'>Expanded (PC)</option>"
             + "<option value='french'>French Format</option>"
             + "<option disabled>----------</option>"
+            + "<option value='404'>404 - Future Prizes</option>"
             + "<option value='0'>00 - Promo</option>"
             + "<option value='1'>01 - The Fellowship of the Ring</option>"
             + "<option value='51'>01E - The Fellowship of the Ring (PC Errata)</option>"

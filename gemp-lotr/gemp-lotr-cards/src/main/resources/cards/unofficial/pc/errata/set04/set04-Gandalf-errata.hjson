@@ -24,6 +24,10 @@
 				trigger: {
 					type: Moves
 				}
+				requires: {
+					type: Phase
+					phase: Regroup
+				}
 				cost: {
 					type: Spot
 					filter: title(Gandalf)
@@ -40,12 +44,13 @@
 							type: ForEachInMemory
 							memory: hinderedCards
 							filter: side(Shadow)
+							limit: 5
 						}
 					}
 				]
 			}
 		]
-		gametext: <b>Spell</b>.<br>Spot Gandalf to hinder all conditions.  Add (1) for each Shadow condition hindered (limit (5)).
+		gametext: <b>Spell</b>.<br>If the fellowship moves during the regroup phase, spot Gandalf to hinder all conditions. Add (1) for each Shadow condition hindered (limit (5)).
 		lore: "His hood and grey rags were flung away. His white garments shone."
 		promotext: ""
 		alts: {

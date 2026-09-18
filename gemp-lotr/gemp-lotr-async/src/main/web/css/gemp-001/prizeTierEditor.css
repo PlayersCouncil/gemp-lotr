@@ -1,0 +1,143 @@
+/* Prize tier editor (js/gemp-022/prizeTierEditor.js), used by the league and tournament admin forms.
+   Dark theme, matching leagueAdmin.css. Layout helpers (flex-horiz, flex-fill, field-inline) come from hall.css /
+   leagueAdmin.css. */
+
+.prize-tier-editor {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4em;
+}
+
+.prize-tier-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4em;
+}
+
+.prize-tier-empty {
+	color: #888;
+	font-size: 90%;
+	font-style: italic;
+}
+
+.prize-tier-editor .prize-tier-add,
+.prize-tier .prize-item-add {
+	align-self: flex-start;
+}
+
+/* ---- one tier ---- */
+.prize-tier {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3em;
+	padding: 0.4em 0.6em;
+	border: 1px solid #3a3a3a;
+	border-radius: 4px;
+	background: #202020;
+}
+
+.prize-tier-head {
+	align-items: center;
+	gap: 0.5em;
+	flex-wrap: wrap;
+}
+
+.prize-tier-index {
+	color: #aaa;
+	min-width: 1.4em;
+	text-align: right;
+}
+
+.prize-tier-head .field-inline {
+	color: #ccc;
+}
+
+.prize-tier-head input[type="number"] {
+	width: 4em;
+}
+
+.prize-tier-label {
+	flex: 1 1 6em;
+	width: 6em;
+	min-width: 6em;
+}
+
+.prize-tier-buttons {
+	margin-left: auto;
+	display: flex;
+	gap: 0.2em;
+}
+
+/* ---- items of a tier ---- */
+.prize-items {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+	margin-left: 1.9em;
+}
+
+.prize-item {
+	align-items: center;
+	gap: 0.4em;
+	flex-wrap: wrap;
+}
+
+.prize-item .prize-item-count {
+	width: 3.5em;
+}
+
+.prize-item .prize-item-x {
+	color: #888;
+}
+
+.prize-item .prize-item-id {
+	width: 11em;
+}
+
+.prize-item .prize-item-card {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.prize-item .prize-item-promise-part {
+	flex-grow: 1;
+}
+
+.prize-item .prize-item-promise {
+	flex: 1 1 10em;
+	width: 10em;
+	min-width: 10em;
+}
+
+.prize-item-name {
+	color: #bbb;
+	font-size: 90%;
+	min-width: 6em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.prize-item-name .cardHint {
+	font-size: 100%;
+}
+
+.prize-item-unknown {
+	color: #e88;
+}
+
+.prize-item-kind {
+	color: #888;
+}
+
+/* ---- validation ---- */
+.prize-tier.prize-invalid {
+	border-color: #c55;
+	box-shadow: 0 0 0 1px #c55 inset;
+}
+
+.prize-item.prize-invalid {
+	outline: 1px solid #c55;
+	outline-offset: 2px;
+	border-radius: 2px;
+}

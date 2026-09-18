@@ -108,6 +108,19 @@ public class Choice implements EffectAppenderProducer {
             }
 
             @Override
+            public boolean isPlayabilityCheckedForEffect() {
+                // When every branch insists on being checked up front (e.g. all of them play a card from a zone),
+                // the choice as a whole must be too; otherwise an action whose only branches are all impossible
+                // (such as Fell Voices Call at The Great River) is still offered, and the "no valid choices" fallback
+                // below then lets the player pick a branch that must not happen (#1080).
+                for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
+                    if (!possibleEffectAppender.isPlayabilityCheckedForEffect())
+                        return false;
+                }
+                return possibleEffectAppenders.length > 0;
+            }
+
+            @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final String choosingPlayer = playerSource.getPlayer(actionContext);
                 ActionContext delegate = new DelegateActionContext(actionContext,

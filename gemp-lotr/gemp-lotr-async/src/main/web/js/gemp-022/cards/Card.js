@@ -276,6 +276,18 @@ class Card {
     isPack() {
         return packBlueprints[this.blueprintId] != null;
     }
+
+    // Set 404 "Future Prize" placeholders: shown in collections like a card, but never playable or addable to a deck.
+    static isPlaceholder(blueprintId) {
+        if (blueprintId == null)
+            return false;
+        var separator = blueprintId.indexOf("_");
+        return separator > 0 && parseInt(blueprintId.substr(0, separator)) == 404;
+    }
+
+    isPlaceholder() {
+        return Card.isPlaceholder(this.blueprintId);
+    }
     
     isTengwar() {
         return this.tengwar;
@@ -386,7 +398,8 @@ class Card {
         var setNo = parseInt(blueprintId.substr(0, separator));
         var cardNo = parseInt(blueprintId.substr(separator + 1));
         
-        if (setNo >= 400 && setNo < 600) {
+        // 400-599 are in-development sets, except 404: the "Future Prize" placeholders, which have a finished image
+        if (setNo >= 400 && setNo < 600 && setNo != 404) {
             return true;
         }
 
@@ -412,6 +425,10 @@ class Card {
         var separator = blueprintId.indexOf("_");
         var setNo = parseInt(blueprintId.substr(0, separator));
         var cardNo = parseInt(blueprintId.substr(separator + 1));
+
+        // Set 404 holds the "Future Prize" placeholders handed out for promised prizes: one image for all of them.
+        if (setNo == 404)
+            return "images/future_prize.jpg";
 
         var errata = this.getErrata(setNo, cardNo);
         if (errata != null && (ignoreErrata === undefined || !ignoreErrata))
@@ -560,17 +577,13 @@ class Card {
             return maxDimension;
     }
     
+    // static | animated | none; a browser without the cookie gets the static layer
     static getFoilPresentation() {
-        let foil = loadFromCookie("foilPresentation", "none");
-        //Handling of old cookies. This should be removable late 2025.
-        if(foil === "true") {
-            saveToCookie("foilPresentation", "animated");
-            return "animated"
-        }
-        
-        if(foil === "false") {
-            saveToCookie("foilPresentation", "static");
-            return "static"
+        let foil = loadFromCookie("foilPresentation", "static");
+        if (foil !== "static" && foil !== "animated" && foil !== "none") {
+            // pre-2025 cookies stored true/false
+            foil = (foil === "true") ? "animated" : "static";
+            saveToCookie("foilPresentation", foil);
         }
         return foil;
     }

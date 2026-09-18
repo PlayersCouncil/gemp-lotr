@@ -1,33 +1,62 @@
 <link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/leagueAdmin.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/prizeTierEditor.css">
 <script type="text/javascript">
-function gatherData(formElem) {
-	var data = {};
-
-	var inputs = $("input[type='text'], input[type='number'], option:selected", formElem).each(
-		function () {
-			
-			var input = $(this);
-			var name = null;
-			var value = null;
-			if (input.prop("tagName") == "INPUT") {
-				name = input.attr("name");
-				value = input.val();
-			} else if (input.prop("tagName") == "OPTION") {
-				name = input.parents("select").attr("name");
-				value = input.attr("value");
-			}
-			if (name != null && value != null) {
-				if (data[name] == null)
-					data[name] = new Array();
-				data[name].push(value);
-			}
-		});
-
-	return data;
-}
-
 $(document).ready(
 	function () {
+		var page = $("#league-admin-page");
+		var resultdiv = $("#league-result");
+
+		var TYPES = ["SEALED", "SOLODRAFT", "CONSTRUCTED", "RTMD"];
+		var TYPE_LABELS = {SEALED: "Sealed", SOLODRAFT: "Draft", CONSTRUCTED: "Constructed", RTMD: "Race to Mount Doom"};
+		var DEFAULT_COST = {SEALED: 50, SOLODRAFT: 50, CONSTRUCTED: 50, RTMD: 0};
+		var DEFAULT_MATCHES = {SEALED: 5, SOLODRAFT: 5, CONSTRUCTED: 5, RTMD: 10};
+		// template keys the form manages itself; anything else found in a loaded schedule is carried over untouched
+		var MANAGED_TEMPLATE_KEYS = ["cost", "maxRepeatMatches", "description", "inviteOnly", "collectionName", "campaign", "prizeTiers",
+			"racePath", "raceVisualPath", "raceCumulative", "raceIntensityFloor", "raceIntensityCeiling",
+			"raceAdvancementMode", "raceAdvanceFactor", "series", "name", "start", "code"];
+
+		var state = {
+			type: "SEALED",
+			editingLeague: null,    // {code, name, started, participants} while an existing league is loaded
+			editingSchedule: null,  // the schedule object while an existing schedule is loaded
+			templateExtras: {},     // unmanaged template keys of the loaded schedule, written back on save
+			costTouched: false,
+			schedules: []
+		};
+		var formatsLoaded = false;
+		var selectCounter = 0;
+		var adminCalendar = null;
+
+		var esc = function (text) {
+			return $("<div></div>").text(text == null ? "" : String(text)).html();
+		};
+		var toInt = function (value, fallback) {
+			var n = parseInt(value, 10);
+			return isNaN(n) ? fallback : n;
+		};
+		var todayIso = function () {
+			return new Date().toISOString().substr(0, 10);
+		};
+		var isMultiSerie = function (type) {
+			return type == "CONSTRUCTED" || type == "RTMD";
+		};
+		var serieKind = function (type) {
+			return type == "SEALED" ? "sealed" : (type == "SOLODRAFT" ? "draft" : "format");
+		};
+		var isScheduling = function () {
+			return $("#league-repeat").prop("checked");
+		};
+
+		// ---- (i) help toggles: one mechanism for the whole page ----
+		page.on("click", ".info-toggle", function () {
+			var target = $("#" + $(this).data("for"));
+			target.prop("hidden", !target.prop("hidden"));
+		});
+
+		// =====================================================================================
+		// Preview dialog (leagues and schedules share it)
+		// =====================================================================================
 		var previewDialog = $("<div></div>")
 				.dialog({
 					autoOpen:false,
@@ -35,281 +64,426 @@ $(document).ready(
 					resizable:true,
 					modal:true,
 					title:"Preview window",
-					closeText: ''
+					closeText: '',
+					width: 560
 				});
 
-		var displayPreview = function (xml) {
-			var root = xml.documentElement;
-			if(root == null)
+		// one item of a prize tier, as the /admin/preview*League endpoints describe it
+		var prizeItemHtml = function (item) {
+			if (item == null)
+				return "";
+			if (item.kind == "promise")
+				return item.count + "x <span class='preview-promise'>TBA: " + esc(item.name != null ? item.name : item.promise) + "</span>";
+			if (item.kind == "unknown")
+				return item.count + "x [UNKNOWN: " + esc(item.blueprintId) + "]";
+			if (item.kind == "pack")
+				return item.count + "x " + esc(item.name != null ? item.name : item.blueprintId) + " (pack)";
+			var label = (item.name != null) ? item.name : item.blueprintId;
+			return item.count + "x <div class='cardHint' value='" + esc(item.blueprintId) + "'>" + esc(label) + "</div>";
+		};
+
+		var prizeTierWhoHtml = function (tier) {
+			if (tier.kind == "PARTICIPATION") {
+				return "Anyone who plays at least <b>" + tier.games + "</b> game" + (tier.games == 1 ? "" : "s")
+					+ (tier.scope == "CAMPAIGN" ? " across the campaign" : "");
+			}
+			if (tier.from == tier.to)
+				return "Place <b>" + tier.from + "</b>";
+			return "Places <b>" + tier.from + "</b> to <b>" + tier.to + "</b>";
+		};
+
+		// league is the JSON preview object returned by the /admin/preview*League endpoints
+		var renderLeaguePreview = function (container, league) {
+			if (typeof league === "string")
+				league = JSON.parse(league);
+
+			container.append("<div class='leagueName'>" + esc(league.name) + "</div>");
+			container.append("<div class='leagueCost'><b>Cost:</b> " + formatPrice(league.cost) + "</div>");
+			container.append("<div><b>Runs:</b> " + league.start + ", listed until " + league.end + "</div>");
+			if (league.inviteOnly) {
+				container.append("<div><b>Invite only</b></div>");
+			}
+			if (league.descriptionHtml) {
+				container.append($("<div class='preview-desc'></div>").html(league.descriptionHtml));
+			}
+
+			var series = league.series || [];
+			for (var j = 0; j < series.length; j++) {
+				var serie = series[j];
+				var serieText = esc(serie.name) + " - " + serie.start + " to " + serie.end;
+				container.append("<div class='serieName'>" + serieText + "</div>");
+				container.append("<div><b>Format:</b> " + (serie.limited ? "Limited" : "Constructed") + " " + esc(serie.format) + "</div>");
+				container.append("<div><b>Collection:</b> " + esc(league.collection) + "</div>");
+				container.append("<div>Maximum ranked matches in serie: " + serie.maxMatches + "</div>");
+			}
+
+			if (league.race != null) {
+				var race = league.race;
+				container.append("<div class='serieName'>Race to Mount Doom</div>");
+				container.append("<div>" + race.pathLength + " sites, advancing on " + race.advancementMode
+					+ " x" + race.advanceFactor + (race.cumulative ? ", cumulative" : "")
+					+ ", intensity " + race.intensityFloor + " to " + race.intensityCeiling + "</div>");
+				var sites = race.metaSites || [];
+				for (var s = 0; s < sites.length; s++) {
+					var site = sites[s];
+					var siteLabel = (site.name != null) ? site.name : site.blueprintId;
+					container.append("<div>" + site.position + ". <div class='cardHint' value='" + esc(site.blueprintId) + "'>" + esc(siteLabel) + "</div></div>");
+				}
+			}
+
+			if (league.maxRepeatMatches > 1) {
+				container.append("<div>Players may face the same opponent up to <b>" + league.maxRepeatMatches + "</b> times.</div>");
+			}
+
+			if (league.campaign) {
+				container.append("<div><b>Campaign:</b> " + esc(league.campaign) + "</div>");
+			}
+			var tiers = league.prizeTiers || [];
+			if (tiers.length > 0) {
+				container.append("<div class='serieName'>Prizes</div>");
+				for (var t = 0; t < tiers.length; t++) {
+					var tier = tiers[t];
+					var items = (tier.items || []).map(prizeItemHtml).join(", ");
+					var line = $("<div class='preview-prize-tier'></div>");
+					line.append(prizeTierWhoHtml(tier) + (tier.label ? " (" + esc(tier.label) + ")" : "") + " receives " + items);
+					container.append(line);
+				}
+			}
+		};
+
+		var displayPreview = function (league) {
+			renderLeaguePreview(previewDialog, league);
+		};
+
+		var openLeaguePreview = function (league) {
+			previewDialog.html("");
+			previewDialog.dialog("option", "title", "League preview");
+			displayPreview(league);
+			previewDialog.dialog("open");
+		};
+
+		var upcomingHtml = function (upcoming, cssClass) {
+			var html = "<ul class='" + (cssClass || "schedule-upcoming") + "'>";
+			for (var i = 0; i < upcoming.length; i++) {
+				var u = upcoming[i];
+				html += "<li>" + u.start + " to " + u.end + ": <b>" + esc(u.leagueName) + "</b> (created " + u.createdOn + ")";
+				if (u.error)
+					html += " <span class='schedule-error'>&#9888; " + esc(u.error) + "</span>";
+				html += "</li>";
+			}
+			return html + "</ul>";
+		};
+
+		var openSchedulePreview = function (json, definition) {
+			previewDialog.html("");
+			previewDialog.dialog("option", "title", "Schedule preview");
+			previewDialog.append("<div class='leagueName'>Upcoming leagues</div>");
+			previewDialog.append(upcomingHtml(json.upcoming || [], "preview-upcoming"));
+			if (json.nextLeague) {
+				previewDialog.append("<div class='serieName'>Next league as it will be created</div>");
+				renderLeaguePreview(previewDialog, json.nextLeague);
+			}
+			var technical = {};
+			try {
+				technical.template = JSON.parse(definition.template);
+				technical.events = JSON.parse(definition.events);
+			} catch (e) {
+				technical = {template: definition.template, events: definition.events};
+			}
+			var toggle = $("<div class='tech-toggle'>&#9656; Definition (technical)</div>");
+			var pre = $("<pre class='tech-json' hidden></pre>").text(JSON.stringify(technical, null, 2));
+			toggle.click(function () {
+				var open = pre.prop("hidden");
+				pre.prop("hidden", !open);
+				toggle.html((open ? "&#9662;" : "&#9656;") + " Definition (technical)");
+			});
+			previewDialog.append(toggle).append(pre);
+			previewDialog.dialog("open");
+		};
+
+		// =====================================================================================
+		// Format / template / draft selects, filled from one cached getFormats call
+		// =====================================================================================
+		// The hidden #format-cache-* selects hold the sorted option lists; every visible select clones from them.
+		var populateFormatSelect = function (select, kind, value) {
+			select.attr("data-kind", kind);
+			if (!formatsLoaded) {
+				select.data("pendingValue", value);
+				return;
+			}
+			var cache = $("#format-cache-" + kind);
+			select.empty().append(cache.find("option").clone());
+			if (value != null && value !== "" && select.find("option[value='" + String(value).replace(/'/g, "\\'") + "']").length == 0) {
+				// keep an unknown code (an old template or a code not exposed any more) instead of silently swapping it
+				select.append($("<option/>").attr("value", value).attr("data-label", value).text(value + " (unknown)"));
+			}
+			if (value != null && value !== "")
+				select.val(String(value));
+			if (select.val() == null && select.find("option").length > 0)
+				select[0].selectedIndex = 0;
+		};
+
+		var fillPendingSelects = function () {
+			page.find("select.serie-format").each(function () {
+				var select = $(this);
+				populateFormatSelect(select, select.attr("data-kind"), select.data("pendingValue"));
+				select.removeData("pendingValue");
+			});
+		};
+
+		var selectedLabel = function (select) {
+			var option = select.find("option:selected");
+			if (option.length == 0)
+				return "";
+			var label = option.attr("data-label");
+			return label != null ? label : option.text();
+		};
+
+		hall.comm.getFormats(true,
+			function (json)
 			{
-				xml = new DOMParser().parseFromString(xml,"text/xml");
-				root = xml.documentElement;
-			}
-			if (root.tagName == 'league') {
-				var league = root;
+				var drafts = json.DraftTemplates;
+				var formats = json.Formats;
+				var sealed = json.SealedTemplates;
 
-				var leagueName = league.getAttribute("name");
-				var cost = parseInt(league.getAttribute("cost"));
-				var collection = league.getAttribute("collection");
-
-				previewDialog.append("<div class='leagueName'>" + leagueName + "</div>");
-
-				var costStr = formatPrice(cost);
-				previewDialog.append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div>");
-
-				var series = league.getElementsByTagName("serie");
-				for (var j = 0; j < series.length; j++) {
-
-					var serie = series[j];
-					var serieName = serie.getAttribute("type");
-					var serieStart = serie.getAttribute("start");
-					var serieEnd = serie.getAttribute("end");
-					var maxMatches = serie.getAttribute("maxMatches");
-					var format = serie.getAttribute("format");
-					var limited = serie.getAttribute("limited");
-
-					var serieText = serieName + " - " + getDateString(serieStart) + " to " + getDateString(serieEnd);
-					previewDialog.append("<div class='serieName'>" + serieText + "</div>");
-
-					previewDialog.append("<div><b>Format:</b> " + ((limited == "true") ? "Limited" : "Constructed") + " " + format + "</div>");
-					previewDialog.append("<div><b>Collection:</b> " + collection + "</div>");
-
-					previewDialog.append("<div>Maximum ranked matches in serie: " + maxMatches + "</div>");
+				for (var prop in drafts) {
+					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
+						var draftItem = $("<option/>")
+							.attr("value", prop)
+							.attr("data-label", prop)
+							.text(prop);
+						$("#format-cache-draft").append(draftItem);
+					}
 				}
-				
-				var maxRepeatMatches = parseInt(league.getAttribute("maxRepeatMatches"));
-				var topPrize = league.getAttribute("topPrize");
-				var topCutoff = parseInt(league.getAttribute("topCutoff"));
-				var participationPrize = league.getAttribute("participationPrize");
-				var participationGames = parseInt(league.getAttribute("participationGames"));
-				
-				if(maxRepeatMatches > 1) {
-					previewDialog.append("<div>Players may face the same opponent up to <b>" + maxRepeatMatches + "</b> times.</div>");
+				sortOptionsByName("#format-cache-draft");
+
+				for (var prop in formats) {
+					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
+						if(formats[prop].name.includes("Limited"))
+							continue;
+
+						var num = ("0000" + formats[prop].order).substr(-4);
+
+						var formatItem = $("<option/>")
+							.attr("value", prop)
+							.attr("data-label", formats[prop].name)
+							.text("" + num + " - " + formats[prop].name);
+						$("#format-cache-format").append(formatItem);
+					}
 				}
-				
-				if(topPrize != null && topPrize != "") {
-					previewDialog.append("<div>Top " + topCutoff + " players will receive " + topPrize + "</div>");
+				sortOptionsByName("#format-cache-format");
+				$("#format-cache-format option").each(function(index) {
+					var newText = $(this).text().replace(/\d+ - /, '');
+					$(this).text(newText);
+				});
+
+				for (var prop in sealed) {
+					if (Object.prototype.hasOwnProperty.call(sealed, prop)) {
+						var id = sealed[prop].id;
+						var serieCount = sealed[prop].seriesProduct.length;
+
+						var sealedItem = $("<option/>")
+							.attr("value", id)
+							.attr("data-label", prop)
+							.text(prop + " - " + serieCount + " Series");
+						$("#format-cache-sealed").append(sealedItem);
+					}
 				}
-				
-				if(participationPrize != null && participationPrize != "") {
-					previewDialog.append("<div>Any who play at least " + participationGames + " games will receive " + participationPrize + "</div>");
+				sortOptionsByName("#format-cache-sealed");
+
+				formatsLoaded = true;
+				fillPendingSelects();
+				seedEmptyRotationNames();
+			},
+			{
+				"400":function ()
+				{
+					alert("Could not retrieve formats.");
 				}
-				
-			}
+			});
+
+		// =====================================================================================
+		// Serie editor: one row (Sealed/Draft) or a list of rows (Constructed/RTMD)
+		// =====================================================================================
+		var defaultSerie = function (type) {
+			return {format: "", duration: 7, matches: DEFAULT_MATCHES[type]};
 		};
-		
-		var now = new Date();
-		var nowStr = "" + now.getFullYear() + String(1 + now.getMonth()).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-		$("#sealed-start").val(now.toISOString().substr(0, 10));
-		$("#solo-draft-start").val(now.toISOString().substr(0, 10));
-		$("#constructed-start").val(now.toISOString().substr(0, 10));
 
-		var previewError = function (xhr) {
-			previewDialog.dialog("close");
-			alert("Invalid parameters specified - error code: " + xhr.status);
+		var buildSerieRow = function (type, serie, multi) {
+			var row = $("<div class='serie-row flex-horiz'></div>");
+			if (multi)
+				row.append("<span class='serie-index'></span>");
+			var select = $("<select class='serie-format' id='fmt-select-" + (++selectCounter) + "'></select>");
+			populateFormatSelect(select, serieKind(type), serie.format);
+			row.append(select);
+			var durationLabel = $("<label class='field-inline'>Days: </label>");
+			durationLabel.append($("<input type='number' min='1' class='serie-duration'>").val(serie.duration));
+			row.append(durationLabel);
+			var matchesLabel = $("<label class='field-inline'>Max matches: </label>");
+			matchesLabel.append($("<input type='number' min='1' class='serie-matches'>").val(serie.matches));
+			row.append(matchesLabel);
+			if (multi) {
+				row.append($("<button type='button' class='serie-remove'>Remove</button>").button().click(function () {
+					var editor = row.closest(".serie-editor");
+					row.remove();
+					refreshSerieRows(editor);
+				}));
+			}
+			return row;
 		};
-		
-		updateDescPreview("#sealed-desc", "#sealed-desc-preview");
-		
-		$("#preview-sealed-league-button").button().click(
-			function () {
-				let resultdiv = $("#sealed-league-result");
-				resultdiv.html("Processing...");
-						
-				hall.comm.processSealedLeague(
-					true,
-					$("#sealed-start").val().replaceAll("-",""), 
-					$("#sealed-name").val(),
-					$("#sealed-cost").val(),
-					$("#sealed-format").val(),
-					$("#sealed-duration").val(),
-					$("#sealed-matches").val(),
-					
-					$("#sealed-repeat-games").val(),
-					$("#sealed-invite-only").prop('checked'),
-					$("#sealed-desc").val(),
-					
-					$("#sealed-top-prize").val(),
-					$("#sealed-top-pos").val(),
-					$("#sealed-part-prize").val(),
-					$("#sealed-part-games").val(),
-					
-					function (xml) {
-						previewDialog.html("");
-						displayPreview(xml);
-						resultdiv.html("OK");
-						previewDialog.dialog("open");
-					}, leagueErrorMap(resultdiv));
-				});
-		
-		$("#add-sealed-league-button").button().click(
-			function () {
-				let resultdiv = $("#sealed-league-result");
-				resultdiv.html("Processing...");
-						
-				hall.comm.processSealedLeague(
-					false,
-					$("#sealed-start").val().replaceAll("-",""), 
-					$("#sealed-name").val(),
-					$("#sealed-cost").val(),
-					$("#sealed-format").val(),
-					$("#sealed-duration").val(),
-					$("#sealed-matches").val(),
-					
-					$("#sealed-repeat-games").val(),
-					$("#sealed-invite-only").prop('checked'),
-					$("#sealed-desc").val(),
-					
-					$("#sealed-top-prize").val(),
-					$("#sealed-top-pos").val(),
-					$("#sealed-part-prize").val(),
-					$("#sealed-part-games").val(),
-					
-					function (xml) {
-						resultdiv.html("League created successfully.");
-					}, leagueErrorMap(resultdiv));
-				});
-		
-		
-		updateDescPreview("#solo-draft-desc", "#solo-draft-desc-preview");
-		$("#preview-solo-draft-league-button").button().click(
-			function () {
-				let resultdiv = $("#solo-draft-league-result");
-				resultdiv.html("Processing...");
-						
-				hall.comm.processSoloDraftLeague(
-					true,
-					$("#solo-draft-start").val().replaceAll("-",""), 
-					$("#solo-draft-name").val(),
-					$("#solo-draft-cost").val(),
-					$("#solo-draft-format").val(),
-					$("#solo-draft-duration").val(),
-					$("#solo-draft-matches").val(),
-					
-					$("#solo-draft-repeat-games").val(),
-					$("#solo-draft-invite-only").prop('checked'),
-					$("#solo-draft-desc").val(),
-					
-					$("#solo-draft-top-prize").val(),
-					$("#solo-draft-top-pos").val(),
-					$("#solo-draft-part-prize").val(),
-					$("#solo-draft-part-games").val(),
-					
-					function (xml) {
-						previewDialog.html("");
-						displayPreview(xml);
-						resultdiv.html("OK");
-						previewDialog.dialog("open");
-					}, leagueErrorMap(resultdiv));
-				});
-		
-		$("#add-solo-draft-league-button").button().click(
-			function () {
-				let resultdiv = $("#solo-draft-league-result");
-				resultdiv.html("Processing...");
-						
-				hall.comm.processSoloDraftLeague(
-					false,
-					$("#solo-draft-start").val().replaceAll("-",""), 
-					$("#solo-draft-name").val(),
-					$("#solo-draft-cost").val(),
-					$("#solo-draft-format").val(),
-					$("#solo-draft-duration").val(),
-					$("#solo-draft-matches").val(),
-					
-					$("#solo-draft-repeat-games").val(),
-					$("#solo-draft-invite-only").prop('checked'),
-					$("#solo-draft-desc").val(),
-					
-					$("#solo-draft-top-prize").val(),
-					$("#solo-draft-top-pos").val(),
-					$("#solo-draft-part-prize").val(),
-					$("#solo-draft-part-games").val(),
-					
-					function (xml) {
-						resultdiv.html("League created successfully.");
-					}, leagueErrorMap(resultdiv));
-				});
-		
-		updateDescPreview("#constructed-desc", "#constructed-desc-preview");
-		$("#preview-constructed-league-button").button().click(
-			function () {
-				let resultdiv = $("#constructed-league-result");
-				resultdiv.html("Processing...");
-				
-				var data = gatherData($(".series"))
-				
-				hall.comm.processConstructedLeague(
-					true,
-					$("#constructed-start").val().replaceAll("-",""), 
-					$("#constructed-collection").val(),
-					$("#constructed-name").val(),
-					$("#constructed-cost").val(),
-					$("#constructed-repeat-games").val(),
-					$("#constructed-invite-only").prop('checked'),
-					$("#constructed-desc").val(),
-					
-					$("#constructed-top-prize").val(),
-					$("#constructed-top-pos").val(),
-					$("#constructed-part-prize").val(),
-					$("#constructed-part-games").val(),
-					
-					data.format,
-					data.serieDuration,
-					data.maxMatches,
-					function (xml) {
-						previewDialog.html("");
-						displayPreview(xml);
-						resultdiv.html("OK");
-						previewDialog.dialog("open");
-					}, leagueErrorMap(resultdiv));
-				});
-		
-		$("#add-constructed-league-button").button().click(
-			function () {
-				let resultdiv = $("#constructed-league-result");
-				resultdiv.html("Processing...");
-				
-				var data = gatherData($(".series"))
-				
-				hall.comm.processConstructedLeague(
-					false,
-					$("#constructed-start").val().replaceAll("-",""), 
-					$("#constructed-collection").val(),
-					$("#constructed-name").val(),
-					$("#constructed-cost").val(),
-					$("#constructed-repeat-games").val(),
-					$("#constructed-invite-only").prop('checked'),
-					$("#constructed-desc").val(),
-					
-					$("#constructed-top-prize").val(),
-					$("#constructed-top-pos").val(),
-					$("#constructed-part-prize").val(),
-					$("#constructed-part-games").val(),
-					
-					data.format,
-					data.serieDuration,
-					data.maxMatches,
-					function (xml) {
-						resultdiv.html("League created successfully.");
-					}, leagueErrorMap(resultdiv));
-				});
 
-		$("#add-constructed-series-button").button().click(
-				function () {
-					$(".serieData").last().clone().appendTo(".series");
-				});
-		
-		// RTMD League
-		$("#rtmd-start").val(now.toISOString().substr(0, 10));
-		updateDescPreview("#rtmd-desc", "#rtmd-desc-preview");
+		var refreshSerieRows = function (editor) {
+			var rows = editor.find(".serie-row");
+			rows.each(function (index) {
+				$(this).find(".serie-index").text((index + 1) + ".");
+			});
+			editor.find(".serie-remove").button("option", "disabled", rows.length <= 1);
+		};
 
-		// ---- RTMD State ----
+		// Rebuilds the editor for a league type with the given series (or one default serie).
+		var renderSerieEditor = function (editor, type, series) {
+			var multi = isMultiSerie(type);
+			editor.empty().attr("data-type", type);
+			var list = (series && series.length > 0) ? series : [defaultSerie(type)];
+			if (!multi)
+				list = [list[0]];
+			var rows = $("<div class='serie-rows'></div>");
+			for (var i = 0; i < list.length; i++)
+				rows.append(buildSerieRow(type, list[i], multi));
+			editor.append(rows);
+			if (multi) {
+				editor.append($("<button type='button' class='serie-add'>Add serie</button>").button().click(function () {
+					rows.append(buildSerieRow(type, defaultSerie(type), true));
+					refreshSerieRows(editor);
+				}));
+			}
+			refreshSerieRows(editor);
+		};
+
+		var readSerieEditor = function (editor) {
+			var series = [];
+			editor.find(".serie-row").each(function () {
+				var row = $(this);
+				series.push({
+					format: row.find(".serie-format").val() || "",
+					duration: toInt(row.find(".serie-duration").val(), 7),
+					matches: toInt(row.find(".serie-matches").val(), 5)
+				});
+			});
+			return series;
+		};
+
+		// =====================================================================================
+		// Type selector
+		// =====================================================================================
+		var applyTypeVisibility = function () {
+			var type = state.type;
+			$("#league-collection-row").toggle(type == "CONSTRUCTED");
+			$("#rtmd-race-block").toggle(type == "RTMD");
+			$("#oneoff-title").text(isMultiSerie(type) ? "Series" : "Format");
+			$(".type-btn").removeClass("type-selected").filter("[data-type='" + type + "']").addClass("type-selected");
+		};
+
+		// Switches the league type. Common fields are kept; only the type-specific serie rows are rebuilt.
+		var selectType = function (type, series) {
+			state.type = type;
+			applyTypeVisibility();
+			renderSerieEditor($("#oneoff-series"), type, series);
+			$("#rotation-rows .rotation-row").each(function () {
+				var row = $(this);
+				// format codes are type-specific, so only durations and match limits survive a type switch
+				var existing = readSerieEditor(row.find(".serie-editor")).map(function (s) {
+					return {format: "", duration: s.duration, matches: s.matches};
+				});
+				renderSerieEditor(row.find(".serie-editor"), type, existing.length > 0 ? existing : null);
+			});
+			if (!state.costTouched)
+				$("#league-cost").val(DEFAULT_COST[type]);
+		};
+
+		$(".type-btn").button().click(function () {
+			if (state.editingLeague != null)
+				return;
+			var type = $(this).data("type");
+			if (type != state.type)
+				selectType(type, null);
+		});
+
+		$("#league-cost").on("input", function () { state.costTouched = true; });
+
+		// =====================================================================================
+		// Common block
+		// =====================================================================================
+		// The description is markdown (admin flavour: links allowed).  The preview is rendered by the server so it
+		// matches exactly what players get; typing is debounced so it is not a request per keystroke.
+		var descPreviewTimer = null;
+		var descPreviewSerial = 0;
+		var refreshDescPreview = function () {
+			var text = $("#league-desc").val();
+			var serial = ++descPreviewSerial;
+			if (!text) {
+				$("#league-desc-preview").html("");
+				return;
+			}
+			hall.comm.previewMarkdown(text, function (json) {
+				if (serial == descPreviewSerial)
+					$("#league-desc-preview").html(json.html);
+			}, {});
+		};
+		$("#league-desc").on("input", function () {
+			clearTimeout(descPreviewTimer);
+			descPreviewTimer = setTimeout(refreshDescPreview, 400);
+		});
+
+		var readCommon = function () {
+			var startIso = $("#league-start").val() || "";
+			return {
+				name: $("#league-name").val(),
+				description: $("#league-desc").val(),
+				cost: toInt($("#league-cost").val(), 0),
+				startIso: startIso,
+				start8: startIso.replace(/-/g, ""),
+				maxRepeatMatches: toInt($("#league-repeat-games").val(), 1),
+				inviteOnly: $("#league-invite-only").prop("checked"),
+				collection: $("#league-collection").val(),
+				campaign: $.trim($("#league-campaign").val()),
+				prizeTiers: prizeEditor.getTiers()
+			};
+		};
+
+		var setCollection = function (collectionName) {
+			var select = $("#league-collection");
+			if (collectionName == null || collectionName === "")
+				collectionName = "default";
+			if (select.find("option[value='" + collectionName + "']").length == 0)
+				select.append($("<option/>").attr("value", collectionName).text(collectionName));
+			select.val(collectionName);
+		};
+
+		// Campaign tag + prize tiers, shared by every league type and by schedules (stored in the template).
+		var prizeEditor = new PrizeTierEditor($("#league-prize-tiers"), {comm: hall.comm, campaignInput: $("#league-campaign")});
+
+		var setPrizes = function (campaign, prizeTiers) {
+			$("#league-campaign").val(campaign || "");
+			prizeEditor.setTiers(prizeTiers || []);
+		};
+
+		var setDescription = function (text) {
+			$("#league-desc").val(text || "");
+			clearTimeout(descPreviewTimer);
+			refreshDescPreview();
+		};
+
+		// =====================================================================================
+		// RTMD race path editor
+		// =====================================================================================
 		var rtmdAllModifiers = [];   // Full list from server {blueprintId, title, intensity, gameText}
 		var rtmdAllVisualCards = [];  // Full list from server {blueprintId, title, intensity}
 		var rtmdPath = [];           // Current path: array of modifier objects (or null for empty slots)
 		var rtmdLocked = [];         // Boolean array: which slots are locked
 		var rtmdDataLoaded = false;
+		var rtmdPendingPath = null;  // blueprint ids to apply once the modifier data has arrived
+		var rtmdFullRange = [-10, 10];
 
 		// ---- Path Length Slider ----
 		$("#rtmd-path-length-slider").slider({
@@ -321,6 +495,13 @@ $(document).ready(
 				$("#rtmd-path-length-display").text(ui.value);
 			}
 		});
+
+		var setPathLength = function (length) {
+			length = Math.max(1, Math.min(18, toInt(length, 9)));
+			$("#rtmd-path-length-slider").slider("value", length);
+			$("#rtmd-path-length").val(length);
+			$("#rtmd-path-length-display").text(length);
+		};
 
 		// ---- Intensity Slider (init before fetch so it exists when data arrives) ----
 		$("#rtmd-intensity-slider").slider({
@@ -337,6 +518,24 @@ $(document).ready(
 			}
 		});
 
+		var setIntensityRange = function (floor, ceiling) {
+			var slider = $("#rtmd-intensity-slider");
+			var min = slider.slider("option", "min");
+			var max = slider.slider("option", "max");
+			floor = toInt(floor, min);
+			ceiling = toInt(ceiling, max);
+			if (rtmdDataLoaded) {
+				floor = Math.max(min, Math.min(max, floor));
+				ceiling = Math.max(min, Math.min(max, ceiling));
+				if (floor > ceiling) { var tmp = floor; floor = ceiling; ceiling = tmp; }
+				slider.slider("option", "values", [floor, ceiling]);
+			}
+			$("#rtmd-intensity-floor").val(floor);
+			$("#rtmd-intensity-ceiling").val(ceiling);
+			$("#rtmd-intensity-display").text(floor + " to " + ceiling);
+			updateAvailablePool();
+		};
+
 		// ---- Fetch modifier/visual card data ----
 		$("#rtmd-path-container").html("<em>Loading modifier data...</em>");
 		hall.comm.getRTMDModifiers(function(data) {
@@ -348,15 +547,15 @@ $(document).ready(
 			// Set intensity slider range from actual data
 			var intensities = rtmdAllModifiers.map(function(m) { return m.intensity; });
 			if (intensities.length === 0) {
-				console.warn("RTMD: No modifiers loaded — slider left disabled.");
+				console.warn("RTMD: No modifiers loaded - slider left disabled.");
 				$("#rtmd-intensity-display").text("No modifiers found");
 				return;
 			}
 			var minI = Math.min.apply(null, intensities);
 			var maxI = Math.max.apply(null, intensities);
 			if (minI === maxI) { maxI = minI + 1; } // Prevent degenerate range
+			rtmdFullRange = [minI, maxI];
 			var slider = $("#rtmd-intensity-slider");
-			console.log("RTMD slider init: min=" + minI + ", max=" + maxI + ", slider element count=" + slider.length);
 			slider.slider("option", "min", minI);
 			slider.slider("option", "max", maxI);
 			slider.slider("option", "values", [minI, maxI]);
@@ -366,6 +565,12 @@ $(document).ready(
 			$("#rtmd-intensity-display").text(minI + " to " + maxI);
 
 			updateAvailablePool();
+
+			if (rtmdPendingPath != null) {
+				var pending = rtmdPendingPath;
+				rtmdPendingPath = null;
+				setRacePath(pending.path, pending.floor, pending.ceiling);
+			}
 		}, {});
 
 		// ---- Available Pool ----
@@ -428,10 +633,10 @@ $(document).ready(
 				var modIntensity = validMods[i].mod.intensity;
 				var targetVis;
 				if (globalModMax === globalModMin) {
-					// All modifiers have same intensity — spread evenly across visual range
+					// All modifiers have same intensity - spread evenly across visual range
 					targetVis = visMin + (visMax - visMin) * (i / Math.max(1, validMods.length - 1));
 				} else {
-					// Map proportionally: modifier's position in global range → visual range
+					// Map proportionally: modifier's position in global range -> visual range
 					var t = (modIntensity - globalModMin) / (globalModMax - globalModMin);
 					targetVis = visMin + (visMax - visMin) * t;
 				}
@@ -746,174 +951,716 @@ $(document).ready(
 				.map(function(v) { return v.blueprintId; });
 		}
 
-		function submitRTMDLeague(preview) {
-			let resultdiv = $("#rtmd-league-result");
-			resultdiv.html("Processing...");
+		var readRace = function () {
+			return {
+				racePath: gatherRTMDPath(),
+				raceVisualPath: gatherRTMDVisualPath(),
+				raceCumulative: $("#rtmd-cumulative").prop("checked"),
+				raceIntensityFloor: toInt($("#rtmd-intensity-floor").val(), -10),
+				raceIntensityCeiling: toInt($("#rtmd-intensity-ceiling").val(), 10),
+				raceAdvancementMode: $("#rtmd-advancement-mode").val(),
+				raceAdvanceFactor: toInt($("#rtmd-advance-factor").val(), 1)
+			};
+		};
 
-			var serieData = gatherData($(".rtmd-series"));
-
-			hall.comm.processRTMDLeague(
-				preview,
-				$("#rtmd-start").val().replaceAll("-",""),
-				$("#rtmd-name").val(),
-				$("#rtmd-cost").val(),
-				$("#rtmd-repeat-games").val(),
-				$("#rtmd-invite-only").prop('checked'),
-				$("#rtmd-desc").val(),
-
-				$("#rtmd-top-prize").val(),
-				$("#rtmd-top-pos").val(),
-				$("#rtmd-part-prize").val(),
-				$("#rtmd-part-games").val(),
-
-				serieData.format,
-				serieData.serieDuration,
-				serieData.maxMatches,
-
-				gatherRTMDPath(),
-				gatherRTMDVisualPath(),
-				$("#rtmd-cumulative").prop('checked'),
-				$("#rtmd-intensity-floor").val(),
-				$("#rtmd-intensity-ceiling").val(),
-				$("#rtmd-advancement-mode").val(),
-				$("#rtmd-advance-factor").val(),
-
-				function (xml) {
-					if(preview) {
-						previewDialog.html("");
-						displayPreview(xml);
-						resultdiv.html("OK");
-						previewDialog.dialog("open");
-					} else {
-						resultdiv.html("League created successfully.");
-					}
-				}, leagueErrorMap(resultdiv));
+		// Loads a stored race path (blueprint ids) into the editor; waits for the modifier data if needed.
+		function setRacePath(blueprintIds, floor, ceiling) {
+			blueprintIds = blueprintIds || [];
+			if (!rtmdDataLoaded) {
+				rtmdPendingPath = {path: blueprintIds, floor: floor, ceiling: ceiling};
+				return;
+			}
+			rtmdPath = [];
+			rtmdLocked = [];
+			for (var i = 0; i < blueprintIds.length; i++) {
+				var id = blueprintIds[i];
+				var mod = rtmdAllModifiers.find(function(m) { return m.blueprintId === id; });
+				rtmdPath.push(mod || {blueprintId: id, title: id + " (unknown)", intensity: 0, gameText: ""});
+				rtmdLocked.push(false);
+			}
+			if (blueprintIds.length > 0)
+				setPathLength(blueprintIds.length);
+			setIntensityRange(floor, ceiling);
+			renderRTMDPath();
+			updateAvailablePool();
 		}
 
-		$("#preview-rtmd-league-button").button().click(function () {
-			submitRTMDLeague(true);
+		var clearRace = function () {
+			rtmdPendingPath = null;
+			rtmdPath = [];
+			rtmdLocked = [];
+			$("#rtmd-advancement-mode").val("WIN");
+			$("#rtmd-advance-factor").val(1);
+			$("#rtmd-cumulative").prop("checked", false);
+			setPathLength(9);
+			setIntensityRange(rtmdFullRange[0], rtmdFullRange[1]);
+			if (rtmdDataLoaded)
+				renderRTMDPath();
+			updateAvailablePool();
+		};
+
+		var setRaceFromParams = function (params) {
+			params = params || {};
+			$("#rtmd-advancement-mode").val(params.raceAdvancementMode || "WIN");
+			$("#rtmd-advance-factor").val(params.raceAdvanceFactor != null ? params.raceAdvanceFactor : 1);
+			$("#rtmd-cumulative").prop("checked", params.raceCumulative === true);
+			setRacePath(params.racePath || [], params.raceIntensityFloor, params.raceIntensityCeiling);
+		};
+
+		// =====================================================================================
+		// Rotation (schedule events)
+		// =====================================================================================
+		var refreshRotation = function () {
+			var rows = $("#rotation-rows .rotation-row");
+			rows.each(function (index) {
+				var row = $(this);
+				row.find(".rotation-index").text((index + 1) + ".");
+				row.find(".rot-up").button("option", "disabled", index == 0);
+				row.find(".rot-down").button("option", "disabled", index == rows.length - 1);
+				row.find(".rot-remove").button("option", "disabled", rows.length <= 1);
+				row.toggleClass("is-next", row.find(".rotation-next").prop("checked"));
+			});
+			if (rows.length > 0 && rows.find(".rotation-next:checked").length == 0) {
+				rows.first().find(".rotation-next").prop("checked", true);
+				rows.first().addClass("is-next");
+			}
+		};
+
+		var addRotationRow = function (name, series, extras) {
+			var row = $("<div class='rotation-row schedule-event'></div>");
+			row.data("extras", extras || {});
+			var head = $("<div class='rotation-head flex-horiz'></div>");
+			head.append("<span class='rotation-index'></span>");
+			head.append($("<input type='text' class='rotation-name flex-fill' maxlength='45' placeholder='Event name'>").val(name || ""));
+			head.append("<label class='rotation-next-label' title='The next league created by this schedule is this event'><input type='radio' name='rotation-next' class='rotation-next'> next</label>");
+			var buttons = $("<div class='rotation-buttons'></div>");
+			buttons.append($("<button type='button' class='rot-up'>Up</button>").button().click(function () {
+				var prev = row.prev(".rotation-row");
+				if (prev.length > 0) prev.before(row);
+				refreshRotation();
+			}));
+			buttons.append($("<button type='button' class='rot-down'>Down</button>").button().click(function () {
+				var next = row.next(".rotation-row");
+				if (next.length > 0) next.after(row);
+				refreshRotation();
+			}));
+			buttons.append($("<button type='button' class='rot-remove'>Remove</button>").button().click(function () {
+				row.remove();
+				refreshRotation();
+			}));
+			head.append(buttons);
+			row.append(head);
+			var editor = $("<div class='serie-editor'></div>");
+			renderSerieEditor(editor, state.type, series);
+			row.append(editor);
+			$("#rotation-rows").append(row);
+			if (!name)
+				seedRotationName(row);
+			refreshRotation();
+			return row;
+		};
+
+		// An event name defaults to the display name of its first format while the admin has not typed one.
+		var seedRotationName = function (row) {
+			var nameInput = row.find(".rotation-name");
+			if (nameInput.val() !== "" || !formatsLoaded)
+				return;
+			var label = selectedLabel(row.find(".serie-format").first());
+			if (label) {
+				nameInput.val(label);
+				nameInput.data("autoName", label);
+			}
+		};
+
+		var seedEmptyRotationNames = function () {
+			$("#rotation-rows .rotation-row").each(function () { seedRotationName($(this)); });
+		};
+
+		$("#rotation-rows").on("change", ".serie-format", function () {
+			var row = $(this).closest(".rotation-row");
+			var nameInput = row.find(".rotation-name");
+			if (nameInput.val() === "" || nameInput.val() === nameInput.data("autoName")) {
+				var label = selectedLabel(row.find(".serie-format").first());
+				nameInput.val(label);
+				nameInput.data("autoName", label);
+			}
+		});
+		$("#rotation-rows").on("change", ".rotation-next", refreshRotation);
+
+		$("#rotation-add").button().click(function () {
+			addRotationRow("", null, {});
 		});
 
-		$("#add-rtmd-league-button").button().click(function () {
-			submitRTMDLeague(false);
+		var readRotation = function () {
+			var events = [];
+			$("#rotation-rows .rotation-row").each(function () {
+				var row = $(this);
+				var params = $.extend({}, row.data("extras") || {}, {series: readSerieEditor(row.find(".serie-editor"))});
+				events.push({name: row.find(".rotation-name").val(), params: params});
+			});
+			return events;
+		};
+
+		var readNextEventIndex = function () {
+			var rows = $("#rotation-rows .rotation-row");
+			var index = rows.index(rows.filter(function () { return $(this).find(".rotation-next").prop("checked"); }).first());
+			return index < 0 ? 0 : index;
+		};
+
+		// =====================================================================================
+		// Mode handling (new league / edit league / new schedule / edit schedule)
+		// =====================================================================================
+		var applyMode = function () {
+			var scheduling = isScheduling();
+			var title, saveLabel;
+			if (state.editingLeague != null) {
+				title = "Editing league: " + state.editingLeague.name;
+				saveLabel = "Save changes";
+			} else if (scheduling && state.editingSchedule != null) {
+				title = "Editing schedule: " + state.editingSchedule.name;
+				saveLabel = "Save schedule";
+			} else if (scheduling) {
+				title = "New schedule";
+				saveLabel = "Create schedule";
+			} else {
+				title = "New league";
+				saveLabel = "Create league";
+			}
+			$("#league-form-title").text(title);
+			$("#league-save-button").button("option", "label", saveLabel);
+			$(".type-btn").button("option", "disabled", state.editingLeague != null);
+			$("#league-repeat").prop("disabled", state.editingLeague != null || state.editingSchedule != null);
+			$("#league-repeat-row").toggle(state.editingLeague == null);
+			$("#schedule-block").toggle(scheduling);
+			$("#oneoff-block").toggle(!scheduling);
+			$("#league-name-row").toggle(!scheduling);
+			$("#league-start-label").text(scheduling ? "Next league starts" : "Start date");
+			$("#help-start").text(scheduling
+				? "The date the next league of this schedule begins. Later leagues follow at the interval below."
+				: "The day the league opens for play (UTC). Players can sign up as soon as the league exists.");
+
+			var warning = $("#league-warning");
+			if (state.editingLeague != null && (state.editingLeague.started || state.editingLeague.participants > 0)) {
+				var parts = [];
+				if (state.editingLeague.started)
+					parts.push("has started");
+				if (state.editingLeague.participants > 0)
+					parts.push("has " + state.editingLeague.participants + " participant" + (state.editingLeague.participants == 1 ? "" : "s"));
+				warning.text("This league " + parts.join(" and ") + ". Changing the format, template, collection or dates can break players' collections.").show();
+			} else {
+				warning.hide();
+			}
+		};
+
+		$("#league-repeat").on("change", function () {
+			if (isScheduling()) {
+				if ($("#rotation-rows .rotation-row").length == 0) {
+					var seed = readSerieEditor($("#oneoff-series"));
+					addRotationRow("", seed, {});
+				}
+				if ($("#schedule-name").val() === "")
+					$("#schedule-name").val($("#league-name").val());
+			} else {
+				if ($("#league-name").val() === "")
+					$("#league-name").val($("#schedule-name").val());
+				var first = $("#rotation-rows .rotation-row").first();
+				if (first.length > 0)
+					renderSerieEditor($("#oneoff-series"), state.type, readSerieEditor(first.find(".serie-editor")));
+			}
+			applyMode();
 		});
 
-		$("#add-rtmd-series-button").button().click(function () {
-			$(".rtmdSerieData").last().clone().appendTo(".rtmd-series");
+		// Clears everything back to a fresh "New league".
+		var startOver = function () {
+			state.editingLeague = null;
+			state.editingSchedule = null;
+			state.templateExtras = {};
+			state.costTouched = false;
+
+			$("#league-name").val("");
+			setDescription("");
+			$("#league-start").val(todayIso());
+			$("#league-repeat-games").val(1);
+			$("#league-invite-only").prop("checked", false);
+			setCollection("default");
+			setPrizes(null, null);
+
+			$("#league-repeat").prop("checked", false);
+			$("#schedule-name").val("");
+			$("#schedule-name-pattern").val("{series} - {event}");
+			$("#schedule-interval").val(1);
+			$("#schedule-lead-days").val(7);
+			$("#schedule-active").prop("checked", true);
+			$("#rotation-rows").empty();
+
+			clearRace();
+			selectType("SEALED", null);
+			applyMode();
+			resultdiv.html("Ready.");
+		};
+
+		$("#league-reset-button").button().click(startOver);
+
+		// ---- edit an existing league ----
+		var loadLeagueForEdit = function (code) {
+			resultdiv.html("Loading league " + esc(code) + "...");
+			hall.comm.getLeagueForAdmin(code, function (league) {
+				startOver();
+				var params = league.params || {};
+				state.editingLeague = {code: league.code, name: league.name, started: league.started === true, participants: league.participants || 0};
+				state.costTouched = true;
+
+				var type = league.type || "CONSTRUCTED";
+				selectType(type, params.series || []);
+
+				$("#league-name").val(league.name || params.name || "");
+				setDescription(params.description || "");
+				$("#league-cost").val(params.cost != null ? params.cost : DEFAULT_COST[type]);
+				var startIso = league.start || (params.start ? String(params.start).substr(0, 10) : todayIso());
+				$("#league-start").val(startIso);
+				$("#league-repeat-games").val(params.maxRepeatMatches != null ? params.maxRepeatMatches : 1);
+				$("#league-invite-only").prop("checked", params.inviteOnly === true);
+				if (type == "CONSTRUCTED")
+					setCollection(params.collectionName);
+				setPrizes(params.campaign, params.prizeTiers);
+				if (type == "RTMD")
+					setRaceFromParams(params);
+
+				applyMode();
+				resultdiv.html("Loaded league '" + esc(league.name) + "' (code " + esc(league.code) + ").");
+				if (league.scheduleId != null) {
+					var scheduleName = null;
+					for (var i = 0; i < state.schedules.length; i++)
+						if (state.schedules[i].id == league.scheduleId)
+							scheduleName = state.schedules[i].name;
+					resultdiv.append(" Created by schedule " + (scheduleName != null ? "'" + esc(scheduleName) + "'" : "#" + esc(league.scheduleId)) + ". ");
+					resultdiv.append($("<button type='button'>Open schedule</button>").button().click(function () {
+						editScheduleById(league.scheduleId);
+					}));
+				}
+			}, leagueErrorMap(resultdiv));
+		};
+
+		// ---- edit an existing schedule ----
+		var fillScheduleForm = function (schedule) {
+			startOver();
+			state.editingSchedule = schedule;
+			state.costTouched = true;
+			var template = schedule.template || {};
+			var extras = {};
+			for (var key in template) {
+				if (Object.prototype.hasOwnProperty.call(template, key) && MANAGED_TEMPLATE_KEYS.indexOf(key) < 0)
+					extras[key] = template[key];
+			}
+			state.templateExtras = extras;
+
+			var type = schedule.leagueType || "CONSTRUCTED";
+			selectType(type, template.series || []);
+
+			$("#league-repeat").prop("checked", true);
+			$("#schedule-name").val(schedule.name || "");
+			$("#schedule-name-pattern").val(schedule.namePattern || "{series} - {event}");
+			$("#league-start").val(schedule.nextEventDate || todayIso());
+			$("#schedule-interval").val(schedule.intervalMonths != null ? schedule.intervalMonths : 1);
+			$("#schedule-lead-days").val(schedule.leadDays != null ? schedule.leadDays : 7);
+			$("#schedule-active").prop("checked", schedule.active !== false);
+
+			setDescription(template.description || "");
+			$("#league-cost").val(template.cost != null ? template.cost : DEFAULT_COST[type]);
+			$("#league-repeat-games").val(template.maxRepeatMatches != null ? template.maxRepeatMatches : 1);
+			$("#league-invite-only").prop("checked", template.inviteOnly === true);
+			if (type == "CONSTRUCTED")
+				setCollection(template.collectionName);
+			setPrizes(template.campaign, template.prizeTiers);
+			if (type == "RTMD")
+				setRaceFromParams(template);
+
+			$("#rotation-rows").empty();
+			var events = schedule.events || [];
+			for (var i = 0; i < events.length; i++) {
+				var params = events[i].params || {};
+				var eventExtras = {};
+				for (var pkey in params) {
+					if (Object.prototype.hasOwnProperty.call(params, pkey) && pkey != "series")
+						eventExtras[pkey] = params[pkey];
+				}
+				addRotationRow(events[i].name, params.series || template.series || [], eventExtras);
+			}
+			if (events.length == 0)
+				addRotationRow("", null, {});
+			var nextIndex = toInt(schedule.nextEventIndex, 0);
+			var rows = $("#rotation-rows .rotation-row");
+			rows.find(".rotation-next").prop("checked", false);
+			rows.eq(Math.max(0, Math.min(rows.length - 1, nextIndex))).find(".rotation-next").prop("checked", true);
+			refreshRotation();
+
+			applyMode();
+			resultdiv.html("Loaded schedule '" + esc(schedule.name) + "'.");
+		};
+
+		// =====================================================================================
+		// Submitting
+		// =====================================================================================
+		var validateCommon = function (common, series) {
+			var scheduling = isScheduling();
+			if (!scheduling && !common.name) {
+				resultdiv.html("Please give the league a name.");
+				return false;
+			}
+			if (scheduling && !$("#schedule-name").val()) {
+				resultdiv.html("Please give the schedule a series name.");
+				return false;
+			}
+			if (!common.startIso) {
+				resultdiv.html("Please pick a start date.");
+				return false;
+			}
+			for (var i = 0; i < series.length; i++) {
+				if (!series[i].format) {
+					resultdiv.html("Please pick a format for every serie.");
+					return false;
+				}
+			}
+			if (state.type == "RTMD" && gatherRTMDPath().length == 0) {
+				resultdiv.html("The race needs at least one site: use Randomize or add modifiers to the path.");
+				return false;
+			}
+			var prizeProblem = prizeEditor.validate();
+			if (prizeProblem != null) {
+				resultdiv.html(esc(prizeProblem));
+				return false;
+			}
+			return true;
+		};
+
+		var buildUpdateData = function (common, series) {
+			var data = {
+				code: state.editingLeague.code,
+				name: common.name,
+				description: common.description,
+				cost: common.cost,
+				start: common.start8,
+				maxRepeatMatches: common.maxRepeatMatches,
+				inviteOnly: common.inviteOnly,
+				campaign: common.campaign,
+				prizeTiers: JSON.stringify(common.prizeTiers)
+			};
+			if (!isMultiSerie(state.type)) {
+				var s0 = series[0] || defaultSerie(state.type);
+				data.format = s0.format;
+				data.serieDuration = s0.duration;
+				data.maxMatches = s0.matches;
+				return data;
+			}
+			// jQuery serialises these arrays as format[] / serieDuration[] / maxMatches[], which is what the server reads
+			data.format = series.map(function (s) { return s.format; });
+			data.serieDuration = series.map(function (s) { return s.duration; });
+			data.maxMatches = series.map(function (s) { return s.matches; });
+			if (state.type == "CONSTRUCTED")
+				data.collectionType = common.collection;
+			if (state.type == "RTMD")
+				$.extend(data, readRace());
+			return data;
+		};
+
+		var submitLeague = function (preview) {
+			var common = readCommon();
+			var series = readSerieEditor($("#oneoff-series"));
+			if (!validateCommon(common, series))
+				return;
+			resultdiv.html("Processing...");
+			var err = leagueErrorMap(resultdiv);
+			var onDone = function (json) {
+				if (preview) {
+					openLeaguePreview(json);
+					resultdiv.html("OK");
+				} else if (state.editingLeague != null) {
+					resultdiv.html("League '" + esc(common.name) + "' updated.");
+					state.editingLeague.name = common.name;
+					applyMode();
+					adminCalendar.load();
+				} else {
+					resultdiv.html("League created successfully.");
+					adminCalendar.load();
+				}
+			};
+
+			if (!preview && state.editingLeague != null) {
+				hall.comm.updateLeague(buildUpdateData(common, series), onDone, err);
+				return;
+			}
+
+			var prizeTiersJson = JSON.stringify(common.prizeTiers);
+			var s0 = series[0] || defaultSerie(state.type);
+			var formats = series.map(function (s) { return s.format; });
+			var durations = series.map(function (s) { return s.duration; });
+			var matches = series.map(function (s) { return s.matches; });
+
+			if (state.type == "SEALED") {
+				hall.comm.processSealedLeague(preview, common.start8, common.name, common.cost,
+					s0.format, s0.duration, s0.matches,
+					common.maxRepeatMatches, common.inviteOnly, common.description,
+					common.campaign, prizeTiersJson,
+					onDone, err);
+			} else if (state.type == "SOLODRAFT") {
+				hall.comm.processSoloDraftLeague(preview, common.start8, common.name, common.cost,
+					s0.format, s0.duration, s0.matches,
+					common.maxRepeatMatches, common.inviteOnly, common.description,
+					common.campaign, prizeTiersJson,
+					onDone, err);
+			} else if (state.type == "CONSTRUCTED") {
+				hall.comm.processConstructedLeague(preview, common.start8, common.collection, common.name, common.cost,
+					common.maxRepeatMatches, common.inviteOnly, common.description,
+					common.campaign, prizeTiersJson,
+					formats, durations, matches,
+					onDone, err);
+			} else {
+				var race = readRace();
+				hall.comm.processRTMDLeague(preview, common.start8, common.name, common.cost,
+					common.maxRepeatMatches, common.inviteOnly, common.description,
+					common.campaign, prizeTiersJson,
+					formats, durations, matches,
+					race.racePath, race.raceVisualPath, race.raceCumulative, race.raceIntensityFloor, race.raceIntensityCeiling,
+					race.raceAdvancementMode, race.raceAdvanceFactor,
+					onDone, err);
+			}
+		};
+
+		// The schedule definition the server stores: template (LeagueParams fields shared by every event) + events.
+		var buildScheduleDefinition = function (common) {
+			var template = $.extend({}, state.templateExtras, {
+				cost: common.cost,
+				maxRepeatMatches: common.maxRepeatMatches,
+				description: common.description,
+				inviteOnly: common.inviteOnly,
+				campaign: common.campaign || null,
+				prizeTiers: common.prizeTiers
+			});
+			if (state.type == "CONSTRUCTED" || state.type == "RTMD") {
+				template.collectionName = state.type == "RTMD" ? "default" : (common.collection || "default");
+			}
+			if (state.type == "RTMD")
+				$.extend(template, readRace());
+			delete template.series;
+			delete template.name;
+			delete template.start;
+			delete template.code;
+
+			return {
+				id: state.editingSchedule != null ? state.editingSchedule.id : "",
+				name: $("#schedule-name").val(),
+				leagueType: state.type,
+				template: JSON.stringify(template),
+				events: JSON.stringify(readRotation()),
+				namePattern: $("#schedule-name-pattern").val() || "{series} - {event}",
+				nextEventDate: common.startIso,
+				nextEventIndex: readNextEventIndex(),
+				intervalMonths: $("#schedule-interval").val(),
+				leadDays: toInt($("#schedule-lead-days").val(), 7),
+				active: $("#schedule-active").prop("checked")
+			};
+		};
+
+		var submitSchedule = function (preview) {
+			var common = readCommon();
+			var rows = $("#rotation-rows .rotation-row");
+			if (rows.length == 0) {
+				resultdiv.html("Add at least one event to the rotation.");
+				return;
+			}
+			var allSeries = [];
+			rows.each(function () {
+				allSeries = allSeries.concat(readSerieEditor($(this).find(".serie-editor")));
+			});
+			if (!validateCommon(common, allSeries))
+				return;
+			var definition = buildScheduleDefinition(common);
+			resultdiv.html("Processing...");
+			if (preview) {
+				hall.comm.saveLeagueSchedule(true, definition, function (json) {
+					resultdiv.html("OK");
+					openSchedulePreview(json, definition);
+				}, leagueErrorMap(resultdiv));
+			} else {
+				hall.comm.saveLeagueSchedule(false, definition, function (json) {
+					state.editingSchedule = json;
+					resultdiv.html("Schedule '" + esc(json.name) + "' saved.");
+					applyMode();
+					loadSchedules();
+				}, leagueErrorMap(resultdiv));
+			}
+		};
+
+		$("#league-preview-button").button().click(function () {
+			if (isScheduling()) submitSchedule(true); else submitLeague(true);
 		});
-		
+		$("#league-save-button").button().click(function () {
+			if (isScheduling()) submitSchedule(false); else submitLeague(false);
+		});
+
+		// =====================================================================================
+		// Schedules list
+		// =====================================================================================
+		var cadenceText = function (intervalMonths) {
+			var n = parseFloat(intervalMonths);
+			if (isNaN(n)) return "";
+			if (n == 0.25) return "weekly";
+			if (n == 0.5) return "every 2 weeks";
+			if (n == 1) return "monthly";
+			if (n == Math.floor(n)) return "every " + n + " months";
+			return "every " + n + " months";
+		};
+
+		var renderSchedules = function (json) {
+			var list = $("#schedule-list").empty();
+			var schedules = json.schedules || [];
+			state.schedules = schedules;
+			if (schedules.length == 0) {
+				list.append("<i>No league schedules yet. Tick \"Repeat on a schedule\" in the form below to create one.</i>");
+				return;
+			}
+			for (var i = 0; i < schedules.length; i++) {
+				(function (schedule) {
+					var card = $("<div class='schedule-card" + (schedule.active ? "" : " inactive") + "' id='schedule-card-" + schedule.id + "'></div>");
+
+					var line1 = $("<div class='schedule-line'></div>");
+					line1.append("<span class='schedule-title'>" + esc(schedule.name) + "</span>");
+					line1.append("<span class='league-id'>" + esc(TYPE_LABELS[schedule.leagueType] || schedule.leagueType)
+						+ (schedule.active ? "" : " &middot; paused") + "</span>");
+					var buttons = $("<span class='schedule-buttons'></span>");
+					buttons.append($("<button type='button'>Edit</button>").button().click(function () { fillScheduleForm(schedule); }));
+					buttons.append($("<button type='button'>Create next now</button>").button().click(function () {
+						var upcoming = schedule.upcoming || [];
+						if (!confirm("Create '" + (upcoming[0] ? upcoming[0].leagueName : "the next league") + "' right now and advance the schedule?"))
+							return;
+						resultdiv.html("Processing...");
+						hall.comm.runLeagueSchedule(schedule.id, function (json) {
+							resultdiv.html("Created league '" + esc(json.league.name) + "'.");
+							loadSchedules();
+						}, leagueErrorMap(resultdiv));
+					}));
+					buttons.append($("<button type='button'>" + (schedule.active ? "Pause" : "Resume") + "</button>").button().click(function () {
+						var definition = {
+							id: schedule.id, name: schedule.name, leagueType: schedule.leagueType,
+							template: JSON.stringify(schedule.template), events: JSON.stringify(schedule.events),
+							namePattern: schedule.namePattern, nextEventDate: schedule.nextEventDate,
+							nextEventIndex: schedule.nextEventIndex, intervalMonths: schedule.intervalMonths,
+							leadDays: schedule.leadDays, active: !schedule.active
+						};
+						hall.comm.saveLeagueSchedule(false, definition, function () { loadSchedules(); }, leagueErrorMap(resultdiv));
+					}));
+					buttons.append($("<button type='button'>Delete</button>").button().click(function () {
+						if (!confirm("Delete schedule '" + schedule.name + "'? Leagues it already created are not affected."))
+							return;
+						hall.comm.deleteLeagueSchedule(schedule.id, function () {
+							if (state.editingSchedule != null && state.editingSchedule.id == schedule.id)
+								startOver();
+							loadSchedules();
+						}, leagueErrorMap(resultdiv));
+					}));
+					line1.append(buttons);
+					card.append(line1);
+
+					var events = schedule.events || [];
+					var eventNames = [];
+					for (var e = 0; e < events.length; e++)
+						eventNames.push((e == schedule.nextEventIndex ? "<b>" : "") + esc(events[e].name) + (e == schedule.nextEventIndex ? "</b>" : ""));
+					var line2 = $("<div class='schedule-line schedule-meta'></div>");
+					var meta = "Rotation: " + eventNames.join(" &rarr; ")
+						+ "<span class='sep'>&middot;</span>Next: " + esc(schedule.nextEventDate)
+						+ "<span class='sep'>&middot;</span>" + cadenceText(schedule.intervalMonths)
+						+ "<span class='sep'>&middot;</span>created " + schedule.leadDays + " day" + (schedule.leadDays == 1 ? "" : "s") + " ahead";
+					if (schedule.lastRun)
+						meta += "<span class='sep'>&middot;</span>last run " + esc(String(schedule.lastRun).replace("T", " ").substr(0, 16));
+					meta += " <span class='info-toggle' data-for='schedule-upcoming-" + schedule.id + "' title='Upcoming leagues'>i</span>";
+					line2.html(meta);
+					card.append(line2);
+
+					if (schedule.lastError)
+						card.append("<div class='schedule-error'>&#9888; " + esc(schedule.lastError) + "</div>");
+
+					var upcoming = $(upcomingHtml(schedule.upcoming || []));
+					upcoming.attr("id", "schedule-upcoming-" + schedule.id).prop("hidden", true);
+					card.append(upcoming);
+					list.append(card);
+				})(schedules[i]);
+			}
+		};
+
+		var loadSchedules = function () {
+			hall.comm.getLeagueSchedules(renderSchedules, leagueErrorMap($("#schedule-list")));
+			if (adminCalendar != null)
+				adminCalendar.load();
+		};
+
+		var highlightScheduleCard = function (scheduleId) {
+			var card = $("#schedule-card-" + scheduleId);
+			if (card.length > 0) {
+				card.css("outline", "2px solid #9fd49f");
+				setTimeout(function () { card.css("outline", ""); }, 2000);
+			}
+		};
+
+		var editScheduleById = function (scheduleId) {
+			for (var i = 0; i < state.schedules.length; i++) {
+				if (state.schedules[i].id == scheduleId) {
+					highlightScheduleCard(scheduleId);
+					fillScheduleForm(state.schedules[i]);
+					return;
+				}
+			}
+			// not in the cached list (created elsewhere since the last load): refresh, then try again
+			hall.comm.getLeagueSchedules(function (json) {
+				renderSchedules(json);
+				for (var j = 0; j < state.schedules.length; j++) {
+					if (state.schedules[j].id == scheduleId) {
+						fillScheduleForm(state.schedules[j]);
+						return;
+					}
+				}
+				resultdiv.html("Schedule #" + esc(scheduleId) + " no longer exists.");
+			}, leagueErrorMap(resultdiv));
+		};
+
+		// =====================================================================================
+		// Calendar: on this page it is the editing entry point
+		// =====================================================================================
+		adminCalendar = new EventCalendarUI(hall.comm, $("#adminCalendar"), {
+			onLeague: function (id, event) {
+				loadLeagueForEdit(id);
+			},
+			onProjected: function (scheduleId, event) {
+				editScheduleById(scheduleId);
+			},
+			onTournament: function (id, event) {
+				$("#adminMain").tabs("option", "active", $("#admin-tabs li").index($("#tournamentTab").parent()));
+			}
+		});
+
+		// =====================================================================================
+		// Add players to league (unchanged)
+		// =====================================================================================
 		$("#add-league-players-button").button().click(
 			function () {
 				let resultdiv = $("#league-add-result");
 				resultdiv.html("Processing...");
-						
+
 				hall.comm.addLeaguePlayers(
 					$("#league-to-add").val(),
 					$("#players-to-add").val().split('\n'),
-					
+
 					function (xml) {
 						resultdiv.html("Added players to league successfully.");
 					}, leagueErrorMap(resultdiv));
 				});
-		
-		
-		hall.comm.getFormats(true,
-			function (json) 
-			{
-				//console.log(json);
-				let drafts = json.DraftTemplates;
-				let formats = json.Formats;
-				let sealed = json.SealedTemplates
-				//console.log(drafts);
-				for (var prop in drafts) {
-					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
-						//console.log(prop);
-						
-						var item = $("<option/>")
-							.attr("value", prop)
-							.text(prop);
-						$("#solo-draft-format").append(item);
-					}
-				}
-				sortOptionsByName("#solo-draft-format");
-				
-				//console.log(formats);
-				for (var prop in formats) {
-					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
-						//console.log(prop);
-						
-						if(formats[prop].name.includes("Limited"))
-							continue;
-						
-						let num = ("0000" + formats[prop].order).substr(-4);
-						
-						var item = $("<option/>")
-							.attr("value", prop)
-							.text("" + num + " - " + formats[prop].name);
-						$("#constructed-format").append(item);
-					}
-				}
-				sortOptionsByName("#constructed-format");
-				$("#constructed-format option").each(function(index) {
-					//console.log(this);
-					let newText = $(this).text().replace(/\d+ - /, '');
-					//console.log(newText);
-					$(this).text(newText);
-				});
-				
-				for (var prop in formats) {
-					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
-						if(formats[prop].name.includes("Limited"))
-							continue;
 
-						let num = ("0000" + formats[prop].order).substr(-4);
-
-						var item = $("<option/>")
-							.attr("value", prop)
-							.text("" + num + " - " + formats[prop].name);
-						$("#rtmd-format").append(item);
-					}
-				}
-				sortOptionsByName("#rtmd-format");
-				$("#rtmd-format option").each(function(index) {
-					let newText = $(this).text().replace(/\d+ - /, '');
-					$(this).text(newText);
-				});
-				
-				//console.log(sealed);
-				for (var prop in sealed) {
-					if (Object.prototype.hasOwnProperty.call(sealed, prop)) {
-						//console.log(prop);
-						
-						let code = sealed[prop].format;
-						let id = sealed[prop].id;
-						let serieCount = sealed[prop].seriesProduct.length;
-						
-						var item = $("<option/>")
-							.attr("value", id)
-							.text(prop + " - " + serieCount + " Series");
-						$("#sealed-format").append(item);
-					}
-				}
-				sortOptionsByName("#sealed-format");
-				
-			}, 
-			{
-				"400":function () 
-				{
-					alert("Could not retrieve formats.");
-				}
-			});
+		// =====================================================================================
+		// Go
+		// =====================================================================================
+		startOver();
+		loadSchedules();
+		adminCalendar.show();
 	});
-
-
-function updateDescPreview(text, preview) {
-	
-	$(text).on("input", function() {
-		$(preview).html($(text).val());
-	})
-	//oninput='$("#solo-draft-desc-preview").html($("#solo-draft-desc").val());'
-}
 
 function sortOptionsByName(selector) {
 	$(selector).html($(selector + " option").sort(function (a, b) {
@@ -922,7 +1669,7 @@ function sortOptionsByName(selector) {
 	$(selector)[0].selectedIndex = 0;
 }
 
-	
+
 function leagueErrorMap(outputControl, callback=null) {
 	return {
 		"0":function() {
@@ -970,549 +1717,276 @@ function leagueErrorMap(outputControl, callback=null) {
 }
 </script>
 <div class="article">
-	
-	<div id="sealed-league-section" class="league-form">
-		<h1>Add Sealed League</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Name: </div>
-			<input type="text" id="sealed-name" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Description: </div>
-			<div class="label-column flex-horiz flex-fill desc-div">
-				<div class="flex-vert" style="flex-basis:50%;">
-					<textarea type="text" id="sealed-desc" class="desc-area"></textarea>
-				</div>
-				<div id="sealed-desc-preview" class="desc-preview"></div>
-			</div>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Cost (in silver): </div>
-			<input type="number" min="1" id="sealed-cost" value="50" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Start Date: </div>
-			<input type="date" id="sealed-start" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Format: </div>
-			<select id="sealed-format" name="format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Max games against same opponent: </div>
-			<input type="number" min="1" id="sealed-repeat-games" value="1" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Serie duration in days: </div>
-			<input type="number" min="1" id="sealed-duration" name="serieDuration" value="7" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Max matches per serie: </div>
-			<input type="number" min="1" id="sealed-matches" name="maxMatches" value="5" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Invite only: </div>
-			<input type="checkbox" id="sealed-invite-only" />
-		</div>
-		
-		<div id="prize-info" style="display:none">
-			Prizes are defined in the following format:
-			
-			<pre>2x 9_1*</pre>
-			
-			<ul>
-				<li>
-					"2x" indicates 2 awarded copies (up to 4x, please)
-				</li>
-				<li>
-					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
-				</li>
-				<li>
-					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
-				</li>
-			</ul> 
-		</div>
-		
-		<div style="display:none">
-		<div class="flex-horiz">
-			<div class="label-column">Top Prizes:</div>
-			<input type="text" id="sealed-top-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Top Prize Cutoff:</div>
-			<input type="number" min="1" id="sealed-top-pos" value="10" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Prizes:</div>
-			<input type="text" id="sealed-part-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Games:</div>
-			<input type="number" min="1" id="sealed-part-games" value="3" class="flex-fill">
-		</div>
-		</div>
-		
-		<button id="preview-sealed-league-button">
-			Preview Sealed League
-		</button>
-				
-		<button id="add-sealed-league-button" >
-			Add Sealed League
-		</button> 
-		<div id="sealed-league-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
-			</div>
-			<div id="sealed-league-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
-		
-	
-	<br/><br/><hr><br/><br/>
-	
+	<div id="league-admin-page" class="league-form">
 
-	<div id="solo-draft-league-section" class="league-form">
-		<h1>Add Solo-Draft League</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Name: </div>
-			<input type="text" id="solo-draft-name" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Description: </div>
-			<div class="label-column flex-horiz flex-fill desc-div">
-				<div class="flex-vert" style="flex-basis:50%;">
-					<textarea type="text" id="solo-draft-desc" class="desc-area"></textarea>
-				</div>
-				<div id="solo-draft-desc-preview" class="desc-preview"></div>
-			</div>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Cost (in silver): </div>
-			<input type="number" min="1" id="solo-draft-cost" value="50" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Start Date: </div>
-			<input type="date" id="solo-draft-start" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Format: </div>
-			<select id="solo-draft-format" name="format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Max games against same opponent: </div>
-			<input type="number" min="1" id="solo-draft-repeat-games" value="1" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Serie duration in days: </div>
-			<input type="number" min="1" id="solo-draft-duration" name="serieDuration" value="7" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Max matches per serie: </div>
-			<input type="number" min="1" id="solo-draft-matches" name="maxMatches" value="5" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Invite only: </div>
-			<input type="checkbox" id="solo-draft-invite-only" />
-		</div>
-		
-		<div id="prize-info" style="display:none">
-			Prizes are defined in the following format:
-			
-			<pre>2x 9_1*</pre>
-			
-			<ul>
-				<li>
-					"2x" indicates 2 awarded copies (up to 4x, please)
-				</li>
-				<li>
-					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
-				</li>
-				<li>
-					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
-				</li>
-			</ul> 
-		</div>
-		
-		<div style="display:none">
-		<div class="flex-horiz">
-			<div class="label-column">Top Prizes:</div>
-			<input type="text" id="solo-draft-top-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Top Prize Cutoff:</div>
-			<input type="number" min="1" id="solo-draft-top-pos" value="10" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Prizes:</div>
-			<input type="text" id="solo-draft-part-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Games:</div>
-			<input type="number" min="1" id="solo-draft-part-games" value="3" class="flex-fill">
-		</div>
-		</div>
-		
-		<button id="preview-solo-draft-league-button">
-			Preview Solo-Draft League
-		</button>
-				
-		<button id="add-solo-draft-league-button" >
-			Add Solo-Draft League
-		</button> 
-		<div id="solo-draft-league-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
-			</div>
-			<div id="solo-draft-league-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
+		<!-- A. Calendar -->
+		<h1>Event calendar</h1>
+		<div class="page-hint">Click a league to edit it, a dashed (scheduled) league to edit its schedule, or a tournament to open Tournament Admin.</div>
+		<div id="adminCalendar"></div>
 
-		
-	<br/><br/><hr><br/><br/>
-	
+		<!-- B. Schedules -->
+		<h2>League schedules <span class="info-toggle" data-for="help-schedules">i</span></h2>
+		<div id="help-schedules" class="info-text" hidden>
+			A schedule creates leagues on its own: the same settings, an ordered rotation of events, and a cadence. Each league is
+			created a few days before it starts so players can sign up. Nothing is created while a league with the same name is still active.
+		</div>
+		<div id="schedule-list"></div>
 
-	<div id="constructed-league-section" class="league-form">
-		<h1>Add Constructed League</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Name: </div>
-			<input type="text" id="constructed-name" class="flex-fill">
+		<!-- C. The league form -->
+		<div class="mode-header flex-horiz">
+			<h2 id="league-form-title">New league</h2>
+			<button type="button" id="league-reset-button">Start over</button>
 		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Description: </div>
-			<div class="label-column flex-horiz flex-fill desc-div">
-				<div class="flex-vert" style="flex-basis:50%;">
-					<textarea type="text" id="constructed-desc" class="desc-area"></textarea>
-				</div>
-				<div id="constructed-desc-preview" class="desc-preview"></div>
-			</div>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Cost (in silver): </div>
-			<input type="number" min="1" id="constructed-cost" value="50" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Start Date: </div>
-			<input type="date" id="constructed-start" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Max games against same opponent: </div>
-			<input type="number" min="1" id="constructed-repeat-games" value="1" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Invite only: </div>
-			<input type="checkbox" id="constructed-invite-only" />
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Collection: </div>
-			<select id="constructed-collection" class="flex-fill">
-				<option value="default">All cards</option>
-				<option value="permanent+trophy">My cards</option>
-			</select>
-		</div>
-		
-		<div id="prize-info" style="display:none">
-			Prizes are defined in the following format:
-			
-			<pre>2x 9_1*</pre>
-			
-			<ul>
-				<li>
-					"2x" indicates 2 awarded copies (up to 4x, please)
-				</li>
-				<li>
-					"9_1" indicates "set 9, card 1" (you can think of it as the collector's info with the rarity replaced with _)
-				</li>
-				<li>
-					Last character is style; an optional "*" to make the copy foil or "T" to make it tengwar; omit this entirely for standard nonfoil. 
-				</li>
-			</ul> 
-		</div>
-		<div style="display:none">
-		<div class="flex-horiz">
-			<div class="label-column">Top Prizes:</div>
-			<input type="text" id="constructed-top-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Top Prize Cutoff:</div>
-			<input type="number" min="1" id="constructed-top-pos" value="10" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Prizes:</div>
-			<input type="text" id="constructed-part-prize" value="" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Participation Games:</div>
-			<input type="number" min="1" id="constructed-part-games" value="3" class="flex-fill">
-		</div>
-		</div>
-		
-		<div class="series" class="flex-vert">
-			<div class="serieData" >
-				<div><b>Serie</b></div>
-				<div class="flex-horiz">
-					<div class="label-column">Format: </div>
-					<select id="constructed-format" name="format" class="flex-fill"></select>
-				</div>
-				
-				<div class="flex-horiz">
-					<div class="label-column">Serie duration in days: </div>
-					<input type="number" min="1" name="serieDuration" value="7" class="flex-fill">
-				</div>
-				
-				<div class="flex-horiz">
-					<div class="label-column">Max matches per serie: </div>
-					<input type="number" min="1" name="maxMatches" value="5" class="flex-fill">
+		<div id="league-form">
+			<div id="league-warning" class="league-warning" style="display:none"></div>
+
+			<div class="form-section first">
+				<div class="league-type-bar">
+					<button type="button" class="type-btn" data-type="SEALED">Sealed</button>
+					<button type="button" class="type-btn" data-type="SOLODRAFT">Draft</button>
+					<button type="button" class="type-btn" data-type="CONSTRUCTED">Constructed</button>
+					<button type="button" class="type-btn" data-type="RTMD">Race to Mount Doom</button>
 				</div>
 			</div>
-		</div>
-		
-		<button id="add-constructed-series-button">
-			Add Another Serie
-		</button>
-		
-		<button id="preview-constructed-league-button">
-			Preview Constructed League
-		</button>
-				
-		<button id="add-constructed-league-button" >
-			Add Constructed League
-		</button> 
-		<div id="constructed-league-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
-			</div>
-			<div id="constructed-league-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
-	
-	<br/><br/><hr><br/><br/>
 
-	<div id="rtmd-league-section" class="league-form">
-		<h1>Add Race to Mount Doom League</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Name: </div>
-			<input type="text" id="rtmd-name" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Description: </div>
-			<div class="label-column flex-horiz flex-fill desc-div">
-				<div class="flex-vert" style="flex-basis:50%;">
-					<textarea type="text" id="rtmd-desc" class="desc-area"></textarea>
-				</div>
-				<div id="rtmd-desc-preview" class="desc-preview"></div>
-			</div>
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Cost (in silver): </div>
-			<input type="number" min="0" id="rtmd-cost" value="0" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Start Date: </div>
-			<input type="date" id="rtmd-start" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Max games against same opponent: </div>
-			<input type="number" min="1" id="rtmd-repeat-games" value="1" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Invite only: </div>
-			<input type="checkbox" id="rtmd-invite-only" />
-		</div>
-
-		<div style="display:none">
-		<div class="flex-horiz">
-			<div class="label-column">Top Prizes:</div>
-			<input type="text" id="rtmd-top-prize" value="" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Top Prize Cutoff:</div>
-			<input type="number" min="1" id="rtmd-top-pos" value="10" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Participation Prizes:</div>
-			<input type="text" id="rtmd-part-prize" value="" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Participation Games:</div>
-			<input type="number" min="1" id="rtmd-part-games" value="3" class="flex-fill">
-		</div>
-		</div>
-		
-		<h3>Series</h3>
-
-		<div class="rtmd-series" class="flex-vert">
-			<div class="rtmdSerieData" >
-				<div><b>Serie</b></div>
-				<div class="flex-horiz">
-					<div class="label-column">Format: </div>
-					<select id="rtmd-format" name="format" class="flex-fill"></select>
+			<!-- common block -->
+			<div class="form-section">
+				<div id="league-name-row" class="flex-horiz field-row">
+					<div class="label-column">Name</div>
+					<input type="text" id="league-name" class="flex-fill" maxlength="45">
 				</div>
 
 				<div class="flex-horiz">
-					<div class="label-column">Serie duration in days: </div>
-					<input type="number" min="1" name="serieDuration" value="7" class="flex-fill">
+					<div class="label-column">Description (Markdown) <span class="info-toggle" data-for="help-desc">i</span></div>
+					<div class="flex-horiz flex-fill desc-div">
+						<textarea id="league-desc" class="desc-area flex-fill" rows="4"></textarea>
+						<div id="league-desc-preview" class="desc-preview"></div>
+					</div>
+				</div>
+				<div id="help-desc" class="info-text" hidden>Shown to players on the league page and the calendar. Markdown, the same as announcements: <code>**bold**</code>, <code>*italics*</code>, <code>- lists</code>, and <code>[links](https://...)</code> are allowed here. The right-hand side shows it as players will see it.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Cost (silver)</div>
+					<input type="number" min="0" id="league-cost" value="50" class="flex-fill">
 				</div>
 
-				<div class="flex-horiz">
-					<div class="label-column">Max matches per serie: </div>
-					<input type="number" min="1" name="maxMatches" value="10" class="flex-fill">
+				<div class="flex-horiz field-row">
+					<div class="label-column"><span id="league-start-label">Start date</span> <span class="info-toggle" data-for="help-start">i</span></div>
+					<input type="date" id="league-start" class="flex-fill">
+				</div>
+				<div id="help-start" class="info-text" hidden>The day the league opens for play (UTC). Players can sign up as soon as the league exists.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Max games vs same opponent <span class="info-toggle" data-for="help-repeat">i</span></div>
+					<input type="number" min="1" id="league-repeat-games" value="1" class="flex-fill">
+				</div>
+				<div id="help-repeat" class="info-text" hidden>How many times the same two players can meet in one serie with the game counting for the league.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Invite only <span class="info-toggle" data-for="help-invite">i</span></div>
+					<input type="checkbox" id="league-invite-only" />
+				</div>
+				<div id="help-invite" class="info-text" hidden>Players cannot join by themselves; add them with "Add players to league" at the bottom of this page.</div>
+
+				<div id="league-collection-row" class="flex-horiz field-row">
+					<div class="label-column">Collection <span class="info-toggle" data-for="help-collection">i</span></div>
+					<select id="league-collection" class="flex-fill">
+						<option value="default">All cards</option>
+						<option value="permanent+trophy">My cards</option>
+					</select>
+				</div>
+				<div id="help-collection" class="info-text" hidden>"All cards" lets players build from every card in the game; "My cards" restricts them to the cards they own.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Campaign <span class="info-toggle" data-for="help-campaign">i</span></div>
+					<input type="text" id="league-campaign" class="flex-fill" maxlength="45" placeholder="optional, e.g. Yuletide 2026">
+				</div>
+				<div id="help-campaign" class="info-text" hidden>
+					Leagues that share a campaign tag belong together: a participation prize can then count the games a player has
+					played across all of them, and is handed out once per campaign. Leave blank for a stand-alone league.
+				</div>
+
+				<div class="flex-vert">
+					<div class="section-title">Prizes <span class="info-toggle" data-for="help-prizes">i</span></div>
+					<div id="help-prizes" class="info-text" hidden>
+						Extra prizes handed out when the league ends, on top of the automatic ones. Each tier says who qualifies
+						(a range of final places, ties included, or a minimum number of games played) and what they get. An item is
+						a card or pack id (<code>9_1</code> is set 9 card 1; add <code>*</code> for foil or <code>T</code> for tengwar)
+						or, when the card does not exist yet, "to be announced" with a description: players receive a placeholder
+						card that is swapped for the real one once it is resolved on the Prizes tab.
+					</div>
+					<div id="league-prize-tiers"></div>
 				</div>
 			</div>
-		</div>
 
-		<button id="add-rtmd-series-button">
-			Add Another Serie
-		</button>
-
-		<h3>Race Configuration</h3>
-
-		<div class="flex-horiz">
-			<div class="label-column">Advancement Mode: </div>
-			<select id="rtmd-advancement-mode" class="flex-fill">
-				<option value="WIN">Win-based</option>
-				<option value="SCORE">Score-based</option>
-			</select>
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Advance Factor: </div>
-			<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
-			<span style="margin-left:8px; color:#888;">(wins or points needed per position advance)</span>
-		</div>
-
-		<div class="flex-horiz" style="display:none">
-			<div class="label-column">Cumulative: </div>
-			<input type="checkbox" id="rtmd-cumulative" />
-			<span style="margin-left:8px; color:#888;">(all prior meta-sites remain active)</span>
-		</div>
-
-		<div class="flex-horiz" style="align-items:center;">
-			<div class="label-column">Path Length: </div>
-			<div class="flex-fill" style="padding:0 10px;">
-				<div id="rtmd-path-length-slider" style="margin:10px 0;"></div>
+			<!-- one-off type block (hidden while scheduling) -->
+			<div id="oneoff-block" class="form-section">
+				<div class="section-title"><span id="oneoff-title">Format</span> <span class="info-toggle" data-for="help-series">i</span></div>
+				<div id="help-series" class="info-text" hidden>
+					Each serie runs for the given number of days, one after the other, and only the first "max matches" ranked games count per player.
+					Sealed and Draft leagues take one entry; Constructed and Race to Mount Doom can chain several formats.
+				</div>
+				<div id="oneoff-series" class="serie-editor"></div>
 			</div>
-			<span id="rtmd-path-length-display" style="margin-left:8px; color:#aaa; min-width:30px;">9</span>
-			<input type="hidden" id="rtmd-path-length" value="9">
-		</div>
 
-		<div class="flex-horiz" style="align-items:center;">
-			<div class="label-column">Intensity Range: </div>
-			<div class="flex-fill" style="padding:0 10px;">
-				<div id="rtmd-intensity-slider" style="margin:10px 0;"></div>
+			<!-- RTMD race editor (shown for Race to Mount Doom, one-off or scheduled) -->
+			<div id="rtmd-race-block" class="form-section">
+				<div class="section-title">Race configuration <span class="info-toggle" data-for="help-race">i</span></div>
+				<div id="help-race" class="info-text" hidden>
+					Players advance along a path of meta-sites, each carrying a modifier card. Set the path length and intensity range,
+					press Randomize (locked sites are kept), or add modifiers by hand. Drag sites to reorder; right-click a card to preview it.
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Advancement</div>
+					<select id="rtmd-advancement-mode" class="flex-fill">
+						<option value="WIN">Win-based</option>
+						<option value="SCORE">Score-based</option>
+					</select>
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Advance factor <span class="info-toggle" data-for="help-advance">i</span></div>
+					<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
+				</div>
+				<div id="help-advance" class="info-text" hidden>Wins (or points) needed to move one site along the path.</div>
+
+				<div class="flex-horiz field-row" style="display:none">
+					<div class="label-column">Cumulative</div>
+					<input type="checkbox" id="rtmd-cumulative" />
+					<span class="race-hint">(all prior meta-sites remain active)</span>
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Path length</div>
+					<div class="flex-fill" style="padding:0 10px;">
+						<div id="rtmd-path-length-slider" style="margin:10px 0;"></div>
+					</div>
+					<span id="rtmd-path-length-display" style="margin-left:8px; color:#aaa; min-width:30px;">9</span>
+					<input type="hidden" id="rtmd-path-length" value="9">
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Intensity range <span class="info-toggle" data-for="help-intensity">i</span></div>
+					<div class="flex-fill" style="padding:0 10px;">
+						<div id="rtmd-intensity-slider" style="margin:10px 0;"></div>
+					</div>
+					<span id="rtmd-intensity-display" style="margin-left:8px; color:#aaa; min-width:60px;">-10 to 10</span>
+					<input type="hidden" id="rtmd-intensity-floor" value="-10">
+					<input type="hidden" id="rtmd-intensity-ceiling" value="10">
+				</div>
+				<div id="help-intensity" class="info-text" hidden>Only modifiers within this range are used by Randomize and offered in the list below. Low values help the players, high values hinder them.</div>
+
+				<div class="flex-horiz field-row" style="gap:8px; margin:8px 0;">
+					<button type="button" id="rtmd-randomize-btn">Randomize</button>
+					<span style="flex-grow:1;"></span>
+					<select id="rtmd-add-modifier" style="max-width:500px;">
+						<option value="">-- Select a modifier to add --</option>
+					</select>
+					<button type="button" id="rtmd-add-modifier-btn">Add</button>
+				</div>
+
+				<div id="rtmd-path-container"></div>
+				<div id="rtmd-path-count">0 modifiers</div>
+
+				<div class="section-title" style="margin-top:12px;">Path preview</div>
+				<div id="rtmd-preview"></div>
 			</div>
-			<span id="rtmd-intensity-display" style="margin-left:8px; color:#aaa; min-width:60px;">-10 to 10</span>
-			<input type="hidden" id="rtmd-intensity-floor" value="-10">
-			<input type="hidden" id="rtmd-intensity-ceiling" value="10">
-		</div>
 
-		<div class="flex-horiz" style="gap:8px; margin:8px 0; align-items:center;">
-			<button id="rtmd-randomize-btn">Randomize</button>
-			<span style="flex-grow:1;"></span>
-			<select id="rtmd-add-modifier" style="max-width:500px;">
-				<option value="">-- Select a modifier to add --</option>
-			</select>
-			<button id="rtmd-add-modifier-btn">Add</button>
-		</div>
-
-		<div id="rtmd-path-container" style="display:flex;flex-wrap:wrap;gap:8px;min-height:120px;padding:8px;border:1px solid #444;border-radius:4px;background:#1a1a1a;"></div>
-		<div id="rtmd-path-count" style="color:#888; margin-top:4px;">0 modifiers</div>
-
-		<h4 style="margin-top:12px;">Path Preview</h4>
-		<div id="rtmd-preview" style="padding:8px;border:1px solid #333;border-radius:4px;background:#111;min-height:60px;"></div>
-		
-
-		<button id="preview-rtmd-league-button">
-			Preview RTMD League
-		</button>
-
-		<button id="add-rtmd-league-button" >
-			Add RTMD League
-		</button>
-		<div id="rtmd-league-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
+			<!-- schedule toggle -->
+			<div id="league-repeat-row" class="form-section">
+				<label class="field-inline"><input type="checkbox" id="league-repeat"> Repeat on a schedule</label>
 			</div>
-			<div id="rtmd-league-result" class="flex-fill result-box">
-				Ready.
+
+			<!-- schedule block -->
+			<div id="schedule-block" class="form-section">
+				<div class="flex-horiz field-row">
+					<div class="label-column">Series name <span class="info-toggle" data-for="help-series-name">i</span></div>
+					<input type="text" id="schedule-name" class="flex-fill" maxlength="45" placeholder="Sealed, Draft, Constructed - Fellowship Progressive...">
+				</div>
+				<div id="help-series-name" class="info-text" hidden>The name of the whole schedule; it fills <code>{series}</code> in the league name pattern below.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">League name pattern <span class="info-toggle" data-for="help-pattern">i</span></div>
+					<input type="text" id="schedule-name-pattern" class="flex-fill" value="{series} - {event}">
+				</div>
+				<div id="help-pattern" class="info-text" hidden>
+					How each created league is named. Tokens: <code>{series}</code> the series name, <code>{event}</code> the event name,
+					<code>{month}</code> September, <code>{mon}</code> Sep, <code>{mm}</code> 09, <code>{year}</code> 2026, <code>{yy}</code> 26.
+					The result must be 45 characters or less.
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Repeat every <span class="info-toggle" data-for="help-interval">i</span></div>
+					<label class="field-inline"><input type="number" min="0.25" step="0.25" id="schedule-interval" value="1" class="wide"> months</label>
+				</div>
+				<div id="help-interval" class="info-text" hidden>Whole months keep the day of the month (the 1st stays the 1st). 0.25 = weekly, 0.5 = every two weeks, 1.5 = a month and two weeks.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Create <span class="info-toggle" data-for="help-lead">i</span></div>
+					<label class="field-inline"><input type="number" min="0" id="schedule-lead-days" value="7"> days before start</label>
+				</div>
+				<div id="help-lead" class="info-text" hidden>Each league appears in the hall this many days before it starts, so players can sign up in advance.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Active</div>
+					<input type="checkbox" id="schedule-active" checked />
+				</div>
+
+				<div class="section-title" style="margin-top:0.4em;">Rotation <span class="info-toggle" data-for="help-rotation">i</span></div>
+				<div id="help-rotation" class="info-text" hidden>
+					The events the schedule cycles through, in order; after the last one it starts again from the first. Each event has its own
+					format(s); everything else above (cost, description, prizes, race) is shared by every event. The event marked "next" is the one
+					created next.
+				</div>
+				<div id="rotation-rows"></div>
+				<div><button type="button" id="rotation-add">Add event</button></div>
+			</div>
+
+			<div class="flex-horiz form-buttons">
+				<button type="button" id="league-preview-button">Preview</button>
+				<button type="button" id="league-save-button">Create league</button>
+			</div>
+			<div id="league-result-label" class="flex-horiz result-label">
+				<div class="label"><b>Result:</b></div>
+				<div id="league-result" class="flex-fill result-box">Ready.</div>
 			</div>
 		</div>
-	</div>
-	
-	<br/><br/><hr><br/><br/>
-	
-	<div class="league-form">
-		<h1>Add Players to League</h1>
-		<p>
-			<i>This is intended to be used for use with invite-only leagues, but may have uses elsewhere.</i>
-		</p>
-		
-		<div class="flex-horiz">
-			<div class="label-column">League ID: </div>
-			<input type="text" id="league-to-add">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Players (1 per line): </div>
-			<textarea rows="5" cols="20" id="players-to-add" class="flex-fill"></textarea>
-		</div>
-		
-		<button id="add-league-players-button">
-			Add Players to League
-		</button>
-		
-		<div id="league-add-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
+
+		<!-- hidden option caches, filled once from getFormats and cloned into every format select -->
+		<select id="format-cache-sealed" style="display:none"></select>
+		<select id="format-cache-draft" style="display:none"></select>
+		<select id="format-cache-format" style="display:none"></select>
+
+		<!-- Add players to league (unchanged) -->
+		<div id="add-players-section" class="league-form">
+			<h2>Add players to league</h2>
+			<p>
+				<i>This is intended to be used for use with invite-only leagues, but may have uses elsewhere.</i>
+			</p>
+
+			<div class="flex-horiz">
+				<div class="label-column">League ID: </div>
+				<input type="text" id="league-to-add">
 			</div>
-			<div id="league-add-result" class="flex-fill result-box">
-				Ready.
+
+			<div class="flex-horiz">
+				<div class="label-column">Players (1 per line): </div>
+				<textarea rows="5" cols="20" id="players-to-add" class="flex-fill"></textarea>
+			</div>
+
+			<button type="button" id="add-league-players-button">
+				Add Players to League
+			</button>
+
+			<div id="league-add-result-label" class="flex-horiz result-label">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="league-add-result" class="flex-fill result-box">
+					Ready.
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-

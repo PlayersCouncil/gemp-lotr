@@ -834,6 +834,8 @@ var GempLotrDeckBuildingUI = Class.extend({
     },
 
     addCardToContainer:function (blueprintId, zone, container, tokens) {
+        if (Card.isPlaceholder(blueprintId))
+            return $();
         var card = new Card(blueprintId, zone, "deck", "player");
         var cardDiv = createCardDiv(card.imageUrl, null, card.isFoil(), tokens, card.isPack(), card.hasErrata());
         cardDiv.data("card", card);
@@ -910,6 +912,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 
     addCardToDeck:function (blueprintId, side) {
         var that = this;
+        if (Card.isPlaceholder(blueprintId))
+            return;
         var added = false;
         $(".card.cardInDeck", this.drawDeckDiv).each(
                 function () {
@@ -1081,6 +1085,14 @@ var GempLotrDeckBuildingUI = Class.extend({
                 cardDiv.addClass("packInCollection");
             }
             this.normalCollectionDiv.append(cardDiv);
+        } else if (type == "card" && Card.isPlaceholder(blueprintId)) {
+            // A promised prize: visible but never addable to a deck
+            var placeholder = new Card(blueprintId, side, "collection", "player");
+            placeholder.tokens = {"count":count};
+            var placeholderDiv = createCardDiv(placeholder.imageUrl, null, false, true, false, false);
+            placeholderDiv.data("card", placeholder);
+            placeholderDiv.addClass("placeholderInCollection");
+            this.normalCollectionDiv.append(placeholderDiv);
         } else if (type == "card") {
             var card = new Card(blueprintId, side, "collection", "player");
             var countInDeck = 0;

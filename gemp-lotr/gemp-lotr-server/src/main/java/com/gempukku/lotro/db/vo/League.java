@@ -31,21 +31,32 @@ public class League {
 
     private final LeagueType _type;
     private final int _status;
+    private final Integer _scheduleId;
     private final String _unparsedParams;
     private LeagueData _leagueData;
 
     public League(DBDefs.League row) {
-        this(row.name, row.cost, row.code, LeagueType.parse(row.type), row.parameters, row.status);
+        this(row.name, row.cost, row.code, LeagueType.parse(row.type), row.parameters, row.status, row.schedule_id);
     }
 
     public League(String name, int cost, long code, LeagueType type, String parameters, int status) {
+        this(name, cost, code, type, parameters, status, null);
+    }
+
+    public League(String name, int cost, long code, LeagueType type, String parameters, int status, Integer scheduleId) {
         _name = name;
         _cost = cost;
         _code = code;
         _type = type;
         _unparsedParams = parameters;
         _status = status;
+        _scheduleId = scheduleId;
     }
+
+    /**
+     * @return the id of the league schedule that created this league, or null if an admin created it by hand
+     */
+    public Integer getScheduleId() { return _scheduleId; }
 
     public boolean inviteOnly() { return _leagueData.getParameters().inviteOnly; }
 

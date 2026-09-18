@@ -615,5 +615,15 @@
 		playable: true
 	}
 
+	{
+		setId: 404
+		setName: Future Prizes
+		rarityFile: /set404-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: false
+	}
+
 
 ]
