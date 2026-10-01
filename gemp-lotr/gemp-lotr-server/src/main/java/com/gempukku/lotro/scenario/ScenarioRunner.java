@@ -85,6 +85,8 @@ public final class ScenarioRunner {
         }
 
         report.steps.putAll(director.statuses());
+        for (Step step : def.steps)
+            report.stepDescriptions.put(step.label(), step.when.source);
         for (String problem : table.Problems())
             report.failures.add(problem);
 
@@ -94,9 +96,9 @@ public final class ScenarioRunner {
                         + ": " + String.join(", ", entry.result()) + ") was never used");
             for (Map.Entry<String, ScenarioDirector.StepStatus> entry : director.statuses().entrySet()) {
                 if (entry.getValue() == ScenarioDirector.StepStatus.UNREACHED)
-                    report.failures.add("step '" + entry.getKey() + "' was never reached");
+                    report.failures.add(def.findStep(entry.getKey()).describe() + " was never reached");
                 else if (entry.getValue() == ScenarioDirector.StepStatus.SKIPPED)
-                    report.warnings.add("step '" + entry.getKey() + "' was skipped");
+                    report.warnings.add(def.findStep(entry.getKey()).describe() + " was skipped");
             }
             if (report.failures.isEmpty())
                 report.reached = RunnerLevel.FULL;
@@ -150,10 +152,10 @@ public final class ScenarioRunner {
                         answer = AnswerCompiler.leastAnswer(decision);
                         note = "(exploring: the step gives no answer, so did as little as possible)";
                     } else if (answer == null) {
-                        report.decisions.add(new ScenarioRunReport.Decision(number, description, step.id, null, null));
-                        report.stopped = "step '" + step.id + "' leaves the choice open and gives the runner no answer";
+                        report.decisions.add(new ScenarioRunReport.Decision(number, description, step.label(), null, null));
+                        report.stopped = "step " + step.label() + " leaves the choice open and gives the runner no answer";
                         if (strict)
-                            report.failures.add("step '" + step.id + "' has no answer for the runner.  Give it an 'answer', or an 'allow' with exactly one entry.");
+                            report.failures.add("step " + step.label() + " has no answer for the runner.  Give it an 'answer', or an 'allow' with exactly one entry.");
                         else
                             report.reached = RunnerLevel.PREFIX;
                         return false;
@@ -170,7 +172,7 @@ public final class ScenarioRunner {
                     report.stopped = "a decision for the player that no step covers";
                     if (strict)
                         report.failures.add("No step covers this decision (the script is waiting on "
-                                + (director.currentStep() == null ? "nothing: every step has been used" : "step '" + director.currentStep().id + "'")
+                                + (director.currentStep() == null ? "nothing: every step has been used" : director.currentStep().describe())
                                 + "): " + description);
                     else
                         report.reached = RunnerLevel.PREFIX;
@@ -185,23 +187,23 @@ public final class ScenarioRunner {
                         report.reached = RunnerLevel.PREFIX;
                     else
                         report.failures.add("No step covers this decision for the opponent (the script is waiting on "
-                                + (director.currentStep() == null ? "nothing: every step has been used" : "step '" + director.currentStep().id + "'")
+                                + (director.currentStep() == null ? "nothing: every step has been used" : director.currentStep().describe())
                                 + "): " + description);
                     return false;
                 }
             } catch (ScenarioScriptException exp) {
-                report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.id, null, null));
-                report.failures.add((step == null ? "" : "step '" + step.id + "': ") + exp.getMessage());
+                report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), null, null));
+                report.failures.add((step == null ? "" : "step " + step.label() + ": ") + exp.getMessage());
                 report.stopped = "the script does not fit the game";
                 return false;
             }
 
-            report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.id, answer, note));
+            report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), answer, note));
             try {
                 table.PlayerDecided(player, answer);
             } catch (RuntimeException exp) {
                 boolean rejected = exp.getCause() instanceof com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-                report.failures.add((step == null ? "" : "step '" + step.id + "': ")
+                report.failures.add((step == null ? "" : "step " + step.label() + ": ")
                         + (rejected ? "the game rejected the answer \"" + answer + "\" to: " + description
                                 : "the game threw " + exp + rootCause(exp) + " after the answer \"" + answer + "\" to: " + description));
                 report.stopped = rejected ? "the game rejected an answer" : "the game threw an exception";

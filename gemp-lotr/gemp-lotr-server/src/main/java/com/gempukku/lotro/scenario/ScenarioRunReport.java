@@ -14,11 +14,11 @@ public class ScenarioRunReport {
     /**
      * One decision the game asked for.
      * @param decision The decision, in the scenario's terms.
-     * @param stepId The step it belonged to, or null if it belonged to none.
+     * @param step The label of the step it belonged to, or null if it belonged to none.
      * @param answer How it was answered, in the game's terms, or null if the run stopped here.
      * @param note Anything worth saying about it (e.g. "answered by fallback").
      */
-    public record Decision(int number, String decision, String stepId, String answer, String note) { }
+    public record Decision(int number, String decision, String step, String answer, String note) { }
 
     public final String scenarioId;
     /** How much of the scenario the run proved. */
@@ -28,7 +28,10 @@ public class ScenarioRunReport {
     public final List<String> failures = new ArrayList<>();
     public final List<String> warnings = new ArrayList<>();
     public final List<Decision> decisions = new ArrayList<>();
+    /** Every step, by label, and what became of it. */
     public final Map<String, ScenarioDirector.StepStatus> steps = new LinkedHashMap<>();
+    /** Every step, by label, and what it waits for (as written in the file). */
+    public final Map<String, String> stepDescriptions = new LinkedHashMap<>();
     /** Why the run stopped, in a sentence. */
     public String stopped = "";
 
@@ -53,11 +56,14 @@ public class ScenarioRunReport {
             sb.append("  warning: ").append(warning).append("\n");
         sb.append("Steps:\n");
         for (Map.Entry<String, ScenarioDirector.StepStatus> entry : steps.entrySet())
-            sb.append("  ").append(String.format("%-10s", entry.getValue().name().toLowerCase())).append(entry.getKey()).append("\n");
+            sb.append("  ").append(String.format("%-10s", entry.getValue().name().toLowerCase()))
+                    .append(String.format("%-4s", entry.getKey()))
+                    .append(stepDescriptions.getOrDefault(entry.getKey(), "").isEmpty() ? "" : " when: " + stepDescriptions.get(entry.getKey()))
+                    .append("\n");
         sb.append("Decisions:\n");
         for (Decision decision : decisions) {
             sb.append("  ").append(String.format("%3d", decision.number())).append(". ")
-                    .append(decision.stepId() == null ? "(no step)" : "[" + decision.stepId() + "]")
+                    .append(decision.step() == null ? "(no step)" : "[step " + decision.step() + "]")
                     .append(" ").append(decision.decision()).append("\n");
             sb.append("       -> ").append(decision.answer() == null ? "(not answered)" : "\"" + decision.answer() + "\"");
             if (decision.note() != null)

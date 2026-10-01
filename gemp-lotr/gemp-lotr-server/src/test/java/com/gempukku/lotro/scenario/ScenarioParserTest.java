@@ -77,6 +77,32 @@ public class ScenarioParserTest {
     }
 
     @Test
+    public void stepsAreNumberedAndOnlyNamedIfTheirAuthorWantsTo() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, action
+                		}
+                		{
+                			id: the-big-moment
+                			when: freeps, assign
+                		}
+                		{
+                			allow: pass
+                		}
+                	]
+                """);
+        assertEquals(1, def.steps.get(0).number);
+        assertNull(def.steps.get(0).id);
+        assertEquals("1", def.steps.get(0).label());
+        assertEquals("step 1 [when: freeps, action]", def.steps.get(0).describe());
+        assertEquals("2 (the-big-moment)", def.steps.get(1).label());
+        assertEquals("step 3", def.steps.get(2).describe());
+        assertSame(def.steps.get(1), def.findStep("2 (the-big-moment)"));
+        assertSame(def.steps.get(2), def.findStep("3"));
+    }
+
+    @Test
     public void answersAndAllowsShareOneVocabulary() throws Exception {
         ScenarioDefinition def = ScenarioTesting.parse("""
                 	steps: [
@@ -176,6 +202,40 @@ public class ScenarioParserTest {
     }
 
     @Test
+    public void aMessageCanWaitForAMomentInsideTheDecision() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, assign
+                			messages: [
+                				Click the Bowman.
+                				{
+                					text: Now click Frodo.
+                					anchor: card:frodo
+                					on: picked(bowman)
+                				}
+                				{
+                					text: That pairs them up.
+                					on: assigned(frodo)
+                				}
+                				{
+                					text: Click Done.
+                					anchor: ui:button:done
+                					on: ready
+                				}
+                			]
+                			allow: assign(frodo: bowman)
+                		}
+                	]
+                """);
+        List<Message> messages = def.steps.getFirst().messages;
+        assertNull("With no moment given, a message is shown as soon as the decision is", messages.get(0).on);
+        assertEquals(new Moment(MomentKind.PICKED, "bowman"), messages.get(1).on);
+        assertEquals(new Moment(MomentKind.ASSIGNED, "frodo"), messages.get(2).on);
+        assertEquals(new Moment(MomentKind.READY, null), messages.get(3).on);
+    }
+
+    @Test
     public void rulesAndRandomOutcomes() throws Exception {
         ScenarioDefinition def = ScenarioTesting.parse("""
                 	human: shadow
@@ -212,10 +272,13 @@ public class ScenarioParserTest {
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\twhen: freeps, sometime\n\t\t}\n\t]", "don't know what 'sometime' means");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tanswer: jump(aragorn)\n\t\t}\n\t]", "don't know what 'jump(aragorn)' means");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t}\n\t\t{\n\t\t\tid: a\n\t\t}\n\t]", "two steps called 'a'");
-        assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tanswer: pass, pass\n\t\t}\n\t]", "give it an 'until'");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tanswer: pass, pass\n\t\t}\n\t]", "step 1: has several answers but answers only one decision");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: 7th\n\t\t}\n\t]", "is not usable as a step's name");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tmessages: [\n\t\t\t\tStrength is {might:aragorn}.\n\t\t\t]\n\t\t}\n\t]", "don't know how to fill in {might:aragorn}");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tanchor: card:legolas\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tanchor: ui:minimap\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "is not an anchor");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: clicked(bowman)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "don't know what 'clicked(bowman)' means");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: picked(legolas)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: runner1\n\t\t}\n\t}", "belongs to the other seat");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: aragorn\n\t\t\tdeck: aragorn\n\t\t}\n\t}", "placed in more than one zone");
         assertRejected("\tring: {\n\t\tfreeps: runner1\n\t}", "belongs to the other seat");

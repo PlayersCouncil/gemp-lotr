@@ -105,7 +105,6 @@
 
 	steps: [
 		{
-			id: t1-welcome
 			when: freeps, action, phase(fellowship), turn(1)
 			messages: [
 				{
@@ -129,7 +128,6 @@
 			allow: pass
 		}
 		{
-			id: t1-bowman
 			when: opponent, action, phase(shadow), turn(1)
 			messages: [
 				{
@@ -142,7 +140,6 @@
 			answer: play(bowman)
 		}
 		{
-			id: t1-assign
 			when: freeps, assign, turn(1)
 			messages: [
 				{
@@ -153,15 +150,25 @@
 				}
 				{
 					title: Assignment
-					text: Next you choose who fights each minion. Click the Bowman, then Frodo.
+					text: Next you choose who fights each minion. Start by clicking the Bowman.
 					anchor: card:bowman
-					highlight: card:bowman, card:frodo
+					highlight: card:bowman
+				}
+				{
+					text: Now click Frodo to send the Bowman against him.
+					anchor: card:frodo
+					highlight: card:frodo
+					on: picked(bowman)
+				}
+				{
+					text: Every minion has an opponent. Click **Done** to confirm.
+					anchor: ui:button:done
+					on: ready
 				}
 			]
 			allow: assign(frodo: bowman)
 		}
 		{
-			id: t1-choose-skirmish
 			when: freeps, cards, text(next skirmish)
 			messages: [
 				{
@@ -173,7 +180,6 @@
 			allow: choose(frodo)
 		}
 		{
-			id: t1-skirmish
 			when: freeps, action, phase(skirmish), skirmish(1)
 			messages: [
 				{
@@ -189,7 +195,6 @@
 			}
 		}
 		{
-			id: t1-stay
 			when: freeps, choice, text(another move)
 			messages: [
 				{
@@ -202,7 +207,6 @@
 			allow: option(No)
 		}
 		{
-			id: t2-help-arrives
 			checkpoint: true
 			when: freeps, action, phase(fellowship), turn(2)
 			messages: [
@@ -223,7 +227,6 @@
 			allow: play(gandalf)
 		}
 		{
-			id: t2-set-out
 			when: freeps, action, phase(fellowship), turn(2)
 			messages: [
 				{

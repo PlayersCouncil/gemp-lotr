@@ -154,6 +154,28 @@ public final class ScenarioDefinition {
 
     public enum Advance { NEXT, DECISION }
 
+    /**
+     * A point inside the answering of one decision.  Some decisions take several clicks before anything is sent to
+     * the game (assigning minions: pick up a minion, put it on a character, and so on, then Done).  The game sees none
+     * of that; only the player's own screen does.  A message can be tied to one of these points, and it is the client
+     * that decides when the point has come.
+     */
+    public enum MomentKind {
+        /** The decision has just been put to the player.  This is when a message with no moment is shown. */
+        START,
+        /** The player has picked this card as part of building their answer. */
+        PICKED,
+        /** Assignment: this character now has every minion the allowed answer gives it. */
+        ASSIGNED,
+        /** What the player has built is a complete allowed answer; only confirming it remains. */
+        READY
+    }
+
+    /**
+     * @param card The card the moment is about (PICKED, ASSIGNED); null otherwise.
+     */
+    public record Moment(MomentKind kind, String card) { }
+
     public static final class Message {
         public String title;
         public String text;
@@ -165,6 +187,8 @@ public final class ScenarioDefinition {
         public String side = "auto";
         /** Null means "decide from position": the last message of a step waits for the decision, the others for Next. */
         public Advance advance;
+        /** When, within the answering of the decision, the message is shown.  Null means at the start. */
+        public Moment on;
     }
 
     public static final class Allow {
@@ -186,6 +210,9 @@ public final class ScenarioDefinition {
     }
 
     public static final class Step {
+        /** Where the step comes in the script, counting from 1.  This is how a step is known. */
+        public int number;
+        /** A name for the step, if its author wanted one.  It only makes reports easier to read. */
         public String id;
         public When when = new When();
         /** If present, the step keeps applying to decisions until one arrives that matches this. */
@@ -204,6 +231,16 @@ public final class ScenarioDefinition {
         public boolean repeats() {
             return until != null;
         }
+
+        /** What the step is called in reports: its number, with its name if it has one. */
+        public String label() {
+            return id == null ? String.valueOf(number) : number + " (" + id + ")";
+        }
+
+        /** The label, plus what the step waits for, to say which step is meant to somebody reading the file. */
+        public String describe() {
+            return "step " + label() + (when.source.isEmpty() ? "" : " [when: " + when.source + "]");
+        }
     }
 
     public enum OffScriptResult { RESTART, FAIL, CONTINUE }
@@ -216,9 +253,12 @@ public final class ScenarioDefinition {
         public OffScriptResult offScriptResult = OffScriptResult.RESTART;
     }
 
-    public Step findStep(String stepId) {
+    /**
+     * @param label A step's label, as given by Step.label().
+     */
+    public Step findStep(String label) {
         for (Step step : steps)
-            if (step.id.equals(stepId))
+            if (step.label().equals(label))
                 return step;
         return null;
     }
