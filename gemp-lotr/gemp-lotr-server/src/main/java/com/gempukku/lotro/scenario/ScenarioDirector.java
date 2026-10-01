@@ -225,12 +225,7 @@ public class ScenarioDirector {
      * @throws ScenarioScriptException if the step allows something the decision does not offer.
      */
     public Presentation present(Step step, String player, AwaitingDecision decision) throws ScenarioScriptException {
-        List<RenderedMessage> messages = new ArrayList<>();
-        if (!isContinuing(step))
-            for (Message message : step.messages)
-                messages.add(new RenderedMessage(message,
-                        message.title == null ? null : Templates.render(_table, message.title),
-                        Templates.render(_table, message.text)));
+        List<RenderedMessage> messages = render(step);
 
         List<String> allowed = null;
         boolean passAllowed = false;
@@ -259,6 +254,23 @@ public class ScenarioDirector {
                         + AnswerCompiler.describe(_table, decision));
         }
         return new Presentation(step, messages, allowed, passAllowed);
+    }
+
+    /**
+     * What a step shows when its restrictions cannot be worked out: its messages, and nothing about the answer.
+     */
+    public Presentation presentUnrestricted(Step step) {
+        return new Presentation(step, render(step), null, false);
+    }
+
+    private List<RenderedMessage> render(Step step) {
+        List<RenderedMessage> messages = new ArrayList<>();
+        if (!isContinuing(step))
+            for (Message message : step.messages)
+                messages.add(new RenderedMessage(message,
+                        message.title == null ? null : Templates.render(_table, message.title),
+                        Templates.render(_table, message.text)));
+        return messages;
     }
 
     /**

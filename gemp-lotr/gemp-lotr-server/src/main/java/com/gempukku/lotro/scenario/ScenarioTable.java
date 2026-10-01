@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
+import com.gempukku.lotro.game.DecisionObserver;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
@@ -61,7 +62,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private final Map<Seat, PhysicalCardImpl> _rulesCards = new EnumMap<>(Seat.class);
     private final Map<String, Requirement[]> _requirements = new HashMap<>();
     private final List<String> _problems = new ArrayList<>();
+    private final List<DecisionObserver> _observers = new ArrayList<>();
+    private final Map<String, LotroDeck> _decks = new HashMap<>();
     private ScenarioRandom _random;
+    private boolean _arranged;
 
     /**
      * @param humanPlayer The name of the player in the scenario's "human" seat.
@@ -131,11 +135,36 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     /**
+     * Has an observer told about every decision of the game and every answer to one.  Only before the game exists.
+     */
+    public void Observe(DecisionObserver observer) {
+        if (_game != null)
+            throw new IllegalStateException("The game already exists; it is too late to start observing it");
+        _observers.add(observer);
+    }
+
+    /**
+     * @return Whether the scenario's board has been laid out yet.  Until it has, no alias refers to anything.
+     */
+    public boolean Arranged() { return _arranged; }
+
+    /** The deck each player was given, by player name. */
+    public Map<String, LotroDeck> Decks() { return _decks; }
+
+    /**
      * Builds the decks, starts the game, seats the players and lets the game run to its first decision: the Free
      * Peoples seat's first choice of the first turn, with the board arranged as the scenario describes.
      */
     public void Start() {
-        Map<String, LotroDeck> decks = new HashMap<>();
+        Prepare();
+        Begin();
+    }
+
+    /**
+     * The first half of Start: builds the decks and the game, and stops there.  Nothing has happened in the game
+     * yet, so it can still be handed to whatever is going to run it.
+     */
+    public void Prepare() {
         for (Seat seat : Seat.values()) {
             LotroDeck deck = new LotroDeck(_def.title);
             String ringBearer = _def.ringBearer.get(seat);
@@ -149,10 +178,17 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                 if (card.owner() == seat && !card.alias().equals(ringBearer) && !card.alias().equals(ring))
                     deck.addCard(card.blueprintId());
             //The format decides which version of each card is in force, the same as at a hall table
-            decks.put(Player(seat), _format.applyErrata(deck));
+            _decks.put(Player(seat), _format.applyErrata(deck));
         }
 
-        InitializeGame(_format, decks, _library, null);
+        CreateGame(_format, _decks, _library, null);
+    }
+
+    /**
+     * The second half of Start: sets the game going and answers its opening questions.
+     */
+    public void Begin() {
+        _game.startGame();
 
         //The Free Peoples seat outbids the other and elects to go first.  From there the game runs on its own
         // through the first site and the Ring-bearers, into arrangeBoard below, and on to the first turn.
@@ -162,7 +198,13 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     @Override
+    protected String GameName() { return "Scenario - " + _def.title; }
+
+    @Override
     protected void BeforeGameStarts() {
+        for (DecisionObserver observer : _observers)
+            _userFeedback.addDecisionObserver(observer);
+
         _random = new ScenarioRandom(this, _def);
         _gameState.setRandom(_random);
         _gameState.setPregameSetup(this);
@@ -252,6 +294,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         AddBurdens(_def.setup.burdens);
         if (_def.setup.threats > 0)
             AddThreats(_def.setup.threats);
+
+        _arranged = true;
     }
 
     private void bindAliases(Seat seat) {

@@ -66,10 +66,10 @@ public final class ScenarioRunner {
         }
 
         ScenarioTable table = new ScenarioTable(def, library, format, HUMAN, OPPONENT);
-        ScenarioDirector director;
+        ScenarioSession session = new ScenarioSession(table);
+        ScenarioDirector director = session.Director();
         try {
             table.Start();
-            director = new ScenarioDirector(table);
         } catch (RuntimeException exp) {
             report.failures.add("The board could not be laid out: " + exp);
             report.stopped = "before the first decision";
@@ -78,7 +78,7 @@ public final class ScenarioRunner {
 
         boolean completed = false;
         try {
-            completed = play(def, table, director, report, explore);
+            completed = play(def, session, report, explore);
         } catch (RuntimeException exp) {
             report.failures.add("The game threw " + exp + rootCause(exp));
             report.stopped = "the game threw an exception";
@@ -109,7 +109,9 @@ public final class ScenarioRunner {
     /**
      * @return Whether the scenario reached its end.
      */
-    private static boolean play(ScenarioDefinition def, ScenarioTable table, ScenarioDirector director, ScenarioRunReport report, boolean explore) {
+    private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore) {
+        ScenarioTable table = session.Table();
+        ScenarioDirector director = session.Director();
         boolean strict = def.coverage == Coverage.STRICT;
         int unscripted = 0;
 
@@ -133,21 +135,25 @@ public final class ScenarioRunner {
             AwaitingDecision decision = table.GetAwaitingDecision(player);
             boolean human = player.equals(table.HumanPlayer());
 
-            Step step = director.match(player, decision);
+            //The session ruled on the decision the moment the game asked for it
+            ScenarioSession.Ruling ruling = session.Ruling(player);
+            Step step = ruling.step();
             String description = director.describe(player, decision);
             String answer;
             String note = null;
 
             try {
+                if (ruling.problem() != null)
+                    throw new ScenarioScriptException(ruling.problem());
                 if (step != null) {
-                    ScenarioDirector.Presentation shown = director.present(step, player, decision);
+                    ScenarioDirector.Presentation shown = ruling.shown();
                     if (shown.allowed() != null && decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS) {
                         //Worth knowing when writing the step's text: what the player could do here but is asked not to
                         int withheld = AnswerCompiler.options(table, decision).size() - shown.allowed().size();
                         if (withheld > 0)
                             note = "(" + withheld + " thing(s) on offer that the step does not allow)";
                     }
-                    answer = director.scriptedAnswer(step, decision);
+                    answer = ruling.answer();
                     if (answer == null && explore) {
                         answer = AnswerCompiler.leastAnswer(decision);
                         note = "(exploring: the step gives no answer, so did as little as possible)";
@@ -209,8 +215,6 @@ public final class ScenarioRunner {
                 report.stopped = rejected ? "the game rejected an answer" : "the game threw an exception";
                 return false;
             }
-            if (step != null)
-                director.answered(step);
 
             if (director.end() != null) {
                 report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";

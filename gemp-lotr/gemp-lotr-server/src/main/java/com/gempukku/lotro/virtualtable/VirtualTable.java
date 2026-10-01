@@ -91,14 +91,27 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
      *             meta-sites), or else null.
      */
     protected void InitializeGame(LotroFormat format, Map<String, LotroDeck> decks, LotroCardBlueprintLibrary library, GameExtraInfo info) {
+        CreateGame(format, decks, library, info);
+        _game.startGame();
+    }
+
+    /**
+     * Builds the game without setting it going, for a caller that has to hand the game to something else first (a
+     * live game's mediator, say).  The caller starts it with game().startGame().
+     */
+    protected void CreateGame(LotroFormat format, Map<String, LotroDeck> decks, LotroCardBlueprintLibrary library, GameExtraInfo info) {
         _userFeedback = new DefaultUserFeedback();
 
-        _game = new DefaultLotroGame(format, decks, _userFeedback, library, info);
+        _game = new DefaultLotroGame(format, decks, _userFeedback, library, TimerDescription(), SpectatorsAllowed(), GameName(), info);
         _userFeedback.setGame(_game);
         _gameState = _game.getGameState();
         BeforeGameStarts();
-        _game.startGame();
     }
+
+    /** What the players are told the game is, before it starts. */
+    protected String GameName() { return "Test Match"; }
+    protected String TimerDescription() { return "No timer"; }
+    protected boolean SpectatorsAllowed() { return false; }
 
     /**
      * Called once the game exists but before it has started running, for anything that has to be in place from the
@@ -260,6 +273,7 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
             userFeedback().sendAwaitingDecision(player, decision);
             throw new RuntimeException(exp);
         }
+        userFeedback().decisionAccepted(player, decision, answer);
         game().carryOutPendingActionsUntilDecisionNeeded();
     }
 }
