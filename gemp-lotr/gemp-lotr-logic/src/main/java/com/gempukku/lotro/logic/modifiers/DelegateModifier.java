@@ -280,6 +280,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public boolean loosensUniqueness(LotroGame game, PhysicalCard card) {
+        return delegate.loosensUniqueness(game, card);
+    }
+
+    @Override
     public Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter) {
         return delegate.getShadowSkirmishStrengthOverrideEvaluator(game, fpCharacter);
     }
@@ -317,6 +322,11 @@ public class DelegateModifier implements Modifier {
     @Override
     public boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag) {
         return delegate.hasFlagActive(game, modifierFlag);
+    }
+
+    @Override
+    public boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag, String playerId) {
+        return delegate.hasFlagActive(game, modifierFlag, playerId);
     }
 
     @Override
@@ -427,5 +437,15 @@ public class DelegateModifier implements Modifier {
     @Override
     public boolean shouldSkipPhase(LotroGame game, Phase phase, String playerId) {
         return delegate.shouldSkipPhase(game, phase, playerId);
+    }
+
+    @Override
+    public boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card) {
+        return delegate.deadPileGoesToDiscard(game, card);
+    }
+
+    @Override
+    public boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId) {
+        return delegate.sanctuaryMayRemoveBurdens(game, playerId);
     }
 }

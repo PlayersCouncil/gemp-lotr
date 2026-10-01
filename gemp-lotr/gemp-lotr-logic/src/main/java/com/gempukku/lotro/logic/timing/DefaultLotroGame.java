@@ -50,6 +50,7 @@ public class DefaultLotroGame implements LotroGame {
 
     private final Set<String> _requestedCancel = new HashSet<>();
     private final LotroCardBlueprintLibrary _library;
+    private final GameExtraInfo _extraInfo;
 
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library) {
         this(format, decks, userFeedback, library, "No timer", false, "Test Match", null);
@@ -64,6 +65,7 @@ public class DefaultLotroGame implements LotroGame {
         _library = library;
         _adventure = format.getAdventure();
         _format = format;
+        _extraInfo = extraInfo;
         _actionStack = new ActionStack();
 
         _allPlayers = decks.keySet();
@@ -191,6 +193,11 @@ public class DefaultLotroGame implements LotroGame {
     @Override
     public LotroFormat getFormat() {
         return _format;
+    }
+
+    @Override
+    public GameExtraInfo getExtraInfo() {
+        return _extraInfo;
     }
 
     public void startGame() {

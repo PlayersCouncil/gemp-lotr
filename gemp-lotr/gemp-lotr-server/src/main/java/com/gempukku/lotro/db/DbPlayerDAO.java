@@ -526,4 +526,33 @@ public class DbPlayerDAO implements PlayerDAO {
             throw new RuntimeException("Unable to retrieve players", ex);
         }
     }
+
+    @Override
+    public List<String> findPlayerNames(String fragment, int limit) {
+        if (fragment == null || fragment.isBlank() || limit <= 0)
+            return new LinkedList<>();
+        String lower = fragment.trim().toLowerCase();
+        // LIKE wildcards are common in player names ("_"), so escape them
+        String escaped = lower.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT name
+                        FROM player
+                        WHERE LOWER(name) LIKE :contains
+                        ORDER BY (LOWER(name) = :exact) DESC, (LOWER(name) LIKE :prefix) DESC, CHAR_LENGTH(name), name
+                        LIMIT :maxRows
+                        """;
+                return conn.createQuery(sql)
+                        .addParameter("contains", "%" + escaped + "%")
+                        .addParameter("prefix", escaped + "%")
+                        .addParameter("exact", lower)
+                        .addParameter("maxRows", limit)
+                        .executeScalarList(String.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to search player names", ex);
+        }
+    }
 }

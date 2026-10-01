@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_01_342_Tests
@@ -269,5 +270,91 @@ public class Card_01_342_Tests
 		while (scn.FreepsDecisionAvailable("Required responses"))
 			scn.FreepsChooseAction("Rivendell Waterfall");
 		assertEquals(4, scn.GetMoveLimit());
+	}
+
+	/**
+	 * Ends the current (P1) turn by staying at the current site, plays out P2's turn with P2 staying wherever it is,
+	 * and returns at the start of P1's next fellowship phase.
+	 */
+	private static void P1StaysThenP2PlaysATurnAndStays(VirtualTableScenario scn) throws DecisionResultInvalidException {
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToStay();
+		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
+		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
+
+		scn.SkipToPhaseInverted(Phase.REGROUP);
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
+		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
+		if (scn.ShadowDecisionAvailable("another move")) scn.ShadowChooseToStay();
+		if (scn.ShadowDecisionAvailable("reconcile")) scn.ShadowDeclineReconciliation();
+		while (scn.ShadowDecisionAvailable("discard down")) scn.ShadowChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetShadowHand().getFirst());
+	}
+
+	@Test
+	public void StartingATurnAtWaterfallWhileOtherTriggersResolveGivesOnlyPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+		// Regression for #1091. Amser began his turn at his Rivendell Waterfall with a ranger; at the start of the
+		// fellowship phase Blade Tip wounded (and killed) that ranger. The site's "constantly check" trigger was
+		// collected again for every effect that happened before its first copy had resolved and bumped the per-turn
+		// limit, so the move limit went 2 -> 3 -> 4 -> 5 instead of 2 -> 3.
+		var scn = new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");  // Ranger
+					put("gimli", "1_13");
+					put("bladetip", "1_209");
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					put("site2", "1_331");
+					put("site3", "1_342");   // Rivendell Waterfall
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bladeTip = scn.GetShadowCard("bladetip");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();          // P1: 2 -> 3
+		AnyoneChoosesSiteIfAsked(scn);
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals("Rivendell Waterfall", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(3, scn.GetMoveLimit());
+
+		// Blade Tip goes on the ranger; P1 stays at the Waterfall, P2 plays a turn (Blade Tip wounds Aragorn at the
+		// start of P2's fellowship phase too).
+		scn.AttachCardsTo(aragorn, bladeTip);
+		P1StaysThenP2PlaysATurnAndStays(scn);
+
+		// P1's next turn starts at the Waterfall (sanctuary healing has already cleaned Aragorn up).  At the start of
+		// the fellowship phase both Blade Tip and the Waterfall's own check trigger; the Free Peoples player orders them.
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetMoveLimit());
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+
+		// As in the replay, Blade Tip resolves first and its wound kills the ranger.
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.FreepsChooseAction("blueprintId", "1_209");
+		while (scn.FreepsDecisionAvailable("Required responses"))
+			scn.FreepsChooseAction("blueprintId", "1_342");
+
+		assertInZone(Zone.DEAD, aragorn);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		// P1 has not moved yet this turn and gets exactly one extra move
+		assertEquals(3, scn.GetMoveLimit());
 	}
 }

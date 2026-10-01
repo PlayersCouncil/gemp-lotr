@@ -48,10 +48,14 @@ public class DrawCardsEffect extends AbstractSubActionEffect {
     @Override
     public void playEffect(LotroGame game) {
         SubAction subAction = new SubAction(_action);
+        // Reconcile draws (a player drawing back up to hand size at the end of the regroup phase) are never
+        // subject to a replacement such as OPPONENT_FILTERS_YOUR_DRAWS - see PlayerReconcilesAction, the only
+        // caller that passes an Action of type RECONCILE here.
+        final boolean reconcileDraw = _action != null && _action.getType() == Action.Type.RECONCILE;
         final List<DrawOneCardEffect> drawEffects = new LinkedList<>();
         final int drawCount = _count.evaluateExpression(game, null);
         for (int i = 0; i < drawCount; i++) {
-            final DrawOneCardEffect effect = new DrawOneCardEffect(_playerId);
+            final DrawOneCardEffect effect = new DrawOneCardEffect(_playerId, reconcileDraw);
             subAction.appendEffect(effect);
             drawEffects.add(effect);
         }

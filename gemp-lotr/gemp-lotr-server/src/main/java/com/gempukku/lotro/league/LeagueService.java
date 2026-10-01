@@ -346,6 +346,7 @@ public class LeagueService {
 
         var standings = getLeagueStandings(league);
         var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
+        var playerPlacements = new HashMap<String, RTMDGameInfo.LeaguePlacement>();
 
         for (String playerName : playerNames) {
             int position = rtmd.getPlayerPosition(playerName, standings);
@@ -358,9 +359,13 @@ public class LeagueService {
                 pairs.add(new RTMDGameInfo.MetaSitePair(visualId, modifiers.get(i)));
             }
             playerMetaSites.put(playerName, pairs);
+
+            var placement = RTMDTitles.placementOf(playerName, standings);
+            if (placement != null)
+                playerPlacements.put(playerName, placement);
         }
 
-        return new RTMDGameInfo(playerMetaSites);
+        return new RTMDGameInfo(playerMetaSites, playerPlacements);
     }
 
     /**
@@ -392,5 +397,60 @@ public class LeagueService {
         }
 
         return merged;
+    }
+
+    // ---- t4-add-items: collections an admin can add items to ----
+
+    /**
+     * A league's own card collection (sealed and draft leagues deal each player a collection of their own).
+     *
+     * @param code           the collection code, what the addItems endpoint takes as collectionType
+     * @param collectionName the collection's own name
+     * @param leagueName     the league's name
+     * @param type           the league type
+     * @param start          start of the first serie
+     * @param end            end of the last serie
+     */
+    public record LeagueCollection(String code, String collectionName, String leagueName, League.LeagueType type,
+                                   ZonedDateTime start, ZonedDateTime end) {
+    }
+
+    /**
+     * The collections of every active (not yet ended) league that plays from its own collection, i.e. every
+     * collection type {@link #getCollectionTypeByCode} can resolve.  Constructed and RTMD leagues play from the
+     * shared collections and are not listed.  Ordered by start date, then name.
+     */
+    public synchronized List<LeagueCollection> getActiveLeagueCollections() {
+        Map<String, LeagueCollection> result = new LinkedHashMap<>();
+        for (League league : getActiveLeagues()) {
+            List<LeagueSerieInfo> series;
+            try {
+                series = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions).getSeries();
+            } catch (RuntimeException exp) {
+                continue; // a league whose parameters no longer parse cannot be added to either
+            }
+            if (series == null || series.isEmpty())
+                continue;
+            ZonedDateTime start = null;
+            ZonedDateTime end = null;
+            for (LeagueSerieInfo serie : series) {
+                if (serie.getStart() != null && (start == null || serie.getStart().isBefore(start)))
+                    start = serie.getStart();
+                if (serie.getEnd() != null && (end == null || serie.getEnd().isAfter(end)))
+                    end = serie.getEnd();
+            }
+            for (LeagueSerieInfo serie : series) {
+                CollectionType collectionType = serie.getCollectionType();
+                if (collectionType == null || CollectionType.parseCollectionCode(collectionType.getCode()) != null)
+                    continue;
+                if (!result.containsKey(collectionType.getCode()))
+                    result.put(collectionType.getCode(), new LeagueCollection(collectionType.getCode(),
+                            collectionType.getFullName(), league.getName(), league.getType(), start, end));
+            }
+        }
+        List<LeagueCollection> list = new ArrayList<>(result.values());
+        list.sort(Comparator.comparing(LeagueCollection::start, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(LeagueCollection::leagueName, Comparator.nullsLast(Comparator.naturalOrder())));
+        return list;
     }
 }

@@ -19,7 +19,8 @@ public class Card_02_046_ErrataTests
 				new HashMap<>()
 				{{
 					put("captain", "52_46");
-					put("uruk", "1_151");    // Uruk Lieutenant (another Uruk-hai to exert)
+					put("uruk", "1_151");    // Uruk Savage (non-unique Uruk-hai)
+					put("lurtz", "1_127");   // Lurtz, Servant of Saruman (another unique Uruk-hai)
 					put("brood", "1_154");   // Uruk Brood (Uruk-hai in discard to play)
 					put("runner", "1_178");
 				}},
@@ -44,7 +45,7 @@ public class Card_02_046_ErrataTests
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai
+		 * Game Text: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert a unique Uruk-hai
 		 * to play an Uruk-hai from your discard pile.
 		*/
 
@@ -68,8 +69,40 @@ public class Card_02_046_ErrataTests
 	}
 
 	@Test
-	public void UrukCaptainExertsAnyUrukHaiToPlayFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void UrukCaptainExertsAUniqueUrukHaiToPlayFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var captain = scn.GetShadowCard("captain");
+		var uruk = scn.GetShadowCard("uruk");
+		var lurtz = scn.GetShadowCard("lurtz");
+		var brood = scn.GetShadowCard("brood");
+
+		scn.MoveMinionsToTable(captain, uruk, lurtz);
+		scn.MoveCardsToDiscard(brood);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(captain));
+		int twilight = scn.GetTwilight();
+		scn.ShadowUseCardAction(captain);
+
+		// Only unique Uruk-hai (Uruk Captain himself, Lurtz) may be exerted; the non-unique Uruk Savage may not
+		assertTrue(scn.ShadowHasCardChoiceAvailable(captain, lurtz));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(uruk));
+		scn.ShadowChooseCard(lurtz);
+
+		assertEquals(1, scn.GetWoundsOn(lurtz));
+		assertEquals(0, scn.GetWoundsOn(captain));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		// removed (1), then paid Uruk Brood's cost (2, +2 roaming at site 2)
+		assertEquals(twilight - 1 - 2 - 2, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, brood);
+	}
+
+	@Test
+	public void UrukCaptainCanExertHimself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var captain = scn.GetShadowCard("captain");
@@ -80,24 +113,51 @@ public class Card_02_046_ErrataTests
 		scn.MoveCardsToDiscard(brood);
 
 		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
-		scn.SetTwilight(4);
-
-		scn.SkipToPhase(Phase.SHADOW);
-
-		// Captain's ability should be available
-		assertTrue(scn.ShadowActionAvailable(captain));
 		scn.ShadowUseCardAction(captain);
+		// the Captain is the only unique Uruk-hai, so he is exerted without a choice
 
-		// Choose which Uruk-hai to exert -- can pick the Lieutenant instead of self
-		// (Errata changed from "exert Uruk Captain" to "exert an Uruk-hai")
-		assertTrue(scn.ShadowHasCardChoiceAvailable(uruk));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(captain));
-		scn.ShadowChooseCard(uruk);
-
-		// Uruk Brood should be auto-selected from discard and played
-		assertEquals(1, scn.GetWoundsOn(uruk));
-		assertEquals(0, scn.GetWoundsOn(captain));
+		assertEquals(1, scn.GetWoundsOn(captain));
+		assertEquals(0, scn.GetWoundsOn(uruk));
 		assertInZone(Zone.SHADOW_CHARACTERS, brood);
+	}
+
+	@Test
+	public void UrukCaptainAbilityNotAvailableWithOnlyNonUniqueUrukHaiAbleToExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var captain = scn.GetShadowCard("captain");
+		var uruk = scn.GetShadowCard("uruk");
+		var brood = scn.GetShadowCard("brood");
+
+		scn.MoveMinionsToTable(captain, uruk);
+		scn.MoveCardsToDiscard(brood);
+
+		scn.StartGame();
+		// the Captain (vitality 2) is exhausted; only the non-unique Uruk Savage could exert
+		scn.AddWoundsToChar(captain, 1);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.ShadowActionAvailable(captain));
+	}
+
+	@Test
+	public void UrukCaptainAbilityRequiresRemovingOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var captain = scn.GetShadowCard("captain");
+		var brood = scn.GetShadowCard("brood");
+
+		scn.MoveMinionsToTable(captain);
+		scn.MoveCardsToDiscard(brood);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.SetTwilight(0);
+		assertFalse(scn.ShadowActionAvailable(captain));
 	}
 }

@@ -12,6 +12,8 @@ import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
 import com.gempukku.lotro.logic.effects.IncrementTurnLimitEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.logic.timing.AbstractEffect;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
 
 public class TriggerEffectProcessor implements EffectProcessor {
@@ -43,6 +45,32 @@ public class TriggerEffectProcessor implements EffectProcessor {
                 triggerActionSource.setText(text);
             }
             triggerActionSource.addPlayRequirement(triggerChecker);
+
+            if (triggerChecker.isConstantCheck()) {
+                // A "constantly check" trigger is collected afresh for every batch of effect results while its
+                // condition holds, so further copies can be queued before the first one resolves (e.g. a wound and a
+                // kill happening while the Rivendell Waterfall's check is still pending, #1091). Its requirements -
+                // including any per-turn limit the first copy uses up - are therefore re-checked when it resolves,
+                // and a copy whose condition no longer holds does nothing.
+                final DefaultActionSource source = triggerActionSource;
+                triggerActionSource.addCost(
+                        new AbstractEffectAppender() {
+                            @Override
+                            protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                                return new AbstractEffect() {
+                                    @Override
+                                    public boolean isPlayableInFull(LotroGame game) {
+                                        return true;
+                                    }
+
+                                    @Override
+                                    protected FullEffectResult playEffectReturningResult(LotroGame game) {
+                                        return new FullEffectResult(source.isValid(actionContext));
+                                    }
+                                };
+                            }
+                        });
+            }
 
             if (limitPerPhase > 0) {
                 triggerActionSource.addPlayRequirement(

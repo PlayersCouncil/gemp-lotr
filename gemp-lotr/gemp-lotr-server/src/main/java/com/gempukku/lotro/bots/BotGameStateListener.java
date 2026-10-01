@@ -8,17 +8,28 @@ import com.gempukku.lotro.game.state.PreGameInfo;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.timing.GameStats;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 public class BotGameStateListener implements GameStateListener {
+    private static final Logger LOG = LogManager.getLogger(BotGameStateListener.class);
+
     private final BotPlayer botPlayer;
     private final LotroGameMediator lotroGameMediator;
+    private final AssignmentLegality assignmentLegality;
 
     public BotGameStateListener(BotPlayer botPlayer, LotroGameMediator lotroGameMediator) {
+        this(botPlayer, lotroGameMediator, AssignmentLegality.UNCHECKED);
+    }
+
+    public BotGameStateListener(BotPlayer botPlayer, LotroGameMediator lotroGameMediator, AssignmentLegality assignmentLegality) {
         this.botPlayer = botPlayer;
         this.lotroGameMediator = lotroGameMediator;
+        this.assignmentLegality = assignmentLegality;
     }
 
     @Override
@@ -163,7 +174,14 @@ public class BotGameStateListener implements GameStateListener {
     public void decisionRequired(String playerId, AwaitingDecision awaitingDecision) {
         if (playerId.equals(botPlayer.getName())) {
             new Thread(() -> {
-                String action = botPlayer.chooseAction(lotroGameMediator.getGameState(), awaitingDecision);
+                String action;
+                try {
+                    action = botPlayer.chooseAction(lotroGameMediator.getGameState(), awaitingDecision, assignmentLegality);
+                } catch (RuntimeException exp) {
+                    // Without an answer the game would wait on the bot forever; the mediator substitutes a valid default
+                    LOG.error("Bot " + botPlayer.getName() + " failed to choose an answer for \"" + awaitingDecision.getText() + "\"", exp);
+                    action = null;
+                }
                 lotroGameMediator.botAnswered(botPlayer.getName(), awaitingDecision.getAwaitingDecisionId(), action);
             }).start();
         }

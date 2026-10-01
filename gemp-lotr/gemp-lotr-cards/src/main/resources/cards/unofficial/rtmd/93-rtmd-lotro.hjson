@@ -12,7 +12,7 @@
 		}
 		title: Race Text 93_1
 		type: MetaSite
-		intensity: -2
+		intensity: -3
 		effects: {
 			type: Activated
 			phase: skirmish
@@ -135,25 +135,23 @@
 		}
 		title: Race Text 93_4
 		type: MetaSite
-		intensity: 4
+		intensity: 6
 		effects: {
 			type: Trigger
 			optional: false
 			trigger: {
 				type: SkirmishAboutToEnd
 			}
-			requires: [
-				{
-					type: OwnerIsFreeps
+			# Applies whichever side the holder is playing this turn (#1099): "your characters" are companions and
+			# allies while they are the Free Peoples player and minions while they are the Shadow player, and only
+			# the holder's own skirmish events count.
+			requires: {
+				type: Not
+				requires: {
+					type: PlayedCardThisPhase
+					filter: your,event,timeword(skirmish)
 				}
-				{
-					type: Not
-					requires: {
-						type: PlayedCardThisPhase
-						filter: your,event,timeword(skirmish)
-					}
-				}
-			]
+			}
 			effect: {
 				type: Wound
 				select: choose(your,character)
@@ -184,7 +182,7 @@
 		}
 		title: Race Text 93_5
 		type: MetaSite
-		intensity: 3
+		intensity: 1
 		effects: {
 			type: Modifier
 			modifier: {
@@ -218,7 +216,7 @@
 		}
 		title: Race Text 93_6
 		type: MetaSite
-		intensity: 5
+		intensity: 1
 		effects: {
 			type: Modifier
 			modifier: {
@@ -250,7 +248,7 @@
 		}
 		title: Race Text 93_7
 		type: MetaSite
-		intensity: 4
+		intensity: 3
 		effects: {
 			type: Trigger
 			optional: true
@@ -295,7 +293,7 @@
 		}
 		title: Race Text 93_8
 		type: MetaSite
-		intensity: 3
+		intensity: -1
 		effects: {
 			type: Modifier
 			modifier: {

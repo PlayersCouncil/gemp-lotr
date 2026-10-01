@@ -5,6 +5,7 @@ import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.packs.ProductOpener;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -165,11 +166,37 @@ public class CollectionsManager {
 
         _readWriteLock.writeLock().lock();
         try {
-            overwritePlayerCollection(player, collectionType.getCode(), cardCollection, reason);
-            _transferDAO.addTransferTo(notifyPlayer, player.getName(), reason, collectionType.getFullName(), cardCollection.getCurrency(), cardCollection);
+            CardCollection contents = expandForDelivery(cardCollection);
+            overwritePlayerCollection(player, collectionType.getCode(), contents, reason);
+            _transferDAO.addTransferTo(notifyPlayer, player.getName(), reason, collectionType.getFullName(), contents.getCurrency(), contents);
         } finally {
             _readWriteLock.writeLock().unlock();
         }
+    }
+
+    /**
+     * Opens any openOnDelivery products in a collection about to be handed to a player (sealed/draft
+     * starting pools).  Returns the original collection untouched when nothing needs opening.
+     */
+    private CardCollection expandForDelivery(CardCollection cardCollection) {
+        if (cardCollection == null)
+            return null;
+
+        boolean needsExpansion = false;
+        for (CardCollection.Item item : cardCollection.getAll()) {
+            if (item.getType() == CardCollection.Item.Type.PACK && _productLibrary.opensOnDelivery(item.getBlueprintId())) {
+                needsExpansion = true;
+                break;
+            }
+        }
+        if (!needsExpansion)
+            return cardCollection;
+
+        DefaultCardCollection result = new DefaultCardCollection();
+        result.setExtraInformation(cardCollection.getExtraInformation());
+        for (CardCollection.Item item : ProductOpener.expandForDelivery(_productLibrary, cardCollection.getAll()))
+            result.addItem(item.getBlueprintId(), item.getCount());
+        return result;
     }
 
     public Map<Player, CardCollection> getPlayersCollection(long collectionCode) {
@@ -231,10 +258,11 @@ public class CollectionsManager {
         try {
             final CardCollection playerCollection = getPlayerCollection(player, collectionType.getCode());
             if (playerCollection != null) {
-                MutableCardCollection mutableCardCollection = new DefaultCardCollection(playerCollection);
                 MutableCardCollection addedCards = new DefaultCardCollection();
-                for (CardCollection.Item item : items) {
-                    mutableCardCollection.addItem(item.getBlueprintId(), item.getCount());
+                //Products tagged openOnDelivery are rolled here and their contents deposited instead.
+                //addedCards is both what is persisted and what the player is notified of, so the
+                //delivery popup shows the real cards for free.
+                for (CardCollection.Item item : ProductOpener.expandForDelivery(_productLibrary, items)) {
                     addedCards.addItem(item.getBlueprintId(), item.getCount());
                 }
 

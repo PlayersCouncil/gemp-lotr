@@ -647,13 +647,20 @@ class Card {
         return cardDiv;
     }
 
+    // RTMD sets: 90 holds the visual position cards, 91+ the modifier cards (91 TTT, 92 ROTK, 93 LOTRO, 94 PC).
+    static MetaSiteFirstSet = 90;
+    static MetaSiteLastSet = 94;
+
     /**
-     * Returns true if the given blueprint ID is a meta-site modifier (sets 91-93).
+     * Returns true if the given blueprint ID is a meta-site card (RTMD sets 90-94), or is any card the game has
+     * announced as a meta-site modifier (see preGameSetup), so a newly added modifier set is split-rendered without
+     * having to update the set range here first.
      */
     static isMetaSiteModifier(blueprintId) {
         if (!blueprintId) return false;
+        if (Card.metaSiteOverlays[blueprintId]) return true;
         var setNum = parseInt(blueprintId.split("_")[0]);
-        return setNum >= 90 && setNum <= 93;
+        return setNum >= Card.MetaSiteFirstSet && setNum <= Card.MetaSiteLastSet;
     }
 
     /**

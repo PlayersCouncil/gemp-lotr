@@ -41,7 +41,19 @@ public class SoloDraftLeague implements LeagueData {
 
         _serie = new DefaultLeagueSerieInfo(_leaguePrizes, true, "Serie 1",
                 start, start.plusDays( serieDuration - 1), maxMatches,
-                formatLibrary.getFormat(_draft.getFormat()), _collectionType);
+                draftFormat(formatLibrary, _draft), draftFormatCode(_draft, _parameters.series.getFirst().format()), _collectionType);
+    }
+
+    /*
+     * A finished league whose solo draft definition has since been removed still has to load for its read-only
+     * detail view; its serie then has no format, and the draft code stands in as the format code.
+     */
+    private static LotroFormat draftFormat(LotroFormatLibrary formatLibrary, SoloDraft draft) {
+        return draft == null ? null : formatLibrary.getFormat(draft.getFormat());
+    }
+
+    private static String draftFormatCode(SoloDraft draft, String draftCode) {
+        return draft != null ? draft.getFormat() : draftCode;
     }
 
     public static SoloDraftLeague fromRawParameters(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary,  SoloDraftDefinitions soloDraftDefinitions, String parameters) {
@@ -72,7 +84,7 @@ public class SoloDraftLeague implements LeagueData {
 
         _serie = new DefaultLeagueSerieInfo(_leaguePrizes, true, "Serie 1",
                 startDate, startDate.plusDays( serieDuration - 1), maxMatches,
-                formatLibrary.getFormat(_draft.getFormat()), _collectionType);
+                draftFormat(formatLibrary, _draft), draftFormatCode(_draft, draftDef), _collectionType);
 
         _parameters = new LeagueParams() {{
             start = startDate.toLocalDateTime();

@@ -186,6 +186,7 @@ public class CalendarRequestHandler extends LotroServerRequestHandler implements
             event.put("started", tournament.started);
             event.put("cost", tournamentCost(tournament));
             event.put("joined", isSignedUp(tournament, viewer));
+            addQueueState(event, tournament, viewer);
             events.add(event);
         }
     }
@@ -197,6 +198,27 @@ public class CalendarRequestHandler extends LotroServerRequestHandler implements
         } catch (Exception exp) {
             return null;
         }
+    }
+
+    /**
+     * tabs-account (calendar "Join Queue"): a scheduled tournament's hall queue is registered under the tournament's
+     * own id (TournamentService.refreshQueues / getTournamentQueue), so the calendar can offer the hall's join flow.
+     * queueOpen is true while that queue takes sign-ups and the viewer is not in it; queueType and queueStart are the
+     * hall queue's type and start text, which the join flow needs.
+     */
+    private void addQueueState(Map<String, Object> event, com.gempukku.lotro.common.DBDefs.ScheduledTournament tournament, Player viewer) {
+        boolean open = false;
+        try {
+            TournamentQueue queue = tournament.started ? null : _tournamentService.getTournamentQueue(tournament.tournament_id);
+            if (queue != null && queue.isJoinable() && !queue.isPlayerSignedUp(viewer.getName())) {
+                open = true;
+                event.put("queueType", queue.getInfo().Parameters().type.toString());
+                event.put("queueStart", queue.getStartCondition());
+            }
+        } catch (Exception exp) {
+            _log.debug("Could not determine queue state for tournament " + tournament.tournament_id, exp);
+        }
+        event.put("queueOpen", open);
     }
 
     private boolean isSignedUp(com.gempukku.lotro.common.DBDefs.ScheduledTournament tournament, Player viewer) {

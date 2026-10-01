@@ -26,6 +26,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final GameRequestHandler _gameRequestHandler;
     private final LeagueRequestHandler _leagueRequestHandler;
     private final CalendarRequestHandler _calendarRequestHandler;
+    private final EventHistoryRequestHandler _eventHistoryRequestHandler;
     private final MerchantRequestHandler _merchantRequestHandler;
     private final RegisterRequestHandler _registerRequestHandler;
     private final ReplayRequestHandler _replayRequestHandler;
@@ -38,6 +39,8 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final PlayerInfoRequestHandler _playerInfoRequestHandler;
     private final TableDraftRequestHandler _tableDraftRequestHandler;
     private final RtmdFeedbackRequestHandler _rtmdFeedbackRequestHandler;
+    private final PatchNotesRequestHandler _patchNotesRequestHandler;
+    private final ShareRequestHandler _shareRequestHandler;
 
     private final Pattern originPattern;
 
@@ -56,6 +59,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _gameRequestHandler = new GameRequestHandler(context, longPollingSystem);
         _leagueRequestHandler = new LeagueRequestHandler(context);
         _calendarRequestHandler = new CalendarRequestHandler(context);
+        _eventHistoryRequestHandler = new EventHistoryRequestHandler(context);
         _merchantRequestHandler = new MerchantRequestHandler(context);
         _registerRequestHandler = new RegisterRequestHandler(context);
         _replayRequestHandler = new ReplayRequestHandler(context);
@@ -68,11 +72,16 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _playerInfoRequestHandler = new PlayerInfoRequestHandler(context);
         _tableDraftRequestHandler = new TableDraftRequestHandler(context);
         _rtmdFeedbackRequestHandler = new RtmdFeedbackRequestHandler(context);
+        _patchNotesRequestHandler = new PatchNotesRequestHandler(context);
+        _shareRequestHandler = new ShareRequestHandler(context);
     }
 
     @Override
     public void handleRequest(String uri, HttpRequest request, Map<Type, Object> context, ResponseWriter responseWriter, String remoteIp) throws Exception {
-        if (uri.startsWith(_webContextPath)) {
+        if (ShareRequestHandler.handles(uri)) {
+            // public share links (/gemp-lotr/share/<kind>/<id>): a link preview page that redirects into the hall
+            _shareRequestHandler.handleRequest(uri, request, context, responseWriter, remoteIp);
+        } else if (uri.startsWith(_webContextPath)) {
             _webRequestHandler.handleRequest(uri.substring(_webContextPath.length()), request, context, responseWriter, remoteIp);
         } else if (uri.equals("/gemp-lotr")) {
             responseWriter.writeError(301, Collections.singletonMap("Location", "/gemp-lotr/"));
@@ -114,6 +123,8 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _gameRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 4), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "calendar")) {
                 _calendarRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 8), request, context, responseWriter, remoteIp);
+            } else if (uri.startsWith(_serverContextPath + "eventHistory")) {
+                _eventHistoryRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 12), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "league")) {
                 _leagueRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 6), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "merchant")) {
@@ -130,6 +141,9 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _tableDraftRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "rtmdFeedback")) {
                 _rtmdFeedbackRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 12), request, context, responseWriter, remoteIp);
+            } else if (uri.startsWith(_serverContextPath + "patchnotes")) {
+                // public, read-only: Server Info > Patch Notes
+                _patchNotesRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
             } else {
                 throw new HttpProcessingException(404);
             }

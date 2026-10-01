@@ -63,13 +63,7 @@ public class TableHolder {
     }
 
     public GameTable joinTable(String tableId, Player player, LotroDeck lotroDeck) throws HallException {
-        final GameTable awaitingTable = awaitingTables.get(tableId);
-
-        if (awaitingTable == null || awaitingTable.wasGameStarted())
-            throw new HallException("Table is already taken or was removed");
-
-        if (awaitingTable.hasPlayer(player.getName()))
-            throw new HallException("You can't play against yourself");
+        final GameTable awaitingTable = verifyMayTakeSeat(tableId, player);
 
         final League league = awaitingTable.getGameSettings().league();
         if (league != null) {
@@ -97,6 +91,24 @@ public class TableHolder {
             return awaitingTable;
         }
         return null;
+    }
+
+    /**
+     * The waiting table {@code player} may take the free seat at: it exists, they are not already seated there, and,
+     * for an invite-only table, they are the invitee (or an administrator).  HallServer asks before it validates the
+     * deck, and {@link #joinTable} asks again.
+     */
+    public GameTable verifyMayTakeSeat(String tableId, Player player) throws HallException {
+        final GameTable awaitingTable = awaitingTables.get(tableId);
+
+        if (awaitingTable == null || awaitingTable.wasGameStarted())
+            throw new HallException("Table is already taken or was removed");
+
+        if (awaitingTable.hasPlayer(player.getName()))
+            throw new HallException("You can't play against yourself");
+
+        verifyMayJoin(awaitingTable.getGameSettings(), player);
+        return awaitingTable;
     }
 
     public GameTable setupTournamentTable(GameSettings gameSettings, LotroGameParticipant[] participants) {
@@ -186,7 +198,8 @@ public class TableHolder {
                         "Waiting", table.getGameSettings().format().getName(), getTournamentName(table),
                         table.getGameSettings().userDescription(), players,
                         table.getPlayerNames().contains(player.getName()), table.getGameSettings().privateGame(),
-                        table.getGameSettings().isInviteOnly(), null);
+                        table.getGameSettings().isInviteOnly(), null,
+                        table.getCreatedAt(), isInvitee(table.getGameSettings(), player.getName()));
             }
         }
 
@@ -211,7 +224,8 @@ public class TableHolder {
                                 lotroGameMediator.getPlayersPlaying(),
                                 lotroGameMediator.getPlayersPlaying().contains(player.getName()),
                                 runningTable.getGameSettings().privateGame(),
-                                runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner());
+                                runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner(),
+                                runningTable.getCreatedAt(), isInvitee(runningTable.getGameSettings(), player.getName()));
                     }
 
                     if (!lotroGameMediator.isFinished() && lotroGameMediator.getPlayersPlaying().contains(player.getName()))
@@ -226,7 +240,8 @@ public class TableHolder {
             LotroGameMediator lotroGameMediator = runningTable.getLotroGameMediator();
             if (lotroGameMediator != null) {
                 if (isAdmin || isNoIgnores(lotroGameMediator.getPlayersPlaying(), player.getName()))
-                    visitor.visitTable(nonPlayingGame.getKey(), lotroGameMediator.getGameId(), false, HallInfoVisitor.TableStatus.FINISHED, lotroGameMediator.getGameStatus(), runningTable.getGameSettings().format().getName(), getTournamentName(runningTable), runningTable.getGameSettings().userDescription(), lotroGameMediator.getPlayersPlaying(), lotroGameMediator.getPlayersPlaying().contains(player.getName()), runningTable.getGameSettings().privateGame(),  runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner());
+                    visitor.visitTable(nonPlayingGame.getKey(), lotroGameMediator.getGameId(), false, HallInfoVisitor.TableStatus.FINISHED, lotroGameMediator.getGameStatus(), runningTable.getGameSettings().format().getName(), getTournamentName(runningTable), runningTable.getGameSettings().userDescription(), lotroGameMediator.getPlayersPlaying(), lotroGameMediator.getPlayersPlaying().contains(player.getName()), runningTable.getGameSettings().privateGame(),  runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner(),
+                            runningTable.getCreatedAt(), isInvitee(runningTable.getGameSettings(), player.getName()));
             }
         }
     }
@@ -243,6 +258,53 @@ public class TableHolder {
             }
         }
         return changed;
+    }
+
+    /**
+     * Whether {@code playerName} is the player an invite-only table was opened for.  The invitee lives in the table's
+     * description (deliberately: an invite needs no other description), exactly as the creator typed it; the server
+     * checked it names a real player, and a "(New Player) " prefix is tolerated ({@link #tableDescription} never adds
+     * it to invite-only tables, but older servers and hand-typed descriptions may carry it).  Names are compared
+     * case-insensitively, as the player lookup is.
+     */
+    static boolean isInvitee(GameSettings settings, String playerName) {
+        if (!settings.isInviteOnly() || playerName == null)
+            return false;
+        String desc = settings.userDescription();
+        if (desc == null)
+            return false;
+        desc = desc.trim();
+        if (desc.startsWith(NEW_PLAYER_PREFIX))
+            desc = desc.substring(NEW_PLAYER_PREFIX.length()).trim();
+        return desc.equalsIgnoreCase(playerName);
+    }
+
+    private static final String NEW_PLAYER_PREFIX = "(New Player)";
+
+    /**
+     * The description a new table is listed with.  A player with no decks of their own on their account is flagged
+     * as a new player with a "(New Player) " prefix, so others can go easy on them; a player who has decks is not,
+     * even when they pick a Deck Library deck.  An invite-only table is never prefixed, as its description is the
+     * invitee's name ({@link #isInvitee} strips the prefix anyway).  A description that already carries the prefix
+     * is left alone.
+     */
+    public static String tableDescription(String desc, boolean inviteOnly, boolean hasOwnDecks) {
+        String text = desc == null ? "" : desc;
+        if (inviteOnly || hasOwnDecks || text.trim().startsWith(NEW_PLAYER_PREFIX))
+            return text;
+        return text.isEmpty() ? NEW_PLAYER_PREFIX : NEW_PLAYER_PREFIX + " " + text;
+    }
+
+    /**
+     * An invite-only table seats only its invitee ({@link #isInvitee}); administrators may join any table.  (The
+     * creator is already seated, and cannot join their own table twice.)
+     */
+    static void verifyMayJoin(GameSettings settings, Player player) throws HallException {
+        if (!settings.isInviteOnly())
+            return;
+        if (player != null && (isInvitee(settings, player.getName()) || player.hasType(Player.Type.ADMIN)))
+            return;
+        throw new HallException("This table is invite-only; only the invited player can join it.");
     }
 
     private boolean isNoIgnores(Collection<String> participants, String playerLooking) {

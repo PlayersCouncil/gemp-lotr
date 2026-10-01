@@ -12,6 +12,19 @@
 			1xEoF - Booster
 		]
 	}
+    {
+		name: (S)KS Choice - Booster
+		type: selection
+		items: [
+			1xFotR - Booster
+			1xMoM - Booster
+			1xRotEL - Booster
+			1xTTT - Booster
+			1xBoHD - Booster
+			1xEoF - Booster
+			1xRotK - Booster
+		]
+	}
 	{
 		name: (S)Movie Choice - Booster
 		type: selection

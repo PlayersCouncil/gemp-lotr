@@ -12,7 +12,7 @@
 		}
 		title: Race Text 91_1
 		type: MetaSite
-		intensity: 4
+		intensity: -3
 		effects: [
 			{
 				type: Modifier
@@ -48,7 +48,7 @@
 		}
 		title: Race Text 91_2
 		type: MetaSite
-		intensity: -6
+		intensity: -2
 		effects: [
 			{
 				type: Trigger
@@ -95,7 +95,7 @@
 		}
 		title: Race Text 91_3
 		type: MetaSite
-		intensity: -5
+		intensity: -3
 		effects: [
 			{
 				type: Trigger
@@ -137,7 +137,7 @@
 		}
 		title: Race Text 91_4
 		type: MetaSite
-		intensity: -3
+		intensity: 1
 		effects: [
 			{
 				type: Modifier
@@ -174,7 +174,7 @@
 		}
 		title: Race Text 91_5
 		type: MetaSite
-		intensity: -1
+		intensity: 2
 		effects: [
 			{
 				type: Trigger
@@ -229,7 +229,7 @@
 		}
 		title: Race Text 91_6
 		type: MetaSite
-		intensity: 8
+		intensity: 6
 		effects: [
 			{
 				type: Trigger
@@ -271,7 +271,7 @@
 		}
 		title: Race Text 91_7
 		type: MetaSite
-		intensity: 4
+		intensity: 3
 		// NOTE: Roaming is a pseudokeyword auto-added by rule to qualifying minions.
 		// RemoveKeyword strips it entirely, which also removes the penalty.
 		effects: [
@@ -309,7 +309,7 @@
 		}
 		title: Race Text 91_8
 		type: MetaSite
-		intensity: 7
+		intensity: 3
 		effects: [
 			{
 				type: Modifier
@@ -349,7 +349,7 @@
 		}
 		title: Race Text 91_9
 		type: MetaSite
-		intensity: 6
+		intensity: 5
 		effects: [
 			{
 				type: Trigger
@@ -394,7 +394,7 @@
 		}
 		title: Race Text 91_10
 		type: MetaSite
-		intensity: -4
+		intensity: -2
 		effects: [
 			{
 				type: Activated
@@ -436,7 +436,7 @@
 		}
 		title: Race Text 91_11
 		type: MetaSite
-		intensity: -3
+		intensity: -2
 		effects: [
 			{
 				type: Activated
@@ -480,7 +480,7 @@
 		}
 		title: Race Text 91_12
 		type: MetaSite
-		intensity: -3
+		intensity: -2
 		effects: [
 			{
 				type: Modifier
@@ -532,7 +532,7 @@
 		}
 		title: Race Text 91_13
 		type: MetaSite
-		intensity: 3
+		intensity: 2
 		effects: [
 			{
 				type: Modifier
@@ -604,7 +604,7 @@
 		}
 		title: Race Text 91_15
 		type: MetaSite
-		intensity: 5
+		intensity: 2
 		effects: [
 			{
 				type: Modifier
@@ -639,7 +639,7 @@
 		}
 		title: Race Text 91_16
 		type: MetaSite
-		intensity: 3
+		intensity: 2
 		effects: [
 			{
 				type: Trigger
@@ -681,7 +681,7 @@
 		}
 		title: Race Text 91_17
 		type: MetaSite
-		intensity: 7
+		intensity: 4
 		effects: [
 			{
 				type: Trigger
@@ -732,7 +732,7 @@
 		}
 		title: Race Text 91_18
 		type: MetaSite
-		intensity: 8
+		intensity: 6
 		effects: [
 			{
 				type: Modifier

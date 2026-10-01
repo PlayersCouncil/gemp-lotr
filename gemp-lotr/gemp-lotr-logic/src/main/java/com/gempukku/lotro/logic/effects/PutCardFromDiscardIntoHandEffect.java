@@ -5,6 +5,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.DrawCardOrPutIntoHandResult;
@@ -30,13 +31,18 @@ public class PutCardFromDiscardIntoHandEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return _card.getZone() == Zone.DISCARD;
+        return _card.getZone() == Zone.DISCARD && !cantTakeIntoHand(game);
+    }
+
+    private boolean cantTakeIntoHand(LotroGame game) {
+        return game.getModifiersQuerying().hasFlagActive(game,
+                ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, _card.getOwner());
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         if ((!game.getFormat().hasRuleOfFour() || game.getModifiersQuerying().canDrawCardAndIncrementForRuleOfFour(game, _card.getOwner()))
-                && _card.getZone() == Zone.DISCARD) {
+                && _card.getZone() == Zone.DISCARD && !cantTakeIntoHand(game)) {
             GameState gameState = game.getGameState();
             gameState.sendMessage(_card.getOwner() + " puts " + GameUtils.getCardLink(_card) + " from discard into their hand");
             gameState.removeCardsFromZone(_card.getOwner(), Collections.singleton(_card));

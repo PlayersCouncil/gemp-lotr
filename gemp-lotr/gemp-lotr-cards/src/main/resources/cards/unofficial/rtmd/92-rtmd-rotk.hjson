@@ -12,7 +12,7 @@
 		}
 		title: Race Text 92_1
 		type: MetaSite
-		intensity: -4
+		intensity: -2
 		effects: [
 			{
 				type: DeckBuildingOverride
@@ -44,7 +44,7 @@
 		}
 		title: Race Text 92_2
 		type: MetaSite
-		intensity: -3
+		intensity: -1
 		effects: [
 			{
 				type: Activated
@@ -90,7 +90,7 @@
 		}
 		title: Race Text 92_3
 		type: MetaSite
-		intensity: 2
+		intensity: -1
 		effects: [
 			{
 				type: Modifier
@@ -126,7 +126,7 @@
 		}
 		title: Race Text 92_4
 		type: MetaSite
-		intensity: -2
+		intensity: -3
 		effects: [
 			{
 				type: Activated
@@ -186,7 +186,7 @@
 		}
 		title: Race Text 92_5
 		type: MetaSite
-		intensity: -3
+		intensity: -1
 		effects: [
 			{
 				type: Activated
@@ -231,7 +231,7 @@
 		}
 		title: Race Text 92_6
 		type: MetaSite
-		intensity: -4
+		intensity: -3
 		effects: [
 			{
 				type: Modifier
@@ -267,7 +267,7 @@
 		}
 		title: Race Text 92_7
 		type: MetaSite
-		intensity: 6
+		intensity: 4
 		effects: [
 			{
 				type: Modifier
@@ -302,7 +302,7 @@
 		}
 		title: Race Text 92_8
 		type: MetaSite
-		intensity: 5
+		intensity: 4
 		effects: [
 			{
 				type: Trigger
@@ -342,7 +342,7 @@
 		}
 		title: Race Text 92_9
 		type: MetaSite
-		intensity: 5
+		intensity: 4
 		effects: [
 			{
 				type: Modifier
@@ -381,7 +381,7 @@
 		}
 		title: Race Text 92_10
 		type: MetaSite
-		intensity: -3
+		intensity: -2
 		effects: {
 			type: activated
 			phase: shadow
@@ -424,7 +424,7 @@
 		}
 		title: Race Text 92_11
 		type: MetaSite
-		intensity: 3
+		intensity: -3
 		effects: {
 			type: Modifier
 			modifier: {
@@ -467,7 +467,7 @@
 		}
 		title: Race Text 92_12
 		type: MetaSite
-		intensity: 2
+		intensity: -2
 		effects: {
 			type: Modifier
 			modifier: {
@@ -503,7 +503,7 @@
 		}
 		title: Race Text 92_13
 		type: MetaSite
-		intensity: 3
+		intensity: 1
 		effects: {
 			type: Activated
 			phase: shadow
@@ -542,7 +542,7 @@
 		}
 		title: Race Text 92_14
 		type: MetaSite
-		intensity: 2
+		intensity: -1
 		effects: {
 			type: Activated
 			phase: shadow
@@ -587,7 +587,7 @@
 		}
 		title: Race Text 92_15
 		type: MetaSite
-		intensity: -4
+		intensity: -3
 		effects: [
 			{
 				type: Modifier
@@ -638,7 +638,7 @@
 		}
 		title: Race Text 92_16
 		type: MetaSite
-		intensity: -3
+		intensity: -1
 		effects: {
 			type: Modifier
 			modifier: {
@@ -671,7 +671,7 @@
 		}
 		title: Race Text 92_17
 		type: MetaSite
-		intensity: 5
+		intensity: 2
 		effects: {
 			type: Trigger
 			optional: false
@@ -710,7 +710,7 @@
 		}
 		title: Race Text 92_18
 		type: MetaSite
-		intensity: 8
+		intensity: 6
 		effects: {
 			type: Trigger
 			optional: false
@@ -792,7 +792,7 @@
 		}
 		title: Race Text 92_20
 		type: MetaSite
-		intensity: -2
+		intensity: -1
 		effects: {
 			type: Activated
 			phase: Shadow
@@ -834,7 +834,7 @@
 		}
 		title: Race Text 92_21
 		type: MetaSite
-		intensity: -5
+		intensity: -3
 		effects: {
 			type: Activated
 			phase: Fellowship
@@ -869,7 +869,7 @@
 		}
 		title: Race Text 92_22
 		type: MetaSite
-		intensity: -3
+		intensity: 1
 		effects: {
 			type: Activated
 			phase: Shadow
@@ -952,13 +952,14 @@
 		}
 		title: Race Text 92_24
 		type: MetaSite
-		intensity: -5
+		intensity: -1
 		effects: {
 			type: Modifier
 			modifier: {
 				type: OverrideUniqueness
 				filter: your,nazgul
 				uniqueness: 4
+				loosen: true
 				requires: {
 					type: OwnerIsShadow
 				}
@@ -989,7 +990,7 @@
 		}
 		title: Race Text 92_25
 		type: MetaSite
-		intensity: 6
+		intensity: 3
 		effects: {
 			type: Trigger
 			optional: false
@@ -1031,7 +1032,7 @@
 		}
 		title: Race Text 92_26
 		type: MetaSite
-		intensity: 5
+		intensity: 4
 		effects: {
 			type: Trigger
 			optional: false
@@ -1074,7 +1075,7 @@
 		}
 		title: Race Text 92_27
 		type: MetaSite
-		intensity: 7
+		intensity: 6
 		effects: {
 			type: Trigger
 			optional: false
@@ -1117,7 +1118,7 @@
 		}
 		title: Race Text 92_28
 		type: MetaSite
-		intensity: -4
+		intensity: -3
 		effects: [
 			{
 				type: Activated
@@ -1186,7 +1187,7 @@
 		}
 		title: Race Text 92_29
 		type: MetaSite
-		intensity: -6
+		intensity: -2
 		effects: {
 			type: Activated
 			phase: shadow
@@ -1225,7 +1226,7 @@
 		}
 		title: Race Text 92_30
 		type: MetaSite
-		intensity: -3
+		intensity: -2
 		effects: {
 			type: Trigger
 			optional: true
@@ -1271,7 +1272,7 @@
 		}
 		title: Race Text 92_31
 		type: MetaSite
-		intensity: -3
+		intensity: -1
 		effects: {
 			type: Activated
 			phase: fellowship
@@ -1311,7 +1312,7 @@
 		}
 		title: Race Text 92_32
 		type: MetaSite
-		intensity: -3
+		intensity: -2
 		effects: {
 			type: Activated
 			phase: fellowship
@@ -1395,7 +1396,7 @@
 		}
 		title: Race Text 92_34
 		type: MetaSite
-		intensity: 5
+		intensity: 3
 		effects: {
 			type: modifier
 			modifier: {
@@ -1429,7 +1430,7 @@
 		}
 		title: Race Text 92_35
 		type: MetaSite
-		intensity: 4
+		intensity: 5
 		effects: {
 			type: Trigger
 			optional: false

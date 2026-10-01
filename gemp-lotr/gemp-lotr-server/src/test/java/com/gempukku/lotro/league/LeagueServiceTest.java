@@ -8,11 +8,13 @@ import com.gempukku.lotro.db.LeagueMatchDAO;
 import com.gempukku.lotro.db.LeagueParticipationDAO;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.db.vo.LeagueMatchResult;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.prizes.PrizeService;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -233,5 +235,93 @@ public class LeagueServiceTest extends AbstractAtTest {
         assertEquals(2, leagueStandings.get(2).points);
         assertEquals(2, leagueStandings.get(2).gamesPlayed);
         assertEquals(3, leagueStandings.get(2).standing);
+    }
+
+    /**
+     * RTMD's "top N%" league-placement requirement must be resolved against the whole league's standings
+     * (every serie combined), never a single serie's standings — even the one a player happens to dominate.
+     * <p>
+     * "leader" wins big in Serie 1 alone and is never seen in Serie 2. "serieTwoStar" only ever plays (and
+     * sweeps) Serie 2, but that alone is not enough to overtake "leader" once both series are combined: with
+     * 10 total participants and a top-10% cutoff of one place, only "leader" qualifies.
+     */
+    @Test
+    public void rtmdPlacementUsesStandingsAcrossAllSeriesNotJustOne() throws Exception {
+        LeagueDAO leagueDao = Mockito.mock(LeagueDAO.class);
+
+        LeagueParams params = new LeagueParams();
+        params.name = "Race to Mount Doom";
+        params.start = LocalDateTime.of(2026, 3, 1, 0, 0);
+        params.cost = 0;
+        params.series.add(new LeagueParams.SerieData("fotr_block", 7, 10));
+        params.series.add(new LeagueParams.SerieData("fotr_block", 7, 10));
+        params.racePath = new ArrayList<>(List.of("92_3"));
+        params.raceVisualPath = new ArrayList<>(List.of("90_11"));
+        params.raceAdvancementMode = RTMDLeague.AdvanceType.WIN;
+        params.raceAdvanceFactor = 1;
+
+        League league = new League(params.name, params.cost, 456, League.LeagueType.RTMD, params.toString(), 0);
+
+        LeagueSerieInfo serieOne = league.getLeagueData(_productLibrary, _formatLibrary, null).getSeries().get(0);
+        LeagueSerieInfo serieTwo = league.getLeagueData(_productLibrary, _formatLibrary, null).getSeries().get(1);
+        assertEquals("Serie 1", serieOne.getName());
+        assertEquals("Serie 2", serieTwo.getName());
+
+        Set<String> players = new HashSet<>(List.of(
+                "leader", "serieTwoStar", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"));
+
+        Set<LeagueMatchResult> matches = new HashSet<>();
+        // Serie 1: "leader" sweeps every filler. "serieTwoStar" never plays this serie.
+        for (String filler : List.of("f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"))
+            matches.add(new LeagueMatchResult(serieOne.getName(), "leader", filler));
+        // Serie 2: "serieTwoStar" is the only player with any wins here, so it tops the serie-2-only standings.
+        matches.add(new LeagueMatchResult(serieTwo.getName(), "serieTwoStar", "f1"));
+        matches.add(new LeagueMatchResult(serieTwo.getName(), "serieTwoStar", "f2"));
+
+        LeagueMatchDAO leagueMatchDAO = Mockito.mock(LeagueMatchDAO.class);
+        Mockito.when(leagueMatchDAO.getLeagueMatches(league.getCodeStr())).thenReturn(matches);
+
+        LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
+        Mockito.when(leagueParticipationDAO.getUsersParticipating(league.getCodeStr())).thenReturn(players);
+
+        CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
+
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO,
+                collectionsManager, null, _cardLibrary, _formatLibrary, _productLibrary, null);
+
+        // Sanity check: taken on its own, Serie 2's standings are led by "serieTwoStar", not "leader".
+        // (The list itself is not returned in rank order - BestOfOneStandingsProducer rebuilds it from a
+        // HashMap - so rank is read from each entry's `standing` field, exactly as RTMDTitles.placementOf does.)
+        List<PlayerStanding> serieTwoStandings = leagueService.getLeagueSerieStandings(league, serieTwo);
+        assertEquals(1, standingOf(serieTwoStandings, "serieTwoStar").standing);
+        assertTrue(standingOf(serieTwoStandings, "leader").standing > 1);
+
+        // But the RTMD game info must be built from the whole-league (all-series) standings.
+        RTMDGameInfo info = leagueService.buildRTMDGameInfo(league, List.of("leader", "serieTwoStar"));
+        assertNotNull(info);
+
+        RTMDGameInfo.LeaguePlacement leaderPlacement = info.getLeaguePlacement("leader");
+        RTMDGameInfo.LeaguePlacement serieTwoStarPlacement = info.getLeaguePlacement("serieTwoStar");
+
+        assertNotNull(leaderPlacement);
+        assertNotNull(serieTwoStarPlacement);
+
+        assertEquals(10, leaderPlacement.participants());
+        assertEquals(10, serieTwoStarPlacement.participants());
+
+        assertEquals(1, leaderPlacement.rank());
+        assertEquals(2, serieTwoStarPlacement.rank());
+
+        // "leader" dominates the league overall and is within the top 10%...
+        assertTrue(leaderPlacement.isWithinTopPercentage(10));
+        // ...but "serieTwoStar" merely topping one serie is not enough once all series are counted.
+        assertFalse(serieTwoStarPlacement.isWithinTopPercentage(10));
+    }
+
+    private static PlayerStanding standingOf(List<PlayerStanding> standings, String playerName) {
+        for (PlayerStanding standing : standings)
+            if (standing.playerName.equals(playerName))
+                return standing;
+        throw new AssertionError("No standing found for player " + playerName);
     }
 }

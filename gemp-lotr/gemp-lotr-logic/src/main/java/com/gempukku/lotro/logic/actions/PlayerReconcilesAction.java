@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.*;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.results.ReconcileResult;
 
 import java.util.HashSet;
@@ -89,7 +90,8 @@ public class PlayerReconcilesAction implements Action {
             // Formats which are set to end the game at the end of the regroup phase instead of at the start of the regroup phase
             // should prematurely end the game instead of doing a true reconcile.
             if(game.getFormat().winWhenShadowReconciles() && game.getGameState().getCurrentPhase() == Phase.REGROUP
-                    && game.getGameState().getCurrentSiteNumber() == 9 && !_playerId.equals(game.getGameState().getCurrentPlayerId())) {
+                    && game.getGameState().getCurrentSiteNumber() == RuleUtils.getFellowshipWinSiteNumber(game)
+                    && !_playerId.equals(game.getGameState().getCurrentPlayerId())) {
                 game.getGameState().sendMessage("End of regroup phase reached.");
                 _effectQueue.add(new TriggeringResultEffect(new ReconcileResult(_playerId), "Player reconciled"));
             }

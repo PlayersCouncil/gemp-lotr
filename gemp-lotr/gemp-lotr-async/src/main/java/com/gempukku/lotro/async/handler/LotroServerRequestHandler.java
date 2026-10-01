@@ -364,7 +364,7 @@ public class LotroServerRequestHandler {
             return;
 
         if(errorMsg != null && !errorMsg.isEmpty())
-            throw new HttpProcessingException(400, "Parameter '" + paramName + "' value '" + value + "'failed validation: " + errorMsg);
+            throw new HttpProcessingException(400, "Parameter '" + paramName + "' value '" + value + "' failed validation: " + errorMsg);
         else
             throw new HttpProcessingException(400, "Parameter '" + paramName + "' value not recognized: '" + value + "'");
     }

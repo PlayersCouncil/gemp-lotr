@@ -23,6 +23,11 @@ public class ConstantlyCheckTrigger implements TriggerCheckerProducer {
             }
 
             @Override
+            public boolean isConstantCheck() {
+                return true;
+            }
+
+            @Override
             public boolean accepts(ActionContext actionContext) {
                 for (Requirement requirement : requirements) {
                     if (!requirement.accepts(actionContext))

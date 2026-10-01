@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -25,6 +26,7 @@ public class LeagueScheduleServiceTest extends AbstractAtTest {
     private LeagueDAO _leagueDao;
     private LeagueService _leagueService;
     private LeagueScheduleDAO _scheduleDao;
+    private LeagueFactory _factory;
     private LeagueScheduleService _service;
 
     @Before
@@ -36,9 +38,10 @@ public class LeagueScheduleServiceTest extends AbstractAtTest {
         Mockito.when(_leagueService.getActiveLeagues()).thenReturn(List.of());
         Mockito.when(_leagueDao.addLeague(Mockito.anyString(), Mockito.anyLong(), Mockito.any(), Mockito.any(),
                 Mockito.any(), Mockito.any(), Mockito.anyInt(), Mockito.any())).thenReturn(100, 101, 102, 103);
-        var factory = new LeagueFactory(_cardLibrary, _productLibrary, _formatLibrary, soloDraftDefinitions, _leagueDao, _leagueService);
+        _factory = new LeagueFactory(_cardLibrary, _productLibrary, _formatLibrary, soloDraftDefinitions, _leagueDao, _leagueService);
+        _factory.setRaceRandom(new Random(4242));
         _scheduleDao = Mockito.mock(LeagueScheduleDAO.class);
-        _service = new LeagueScheduleService(_scheduleDao, factory, _leagueService);
+        _service = new LeagueScheduleService(_scheduleDao, _factory, _leagueService);
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -100,6 +103,47 @@ public class LeagueScheduleServiceTest extends AbstractAtTest {
 
     private static ZonedDateTime at(int year, int month, int day) {
         return DateUtils.DateOf(year, month, day);
+    }
+
+    /**
+     * A monthly Race to Mount Doom schedule.  Its template carries the race settings but no path: the path of each
+     * league is rolled when that league is created.
+     */
+    private static DBDefs.LeagueSchedule racingSchedule() {
+        var template = new JSONObject();
+        template.put("cost", 0);
+        template.put("maxRepeatMatches", 10);
+        template.put("description", "Run for it");
+        template.put("collectionName", "default");
+        template.put("raceIntensityFloor", -10);
+        template.put("raceIntensityCeiling", 10);
+        template.put("raceAdvancementMode", "WIN");
+        template.put("raceAdvanceFactor", 1);
+        template.put("racePathLength", 9);
+
+        var row = new DBDefs.LeagueSchedule();
+        row.id = 11;
+        row.name = "Race to Mount Doom";
+        row.league_type = "RTMD";
+        row.template = template.toJSONString();
+        row.events = events("Fellowship Block", override("series", List.of(serie("fotr_block", 28, 10))));
+        row.name_pattern = "{series} - {mon} {yy}";
+        row.next_event_date = LocalDate.of(2026, 10, 1);
+        row.next_event_index = 0;
+        row.interval_months = 1;
+        row.lead_days = 7;
+        row.active = true;
+        return row;
+    }
+
+    private static DBDefs.LeagueSchedule racingScheduleWithFixedPath(boolean randomizeEachInstance) {
+        var row = racingSchedule();
+        var template = JSONObject.parseObject(row.template);
+        template.put("racePath", List.of("92_3", "92_24"));
+        template.put("raceVisualPath", List.of("90_11", "90_2"));
+        template.put("raceRandomizeEachInstance", randomizeEachInstance);
+        row.template = template.toJSONString();
+        return row;
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -428,6 +472,125 @@ public class LeagueScheduleServiceTest extends AbstractAtTest {
         assertEquals(55, schedule.getId());
         assertEquals("Constructed", schedule.getName());
         assertEquals(2, schedule.getEvents().size());
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // Scheduled Race to Mount Doom leagues
+    // ------------------------------------------------------------------------------------------------
+
+    /**
+     * The scheduling bug: a race schedule is a template, so it has no path of its own, and every path that a league
+     * needs is rolled per league.  Schedule validation used to run the full one-off league check against the
+     * template and reject it on the missing path, which made an RTMD schedule impossible to save.
+     */
+    @Test
+    public void anRtmdScheduleNeedsNoPathOfItsOwn() throws LeagueDefinitionException {
+        _service.validateDefinition(racingSchedule());
+        Mockito.verifyNoInteractions(_leagueDao);
+    }
+
+    @Test
+    public void aScheduledRaceGetsItsPathWhenTheLeagueIsCreated() {
+        var row = racingSchedule();
+        Mockito.when(_scheduleDao.getAllSchedules()).thenReturn(List.of(row));
+
+        var created = _service.processDueSchedules(at(2026, 9, 25));
+
+        assertEquals(1, created.size());
+        var params = created.getFirst().params();
+        assertEquals("Race to Mount Doom - Oct 26", params.name);
+        assertEquals(9, params.racePath.size());
+        assertEquals(9, params.raceVisualPath.size());
+        assertEquals(RTMDPathGenerator.FIRST_VISUAL_ID, params.raceVisualPath.getFirst());
+        assertEquals(RTMDPathGenerator.LAST_VISUAL_ID, params.raceVisualPath.getLast());
+        for (String blueprintId : params.racePath)
+            assertTrue(blueprintId, blueprintId.startsWith("91_") || blueprintId.startsWith("92_")
+                    || blueprintId.startsWith("93_") || blueprintId.startsWith("94_"));
+    }
+
+    @Test
+    public void everyLeagueOfARaceScheduleGetsItsOwnPath() {
+        var row = racingSchedule();
+        row.next_event_date = LocalDate.of(2026, 7, 1);
+        Mockito.when(_scheduleDao.getAllSchedules()).thenReturn(List.of(row));
+
+        var created = _service.processDueSchedules(at(2026, 9, 25));
+
+        assertEquals(LeagueScheduleService.MAX_CATCH_UP_PER_RUN, created.size());
+        assertNotEquals(created.get(0).params().racePath, created.get(1).params().racePath);
+        assertNotEquals(created.get(1).params().racePath, created.get(2).params().racePath);
+    }
+
+    /**
+     * The flag belongs to the schedule, not to the leagues it makes: a created league holds a plain fixed path that
+     * an admin can still edit before it starts, without the edit being thrown away by another roll.
+     */
+    @Test
+    public void theCreatedLeagueHoldsAFixedPath() {
+        var row = racingSchedule();
+        Mockito.when(_scheduleDao.getAllSchedules()).thenReturn(List.of(row));
+
+        var params = _service.processDueSchedules(at(2026, 9, 25)).getFirst().params();
+
+        assertFalse(params.raceRandomizeEachInstance);
+        assertEquals(9, params.racePathLength);
+    }
+
+    @Test
+    public void aScheduleMayPinItsPathInstead() {
+        var row = racingScheduleWithFixedPath(false);
+        row.next_event_date = LocalDate.of(2026, 9, 1);
+        Mockito.when(_scheduleDao.getAllSchedules()).thenReturn(List.of(row));
+
+        var created = _service.processDueSchedules(at(2026, 9, 25));
+
+        assertEquals(2, created.size());
+        for (var league : created) {
+            assertEquals(List.of("92_3", "92_24"), league.params().racePath);
+            assertEquals(List.of("90_11", "90_2"), league.params().raceVisualPath);
+        }
+    }
+
+    /**
+     * A schedule written before the flag existed carries a path but no flag; it is treated as "re-roll", which is
+     * what a recurring race is for.  The stored path becomes the sample the admin saw, not every league's path.
+     */
+    @Test
+    public void aScheduleWithAPathButNoFlagStillRerolls() {
+        var row = racingSchedule();
+        var template = JSONObject.parseObject(row.template);
+        template.remove("racePathLength");
+        template.put("racePath", List.of("92_3", "92_24"));
+        template.put("raceVisualPath", List.of("90_11", "90_2"));
+        row.template = template.toJSONString();
+        Mockito.when(_scheduleDao.getAllSchedules()).thenReturn(List.of(row));
+
+        var params = _service.processDueSchedules(at(2026, 9, 25)).getFirst().params();
+
+        // the template's length is kept, the cards are not
+        assertEquals(2, params.racePath.size());
+        assertNotEquals(List.of("92_3", "92_24"), params.racePath);
+    }
+
+    @Test
+    public void anImpossibleIntensityRangeIsReportedNotSilentlyEmpty() {
+        var row = racingSchedule();
+        var template = JSONObject.parseObject(row.template);
+        template.put("raceIntensityFloor", 900);
+        template.put("raceIntensityCeiling", 999);
+        row.template = template.toJSONString();
+
+        assertDefinitionRejected(row, "events[0].racePath");
+    }
+
+    @Test
+    public void projectingARaceScheduleCreatesNothing() {
+        var events = _service.projectNext(new LeagueSchedule(racingSchedule()), 3);
+
+        assertEquals(3, events.size());
+        for (var event : events)
+            assertNull(event.error(), event.error());
+        Mockito.verifyNoInteractions(_leagueDao);
     }
 
     // ------------------------------------------------------------------------------------------------

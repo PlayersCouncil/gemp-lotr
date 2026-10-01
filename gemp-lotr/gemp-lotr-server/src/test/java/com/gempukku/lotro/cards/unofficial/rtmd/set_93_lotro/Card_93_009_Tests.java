@@ -10,22 +10,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_9: Fellowship: Add (3) to play a companion from your draw deck; they come into play exhausted.
- *
- * Owner-gated to Freeps.
- * Cost: add 3 twilight.
- * Effect: play a companion from draw deck, then exhaust that companion.
- *
- * Test cards:
- * - Aragorn (1_89): companion in draw deck to be played
- * - Boromir (1_96): second companion to prove selectivity
- */
 public class Card_93_009_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89");
-		put("boromir", "1_96");
+		put("aragorn", "1_89"); // Aragorn: companion in draw deck to be played
+		put("boromir", "1_96"); // Boromir: second companion to prove selectivity
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -48,6 +37,13 @@ public class Card_93_009_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_9
+		 * Type: MetaSite
+		 * Game Text: Fellowship: Add (3) to play a companion from your draw deck; they come into
+		 * play exhausted.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_9", card.getBlueprint().getTitle());

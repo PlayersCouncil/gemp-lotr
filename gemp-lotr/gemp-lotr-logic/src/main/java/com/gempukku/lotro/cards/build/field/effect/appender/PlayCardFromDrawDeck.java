@@ -89,7 +89,8 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                     @Override
                     public boolean isPlayableInFull(ActionContext actionContext) {
                         final LotroGame game = actionContext.getGame();
-                        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK);
+                        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK,
+                                actionContext.getPerformingPlayer());
                     }
 
                     @Override

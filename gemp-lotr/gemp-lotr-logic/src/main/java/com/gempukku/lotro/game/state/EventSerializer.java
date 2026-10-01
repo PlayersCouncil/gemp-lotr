@@ -198,6 +198,9 @@ public class EventSerializer {
             final Element playerZonesElem = doc.createElement("playerZones");
 
             playerZonesElem.setAttribute("name", playerZoneSizes.getKey());
+            // Lets every viewer (owner, opponent, spectator) show this player's hand as revealed
+            if (gameStats.getRevealedHands().contains(playerZoneSizes.getKey()))
+                playerZonesElem.setAttribute("handRevealed", "true");
 
             for (Map.Entry<Zone, Integer> zoneSizes : playerZoneSizes.getValue().entrySet())
                 playerZonesElem.setAttribute(zoneSizes.getKey().name(), zoneSizes.getValue().toString());

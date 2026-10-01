@@ -256,7 +256,9 @@ var GameAnimations = Class.extend({
                     that.game.miscPileDialogs[participantId].append(cardDiv);
                     animate = false;
                 }
-                else if (zone == "HAND" && participantId != that.game.bottomPlayerId) {
+                // A hand card we are sent that is not our own hand is a revealed hand. Spectators have no hand
+                // group at all, so this includes the bottom player's hand when spectating.
+                else if (zone == "HAND" && (that.game.spectatorMode || participantId != that.game.bottomPlayerId)) {
                     that.game.ensureRevealedHandDialog(participantId);
                     that.game.revealedHandDialogs[participantId].append(cardDiv);
                 }
@@ -1091,10 +1093,13 @@ var GameAnimations = Class.extend({
                 
 
                 var playerZones = element.getElementsByTagName("playerZones");
+                var revealedHands = [];
                 for (var i = 0; i < playerZones.length; i++) {
                     var playerZone = playerZones[i];
 
                     var playerId = playerZone.getAttribute("name");
+                    if (playerZone.getAttribute("handRevealed") === "true")
+                        revealedHands.push(playerId);
                     var hand = playerZone.getAttribute("HAND");
                     var discard = playerZone.getAttribute("DISCARD");
                     var adventureDeck = playerZone.getAttribute("ADVENTURE_DECK");
@@ -1109,6 +1114,10 @@ var GameAnimations = Class.extend({
                     $("#adventureDeck" + that.game.getPlayerIndex(playerId)).text(adventureDeck);
                     $("#removedPile" + that.game.getPlayerIndex(playerId)).text(removed);
                 }
+                // Replays recorded before the server sent this flag have no playerZones flag at all; the opponent's
+                // link then still appears when their first revealed card arrives (ensureRevealedHandDialog).
+                if (playerZones.length > 0)
+                    that.game.setRevealedHands(revealedHands);
 
                 var playerThreats = element.getElementsByTagName("threats");
                 var playerThreatTotals = element.getElementsByTagName("threatTotals");

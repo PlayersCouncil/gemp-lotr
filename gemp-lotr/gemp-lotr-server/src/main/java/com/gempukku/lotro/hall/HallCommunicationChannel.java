@@ -83,9 +83,15 @@ public class HallCommunicationChannel implements LongPollableResource {
                     }
 
                     @Override
+                    public void shutdownMode(boolean shutdown) {
+                        hallChannelVisitor.shutdownMode(shutdown);
+                    }
+
+                    @Override
                     public void visitTable(String tableId, String gameId, boolean watchable, TableStatus status, String statusDescription,
                                            String formatName, String tournamentName, String userDesc, List<String> playerIds, boolean playing,
-                                           boolean isPrivate, boolean isInviteOnly, String winner) {
+                                           boolean isPrivate, boolean isInviteOnly, String winner,
+                                           long createdAt, boolean invitedYou) {
                         Map<String, String> props = new HashMap<>();
                         props.put("gameId", gameId);
                         props.put("watchable", String.valueOf(watchable));
@@ -100,6 +106,11 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("playing", String.valueOf(playing));
                         if (winner != null)
                             props.put("winner", winner);
+                        // Epoch ms (server clock): the hall shows how long a waiting table has been open.
+                        props.put("createdAt", String.valueOf(createdAt));
+                        // Per viewer: this channel belongs to one player, so the flag never leaks to anyone else.
+                        if (invitedYou)
+                            props.put("invitedYou", "true");
 
                         tablesOnServer.put(tableId, props);
                     }

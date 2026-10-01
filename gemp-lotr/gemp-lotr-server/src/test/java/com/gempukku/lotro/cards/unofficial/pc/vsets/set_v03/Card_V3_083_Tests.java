@@ -69,7 +69,7 @@ public class Card_V3_083_Tests
 		 * Game Text: Beacon. To play, hinder 4 beacons.
 		* 	This cannot be discarded or hindered.
 		* 	Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.
-		* 	Maneuver: Hinder a beacon to play an item from your discard pile on your Man.
+		* 	Fellowship: Hinder X beacons to play X items from your discard pile on your Men.
 		*/
 
 		var scn = GetScenario();
@@ -187,11 +187,11 @@ public class Card_V3_083_Tests
 
 
 //
-// Maneuver ability tests - hinder X beacons to play X items from discard
+// Fellowship ability tests (a Maneuver ability before the pre-WC 2026 errata) - hinder X beacons to play X items from discard
 //
 
 	@Test
-	public void GCFAManeuverAbilityPlaysOneItemFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GCFAFellowshipAbilityPlaysOneItemFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gcfa = scn.GetFreepsCard("gcfa");
@@ -206,7 +206,8 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 
-		scn.SkipToPhase(Phase.MANEUVER);
+		// Errata: now a Fellowship action
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 
 		assertInZone(Zone.DISCARD, ridermount);
 		assertFalse(scn.IsHindered(beacon1));
@@ -225,7 +226,7 @@ public class Card_V3_083_Tests
 	}
 
 	@Test
-	public void GCFAManeuverAbilityPlaysMultipleItemsFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GCFAFellowshipAbilityPlaysMultipleItemsFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gcfa = scn.GetFreepsCard("gcfa");
@@ -247,7 +248,8 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 
-		scn.SkipToPhase(Phase.MANEUVER);
+		// Errata: now a Fellowship action
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 
 		scn.FreepsUseCardAction(gcfa);
 		scn.FreepsChooseCards(beacon1, beacon2, beacon3); // Hinder 3 beacons
@@ -279,7 +281,7 @@ public class Card_V3_083_Tests
 
 
 	@Test
-	public void GCFAManeuverAbilityNotAvailableWithoutBeaconToHinder() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GCFAFellowshipAbilityNotAvailableWithoutBeaconToHinder() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gcfa = scn.GetFreepsCard("gcfa");
@@ -293,14 +295,15 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 
-		scn.SkipToPhase(Phase.MANEUVER);
+		// Errata: now a Fellowship action
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 
 		// No beacons available to hinder (GCFA can't be hindered)
 		assertFalse(scn.FreepsActionAvailable(gcfa));
 	}
 
 	@Test
-	public void GCFAManeuverAbilityNotAvailableWithoutItemInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GCFAFellowshipAbilityNotAvailableWithoutItemInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gcfa = scn.GetFreepsCard("gcfa");
@@ -314,10 +317,35 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 
-		scn.SkipToPhase(Phase.MANEUVER);
+		// Errata: now a Fellowship action
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 
 		// No playable items in discard
 		assertFalse(scn.FreepsActionAvailable(gcfa));
+	}
+
+	@Test
+	public void GCFAAbilityIsNoLongerAManeuverAction() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gcfa = scn.GetFreepsCard("gcfa");
+		var beacon1 = scn.GetFreepsCard("beacon1");
+		var ridermount = scn.GetFreepsCard("ridermount");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(eowyn);
+		scn.MoveCardsToSupportArea(gcfa, beacon1);
+		scn.MoveCardsToDiscard(ridermount);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(gcfa));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		assertFalse(scn.FreepsActionAvailable(gcfa));
+		assertFalse(scn.IsHindered(beacon1));
+		assertInZone(Zone.DISCARD, ridermount);
 	}
 
 	@Test

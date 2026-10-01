@@ -11,13 +11,18 @@ import org.json.simple.JSONObject;
 public class DeckBuildingOverrideGameTextProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject effectObj, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObj, "maximumSameName", "skipSiteBlockValidation");
+        FieldUtils.validateAllowedFields(effectObj, "maximumSameName", "minimumDeckSize", "skipSiteBlockValidation");
 
         var context = new DeckValidationContext();
 
         final Object maxSameName = effectObj.get("maximumSameName");
         if (maxSameName != null) {
             context.setMaximumSameNameOverride(FieldUtils.getInteger(maxSameName, "maximumSameName"));
+        }
+
+        final Object minDeckSize = effectObj.get("minimumDeckSize");
+        if (minDeckSize != null) {
+            context.setMinimumDeckSizeOverride(FieldUtils.getInteger(minDeckSize, "minimumDeckSize"));
         }
 
         final Object skipSiteBlock = effectObj.get("skipSiteBlockValidation");

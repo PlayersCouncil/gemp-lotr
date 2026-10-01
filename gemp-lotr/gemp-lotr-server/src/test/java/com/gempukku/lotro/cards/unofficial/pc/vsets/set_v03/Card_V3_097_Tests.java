@@ -25,6 +25,7 @@ public class Card_V3_097_Tests
 					put("sky", "103_97");
 					put("sky2", "103_97");       // Second copy for discard pile retrieval tests
 					put("orc", "1_271");          // Orc Soldier - [Sauron] Orc, cost 2
+					put("orc2", "1_271");
 					put("troll", "6_106");        // Troll of Udun, [Sauron] Troll, cost 10
 					put("hollowing", "3_54");     // Hollowing of Isengard - [Isengard] Condition (non-Twilight)
 					put("uruk", "1_151");         // Uruk Savage - Uruk-hai (not Orc or Troll), cost 2
@@ -47,7 +48,7 @@ public class Card_V3_097_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).
+		 * Game Text: Twilight. Each time you play an Orc or Troll, add (1) (limit once per phase).
 		 * 	<b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
 		 */
 
@@ -73,8 +74,32 @@ public class Card_V3_097_Tests
 // ========================================
 
 	@Test
-	public void OminousSkyTriggersWhenYouPlayATroll() throws DecisionResultInvalidException, CardNotFoundException {
-		// Trigger: Each time you play an Orc or Troll, you may hinder this to add (1)
+	public void PlayingAnOrcAddsOneTwilightWithoutHinderingThis() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: the trigger is no longer optional and no longer costs hindering this condition
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var twilight = scn.GetTwilight();
+
+		// Orc Soldier costs 2 + 2 roaming = 4 twilight
+		scn.ShadowPlayCard(orc);
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(sky));
+		assertEquals(twilight - 4 + 1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void PlayingATrollAddsOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sky = scn.GetShadowCard("sky");
@@ -86,62 +111,64 @@ public class Card_V3_097_Tests
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
-		// Cave Troll costs 10 + 2 roaming = 12 twilight
+		var twilight = scn.GetTwilight();
+		int cost = troll.getBlueprint().getTwilightCost() + 2; // roaming
 		scn.ShadowPlayCard(troll);
 
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(sky));
+		assertEquals(twilight - cost + 1, scn.GetTwilight());
 	}
 
 	@Test
-	public void OminousSkyAcceptingTriggerHindersSelfAndAddsTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AddsTwilightOnlyOncePerPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sky = scn.GetShadowCard("sky");
 		var orc = scn.GetShadowCard("orc");
+		var orc2 = scn.GetShadowCard("orc2");
 		scn.MoveCardsToSupportArea(sky);
-		scn.MoveCardsToHand(orc);
+		scn.MoveCardsToHand(orc, orc2);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertFalse(scn.IsHindered(sky));
-
 		var twilight = scn.GetTwilight();
 
-		// Orc Soldier costs 2 + 2 roaming = 4 twilight; 20 - 4 = 16
 		scn.ShadowPlayCard(orc);
-		assertEquals(twilight - 4, scn.GetTwilight());
+		assertEquals(twilight - 4 + 1, scn.GetTwilight());
 
-		scn.ShadowAcceptOptionalTrigger();
-
-		assertTrue(scn.IsHindered(sky));
-		assertEquals(twilight - 3, scn.GetTwilight()); // 16 + 1 from trigger
+		// second Orc this phase: no bonus
+		scn.ShadowPlayCard(orc2);
+		assertEquals(twilight - 4 + 1 - 4, scn.GetTwilight());
+		assertFalse(scn.IsHindered(sky));
 	}
 
 	@Test
-	public void OminousSkyDecliningTriggerDoesNotHinderOrAddTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EachCopyHasItsOwnLimit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sky = scn.GetShadowCard("sky");
+		var sky2 = scn.GetShadowCard("sky2");
 		var orc = scn.GetShadowCard("orc");
-		scn.MoveCardsToSupportArea(sky);
-		scn.MoveCardsToHand(orc);
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.MoveCardsToSupportArea(sky, sky2);
+		scn.MoveCardsToHand(orc, orc2);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertFalse(scn.IsHindered(sky));
 		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(orc);
-		assertEquals(twilight - 4, scn.GetTwilight());
+		// two identical required triggers may be offered in either order
+		if (scn.ShadowDecisionAvailable("Required"))
+			scn.ShadowChooseAction("0");
+		assertEquals(twilight - 4 + 2, scn.GetTwilight());
 
-		scn.ShadowDeclineOptionalTrigger();
-
-		assertFalse(scn.IsHindered(sky));
-		assertEquals(twilight - 4, scn.GetTwilight()); // Unchanged
+		scn.ShadowPlayCard(orc2);
+		assertEquals(twilight - 4 + 2 - 4, scn.GetTwilight());
 	}
 
 	@Test
@@ -158,10 +185,31 @@ public class Card_V3_097_Tests
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
+		var twilight = scn.GetTwilight();
 		// Uruk Savage costs 2 + 2 roaming = 4 twilight
 		scn.ShadowPlayCard(uruk);
 
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(twilight - 4, scn.GetTwilight());
+	}
+
+	@Test
+	public void HinderedOminousSkyDoesNotTrigger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sky = scn.GetShadowCard("sky");
+		var orc = scn.GetShadowCard("orc");
+		scn.MoveCardsToSupportArea(sky);
+		scn.HinderCard(sky);
+		scn.MoveCardsToHand(orc);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(orc);
+
+		assertEquals(twilight - 4, scn.GetTwilight());
 	}
 
 // ========================================
@@ -234,10 +282,10 @@ public class Card_V3_097_Tests
 		scn.MoveCardsToHand(orc);
 
 		scn.StartGame();
-		scn.SetTwilight(2);
+		scn.SetTwilight(1);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(orc);
-		scn.ShadowDeclineOptionalTrigger();
+		// Ominous Sky's (now required) trigger adds (1)
 
 		assertEquals(1, scn.GetTwilight());
 		assertFalse(scn.ShadowActionAvailable(sky));
@@ -326,10 +374,10 @@ public class Card_V3_097_Tests
 		scn.MoveCardsToHand(orc);
 
 		scn.StartGame();
-		scn.SetTwilight(3);
+		scn.SetTwilight(2);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(orc);
-		scn.ShadowDeclineOptionalTrigger();
+		// Ominous Sky's (now required) trigger adds (1)
 
 		assertEquals(2, scn.GetTwilight());
 

@@ -9,6 +9,8 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.RTMDGameInfo;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
@@ -365,5 +367,74 @@ public class RequirementsAtTest extends AbstractAtTest {
         assertFalse(requirement.accepts(actionContext));
         playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
         assertTrue(requirement.accepts(actionContext));
+    }
+
+    @Test
+    public void playerIs() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONArray names = new JSONArray();
+        names.add(P1.toUpperCase());
+
+        JSONObject obj = new JSONObject();
+        obj.put("player", "you");
+        obj.put("names", names);
+
+        Requirement requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+        assertFalse(requirement.accepts(new DefaultActionContext(P2, _game, null, null, null)));
+
+        obj.put("player", "freeps");
+        requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertTrue(requirement.accepts(new DefaultActionContext(P2, _game, null, null, null)));
+    }
+
+    @Test
+    public void playerIsAny() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONArray names = new JSONArray();
+        names.add(P2);
+
+        JSONObject obj = new JSONObject();
+        obj.put("player", "any");
+        obj.put("names", names);
+
+        Requirement requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+
+        JSONArray nobody = new JSONArray();
+        nobody.add("nobody at this table");
+        obj.put("names", nobody);
+        requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+    }
+
+    @Test
+    public void playerLeaguePlacementOutsideALeague() throws Exception {
+        initializeSimplestGame();
+
+        passUntil(Phase.FELLOWSHIP);
+
+        JSONObject obj = new JSONObject();
+        obj.put("player", "you");
+        obj.put("percentage", 10);
+
+        Requirement requirement = new PlayerLeaguePlacement().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
+    }
+
+    @Test
+    public void leaguePlacementCutoff() {
+        assertTrue(new RTMDGameInfo.LeaguePlacement(1, 10).isWithinTopPercentage(10));
+        assertFalse(new RTMDGameInfo.LeaguePlacement(2, 10).isWithinTopPercentage(10));
+        //The cutoff rounds up and never falls below one place.
+        assertTrue(new RTMDGameInfo.LeaguePlacement(1, 4).isWithinTopPercentage(10));
+        assertTrue(new RTMDGameInfo.LeaguePlacement(3, 25).isWithinTopPercentage(10));
+        assertFalse(new RTMDGameInfo.LeaguePlacement(4, 25).isWithinTopPercentage(10));
     }
 }

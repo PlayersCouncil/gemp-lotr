@@ -46,6 +46,13 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
     }
 
     @Override
+    protected String getJoinRefusal() {
+        if (maxPlayers >= 0 && _players.size() >= maxPlayers)
+            return describeFull(maxPlayers);
+        return super.getJoinRefusal();
+    }
+
+    @Override
     public boolean shouldBeDisplayedAsWaiting() {
         return _players.size() > 0;
     }

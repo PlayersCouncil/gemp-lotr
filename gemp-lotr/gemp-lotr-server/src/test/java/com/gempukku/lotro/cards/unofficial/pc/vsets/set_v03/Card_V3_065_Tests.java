@@ -30,6 +30,10 @@ public class Card_V3_065_Tests
 					put("rwintwilight", "101_40"); // Ringwraith in Twilight - Twilight [Ringwraith] Nazgul minion
 					put("orc", "1_271");          // Orc Soldier - non-Twilight minion
 					put("hollowing", "3_54");     // Hollowing of Isengard - non-Twilight condition
+					put("runner", "1_178");       // Goblin Runner - str 5, vit 1: dies to a single wound
+					put("runner2", "1_178");
+
+					put("aragorn", "1_89");       // str 8: beats a Goblin Runner in a skirmish
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -51,7 +55,7 @@ public class Card_V3_065_Tests
 		 * Subtype: Support area
 		 * Game Text: Twilight.
 		 * 	To play, hinder 2 twilight conditions.
-		 * 	Shadow: Hinder this condition and remove (1) to take a twilight card into hand from your draw deck.
+		 * 	Each time your minion is killed, you may remove (1) and hinder a twilight condition to shuffle that minion into your draw deck.
 		 * 	Regroup: Hinder a twilight card to add (1).
 		 */
 
@@ -112,69 +116,155 @@ public class Card_V3_065_Tests
 	}
 
 // ========================================
-// SHADOW ABILITY TESTS - Fetch Twilight Card
+// KILL TRIGGER TESTS - shuffle a killed minion back into the draw deck
 // ========================================
 
-	@Test
-	public void OmenOfGloomShadowAbilityHindersSelfToFetchTwilightCardFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gloom = scn.GetShadowCard("gloom");
-		var sky1 = scn.GetShadowCard("sky1");
-		var sky2 = scn.GetShadowCard("sky2");
-		var sky3 = scn.GetShadowCard("sky3"); // In deck
-		var marshwight = scn.GetShadowCard("marshwight"); // Twilight minion in deck
-		var hollowing = scn.GetShadowCard("hollowing"); // Non-twilight in deck
-		scn.MoveCardsToSupportArea(gloom, sky1, sky2);
-		scn.HinderCard(sky1, sky2);
-		// sky3, marshwight, hollowing remain in deck
-
-		scn.StartGame();
-		scn.SetTwilight(17);
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		assertFalse(scn.IsHindered(gloom));
-		assertInZone(Zone.DECK, sky3);
-		assertInZone(Zone.DECK, marshwight);
-
-		assertTrue(scn.ShadowActionAvailable(gloom));
-		assertEquals(20, scn.GetTwilight());
-		scn.ShadowUseCardAction(gloom);
-		scn.ShadowDismissRevealedCards();
-
-		assertTrue(scn.IsHindered(gloom));
-		//Errata: now removes 1 twilight to fetch
-		assertEquals(19, scn.GetTwilight());
-
-		// Should see twilight cards available (sky3 and marshwight), but not hollowing
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sky3, marshwight));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(hollowing));
-
-		scn.ShadowChooseCardBPFromSelection(marshwight);
-
-		assertInZone(Zone.HAND, marshwight);
-		assertInZone(Zone.DECK, sky3);
+	/** Aragorn skirmishes the Goblin Runner and kills it (Runner has 1 vitality). */
+	private void KillRunnerInSkirmish(VirtualTableScenario scn, com.gempukku.lotro.game.PhysicalCardImpl aragorn,
+			com.gempukku.lotro.game.PhysicalCardImpl runner, int twilight) throws DecisionResultInvalidException {
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, runner);
+		scn.SetTwilight(twilight);
+		scn.PassSkirmishActions();
 	}
 
 	@Test
-	public void OmenOfGloomShadowAbilityCannotBeUsedIfSelfAlreadyHindered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void KilledMinionCanBeShuffledIntoDrawDeckByRemoving1AndHinderingATwilightCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gloom = scn.GetShadowCard("gloom");
 		var sky1 = scn.GetShadowCard("sky1");
-		var sky2 = scn.GetShadowCard("sky2");
-		scn.MoveCardsToSupportArea(gloom, sky1, sky2);
-		scn.HinderCard(sky1, sky2, gloom); // Gloom already hindered
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gloom, sky1);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		KillRunnerInSkirmish(scn, aragorn, runner, 5);
+
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		// any twilight condition, including this one
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sky1, gloom));
+		scn.ShadowChooseCard(sky1);
+
+		assertTrue(scn.IsHindered(sky1));
+		assertFalse(scn.IsHindered(gloom));
+		assertEquals(4, scn.GetTwilight());
+		assertInZone(Zone.DECK, runner);
+	}
+
+	@Test
+	public void KillTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gloom = scn.GetShadowCard("gloom");
+		var sky1 = scn.GetShadowCard("sky1");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gloom, sky1);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		KillRunnerInSkirmish(scn, aragorn, runner, 5);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertFalse(scn.IsHindered(sky1));
+		assertFalse(scn.IsHindered(gloom));
+		assertEquals(5, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, runner);
+	}
+
+	@Test
+	public void WithNoOtherTwilightConditionItHindersItself() throws DecisionResultInvalidException, CardNotFoundException {
+		// "a twilight condition" includes Omen of Gloom itself, so while it is active there is always one to hinder
+		var scn = GetScenario();
+
+		var gloom = scn.GetShadowCard("gloom");
+		var hollowing = scn.GetShadowCard("hollowing"); // a non-twilight condition does not qualify
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gloom, hollowing);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		KillRunnerInSkirmish(scn, aragorn, runner, 5);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		// only candidate, auto-selected
+
+		assertTrue(scn.IsHindered(gloom));
+		assertFalse(scn.IsHindered(hollowing));
+		assertEquals(4, scn.GetTwilight());
+		assertInZone(Zone.DECK, runner);
+	}
+
+	@Test
+	public void KillTriggerNotOfferedWithoutTwilightToRemove() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gloom = scn.GetShadowCard("gloom");
+		var sky1 = scn.GetShadowCard("sky1");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gloom, sky1);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		KillRunnerInSkirmish(scn, aragorn, runner, 0);
+
+		assertInZone(Zone.DISCARD, runner);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(sky1));
+	}
+
+	@Test
+	public void HinderedOmenOfGloomDoesNotTrigger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gloom = scn.GetShadowCard("gloom");
+		var sky1 = scn.GetShadowCard("sky1");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gloom, sky1);
+		scn.HinderCard(gloom);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		KillRunnerInSkirmish(scn, aragorn, runner, 5);
+
+		assertInZone(Zone.DISCARD, runner);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void NoLongerHasAShadowAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: the Shadow "take a twilight card into hand from your draw deck" ability is gone
+		var scn = GetScenario();
+
+		var gloom = scn.GetShadowCard("gloom");
+		var sky1 = scn.GetShadowCard("sky1");
+		var sky3 = scn.GetShadowCard("sky3"); // in deck
+		scn.MoveCardsToSupportArea(gloom, sky1);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertInZone(Zone.DECK, sky3);
 		assertFalse(scn.ShadowActionAvailable(gloom));
 	}
-
 
 // ========================================
 // REGROUP ABILITY TESTS - Hinder Twilight to Add Twilight

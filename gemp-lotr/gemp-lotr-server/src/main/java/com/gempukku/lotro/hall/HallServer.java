@@ -24,6 +24,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.service.AdminService;
+import com.gempukku.lotro.service.IgnoreListService;
 import com.gempukku.lotro.tournament.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,7 +90,7 @@ public class HallServer extends AbstractServer {
         tableHolder = new TableHolder(leagueService, tournamentService, ignoreDAO);
 
         _hallChat = _chatServer.createChatRoom("Game Hall", true, 300, true,
-                "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->",
+                "You're now in the Legacy chat.  Use this if Discord goes down.",
                 null);
         _hallChat.addChatCommandCallback("ban",
                 new ChatCommandCallback() {
@@ -129,7 +130,7 @@ public class HallServer extends AbstractServer {
                     @Override
                     public void commandReceived(String from, String parameters, boolean admin) {
                         final String playerName = parameters.trim();
-                        if (playerName.length() >= 2 && playerName.length() <= 30) {
+                        if (playerName.length() >= IgnoreListService.MIN_NAME_LENGTH && playerName.length() <= IgnoreListService.MAX_NAME_LENGTH) {
                             if (!from.equals(playerName) && ignoreDAO.addIgnoredUser(from, playerName)) {
                                 _hallChat.sendToUser("System", from, "User " + playerName + " added to ignore list");
                             } else if (from.equals(playerName)) {
@@ -161,19 +162,18 @@ public class HallServer extends AbstractServer {
                         }
                     }
                 });
+        // /unignore follows the same rules as My Account's "Remove" (IgnoreListService): any name up to the /ignore
+        // limit of 30 characters, matched exactly or else ignoring case
+        final IgnoreListService ignoreList = new IgnoreListService(ignoreDAO);
         _hallChat.addChatCommandCallback("unignore",
                 new ChatCommandCallback() {
                     @Override
                     public void commandReceived(String from, String parameters, boolean admin) {
-                        final String playerName = parameters.trim();
-                        if (playerName.length() >= 2 && playerName.length() <= 10) {
-                            if (ignoreDAO.removeIgnoredUser(from, playerName)) {
-                                _hallChat.sendToUser("System", from, "User " + playerName + " removed from ignore list");
-                            } else {
-                                _hallChat.sendToUser("System", from, "User " + playerName + " wasn't on your ignore list. Try ignoring them first.");
-                            }
-                        } else {
-                            _hallChat.sendToUser("System", from, playerName + " is not a valid username");
+                        IgnoreListService.Result result = ignoreList.unignore(from, parameters);
+                        switch (result.outcome()) {
+                            case REMOVED -> _hallChat.sendToUser("System", from, "User " + result.name() + " removed from ignore list");
+                            case NOT_IGNORED -> _hallChat.sendToUser("System", from, "User " + result.name() + " wasn't on your ignore list. Try ignoring them first.");
+                            default -> _hallChat.sendToUser("System", from, result.name() + " is not a valid username");
                         }
                     }
                 });
@@ -262,6 +262,8 @@ public class HallServer extends AbstractServer {
                 hallChanged();
             } else if (cancelMessage) {
                 _chatServer.sendSystemMessageToAllChatRooms("@everyone Shutdown mode canceled; games may now resume.");
+                // the hall's connection readout shows shutdown mode, so it has to hear that it is over too
+                hallChanged();
             }
         } finally {
             _hallDataAccessLock.writeLock().unlock();
@@ -300,16 +302,45 @@ public class HallServer extends AbstractServer {
         tableHolder.cancelWaitingTables();
     }
 
+    /** The longest table description accepted (the Casual form's maxlength). */
+    public static final int MAX_TABLE_DESCRIPTION_LENGTH = 100;
+
     /**
-     * @return If table created, otherwise <code>false</code> (if the user already is sitting at a table or playing).
+     * Cleans a user-supplied table description before it is stored: angle brackets and control characters are
+     * removed (so no client, old or new, can be handed markup through it), surrounding whitespace is trimmed and the
+     * result is capped at {@link #MAX_TABLE_DESCRIPTION_LENGTH} characters.  It is not HTML-escaped here; the hall
+     * escapes on render.
      */
+    public static String sanitizeTableDescription(String description) {
+        if (description == null)
+            return "";
+        StringBuilder clean = new StringBuilder(description.length());
+        description.codePoints()
+                .filter(cp -> cp != '<' && cp != '>' && !Character.isISOControl(cp)
+                        && Character.getType(cp) != Character.LINE_SEPARATOR
+                        && Character.getType(cp) != Character.PARAGRAPH_SEPARATOR)
+                .forEach(clean::appendCodePoint);
+        String result = clean.toString().trim();
+        if (result.codePointCount(0, result.length()) > MAX_TABLE_DESCRIPTION_LENGTH)
+            result = result.substring(0, result.offsetByCodePoints(0, MAX_TABLE_DESCRIPTION_LENGTH)).trim();
+        return result;
+    }
+
     public void createNewTable(String type, Player player, String deckName, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
+        createNewTable(type, player, player, deckName, timer, description, isInviteOnly, isPrivate, isHidden);
+    }
+
+    /**
+     * Opens a table for <code>player</code> using the deck <code>deckName</code> owned by <code>deckOwner</code>:
+     * the player themselves, or the Librarian for a deck from the Deck Library.
+     */
+    public void createNewTable(String type, Player player, Player deckOwner, String deckName, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
+        GameSettings gameSettings = createGameSettings(type, timer, sanitizeTableDescription(description), isInviteOnly, isPrivate, isHidden, false);
 
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), deckOwner, deckName, gameSettings.collectionType(), gameSettings.league(), player);
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -324,12 +355,20 @@ public class HallServer extends AbstractServer {
     }
 
     public void createNewSoloTable(String type, Player player, String deckName, String botDeckName, boolean isPrivate) throws  HallException {
+        createNewSoloTable(type, player, player, deckName, botDeckName, isPrivate);
+    }
+
+    /**
+     * A game against the bot.  The player's deck comes from <code>deckOwner</code> (the player, or the Librarian for a
+     * Deck Library deck); the bot's deck, when one is named, is always one of the player's own decks.
+     */
+    public void createNewSoloTable(String type, Player player, Player deckOwner, String deckName, String botDeckName, boolean isPrivate) throws  HallException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
         GameSettings gameSettings = createGameSettings(type, "slow", "Solo game", false, isPrivate, false, true);
 
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), deckOwner, deckName, gameSettings.collectionType(), gameSettings.league(), player);
 
 
         LotroDeck botDeck = null;
@@ -350,23 +389,7 @@ public class HallServer extends AbstractServer {
     }
 
     public void spoofNewTable(String type, Player player, Player librarian, String deckName, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden) throws HallException {
-        if (_shutdown)
-            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
-
-        GameSettings gameSettings = createGameSettings(type, timer, description, isInviteOnly, isPrivate, isHidden, false);
-
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType(), gameSettings.league());
-
-        _hallDataAccessLock.writeLock().lock();
-        try {
-            final GameTable table = tableHolder.createTable(player, gameSettings, lotroDeck);
-            if (table != null)
-                createGameFromTable(table);
-
-            hallChanged();
-        } finally {
-            _hallDataAccessLock.writeLock().unlock();
-        }
+        createNewTable(type, player, librarian, deckName, timer, description, isInviteOnly, isPrivate, isHidden);
     }
 
     private GameSettings createGameSettings(String type, String timer, String description, boolean isInviteOnly, boolean isPrivate, boolean isHidden, boolean isSolo) throws HallException {
@@ -411,6 +434,16 @@ public class HallServer extends AbstractServer {
     }
 
     public boolean joinQueue(String queueId, Player player, String deckName) throws HallException, SQLException, IOException {
+        return joinQueue(queueId, player, player, deckName);
+    }
+
+    /**
+     * Signs <code>player</code> up for a tournament queue, with the deck <code>deckName</code> owned by
+     * <code>deckOwner</code> (the player, or the Librarian for a Deck Library deck) when the queue needs a deck.
+     * @throws HallException with a message for the player whenever they did not end up in the queue (queue gone,
+     * already joined, sign-up not open yet, queue full, not enough currency, invalid deck...)
+     */
+    public boolean joinQueue(String queueId, Player player, Player deckOwner, String deckName) throws HallException, SQLException, IOException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
@@ -424,7 +457,7 @@ public class HallServer extends AbstractServer {
 
             LotroDeck lotroDeck = null;
             if (tournamentQueue.isRequiresDeck())
-                lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormatCode()), player, deckName, tournamentQueue.getCollectionType());
+                lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormatCode()), deckOwner, deckName, tournamentQueue.getCollectionType());
 
             tournamentQueue.joinPlayer(player, lotroDeck);
 
@@ -469,11 +502,21 @@ public class HallServer extends AbstractServer {
      * @return If table joined, otherwise <code>false</code> (if the user already is sitting at a table or playing).
      */
     public boolean joinTableAsPlayer(String tableId, Player player, String deckName) throws HallException {
+        return joinTableAsPlayer(tableId, player, player, deckName);
+    }
+
+    /**
+     * Seats <code>player</code> at a waiting table with the deck <code>deckName</code> owned by <code>deckOwner</code>:
+     * the player themselves, or the Librarian for a deck from the Deck Library.
+     */
+    public boolean joinTableAsPlayer(String tableId, Player player, Player deckOwner, String deckName) throws HallException {
         if (_shutdown)
             throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
 
         GameSettings gameSettings = tableHolder.getGameSettings(tableId);
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), player, deckName, gameSettings.collectionType(), gameSettings.league());
+        // refuse an invite-only table before judging the deck (TableHolder.joinTable checks again under the lock)
+        tableHolder.verifyMayTakeSeat(tableId, player);
+        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), deckOwner, deckName, gameSettings.collectionType(), gameSettings.league(), player);
 
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -490,33 +533,21 @@ public class HallServer extends AbstractServer {
     }
 
     public boolean joinTableAsPlayerWithSpoofedDeck(String tableId, Player player, Player librarian, String deckName) throws HallException {
-        if (_shutdown)
-            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
-
-        GameSettings gameSettings = tableHolder.getGameSettings(tableId);
-        LotroDeck lotroDeck = validateUserAndDeck(gameSettings.format(), librarian, deckName, gameSettings.collectionType(), gameSettings.league());
-
-        _hallDataAccessLock.writeLock().lock();
-        try {
-            final GameTable runningTable = tableHolder.joinTable(tableId, player, lotroDeck);
-            if (runningTable != null)
-                createGameFromTable(runningTable);
-
-            hallChanged();
-
-            return true;
-        } finally {
-            _hallDataAccessLock.writeLock().unlock();
-        }
+        return joinTableAsPlayer(tableId, player, librarian, deckName);
     }
 
 
     public boolean addPlayerMadeQueue(TournamentInfo info, Player player, String deckName, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException, HallException {
+        return addPlayerMadeQueue(info, player, player, deckName, startableEarly, readyCheckTimeSecs);
+    }
+
+    /** As above, with the creator's deck owned by <code>deckOwner</code> (the player, or the Librarian). */
+    public boolean addPlayerMadeQueue(TournamentInfo info, Player player, Player deckOwner, String deckName, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException, HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
             LotroDeck lotroDeck = null;
             if (info.Parameters().requiresDeck) {
-                lotroDeck = validateUserAndDeck(info.Format, player, deckName, info.Collection);
+                lotroDeck = validateUserAndDeck(info.Format, deckOwner, deckName, info.Collection);
             }
 
             boolean success = _tournamentService.addPlayerMadeQueue(info, player, lotroDeck, startableEarly, readyCheckTimeSecs);
@@ -576,91 +607,92 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public String dropFromTournament(String tournamentId, Player player) {
+    /**
+     * Drops the player from a running tournament.
+     * @return the message to show the player on success
+     * @throws HallException with a message for the player whenever they were not dropped (still playing a match,
+     * already dropped, never joined, tournament over)
+     */
+    public String dropFromTournament(String tournamentId, Player player) throws HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
-            String result = "";
             Tournament tournament = _tournamentService.getTournamentById(tournamentId);
-            if (tournament != null) {
-                result = tournament.dropPlayer(player.getName());
-                hallChanged();
-            }
-            else {
-                result = "That tournament is already over.";
-            }
+            if (tournament == null)
+                throw new HallException("That tournament is already over.");
 
+            String result = tournament.dropPlayer(player.getName());
+            if (!BaseTournament.DROPPED_MESSAGE.equals(result))
+                throw new HallException(result);
+            hallChanged();
             return result;
         } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
 
-    public String joinTournamentLate(String tournamentId, Player player, String deckName) {
+    public String joinTournamentLate(String tournamentId, Player player, String deckName) throws HallException {
+        return joinTournamentLate(tournamentId, player, player, deckName);
+    }
+
+    /**
+     * Joins a tournament that is already running (when it allows late joining).
+     * @return the message to show the player on success
+     * @throws HallException with a message for the player whenever they did not join
+     */
+    public String joinTournamentLate(String tournamentId, Player player, Player deckOwner, String deckName) throws HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
-            String result = "";
             var tournament = _tournamentService.getTournamentById(tournamentId);
-            if (tournament == null) {
-                result = "That tournament is already over.";
-            } else if (!tournament.isJoinable()) {
-                result = "That tournament does not allow late joining.";
-            } else {
-                LotroDeck lotroDeck = null;
-                if (tournament.getInfo().Parameters().requiresDeck) {
-                    lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
-                }
-                if (_tournamentService.joinTournamentLate(tournamentId, player.getName(), lotroDeck)) {
-                    result = "Joined tournament <b>" + tournament.getTournamentName() + "</b> successfully.";
-                } else {
-                    result = "Joining tournament <b>" + tournament.getTournamentName() + "</b> failed.";
-                }
-                hallChanged();
-            }
+            if (tournament == null)
+                throw new HallException("That tournament is already over.");
+            if (!tournament.isJoinable())
+                throw new HallException("That tournament does not allow late joining.");
 
-            return result;
-        }
-        catch(HallException ex) {
-            return ex.getMessage();
-        }
-        finally {
+            LotroDeck lotroDeck = null;
+            if (tournament.getInfo().Parameters().requiresDeck) {
+                lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), deckOwner, deckName, tournament.getCollectionType());
+            }
+            if (!_tournamentService.joinTournamentLate(tournamentId, player.getName(), lotroDeck))
+                throw new HallException("Joining tournament '" + tournament.getTournamentName() + "' failed. You may already be in it, or it has stopped taking players.");
+
+            hallChanged();
+            return "Joined tournament '" + tournament.getTournamentName() + "' successfully.";
+        } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
 
-    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) {
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+        return registerLimitedTournamentDeck(tournamentId, player, player, deckName);
+    }
+
+    /**
+     * Registers (or re-registers) the deck a player will use in a limited tournament's playing rounds.
+     * @return the message to show the player on success
+     * @throws HallException with a message for the player whenever the deck was not registered
+     */
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, Player deckOwner, String deckName) throws HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
-            String result = "";
             var tournament = _tournamentService.getTournamentById(tournamentId);
-            if (tournament != null) {
-                LotroDeck lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
-                var submitted = tournament.playerSubmittedDeck(player.getName(), lotroDeck);
-
-                if(submitted) {
-                    result = "Registered deck '" + deckName + "' with tournament '" + tournament.getTournamentName() + "' successfully. "
-                            + "If you make an update to your deck, you will need to register it here again for any changes to take effect.";
-                    _log.trace("Player '" + player.getName() + "' registered deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' successfully.");
-                }
-                else {
-                    result = "Could not register deck with tournament '" + tournament.getTournamentName() + "'. "
-                            + "Please contact an administrator if you think this was in error.";
-
-                    _log.trace("Player '" + player.getName() + "' failed to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "'.");
-                }
-
-                hallChanged();
-            }
-            else {
-                result = "Registration for that tournament has already closed.";
-                _log.trace("Player '" + player.getName() + "' attempted to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' after registration closed.");
+            if (tournament == null) {
+                _log.trace("Player '" + player.getName() + "' attempted to register deck '" + deckName + "' for tournament '" + tournamentId + "', which was not found.");
+                throw new HallException("That tournament was not found; it may already be over.");
             }
 
-            return result;
-        }
-        catch(HallException ex) {
-            return ex.getMessage();
-        }
-        finally {
+            LotroDeck lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), deckOwner, deckName, tournament.getCollectionType());
+            if (!tournament.playerSubmittedDeck(player.getName(), lotroDeck)) {
+                _log.trace("Player '" + player.getName() + "' failed to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "'.");
+                throw new HallException("Could not register your deck with tournament '" + tournament.getTournamentName() + "'. "
+                        + "Deck registration may have closed, or you are not in this tournament. "
+                        + "Please contact an administrator if you think this was in error.");
+            }
+
+            _log.trace("Player '" + player.getName() + "' registered deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' successfully.");
+            hallChanged();
+            return "Registered deck '" + deckName + "' with tournament '" + tournament.getTournamentName() + "' successfully. "
+                    + "If you make an update to your deck, you will need to register it here again for any changes to take effect.";
+        } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
@@ -723,6 +755,7 @@ public class HallServer extends AbstractServer {
             visitor.serverTime(DateUtils.getStringDateWithHour());
             if (_motd != null)
                 visitor.motd(_motd);
+            visitor.shutdownMode(_shutdown);
 
             tableHolder.processTables(isAdmin, player, visitor);
             _tournamentService.processTournamentsForHall(_formatLibrary, player, visitor);
@@ -737,6 +770,14 @@ public class HallServer extends AbstractServer {
     }
 
     private LotroDeck validateUserAndDeck(LotroFormat format, Player player, String deckName, CollectionType collectionType, League league) throws HallException {
+        return validateUserAndDeck(format, player, deckName, collectionType, league, player);
+    }
+
+    /**
+     * @param player       the deck's owner (the Librarian for a Deck Library deck)
+     * @param seatedPlayer the player who will play the deck; league deck rules (e.g. by standing) are worked out for them
+     */
+    private LotroDeck validateUserAndDeck(LotroFormat format, Player player, String deckName, CollectionType collectionType, League league, Player seatedPlayer) throws HallException {
         LotroDeck lotroDeck = _lotroServer.getParticipantDeck(player, deckName);
         if (lotroDeck == null) {
             _log.debug("Player '" + player.getName() + "' attempting to use deck '" + deckName + "' but failed.");
@@ -747,7 +788,7 @@ public class HallServer extends AbstractServer {
             lotroDeck = format.applyErrata(lotroDeck);
             DeckValidationContext context = null;
             if (league != null) {
-                context = _leagueService.buildDeckValidationContext(league, player.getName());
+                context = _leagueService.buildDeckValidationContext(league, seatedPlayer.getName());
             }
             lotroDeck = validateUserAndDeck(format, player, collectionType, lotroDeck, context);
         } catch (DeckInvalidException e) {
@@ -1065,7 +1106,8 @@ public class HallServer extends AbstractServer {
     }
 
     public ManualGameSpawner createManualGameSpawner(Tournament tourney, LotroFormat format, GameTimer timer, String description) {
-        return new ManualGameSpawner(tourney, format, timer, description);
+        // admin-made tables (Tournament Admin > manual tables) go through the same cleaning as players' descriptions
+        return new ManualGameSpawner(tourney, format, timer, sanitizeTableDescription(description));
     }
 
     public class ManualGameSpawner implements TournamentCallback {

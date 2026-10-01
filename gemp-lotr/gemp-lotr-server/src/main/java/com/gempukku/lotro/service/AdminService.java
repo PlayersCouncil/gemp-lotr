@@ -7,7 +7,8 @@ import com.gempukku.lotro.game.Player;
 import java.sql.SQLException;
 
 public class AdminService {
-    public static final int DAY_IN_MILIS = 1000 * 60 * 60 * 24;
+    // long, not int: days * an int day length overflowed past 24 days, so a 30-day ban expired ~20 days in the past.
+    public static final long DAY_IN_MILIS = 1000L * 60 * 60 * 24;
     private final PlayerDAO _playerDAO;
     private final LoggedUserHolder _loggedUserHolder;
     private final IpBanDAO _ipBanDAO;
@@ -42,9 +43,15 @@ public class AdminService {
         }
     }
 
+    public static long tempBanExpiry(long nowMillis, int days) {
+        return nowMillis + days * DAY_IN_MILIS;
+    }
+
     public boolean banUserTemp(String login, int days) {
+        if (days <= 0)
+            return false;
         try {
-            final boolean success = _playerDAO.banPlayerTemporarily(login, System.currentTimeMillis() + days * DAY_IN_MILIS);
+            final boolean success = _playerDAO.banPlayerTemporarily(login, tempBanExpiry(System.currentTimeMillis(), days));
             if (!success)
                 return false;
             _loggedUserHolder.forceLogoutUser(login);

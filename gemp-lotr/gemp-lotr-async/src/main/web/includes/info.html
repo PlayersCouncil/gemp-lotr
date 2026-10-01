@@ -6,6 +6,10 @@
 			
 			var ui = new StatsUI("/gemp-lotr-server", $("#statsParameters"), $("#stats"));
 			$(".getStats").click();
+			// coming back to Server Stats after a while re-fetches the stats last displayed (GempHallTabs.onReturn,
+			// GameHall.js); the date / period fields keep whatever the viewer has typed
+			if (window.GempHallTabs)
+				GempHallTabs.onReturn($("#server-stats"), function () { ui.refresh(); });
 		});
 	
 </script>
@@ -14,13 +18,13 @@
 	<div id="info-tabs" class="sub-tabs">
 		<ol>
 			<li><a href="#server-stats">Server Stats</a></li>
-			<li><a href="includes/info/changeLog.html">GEMP Change Log</a></li>
+			<li><a href="includes/info/patchNotes.html">Patch Notes</a></li>
 			<li><a href="includes/info/contribute.html">Contribute</a></li>
 			<li><a href="#about">About</a></li>
 		</ol>
 	</div>	
 	<div id="server-stats">
-		All times are GMT based.
+		All dates are server time (UTC).
 		<div id="statsParameters">
 			<span>
 				Start date: <input class='startDay' type='text' value="">
@@ -39,31 +43,12 @@
 			<div class='period'>Stats for <span id="startDateSpan"></span> - <span id="endDateSpan"></span> </div>
 			<div class='activePlayers'>Active players: <span id="activePlayersStat"></span></div>
 			<div class='gamesCount'>All games count: <span id="gamesCountStat"></span></div>
-			<table class='tables' id="competitiveStatsTable">
-				<caption>Competitive Games by Format</caption>
-				<thead>
-					<tr>
-						<th>Format name</th>
-						<th># of games</th>
-						<th>% of competitive</th>
-						<th>% of total</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
+			<div class='botGamesCount'>Bot games count: <span id="botGamesCountStat"></span> (Not counted in the below stats)</div>
+			<h2 class="stats-caption">Competitive Games by Format</h2>
+			<div id="competitiveStatsTable" class="stats-table"></div>
 			<br>
-			<table class='tables' id="casualStatsTable">
-				<caption>Casual Games by Format</caption>
-				<thead>
-					<tr>
-						<th>Format name</th>
-						<th># of games</th>
-						<th>% of casual</th>
-						<th>% of total</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
+			<h2 class="stats-caption">Casual Games by Format</h2>
+			<div id="casualStatsTable" class="stats-table"></div>
 		</div>
 		<br><br><br>
 	</div>

@@ -56,6 +56,16 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     }
 
     @Override
+    protected String getJoinRefusal() {
+        var opens = _nextStart.minus(_signupTimeBeforeStart);
+        if (!ZonedDateTime.now().isAfter(opens))
+            return "Sign-up for the next " + getTournamentQueueName() + " opens at " + DateUtils.FormatDateTime(opens) + ".";
+        if (_maximumPlayers >= 0 && _players.size() >= _maximumPlayers)
+            return describeFull(_maximumPlayers);
+        return super.getJoinRefusal();
+    }
+
+    @Override
     public boolean shouldBeDisplayedAsWaiting() {
         // Display in waiting tables section 1 hour before start
         return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart));

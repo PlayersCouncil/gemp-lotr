@@ -10,24 +10,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_7: Each time your fellowship moves, the Shadow player may draw a card for each companion you can spot over 4.
- *
- * Owner-gated to Freeps (via OwnerIsFreeps). "Your" refers to the Freeps player.
- * The Shadow player draws, but the Freeps player controls whether the trigger fires (via "you may").
- *
- * Test cards:
- * - Aragorn (1_89), Boromir (1_96), Legolas (1_50), Gimli (1_13): 4 companions + Frodo = 5 total
- * - Dwarf Guard (1_7): 6th companion to push over 4
- */
 public class Card_93_007_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89");
-		put("boromir", "1_96");
-		put("legolas", "1_50");
-		put("gimli", "1_13");
-		put("guard", "1_7");
+		put("aragorn", "1_89"); // Aragorn: companion, part of the 4-companion baseline
+		put("boromir", "1_96"); // Boromir: companion, part of the 4-companion baseline
+		put("legolas", "1_50"); // Legolas: companion, part of the 4-companion baseline
+		put("gimli", "1_13"); // Gimli: companion, part of the 4-companion baseline
+		put("guard", "1_7"); // Dwarf Guard: 5th companion, pushes the count over 4
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -50,6 +40,13 @@ public class Card_93_007_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_7
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, the Shadow player may draw a card for each
+		 * companion you can spot over 4.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_7", card.getBlueprint().getTitle());

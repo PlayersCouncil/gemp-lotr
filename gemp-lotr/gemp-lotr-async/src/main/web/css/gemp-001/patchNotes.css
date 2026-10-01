@@ -1,0 +1,534 @@
+/* ==== patch-notes: Server Info › Patch Notes (includes/info/patchNotes.html, js/gemp-022/patchNotesUi.js) ====
+   The tag filter and the Events tab's month navigation on top, the newest few updates as cards (title, date, tags,
+   blurb, notes, screenshots), Newer / Older at the bottom, and a lightbox for enlarged screenshots.
+   Sizes follow the Events tab (hall.css): the base text is its .article's 120% (15.84px in the hall, the event drawers'
+   text), and the page and update headings are its .event-row-title's 200% of that, bold (31.68px, a league name). */
+
+.patchnotes {
+	box-sizing: border-box;
+	max-width: 60em;
+	padding: 0.6em 1.2em 4em 1.2em;
+	color: #ddd;
+	font-size: 120%;
+}
+
+.patchnotes-intro h1 {
+	margin: 0.2em 0 0.1em 0;
+	font-size: 200%;
+	font-weight: bolder;
+}
+
+/* ---- the tag filter: chips like Help › PC Errata's All / Latest (pcErrata.css .pc-errata-chip) ---- */
+.patchnotes-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35em;
+	margin: 0 0 0.3em 0;
+}
+
+.patchnotes .patchnotes-filter {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45em;
+	padding: 0.25em 0.7em;
+	border: 1px solid #555555;
+	border-radius: 999px;
+	background: #1d1d1d;
+	color: #dddddd;
+	font: inherit;
+	font-size: 90%;
+	cursor: pointer;
+}
+
+.patchnotes .patchnotes-filter:hover,
+.patchnotes .patchnotes-filter:focus-visible {
+	border-color: #26b3f7;
+	outline: none;
+}
+
+.patchnotes .patchnotes-filter-on {
+	background: #0972a5;
+	border-color: #26b3f7;
+	color: #ffffff;
+}
+
+.patchnotes-filter-count {
+	font-size: 85%;
+	padding: 0 0.45em;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.12);
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---- the month navigation: the Events tab's (MonthNav, eventHistoryUi.js; its look is hall.css's
+   .calendar-header / .event-history-*) ---- */
+.patchnotes-months {
+	margin: 0 0 0.6em 0;
+	font-size: 83.333%;      /* back to the hall's size (the page's text is 120%), so it matches the Events tab's */
+}
+
+.patchnotes-months .calendar-header {
+	margin: 0.4em 0;
+}
+
+/* ---- the pager at the bottom ---- */
+.patchnotes-pager {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em 0.8em;
+	margin: 0.4em 0 0.8em 0;
+}
+
+.patchnotes-pager:empty {
+	display: none;
+}
+
+.patchnotes-pager-bottom {
+	justify-content: center;
+	margin-top: 1.2em;
+}
+
+.patchnotes-range {
+	color: #999;
+	font-size: 90%;
+	font-variant-numeric: tabular-nums;
+}
+
+.patchnotes-pager button,
+.patchnotes-status button,
+.patchnote-head button {
+	padding: 0.35em 0.9em;
+	font: inherit;
+	font-size: 95%;
+	color: #ddd;
+	background: #2b2b2b;
+	border: 1px solid #555;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.patchnotes-pager button:hover,
+.patchnotes-pager button:focus-visible,
+.patchnotes-status button:hover,
+.patchnotes-status button:focus-visible,
+.patchnote-head button:hover,
+.patchnote-head button:focus-visible {
+	border-color: #E88104;
+	color: #fff;
+	outline: none;
+}
+
+.patchnotes-pager-bottom .patchnotes-older {
+	padding: 0.5em 1.4em;
+	font-weight: bold;
+}
+
+.patchnotes-status {
+	margin: 0.6em 0;
+	color: #aaa;
+}
+
+.patchnotes-status[hidden] {
+	display: none;
+}
+
+.patchnotes-status .patchnotes-retry {
+	margin-left: 0.4em;
+}
+
+.patchnotes-notice,
+.patchnotes-empty {
+	margin: 0 0 1em 0;
+	padding: 0.5em 0.8em;
+	color: #ccc;
+	background: rgba(255, 255, 255, 0.05);
+	border-left: 3px solid #8a5a14;
+}
+
+/* ---- one update ---- */
+/* a clear gap between updates, so a reader scrolling on sees where one ends: more than three lines' worth (the
+   maintainer asked for at least three <br>s) */
+.patchnote {
+	margin: 0 0 4.5em 0;
+	padding: 0.6em 1.1em 0.9em 1.1em;
+	background: rgba(0, 0, 0, 0.28);
+	border: 1px solid #3a3a3a;
+	border-radius: 6px;
+}
+
+.patchnote-target {
+	border-color: #8a5a14;
+	box-shadow: 0 0 0 1px #8a5a14, 0 0 12px rgba(232, 129, 4, 0.25);
+}
+
+.patchnote-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.2em 0.8em;
+	padding-bottom: 0.3em;
+	border-bottom: 1px solid #333;
+}
+
+.patchnote-title {
+	margin: 0;
+	font-size: 200%;
+	font-weight: bolder;
+	line-height: 1.2;
+	overflow-wrap: anywhere;
+	color: #fff;
+}
+
+/* the date beside a title (YYYY-MM-DD); an update without a title is headed by its date instead */
+.patchnote-date {
+	color: #9aa;
+	font-size: 184%;
+	font-variant-numeric: tabular-nums;
+}
+
+.patchnote-title time {
+	font-variant-numeric: tabular-nums;
+}
+
+/* the update's tags (front matter tags:; "Announcement" on a server announcement) */
+.patchnote-tags {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-self: center;
+	gap: 0.3em;
+}
+
+.patchnote-tag {
+	padding: 0.05em 0.6em;
+	font-size: 75%;
+	color: #bcd;
+	background: rgba(38, 179, 247, 0.12);
+	border: 1px solid rgba(38, 179, 247, 0.35);
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.patchnote-summary {
+	margin: 0.6em 0 0.2em 0;
+	font-size: 108%;
+	line-height: 1.45;
+	color: #eee;
+}
+
+/* the Share button (shareLinks.js) at the header's right.  Its "Link copied" note (or, when copying failed, the link
+   to copy by hand) is placed to the button's LEFT, out of the flow, so clicking Share moves nothing. */
+.patchnote-share-wrap {
+	position: relative;
+	margin-left: auto;
+	align-self: center;
+}
+
+.patchnote-head .patchnote-share {
+	font-size: 80%;
+}
+
+.patchnote-share-wrap .share-link-note {
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	transform: translateY(-50%);
+	z-index: 3;
+	margin: 0 0.5em 0 0;
+	padding: 0.1em 0.5em;
+	background: #1d1d1d;
+	border: 1px solid #444;
+	border-radius: 4px;
+	line-height: 1.4;
+}
+
+/* ---- the notes (server-rendered Markdown) ---- */
+.patchnote-body {
+	line-height: 1.5;
+	overflow-wrap: anywhere;
+}
+
+.patchnote-body > :first-child {
+	margin-top: 0.6em;
+}
+
+.patchnote-body > :last-child {
+	margin-bottom: 0;
+}
+
+.patchnote-body p {
+	margin: 0.6em 0;
+}
+
+.patchnote-body ul,
+.patchnote-body ol {
+	margin: 0.5em 0;
+	padding-left: 1.5em;
+}
+
+.patchnote-body li {
+	margin: 0.25em 0;
+}
+
+.patchnote-body h1,
+.patchnote-body h2,
+.patchnote-body h3,
+.patchnote-body h4 {
+	margin: 0.9em 0 0.3em 0;
+	color: #f0b35a;
+	font-size: 1.08em;
+}
+
+.patchnote-body h1,
+.patchnote-body h2 {
+	font-size: 1.15em;
+}
+
+.patchnote-body a:link,
+.patchnote-body a:visited {
+	color: #E88104;
+}
+
+.patchnote-body a:hover {
+	color: #ffa53a;
+}
+
+.patchnote-body code {
+	padding: 0 0.25em;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 3px;
+	font-size: 92%;
+}
+
+.patchnote-body pre {
+	padding: 0.6em 0.8em;
+	background: rgba(0, 0, 0, 0.35);
+	border: 1px solid #333;
+	border-radius: 4px;
+	overflow-x: auto;
+	white-space: pre;
+}
+
+.patchnote-body pre code {
+	padding: 0;
+	background: none;
+}
+
+.patchnote-body blockquote {
+	margin: 0.6em 0;
+	padding: 0.1em 0.9em;
+	border-left: 3px solid #555;
+	color: #ccc;
+}
+
+.patchnote-body hr {
+	border: 0;
+	border-top: 1px solid #3a3a3a;
+	margin: 1em 0;
+}
+
+.patchnote-body table {
+	border-collapse: collapse;
+	margin: 0.6em 0;
+}
+
+.patchnote-body th,
+.patchnote-body td {
+	padding: 0.2em 0.6em;
+	border: 1px solid #3a3a3a;
+	text-align: left;
+}
+
+/* [[card links]]: the hall's .cardHint (a click opens the card display), marked as a card with a dotted underline */
+.patchnote-body .patchnote-card {
+	color: #8fb4ff;
+	text-decoration: underline dotted rgba(143, 180, 255, 0.7);
+	text-underline-offset: 0.18em;
+	cursor: zoom-in;
+	border-radius: 2px;
+}
+
+.patchnote-body .patchnote-card:hover {
+	color: #c0d6ff;
+	text-decoration-style: solid;
+}
+
+.patchnote-body .patchnote-card:focus-visible {
+	outline: 2px solid #E88104;
+	outline-offset: 1px;
+}
+
+/* screenshots: readable thumbnails (several in one paragraph sit in a row); a click opens the lightbox */
+.patchnote-body img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+	margin: 0.2em 0.4em 0.2em 0;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #111;
+	cursor: zoom-in;
+}
+
+.patchnote-body img:not([width]):not([height]) {
+	max-width: min(100%, 24em);
+	max-height: 13em;
+}
+
+.patchnote-body a img {
+	cursor: pointer;
+}
+
+.patchnote-body img:hover {
+	border-color: #8a5a14;
+}
+
+/* culture icons (:isengard: / [isengard], CultureIcons.java): the PC Errata Culture column's icons, inline at the text's
+   size, each at its own shape (Shire is 49 x 20).  Not screenshots: no frame, no lightbox. */
+.patchnotes .patchnote-body img.patchnote-culture[src],
+.patchnotes .patchnote-summary img.patchnote-culture[src] {
+	display: inline;
+	height: 1.15em;
+	width: auto;
+	max-width: none;
+	max-height: none;
+	margin: 0 0.1em;
+	padding: 0;
+	vertical-align: -0.22em;
+	border: 0;
+	border-radius: 0;
+	background: none;
+	cursor: default;
+}
+
+/* twilight icons ((1) / :1twilight:): the SVGs are drawn in black (fill: currentColor, which an <img> can't inherit), so
+   on this dark page they are turned white: a white disc with the digit cut out */
+.patchnotes img.patchnote-culture[src*="/twilight_"] {
+	filter: invert(1);
+}
+
+/* <details><summary>: the summary is a button, in the hall's jQuery UI button look (default, hover / focus, and
+   pressed while open), with a triangle that turns when it opens */
+.patchnote-body details {
+	margin: 0.6em 0;
+}
+
+.patchnote-body details > summary {
+	display: inline-block;
+	list-style: none;
+	padding: 0.35em 1em 0.35em 0.8em;
+	border: 1px solid #444444;
+	border-radius: 6px;
+	background: #222222 url("../../js/jquery/jquery-ui-1.13.2.custom/images/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
+	color: #eeeeee;
+	line-height: normal;
+	cursor: pointer;
+	user-select: none;
+}
+
+.patchnote-body details > summary::-webkit-details-marker {
+	display: none;
+}
+
+.patchnote-body details > summary::before {
+	content: "\25B8";
+	display: inline-block;
+	width: 0.8em;
+	margin-right: 0.35em;
+	transition: transform 0.15s ease;
+}
+
+.patchnote-body details[open] > summary::before {
+	transform: rotate(90deg);
+}
+
+.patchnote-body details > summary:hover,
+.patchnote-body details > summary:focus-visible {
+	border-color: #0b93d5;
+	background: #003147 url("../../js/jquery/jquery-ui-1.13.2.custom/images/ui-bg_highlight-soft_33_003147_1x100.png") 50% 50% repeat-x;
+	color: #ffffff;
+	outline: none;
+}
+
+.patchnote-body details > summary:focus-visible {
+	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
+}
+
+.patchnote-body details[open] > summary {
+	margin-bottom: 0.4em;
+	border-color: #26b3f7;
+	background: #0972a5 url("../../js/jquery/jquery-ui-1.13.2.custom/images/ui-bg_highlight-hard_20_0972a5_1x100.png") 50% 50% repeat-x;
+	color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.patchnote-body details > summary::before {
+		transition: none;
+	}
+}
+
+/* ---- lightbox ---- */
+.patchnotes-lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 2000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2.5em;
+	box-sizing: border-box;
+	/* light enough that the hall shows through: this is an overlay, not a new page */
+	background: rgba(0, 0, 0, 0.62);
+	font-family: Arial, Helvetica, sans-serif;
+	cursor: zoom-out;
+}
+
+.patchnotes-lightbox-figure {
+	margin: 0;
+	max-width: 100%;
+	max-height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.patchnotes-lightbox-figure img {
+	max-width: 100%;
+	max-height: calc(100vh - 7em);
+	object-fit: contain;
+	border: 1px solid #555;
+	border-radius: 4px;
+	box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+	background: #111;
+	cursor: default;
+}
+
+.patchnotes-lightbox-figure figcaption {
+	color: #ddd;
+	text-align: center;
+}
+
+.patchnotes-lightbox-close {
+	position: absolute;
+	top: 0.5em;
+	right: 0.7em;
+	width: 2em;
+	height: 2em;
+	font-size: 1.5em;
+	line-height: 1;
+	color: #ddd;
+	background: rgba(40, 40, 40, 0.9);
+	border: 1px solid #666;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.patchnotes-lightbox-close:hover,
+.patchnotes-lightbox-close:focus-visible {
+	border-color: #E88104;
+	color: #fff;
+	outline: none;
+}
+
+/* ==== end patch-notes ==== */

@@ -141,33 +141,6 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
     }
 
     @Override
-    public List<DBDefs.GameHistory> getGameHistoryForFormat(String format, int count)  {
-        try {
-
-            var db = _dbAccess.openDB();
-
-            try (org.sql2o.Connection conn = db.open()) {
-                String sql = """
-                        SELECT
-                            winner, winnerId, loser, loserId, win_reason, lose_reason, win_recording_id, lose_recording_id, 
-                            format_name, tournament, winner_deck_name, loser_deck_name, start_date, end_date, replay_version
-                        FROM game_history
-                        WHERE format_name LIKE :format
-                        ORDER BY end_date DESC
-                        LIMIT :count
-                        """;
-
-                return conn.createQuery(sql)
-                        .addParameter("format", "%" + format + "%")
-                        .addParameter("count", count)
-                        .executeAndFetch(DBDefs.GameHistory.class);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to retrieve game history by format", ex);
-        }
-    }
-
-    @Override
     public List<DBDefs.GameHistory> getGamesForTournament(String tournamentName)  {
         try {
 
@@ -269,6 +242,32 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
         }
     }
 
+    @Override
+    public int getBotGamesPlayedCount(ZonedDateTime from, ZonedDateTime to) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                // bot accounts are named ~something (DbPlayerDAO.registerBot); players' names cannot contain ~
+                String sql = """
+                        SELECT COUNT(*)
+                        FROM game_history
+                        WHERE end_date BETWEEN :from AND :to
+                            AND (winner LIKE '~%' OR loser LIKE '~%');
+                        """;
+                Integer result = conn.createQuery(sql)
+                        .addParameter("from", from.format(DateUtils.DateFormat))
+                        .addParameter("to", to.format(DateUtils.DateFormat))
+                        .executeScalar(Integer.class);
+
+                return Objects.requireNonNullElse(result, -1);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve count of bot games played", ex);
+        }
+    }
+
+    // Excludes bot games (bot accounts start with '~'); Server Stats reports them separately (getBotGamesPlayedCount).
     public List<DBDefs.FormatStats> GetAllGameFormatData(ZonedDateTime from, ZonedDateTime to) {
         try {
             var db = _dbAccess.openDB();
@@ -281,6 +280,7 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         	,CASE WHEN tournament IS NULL OR tournament LIKE 'Casual %' THEN 1 ELSE 0 END AS Casual
                         FROM game_history
                         WHERE end_date BETWEEN :from AND :to
+                          AND winner NOT LIKE '~%' AND loser NOT LIKE '~%'
                         GROUP BY format_name, CASE WHEN tournament IS NULL OR tournament LIKE 'Casual %' THEN 1 ELSE 0 END
                         """;
                 List<DBDefs.FormatStats> result = conn.createQuery(sql)
@@ -367,6 +367,82 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
             }
         } catch (SQLException exp) {
             throw new RuntimeException("Unable to get count of games played", exp);
+        }
+    }
+
+    // ---- tabs-account: filtered, paged game history (SQL built by GameHistoryQuery, values bound as parameters) ----
+
+    @Override
+    public List<DBDefs.GameHistory> getGameHistoryForPlayer(Player player, GameHistoryFilter filter, int start, int count) {
+        GameHistoryQuery query = GameHistoryQuery.forPlayer(player.getName(), filter);
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                Query q = conn.createQuery(query.selectSql());
+                bind(q, query.parameters());
+                return q.addParameter("start", start)
+                        .addParameter("count", count)
+                        .executeAndFetch(DBDefs.GameHistory.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve filtered game history for player", ex);
+        }
+    }
+
+    @Override
+    public int getGameHistoryForPlayerCount(Player player, GameHistoryFilter filter) {
+        GameHistoryQuery query = GameHistoryQuery.forPlayer(player.getName(), filter);
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                Query q = conn.createQuery(query.countSql());
+                bind(q, query.parameters());
+                Integer result = q.executeScalar(Integer.class);
+                return Objects.requireNonNullElse(result, 0);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to count filtered game history for player", ex);
+        }
+    }
+
+    @Override
+    public List<String> getGameHistoryFormats(Player player) {
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                return conn.createQuery(GameHistoryQuery.formatsSql())
+                        .addParameter("me", player.getName())
+                        .executeScalarList(String.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve game history formats for player", ex);
+        }
+    }
+
+    @Override
+    public List<String> getGameHistoryEvents(Player player, int limit) {
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                return conn.createQuery(GameHistoryQuery.eventsSql())
+                        .addParameter("me", player.getName())
+                        .addParameter("limit", limit)
+                        .executeScalarList(String.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve game history events for player", ex);
+        }
+    }
+
+    private static void bind(Query query, java.util.Map<String, Object> parameters) {
+        for (var entry : parameters.entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof String str)
+                query.addParameter(entry.getKey(), str);
+            else if (value instanceof Integer i)
+                query.addParameter(entry.getKey(), i);
+            else
+                query.addParameter(entry.getKey(), value);
         }
     }
 }

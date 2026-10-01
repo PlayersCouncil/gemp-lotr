@@ -85,7 +85,9 @@ public class DBDefs {
         public String password;
         public String type;
         public Integer last_login_reward;
-        public Integer banned_until;
+        // Epoch milliseconds (column is decimal(20,0)). Must be a Long: sql2o narrows the value with
+        // Number.intValue() when the field is an Integer, which turned every temp ban into a date within ~25 days of 1 Jan 1970 (always in the past).
+        public Long banned_until;
         public String create_ip;
         public String last_ip;
 

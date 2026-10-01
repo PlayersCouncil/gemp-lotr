@@ -2,6 +2,7 @@ package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.io.IOException;
@@ -28,9 +29,15 @@ public interface TournamentQueue {
 
     boolean process() throws SQLException, IOException ;
 
-    void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException;
+    /**
+     * Signs the player up (taking the entry cost).
+     * @throws HallException with a message for the player when they were not signed up: already in the queue, sign-up
+     * not open, queue full, not enough currency...
+     */
+    void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException, HallException;
 
-    void joinPlayer(Player player) throws SQLException, IOException;
+    /** As {@link #joinPlayer(Player, LotroDeck)}, for queues that do not take a deck at sign-up. */
+    void joinPlayer(Player player) throws SQLException, IOException, HallException;
 
     void leavePlayer(Player player) throws SQLException, IOException;
 

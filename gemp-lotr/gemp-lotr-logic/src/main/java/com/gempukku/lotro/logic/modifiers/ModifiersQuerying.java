@@ -168,6 +168,14 @@ public interface ModifiersQuerying {
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 
+    /**
+     * As {@link #hasFlagActive(LotroGame, ModifierFlag)}, but also answers true for flags that were declared for this
+     * one player (the {@code player} field on an {@code AddModifierFlag} modifier, e.g. the Race to Mount Doom
+     * meta-site modifiers whose text says "you"/"your").  A flag declared without a player is global and is reported
+     * for every player; a flag declared with a player is deliberately invisible to the player-agnostic query above.
+     */
+    boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag, String playerId);
+
     boolean canReplaceSite(LotroGame game, String playerId, PhysicalCard siteToReplace);
 
     boolean canPlaySite(LotroGame game, String playerId);
@@ -187,4 +195,8 @@ public interface ModifiersQuerying {
     int getPotentialDiscount(LotroGame game, PhysicalCard playedCard);
 
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard playedCard);
+
+    boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card);
+
+    boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId);
 }

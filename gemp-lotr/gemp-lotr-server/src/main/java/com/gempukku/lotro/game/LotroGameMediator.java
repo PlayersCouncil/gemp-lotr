@@ -22,6 +22,8 @@ import com.gempukku.lotro.packs.PackOpener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.bots.BotGameStateListener;
 import com.gempukku.lotro.bots.BotPlayer;
+import com.gempukku.lotro.bots.AssignmentLegality;
+import com.gempukku.lotro.bots.BotDecisionFallback;
 import com.gempukku.lotro.bots.BotService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -121,7 +123,7 @@ public class LotroGameMediator {
         }
 
         if (_botPlayer != null) {
-            _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this));
+            _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this, new AssignmentLegality(_lotroGame)));
         }
 
         _userFeedback.setGame(_lotroGame);
@@ -487,7 +489,11 @@ public class LotroGameMediator {
 
                     try {
                         _userFeedback.participantDecided(botName);
-                        awaitingDecision.decisionMade(answer);
+                        // A rejected (or missing) bot answer falls back to a valid default before conceding (#1097)
+                        String accepted = BotDecisionFallback.decide(_lotroGame, botName, awaitingDecision, answer);
+                        if (!accepted.equals(answer))
+                            LOG.warn("Bot " + botName + " game=" + _gameId + " decision=\"" + awaitingDecision.getText()
+                                    + "\": answer \"" + answer + "\" was rejected, used fallback \"" + accepted + "\"");
 
                         // Decision successfully made, add the time to user clock
                         addTimeSpentOnDecisionToUserClock(botName);

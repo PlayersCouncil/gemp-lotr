@@ -4,6 +4,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.io.IOException;
@@ -223,28 +224,56 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     }
 
     @Override
-    public final synchronized void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException {
-        if (!_players.contains(player.getName()) && isJoinable()) {
-            if (_tournamentInfo._params.cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost)) {
-                _players.add(player.getName());
-                regeneratePlayerList();
-                if (_tournamentInfo._params.requiresDeck)
-                    _playerDecks.put(player.getName(), deck);
-            }
-        }
+    public final synchronized void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException, HallException {
+        signUp(player);
+        if (_tournamentInfo._params.requiresDeck)
+            _playerDecks.put(player.getName(), deck);
     }
 
     @Override
-    public final synchronized void joinPlayer(Player player) throws SQLException, IOException {
-        if (_tournamentInfo._params.requiresDeck) { // Only for limited games
-            return;
-        }
-        if (!_players.contains(player.getName()) && isJoinable()) {
-            if (_tournamentInfo._params.cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost)) {
-                _players.add(player.getName());
-                regeneratePlayerList();
-            }
-        }
+    public final synchronized void joinPlayer(Player player) throws SQLException, IOException, HallException {
+        if (_tournamentInfo._params.requiresDeck) // this queue takes a deck at sign-up
+            throw new HallException("You need to choose a deck to join " + getTournamentQueueName() + ".");
+        signUp(player);
+    }
+
+    // Adds the player, taking the entry cost, or explains why not.  Callers hold the lock.
+    private void signUp(Player player) throws SQLException, IOException, HallException {
+        if (_players.contains(player.getName()))
+            throw new HallException("You have already joined that queue");
+        if (!isJoinable())
+            throw new HallException(getJoinRefusal());
+        int cost = _tournamentInfo._params.cost;
+        if (cost > 0 && !collectionsManager.removeCurrencyFromPlayerCollection("Joined " + getTournamentQueueName() + " queue", player, _currencyCollection, cost))
+            throw new HallException("You don't have enough currency to join " + getTournamentQueueName() + ": the entry cost is " + describeCost(cost) + ".");
+        _players.add(player.getName());
+        regeneratePlayerList();
+    }
+
+    /**
+     * Why {@link #isJoinable()} is false right now, as a message for the player.  Queue types override this with
+     * their own reasons (sign-up time, ready check...); the default covers a full queue.
+     */
+    protected String getJoinRefusal() {
+        int max = _tournamentInfo._params.maximumPlayers;
+        if (max >= 0 && _players.size() >= max)
+            return describeFull(max);
+        return getTournamentQueueName() + " is not accepting players right now.";
+    }
+
+    protected String describeFull(int maxPlayers) {
+        return getTournamentQueueName() + " is full (" + maxPlayers + " players).";
+    }
+
+    /** "2 gold 50 silver"-style text for an amount of currency in silver. */
+    public static String describeCost(int cost) {
+        int gold = cost / 100;
+        int silver = cost % 100;
+        if (gold > 0 && silver > 0)
+            return gold + " gold " + silver + " silver";
+        if (gold > 0)
+            return gold + " gold";
+        return silver + " silver";
     }
 
     @Override
@@ -293,6 +322,14 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         } else {
             return _playerList;
         }
+    }
+
+    /**
+     * The players waiting in the queue, in sign-up order (a copy).  Unlike {@link #getPlayerList()}, never hidden for
+     * competitive queues: this is for admin tools (Prizes &gt; Add items "Load"), not for display to players.
+     */
+    public final synchronized List<String> getSignedUpPlayers() {
+        return new ArrayList<>(_players);
     }
 
     @Override

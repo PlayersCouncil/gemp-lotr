@@ -348,6 +348,12 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag, String playerId) {
+        // Flags that are not scoped to a player apply to everyone.
+        return hasFlagActive(game, modifierFlag);
+    }
+
+    @Override
     public boolean isSiteReplaceable(LotroGame game, String playerId) {
         return true;
     }
@@ -424,6 +430,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public boolean loosensUniqueness(LotroGame game, PhysicalCard card) {
+        return false;
+    }
+
+    @Override
     public int getPotentialDiscount(LotroGame game, PhysicalCard discountCard) {
         return 0;
     }
@@ -431,5 +442,15 @@ public abstract class AbstractModifier implements Modifier {
     @Override
     public void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard card) {
 
+    }
+
+    @Override
+    public boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card) {
+        return false;
+    }
+
+    @Override
+    public boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId) {
+        return false;
     }
 }

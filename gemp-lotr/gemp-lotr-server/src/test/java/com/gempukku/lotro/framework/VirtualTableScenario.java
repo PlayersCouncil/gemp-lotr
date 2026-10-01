@@ -99,6 +99,20 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
             String format,
             String freepsMetaSiteId, String shadowMetaSiteId,
             Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, freepsMetaSiteId, shadowMetaSiteId, bidHandler, null);
+    }
+
+    /**
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null.
+     *                         Only meaningful when a meta-site id was supplied.
+     */
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
 
         if(siteIDs == null ) {
             siteIDs = KingSites;
@@ -140,7 +154,7 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
         decks.get(P1).setRing(ringID);
         decks.get(P2).setRing(ringID);
 
-        InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId);
+        InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId, playerPlacements);
 
         //We want to handle this at this time before the game start process because certain game properties aren't
         // available until the player order has been determined.
@@ -297,6 +311,20 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
      * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
      */
     public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId) {
+        InitializeGameWithDecks(decks, formatName, freepsMetaSiteId, shadowMetaSiteId, null);
+    }
+
+    /**
+     * Starts up a game of LOTR-TCG with the given decks and format.  This is used internally but may have use in certain
+     * complicated test scenarios.  The vast majority of the time you do not need this.
+     * @param decks A map of decks for each player in the game; key is the player name.
+     * @param formatName Name of the format this table should be following.
+     * @param freepsMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null
+     * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null
+     */
+    public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) {
         _userFeedback = new DefaultUserFeedback();
 
         var format = _formatLibrary.getFormat(formatName);
@@ -310,7 +338,7 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
             if(shadowMetaSiteId != null) {
                 playerMetaSites.put(P2, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
             }
-            info = new RTMDGameInfo(playerMetaSites);
+            info = new RTMDGameInfo(playerMetaSites, playerPlacements);
         }
 
         _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary, info);

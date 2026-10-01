@@ -978,10 +978,11 @@ var GempLotrGameUI = Class.extend({
         var alertHeight = 180;
 
         // The chat box shares the vertical band of the bottom player's hand (spectators have no hand: fixed height)
+        var minChatBoxHeight = 170;
         var chatHeight = 200;
         if (!this.spectatorMode) {
             var handTop = padding * 6 + yScales[5] * heightPerScale;
-            chatHeight = height - padding - handTop;
+            chatHeight = Math.max(minChatBoxHeight + padding, height - padding - handTop);
         }
 
         var assignmentsCount = this.assignGroupDivs.length + ((this.skirmishGroupDiv != null) ? 1 : 0);
@@ -1791,20 +1792,77 @@ var GempLotrGameUI = Class.extend({
         if (this.revealedHandDialogs[playerId])
             return;
 
-        this.createPile(playerId, "Revealed Hand", "revealedHandDialogs", "revealedHandGroups");
+        // Our own hand stays in the hand area; its window shows copies of it, i.e. what everyone else can see.
+        var ownHand = this.isOwnHand(playerId);
+        this.createPile(playerId, ownHand ? "Your Revealed Hand" : "Revealed Hand", "revealedHandDialogs", "revealedHandGroups");
 
         var that = this;
         var playerIndex = this.getPlayerIndex(playerId);
         if (playerIndex >= 0) {
-            $("#hand" + playerIndex).addClass("clickable").click(
+            $("#hand" + playerIndex).addClass("clickable revealedHand")
+                .attr("title", ownHand
+                    ? "Your hand is revealed to your opponent and spectators. Click to see it as they do."
+                    : "This hand is revealed. Click to view it.")
+                .click(
                 function () {
                     var dialog = that.revealedHandDialogs[playerId];
                     var group = that.revealedHandGroups[playerId];
+                    if (ownHand)
+                        that.syncOwnRevealedHand(true);
                     openSizeDialog(dialog);
                     that.dialogResize(dialog, group);
                     group.layoutCards();
                 });
         }
+    },
+
+    isOwnHand: function(playerId) {
+        return !this.spectatorMode && playerId == this.bottomPlayerId;
+    },
+
+    // Called with every game-stats update: the server flags each player whose hand is revealed to everyone, so the
+    // hand link is shown to every viewer - the owner, the opponent and spectators - even while that hand is empty.
+    setRevealedHands: function(playerIds) {
+        if (this.allPlayerIds == null)
+            return;
+        for (var i = 0; i < playerIds.length; i++)
+            this.ensureRevealedHandDialog(playerIds[i]);
+        this.syncOwnRevealedHand(false);
+    },
+
+    ownRevealedHandSignature: null,
+
+    // Refreshes the copies in "Your Revealed Hand" from the cards in our hand area (only while its window is open,
+    // unless forced because it is about to open).
+    syncOwnRevealedHand: function(force) {
+        if (this.spectatorMode || this.bottomPlayerId == null)
+            return;
+        var playerId = this.bottomPlayerId;
+        var dialog = this.revealedHandDialogs[playerId];
+        if (!dialog || (!force && !dialog.dialog("isOpen")))
+            return;
+
+        var handCards = [];
+        $("#main").children(".card").each(function () {
+            var card = $(this).data("card");
+            if (card != null && card.zone == "HAND" && card.owner == playerId)
+                handCards.push(card);
+        });
+        var signature = $.map(handCards, function (card) { return card.cardId + ":" + card.blueprintId; }).join(",");
+        if (signature === this.ownRevealedHandSignature && dialog.children(".card").length == handCards.length)
+            return;
+        this.ownRevealedHandSignature = signature;
+
+        dialog.children(".card").remove();
+        for (var i = 0; i < handCards.length; i++) {
+            var original = handCards[i];
+            // "temp" ids are never looked up on the server (see displayCardInfo) and never match a real card
+            var copy = new Card(original.blueprintId, original.testingText, original.backSideTestingText, "HAND",
+                "tempRevealed" + original.cardId, playerId);
+            dialog.append(this.createCardDiv(copy));
+        }
+        if (dialog.dialog("isOpen"))
+            this.revealedHandGroups[playerId].layoutCards();
     },
 
     getDecisionParameter: function (decision, name) {

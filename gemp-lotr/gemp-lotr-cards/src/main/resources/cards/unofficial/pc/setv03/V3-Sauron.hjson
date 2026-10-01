@@ -948,14 +948,117 @@
 //		}
 //	}
 
+//	103_97: {
+//		cardInfo: {
+//			//id: 103_97.1
+//			parent: 103_97
+//			variant: ERRATA
+//			variantPath: errata/pc
+//			revision: 1
+//			image: sets/V3/LOTR-ENV3S097.1_card.jpg
+//			collInfo: V3_97
+//			rarity: _
+//		}
+//		title: Ominous Sky
+//		unique: 3
+//		side: Shadow
+//		culture: Sauron
+//		twilight: 2
+//		type: Condition
+//		keywords: [
+//			Twilight
+//			Support Area
+//		]
+//		effects: [
+//			{
+//				type: Trigger
+//				optional: true
+//				trigger: {
+//					type: Played
+//					player: you
+//					filter: or(Orc, Troll)
+//				}
+//				cost: {
+//					type: Hinder
+//					select: self
+//				}
+//				effect: {
+//					type: AddTwilight
+//					amount: 1
+//				}
+//			}
+//			{
+//				type: Activated
+//				phase: [
+//					Shadow
+//					Regroup
+//				]
+//				cost: {
+//					type: RemoveTwilight
+//					amount: 2
+//				}
+//				effect: [
+//					{
+//						type: ChooseCardsFromDiscard
+//						select: choose(side(Shadow), condition)
+//						memorize: chosenCondition
+//					}
+//					{
+//						type: If
+//						check: {
+//							type: MemoryMatches
+//							memory: chosenCondition
+//							filter: twilight, Playable
+//						}
+//						true: [
+//							{
+//								type: Optional
+//								text: Would you like to play {chosenCondition}?
+//								effect: {
+//									type: PlayCardFromDiscard
+//									select: choose(side(Shadow), condition)
+//									memorize: chosenCondition
+//								}
+//							}
+//						]
+//					}
+//
+//					#We only shuffle the card if the player
+//					#didn't decide to play it
+//					{
+//						type: If
+//						check: {
+//							type: MemoryMatches
+//							memory: chosenCondition
+//							filter: Zone(DISCARD)
+//						}
+//						true: {
+//							type: ShuffleCardsFromDiscardIntoDrawDeck
+//							select: memory(chosenCondition)
+//						}
+//					}
+//				]
+//			}
+//		]
+//		gametext: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
+//		lore: "'No...not at sunrise. The Darkness has begun. There will be no dawn.'"
+//		promotext: ""
+//		alts: {
+//			promos: {
+//			}
+//			errata: {
+//			}
+//		}
+//	}
+
 	103_97: {
 		cardInfo: {
-			//id: 103_97.1
+			//id: 103_97.2
 			parent: 103_97
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: sets/V3/LOTR-ENV3S097.1_card.jpg
+			revision: 2
+			image: sets/V3/LOTR-ENV3S097.2_card.jpg
 			collInfo: V3_97
 			rarity: _
 		}
@@ -972,20 +1075,26 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: Played
 					player: you
 					filter: or(Orc, Troll)
 				}
-				cost: {
-					type: Hinder
-					select: self
+				requires: {
+					type: PerPhaseLimit
+					limit: 1
 				}
-				effect: {
-					type: AddTwilight
-					amount: 1
-				}
+				effect: [
+					{
+						type: AddTwilight
+						amount: 1
+					}
+					{
+						type: IncrementPerPhaseLimit
+						limit: 1
+					}
+				]
 			}
 			{
 				type: Activated
@@ -1040,7 +1149,7 @@
 				]
 			}
 		]
-		gametext: Twilight. Each time you play an Orc or Troll, you may hinder this to add (1).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
+		gametext: Twilight. Each time you play an Orc or Troll, add (1) (limit once per phase).<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) to choose a Shadow condition from your discard pile. Shuffle it into your draw deck (or you may play it if it is twilight).
 		lore: "'No...not at sunrise. The Darkness has begun. There will be no dawn.'"
 		promotext: ""
 		alts: {

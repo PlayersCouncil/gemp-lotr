@@ -11,25 +11,13 @@ import java.util.HashMap;
 import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
 import static org.junit.Assert.*;
 
-/**
- * 93_1: Skirmish: Play a possession on your minion.
- *
- * Test cards:
- * - Goblin Scimitar (1_180): Moria Hand weapon, plays on Moria Orc
- * - Goblin Backstabber (1_174): Moria Orc minion (twilight 1)
- * - Goblin Runner (1_178): Moria Orc minion (twilight 1)
- */
 public class Card_93_001_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Goblin Backstabber (1_174): non-unique Moria Orc minion
-		put("backstabber", "1_174");
-		// Goblin Runner (1_178): non-unique Moria Orc minion
-		put("runner", "1_178");
-		// Goblin Scimitar (1_180): Hand weapon, bears on Moria Orc
-		put("scimitar", "1_180");
-		// Aragorn, Ranger of the North (1_89): Gondor companion
-		put("aragorn", "1_89");
+		put("backstabber", "1_174"); // Goblin Backstabber: non-unique Moria Orc minion
+		put("runner", "1_178"); // Goblin Runner: non-unique Moria Orc minion
+		put("scimitar", "1_180"); // Goblin Scimitar: Hand weapon, bears on Moria Orc
+		put("aragorn", "1_89"); // Aragorn, Ranger of the North: Gondor companion
 	}};
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -52,6 +40,12 @@ public class Card_93_001_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_1
+		 * Type: MetaSite
+		 * Game Text: Skirmish: Play a possession on your minion.
+		 */
 		var scn = GetShadowScenario();
 		var card = scn.GetShadowCard("mod");
 		assertEquals("Race Text 93_1", card.getBlueprint().getTitle());

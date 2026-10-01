@@ -328,14 +328,90 @@
 //		}
 //	}
 
+//	103_65: {
+//		cardInfo: {
+//			//id: 103_65.1
+//			parent: 103_65
+//			variant: ERRATA
+//			variantPath: errata/pc
+//			revision: 1
+//			image: sets/V3/LOTR-ENV3S065.1_card.jpg
+//			collInfo: V3_65
+//			rarity: _
+//		}
+//		title: Cover of Darkness
+//		subtitle: Omen of Gloom
+//		unique: 2
+//		side: Shadow
+//		culture: Wraith
+//		twilight: 2
+//		type: Condition
+//		keywords: [
+//			Twilight
+//			Support Area
+//		]
+//		effects: [
+//			{
+//				type: ExtraCost
+//				cost: {
+//					type: Hinder
+//					select: choose(twilight,condition)
+//					count: 2
+//				}
+//			}
+//			{
+//				type: Activated
+//				phase: Shadow
+//				cost: [
+//					{
+//						type: Hinder
+//						select: self
+//					}
+//					{
+//						type: RemoveTwilight
+//						amount: 1
+//					}
+//				]
+//				effect: {
+//					type: PutCardsFromDeckIntoHand
+//					select: choose(twilight)
+//					shuffle: true
+//					reveal: true
+//					showAll: true
+//				}
+//			}
+//			{
+//				type: Activated
+//				phase: Regroup
+//				cost: {
+//					type: Hinder
+//					select: choose(twilight)
+//				}
+//				effect: {
+//					type: AddTwilight
+//					amount: 1
+//				}
+//			}
+//		]
+//		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Shadow: Hinder this condition and remove (1) to take a twilight card into hand from your draw deck.<br>Regroup: Hinder a twilight card to add (1).
+//		lore: "'But the Lord of the City, Beregond, has fallen before his city is taken. He is fey and dangerous.'"
+//		promotext: ""
+//		alts: {
+//			promos: {
+//			}
+//			errata: {
+//			}
+//		}
+//	}
+
 	103_65: {
 		cardInfo: {
-			//id: 103_65.1
+			//id: 103_65.2
 			parent: 103_65
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: sets/V3/LOTR-ENV3S065.1_card.jpg
+			revision: 2
+			image: sets/V3/LOTR-ENV3S065.2_card.jpg
 			collInfo: V3_65
 			rarity: _
 		}
@@ -360,24 +436,26 @@
 				}
 			}
 			{
-				type: Activated
-				phase: Shadow
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Killed
+					filter: your,minion
+					memorize: killedMinion
+				}
 				cost: [
-					{
-						type: Hinder
-						select: self
-					}
 					{
 						type: RemoveTwilight
 						amount: 1
 					}
+					{
+						type: Hinder
+						select: choose(twilight,condition)
+					}
 				]
 				effect: {
-					type: PutCardsFromDeckIntoHand
-					select: choose(twilight)
-					shuffle: true
-					reveal: true
-					showAll: true
+					type: ShuffleCardsFromDiscardIntoDrawDeck
+					select: memory(killedMinion)
 				}
 			}
 			{
@@ -393,7 +471,7 @@
 				}
 			}
 		]
-		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Shadow: Hinder this condition and remove (1) to take a twilight card into hand from your draw deck.<br>Regroup: Hinder a twilight card to add (1).
+		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Each time your minion is killed, you may remove (1) and hinder a twilight condition to shuffle that minion into your draw deck.<br>Regroup: Hinder a twilight card to add (1).
 		lore: "'But the Lord of the City, Beregond, has fallen before his city is taken. He is fey and dangerous.'"
 		promotext: ""
 		alts: {

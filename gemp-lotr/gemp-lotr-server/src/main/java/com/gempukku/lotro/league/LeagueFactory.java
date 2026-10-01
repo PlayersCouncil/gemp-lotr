@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * The single path for turning a league definition ({@link League.LeagueType} + {@link LeagueParams}) into a league:
@@ -39,6 +40,9 @@ public class LeagueFactory {
     private final LeagueDAO _leagueDao;
     private final LeagueService _leagueService;
     private PrizeService _prizeService;
+    private Random _raceRandom = new Random();
+    private volatile RTMDPathGenerator.Pool _racePool;
+    private volatile int _racePoolCards;
 
     /**
      * A validated definition together with the league it instantiates.  {@code params} is the definition as it will
@@ -171,7 +175,7 @@ public class LeagueFactory {
      * Fills in the parts of a definition that are derived rather than chosen: the league code (a timestamp, which
      * also keys the league's collection) and the collection name.
      */
-    private void applyDefaults(League.LeagueType type, LeagueParams params) {
+    private void applyDefaults(League.LeagueType type, LeagueParams params) throws LeagueDefinitionException {
         if (params.code == 0)
             params.code = System.currentTimeMillis();
 
@@ -197,6 +201,67 @@ public class LeagueFactory {
             params.prizeTiers = new ArrayList<>();
         // a blank campaign tag means "no campaign"
         params.campaign = StringUtils.isBlank(params.campaign) ? null : params.campaign.trim();
+
+        generateRacePath(type, params);
+    }
+
+    /**
+     * Rolls the race path of a definition that asked for one ({@code raceRandomizeEachInstance}), which is how a
+     * league schedule keeps its races fresh: the schedule stores the flag, and every league it materialises gets its
+     * own randomisation at that moment rather than a copy of one path chosen when the schedule was written.
+     * <p>
+     * The flag is cleared on the way out, so the league that is persisted holds an ordinary fixed path that an admin
+     * can still tweak (through the league editor) while the league has not started yet.  A definition without the
+     * flag - every hand-made league - is left exactly as it was.
+     */
+    private void generateRacePath(League.LeagueType type, LeagueParams params) throws LeagueDefinitionException {
+        if (type != League.LeagueType.RTMD || !params.raceRandomizeEachInstance)
+            return;
+
+        params.raceRandomizeEachInstance = false;
+
+        int length = params.racePathLength;
+        if (length <= 0)
+            length = (params.racePath == null || params.racePath.isEmpty())
+                    ? RTMDPathGenerator.DEFAULT_PATH_LENGTH : params.racePath.size();
+
+        var generated = RTMDPathGenerator.generate(racePool(), length,
+                params.raceIntensityFloor, params.raceIntensityCeiling, null, _raceRandom);
+        if (generated.isEmpty()) {
+            // nothing matched the intensity range (or no cards are loaded); fall back to whatever the definition
+            // already had, and say so plainly when it had nothing
+            if (params.racePath != null && !params.racePath.isEmpty())
+                return;
+            throw new LeagueDefinitionException("racePath", "No race path could be generated: no meta-site has an"
+                    + " intensity between " + params.raceIntensityFloor + " and " + params.raceIntensityCeiling + ".");
+        }
+
+        params.racePath = new ArrayList<>(generated.racePath());
+        params.raceVisualPath = new ArrayList<>(generated.raceVisualPath());
+        params.racePathLength = params.racePath.size();
+    }
+
+    /**
+     * The cards a generated path is drawn from.  Reading them means walking the whole blueprint library, and
+     * projecting a schedule's next few dozen occurrences prepares each of them, so the result is kept until the
+     * library's card count changes (which is what a card reload does).
+     */
+    private RTMDPathGenerator.Pool racePool() {
+        int cards = _cardLibrary == null ? 0 : _cardLibrary.getBaseCards().size();
+        var pool = _racePool;
+        if (pool == null || cards != _racePoolCards) {
+            pool = RTMDPathGenerator.loadPool(_cardLibrary);
+            _racePool = pool;
+            _racePoolCards = cards;
+        }
+        return pool;
+    }
+
+    /**
+     * Lets a test pin the randomness used for generated race paths.
+     */
+    public void setRaceRandom(Random raceRandom) {
+        _raceRandom = raceRandom == null ? new Random() : raceRandom;
     }
 
     /**

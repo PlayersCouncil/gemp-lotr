@@ -1,6 +1,7 @@
 package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.packs.ProductOpener;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -94,23 +95,10 @@ public class DefaultCardCollection implements MutableCardCollection {
     }
 
     private void addAllItems(Item item, DefaultCardCollection coll, ProductLibrary lib) {
-        if(item.isRecursive() && item.getType() == Item.Type.PACK) {
-            for(int i = 0; i < item.getCount(); i++) {
-                var bp = item.getBlueprintId();
-                var product = lib.GetProduct(bp);
-                if(product == null)
-                    continue;
-                var children = product.openPack();
-                for(var child : children) {
-                    addAllItems(child, coll, lib);
-                }
-            }
+        for (Item expanded : ProductOpener.expandPackContents(lib, item)) {
+            addItem(expanded.getBlueprintId(), expanded.getCount());
+            coll.addItem(expanded.getBlueprintId(), expanded.getCount());
         }
-        else {
-            addItem(item.getBlueprintId(), item.getCount());
-            coll.addItem(item.getBlueprintId(), item.getCount());
-        }
-
     }
 
     public void addAndOpenPack(String packId, int count, ProductLibrary productLibrary) {

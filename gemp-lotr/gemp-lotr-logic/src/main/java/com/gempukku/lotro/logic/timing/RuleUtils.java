@@ -8,6 +8,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
 import java.util.List;
@@ -71,6 +72,20 @@ public class RuleUtils {
 
     public static int calculateMoveLimit(LotroGame game) {
         return game.getModifiersQuerying().getMoveLimit(game, 2);
+    }
+
+    /**
+     * The site the current player's fellowship has to survive in order to win the game.  Normally the last site of the
+     * adventure path, site 9; MUST_SURVIVE_SITE_10, scoped to that player, pushes it back to site 10.
+     */
+    public static int getFellowshipWinSiteNumber(LotroGame game) {
+        return getFellowshipWinSiteNumber(game, game.getGameState().getCurrentPlayerId());
+    }
+
+    public static int getFellowshipWinSiteNumber(LotroGame game, String playerId) {
+        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.MUST_SURVIVE_SITE_10, playerId))
+            return 10;
+        return 9;
     }
 
     public static int getFellowshipSkirmishStrength(LotroGame game) {

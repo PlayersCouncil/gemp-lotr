@@ -498,6 +498,84 @@ public class DbTransferDAO implements TransferDAO {
         }
     }
 
+    // Patch notes feed
+    @Override
+    public List<DBDefs.Announcement> getPastAnnouncements() {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                    SELECT id, title, content, start, until
+                    FROM announcements
+                    WHERE start <= NOW()
+                    ORDER BY start DESC, id DESC;
+                """;
+                return conn.createQuery(sql)
+                        .executeAndFetch(DBDefs.Announcement.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve past announcements", ex);
+        }
+    }
+
+    // Patch note announcements
+
+    /** GET_LOCK name (per database; MySQL caps it at 64 characters) guarding addServerAnnouncementIfAbsent */
+    private static final String ANNOUNCEMENT_LOCK = "CONCAT(IFNULL(DATABASE(), ''), '.announcements')";
+    private static final int ANNOUNCEMENT_LOCK_TIMEOUT_SECONDS = 10;
+
+    @Override
+    public int addServerAnnouncementIfAbsent(String marker, String title, String markdown, ZonedDateTime start, ZonedDateTime until) {
+        if (marker == null || marker.isEmpty())
+            throw new IllegalArgumentException("marker is required");
+        try {
+            var db = _dbAccess.openDB();
+
+            // A named lock rather than a transaction: announcements has no unique key to insert against, and the lock
+            // is released explicitly (a pooled connection would otherwise keep holding it).  Autocommit is on, so the
+            // insert is committed before the lock is released.
+            try (org.sql2o.Connection conn = db.open()) {
+                Integer locked = conn.createQuery("SELECT GET_LOCK(" + ANNOUNCEMENT_LOCK + ", "
+                                + ANNOUNCEMENT_LOCK_TIMEOUT_SECONDS + ")")
+                        .executeScalar(Integer.class);
+                if (locked == null || locked != 1)
+                    throw new RuntimeException("Timed out waiting for the announcements lock");
+                try {
+                    String sql = """
+                        SELECT id
+                        FROM announcements
+                        WHERE LOCATE(:marker, content) > 0
+                        ORDER BY id
+                        LIMIT 1
+                        """;
+                    Integer existing = conn.createQuery(sql)
+                            .addParameter("marker", marker)
+                            .executeScalar(Integer.class);
+                    if (existing != null)
+                        return -1;
+
+                    sql = """
+                        INSERT INTO announcements (title, content, start, until)
+                        VALUES (:title, :content, :start, :until)
+                        """;
+                    return conn.createQuery(sql, true)
+                            .addParameter("title", title)
+                            .addParameter("content", markdown)
+                            .addParameter("start", DateUtils.FormatDateTime(start))
+                            .addParameter("until", DateUtils.FormatDateTime(until))
+                            .executeUpdate()
+                            .getKey(Integer.class);
+                } finally {
+                    conn.createQuery("SELECT RELEASE_LOCK(" + ANNOUNCEMENT_LOCK + ")")
+                            .executeScalar(Integer.class);
+                }
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert patch note announcement", ex);
+        }
+    }
+
     private Map<String, ? extends CardCollection> convertTransferRowToCollectionMap(List<DBDefs.Transfer> rows) {
         Map<String, DefaultCardCollection> result = new HashMap<>();
 

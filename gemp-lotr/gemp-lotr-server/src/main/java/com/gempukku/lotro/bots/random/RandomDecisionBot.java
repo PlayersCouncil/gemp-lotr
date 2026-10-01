@@ -1,12 +1,13 @@
 package com.gempukku.lotro.bots.random;
 
+import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.BotPlayer;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class RandomDecisionBot implements BotPlayer {
     private final String botName;
@@ -18,6 +19,16 @@ public class RandomDecisionBot implements BotPlayer {
 
     @Override
     public String chooseAction(GameState gameState, AwaitingDecision awaitingDecision) {
+        // not this.chooseAction(..., legality): subclasses override that one and call super.chooseAction(gameState, decision)
+        return chooseRandomly(gameState, awaitingDecision, AssignmentLegality.UNCHECKED);
+    }
+
+    @Override
+    public String chooseAction(GameState gameState, AwaitingDecision awaitingDecision, AssignmentLegality legality) {
+        return chooseRandomly(gameState, awaitingDecision, legality);
+    }
+
+    private String chooseRandomly(GameState gameState, AwaitingDecision awaitingDecision, AssignmentLegality legality) {
         AwaitingDecisionType type = awaitingDecision.getDecisionType();
         Map<String, String[]> params = awaitingDecision.getDecisionParameters();
 
@@ -28,7 +39,7 @@ public class RandomDecisionBot implements BotPlayer {
             case CARD_ACTION_CHOICE -> chooseFromCardActionChoice(params);
             case ACTION_CHOICE -> chooseFromActionChoice(params);
             case CARD_SELECTION -> chooseFromCardSelection(params);
-            case ASSIGN_MINIONS -> chooseAssignment(params, gameState.getCurrentPlayerId().equals(botName));
+            case ASSIGN_MINIONS -> chooseAssignment(params, gameState.getCurrentPlayerId().equals(botName), legality);
         };
     }
 
@@ -156,7 +167,7 @@ public class RandomDecisionBot implements BotPlayer {
         return defaultVal;
     }
 
-    private String chooseAssignment(Map<String, String[]> params, boolean isFreePeoples) {
+    private String chooseAssignment(Map<String, String[]> params, boolean isFreePeoples, AssignmentLegality legality) {
         String[] freeCharIds = params.get("freeCharacters");
         String[] minionIds = params.get("minions");
 
@@ -169,7 +180,7 @@ public class RandomDecisionBot implements BotPlayer {
         Collections.shuffle(freeChars, random);
         Collections.shuffle(minions, random);
 
-        Map<String, List<String>> assignments = new HashMap<>();
+        Map<String, List<String>> assignments = new LinkedHashMap<>();
 
         if (isFreePeoples) {
             // Assign 0 or 1 minion to each character (simulate defender = 0)
@@ -187,9 +198,9 @@ public class RandomDecisionBot implements BotPlayer {
             }
         }
 
-        return assignments.entrySet().stream()
-                .map(entry -> entry.getKey() + " " + String.join(" ", entry.getValue()))
-                .collect(Collectors.joining(","));
+        // Drop any pairing the game forbids (e.g. Uruk Guard's "can't be assigned against <companion>")
+        Side side = isFreePeoples ? Side.FREE_PEOPLE : Side.SHADOW;
+        return AssignmentLegality.format(legality.keepLegal(side, freeCharIds, minionIds, assignments));
     }
 
     @Override

@@ -1,38 +1,71 @@
 <link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
 <link rel="stylesheet" type="text/css" href="css/gemp-001/leagueAdmin.css">
 <link rel="stylesheet" type="text/css" href="css/gemp-001/prizeTierEditor.css">
+<link rel="stylesheet" type="text/css" href="css/gemp-001/tournamentAdmin.css">
 <script type="text/javascript">
-// The prize tier editor of the scheduled-tournament form (created on load; used by processScheduledTournament)
-var tourneyPrizeEditor = null;
-
-function gatherData(formElem) {
-	var data = {};
-
-	var inputs = $("input[type='text'], option:selected", formElem).each(
-		function () {
-			
-			var input = $(this);
-			var name = null;
-			var value = null;
-			if (input.prop("tagName") == "INPUT") {
-				name = input.attr("name");
-				value = input.val();
-			} else if (input.prop("tagName") == "OPTION") {
-				name = input.parents("select").attr("name");
-				value = input.attr("value");
-			}
-			if (name != null && value != null) {
-				if (data[name] == null)
-					data[name] = new Array();
-				data[name].push(value);
-			}
-		});
-
-	return data;
-}
-
 $(document).ready(
 	function () {
+		var page = $("#tournament-admin-page");
+		var resultdiv = $("#tourney-result");
+
+		var TYPE_LABELS = {CONSTRUCTED: "Constructed", SEALED: "Sealed", SOLODRAFT: "Solo Draft",
+			TABLE_SOLODRAFT: "Table Solo Draft", TABLE_DRAFT: "Table Draft"};
+		// deck-building / registration defaults per limited type (what the old separate inputs defaulted to)
+		var LIMITED_DEFAULTS = {SEALED: [25, 5], SOLODRAFT: [25, 5], TABLE_SOLODRAFT: [25, 5], TABLE_DRAFT: [15, 2]};
+		var DECKBUILD_LABELS = {SEALED: "Deck-building (minutes)", SOLODRAFT: "Drafting + deck-building (minutes)",
+			TABLE_SOLODRAFT: "Drafting + deck-building (minutes)", TABLE_DRAFT: "Deck-building after the draft (minutes)"};
+		var STATUS_LABELS = {scheduled: "Scheduled", expired: "Did not start", live: "Running", finished: "Finished"};
+		var OTHER_SOURCE = "__other__";
+
+		var state = {
+			type: "CONSTRUCTED",
+			current: null,         // the /admin/tournament object while an existing tournament is loaded
+			durationsTouched: false,
+			idTouched: false,
+			list: [],              // /admin/tournaments
+			sourcePlayers: null,   // /admin/tournamentPlayers of the deck source, or null when unknown
+			sourceId: null
+		};
+		var formatsLoaded = false;
+		var afterFormats = [];
+		var adminCalendar = null;
+
+		var esc = function (text) {
+			return $("<div></div>").text(text == null ? "" : String(text)).html();
+		};
+		var toInt = function (value, fallback) {
+			var n = parseInt(value, 10);
+			return isNaN(n) ? fallback : n;
+		};
+		var isWholeNumber = function (value, min) {
+			return /^\s*\d+\s*$/.test(String(value)) && parseInt(value, 10) >= min;
+		};
+		var isLimited = function (type) {
+			return type != "CONSTRUCTED";
+		};
+		var whenFormatsLoaded = function (fn) {
+			if (formatsLoaded) fn(); else afterFormats.push(fn);
+		};
+		// Selects a value, keeping an unknown one (a retired format, say) visible instead of silently swapping it.
+		var setSelect = function (select, value, label) {
+			if (value == null || value === "")
+				return;
+			value = String(value);
+			var found = select.find("option").filter(function () { return $(this).attr("value") === value; });
+			if (found.length == 0)
+				select.append($("<option/>").attr("value", value).text((label || value) + " (unknown)"));
+			select.val(value);
+		};
+
+		// ---- (i) help toggles: one mechanism for the whole page (as on League Admin) ----
+		page.on("click", ".info-toggle", function () {
+			var target = $("#" + $(this).data("for"));
+			target.prop("hidden", !target.prop("hidden"));
+		});
+
+		// =====================================================================================
+		// Preview dialog
+		// =====================================================================================
 		var previewDialog = $("<div></div>")
 				.dialog({
 					autoOpen:false,
@@ -40,20 +73,9 @@ $(document).ready(
 					resizable:true,
 					modal:true,
 					title:"Preview window",
-					closeText: ''
+					closeText: '',
+					width: 560
 				});
-
-		var esc = function (text) {
-			return $("<div></div>").text(text == null ? "" : String(text)).html();
-		};
-
-		// Prize tiers of the scheduled tournament (no campaign: tournaments count games in the event only)
-		var prizeEditor = new PrizeTierEditor($("#sch-tourney-prize-tiers"), {comm: hall.comm});
-		tourneyPrizeEditor = prizeEditor;
-
-		$(".info-toggle", "#sch-tourney-section").on("click", function () {
-			$("#" + $(this).attr("data-for")).toggle();
-		});
 
 		// item / tier lines as the preview shows them; same shapes as the league preview (kind: card|pack|promise|unknown)
 		var prizeItemHtml = function (item) {
@@ -68,21 +90,20 @@ $(document).ready(
 		};
 
 		var prizeTierWhoHtml = function (tier) {
-			if (tier.kind == "PARTICIPATION") {
-				return "Anyone who plays at least <b>" + tier.games + "</b> game" + (tier.games == 1 ? "" : "s");
-			}
+			if (tier.kind == "PARTICIPATION")
+				return "Anyone who plays at least <b>" + esc(tier.games) + "</b> game" + (tier.games == 1 ? "" : "s");
 			if (tier.from == tier.to)
-				return "Place <b>" + tier.from + "</b>";
-			return "Places <b>" + tier.from + "</b> to <b>" + tier.to + "</b>";
+				return "Place <b>" + esc(tier.from) + "</b>";
+			return "Places <b>" + esc(tier.from) + "</b> to <b>" + esc(tier.to) + "</b>";
 		};
 
-		// json is the preview object returned by /admin/processScheduledTournament: the tournament parameters,
-		// with prizeTiers described (description + item kind/name) the way the league preview describes them
+		// json is the preview object returned by /admin/processScheduledTournament (or its update twin): the
+		// tournament parameters, with prizeTiers described the way the league preview describes them
 		var renderTournamentPreview = function (container, json) {
 			if (typeof json === "string")
 				json = JSON.parse(json);
 
-			container.append("<div class='leagueName'>" + esc(json.name) + "</div>");
+			container.append($("<div class='leagueName'></div>").text(json.name));
 			container.append("<div><b>Tournament ID:</b> " + esc(json.tournamentId) + "</div>");
 			container.append("<div><b>Type:</b> " + esc(json.type) + " - <b>Format:</b> " + esc(json.format) + "</div>");
 			container.append("<div><b>Start (UTC):</b> " + esc(json.startTime) + "</div>");
@@ -93,9 +114,8 @@ $(document).ready(
 			var tiers = json.prizeTiers || [];
 			container.append("<div class='serieName'>Prizes</div>");
 			container.append("<div>Automatic prizes: " + esc(json.prizes) + "</div>");
-			if (tiers.length == 0) {
+			if (tiers.length == 0)
 				container.append("<div class='preview-prize-tier'>No extra prize tiers.</div>");
-			}
 			for (var t = 0; t < tiers.length; t++) {
 				var tier = tiers[t];
 				var items = (tier.items || []).map(prizeItemHtml).join(", ");
@@ -110,711 +130,1264 @@ $(document).ready(
 				.append($("<pre></pre>").text(JSON.stringify(rest, null, 2))));
 		};
 
-		var displayPreview = function (xml) {
-			var root = xml.documentElement;
-			if(root == null)
-			{
-				xml = new DOMParser().parseFromString(xml,"text/xml");
-				root = xml.documentElement;
-			}
-			if (root.tagName == 'league') {
-				var league = root;
+		// =====================================================================================
+		// Formats: one getFormats call fills every select on the page
+		// =====================================================================================
+		var prizeEditor = new PrizeTierEditor($("#tourney-prize-tiers"), {comm: hall.comm});
 
-				var leagueName = league.getAttribute("name");
-				var cost = parseInt(league.getAttribute("cost"));
-
-				previewDialog.append("<div class='leagueName'>" + leagueName + "</div>");
-
-				var costStr = formatPrice(cost);
-				previewDialog.append("<div class='leagueCost'><b>Cost:</b> " + costStr + "</div>");
-
-				var series = league.getElementsByTagName("serie");
-				for (var j = 0; j < series.length; j++) {
-
-					var serie = series[j];
-					var serieName = serie.getAttribute("type");
-					var serieStart = serie.getAttribute("start");
-					var serieEnd = serie.getAttribute("end");
-					var maxMatches = serie.getAttribute("maxMatches");
-					var format = serie.getAttribute("format");
-					var collection = serie.getAttribute("collection");
-					var limited = serie.getAttribute("limited");
-
-					var serieText = serieName + " - " + getDateString(serieStart) + " to " + getDateString(serieEnd);
-					previewDialog.append("<div class='serieName'>" + serieText + "</div>");
-
-					previewDialog.append("<div><b>Format:</b> " + ((limited == "true") ? "Limited" : "Constructed") + " " + format + "</div>");
-					previewDialog.append("<div><b>Collection:</b> " + collection + "</div>");
-
-					previewDialog.append("<div>Maximum ranked matches in serie: " + maxMatches + "</div>");
-				}
-			}
-		};
-		
-		var now = new Date();
-		var dateStr = "" + now.getFullYear() + String(1 + now.getMonth()).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-		var dateTimeStr = "" + now.getFullYear() + "-" + String(1 + now.getMonth()).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
-		$("#sch-tourney-start").val(dateTimeStr + "T17:00");
-
-		
-		$("#update-stage-button").button().click(
-			function () {
-				let resultdiv = $("#update-stage-result");
-				resultdiv.html("Processing...");
-				
-				hall.comm.setTournamentStage(
-			   		$("#update-stage-tourney-id").val(), 
-			   		$("#update-stage").val(),
-					function (xml) {
-						resultdiv.html("OK");
-					}, tourneyErrorMap(resultdiv));
-				});
-
-		$("#toggle-sealed-button").button().click(
-			function () {
-				let resultdiv = $("#toggle-sealed-result");
-				resultdiv.html("Processing...");
-
-				hall.comm.toggleSealedHallStatus(
-			   		$("#toggle-sealed-select").val(),
-					function (xml) {
-						resultdiv.html(xml);
-					}, tourneyErrorMap(resultdiv));
-			});
-		
-		$("#preview-sch-tourney-button").button().click(
-			function () {
-				let resultdiv = $("#sch-tourney-result");
-				resultdiv.html("Processing...");
-
-				processScheduledTournament(true, resultdiv, function(json) {
-						previewDialog.html("");
-						previewDialog.dialog("option", "title", "Tournament preview");
-						renderTournamentPreview(previewDialog, json);
-						
-						resultdiv.html("OK");
-						previewDialog.dialog("open");
-					})
-				});
-		
-		$("#add-sch-tourney-button").button().click(
-			function () {
-				let resultdiv = $("#sch-tourney-result");
-				resultdiv.html("Processing...");
-
-				processScheduledTournament(false, resultdiv, function(json) {
-					resultdiv.html("Tournament scheduled successfully.");
-				})
-			});
-		
-		
-		
-		$("#add-additional-table-button").button().click(
-			function () {
-					$(".elim-table-entry").last().clone().appendTo("#elim-table-pairs");
-				});
-		
-		$("#add-tables-button").button().click(
-			function () {
-				let resultdiv = $("#elim-tables-result");
-				resultdiv.html("Processing...");
-				
-				var data = gatherData($(".elim-table-entry"))
-				
-				console.log(data);
-				
-				hall.comm.addTables(
-			   		$("#elim-table-name").val(), 
-			   		$("#elim-table-tournament").val(),
-			   		$("#elim-table-format").val(),
-			   		$("#elim-table-timer").val(),
-			   		data.playerone,
-			   		data.playertwo,
-					function (xml) {
-						resultdiv.html("OK");
-					}, tourneyErrorMap(resultdiv));
-				});
-		
-		$("#sch-tourney-type").on("change", function() {
-			let type = 	$("#sch-tourney-type").val();
-			if(type === "SEALED") {
-				$('.sealed-only').show();
-				$('.constructed-only').hide();
-				$('.solodraft-only').hide();
-				$('.solo-table-draft-only').hide();
-				$('.table-draft-only').hide();
-			}
-			else if(type === "SOLODRAFT") {
-				$('.sealed-only').hide();
-				$('.constructed-only').hide();
-				$('.solodraft-only').show();
-				$('.solo-table-draft-only').hide();
-				$('.table-draft-only').hide();
-			}
-			else if(type === "TABLE_SOLODRAFT") {
-				$('.sealed-only').hide();
-				$('.constructed-only').hide();
-				$('.solodraft-only').hide();
-				$('.solo-table-draft-only').show();
-				$('.table-draft-only').hide();
-			}
-			else if(type === "TABLE_DRAFT") {
-				$('.sealed-only').hide();
-				$('.constructed-only').hide();
-				$('.solodraft-only').hide();
-				$('.solo-table-draft-only').hide();
-				$('.table-draft-only').show();
-			}
-			else {
-				$('.sealed-only').hide();
-				$('.constructed-only').show();
-				$('.solodraft-only').hide();
-				$('.solo-table-draft-only').hide();
-				$('.table-draft-only').hide();
-			}
-		});
-		
-		$('.sealed-only').hide();
-		$('.solodraft-only').hide();
-		$('.constructed-only').show();
-		$('.solo-table-draft-only').hide();
-		$('.table-draft-only').hide();
-		
-		
 		hall.comm.getFormats(true,
-			function (json) 
+			function (json)
 			{
-				//console.log(json);
-				let drafts = json.DraftTemplates;
-				let formats = json.Formats;
-				let sealed = json.SealedTemplates;
-				let tableDrafts = json.TableDraftTemplates;
-				let tableDraftTimers = json.TableDraftTimerTypes;
+				var drafts = json.DraftTemplates;
+				var formats = json.Formats;
+				var sealed = json.SealedTemplates;
+				var tableDrafts = json.TableDraftTemplates;
+				var tableDraftTimers = json.TableDraftTimerTypes;
 
 				for (var prop in formats) {
 					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
-						//console.log(prop);
-						
-						if(formats[prop].name.includes("Limited"))
+						if (formats[prop].name.includes("Limited"))
 							continue;
-						
-						let num = ("0000" + formats[prop].order).substr(-4);
-						
+						var num = ("0000" + formats[prop].order).substr(-4);
 						var item = $("<option/>")
 							.attr("value", prop)
 							.text("" + num + " - " + formats[prop].name);
-						$("#sch-tourney-format").append(item);
-						$("#elim-table-format").append(item.clone());
+						$("#tourney-format").append(item);
+						$("#tables-format").append(item.clone());
 					}
 				}
-				sortOptionsByName("#elim-table-format");
-				sortOptionsByName("#sch-tourney-format");
-				
-				$("#elim-table-format option").each(function(index) {
-					//console.log(this);
-					let newText = $(this).text().replace(/\d+ - /, '');
-					//console.log(newText);
-					$(this).text(newText);
+				sortOptionsByName("#tourney-format");
+				sortOptionsByName("#tables-format");
+				$("#tourney-format option, #tables-format option").each(function () {
+					$(this).text($(this).text().replace(/\d+ - /, ''));
 				});
-				
-				$("#sch-tourney-format option").each(function(index) {
-					//console.log(this);
-					let newText = $(this).text().replace(/\d+ - /, '');
-					//console.log(newText);
-					$(this).text(newText);
-				});
-				
+
 				for (var prop in sealed) {
 					if (Object.prototype.hasOwnProperty.call(sealed, prop)) {
-						//console.log(prop);
-						
-						let code = sealed[prop].format;
-						let id = sealed[prop].id;
-						let serieCount = sealed[prop].seriesProduct.length;
-						
-						if(serieCount > 1)
+						var serieCount = sealed[prop].seriesProduct.length;
+						if (serieCount > 1)
 							continue;
-						
-						var item = $("<option/>")
-							.attr("value", id)
-							.text(prop + " - " + serieCount + " Series");
-						$("#sch-tourney-sealed-format").append(item);
-
-						var item2 = $("<option/>")
-							.attr("value", id)
-							.text(prop);
-						$("#toggle-sealed-select").append(item2);
+						var id = sealed[prop].id;
+						$("#tourney-sealed-format").append($("<option/>").attr("value", id).text(prop + " - " + serieCount + " Series"));
+						$("#toggle-sealed-select").append($("<option/>").attr("value", id).text(prop));
 					}
 				}
-				sortOptionsByName("#sch-tourney-sealed-format");
+				sortOptionsByName("#tourney-sealed-format");
 				sortOptionsByName("#toggle-sealed-select");
 
 				for (var prop in drafts) {
-					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
-						//console.log(prop);
-
-						let code = drafts[prop].format;
-						let id = drafts[prop].id;
-
-						var item = $("<option/>")
-							.attr("value", id)
-							.text(prop);
-						$("#sch-tourney-solodraft-format").append(item);
-					}
+					if (Object.prototype.hasOwnProperty.call(drafts, prop))
+						$("#tourney-solodraft-format").append($("<option/>").attr("value", drafts[prop].id).text(prop));
 				}
 
 				for (var prop in tableDrafts) {
 					if (Object.prototype.hasOwnProperty.call(tableDrafts, prop)) {
-						//console.log(prop);
-
-						let code = tableDrafts[prop].code;
-
-						var item = $("<option/>")
-							.attr("value", code)
-							.text(prop);
-						$("#sch-tourney-solo-table-draft-format").append(item);
-						var item2 = $("<option/>")
-							.attr("value", code)
-							.text(prop);
-						$("#sch-tourney-table-draft-format").append(item2);
+						var code = tableDrafts[prop].code;
+						$("#tourney-solo-table-draft-format").append($("<option/>").attr("value", code).text(prop));
+						$("#tourney-table-draft-format").append($("<option/>").attr("value", code).text(prop));
 					}
 				}
-				sortOptionsByName("#sch-tourney-table-draft-format");
+				sortOptionsByName("#tourney-table-draft-format");
 
 				for (var prop in tableDraftTimers) {
-					if (Object.prototype.hasOwnProperty.call(tableDraftTimers, prop)) {
-						//console.log(prop);
-						var item = $("<option/>")
-							.attr("value", tableDraftTimers[prop])
-							.text(tableDraftTimers[prop]);
-						$("#sch-tourney-table-draft-timer").append(item);
+					if (Object.prototype.hasOwnProperty.call(tableDraftTimers, prop))
+						$("#tourney-table-draft-timer").append($("<option/>").attr("value", tableDraftTimers[prop]).text(tableDraftTimers[prop]));
+				}
+
+				formatsLoaded = true;
+				var pending = afterFormats;
+				afterFormats = [];
+				for (var i = 0; i < pending.length; i++)
+					pending[i]();
+			},
+			tourneyErrorMap(resultdiv));
+
+		// =====================================================================================
+		// Type selector (same bar as the league form)
+		// =====================================================================================
+		var applyType = function () {
+			var type = state.type;
+			$(".tourney-type-btn").removeClass("type-selected").filter("[data-type='" + type + "']").addClass("type-selected");
+			$(".constructed-only").toggle(type == "CONSTRUCTED");
+			$(".sealed-only").toggle(type == "SEALED");
+			$(".solodraft-only").toggle(type == "SOLODRAFT");
+			$(".solo-table-draft-only").toggle(type == "TABLE_SOLODRAFT");
+			$(".table-draft-only").toggle(type == "TABLE_DRAFT");
+			$(".limited-only").toggle(isLimited(type));
+			if (isLimited(type))
+				$("#tourney-deckbuild-label").text(DECKBUILD_LABELS[type]);
+		};
+
+		var selectType = function (type) {
+			state.type = type;
+			if (isLimited(type) && !state.durationsTouched) {
+				$("#tourney-deckbuild").val(LIMITED_DEFAULTS[type][0]);
+				$("#tourney-registration").val(LIMITED_DEFAULTS[type][1]);
+			}
+			applyType();
+		};
+
+		$(".tourney-type-btn").button().click(function () {
+			if ($(this).button("option", "disabled"))
+				return;
+			selectType($(this).data("type"));
+		});
+		$("#tourney-deckbuild, #tourney-registration").on("input", function () { state.durationsTouched = true; });
+
+		// The id follows the name (lower case, dashes for spaces) until the admin types one of their own.
+		$("#tourney-name").on("input", function () {
+			if (state.idTouched || state.current != null)
+				return;
+			$("#tourney-id").val($(this).val().toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""));
+		});
+		$("#tourney-id").on("input", function () { state.idTouched = true; });
+
+		// =====================================================================================
+		// Reading / filling the settings
+		// =====================================================================================
+		var readSettings = function () {
+			var deckbuild = $("#tourney-deckbuild").val();
+			var registration = $("#tourney-registration").val();
+			var type = state.type;
+			// exactly the fields /admin/processScheduledTournament reads; only the ones for the chosen type matter
+			return {
+				preview: false,
+				name: $.trim($("#tourney-name").val()),
+				type: type,
+				wc: $("#tourney-wc").prop("checked"),
+				tournamentId: $.trim($("#tourney-id").val()),
+				formatCode: $("#tourney-format").val() || "",
+				sealedFormatCode: $("#tourney-sealed-format").val() || "",
+				deckbuildingDuration: type == "SEALED" ? deckbuild : "",
+				turnInDuration: type == "SEALED" ? registration : "",
+				soloDraftFormatCode: $("#tourney-solodraft-format").val() || "",
+				soloDraftDeckbuildingDuration: type == "SOLODRAFT" ? deckbuild : "",
+				soloDraftTurnInDuration: type == "SOLODRAFT" ? registration : "",
+				soloTableDraftFormatCode: $("#tourney-solo-table-draft-format").val() || "",
+				soloTableDraftDeckbuildingDuration: type == "TABLE_SOLODRAFT" ? deckbuild : "",
+				soloTableDraftTurnInDuration: type == "TABLE_SOLODRAFT" ? registration : "",
+				tableDraftFormatCode: $("#tourney-table-draft-format").val() || "",
+				tableDraftTimer: $("#tourney-table-draft-timer").val() || "",
+				tableDraftDeckbuildingDuration: type == "TABLE_DRAFT" ? deckbuild : "",
+				tableDraftTurnInDuration: type == "TABLE_DRAFT" ? registration : "",
+				start: $("#tourney-start").val(),
+				cost: $.trim($("#tourney-cost").val()),
+				playoff: $("#tourney-playoff").val(),
+				tiebreaker: "",
+				prizeTiers: JSON.stringify(prizeEditor.getTiers()),
+				minPlayers: $.trim($("#tourney-min-players").val()),
+				manualKickoff: $("#tourney-kickoff").prop("checked")
+			};
+		};
+
+		// Fills the settings from the stored TournamentParams of a scheduled tournament.
+		var fillSettings = function (json) {
+			var params = json.params || {};
+			var type = json.type || params.type || "CONSTRUCTED";
+			state.durationsTouched = true;
+			selectType(type);
+			$("#tourney-name").val(json.name || params.name || "");
+			$("#tourney-id").val(json.tournamentId);
+			$("#tourney-start").val(json.start || "");
+			$("#tourney-cost").val(params.cost != null ? params.cost : 0);
+			$("#tourney-min-players").val(params.minimumPlayers != null ? params.minimumPlayers : 2);
+			$("#tourney-wc").prop("checked", params.wc === true);
+			$("#tourney-kickoff").prop("checked", params.manualKickoff === true);
+			if (params.playoff)
+				setSelect($("#tourney-playoff"), String(params.playoff).toLowerCase().replace(/_/g, "-"));
+			if (params.deckbuildingDuration != null)
+				$("#tourney-deckbuild").val(params.deckbuildingDuration);
+			if (params.turnInDuration != null)
+				$("#tourney-registration").val(params.turnInDuration);
+			prizeEditor.setTiers(params.prizeTiers || []);
+			whenFormatsLoaded(function () {
+				if (type == "CONSTRUCTED")
+					setSelect($("#tourney-format"), params.format, json.formatName);
+				if (type == "SEALED")
+					setSelect($("#tourney-sealed-format"), params.sealedFormatCode);
+				if (type == "SOLODRAFT")
+					setSelect($("#tourney-solodraft-format"), params.soloDraftFormatCode);
+				if (type == "TABLE_SOLODRAFT")
+					setSelect($("#tourney-solo-table-draft-format"), params.soloTableDraftFormatCode);
+				if (type == "TABLE_DRAFT") {
+					setSelect($("#tourney-table-draft-format"), params.tableDraftFormatCode);
+					setSelect($("#tourney-table-draft-timer"), params.draftTimerType);
+				}
+			});
+		};
+
+		var settingsInputs = function () {
+			return $("#tourney-settings-block").find("input, select, textarea");
+		};
+
+		var setSettingsEnabled = function (enabled) {
+			settingsInputs().prop("disabled", !enabled);
+			$(".tourney-type-btn").button("option", "disabled", !enabled);
+			$("#tourney-preview-button, #tourney-save-button").button("option", "disabled", !enabled);
+			$("#tourney-prize-tiers").find("button").prop("disabled", !enabled);
+		};
+
+		// =====================================================================================
+		// Modes: new / edit scheduled / running or finished (state + stage + tables)
+		// =====================================================================================
+		var isEditingScheduled = function () {
+			return state.current != null && state.current.scheduled
+				&& (state.current.status == "scheduled" || state.current.status == "expired");
+		};
+		var hasStarted = function () {
+			return state.current != null && (state.current.status == "live" || state.current.status == "finished");
+		};
+
+		var renderFacts = function (json) {
+			var facts = $("#tourney-facts").empty();
+			var fact = function (label, value) {
+				if (value == null || value === "")
+					return;
+				facts.append($("<div class='tourney-fact'></div>")
+					.append($("<span class='tourney-fact-label'></span>").text(label))
+					.append($("<span class='tourney-fact-value'></span>").text(value)));
+			};
+			var params = json.params || {};
+			fact("Status", STATUS_LABELS[json.status] || json.status);
+			fact("Tournament ID", json.tournamentId);
+			fact("Type", TYPE_LABELS[json.type] || json.type);
+			fact("Format", json.formatName || json.format);
+			fact("Start (UTC)", json.start ? json.start.replace("T", " ") : null);
+			if (json.stageName != null)
+				fact("Stage", json.stageName + (json.round ? ", round " + json.round : ""));
+			if (json.playerCount != null)
+				fact("Players", json.playerCount);
+			if (json.signedUp != null)
+				fact("Signed up", json.signedUp);
+			if (params.playoff)
+				fact("Pairing", String(params.playoff).toLowerCase().replace(/_/g, " "));
+			if (params.cost != null)
+				fact("Cost", params.cost + " silver");
+			var flags = [];
+			if (params.wc) flags.push("World Championship");
+			if (params.manualKickoff) flags.push("manual kickoff");
+			if (flags.length > 0)
+				fact("Flags", flags.join(", "));
+			$("#tourney-params-json").text(JSON.stringify(params, null, 2));
+		};
+
+		var applyMode = function () {
+			var json = state.current;
+			var title, saveLabel = "Create tournament";
+			if (json == null) {
+				title = "New tournament";
+			} else if (isEditingScheduled()) {
+				title = "Editing scheduled tournament: " + json.name;
+				saveLabel = "Save changes";
+			} else {
+				title = (STATUS_LABELS[json.status] || "Tournament") + " tournament: " + json.name;
+			}
+			$("#tourney-form-title").text(title);
+			$("#tourney-save-button").button("option", "label", saveLabel);
+
+			var showSettings = json == null || isEditingScheduled();
+			$("#tourney-settings-block").toggle(showSettings);
+			$("#tourney-state-block").toggle(json != null);
+			$("#tourney-stage-block").toggle(hasStarted());
+			$("#tourney-tables-block").toggle(hasStarted());
+			// the id is the key of an existing tournament and cannot be changed
+			$("#tourney-id").prop("readonly", json != null);
+			$("#tourney-id-row").toggleClass("readonly", json != null);
+
+			var warning = $("#tourney-warning");
+			var editable = json == null || json.editable === true;
+			if (json != null && json.status == "finished") {
+				warning.text("This tournament has finished. Setting a stage or creating tables still works, as it always has, but is rarely what you want.").show();
+			} else if (json != null && !editable && !hasStarted()) {
+				warning.text(json.editBlocker || "This tournament cannot be edited.").show();
+			} else if (json != null && json.status == "expired") {
+				warning.text("Its start time passed without enough players signing up. Pick a new start time and save to reschedule it.").show();
+			} else {
+				warning.hide();
+			}
+			if (showSettings)
+				setSettingsEnabled(editable);
+		};
+
+		var startOver = function () {
+			state.current = null;
+			state.durationsTouched = false;
+			state.idTouched = false;
+			var now = new Date();
+			var dateStr = now.getFullYear() + "-" + String(1 + now.getMonth()).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
+			$("#tourney-name").val("");
+			$("#tourney-id").val("");
+			$("#tourney-start").val(dateStr + "T17:00");
+			$("#tourney-cost").val(0);
+			$("#tourney-min-players").val(2);
+			$("#tourney-playoff").val("swiss");
+			$("#tourney-wc").prop("checked", false);
+			$("#tourney-kickoff").prop("checked", false);
+			prizeEditor.setTiers([]);
+			selectType("CONSTRUCTED");
+			applyMode();
+			resultdiv.html("Ready.");
+			$("#tourney-state-block, #tourney-stage-block, #tourney-tables-block").hide();
+		};
+		$("#tourney-new-button").button().click(function () {
+			startOver();
+			highlightRunning(null);
+		});
+
+		var loadTournament = function (tournamentId) {
+			if (!tournamentId)
+				return;
+			resultdiv.html("Loading tournament " + esc(tournamentId) + "...");
+			hall.comm.getTournamentForAdmin(tournamentId, function (json) {
+				startOver();
+				state.current = json;
+				renderFacts(json);
+				if (isEditingScheduled())
+					fillSettings(json);
+				applyMode();
+				highlightRunning(json.tournamentId);
+				if (hasStarted()) {
+					prepareStage(json);
+					prepareTables(json);
+				}
+				resultdiv.html("Loaded '" + esc(json.name) + "' (" + esc(json.tournamentId) + ").");
+				var form = $("#tourney-form-anchor")[0];
+				if (form && form.scrollIntoView)
+					form.scrollIntoView({behavior: "smooth", block: "start"});
+			}, tourneyErrorMap(resultdiv));
+		};
+
+		// =====================================================================================
+		// Saving the settings
+		// =====================================================================================
+		var validateSettings = function (data) {
+			var problem = function (message, field) {
+				resultdiv.text(message);
+				if (field)
+					$(field).trigger("focus");
+				return false;
+			};
+			if (!data.name)
+				return problem("Please give the tournament a name.", "#tourney-name");
+			if (data.name.length > 45)
+				return problem("The name must be 45 characters or less.", "#tourney-name");
+			if (!data.tournamentId)
+				return problem("Please give the tournament an id.", "#tourney-id");
+			if (/\s/.test(data.tournamentId))
+				return problem("The tournament id must not contain spaces.", "#tourney-id");
+			var formatField = {CONSTRUCTED: "#tourney-format", SEALED: "#tourney-sealed-format", SOLODRAFT: "#tourney-solodraft-format",
+				TABLE_SOLODRAFT: "#tourney-solo-table-draft-format", TABLE_DRAFT: "#tourney-table-draft-format"}[data.type];
+			if (!$(formatField).val())
+				return problem("Please pick a format.", formatField);
+			if (isLimited(data.type)) {
+				if (!isWholeNumber($("#tourney-deckbuild").val(), 1))
+					return problem("The deck-building time must be a whole number of minutes (at least 1).", "#tourney-deckbuild");
+				if (!isWholeNumber($("#tourney-registration").val(), 1))
+					return problem("The registration grace period must be a whole number of minutes (at least 1).", "#tourney-registration");
+			}
+			if (!data.start)
+				return problem("Please pick a start time.", "#tourney-start");
+			var start = new Date(data.start + ":00Z");
+			if (isNaN(start.getTime()) || start.getTime() <= Date.now())
+				return problem("The start time (UTC) must be in the future.", "#tourney-start");
+			if (!isWholeNumber(data.cost, 0))
+				return problem("The cost must be a whole number of silver (0 for free).", "#tourney-cost");
+			if (!isWholeNumber(data.minPlayers, 1))
+				return problem("The minimum number of players must be a whole number.", "#tourney-min-players");
+			var prizeProblem = prizeEditor.validate();
+			if (prizeProblem != null)
+				return problem(prizeProblem);
+			return true;
+		};
+
+		var submitSettings = function (preview) {
+			if (state.current != null && (!isEditingScheduled() || state.current.editable !== true)) {
+				resultdiv.text(state.current.editBlocker || "This tournament cannot be edited.");
+				return;
+			}
+			var data = readSettings();
+			if (!validateSettings(data))
+				return;
+			data.preview = preview;
+			resultdiv.html("Processing...");
+			var err = tourneyErrorMap(resultdiv);
+			var onDone = function (json) {
+				if (preview) {
+					previewDialog.html("");
+					previewDialog.dialog("option", "title", "Tournament preview");
+					renderTournamentPreview(previewDialog, json);
+					resultdiv.html("OK");
+					previewDialog.dialog("open");
+					return;
+				}
+				if (isEditingScheduled()) {
+					resultdiv.text("Tournament '" + data.name + "' updated.");
+					var id = state.current.tournamentId;
+					refreshLists();
+					hall.comm.getTournamentForAdmin(id, function (fresh) {
+						state.current = fresh;
+						renderFacts(fresh);
+						applyMode();
+					}, {});
+				} else {
+					resultdiv.text("Tournament '" + data.name + "' scheduled" + (data.wc ? " (its id gets the World Championship prefix)." : "."));
+					refreshLists();
+				}
+			};
+
+			if (isEditingScheduled()) {
+				hall.comm.updateScheduledTournament(data, onDone, err);
+				return;
+			}
+			hall.comm.processScheduledTournament(
+				preview, data.name, data.type, data.wc, data.tournamentId, data.formatCode,
+				data.sealedFormatCode, data.deckbuildingDuration, data.turnInDuration,
+				data.soloDraftFormatCode, data.soloDraftDeckbuildingDuration, data.soloDraftTurnInDuration,
+				data.soloTableDraftFormatCode, data.soloTableDraftDeckbuildingDuration, data.soloTableDraftTurnInDuration,
+				data.tableDraftFormatCode, data.tableDraftTimer, data.tableDraftDeckbuildingDuration, data.tableDraftTurnInDuration,
+				data.start, data.cost, data.playoff, data.tiebreaker, data.prizeTiers, data.minPlayers, data.manualKickoff,
+				onDone, err);
+		};
+
+		$("#tourney-preview-button").button().click(function () { submitSettings(true); });
+		$("#tourney-save-button").button().click(function () { submitSettings(false); });
+
+		// =====================================================================================
+		// Stage (started tournaments)
+		// =====================================================================================
+		var prepareStage = function (json) {
+			$("#stage-current").text(json.stageName ? json.stageName + (json.round ? ", round " + json.round : "") : "unknown");
+			if (json.stage)
+				$("#stage-select").val(json.stage);
+			$("#stage-result").html("Ready.");
+		};
+
+		$("#stage-button").button().click(function () {
+			var json = state.current;
+			if (json == null)
+				return;
+			var stage = $("#stage-select").val();
+			var label = $("#stage-select option:selected").text();
+			if (stage == json.stage) {
+				$("#stage-result").text("The tournament is already at '" + label + "'.");
+				return;
+			}
+			if (stage == "FINISHED" && !confirm("Finish '" + json.name + "' now? It stops pairing rounds and presents its results."))
+				return;
+			var out = $("#stage-result");
+			out.html("Processing...");
+			hall.comm.setTournamentStage(json.tournamentId, stage, function () {
+				out.text("Stage set to '" + label + "'.");
+				refreshLists();
+				hall.comm.getTournamentForAdmin(json.tournamentId, function (fresh) {
+					state.current = fresh;
+					renderFacts(fresh);
+					applyMode();
+				}, {});
+			}, tourneyErrorMap(out));
+		});
+
+		// =====================================================================================
+		// Manual tables (started tournaments)
+		// =====================================================================================
+		var tablesResult = $("#tables-result");
+
+		// Fills the deck-source dropdown: the current tournament first, then running ones, then recently finished
+		// ones (a scheduled tournament has no registered decks yet), then "Other id..." for anything older.
+		var renderSourceOptions = function (currentId, currentName) {
+			var select = $("#tables-source").empty();
+			var seen = {};
+			var option = function (t) {
+				return $("<option/>").attr("value", t.tournamentId)
+					.text(t.name + " (" + t.tournamentId + ")" + (t.formatName ? " - " + t.formatName : ""));
+			};
+			var current = null;
+			for (var i = 0; i < state.list.length; i++)
+				if (state.list[i].tournamentId == currentId)
+					current = state.list[i];
+			select.append(option(current || {tournamentId: currentId, name: currentName}).addClass("current-source"));
+			seen[currentId] = true;
+			var groups = [["live", "Running"], ["finished", "Finished recently"]];
+			for (var g = 0; g < groups.length; g++) {
+				var group = $("<optgroup/>").attr("label", groups[g][1]);
+				for (var j = 0; j < state.list.length; j++) {
+					var t = state.list[j];
+					if (t.status == groups[g][0] && !seen[t.tournamentId]) {
+						seen[t.tournamentId] = true;
+						group.append(option(t));
 					}
 				}
-			}, 
-			tourneyErrorMap());
+				if (group.children().length > 0)
+					select.append(group);
+			}
+			select.append($("<option/>").attr("value", OTHER_SOURCE).text("Other tournament id..."));
+			select.val(currentId);
+		};
+
+		var currentSourceId = function () {
+			var value = $("#tables-source").val();
+			return value == OTHER_SOURCE ? $.trim($("#tables-source-other").val()) : value;
+		};
+
+		var loadSourcePlayers = function () {
+			var sourceId = currentSourceId();
+			state.sourceId = sourceId;
+			state.sourcePlayers = null;
+			$("#tables-source-hint").text(sourceId ? "Loading players..." : "");
+			if (!sourceId)
+				return;
+			hall.comm.getTournamentPlayersForAdmin(sourceId, function (json) {
+				if (state.sourceId != sourceId)
+					return;   // the admin picked another source meanwhile
+				var players = json.players || [];
+				state.sourcePlayers = players;
+				var withDeck = players.filter(function (p) { return p.hasDeck; }).length;
+				$("#tables-source-hint").text(!json.started
+					? "'" + (json.name || sourceId) + "' has not started, so it has no registered decks yet."
+					: players.length + " player" + (players.length == 1 ? "" : "s") + " registered in '" + (json.name || sourceId)
+						+ "', " + withDeck + " with a deck.");
+				if (json.format)
+					whenFormatsLoaded(function () { setSelect($("#tables-format"), json.format, json.formatName); });
+			}, {
+				"404": function () {
+					if (state.sourceId == sourceId)
+						$("#tables-source-hint").text("There is no tournament '" + sourceId + "'.");
+				},
+				"400": function () { $("#tables-source-hint").text("Could not load the players of '" + sourceId + "'."); },
+				"403": function () { $("#tables-source-hint").text("403: You do not have permission to perform such actions."); }
+			});
+		};
+
+		$("#tables-source").on("change", function () {
+			var other = $(this).val() == OTHER_SOURCE;
+			$("#tables-source-other-row").toggle(other);
+			if (other)
+				$("#tables-source-other").trigger("focus");
+			loadSourcePlayers();
+		});
+		$("#tables-source-other").on("change", loadSourcePlayers);
+
+		// ---- rows ----
+		var findSourcePlayer = function (name) {
+			if (state.sourcePlayers == null)
+				return null;
+			var lower = String(name).toLowerCase();
+			for (var i = 0; i < state.sourcePlayers.length; i++)
+				if (state.sourcePlayers[i].name.toLowerCase() == lower)
+					return state.sourcePlayers[i];
+			return null;
+		};
+
+		// Autocomplete: the deck source's players, minus the ones already seated at another table.
+		var playerSource = function (input) {
+			return function (request, response) {
+				var players = state.sourcePlayers || [];
+				var term = (request.term || "").toLowerCase();
+				var used = {};
+				$("#tables-rows .table-player").not(input).each(function () {
+					var v = $.trim($(this).val()).toLowerCase();
+					if (v) used[v] = true;
+				});
+				var matches = [];
+				for (var i = 0; i < players.length; i++) {
+					var p = players[i];
+					var lower = p.name.toLowerCase();
+					if (used[lower] || lower.indexOf(term) < 0)
+						continue;
+					var notes = [];
+					if (!p.hasDeck) notes.push("no deck");
+					if (p.dropped) notes.push("dropped");
+					matches.push({label: p.name + (notes.length ? " (" + notes.join(", ") + ")" : ""), value: p.name,
+						starts: lower.indexOf(term) == 0});
+				}
+				// names that start with what was typed come first
+				matches.sort(function (a, b) { return (b.starts ? 1 : 0) - (a.starts ? 1 : 0); });
+				response(matches.slice(0, 30));
+			};
+		};
+
+		var refreshRows = function () {
+			var rows = $("#tables-rows .table-row");
+			rows.each(function (index) {
+				$(this).find(".table-index").text("Table " + (index + 1));
+			});
+			rows.find(".table-remove").button("option", "disabled", rows.length <= 1);
+		};
+
+		var addTableRow = function (p1, p2) {
+			var row = $("<div class='table-row'></div>");
+			var line = $("<div class='table-row-line'></div>");
+			line.append("<span class='table-index'></span>");
+			var one = $("<input type='text' class='table-player table-p1' placeholder='Player 1' autocomplete='off'>").val(p1 || "");
+			var two = $("<input type='text' class='table-player table-p2' placeholder='Player 2' autocomplete='off'>").val(p2 || "");
+			line.append(one).append("<span class='table-vs'>vs</span>").append(two);
+			line.append($("<button type='button' class='table-remove' title='Remove this table'>Remove</button>").button().click(function () {
+				row.remove();
+				refreshRows();
+			}));
+			row.append(line).append("<div class='table-row-msg'></div>");
+			$("#tables-rows").append(row);
+			row.find(".table-player").each(function () {
+				var input = $(this);
+				input.autocomplete({source: playerSource(input), minLength: 0, delay: 0})
+					.on("focus", function () {
+						if (!input.val())
+							input.autocomplete("search", "");
+					});
+			});
+			refreshRows();
+			return row;
+		};
+
+		// Enter moves on: player 1 -> player 2 -> a new table (the fast path for typing a round in).
+		$("#tables-rows").on("keydown", ".table-player", function (e) {
+			if (e.key != "Enter" && e.which != 13)
+				return;
+			if ($(this).data("ui-autocomplete") && $(this).autocomplete("widget").is(":visible"))
+				return;   // let the autocomplete take the highlighted name
+			e.preventDefault();
+			var row = $(this).closest(".table-row");
+			if ($(this).hasClass("table-p1")) {
+				row.find(".table-p2").trigger("focus");
+			} else {
+				var next = row.next(".table-row");
+				if (next.length == 0)
+					next = addTableRow();
+				next.find(".table-p1").trigger("focus");
+			}
+		});
+
+		var resetRows = function () {
+			$("#tables-rows").empty();
+			addTableRow();
+		};
+
+		$("#tables-add-row").button().click(function () {
+			addTableRow().find(".table-p1").trigger("focus");
+		});
+
+		// ---- pasting a round's pairings ----
+		// One table per line: two names separated by spaces, tabs, commas, semicolons or "vs" (a spreadsheet column
+		// pair pastes as tab-separated).  A leading "1.", "1)" or "Table 1:" is ignored.
+		var parsePairings = function (text) {
+			var pairs = [], bad = [];
+			var lines = String(text || "").split(/\r?\n/);
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i].replace(/^\s*(table\s*)?\d+\s*[.):]\s*/i, "");
+				if ($.trim(line) === "")
+					continue;
+				var tokens = line.split(/[\s,;]+/).filter(function (t) { return t && !/^v(s)?\.?$/i.test(t); });
+				if (tokens.length == 2)
+					pairs.push(tokens);
+				else
+					bad.push(lines[i]);
+			}
+			return {pairs: pairs, bad: bad};
+		};
+
+		$("#tables-paste-toggle").button().click(function () {
+			var box = $("#tables-paste-box");
+			box.prop("hidden", !box.prop("hidden"));
+			if (!box.prop("hidden"))
+				$("#tables-paste").trigger("focus");
+		});
+
+		$("#tables-paste-apply").button().click(function () {
+			var parsed = parsePairings($("#tables-paste").val());
+			if (parsed.pairs.length == 0) {
+				tablesResult.text("No pairings found: put one table per line, two player names on each.");
+				return;
+			}
+			// replace the empty rows, keep the ones already filled in
+			$("#tables-rows .table-row").each(function () {
+				var row = $(this);
+				if (!$.trim(row.find(".table-p1").val()) && !$.trim(row.find(".table-p2").val()))
+					row.remove();
+			});
+			for (var i = 0; i < parsed.pairs.length; i++)
+				addTableRow(parsed.pairs[i][0], parsed.pairs[i][1]);
+			$("#tables-paste").val(parsed.bad.join("\n"));
+			tablesResult.text(parsed.pairs.length + " table" + (parsed.pairs.length == 1 ? "" : "s") + " added from the pasted pairings"
+				+ (parsed.bad.length > 0 ? "; " + parsed.bad.length + " line(s) could not be read and were left in the box." : "."));
+			if (parsed.bad.length == 0)
+				$("#tables-paste-box").prop("hidden", true);
+			validateTables();
+		});
+
+		// ---- validation ----
+		// Checks every row, writes a message under each problem row and returns the tables to create, or null.
+		var validateTables = function () {
+			var tables = [];
+			var errors = 0;
+			var seatedAt = {};
+			var sourceName = state.sourceId;
+			var known = state.sourcePlayers != null && state.sourcePlayers.length > 0;
+			$("#tables-rows .table-row").each(function (index) {
+				var row = $(this);
+				var msg = row.find(".table-row-msg").empty().removeClass("row-error row-warning");
+				row.removeClass("row-error");
+				var names = [$.trim(row.find(".table-p1").val()), $.trim(row.find(".table-p2").val())];
+				if (!names[0] && !names[1])
+					return;   // an empty row is simply skipped
+				var problems = [], warnings = [];
+				if (!names[0] || !names[1])
+					problems.push("Both players are needed.");
+				for (var n = 0; n < 2; n++) {
+					if (!names[n])
+						continue;
+					var player = findSourcePlayer(names[n]);
+					if (known && player == null) {
+						problems.push("'" + names[n] + "' is not registered in '" + sourceName + "'.");
+						continue;
+					}
+					if (player != null) {
+						names[n] = player.name;   // the registered spelling
+						row.find(n == 0 ? ".table-p1" : ".table-p2").val(player.name);
+						if (!player.hasDeck)
+							problems.push("'" + player.name + "' has no deck registered in '" + sourceName + "'.");
+						if (player.dropped)
+							warnings.push("'" + player.name + "' has dropped from '" + sourceName + "'.");
+					}
+					var key = names[n].toLowerCase();
+					if (seatedAt[key] != null && seatedAt[key] != index)
+						problems.push("'" + names[n] + "' is already at table " + (seatedAt[key] + 1) + ".");
+				}
+				if (names[0] && names[1] && names[0].toLowerCase() == names[1].toLowerCase())
+					problems.push("A player cannot play against themselves.");
+				for (var m = 0; m < 2; m++)
+					if (names[m] && seatedAt[names[m].toLowerCase()] == null)
+						seatedAt[names[m].toLowerCase()] = index;
+				if (problems.length > 0) {
+					errors++;
+					row.addClass("row-error");
+					msg.addClass("row-error").text(problems.join(" "));
+				} else {
+					if (warnings.length > 0)
+						msg.addClass("row-warning").text(warnings.join(" "));
+					tables.push({p1: names[0], p2: names[1]});
+				}
+			});
+			if (errors > 0) {
+				tablesResult.text(errors + " table" + (errors == 1 ? " needs" : "s need") + " fixing (see the messages under them).");
+				return null;
+			}
+			if (tables.length == 0) {
+				tablesResult.text("Enter at least one table: two players each.");
+				return null;
+			}
+			return tables;
+		};
+
+		// "WC Round 3" -> "WC Round 4": the next round's series name after a round has been created.
+		var nextSeriesName = function (name) {
+			var match = /^(.*?)(\d+)(\D*)$/.exec(name || "");
+			if (!match)
+				return name;
+			return match[1] + (parseInt(match[2], 10) + 1) + match[3];
+		};
+
+		$("#tables-create-button").button().click(function () {
+			if (state.current == null)
+				return;
+			var sourceId = currentSourceId();
+			if (!sourceId) {
+				tablesResult.text("Pick the tournament whose registered decks the players use.");
+				return;
+			}
+			if (!$("#tables-format").val()) {
+				tablesResult.text("Pick the format the games are played in.");
+				return;
+			}
+			var tables = validateTables();
+			if (tables == null)
+				return;
+			var seriesName = $.trim($("#tables-name").val());
+			tablesResult.html("Processing...");
+			hall.comm.addTables(seriesName, sourceId, $("#tables-format").val(), $("#tables-timer").val(),
+				tables.map(function (t) { return t.p1; }), tables.map(function (t) { return t.p2; }),
+				function () {
+					var next = nextSeriesName(seriesName);
+					tablesResult.empty()
+						.append($("<div></div>").text("Created " + tables.length + " table" + (tables.length == 1 ? "" : "s")
+							+ (seriesName ? " for '" + seriesName + "'" : "") + ": "
+							+ tables.map(function (t) { return t.p1 + " vs " + t.p2; }).join(", ") + "."));
+					if (next != seriesName) {
+						$("#tables-name").val(next);
+						tablesResult.append($("<div class='tables-next'></div>").text("Series name advanced to '" + next + "' for the next round."));
+					}
+					resetRows();
+				}, tourneyErrorMap(tablesResult));
+		});
+
+		var prepareTables = function (json) {
+			renderSourceOptions(json.tournamentId, json.name);
+			$("#tables-source-other-row").hide();
+			$("#tables-source-other").val("");
+			$("#tables-name").val("");
+			$("#tables-timer").val((json.params && json.params.wc) ? "WC" : "Competitive");
+			whenFormatsLoaded(function () { setSelect($("#tables-format"), json.format, json.formatName); });
+			resetRows();
+			$("#tables-paste-box").prop("hidden", true);
+			tablesResult.html("Ready.");
+			loadSourcePlayers();
+		};
+
+		// =====================================================================================
+		// Running tournaments list + calendar
+		// =====================================================================================
+		var highlightRunning = function (tournamentId) {
+			$("#running-list .schedule-card").removeClass("is-open");
+			if (tournamentId != null)
+				$("#running-list .schedule-card").filter(function () { return $(this).data("tournamentId") == tournamentId; }).addClass("is-open");
+		};
+
+		var renderRunning = function () {
+			var list = $("#running-list").empty();
+			var live = state.list.filter(function (t) { return t.status == "live"; });
+			if (live.length == 0) {
+				list.append("<i>No tournament is running right now.</i>");
+				return;
+			}
+			for (var i = 0; i < live.length; i++) {
+				(function (t) {
+					var card = $("<div class='schedule-card running-card'></div>").data("tournamentId", t.tournamentId);
+					var line = $("<div class='schedule-line'></div>");
+					line.append($("<span class='schedule-title'></span>").text(t.name));
+					line.append($("<span class='league-id'></span>").text(t.tournamentId));
+					var meta = [];
+					if (t.stageName) meta.push(t.stageName + (t.round ? ", round " + t.round : ""));
+					if (t.formatName) meta.push(t.formatName);
+					if (t.start) meta.push("started " + t.start.replace("T", " "));
+					line.append($("<span class='schedule-meta'></span>").text(meta.join(" · ")));
+					line.append($("<span class='schedule-buttons'></span>").append(
+						$("<button type='button'>Open</button>").button().click(function () { loadTournament(t.tournamentId); })));
+					card.append(line);
+					list.append(card);
+				})(live[i]);
+			}
+			if (state.current != null)
+				highlightRunning(state.current.tournamentId);
+		};
+
+		var refreshLists = function (skipCalendar) {
+			hall.comm.getTournamentsForAdmin(function (json) {
+				state.list = json.tournaments || [];
+				renderRunning();
+				if (hasStarted() && $("#tables-source").val() != OTHER_SOURCE) {
+					var chosen = $("#tables-source").val();
+					renderSourceOptions(state.current.tournamentId, state.current.name);
+					if (chosen)
+						$("#tables-source").val(chosen);
+				}
+			}, tourneyErrorMap($("#running-list")));
+			if (adminCalendar != null && !skipCalendar)
+				adminCalendar.load();
+		};
+
+		$("#open-tourney-button").button().click(function () {
+			var id = $.trim($("#open-tourney-id").val());
+			if (id)
+				loadTournament(id);
+		});
+		$("#open-tourney-id").on("keydown", function (e) {
+			if (e.key == "Enter" || e.which == 13)
+				$("#open-tourney-button").trigger("click");
+		});
+
+		var goToLeagueAdmin = function () {
+			$("#adminMain").tabs("option", "active", $("#admin-tabs li").index($("#leagueTab").parent()));
+		};
+
+		// On this page the calendar is the editing entry point, as it is on League Admin.
+		adminCalendar = new EventCalendarUI(hall.comm, $("#tourneyAdminCalendar"), {
+			onTournament: function (id, event) {
+				loadTournament(id);
+			},
+			onLeague: function (id, event) {
+				goToLeagueAdmin();
+			},
+			onProjected: function (scheduleId, event) {
+				goToLeagueAdmin();
+			}
+		});
+
+		// =====================================================================================
+		// Sealed formats in the hall (unchanged behaviour)
+		// =====================================================================================
+		$("#toggle-sealed-button").button().click(function () {
+			var out = $("#toggle-sealed-result");
+			out.html("Processing...");
+			hall.comm.toggleSealedHallStatus($("#toggle-sealed-select").val(),
+				function (text) {
+					out.text(text);
+				}, tourneyErrorMap(out));
+		});
+
+		// =====================================================================================
+		// Go
+		// =====================================================================================
+		startOver();
+		refreshLists(true);
+		adminCalendar.show();
+		// League Admin's calendar leaves the tournament it was asked to open here
+		if (window.tournamentAdminPendingOpen) {
+			var pending = window.tournamentAdminPendingOpen;
+			window.tournamentAdminPendingOpen = null;
+			loadTournament(pending);
+		}
 	});
 
 function sortOptionsByName(selector) {
 	$(selector).html($(selector + " option").sort(function (a, b) {
 		return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
 	}))
-	$(selector)[0].selectedIndex = 0;
+	if ($(selector)[0] && $(selector)[0].options.length > 0)
+		$(selector)[0].selectedIndex = 0;
 }
 
-function processScheduledTournament(preview, resultdiv, callback) {
-	var prizeEditor = tourneyPrizeEditor;
-	var prizeProblem = prizeEditor.validate();
-	if (prizeProblem != null) {
-		resultdiv.text(prizeProblem);
-		return;
-	}
-	
-	hall.comm.processScheduledTournament(                          
-		preview, 
-		$("#sch-tourney-name").val(),
-		$("#sch-tourney-type").val(),
-		$("#sch-tourney-wc").prop('checked'),
-		$("#sch-tourney-id").val(),
-		$("#sch-tourney-format").val(),
-		
-		$("#sch-tourney-sealed-format").val(),
-		$("#sch-tourney-sealed-deckbuild").val(),
-		$("#sch-tourney-sealed-registration").val(),
-
-		$("#sch-tourney-solodraft-format").val(),
-		$("#sch-tourney-solodraft-deckbuild").val(),
-		$("#sch-tourney-solodraft-registration").val(),
-
-		$("#sch-tourney-solo-table-draft-format").val(),
-		$("#sch-tourney-solo-table-draft-deckbuild").val(),
-		$("#sch-tourney-solo-table-draft-registration").val(),
-
-		$("#sch-tourney-table-draft-format").val(),
-		$("#sch-tourney-table-draft-timer").val(),
-		$("#sch-tourney-table-draft-deckbuild").val(),
-		$("#sch-tourney-table-draft-registration").val(),
-		
-		$("#sch-tourney-start").val(),
-		$("#sch-tourney-cost").val(),
-		$("#sch-tourney-playoff").val(),
-		"", //tiebreaker method
-		JSON.stringify(prizeEditor.getTiers()), //prizeTiers: JSON array of PrizeTier
-		$("#sch-tourney-min-players").val(),
-		$("#sch-tourney-kickoff").prop('checked'),
-		
-		callback, tourneyErrorMap(resultdiv));	
-}
-
-	
 function tourneyErrorMap(outputControl, callback=null) {
+	var done = function (message) {
+		outputControl.text(message);
+		if (callback != null)
+			callback();
+	};
 	return {
-		"0":function() {
-			outputControl.html("0: Server has been shut down or there was a problem with your internet connection.", "warningMessage");
-			if(callback!=null)
-				callback();
+		"0": function () {
+			done("0: Server has been shut down or there was a problem with your internet connection.");
 		},
-		"400":function(xhr, status, request) {
+		"400": function (xhr, status, request) {
 			var message = xhr.getResponseHeader("message");
-			if(message != null) {
-				outputControl.html("400; malformed input: " + message);
-			}
-			else {
-				outputControl.html("400: One of the provided parameters was malformed.  Double-check your input and try again.");
-			}
-			if(callback!=null)
-				callback();
+			done(message != null ? "400; malformed input: " + message
+				: "400: One of the provided parameters was malformed.  Double-check your input and try again.");
 		},
-		"401":function() {
-			outputControl.html("401: You are not logged in.");
-			if(callback!=null)
-				callback();
+		"401": function () {
+			done("401: You are not logged in.");
 		},
-		"403": function() {
-			outputControl.html("403: You do not have permission to perform such actions.");
-			if(callback!=null)
-				callback();
+		"403": function () {
+			done("403: You do not have permission to perform such actions.");
 		},
-		"404": function() {
-			outputControl.html("404: Info not found.  Check that your input is correct with removed whitespace and try again.");
-			if(callback!=null)
-				callback();
+		"404": function () {
+			done("404: Info not found.  Check that your input is correct with removed whitespace and try again.");
 		},
-		"410": function() {
-			outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
-			if(callback!=null)
-				callback();
+		"410": function () {
+			done("410: You have been inactive for too long and were logged out. Refresh the page if you wish to re-establish connection.");
 		},
-		"500": function() {
-			outputControl.html("500: Server error. One of the provided parameters was probably malformed.  Double-check your input and try again.");
-			if(callback!=null)
-				callback();
+		"500": function () {
+			done("500: Server error. One of the provided parameters was probably malformed.  Double-check your input and try again.");
 		}
 	};
 }
 </script>
-<div class="article">	
-	
-	
-	<div id="update-tourney-stage-section" class="league-form">
-		<h1>Update Tournament Stage</h1>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Tournament ID: </div>
-			<input type="text" id="update-stage-tourney-id" class="flex-fill">
+<div class="article">
+	<div id="tournament-admin-page" class="league-form">
+
+		<!-- A. Calendar -->
+		<h1>Event calendar</h1>
+		<div class="page-hint">Click a tournament to open it below: a scheduled one to edit it, a started one to manage its stage and tables. Leagues open League Admin.</div>
+		<div id="tourneyAdminCalendar"></div>
+
+		<!-- B. Running tournaments -->
+		<h2>Running tournaments <span class="info-toggle" data-for="help-running">i</span></h2>
+		<div id="help-running" class="info-text" hidden>
+			Every tournament that has started and not finished, including the daily and player-made ones that are not on the
+			calendar. Open one to change its stage or seat players at tables by hand. Anything else (an older or finished
+			tournament, or a queue) can be opened by its id.
 		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">New Stage: </div>
-			<select id="update-stage" class="flex-fill">
-				<option value="STARTING">Starting</option>
-				<option value="DRAFT">Drafting</option>
-				<option value="DECK_BUILDING">Deck-building</option>
-				<option value="DECK_REGISTRATION">Registering Decks</option>				
-				<option value="AWAITING_KICKOFF">Awaiting Kickoff</option>
-				<option value="PAUSED">Paused</option>
-				<option value="PREPARING">Preparing</option>
-				<option value="PLAYING_GAMES">Playing games</option>
-				<option value="FINISHED">Finished</option>
-			</select>
+		<div id="running-list"></div>
+		<div class="flex-horiz field-row open-by-id">
+			<div class="label-column">Open by id</div>
+			<input type="text" id="open-tourney-id" class="flex-fill" placeholder="tournament id, e.g. 2026-wc-fotr">
+			<button type="button" id="open-tourney-button">Open</button>
 		</div>
-		
-		<ul>
-			<li><b>Starting</b> - first stage of a tournament, which handles any setup (such as issuing packs in a sealed event).</li>
-			
-			<li><b>Drafting</b> - a Draft tournament is actively issuing cards to players.</li>
-			
-			<li><b>Deck-building</b> - a Sealed or Draft tournament is permitting players to construct decks with their event material.</li>
-			
-			<li><b>Registering Decks</b> - a brief period of leeway for players to register the decks they have constructed during limited events.</li>
-			
-			<li><b>Awaiting Kickoff</b> - a scheduled tournament will idle until an admin sets the status here to Preparing.</li>
-			
-			<li><b>Preparing</b> - a tournament that has been kicked off or unpaused and is about to resume play.</li>
-			
-			<li><b>Playing Games</b> - the tournament will generate tables for the current round and then wait for them to complete.</li>
-			
-			<li><b>Paused</b> - the tournament will idle until an admin sets the status here to Preparing.</li>
-			
-			<li><b>Finished</b> - a tournament which has reached its final round and will present the results.</li>
-		</ul>
-		
-		<button id="update-stage-button">
-			Update Tournament Stage
-		</button>
-		
-		<div id="update-stage-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
+
+		<!-- C. The tournament form -->
+		<div id="tourney-form-anchor" class="mode-header flex-horiz">
+			<h2 id="tourney-form-title">New tournament</h2>
+			<button type="button" id="tourney-new-button">New tournament</button>
+		</div>
+		<div id="tourney-form">
+			<div id="tourney-warning" class="league-warning" style="display:none"></div>
+
+			<!-- state of an existing tournament -->
+			<div id="tourney-state-block" class="form-section first" style="display:none">
+				<div id="tourney-facts" class="tourney-facts"></div>
+				<details class="tourney-preview-json"><summary>All parameters</summary><pre id="tourney-params-json"></pre></details>
 			</div>
-			<div id="update-stage-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
 
-	<br/><br/><hr><br/><br/>
-
-	<div id="toggle-sealed-hall-section" class="league-form">
-		<h1>Toggle Sealed Format Hall Status</h1>
-
-		<div class="flex-horiz">
-			<div class="label-column">Sealed Format: </div>
-			<select id="toggle-sealed-select" class="flex-fill"></select>
-		</div>
-
-		<div>
-			<p>If chosen sealed format is already available in hall, this will disable it. If the format is not available
-			in hall, this will enable it.</p>
-			<p>The changes made using this form are in effect only until server restart or json definitions reload.</p>
-			<p>For permanent change, remove or add "hall: true" field in the sealed format json definition.</p>
-		</div>
-
-		<button id="toggle-sealed-button">
-			Toggle Sealed Format Hall Status
-		</button>
-
-		<div id="toggle-sealed-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
-			</div>
-			<div id="toggle-sealed-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
-
-	<br/><br/><hr><br/><br/>
-	
-	<div id="sch-tourney-section" class="league-form">
-		<h1>Add Scheduled Tournament</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Name: </div>
-			<input type="text" id="sch-tourney-name" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz">
-			<div class="label-column">Tournament ID: </div>
-			<input type="text" id="sch-tourney-id" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Tournament Type: </div>
-			<select id="sch-tourney-type" class="flex-fill">
-				<option value="CONSTRUCTED">Constructed</option>
-				<option value="SEALED">Sealed</option>
-				<option value="SOLODRAFT">Solo Draft</option>
-				<option value="TABLE_SOLODRAFT">Table Solo Draft</option>
-				<option value="TABLE_DRAFT">Table Draft</option>
-			</select>
-		</div>
-		
-		<div class="flex-horiz constructed-only">
-			<div class="label-column">Constructed Format: </div>
-			<select id="sch-tourney-format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz sealed-only">
-			<div class="label-column">Sealed Format: </div>
-			<select id="sch-tourney-sealed-format" name="format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz sealed-only">
-			<div class="label-column">Deckbuilding duration (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-sealed-deckbuild" value="25" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz sealed-only">
-			<div class="label-column">Deck registration grace period (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-sealed-registration" value="5" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz solodraft-only">
-			<div class="label-column">Solo Draft Format: </div>
-			<select id="sch-tourney-solodraft-format" name="format" class="flex-fill"></select>
-		</div>
-
-		<div class="flex-horiz solodraft-only">
-			<div class="label-column">Solo Drafting + Deckbuilding duration (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-solodraft-deckbuild" value="25" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz solodraft-only">
-			<div class="label-column">Deck registration grace period (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-solodraft-registration" value="5" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz solo-table-draft-only">
-			<div class="label-column">Solo Table Draft Format: </div>
-			<select id="sch-tourney-solo-table-draft-format" name="format" class="flex-fill"></select>
-		</div>
-
-		<div class="flex-horiz solo-table-draft-only">
-			<div class="label-column">Solo Table Drafting + Deckbuilding duration (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-solo-table-draft-deckbuild" value="25" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz solo-table-draft-only">
-			<div class="label-column">Deck registration grace period (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-solo-table-draft-registration" value="5" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz table-draft-only">
-			<div class="label-column">Table Draft Format: </div>
-			<select id="sch-tourney-table-draft-format" name="format" class="flex-fill"></select>
-		</div>
-
-		<div class="flex-horiz table-draft-only">
-			<div class="label-column">Table Draft Timer: </div>
-			<select id="sch-tourney-table-draft-timer" name="format" class="flex-fill"></select>
-		</div>
-
-		<div class="flex-horiz table-draft-only">
-			<div class="label-column">Deckbuilding duration after draft (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-table-draft-deckbuild" value="15" class="flex-fill">
-		</div>
-
-		<div class="flex-horiz table-draft-only">
-			<div class="label-column">Deck registration grace period (in minutes): </div>
-			<input type="number" min="1" id="sch-tourney-table-draft-registration" value="2" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">World Championship: </div>
-			<input type="checkbox" id="sch-tourney-wc" />
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Require Manual Admin Kickoff: </div>
-			<input type="checkbox" id="sch-tourney-kickoff" />
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Cost (in silver): </div>
-			<input type="number" min="1" id="sch-tourney-cost" value="0" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Start Time (UTC): </div>
-			<input type="datetime-local" id="sch-tourney-start" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Playoff Type: </div>
-			<select id="sch-tourney-playoff" class="flex-fill">
-				<option value="swiss">Swiss</option>
-				<option value="single-elimination">Single Elimination</option>
-				<option value="swiss-3">3-round Swiss</option>
-				<option value="wc-swiss">WC Swiss (8 rounds)</option>
-				
-			</select>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Minimum Participants to Start: </div>
-			<input type="number" min="2" id="sch-tourney-min-players" value="2" class="flex-fill">
-		</div>	
-		
-		
-		<div class="flex-vert">
-			<div class="section-title">Prizes <span class="info-toggle" data-for="help-tourney-prizes">i</span></div>
-			<div id="help-tourney-prizes" class="info-text" hidden>
-				Extra prizes handed out when the tournament finishes, on top of the automatic daily prizes. Each tier says
-				who qualifies (a range of final places, ties included, or a minimum number of games played in the tournament)
-				and what they get. An item is a card or pack id (<code>9_1</code> is set 9 card 1; add <code>*</code> for
-				foil or <code>T</code> for tengwar) or, when the card does not exist yet, "to be announced" with a description:
-				players receive a placeholder card that is swapped for the real one once it is resolved on the Prizes tab.
-			</div>
-			<div id="sch-tourney-prize-tiers"></div>
-		</div>
-		
-		<button id="preview-sch-tourney-button">
-			Preview Scheduled Tournament
-		</button>
-				
-		<button id="add-sch-tourney-button" >
-			Add Scheduled Tournament
-		</button> 
-		<div id="sch-tourney-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
-			</div>
-			<div id="sch-tourney-result" class="flex-fill result-box">
-				Ready.
-			</div>
-		</div>
-	</div>
-	
-	
-	
-	<br/><br/><hr><br/><br/>
-	
-	<div id="elim-tables-section" class="league-form">
-		<h1>Manually Add Tables</h1>
-		<div class="flex-horiz">
-			<div class="label-column">Series Name: </div>
-			<input type="text" id="elim-table-name" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Tournament (for decks): </div>
-			<input type="text" id="elim-table-tournament" class="flex-fill">
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Format: </div>
-			<select id="elim-table-format" class="flex-fill"></select>
-		</div>
-		
-		<div class="flex-horiz">
-			<div class="label-column">Timer (player clock / timeout): </div>
-			<select id="elim-table-timer" class="flex-fill">
-				<option value="Competitive">Competitive (40/5)</option>
-				<option value="WC">Championship (20/10)</option>
-				<option value="WC_Expanded">Championship Expanded (25/10)</option>
-				<option value="Blitz!">Blitz (25/3)</option>
-				<option value="Default">Default (45/6)</option>
-				<option value="Slow">Slow (80/10)</option>
-			</select><br/>
-		</div>
-		
-		<div id="elim-table-pairs">
-			<div class="elim-table-entry">
-				<div class="label-column">Table Players: </div>
-				<div class="flex-horiz">
-					<div class="label-column">Player 1: </div>
-					<input type="text" name="playerone" class="flex-fill">
+			<!-- settings: a new tournament, or a scheduled one that has not started -->
+			<div id="tourney-settings-block">
+				<div class="form-section first">
+					<div class="league-type-bar">
+						<button type="button" class="type-btn tourney-type-btn" data-type="CONSTRUCTED">Constructed</button>
+						<button type="button" class="type-btn tourney-type-btn" data-type="SEALED">Sealed</button>
+						<button type="button" class="type-btn tourney-type-btn" data-type="SOLODRAFT">Solo Draft</button>
+						<button type="button" class="type-btn tourney-type-btn" data-type="TABLE_SOLODRAFT">Table Solo Draft</button>
+						<button type="button" class="type-btn tourney-type-btn" data-type="TABLE_DRAFT">Table Draft</button>
+					</div>
 				</div>
-				<div class="flex-horiz">
-					<div class="label-column">Player 2: </div>
-					<input type="text" name="playertwo" class="flex-fill">
+
+				<div class="form-section">
+					<div class="flex-horiz field-row">
+						<div class="label-column">Name</div>
+						<input type="text" id="tourney-name" class="flex-fill" maxlength="45">
+					</div>
+
+					<div id="tourney-id-row" class="flex-horiz field-row">
+						<div class="label-column">Tournament ID <span class="info-toggle" data-for="help-tourney-id">i</span></div>
+						<input type="text" id="tourney-id" class="flex-fill">
+					</div>
+					<div id="help-tourney-id" class="info-text" hidden>
+						The tournament's permanent key: no spaces, and it must not be used by any other tournament. It follows the
+						name until you type one. A World Championship tournament gets the prefix <code>&lt;year&gt;-wc-</code> when it
+						is created. Once created it cannot be changed.
+					</div>
+
+					<div class="flex-horiz field-row constructed-only">
+						<div class="label-column">Format</div>
+						<select id="tourney-format" class="flex-fill"></select>
+					</div>
+					<div class="flex-horiz field-row sealed-only">
+						<div class="label-column">Sealed format</div>
+						<select id="tourney-sealed-format" class="flex-fill"></select>
+					</div>
+					<div class="flex-horiz field-row solodraft-only">
+						<div class="label-column">Solo draft format</div>
+						<select id="tourney-solodraft-format" class="flex-fill"></select>
+					</div>
+					<div class="flex-horiz field-row solo-table-draft-only">
+						<div class="label-column">Solo table draft format</div>
+						<select id="tourney-solo-table-draft-format" class="flex-fill"></select>
+					</div>
+					<div class="flex-horiz field-row table-draft-only">
+						<div class="label-column">Table draft format</div>
+						<select id="tourney-table-draft-format" class="flex-fill"></select>
+					</div>
+					<div class="flex-horiz field-row table-draft-only">
+						<div class="label-column">Draft timer</div>
+						<select id="tourney-table-draft-timer" class="flex-fill"></select>
+					</div>
+
+					<div class="flex-horiz field-row limited-only">
+						<div class="label-column"><span id="tourney-deckbuild-label">Deck-building (minutes)</span> <span class="info-toggle" data-for="help-deckbuild">i</span></div>
+						<input type="number" min="1" id="tourney-deckbuild" value="25" class="flex-fill">
+					</div>
+					<div class="flex-horiz field-row limited-only">
+						<div class="label-column">Registration grace (minutes)</div>
+						<input type="number" min="1" id="tourney-registration" value="5" class="flex-fill">
+					</div>
+					<div id="help-deckbuild" class="info-text" hidden>
+						How long players have to draft and build (solo drafts count the drafting too; a table draft builds after the
+						live draft ends), then a short grace period to register the deck before the first round is paired.
+					</div>
+				</div>
+
+				<div class="form-section">
+					<div class="flex-horiz field-row">
+						<div class="label-column">Start (UTC) <span class="info-toggle" data-for="help-start">i</span></div>
+						<input type="datetime-local" id="tourney-start" class="flex-fill">
+					</div>
+					<div id="help-start" class="info-text" hidden>
+						When the first round begins, in UTC. Players can sign up from an hour before (30 hours before for a World
+						Championship tournament); if fewer than the minimum have signed up by then, it does not start.
+					</div>
+
+					<div class="flex-horiz field-row">
+						<div class="label-column">Cost (silver)</div>
+						<input type="number" min="0" id="tourney-cost" value="0" class="flex-fill">
+					</div>
+
+					<div class="flex-horiz field-row">
+						<div class="label-column">Pairing <span class="info-toggle" data-for="help-playoff">i</span></div>
+						<select id="tourney-playoff" class="flex-fill">
+							<option value="swiss">Swiss</option>
+							<option value="single-elimination">Single Elimination</option>
+							<option value="swiss-3">3-round Swiss</option>
+							<option value="wc-swiss">WC Swiss (8 rounds)</option>
+						</select>
+					</div>
+					<div id="help-playoff" class="info-text" hidden>
+						Swiss runs as many rounds as the player count needs; 3-round Swiss stops after three; single elimination drops
+						every loser; WC Swiss is the championship's fixed-length Swiss.
+					</div>
+
+					<div class="flex-horiz field-row">
+						<div class="label-column">Minimum players</div>
+						<input type="number" min="2" id="tourney-min-players" value="2" class="flex-fill">
+					</div>
+
+					<div class="flex-horiz field-row">
+						<div class="label-column">World Championship <span class="info-toggle" data-for="help-wc">i</span></div>
+						<input type="checkbox" id="tourney-wc" />
+					</div>
+					<div id="help-wc" class="info-text" hidden>
+						Marks the tournament as part of the World Championship: sign-up opens 30 hours ahead, and a new one's id gets
+						the <code>&lt;year&gt;-wc-</code> prefix.
+					</div>
+
+					<div class="flex-horiz field-row">
+						<div class="label-column">Manual kickoff <span class="info-toggle" data-for="help-kickoff">i</span></div>
+						<input type="checkbox" id="tourney-kickoff" />
+					</div>
+					<div id="help-kickoff" class="info-text" hidden>
+						The tournament waits at "Awaiting Kickoff" once it starts, until an admin sets its stage to Preparing below.
+						Useful when players sign up to register decks and the rounds are run by hand (see "Tables" below).
+					</div>
+
+					<div class="flex-vert">
+						<div class="section-title">Prizes <span class="info-toggle" data-for="help-tourney-prizes">i</span></div>
+						<div id="help-tourney-prizes" class="info-text" hidden>
+							Extra prizes handed out when the tournament finishes, on top of the automatic daily prizes. Each tier says
+							who qualifies (a range of final places, ties included, or a minimum number of games played in the tournament)
+							and what they get. An item is a card or pack id (<code>9_1</code> is set 9 card 1; add <code>*</code> for
+							foil or <code>T</code> for tengwar) or, when the card does not exist yet, "to be announced" with a description:
+							players receive a placeholder card that is swapped for the real one once it is resolved on the Prizes tab.
+						</div>
+						<div id="tourney-prize-tiers"></div>
+					</div>
+				</div>
+
+				<div class="flex-horiz form-buttons">
+					<button type="button" id="tourney-preview-button">Preview</button>
+					<button type="button" id="tourney-save-button">Create tournament</button>
+				</div>
+			</div>
+
+			<div id="tourney-result-label" class="flex-horiz result-label">
+				<div class="label"><b>Result:</b></div>
+				<div id="tourney-result" class="flex-fill result-box">Ready.</div>
+			</div>
+
+			<!-- stage: started tournaments only -->
+			<div id="tourney-stage-block" class="form-section" style="display:none">
+				<div class="section-title">Stage <span class="info-toggle" data-for="help-stage">i</span></div>
+				<div id="help-stage" class="info-text" hidden>
+					<ul class="stage-help">
+						<li><b>Starting</b> - first stage of a tournament, which handles any setup (such as issuing packs in a sealed event).</li>
+						<li><b>Drafting</b> - a Draft tournament is actively issuing cards to players.</li>
+						<li><b>Deck-building</b> - a Sealed or Draft tournament is permitting players to construct decks with their event material.</li>
+						<li><b>Registering Decks</b> - a brief period of leeway for players to register the decks they have constructed during limited events.</li>
+						<li><b>Awaiting Kickoff</b> - a scheduled tournament will idle until an admin sets the status here to Preparing.</li>
+						<li><b>Preparing</b> - a tournament that has been kicked off or unpaused and is about to resume play.</li>
+						<li><b>Playing Games</b> - the tournament will generate tables for the current round and then wait for them to complete.</li>
+						<li><b>Paused</b> - the tournament will idle until an admin sets the status here to Preparing.</li>
+						<li><b>Finished</b> - a tournament which has reached its final round and will present the results.</li>
+					</ul>
+				</div>
+				<div class="flex-horiz field-row">
+					<div class="label-column">Current stage</div>
+					<span id="stage-current" class="flex-fill"></span>
+				</div>
+				<div class="flex-horiz field-row">
+					<div class="label-column">New stage</div>
+					<select id="stage-select" class="flex-fill">
+						<option value="STARTING">Starting</option>
+						<option value="DRAFT">Drafting</option>
+						<option value="DECK_BUILDING">Deck-building</option>
+						<option value="DECK_REGISTRATION">Registering Decks</option>
+						<option value="AWAITING_KICKOFF">Awaiting Kickoff</option>
+						<option value="PAUSED">Paused</option>
+						<option value="PREPARING">Preparing</option>
+						<option value="PLAYING_GAMES">Playing games</option>
+						<option value="FINISHED">Finished</option>
+					</select>
+					<button type="button" id="stage-button">Set stage</button>
+				</div>
+				<div class="flex-horiz result-label">
+					<div class="label"><b>Result:</b></div>
+					<div id="stage-result" class="flex-fill result-box">Ready.</div>
+				</div>
+			</div>
+
+			<!-- manual tables: started tournaments only -->
+			<div id="tourney-tables-block" class="form-section" style="display:none">
+				<div class="section-title">Tables <span class="info-toggle" data-for="help-tables">i</span></div>
+				<div id="help-tables" class="info-text" hidden>
+					Seats players at game tables by hand, outside the automatic pairing - the way a World Championship round is run:
+					players sign up to a tournament (one per format) so their decks are registered, and admins seat each round here.
+					Each player plays with the deck they registered in the <i>deck source</i> tournament, and the games are reported
+					under that tournament. Type the names (they autocomplete from the deck source's players; Enter moves to the next
+					box and adds a table), or paste a round's pairings. After the tables are created, a number at the end of the
+					series name is advanced for the next round.
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Series name <span class="info-toggle" data-for="help-tables-name">i</span></div>
+					<input type="text" id="tables-name" class="flex-fill" placeholder="e.g. WC Round 1">
+				</div>
+				<div id="help-tables-name" class="info-text" hidden>The description shown on each table, so players and spectators can tell which round it belongs to.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Deck source <span class="info-toggle" data-for="help-tables-source">i</span></div>
+					<select id="tables-source" class="flex-fill"></select>
+				</div>
+				<div id="tables-source-other-row" class="flex-horiz field-row" style="display:none">
+					<div class="label-column">Deck source id</div>
+					<input type="text" id="tables-source-other" class="flex-fill" placeholder="tournament id">
+				</div>
+				<div id="help-tables-source" class="info-text" hidden>
+					The tournament whose registered decks the players use; it is also the tournament the games are reported under.
+					This tournament comes first; for a two-part event pick the tournament of the other format for the second part.
+					Running and recently finished tournaments are listed; "Other tournament id..." reaches any other.
+				</div>
+				<div id="tables-source-hint" class="tables-hint"></div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Format <span class="info-toggle" data-for="help-tables-format">i</span></div>
+					<select id="tables-format" class="flex-fill"></select>
+				</div>
+				<div id="help-tables-format" class="info-text" hidden>The format the games are played in. Picking a deck source selects its format.</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Timer (player clock / timeout)</div>
+					<select id="tables-timer" class="flex-fill">
+						<option value="Competitive">Competitive (40/5)</option>
+						<option value="WC">Championship (20/10)</option>
+						<option value="WC_Expanded">Championship Expanded (25/10)</option>
+						<option value="Blitz">Blitz (25/3)</option>
+						<option value="Default">Default (45/6)</option>
+						<option value="Slow">Slow (80/10)</option>
+					</select>
+				</div>
+
+				<div id="tables-rows"></div>
+				<div class="flex-horiz form-buttons">
+					<button type="button" id="tables-add-row">Add table</button>
+					<button type="button" id="tables-paste-toggle">Paste pairings</button>
+				</div>
+				<div id="tables-paste-box" class="tables-paste-box" hidden>
+					<textarea id="tables-paste" rows="6" class="flex-fill" placeholder="alice vs bob&#10;carol	dave&#10;3. erin, frank"></textarea>
+					<div class="page-hint">One table per line: two names separated by spaces, a tab, a comma or "vs". Pasting two columns from a spreadsheet works.</div>
+					<div><button type="button" id="tables-paste-apply">Use these pairings</button></div>
+				</div>
+
+				<div class="flex-horiz form-buttons">
+					<button type="button" id="tables-create-button">Create tables</button>
+				</div>
+				<div class="flex-horiz result-label">
+					<div class="label"><b>Result:</b></div>
+					<div id="tables-result" class="flex-fill result-box">Ready.</div>
 				</div>
 			</div>
 		</div>
-				
-		<button id="add-additional-table-button" >
-			Add Another Table
-		</button> 
-		
-		<button id="add-tables-button">
-			Add Tables
-		</button>
-		
-		<div id="elim-tables-result-label" class="flex-horiz result-label">
-			<div class="label">
-				<b>Result:</b>
+
+		<!-- D. Sealed formats in the hall -->
+		<div id="toggle-sealed-hall-section" class="tourney-side-section">
+			<h2>Sealed formats in the hall <span class="info-toggle" data-for="help-toggle-sealed">i</span></h2>
+			<div id="help-toggle-sealed" class="info-text" hidden>
+				Offers a sealed format for player-made tournaments in the hall, or withdraws it if it is already offered. The change
+				lasts until the server restarts or the format definitions are reloaded; for a permanent change add or remove
+				<code>hall: true</code> in the sealed format's json definition.
 			</div>
-			<div id="elim-tables-result" class="flex-fill result-box">
-				Ready.
+			<div class="flex-horiz field-row">
+				<div class="label-column">Sealed format</div>
+				<select id="toggle-sealed-select" class="flex-fill"></select>
+				<button type="button" id="toggle-sealed-button">Toggle hall status</button>
+			</div>
+			<div class="flex-horiz result-label">
+				<div class="label"><b>Result:</b></div>
+				<div id="toggle-sealed-result" class="flex-fill result-box">Ready.</div>
 			</div>
 		</div>
+
 	</div>
-	
-	
-	<br/><br/><hr><br/><br/>
-	
-	
-	
 </div>
-
-	
-

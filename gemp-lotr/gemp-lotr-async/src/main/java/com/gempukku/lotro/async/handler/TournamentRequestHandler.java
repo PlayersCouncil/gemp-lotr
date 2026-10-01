@@ -12,6 +12,7 @@ import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.SortAndFilterCards;
+import com.gempukku.lotro.game.formats.FormatNames;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.hall.HallServer;
@@ -19,6 +20,7 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.*;
 import com.gempukku.util.JsonUtils;
+import com.gempukku.util.UrlPaths;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
@@ -82,7 +84,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         } else if (uri.equals("/history") && request.method() == HttpMethod.GET) {
             getTournamentHistory(request, responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/html") && uri.contains("/deck/") && request.method() == HttpMethod.GET) {
-            getTournamentDeck(request, uri.substring(1, uri.indexOf("/deck/")), uri.substring(uri.indexOf("/deck/") + 6, uri.lastIndexOf("/html")), responseWriter);
+            // The player name arrives percent-encoded (a space as %20, and so on): the HTTP layer does not decode paths.
+            getTournamentDeck(request, uri.substring(1, uri.indexOf("/deck/")),
+                    UrlPaths.decodeSegment(uri.substring(uri.indexOf("/deck/") + 6, uri.lastIndexOf("/html"))), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/html") && uri.contains("/report/") && request.method() == HttpMethod.GET) {
             getTournamentReport(request, uri.substring(1, uri.indexOf("/report/")), responseWriter);
         } else if (uri.equals("/create") && request.method() == HttpMethod.POST) {
@@ -98,7 +102,14 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
     private void getTournamentFormats(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
         var postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            getTournamentFormats(request, postDecoder, responseWriter);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
 
+    private void getTournamentFormats(HttpRequest request, HttpPostRequestDecoder postDecoder, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
         String participantId = getFormParameterSafely(postDecoder, "participantId");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
@@ -132,10 +143,20 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
     private void processPlayerMadeTournament(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         var postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            processPlayerMadeTournament(request, postDecoder, responseWriter);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
 
+    private void processPlayerMadeTournament(HttpRequest request, HttpPostRequestDecoder postDecoder, ResponseWriter responseWriter) throws Exception {
         String participantId = getFormParameterSafely(postDecoder, "participantId");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
         String deckName = getFormParameterSafely(postDecoder, "deckName");
+        // deckSource=library: the creator's deck is a Deck Library deck (owned by the Librarian)
+        String deckSource = getFormParameterSafely(postDecoder, "deckSource");
+        Player deckOwner = (deckSource != null && deckSource.equalsIgnoreCase("library")) ? getLibrarian() : resourceOwner;
 
         String typeStr = getFormParameterSafely(postDecoder, "type");
         String deckbuildingDurationStr = getFormParameterSafely(postDecoder, "deckbuildingDuration");
@@ -280,14 +301,22 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             return;
         }
         try {
-            if (_hallServer.addPlayerMadeQueue(info, resourceOwner, deckName, startable, readyCheck)) {
+            if (_hallServer.addPlayerMadeQueue(info, resourceOwner, deckOwner, deckName, startable, readyCheck)) {
                 responseWriter.sendJsonOK();
             } else {
-                Throw400IfValidationFails("Error", "Error", false, "Error while creating queue or joining");
+                writeJsonError(responseWriter, "The tournament could not be created: one with the same id already exists. Please try again.");
             }
-        } catch (HallException badDeck) {
-            Throw400IfValidationFails("deckName", deckName, false, "Select valid deck for the requested format");
+        } catch (HallException refused) {
+            // the reason the player can act on, e.g. "Your selected deck is not valid for this format: ..."
+            writeJsonError(responseWriter, refused.getMessage());
         }
+    }
+
+    // A 400 whose JSON body {"error": "..."} carries a message meant for the player (the Play popup shows it as is).
+    private void writeJsonError(ResponseWriter responseWriter, String message) {
+        var body = new HashMap<String, String>();
+        body.put("error", message);
+        responseWriter.writeJsonResponse(400, JsonUtils.Serialize(body));
     }
 
     private void getTournamentInfo(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
@@ -304,7 +333,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         tournamentElem.setAttribute("id", tournament.getTournamentId());
         tournamentElem.setAttribute("name", tournament.getTournamentName());
-        tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
+        tournamentElem.setAttribute("format", formatName(tournament));
         tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
         tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
         tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
@@ -319,6 +348,14 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         doc.appendChild(tournamentElem);
 
         responseWriter.writeXmlResponse(doc);
+    }
+
+    /**
+     * The tournament's format name, or its raw format code when that format has since been retired (the library then
+     * returns null for it).  Finished tournaments of any age are shown, so this must not throw.
+     */
+    private String formatName(Tournament tournament) {
+        return FormatNames.nameOrCode(_formatLibrary, tournament.getFormatCode());
     }
 
     private void setStandingAttributes(PlayerStanding standing, Element standingElem) {
@@ -374,7 +411,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());
             tournamentElem.setAttribute("name", tournament.getTournamentName());
-            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
+            tournamentElem.setAttribute("format", formatName(tournament));
             tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
             tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
             tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
@@ -403,10 +440,14 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());
             tournamentElem.setAttribute("name", tournament.getTournamentName());
-            tournamentElem.setAttribute("format", _formatLibrary.getFormat(tournament.getFormatCode()).getName());
+            tournamentElem.setAttribute("format", formatName(tournament));
             tournamentElem.setAttribute("collection", tournament.getCollectionType().getFullName());
             tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
             tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
+            // The Current Tournaments rows show this date on the right (yyyy-MM-dd, UTC).
+            TournamentInfo info = tournament.getInfo();
+            if (info != null && info.StartTime != null)
+                tournamentElem.setAttribute("start", DateUtils.FormatDate(info.StartTime.withZoneSameInstant(DateUtils.UTC)));
 
             tournaments.appendChild(tournamentElem);
         }

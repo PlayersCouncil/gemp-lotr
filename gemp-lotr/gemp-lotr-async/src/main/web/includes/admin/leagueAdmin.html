@@ -14,7 +14,8 @@ $(document).ready(
 		// template keys the form manages itself; anything else found in a loaded schedule is carried over untouched
 		var MANAGED_TEMPLATE_KEYS = ["cost", "maxRepeatMatches", "description", "inviteOnly", "collectionName", "campaign", "prizeTiers",
 			"racePath", "raceVisualPath", "raceCumulative", "raceIntensityFloor", "raceIntensityCeiling",
-			"raceAdvancementMode", "raceAdvanceFactor", "series", "name", "start", "code"];
+			"raceAdvancementMode", "raceAdvanceFactor", "racePathLength", "raceRandomizeEachInstance",
+			"series", "name", "start", "code"];
 
 		var state = {
 			type: "SEALED",
@@ -854,6 +855,9 @@ $(document).ready(
 		}
 
 		// ---- Randomizer ----
+		// The roll itself is done by the server (RTMDPathGenerator), which is also what scheduled leagues use, so
+		// there is one implementation of the algorithm rather than two that can drift apart.  Locked slots are sent
+		// positionally: a blueprint ID keeps that slot, an empty entry re-rolls it.
 		$("#rtmd-randomize-btn").button().click(function() {
 			if (!rtmdDataLoaded) return;
 
@@ -861,70 +865,31 @@ $(document).ready(
 			var floor = parseInt($("#rtmd-intensity-floor").val());
 			var ceiling = parseInt($("#rtmd-intensity-ceiling").val());
 
-			var pool = rtmdAllModifiers.filter(function(m) {
-				return m.intensity >= floor && m.intensity <= ceiling;
+			var locked = [];
+			for (var i = 0; i < pathLength; i++)
+				locked.push((rtmdLocked[i] && rtmdPath[i]) ? rtmdPath[i].blueprintId : "");
+
+			var button = $(this).button("option", "disabled", true);
+			hall.comm.getRTMDRandomPath(pathLength, floor, ceiling, locked.join(","), function(json) {
+				button.button("option", "disabled", false);
+				var ids = json.racePath || [];
+				rtmdPath = [];
+				rtmdLocked = [];
+				for (var i = 0; i < ids.length; i++) {
+					var id = ids[i];
+					var mod = rtmdAllModifiers.find(function(m) { return m.blueprintId === id; });
+					rtmdPath.push(mod || {blueprintId: id, title: id + " (unknown)", intensity: 0, gameText: ""});
+					// a slot the admin had locked comes back untouched, so it stays locked
+					rtmdLocked.push(locked.indexOf(id) >= 0);
+				}
+				renderRTMDPath();
+				updateAvailablePool();
+			}, {
+				"400": function() {
+					button.button("option", "disabled", false);
+					resultdiv.html("Could not roll a path: check the path length and intensity range.");
+				}
 			});
-
-			// Ensure arrays are correct length
-			while (rtmdPath.length < pathLength) { rtmdPath.push(null); rtmdLocked.push(false); }
-			rtmdPath.length = pathLength;
-			rtmdLocked.length = pathLength;
-
-			// Track used IDs from locked slots
-			var usedIds = new Set();
-			for (var i = 0; i < pathLength; i++) {
-				if (rtmdLocked[i] && rtmdPath[i]) {
-					usedIds.add(rtmdPath[i].blueprintId);
-				}
-			}
-
-			// Generate target intensities with linear interpolation
-			var targets = [];
-			for (var i = 0; i < pathLength; i++) {
-				targets.push(floor + (ceiling - floor) * (i / Math.max(1, pathLength - 1)));
-			}
-
-			// For each unlocked slot, pick best match with jitter
-			for (var i = 0; i < pathLength; i++) {
-				if (rtmdLocked[i] && rtmdPath[i]) continue;
-
-				var target = targets[i];
-				var jitter = (Math.random() - 0.5) * 2;
-				var adjustedTarget = target + jitter;
-
-				var available = pool.filter(function(m) { return !usedIds.has(m.blueprintId); });
-				available.sort(function(a, b) {
-					return Math.abs(a.intensity - adjustedTarget) - Math.abs(b.intensity - adjustedTarget);
-				});
-
-				if (available.length > 0) {
-					var topN = Math.min(3, available.length);
-					var pick = available[Math.floor(Math.random() * topN)];
-					rtmdPath[i] = pick;
-					usedIds.add(pick.blueprintId);
-				} else {
-					rtmdPath[i] = null;
-				}
-			}
-
-			// Swap two random pairs of unlocked adjacent modifiers for a dash of nonlinearity
-			for (var swap = 0; swap < 2; swap++) {
-				var candidates = [];
-				for (var i = 0; i < rtmdPath.length - 1; i++) {
-					if (!rtmdLocked[i] && !rtmdLocked[i + 1] && rtmdPath[i] && rtmdPath[i + 1]) {
-						candidates.push(i);
-					}
-				}
-				if (candidates.length > 0) {
-					var idx = candidates[Math.floor(Math.random() * candidates.length)];
-					var tmp = rtmdPath[idx];
-					rtmdPath[idx] = rtmdPath[idx + 1];
-					rtmdPath[idx + 1] = tmp;
-				}
-			}
-
-			renderRTMDPath();
-			updateAvailablePool();
 		});
 
 		// ---- Manual Add ----
@@ -959,7 +924,10 @@ $(document).ready(
 				raceIntensityFloor: toInt($("#rtmd-intensity-floor").val(), -10),
 				raceIntensityCeiling: toInt($("#rtmd-intensity-ceiling").val(), 10),
 				raceAdvancementMode: $("#rtmd-advancement-mode").val(),
-				raceAdvanceFactor: toInt($("#rtmd-advance-factor").val(), 1)
+				raceAdvanceFactor: toInt($("#rtmd-advance-factor").val(), 1),
+				racePathLength: toInt($("#rtmd-path-length").val(), 9),
+				// only a schedule re-rolls; a one-off league keeps exactly the path shown in the editor
+				raceRandomizeEachInstance: isScheduling() && $("#rtmd-randomize-each").prop("checked")
 			};
 		};
 
@@ -992,6 +960,7 @@ $(document).ready(
 			$("#rtmd-advancement-mode").val("WIN");
 			$("#rtmd-advance-factor").val(1);
 			$("#rtmd-cumulative").prop("checked", false);
+			$("#rtmd-randomize-each").prop("checked", true);
 			setPathLength(9);
 			setIntensityRange(rtmdFullRange[0], rtmdFullRange[1]);
 			if (rtmdDataLoaded)
@@ -1004,7 +973,11 @@ $(document).ready(
 			$("#rtmd-advancement-mode").val(params.raceAdvancementMode || "WIN");
 			$("#rtmd-advance-factor").val(params.raceAdvanceFactor != null ? params.raceAdvanceFactor : 1);
 			$("#rtmd-cumulative").prop("checked", params.raceCumulative === true);
+			// a schedule template written before the flag existed re-rolls, which is what the server assumes too
+			$("#rtmd-randomize-each").prop("checked", params.raceRandomizeEachInstance !== false);
 			setRacePath(params.racePath || [], params.raceIntensityFloor, params.raceIntensityCeiling);
+			if (params.racePathLength > 0 && (params.racePath || []).length == 0)
+				setPathLength(params.racePathLength);
 		};
 
 		// =====================================================================================
@@ -1133,6 +1106,8 @@ $(document).ready(
 			$("#league-repeat-row").toggle(state.editingLeague == null);
 			$("#schedule-block").toggle(scheduling);
 			$("#oneoff-block").toggle(!scheduling);
+			// only a schedule can re-roll: a single league is created once, from the path in the editor
+			$("#rtmd-randomize-each-row").toggle(scheduling);
 			$("#league-name-row").toggle(!scheduling);
 			$("#league-start-label").text(scheduling ? "Next league starts" : "Start date");
 			$("#help-start").text(scheduling
@@ -1321,7 +1296,9 @@ $(document).ready(
 					return false;
 				}
 			}
-			if (state.type == "RTMD" && gatherRTMDPath().length == 0) {
+			// a schedule that re-rolls needs no path of its own; the server generates one per league
+			var raceIsGenerated = scheduling && $("#rtmd-randomize-each").prop("checked");
+			if (state.type == "RTMD" && !raceIsGenerated && gatherRTMDPath().length == 0) {
 				resultdiv.html("The race needs at least one site: use Randomize or add modifiers to the path.");
 				return false;
 			}
@@ -1633,6 +1610,8 @@ $(document).ready(
 				editScheduleById(scheduleId);
 			},
 			onTournament: function (id, event) {
+				// t3-tournament-admin: Tournament Admin opens this tournament in its form when its tab loads
+				window.tournamentAdminPendingOpen = id;
 				$("#adminMain").tabs("option", "active", $("#admin-tabs li").index($("#tournamentTab").parent()));
 			}
 		});
@@ -1704,7 +1683,7 @@ function leagueErrorMap(outputControl, callback=null) {
 				callback();
 		},
 		"410": function() {
-			outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+			outputControl.html("410: You have been inactive for too long and were logged out. Refresh the page if you wish to re-establish connection.");
 			if(callback!=null)
 				callback();
 		},
@@ -1850,6 +1829,17 @@ function leagueErrorMap(outputControl, callback=null) {
 					<input type="number" min="1" id="rtmd-advance-factor" value="1" class="flex-fill">
 				</div>
 				<div id="help-advance" class="info-text" hidden>Wins (or points) needed to move one site along the path.</div>
+
+				<div id="rtmd-randomize-each-row" class="flex-horiz field-row">
+					<div class="label-column">Re-roll each league <span class="info-toggle" data-for="help-randomize-each">i</span></div>
+					<input type="checkbox" id="rtmd-randomize-each" checked />
+				</div>
+				<div id="help-randomize-each" class="info-text" hidden>
+					On (the default for a schedule): the server rolls a brand new path, of the length and intensity range set here,
+					for every league this schedule creates - the path below is only a sample of what they will look like.
+					Off: every league of this schedule gets exactly the path below. Either way the path of a league that has been
+					created but has not started yet can still be edited by loading that league.
+				</div>
 
 				<div class="flex-horiz field-row" style="display:none">
 					<div class="label-column">Cumulative</div>

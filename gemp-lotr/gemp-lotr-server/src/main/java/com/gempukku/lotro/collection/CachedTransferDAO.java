@@ -5,9 +5,11 @@ import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
 
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.function.LongSupplier;
 
 public class CachedTransferDAO implements TransferDAO, Cached {
     private final TransferDAO _delegate;
@@ -17,9 +19,19 @@ public class CachedTransferDAO implements TransferDAO, Cached {
     private final MarkdownParser _markdownParser;
     private DBDefs.Announcement _parsedAnnouncement;
 
+    /** how often the current announcement is looked up again, so one that starts or ends later shows up / goes away */
+    public static final long ANNOUNCEMENT_RECHECK_MS = 60_000;
+    private final LongSupplier _clock;
+    private volatile long _announcementCheckedAt;
+
     public CachedTransferDAO(TransferDAO delegate, MarkdownParser parser) {
+        this(delegate, parser, System::currentTimeMillis);
+    }
+
+    CachedTransferDAO(TransferDAO delegate, MarkdownParser parser, LongSupplier clock) {
         _delegate = delegate;
         _markdownParser = parser;
+        _clock = clock;
     }
 
     @Override
@@ -59,6 +71,7 @@ public class CachedTransferDAO implements TransferDAO, Cached {
 
     @Override
     public boolean hasUndeliveredAnnouncement(Player player) {
+        recheckCurrentAnnouncement();
         if (_playersWithoutAnnouncements.contains(player.getName()))
             return false;
         boolean value = _delegate.hasUndeliveredAnnouncement(player);
@@ -144,14 +157,42 @@ public class CachedTransferDAO implements TransferDAO, Cached {
     }
 
     private void cacheCurrentAnnouncement() {
-        _parsedAnnouncement = _delegate.getCurrentAnnouncement();
-        if(_parsedAnnouncement != null) {
-            _parsedAnnouncement.content = _markdownParser.renderMarkdown(_parsedAnnouncement.content, false);
+        _announcementCheckedAt = _clock.getAsLong();
+        _parsedAnnouncement = parse(_delegate.getCurrentAnnouncement());
+    }
+
+    private DBDefs.Announcement parse(DBDefs.Announcement announcement) {
+        if(announcement != null) {
+            // a patch note's announcement starts with a marker line (an HTML comment, which the renderer would show)
+            announcement.content = _markdownParser.renderMarkdown(PatchNoteAnnouncer.stripMarker(announcement.content), false);
         }
+        return announcement;
+    }
+
+    /**
+     * The current announcement is the one that started last of those running (DbTransferDAO.getCurrentAnnouncement).
+     * It is looked up again every ANNOUNCEMENT_RECHECK_MS, so an announcement that starts later, or one added by
+     * another server process, shows up without a cache clear, and one that has ended stops being shown (within that
+     * time; the database decides what is running).  When it changes, players are checked for it again.
+     */
+    private synchronized void recheckCurrentAnnouncement() {
+        long now = _clock.getAsLong();
+        if (now - _announcementCheckedAt < ANNOUNCEMENT_RECHECK_MS)
+            return;
+        _announcementCheckedAt = now;
+        DBDefs.Announcement cached = _parsedAnnouncement;
+        DBDefs.Announcement current = _delegate.getCurrentAnnouncement();
+        int cachedId = cached == null ? -1 : cached.id;
+        int currentId = current == null ? -1 : current.id;
+        if (cachedId == currentId)
+            return;
+        _parsedAnnouncement = parse(current);
+        _playersWithoutAnnouncements.clear();
     }
 
     @Override
     public DBDefs.Announcement getCurrentAnnouncement() {
+        recheckCurrentAnnouncement();
         if(_parsedAnnouncement == null) {
             cacheCurrentAnnouncement();
         }
@@ -166,6 +207,26 @@ public class CachedTransferDAO implements TransferDAO, Cached {
         int id = _delegate.addServerAnnouncement(title, markdown, start, until);
         cacheCurrentAnnouncement();
 
+        return id;
+    }
+
+    // Patch notes feed
+    // Not cached here: the patch notes library keeps them for a couple of minutes (the raw Markdown, which it renders
+    // itself; _parsedAnnouncement holds the popup's rendering).
+    @Override
+    public List<DBDefs.Announcement> getPastAnnouncements() {
+        return _delegate.getPastAnnouncements();
+    }
+
+    // Patch note announcements
+
+    @Override
+    public int addServerAnnouncementIfAbsent(String marker, String title, String markdown, ZonedDateTime start, ZonedDateTime until) {
+        int id = _delegate.addServerAnnouncementIfAbsent(marker, title, markdown, start, until);
+        if (id > 0) {
+            clearCache();
+            cacheCurrentAnnouncement();
+        }
         return id;
     }
 }

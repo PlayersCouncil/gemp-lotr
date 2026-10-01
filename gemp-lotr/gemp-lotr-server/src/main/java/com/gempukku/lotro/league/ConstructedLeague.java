@@ -35,7 +35,7 @@ public class ConstructedLeague implements LeagueData {
         for(var serie : _parameters.series) {
             _series.add(new DefaultLeagueSerieInfo(_leaguePrizes, false, "Serie " + count, serieStart,
                     serieStart.plusDays(serie.duration() - 1), serie.matches(), formatLibrary.getFormat(serie.format()),
-                    CollectionType.ALL_CARDS));
+                    serie.format(), CollectionType.ALL_CARDS));
 
             serieStart = serieStart.plusDays(serie.duration());
             count++;
@@ -78,7 +78,7 @@ public class ConstructedLeague implements LeagueData {
             int maxMatches = Integer.parseInt(params[7 + i * 3]);
             _series.add(new DefaultLeagueSerieInfo(_leaguePrizes, false, "Serie " + (i + 1),
                     serieStart, serieStart.plusDays(duration - 1),
-                    maxMatches, formatLibrary.getFormat(format), CollectionType.ALL_CARDS));
+                    maxMatches, formatLibrary.getFormat(format), format, CollectionType.ALL_CARDS));
 
             serieStart = serieStart.plusDays(duration);
         }

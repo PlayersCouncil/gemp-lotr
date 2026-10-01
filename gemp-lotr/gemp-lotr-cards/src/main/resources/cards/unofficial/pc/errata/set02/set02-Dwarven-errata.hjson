@@ -56,6 +56,9 @@
 				]
 			}
 		]
+		gametext: <b>Tale</b>.<br><b>Fellowship:</b> Discard the top 3 cards from your draw deck to play a [dwarven] weapon from your discard pile.<br><b>Fellowship:</b> Spot a Dwarf to discard the top 3 cards from your draw deck.
+		lore: "'There forged was blade, and bound was hilt; / The delver mined, the mason built.'"
+		promotext: ""
 	}
 	
 	52_12: {

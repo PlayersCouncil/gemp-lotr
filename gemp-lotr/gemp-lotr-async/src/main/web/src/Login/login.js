@@ -3,6 +3,13 @@ var comm = new GempLotrCommunication("/gemp-lotr-server", function () {
     alert("Unable to contact the server");
 });
 
+// A hall link the visitor came from ("Click here to register or log in." in the hall passes it as this page's
+// #fragment, e.g. /gemp-lotr/#events/leagues): logging in or registering goes back to it.
+function hallReturnLink() {
+    var hash = window.location.hash;
+    return /^#[A-Za-z0-9_\-\/?=&%.+]{1,200}$/.test(hash) ? hash : "";
+}
+
 function register() {
     var login = $("#login").val();
     var password = $("#password").val();
@@ -15,7 +22,7 @@ function register() {
                     $(".error").html("Your password has successfully been reset!  Please refresh the page and log in.");
                 }
                 else {
-                    location.href = "/gemp-lotr/hall.html";
+                    location.href = "/gemp-lotr/hall.html" + hallReturnLink();
                 }
             },
             {
@@ -58,7 +65,7 @@ function login() {
                 $("#login").val(login);
             }
             else {
-                location.href = "/gemp-lotr/hall.html";
+                location.href = "/gemp-lotr/hall.html" + hallReturnLink();
             }
         },
         {

@@ -56,11 +56,13 @@ public class ModifierSourceFactory {
         modifierProducers.put("cantremovethreats", new CantRemoveThreats());
         modifierProducers.put("cantreplacesite", new CantReplaceSite());
         modifierProducers.put("canttakearcherywounds", new CantTakeArcheryWounds());
+        modifierProducers.put("canttakecardsintohandfromdeckordiscardpile", new AddModifierFlag(ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK));
         modifierProducers.put("canttakemorewoundsthan", new CantTakeMoreWoundsThan());
         modifierProducers.put("canttakewounds", new CantTakeWounds());
         modifierProducers.put("canttakewoundsfromlosingskirmish", new CantTakeWoundsFromLosingSkirmish());
         modifierProducers.put("canttouchtokens", new AddModifierFlag(ModifierFlag.CANT_TOUCH_CULTURE_TOKENS));
         modifierProducers.put("cantusespecialabilities", new CantUseSpecialAbilities());
+        modifierProducers.put("deadpilegoestodiscard", new DeadPileGoesToDiscard());
         modifierProducers.put("disablegametext", new DisableGameText());
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("duplicateactionfromphase", new DuplicateActionFromPhase());
@@ -73,6 +75,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifycost", new ModifyCost());
         modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
         modifierProducers.put("minimumbid", new ModifyMinimumBid());
+        modifierProducers.put("mayincludeothercardtypesinstartingfellowship", new AddModifierFlag(ModifierFlag.EXTRA_CARD_TYPES_IN_STARTING_FELLOWSHIP));
         modifierProducers.put("modifymovelimit", new ModifyMoveLimit());
         modifierProducers.put("modifyplayoncost", new ModifyPlayOnCost());
         modifierProducers.put("modifyracespotcount", new ModifyRaceSpotCount());
@@ -81,8 +84,10 @@ public class ModifierSourceFactory {
         modifierProducers.put("modifysanctuaryheal", new ModifySanctuaryHeal());
         modifierProducers.put("modifysitenumber", new ModifySiteNumber());
         modifierProducers.put("modifystrength", new ModifyStrength());
+        modifierProducers.put("mustsurvivesite10", new AddModifierFlag(ModifierFlag.MUST_SURVIVE_SITE_10));
         modifierProducers.put("modifyvitality", new ModifyVitality());
         modifierProducers.put("nomorethanoneminionmaybeassignedtoeachskirmish", new NoMorethanOneMinionMayBeAssignedToEachSkirmish());
+        modifierProducers.put("opponentfiltersyourdraws", new AddModifierFlag(ModifierFlag.OPPONENT_FILTERS_YOUR_DRAWS));
         modifierProducers.put("removeallkeywords", new RemoveAllKeywords());
         modifierProducers.put("removecardsgoingtodiscard", new AddModifierFlag(ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD));
         modifierProducers.put("removekeyword", new RemoveKeyword());
@@ -90,6 +95,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("overrideuniqueness", new OverrideUniqueness());
         modifierProducers.put("revealhand", new RevealHand());
         modifierProducers.put("ringtextisinactive", new AddModifierFlag(ModifierFlag.RING_TEXT_INACTIVE));
+        modifierProducers.put("sanctuarymayremoveburdens", new SanctuaryMayRemoveBurdens());
         modifierProducers.put("sarumanfirstsentenceinactive", new AddModifierFlag(ModifierFlag.SARUMAN_FIRST_SENTENCE_INACTIVE));
         modifierProducers.put("shadowhasinitiative", new ShadowHasInitiative());
         modifierProducers.put("sitecontrolcount", new SiteControlCount());

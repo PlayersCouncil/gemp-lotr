@@ -11,7 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 public class ProductLibrary {
@@ -19,6 +21,8 @@ public class ProductLibrary {
 
     }
     private final Map<String, PackBox> _products = new HashMap<>();
+    //Products which are opened immediately when awarded to a player, rather than being deposited as a pack.
+    private final Set<String> _openOnDelivery = new HashSet<>();
     private final LotroCardBlueprintLibrary _cardLibrary;
     private final File _packDirectory;
 
@@ -145,14 +149,24 @@ public class ProductLibrary {
                     continue;
                 }
 
-//                if(def.InstantOpen) {
-//                    var items = result.openPack().stream().map(CardCollection.Item::toString).toList();
-//                    result = FixedPackBox.LoadFromArray(items);
-//                }
                 if(_products.containsKey(def.name)) {
                     System.out.println("Overwriting existing pack '" + def.name + "'!");
                 }
                 _products.put(def.name, result);
+
+                //openOnDelivery is resolved per award, not here: rolling the randomness at load time would
+                //hand every player the identical card.  See ProductOpener.
+                if(def.openOnDelivery && def.type == JSONDefs.Pack.PackType.SELECTION) {
+                    System.out.println(def.name + " SELECTION pack type cannot use 'openOnDelivery', as opening it requires the player to pick an item.  Ignoring the flag.");
+                }
+
+                if(def.openOnDelivery && def.type != JSONDefs.Pack.PackType.SELECTION) {
+                    _openOnDelivery.add(def.name);
+                }
+                else {
+                    //A redefinition of the same name must be able to clear the flag as well as set it.
+                    _openOnDelivery.remove(def.name);
+                }
             }
 
 
@@ -182,6 +196,25 @@ public class ProductLibrary {
         }
         catch (InterruptedException exp) {
             throw new RuntimeException("ProductLibrary.GetProduct() interrupted: ", exp);
+        }
+    }
+
+    /**
+     * True if this product is tagged <code>openOnDelivery</code>: awarding it to a player deposits its
+     * opened contents instead of the product itself.  Never true for SELECTION products.
+     */
+    public boolean opensOnDelivery(String name) {
+        if(name == null)
+            return false;
+
+        try {
+            collectionReady.acquire();
+            var data = _openOnDelivery.contains(name);
+            collectionReady.release();
+            return data;
+        }
+        catch (InterruptedException exp) {
+            throw new RuntimeException("ProductLibrary.opensOnDelivery() interrupted: ", exp);
         }
     }
 }

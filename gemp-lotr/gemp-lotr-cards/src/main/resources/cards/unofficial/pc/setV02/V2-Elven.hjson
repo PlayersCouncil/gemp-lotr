@@ -222,7 +222,7 @@
 				type: Response
 				trigger: {
 					type: AboutToDiscard
-					filter: culture(elven),rangedWeapon
+					filter: culture(elven),possession
 				}
 				cost: {
 					type: exert
@@ -230,7 +230,7 @@
 				}
 				effect: {
 					type: preventDiscard
-					select: choose(culture(elven),rangedWeapon, GettingDiscarded)
+					select: choose(culture(elven),possession, GettingDiscarded)
 				}
 			}
 		]

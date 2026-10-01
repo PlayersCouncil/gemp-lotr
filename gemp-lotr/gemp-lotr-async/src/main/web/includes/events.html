@@ -4,29 +4,69 @@
 			$("#eventsMain").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
 			$("#event-tabs > ol > li").removeClass("ui-corner-top").addClass("ui-corner-left");
 			
-			var leagueUI = new LeagueResultsUI("/gemp-lotr-server");
-			
-			var tourneyUI = new TournamentResultsUI("/gemp-lotr-server");
+			// Sub-tab indexes: 0 = calendar, 1 = leagues, 2 = tournaments.
+			var calendar = null;
 
-			$(".loadFinishedTournaments").button().click(
-				function() {
-					tourneyUI.loadHistoryTournaments();
-				});
+			// Current Leagues / Current Tournaments: one header row per event, whose + Details button opens that
+			// event's own drawer right beneath it (eventDrawer.js).  Joining a league re-renders its drawer in place
+			// and refreshes the hall's league dropdown and the calendar's "joined" marks.
+			var leagueUI = new LeagueResultsUI("/gemp-lotr-server", function () {
+				if (hall.tableCreator && hall.tableCreator.formatManager)
+					hall.tableCreator.formatManager.updateFormats();
+				if (calendar != null)
+					calendar.load();
+			}, {list: $("#eventLeagueList")});
 
-			// Sub-tab indexes: 0 = calendar, 1 = leagues, 2 = tournaments.  Clicking an event describes it in the
-			// panel under the calendar; its "Go to ..." button is what jumps to the tab.
-			var calendar = new EventCalendarUI(hall.comm, $("#eventCalendar"), {
+			var tourneyUI = new TournamentResultsUI("/gemp-lotr-server", {list: $("#eventTournamentList")});
+
+			// Completed events, a month at a time, one kind per sub-tab.  Each panel renders a row's details with
+			// the same UI object as the live list above it.  A panel loads by itself (the newest month with completed
+			// events) once the live list above it has rendered, or failed to, so it never delays the current events.
+			var leagueHistoryUI = new EventHistoryUI(hall.comm, $("#leagueHistory"), "league", leagueUI).show();
+			var tournamentHistoryUI = new EventHistoryUI(hall.comm, $("#tournamentHistory"), "tournament", tourneyUI).show();
+			leagueUI.loadList(function () { leagueHistoryUI.start(); });
+			tourneyUI.loadList(function () { tournamentHistoryUI.start(); });
+
+			// Clicking an event shows its header row and full detail (open drawer) under the calendar; its
+			// "Go to League" / "Go to Tournament" button switches to the list and opens that event's drawer there.
+			calendar = new EventCalendarUI(hall.comm, $("#eventCalendar"), {
 				details: $("#eventDetails"),
+				leagueUI: leagueUI,
+				tournamentUI: tourneyUI,
 				onLeague: function (leagueCode) {
 					$("#eventsMain").tabs("option", "active", 1);
-					leagueUI.loadResultsWithLeague(leagueCode);
+					leagueUI.showLeague(leagueCode);
+					if (window.GempLinks)
+						GempLinks.setLink("#league-" + leagueCode);
 				},
 				onTournament: function (tournamentId) {
 					$("#eventsMain").tabs("option", "active", 2);
-					tourneyUI.loadLiveTournaments(tournamentId);
+					tourneyUI.showTournament(tournamentId);
+					if (window.GempLinks)
+						GempLinks.setLink("#tournament-" + tournamentId);
 				}
 			});
 			calendar.show();
+
+			// #league-<code> / #tournament-<id> hall links (GempLinks, hallLinks.js) open that event's drawer
+			window.GempEventsPage = {
+				showLeague: function (leagueCode) {
+					leagueUI.showLeague(leagueCode);
+				},
+				showTournament: function (tournamentId) {
+					tourneyUI.showTournament(tournamentId);
+				}
+			};
+
+			// The page is loaded once; its live data is refreshed whenever the viewer comes back to a sub-tab (or to
+			// the Events tab, or to the browser window) after being away for a while (GempHallTabs.onReturn,
+			// GameHall.js).  Open drawers, the selected calendar event, scroll position and the completed-events
+			// panels (which only change when the viewer loads another month) are left as they are.
+			if (window.GempHallTabs) {
+				GempHallTabs.onReturn($("#calendar"), function () { calendar.refresh(); });
+				GempHallTabs.onReturn($("#eventLeagueList"), function () { leagueUI.refreshList(); });
+				GempHallTabs.onReturn($("#eventTournamentList"), function () { tourneyUI.refreshList(); });
+			}
 		});
 	
 	$("tournamentResults").ready(
@@ -45,29 +85,29 @@
 		</ol>
 	</div>
 	<div id="calendar" class="article">
-		<div class='top-of-league-form'>
-			All dates are server time (UTC / GMT). Click an event to see its details; events you have joined are in <b>bold</b>.
+		<div class='top-of-league-form event-tab-intro'>
+			All dates are server time (UTC). Click an event to see its details; events you have joined are in <b>bold</b>.
 		</div>
 		<div id="eventCalendar"></div>
-		<div id="eventDetails"></div>
+		<hr class="event-section-rule" />
+		<div id="eventDetails"><div class="calendar-details-placeholder">Click on an event above to load details.</div></div>
 	</div>
 	<div id="leagues" class="article">
 		
-		<div class='top-of-league-form'>
-			All times are server time (UTC / GMT).
+		<div class='top-of-league-form event-tab-intro'>
+			All times are server time (UTC).
 		</div>
-		<div id='leagueExtraInfo'></div>
-		<hr />
-		<div id="leagueResults"></div>
+		<div id="eventLeagueList" class="event-list"></div>
+		<hr class="event-section-rule" />
+		<div id="leagueHistory"></div>
 	</div>
-	
-	<div id="tournaments" class="article"> 
-		<script type="text/javascript">
-			
 
-		</script>
-		All times are GMT based.
-		<div class="loadFinishedTournaments">Load finished tournaments</div>
-		<div id="tournamentResults"></div>
+	<div id="tournaments" class="article">
+		<div class='event-tab-intro'>
+			All times are server time (UTC).
+		</div>
+		<div id="eventTournamentList" class="event-list"></div>
+		<hr class="event-section-rule" />
+		<div id="tournamentHistory"></div>
 	</div>
 </div>

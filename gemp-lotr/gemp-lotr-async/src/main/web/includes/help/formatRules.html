@@ -1,15 +1,35 @@
-<div id="formats">
+<div id="formats" class="fd-page">
 	<script>
+		// Help › Format Definitions: drawn by js/gemp-022/formatDefinitions.js from GET /hall/formats/json.  Each format
+		// is a <section class="format-entry" id="format-<code>">, so a #format-<code> deep link (e.g. from the Play
+		// popup's format (i)) scrolls to it through GempFormatHelp (tables/TableFlow.js), which is told below that the
+		// definitions have arrived.
 		$("#helpMain").ready(
 		function () {
-			hall.comm.getFormatRules(function(json){
-				$("#formatRules").html(json);
-			}, hall.hallErrorMap());
+			GempFormatDefinitions.load($("#formatDefinitions"), function () {
+				if (typeof GempFormatHelp != "undefined")
+					GempFormatHelp.rendered();
+			});
 		  }
 		);
-		
 	</script>
-	<div id="formatRules" class="article">
-		
+	<div class="fd-intro">
+		<p>A 'format' is a shorthand for what cards are legal to use and what ruleset is being followed.  Every format
+			that can be played in the Game Hall is listed below.
+			<span class="info-toggle" data-for="fd-help-lists">i</span></p>
+		<div id="fd-help-lists" class="info-text" hidden>
+			<ul>
+				<li><b>X-list</b>: cards that can't be used in the format.</li>
+				<li><b>R-list</b>: cards a deck may hold no more than 1 copy of.</li>
+				<li><b>Limit 2 / Limit 3</b>: cards a deck may hold at most two / three copies of.</li>
+				<li><b>Also legal</b>: cards from outside the format's sets that it allows.</li>
+				<li><b>PC errata</b>: the format plays the Player's Council's updated versions of some cards (see Help › PC Errata).</li>
+			</ul>
+			Click (or right-click) a card to see it larger, or tick "Card images" to see the lists as pictures.  The box above the format list finds
+			a format by name, or every format that lists a card.
+		</div>
+	</div>
+	<div id="formatDefinitions" class="fd-layout">
+		<p class="fd-loading">Loading the format definitions…</p>
 	</div>
 </div>

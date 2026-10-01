@@ -53,6 +53,15 @@ public final class JsonUtils {
         return JSON.toJSONString(obj, JSONWriter.Feature.WriteEnumUsingToString);
     }
 
+    /**
+     * As {@link #Serialize(Object)}, but keeps map entries whose value is null instead of dropping them, for the
+     * API responses whose contract promises a field is always present and null when unknown.
+     */
+    public static String SerializeWithNulls(Object obj) {
+        return JSON.toJSONString(obj, JSONWriter.Feature.WriteEnumUsingToString,
+                JSONWriter.Feature.WriteMapNullValue);
+    }
+
     public static String SerializePretty(Object obj) {
         return JSON.toJSONString(obj, JSONWriter.Feature.WriteEnumUsingToString,
                 JSONWriter.Feature.PrettyFormat);

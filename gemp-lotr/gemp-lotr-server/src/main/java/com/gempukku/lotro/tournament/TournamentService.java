@@ -12,6 +12,7 @@ import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.hall.HallInfoVisitor;
 import com.gempukku.lotro.hall.HallServer;
 import com.gempukku.lotro.hall.TableHolder;
@@ -339,7 +340,7 @@ public class TournamentService {
         return true;
     }
 
-    public boolean addPlayerMadeQueue(TournamentInfo info, Player player, LotroDeck lotroDeck, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
+    public boolean addPlayerMadeQueue(TournamentInfo info, Player player, LotroDeck lotroDeck, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException, HallException {
         if (_tournamentQueues.containsKey(info._params.tournamentId))
             return false;
 
@@ -348,10 +349,16 @@ public class TournamentService {
                 tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament), _collectionsManager);
         _tournamentQueues.put(info._params.tournamentId, tournamentQueue);
 
-        if (info._params.requiresDeck) {
-            tournamentQueue.joinPlayer(player, lotroDeck);
-        } else {
-            tournamentQueue.joinPlayer(player);
+        try {
+            if (info._params.requiresDeck) {
+                tournamentQueue.joinPlayer(player, lotroDeck);
+            } else {
+                tournamentQueue.joinPlayer(player);
+            }
+        } catch (HallException creatorCouldNotJoin) {
+            // a queue its creator could not join would sit in the hall empty
+            _tournamentQueues.remove(info._params.tournamentId);
+            throw creatorCouldNotJoin;
         }
 
         return true;
@@ -451,7 +458,12 @@ public class TournamentService {
             if (dbinfo == null)
                 return null;
 
-            tournament = upsertTournamentInCache(dbinfo, !dbinfo.stage.equals(Tournament.Stage.FINISHED.getHumanReadable()));
+            // The stage column holds the enum name ("FINISHED"), not the human-readable "Finished", so it is parsed
+            // rather than compared: comparing against getHumanReadable() never matched, and every finished tournament
+            // looked up here (detail view, deck, report) was put into the active map and shown in the hall as live
+            // until the next processTournaments pass removed it.  A finished one is built for this call only.
+            boolean finished = dbinfo.stage != null && Tournament.Stage.parseStage(dbinfo.stage) == Tournament.Stage.FINISHED;
+            tournament = upsertTournamentInCache(dbinfo, !finished);
         }
         return tournament;
     }
@@ -566,5 +578,216 @@ public class TournamentService {
 
     public void recordScheduledTournamentStarted(String scheduledTournamentId) {
         _tournamentDao.updateScheduledTournamentStarted(scheduledTournamentId);
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // Tournament Admin page (t3-tournament-admin): what the unified tournament form loads, the tournaments it
+    // offers as deck sources, and in-place editing of a scheduled tournament that has not started yet.
+    // ------------------------------------------------------------------------------------------------
+
+    /** Waiting for its start time (a scheduled tournament, or a queue). */
+    public static final String ADMIN_STATUS_SCHEDULED = "scheduled";
+    /** A scheduled tournament whose start time passed without it starting (too few players signed up). */
+    public static final String ADMIN_STATUS_EXPIRED = "expired";
+    /** Started and not finished. */
+    public static final String ADMIN_STATUS_LIVE = "live";
+    public static final String ADMIN_STATUS_FINISHED = "finished";
+
+    /**
+     * Everything the admin form needs to know about one tournament id.  Any of the parts may be null: a scheduled
+     * tournament has no {@code record} until it starts, a recurring or player-made queue has no {@code scheduled}
+     * row, and a finished tournament has no {@code queue}.
+     * @param editBlocker why the scheduled settings cannot be edited, or null when they can
+     */
+    public record AdminTournamentView(String tournamentId, String status, DBDefs.ScheduledTournament scheduled,
+                                      DBDefs.Tournament record, Tournament live, TournamentQueue queue,
+                                      String editBlocker) {
+        /** Players waiting in the queue (0 once the tournament has started). */
+        public int signedUp() {
+            return queue == null ? 0 : queue.getPlayerCount();
+        }
+    }
+
+    /** One line of the admin tournament list (the deck-source choices and the "running now" list). */
+    public record AdminTournamentSummary(String tournamentId, String name, String type, String format,
+                                         ZonedDateTime start, String status, String stage, int round) {
+    }
+
+    /** A player recorded in a started tournament, as the manual table form checks and autocompletes them. */
+    public record AdminTournamentPlayer(String name, boolean dropped, boolean hasDeck) {
+    }
+
+    private static boolean isFinishedStage(String stage) {
+        return stage != null && Tournament.Stage.parseStage(stage) == Tournament.Stage.FINISHED;
+    }
+
+    /**
+     * @return the admin view of the tournament, queue or scheduled tournament with this id, or null when there is
+     * none of them
+     */
+    public AdminTournamentView getAdminTournamentView(String tournamentId, ZonedDateTime now) {
+        if (tournamentId == null || tournamentId.isBlank())
+            return null;
+        var scheduled = getScheduledTournamentById(tournamentId);
+        var record = _tournamentDao.getTournamentById(tournamentId);
+        var live = _activeTournaments.get(tournamentId);
+        var queue = _tournamentQueues.get(tournamentId);
+        if (scheduled == null && record == null && live == null && queue == null)
+            return null;
+
+        String status;
+        if (live != null)
+            status = live.getTournamentStage() == Tournament.Stage.FINISHED ? ADMIN_STATUS_FINISHED : ADMIN_STATUS_LIVE;
+        else if (record != null)
+            status = isFinishedStage(record.stage) ? ADMIN_STATUS_FINISHED : ADMIN_STATUS_LIVE;
+        else if (queue != null || (scheduled != null && scheduled.started))
+            status = queue != null ? ADMIN_STATUS_SCHEDULED : ADMIN_STATUS_LIVE;
+        else
+            status = scheduled.GetUTCStartDate().isAfter(now) ? ADMIN_STATUS_SCHEDULED : ADMIN_STATUS_EXPIRED;
+
+        return new AdminTournamentView(tournamentId, status, scheduled, record, live, queue,
+                getScheduledTournamentEditBlocker(tournamentId, scheduled, record, queue));
+    }
+
+    /**
+     * Why the scheduled tournament with this id cannot be edited in place, or null when it can.  It must be a
+     * scheduled tournament (not a recurring or player-made queue), must not have started, and nobody may be signed
+     * up: joining takes the entry cost, and the queue holding those players would have to be rebuilt for the new
+     * settings.  One whose start time passed without starting may be edited, which is how it is rescheduled.
+     */
+    public String getScheduledTournamentEditBlocker(String tournamentId) {
+        return getScheduledTournamentEditBlocker(tournamentId, getScheduledTournamentById(tournamentId),
+                _tournamentDao.getTournamentById(tournamentId), _tournamentQueues.get(tournamentId));
+    }
+
+    private String getScheduledTournamentEditBlocker(String tournamentId, DBDefs.ScheduledTournament scheduled,
+                                                     DBDefs.Tournament record, TournamentQueue queue) {
+        if (scheduled == null) {
+            if (queue != null)
+                return "'" + tournamentId + "' is a recurring or player-made queue, not a scheduled tournament, so it cannot be edited here.";
+            return "There is no scheduled tournament '" + tournamentId + "'.";
+        }
+        if (scheduled.started || record != null)
+            return "The tournament has already started; its settings can no longer be changed.";
+        int signedUp = queue == null ? 0 : queue.getPlayerCount();
+        if (signedUp > 0)
+            return signedUp + (signedUp == 1 ? " player has" : " players have") + " already signed up and paid the entry "
+                    + "cost, so the settings can no longer be changed.  Players who leave the queue are refunded; once "
+                    + "it is empty the tournament can be edited again.";
+        return null;
+    }
+
+    /**
+     * Replaces the settings of a scheduled tournament that has not started (same id), then rebuilds its queue from
+     * them if the queue is due to be loaded.  Throws IllegalStateException, with a message for the admin, when
+     * {@link #getScheduledTournamentEditBlocker} forbids the edit or someone signs up while it is being saved.
+     */
+    public synchronized void updateScheduledTournament(TournamentInfo info, ZonedDateTime now) {
+        String tournamentId = info.Parameters().tournamentId;
+        var oldRow = getScheduledTournamentById(tournamentId);
+        String blocker = getScheduledTournamentEditBlocker(tournamentId);
+        if (blocker != null)
+            throw new IllegalStateException(blocker);
+
+        var oldQueue = _tournamentQueues.get(tournamentId);
+        if (oldQueue != null) {
+            // atomic with joining: from here on the old queue takes nobody's entry fee
+            if (!(oldQueue instanceof ScheduledTournamentQueue scheduledQueue) || !scheduledQueue.retireIfEmpty())
+                throw new IllegalStateException("A player signed up while the change was being saved, so it was not saved.");
+        }
+
+        int changed;
+        try {
+            changed = _tournamentDao.updateScheduledTournament(info.ToScheduledDB());
+        } catch (RuntimeException exp) {
+            restoreQueue(tournamentId, oldQueue, oldRow);
+            throw exp;
+        }
+        if (changed == 0) {
+            restoreQueue(tournamentId, oldQueue, oldRow);
+            throw new IllegalStateException("The tournament started or was removed while the change was being saved.");
+        }
+
+        // the same window refreshQueues loads scheduled tournaments in; a later start is picked up by it in time
+        var start = DateUtils.ParseDate(info.Parameters().startTime);
+        boolean load = !start.isAfter(now.plusDays(_scheduledTournamentLoadTime)) && !start.isBefore(now);
+        var newQueue = load ? getTournamentQueue(info) : null;
+        _tournamentQueues.compute(tournamentId, (id, current) ->
+                (current == null || current == oldQueue) ? newQueue : current);
+    }
+
+    private void restoreQueue(String tournamentId, TournamentQueue oldQueue, DBDefs.ScheduledTournament oldRow) {
+        if (oldQueue == null || oldRow == null)
+            return;
+        var fresh = getTournamentQueue(oldRow);
+        _tournamentQueues.compute(tournamentId, (id, current) -> (current == null || current == oldQueue) ? fresh : current);
+    }
+
+    /**
+     * The tournaments the admin form lists: every live one (newest first), then scheduled ones that have not
+     * started and begin within {@code scheduledDays} (soonest first), then those that finished within the last
+     * {@code finishedDays} days (newest first).  An id appears once, in the first group that has it.
+     */
+    public List<AdminTournamentSummary> getAdminTournamentList(ZonedDateTime now, int finishedDays, int scheduledDays) {
+        var result = new ArrayList<AdminTournamentSummary>();
+        var seen = new HashSet<String>();
+
+        var live = new ArrayList<AdminTournamentSummary>();
+        for (var tournament : getLiveTournaments()) {
+            if (tournament.getTournamentStage() == Tournament.Stage.FINISHED)
+                continue;
+            var info = tournament.getInfo();
+            var params = info == null ? null : info.Parameters();
+            live.add(new AdminTournamentSummary(tournament.getTournamentId(), tournament.getTournamentName(),
+                    params == null || params.type == null ? null : params.type.name(), tournament.getFormatCode(),
+                    info == null ? null : info.StartTime, ADMIN_STATUS_LIVE, tournament.getTournamentStage().name(),
+                    tournament.getCurrentRound()));
+        }
+        live.sort(Comparator.comparing(AdminTournamentSummary::start, Comparator.nullsLast(Comparator.reverseOrder())));
+        for (var summary : live)
+            if (seen.add(summary.tournamentId()))
+                result.add(summary);
+
+        for (var row : _tournamentDao.getScheduledTournamentsBetween(now, now.plusDays(scheduledDays))) {
+            if (row.started || !seen.add(row.tournament_id))
+                continue;
+            result.add(new AdminTournamentSummary(row.tournament_id, row.name, row.type, row.format,
+                    row.GetUTCStartDate(), ADMIN_STATUS_SCHEDULED, null, 0));
+        }
+
+        for (var row : _tournamentDao.getFinishedTournamentsBetween(now.minusDays(finishedDays), now.plusDays(1))) {
+            if (!seen.add(row.tournament_id))
+                continue;
+            String format = null;
+            try {
+                var params = Tournament.parseInfo(row.type, row.parameters);
+                format = params == null ? null : params.format;
+            } catch (RuntimeException ignored) {
+                // an unreadable parameter blob only costs the format column
+            }
+            result.add(new AdminTournamentSummary(row.tournament_id, row.name, row.type, format,
+                    row.start_date == null ? null : row.GetUTCStartDate(), ADMIN_STATUS_FINISHED,
+                    Tournament.Stage.FINISHED.name(), row.round));
+        }
+        return result;
+    }
+
+    /**
+     * Every player recorded in a started tournament, sorted by name (case-insensitively), with whether they dropped
+     * and whether a deck is registered for them - what the manual table form needs to offer and check names.
+     */
+    public List<AdminTournamentPlayer> getAdminTournamentPlayers(String tournamentId, String formatName) {
+        var players = _tournamentPlayerDao.getPlayers(tournamentId);
+        var dropped = _tournamentPlayerDao.getDroppedPlayers(tournamentId);
+        var decks = _tournamentPlayerDao.getPlayerDecks(tournamentId, formatName);
+        var result = new ArrayList<AdminTournamentPlayer>();
+        if (players == null)
+            return result;
+        for (String player : players) {
+            result.add(new AdminTournamentPlayer(player, dropped != null && dropped.contains(player),
+                    decks != null && decks.get(player) != null));
+        }
+        result.sort(Comparator.comparing(AdminTournamentPlayer::name, String.CASE_INSENSITIVE_ORDER));
+        return result;
     }
 }

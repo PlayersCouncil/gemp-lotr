@@ -31,4 +31,22 @@ public interface TransferDAO {
 
     DBDefs.Announcement getCurrentAnnouncement();
     int addServerAnnouncement(String title, String markdown, ZonedDateTime start, ZonedDateTime until);
+
+    // Patch notes feed
+    /**
+     * Every announcement whose start has passed (ended ones included), newest first, with its Markdown content as
+     * stored.  Server Info &gt; Patch Notes shows them among the notes (PatchNotesLibrary, which caches them).
+     */
+    List<DBDefs.Announcement> getPastAnnouncements();
+
+    // Patch note announcements
+
+    /**
+     * Adds an announcement unless one whose content contains {@code marker} already exists (PatchNoteAnnouncer: the
+     * marker names the patch note).  The check and the insert happen under a database-wide lock, so server
+     * processes sharing a database never both add it.
+     *
+     * @return the new announcement's id, or -1 when one with the marker already exists
+     */
+    int addServerAnnouncementIfAbsent(String marker, String title, String markdown, ZonedDateTime start, ZonedDateTime until);
 }

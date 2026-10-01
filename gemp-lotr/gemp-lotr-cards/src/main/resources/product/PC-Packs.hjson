@@ -210,6 +210,7 @@
 	{
 		name: Random PC Full Art
 		type: random
+		openOnDelivery: true
 		items: [
 			#Aragorn, Strider
 			1x11_267
@@ -466,6 +467,7 @@
 	{
 		name: Random Masterwork
 		type: random
+		openOnDelivery: true
 		items: [
 			#Countdown Collection
 			1x0_30

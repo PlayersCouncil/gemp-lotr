@@ -115,6 +115,11 @@ public class LeagueSchedule {
     /**
      * Builds the LeagueParams for one event: template with the event's overrides applied key by key.  The name,
      * start and code are left for the scheduler to fill in.
+     * <p>
+     * A race schedule randomises its path per instance unless the definition says otherwise: a template that does
+     * not mention {@code raceRandomizeEachInstance} gets it turned on, so a schedule written before the flag
+     * existed - or one whose template carries no path at all - produces a freshly rolled race every time instead of
+     * the same one forever (or, for a pathless template, a validation failure).
      */
     public LeagueParams buildParams(int eventIndex) {
         var merged = new JSONObject(_template);
@@ -123,10 +128,13 @@ public class LeagueSchedule {
         merged.remove("name");
         merged.remove("start");
         merged.remove("code");
+        boolean randomizeSpecified = merged.containsKey("raceRandomizeEachInstance");
         LeagueParams params = JsonUtils.Convert(merged.toJSONString(), LeagueParams.class);
         if (params == null)
             throw new IllegalArgumentException("League schedule template could not be read as league parameters.");
         params.code = 0;
+        if (_type == League.LeagueType.RTMD && !randomizeSpecified)
+            params.raceRandomizeEachInstance = true;
         return params;
     }
 

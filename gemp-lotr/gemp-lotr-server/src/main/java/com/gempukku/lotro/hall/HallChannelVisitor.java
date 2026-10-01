@@ -7,6 +7,13 @@ public interface HallChannelVisitor {
     public void motdChanged(String motd);
     
     public void serverTime(String serverTime);
+
+    /**
+     * Sent with every hall update (like the server time): whether the server is in shutdown mode.  A default no-op so
+     * visitors that do not care need not implement it.
+     */
+    public default void shutdownMode(boolean shutdown) {
+    }
     public void newPlayerGame(String gameId);
 
     public void addTournamentQueue(String queueId, Map<String, String> props);

@@ -166,6 +166,10 @@ public class DeckValidationScenario implements TestConstants {
         return errors.stream().anyMatch(e -> e.contains("more of the same card than allowed"));
     }
 
+    public boolean hasMinimumDeckSizeError(List<String> errors) {
+        return errors.stream().anyMatch(e -> e.contains("below minimum number of cards"));
+    }
+
     /**
      * Adds filler cards, cycling through IDs in groups of 4 copies each.
      */

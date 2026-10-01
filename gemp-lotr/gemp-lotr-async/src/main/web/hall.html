@@ -14,13 +14,17 @@
 	<meta property="og:image" content="https://play.lotrtcgpc.net/gemp-lotr/images/splash.jpg" />
 	<meta property="og:type" content="website" />
 	
-	<link rel="stylesheet" type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css">
 	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css">
 	<link rel="stylesheet" type="text/css" href="js/jquery/styles/jquery.spinnercontrol.css">
 	<link rel="stylesheet" type="text/css" href="js/jquery/jquery-ui-1.13.2.custom/jquery-ui.css">
 	
 	<link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/tables.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/formatDefinitions.css">
 	<link rel="stylesheet" type="text/css" href="css/gemp-001/icons.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/pcErrata.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/patchNotes.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/cardPreview.css">
 
 	<script type="text/javascript" src="js/jquery/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery-migrate-1.4.1.js"></script>
@@ -50,7 +54,7 @@
 
 	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/Deck.js"></script>
-	<script type="text/javascript" src="js/gemp-022/tables/Format.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/TableFlow.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/FormatManager.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/DeckManager.js"></script>
 	
@@ -66,16 +70,20 @@
 	<script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tournamentResultsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/calendarUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/eventHistoryUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/shareLinks.js"></script>
+	<script type="text/javascript" src="js/gemp-022/patchNotesUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/hallLinks.js"></script>
+	<script type="text/javascript" src="js/gemp-022/formatDefinitions.js"></script>
+	<script type="text/javascript" src="js/gemp-022/pcErrataUi.js"></script>
+	<script type="text/javascript" src="js/gemp-022/eventDrawer.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cardPreview.js"></script>
+	<script type="text/javascript" src="js/gemp-022/addItemsForm.js"></script>
+	<script type="text/javascript" src="js/gemp-022/playerPicker.js"></script>
 	<script type="text/javascript" src="js/gemp-022/prizeTierEditor.js"></script>
 	<script type="text/javascript" src="js/gemp-022/statsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/playerStatsUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/gameHistoryUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/deckBuildingUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/gameUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/gameAnimations.js"></script>
-	<script type="text/javascript" src="js/gemp-022/merchantUi.js"></script>
-	
-	<script type="text/javascript" src="js/lib/json2html/json2html.js"></script>
 
 	<audio id="gamestart" src="/gemp-lotr/src/assets/fanfare_x.mp3" type="audio/mpeg" preload="metadata"></audio>
 	
@@ -114,35 +122,25 @@
 		<div id="gameHallMain" class="hall-tab flex-vert">
 			<div id="serverInfo" class="flex-vert">
 				<div id="infoButtons" class="flex-horiz">
-					
-					<a href="https://forms.gle/pks6CHMWcpBsTcwv9" target="_blank">
-						<button id="bug-button" class="toolbar-button">
-							<span class="custom-icon icon-bug"></span><span>Report a Bug</span>
-						</button>
+					<!-- links styled as buttons (jQuery UI .button() in hallUi.js), not <button>s nested in <a>s -->
+					<a id="bug-button" class="toolbar-button" href="https://forms.gle/pks6CHMWcpBsTcwv9" target="_blank">
+						<span class="custom-icon icon-bug"></span><span>Report a Bug</span>
 					</a>
 					
-					<a href="https://lotrtcgwiki.com/forums/index.php?topic=8267.585#new" target="_blank">
-						<button id="report-button" class="toolbar-button">
-							<span class="custom-icon icon-report"></span><span>Report a Player</span>
-						</button>
+					<a id="report-button" class="toolbar-button" href="https://lotrtcgwiki.com/forums/index.php?topic=8267.585#new" target="_blank">
+						<span class="custom-icon icon-report"></span><span>Report a Player</span>
 					</a>
 					
-					<a href="https://lotrtcgpc.net/discord" target="_blank">
-						<button id="discord-button" class="toolbar-button">
-							<span class="custom-icon icon-discord"></span><span>Join the PC Discord</span>
-						</button>
+					<a id="discord-button" class="toolbar-button" href="https://lotrtcgpc.net/discord" target="_blank">
+						<span class="custom-icon icon-discord"></span><span>Join the PC Discord</span>
 					</a>
 					
-					<a href="https://wiki.lotrtcgpc.net" target="_blank">
-						<button id="wiki-button" class="toolbar-button">
-							<span class="custom-icon icon-wiki"></span><span>Browse the LOTR-TCG Wiki</span>
-						</button>
+					<a id="wiki-button" class="toolbar-button" href="https://wiki.lotrtcgpc.net" target="_blank">
+						<span class="custom-icon icon-wiki"></span><span>Browse the LOTR-TCG Wiki</span>
 					</a>
 					
-					<a href="merchant.html" target="_blank">
-						<button id="merchant-button" class="toolbar-button">
-							<span class="custom-icon icon-merchant"></span><span class="strikethrough">Merchant</span>
-						</button>
+					<a id="merchant-button" class="toolbar-button" href="merchant.html" target="_blank">
+						<span class="custom-icon icon-merchant"></span><span class="strikethrough">Merchant</span>
 					</a>
 					<!-- If you find any problems with specific card or rules in general, please report it on <a target='_blank' href='http://lotrtcgwiki.com/forums/index.php/topic,7592.0.html'>TLHH forum thread here</a> or on the <a href='https://lotrtcgpc.net/discord'>PC Discord here</a>, in the #gemp-dev channel. Please include a game replay link. -->
 				</div>
@@ -152,7 +150,7 @@
 			</div>
 			<div id="hall" class="">
 				<div id="tablesDiv">
-					<div id="waitingTablesHeader" class='eventHeader waitingTables'>Waiting Tables<span class='count'>(0)</span></div>
+					<button type="button" id="waitingTablesHeader" class='eventHeader waitingTables' aria-expanded="true" aria-controls="waitingTablesContent">Waiting Tables<span class='count'>(0)</span></button>
 					<div id="waitingTablesContent" class='visibilityToggle'>
 						<table class='tables waitingTables'>
 							<tr>
@@ -165,7 +163,7 @@
 						</table>
 					</div>
 					
-					<div id="playingTablesHeader" class='eventHeader playingTables'>Playing Tables<span class='count'>(0)</span></div>
+					<button type="button" id="playingTablesHeader" class='eventHeader playingTables' aria-expanded="true" aria-controls="playingTablesContent">Playing Tables<span class='count'>(0)</span></button>
 					<div id="playingTablesContent" class='visibilityToggle'>
 						<table class='tables playingTables'>
 							<tr>
@@ -178,7 +176,7 @@
 						</table>
 					</div>
 					
-					<div id="finishedTablesHeader" class='eventHeader finishedTables'>Finished Tables<span class='count'>(0)</span></div>
+					<button type="button" id="finishedTablesHeader" class='eventHeader finishedTables' aria-expanded="false" aria-controls="finishedTablesContent">Finished Tables<span class='count'>(0)</span></button>
 					<div id="finishedTablesContent" class='visibilityToggle'>
 						<table class='tables finishedTables'>
 							<tr>
@@ -191,7 +189,7 @@
 						</table>
 					</div>
 
-					<div id="recurringQueuesHeader" class='eventHeader recurringQueues'>Recurring Events<span class='count'>(0)</span></div>
+					<button type="button" id="recurringQueuesHeader" class='eventHeader recurringQueues' aria-expanded="false" aria-controls="recurringQueuesContent">Recurring Events<span class='count'>(0)</span></button>
 					<div id="recurringQueuesContent" class='visibilityToggle'>
 						<table class='tables recurringQueues'>
 							<tr>
@@ -212,18 +210,33 @@
 		<!-- <div id="culture-icon"><img src="images/cultures/sauron.svg"/></div> -->
 	</div>
 	<div class="buttons-gutter flex-horiz">
+		<!-- Hall connection readout (hallUi.js HallConnectionIndicator), at the left end opposite the server clock:
+		     hover, focus, click or tap for details. -->
+		<div id="hall-connection" class="hall-connection" data-state="connecting">
+			<button type="button" class="hall-connection-readout" aria-expanded="false" aria-controls="hall-connection-popup">
+				<span class="hall-connection-dot" aria-hidden="true"></span><span class="hall-connection-label">Connecting</span>
+			</button>
+			<!-- shown while the viewer is not logged in (state "loggedout") -->
+			<a class="hall-connection-signin" href="/gemp-lotr/" hidden>Log in</a>
+			<span class="hall-connection-live visually-hidden" role="status" aria-live="polite"></span>
+			<div id="hall-connection-popup" class="hall-connection-popup" hidden>
+				<div class="hall-connection-popup-status"></div>
+				<div class="hall-connection-popup-updated"></div>
+				<div class="hall-connection-popup-message" hidden></div>
+			</div>
+		</div>
+
 		<div class="buttons-gutter flex-horiz flex-fill">
-			<a href="deckBuild.html" target="_blank">
-				<button id="deckbuilder-button" class="play-buttons">
-					<span class="bigger-icon icon-deckbuilder"></span>
-					<span><b>Deck-builder</b></span>
-				</button>
+			<a id="deckbuilder-button" class="play-buttons" href="deckBuild.html" target="_blank">
+				<span class="bigger-icon icon-deckbuilder"></span>
+				<span><b>Deck-builder</b></span>
 			</a>
 			
 			<button id="open-table-button" class="play-buttons table-create-button">
 				<span class="bigger-icon icon-play" ></span>
 				<span><b>Play</b></span>
 			</button>
+
 		</div>
 		
 		<div class="server-time flex-static"></div>
@@ -236,7 +249,8 @@
 			<div id="legacyChat" class="flex-vert">
 				<div id="chatMessages" class="flex-vert"></div>
 				<div id="legacyChatInput" class="flex-horiz">
-					<textarea type="text" id="chatTalk" class="" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeHolder="Message the game hall..."></textarea>
+					<label for="chatTalk" class="visually-hidden">Message the game hall</label>
+					<textarea id="chatTalk" class="" oninput='this.style.height = "";this.style.height = (this.scrollHeight + this.offsetHeight - this.clientHeight) + "px"' placeHolder="Message the game hall..."></textarea>
 					<button id="showSystemButton" class="ui-icon-zoomin"></button>					   
 				</div>
 			</div>
@@ -260,19 +274,21 @@
 </div>
 
 
-<div id="create-table-popup" style="display:none">
-	
+<div id="create-table-popup" class="play-flow" style="display:none">
+
 	<div id="create-table-overlay">
 		<button id="create-table-back-button" autofocus>< Back</button>
 	</div>
-	
+
+	<div id="play-load-error" class="play-error" role="alert" hidden></div>
+
 	<div id="create-table-selection">
-		<button id="create-bot-table-button"><span class="bigger-icon icon-bot"></span><span>Play Against Bots (Beta)</span></button>
-		<button id="create-unranked-table-button"><span class="bigger-icon icon-unranked"></span><span>Open Unranked Table</span></button>
-		<button id="create-league-table-button"><span class="bigger-icon icon-league"></span><span>Open League Table</span></button>
-		<button id="create-tournament-button"><span class="bigger-icon icon-tournament"></span><span>Create Tournament</span></button>
+		<button id="create-bot-table-button"><span class="play-choice-title"><span class="bigger-icon icon-bot"></span><span>Play Against Bots (Beta)</span></span><span class="play-subtitle">A practice game against a computer opponent.</span></button>
+		<button id="create-unranked-table-button"><span class="play-choice-title"><span class="bigger-icon icon-unranked"></span><span>Open Casual Table</span></span><span class="play-subtitle">A 1-on-1 game against another player.</span></button>
+		<button id="create-league-table-button"><span class="play-choice-title"><span class="bigger-icon icon-league"></span><span>Open League Table</span></span><span class="play-subtitle">Join a multi-week league and participate in themed Sealed or Constructed events of all kinds.</span></button>
+		<button id="create-tournament-button"><span class="play-choice-title"><span class="bigger-icon icon-tournament"></span><span>Create Tournament</span></span><span class="play-subtitle">Host an event that other players sign up for.</span></button>
 	</div>
-	
+
 	<div id="create-bot-table" style="display:none" class="table-form">
 		<h1>Open Bot Table</h1>
 		<div id="bot-table-options" class="inner-table-form">
@@ -285,96 +301,93 @@
 				</ul>
 				Please report a bug for any matches where you encounter a crash or other concession by the bot.  But don't bother reporting bad gameplay; we already know they are dumb. :)
 			</div>
-			
+
 			<div class="flex-horiz">
-				<div class="label-column">Table Format: </div>
+				<div class="label-column">Table Format: <span class="info-toggle" data-for="help-bot-format">i</span></div>
 				<button id="bot-unlock-format" class="flex-static">Unlock Formats</button>
 				<select id="bot-format" class="flex-fill" disabled="disabled"></select>
 			</div>
-			
+			<div id="help-bot-format" class="info-text format-info" hidden></div>
+
 			<div class="bot-deck flex-horiz">
 					<div class="label-column">Bot Deck: </div>
 					<select class="player-deck-dropdown flex-fill">
 						<option value="" selected>Random FotR Starter</option>
 					</select>
 			</div>
-			
-			<div class="player-deck flex-horiz">
+
+			<div class="player-deck flex-vert">
+				<div class="flex-horiz">
 					<div class="label-column">Your Deck: </div>
 					<select class="player-deck-dropdown flex-fill"></select>
+				</div>
+				<div class="flex-horiz">
+					<div class="label-column">Select Library Deck: <span class="info-toggle" data-for="help-library-bot">i</span></div>
+					<select class="library-deck-dropdown flex-fill"></select>
+				</div>
+				<div id="help-library-bot" class="info-text" hidden>The Deck Library contains sample decks you can use, including starter decks, past championship decks, and more.</div>
 			</div>
-			
+
 			<button id="submit-bot-table-button" class="table-create-button">
 				Create Table
 			</button>
-			
+
 			<div id="bot-result-label" class="flex-horiz result-label">
 				<div class="label">
 					<b>Result:</b>
 				</div>
-				<div id="bot-result" class="flex-fill result-box">
+				<div id="bot-result" class="flex-fill result-box" role="status" aria-live="polite">
 					Ready.
 				</div>
 			</div>
-			
-			 
+
+
 		</div>
 	</div>
-	
+
 	<div id="create-unranked-table" style="display:none" class="table-form">
-		
-		
+
+
 		<div id="unranked-table-options" class="inner-table-form">
-			<h1>Open Unranked Table</h1>
-			
+			<h1>Open Casual Table</h1>
+
 			<div class="flex-vert table-blurb">
-				Open a casual table to play another human 1v1 in your format of choice.  
+				Open a casual table to play another human 1v1 in your format of choice.
 				Remember:
 				<ul>
 					<li>If you have to leave early for any reason, go to <b>Options -> Concede game</b> (and then pass your current action, if necessary)</li>
-					<li>If you are looking for decks to use, check out the Deck Library which includes many starter, sample, and championship decks from years past.</li>
+					<li>If you have no deck of your own yet, pick one from <b>Select Library Deck</b>: the Deck Library has many starter, sample, and championship decks from years past.</li>
 					<li>Always be courteous to your fellow players! Use the description field to avoid misunderstandings.</li>
 				</ul>
 
 			</div>
-			
-			<div class="player-deck" class="flex-vert">
-				<!-- <div class="flex-horiz">
-					<div class="label-column">Format: </div>
-					<select class="player-deck-format" ></select>
-				</div> -->
-				
+
+			<div class="player-deck flex-vert">
 				<div class="flex-horiz">
-					<div class="label-column">Select Deck: </div>
+					<div class="label-column">Your Deck: </div>
 					<select class="player-deck-dropdown flex-fill" ></select>
 				</div>
-				<!-- <div class="player-deck-tabs">
-					<ul>
-						<li><a href="#unranked-deck-tabs-1">My Decks</a></li>
-						<li><a href="#unranked-deck-tabs-2">Deck Library</a></li>
-					</ul>
-					<div id="unranked-deck-tabs-1">
-						<select class="player-deck-dropdown" ></select>
-					</div>
-					<div id="unranked-deck-tabs-2">
-						qwer
-						<select class="library-deck-dropdown" ></select>
-					</div>
-				</div> -->
-			</div>
-			
-			<div class="flex-horiz">
-				<div class="label-column">Description: </div>
-				<input id="unranked-desc" class="flex-fill" type='text' maxlength='100'>
-			</div>			
-			
-			<div class="flex-horiz">
-				<div class="label-column">Table Format: </div>
-				<select id="unranked-format" class="flex-fill"></select>
+				<div class="flex-horiz">
+					<div class="label-column">Select Library Deck: <span class="info-toggle" data-for="help-library-casual">i</span></div>
+					<select class="library-deck-dropdown flex-fill"></select>
+				</div>
+				<div id="help-library-casual" class="info-text" hidden>The Deck Library contains sample decks you can use, including starter decks, past championship decks, and more.</div>
 			</div>
 
 			<div class="flex-horiz">
-				<div class="label-column">Game Timer: </div>
+				<div class="label-column">Description: <span class="info-toggle" data-for="help-unranked-desc">i</span></div>
+				<input id="unranked-desc" class="flex-fill" type='text' maxlength='100'>
+			</div>
+			<div id="help-unranked-desc" class="info-text" hidden>A short note shown with your table in the hall, for example "new player, go easy" (up to 100 characters). An invite-only table uses the invited player's name here instead.</div>
+
+			<div class="flex-horiz">
+				<div class="label-column">Table Format: <span class="info-toggle" data-for="help-unranked-format">i</span></div>
+				<select id="unranked-format" class="flex-fill"></select>
+			</div>
+			<div id="help-unranked-format" class="info-text format-info" hidden></div>
+
+			<div class="flex-horiz">
+				<div class="label-column">Game Timer: <span class="info-toggle" data-for="help-unranked-timer">i</span></div>
 				<select id="unranked-timer" class="flex-fill">
 					<option value="default">Default (45m/6m)</option>
 					<option value="blitz">Blitz! (25m/3m)</option>
@@ -383,101 +396,113 @@
 					<option value="glacial">Glacial (1d/1d)</option>
 				</select>
 			</div>
-			
+			<div id="help-unranked-timer" class="info-text" hidden>Each player has a total time bank (the first number), and will time out with a loss if they run out of their time bank or take longer than the second number between actions.</div>
+
 			<div class="flex-horiz">
-				<div class="label-column">Invite Only: </div>
+				<div class="label-column">Invite Only: <span class="info-toggle" data-for="help-unranked-invite">i</span></div>
 				<input type="checkbox" id="unranked-invite-only" />
-				<select id="unranked-invitee" class="flex-fill" disabled="true"></select>
+				<!-- PlayerPicker (playerPicker.js) adds the ▾ list of players in the hall and the type-to-search -->
+				<input id="unranked-invitee" class="flex-fill" type="text" maxlength="100"
+					placeholder="Choose or type a player" autocomplete="off" disabled="disabled" aria-label="Player to invite" />
 			</div>
-			
+			<div id="help-unranked-invite" class="info-text" hidden>Only the player you name can join. Pick someone who is in the hall, or type to search for any player (for example a friend who is about to log in).</div>
+
 			<div class="flex-horiz">
-				<div class="label-column">Private Mode (no spectators): </div>
+				<div class="label-column">Private Mode: <span class="info-toggle" data-for="help-unranked-private">i</span></div>
 				<input type="checkbox" id="unranked-private" />
 			</div>
-			
+			<div id="help-unranked-private" class="info-text" hidden>If checked, nobody can join your game to watch from the sidelines (except administrators).</div>
+
 			<div class="flex-horiz">
-				<div class="label-column">Keep this window open: </div>
+				<div class="label-column">Keep this window open: <span class="info-toggle" data-for="help-unranked-keep-open">i</span></div>
 				<input type="checkbox" id="unranked-keep-open" />
 			</div>
-			
+			<div id="help-unranked-keep-open" class="info-text" hidden>After the table is created, stay on this form (to open another table) instead of closing it.</div>
+
 			<div class="flex-horiz">
-				<div class="label-column">Open this flow by default: </div>
+				<div class="label-column">Open this flow by default: <span class="info-toggle" data-for="help-unranked-default-flow">i</span></div>
 				<input type="checkbox" id="unranked-default-flow" />
 			</div>
-					
+			<div id="help-unranked-default-flow" class="info-text" hidden>Checking this box makes this screen show immediately when clicking Play.  Click the Back button in the upper left to return to the main menu.</div>
+
 			<button id="submit-unranked-table-button" class="table-create-button">
 				Create Table
-			</button> 
+			</button>
 			<div id="unranked-result-label" class="flex-horiz result-label">
 				<div class="label">
 					<b>Result:</b>
 				</div>
-				<div id="unranked-result" class="flex-fill result-box">
+				<div id="unranked-result" class="flex-fill result-box" role="status" aria-live="polite">
 					Ready.
 				</div>
 			</div>
-			
+
 		</div>
-		
-		
-		
+
+
+
 	</div>
-	
+
 	<div id="create-league-table" style="display:none" class="table-form flex-vert">
 
 		<div id="league-table-options" class="inner-table-form">
-			<h1>Open League Table</h1>
-			
+			<h1>Open League Table <span class="info-toggle" data-for="help-league">i</span></h1>
+			<div id="help-league" class="info-text" hidden>League games are ranked: each win or loss counts toward the league's standings, within the league's limits on games per serie and per opponent. They always use the Competitive timer (40 minutes each, 5 minutes per decision), and cannot be private or invite-only.</div>
+
 			<div class="flex-vert table-blurb">
-					Leagues are multi-week or multi-month events where players compete in many matches across days to improve their skills and hone their craft.  
-				<br /><br /><br />
+					Leagues are multi-week or multi-month events where players compete in many matches across days to improve their skills and hone their craft.
+				<br /><br />
 					Join leagues below or using the Events tab at the top of the main hall.  If you enter a Limited league (Sealed or Draft), you will need to receive your cards and construct a new deck using those cards before you can participate.
 
 			</div>
-			
+
 			<div class="flex-horiz">
 				<div class="label-column">League: </div>
 				<select id="league-format" class="flex-fill"></select>
 			</div>
-			
-			<div class="player-deck" class="flex-vert">
+
+			<div class="player-deck flex-vert">
 
 				<div class="flex-horiz">
 					<div class="label-column">Deck: </div>
 					<select class="player-deck-dropdown flex-fill"></select>
 				</div>
+				<div class="flex-horiz">
+					<div class="label-column">Select Library Deck: <span class="info-toggle" data-for="help-library-league">i</span></div>
+					<select class="library-deck-dropdown flex-fill"></select>
+				</div>
+				<div id="help-library-league" class="info-text" hidden>The Deck Library contains sample decks you can use, including starter decks, past championship decks, and more.</div>
 
 			</div>
 
 			<button id="submit-league-table-button" class="table-create-button">
 				Create Table
-			</button> 
+			</button>
 			<div id="league-result-label" class="flex-horiz result-label">
 				<div class="label">
 					<b>Result:</b>
 				</div>
-				<div id="league-result" class="flex-fill result-box">
+				<div id="league-result" class="flex-fill result-box" role="status" aria-live="polite">
 					Ready.
 				</div>
 			</div>
-			
+
 		</div>
-		
-		<h1>Join Current League</h1>
-		<div id="league-table-leagues" class="inner-table-form">
-			<div class='top-of-league-form'></div>
-			<div id='leagueExtraInfo'></div>
-			<hr />
-			<div id="leagueResults"></div>
+
+		<h1>Join Leagues</h1>
+		<div id="play-league-panel" class="inner-table-form">
+			<div id="play-league-next-steps" class="play-next-steps" hidden></div>
+			<div class="page-hint">All times are server time (UTC / GMT). Open a league for its details, standings and Join button.</div>
+			<div id="play-league-list" class="event-list"></div>
 		</div>
-			
+
 	</div>
-	
+
 	<div id="create-tournament" style="display:none" class="table-form flex-vert">
-		
-		<div id="league-table-options" class="inner-table-form">
+
+		<div id="tournament-table-options" class="inner-table-form">
 			<h1>Create Tournament</h1>
-			
+
 			<div class="flex-vert table-blurb">
 					Tournaments are competitive events where players fight to prove their skills against other players!  Anyone may create or enter a tournament, but know that others will be playing to win! :)
 				<ul>
@@ -487,7 +512,7 @@
 					<li><b>Solo Draft</b>: Players will each draft against the computer, meaning that they have a limited selection but the remainder is <b>not</b> passed to a human opponent. After drafting, players have 30 minutes (by default) to construct a deck for the tournament.</li>
 				</ul>
 			</div>
-			
+
 			<div class="flex-horiz">
 				<div class="label-column">Tournament Type: </div>
 				<select id="tournament-type-select" class="flex-fill">
@@ -498,57 +523,63 @@
 					<option value="solodraft">Solo Draft</option>
 				</select>
 			</div>
-			
+
 			<div id="tournament-startup" class="flex-vert" style="display:none">
 				<div class="flex-horiz">
-					<div class="label-column">Format: </div>
+					<div class="label-column">Format: <span class="info-toggle" data-for="help-tournament-format">i</span></div>
 					<select id="tournament-format" class="flex-fill"></select>
 				</div>
-				
+				<div id="help-tournament-format" class="info-text format-info" hidden></div>
+
 				<div id="tournament-draft-info-row" class="flex-horiz conditional-display" >
 					<div class="label-column">Draft Info: </div>
 					<div id="tournament-draft-info" class="flex-fill"></div>
 				</div>
-				
+
 				<div class="flex-horiz">
-					<div class="label-column">Number of Players: </div>
+					<div class="label-column">Number of Players: <span class="info-toggle" data-for="help-tournament-players">i</span></div>
 					<input type="number" min="1" id="tournament-players" value="4" class="flex-fill">
 				</div>
-				
+				<div id="help-tournament-players" class="info-text" hidden>The tournament starts when this many players have signed up (or earlier, if Early Start is on and you start it). With 2 or fewer players there is no ready check and no pairing choice.</div>
+
 				<!-- Advanced settings section -->
 				<div class="flex-vert" >
 					<button id="tournament-advanced-toggle" >
 						Show Advanced Settings
-					</button> 
+					</button>
 					<div id="tournament-advanced-fields" class="flex-vert">
-						
+
 						<div class="flex-horiz">
-							<div class="label-column">Pairing Type: </div>
+							<div class="label-column">Pairing Type: <span class="info-toggle" data-for="help-tournament-pairing">i</span></div>
 							<select id="tournament-pairing" class="flex-fill">
 								<option value="SWISS">Swiss (everyone plays all rounds)</option>
 								<option value="SINGLE_ELIMINATION">Single-elimination (losers play no more rounds)</option>
 							</select>
 						</div>
-						
+						<div id="help-tournament-pairing" class="info-text" hidden>Swiss: every round pairs players with similar records, and everyone plays every round; the best record wins. Single-elimination: a loss knocks you out, and the last player standing wins.</div>
+
 						<div id="tournament-duration-row" class="flex-horiz conditional-display">
-							<div class="label-column">Deck-building Duration (minutes): </div>
+							<div class="label-column">Deck-building Duration (minutes): <span class="info-toggle" data-for="help-tournament-deckbuilding">i</span></div>
 							<input type="number" min="5" id="tournament-deckbuilding" value="15" class="flex-fill">
 						</div>
-						
+						<div id="help-tournament-deckbuilding" class="info-text" hidden>How long players have, after opening their packs or finishing the draft, to build and register a deck before the first round.</div>
+
 						<div class="flex-horiz">
-							<div class="label-column">Private Mode: </div>
+							<div class="label-column">Competitive Mode: <span class="info-toggle" data-for="help-tournament-competitive">i</span></div>
 							<input type="checkbox" id="tournament-private" />
-							<i>(No spectators, names are hidden while in the queue)</i>
+							<i>(Named "Competitive …" instead of "Casual …"; no spectators)</i>
 						</div>
-						
+						<div id="help-tournament-competitive" class="info-text" hidden>A competitive tournament is named "Competitive &lt;format&gt;" instead of "Casual &lt;format&gt;". Its games have no spectators, the game chat is limited to the two players, and player names are hidden while the tournament is still signing players up.</div>
+
 						<div class="flex-horiz">
-							<div class="label-column">Early Start: </div>
+							<div class="label-column">Early Start: <span class="info-toggle" data-for="help-tournament-early-start">i</span></div>
 							<input type="checkbox" id="tournament-early-start" checked="true" />
 							<i>(Tournament owner can force start without all player slots filled)</i>
 						</div>
-						
+						<div id="help-tournament-early-start" class="info-text" hidden>You, as the first player in the queue, get a Start button in the hall to begin before every seat is filled.</div>
+
 						<div class="flex-horiz">
-							<div class="label-column">Ready Check: </div>
+							<div class="label-column">Ready Check: <span class="info-toggle" data-for="help-tournament-ready-check">i</span></div>
 							<select id="tournament-ready-check" class="flex-fill">
 								<option value="-1">Start with no ready check</option>
 								<option value="60" selected="selected">1 minute to confirm</option>
@@ -556,66 +587,81 @@
 								<option value="180">3 minutes to confirm</option>
 							</select>
 						</div>
-						
+						<div id="help-tournament-ready-check" class="info-text" hidden>When the tournament is about to start, every player must confirm they are present within this time. Players who do not are removed from the queue (and refunded), so nobody starts against an absent opponent.</div>
+
 						<div id="tournament-timer-row" class="flex-horiz conditional-display">
-							<div class="label-column">Draft Timer: </div>
+							<div class="label-column">Draft Timer: <span class="info-toggle" data-for="help-tournament-draft-timer">i</span></div>
 							<select id="tournament-draft-timer" class="flex-fill"></select>
 						</div>
-						
+						<div id="help-tournament-draft-timer" class="info-text" hidden>How long each player has to make each pick during the live draft.</div>
+
 					</div>
 				</div>
-				
+
 				<hr/>
-				
-				<div class="player-deck flex-horiz conditional-display">
+
+				<div class="player-deck flex-vert conditional-display">
+					<div class="flex-horiz">
 						<div class="label-column">Your Deck: </div>
 						<select class="player-deck-dropdown flex-fill"></select>
+					</div>
+					<div class="flex-horiz">
+						<div class="label-column">Select Library Deck: <span class="info-toggle" data-for="help-library-tournament">i</span></div>
+						<select class="library-deck-dropdown flex-fill"></select>
+					</div>
+					<div id="help-library-tournament" class="info-text" hidden>The Deck Library contains sample decks you can use, including starter decks, past championship decks, and more.</div>
 				</div>
-				
+
 				<button id="submit-tournament-button" class="flex-fill table-create-button">
 					Host Tournament
-				</button> 
+				</button>
 				<div id="tournament-result-label" class="flex-horiz result-label">
 					<div class="label">
 						<b>Result:</b>
 					</div>
-					<div id="tournament-result" class="flex-fill result-box">
+					<div id="tournament-result" class="flex-fill result-box" role="status" aria-live="polite">
 						Ready.
 					</div>
 				</div>
-				
+
 			</div>
-			
+
 		</div>
-		
+
 	</div>
 
-	
+
 </div>
 
-<div id="join-table-popup">
+<div id="join-table-popup" class="play-flow" style="display:none">
 	<div id="join-table-options" class="inner-table-form table-form">
-			<h1>Join Table</h1>
-			
-			<div class="player-deck" class="flex-vert">
+			<h1 id="join-table-heading">Join Table</h1>
+			<div id="join-table-subtitle" class="play-subtitle" hidden></div>
+
+			<div class="player-deck flex-vert">
 				<div class="flex-horiz">
-					<div class="label-column">Select Deck: </div>
+					<div class="label-column">Your Deck: </div>
 					<select class="player-deck-dropdown flex-fill" ></select>
 				</div>
+				<div class="flex-horiz">
+					<div class="label-column">Select Library Deck: <span class="info-toggle" data-for="help-library-join">i</span></div>
+					<select class="library-deck-dropdown flex-fill"></select>
+				</div>
+				<div id="help-library-join" class="info-text" hidden>The Deck Library contains sample decks you can use, including starter decks, past championship decks, and more.</div>
 			</div>
-	
+
 			<button id="submit-join-table-button" >
 				Join Table
-			</button> 
-			<div id="join-result-label" class="flex-horiz result-label" style="display:none">
+			</button>
+			<div id="join-result-label" class="flex-horiz result-label">
 				<div class="label">
 					<b>Result:</b>
 				</div>
-				<div id="join-result" class="flex-fill result-box">
+				<div id="join-result" class="flex-fill result-box" role="status" aria-live="polite">
 					Ready.
 				</div>
 			</div>
-			
+
 		</div>
 </div>
 

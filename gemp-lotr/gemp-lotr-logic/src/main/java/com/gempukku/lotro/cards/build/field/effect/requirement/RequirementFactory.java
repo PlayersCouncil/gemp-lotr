@@ -72,6 +72,8 @@ public class RequirementFactory {
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
         requirementProducers.put("playable", new Playable());
+        requirementProducers.put("playeris", new PlayerIs());
+        requirementProducers.put("playerleagueplacement", new PlayerLeaguePlacement());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
         requirementProducers.put("ringisactive", new RingIsActive());

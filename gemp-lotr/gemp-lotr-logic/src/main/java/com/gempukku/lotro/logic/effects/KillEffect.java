@@ -100,7 +100,7 @@ public class KillEffect extends AbstractSuccessfulEffect {
         for (PhysicalCard card : toBeKilled) {
             toRemoveFromZone.add(card);
 
-            if (card.getBlueprint().getSide() == Side.FREE_PEOPLE) {
+            if (card.getBlueprint().getSide() == Side.FREE_PEOPLE && !game.getModifiersQuerying().deadPileGoesToDiscard(game, card)) {
                 killedCards.add(card);
                 toAddToDeadPile.add(card);
             } else {

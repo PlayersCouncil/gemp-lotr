@@ -39,6 +39,7 @@ public class DefaultLotroFormat implements LotroFormat {
     private final List<String> _validSets = new ArrayList<>();
     private final List<String> _restrictedCardNames = new ArrayList<>();
     private final String _surveyUrl;
+    private final String _description;
     private final boolean _isPlaytest;
 
     //Additional Hobbit Draft parameters
@@ -59,6 +60,7 @@ public class DefaultLotroFormat implements LotroFormat {
         _code = def.code;
         _order = def.order;
         _surveyUrl = def.surveyUrl;
+        _description = def.description;
         _siteBlock = SitesBlock.findBlock(def.sites);
         _validateShadowFPCount = def.validateShadowFPCount;
         _minimumDeckSize = def.minimumDeckSize;
@@ -475,7 +477,7 @@ public class DefaultLotroFormat implements LotroFormat {
         }
 
         // Deck
-        valid = validateDeckStructure(deck);
+        valid = validateDeckStructure(deck, context);
         if(valid != null && !valid.isEmpty()) {
             result.add(valid);
         }
@@ -625,10 +627,11 @@ public class DefaultLotroFormat implements LotroFormat {
                 .toList();
     }
 
-    private String validateDeckStructure(LotroDeck deck) {
+    private String validateDeckStructure(LotroDeck deck, DeckValidationContext context) {
         String result = "";
-        if (deck.getDrawDeckCards().size() < _minimumDeckSize) {
-            result += "Deck contains below minimum number of cards: " + deck.getDrawDeckCards().size() + "<" + _minimumDeckSize + ".\n";
+        int effectiveMinimumDeckSize = context != null ? context.getMinimumDeckSize(_minimumDeckSize) : _minimumDeckSize;
+        if (deck.getDrawDeckCards().size() < effectiveMinimumDeckSize) {
+            result += "Deck contains below minimum number of cards: " + deck.getDrawDeckCards().size() + "<" + effectiveMinimumDeckSize + ".\n";
         }
         if (_validateShadowFPCount) {
             int shadow = 0;
@@ -959,6 +962,7 @@ public class DefaultLotroFormat implements LotroFormat {
             adventure = null;
             code = _code;
             name = _name;
+            description = _description;
             order = _order;
             surveyUrl = _surveyUrl;
             sites = _siteBlock.getHumanReadable();
@@ -974,6 +978,7 @@ public class DefaultLotroFormat implements LotroFormat {
             mulliganRule = _mulliganRule;
             usesMaps = _usesMaps;
             sets = null;
+            setSummary = FormatSummary.describeSets(_validSets);
             blocks = null;
             blockFilters = new ArrayList<>(_blockFilters);
             banned = null;

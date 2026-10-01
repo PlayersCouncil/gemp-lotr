@@ -1,10 +1,12 @@
 package com.gempukku.lotro.bots.rl.fotrstarters;
 
+import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.bots.rl.*;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.CardFromDiscardTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.arbitrarycards.StartingFellowshipTrainer;
+import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.AbstractAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.FpAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.assignment.ShadowAssignmentTrainer;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.cardaction.*;
@@ -69,7 +71,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
             new OptionalResponsesCardActionTrainer()
     );
 
-    private final List<DecisionAnswerer> assignmentTrainers = List.of(
+    private final List<AbstractAssignmentTrainer> assignmentTrainers = List.of(
             new ShadowAssignmentTrainer(),
             new FpAssignmentTrainer()
     );
@@ -94,9 +96,14 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
 
     @Override
     public String chooseAction(GameState gameState, AwaitingDecision decision) {
+        return chooseAction(gameState, decision, AssignmentLegality.UNCHECKED);
+    }
+
+    @Override
+    public String chooseAction(GameState gameState, AwaitingDecision decision, AssignmentLegality legality) {
         double[] stateVector = features.extractFeatures(gameState, decision, getName());
 
-        SemanticAction action = chooseSemanticAction(gameState, decision);
+        SemanticAction action = chooseSemanticAction(gameState, decision, legality);
 
         // Store temporarily — reward comes later
         episodeSteps.add(new LearningStep(stateVector, action, getName().equals(gameState.getCurrentPlayerId()), decision));
@@ -104,7 +111,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
         return action.toDecisionString(decision, gameState);
     }
 
-    private SemanticAction chooseSemanticAction(GameState gameState, AwaitingDecision decision) {
+    private SemanticAction chooseSemanticAction(GameState gameState, AwaitingDecision decision, AssignmentLegality legality) {
         String action =  switch (decision.getDecisionType()) {
             case INTEGER -> chooseIntegerAction(gameState, decision);
             case MULTIPLE_CHOICE -> chooseMultipleChoiceAction(gameState, decision);
@@ -112,7 +119,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
             case CARD_ACTION_CHOICE -> chooseCardActionChoice(gameState, decision);
             case ACTION_CHOICE -> chooseActionChoice(gameState, decision);
             case CARD_SELECTION -> chooseCardSelectionAction(gameState, decision);
-            case ASSIGN_MINIONS -> chooseAssignmentAction(gameState, decision);
+            case ASSIGN_MINIONS -> chooseAssignmentAction(gameState, decision, legality);
         };
 
         return switch (decision.getDecisionType()) {
@@ -131,10 +138,10 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
         };
     }
 
-    private String chooseAssignmentAction(GameState gameState, AwaitingDecision decision) {
-        for (DecisionAnswerer trainer : assignmentTrainers) {
+    private String chooseAssignmentAction(GameState gameState, AwaitingDecision decision, AssignmentLegality legality) {
+        for (AbstractAssignmentTrainer trainer : assignmentTrainers) {
             if (trainer.appliesTo(gameState, decision, getName())) {
-                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry);
+                return trainer.getAnswer(gameState, decision, getName(), features, modelRegistry, legality);
             }
         }
 
@@ -143,7 +150,7 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
                 + decision.getText()
                 + "; freeCharacters=" + Arrays.toString(decision.getDecisionParameters().get("freeCharacters"))
                 + "; minions=" + Arrays.toString(decision.getDecisionParameters().get("minions")));
-        return super.chooseAction(gameState, decision);
+        return super.chooseAction(gameState, decision, legality);
     }
 
     private String chooseActionChoice(GameState gameState, AwaitingDecision decision) {

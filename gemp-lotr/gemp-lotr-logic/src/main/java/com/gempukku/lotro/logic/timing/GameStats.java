@@ -38,6 +38,7 @@ public class GameStats {
     private Map<Integer, Integer> _siteNumbers = new HashMap<>();
     private Map<Integer, String> _charResistances = new HashMap<>();
     private Set<Integer> _hinderedStatus = new HashSet<>();
+    private Set<String> _revealedHands = new HashSet<>();
 
     /**
      * @return If the stats have changed
@@ -254,6 +255,21 @@ public class GameStats {
             _threatTotals = newThreatTotals;
         }
 
+        // Whose hand is revealed is a property of the player (whoever holds the revealing card), not of the side they
+        // are playing this turn.
+        Set<String> newRevealedHands = new HashSet<>();
+        if (playerOrder != null) {
+            for (String player : playerOrder.getAllPlayers()) {
+                if (game.getModifiersQuerying().isHandRevealed(game, player))
+                    newRevealedHands.add(player);
+            }
+        }
+
+        if (!newRevealedHands.equals(_revealedHands)) {
+            changed = true;
+            _revealedHands = newRevealedHands;
+        }
+
         return changed;
     }
 
@@ -331,6 +347,14 @@ public class GameStats {
         return _hinderedStatus;
     }
 
+    /**
+     * @return the players whose hands are currently revealed to everyone (e.g. by RTMD 92_7), so that every viewer --
+     * the owner, the opponent and spectators alike -- can be shown that hand's link
+     */
+    public Set<String> getRevealedHands() {
+        return _revealedHands;
+    }
+
     public GameStats makeACopy() {
         GameStats copy = new GameStats();
         copy.wearingRing = wearingRing;
@@ -353,6 +377,7 @@ public class GameStats {
         copy._siteNumbers = _siteNumbers;
         copy._charResistances = _charResistances;
         copy._hinderedStatus = _hinderedStatus;
+        copy._revealedHands = _revealedHands;
         return copy;
     }
 }

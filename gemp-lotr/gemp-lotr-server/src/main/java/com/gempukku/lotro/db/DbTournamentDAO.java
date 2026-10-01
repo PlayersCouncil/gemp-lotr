@@ -17,6 +17,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DbTournamentDAO implements TournamentDAO {
     private final DbAccess _dbAccess;
@@ -182,6 +184,83 @@ public class DbTournamentDAO implements TournamentDAO {
     }
 
     @Override
+    public List<DBDefs.Tournament> getFinishedTournamentsBetween(ZonedDateTime from, ZonedDateTime to) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT
+                            tournament_id, name, start_date, type, parameters, stage, round
+                        FROM tournament
+                        WHERE stage = :finished
+                            AND start_date >= :from
+                            AND start_date < :to
+                        ORDER BY start_date DESC;
+                        """;
+                return conn.createQuery(sql)
+                        .addParameter("from", from)
+                        .addParameter("to", to)
+                        .addParameter("finished", Tournament.Stage.FINISHED.name())
+                        .executeAndFetch(DBDefs.Tournament.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve finished tournaments between " + from + " and " + to, ex);
+        }
+    }
+
+    @Override
+    public Map<String, Integer> getFinishedTournamentPlayerCountsBetween(ZonedDateTime from, ZonedDateTime to) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT tp.tournament_id AS eventId, COUNT(*) AS count
+                        FROM tournament_player tp
+                        JOIN tournament t ON t.tournament_id = tp.tournament_id
+                        WHERE t.stage = :finished
+                            AND t.start_date >= :from
+                            AND t.start_date < :to
+                        GROUP BY tp.tournament_id;
+                        """;
+                List<DbLeagueDAO.EventCount> counts = conn.createQuery(sql)
+                        .addParameter("from", from)
+                        .addParameter("to", to)
+                        .addParameter("finished", Tournament.Stage.FINISHED.name())
+                        .executeAndFetch(DbLeagueDAO.EventCount.class);
+
+                return counts.stream().collect(Collectors.toMap(x -> x.eventId, x -> x.count));
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve tournament player counts between " + from + " and " + to, ex);
+        }
+    }
+
+    @Override
+    public List<String> getFinishedTournamentMonths() {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.open()) {
+                // round > 0 mirrors the long-standing rule that a finished tournament with no round played
+                // (a solo draft against bots, say) is not a real event.
+                String sql = """
+                        SELECT DISTINCT DATE_FORMAT(start_date, '%Y-%m') AS ym
+                        FROM tournament
+                        WHERE stage = :finished
+                            AND round > 0;
+                        """;
+                return conn.createQuery(sql)
+                        .addParameter("finished", Tournament.Stage.FINISHED.name())
+                        .executeScalarList(String.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve finished tournament months", ex);
+        }
+    }
+
+    @Override
     public void updateTournamentStage(String tournamentId, Tournament.Stage stage) {
         try {
             try (Connection conn = _dbAccess.getDataSource().getConnection()) {
@@ -280,6 +359,37 @@ public class DbTournamentDAO implements TournamentDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve scheduled tournament '" + tournamentId + "'", ex);
+        }
+    }
+
+    @Override
+    public int updateScheduledTournament(DBDefs.ScheduledTournament dbinfo) {
+        try {
+            var db = _dbAccess.openDB();
+
+            // started = 0 in the WHERE: a queue that starts between the admin's check and this write keeps its row
+            String sql = """
+                        UPDATE scheduled_tournament
+                        SET name = :name, format = :format, start_date = :start, type = :type, parameters = :parameters
+                        WHERE tournament_id = :tid
+                            AND started = 0;
+                        """;
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                int changed = conn.createQuery(sql)
+                        .addParameter("tid", dbinfo.tournament_id)
+                        .addParameter("name", dbinfo.name)
+                        .addParameter("format", dbinfo.format)
+                        .addParameter("start", dbinfo.start_date)
+                        .addParameter("type", dbinfo.type)
+                        .addParameter("parameters", dbinfo.parameters)
+                        .executeUpdate()
+                        .getResult();
+                conn.commit();
+                return changed;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to update scheduled tournament '" + dbinfo.tournament_id + "'", ex);
         }
     }
 

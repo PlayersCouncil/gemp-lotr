@@ -131,3 +131,226 @@
 	border-bottom: 1px solid #2a2a2a;
 	vertical-align: top;
 }
+
+/* ==== t4-add-items: the add-items form at the top of the tab ==== */
+#additems-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	padding: 0.5em 0.8em 0.6em 0.8em;
+	margin-bottom: 0.8em;
+	border: 1px solid #444;
+	border-radius: 4px;
+	background: #1b1b1b;
+}
+
+.additems-chip-box {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3em;
+	min-height: 1.9em;
+	padding: 0.15em 0.3em;
+	border: 1px solid #555;
+	border-radius: 3px;
+	background: #262626;
+	cursor: text;
+}
+
+.additems-chip-box input[type="text"] {
+	flex: 1 1 12em;
+	min-width: 10em;
+	border: none;
+	outline: none;
+	background: transparent;
+	color: inherit;
+}
+
+.additems-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0.05em 0.45em;
+	border-radius: 1em;
+	border: 1px solid #567;
+	background: #2c3a44;
+	font-size: 90%;
+}
+
+.additems-chip-checking {
+	opacity: 0.6;
+	border-style: dashed;
+}
+
+.additems-chip-unknown {
+	border-color: #a44;
+	background: #472626;
+	color: #f0b0b0;
+}
+
+.additems-chip-hint {
+	color: #c99;
+	font-style: italic;
+}
+
+.additems-chip-suggestions {
+	display: inline-flex;
+	gap: 0.35em;
+}
+
+.additems-suggestion {
+	color: #9fd49f;
+}
+
+.additems-chip-remove {
+	color: #999;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.additems-chip-remove:hover {
+	color: #fff;
+}
+
+/* kind tags, shared by the search list, the item rows and the summary */
+.additems-kind {
+	display: inline-block;
+	min-width: 4.5em;
+	padding: 0 0.35em;
+	border-radius: 3px;
+	font-size: 80%;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	background: #3a3a3a;
+	color: #ddd;
+}
+
+.additems-kind-card { background: #2f4a2f; color: #cfe8cf; }
+.additems-kind-pack { background: #3d3a24; color: #ece2b0; }
+.additems-kind-selection { background: #2c3a52; color: #c6d6f0; }
+.additems-kind-award { background: #4a2f47; color: #efcbe9; }
+
+.additems-option {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5em;
+}
+
+.additems-option-subtitle,
+.additems-item-subtitle {
+	color: #aaa;
+	font-style: italic;
+}
+
+.additems-option-meta,
+.additems-item-meta {
+	color: #888;
+	font-size: 85%;
+}
+
+#additems-item-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2em;
+	margin-left: max(200px, 20%);
+}
+
+.additems-items-empty {
+	color: #888;
+	font-style: italic;
+	font-size: 90%;
+}
+
+.additems-item {
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.1em 0.3em;
+	border-radius: 3px;
+}
+
+.additems-item.additems-invalid {
+	outline: 1px solid #a44;
+}
+
+.additems-item-count {
+	width: 4em;
+}
+
+.additems-item-name {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.4em;
+}
+
+.additems-item-foil {
+	color: #bbb;
+	font-size: 90%;
+}
+
+#additems-summary {
+	padding: 0.4em 0.6em;
+	border: 1px solid #b89a00;
+	border-radius: 3px;
+	background: #2a2610;
+}
+
+.additems-summary-items {
+	margin: 0.2em 0 0.3em 0;
+	padding-left: 1.4em;
+}
+
+.additems-summary-note {
+	color: #ffe680;
+	font-size: 90%;
+}
+
+#additems-player-results {
+	margin: 0 0 0 max(200px, 20%);
+	padding-left: 1.2em;
+	columns: 2;
+	column-gap: 1.5em;
+	font-size: 90%;
+}
+
+#additems-player-results:empty {
+	display: none;
+}
+
+.additems-result-player {
+	margin-right: 0.5em;
+}
+
+.additems-result-ok .additems-result-status { color: #9fd49f; }
+.additems-result-skipped .additems-result-status { color: #ffe680; }
+.additems-result-error .additems-result-status { color: #e88; }
+/* ==== end t4-add-items ==== */
+
+/* ==== s4-admin: "Load from event" row - the event dropdown is clamped to the space the row has left, so a long
+   event name can no longer push the Load button past the panel edge; the name ellipsizes and the full text is in
+   the option / select title ==== */
+#additems-event {
+	flex: 1 1 0;
+	width: 0;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#additems-event-load-button {
+	flex: none;
+	white-space: nowrap;
+}
+
+/* ==== r4-t4-admin: players loaded from an event - those with no games (always loaded last) are dimmed so the
+   admin can see where they start; a tournament player who dropped is in italics (the chip's title says why) ==== */
+.additems-chip-nogames {
+	border-color: #4a4a4a;
+	background: #2a2a2a;
+	color: #9a9a9a;
+}
+
+.additems-chip-dropped .additems-chip-name {
+	font-style: italic;
+}

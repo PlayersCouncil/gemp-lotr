@@ -14,6 +14,7 @@ import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
@@ -118,6 +119,18 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             data.Formats = _formatLibrary.getAllFormats().values().stream()
                     .map(LotroFormat::Serialize)
                     .collect(Collectors.toMap(x-> x.code, x-> x));
+
+            data.HallTimers = new ArrayList<>();
+            for (var entry : GameTimer.HALL_TIMERS.entrySet()) {
+                var timer = entry.getValue();
+                var info = new JSONDefs.TimerInfo();
+                info.code = entry.getKey();
+                info.name = timer.name();
+                info.minutesPerPlayer = timer.maxSecondsPerPlayer() / 60;
+                info.minutesPerDecision = timer.maxSecondsPerDecision() / 60;
+                info.description = timer.describeLimits();
+                data.HallTimers.add(info);
+            }
 
             if(includeEvents)
             {

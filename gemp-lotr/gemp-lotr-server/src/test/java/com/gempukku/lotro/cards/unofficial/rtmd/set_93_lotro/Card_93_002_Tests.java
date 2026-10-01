@@ -10,13 +10,6 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_2: Your Ring-bearer (except Frodo or Sam) is resistance +3.
- *
- * Owner-gated to Freeps.
- * Uses GimliRB as a non-Frodo/non-Sam ring-bearer to test the positive case.
- * Also tests Frodo to confirm the exclusion works.
- */
 public class Card_93_002_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
@@ -51,6 +44,12 @@ public class Card_93_002_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_2
+		 * Type: MetaSite
+		 * Game Text: Your Ring-bearer (except Frodo or Sam) is resistance +3.
+		 */
 		var scn = GetGimliScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_2", card.getBlueprint().getTitle());

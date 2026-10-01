@@ -8,6 +8,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.effects.ChooseAndHealCharactersEffect;
+import com.gempukku.lotro.logic.effects.ChooseHealOrRemoveBurdenEffect;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.timing.EffectResult;
@@ -38,11 +39,17 @@ public class SanctuaryRule {
                             action.setText("Sanctuary healing");
                             int healCount = 5 + game.getModifiersQuerying().getSanctuaryHealModifier(game);
                             game.getGameState().sendMessage("Sanctuary healing. " + game.getGameState().getCurrentPlayerId() + " has " + healCount + " heals available.");
+                            String healingPlayerId = game.getGameState().getCurrentPlayerId();
+                            boolean mayRemoveBurdens = game.getModifiersQuerying().sanctuaryMayRemoveBurdens(game, healingPlayerId);
                             for (int i = 0; i < healCount; i++) {
                                 final int remainingHeals = healCount - i;
-                                ChooseAndHealCharactersEffect healEffect = new ChooseAndHealCharactersEffect(action, game.getGameState().getCurrentPlayerId(), 0, 1, CardType.COMPANION);
-                                healEffect.setChoiceText("Sanctuary healing - Choose companion to heal - remaining heals: " + remainingHeals);
-                                action.appendEffect(healEffect);
+                                if (mayRemoveBurdens) {
+                                    action.appendEffect(new ChooseHealOrRemoveBurdenEffect(action, healingPlayerId, remainingHeals));
+                                } else {
+                                    ChooseAndHealCharactersEffect healEffect = new ChooseAndHealCharactersEffect(action, healingPlayerId, 0, 1, CardType.COMPANION);
+                                    healEffect.setChoiceText("Sanctuary healing - Choose companion to heal - remaining heals: " + remainingHeals);
+                                    action.appendEffect(healEffect);
+                                }
                             }
                             return Collections.singletonList(action);
                         }

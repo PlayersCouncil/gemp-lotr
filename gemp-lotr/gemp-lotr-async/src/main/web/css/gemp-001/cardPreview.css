@@ -1,0 +1,66 @@
+/* GempCardPreview (js/gemp-022/cardPreview.js): the hall's zoomable card window.  The script sizes the window to the
+   card, so its content never scrolls; the card is a CardDisplay with the game's rounded black frame (autozoom.css,
+   which the hall does not load). */
+.card-preview-dialog .ui-dialog-content.card-preview {
+	padding: 6px;
+	overflow: hidden;
+}
+
+/* the Card Size slider (as in the game's Card Information dialog); its handle reaches .6em past each end */
+.card-preview-zoom {
+	margin: 4px 10px 10px;
+}
+
+.card-preview-zoom.card-preview-zoom-touch {
+	display: none;
+}
+
+.card-preview-card {
+	line-height: 0;
+	font-size: 0;
+	/* CardDisplay's frame reaches 2px past the image on the right and bottom (GempCardPreview.OVERHANG) */
+	padding: 0 2px 2px 0;
+}
+
+.card-preview-display {
+	cursor: pointer;
+}
+
+/* while a newly opened card's image loads, the card is blank rather than the card shown before (the frame stays) */
+.card-preview-display img.card-preview-pending {
+	visibility: hidden;
+}
+
+.card-preview-display .foilOverlay,
+.card-preview-display .foilOverlay img,
+.card-preview-display .borderOverlay,
+.card-preview-display .borderOverlay img {
+	border-radius: 5%;
+}
+
+/* the scan's own corners (white on Decipher scans) are cut a little deeper than the frame's, so their anti-aliased
+   edge falls under the black frame instead of showing as a pale fringe */
+.card-preview-display .fullcard img {
+	border-radius: 7%;
+}
+
+/* a meta-site modifier drawn over the bottom 27% of the card: its bottom corners follow the frame's 5% */
+.card-preview-display .metaSiteOverlay {
+	border-radius: 0 0 5% 5% / 0 0 18.5% 18.5%;
+}
+
+.card-preview-display.card-preview-pack .fullcard img,
+.card-preview-display.card-preview-pack .borderOverlay,
+.card-preview-display.card-preview-pack .borderOverlay img {
+	border-radius: 0;
+}
+
+.card-preview-footer {
+	padding: 4px 0 0;
+	text-align: center;
+	line-height: 1.3;
+}
+
+.card-preview-footer[hidden] {
+	display: none;
+}

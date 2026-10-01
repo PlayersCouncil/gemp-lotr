@@ -729,7 +729,10 @@
 		culture: Dwarven
 		twilight: 2
 		type: Condition
-		keywords: Support Area
+		keywords: [
+			Support Area
+			Tale
+		]
 		effects: [
 			{
 				type: Trigger
@@ -751,7 +754,7 @@
 				]
 			}
 		]
-		gametext: Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. 
+		gametext: Tale. Each time a Dwarf wins a skirmish, you may discard a card from hand to heal that Dwarf. 
 		lore: "When thirteen had fallen the rest fled shrieking, leaving the defenders unharmed...."
 		promotext: ""
 		alts: {

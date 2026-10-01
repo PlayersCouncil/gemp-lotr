@@ -3,9 +3,12 @@ package com.gempukku.lotro.builder;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CollectionSerializer;
+import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
+import com.gempukku.lotro.cache.CacheManager;
 import com.gempukku.lotro.db.*;
+import com.gempukku.lotro.events.EventHistoryService;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
@@ -18,6 +21,9 @@ import com.gempukku.lotro.merchant.MerchantService;
 import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.packs.ProductLibraryPackOpener;
+import com.gempukku.lotro.patchnotes.LibraryCardLookup;
+import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
+import com.gempukku.lotro.patchnotes.PatchNotesLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
@@ -27,6 +33,7 @@ import com.gempukku.lotro.tournament.TournamentMatchDAO;
 import com.gempukku.lotro.tournament.TournamentPlayerDAO;
 import com.gempukku.lotro.tournament.TournamentService;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -127,6 +134,38 @@ public class ServerBuilder {
                         extract(objectMap, LeagueScheduleDAO.class),
                         extract(objectMap, LeagueFactory.class),
                         extract(objectMap, LeagueService.class)));
+
+        objectMap.put(EventHistoryService.class,
+                new EventHistoryService(
+                        extract(objectMap, LeagueDAO.class),
+                        extract(objectMap, TournamentDAO.class),
+                        extract(objectMap, ProductLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, SoloDraftDefinitions.class)));
+        // The intended extension point: CacheManager is already in the object map by the time services are built,
+        // so the admin panel's "Clear Server Cache" picks this up without AdminRequestHandler naming it.
+        extract(objectMap, CacheManager.class).addCache(extract(objectMap, EventHistoryService.class));
+
+        // Server Info > Patch Notes: the Markdown files in the web root's patchnotes/ folder, shipped with each deploy.
+        // [[card links]] in them are looked up in the card library (and again after it is reloaded).  The newest page
+        // is read and rendered in the background now, so the first visitor does not wait for it.
+        LibraryCardLookup patchNoteCards = new LibraryCardLookup(extract(objectMap, LotroCardBlueprintLibrary.class));
+        PatchNotesLibrary patchNotes = new PatchNotesLibrary(new File(AppConfig.getWebPath(), "patchnotes"),
+                patchNoteCards);
+        objectMap.put(PatchNotesLibrary.class, patchNotes);
+        // past server announcements show in the feed too (re-read every couple of minutes)
+        patchNotes.setAnnouncements(extract(objectMap, TransferDAO.class)::getPastAnnouncements);
+        extract(objectMap, CacheManager.class).addCache(patchNotes);
+        extract(objectMap, LotroCardBlueprintLibrary.class).subscribeToRefreshes(patchNotes::cardsChanged);
+        Thread patchNotesWarmUp = new Thread(() -> patchNotes.warmUp(5), "patch-notes-warm-up");
+        patchNotesWarmUp.setDaemon(true);
+        patchNotesWarmUp.start();
+        // Each new patch note is announced in the hall's announcement popup for two weeks from its date (checked
+        // shortly after start-up and then every minute; see PatchNoteAnnouncer).
+        PatchNoteAnnouncer patchNoteAnnouncer = new PatchNoteAnnouncer(patchNotes, extract(objectMap, TransferDAO.class),
+                patchNoteCards);
+        objectMap.put(PatchNoteAnnouncer.class, patchNoteAnnouncer);
+        patchNoteAnnouncer.start(PatchNoteAnnouncer.DEFAULT_FIRST_CHECK_DELAY_MS, PatchNoteAnnouncer.DEFAULT_CHECK_INTERVAL_MS);
 
         objectMap.put(AdminService.class,
                 new AdminService(

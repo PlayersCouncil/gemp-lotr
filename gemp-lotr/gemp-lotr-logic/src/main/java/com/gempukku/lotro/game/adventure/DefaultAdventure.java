@@ -9,8 +9,10 @@ import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.effects.PlaySiteEffect;
+import com.gempukku.lotro.logic.effects.PlaySiteFromOutsideGameEffect;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.timing.PlayerOrderFeedback;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.PregameSetupFeedback;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
@@ -45,6 +47,18 @@ public class DefaultAdventure implements Adventure {
                         PhysicalCard nextSite = gameState.getSite(nextSiteNumber);
 
                         if (nextSite == null) {
+                            //Race to Mount Doom 94_31 extends the path past its last site; that extra site is not in
+                            // anybody's adventure deck, so the Shadow player plays one from outside the game instead.
+                            if (nextSiteNumber > 9
+                                    && nextSiteNumber == RuleUtils.getFellowshipWinSiteNumber(game)) {
+                                PlayOrder shadowOrder = gameState.getPlayerOrder().getCounterClockwisePlayOrder(gameState.getCurrentPlayerId(), false);
+                                shadowOrder.getNextPlayer();
+                                String shadowPlayer = shadowOrder.getNextPlayer();
+                                action.insertEffect(
+                                        new PlaySiteFromOutsideGameEffect(action, shadowPlayer, nextSiteNumber, 9, 4));
+                                return;
+                            }
+
                             LotroCardBlueprint.Direction nextSiteDirection = gameState.getCurrentSite().getBlueprint().getSiteDirection();
                             String playerToPlaySite;
                             if (nextSiteDirection == LotroCardBlueprint.Direction.LEFT) {

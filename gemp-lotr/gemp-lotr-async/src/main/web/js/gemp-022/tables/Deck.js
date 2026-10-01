@@ -9,9 +9,9 @@ class Deck {
 	}
 	
 	static processDecksFromXML(xml) {
-		var root = xml.documentElement;
+		var root = (xml != null) ? xml.documentElement : null;
 		
-		if (root.tagName != "decks")
+		if (root == null || root.tagName != "decks")
 			return [];
 		
 		var decks = [];
@@ -19,7 +19,7 @@ class Deck {
 		var xmlDecks = root.getElementsByTagName("deck");
 		for (var i = 0; i < xmlDecks.length; i++) {
 			var xmlDeck = xmlDecks[i];
-			var deckName = xmlDeck.childNodes[0].nodeValue;
+			var deckName = xmlDeck.textContent;
 			var formatName = xmlDeck.getAttribute("targetFormat");
 			decks.push(new Deck(deckName, formatName));
 		}

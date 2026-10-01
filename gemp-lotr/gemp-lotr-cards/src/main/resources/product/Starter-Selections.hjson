@@ -189,6 +189,38 @@
 			1xTSSealedS3D3
 		]
 	}
+
+    {
+		name: (S)KSSealed-S1
+		type: selection
+		selectionCount: 1
+		items: [
+			1xKSSealedS1D1
+			1xKSSealedS1D2
+			1xKSSealedS1D3
+		]
+	}
+	{
+		name: (S)KSSealed-S2
+		type: selection
+		selectionCount: 1
+		items: [
+			1xKSSealedS2D1
+			1xKSSealedS2D2
+			1xKSSealedS2D3
+		]
+	}
+	{
+		name: (S)KSSealed-S3
+		type: selection
+		selectionCount: 1
+		items: [
+			1xKSSealedS3D1
+			1xKSSealedS3D2
+			1xKSSealedS3D3
+		]
+	}
+
 	{
 		name: (S)Movie Choice - Starter
 		type: selection

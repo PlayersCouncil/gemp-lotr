@@ -337,14 +337,74 @@
 		}
 	}
 	
+	# 53_66: {
+	# 	cardInfo: {
+	# 		//id: 53_66.1
+	# 		parent: 3_66
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E066.1_card.jpg
+	# 		collInfo: 3R66
+	# 		rarity: R
+	# 	}
+	# 	title: Orthanc Berserker
+	# 	unique: true
+	# 	side: Shadow
+	# 	culture: Isengard
+	# 	twilight: 5
+	# 	type: Minion
+	# 	race: Uruk-hai
+	# 	strength: 11
+	# 	vitality: 3
+	# 	site: 5
+	# 	keywords: Damage+1
+	# 	effects: {
+	# 		type: activated
+	# 		phase: maneuver
+	# 		requires: {
+	# 			type: or
+	# 			requires: [
+	# 				{
+	# 					type: canSpotBurdens
+	# 					amount: 5
+	# 				}
+	# 				{
+	# 					type: canSpot
+	# 					filter: culture(isengard)
+	# 					count: 5
+	# 				}
+	# 			]
+	# 		}
+	# 		cost: {
+	# 			type: exert
+	# 			select: self
+	# 			times: 2
+	# 		}
+	# 		effect: {
+	# 			type: exhaust
+	# 			select: choose(companion,not(ringBearer))
+	# 		}
+	# 	}
+	# 	gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens or 5 [isengard] cards and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
+	# 	lore: "The voice of Saruman compels his minions to stop at nothing to earn his favor."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+
 	53_66: {
 		cardInfo: {
-			//id: 53_66.1
+			//id: 53_66.2
 			parent: 3_66
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN03E066.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E066.2_card.jpg
 			collInfo: 3R66
 			rarity: R
 		}
@@ -363,18 +423,8 @@
 			type: activated
 			phase: maneuver
 			requires: {
-				type: or
-				requires: [
-					{
-						type: canSpotBurdens
-						amount: 5
-					}
-					{
-						type: canSpot
-						filter: culture(isengard)
-						count: 5
-					}
-				]
+				type: canSpotBurdens
+				amount: 4
 			}
 			cost: {
 				type: exert
@@ -386,7 +436,7 @@
 				select: choose(companion,not(ringBearer))
 			}
 		}
-		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 5 burdens or 5 [isengard] cards and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Spot 4 burdens and exert Orthanc Berserker twice to exhaust a companion (except the Ring-bearer).
 		lore: "The voice of Saruman compels his minions to stop at nothing to earn his favor."
 		promotext: ""
 		alts: {

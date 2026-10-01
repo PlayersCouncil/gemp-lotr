@@ -24,6 +24,16 @@ public class ChatRoom {
         }
     }
 
+    /** True when the user is in the room and has turned incognito on (always false in rooms that do not allow it). */
+    public boolean isUserIncognito(String username) {
+        final ChatRoomInfo chatRoomInfo = _chatRoomListeners.get(username);
+        return chatRoomInfo != null && chatRoomInfo.incognito;
+    }
+
+    public boolean isUserInRoom(String username) {
+        return _chatRoomListeners.containsKey(username);
+    }
+
     public void postMessage(String from, String message, boolean addToHistory, boolean fromAdmin) {
         ChatMessage chatMessage = new ChatMessage(new Date(), from, message, fromAdmin);
         if (addToHistory) {

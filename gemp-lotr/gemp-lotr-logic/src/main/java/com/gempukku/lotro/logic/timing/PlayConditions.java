@@ -75,13 +75,13 @@ public class PlayConditions {
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, Filterable... filters) {
-        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
+        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK, playerId))
             return false;
         return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId), Filters.and(filters, Filters.playable(modifier)));
     }
 
     public static boolean canPlayFromDrawDeck(String playerId, LotroGame game, int modifier, Filterable... filters) {
-        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK))
+        if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK, playerId))
             return false;
         return Filters.acceptsAny(game, game.getGameState().getDeck(playerId), Filters.and(filters, Filters.playable(modifier)));
     }

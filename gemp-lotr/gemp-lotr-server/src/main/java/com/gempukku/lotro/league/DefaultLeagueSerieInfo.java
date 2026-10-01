@@ -14,10 +14,20 @@ public class DefaultLeagueSerieInfo implements LeagueSerieInfo {
     private final ZonedDateTime _end;
     private final int _maxMatches;
     private final LotroFormat _format;
+    private final String _formatCode;
     private final CollectionType _collectionType;
 
     public DefaultLeagueSerieInfo(LeaguePrizes leaguePrizes, boolean limited, String name, ZonedDateTime start, ZonedDateTime end,
             int maxMatches, LotroFormat format, CollectionType collectionType) {
+        this(leaguePrizes, limited, name, start, end, maxMatches, format, format == null ? null : format.getCode(), collectionType);
+    }
+
+    /**
+     * @param format     the resolved format, or null when {@code formatCode} no longer resolves (a retired format)
+     * @param formatCode the code the league was defined with, kept so a retired format can still be displayed
+     */
+    public DefaultLeagueSerieInfo(LeaguePrizes leaguePrizes, boolean limited, String name, ZonedDateTime start, ZonedDateTime end,
+            int maxMatches, LotroFormat format, String formatCode, CollectionType collectionType) {
         _leaguePrizes = leaguePrizes;
         _limited = limited;
         _name = name;
@@ -25,6 +35,7 @@ public class DefaultLeagueSerieInfo implements LeagueSerieInfo {
         _end = end;
         _maxMatches = maxMatches;
         _format = format;
+        _formatCode = format != null && format.getCode() != null ? format.getCode() : formatCode;
         _collectionType = collectionType;
     }
 
@@ -55,6 +66,11 @@ public class DefaultLeagueSerieInfo implements LeagueSerieInfo {
     @Override
     public LotroFormat getFormat() {
         return _format;
+    }
+
+    @Override
+    public String getFormatCode() {
+        return _formatCode;
     }
 
     @Override

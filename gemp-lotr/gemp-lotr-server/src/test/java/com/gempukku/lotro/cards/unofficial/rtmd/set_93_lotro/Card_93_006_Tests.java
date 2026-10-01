@@ -11,25 +11,13 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_6: Skirmishes are resolved in an order decided by the Shadow player.
- *
- * Normally the Free Peoples player (current player) chooses skirmish order.
- * With this modifier, the Shadow player gets to choose instead.
- *
- * Not owner-gated — it applies regardless.
- *
- * Test cards:
- * - Aragorn (1_89), Boromir (1_96): two companions to create two skirmishes
- * - Goblin Runner (1_178) x2: two minions for two separate skirmishes
- */
 public class Card_93_006_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89");
-		put("boromir", "1_96");
-		put("runner1", "1_178");
-		put("runner2", "1_178");
+		put("aragorn", "1_89"); // Aragorn: companion for the first skirmish
+		put("boromir", "1_96"); // Boromir: companion for the second skirmish
+		put("runner1", "1_178"); // Goblin Runner: minion for the first skirmish
+		put("runner2", "1_178"); // Goblin Runner: minion for the second skirmish
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -52,6 +40,12 @@ public class Card_93_006_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_6
+		 * Type: MetaSite
+		 * Game Text: Skirmishes are resolved in an order decided by the Shadow player.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_6", card.getBlueprint().getTitle());

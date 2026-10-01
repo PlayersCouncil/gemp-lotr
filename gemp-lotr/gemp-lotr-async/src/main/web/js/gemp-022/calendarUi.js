@@ -11,16 +11,30 @@
  *       onLeague: function (leagueCode, event) {...},          // open a real league
  *       onTournament: function (tournamentId, event) {...},   // open a scheduled tournament
  *       onProjected: function (scheduleId, event) {...},      // open a projected (not yet created) league
- *       details: $("#eventDetails")                            // optional: clicking an event describes it here
+ *       details: $("#eventDetails"),                           // optional: clicking an event describes it here
+ *       leagueUI: leagueResultsUI,                             // optional, with details: full preview (see below)
+ *       tournamentUI: tournamentResultsUI                      // optional, with details: full preview (see below)
  *   });
  *
- * Without "details", clicking an event calls the matching callback straight away (the admin page uses this to
- * load the event into its form).  With it, a click fills that container with the event's name, dates, description
- * and serie schedule plus a "Go to ..." button, and the callback runs when the button is pressed.
+ * Without "details", clicking an event calls the matching callback straight away (the admin pages use this to
+ * load the event into their forms).  With it, a click fills that container with the event's name, dates, description
+ * and serie schedule plus a "Go to ..." button, and the callback runs when the button is pressed.  Whatever the
+ * container holds before the first click (the Events tab's "Click on an event above..." placeholder) is replaced.
+ *
+ * With "details" AND leagueUI / tournamentUI (the player-facing Events tab), a click instead renders the same header
+ * row the Current Leagues / Current Tournaments lists use, with a "Go to League" / "Go to Tournament" button in place
+ * of See details, and its drawer already open underneath holding the full, working league / tournament detail (join,
+ * draft, standings, deck links) from LeagueResultsUI / TournamentResultsUI.  Events those cannot show (a scheduled
+ * tournament that has not started, a projected league, a failed fetch) get the facts described above inside the
+ * same frame.  Without the matching UI, that kind falls back to the same frame with the facts.
+ *
+ * A scheduled tournament whose hall queue is open (event.queueOpen) also gets the hall's "Join Queue" button in its
+ * preview (options.queueJoiner, default hall.tableJoiner; see joinQueueButton).
  *
  * Events the viewer has joined (event.joined) are drawn in bold.
  *   cal.show();               // current month
  *   cal.show(2026, 11);       // a specific month
+ *   cal.refresh();            // re-fetch the month shown, keeping the selected event and its preview (see refresh)
  *
  * All date arithmetic is done in UTC, because the server reports dates in UTC.
  */
@@ -32,6 +46,8 @@ var EventCalendarUI = Class.extend({
     month: 0,   // 1-12
     events: [],
     selected: null,   // the event shown in the details panel, if any
+    preview: null,    // preview mode: the {element, header, button, drawer} row in the details panel
+    scrollKeeper: null,   // preview mode: keeps the page from jumping while the preview is swapped / animates
 
     init: function (comm, container, options) {
         this.comm = comm;
@@ -70,18 +86,54 @@ var EventCalendarUI = Class.extend({
 
     // ---- data ----
 
-    load: function () {
+    // then: runs after a successful load has been rendered
+    load: function (then) {
         var that = this;
         var range = this.gridRange();
         this.comm.getCalendar(range.from, range.to,
             function (json) {
                 that.events = json.events || [];
                 that.render();
+                if (then)
+                    then();
             },
             {
                 "400": function () { that.container.html("<div>Could not load the calendar.</div>"); },
                 "401": function () { that.container.html("<div>You must be logged in to see the calendar.</div>"); }
             });
+    },
+
+    // A data refresh (the Events tab calls it when the viewer comes back): the month shown is fetched and redrawn, the
+    // selected event stays selected, and its details / preview are brought up to date in place.  A preview whose event
+    // changed in the calendar feed (joined, started, queue opened...) is rebuilt; otherwise only its drawer re-fetches.
+    refresh: function () {
+        var that = this;
+        this.load(function () {
+            that.refreshSelected();
+        });
+    },
+
+    refreshSelected: function () {
+        var old = this.selected;
+        if (old == null || !this.options.details)
+            return;
+        var fresh = null;
+        for (var i = 0; i < this.events.length; i++) {
+            var event = this.events[i];
+            if (event.kind == old.kind && event.id == old.id && event.scheduleId == old.scheduleId) {
+                fresh = event;
+                break;
+            }
+        }
+        if (fresh != null && JSON.stringify(fresh) !== JSON.stringify(old)) {
+            this.selected = fresh;
+            this.renderDetails(fresh);
+            return;
+        }
+        if (fresh != null)
+            this.selected = fresh;
+        if (this.previewMode() && this.preview != null && this.preview.drawer.isOpen())
+            this.preview.drawer.refresh(true);
     },
 
     // The grid always shows whole weeks: the first row starts on the Monday on or before the 1st of the month and
@@ -348,8 +400,16 @@ var EventCalendarUI = Class.extend({
 
     // ---- details panel (player-facing calendar) ----
 
+    previewMode: function () {
+        return !!(this.options.leagueUI || this.options.tournamentUI);
+    },
+
     renderDetails: function (event) {
         var that = this;
+        if (this.previewMode()) {
+            this.renderPreview(event);
+            return;
+        }
         var panel = this.options.details;
         panel.empty().addClass("calendar-details kind-" + event.kind);
 
@@ -365,8 +425,16 @@ var EventCalendarUI = Class.extend({
         head.append($("<span class='calendar-chip kind-" + event.kind + "'></span>").text(EventCalendarUI.kindLabel(event)));
         if (event.joined)
             head.append("<span class='calendar-details-joined'>You are signed up</span>");
+        var joinButton = this.joinQueueButton(event);
+        if (joinButton)
+            head.append(joinButton);
         panel.append(head);
+        this.renderFacts(event, panel);
+    },
 
+    // The event's facts, description and serie schedule, appended to target.
+    renderFacts: function (event, target) {
+        var panel = target;
         var facts = $("<div class='calendar-details-facts'></div>");
         if (event.kind == "tournament") {
             facts.append(EventCalendarUI.fact("Starts", event.start + " " + (event.startTime ? event.startTime.substring(11, 16) + " UTC" : "")));
@@ -403,8 +471,181 @@ var EventCalendarUI = Class.extend({
             table.append(body);
             panel.append(table);
         }
+    },
+
+    // ==== tabs-account: "Join Queue" for a scheduled tournament whose hall queue is taking sign-ups ====
+    // The server registers a scheduled tournament's hall queue under the tournament's own id, and the calendar feed
+    // says whether it is open (queueOpen) with the queue's type and start text.  The button is the hall's own
+    // (JoinTable.generateJoinQueueButton, fed an element shaped like the hall poll's <queue>), so joining works
+    // exactly as in the Waiting Tables list.  No button where there is no hall (admin pages) or no open queue.
+    joinQueueButton: function (event) {
+        if (event.kind != "tournament" || event.queueOpen !== true || event.joined)
+            return null;
+        var joiner = this.options.queueJoiner || (window.hall ? window.hall.tableJoiner : null);
+        if (!joiner || typeof joiner.generateJoinQueueButton != "function")
+            return null;
+        var queue = $.parseXML("<queue/>").documentElement;
+        queue.setAttribute("id", String(event.id));
+        queue.setAttribute("queue", event.name == null ? "" : String(event.name));
+        queue.setAttribute("type", event.queueType == null ? "" : String(event.queueType));
+        queue.setAttribute("start", event.queueStart == null ? "" : String(event.queueStart));
+        queue.setAttribute("joinable", "true");
+        queue.setAttribute("signedUp", "false");
+        var button = joiner.generateJoinQueueButton(queue);
+        if (button)
+            $(button).addClass("calendar-join-queue");
+        return button;
+    },
+    // ==== end tabs-account ====
+
+    // Header row (as in the Current Leagues / Tournaments lists) with a "Go to ..." button and the drawer open below.
+    renderPreview: function (event) {
+        var that = this;
+        var panel = this.options.details;
+        if (this.scrollKeeper == null)
+            this.scrollKeeper = new EventCalendarUI.ScrollKeeper(panel);
+        // Pin the viewer's scroll position across the swap: emptying the panel and the new drawer's loading line and
+        // eased growth would otherwise shrink the page for a moment and make the browser clamp the scroll upward.
+        this.scrollKeeper.pin();
+        panel.empty().removeClass("calendar-details kind-league kind-tournament kind-projected").addClass("calendar-preview");
+
+        var action = false;
+        if (event.kind == "league" && this.options.onLeague)
+            action = {label: "Go to League", click: function () { that.openEvent(event); }};
+        else if (event.kind == "tournament" && this.options.onTournament)
+            action = {label: "Go to Tournament", click: function () { that.openEvent(event); }};
+
+        var extras = [];
+        if (event.kind != "league" && event.kind != "tournament")
+            extras.push($("<span class='calendar-chip kind-" + event.kind + "'></span>").text(EventCalendarUI.kindLabel(event)));
+        if (event.joined)
+            extras.push($("<span class='calendar-details-joined'></span>").text("You are signed up"));
+        var joinButton = this.joinQueueButton(event);
+        if (joinButton)
+            extras.push(joinButton);
+
+        var fallback = function (content) {
+            that.renderFacts(event, content);
+        };
+        var row;
+        if (event.kind == "league" && this.options.leagueUI) {
+            row = this.options.leagueUI.createLeagueRow(
+                {code: event.id, name: event.name, start: event.start, end: event.end},
+                {action: action, open: true, fallback: fallback, extras: extras});
+        } else if (event.kind == "tournament" && this.options.tournamentUI) {
+            // a scheduled tournament that has not started yet has no tournament to fetch
+            row = this.options.tournamentUI.createTournamentRow(
+                {id: event.id, name: event.name, start: EventCalendarUI.previewDate(event)},
+                {action: action, open: true, fallback: fallback, extras: extras, fetch: event.started === true});
+        } else {
+            row = EventDrawer.row({
+                kind: event.kind,
+                title: event.name,
+                date: EventCalendarUI.previewDate(event),
+                dateTitle: "Server time (UTC)",
+                extras: extras,
+                action: action,
+                open: true,
+                load: function (drawer, content) {
+                    drawer.settle(content, function (c) {
+                        c.empty();
+                        fallback(c);
+                    });
+                }
+            });
+        }
+        panel.append(row.element);
+        this.preview = row;
+        this.scrollKeeper.fit();
     }
 });
+
+/**
+ * Keeps a scroll container's position stable while the content of `panel` (which sits inside it) is replaced and
+ * animates.  It inserts an invisible spacer right after the panel whose height is always just enough that the
+ * container can still scroll to the position being held, so the page never gets shorter than the viewer's current
+ * scroll offset and the browser never clamps it; as real content grows back, the spacer shrinks to nothing.
+ *
+ * pin() holds the current offset exactly until the viewer next scrolls, wheels, touches or presses a key (so the
+ * pre-click and post-click offsets are identical, whatever the old and new previews' heights).  Afterwards the spacer
+ * only protects whatever offset the viewer has scrolled to.  The panel also gets overflow-anchor: none (in CSS) so
+ * the browser's own scroll anchoring cannot pick a node inside the panel being replaced.
+ */
+EventCalendarUI.ScrollKeeper = function (panel) {
+    var that = this;
+    this.panel = panel;
+    this.scroller = EventCalendarUI.scrollParent(panel[0]);
+    this.isDocument = (this.scroller === document.scrollingElement || this.scroller === document.documentElement
+        || this.scroller === document.body);
+    this.spacer = $("<div class='calendar-scroll-spacer' aria-hidden='true'></div>").css({height: "0px"});
+    panel.after(this.spacer);
+    this.pinnedTop = null;
+    this.fitting = false;
+
+    var release = function () { that.pinnedTop = null; };
+    var target = this.isDocument ? $(window) : $(this.scroller);
+    target.on("wheel touchstart mousedown keydown", release);
+    if (this.isDocument)
+        $(document).on("keydown", release);
+    // After the viewer scrolls, trim the spacer back to what their new position needs.
+    var scheduled = false;
+    target.on("scroll", function () {
+        if (that.fitting || scheduled)
+            return;
+        scheduled = true;
+        var run = function () { scheduled = false; that.fit(); };
+        if (window.requestAnimationFrame) window.requestAnimationFrame(run); else setTimeout(run, 16);
+    });
+    // The drawer eases its height over several frames; follow every change.
+    if (typeof ResizeObserver != "undefined") {
+        this.observer = new ResizeObserver(function () { that.fit(); });
+        this.observer.observe(panel[0]);
+    }
+};
+
+EventCalendarUI.ScrollKeeper.prototype.pin = function () {
+    this.pinnedTop = this.scroller.scrollTop;
+};
+
+// Sizes the spacer for the held offset (the pinned one, else the current one) and restores that offset.  The content
+// height without the spacer is measured with the spacer temporarily set taller than the viewport (a zero-height spacer
+// would not do: scrollHeight never reports less than the viewport, which hides how short the content really is).
+// Everything happens in one task, so the probe height is never painted.
+EventCalendarUI.ScrollKeeper.prototype.fit = function () {
+    var scroller = this.scroller;
+    var top = (this.pinnedTop != null) ? this.pinnedTop : scroller.scrollTop;
+    var client = scroller.clientHeight;
+    this.fitting = true;
+    var probe = Math.ceil(top + client) + 1;
+    this.spacer[0].style.height = probe + "px";
+    var content = scroller.scrollHeight - probe;   // everything scrollable except the spacer
+    var need = Math.max(0, Math.ceil(top + client - content));
+    this.spacer[0].style.height = need + "px";
+    if (scroller.scrollTop !== top)
+        scroller.scrollTop = top;
+    this.fitting = false;
+};
+
+// The nearest ancestor that scrolls vertically, or the document's scrolling element.
+EventCalendarUI.scrollParent = function (element) {
+    var node = element ? element.parentElement : null;
+    while (node && node !== document.body && node !== document.documentElement) {
+        var overflowY = window.getComputedStyle(node).overflowY;
+        if (overflowY == "auto" || overflowY == "scroll" || overflowY == "overlay")
+            return node;
+        node = node.parentElement;
+    }
+    return document.scrollingElement || document.documentElement;
+};
+
+// The date shown on the right of a preview header: "start to end" for a league, date and time for a tournament.
+EventCalendarUI.previewDate = function (event) {
+    if (event.kind == "tournament")
+        return (event.start || "") + (event.startTime ? " " + String(event.startTime).substring(11, 16) : "");
+    if (!event.end || event.end == event.start)
+        return event.start || "";
+    return event.start + " to " + event.end;
+};
 
 EventCalendarUI.kindLabel = function (event) {
     if (event.kind == "tournament")

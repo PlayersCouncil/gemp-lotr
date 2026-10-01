@@ -1,10 +1,19 @@
 <script type="text/javascript">
 	$("#gameHistory").ready(
 		function () {
-			var ui = new GameHistoryUI("/gemp-lotr-server");
+			// build once, even if the sub-tab's content is fetched again
+			if ($("#gameHistory").data("gameHistoryUI") == null) {
+				var ui = new GameHistoryUI("/gemp-lotr-server", {container: $("#gameHistory")});
+				$("#gameHistory").data("gameHistoryUI", ui);
+				// coming back to the sub-tab after a while re-fetches the page shown, keeping its page and filters
+				// (GempHallTabs.onReturn, GameHall.js)
+				if (window.GempHallTabs)
+					GempHallTabs.onReturn($("#gameHistory"), function () { ui.refresh(); });
+			}
 		});
 
 </script>
-<div class="">
+<div class="game-history-article">
+	<h1>My Game History</h1>
 	<div id="gameHistory"></div>
 </div>

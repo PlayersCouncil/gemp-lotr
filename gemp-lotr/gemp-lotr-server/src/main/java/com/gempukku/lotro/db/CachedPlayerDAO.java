@@ -155,6 +155,11 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
     }
 
     @Override
+    public List<String> findPlayerNames(String fragment, int limit) {
+        return _delegate.findPlayerNames(fragment, limit);
+    }
+
+    @Override
     public boolean updateLastReward(Player player, int previousReward, int currentReward) throws SQLException {
         boolean updated = _delegate.updateLastReward(player, previousReward, currentReward);
         if (updated) {

@@ -11,6 +11,7 @@ import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.formats.FormatNames;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -99,7 +100,7 @@ public abstract class BaseTournament implements Tournament {
             _droppedPlayers.addAll(_tournamentService.retrieveAbandonedPlayers(_tournamentId));
 
             _playerDecks.clear();
-            _playerDecks.putAll(_tournamentService.retrievePlayerDecks(_tournamentId, _tournamentInfo.Format.getCode()));
+            _playerDecks.putAll(_tournamentService.retrievePlayerDecks(_tournamentId, getFormatCode()));
 
             _playerByes.clear();
             _playerByes.putAll(_tournamentService.retrieveTournamentByes(_tournamentId));
@@ -210,7 +211,9 @@ public abstract class BaseTournament implements Tournament {
 
     @Override
     public String getFormatCode() {
-        return _tournamentInfo.Format.getCode();
+        // Format is null when the tournament's format has since been retired from the library; a finished
+        // tournament must still load (for its detail view and report), so fall back to the stored code.
+        return FormatNames.codeOr(_tournamentInfo.Format, _tournamentInfo.Parameters().format);
     }
 
     @Override
@@ -269,6 +272,9 @@ public abstract class BaseTournament implements Tournament {
         }
     }
 
+    /** What {@link #dropPlayer} returns when the player was dropped; any other answer says why they were not. */
+    public static final String DROPPED_MESSAGE = "You have successfully dropped from the tournament.  Thanks for playing!";
+
     @Override
     public String dropPlayer(String player) {
         writeLock.lock();
@@ -293,7 +299,7 @@ public abstract class BaseTournament implements Tournament {
                 finishTournament(null);
             }
 
-            return "You have successfully dropped from the tournament.  Thanks for playing!";
+            return DROPPED_MESSAGE;
         } finally {
             writeLock.unlock();
         }
@@ -501,7 +507,7 @@ public abstract class BaseTournament implements Tournament {
                 summary
                         .append("<h1>").append(StringEscapeUtils.escapeHtml3(getTournamentName())).append("</h1>")
                         .append("<ul>")
-                        .append("<li>Format: ").append(_tournamentInfo.Format).append("</li>")
+                        .append("<li>Format: ").append(StringEscapeUtils.escapeHtml3(FormatNames.nameOrCode(_tournamentInfo.Format, getFormatCode()))).append("</li>")
                         .append("<li>Collection: ").append(_tournamentInfo.Collection.getFullName()).append("</li>")
                         .append("<li>Total Rounds: ").append(_tournamentInfo.Round).append("</li>")
                         .append("<li>Start: ").append(DateUtils.FormatDateTime(tournamentStart)).append("</li>")
@@ -552,7 +558,7 @@ public abstract class BaseTournament implements Tournament {
                         rounds.add(createEntry(label, url));
                     }
 
-                    LotroDeck deck = _tournamentService.retrievePlayerDeck(_tournamentId, playerName, _tournamentInfo.Format.getCode());
+                    LotroDeck deck = _tournamentService.retrievePlayerDeck(_tournamentId, playerName, getFormatCode());
 
                     var fragment = renderer.convertDeckToForumFragment(deck, playerName, rounds);
                     sections.add(fragment);

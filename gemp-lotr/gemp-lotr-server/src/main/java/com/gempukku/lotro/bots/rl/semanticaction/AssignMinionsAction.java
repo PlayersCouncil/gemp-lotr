@@ -20,9 +20,14 @@ public class AssignMinionsAction implements SemanticAction {
     private final HashMap<String, Integer> woundsOnFp = new HashMap<>();
     private final int numberOfUnassignedMinions;
     private final int strengthOfUnassignedMinions;
+    // The exact card-id answer this action was built from (null when rebuilt from JSON for training). The
+    // blueprint-level assignmentMap cannot tell apart two copies of a card, so turning it back into card ids can pick
+    // a different copy than the one chosen (e.g. the Uruk Guard that forbade this companion instead of its twin).
+    private final String physicalAnswer;
 
     public AssignMinionsAction(String answer, AwaitingDecision decision, GameState gameState, boolean isFreePeoplesAssignment) {
         this.isFreePeoplesAssignment = isFreePeoplesAssignment;
+        this.physicalAnswer = answer;
         if (!isFreePeoplesAssignment) {
             numberOfUnassignedMinions = 0;
             strengthOfUnassignedMinions = 0;
@@ -54,7 +59,9 @@ public class AssignMinionsAction implements SemanticAction {
 
         String[] assignments = answer.split(",");
         for (String assignment : assignments) {
-            String[] cards = assignment.split(" ");
+            if (assignment.isBlank())
+                continue; // "" = assign nothing
+            String[] cards = assignment.trim().split(" ");
             String fp = gameState.getBlueprintId(Integer.parseInt(cards[0]));
             List<String> minions = new ArrayList<>();
             for (int i = 1; i < cards.length; i++) {
@@ -79,6 +86,7 @@ public class AssignMinionsAction implements SemanticAction {
                                HashMap<String, List<String>> alreadyAssignedMap, HashMap<String, Integer> woundsOnFp,
                                int numberOfUnassignedMinions, int strengthOfUnassignedMinions) {
         this.isFreePeoplesAssignment = isFreePeoplesAssignment;
+        this.physicalAnswer = null;
         this.assignmentMap.putAll(assignmentMap);
         this.alreadyAssignedMap.putAll(alreadyAssignedMap);
         this.woundsOnFp.putAll(woundsOnFp);
@@ -115,6 +123,8 @@ public class AssignMinionsAction implements SemanticAction {
         if (decision.getDecisionType() != AwaitingDecisionType.ASSIGN_MINIONS) {
             throw new IllegalArgumentException("Wrong decision type.");
         }
+        if (physicalAnswer != null)
+            return physicalAnswer;
         // Does not work well with multiple of same minions
 
         String[] freeCharIds = decision.getDecisionParameters().get("freeCharacters");

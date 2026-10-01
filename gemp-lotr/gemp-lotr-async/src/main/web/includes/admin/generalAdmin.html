@@ -73,21 +73,6 @@
 			});
 			
 			
-			$("#add-items-button").button().click(
-				function () {
-					let execute = confirm("Are you sure you want to issue these items in these quantities to these players in that collection? THIS CANNOT BE UNDONE, EVEN MANUALLY.");
-					
-					if(!execute)
-						return;
-					
-					$("#add-items-response").html("Processing...");
-					
-					hall.comm.addItems($("#collectionType").val(), $("#product").val(), $("#players").val(), function (string) {
-						$("#add-items-response").html("Response: " + string);
-					});
-				});
-			
-			
 			$("#preview-announce-button").button().click(
 			function () {
 				let resultdiv = $("#announce-result");
@@ -176,7 +161,7 @@ function adminErrorMap(outputControl, callback=null) {
 				callback();
 		},
 		"410": function() {
-			outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+			outputControl.html("410: You have been inactive for too long and were logged out. Refresh the page if you wish to re-establish connection.");
 			if(callback!=null)
 				callback();
 		},
@@ -270,88 +255,6 @@ function adminErrorMap(outputControl, callback=null) {
 	
 	<br/><br/><hr><br/><br/>
 
-	<div id="items-section">
-		<h1>Add Items to Collections</h1>
-		
-		 <table class="tables">
-			<tr>
-				<th>Input</th>
-				<th>Description</th>
-			</tr>
-			<tr>
-				<td>
-					Type: <br><input type="text" id="collectionType">
-				</td>
-				<td>
-					Which collection to insert the cards in.  One of:
-					<ul>
-						<li>permanent</li>
-						<li>trophy</li>
-						<li>default</li>
-						<li>permanent+trophy</li>
-					</ul>
-					When awarding league awards, "trophy" is the one to use.
-				</td>
-			</tr>
-			
-			<tr>
-				<td>
-					Product: <br><textarea rows="5" cols="20" id="product"></textarea>
-				</td>
-				<td style="width: fit-content;">
-					A list of items + quantities to award (one item per line), in the form 
-					<pre>4x item_id</pre>
-					Where "4x" indicates how many copies to award, and "item_id" is the GEMP ID of the item to award.
-					<br><br>
-					Things which can be awarded: 
-					<ul>
-						<li>
-							Cards in the form 
-							<pre>1x 11_123</pre>
-							where "11_123" is the GEMP ID of the card, usually set number + card number (but not always, especially for masterworks, tengwar, or full art promos).<br>
-						</li>
-						<li>
-							Card selections in the form
-							<pre>1x (S)selection</pre>
-							where "selection" is the name of the items to choose from.  For instance, "1x (S)FotR - Tengwar" would grant that player a choice of 1 tengwar card from sets 1, 2, or 3.
-							<br><br>
-							The full list of selection items is too large to list here.  See <code>GenerateTrophyCollections.java</code>, <code>FixedLeaguePrizes.java</code>, <code>SealedLeaguePrizes.java</code>, <code>SealedLeagueProduct.java</code>, and <code>packs.txt</code> for a (hopefully?) complete list.<br>
-						</li>
-						<li>
-							Card packs in the form
-							<pre>1x packname</pre>
-							where packname is one of various ids (with no underscores).  See <code>PacksStorageBuilder.java</code> for an incomplete list.
-						</li>
-					</ul>
-				</td>
-			</tr>
-			
-			<tr>
-				<td style="width: fit-content;">
-					Players: <br><textarea rows="5" cols="20" id="players"></textarea>
-				</td>
-				<td>
-					A list of players to award cards to, one per line.  Case sensitive.
-				</td>
-			</tr>
-			
-			<tr>
-				<td >
-					<button id="add-items-button" class="" style="padding:4px;">
-						Add Items
-					</button>
-				</td>
-				<td>
-					Invoking this command will add each of the listed items in Product to each of players listed in Players.  THIS CANNOT BE UNDONE, even manually, so be *very sure* you have entered everything in correctly.  Test on your own user if you must.
-					<br><br><span id="add-items-response"></span>
-				</td>
-			</tr>
-		</table> 
-		
-	</div>
-	
-	<br/><br/><hr><br/><br/>
-	
 	<div id="add-announcement-section" class="league-form">
 		<h1>Add Announcement</h1>
 		<div class="flex-horiz">
@@ -396,18 +299,8 @@ function adminErrorMap(outputControl, callback=null) {
 		</div>
 	</div>
 	
-<!-- 	<div class="flex-horiz">
-
-		<form method="POST" action="/gemp-lotr-server/admin/addItems">
-			Type: <input type="text" name="collectionType"><br/>
-			Product: <textarea rows="5" cols="20" name="product"></textarea><br/>
-			Players: <textarea rows="5" cols="20" name="players"></textarea><br/>
-			<input type="submit" value="Add items">
-		</form>
-	</div> -->
-
 	<!-- Do we *really* need a way to add an item to all players??
-	If so, consider adding a special case to the player list above. -->
+	If so, consider adding a special case to the player list of the add-items form (Prizes tab). -->
 	
 	<!-- <h2>Add items to collection</h2>
 

@@ -10,6 +10,7 @@ import com.gempukku.lotro.db.vo.LeagueMatchResult;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.game.formats.FormatNames;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueData;
 import com.gempukku.lotro.league.LeagueSerieInfo;
@@ -172,8 +173,13 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
             serieElem.setAttribute("maxMatches", String.valueOf(serie.getMaxMatches()));
             serieElem.setAttribute("start", DateUtils.FormatDate(serie.getStart()));
             serieElem.setAttribute("end", DateUtils.FormatDate(serie.getEnd()));
-            serieElem.setAttribute("formatType", serie.getFormat().getCode());
-            serieElem.setAttribute("format", serie.getFormat().getName());
+            // A finished league may have been played in a format that has since been retired, in which case the
+            // serie has no format (getFormat() is null) and the code it was defined with stands in for the name.
+            String formatCode = serie.getFormatCode();
+            serieElem.setAttribute("formatType", formatCode == null ? "" : formatCode);
+            serieElem.setAttribute("format", FormatNames.nameOrCode(serie.getFormat(), formatCode));
+            // The client only offers the clickable format description when the format still exists.
+            serieElem.setAttribute("formatAvailable", String.valueOf(serie.getFormat() != null));
             serieElem.setAttribute("collection", serie.getCollectionType().getFullName());
             serieElem.setAttribute("limited", String.valueOf(serie.isLimited()));
 
@@ -292,12 +298,30 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         responseWriter.writeXmlResponse(doc);
     }
 
+    /**
+     * The league with this code, active or not.  The active list is consulted first so that a running league keeps
+     * using the shared, already-parsed instance; a league whose end date has passed is no longer in that list, so
+     * it is loaded straight from the database.  Without the fallback every finished league 404s here, which makes
+     * the completed-event browser's "See details" unusable.
+     * <p>
+     * Only the read-only detail view uses this.  Joining still goes through {@code LeagueService.getLeagueByType},
+     * so a finished league cannot be joined, and the detail view's own {@code joinable} is already false for one
+     * (its end date is in the past).
+     */
     public League getLeagueByType(String type) {
         for (League league : _leagueService.getActiveLeagues()) {
             if (league.getCodeStr().equals(type))
                 return league;
         }
-        return null;
+
+        try {
+            return _leagueService.getLeagueByCode(Long.parseLong(type));
+        } catch (NumberFormatException exp) {
+            return null;
+        } catch (Exception exp) {
+            _log.warn("Unable to load finished league with code " + type, exp);
+            return null;
+        }
     }
 
     private void setStandingAttributes(PlayerStanding standing, Element standingElem) {

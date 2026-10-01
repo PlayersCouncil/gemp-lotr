@@ -55,7 +55,7 @@ public class Card_V3_035_Tests
 		 * Subtype: Support area
 		 * Game Text: <b>Beacon</b>. To play, spot an unbound Man.
 		 * 		Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.
-		 * 		Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck.
+		 * 		Fellowship: Exert a Man and hinder a beacon to reveal the top 4 cards of your draw deck.
 		 * 		You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		*/
 
@@ -272,14 +272,17 @@ public class Card_V3_035_Tests
 
 		scn.DismissRevealedCards();
 
+		// only the top 4 are revealed (elven2, rohan2, gondor1, rohan1); elven1 stays unrevealed
 		scn.FreepsChooseCards(gondor1, rohan1);
-		//Putting the rest back in any order
-		scn.FreepsChooseAny();
+		//Putting the rest (elven2, rohan2) back in any order
 		scn.FreepsChooseAny();
 
 		assertInZone(Zone.HAND, gondor1);
 		assertInZone(Zone.HAND, rohan1);
+		assertInZone(Zone.DECK, rohan2);
 		assertInZone(Zone.DECK, elven1);
+		assertInZone(Zone.DECK, elven2);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -331,7 +334,8 @@ public class Card_V3_035_Tests
 	}
 
 	@Test
-	public void WarBeaconRevealLimitedToFourCardsByRuleOf4() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WarBeaconRevealsOnlyTheTop4Cards() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: 5 revealed cards reduced to 4
 		var scn = GetScenario();
 
 		var beacon1 = scn.GetFreepsCard("beacon1");
@@ -345,15 +349,25 @@ public class Card_V3_035_Tests
 		scn.MoveCardsToSupportArea(beacon1);
 
 		scn.StartGame();
+		// last one listed ends up on top: gondor1, gondor2, gondor3, rohan1, then rohan2 fifth
 		scn.MoveCardsToTopOfDeck(rohan2, rohan1, gondor3, gondor2, gondor1);
 
 		scn.FreepsUseCardAction(beacon1);
 
 		scn.DismissRevealedCards();
 
-		// All 5 cards should be valid choices
-		assertEquals(5, scn.FreepsGetCardChoiceCount());
-		// But max selection should be 4 due to Rule of 4
+		// All 4 revealed cards are valid choices; the 5th card was never revealed
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gondor1, gondor2, gondor3, rohan1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rohan2));
 		assertEquals(4, scn.FreepsGetChoiceMax());
+
+		scn.FreepsChooseCards(gondor1, gondor2, gondor3, rohan1);
+
+		assertInZone(Zone.HAND, gondor1);
+		assertInZone(Zone.HAND, gondor2);
+		assertInZone(Zone.HAND, gondor3);
+		assertInZone(Zone.HAND, rohan1);
+		assertInZone(Zone.DECK, rohan2);
 	}
 }

@@ -1,0 +1,869 @@
+/* Help › PC Errata (includes/help/pc-errata.html, js/gemp-022/pcErrataUi.js): a filterable table beside a "slot
+   machine" viewer, both as tall as the Help panel shows (--pc-errata-view-h, set by PcErrataUI.fit(), since the hall's
+   chat takes the rest of the window).  The left pane's title, filters and column headers stay put and only the rows
+   scroll; PcErrataUI.layout() fits the card and text inside the viewer so the viewer never scrolls. */
+
+.pc-errata {
+	--pc-errata-accent: #26b3f7;
+	--pc-errata-current: #0972a5;
+	--pc-errata-gold: #c9a227;
+	--pc-errata-line: #3a3a3a;
+	--pc-errata-dim: #aaaaaa;
+	--pc-errata-ins: #1f5c2b;
+	--pc-errata-ins-text: #d4f7d9;
+	--pc-errata-stat: #d9b531;
+	--pc-errata-duration: 240ms;
+	padding: 0.4em 12px 4px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.pc-errata-titlebar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3em 0.9em;
+	margin: 0.2em 0 0.4em;
+}
+
+.pc-errata h1 {
+	font-size: 150%;
+	margin: 0;
+	white-space: nowrap;
+}
+
+.pc-errata h1 .info-toggle {
+	font-size: 45%;
+}
+
+.pc-errata-summary {
+	color: #dddddd;
+}
+
+.pc-errata .info-text p {
+	margin: 0.3em 0;
+}
+
+.pc-errata .info-text a {
+	color: #E88104;
+}
+
+/* ---- the view chips (All / Latest) ---- */
+.pc-errata-views {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35em;
+}
+
+.pc-errata-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45em;
+	padding: 0.25em 0.7em;
+	border: 1px solid #555555;
+	border-radius: 999px;
+	background: #1d1d1d;
+	color: #dddddd;
+	font: inherit;
+	font-size: 90%;
+	cursor: pointer;
+}
+
+.pc-errata-chip:hover,
+.pc-errata-chip:focus-visible {
+	border-color: var(--pc-errata-accent);
+	outline: none;
+}
+
+.pc-errata-chip-on {
+	background: var(--pc-errata-current);
+	border-color: var(--pc-errata-accent);
+	color: #ffffff;
+}
+
+.pc-errata-chip-count {
+	font-size: 85%;
+	padding: 0 0.45em;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---- filters: Title, Set, Format, and how many cards are listed ---- */
+.pc-errata-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35em 0.5em;
+	margin: 0.2em 0 0.4em;
+}
+
+.pc-errata-field {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+}
+
+/* each control says what it filters (placeholder / "All ..." choice); the label is for screen readers */
+.pc-errata-field > label:first-child {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.pc-errata-field select {
+	max-width: 14em;
+	font-size: 90%;
+}
+
+.pc-errata-field-q input[type=search] {
+	width: 11em;
+}
+
+.pc-errata-status {
+	color: var(--pc-errata-dim);
+	padding: 0 0.3em;
+}
+
+.pc-errata-status-empty {
+	color: #ffcf8a;
+}
+
+/* ---- layout: table | viewer, both the panel's height ---- */
+.pc-errata-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(360px, 56%);
+	gap: 14px;
+	align-items: stretch;
+}
+
+/* the title, the views and the filters stay put; only the rows scroll, under their column headers */
+.pc-errata-listcol {
+	min-width: 0;
+	height: var(--pc-errata-view-h, 480px);
+	display: flex;
+	flex-direction: column;
+}
+
+.pc-errata-intro {
+	flex: 0 0 auto;
+}
+
+.pc-errata-table {
+	flex: 1 1 0;
+	min-height: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	position: relative;
+}
+
+/* ---- the table ---- */
+/* (short of the pane's width by the current row's pointer towards the viewer) */
+table.pc-errata-list {
+	width: calc(100% - 10px);
+}
+
+table.pc-errata-list th {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: #1b1b1b;
+	padding: 4px 6px;
+	border-bottom: 1px solid #555555;
+}
+
+table.pc-errata-list td {
+	padding: 4px 6px;
+	border-bottom: 1px solid var(--pc-errata-line);
+	vertical-align: middle;
+}
+
+table.pc-errata-list tbody tr[data-index] {
+	cursor: pointer;
+}
+
+table.pc-errata-list tbody tr[data-index]:hover td {
+	background: rgba(255, 255, 255, 0.06);
+}
+
+/* the row on show in the viewer: the hall's "active" blue, with a pointer towards the viewer */
+table.pc-errata-list tbody tr.pc-errata-current td {
+	background: var(--pc-errata-current);
+	color: #ffffff;
+}
+
+table.pc-errata-list tbody tr.pc-errata-current td:first-child {
+	box-shadow: inset 4px 0 0 var(--pc-errata-gold);
+}
+
+table.pc-errata-list tbody tr.pc-errata-current td:last-child {
+	position: relative;
+}
+
+table.pc-errata-list tbody tr.pc-errata-current td:last-child::after {
+	content: "";
+	position: absolute;
+	right: -9px;
+	top: 50%;
+	margin-top: -9px;
+	border: 9px solid transparent;
+	border-right: 0;
+	border-left-color: var(--pc-errata-current);
+}
+
+.pc-errata-col-num,
+.pc-errata-col-rev {
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+td.pc-errata-col-rev,
+th.pc-errata-col-rev {
+	text-align: center;
+}
+
+/* the collector's number, then the New tag at the column's right edge (the same place on every row) */
+.pc-errata-num {
+	display: flex;
+	align-items: center;
+	gap: 0.45em;
+}
+
+.pc-errata-num .pc-errata-badge {
+	margin-left: auto;
+}
+
+/* the culture as its icon, at the icon's own shape (15 to 49 px wide at 20 px high: drawn 18 px high); the name is
+   its tooltip */
+.pc-errata-col-culture {
+	white-space: nowrap;
+	text-align: center;
+}
+
+td.pc-errata-col-culture {
+	width: 46px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.pc-errata-culture-icon {
+	display: inline-block;
+	height: 18px;
+	width: auto;
+	vertical-align: middle;
+}
+
+.pc-errata-culture-name {
+	font-size: 85%;
+}
+
+.pc-errata-badge {
+	display: inline-block;
+	margin-left: 0.45em;
+	padding: 0 0.4em;
+	border-radius: 3px;
+	border: 1px solid #777777;
+	font-size: 72%;
+	line-height: 1.5;
+	color: #dddddd;
+	vertical-align: 1px;
+	white-space: nowrap;
+}
+
+.pc-errata-badge-new {
+	border-color: var(--pc-errata-gold);
+	color: #ffe28a;
+}
+
+/* ---- the viewer: a fixed window the list moves past ---- */
+.pc-errata-viewer {
+	position: relative;
+	height: var(--pc-errata-view-h, 480px);
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	border: 2px solid var(--pc-errata-gold);
+	border-radius: 10px;
+	background: #0b0b0b;
+	box-shadow: 0 0 0 1px #000000, 0 6px 18px rgba(0, 0, 0, 0.6), inset 0 0 24px rgba(0, 0, 0, 0.9);
+	overflow: hidden;
+	outline: none;
+}
+
+.pc-errata-viewer:focus-visible {
+	box-shadow: 0 0 0 2px var(--pc-errata-accent), 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+.pc-errata-viewer-bar {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 4px 8px;
+	background: linear-gradient(#262626, #161616);
+	border-bottom: 1px solid #000000;
+	flex: 0 0 auto;
+}
+
+/* ↑ / ↓ and Enlarge / Close: big targets */
+.pc-errata-viewer-bar button {
+	font: inherit;
+	font-size: 125%;
+	line-height: 1.2;
+	min-height: 34px;
+	color: #dddddd;
+	background: #2b2b2b;
+	border: 1px solid #555555;
+	border-radius: 6px;
+	padding: 4px 14px;
+	cursor: pointer;
+}
+
+.pc-errata-viewer-bar .pc-errata-prev,
+.pc-errata-viewer-bar .pc-errata-next {
+	min-width: 46px;
+}
+
+.pc-errata-viewer-bar button:hover:not(:disabled),
+.pc-errata-viewer-bar button:focus-visible {
+	border-color: var(--pc-errata-accent);
+	outline: none;
+}
+
+.pc-errata-viewer-bar button:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+.pc-errata-counter {
+	min-width: 5.5em;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.pc-errata-viewer-bar > .info-toggle {
+	flex: 0 0 auto;
+}
+
+.pc-errata-viewer-bar .pc-errata-enlarge {
+	margin-left: auto;
+}
+
+.pc-errata-viewer > .info-text {
+	margin: 4px 8px;
+	flex: 0 0 auto;
+}
+
+/* the reel: frames stacked in one slot; the one arriving slides in, the one leaving slides out */
+.pc-errata-reel {
+	position: relative;
+	flex: 1 1 0;
+	min-height: 0;
+	overflow: hidden;
+	touch-action: none;
+	user-select: none;
+}
+
+.pc-errata-frame {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	padding: 6px 10px 8px;
+	box-sizing: border-box;
+	background: #0b0b0b;
+}
+
+.pc-errata-frame.pc-errata-moving {
+	transition: transform var(--pc-errata-duration) cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.pc-errata-frame-empty {
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	color: var(--pc-errata-dim);
+}
+
+/* one line: title, collector's number, culture and type, tags (centred over the card) */
+.pc-errata-frame-head {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: center;
+	text-align: center;
+	gap: 0 0.6em;
+	min-width: 0;
+	max-width: 100%;
+}
+
+.pc-errata-frame-full > .pc-errata-frame-head {
+	justify-content: flex-start;
+	margin-bottom: 6px;
+}
+
+.pc-errata-frame-name {
+	font-weight: bold;
+	font-size: 115%;
+	color: #ffffff;
+}
+
+.pc-errata-frame-meta {
+	font-size: 85%;
+	color: var(--pc-errata-dim);
+}
+
+.pc-errata-frame-head .pc-errata-badge {
+	margin-left: 0;
+}
+
+/* compact: the stage (title and card, centred) above the readout of what changed, which keeps its own height */
+.pc-errata-body {
+	flex: 1 1 0;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 8px;
+	overflow: hidden;
+}
+
+.pc-errata-stage {
+	flex: 1 1 0;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+/* PcErrataUI.READOUT "side" / "auto" in a short viewer: the card on the left, the title and readout beside it */
+.pc-errata-body-side {
+	flex-direction: row;
+	align-items: center;
+	gap: 12px;
+}
+
+.pc-errata-body-side .pc-errata-stage {
+	flex: 0 0 auto;
+}
+
+.pc-errata-body-side .pc-errata-note {
+	align-self: flex-start;
+}
+
+.pc-errata-body-side .pc-errata-frame-head {
+	justify-content: flex-start;
+	text-align: left;
+	margin-bottom: 6px;
+}
+
+/* ---- a card, drawn like the game draws cards: rounded corners and a black border over the scan's edge ---- */
+.pc-errata-card {
+	position: relative;
+	flex: 0 0 auto;
+}
+
+.pc-errata .pc-errata-card .card {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.pc-errata .pc-errata-card .card > img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	-webkit-user-drag: none;
+}
+
+.pc-errata .pc-errata-card .card,
+.pc-errata .pc-errata-card .card > img,
+.pc-errata .pc-errata-card .borderOverlay,
+.pc-errata .pc-errata-card .borderOverlay img {
+	border-radius: 5%;
+}
+
+.pc-errata .pc-errata-card .borderOverlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border-style: solid;
+	border-color: #000000;
+	pointer-events: none;
+}
+
+.pc-errata .pc-errata-card .borderOverlay img {
+	display: block;
+}
+
+.pc-errata-noimage {
+	position: absolute;
+	inset: 0;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em;
+	text-align: center;
+	font-size: 85%;
+	color: #888888;
+	border: 1px dashed #555555;
+	border-radius: 5%;
+}
+
+/* ---- compact: the card that flips between PC errata and Original ---- */
+.pc-errata-flip {
+	flex: 0 0 auto;
+}
+
+.pc-errata-viewer-bar .pc-errata-flip-switch {
+	display: flex;
+	margin-left: auto;
+	border: 1px solid #555555;
+	border-radius: 6px;
+	overflow: hidden;
+	flex: 0 0 auto;
+}
+
+.pc-errata-viewer-bar .pc-errata-flip-switch button {
+	flex: 1 1 auto;
+	font: inherit;
+	font-size: 95%;
+	line-height: 1.2;
+	min-height: 34px;
+	padding: 4px 12px;
+	border: 0;
+	border-radius: 0;
+	background: #1d1d1d;
+	color: #bbbbbb;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+/* Enlarge shows both versions */
+.pc-errata-viewer-full .pc-errata-flip-switch {
+	display: none !important;
+}
+
+.pc-errata-flip-switch button + button {
+	border-left: 1px solid #555555;
+}
+
+.pc-errata-viewer-bar .pc-errata-flip-switch button.pc-errata-flip-on {
+	background: var(--pc-errata-current);
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.pc-errata-viewer-bar .pc-errata-flip-switch button:focus-visible {
+	outline: 1px solid var(--pc-errata-accent);
+	outline-offset: -2px;
+}
+
+.pc-errata-flip .pc-errata-cardbox {
+	position: relative;
+	cursor: pointer;
+	transition: transform 90ms ease-out;
+}
+
+.pc-errata-flip .pc-errata-cardbox.pc-errata-turning {
+	transform: scaleX(0.03);
+	transition: transform 90ms ease-in;
+}
+
+.pc-errata-flip .pc-errata-card {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.pc-errata-flip .pc-errata-side-before,
+.pc-errata-flip .pc-errata-showing-before .pc-errata-side-after {
+	visibility: hidden;
+}
+
+.pc-errata-flip .pc-errata-showing-before .pc-errata-side-before {
+	visibility: visible;
+}
+
+/* ---- what changed: the stats (one per line), then Old (plain) / New (additions highlighted) ---- */
+.pc-errata-note {
+	flex: 0 0 auto;
+	min-width: 0;
+	max-height: 100%;
+	overflow: hidden;
+	line-height: 1.4;
+	position: relative;
+}
+
+.pc-errata-note p {
+	margin: 0;
+}
+
+.pc-errata-note ins {
+	border-radius: 2px;
+	padding: 0 1px;
+	text-decoration: none;
+	background: var(--pc-errata-ins);
+	color: var(--pc-errata-ins-text);
+}
+
+.pc-errata-statblock {
+	margin-bottom: 0.5em;
+}
+
+.pc-errata-stats {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pc-errata-stats li {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 0 0.45em;
+}
+
+.pc-errata-stat-name {
+	color: var(--pc-errata-dim);
+	min-width: 5.5em;
+}
+
+.pc-errata-stat-arrow {
+	color: var(--pc-errata-dim);
+}
+
+.pc-errata-texts {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+
+.pc-errata-side {
+	border-left: 3px solid #444444;
+	padding-left: 0.6em;
+}
+
+.pc-errata-statblock {
+	border-left-color: var(--pc-errata-stat);
+}
+
+.pc-errata-old {
+	border-left-color: #8a8a8a;
+}
+
+.pc-errata-new {
+	border-left-color: #2f7d3d;
+}
+
+/* run in at the start of the text: OLD ..., NEW ... */
+.pc-errata-side-label {
+	font-size: 78%;
+	font-weight: bold;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--pc-errata-dim);
+	margin-right: 0.6em;
+}
+
+.pc-errata-old .pc-errata-side-label {
+	color: #c4c4c4;
+}
+
+.pc-errata-new .pc-errata-side-label {
+	color: #9ad8a4;
+}
+
+.pc-errata-hint {
+	color: #8f8f8f;
+	font-size: 92%;
+	margin-top: 0.4em !important;
+}
+
+/* the text did not fit even small: fade it out (Enlarge shows it all) */
+.pc-errata-clipped .pc-errata-note::after {
+	content: "\2026  Enlarge to read it all";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-top: 1.6em;
+	font-size: 85%;
+	text-align: right;
+	color: #bbbbbb;
+	background: linear-gradient(transparent, #0b0b0b 60%);
+}
+
+/* at either end: a nudge */
+.pc-errata-bump-end .pc-errata-frame {
+	animation: pc-errata-bump-end 280ms ease-out;
+}
+
+.pc-errata-bump-start .pc-errata-frame {
+	animation: pc-errata-bump-start 280ms ease-out;
+}
+
+@keyframes pc-errata-bump-end {
+	40% { transform: translateY(-14px); }
+}
+
+@keyframes pc-errata-bump-start {
+	40% { transform: translateY(14px); }
+}
+
+/* ---- Enlarge: the viewer over the hall, both versions side by side ---- */
+.pc-errata-viewer.pc-errata-viewer-full {
+	position: fixed;
+	top: 3vh;
+	bottom: 3vh;
+	left: max(3vw, calc(50vw - 700px));
+	right: max(3vw, calc(50vw - 700px));
+	height: auto;
+	z-index: 1000;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+/* the card preview (a jQuery UI dialog) opened from the enlarged viewer goes over it */
+body.pc-errata-enlarged .ui-dialog {
+	z-index: 1002 !important;
+}
+
+/* behind it: dims the hall; a click closes Enlarge, the wheel steps the list */
+.pc-errata-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 999;
+	background: rgba(0, 0, 0, 0.75);
+}
+
+.pc-errata-frame-full {
+	padding: 10px 18px 10px;
+}
+
+.pc-errata-frame-full .pc-errata-body {
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+}
+
+.pc-errata-pair {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 14px;
+}
+
+.pc-errata-figure {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+
+.pc-errata-figure figcaption {
+	font-size: 95%;
+	font-weight: bold;
+	color: #dddddd;
+}
+
+/* as tall as the cards (set by layout()), so the arrow sits at their middle */
+.pc-errata-arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--pc-errata-gold);
+	font-size: 200%;
+	flex: 0 0 auto;
+}
+
+.pc-errata-frame-full .pc-errata-texts {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.6em 1.4em;
+}
+
+.pc-errata-frame-full .pc-errata-texts > .pc-errata-same {
+	grid-column: 1 / -1;
+}
+
+.pc-errata-frame-full .pc-errata-body {
+	overflow: hidden;
+}
+
+/* sites that read bigger one above the other: the cards in a column, the text beside them */
+.pc-errata-full-column .pc-errata-body {
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.pc-errata-full-column .pc-errata-pair {
+	flex-direction: column;
+	align-items: center;
+	gap: 0;
+}
+
+.pc-errata-full-column .pc-errata-texts {
+	grid-template-columns: 1fr;
+}
+
+/* ---- a narrower panel: the columns that matter most; a narrow one: the viewer above the table ---- */
+.pc-errata-compact .pc-errata-col-rev {
+	display: none;
+}
+
+.pc-errata-compact .pc-errata-viewer-bar {
+	gap: 0.35em;
+}
+
+.pc-errata-compact .pc-errata-viewer-bar button,
+.pc-errata-compact .pc-errata-viewer-bar .pc-errata-flip-switch button {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.pc-errata-compact .pc-errata-viewer-bar .pc-errata-enlarge {
+	font-size: 110%;
+}
+
+.pc-errata-compact .pc-errata-counter {
+	min-width: 4.8em;
+}
+
+.pc-errata-narrow .pc-errata-layout {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+/* the viewer on top, the list (its title and filters, then the rows) in the rest of the panel */
+.pc-errata-narrow .pc-errata-viewer {
+	order: -1;
+	height: calc(var(--pc-errata-view-h, 480px) * 0.58);
+}
+
+.pc-errata-narrow .pc-errata-listcol {
+	height: calc(var(--pc-errata-view-h, 480px) * 0.42 - 14px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pc-errata-frame.pc-errata-moving,
+	.pc-errata-flip .pc-errata-cardbox {
+		transition: none;
+	}
+
+	.pc-errata-bump-end .pc-errata-frame,
+	.pc-errata-bump-start .pc-errata-frame {
+		animation: none;
+	}
+}

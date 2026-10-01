@@ -4,6 +4,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.RemoveGameTextModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class Card_04_364_Tests
 
 					put("troop1", "1_177");
 					put("troop2", "1_177");
+					put("troop3", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -140,9 +142,9 @@ public class Card_04_364_Tests
 	}
 
 	@Test
-	public void SamIsStillRingBoundWhenHisGameTextIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
-		// Regression for #1061: Helpless ("Sam's game text does not apply") was stripping Sam's rule-granted
-		// Ring-bound status, so he was being counted as an unbound Hobbit.
+	public void SamIsNotRingBoundWhenHisGameTextIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		// Ruling (reverting #1061): Helpless removes all of Sam's game text; Ring-bound is a keyword and keywords are
+		// game text, so a Helpless Sam (who is not the Ring-bearer) is an unbound Hobbit and Wingfoot may count him.
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -155,23 +157,55 @@ public class Card_04_364_Tests
 
 		var troop1 = scn.GetShadowCard("troop1");
 		var troop2 = scn.GetShadowCard("troop2");
-		scn.MoveMinionsToTable(troop1, troop2);
+		var troop3 = scn.GetShadowCard("troop3");
+		scn.MoveMinionsToTable(troop1, troop2, troop3);
 
 		scn.StartGame();
 
-		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
+		assertFalse(scn.HasKeyword(sam, Keyword.RING_BOUND));
+		// The Ring-bearer stays Ring-bound regardless
+		assertTrue(scn.HasKeyword(scn.GetRingBearer(), Keyword.RING_BOUND));
 
 		scn.FreepsPassCurrentPhaseAction();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		scn.FreepsDecided(2);
+		// Sam, Merry and Pippin are all unbound Hobbits now
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsDecided(3);
 		scn.FreepsChooseCard(troop1);
 		scn.FreepsChooseCard(troop2);
+		scn.FreepsChooseCard(troop3);
 
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(1, scn.GetWoundsOn(troop2));
+		assertEquals(1, scn.GetWoundsOn(troop3));
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void RingBearerStaysRingBoundWhenGameTextIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		// Unlike Frodo/Sam's printed keyword, being Ring-bound as the Ring-bearer is a rule, not game text.
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(aragorn, merry);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		scn.MoveMinionsToTable(troop1);
+
+		scn.StartGame();
+		var frodo = scn.GetRingBearer();
+		scn.ApplyAdHocModifier(new RemoveGameTextModifier(null, null, frodo));
+
+		assertTrue(scn.HasKeyword(frodo, Keyword.RING_BOUND));
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Only Merry counts
+		assertEquals(1, scn.FreepsGetChoiceMax());
 	}
 }

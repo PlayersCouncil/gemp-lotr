@@ -77,14 +77,114 @@
 		}
 	}
 
+//	103_83: {
+//		cardInfo: {
+//			//id: 103_83.0
+//			parent: 103_83
+//			variant: ORIGINAL
+//			variantPath: promos/pc
+//			revision: 0
+//			image: sets/V3/LOTR-ENV3S083.0_card.jpg
+//			collInfo: V3_83
+//			rarity: _
+//		}
+//		title: Gondor Calls For Aid!
+//		unique: true
+//		side: Free Peoples
+//		culture: Rohan
+//		twilight: 3
+//		type: Condition
+//		keywords: [
+//			Beacon
+//			Support Area
+//		]
+//		effects: [
+//			{
+//				type: ExtraCost
+//				cost: [
+//					{
+//						type: Hinder
+//						select: choose(beacon)
+//						count: 4
+//					}
+//				]
+//			}
+//			{
+//				type: Modifier
+//				modifier: {
+//					type: CantBeDiscarded
+//					filter: self
+//				}
+//			}
+//			{
+//				type: Modifier
+//				modifier: {
+//					type: CantBeHindered
+//					filter: self
+//				}
+//			}
+//			
+//			{
+//				type: Modifier
+//				modifier: {
+//					type: AddCulture
+//					filter: your, Gondor, Man
+//					culture: Rohan
+//				}
+//			}
+//			
+//			{
+//				type: Modifier
+//				modifier: {
+//					type: AddCulture
+//					filter: your, Rohan, Man
+//					culture: Gondor
+//				}
+//			}
+//			
+//			{
+//				type: Activated
+//				phase: Maneuver
+//				cost: {
+//					type: Hinder
+//					select: choose(hinderable, beacon)
+//					count: 1-5
+//					memorize: hinderedBeacons
+//				}
+//				effect: {
+//					type: Repeat
+//					times: {
+//						type: ForEachInMemory
+//						memory: hinderedBeacons
+//					}
+//					effect: {
+//						type: PlayCardFromDiscard
+//						select: choose(item)
+//						on: your,Man
+//					}
+//				}
+//			}
+//
+//		]
+//		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.<br>Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder X beacons to play X items from your discard pile on your Men.
+//		lore: "And so King Théoden departed from his own realm, and mile by mile the long road wound away..."
+//		promotext: ""
+//		alts: {
+//			promos: {
+//			}
+//			errata: {
+//			}
+//		}
+//	}
+
 	103_83: {
 		cardInfo: {
-			//id: 103_83.0
+			//id: 103_83.1
 			parent: 103_83
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3S083.0_card.jpg
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S083.1_card.jpg
 			collInfo: V3_83
 			rarity: _
 		}
@@ -144,7 +244,7 @@
 			
 			{
 				type: Activated
-				phase: Maneuver
+				phase: Fellowship
 				cost: {
 					type: Hinder
 					select: choose(hinderable, beacon)
@@ -166,7 +266,7 @@
 			}
 
 		]
-		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.\Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Maneuver: Hinder X beacons to play X items from your discard pile on your Men.
+		gametext: Beacon. To play, hinder 4 beacons.<br>This cannot be discarded or hindered.<br>Your [Gondor] Men are considered [Rohan] Men.  Your [Rohan] Men are considered [Gondor] Men.<br>Fellowship: Hinder X beacons to play X items from your discard pile on your Men.
 		lore: "And so King Théoden departed from his own realm, and mile by mile the long road wound away..."
 		promotext: ""
 		alts: {

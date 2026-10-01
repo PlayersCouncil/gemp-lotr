@@ -1,129 +1,58 @@
-<div id="formats">
+<div id="pc-errata" class="pc-errata">
 	<script>
+		// Help › PC Errata: the table, filters and viewer are js/gemp-022/pcErrataUi.js (PcErrataUI); links to this page
+		// are #pc-errata, #pc-errata?format=<code> and #errata-<card id> (GempErrataHelp in the same file).  The page is
+		// public: without a logged-in hall it asks the server itself.
 		$("#helpMain").ready(
 		function () {
-			hall.comm.getErrata(function(json){
-				//$("#errata-readout").text(JSON.stringify(json, null, 2));
-				var top = $("<div style='display:flex; flex-direction:column; gap:20px; justify-content:center; align-items:center;'></div>");
-				
-				var bot = $("<div style='display:flex; flex-direction:column; gap:20px; justify-content:center; align-items:center;'></div>");
-				
-				var recentResults = {};
-				var allResults = {};
-				for(var bp in json.all) {
-					var info = json.all[bp];
-					var eid = info.ErrataIDs.PC;
-					var text = info.LinkText;
-					text = text.replace(eid, bp + "," + eid);
-					//console.log(text);
-					//result.append(text);
-					
-					var parts = bp.split("_");
-					var setID = parseInt(parts[0]);
-					var cardID = parseInt(parts[1]);
-					
-					if(setID in allResults) {
-						allResults[setID][cardID] = text;
-					}
-					else {
-						allResults[setID] = {};
-						allResults[setID][cardID] = text;
-					}
-				}
-				
-				for(var bp in json.recent) {
-					var info = json.recent[bp];
-					var eid = info.ErrataIDs.PC;
-					var text = info.LinkText;
-					text = text.replace(eid, bp + "," + eid);
-					//console.log(text);
-					//result.append(text);
-					
-					var parts = bp.split("_");
-					var setID = parseInt(parts[0]);
-					var cardID = parseInt(parts[1]);
-					
-					if(setID in recentResults) {
-						recentResults[setID][cardID] = text;
-					}
-					else {
-						recentResults[setID] = {};
-						recentResults[setID][cardID] = text;
-					}
-				}
-				debugger;
-				var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-				var recentSets = Object.keys(recentResults).sort(collator.compare);
-				var allSets = Object.keys(allResults).sort(collator.compare);
-				
-				for(let set in recentSets) {
-					let setdiv = $("<div style='display:flex; flex-direction:column; gap:10px; flex-wrap: wrap; width:70%; row-gap:10px; column-gap:30px; '></div>");
-					top.append($("<div style='margin:auto; font-size: 140%; position:relative; top:20px; bottom:10px;'>Set " + recentSets[set] + "</div>"));
-					
-					//(# * 28) / 2
-					//debugger;
-					let cards = Object.keys(recentResults[recentSets[set]]).sort(collator.compare);
-					for(let card in cards) {
-						let cardspan = $("<span></span>");
-						
-						let html = recentResults[recentSets[set]][cards[card]];
-						cardspan.append(html);
-						
-						setdiv.append(cardspan);
-					}
-
-					
-					setdiv.css({"height": "" + (((cards.length * 29) / 1.8) + 30) + "px"});
-					
-					top.append(setdiv);
-				}
-				
-				debugger;
-				for(let set in allSets) {
-					let setdiv = $("<div style='display:flex; flex-direction:column; gap:10px; flex-wrap: wrap; width:70%; row-gap:10px; column-gap:30px; '></div>");
-					bot.append($("<div style='margin:auto; font-size: 140%; position:relative; top:20px; bottom:10px;'>Set " + allSets[set] + "</div>"));
-					
-					//(# * 28) / 2
-					//debugger;
-					let cards = Object.keys(allResults[allSets[set]]).sort(collator.compare);
-					for(let card in cards) {
-						let cardspan = $("<span></span>");
-						
-						let html = allResults[allSets[set]][cards[card]];
-						cardspan.append(html);
-						
-						setdiv.append(cardspan);
-					}
-
-					
-					setdiv.css({"height": "" + (((cards.length * 29) / 1.8) + 30) + "px"});
-					
-					bot.append(setdiv);
-				}
-				console.log(bot);
-				$("#all-errata-readout").html(bot);
-				
-				console.log(top);
-				$("#recent-errata-readout").html(top);
-				
-			}, hall.hallErrorMap());
+			var comm = typeof hall != "undefined" && hall && hall.comm ? hall.comm
+				: new GempLotrCommunication("/gemp-lotr-server", function () {});
+			PcErrataUI.mount($("#pc-errata"), comm);
 		  }
 		);
-		
 	</script>
-	<div id="errata-info" class="article">
-		<p>
-			All errata are indicated in-game with a red slash in their upper-right-hand corner.  Errata that were issued by the Player's Council instead of Decipher also have this slash, but also include the errata date in the lower-left-hand corner of the card.
-		<p>
-			Each of the released errata have had a full writeup on the PC's thoughts and justifications <a href="https://wiki.lotrtcgpc.net/wiki/PC_Errata">here on the LOTR-TCG wiki</a>.
-		</p>
-		<p>
-			Below you can find a quick reference allowing you to quickly compare released errata.
-		</p>
-		<h1>Recent Errata</h1>
-		<div id="recent-errata-readout"></div>
-		
-		<h1>All PC Errata</h1>
-		<div id="all-errata-readout"></div>
+	<div class="pc-errata-layout">
+		<div class="pc-errata-listcol">
+			<div class="pc-errata-intro">
+				<div class="pc-errata-titlebar">
+					<h1>PC Errata <span class="info-toggle" data-for="pc-errata-help-about">i</span></h1>
+					<div class="pc-errata-views" role="radiogroup" aria-label="View"></div>
+				</div>
+				<div id="pc-errata-help-about" class="info-text" hidden>
+					<p class="pc-errata-summary"></p>
+					<p>All errata are marked in-game with a red slash in the card's upper-left corner.  Errata issued by
+						the Player's Council instead of Decipher also carry the errata date in the lower-left corner of the
+						card.</p>
+					<p>Every released erratum has a full write-up of the PC's thoughts and reasons
+						<a href="https://wiki.lotrtcgpc.net/wiki/PC_Errata" target="_blank" rel="noopener">on the LOTR-TCG wiki</a>.</p>
+					<p><b>#</b> counts how many times the PC has revised a card.</p>
+				</div>
+				<div class="pc-errata-filters"></div>
+			</div>
+			<div class="pc-errata-table"></div>
+		</div>
+		<div class="pc-errata-viewer" tabindex="0" aria-roledescription="card viewer" aria-label="Errata viewer">
+			<div class="pc-errata-viewer-bar">
+				<button type="button" class="pc-errata-prev" aria-label="Previous card" title="Previous card (&#8593; or k)">&#9650;</button>
+				<span class="pc-errata-counter" aria-live="polite"></span>
+				<button type="button" class="pc-errata-next" aria-label="Next card" title="Next card (&#8595; or j)">&#9660;</button>
+				<div class="pc-errata-flip-switch" role="group" aria-label="Which version the card shows">
+					<button type="button" data-original="1" title="The card as Decipher printed it (O)">Original</button><button
+						type="button" data-original="0" title="The card as the Player's Council errata has it (O)">PC errata</button>
+				</div>
+				<span class="info-toggle" data-for="pc-errata-help-keys">i</span>
+				<button type="button" class="pc-errata-enlarge" aria-pressed="false">Enlarge</button>
+			</div>
+			<div id="pc-errata-help-keys" class="info-text" hidden>
+				Step through the list one card at a time: <b>&#8593; / &#8595;</b> or <b>k / j</b>, the mouse wheel over
+				this viewer, or a swipe up / down on it; <b>Home / End</b> go to the first / last card.  Scrolling the
+				table skims: the selected card rides along with the rows, several cards per wheel notch.  A click on a row
+				shows that card.  A click on the card image (or <b>O</b>, or the switch above) flips it between the PC
+				errata and the original; a right-click on it (a swipe up on a touch screen) opens it large, with zoom.
+				<b>Enlarge</b> shows both side by side (<b>Esc</b> closes it).  The address bar links to the card on show.
+			</div>
+			<div class="pc-errata-reel"></div>
+		</div>
+		<div class="pc-errata-backdrop" hidden></div>
 	</div>
 </div>

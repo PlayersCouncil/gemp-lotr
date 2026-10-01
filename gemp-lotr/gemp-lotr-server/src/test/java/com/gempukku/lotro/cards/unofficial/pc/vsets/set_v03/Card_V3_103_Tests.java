@@ -304,15 +304,21 @@ public class Card_V3_103_Tests
 		var halls = scn.GetFreepsCard("halls");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
-		//a shadow card owned by player 1
+		//shadow cards owned by player 1
 		var runner = scn.GetFreepsCard("runner");
+		var bladetip = scn.GetFreepsCard("bladetip");
+		//a free peoples card owned by player 1
+		var sam = scn.GetFreepsCard("sam");
 
 		scn.MoveCardsToSupportArea(accounted);
 		scn.MoveCardsToHand(halls);
 		scn.MoveCompanionsToTable(aragorn, gimli);
 
 		scn.StartGame();
-		scn.MoveCardsToTopOfDeck(runner);
+		// Pin all 3 cards Halls will reveal. With only runner stacked, the other 2 came from the shuffled deck, and
+		// whenever both were Free Peoples (Sam + Bilbo, 1 in 15) runner was the only Shadow card revealed, so the
+		// discard auto-selected it and there was no choice for Freeps to make. Two Shadow cards guarantee a real choice.
+		scn.MoveCardsToTopOfDeck(sam, bladetip, runner);
 
 		// First reveal - trigger available
 		scn.FreepsPlayCard(halls);
@@ -327,9 +333,9 @@ public class Card_V3_103_Tests
 		scn.FreepsChooseYes();
 		assertEquals(Zone.DECK, runner.getZone());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(bladetip));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(sam));
 
-		//This test is stochastic for some reason, but I can't figure out what is causing it to randomly fail.
-		// It is almost certainly something stupid like deck shuffle reordering the cards, but I don't know where or why.
 		scn.FreepsChooseCardBPFromSelection(runner); //discarded
 		assertInDiscard(runner);
 

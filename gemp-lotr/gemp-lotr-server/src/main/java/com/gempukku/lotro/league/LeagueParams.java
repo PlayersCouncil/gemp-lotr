@@ -37,6 +37,19 @@ public class LeagueParams {
     public int raceIntensityCeiling = 10;         // Max intensity for auto-generation pool
     public RTMDLeague.AdvanceType raceAdvancementMode = RTMDLeague.AdvanceType.WIN;    // "win" or "points"
     public int raceAdvanceFactor = 1;      // How many wins or points to advance
+    /**
+     * Asks the {@link LeagueFactory} to roll a fresh race path for this league instead of using {@code racePath}.
+     * It is a property of a <em>definition</em>, not of a league: a league schedule's template carries it (so every
+     * instance the schedule creates gets its own randomisation), and the factory clears it on the league it creates,
+     * which therefore has an ordinary fixed path an admin can still edit.  False for hand-made leagues, whose path
+     * the admin rolls in the race editor.
+     */
+    public boolean raceRandomizeEachInstance = false;
+    /**
+     * How long a generated path should be; only consulted when {@link #raceRandomizeEachInstance} is set.  Zero
+     * falls back to the length of {@code racePath}, or {@link RTMDPathGenerator#DEFAULT_PATH_LENGTH}.
+     */
+    public int racePathLength = 0;
 
     public record SerieData(String format, int duration, int matches) {
     }

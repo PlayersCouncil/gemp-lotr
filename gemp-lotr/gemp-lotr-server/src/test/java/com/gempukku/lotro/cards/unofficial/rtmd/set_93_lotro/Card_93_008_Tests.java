@@ -10,27 +10,12 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * 93_8: Each Wraith is strength +1 for each wound on a character in its skirmish.
- *
- * Wraith is a race (Man, Elf, Dwarf, Wraith, etc.), not the [Wraith] culture.
- * Both Free Peoples Wraiths (dead men of Dunharrow) and Shadow Wraiths (Barrow-wights, etc.) qualify.
- * Not owner-gated — applies to all Wraiths.
- *
- * Test cards:
- * - Aragorn (1_89): Gondor companion, strength 8, vitality 4
- * - Oathbreaker (8_41): FP Gondor Wraith companion, strength 6, vitality 3, Enduring (+2 str per own wound)
- * - Barrow-wight Stalker (16_1): Shadow Wraith minion, strength 11, vitality 4, Enduring (+2 str per own wound)
- */
 public class Card_93_008_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Aragorn (1_89): Gondor companion, strength 8, vitality 4
-		put("aragorn", "1_89");
-		// Oathbreaker (8_41): FP Gondor Wraith companion, strength 6, vitality 3, Enduring
-		put("oathbreaker", "8_41");
-		// Barrow-wight Stalker (16_1): Shadow Wraith minion, strength 11, vitality 4, Enduring
-		put("stalker", "16_1");
+		put("aragorn", "1_89"); // Aragorn: Gondor companion, strength 8, vitality 4 — not a Wraith
+		put("oathbreaker", "8_41"); // Oathbreaker: FP Gondor Wraith companion, strength 6, vitality 3, Enduring
+		put("stalker", "16_1"); // Barrow-wight Stalker: Shadow Wraith minion, strength 11, vitality 4, Enduring
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -44,6 +29,12 @@ public class Card_93_008_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_8
+		 * Type: MetaSite
+		 * Game Text: Each Wraith is strength +1 for each wound on a character in its skirmish.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_8", card.getBlueprint().getTitle());

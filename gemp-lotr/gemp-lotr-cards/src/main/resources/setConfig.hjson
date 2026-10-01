@@ -571,7 +571,7 @@
 		rarityFile: /set94-rarity.txt
 		originalSet: false
 		merchantable: false
-		needsLoading: false
+		needsLoading: true
 		playable: false
 	}
 

@@ -1,5 +1,6 @@
 package com.gempukku.lotro.bots.random;
 
+import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.rl.LearningBotPlayer;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
@@ -26,9 +27,14 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
 
     @Override
     public String chooseAction(GameState gameState, AwaitingDecision decision) {
+        return chooseAction(gameState, decision, AssignmentLegality.UNCHECKED);
+    }
+
+    @Override
+    public String chooseAction(GameState gameState, AwaitingDecision decision, AssignmentLegality legality) {
         double[] stateVector = features.extractFeatures(gameState, decision, getName());
 
-        SemanticAction action = pickSemanticAction(decision, gameState);
+        SemanticAction action = pickSemanticAction(decision, gameState, legality);
 
         // Store temporarily — reward comes later
         episodeSteps.add(new LearningStep(stateVector, action, getName().equals(gameState.getCurrentPlayerId()), decision));
@@ -36,8 +42,8 @@ public class RandomLearningBot extends RandomDecisionBot implements LearningBotP
         return action.toDecisionString(decision, gameState);
     }
 
-    private SemanticAction pickSemanticAction(AwaitingDecision decision, GameState gameState) {
-        String action = super.chooseAction(gameState, decision);
+    private SemanticAction pickSemanticAction(AwaitingDecision decision, GameState gameState, AssignmentLegality legality) {
+        String action = super.chooseAction(gameState, decision, legality);
 
         return switch (decision.getDecisionType()) {
             case INTEGER -> new IntegerChoiceAction(Integer.parseInt(action));

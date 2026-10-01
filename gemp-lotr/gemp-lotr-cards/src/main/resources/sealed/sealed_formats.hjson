@@ -123,7 +123,37 @@
 	}
 	
 	{
-		name: 05 Movie Special Sealed
+		name: 05 King Standard Special Sealed
+		id: ks_special_sealed
+		format: limited_king
+		seriesProduct: [
+			[
+				1x(S)KSSealed-S1
+				1xFotR - Booster
+				1xTTT - Booster
+				1xRotK - Booster
+				3x(S)KS Choice - Booster
+			]
+			[
+				1x(S)KSSealed-S2
+				1xMoM - Booster
+				1xBoHD - Booster
+				1x(S)KS Choice - Booster
+			]
+			[
+				1x(S)KSSealed-S3
+				1xRotEL - Booster
+				1xEoF - Booster
+				1x(S)KS Choice - Booster
+			]
+			[
+				6x(S)KS Choice - Booster
+			]
+		]
+	}
+	
+	{
+		name: 06 Movie Special Sealed
 		id: movie_special_sealed
 		format: limited_king
 		seriesProduct: [
@@ -154,7 +184,7 @@
 	}
 	
 	{
-		name: 06 War of the Ring Block Sealed
+		name: 07 War of the Ring Block Sealed
 		id: wotr_block_sealed
 		format: limited_shadows
 		seriesProduct: [
@@ -187,7 +217,7 @@
 	}
 	
 	{
-		name: 07 Hunters Block Sealed
+		name: 08 Hunters Block Sealed
 		id: th_block_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -229,7 +259,7 @@
 	}
 	
 	{
-		name: 08 Reverse Fellowship Block Sealed
+		name: 09 Reverse Fellowship Block Sealed
 		id: reverse_fotr_block_sealed
 		format: limited_fotr
 		seriesProduct: [
@@ -264,7 +294,7 @@
 	}
 	
 	{
-		name: 09 Reverse Towers Block Sealed
+		name: 10 Reverse Towers Block Sealed
 		id: reverse_ttt_block_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -299,7 +329,7 @@
 	}
 	
 	{
-		name: 10 Reverse Towers Standard Special Sealed
+		name: 11 Reverse Towers Standard Special Sealed
 		id: reverse_ts_special_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -328,7 +358,7 @@
 	}
 	
 	{
-		name: 11 Reverse King Block Sealed
+		name: 12 Reverse King Block Sealed
 		id: reverse_rotk_block_sealed
 		format: limited_king
 		seriesProduct: [
@@ -371,7 +401,7 @@
 	}
 	
 	{
-		name: 12 Reverse Movie Special Sealed
+		name: 13 Reverse Movie Special Sealed
 		id: reverse_movie_special_sealed
 		format: limited_king
 		seriesProduct: [
@@ -402,7 +432,7 @@
 	}
 	
 	{
-		name: 13 Reverse War of the Ring Block Sealed
+		name: 14 Reverse War of the Ring Block Sealed
 		id: reverse_wotr_block_sealed
 		format: limited_shadows
 		seriesProduct: [
@@ -441,7 +471,7 @@
 	}
 	
 	{
-		name: 14 Reverse Hunters Block Sealed
+		name: 15 Reverse Hunters Block Sealed
 		id: reverse_th_block_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -489,7 +519,7 @@
 	}
 	
 	{
-		name: 15 Single Series Fellowship Block Sealed
+		name: 16 Single Series Fellowship Block Sealed
 		id: single_fotr_block_sealed
 		format: limited_fotr
 		hall: true
@@ -507,7 +537,7 @@
 	}
 	
 	{
-		name: 16 Single Series Towers Block Sealed
+		name: 17 Single Series Towers Block Sealed
 		id: single_ttt_block_sealed
 		format: limited_ttt
 		hall: true
@@ -525,7 +555,7 @@
 	}
 	
 	{
-		name: 17 Single Series Towers Standard Sealed
+		name: 18 Single Series Towers Standard Sealed
 		id: single_ts_sealed
 		format: limited_ttt
 		hall: true
@@ -544,7 +574,7 @@
 	}
 	
 	{
-		name: 18 Single Series King Block Sealed
+		name: 19 Single Series King Block Sealed
 		id: single_rotk_block_sealed
 		format: limited_king
 		hall: true
@@ -568,7 +598,7 @@
 	}
 	
 	{
-		name: 19 Single Series Movie Sealed
+		name: 20 Single Series Movie Sealed
 		id: single_movie_sealed
 		format: limited_king
 		hall: true
@@ -590,7 +620,7 @@
 	}
 	
 	{
-		name: 20 Single Series War of the Ring Block Sealed
+		name: 21 Single Series War of the Ring Block Sealed
 		id: single_wotr_block_sealed
 		format: limited_shadows
 		hall: true
@@ -614,7 +644,7 @@
 	}
 	
 	{
-		name: 21 Single Series Hunters Block Sealed
+		name: 22 Single Series Hunters Block Sealed
 		id: single_th_block_sealed
 		format: limited_hunters
 		hall: true
@@ -636,7 +666,7 @@
 	}
 	
 	{
-		name: 22 Fellowship Booster Box Sealed
+		name: 23 Fellowship Booster Box Sealed
 		id: fotr_box_sealed
 		format: limited_fotr
 		seriesProduct: [
@@ -741,7 +771,7 @@
 	}
 	
 	{
-		name: 23 Fellowship Block Booster Box Sealed
+		name: 24 Fellowship Block Booster Box Sealed
 		id: fotr_block_box_sealed
 		format: limited_fotr
 		seriesProduct: [
@@ -761,7 +791,7 @@
 	}
 	
 	{
-		name: 24 Towers Booster Box Sealed
+		name: 25 Towers Booster Box Sealed
 		id: ttt_box_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -858,7 +888,7 @@
 	}
 	
 	{
-		name: 25 Towers Block Booster Box Sealed
+		name: 26 Towers Block Booster Box Sealed
 		id: ttt_block_box_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -878,7 +908,7 @@
 	}
 	
 	{
-		name: 26 King Booster Box Sealed
+		name: 27 King Booster Box Sealed
 		id: rotk_box_sealed
 		format: limited_king
 		seriesProduct: [
@@ -963,7 +993,7 @@
 	}
 	
 	{
-		name: 27 King Block Booster Box Sealed
+		name: 28 King Block Booster Box Sealed
 		id: rotk_block_box_sealed
 		format: limited_king
 		seriesProduct: [
@@ -981,7 +1011,7 @@
 	}
 	
 	{
-		name: 28 Shadows Booster Box Sealed
+		name: 29 Shadows Booster Box Sealed
 		id: sh_box_sealed
 		format: limited_shadows
 		seriesProduct: [
@@ -1076,7 +1106,7 @@
 	}
 	
 	{
-		name: 29 War of the Ring Block Booster Box Sealed
+		name: 30 War of the Ring Block Booster Box Sealed
 		id: wotr_block_box_sealed
 		format: limited_shadows
 		seriesProduct: [
@@ -1094,7 +1124,7 @@
 	}
 	
 	{
-		name: 30 Hunters Block Booster Box Sealed
+		name: 31 Hunters Block Booster Box Sealed
 		id: th_block_box_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1111,7 +1141,7 @@
 		]
 	}
 	{
-		name: 31 Random Multipath Booster Box
+		name: 32 Random Multipath Booster Box
 		id: multipath_box_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1136,7 +1166,7 @@
 		]
 	}
 	{
-		name: 32 Random Expanded Booster Box
+		name: 33 Random Expanded Booster Box
 		id: expanded_box_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1154,7 +1184,7 @@
 		]
 	}
 	{
-		name: 33 Multipath Movie Sealed
+		name: 34 Multipath Movie Sealed
 		id: multipath_movie_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1178,7 +1208,7 @@
 	}
 	
 	{
-		name: 34 Reflections Sealed
+		name: 35 Reflections Sealed
 		id: ref_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1192,7 +1222,7 @@
 	}
 	
 	{
-		name: 35 Expanded Sealed
+		name: 36 Expanded Sealed
 		id: expanded_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1212,7 +1242,7 @@
 	}
 	
 	{
-		name: 36 Four Hobbits Sealed
+		name: 37 Four Hobbits Sealed
 		id: four_hobbits_sealed
 		format: limited_king
 		seriesProduct: [
@@ -1230,7 +1260,7 @@
 	}
 	
 	{
-		name: 37 Evil Characters Sealed
+		name: 38 Evil Characters Sealed
 		id: evil_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1247,7 +1277,7 @@
 	}
 	
 	{
-		name: 38 Shadows of the Past Sealed
+		name: 39 Shadows of the Past Sealed
 		id: sotp_sealed
 		format: limited_fotr_pc
 		seriesProduct: [
@@ -1266,7 +1296,7 @@
 		]
 	}
 	{
-		name: 39 Saruman Sealed
+		name: 40 Saruman Sealed
 		id: saruman_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1281,7 +1311,7 @@
 		]
 	}
 	{
-		name: 40 Shelbi Sealed
+		name: 41 Shelbi Sealed
 		id: shelbi_sealed
 		format: limited_king
 		seriesProduct: [
@@ -1298,7 +1328,7 @@
 		]
 	}
 	{
-		name: 41 Alternate Ringbearer Sealed
+		name: 42 Alternate Ringbearer Sealed
 		id: altring_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1322,7 +1352,7 @@
 		]
 	}
 	{
-		name: 42 Ages End Sealed
+		name: 43 Ages End Sealed
 		id: ages_end_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1367,7 +1397,7 @@
 		]
 	}
 	{
-		name: 43 Allies Sealed
+		name: 44 Allies Sealed
 		id: allies_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1383,7 +1413,7 @@
 		]
 	}
 	{
-		name: 44 Big Baddies Sealed
+		name: 45 Big Baddies Sealed
 		id: big_baddies_sealed
 		format: limited_king
 		seriesProduct: [
@@ -1402,7 +1432,7 @@
 		]
 	}
 	{
-		name: 45 Little Baddies Sealed
+		name: 46 Little Baddies Sealed
 		id: little_baddies_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1418,7 +1448,7 @@
 		]
 	}
 	{
-		name: 46 The Nine Sealed
+		name: 47 The Nine Sealed
 		id: the_nine_sealed
 		format: limited_king
 		seriesProduct: [
@@ -1441,7 +1471,7 @@
 		]
 	}
 	{
-		name: 47 Walk Through Movie Sealed
+		name: 48 Walk Through Movie Sealed
 		id: Walk_through_movie_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1487,7 +1517,7 @@
 		]
 	}
 	{
-		name: 48 Fellowship Anthology Sealed
+		name: 49 Fellowship Anthology Sealed
 		id: fotr_anthology_sealed
 		format: limited_fotr
 		seriesProduct: [
@@ -1536,7 +1566,7 @@
 		]
 	}
 	{
-		name: 49 Towers Anthology Sealed
+		name: 50 Towers Anthology Sealed
 		id: ttt_anthology_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -1585,7 +1615,7 @@
 		]
 	}
 	{
-		name: 50 RotK Anthology Sealed
+		name: 51 RotK Anthology Sealed
 		id: rotk_anthology_sealed
 		format: limited_king
 		seriesProduct: [
@@ -1633,7 +1663,7 @@
 		]
 	}
 	{
-		name: 51 WotR Anthology Sealed
+		name: 52 WotR Anthology Sealed
 		id: wotr_anthology_sealed
 		format: limited_shadows
 		seriesProduct: [
@@ -1682,7 +1712,7 @@
 		]
 	}
 	{
-		name: 52 Battle for Site Control Sealed
+		name: 53 Battle for Site Control Sealed
 		id:sitecontrol_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1696,7 +1726,7 @@
 		]
 	}
 	{
-		name: 53 Romance Sealed
+		name: 54 Romance Sealed
 		id:romance_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1711,7 +1741,7 @@
 		]
 	}
 	{
-		name: 54 Bromance Sealed
+		name: 55 Bromance Sealed
 		id:bromance_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1724,7 +1754,7 @@
 		]
 	}
 	{
-		name: 55 Forbidden Love Sealed
+		name: 56 Forbidden Love Sealed
 		id:forbiddenlove_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -1739,7 +1769,7 @@
 		]
 	}
 	{
-		name: 56 True Love Sealed
+		name: 57 True Love Sealed
 		id:truelove_sealed
 		format: limited_hunters
 		seriesProduct: [
@@ -1755,7 +1785,7 @@
 		]
 	}
 	{
-		name: 57 Lineage Sealed
+		name: 58 Lineage Sealed
 		id:lineage_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1771,7 +1801,7 @@
 		]
 	}
 	{
-		name: 58 Shelobs Lair Sealed
+		name: 59 Shelobs Lair Sealed
 		id:shelobslair_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1789,7 +1819,7 @@
 		]
 	}
 	{
-		name: 59 Knighted Sealed
+		name: 60 Knighted Sealed
 		id:knighted_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1806,7 +1836,7 @@
 		]
 	}
 	{
-		name: 60 Move Limit Sealed
+		name: 61 Move Limit Sealed
 		id:movelimit_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1822,7 +1852,7 @@
 		]
 	}
 	{
-		name: 61 The Great Eye Sealed
+		name: 62 The Great Eye Sealed
 		id:greateye_sealed
 		format: limited_ttt
 		seriesProduct: [
@@ -1836,7 +1866,7 @@
 		]
 	}
 	{
-		name: 62 Alphabet DEGR Sealed
+		name: 63 Alphabet DEGR Sealed
 		id:alphabetdegr_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1855,7 +1885,7 @@
 		]
 	}
 	{
-		name: 63 Alphabet AHST Sealed
+		name: 64 Alphabet AHST Sealed
 		id:alphabetahst_sealed
 		format: limited_multipath
 		seriesProduct: [
@@ -1872,7 +1902,7 @@
 		]
 	}
 	{
-		name: 64 Alphabet BFLW Sealed
+		name: 65 Alphabet BFLW Sealed
 		id:alphabetbflw_sealed
 		format: limited_multipath
 		seriesProduct: [

@@ -139,6 +139,8 @@ public interface Modifier {
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 
+    boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag, String playerId);
+
     boolean isSiteReplaceable(LotroGame game, String playerId);
 
     boolean canPlaySite(LotroGame game, String playerId);
@@ -170,7 +172,17 @@ public interface Modifier {
 
     int getOverrideUniqueness(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether this modifier's uniqueness override is a loosening one (raising the number of copies allowed in play)
+     * rather than a restricting one.  Restricting overrides beat loosening ones - see ModifiersLogic.getUniqueness.
+     */
+    boolean loosensUniqueness(LotroGame game, PhysicalCard card);
+
     int getPotentialDiscount(LotroGame game, PhysicalCard discountCard);
 
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard card);
+
+    boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card);
+
+    boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId);
 }

@@ -1,0 +1,489 @@
+/* ==== format-definitions: Help › Format Definitions (includes/help/formatRules.html, js/gemp-022/formatDefinitions.js) ====
+   A sticky format list (with a find box) beside one card per format: its facts, then its card lists as name chips
+   grouped by set, or thumbnails when "Card images" is on. */
+
+.fd-page {
+	box-sizing: border-box;
+	padding: 0.6em 1.2em 3em 1.2em;
+}
+
+.fd-intro p {
+	margin: 0.2em 0 0.6em 0;
+	color: #ddd;
+	max-width: 62em;
+}
+
+.fd-intro .info-text {
+	max-width: 62em;
+	margin-bottom: 0.8em;
+}
+
+.fd-intro .info-text ul {
+	margin: 0 0 0.3em 0;
+	padding-left: 1.2em;
+}
+
+.fd-layout {
+	display: grid;
+	grid-template-columns: 13.5em minmax(0, 1fr);
+	gap: 1.2em;
+	align-items: start;
+}
+
+.fd-loading,
+.fd-empty,
+.fd-layout > .load-error {
+	color: #aaa;
+	grid-column: 1 / -1;
+}
+
+/* ---- the format list: stays in view while the panel scrolls (formatDefinitions.js sets --fd-view-height) ---- */
+.fd-side {
+	position: sticky;
+	top: 0;
+	max-height: var(--fd-view-height, 80vh);
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: rgba(0, 0, 0, 0.35);
+	border: 1px solid #333;
+	border-radius: 6px;
+}
+
+.fd-side-tools {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	padding: 0.5em 0.5em 0.3em 0.5em;
+	background: #140d0a;
+	border-bottom: 1px solid #333;
+}
+
+.fd-filter {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.3em 0.5em;
+	background: #111;
+	color: #eee;
+	border: 1px solid #555;
+	border-radius: 4px;
+	font: inherit;
+	font-size: 90%;
+}
+
+.fd-filter:focus {
+	outline: none;
+	border-color: #8ab;
+}
+
+.fd-images-toggle {
+	display: block;
+	margin-top: 0.35em;
+	font-size: 85%;
+	color: #ccc;
+	cursor: pointer;
+}
+
+.fd-filter-status {
+	font-size: 78%;
+	color: #aaa;
+}
+
+.fd-filter-status:empty {
+	display: none;
+}
+
+.fd-nav {
+	list-style: none;
+	margin: 0;
+	padding: 0.3em 0;
+}
+
+.fd-nav li {
+	margin: 0;
+}
+
+/* In-page links (the list, each format's "#", "PC Errata") keep their colours once clicked.  hall.css's
+   a:visited (orange) outranks a plain class such as .fd-permalink, and a #format-<code> link is "visited" once its URL
+   has been in the address bar (a shared link, or this page following the format being read).  It also outranks .fd-nav a (the
+   same specificity, which only wins by coming later) whenever a second copy of hall.css is loaded after this file:
+   the Admin tab's pages (includes/admin/*.html) link hall.css again, so the list turned orange only in a session that
+   had opened one, and not after a reload.  Hence the .fd-page prefix and explicit :link / :visited states. */
+.fd-nav a {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 0.5em;
+	padding: 0.22em 0.6em 0.22em 0.5em;
+	border-left: 3px solid transparent;
+	text-decoration: none;
+	font-size: 92%;
+}
+
+.fd-page .fd-nav a,
+.fd-page .fd-nav a:link,
+.fd-page .fd-nav a:visited,
+.fd-page .fd-nav a:focus,
+.fd-page .fd-nav a:active {
+	color: #cdd6e0;
+}
+
+.fd-page .fd-nav a:hover,
+.fd-page .fd-nav a:focus-visible {
+	background: rgba(255, 255, 255, 0.06);
+	color: #fff;
+	outline: none;
+}
+
+.fd-page .fd-nav li.fd-active a,
+.fd-page .fd-nav li.fd-active a:link,
+.fd-page .fd-nav li.fd-active a:visited,
+.fd-page .fd-nav li.fd-active a:focus,
+.fd-page .fd-nav li.fd-active a:active {
+	border-left-color: #E88104;
+	background: rgba(255, 255, 255, 0.08);
+	color: #fff;
+}
+
+.fd-nav-meta {
+	flex: none;
+	font-size: 78%;
+	color: #999;
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---- one format ---- */
+.fd-format {
+	margin: 0 0 1em 0;
+	padding: 0.55em 1em 0.8em 1em;
+	background: rgba(0, 0, 0, 0.28);
+	border: 1px solid #3a3a3a;
+	border-radius: 6px;
+}
+
+.fd-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.3em 0.6em;
+	padding-bottom: 0.3em;
+	border-bottom: 1px solid #333;
+}
+
+.fd-head .format-name {
+	margin: 0;
+	font-size: 1.35em;
+}
+
+.fd-badge {
+	font-size: 72%;
+	padding: 0 0.55em;
+	border: 1px solid;
+	border-radius: 1em;
+	white-space: nowrap;
+}
+
+.fd-badge-pc {
+	color: #f0b35a;
+	border-color: #8a5a14;
+}
+
+.fd-badge-playtest {
+	color: #c9a6ff;
+	border-color: #6a4b99;
+}
+
+.fd-permalink {
+	margin-left: auto;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.fd-page .fd-permalink,
+.fd-page .fd-permalink:link,
+.fd-page .fd-permalink:visited,
+.fd-page .fd-permalink:focus,
+.fd-page .fd-permalink:active {
+	color: #666;
+}
+
+.fd-page .fd-permalink:hover,
+.fd-page .fd-permalink:focus-visible {
+	color: #8ab;
+}
+
+.fd-format .format-description {
+	margin: 0.5em 0 0 0;
+	color: #ccc;
+}
+
+.fd-facts {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 0.2em 1em;
+	margin: 0.6em 0 0.2em 0;
+}
+
+.fd-facts dt {
+	color: #9aa6b0;
+	font-size: 90%;
+}
+
+.fd-facts dd {
+	margin: 0;
+}
+
+.fd-rules {
+	margin: 0;
+	padding-left: 1.1em;
+}
+
+.fd-rules li {
+	margin: 0;
+}
+
+.fd-page .fd-errata-link,
+.fd-page .fd-errata-link:link,
+.fd-page .fd-errata-link:visited,
+.fd-page .fd-errata-link:focus,
+.fd-page .fd-errata-link:active {
+	color: #8ab;
+}
+
+.fd-page .fd-errata-link:hover,
+.fd-page .fd-errata-link:focus-visible {
+	color: #bcd;
+}
+
+.fd-no-lists {
+	margin: 0.5em 0 0 0;
+	color: #999;
+	font-size: 90%;
+}
+
+/* ---- card lists ---- */
+.fd-list {
+	margin: 0.55em 0 0 0;
+	padding-top: 0.4em;
+	border-top: 1px dashed #3a3a3a;
+}
+
+.fd-list summary {
+	cursor: pointer;
+	margin-bottom: 0.3em;
+}
+
+.fd-list summary:focus-visible {
+	outline: 2px solid #E88104;
+	outline-offset: 1px;
+}
+
+.fd-list-title {
+	font-weight: bold;
+}
+
+.fd-count {
+	display: inline-block;
+	min-width: 1.4em;
+	margin: 0 0.5em 0 0.4em;
+	padding: 0 0.4em;
+	border-radius: 1em;
+	background: #3b4a5a;
+	color: #fff;
+	font-size: 80%;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.fd-list-banned .fd-count {
+	background: #7a2a2a;
+}
+
+.fd-list-restricted .fd-count,
+.fd-list-names .fd-count {
+	background: #7a5a1a;
+}
+
+.fd-list-note {
+	color: #999;
+	font-size: 85%;
+}
+
+.fd-set-row {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	margin: 0.15em 0;
+}
+
+.fd-set {
+	flex: 0 0 2.4em;
+	text-align: right;
+	color: #999;
+	font-size: 80%;
+	font-variant-numeric: tabular-nums;
+	cursor: default;
+}
+
+.fd-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25em 0.35em;
+	min-width: 0;
+}
+
+/* the chips are .cardHint buttons (a click opens the card); these beat hall.css's plain-link look for hints */
+.fd-page button.cardHint.fd-chip,
+.fd-chip-name {
+	display: inline-block;
+	padding: 0 0.5em;
+	border: 1px solid #3d4452;
+	border-radius: 3px;
+	background: rgba(111, 111, 255, 0.08);
+	color: #bfc6ff;
+	font-size: 90%;
+	line-height: 1.55;
+	white-space: nowrap;
+}
+
+.fd-chip-name {
+	color: #ddd;
+}
+
+.fd-page button.cardHint.fd-chip:hover {
+	border-color: #8ab;
+	background: rgba(111, 111, 255, 0.2);
+	color: #fff;
+}
+
+.fd-page .fd-hit,
+.fd-page button.cardHint.fd-chip.fd-hit {
+	border-color: #E88104;
+	background: rgba(232, 129, 4, 0.25);
+	color: #fff;
+}
+
+/* ---- "Card images": thumbnails (a click opens the card, hovering enlarges it) ---- */
+.fd-thumbs {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+	gap: 0.6em 0.5em;
+	padding: 0.2em 0 0.3em 0;
+}
+
+.fd-page button.cardHint.fd-thumb {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.15em;
+	position: relative;
+	padding: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	min-width: 0;
+}
+
+.fd-thumb img {
+	display: block;
+	width: 78px;
+	height: 109px;
+	object-fit: cover;
+	border-radius: 4px;
+	background: #222;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+	transition: transform 0.15s ease;
+	transform-origin: center top;
+}
+
+.fd-thumb-horizontal img {
+	height: 56px;
+	margin: 26px 0 27px 0;
+}
+
+.fd-page button.cardHint.fd-thumb:hover img,
+.fd-page button.cardHint.fd-thumb:focus-visible img {
+	position: relative;
+	z-index: 5;
+	transform: scale(2);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+.fd-thumb-name {
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #bbb;
+	font-size: 70%;
+}
+
+.fd-thumb.fd-hit img {
+	outline: 3px solid #E88104;
+}
+
+.fd-thumb.fd-hit {
+	background: none;
+}
+
+/* ---- deep link (#format-<code>, GempFormatHelp in tables/TableFlow.js): the format it lands on flashes ---- */
+.format-entry {
+	scroll-margin-top: 0.5em;
+	transition: background-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+.format-entry.format-highlight {
+	background-color: rgba(136, 170, 187, 0.18);
+	box-shadow: 0 0 0 2px #8ab;
+}
+
+/* ---- narrow panels: the list goes on top and wraps ---- */
+@media (max-width: 900px) {
+	.fd-page {
+		padding: 0.4em 0.6em 2em 0.6em;
+	}
+
+	.fd-layout {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.8em;
+	}
+
+	.fd-side {
+		position: static;
+		max-height: none;
+	}
+
+	.fd-side-tools {
+		position: static;
+	}
+
+	.fd-nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.1em 0.2em;
+		padding: 0.3em;
+	}
+
+	.fd-nav a {
+		border-left: none;
+		border-bottom: 2px solid transparent;
+		padding: 0.1em 0.4em;
+	}
+
+	.fd-page .fd-nav li.fd-active a {
+		border-bottom-color: #E88104;
+	}
+
+	.fd-nav-meta {
+		display: none;
+	}
+
+	.fd-facts {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0;
+	}
+
+	.fd-facts dd {
+		margin-bottom: 0.3em;
+	}
+}
+/* ==== end format-definitions ==== */

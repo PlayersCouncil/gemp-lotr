@@ -11,6 +11,8 @@ public class GameTable {
 
     private LotroGameMediator lotroGameMediator;
     private final int capacity;
+    // When the table was opened (epoch ms, server clock); the hall shows waiting tables' age from it.
+    private final long createdAt = System.currentTimeMillis();
 
     public GameTable(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
@@ -57,5 +59,9 @@ public class GameTable {
 
     public GameSettings getGameSettings() {
         return gameSettings;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
     }
 }

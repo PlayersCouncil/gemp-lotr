@@ -3,6 +3,7 @@
 	{
 		name: Random Alt Image Promo
 		type: random
+		openOnDelivery: true
 		items: [
 			1x0_1
 			1x0_4

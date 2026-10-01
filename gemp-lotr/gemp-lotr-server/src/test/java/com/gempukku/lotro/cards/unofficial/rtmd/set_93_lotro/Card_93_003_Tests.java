@@ -11,18 +11,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_3: Each time your fellowship moves, you may kill a companion (except the Ring-bearer) to make the move limit +1.
- *
- * Test cards:
- * - Aragorn (1_89): Gondor companion (sacrifice target)
- * - Boromir (1_96): Gondor companion (second companion to prove selectivity)
- */
 public class Card_93_003_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89");
-		put("boromir", "1_96");
+		put("aragorn", "1_89"); // Aragorn: Gondor companion (sacrifice target)
+		put("boromir", "1_96"); // Boromir: Gondor companion (second companion to prove selectivity)
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -45,6 +38,13 @@ public class Card_93_003_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_3
+		 * Type: MetaSite
+		 * Game Text: Each time your fellowship moves, you may kill a companion (except the
+		 * Ring-bearer) to make the move limit +1.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_3", card.getBlueprint().getTitle());

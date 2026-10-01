@@ -5,13 +5,14 @@ import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.draft.DraftChannelVisitor;
 import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.formats.FormatDefinitions;
+import com.gempukku.lotro.game.formats.FormatSummary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.*;
-import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.polling.LongPollingResource;
@@ -34,6 +35,7 @@ import java.util.*;
 
 public class HallRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private final CollectionsManager _collectionManager;
+    private final DeckDAO _deckDao;
     private final LotroFormatLibrary _formatLibrary;
     private final HallServer _hallServer;
     private final LeagueService _leagueService;
@@ -46,6 +48,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     public HallRequestHandler(Map<Type, Object> context, LongPollingSystem longPollingSystem) {
         super(context);
         _collectionManager = extractObject(context, CollectionsManager.class);
+        _deckDao = extractObject(context, DeckDAO.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _hallServer = extractObject(context, HallServer.class);
         _leagueService = extractObject(context, LeagueService.class);
@@ -66,8 +69,12 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             updateHall(request, responseWriter);
         } else if (uri.equals("/formats/html") && request.method() == HttpMethod.GET) {
             getFormats(request, responseWriter);
+        } else if (uri.equals("/formats/json") && request.method() == HttpMethod.GET) {
+            getFormatDefinitions(responseWriter);
         } else if (uri.equals("/errata/json") && request.method() == HttpMethod.GET) {
             getErrataInfo(request, responseWriter);
+        } else if (uri.equals("/players") && request.method() == HttpMethod.GET) {
+            searchPlayers(request, responseWriter);
         } else if (uri.startsWith("/format/") && request.method() == HttpMethod.GET) {
             getFormat(request, uri.substring(8), responseWriter);
         } else if (uri.startsWith("/queue/") && request.method() == HttpMethod.POST) {
@@ -95,6 +102,25 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
+    // ---- deck source (Play flows) ----
+    // The Play and Join forms say where the chosen deck lives: deckSource=player (one of the player's own decks) or
+    // deckSource=library (a Deck Library deck, owned by the Librarian).  Requests without the parameter come from
+    // older clients; for those, create and join keep the old behaviour of retrying with the Librarian's deck of the
+    // same name when the player's own deck fails.
+    private static final String DECK_SOURCE_LIBRARY = "library";
+    private static final String DECK_SOURCE_PLAYER = "player";
+
+    /** The deck's owner for an explicit deckSource, or null when the client did not say (legacy request). */
+    private Player resolveDeckOwner(String deckSource, Player player) throws HttpProcessingException {
+        if (deckSource == null || deckSource.isEmpty())
+            return null;
+        if (deckSource.equalsIgnoreCase(DECK_SOURCE_LIBRARY))
+            return getLibrarian();
+        if (deckSource.equalsIgnoreCase(DECK_SOURCE_PLAYER))
+            return player;
+        throw new HttpProcessingException(400, "Parameter 'deckSource' must be 'player' or 'library'.");
+    }
+
     private void joinTable(HttpRequest request, String tableId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
@@ -102,7 +128,21 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         String deckName = getFormParameterSafely(postDecoder, "deckName");
+        Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
+        if (deckOwner != null) {
+            try {
+                _hallServer.joinTableAsPlayer(tableId, resourceOwner, deckOwner, deckName);
+                responseWriter.writeXmlResponse(null);
+            } catch (HallException e) {
+                if (!IgnoreError(e))
+                    _log.error("Error response for " + request.uri(), e);
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
+            return;
+        }
+
+        // legacy client: no deckSource
         try {
             _hallServer.joinTableAsPlayer(tableId, resourceOwner, deckName);
             responseWriter.writeXmlResponse(null);
@@ -148,19 +188,24 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String format = getFormParameterSafely(postDecoder, "format");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
+            String deckSource = getFormParameterSafely(postDecoder, "deckSource");
             String timer = getFormParameterSafely(postDecoder, "timer");
-            String desc = getFormParameterSafely(postDecoder, "desc").trim();
+            // No markup, no control characters, at most 100 characters, whatever the client sent.
+            String desc = HallServer.sanitizeTableDescription(getFormParameterSafely(postDecoder, "desc"));
             String isPrivateVal = getFormParameterSafely(postDecoder, "isPrivate");
             boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
             String isInviteOnlyVal = getFormParameterSafely(postDecoder, "isInviteOnly");
             boolean isInviteOnly = Boolean.parseBoolean(isInviteOnlyVal);
             //To prevent annoyance, super long glacial games are hidden from everyone except
-            // the participants and admins.
-            boolean isHidden = timer.toLowerCase().equals(GameTimer.GLACIAL_TIMER.name());
+            // the participants and admins.  (The form sends the code "glacial"; the timer's name is "Glacial".)
+            boolean isHidden = GameTimer.ResolveTimer(timer) == GameTimer.GLACIAL_TIMER;
 
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player deckOwner = resolveDeckOwner(deckSource, resourceOwner);
 
             if(isInviteOnly) {
+                // The invitee's name is the description (the hall's invite convention).  It may be typed in, so it is
+                // checked here and replaced by the account's exact name.
                 if(desc.isEmpty()) {
                     responseWriter.writeXmlResponse(marshalException(new HallException("Invite-only games must have your intended opponent in the description")));
                     return;
@@ -175,18 +220,33 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                     var player = _playerDao.getPlayer(desc);
                     if(player == null)
                     {
-                        responseWriter.writeXmlResponse(marshalException(new HallException("Cannot find player '" + desc + "'. Check your spelling and capitalization and ensure it is exact.")));
+                        responseWriter.writeXmlResponse(marshalException(new HallException("Cannot find player '" + desc + "'. Check your spelling and ensure the name is exact.")));
                         return;
                     }
+                    if (player.getName() != null && player.getName().equalsIgnoreCase(desc))
+                        desc = player.getName();
                 }
                 catch(RuntimeException ex) {
-                    responseWriter.writeXmlResponse(marshalException(new HallException("Cannot find player '" + desc + "'. Check your spelling and capitalization and ensure it is exact.")));
+                    responseWriter.writeXmlResponse(marshalException(new HallException("Cannot find player '" + desc + "'. Check your spelling and ensure the name is exact.")));
                     return;
                 }
             }
 
+            if (deckOwner != null) {
+                // explicit deck source: no retry with the other owner
+                String tableDesc = TableHolder.tableDescription(desc, isInviteOnly, hasOwnDecks(resourceOwner));
+                try {
+                    _hallServer.createNewTable(format, resourceOwner, deckOwner, deckName, timer, tableDesc, isInviteOnly, isPrivate, isHidden);
+                    responseWriter.writeXmlResponse(null);
+                } catch (HallException e) {
+                    if (!IgnoreError(e))
+                        _log.error(e);
+                    responseWriter.writeXmlResponse(marshalException(e));
+                }
+                return;
+            }
 
-
+            // legacy client: no deckSource
             try {
                 _hallServer.createNewTable(format, resourceOwner, deckName, timer, desc, isInviteOnly, isPrivate, isHidden);
                 responseWriter.writeXmlResponse(null);
@@ -196,7 +256,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 {
                     //try again assuming it's a new player with one of the default library decks selected
                     Player librarian = _playerDao.getPlayer("Librarian");
-                    _hallServer.spoofNewTable(format, resourceOwner, librarian, deckName, timer, "(New Player) " + desc, isInviteOnly, isPrivate, isHidden);
+                    _hallServer.spoofNewTable(format, resourceOwner, librarian, deckName, timer,
+                            TableHolder.tableDescription(desc, isInviteOnly, hasOwnDecks(resourceOwner)), isInviteOnly, isPrivate, isHidden);
                     responseWriter.writeXmlResponse(null);
                     return;
                 }
@@ -206,6 +267,9 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 _log.error(e);
                 responseWriter.writeXmlResponse(marshalException(e));
             }
+        }
+        catch (HttpProcessingException ex) {
+            throw ex;
         }
         catch (Exception ex)
         {
@@ -220,27 +284,43 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
+    // Whether the player has any decks of their own; only a player with none is flagged "(New Player)".  If the decks
+    // cannot be read, the player is not flagged.
+    private boolean hasOwnDecks(Player player) {
+        try {
+            return !_deckDao.getPlayerDeckNames(player).isEmpty();
+        } catch (RuntimeException ex) {
+            _log.warn("Could not read the decks of " + player.getName() + " for the table description", ex);
+            return true;
+        }
+    }
+
     private void createSoloTable(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String format = getFormParameterSafely(postDecoder, "format");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
+            String deckSource = getFormParameterSafely(postDecoder, "deckSource");
             String isPrivateVal = getFormParameterSafely(postDecoder, "isPrivate");
             String botDeckName = getFormParameterSafely(postDecoder, "botDeckName");
             boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
 
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player deckOwner = resolveDeckOwner(deckSource, resourceOwner);
 
             try {
-                _hallServer.createNewSoloTable(format, resourceOwner, deckName, botDeckName, isPrivate);
+                _hallServer.createNewSoloTable(format, resourceOwner, deckOwner != null ? deckOwner : resourceOwner, deckName, botDeckName, isPrivate);
                 responseWriter.writeXmlResponse(null);
             }
             catch (HallException e) {
-                // TODO try again assuming it's a new player with one of the default library decks selected
-                _log.error(e);
+                if (!IgnoreError(e))
+                    _log.error(e);
                 responseWriter.writeXmlResponse(marshalException(e));
             }
+        }
+        catch (HttpProcessingException ex) {
+            throw ex;
         }
         catch (Exception ex)
         {
@@ -274,9 +354,14 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-            String response = _hallServer.dropFromTournament(tournamentId, resourceOwner);
-
-            responseWriter.writeXmlResponse(marshalResponse(response));
+            try {
+                String response = _hallServer.dropFromTournament(tournamentId, resourceOwner);
+                responseWriter.writeXmlResponse(marshalResponse(response));
+            } catch (HallException e) {
+                // a refusal the player reads (still playing a match, already dropped, tournament over...)
+                _log.debug("Tournament drop refused for " + request.uri() + ": " + e.getMessage());
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
         } finally {
             postDecoder.destroy();
         }
@@ -288,10 +373,16 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
-            String response = _hallServer.joinTournamentLate(tournamentId, resourceOwner, deckName);
-
-            responseWriter.writeXmlResponse(marshalResponse(response));
+            try {
+                String response = _hallServer.joinTournamentLate(tournamentId, resourceOwner, deckOwner != null ? deckOwner : resourceOwner, deckName);
+                responseWriter.writeXmlResponse(marshalResponse(response));
+            } catch (HallException e) {
+                if (!IgnoreError(e))
+                    _log.debug("Late join refused for " + request.uri() + ": " + e.getMessage());
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
         } finally {
             postDecoder.destroy();
         }
@@ -303,10 +394,16 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
-            String response = _hallServer.registerLimitedTournamentDeck(tournamentId, resourceOwner, deckName);
-
-            responseWriter.writeXmlResponse(marshalResponse(response));
+            try {
+                String response = _hallServer.registerLimitedTournamentDeck(tournamentId, resourceOwner, deckOwner != null ? deckOwner : resourceOwner, deckName);
+                responseWriter.writeXmlResponse(marshalResponse(response));
+            } catch (HallException e) {
+                if (!IgnoreError(e))
+                    _log.debug("Deck registration refused for " + request.uri() + ": " + e.getMessage());
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
         } finally {
             postDecoder.destroy();
         }
@@ -319,14 +416,14 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         String deckName = getFormParameterSafely(postDecoder, "deckName");
 
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
         try {
-            _hallServer.joinQueue(queueId, resourceOwner, deckName);
+            _hallServer.joinQueue(queueId, resourceOwner, deckOwner != null ? deckOwner : resourceOwner, deckName);
             responseWriter.writeXmlResponse(null);
         } catch (HallException e) {
-            if(!IgnoreError(e)) {
-                _log.error("Error response for " + request.uri(), e);
-            }
+            // a refusal the player reads (queue full, sign-up not open, not enough currency, invalid deck...)
+            _log.debug("Queue join refused for " + request.uri() + ": " + e.getMessage());
             responseWriter.writeXmlResponse(marshalException(e));
         }
         } finally {
@@ -414,24 +511,47 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         responseWriter.writeHtmlResponse(result.toString());
     }
 
+    /**
+     * Help › Format Definitions: every hall format, in the Play menu's order, each in a
+     * {@code <section class="format-entry" id="format-<code>">} so the Play popup's format (i) can link straight to it
+     * (FormatSummary.anchorId; the page builds its contents list from these sections).
+     */
     private void getFormats(HttpRequest request, ResponseWriter responseWriter) throws CardNotFoundException {
         StringBuilder result = new StringBuilder();
-        for (LotroFormat lotroFormat : _formatLibrary.getHallFormats().values()) {
+        List<LotroFormat> formats = new ArrayList<>(_formatLibrary.getHallFormats().values());
+        formats.sort(Comparator.comparingInt(LotroFormat::getOrder));
+        for (LotroFormat lotroFormat : formats) {
             appendFormat(result, lotroFormat);
         }
 
         responseWriter.writeHtmlResponse(result.toString());
     }
 
+    /**
+     * GET /hall/formats/json: Help › Format Definitions' data, {"formats": [...]} for every hall format in the Play
+     * menu's order (FormatDefinitions: the Play popup's facts, the section anchor, errata flags and the card lists
+     * with names and sets).
+     */
+    private void getFormatDefinitions(ResponseWriter responseWriter) {
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(
+                FormatDefinitions.describeAll(_formatLibrary.getHallFormats().values(), _library)));
+    }
+
     private void appendFormat(StringBuilder result, LotroFormat lotroFormat) throws CardNotFoundException {
-        result.append("<b>" + lotroFormat.getName() + "</b>");
+        String code = lotroFormat.getCode();
+        result.append("<section class=\"format-entry\" id=\"" + FormatSummary.anchorId(code) + "\" data-format=\""
+                + escapeHtml(code) + "\">");
+        result.append("<h2 class=\"format-name\">" + escapeHtml(lotroFormat.getName()) + "</h2>");
         result.append("<ul>");
-        result.append("<li>valid sets: ");
-        for (String setCode : lotroFormat.getValidSets())
-            result.append(setCode + ", ");
-        result.append("</li>");
-        result.append("<li>sites from block: " + lotroFormat.getSiteBlock().getHumanReadable() + "</li>");
-        result.append("<li>Ring-bearer skirmish can be cancelled: " + (lotroFormat.canCancelRingBearerSkirmish() ? "yes" : "no") + "</li>");
+        String sets = FormatSummary.describeSets(lotroFormat.getValidSets());
+        if (sets != null)
+            result.append("<li>" + escapeHtml(sets) + "</li>");
+        result.append("<li>Sites: " + escapeHtml(lotroFormat.getSiteBlock().getHumanReadable()) + "</li>");
+        result.append("<li>Ring-bearer skirmish cancel: " + (lotroFormat.canCancelRingBearerSkirmish() ? "Yes" : "No") + "</li>");
+        if (lotroFormat.winWhenShadowReconciles())
+            result.append("<li>The game ends after Regroup actions are made (instead of at the start of Regroup)</li>");
+        if (lotroFormat.discardPileIsPublic())
+            result.append("<li>Discard piles are public information for both sides</li>");
         if (lotroFormat.getBannedCards().size() > 0) {
             result.append("<li>X-listed (can't be played): ");
             appendCards(result, lotroFormat.getBannedCards());
@@ -465,11 +585,14 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             }
             result.append("</li>");
         }
-        if (!lotroFormat.getErrataCardMap().isEmpty()) {
-            result.append("<li>Errata: ");
-            appendCards(result, new ArrayList<>(new LinkedHashSet<>(lotroFormat.getErrataCardMap().values())));
-            result.append("</li>");
-        }
+        // The errata themselves are on Help › PC Errata; listing every errata'd card here was a wall of text.
+        var errata = FormatDefinitions.errata(lotroFormat);
+        if (Boolean.TRUE.equals(errata.get("pc")))
+            result.append("<li>Errata: PC Errata (see Help &rsaquo; PC Errata)</li>");
+        else if (Boolean.TRUE.equals(errata.get("pcCardsLegal")))
+            result.append("<li>Errata: PC Errata versions are legal alongside the originals (see Help &rsaquo; PC Errata)</li>");
+        if (Boolean.TRUE.equals(errata.get("playtest")))
+            result.append("<li>Errata: playtest errata</li>");
         if (lotroFormat.getValidCards().size() > 0) {
             result.append("<li>Additional valid: ");
             List<String> additionalValidCards = lotroFormat.getValidCards();
@@ -477,6 +600,30 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             result.append("</li>");
         }
         result.append("</ul>");
+        result.append("</section>");
+    }
+
+    private static String escapeHtml(String text) {
+        if (text == null)
+            return "";
+        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+    }
+
+    /**
+     * GET /hall/players?prefix=..&limit=.. (logged in): {"players": [name, ...]}, registered players whose name starts
+     * with prefix (at least 2 characters; at most 10 names; never the searcher).  The Casual table's invite picker
+     * uses it after the players in the hall.
+     */
+    private void searchPlayers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
+        Player resourceOwner = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
+
+        String prefix = getQueryParameterSafely(queryDecoder, "prefix");
+        int limit = PlayerNameSearch.clampLimit(getQueryParameterSafely(queryDecoder, "limit"));
+
+        var result = new LinkedHashMap<String, Object>();
+        result.put("players", PlayerNameSearch.byPrefix(_playerDao, prefix, resourceOwner.getName(), limit));
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
     }
 
     private void appendCards(StringBuilder result, List<String> additionalValidCards) throws CardNotFoundException {
@@ -495,6 +642,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         var errataInfo = new HashMap<String, Object>();
         errataInfo.put("all", _library.getErrata());
         errataInfo.put("recent", recentErrata);
+        // Help › PC Errata (pc-errata): the filterable rows ("entries"), the hall formats ("formats") and "counts"
+        errataInfo.putAll(com.gempukku.lotro.game.formats.ErrataCatalog.build(_library, _formatLibrary));
 
         String json = JsonUtils.Serialize(errataInfo);
 
@@ -514,31 +663,12 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
 
             Document doc = documentBuilder.newDocument();
 
-            Player player = getResourceOwnerSafely(request, null);
-
             Element hall = doc.createElement("hall");
+            // The My Account tab shows this (hall.pocketValue).  The format and league lists this response used to
+            // carry went unread: the Play popup fetches them from /hall/formats and /league.
             hall.setAttribute("currency", String.valueOf(_collectionManager.getPlayerCollection(resourceOwner, CollectionType.MY_CARDS.getCode()).getCurrency()));
 
             _hallServer.signupUserForHall(resourceOwner, new SerializeHallInfoVisitor(doc, hall));
-            for (Map.Entry<String, LotroFormat> format : _formatLibrary.getHallFormats().entrySet()) {
-                //playtest formats are opt-in
-                if (format.getKey().startsWith("test") && !player.hasType(Player.Type.PLAY_TESTER))
-                    continue;
-
-                Element formatElem = doc.createElement("format");
-                formatElem.setAttribute("type", format.getKey());
-                formatElem.appendChild(doc.createTextNode(format.getValue().getName()));
-                hall.appendChild(formatElem);
-            }
-            for (League league : _leagueService.getActiveLeagues()) {
-                final LeagueSerieInfo currentLeagueSerie = _leagueService.getCurrentLeagueSerie(league);
-                if (currentLeagueSerie != null && _leagueService.isPlayerInLeague(league, resourceOwner)) {
-                    Element formatElem = doc.createElement("league");
-                    formatElem.setAttribute("type", String.valueOf(league.getCode()));
-                    formatElem.appendChild(doc.createTextNode(league.getName()));
-                    hall.appendChild(formatElem);
-                }
-            }
 
             doc.appendChild(hall);
 
@@ -690,11 +820,20 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         @Override
         public void serverTime(String serverTime) {
             _hall.setAttribute("serverTime", serverTime);
+            // Epoch ms, so the client can measure table ages (createdAt) against the server clock, not its own.
+            _hall.setAttribute("serverTimeMs", String.valueOf(System.currentTimeMillis()));
         }
 
         @Override
         public void motdChanged(String motd) {
             _hall.setAttribute("motd", motd);
+        }
+
+        @Override
+        public void shutdownMode(boolean shutdown) {
+            // on every hall answer while it lasts (absent otherwise): the connection readout turns yellow "Shutdown"
+            if (shutdown)
+                _hall.setAttribute("shutdown", "true");
         }
 
         @Override

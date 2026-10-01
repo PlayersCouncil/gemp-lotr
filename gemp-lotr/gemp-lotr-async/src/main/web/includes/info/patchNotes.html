@@ -1,0 +1,21 @@
+<div id="patchnotes-page" class="patchnotes">
+	<script>
+		// Server Info › Patch Notes: js/gemp-022/patchNotesUi.js (PatchNotesUI); the updates themselves are the Markdown
+		// files in patchnotes/ (patchnotes/README.md says how to add one) and the past server announcements.  Links:
+		// #patch-notes, #patch-notes/<name>.
+		$("#infoMain").ready(
+			function () {
+				PatchNotesUI.mount($("#patchnotes-page"));
+			}
+		);
+	</script>
+	<div class="patchnotes-intro">
+		<h1>Patch Notes</h1>
+		<br>
+	</div>
+	<div class="patchnotes-filters" role="radiogroup" aria-label="Show"></div>
+	<div class="patchnotes-months"></div>
+	<div class="patchnotes-status" role="status" aria-live="polite"></div>
+	<div class="patchnotes-list"></div>
+	<div class="patchnotes-pager patchnotes-pager-bottom"></div>
+</div>

@@ -593,6 +593,87 @@ public class LeagueFactoryTest extends AbstractAtTest {
     }
 
     // ------------------------------------------------------------------------------------------------
+    // Generated race paths
+    // ------------------------------------------------------------------------------------------------
+
+    @Test
+    public void aDefinitionThatAsksForARandomPathGetsOne() throws LeagueDefinitionException {
+        var params = rtmd();
+        params.racePath = new ArrayList<>();
+        params.raceVisualPath = new ArrayList<>();
+        params.raceRandomizeEachInstance = true;
+        params.racePathLength = 12;
+
+        var prepared = _factory.prepare(League.LeagueType.RTMD, params);
+
+        assertEquals(12, prepared.params().racePath.size());
+        assertEquals(12, prepared.params().raceVisualPath.size());
+        assertEquals(12, ((RTMDLeague) prepared.data()).getPathLength());
+    }
+
+    /**
+     * The flag is a property of the definition that made the league, not of the league: once the path has been
+     * rolled the league is an ordinary fixed-path one, so editing it does not silently roll a different race.
+     */
+    @Test
+    public void aGeneratedPathIsFixedOnTheLeagueItProduces() throws LeagueDefinitionException {
+        var params = rtmd();
+        params.racePath = new ArrayList<>();
+        params.raceVisualPath = new ArrayList<>();
+        params.raceRandomizeEachInstance = true;
+        params.racePathLength = 9;
+
+        var prepared = _factory.prepare(League.LeagueType.RTMD, params);
+        assertFalse(prepared.params().raceRandomizeEachInstance);
+
+        var path = new ArrayList<>(prepared.params().racePath);
+        var again = _factory.prepare(League.LeagueType.RTMD, prepared.params());
+        assertEquals(path, again.params().racePath);
+    }
+
+    @Test
+    public void withoutTheFlagThePathIsLeftExactlyAsGiven() throws LeagueDefinitionException {
+        var prepared = _factory.prepare(League.LeagueType.RTMD, rtmd());
+
+        assertEquals(List.of("92_3", "92_24"), prepared.params().racePath);
+        assertEquals(List.of("90_11", "90_2"), prepared.params().raceVisualPath);
+    }
+
+    @Test
+    public void generatingWithoutALengthFallsBackToTheLengthOfTheGivenPath() throws LeagueDefinitionException {
+        var params = rtmd();
+        params.raceRandomizeEachInstance = true;
+
+        var prepared = _factory.prepare(League.LeagueType.RTMD, params);
+
+        assertEquals(2, prepared.params().racePath.size());
+        assertEquals(2, prepared.params().raceVisualPath.size());
+    }
+
+    @Test
+    public void anIntensityRangeThatMatchesNoMetaSiteIsRejected() {
+        var params = rtmd();
+        params.racePath = new ArrayList<>();
+        params.raceVisualPath = new ArrayList<>();
+        params.raceRandomizeEachInstance = true;
+        params.raceIntensityFloor = 900;
+        params.raceIntensityCeiling = 999;
+
+        assertRejected(League.LeagueType.RTMD, params, "racePath");
+    }
+
+    @Test
+    public void theFlagDoesNothingForOtherLeagueTypes() throws LeagueDefinitionException {
+        var params = constructed();
+        params.raceRandomizeEachInstance = true;
+
+        var prepared = _factory.prepare(League.LeagueType.CONSTRUCTED, params);
+
+        assertNull(prepared.params().racePath);
+        assertTrue(prepared.params().raceVisualPath.isEmpty());
+    }
+
+    // ------------------------------------------------------------------------------------------------
     // Round trip through the persisted representation
     // ------------------------------------------------------------------------------------------------
 

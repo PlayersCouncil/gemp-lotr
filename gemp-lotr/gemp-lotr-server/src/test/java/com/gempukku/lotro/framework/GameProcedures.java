@@ -31,14 +31,66 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	default void FreepsResolveSkirmish(PhysicalCardImpl comp) { FreepsChooseCard(comp); }
 	default void ShadowResolveSkirmish(PhysicalCardImpl comp) { ShadowChooseCard(comp); }
 
+	/**
+	 * Stops at the regroup "do you want to make another move?" decision of whichever player's turn is
+	 * under way.  On player 2's turn the roles are swapped, so the inverted primitives are used; on
+	 * player 1's turn the behaviour is unchanged.
+	 */
 	default void SkipToMovementDecision() {
-		SkipToPhase(Phase.REGROUP);
-		PassCurrentPhaseActions();
-		if(ShadowDecisionAvailable("reconcile")) {
-			ShadowDeclineReconciliation();
+		if(GetCurrentPlayer().equals(P1)) {
+			SkipToPhase(Phase.REGROUP);
+			PassCurrentPhaseActions();
+			if(ShadowDecisionAvailable("reconcile")) {
+				ShadowDeclineReconciliation();
+			}
+			while(ShadowDecisionAvailable("discard down")) {
+				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
+			}
 		}
-		while(ShadowDecisionAvailable("discard down")) {
-			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
+		else {
+			SkipToPhaseInverted(Phase.REGROUP);
+			//Not BothPassInverted(): that passes player 1 first, but the Free Peoples player of the
+			//turn - player 2 here - is the one who acts first in the regroup phase.
+			PassCurrentPhaseActions();
+			if(FreepsDecisionAvailable("reconcile")) {
+				FreepsDeclineReconciliation();
+			}
+			while(FreepsDecisionAvailable("discard down")) {
+				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
+			}
+		}
+	}
+
+	/**
+	 * Plays out the rest of the turn that is under way and stops at the start of the other player's
+	 * fellowship phase; the moving fellowship declines the optional regroup move.  Calling this a
+	 * second time therefore returns to player 1's fellowship phase.
+	 */
+	default void SkipToOtherPlayersTurn() {
+		boolean playerOnesTurn = GetCurrentPlayer().equals(P1);
+		SkipToMovementDecision();
+
+		if(playerOnesTurn) {
+			if(FreepsDecisionAvailable("another move")) {
+				FreepsChooseToStay();
+			}
+			if(FreepsDecisionAvailable("reconcile")) {
+				FreepsDeclineReconciliation();
+			}
+			while(FreepsDecisionAvailable("discard down")) {
+				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
+			}
+		}
+		else {
+			if(ShadowDecisionAvailable("another move")) {
+				ShadowChooseToStay();
+			}
+			if(ShadowDecisionAvailable("reconcile")) {
+				ShadowDeclineReconciliation();
+			}
+			while(ShadowDecisionAvailable("discard down")) {
+				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
+			}
 		}
 	}
 

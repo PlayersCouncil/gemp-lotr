@@ -412,9 +412,10 @@ table.tables tr.privateForPlayer {
 #chatarea {
 	position:relative;
 	width: 100%;
-	height: 100%;
+	/* fills #chat below the resize bar; a height of 100% plus the margin used to push the typing area out of view */
+	min-height: 0;
 	overflow: hidden;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 #discordChat {
@@ -433,13 +434,13 @@ table.tables tr.privateForPlayer {
 	width: 100%;
 	height: 100%;
 	max-height: 100%;
+	min-height: 0;
 }
 
 #chatMessages {
-	height: 100%;
-	max-height: 100%;
+	flex: 1 1 0;
+	min-height: 0;
 	overflow-y: scroll;
-	flex-shrink: 1;
 	border-style: solid;
 	border-width: 3px;
 	border-color: #222222;
@@ -559,16 +560,31 @@ table.tables tr.privateForPlayer {
 }
 
 #legacyChatInput {
-	/*min-height: fit-content;*/
-	flex-shrink: 1;
+	flex: 0 0 auto;
+	align-items: flex-end;
+	padding-bottom: 2px;
 }
 
 #chatTalk {
 	flex-grow: 1;
+	box-sizing: border-box;
 	resize: none;
-	max-height: 60px;
-	height: 18px;
-	min-height: 16px;
+	/* one line of text at rest; grows with what is typed (oninput in hall.html) up to about four lines */
+	height: 2.25em;
+	min-height: 2.25em;
+	max-height: 6.5em;
+	padding: 0.35em 0.5em;
+	font: inherit;
+	line-height: 1.35;
+	color: #eeeeee;
+	background-color: #1c1c1c;
+	border: 1px solid #555555;
+	border-radius: 3px;
+}
+
+#chatTalk:focus {
+	border-color: #888888;
+	outline: none;
 }
 
 
@@ -928,6 +944,21 @@ table.standings {
 	  margin-right: auto;
 }
 
+/* a culture icon in an automatic patch-note announcement (PatchNoteAnnouncer.cultureImage): inline, at the text's size */
+#announcement-dialog img[src*="/images/cultures/"] {
+	display: inline;
+	width: auto;
+	max-width: none;
+	height: 1.15em;
+	margin: 0 0.1em;
+	vertical-align: -0.22em;
+}
+
+/* a twilight icon there ((1), CultureIcons): drawn in black, so turned white for the dark popup */
+#announcement-dialog img[src*="/images/cultures/twilight_"] {
+	filter: invert(1);
+}
+
 #announcement-dialog h1, 
 #announcement-dialog h2,
 #announcement-dialog ul {
@@ -1063,21 +1094,7 @@ form#queueSpawnerForm input {
 	background: #554400 linear-gradient(#BF8A4A, #1C1C1C);
 }
 
-#league-table-leagues {
-	display: flex;
-	flex-grow: 0;
-	flex-basis: 35%;
-	border-color: grey;
-	border-style: solid;
-	overflow-x:hidden;
-	overflow-y:auto;
-	min-height: 35%;
-	max-height: 35%;
-	height: 35%;
-}
-
-#league-table-options,
-#league-table-leagues {
+#league-table-options {
 	width: 90%;
 	padding: 1rem;
 }
@@ -1158,8 +1175,9 @@ form#queueSpawnerForm input {
 	background: rgba(0, 0, 0, 0.35);
 }
 
+/* today: inverted, a whitish cell with a bold dark number (the event bars keep their own colours on top of it) */
 .calendar-day.today {
-	background: #2a2a10;
+	background: #e8e5da;
 }
 
 .calendar-day-number {
@@ -1175,8 +1193,17 @@ form#queueSpawnerForm input {
 }
 
 .calendar-day-number.today {
-	color: #fff;
+	color: #111;
 	font-weight: bold;
+}
+
+/* today showing in a neighbouring month's leading / trailing days: still inverted, a shade dimmer */
+.calendar-day.today.other-month {
+	background: #a8a59b;
+}
+
+.calendar-day-number.today.other-month {
+	opacity: 1;
 }
 
 /* One bar per event per week; spans its days via grid-column, sits in its lane via grid-row */
@@ -1376,3 +1403,1143 @@ form#queueSpawnerForm input {
 	width: 100%;
 	box-sizing: border-box;
 }
+
+/* ---- Completed event browser (Events tab, below each live list; one kind per panel) ---- */
+.event-history {
+	margin: 0.5em 0 1em 0;
+}
+
+.event-history-heading {
+	font-weight: bold;
+	color: #bbb;
+}
+
+/* The header reuses .calendar-header / .calendar-title so it matches the calendar's navigation; the title is also
+   the button that opens the month dropdown. */
+.event-history-title-wrap {
+	position: relative;
+	display: inline-block;
+}
+
+.event-history-month-title {
+	display: inline-block;
+	cursor: pointer;
+	border-radius: 4px;
+	padding: 0.1em 0.4em;
+	user-select: none;
+}
+
+.event-history-month-title:hover, .event-history-month-title:focus, .event-history-month-title.open {
+	background: #333;
+	outline: none;
+}
+
+.event-history-month-title:focus-visible {
+	outline: 1px dotted #aaa;
+}
+
+.event-history-caret {
+	font-size: 70%;
+	margin-left: 0.4em;
+	vertical-align: middle;
+	color: #aaa;
+}
+
+.event-history-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 50;
+	min-width: 16em;
+	max-height: 20em;
+	overflow-y: auto;
+	margin-top: 0.2em;
+	padding: 0.4em;
+	background: #222;
+	border: 1px solid #666;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+	text-align: left;
+}
+
+.event-history-dd-status {
+	padding: 0.3em;
+}
+
+.event-history-dd-year + .event-history-dd-year {
+	border-top: 1px solid #444;
+	margin-top: 0.3em;
+	padding-top: 0.3em;
+}
+
+.event-history-dd-year-label {
+	font-weight: bold;
+	color: #aaa;
+	margin-bottom: 0.2em;
+}
+
+.event-history-dd-months {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.2em;
+}
+
+.event-history-dd-month {
+	background: transparent;
+	color: inherit;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	cursor: pointer;
+	font: inherit;
+	text-align: left;
+}
+
+.event-history-dd-month:hover, .event-history-dd-month:focus {
+	background: #3a3a3a;
+	border-color: #666;
+	outline: none;
+}
+
+.event-history-dd-month.selected {
+	border-color: #aaa;
+	font-weight: bold;
+}
+
+.event-history-status {
+	margin: 0.3em 0 0.5em 0;
+}
+
+.event-history-hint, .event-history-empty {
+	font-style: italic;
+	color: #bbb;
+}
+
+.event-history-loading {
+	font-style: italic;
+	color: #d8d8a0;
+}
+
+.event-history-error {
+	color: #f0a0a0;
+	font-weight: bold;
+}
+
+.event-history-loaded {
+	color: #bbb;
+}
+
+table.event-history-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.event-history-table th, .event-history-table td {
+	text-align: left;
+	padding: 0.25em 0.6em 0.25em 0;
+	vertical-align: middle;
+	border-bottom: 1px solid #444;
+}
+
+.event-history-table th {
+	color: #aaa;
+	font-weight: normal;
+	white-space: nowrap;
+}
+
+.event-history-name {
+	font-weight: bold;
+}
+
+.event-history-dates {
+	white-space: nowrap;
+}
+
+.event-history-number {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.event-history-detail-cell {
+	white-space: nowrap;
+}
+
+.event-history-row.expanded > td {
+	border-bottom-color: transparent;
+	background: #2a2a2a;
+}
+
+/* The expansion row holds the same content the live displays render (league tabs, standings tables).  The cell itself
+   is flush and unstyled; the slide wrapper is what animates open and shut (its height is driven from JS), and the
+   pane inside it is inset on both sides so the page background shows either side of it and it reads as a drawer
+   hanging from the (full-width) event row above. */
+.event-history-table > tbody > tr.event-history-detail-row > td {
+	padding: 0;
+	background: transparent;
+	border-bottom: 1px solid #444;
+}
+
+.event-history-detail-slide {
+	overflow: hidden;   /* also keeps the pane's bottom margin inside the measured height */
+}
+
+.event-history-detail {
+	margin: 0 1.2em 0.6em 1.2em;
+	padding: 0.5em 0.8em 0.8em 0.8em;
+	background: #2a2a2a;
+	border: 1px solid #3a3a3a;
+	border-top: none;
+	border-radius: 0 0 4px 4px;
+}
+
+.event-history-detail table.standings {
+	padding-bottom: 0.5em;
+}
+
+.event-history-admin-item {
+	display: inline-block;
+	margin-right: 0.6em;
+	white-space: nowrap;
+}
+
+.event-history-admin-link {
+	font-family: monospace;
+}
+
+/* The league code has no URL: it is text an admin selects and pastes, so make a click grab all of it. */
+.event-history-admin-text {
+	font-family: monospace;
+	background: #2a2a2a;
+	border: 1px solid #555;
+	border-radius: 3px;
+	padding: 0 0.3em;
+	cursor: text;
+	user-select: all;
+}
+
+.event-history-admin-none {
+	color: #777;
+}
+
+
+/* ==== t12-drawers ==== */
+/* Current Leagues / Current Tournaments rows and the calendar preview (eventDrawer.js): each event is a header row
+   ([button] title ...... date) and its details hang beneath it in the same inset drawer the completed-events browser
+   uses (.event-history-detail).  The header takes a subtle background while its drawer is open, a touch lighter than
+   the drawer's #2a2a2a, so it reads as the drawer's handle. */
+.event-list {
+	margin: 0.4em 0;
+}
+
+.event-row {
+	margin: 0 0 0.3em 0;
+}
+
+.event-row-header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.3em 0.7em;
+	padding: 0.3em 0.5em;
+	border-bottom: 1px solid #3a3a3a;
+	border-radius: 4px 4px 0 0;
+	transition: background-color 0.15s ease;
+}
+
+.event-row-header.expanded {
+	background: #353535;
+	border-bottom-color: #444;
+}
+
+/* the details toggle: the same button (size, padding) on the Current Leagues / Tournaments rows, the completed-events
+   table and the calendar preview's "Go to ...": the size the Current Leagues rows' button has always had (the row's
+   font, jQuery UI's padding) */
+.event-row-button {
+	flex: none;
+}
+
+.event-details-button.ui-button {
+	font-size: 1em;
+	padding: .4em 1em;
+	white-space: nowrap;
+	/* in the completed-events table too: not the hall's full-width "td button" */
+	width: auto;
+	margin: 0 .1em 0 0;
+}
+
+/* same size as the old list's .leagueName / .tournamentName */
+.event-row-title {
+	font-size: 200%;
+	font-weight: bolder;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.event-row-extras {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6em;
+}
+
+/* league code (click selects it) / tournament report link, admins only */
+.event-row-code {
+	font-family: monospace;
+	color: #bbb;
+}
+
+.event-row-select {
+	cursor: text;
+	user-select: all;
+}
+
+.event-row-date {
+	margin-left: auto;
+	white-space: nowrap;
+	color: #ccc;
+}
+
+.event-drawer-slide {
+	overflow: hidden;   /* also keeps the pane's bottom margin inside the measured height */
+}
+
+.event-drawer {
+	margin: 0 1.2em 0.6em 1.2em;
+	padding: 0.5em 0.8em 0.8em 0.8em;
+	background: #2a2a2a;
+	border: 1px solid #3a3a3a;
+	border-top: none;
+	border-radius: 0 0 4px 4px;
+}
+
+.event-drawer table.standings {
+	padding-bottom: 0.5em;
+}
+
+.event-drawer-loading {
+	font-style: italic;
+	color: #d8d8a0;
+}
+
+.event-drawer-error {
+	color: #f0a0a0;
+	font-weight: bold;
+}
+
+/* the calendar preview: the same row, its drawer always open, with a little room above it.  overflow-anchor: none
+   keeps the browser's scroll anchoring from latching onto a node inside the preview while it is being replaced
+   (EventCalendarUI.ScrollKeeper holds the scroll position instead). */
+.calendar-preview {
+	margin-top: 0.8em;
+	overflow-anchor: none;
+}
+
+.calendar-scroll-spacer {
+	overflow-anchor: none;
+	pointer-events: none;
+}
+/* ==== end t12-drawers ==== */
+
+/* ==== events-history-tabs ==== */
+/* Section spacing on the Events sub-tabs, measured on Admin > General Admin (<br><br><hr><br><br> between its
+   sections at 13.2px): 36px from a section to the rule, 54px from the rule to the next section's heading.  On the
+   Calendar the rule is there from the start, above the details placeholder (events-account block). */
+hr.event-section-rule {
+	margin: 36px 0 54px 0;
+}
+
+#eventDetails.calendar-preview {
+	margin-top: 0;
+}
+
+.event-tab-intro {
+	margin-bottom: 0.4em;
+}
+
+/* the completed-events toggle sits where the Current Leagues / Tournaments rows have theirs: first, inset by the
+   row header's padding */
+.event-history-table th:first-child,
+.event-history-table td.event-history-detail-cell {
+	padding-left: 0.5em;
+	padding-right: 0.7em;
+	width: 1%;
+}
+/* ==== end events-history-tabs ==== */
+
+/* ==== events-account ==== */
+/* The Calendar's details area before any event is clicked: a quiet box about the height of the preview's header row
+   and its loading line, so the first click replaces it rather than pushing the page down by the rule, the gap and
+   the header at once. */
+.calendar-details-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: 6.1em;
+	padding: 0.5em 0.8em;
+	border: 1px dashed #4a4a4a;
+	border-radius: 4px;
+	color: #a0a0a0;
+	font-style: italic;
+	text-align: center;
+}
+/* ==== end events-account ==== */
+
+/* ==== W1 hall-core ==== */
+.visually-hidden {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* section headers are buttons (keyboard operable, aria-expanded); keep the look they had as divs */
+button.eventHeader {
+	font-size: 120%; /* beats jQuery UI's ".ui-widget button { font-size: 1em }", as the div headers were */
+	width: calc(100% - 4px);
+	text-align: left;
+	color: inherit;
+	font-family: inherit;
+	border: none;
+}
+
+button.eventHeader:focus-visible {
+	outline: 2px solid #E88104;
+	outline-offset: 1px;
+}
+
+/* hints drawn as buttons look like the links they were */
+button.cardHint,
+button.prizeHint,
+button.draftFormatInfo,
+td button.cardHint,
+td button.prizeHint,
+td button.draftFormatInfo {
+	width: auto;
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+	font: inherit;
+	text-align: inherit;
+	white-space: normal;
+}
+
+.cardHint:focus-visible,
+.prizeHint:focus-visible,
+.draftFormatInfo:focus-visible {
+	outline: 2px solid #E88104;
+	outline-offset: 1px;
+}
+
+/* toolbar and Deck-builder links styled as buttons (they were <button>s nested in <a>s) */
+#infoButtons a.ui-button,
+.buttons-gutter a.ui-button {
+	color: #eeeeee;
+	text-decoration: none;
+}
+
+#infoButtons a.ui-button:hover,
+#infoButtons a.ui-button:focus,
+.buttons-gutter a.ui-button:hover,
+.buttons-gutter a.ui-button:focus {
+	color: #ffffff;
+}
+
+/* Play Match / Spectate links in the rows, sized like the row buttons */
+td a.hall-row-link {
+	box-sizing: border-box;
+	width: calc(100% - 6px);
+	margin: 3px;
+	text-align: center;
+	color: #eeeeee;
+}
+
+/* how long a waiting table has been open: "Waiting 01:30", ticking every second */
+.table-age {
+	color: #bbbbbb;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+/* the main bar: connection readout at the left end, server clock at the right end, the buttons centred between them */
+#main > .buttons-gutter > .hall-connection,
+#main > .buttons-gutter > .server-time {
+	flex: 1 1 0;
+	min-width: max-content;
+}
+
+/* the centre group is only a layout wrapper now: the bar's own top border runs across the whole width */
+#main > .buttons-gutter > .buttons-gutter {
+	flex: 0 1 auto;
+	border-top: none;
+	padding: 0;
+	background: none;
+}
+
+/* the connection readout on the main bar: "• Connected" */
+.hall-connection {
+	position: relative;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.hall-connection-readout {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 6px;
+	background: none;
+	border: none;
+	border-radius: 3px;
+	color: #cccccc;
+	font: inherit;
+	font-size: 90%;
+	cursor: pointer;
+}
+
+.hall-connection-readout:hover,
+.hall-connection-readout:focus-visible {
+	color: #ffffff;
+	background-color: #444444;
+}
+
+.hall-connection-dot {
+	display: inline-block;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background-color: #f08c28;
+	box-shadow: 0 0 0 1px #00000066;
+}
+
+.hall-connection[data-state="connected"] .hall-connection-dot {
+	background-color: #3fbf5f;
+}
+
+/* amber (orange): a connection problem the hall is retrying; yellow is kept for shutdown mode */
+.hall-connection[data-state="reconnecting"] .hall-connection-dot,
+.hall-connection[data-state="connecting"] .hall-connection-dot {
+	background-color: #f08c28;
+}
+
+/* shutdown mode: connected, but the server will restart soon and new games can't be started */
+.hall-connection[data-state="shutdown"] .hall-connection-dot {
+	background-color: #f5e030;
+}
+
+.hall-connection[data-state="shutdown"] .hall-connection-label {
+	color: #f5e36a;
+}
+
+.hall-connection[data-state="disconnected"] .hall-connection-dot {
+	background-color: #e04040;
+}
+
+.hall-connection[data-state="disconnected"] .hall-connection-label {
+	color: #ff8080;
+}
+
+.hall-connection-popup {
+	position: absolute;
+	bottom: calc(100% + 6px);
+	left: 0;
+	z-index: 200;
+	min-width: 16rem;
+	max-width: min(22rem, 90vw);
+	padding: 0.5em 0.7em;
+	background-color: #222222;
+	border: 1px solid #666666;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px #000000aa;
+	color: #eeeeee;
+	font-size: 90%;
+	white-space: normal;
+}
+
+.hall-connection-popup[hidden],
+.hall-connection-popup-message[hidden] {
+	display: none;
+}
+
+.hall-connection-popup > div + div {
+	margin-top: 0.3em;
+}
+
+.hall-connection-popup a {
+	color: #E88104;
+}
+
+/* the chat's resize bar (hallUi.js HallChatResizer; jQuery UI's .ui-resizable-n gives its place and size) */
+#chat .hall-chat-resizer {
+	cursor: ns-resize;
+	z-index: 5;
+}
+
+#chat .hall-chat-resizer:focus-visible {
+	outline: 2px solid #E88104;
+	outline-offset: -1px;
+}
+
+/* while the chat is being resized, iframes (the Discord chat) must not take the pointer, and nothing gets selected */
+body.hall-chat-resizing,
+body.hall-chat-resizing * {
+	cursor: ns-resize !important;
+	user-select: none;
+}
+
+body.hall-chat-resizing iframe {
+	pointer-events: none;
+}
+
+/* "your game is ready" (when the browser blocked the game window) */
+.hall-ready-actions {
+	text-align: center;
+}
+
+/* system messages: #5f5f5f on the chat's #121212 was about 3:1; this is about 5.4:1 */
+.systemMessage,
+.systemMessage > .timestamp {
+	color: #8a8a8a;
+}
+/* ==== end W1 hall-core ==== */
+
+/* ==== tabs-account ==== */
+/* Shared data table from commonUi.js renderTable() (Server Stats, Game History): sortable headers are buttons that
+   look like header text; the empty state is one full-width row. */
+table.gemp-table {
+	border-collapse: collapse;
+}
+
+table.gemp-table th {
+	text-align: left;
+	white-space: nowrap;
+}
+
+.gemp-table-sort {
+	background: none;
+	border: none;
+	color: inherit;
+	font: inherit;
+	font-weight: bold;
+	padding: 0;
+	cursor: pointer;
+	text-align: left;
+}
+
+.gemp-table-sort:hover,
+.gemp-table-sort:focus-visible {
+	text-decoration: underline;
+}
+
+.gemp-table-sort-mark {
+	font-size: 75%;
+}
+
+td.gemp-table-empty {
+	font-style: italic;
+	color: #bbbbbb;
+	text-align: center;
+	padding: 0.6em;
+}
+
+.load-error {
+	color: #ffb0a0;
+}
+
+/* Server Info > Server Stats */
+.stats-caption {
+	font-size: 110%;
+	margin: 0.6em 10px 0.3em;
+}
+
+/* My Account > Game History */
+.game-history-article {
+	padding: 0 10px 1em;
+	max-width: 100%;
+}
+
+.game-history-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 0.4em 1em;
+	/* the bottom margin keeps the room the removed "Dates are the day the game ended..." line took */
+	margin: 0.5em 0 1.8em;
+}
+
+.game-history-field {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.15em;
+}
+
+.game-history-field label {
+	font-size: 85%;
+	color: #cccccc;
+}
+
+.game-history-field select,
+.game-history-field input[type=text] {
+	min-width: 12em;
+}
+
+.game-history-buttons {
+	display: inline-flex;
+	gap: 0.4em;
+}
+
+.game-history-status {
+	margin: 0.4em 0;
+}
+
+.game-history-table {
+	overflow-x: auto;
+}
+
+.game-history-table table.gemp-table {
+	width: 100%;
+}
+
+/* header text centred, cell text centred except the name-like columns (Format, Event, My Deck) */
+.game-history-table table.gameHistory th,
+.game-history-table table.gameHistory td {
+	padding: 4px 7px;
+	text-align: center;
+}
+
+.game-history-table table.gameHistory td.gh-left {
+	text-align: left;
+}
+
+/* My Deck wraps early (anywhere, if a name has no spaces) so the other columns keep their room */
+.gh-deck-name {
+	max-width: 14em;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+/* the Replay link in the hall's standard link colours: #motd a, .msg-content p a ... (unvisited) and a:visited */
+.game-history-table table.gameHistory a:link {
+	color: #E88104;
+}
+
+.game-history-table table.gameHistory a:visited {
+	color: #BF6B04;
+}
+
+.game-history-pager {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.4em;
+	margin: 0.4em 0;
+}
+
+.game-history-pager .pager-info {
+	padding: 0 0.6em;
+}
+
+.gh-result {
+	font-weight: bold;
+}
+
+.gh-win {
+	color: #8fdc8f;
+}
+
+.gh-loss {
+	color: #ff9a8a;
+}
+
+.gh-when,
+.gh-duration {
+	white-space: nowrap;
+}
+
+/* My Account > Ignored players */
+.account-section {
+	clear: both;
+	margin-top: 1.5em;
+	max-width: 40em;
+}
+
+.account-help {
+	color: #bbbbbb;
+	font-size: 90%;
+}
+
+.ignore-add {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em;
+}
+
+/* the PlayerPicker (playerPicker.js) around #ignore-add-name: a field of a name's width, not the whole row */
+.ignore-add .player-picker {
+	flex: 0 1 16em;
+}
+
+.ignore-status {
+	min-height: 1.2em;
+	margin: 0.3em 0;
+}
+
+.ignore-list {
+	list-style: none;
+	padding: 0;
+	margin: 0.3em 0;
+}
+
+.ignore-list li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1em;
+	padding: 0.2em 0.4em;
+	border-bottom: 1px solid #333333;
+}
+
+/* Hall user list: bare names with small role / state badges; other players open a menu.  The column's width is
+   fixed by chat.js (lockUserListWidth) to fit your own entry; one line per player, longer names end in "…". */
+.chatUser {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.3em;
+	padding: 1px 2px;
+	border-radius: 3px;
+}
+
+.chatUser-name {
+	flex: 0 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.chatUser-visibility {
+	flex: 0 0 auto;
+}
+
+/* In a narrow column another player's name keeps its room first: their role badge gives way ("league a…", full
+   text in its tooltip) before the name is cut.  Your own entry always fits, so its badge never shrinks. */
+.chatUser-badge {
+	flex: 0 1000 auto;
+	min-width: 2.6em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.chatUser[tabindex] {
+	cursor: pointer;
+}
+
+.chatUser[tabindex]:hover,
+.chatUser[tabindex]:focus-visible,
+.chatUser[aria-expanded=true] {
+	background: #333333;
+	outline: 1px solid #777777;
+}
+
+.chatUser-self {
+	border-bottom: 1px solid #444444;
+	padding-bottom: 3px;
+	margin-bottom: 3px;
+}
+
+.chatUser-self .chatUser-name {
+	font-weight: bold;
+}
+
+.chatUser-ignored .chatUser-name {
+	color: #999999;
+	text-decoration: line-through;
+}
+
+.chatUser-badge {
+	font-size: 70%;
+	line-height: 1.3;
+	padding: 0 0.35em;
+	border-radius: 0.6em;
+	border: 1px solid #666666;
+	color: #dddddd;
+	white-space: nowrap;
+}
+
+.chatUser-admin .chatUser-role {
+	border-color: #d4a93a;
+	color: #f0cf73;
+}
+
+.chatUser-leagueAdmin .chatUser-role {
+	border-color: #5e9bd6;
+	color: #9cc7ef;
+}
+
+.chatUser-visibility {
+	font-size: 70%;
+	line-height: 1.3;
+	padding: 0 0.4em;
+	border-radius: 0.6em;
+	cursor: pointer;
+	background: #1e3a1e;
+	color: #b6ecb6;
+	border: 1px solid #4f8a4f;
+}
+
+.chatUser-visibility.is-incognito {
+	background: #3a3320;
+	color: #f0dc9c;
+	border-color: #8a7a4f;
+}
+
+/* The status line takes the column's width and never widens it: width 0 keeps it out of the column's fit-content
+   width, min-width 100% fills what the names already need; longer text wraps. */
+.chatUserStatus {
+	font-size: 80%;
+	padding: 3px 5px;
+	color: #dddddd;
+	border-left: 1px solid #999999;
+	box-sizing: border-box;
+	width: 0;
+	min-width: 100%;
+	overflow-wrap: anywhere;
+}
+
+.chatUserMenu {
+	font-family: Verdana, Arial, sans-serif;
+	list-style: none;
+	margin: 0;
+	padding: 3px 0;
+	min-width: 10em;
+	background: #262626;
+	border: 1px solid #777777;
+	border-radius: 4px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+	color: #ffffff;
+}
+
+.chatUserMenu-title {
+	padding: 2px 10px 4px;
+	font-weight: bold;
+	border-bottom: 1px solid #444444;
+	margin-bottom: 2px;
+}
+
+.chatUserMenu-item {
+	padding: 3px 10px;
+	cursor: pointer;
+}
+
+.chatUserMenu-item:hover,
+.chatUserMenu-item:focus {
+	background: #444444;
+	outline: none;
+}
+
+/* Events > Calendar: the hall's Join Queue button in a scheduled tournament's preview */
+.calendar-join-queue {
+	font-size: 80%;
+}
+/* ==== end tabs-account ==== */
+
+/* ==== format-definitions: the hall's card dialog (GempCardHintDialog in src/Hall/GameHall.js) ====
+   Sized to its cards by the script; the cards are CardDisplays with the game's rounded black frame (autozoom.css). */
+.card-hint-dialog .ui-dialog-content {
+	padding: 6px;
+}
+
+.card-hint-cards {
+	display: flex;
+	gap: 6px;
+	align-items: flex-start;
+	box-sizing: content-box;
+	padding: 0 2px 2px 0;
+}
+
+.card-hint-card {
+	flex: none;
+}
+
+.card-hint-card .foilOverlay,
+.card-hint-card .foilOverlay img,
+.card-hint-card .borderOverlay,
+.card-hint-card .borderOverlay img {
+	border-radius: 5%;
+}
+
+/* the scan's own corners (white on Decipher scans) are cut a little deeper than the frame's, so their anti-aliased
+   edge falls under the black frame instead of showing as a pale fringe around it */
+.card-hint-card .fullcard img {
+	border-radius: 7%;
+}
+
+.card-hint-card.card-hint-pack .fullcard img {
+	border-radius: 0;
+}
+/* ==== end format-definitions ==== */
+/* ==== links-login ==== */
+/* a visitor who is not logged in (hallUi.js HallConnectionIndicator state "loggedout"): neutral, not an error */
+.hall-connection[data-state="loggedout"] .hall-connection-dot {
+	background-color: #909090;
+}
+
+.hall-connection-signin {
+	margin-left: 4px;
+	padding: 2px 4px;
+	color: #E88104;
+	white-space: nowrap;
+}
+
+.hall-connection-signin:hover,
+.hall-connection-signin:focus-visible {
+	color: #ffa640;
+}
+
+.hall-connection-signin[hidden],
+.hall-connection-popup-updated[hidden] {
+	display: none;
+}
+
+/* "You are not logged in. Click here to register or log in." in the chat */
+.warningMessage a.chat-login-link,
+.warningMessage a.chat-login-link:visited {
+	color: #E88104;
+	text-decoration: underline;
+}
+
+.hall-login-required p {
+	margin: 0.3em 0;
+}
+
+/* ==== share-links: "Copy share link" buttons (js/gemp-022/shareLinks.js) ==== */
+button.share-link-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	width: auto;
+	margin: 0;
+	padding: 0.2em 0.6em;
+	font: inherit;
+	color: #aaa;
+	background: transparent;
+	border: 1px solid #444;
+	border-radius: 4px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+button.share-link-button img {
+	width: 1em;
+	height: 1em;
+	filter: invert(0.75);
+}
+
+button.share-link-button:hover,
+button.share-link-button:focus-visible {
+	color: #fff;
+	border-color: #E88104;
+	outline: none;
+}
+
+button.share-link-button:hover img,
+button.share-link-button:focus-visible img {
+	filter: invert(1);
+}
+
+.share-link-note {
+	margin-left: 0.5em;
+	color: #9c9;
+	font-size: 90%;
+	white-space: nowrap;
+}
+
+.share-link-note-manual input {
+	width: 24em;
+	max-width: 60vw;
+	font: inherit;
+	color: #ddd;
+	background: #1d1d1d;
+	border: 1px solid #555;
+}
+
+button.share-link-button.share-link-icon-only .share-link-label {
+	display: none;
+}
+
+button.share-link-button:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+/* Share on Help › Format Definitions (each format's header) and in the PC Errata viewer's bar: the patch notes look */
+.fd-head .fd-share {
+	align-self: center;
+	font-size: 80%;
+}
+
+.pc-errata-viewer .pc-errata-viewer-bar button.share-link-button {
+	margin-left: auto;
+	min-height: 0;
+	padding: 0.2em 0.6em;
+	font-size: 100%;
+	color: #aaa;
+	background: transparent;
+	border: 1px solid #444;
+	border-radius: 4px;
+}
+
+.pc-errata-viewer .pc-errata-viewer-bar button.share-link-button:hover:not(:disabled),
+.pc-errata-viewer .pc-errata-viewer-bar button.share-link-button:focus-visible {
+	color: #fff;
+	border-color: #E88104;
+}
+
+.pc-errata-viewer .pc-errata-viewer-bar button.pc-errata-share-hidden {
+	display: none;
+}
+
+.pc-errata-viewer-bar button.share-link-button + .pc-errata-enlarge,
+.pc-errata-viewer-bar .share-link-note + .pc-errata-enlarge {
+	margin-left: 0;
+}
+
+.pc-errata-viewer .pc-errata-viewer-bar button.pc-errata-share-hidden + .pc-errata-enlarge {
+	margin-left: auto;
+}
+
+/* "Link copied" below the button, over the card, so the bar keeps its layout */
+.pc-errata-viewer-bar {
+	position: relative;
+}
+
+.pc-errata-viewer-bar .share-link-note {
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 8px;
+	z-index: 3;
+	margin: 0;
+	padding: 2px 8px;
+	background: #1d1d1d;
+	border: 1px solid #444;
+	border-radius: 4px;
+}
+
+textarea.share-link-copy-area {
+	position: fixed;
+	top: -100px;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+}
+/* ==== end share-links ==== */

@@ -135,6 +135,24 @@ public class ChatRoomMediator {
         }
     }
 
+    public boolean isIncognito(String username) {
+        _lock.readLock().lock();
+        try {
+            return _chatRoom.isUserIncognito(username);
+        } finally {
+            _lock.readLock().unlock();
+        }
+    }
+
+    public boolean isInRoom(String username) {
+        _lock.readLock().lock();
+        try {
+            return _chatRoom.isUserInRoom(username);
+        } finally {
+            _lock.readLock().unlock();
+        }
+    }
+
     public void sendToUser(String from, String to, String message) {
         _lock.writeLock().lock();
         try {

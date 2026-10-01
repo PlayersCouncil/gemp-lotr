@@ -160,7 +160,9 @@ public class Shuffler_Tests
                 .map(x ->  x.getValue().toString() + "x" + x.getKey())
                 .sorted()
                 .collect(Collectors.joining("\n"));
-        Files.write(file, Collections.singleton(content), StandardCharsets.UTF_8);
+        // Writing the distribution out left IdealShuffleResult.txt in the working tree on every test run; re-enable
+        // locally when inspecting shuffle distributions (an earlier analysis found no shuffler bias).
+        //Files.write(file, Collections.singleton(content), StandardCharsets.UTF_8);
 
     }
 

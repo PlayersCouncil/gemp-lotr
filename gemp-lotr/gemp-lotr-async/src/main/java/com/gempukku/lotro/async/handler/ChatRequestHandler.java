@@ -124,7 +124,7 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
 
                     Document doc = documentBuilder.newDocument();
 
-                    serializeChatRoomData(room, chatMessages, usersInRoom, doc);
+                    serializeChatRoomData(room, chatMessages, usersInRoom, playerId, chatRoom, doc);
 
                     responseWriter.writeXmlResponse(doc);
                 } catch (SubscriptionExpiredException exp) {
@@ -158,7 +158,7 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
 
             Document doc = documentBuilder.newDocument();
 
-            serializeChatRoomData(room, chatMessages, usersInRoom, doc);
+            serializeChatRoomData(room, chatMessages, usersInRoom, resourceOwner.getName(), chatRoom, doc);
 
             responseWriter.writeXmlResponse(doc);
         } catch (PrivateInformationException exp) {
@@ -167,7 +167,14 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
-    private void serializeChatRoomData(String room, List<ChatMessage> chatMessages, Collection<String> usersInRoom, Document doc) {
+    /**
+     * The room's messages and user list.  Each {@code <user>} carries the bare player name as its text; roles travel
+     * as attributes: {@code role="admin"} or {@code role="leagueAdmin"} (absent otherwise), and on the viewer's own
+     * entry {@code self="true"} plus {@code incognito="true|false"}.  The viewer's own entry comes first and is listed
+     * even while they are incognito (which otherwise hides them from everyone but admins).
+     */
+    private void serializeChatRoomData(String room, List<ChatMessage> chatMessages, Collection<String> usersInRoom,
+                                       String viewer, ChatRoomMediator chatRoom, Document doc) {
         Element chatElem = doc.createElement("chat");
         chatElem.setAttribute("roomName", room);
         doc.appendChild(chatElem);
@@ -181,14 +188,27 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
         }
 
         Set<String> users = new TreeSet<>(new CaseInsensitiveStringComparator());
-        for (String userInRoom : usersInRoom)
-            users.add(formatPlayerNameForChatList(userInRoom));
+        users.addAll(usersInRoom);
 
-        for (String userInRoom : users) {
-            Element user = doc.createElement("user");
-            user.appendChild(doc.createTextNode(userInRoom));
-            chatElem.appendChild(user);
+        if (viewer != null && (users.contains(viewer) || chatRoom.isInRoom(viewer))) {
+            users.remove(viewer);
+            Element self = createUserElement(doc, viewer);
+            self.setAttribute("self", "true");
+            self.setAttribute("incognito", String.valueOf(chatRoom.isIncognito(viewer)));
+            chatElem.appendChild(self);
         }
+
+        for (String userInRoom : users)
+            chatElem.appendChild(createUserElement(doc, userInRoom));
+    }
+
+    private Element createUserElement(Document doc, String userName) {
+        Element user = doc.createElement("user");
+        user.appendChild(doc.createTextNode(userName));
+        String role = chatRoleOf(userName);
+        if (role != null)
+            user.setAttribute("role", role);
+        return user;
     }
 
     private static class CaseInsensitiveStringComparator implements Comparator<String> {
@@ -198,14 +218,15 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
-    private String formatPlayerNameForChatList(String userInRoom) {
+    /** "admin", "leagueAdmin" or null - sent as the user element's role attribute instead of a name prefix. */
+    private String chatRoleOf(String userInRoom) {
         final Player player = _playerDao.getPlayer(userInRoom);
         if (player != null) {
             if (player.hasType(Player.Type.ADMIN))
-                return "* "+userInRoom;
+                return "admin";
             else if (player.hasType(Player.Type.LEAGUE_ADMIN))
-                return "+ "+userInRoom;
+                return "leagueAdmin";
         }
-        return userInRoom;
+        return null;
     }
 }

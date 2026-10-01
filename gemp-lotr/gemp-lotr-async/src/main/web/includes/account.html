@@ -1,27 +1,181 @@
 <script type="text/javascript">
-	$("accountMain").ready(
+	$("#accountMain").ready(
 		function () {
-			console.log("aasdf");
+			var SUB_TAB_KEY = "gemp.account.subTab";
+			var savedTab = null;
+			try {
+				savedTab = window.localStorage.getItem(SUB_TAB_KEY);
+			} catch (e) {
+				// storage unavailable (private mode, blocked): start on My Account
+			}
+			var active = 0;
+			$("#account-tabs > ol > li > a").each(function (index) {
+				if (savedTab != null && $(this).attr("href") === savedTab)
+					active = index;
+			});
+
 			$("#trophyMigrate").hide();
-			
-			$("#accountMain").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+
+			$("#accountMain").tabs({
+				active: active,
+				// a sub-tab's page is fetched once; coming back to it keeps what it already shows
+				beforeLoad: function (event, ui) {
+					if (ui.tab.data("loaded")) {
+						event.preventDefault();
+						return;
+					}
+					ui.jqXHR.done(function () {
+						ui.tab.data("loaded", true);
+					});
+				},
+				activate: function (event, ui) {
+					try {
+						window.localStorage.setItem(SUB_TAB_KEY, ui.newTab.find("a").attr("href"));
+					} catch (e) {
+						// not remembered; nothing else depends on it
+					}
+				}
+			}).addClass("ui-tabs-vertical ui-helper-clearfix");
 			$("#account-tabs > ol > li").removeClass("ui-corner-top").addClass("ui-corner-left");
-			
-			$("#accountName").html(chat.userName);
+
+			var name = (window.chat && chat.userName) || (window.hall && hall.userInfo && hall.userInfo.name) || "";
+			$("#accountName").text(name);
 			$("#pocketDiv").html(formatPrice(hall.pocketValue));
 
-			if(chat.userInfo.hasTrophies) {
+			if(window.chat && chat.userInfo && chat.userInfo.hasTrophies) {
 				$("#trophyMigrate").show();
 			}
+
+			AccountIgnores.init(hall.comm);
+			// events-history-tabs: the list is fetched again when the viewer comes back to it after a while
+			// (GempHallTabs.onReturn, GameHall.js); the name being typed is left alone
+			if (window.GempHallTabs)
+				GempHallTabs.onReturn($("#account-ignores"), function () { AccountIgnores.load(); });
 		});
-	
+
 	function migrate() {
 		let execute = confirm("This will permanently migrate all of your cards from 'Trophies' to 'My Cards' THIS CANNOT BE UNDONE, EVEN MANUALLY.  Are you sure you want to continue?");
-					
+
 		if(!execute)
 			return;
-					
+
 		hall.MigrateTrophies();
+	};
+
+	// My Account > Ignored players.  The user list's menu changes the same list; both announce changes with the
+	// "gemp:ignores-changed" document event so each shows the other's changes.
+	var AccountIgnores = {
+		comm: null,
+		picker: null,
+
+		init: function (comm) {
+			var that = this;
+			this.comm = comm;
+			this.initPicker();
+			$("#ignore-add-form").off("submit").on("submit", function (e) {
+				e.preventDefault();
+				that.add($.trim($("#ignore-add-name").val() || ""));
+			});
+			$(document).off("gemp:ignores-changed.account").on("gemp:ignores-changed.account", function (e, list) {
+				that.render(list);
+			});
+			this.load();
+		},
+
+		// "Ignore a player" picks like the Casual table's invite field: the players in the hall from the ▾ list, or
+		// type 2+ letters to search every registered player (GET /hall/players).  One name.
+		initPicker: function () {
+			var that = this;
+			var input = $("#ignore-add-name");
+			if (typeof PlayerPicker !== "function" || input.length === 0 || input.closest(".player-picker").length > 0)
+				return;
+			this.picker = new PlayerPicker(input, {
+				search: function (prefix, limit, done, failed) {
+					// a failed search still offers the players in the hall, with no error dialog
+					var failures = {};
+					$.each(["0", "400", "401", "403", "404", "410", "500", "502", "503"], function (i, status) {
+						failures[status] = function () { failed(); };
+					});
+					that.comm.searchHallPlayers(prefix, limit, function (json) {
+						done((json && json.players) || []);
+					}, failures);
+				},
+				// the hall's user list (bare names), read whenever the list opens
+				players: function () {
+					var players = (window.hall && hall.players) || [];
+					return $.map(players, function (name) { return String(name).replace(/^[*+] /, ""); });
+				},
+				self: function () {
+					return (window.hall && hall.userInfo && hall.userInfo.name) || (window.chat && chat.userName) || "";
+				}
+			});
+		},
+
+		errorMap: function () {
+			var that = this;
+			return {
+				"0": function () { that.status("Could not reach the server."); },
+				"401": function () { that.status("You are not logged in."); },
+				"500": function () { that.status("Could not load or change your ignore list. Try again later."); }
+			};
+		},
+
+		load: function () {
+			var that = this;
+			this.comm.getIgnoredPlayers(function (json) {
+				that.render(json && json.ignored ? json.ignored : []);
+			}, this.errorMap());
+		},
+
+		render: function (list) {
+			var that = this;
+			var ul = $("#ignore-list").empty();
+			list = list || [];
+			$("#ignore-empty").prop("hidden", list.length !== 0);
+			$.each(list, function (i, name) {
+				var remove = $("<button type='button' class='ignore-remove'>Remove</button>")
+					.attr("aria-label", "Stop ignoring " + name)
+					.on("click", function () { that.remove(name); });
+				ul.append($("<li></li>")
+					.append($("<span class='ignore-name'></span>").text(name))
+					.append(" ")
+					.append(remove));
+			});
+		},
+
+		changed: function (json) {
+			if (json && json.ignored) {
+				this.render(json.ignored);
+				if (json.changed)
+					$(document).trigger("gemp:ignores-changed", [json.ignored]);
+			}
+			if (json && json.message)
+				this.status(json.message);
+		},
+
+		add: function (name) {
+			var that = this;
+			if (name === "") {
+				this.status("Type the name of the player to ignore.");
+				return;
+			}
+			this.comm.ignorePlayer(name, function (json) {
+				that.changed(json);
+				if (json && !json.error)
+					$("#ignore-add-name").val("");
+			}, this.errorMap());
+		},
+
+		remove: function (name) {
+			var that = this;
+			this.comm.unignorePlayer(name, function (json) {
+				that.changed(json);
+			}, this.errorMap());
+		},
+
+		status: function (text) {
+			$("#ignore-status").text(text);
+		}
 	};
 </script>
 
@@ -31,16 +185,33 @@
 			<li><a href="#account">My Account</a></li>
 			<li><a href="includes/account/gameHistory.html">My Game History</a></li>
 			<li><a href="includes/account/yourStats.html">My Stats</a></li>
-			<li><a href="includes/account/playtesting.html">Playtesting</a></li>
 		</ol>
-	</div>  
+	</div>
 	<div id="account">
-		<h1>Account Settings for <span id="accountName"></span></h1>
+		<h1>My Account: <span id="accountName"></span></h1>
 		<div id="pocketDiv" class='pocket' style="float:right; width:95; height:18;"></div>
 		<div id="trophyMigrate">
 			<button id="migrate-button" class="toolbar-button" onclick="migrate()">
 				<span>Migrate Trophies to My Cards</span>
 			</button>
 		</div>
+
+		<section id="account-ignores" class="account-section">
+			<h2>Ignored players</h2>
+			<p class="account-help">
+				Tables with a player you ignore are hidden from you, and yours from them. (Exception: league events and
+				tournaments cannot block other players.) After you refresh, their chat messages are also hidden. You can
+				also click on usernames in the main hall chat to ignore/unignore other players.
+			</p>
+			<form id="ignore-add-form" class="ignore-add" autocomplete="off">
+				<label for="ignore-add-name">Ignore a player:</label>
+				<!-- PlayerPicker (playerPicker.js) adds the ▾ list of players in the hall and the type-to-search -->
+				<input type="text" id="ignore-add-name" maxlength="30" placeholder="Choose or type a player">
+				<button type="submit">Ignore</button>
+			</form>
+			<div id="ignore-status" class="ignore-status" role="status" aria-live="polite"></div>
+			<ul id="ignore-list" class="ignore-list"></ul>
+			<p id="ignore-empty" class="account-help" hidden>You are not ignoring anyone.</p>
+		</section>
 	</div>
 </div>

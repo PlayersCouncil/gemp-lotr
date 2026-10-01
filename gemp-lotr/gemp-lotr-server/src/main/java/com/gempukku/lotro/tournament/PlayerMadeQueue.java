@@ -45,6 +45,13 @@ public class PlayerMadeQueue extends AbstractTournamentQueue implements Tourname
     }
 
     @Override
+    protected String getJoinRefusal() {
+        if (isReadyCheckTimerRunning())
+            return getTournamentQueueName() + " is running its ready check and cannot take new players until it finishes.";
+        return super.getJoinRefusal();
+    }
+
+    @Override
     public boolean shouldBeDisplayedAsWaiting() {
         return true; // Always display player made queues in waiting tables section
     }

@@ -9,6 +9,7 @@ import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.packs.ProductLibrary;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,7 +30,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
     }
 
     @Test
-    public void joiningQueue() throws SQLException, IOException {
+    public void joiningQueue() throws Exception {
         TournamentService tournamentService = Mockito.mock(TournamentService.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
@@ -54,7 +55,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
     }
 
     @Test
-    public void leavingQueue() throws SQLException, IOException {
+    public void leavingQueue() throws Exception {
         TournamentService tournamentService = Mockito.mock(TournamentService.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
@@ -82,7 +83,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
     }
     
     @Test
-    public void cancellingQueue() throws SQLException, IOException {
+    public void cancellingQueue() throws Exception {
         TournamentService tournamentService = Mockito.mock(TournamentService.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
@@ -110,7 +111,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
     }
 
     @Test
-    public void fillingQueue() throws SQLException, IOException {
+    public void fillingQueue() throws Exception {
         var tournament = Mockito.mock(Tournament.class);
         var tournamentService = Mockito.mock(TournamentService.class);
         var tournamentInfo = Mockito.mock(TournamentInfo.class);
@@ -170,7 +171,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
     }
 
     @Test
-    public void overflowingQueue() throws SQLException, IOException {
+    public void overflowingQueue() throws Exception {
         var tournament = Mockito.mock(Tournament.class);
         var tournamentInfo = Mockito.mock(TournamentInfo.class);
         var tournamentService = Mockito.mock(TournamentService.class);
@@ -202,7 +203,12 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
         Mockito.verifyNoMoreInteractions(queueCallback);
 
         queue.joinPlayer(player2, null);
-        queue.joinPlayer(player3, null);
+        try {
+            queue.joinPlayer(player3, null);
+            fail("joining a full queue must be refused");
+        } catch (HallException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("is full"));
+        }
 
         assertEquals(2, queue.getPlayerCount());
 

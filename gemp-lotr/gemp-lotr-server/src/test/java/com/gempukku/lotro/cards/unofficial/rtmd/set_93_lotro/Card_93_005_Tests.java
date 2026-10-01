@@ -10,22 +10,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_5: Each companion with resistance 3 or less is strength -1.
- *
- * This is not owner-gated — it applies to all companions regardless of who owns the mod.
- *
- * Test cards:
- * - Gimli, Dwarf of Erebor (1_13): resistance 6, strength 6 — NOT affected
- * - Merry, Friend to Sam (1_302): resistance 3, strength 3 — affected (resistance <= 3)
- */
 public class Card_93_005_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Gimli (1_13): Dwarf companion, resistance 6, strength 6
-		put("gimli", "1_13");
-		// Merry : Hobbit companion, resistance 9, base strength 3
-		put("merry", "11_168");
+		put("gimli", "1_13"); // Gimli: Dwarf companion, resistance 6, strength 6 — NOT affected
+		put("merry", "11_168"); // Merry, Friend to Sam: Hobbit companion, resistance 9, strength 3 — affected (resistance <= 3 once burdened)
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -48,6 +37,12 @@ public class Card_93_005_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_5
+		 * Type: MetaSite
+		 * Game Text: Each companion with resistance 3 or less is strength -1.
+		 */
 		var scn = GetFreepsScenario();
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_5", card.getBlueprint().getTitle());

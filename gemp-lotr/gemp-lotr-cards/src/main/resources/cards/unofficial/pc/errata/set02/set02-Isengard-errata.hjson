@@ -308,14 +308,65 @@
 		}
 	}
 	
+	# 52_46: {
+	# 	cardInfo: {
+	# 		//id: 52_46.1
+	# 		parent: 2_46
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN02E046.1_card.jpg
+	# 		collInfo: 2R46
+	# 		rarity: R
+	# 	}
+	# 	title: Uruk Captain
+	# 	unique: true
+	# 	side: Shadow
+	# 	culture: Isengard
+	# 	twilight: 3
+	# 	type: Minion
+	# 	race: Uruk-hai
+	# 	strength: 9
+	# 	vitality: 2
+	# 	site: 5
+	# 	keywords: Damage+1
+	# 	effects: {
+	# 		type: activated
+	# 		phase: shadow
+	# 		cost: [
+	# 			{
+	# 				type: removeTwilight
+	# 				amount: 1
+	# 			}
+	# 			{
+	# 				type: exert
+	# 				select: choose(uruk-hai)
+	# 			}
+	# 		]
+	# 		effect: {
+	# 			type: playCardFromDiscard
+	# 			select: choose(uruk-hai)
+	# 		}
+	# 	}
+	# 	gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai to play an Uruk-hai from your discard pile.
+	# 	lore: "The captains marched the Uruk-hai to the great river without halting."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+
 	52_46: {
 		cardInfo: {
-			//id: 52_46.1
+			//id: 52_46.2
 			parent: 2_46
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN02E046.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN02E046.2_card.jpg
 			collInfo: 2R46
 			rarity: R
 		}
@@ -340,7 +391,7 @@
 				}
 				{
 					type: exert
-					select: choose(uruk-hai)
+					select: choose(unique,uruk-hai)
 				}
 			]
 			effect: {
@@ -348,7 +399,7 @@
 				select: choose(uruk-hai)
 			}
 		}
-		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert an Uruk-hai to play an Uruk-hai from your discard pile.
+		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert a unique Uruk-hai to play an Uruk-hai from your discard pile.
 		lore: "The captains marched the Uruk-hai to the great river without halting."
 		promotext: ""
 		alts: {

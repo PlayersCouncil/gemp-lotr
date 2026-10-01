@@ -1,5 +1,6 @@
 package com.gempukku.lotro.bots.rl.fotrstarters.models.assignment;
 
+import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.rl.LearningStep;
 import com.gempukku.lotro.bots.rl.RLGameStateFeatures;
 import com.gempukku.lotro.bots.rl.fotrstarters.CardFeatures;
@@ -8,6 +9,7 @@ import com.gempukku.lotro.bots.rl.fotrstarters.models.LabeledPoint;
 import com.gempukku.lotro.bots.rl.fotrstarters.models.ModelRegistry;
 import com.gempukku.lotro.bots.rl.semanticaction.AssignMinionsAction;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
@@ -48,6 +50,16 @@ public abstract class AbstractAssignmentTrainer extends AbstractTrainer {
 
     @Override
     public String getAnswer(GameState gameState, AwaitingDecision decision, String playerName, RLGameStateFeatures features, ModelRegistry modelRegistry) {
+        return getAnswer(gameState, decision, playerName, features, modelRegistry, AssignmentLegality.UNCHECKED);
+    }
+
+    /**
+     * Scores every candidate assignment with the model and answers with the best one the game will accept. If the
+     * rules reject every candidate (only possible for Shadow, whose candidates assign every minion), the best-scored
+     * one is trimmed down to its legal pairings instead.
+     */
+    public String getAnswer(GameState gameState, AwaitingDecision decision, String playerName, RLGameStateFeatures features,
+                            ModelRegistry modelRegistry, AssignmentLegality legality) {
         Map<String, String[]> params = decision.getDecisionParameters();
         String[] freeCharIds = params.get("freeCharacters");
         String[] minionIds = params.get("minions");
@@ -88,8 +100,11 @@ public abstract class AbstractAssignmentTrainer extends AbstractTrainer {
         double[] stateVector = features.extractFeatures(gameState, decision, playerName);
         SoftClassifier<double[]> model = modelRegistry.getModel(getClass());
 
+        Side side = isForFp() ? Side.FREE_PEOPLE : Side.SHADOW;
         double bestScore = Double.NEGATIVE_INFINITY;
         Map<String, List<String>> bestAssignment = null;
+        double bestIllegalScore = Double.NEGATIVE_INFINITY;
+        Map<String, List<String>> bestIllegalAssignment = null;
 
         for (AssignmentInfo assignment : allAssignments) {
             try {
@@ -100,13 +115,21 @@ public abstract class AbstractAssignmentTrainer extends AbstractTrainer {
 
                 double[] probs = new double[2];
                 model.predict(extended, probs);
-                if (probs[1] > bestScore) {
+                if (!legality.isLegal(side, freeCharIds, minionIds, assignment.physicalAssignment())) {
+                    if (probs[1] > bestIllegalScore) {
+                        bestIllegalScore = probs[1];
+                        bestIllegalAssignment = assignment.physicalAssignment();
+                    }
+                } else if (probs[1] > bestScore) {
                     bestScore = probs[1];
                     bestAssignment = assignment.physicalAssignment();
                 }
             } catch (CardNotFoundException ignore) {
             }
         }
+
+        if (bestAssignment == null && bestIllegalAssignment != null)
+            bestAssignment = legality.keepLegal(side, freeCharIds, minionIds, bestIllegalAssignment);
 
         if (bestAssignment == null || bestAssignment.isEmpty())
             return "";

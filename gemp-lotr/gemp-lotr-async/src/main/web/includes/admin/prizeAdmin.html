@@ -62,7 +62,7 @@ $(document).ready(
 					outputControl.html("404: Info not found.  Check that your input is correct with removed whitespace and try again.");
 				},
 				"410": function() {
-					outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+					outputControl.html("410: You have been inactive for too long and were logged out. Refresh the page if you wish to re-establish connection.");
 				},
 				"500": function() {
 					outputControl.html("500: Server error. One of the provided parameters was probably malformed.  Double-check your input and try again.");
@@ -257,11 +257,109 @@ $(document).ready(
 		});
 
 		loadPrizes();
+
+		// ---- add items to collections (full admins only; the endpoint uses the admin gate) ----
+		var isFullAdmin = typeof hall !== "undefined" && hall.userInfo != null && hall.userInfo.type != null
+			&& hall.userInfo.type.includes("a");
+		if (isFullAdmin) {
+			new AddItemsForm($("#additems-section"), {comm: hall.comm});
+		} else {
+			$("#additems-form").remove();
+			$("#additems-admin-only").prop("hidden", false);
+		}
 	});
 
 </script>
 <div class="article">
 	<div id="prize-admin-page" class="league-form">
+
+		<div id="additems-section">
+			<h1>Add items to collections <span class="info-toggle" data-for="help-additems">i</span></h1>
+			<div id="help-additems" class="info-text" hidden>
+				Hands cards, packs, selections or awards straight to players' collections, outside any event: for prizes
+				settled elsewhere, compensation, or anything the event prizes missed. Awards tagged "opened on delivery"
+				(Random PC Full Art, ...) are rolled separately for each player and arrive as the card they rolled, the same
+				as event prizes. This cannot be undone, not even by hand, so check the summary before sending.
+			</div>
+			<div id="additems-admin-only" class="page-hint" hidden>Only full admins can add items to collections.</div>
+			<div id="additems-form">
+				<div class="flex-horiz field-row">
+					<div class="label-column">Load from event <span class="info-toggle" data-for="help-additems-event">i</span></div>
+					<select id="additems-event" class="flex-fill"></select>
+					<button type="button" id="additems-event-load-button">Load</button>
+				</div>
+				<div id="help-additems-event" class="info-text" hidden>
+					Picks a league or tournament (running, finished in the last 120 days, or not started yet but with players
+					signed up) and adds all of its players to the Players list below, whether they have played or not: every
+					player signed up for a league; every player registered in a tournament, including those who dropped (a
+					tournament that has not started: everyone signed up for it). They are added in the order of the event's
+					standings, so players with no games come last (dimmed; hover a chip for its place and games). When nobody
+					has played yet, they are added alphabetically. Names already in the list are left alone. Remove anyone
+					who should not get the award with the &times; on their chip.
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Players <span class="info-toggle" data-for="help-additems-players">i</span></div>
+					<div id="additems-player-box" class="additems-chip-box flex-fill">
+						<input type="text" id="additems-player-input" autocomplete="off" placeholder="type a name, or paste a list">
+					</div>
+				</div>
+				<div id="help-additems-players" class="info-text" hidden>
+					Type part of a name and pick from the list (Enter takes the highlighted name). Paste a list separated by
+					new lines, commas or spaces to add many at once: every name is checked, and names that are not players
+					are marked in red with the closest real names to pick from. &times; removes a name.
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Items <span class="info-toggle" data-for="help-additems-items">i</span></div>
+					<input type="text" id="additems-item-input" class="flex-fill" autocomplete="off" placeholder="card title or id (e.g. 1_1), pack, selection or award">
+				</div>
+				<div id="help-additems-items" class="info-text" hidden>
+					Search by card title (accents and punctuation do not matter: "nazgul" finds Nazg&ucirc;l), card id
+					(<code>1_1</code>), or product name, then set how many each player gets. <b>card</b>: that card (tick foil
+					for the foil version); <b>pack</b>: an unopened product the player opens; <b>selection</b>: the player
+					picks one card from it; <b>award</b>: a random reward. Picking the same thing twice adds one to its count.
+				</div>
+				<div id="additems-item-list"></div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Collection <span class="info-toggle" data-for="help-additems-collection">i</span></div>
+					<select id="additems-collection"></select>
+				</div>
+				<div id="help-additems-collection" class="info-text" hidden>
+					Permanent is the player's own cards (My cards); Trophy the trophy collection. A league adds to that sealed or
+					draft league's own card pool, for leagues that have not ended yet; players who have not joined it have no
+					such pool and are skipped (the result says so).
+				</div>
+
+				<div class="flex-horiz field-row">
+					<div class="label-column">Reason <span class="info-toggle" data-for="help-additems-reason">i</span></div>
+					<input type="text" id="additems-reason" class="flex-fill" maxlength="255" placeholder="Administrator action">
+				</div>
+				<div id="help-additems-reason" class="info-text" hidden>
+					Optional. Recorded with each transfer in the database, for the record; players do not see it.
+				</div>
+
+				<div class="flex-horiz form-buttons">
+					<button type="button" id="additems-review-button">Review</button>
+					<button type="button" id="additems-clear-button">Clear</button>
+				</div>
+
+				<div id="additems-summary" hidden>
+					<div id="additems-summary-body"></div>
+					<div class="flex-horiz form-buttons">
+						<button type="button" id="additems-send-button">Send items</button>
+						<button type="button" id="additems-back-button">Back</button>
+					</div>
+				</div>
+
+				<div id="additems-result-label" class="flex-horiz result-label">
+					<div class="label"><b>Result:</b></div>
+					<div id="additems-result" class="flex-fill result-box">Ready.</div>
+				</div>
+				<ul id="additems-player-results"></ul>
+			</div>
+		</div>
 
 		<div class="mode-header flex-horiz">
 			<h1>Promised prizes <span class="info-toggle" data-for="help-promises">i</span></h1>

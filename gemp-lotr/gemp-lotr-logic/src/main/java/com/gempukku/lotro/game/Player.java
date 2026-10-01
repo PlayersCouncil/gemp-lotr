@@ -116,6 +116,14 @@ public class Player {
         return _bannedUntil;
     }
 
+    /**
+     * True while a temporary ban is in force: the ban lasts up to, but not including, the stored instant.
+     * (Permanent bans are the empty type string, checked separately via the USER flag.)
+     */
+    public boolean isTemporarilyBannedAt(Date now) {
+        return _bannedUntil != null && _bannedUntil.after(now);
+    }
+
     public String getCreateIp() {
         return _createIp;
     }

@@ -43,6 +43,7 @@
 	{
 		name: Random Tengwar
 		type: random
+		openOnDelivery: true
 		items: [
 			1x1_1T
 			1x1_13T

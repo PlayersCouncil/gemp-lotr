@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;

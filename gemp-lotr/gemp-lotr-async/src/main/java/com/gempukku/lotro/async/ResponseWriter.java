@@ -14,6 +14,12 @@ public interface ResponseWriter {
     void writeHtmlResponse(String html);
     void writeJsonResponse(String json);
 
+    /**
+     * A JSON body under a status other than 200, for the endpoints whose contract gives errors a readable body
+     * (writeError sends an empty body and puts the message in a header).
+     */
+    void writeJsonResponse(int status, String json);
+
     void writeByteResponse(byte[] bytes, Map<? extends CharSequence, String> headers);
 
     void sendOK();

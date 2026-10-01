@@ -38,7 +38,7 @@ public class Card_V2_005_Tests
 		 * Type: Artifact
 		 * Subtype: Support area
 		 * Game Text: While you can spot 18 twilight tokens in region 1, this card can be played from your draw deck.
-		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (7) to add a [dunland] token here.
+		* 	Shadow: Spot 18 twilight tokens (or 25 if in regions 2 or 3) and remove (7) to add a [dunland] token here.
 		* 	Shadow: Spot a [dunland] token here to take control of 2 sites.  Discard this artifact.
 		*/
 
@@ -103,8 +103,8 @@ public class Card_V2_005_Tests
 	}
 
 	@Test
-	public void FloodInsuranceSpots18TwilightInRegion2AndRemoves7ToAddToken() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FloodInsuranceNeeds25TwilightInRegion2() throws DecisionResultInvalidException, CardNotFoundException {
+		// Errata: region 2 now needs 25 twilight tokens, like region 3 (previously 18)
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
@@ -119,22 +119,66 @@ public class Card_V2_005_Tests
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
+		assertFalse(scn.ShadowActionAvailable("Remove (7) to add a"));
+	}
+
+	@Test
+	public void FloodInsuranceCannotUse24TwilightInRegion2() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var insurance = scn.GetShadowCard("insurance");
+		scn.MoveCardsToSupportArea(insurance);
+
+		scn.StartGame();
+
+		scn.SkipToSite(3);
+
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(24, scn.GetTwilight());
+		assertFalse(scn.ShadowActionAvailable("Remove (7) to add a"));
+	}
+
+	@Test
+	public void FloodInsuranceSpots25TwilightInRegion2AndRemoves7ToAddToken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var insurance = scn.GetShadowCard("insurance");
+		scn.MoveCardsToSupportArea(insurance);
+
+		scn.StartGame();
+
+		scn.SkipToSite(3);
+
+		scn.SetTwilight(21);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(25, scn.GetTwilight());
 		assertEquals(0, scn.GetCultureTokensOn(insurance));
 		assertTrue(scn.ShadowActionAvailable("Remove (7) to add a"));
 
 		scn.ShadowUseCardAction(insurance);
-		assertEquals(11, scn.GetTwilight());
+		assertEquals(18, scn.GetTwilight());
 		assertEquals(1, scn.GetCultureTokensOn(insurance));
+	}
 
-		//Also ensure that region 3 does not trigger at 18 twilight
+	@Test
+	public void FloodInsuranceNeedsOnly18TwilightInRegion1() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		scn.SkipToSite(6);
-		scn.SetTwilight(11);
+		var insurance = scn.GetShadowCard("insurance");
+		scn.MoveCardsToSupportArea(insurance);
 
+		scn.StartGame();
+		scn.SetTwilight(14);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(7, scn.GetCurrentSiteNumber());
-		assertEquals(18, scn.GetTwilight());
+		// 17 is not enough
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(17, scn.GetTwilight());
 		assertFalse(scn.ShadowActionAvailable("Remove (7) to add a"));
 	}
 

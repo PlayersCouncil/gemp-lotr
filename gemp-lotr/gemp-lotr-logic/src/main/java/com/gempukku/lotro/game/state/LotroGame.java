@@ -39,6 +39,11 @@ public interface LotroGame {
 
     LotroFormat getFormat();
 
+    /**
+     * Returns the league-specific extra info this game was created with (e.g. RTMDGameInfo), or null.
+     */
+    GameExtraInfo getExtraInfo();
+
     boolean shouldAutoPass(String playerId, Phase phase);
 
     boolean isSolo();

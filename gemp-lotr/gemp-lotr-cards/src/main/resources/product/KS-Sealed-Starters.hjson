@@ -1,0 +1,1049 @@
+[
+	{
+		name: KSSealedS1D1
+		type: pack
+		items: [
+			#Ring-bearer 4C302 Frodo, Tired Traveller
+			1x4_302
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U329 Dunharrow Plateau
+			#2 7U335 King's Tent
+			#3 7U340 Tower of Ecthelion
+			#4 7U341 Anduin Banks
+			#5 7U345 Pelennor Flat
+			#6 7U349 Minas Tirith Second Circle
+			#7 7U353 Osgiliath Crossing
+			#8 7U357 Morgul Vale
+			#9 7U363 Slag Mounds
+			1x7_329
+			1x7_335
+			1x7_340
+			1x7_341
+			1x7_345
+			1x7_349
+			1x7_353
+			1x7_357
+			1x7_363
+
+			#Free Peoples Draw Deck
+
+			#2x 1C7 Dwarf Guard
+			2x1_7
+			#2x 1C11 Farin, Dwarven Emissary
+			2x1_11
+			#2x 2C6 Frór, Gimli's Kinsman
+			2x2_6
+			#1x 7C6 Gimli, Faithful Companion
+			1x7_6
+			#2x 2C114 Sam, Proper Poet
+			2x2_114
+			#1x 1U27 Thrarin, Dwarven Smith
+			1x1_27
+			#2x 1C8 Dwarven Armor
+			2x1_8
+			#2x 2U3 Dwarven Bracers
+			2x2_3
+			#1x 7U8 Gimli's Armor
+			1x7_8
+			#3x 2C10 Hand Axe
+			3x2_10
+			#2x 1C299 Hobbit Sword
+			2x1_299
+			#2x 1C4 Battle Fury
+			2x1_4
+			#1x 1C19 Here Lies Balin, Son of Fundin
+			1x1_19
+			#2x 7C11 Out of Darkness
+			2x7_11
+			#2x 2U4 Endurance of Dwarves
+			2x2_4
+			#1x 2C9 Great Works Begun There
+			1x2_9
+			#1x 7U13 Reckless Pride
+			1x7_13
+			#1x 4U57 Stout and Strong
+			1x4_57
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#1x 6C102 Gate Sentry
+			1x6_102
+			#2x 5C97 Gate Soldier
+			2x5_97
+			#2x 1C261 Orc Ambusher
+			2x1_261
+			#1x 7U294 Orc Archer Troop
+			1x7_294
+			#2x 7U295 Orc Assault Band
+			2x7_295
+			#2x 1U262 Orc Assassin
+			2x1_262
+			#3x 3C94 Orc Butcher
+			3x3_94
+			#1x 6U104 Orc Insurgent
+			1x6_104
+			#2x 7U305 Orc Savage
+			2x7_305
+			#2x 2C90 Orc Taskmaster
+			2x2_90
+			#2x 3U100 Orc Veteran
+			2x3_100
+			#3x 7C265 Besieging Pike
+			3x7_265
+			#1x 7U309 Rope and Winch
+			1x7_309
+			#1x 6U105 Peril
+			1x6_105
+			#1x 2U92 Spies of Mordor
+			1x2_92
+			#1x 1C278 Strength Born of Fear
+			1x1_278
+			#1x 5U110 Teeth of Mordor
+			1x5_110
+			#2x 1C283 You Bring Great Evil
+			2x1_283
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS1D2
+		type: pack
+		items: [
+			#Ring-bearer 2C102 Frodo, Reluctant Adventurer
+			1x2_102
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U332 Rohirrim Road
+			#2 7U336 Rohirrim Camp
+			#3 7U339 Hall of the Kings
+			#4 7U343 Pelennor Plain
+			#5 7U344 City Gates
+			#6 7U350 Minas Tirith Seventh Circle
+			#7 7U354 Pelennor Grassland
+			#8 7U356 Cross Roads
+			#9 7U360 Dagorlad
+			1x7_332
+			1x7_336
+			1x7_339
+			1x7_343
+			1x7_344
+			1x7_350
+			1x7_354
+			1x7_356
+			1x7_360
+
+			#Free Peoples Draw Deck
+
+			#2x 7C26 Legolas, Nimble Warrior
+			2x7_26
+			#1x 4C76 Lórien Guardian
+			1x4_76
+			#1x 4U81 Pengedhel, Naith Warrior
+			1x4_81
+			#1x 7U254 Théoden, Leader of Spears
+			1x7_254
+			#1x 4P365 Théoden, Lord of the Mark
+			1x4_365
+			#2x 7P365 Éomer, Valiant Warchief
+			2x7_365
+			#2x 0P17 Éowyn, Lady of Rohan
+			2x0_17
+			#1x 1U31 Asfaloth
+			1x1_31
+			#1x 4U62 Elven Bow
+			1x4_62
+			#1x 5U12 Legolas' Sword
+			1x5_12
+			#1x 6C21 Naith Longbow
+			1x6_21
+			#1x 4U263 Brego
+			1x4_263
+			#1x 4U280 Herugrim
+			1x4_280
+			#1x 4C283 Horse of Rohan
+			1x4_283
+			#2x 7C240 Long Spear
+			2x7_240
+			#2x 7U245 Riding Armor
+			2x7_245
+			#2x 4C306 Hobbit Sword
+			2x4_306
+			#2x 4U66 Feathered
+			2x4_66
+			#2x 4U282 An Honorable Charge
+			2x4_282
+			#1x 4U275 Forth Eorlingas!
+			1x4_275
+			#1x 7U258 White Hot Fury
+			1x7_258
+			#1x 1U293 Halfling Deftness
+			1x1_293
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#3x 7C131 Desert Fighter
+			3x7_131
+			#2x 4C221 Desert Spearman
+			2x4_221
+			#3x 7U138 Desert Villain
+			3x7_138
+			#2x 4C222 Desert Warrior
+			2x4_222
+			#2x 7C161 Southron Brigand
+			2x7_161
+			#2x 4U249 Southron Commander
+			2x4_249
+			#2x 6C81 Southron Invaders
+			2x6_81
+			#2x 5C74 Southron Marcher
+			2x5_74
+			#2x 4C258 Southron Wanderer
+			2x4_258
+			#3x 5C73 Mûmak
+			3x5_73
+			#2x 4C255 Southron Spear
+			2x4_255
+			#1x 4U234 Flanking Attack
+			1x4_234
+			#3x 7C154 New Strength Came Now
+			3x7_154
+			#1x 7U171 Thrice Outnumbered
+			1x7_171
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS1D3
+		type: pack
+		items: [
+			#Ring-bearer 7C317 Frodo, Hope of Free Peoples
+			1x7_317
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U334 Steps of Edoras
+			#2 7U337 West Road
+			#3 7U338 Beacon of Minas Tirith
+			#4 7U342 Osgiliath Fallen
+			#5 7U345 Pelennor Flat
+			#6 7U351 Minas Tirith Sixth Circle
+			#7 7U354 Pelennor Grassland
+			#8 7U358 Morgulduin
+			#9 7U361 Haunted Pass
+			1x7_334
+			1x7_337
+			1x7_338
+			1x7_342
+			1x7_345
+			1x7_351
+			1x7_354
+			1x7_358
+			1x7_361
+
+			#Free Peoples Draw Deck
+
+			#1x 7U110 Madril, Faramir's Aide
+			1x7_110
+			#2x 7C115 Ranger of Minas Tirith
+			2x7_115
+			#2x 1C303 Merry, From O'er the Brandywine
+			2x1_303
+			#2x 7C323 Pippin, Sworn to Service
+			2x7_323
+			#1x 1U94 Athelas
+			1x1_94
+			#2x 4C134 Sword of Gondor
+			2x4_134
+			#3x 7C319 Hobbit Sword
+			3x7_319
+			#2x 7C84 Dagger Strike
+			2x7_84
+			#1x 1C104 Eregion's Trails
+			1x1_104
+			#1x 1C110 Pathfinder
+			1x1_110
+			#2x 7U120 Stand to Arms
+			2x7_120
+			#2x 1C117 Swordsman of the Northern Kingdom
+			2x1_117
+			#1x 1C119 What Are They?
+			1x1_119
+			#2x 1C304 Noble Intentions
+			2x1_304
+			#2x 7C118 Second Level
+			2x7_118
+			#2x 7U125 Third Level
+			2x7_125
+			#1x 2U107 Not Feared in Sunlight
+			1x2_107
+			#1x 7U328 Slow-kindled Courage
+			1x7_328
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#2x 1U258 Morgul Skulker
+			2x1_258
+			#2x 7C193 Morgul Lackey
+			2x7_193
+			#2x 7C196 Morgul Predator
+			2x7_196
+			#2x 7C199 Morgul Soldier
+			2x7_199
+			#1x 7U212 Úlairë Enquëa, Faster Than Winds
+			1x7_212
+			#1x 1U231 Úlairë Enquëa, Lieutenant of Morgul
+			1x1_231
+			#3x 7U214 Úlairë Lemenya, Wraith on Wings
+			3x7_214
+			#3x 7U216 Úlairë Nelya, Black-Mantled Wraith
+			3x7_216
+			#3x 7U217 Úlairë Nertëa, Black-Mantled Wraith
+			3x7_217
+			#2x 1U235 Úlairë Otsëa, Lieutenant of Morgul
+			2x1_235
+			#2x 7U203 Nazgûl Scimitar
+			2x7_203
+			#1x 1U225 Sword of Minas Morgul
+			1x1_225
+			#1x 1U203 All Blades Perish
+			1x1_203
+			#1x 1U213 Frozen by Fear
+			1x1_213
+			#1x 1U215 The Master's Will
+			1x1_215
+			#1x 7C220 War Long Planned
+			1x7_220
+			#2x 7C184 More Unbearable
+			2x7_184
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS2D1
+		type: pack
+		items: [
+			#Ring-bearer 15C144 Frodo, Weary From the Journey
+			1x15_144
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U333 Sleeping Quarters
+			#2 7U335 King's Tent
+			#3 7U339 Hall of the Kings
+			#4 7U342 Osgiliath Fallen
+			#5 7U345 Pelennor Flat
+			#6 7U352 Minas Tirith Third Circle
+			#7 7U353 Osgiliath Crossing
+			#8 7U359 Northern Ithilien
+			#9 7U363 Slag Mounds
+			1x7_333
+			1x7_335
+			1x7_339
+			1x7_342
+			1x7_345
+			1x7_352
+			1x7_353
+			1x7_359
+			1x7_363
+
+			#Free Peoples Draw Deck
+
+			#1x 7C72 Sméagol, Hurried Guide
+			1x7_72
+			#1x 4C316 Sam, Samwise the Brave
+			1x4_316
+			#2x 2U96 Bilbo, Well-spoken Gentlehobbit
+			2x2_96
+			#2x 1C286 Bounder
+			2x1_286
+			#1x 1C297 Hobbit Party Guest
+			1x1_297
+			#1x 1U309 Rosie Cotton, Hobbiton Lass
+			1x1_309
+			#1x 1U285 Bilbo's Pipe
+			1x1_285
+			#1x 4C298 Brace of Coneys
+			1x4_298
+			#1x 3U107 Frodo's Pipe
+			1x3_107
+			#1x 4C306 Hobbit Sword
+			1x4_306
+			#2x 1C300 Longbottom Leaf
+			2x1_300
+			#2x 1C305 Old Toby
+			2x1_305
+			#1x 1U292 The Gaffer's Pipe
+			1x1_292
+			#1x 1C287 Extraordinary Resilience
+			1x1_287
+			#3x 1C296 Hobbit Intuition
+			3x1_296
+			#1x 2U103 Hobbit Sword-play
+			1x2_103
+			#1x 1C315 Stout and Sturdy
+			1x1_315
+			#1x 4U305 Good Work
+			1x4_305
+			#2x 2U106 Nice Imitation
+			2x2_106
+			#1x 5U114 Rare Good Ballast
+			1x5_114
+			#2x 1C317 There and Back Again
+			2x1_317
+			#1x 3C114 Three Monstrous Trolls
+			1x3_114
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#1x 5C24 Gollum, Nasty Treacherous Creature
+			1x5_24
+			#1x 6C40 Gollum, Old Villain
+			1x6_40
+			#1x 19P10 Gollum, Threatening Guide
+			1x19_10
+			#1x 7C59 Gollum, Vile Creature
+			1x7_59
+			#3x 6C99 Corpse Lights
+			3x6_99
+			#3x 6C100 Dead Ones
+			3x6_100
+			#3x 6C108 Wisp of Pale Sheen
+			3x6_108
+			#3x 7C53 Captured by the Ring
+			3x7_53
+			#2x 2U82 Úlairë Attëa, The Easterling
+			2x2_82
+			#1x 5U26 Look at Him
+			1x5_26
+			#2x 6C42 Nasty, Foul Hobbitses
+			2x6_42
+			#1x 7C75 Sweeter Meats
+			1x7_75
+			#3x 5C30 We Must Have It
+			3x5_30
+			#2x 5U22 Evil-smelling Fens
+			2x5_22
+			#2x 7U60 Heavy Burden
+			2x7_60
+			#1x 7C62 It's Mine
+			1x7_62
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS2D2
+		type: pack
+		items: [
+			#Ring-bearer 4C302 Frodo, Tired Traveller
+			1x4_302
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U331 Isengard Ruined
+			#2 7U337 West Road
+			#3 7U340 Tower of Ecthelion
+			#4 7U341 Anduin Banks
+			#5 7U345 Pelennor Flat
+			#6 7U346 Minas Tirith Fifth Circle
+			#7 7U354 Pelennor Grassland
+			#8 7U358 Morgulduin
+			#9 7U361 Haunted Pass
+			1x7_331
+			1x7_337
+			1x7_340
+			1x7_341
+			1x7_345
+			1x7_346
+			1x7_354
+			1x7_358
+			1x7_361
+
+			#Free Peoples Draw Deck
+
+			#2x 4C49 Gimli, Unbidden Guest
+			2x4_49
+			#2x 1U51 Legolas, Prince of Mirkwood
+			2x1_51
+			#2x 1P364 Gandalf, The Grey Wizard
+			2x1_364
+			#2x 7P364 Aragorn, Driven by Need
+			2x7_364
+			#1x 2U3 Dwarven Bracers
+			1x2_3
+			#1x 7U8 Gimli's Armor
+			1x7_8
+			#1x 1C42 Elven Cloak
+			1x1_42
+			#2x 1U73 Gandalf's Cart
+			2x1_73
+			#1x 7C52 Wizard Staff
+			1x7_52
+			#1x 1U94 Athelas
+			1x1_94
+			#1x 1C101 Coat of Mail
+			1x1_101
+			#1x 4C51 Khazâd Ai-mênu
+			1x4_51
+			#1x 4U53 Quick As May Be
+			1x4_53
+			#1x 7C29 Still Needed
+			1x7_29
+			#1x 1C76 Intimidate
+			1x1_76
+			#1x 4U96 Keep Your Forked Tongue
+			1x4_96
+			#1x 1C78 Mysterious Wizard
+			1x1_78
+			#1x 13C35 No Colour Now
+			1x13_35
+			#1x 4C105 Under the Living Earth
+			1x4_105
+			#1x 4C115 Defend It and Hope
+			1x4_115
+			#1x 6C56 Trust
+			1x6_56
+			#1x 6C12 Agility
+			1x6_12
+			#1x 2C23 Gandalf's Wisdom
+			1x2_23
+			#1x 3U35 Trust Me as You Once Did
+			1x3_35
+			#1x 3C36 Unknown Perils
+			1x3_36
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#3x 2C42 Goblin Man
+			3x2_42
+			#2x 19P16 Gríma, Servant of Another Master
+			2x19_16
+			#2x 4C153 Gríma, Son of Galmod
+			2x4_153
+			#4x 6C72 Rohirrim Traitor
+			4x6_72
+			#3x 3C69 Saruman, Servant of the Eye
+			3x3_69
+			#3x 4C178 Unferth, Grima's Bodyguard
+			3x4_178
+			#1x 1U231 Úlairë Enquëa, Lieutenant of Morgul
+			1x1_231
+			#1x 3C49 Abandoning Reason for Madness
+			1x3_49
+			#1x 4C141 Beyond Dark Mountains
+			1x4_141
+			#1x 4U155 Haunting Her Steps
+			1x4_155
+			#4x 4U161 Men Will Fall
+			4x4_161
+			#4x 6U61 Desertion
+			4x6_61
+			#1x 2U48 Wizard Storm
+			1x2_48
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS2D3
+		type: pack
+		items: [
+			#Ring-bearer 1C290 Frodo, Son of Drogo
+			1x1_290
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U334 Steps of Edoras
+			#2 7U336 Rohirrim Camp
+			#3 7U339 Hall of the Kings
+			#4 7U342 Osgiliath Fallen
+			#5 7U345 Pelennor Flat
+			#6 7U347 Minas Tirith First Circle
+			#7 7U355 Ruined Capitol
+			#8 7U358 Morgulduin
+			#9 7U363 Slag Mounds
+			1x7_334
+			1x7_336
+			1x7_339
+			1x7_342
+			1x7_345
+			1x7_347
+			1x7_355
+			1x7_358
+			1x7_363
+
+			#Free Peoples Draw Deck
+
+			#1x 6C45 Sméagol, Poor Creature
+			1x6_45
+			#1x 13C66 Faramir, Prince of Ithilien
+			1x13_66
+			#1x 4C314 Pippin, Woolly-footed Rascal
+			1x4_314
+			#1x 1C286 Bounder
+			1x1_286
+			#1x 1U94 Athelas
+			1x1_94
+			#1x 4C112 Boromir's Gauntlets
+			1x4_112
+			#1x 1C101 Coat of Mail
+			1x1_101
+			#1x 7C108 Knight's Spear
+			1x7_108
+			#1x 7C319 Hobbit Sword
+			1x7_319
+			#1x 6C38 Don’t Follow the Lights
+			1x6_38
+			#1x 7U64 Nasty
+			1x7_64
+			#1x 6C43 Not Listening
+			1x6_43
+			#1x 7U78 Where Shall We Go
+			1x7_78
+			#1x 1C102 Dagger Strike
+			1x1_102
+			#3x 1C116 Swordarm of the White Tower
+			3x1_116
+			#1x 2U98 Dear Friends
+			1x2_98
+			#1x 4C308 Knocked on the Head
+			1x4_308
+			#1x 1C304 Noble Intentions
+			1x1_304
+			#1x 3C112 Seek and Hide
+			1x3_112
+			#1x 5U23 Follow Sméagol
+			1x5_23
+			#4x 5C27 Poor Wretch
+			4x5_27
+			#1x 7U77 We Hates Them
+			1x7_77
+			#1x 6C52 Garrison of Osgiliath
+			1x6_52
+			#1x 7C105 I Will Go
+			1x7_105
+			#1x 7U126 Unexpected Visitor
+			1x7_126
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#2x 7C194 Morgul Mongrel
+			2x7_194
+			#2x 7C200 Morgul Spawn
+			2x7_200
+			#2x 7C201 Morgul Spearman
+			2x7_201
+			#1x 7U212 Úlairë Enquëa, Faster Than Winds
+			1x7_212
+			#2x 2U83 Úlairë Enquëa, Ringwraith in Twilight
+			2x2_83
+			#1x 1U232 Úlairë Lemenya, Lieutenant of Morgul
+			1x1_232
+			#2x 6U86 Úlairë Lemenya, Winged Hunter
+			2x6_86
+			#3x 6U87 Úlairë Nertëa, Winged Hunter
+			3x6_87
+			#1x 1U235 Úlairë Otsëa, Lieutenant of Morgul
+			1x1_235
+			#2x 3U86 Úlairë Otsëa, Ringwraith in Twilight
+			2x3_86
+			#1x 0P22 Fell Beast
+			1x0_22
+			#2x 7U203 Nazgûl Scimitar
+			2x7_203
+			#2x 7U175 Corrupt
+			2x7_175
+			#1x 1U213 Frozen by Fear
+			1x1_213
+			#3x 12U165 In the Ringwraith’s Wake
+			3x12_165
+			#1x 2U81 They Will Find the Ring
+			1x2_81
+			#2x 1U209 Blade Tip
+			2x1_209
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS3D1
+		type: pack
+		items: [
+			#Ring-bearer 2C102 Frodo, Reluctant Adventurer
+			1x2_102
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U334 Steps of Edoras
+			#2 7U335 King's Tent
+			#3 7U339 Hall of the Kings
+			#4 7U343 Pelennor Plain
+			#5 7U344 City Gates
+			#6 7U351 Minas Tirith Sixth Circle
+			#7 7U355 Ruined Capitol
+			#8 7U357 Morgul Vale
+			#9 7U360 Dagorlad
+			1x7_334
+			1x7_335
+			1x7_339
+			1x7_343
+			1x7_344
+			1x7_351
+			1x7_355
+			1x7_357
+			1x7_360
+
+			#Free Peoples Draw Deck
+
+			#1x 0P25 Denethor, Wizened Steward
+			1x0_25
+			#1x 7C96 Gondorian Captain
+			1x7_96
+			#1x 5C35 Gondorian Knight
+			1x5_35
+			#1x 5C36 Knight of Gondor
+			1x5_36
+			#2x 5U42 Turgon, Man of Belfalas
+			2x5_42
+			#1x 6U51 Banner of Westernesse
+			1x6_51
+			#1x 1C101 Coat of Mail
+			1x1_101
+			#1x 7U93 Footman's Armor
+			1x7_93
+			#2x 7U94 Gondor Bow
+			2x7_94
+			#1x 7U98 Gondorian Sword
+			1x7_98
+			#2x 7C108 Knight's Spear
+			2x7_108
+			#1x 7C84 Dagger Strike
+			1x7_84
+			#1x 5U34 Fall Back
+			1x5_34
+			#2x 7C99 Great Gate
+			2x7_99
+			#1x 5C37 Men of Númenor
+			1x5_37
+			#1x 7C117 Reckless Counter
+			1x7_117
+			#1x 5C40 Take Cover
+			1x5_40
+			#2x 5C43 War Must Be
+			2x5_43
+			#1x 5C32 Citadel of the Stars
+			1x5_32
+			#2x 5C33 City Wall
+			2x5_33
+			#2x 7C92 First Level
+			2x7_92
+			#1x 7U102 Hasty Repairs
+			1x7_102
+			#1x 5U38 Rally Point
+			1x5_38
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#2x 7U271 Gorgoroth Axeman
+			2x7_271
+			#3x 7C273 Gorgoroth Garrison
+			3x7_273
+			#1x 7C275 Gorgoroth Pillager
+			1x7_275
+			#2x 7C276 Gorgoroth Ransacker
+			2x7_276
+			#3x 7C277 Gorgoroth Sapper
+			3x7_277
+			#3x 7U278 Gorgoroth Soldier
+			3x7_278
+			#2x 5U105 Orc Fighter
+			2x5_105
+			#3x 5C106 Orc Infantry
+			3x5_106
+			#2x 3U96 Orc Pillager
+			2x3_96
+			#2x 6C98 Banner of the Eye
+			2x6_98
+			#1x 1U251 A Host Avails Little
+			1x1_251
+			#1x 7C262 Above the Battlement
+			1x7_262
+			#1x 1U249 Gleaming Spires Will Crumble
+			1x1_249
+			#1x 7U281 Great Siege-towers
+			1x7_281
+			#1x 1U242 The Dark Lord's Summons
+			1x1_242
+			#2x 7C315 Tower Walkway
+			2x7_315
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS3D2
+		type: pack
+		items: [
+			#Ring-bearer 7C317 Frodo, Hope of Free Peoples
+			1x7_317
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U330 Edoras Hall
+			#2 7U337 West Road
+			#3 7U340 Tower of Ecthelion
+			#4 7U342 Osgiliath Fallen
+			#5 7U344 City Gates
+			#6 7U348 Minas Tirith Fourth Circle
+			#7 7U354 Pelennor Grassland
+			#8 7U358 Morgulduin
+			#9 7U360 Dagorlad
+			1x7_330
+			1x7_337
+			1x7_340
+			1x7_342
+			1x7_344
+			1x7_348
+			1x7_354
+			1x7_358
+			1x7_360
+
+			#Free Peoples Draw Deck
+
+			#1x 7U224 Elfhelm, Marshal of Rohan
+			1x7_224
+			#1x 11S152 Riddermark Soldier
+			1x11_152
+			#2x 7U254 Théoden, Leader of Spears
+			2x7_254
+			#1x 7C257 Veteran Horseman
+			1x7_257
+			#2x 7C229 Éowyn, Restless Maiden
+			2x7_229
+			#1x 4U285 Léod, Westfold Herdsman
+			1x4_285
+			#1x 4U295 Weland, Smith of the Riddermark
+			1x4_295
+			#2x 6U90 Banner of the Mark
+			2x6_90
+			#2x 4C283 Horse of Rohan
+			2x4_283
+			#2x 7C248 Rohirrim Javelin
+			2x7_248
+			#1x 7C253 Swift Steed
+			1x7_253
+			#1x 4C291 Sword of Rohan
+			1x4_291
+			#1x 4U268 Éomer's Spear
+			1x4_268
+			#1x 6U93 Ever the Hope of Men
+			1x6_93
+			#1x 7U234 Guarded Fastness
+			1x7_234
+			#1x 7U238 Knights of His House
+			1x7_238
+			#1x 7C256 They Sang as They Slew
+			1x7_256
+			#2x 7C259 Wind in His Face
+			2x7_259
+			#2x 4C297 Work for the Sword
+			2x4_297
+			#1x 5U79 Armory
+			1x5_79
+			#1x 6U91 Blood Has Been Spilled
+			1x6_91
+			#1x 7U252 Strong Arms
+			1x7_252
+			#1x 4U296 Well Stored
+			1x4_296
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#2x 4C180 Uruk Besieger
+			2x4_180
+			#2x 1C145 Uruk Brood
+			2x1_145
+			#2x 1C151 Uruk Savage
+			2x1_151
+			#2x 1C152 Uruk Shaman
+			2x1_152
+			#2x 4C198 Uruk Stormer
+			2x4_198
+			#2x 4U201 Uruk Veteran
+			2x4_201
+			#2x 4U202 Uruk-hai Band
+			2x4_202
+			#2x 4C204 Uruk-hai Marauder
+			2x4_204
+			#2x 4U205 Uruk-hai Mob
+			2x4_205
+			#2x 4C207 Uruk-hai Raiding Party
+			2x4_207
+			#1x 6C59 Banner of Isengard
+			1x6_59
+			#1x 4C142 Broad-bladed Sword
+			1x4_142
+			#1x 4C175 Still They Came
+			1x4_175
+			#2x 4C210 We Are the Fighting Uruk-hai
+			2x4_210
+			#1x 4C137 Attack on Helm's Deep
+			1x4_137
+			#1x 4U148 Down to the Last Child
+			1x4_148
+			#2x 1C133 Saruman's Ambition
+			2x1_133
+			#1x 5U57 Scaling Ladder
+			1x5_57
+
+			#Shadow Total 30
+
+		]
+	}
+	{
+		name: KSSealedS3D3
+		type: pack
+		items: [
+			#Ring-bearer 1C290 Frodo, Son of Drogo
+			1x1_290
+			#The One Ring 7C1 The One Ring, The Ruling Ring
+			1x7_1
+
+			#Adventure Deck
+			#1 7U333 Sleeping Quarters
+			#2 7U337 West Road
+			#3 7U338 Beacon of Minas Tirith
+			#4 7U341 Anduin Banks
+			#5 7U344 City Gates
+			#6 7U352 Minas Tirith Third Circle
+			#7 7U353 Osgiliath Crossing
+			#8 7U358 Morgulduin
+			#9 7U361 Haunted Pass
+			1x7_333
+			1x7_337
+			1x7_338
+			1x7_341
+			1x7_344
+			1x7_352
+			1x7_353
+			1x7_358
+			1x7_361
+
+			#Free Peoples Draw Deck
+
+			#2x 5U15 Birchseed, Tall Statesman
+			2x5_15
+			#1x 5C17 Forest Guardian
+			1x5_17
+			#1x 6C33 Quickbeam, Bregalad
+			1x6_33
+			#2x 7C320 Merry, Rohirrim Squire
+			2x7_320
+			#2x 1C306 Pippin, Friend to Frodo
+			2x1_306
+			#1x 4C104 Treebeard, Oldest Living Thing
+			1x4_104
+			#2x 4C306 Hobbit Sword
+			2x4_306
+			#2x 6U24 Boomed and Trumpeted
+			2x6_24
+			#1x 6U25 Crack Into Rubble
+			1x6_25
+			#1x 6C34 Roused
+			1x6_34
+			#1x 4U101 Stump and Bramble
+			1x4_101
+			#2x 1C296 Hobbit Intuition
+			2x1_296
+			#1x 4C308 Knocked on the Head
+			1x4_308
+			#2x 6C112 Long Slow Wrath
+			2x6_112
+			#1x 4U312 Mind Your Own Affairs
+			1x4_312
+			#1x 1C304 Noble Intentions
+			1x1_304
+			#1x 4C319 Severed His Bonds
+			1x4_319
+			#1x 1C315 Stout and Sturdy
+			1x1_315
+			#2x 4C322 Warmed Up a Bit
+			2x4_322
+			#2x 6C29 Ent Moot
+			2x6_29
+			#1x 1C317 There and Back Again
+			1x1_317
+
+			#Free Peoples Total 30
+
+			#Shadow Draw Deck
+
+			#3x 6C65 Isengard Artisan
+			3x6_65
+			#3x 6C69 Isengard Plodder
+			3x6_69
+			#2x 5C53 Isengard Rider
+			2x5_53
+			#4x 5U55 Isengard Scout Troop
+			4x5_55
+			#3x 5C66 Warg-master
+			3x5_66
+			#3x 5C67 Warg-rider
+			3x5_67
+			#2x 6C59 Banner of Isengard
+			2x6_59
+			#1x 6U73 Scaffolding
+			1x6_73
+			#2x 5U64 War-warg
+			2x5_64
+			#3x 5C65 Warg
+			3x5_65
+			#2x 3C70 Servants to Saruman
+			2x3_70
+			#1x 5C68 Wolf-voices
+			1x5_68
+			#1x 6U63 Gnawing, Biting, Hacking, Burning
+			1x6_63
+
+			#Shadow Total 30
+
+		]
+	}
+]

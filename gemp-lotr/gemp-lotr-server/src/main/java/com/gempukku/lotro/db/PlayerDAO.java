@@ -39,4 +39,10 @@ public interface PlayerDAO {
     public void updateLastLoginIp(String login, String remoteAddr) throws SQLException;
 
     List<DBDefs.Player> getAllPlayers();
+
+    /**
+     * Names of players whose name contains {@code fragment}, ignoring case; names starting with it come first.
+     * At most {@code limit} names.  Used by the admin player search.
+     */
+    List<String> findPlayerNames(String fragment, int limit);
 }

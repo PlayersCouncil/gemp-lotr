@@ -1488,14 +1488,121 @@
 		}
 	}
 
+//	103_35: {
+//		cardInfo: {
+//			//id: 103_35.0
+//			parent: 103_35
+//			variant: ORIGINAL
+//			variantPath: promos/pc
+//			revision: 0
+//			image: sets/V3/LOTR-ENV3S035.0_card.jpg
+//			collInfo: V3_35
+//			rarity: _
+//		}
+//		title: War-beacon
+//		unique: 3
+//		side: Free Peoples
+//		culture: Gondor
+//		twilight: 1
+//		type: Possession
+//		keywords: [
+//			Beacon
+//			Support Area
+//		]
+//		effects: [
+//			{
+//				type: ExtraCost
+//				cost: {
+//					type: Spot
+//					filter: unbound, Man
+//				}
+//			}
+//			{
+//				type: Activated
+//				phase: Fellowship
+//				text: Play a beacon from your discard pile
+//				requires: {
+//					type: HasCardInDiscard
+//					filter: beacon, playable
+//				}
+//				cost: {
+//					type: AddTwilight
+//					amount: {
+//						type: ForEachYouCanSpot
+//						filter: beacon
+//					}
+//				}
+//				effect: [
+//					{
+//						type: PlayCardFromDiscard
+//						select: choose(beacon)
+//					}
+//				]
+//			}
+//			
+//			{
+//				type: Activated
+//				phase: Fellowship
+//				text: Reveal cards on the top of your deck
+//				cost: [
+//					{
+//						type: Exert
+//						select: choose(Man)
+//					}
+//					{
+//						type: Hinder
+//						select: choose(beacon)
+//					}
+//				]
+//				effect: [
+//					{
+//						type: RevealTopCardsOfDrawDeck
+//						deck: you
+//						count: 5
+//						memorize: revealedCards
+//					}
+//					{
+//						type: ChooseArbitraryCards
+//						text: Choose {Gondor} and {Rohan} cards to take into hand
+//						fromMemory: revealedCards
+//						count: 0-4
+//						filter: or(Gondor, Rohan)
+//						memorize: takenCards
+//					}
+//					{
+//						type: PutCardsFromDeckIntoHand
+//						select: memory(takenCards)
+//						reveal: true
+//						shuffle: false
+//						showAll: false
+//					}
+//					{
+//						type: PutCardsFromDeckOnTopOfDeck
+//						select: all(memory(revealedCards),not(memory(takenCards)))
+//						reveal: false
+//					}
+//				]
+//			}
+//		]
+//		gametext: <b>Beacon</b>. To play, spot an unbound Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.<br>Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
+//		lore: ""
+//		promotext: ""
+//		alts: {
+//			promos: {
+//			}
+//			errata: {
+//			}
+//		}
+//	}
+
 	103_35: {
 		cardInfo: {
-			//id: 103_35.0
+			//id: 103_35.1
 			parent: 103_35
-			variant: ORIGINAL
-			variantPath: promos/pc
-			revision: 0
-			image: sets/V3/LOTR-ENV3S035.0_card.jpg
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V3/LOTR-ENV3S035.1_card.jpg
 			collInfo: V3_35
 			rarity: _
 		}
@@ -1558,7 +1665,7 @@
 					{
 						type: RevealTopCardsOfDrawDeck
 						deck: you
-						count: 5
+						count: 4
 						memorize: revealedCards
 					}
 					{
@@ -1584,7 +1691,7 @@
 				]
 			}
 		]
-		gametext: <b>Beacon</b>. To play, spot an unbound Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.<br>Fellowship: Exert a Man and hinder a beacon to reveal the top 5 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
+		gametext: <b>Beacon</b>. To play, spot an unbound Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from the discard pile.<br>Fellowship: Exert a Man and hinder a beacon to reveal the top 4 cards of your draw deck. You may take any [gondor] or [rohan] cards revealed into hand. Replace the rest in any order.
 		lore: ""
 		promotext: ""
 		alts: {

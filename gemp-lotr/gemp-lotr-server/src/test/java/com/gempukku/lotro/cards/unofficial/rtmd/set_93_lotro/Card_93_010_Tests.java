@@ -12,22 +12,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * 93_10: At the start of the regroup phase, you may discard your [Dunland] possession to take control of a site.
- *
- * Owner-gated to Shadow (via OwnerIsShadow).
- *
- * Test cards:
- * - Dark Axe (4_21): Dunland possession (twilight 1), bears on Dunland Man
- * - Dunlending Madman (4_15): Dunland Man minion
- */
 public class Card_93_010_Tests
 {
 	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Iron Axe (4_26): Dunland possession, bears on Dunland Man
-		put("axe", "4_26");
-		// Dunlending Madman (4_12): Dunland Man minion, twilight 3
-		put("madman", "4_12");
+		put("axe", "4_26"); // Iron Axe: Dunland possession, bears on Dunland Man
+		put("madman", "4_12"); // Dunlending Madman: Dunland Man minion, twilight 3
 	}};
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -50,6 +39,13 @@ public class Card_93_010_Tests
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: RTMD 93
+		 * Name: Race Text 93_10
+		 * Type: MetaSite
+		 * Game Text: At the start of the regroup phase, you may discard your [Dunland] possession
+		 * to take control of a site.
+		 */
 		var scn = GetShadowScenario();
 		var card = scn.GetShadowCard("mod");
 		assertEquals("Race Text 93_10", card.getBlueprint().getTitle());

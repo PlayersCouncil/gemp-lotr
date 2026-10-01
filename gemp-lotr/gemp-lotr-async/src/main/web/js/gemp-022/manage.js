@@ -160,7 +160,7 @@ function banErrorMap(outputControl, callback=null) {
 				callback();
 		},
 		"410": function() {
-			outputControl.html("410: You have been inactive for too long and were loggedout. Refresh the page if you wish to re-stablish connection.");
+			outputControl.html("410: You have been inactive for too long and were logged out. Refresh the page if you wish to re-establish connection.");
 			if(callback!=null)
 				callback();
 		}

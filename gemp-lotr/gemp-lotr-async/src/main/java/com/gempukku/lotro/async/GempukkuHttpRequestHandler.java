@@ -309,6 +309,11 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
 
         @Override
         public void writeJsonResponse(String json) {
+            writeJsonResponse(200, json);
+        }
+
+        @Override
+        public void writeJsonResponse(int status, String json) {
             HttpHeaders headers = new DefaultHttpHeaders();
             headers.set(CONTENT_TYPE, "application/json; charset=UTF-8");
 
@@ -321,7 +326,7 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
                 json = obj.toString();
             }
             // Build the response object.
-            FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.OK, Unpooled.wrappedBuffer(json.getBytes(CharsetUtil.UTF_8)), headers, EmptyHttpHeaders.INSTANCE);
+            FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(status), Unpooled.wrappedBuffer(json.getBytes(CharsetUtil.UTF_8)), headers, EmptyHttpHeaders.INSTANCE);
             sendResponse(ctx, request, response);
         }
 
