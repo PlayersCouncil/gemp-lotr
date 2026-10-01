@@ -379,6 +379,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getHandSizeModifier(LotroGame game, String playerId) {
+        return 0;
+    }
+
+    @Override
     public boolean lostAllKeywords(LotroGame game, PhysicalCard card) {
         return false;
     }

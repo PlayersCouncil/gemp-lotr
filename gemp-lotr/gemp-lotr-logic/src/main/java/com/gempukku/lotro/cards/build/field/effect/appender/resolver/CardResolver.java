@@ -8,6 +8,7 @@ import com.gempukku.lotro.common.InactiveReason;
 import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -145,7 +146,7 @@ public class CardResolver {
                         @Override
                         protected void doPlayEffect(LotroGame game) {
                             List<? extends PhysicalCard> hand = game.getGameState().getHand(handPlayer);
-                            List<PhysicalCard> randomCardsFromHand = GameUtils.getRandomCards(hand, count);
+                            List<PhysicalCard> randomCardsFromHand = GameUtils.getRandomCards(game, handPlayer, Zone.HAND, hand, count);
                             actionContext.setCardMemory(memory, randomCardsFromHand);
                         }
                     };
@@ -213,7 +214,7 @@ public class CardResolver {
                         @Override
                         protected void doPlayEffect(LotroGame game) {
                             List<? extends PhysicalCard> adventureDeck = game.getGameState().getAdventureDeck(playerDeck);
-                            List<PhysicalCard> randomCardsFromAdventureDeck = GameUtils.getRandomCards(adventureDeck, count);
+                            List<PhysicalCard> randomCardsFromAdventureDeck = GameUtils.getRandomCards(game, playerDeck, Zone.ADVENTURE_DECK, adventureDeck, count);
                             actionContext.setCardMemory(memory, randomCardsFromAdventureDeck);
                         }
                     };

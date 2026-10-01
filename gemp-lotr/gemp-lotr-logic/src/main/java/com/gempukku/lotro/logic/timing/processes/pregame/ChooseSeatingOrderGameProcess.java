@@ -7,14 +7,13 @@ import com.gempukku.lotro.logic.timing.PlayerOrderFeedback;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ChooseSeatingOrderGameProcess implements GameProcess {
     private final String[] _choices = new String[]{"first", "second", "third", "fourth", "fifth"};
     private final Map<String, Integer> _bids;
     private final PlayerOrderFeedback _playerOrderFeedback;
 
-    private final Iterator<String> _biddingOrderPlayers;
+    private Iterator<String> _biddingOrderPlayers;
     private final String[] _orderedPlayers;
     private boolean _sentBids;
 
@@ -22,8 +21,16 @@ public class ChooseSeatingOrderGameProcess implements GameProcess {
         _bids = bids;
         _playerOrderFeedback = playerOrderFeedback;
 
-        ArrayList<String> participantList = new ArrayList<>(bids.keySet());
-        Collections.shuffle(participantList, ThreadLocalRandom.current());
+        _orderedPlayers = new String[bids.size()];
+    }
+
+    /**
+     * Highest bid chooses first.  Tied bids are settled at random, which is why this waits until the game (and so
+     * the game's source of randomness) is at hand.
+     */
+    private void determineBiddingOrder(LotroGame game) {
+        ArrayList<String> participantList = new ArrayList<>(_bids.keySet());
+        game.getGameState().getRandom().shufflePlayers(participantList);
 
         participantList.sort(new Comparator<>() {
             @Override
@@ -33,13 +40,13 @@ public class ChooseSeatingOrderGameProcess implements GameProcess {
         });
 
         _biddingOrderPlayers = participantList.iterator();
-        _orderedPlayers = new String[participantList.size()];
     }
 
     @Override
     public void process(LotroGame game) {
         if (!_sentBids) {
             _sentBids = true;
+            determineBiddingOrder(game);
             for (Map.Entry<String, Integer> playerBid : _bids.entrySet())
                 game.getGameState().sendMessage(playerBid.getKey() + " bid " + playerBid.getValue());
         }

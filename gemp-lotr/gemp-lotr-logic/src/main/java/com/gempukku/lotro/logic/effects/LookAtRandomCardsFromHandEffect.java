@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
@@ -42,7 +43,7 @@ public abstract class LookAtRandomCardsFromHandEffect extends AbstractEffect {
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         if (game.getModifiersQuerying().canLookOrRevealCardsInHand(game, _playerHand, _actingPlayer)) {
-            List<PhysicalCard> randomCards = GameUtils.getRandomCards(game.getGameState().getHand(_playerHand), _count);
+            List<PhysicalCard> randomCards = GameUtils.getRandomCards(game, _playerHand, Zone.HAND, game.getGameState().getHand(_playerHand), _count);
 
             if (randomCards.size() > 0) {
                 game.getUserFeedback().sendAwaitingDecision(_actingPlayer,

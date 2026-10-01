@@ -11,7 +11,6 @@ import com.gempukku.lotro.logic.timing.results.DiscardCardFromHandResult;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DiscardCardAtRandomFromHandEffect extends AbstractEffect {
     private final PhysicalCard _source;
@@ -45,7 +44,7 @@ public class DiscardCardAtRandomFromHandEffect extends AbstractEffect {
         if (isPlayableInFull(game)) {
             GameState gameState = game.getGameState();
             List<? extends PhysicalCard> hand = gameState.getHand(_playerId);
-            PhysicalCard randomCard = hand.get(ThreadLocalRandom.current().nextInt(hand.size()));
+            PhysicalCard randomCard = GameUtils.getRandomCards(game, _playerId, Zone.HAND, hand, 1).getFirst();
             gameState.sendMessage(_playerId + " randomly discards " + GameUtils.getCardLink(randomCard));
             gameState.removeCardsFromZone(_source.getOwner(), Collections.singleton(randomCard));
             gameState.addCardToZone(game, randomCard, Zone.DISCARD);

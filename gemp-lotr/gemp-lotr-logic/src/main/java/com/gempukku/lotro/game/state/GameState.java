@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -85,6 +84,9 @@ public class GameState {
     private PreGameInfo _preGameInfo;
 
     private int _nextCardId = 0;
+
+    private GameRandom _random = GameRandom.DEFAULT;
+    private String _fixedFreePeoplePlayer;
 
     private GameStats _mostRecentGameStats = null;
     private boolean _isInit = false;
@@ -1369,6 +1371,23 @@ public class GameState {
         return _twilightPool;
     }
 
+    /**
+     * @return The player who takes every turn as the Free Peoples player, or null if turns pass around the table as
+     * usual.
+     */
+    public String getFixedFreePeoplePlayer() {
+        return _fixedFreePeoplePlayer;
+    }
+
+    /**
+     * Makes one player the Free Peoples player on every turn, so that the other player only ever plays their Shadow
+     * cards.  This is for one-sided games (e.g. a lesson that teaches only one half of the game at a time).
+     * @param playerId The player to take every turn, or null to have turns pass around the table as usual.
+     */
+    public void setFixedFreePeoplePlayer(String playerId) {
+        _fixedFreePeoplePlayer = playerId;
+    }
+
     public void startPlayerTurn(String playerId, boolean realTurn) {
         _currentPlayerId = playerId;
         if (realTurn) {
@@ -1653,7 +1672,21 @@ public class GameState {
 
     public void shuffleDeck(String player) {
         List<PhysicalCardImpl> deck = _decks.get(player);
-        Collections.shuffle(deck, ThreadLocalRandom.current());
+        _random.shuffleDeck(player, deck);
+    }
+
+    /**
+     * @return Where this game gets its random outcomes from (shuffles, cards picked at random, tied bids).
+     */
+    public GameRandom getRandom() {
+        return _random;
+    }
+
+    /**
+     * Replaces where this game gets its random outcomes from.  Only do this before the game has started.
+     */
+    public void setRandom(GameRandom random) {
+        _random = random;
     }
 
     public void sendGameStats(GameStats gameStats) {

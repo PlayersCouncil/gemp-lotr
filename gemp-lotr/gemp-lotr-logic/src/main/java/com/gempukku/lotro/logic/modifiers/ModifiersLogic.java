@@ -418,6 +418,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public int getHandSize(LotroGame game, String playerId) {
+        int result = game.getFormat().getHandSize();
+        for (Modifier modifier : getModifiers(game, ModifierEffect.HAND_SIZE_MODIFIER))
+            result += modifier.getHandSizeModifier(game, playerId);
+        return Math.max(0, result);
+    }
+
+    @Override
     public int getMoveLimit(LotroGame game, int baseMoveLimit) {
         int result = baseMoveLimit;
         for (Modifier modifier : getModifiers(game, ModifierEffect.MOVE_LIMIT_MODIFIER))

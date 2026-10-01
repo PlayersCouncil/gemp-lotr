@@ -23,10 +23,9 @@ public class MulliganProcess implements GameProcess {
 
     @Override
     public void process(final LotroGame game) {
-        final int handSize = game.getFormat().getHandSize();
-
         final String nextPlayer = _playOrder.getNextPlayer();
         if (nextPlayer != null) {
+            final int handSize = game.getModifiersQuerying().getHandSize(game, nextPlayer);
             game.getUserFeedback().sendAwaitingDecision(nextPlayer,
                     new MultipleChoiceAwaitingDecision(1, "Do you wish to mulligan? (Shuffle cards back and draw " + (handSize - 2) + ")", new String[]{"No", "Yes"}) {
                         @Override
