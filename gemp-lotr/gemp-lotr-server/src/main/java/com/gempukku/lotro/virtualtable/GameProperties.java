@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.Names;
 import com.gempukku.lotro.common.Phase;
@@ -11,7 +11,7 @@ import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.List;
 
-public interface GameProperties extends TestBase, TestConstants {
+public interface GameProperties extends TableBase {
 	default int GetBurdens() { return gameState().getBurdens(); }
 	default void AddBurdens(int count) {
 		gameState().addBurdens(count);
@@ -21,8 +21,8 @@ public interface GameProperties extends TestBase, TestConstants {
 		gameState().removeBurdens(count);
 	}
 
-	default int GetFreepsCultureCount() { return GameUtils.getSpottableFPCulturesCount(game(), P1); }
-	default int GetShadowCultureCount() { return GameUtils.getSpottableShadowCulturesCount(game(), P1); }
+	default int GetFreepsCultureCount() { return GameUtils.getSpottableFPCulturesCount(game(), P1()); }
+	default int GetShadowCultureCount() { return GameUtils.getSpottableShadowCulturesCount(game(), P1()); }
 
 	default int GetThreats() {
 		return gameState().getThreats();
@@ -102,20 +102,20 @@ public interface GameProperties extends TestBase, TestConstants {
 
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {
-		return (PhysicalCardImpl)gameState().getRing(P1);
+		return (PhysicalCardImpl)gameState().getRing(P1());
 	}
-	default PhysicalCardImpl GetShadowRing() { return (PhysicalCardImpl)gameState().getRing(P2); }
-	default PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P1); }
-	default PhysicalCardImpl GetShadowRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P2); }
+	default PhysicalCardImpl GetShadowRing() { return (PhysicalCardImpl)gameState().getRing(P2()); }
+	default PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P1()); }
+	default PhysicalCardImpl GetShadowRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P2()); }
 
-	default int GetFreepsControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P1)); }
-	default int GetShadowControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P2)); }
+	default int GetFreepsControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P1())); }
+	default int GetShadowControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P2())); }
 
 	default PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)gameState().getCurrentSite(); }
 	default int GetCurrentSiteNumber() { return GetCurrentSite().getSiteNumber(); }
 
-	default PhysicalCardImpl GetFreepsSite(int siteNum) { return GetSite(P1, siteNum); }
-	default PhysicalCardImpl GetShadowSite(int siteNum) { return GetSite(P2, siteNum); }
+	default PhysicalCardImpl GetFreepsSite(int siteNum) { return GetSite(P1(), siteNum); }
+	default PhysicalCardImpl GetShadowSite(int siteNum) { return GetSite(P2(), siteNum); }
 	default PhysicalCardImpl GetSite(String playerID, int siteNum)
 	{
 		PhysicalCardImpl site = (PhysicalCardImpl)gameState().getSite(siteNum);
@@ -126,8 +126,8 @@ public interface GameProperties extends TestBase, TestConstants {
 		return advDeck.stream().filter(x -> x.getBlueprint().getSiteNumber() == siteNum).findFirst().get();
 	}
 	default PhysicalCardImpl GetSite(int siteNum) { return (PhysicalCardImpl) gameState().getSite(siteNum);	}
-	default PhysicalCardImpl GetFreepsSite(String name) { return GetSiteByName(P1, name); }
-	default PhysicalCardImpl GetShadowSite(String name) { return GetSiteByName(P2, name); }
+	default PhysicalCardImpl GetFreepsSite(String name) { return GetSiteByName(P1(), name); }
+	default PhysicalCardImpl GetShadowSite(String name) { return GetSiteByName(P2(), name); }
 	default PhysicalCardImpl GetSiteByName(String player, String name)
 	{
 		var attempt = GetCard(player, name);

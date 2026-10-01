@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -12,7 +12,7 @@ import java.util.List;
  * If you are just checking the printed stats, then you can retrieve the blueprint of a card and check those values
  * directly.  These helper functions are more for live cards which may be affected by modifiers sourced from other cards.
  */
-public interface CardProperties extends TestBase, TestConstants {
+public interface CardProperties extends TableBase {
 
 	default int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
 	default int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }
@@ -64,11 +64,11 @@ public interface CardProperties extends TestBase, TestConstants {
 	}
 
 	default Boolean FreepsControls(PhysicalCardImpl card) {
-		return card.getCardController() != null && card.getCardController().equals(P1);
+		return card.getCardController() != null && card.getCardController().equals(P1());
 	}
 
 	default Boolean ShadowControls(PhysicalCardImpl card) {
-		return card.getCardController() != null && card.getCardController().equals(P2);
+		return card.getCardController() != null && card.getCardController().equals(P2());
 	}
 
 	/**

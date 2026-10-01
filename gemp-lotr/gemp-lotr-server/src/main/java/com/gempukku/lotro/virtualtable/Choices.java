@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
@@ -13,15 +13,15 @@ import java.util.List;
  */
 public interface Choices extends Decisions {
 
-	default void FreepsDeclineChoosing() { PlayerDecided(P1, ""); }
-	default void ShadowDeclineChoosing() { PlayerDecided(P2, ""); }
+	default void FreepsDeclineChoosing() { PlayerDecided(P1(), ""); }
+	default void ShadowDeclineChoosing() { PlayerDecided(P2(), ""); }
 
 	default void FreepsDeclineSanctuaryHealing() {
-		PlayerDecided(P1, "");
-		PlayerDecided(P1, "");
-		PlayerDecided(P1, "");
-		PlayerDecided(P1, "");
-		PlayerDecided(P1, "");
+		PlayerDecided(P1(), "");
+		PlayerDecided(P1(), "");
+		PlayerDecided(P1(), "");
+		PlayerDecided(P1(), "");
+		PlayerDecided(P1(), "");
 	}
 
 	/**
@@ -30,14 +30,14 @@ public interface Choices extends Decisions {
 	 * @param choice The search text the choice description must contain.
 	 * @return True if the Free Peoples player has an active decision with a choice description matching the given text.
 	 */
-	default Boolean FreepsChoiceAvailable(String choice) { return ChoiceAvailable(P1, choice); }
+	default Boolean FreepsChoiceAvailable(String choice) { return ChoiceAvailable(P1(), choice); }
 	/**
 	 * Determines whether the Shadow player has any choices on the current decision whose description matches the
 	 * provided search text.
 	 * @param choice The search text the choice description must contain.
 	 * @return True if the Shadow player has an active decision with a choice description matching the given text.
 	 */
-	default Boolean ShadowChoiceAvailable(String choice) { return ChoiceAvailable(P2, choice); }
+	default Boolean ShadowChoiceAvailable(String choice) { return ChoiceAvailable(P2(), choice); }
 	/**
 	 * Determines whether the given player has any choices on the current decision whose description matches the
 	 * provided search text.
@@ -67,7 +67,7 @@ public interface Choices extends Decisions {
 			FreepsChooseAction(choice);
 		}
 		else {
-			PlayerDecided(P1, choice);
+			PlayerDecided(P1(), choice);
 		}
 	}
 	/**
@@ -76,7 +76,7 @@ public interface Choices extends Decisions {
 	 * @param choices The choices the player wishes to make.
 	 */
 	default void FreepsChoose(String...choices) { PlayerDecided(
-			P1, String.join(",", choices)); }
+			P1(), String.join(",", choices)); }
 
 	/**
 	 * Causes the Shadow player to choose the given option.
@@ -92,7 +92,7 @@ public interface Choices extends Decisions {
 			ShadowChooseAction(choice);
 		}
 		else {
-			PlayerDecided(P2, choice);
+			PlayerDecided(P2(), choice);
 		}
 	}
 	/**
@@ -101,7 +101,7 @@ public interface Choices extends Decisions {
 	 * @param choices The choices the player wishes to make.
 	 */
 	default void ShadowChoose(String...choices) { PlayerDecided(
-			P2, String.join(",", choices)); }
+			P2(), String.join(",", choices)); }
 
 
 
@@ -109,44 +109,44 @@ public interface Choices extends Decisions {
 	/**
 	 * Causes the Free Peoples player to return a canned "Yes" response to a Yes or No question.
 	 */
-	default void FreepsChooseYes() { ChooseOption(P1, "Yes"); }
+	default void FreepsChooseYes() { ChooseOption(P1(), "Yes"); }
 	/**
 	 * Causes the Shadow player to return a canned "Yes" response to a Yes or No question.
 	 */
-	default void ShadowChooseYes() { ChooseOption(P2, "Yes"); }
+	default void ShadowChooseYes() { ChooseOption(P2(), "Yes"); }
 	/**
 	 * Causes the Free Peoples player to return a canned "No" response to a Yes or No question.
 	 */
-	default void FreepsChooseNo() { ChooseOption(P1, "No"); }
+	default void FreepsChooseNo() { ChooseOption(P1(), "No"); }
 	/**
 	 * Causes the Shadow player to return a canned "No" response to a Yes or No question.
 	 */
-	default void ShadowChooseNo() { ChooseOption(P2, "No"); }
+	default void ShadowChooseNo() { ChooseOption(P2(), "No"); }
 
-	default void FreepsChooseOption(String option) { ChooseOption(P1, option); }
-	default void ShadowChooseOption(String option) { ChooseOption(P2, option); }
-
-	/**
-	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
-	 * pick a specific one.
-	 * @param card Which of the triggering cards to pick
-	 */
-	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P1, "cardId", String.valueOf(card.getCardId())); }
+	default void FreepsChooseOption(String option) { ChooseOption(P1(), option); }
+	default void ShadowChooseOption(String option) { ChooseOption(P2(), option); }
 
 	/**
 	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
 	 * pick a specific one.
 	 * @param card Which of the triggering cards to pick
 	 */
-	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P2, "cardId", String.valueOf(card.getCardId())); }
+	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P1(), "cardId", String.valueOf(card.getCardId())); }
+
+	/**
+	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
+	 * pick a specific one.
+	 * @param card Which of the triggering cards to pick
+	 */
+	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P2(), "cardId", String.valueOf(card.getCardId())); }
 	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}
 
-	default void FreepsChooseAction(String paramName, String option) { ChooseAction(P1, paramName, option); }
-	default void FreepsChooseAction(String option) { ChooseAction(P1, "actionText", option); }
-	default void ShadowChooseAction(String paramName, String option) { ChooseAction(P2, paramName, option); }
-	default void ShadowChooseAction(String option) { ChooseAction(P2, "actionText", option); }
+	default void FreepsChooseAction(String paramName, String option) { ChooseAction(P1(), paramName, option); }
+	default void FreepsChooseAction(String option) { ChooseAction(P1(), "actionText", option); }
+	default void ShadowChooseAction(String paramName, String option) { ChooseAction(P2(), paramName, option); }
+	default void ShadowChooseAction(String option) { ChooseAction(P2(), "actionText", option); }
 	default void ChooseAction(String playerID, String paramName, String option) {
 		List<String> choices = GetADParamAsList(playerID, paramName);
 		for(String choice : choices){
@@ -162,10 +162,10 @@ public interface Choices extends Decisions {
 
 	default void FreepsChooseAny() {
 		if (GetChoiceCount(FreepsGetActionChoices()) > 0){
-			ChooseAction(P1, "actionId", FreepsGetActionChoices().getFirst());
+			ChooseAction(P1(), "actionId", FreepsGetActionChoices().getFirst());
 		}
 		else if(FreepsGetBPChoices().size() > 1) {
-			ChooseCardBPFromSelection(P1, FreepsGetBPChoices().getFirst());
+			ChooseCardBPFromSelection(P1(), FreepsGetBPChoices().getFirst());
 		}
 		else {
 			FreepsResolveRuleFirst();
@@ -173,10 +173,10 @@ public interface Choices extends Decisions {
 	}
 
     default void FreepsResolveRuleFirst() {
-		FreepsResolveActionOrder(GetADParamAsList(P1, "actionText").getFirst());
+		FreepsResolveActionOrder(GetADParamAsList(P1(), "actionText").getFirst());
 	}
     default void FreepsResolveActionOrder(String option) {
-		ChooseAction(P1, "actionText", option);
+		ChooseAction(P1(), "actionText", option);
 	}
 
 
@@ -205,42 +205,42 @@ public interface Choices extends Decisions {
 	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
 	 */
 	default int FreepsGetSelectableCount() {
-		return GetADParamEqualsCount(P1, "selectable", "true");
+		return GetADParamEqualsCount(P1(), "selectable", "true");
 	}
 
 	/**
 	 * @return Gets how many of the currently displayed cards are selectable for a Shadow decision.
 	 */
 	default int ShadowGetSelectableCount() {
-		return GetADParamEqualsCount(P2, "selectable", "true");
+		return GetADParamEqualsCount(P2(), "selectable", "true");
 	}
 
 	/**
 	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
 	 */
 	default int FreepsGetTotalRevealedCardCount() {
-		return GetADParamEqualsCount(P1, "selectable", "true");
+		return GetADParamEqualsCount(P1(), "selectable", "true");
 	}
 
 	/**
 	 * @return Gets how many of the currently displayed cards are selectable for a Shadow decision.
 	 */
 	default int ShadowGetGetTotalRevealedCardCount() {
-		return GetADParamEqualsCount(P2, "selectable", "true");
+		return GetADParamEqualsCount(P2(), "selectable", "true");
 	}
 
 	default boolean FreepsHasBPChoice(PhysicalCardImpl card) { return FreepsGetBPChoices().contains(card.getBlueprintId()); }
 	default boolean ShadowHasBPChoice(PhysicalCardImpl card) { return ShadowGetBPChoices().contains(card.getBlueprintId()); }
-	default List<String> FreepsGetBPChoices() { return GetADParamAsList(P1, "blueprintId"); }
-	default List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
+	default List<String> FreepsGetBPChoices() { return GetADParamAsList(P1(), "blueprintId"); }
+	default List<String> ShadowGetBPChoices() { return GetADParamAsList(P2(), "blueprintId"); }
 	default int FreepsGetBPChoiceCount() { return FreepsGetADParamAsList("blueprintId").size(); }
 	default int ShadowGetBPChoiceCount() { return ShadowGetADParamAsList("blueprintId").size(); }
-	default List<String> FreepsGetActionChoices() { return GetADParamAsList(P1, "actionId"); }
-	default List<String> ShadowGetActionChoices() { return GetADParamAsList(P2, "actionId"); }
-	default List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
-	default List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
-	default List<String> FreepsGetCardChoices() { return GetADParamAsList(P1, "cardId"); }
-	default List<String> ShadowGetCardChoices() { return GetADParamAsList(P2, "cardId"); }
+	default List<String> FreepsGetActionChoices() { return GetADParamAsList(P1(), "actionId"); }
+	default List<String> ShadowGetActionChoices() { return GetADParamAsList(P2(), "actionId"); }
+	default List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1(), "results"); }
+	default List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2(), "results"); }
+	default List<String> FreepsGetCardChoices() { return GetADParamAsList(P1(), "cardId"); }
+	default List<String> ShadowGetCardChoices() { return GetADParamAsList(P2(), "cardId"); }
 	default int FreepsGetMultipleChoiceCount() { return GetChoiceCount(FreepsGetMultipleChoices());	}
 	default int ShadowGetMultipleChoiceCount() { return GetChoiceCount(ShadowGetMultipleChoices());	}
 	default int FreepsGetActionCount() { return GetChoiceCount(FreepsGetActionChoices()); }
@@ -252,11 +252,11 @@ public interface Choices extends Decisions {
 		return list.size();
 	}
 
-	default List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1, "freeCharacters"); }
-	default List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1, "minions"); }
+	default List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1(), "freeCharacters"); }
+	default List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1(), "minions"); }
 
-	default List<String> ShadowGetFreepsAssignmentTargets() { return GetADParamAsList(P2, "freeCharacters"); }
-	default List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2, "minions"); }
+	default List<String> ShadowGetFreepsAssignmentTargets() { return GetADParamAsList(P2(), "freeCharacters"); }
+	default List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2(), "minions"); }
 
 
 
@@ -269,19 +269,19 @@ public interface Choices extends Decisions {
 	default void FreepsChooseCard(PhysicalCardImpl card) { FreepsChooseCards(card); }
 	default void FreepsChooseCards(PhysicalCardImpl...cards) {
 		if(GetChoiceCount(FreepsGetBPChoices()) > 0) {
-			ChooseCardBPFromSelection(P1, cards);
+			ChooseCardBPFromSelection(P1(), cards);
 		}
 		else {
-			ChooseCards(P1, cards);
+			ChooseCards(P1(), cards);
 		}
 	}
 	default void ShadowChooseCard(PhysicalCardImpl card) { ShadowChooseCards(card); }
 	default void ShadowChooseCards(PhysicalCardImpl...cards) {
 		if(GetChoiceCount(ShadowGetBPChoices()) > 0) {
-			ChooseCardBPFromSelection(P2, cards);
+			ChooseCardBPFromSelection(P2(), cards);
 		}
 		else {
-			ChooseCards(P2, cards);
+			ChooseCards(P2(), cards);
 		}
 	}
 	default void ChooseCards(String player, PhysicalCardImpl...cards) {
@@ -299,16 +299,16 @@ public interface Choices extends Decisions {
 	default int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
 	default void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) {
-		ChooseCardBPFromSelection(P1, cards);
+		ChooseCardBPFromSelection(P1(), cards);
 	}
 	default void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) {
-		ChooseCardBPFromSelection(P2, cards);
+		ChooseCardBPFromSelection(P2(), cards);
 	}
 	default void FreepsChooseCardBPFromSelection(String...bpids) {
-		ChooseCardBPFromSelection(P1, bpids);
+		ChooseCardBPFromSelection(P1(), bpids);
 	}
 	default void ShadowChooseCardBPFromSelection(String...bpids) {
-		ChooseCardBPFromSelection(P2, bpids);
+		ChooseCardBPFromSelection(P2(), bpids);
 	}
 
 	/**
@@ -381,23 +381,23 @@ public interface Choices extends Decisions {
 	}
 
 	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
-		return HasCardChoiceAvailable(P1, card, selectable);
+		return HasCardChoiceAvailable(P1(), card, selectable);
 	}
 
 	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable) {
-		return HasCardChoiceAvailable(P2, card, selectable);
+		return HasCardChoiceAvailable(P2(), card, selectable);
 	}
 
 	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
-			if(!HasCardChoiceAvailable(P1, card))
+			if(!HasCardChoiceAvailable(P1(), card))
 				return false;
 		}
 		return true;
 	}
 	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
-			if(!HasCardChoiceAvailable(P2, card))
+			if(!HasCardChoiceAvailable(P2(), card))
 				return false;
 		}
 		return true;
@@ -406,14 +406,14 @@ public interface Choices extends Decisions {
 
 	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
-			if(HasCardChoiceAvailable(P1, card))
+			if(HasCardChoiceAvailable(P1(), card))
 				return false;
 		}
 		return true;
 	}
 	default boolean ShadowHasCardChoiceNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
-			if(HasCardChoiceAvailable(P2, card))
+			if(HasCardChoiceAvailable(P2(), card))
 				return false;
 		}
 		return true;
@@ -429,10 +429,10 @@ public interface Choices extends Decisions {
 	 */
 	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) { return HasCardChoiceAvailable(player, card, true); }
 
-	default boolean FreepsHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P1, blueprintId, true); }
-	default boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P1, blueprintId, selectable); }
-	default boolean ShadowHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P2, blueprintId, true); }
-	default boolean ShadowHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P2, blueprintId, selectable); }
+	default boolean FreepsHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P1(), blueprintId, true); }
+	default boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P1(), blueprintId, selectable); }
+	default boolean ShadowHasBPChoiceAvailable(String blueprintId) { return HasBPChoiceAvailable(P2(), blueprintId, true); }
+	default boolean ShadowHasBPChoiceAvailable(String blueprintId, boolean selectable) { return HasBPChoiceAvailable(P2(), blueprintId, selectable); }
 
 	/**
 	 * Checks whether a card with the given blueprint ID is among the selectable options presented to the player.
@@ -513,7 +513,7 @@ public interface Choices extends Decisions {
 	 * @param cards The cards to include in the decision response.
 	 */
 	default void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards) {
-		ChooseCardIDFromSelection(P1, cards);
+		ChooseCardIDFromSelection(P1(), cards);
 	}
 	/**
 	 * Causes the Shadow player to issue a decision response composed of a comma-separated list of the provided
@@ -523,7 +523,7 @@ public interface Choices extends Decisions {
 	 * @param cards The cards to include in the decision response.
 	 */
 	default void ShadowChooseCardIDFromSelection(PhysicalCardImpl...cards) {
-		ChooseCardIDFromSelection(P2, cards);
+		ChooseCardIDFromSelection(P2(), cards);
 	}
 
 	/**

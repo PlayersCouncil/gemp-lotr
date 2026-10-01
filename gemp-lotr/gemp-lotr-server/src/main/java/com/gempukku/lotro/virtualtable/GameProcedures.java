@@ -1,9 +1,8 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.PhysicalCardImpl;
-import org.junit.Assert;
 
 /**
  * These functions are for progressing through the game itself.  For instance, if your test is really about battle
@@ -37,7 +36,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * player 1's turn the behaviour is unchanged.
 	 */
 	default void SkipToMovementDecision() {
-		if(GetCurrentPlayer().equals(P1)) {
+		if(GetCurrentPlayer().equals(P1())) {
 			SkipToPhase(Phase.REGROUP);
 			PassCurrentPhaseActions();
 			if(ShadowDecisionAvailable("reconcile")) {
@@ -67,7 +66,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * second time therefore returns to player 1's fellowship phase.
 	 */
 	default void SkipToOtherPlayersTurn() {
-		boolean playerOnesTurn = GetCurrentPlayer().equals(P1);
+		boolean playerOnesTurn = GetCurrentPlayer().equals(P1());
 		SkipToMovementDecision();
 
 		if(playerOnesTurn) {
@@ -125,12 +124,12 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	default void PassRegroupActions() { PassCurrentPhaseActions(); }
 
 
-	default void FreepsChooseToMove() { PlayerDecided(P1, "0"); }
-	default void FreepsChooseToStay() { PlayerDecided(P1, "1"); }
+	default void FreepsChooseToMove() { PlayerDecided(P1(), "0"); }
+	default void FreepsChooseToStay() { PlayerDecided(P1(), "1"); }
 
 	//These two are only used in situations where the play is inverted, such as when skipping to a site.
-	default void ShadowChooseToMove() { PlayerDecided(P2, "0"); }
-	default void ShadowChooseToStay() { PlayerDecided(P2, "1"); }
+	default void ShadowChooseToMove() { PlayerDecided(P2(), "0"); }
+	default void ShadowChooseToStay() { PlayerDecided(P2(), "1"); }
 
 	default void FreepsDeclineReconciliation() { FreepsPassCurrentPhaseAction(); }
 	default void ShadowDeclineReconciliation() { ShadowPassCurrentPhaseAction(); }
@@ -183,14 +182,14 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 	default void FreepsPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P1) != null) {
-			PlayerDecided(P1, "");
+		if(userFeedback().getAwaitingDecision(P1()) != null) {
+			PlayerDecided(P1(), "");
 		}
 	}
 
 	default void ShadowPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P2) != null) {
-			PlayerDecided(P2, "");
+		if(userFeedback().getAwaitingDecision(P2()) != null) {
+			PlayerDecided(P2(), "");
 		}
 	}
 
@@ -393,8 +392,9 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
 		}
 
-		Assert.assertTrue(GetCurrentPhase() == Phase.BETWEEN_TURNS
-				|| GetCurrentPhase() == Phase.FELLOWSHIP);
+		Verify(GetCurrentPhase() == Phase.BETWEEN_TURNS
+				|| GetCurrentPhase() == Phase.FELLOWSHIP,
+				"SkipCurrentSite expected to end between turns or in the Fellowship phase, but ended in " + GetCurrentPhase());
 	}
 
 

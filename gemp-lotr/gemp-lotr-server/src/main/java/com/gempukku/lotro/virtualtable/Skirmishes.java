@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filters;
@@ -8,7 +8,7 @@ import com.gempukku.lotro.game.state.Skirmish;
 
 import java.util.List;
 
-public interface Skirmishes extends TestBase, Decisions, GameProcedures {
+public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 
 	default void SkipToShadowAssignments() {
 		SkipToAssignments();
@@ -114,7 +114,7 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 	default void ShadowDeclineAssignments() { ShadowPassCurrentPhaseAction(); }
 
 	default void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) {
-		AssignToMinions(P1, comp, minions);
+		AssignToMinions(P1(), comp, minions);
 
 		if(ShadowDecisionAvailable("Assign minions to companions or allies at home")) {
 			ShadowDeclineAssignments();
@@ -123,8 +123,8 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		FreepsResolveSkirmish(comp);
 	}
 
-	default void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P1, comp, minions); }
-	default void ShadowAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P2, comp, minions); }
+	default void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P1(), comp, minions); }
+	default void ShadowAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P2(), comp, minions); }
 	default void AssignToMinions(String player, PhysicalCardImpl comp, PhysicalCardImpl...minions) {
 		String result = comp.getCardId() + "";
 
@@ -135,8 +135,8 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		PlayerDecided(player, result);
 	}
 
-	default void FreepsAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P1, groups); }
-	default void ShadowAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P2, groups); }
+	default void FreepsAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P1(), groups); }
+	default void ShadowAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P2(), groups); }
 	default void AssignToMinions(String player, PhysicalCardImpl[]...groups) {
 		String result = "";
 

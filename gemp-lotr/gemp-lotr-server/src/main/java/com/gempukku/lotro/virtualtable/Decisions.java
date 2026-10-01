@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
@@ -17,18 +17,18 @@ import java.util.Map;
  * the tools to make a decision properly.  See Choices for selecting among multiple options, and see Actions for
  * top-level card actions.
  */
-public interface Decisions extends TestBase, TestConstants  {
+public interface Decisions extends TableBase {
 
 	/**
 	 * @return Gets the Free Peoples decision that Gemp is currently waiting on.  Will be null if Freeps is not currently
 	 * pending any decision.
 	 */
-	default AwaitingDecision FreepsGetAwaitingDecision() { return GetAwaitingDecision(P1); }
+	default AwaitingDecision FreepsGetAwaitingDecision() { return GetAwaitingDecision(P1()); }
 	/**
 	 * @return Gets the Shadow decision that Gemp is currently waiting on.  Will be null if Shadow is not currently
 	 * pending any decision.
 	 */
-	default AwaitingDecision ShadowGetAwaitingDecision() { return GetAwaitingDecision(P2); }
+	default AwaitingDecision ShadowGetAwaitingDecision() { return GetAwaitingDecision(P2()); }
 
 	/**
 	 * Gets a decision for a given player that Gemp is currently waiting on.  Will be null if that player is not
@@ -55,13 +55,13 @@ public interface Decisions extends TestBase, TestConstants  {
 	 * @param text The text snippet to search for.
 	 * @return False if Free Peoples has no current decisions or if the current decision does not contain the given text.
 	 */
-	default Boolean FreepsDecisionAvailable(String text) { return DecisionAvailable(P1, text); }
+	default Boolean FreepsDecisionAvailable(String text) { return DecisionAvailable(P1(), text); }
 	/**
 	 * Determines if the Shadow player is currently presented with a decision which contains the given text.
 	 * @param text The text snippet to search for.
 	 * @return False if Shadow has no current decisions or if the current decision does not contain the given text.
 	 */
-	default Boolean ShadowDecisionAvailable(String text) { return DecisionAvailable(P2, text); }
+	default Boolean ShadowDecisionAvailable(String text) { return DecisionAvailable(P2(), text); }
 
 	/**
 	 * Determines if the given player is currently presented with a decision which contains the given text.
@@ -80,11 +80,11 @@ public interface Decisions extends TestBase, TestConstants  {
 	/**
 	 * @return Returns true if Free Peoples is currently presented with any decision at all.
 	 */
-	default Boolean FreepsAnyDecisionsAvailable() { return AnyDecisionsAvailable(P1); }
+	default Boolean FreepsAnyDecisionsAvailable() { return AnyDecisionsAvailable(P1()); }
 	/**
 	 * @return Returns true if Shadow is currently presented with any decision at all.
 	 */
-	default Boolean ShadowAnyDecisionsAvailable() { return AnyDecisionsAvailable(P2); }
+	default Boolean ShadowAnyDecisionsAvailable() { return AnyDecisionsAvailable(P2()); }
 
 	/**
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Fellowship phase, or else false.
@@ -164,7 +164,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
 	default void FreepsPass() {
 		if(FreepsAnyDecisionsAvailable()) {
-			PlayerDecided(P1, "");
+			PlayerDecided(P1(), "");
 		}
 	}
 	/**
@@ -174,7 +174,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
 	default void FreepsPass(String text) {
 		if(FreepsDecisionAvailable(text)) {
-			PlayerDecided(P1, "");
+			PlayerDecided(P1(), "");
 		}
 	}
 	/**
@@ -183,7 +183,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
 	default void ShadowPass() {
 		if(ShadowAnyDecisionsAvailable()) {
-			PlayerDecided(P2, "");
+			PlayerDecided(P2(), "");
 		}
 	}
 	/**
@@ -193,7 +193,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
 	default void ShadowPass(String text) {
 		if(ShadowDecisionAvailable(text)) {
-			PlayerDecided(P2, "");
+			PlayerDecided(P2(), "");
 		}
 	}
 
@@ -213,7 +213,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	 * @param answer The integer answer to return to the server
 	 * decision.
 	 */
-	default void FreepsDecided(int answer) { PlayerDecided(P1, String.valueOf(answer));}
+	default void FreepsDecided(int answer) { PlayerDecided(P1(), String.valueOf(answer));}
 
 	/**
 	 * Causes Free Peoples to decide to use the given answer.  Answers may take different forms depending on the exact
@@ -221,7 +221,7 @@ public interface Decisions extends TestBase, TestConstants  {
 	 * @param answer The answer to return to the server
 	 * decision.
 	 */
-	default void FreepsDecided(String answer) { PlayerDecided(P1, answer);}
+	default void FreepsDecided(String answer) { PlayerDecided(P1(), answer);}
 
 	/**
 	 * Causes Shadow to decide to use the given answer.  Integers usually indicate an index between multiple choices,
@@ -229,14 +229,14 @@ public interface Decisions extends TestBase, TestConstants  {
 	 * @param answer The integer answer to return to the server
 	 * decision.
 	 */
-	default void ShadowDecided(int answer) { PlayerDecided(P2, String.valueOf(answer));}
+	default void ShadowDecided(int answer) { PlayerDecided(P2(), String.valueOf(answer));}
 	/**
 	 * Causes Shadow to decide to use the given answer.  Answers may take different forms depending on the exact
 	 * nature of the decision at hand.
 	 * @param answer The answer to return to the server
 	 * decision.
 	 */
-	default void ShadowDecided(String answer) { PlayerDecided(P2, answer);}
+	default void ShadowDecided(String answer) { PlayerDecided(P2(), answer);}
 
 	// As this is actually related to the heart of the table simulation, this is left to be implemented on the main Scenario class.
 	void PlayerDecided(String player, String answer);
@@ -250,7 +250,7 @@ public interface Decisions extends TestBase, TestConstants  {
 		if(!FreepsDecisionAvailable("Optional"))
 			return false;
 
-		var texts = GetADParamAsList(P1, "actionText");
+		var texts = GetADParamAsList(P1(), "actionText");
 
 		for(var choice : texts) {
 			if(choice.toLowerCase().contains(text.toLowerCase()))
@@ -264,7 +264,7 @@ public interface Decisions extends TestBase, TestConstants  {
 		if(!ShadowDecisionAvailable("Optional"))
 			return false;
 
-		var texts = GetADParamAsList(P2, "actionText");
+		var texts = GetADParamAsList(P2(), "actionText");
 
 		for(var choice : texts) {
 			if(choice.toLowerCase().contains(text.toLowerCase()))
@@ -274,13 +274,13 @@ public interface Decisions extends TestBase, TestConstants  {
 		return false;
 	}
 
-	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1, "0"); }
-	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1, ""); }
+	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1(), "0"); }
+	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1(), ""); }
 
 
 
-	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2, "0"); }
-	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2, ""); }
+	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2(), "0"); }
+	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2(), ""); }
 
 
 	/**
@@ -296,8 +296,8 @@ public interface Decisions extends TestBase, TestConstants  {
 		return decision.getDecisionParameters().get(paramName);
 	}
 
-	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
-	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
+	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1(), paramName); }
+	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2(), paramName); }
 	default List<String> GetADParamAsList(String playerID, String paramName) {
 		var paramList = GetAwaitingDecisionParam(playerID, paramName);
 		if(paramList == null)
@@ -309,10 +309,10 @@ public interface Decisions extends TestBase, TestConstants  {
 	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
 		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
 	}
-	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName); }
-	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName); }
-	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1, paramName)[0]; }
-	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2, paramName)[0]; }
+	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName); }
+	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName); }
+	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName)[0]; }
+	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName)[0]; }
 	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
 		var decision = userFeedback().getAwaitingDecision(playerID);
 		return decision.getDecisionParameters().get(paramName);

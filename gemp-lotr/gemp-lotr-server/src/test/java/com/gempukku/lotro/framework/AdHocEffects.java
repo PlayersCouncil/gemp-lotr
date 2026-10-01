@@ -18,6 +18,8 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.virtualtable.Decisions;
+import com.gempukku.lotro.virtualtable.TableBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +38,7 @@ import static org.junit.Assert.assertTrue;
  * become aware of the changes you have made).  While awaiting a decision Gemp is effectively paused and thus needs
  * that moment to become aware of changes.
  */
-public interface AdHocEffects extends TestBase, TestConstants, Decisions {
+public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 
 
 	FilterFactory FilterFactory = new FilterFactory();

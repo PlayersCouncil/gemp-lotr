@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * These functions will help you determine pile counts or add/remove a card to a pile at a particular point.
  */
-public interface PileProperties extends TestBase, TestConstants {
+public interface PileProperties extends TableBase {
 	/**
 	 * @return Gets the current number of cards in the Free Peoples player's hand.
 	 */
@@ -21,11 +21,11 @@ public interface PileProperties extends TestBase, TestConstants {
 	/**
 	 * @return Gets all the cards currently in the Free Peoples player's hand.
 	 */
-	default List<? extends PhysicalCard> GetFreepsHand() { return GetHand(P1); }
+	default List<? extends PhysicalCard> GetFreepsHand() { return GetHand(P1()); }
 	/**
 	 * @return Gets all the cards currently in the Shadow player's hand.
 	 */
-	default List<? extends PhysicalCard> GetShadowHand() { return GetHand(P2); }
+	default List<? extends PhysicalCard> GetShadowHand() { return GetHand(P2()); }
 	/**
 	 *
 	 * @param player The player whose hand you are interested in.
@@ -48,11 +48,11 @@ public interface PileProperties extends TestBase, TestConstants {
 	/**
 	 * @return Gets all the cards in the Free Peoples player's DRaw Deck.
 	 */
-	default List<? extends PhysicalCard> GetFreepsDrawDeck() { return GetDrawDeck(P1); }
+	default List<? extends PhysicalCard> GetFreepsDrawDeck() { return GetDrawDeck(P1()); }
 	/**
 	 * @return Gets all the cards in the Shadow player's Draw Deck.
 	 */
-	default List<? extends PhysicalCard> GetShadowDrawDeck() { return GetDrawDeck(P2); }
+	default List<? extends PhysicalCard> GetShadowDrawDeck() { return GetDrawDeck(P2()); }
 
 	/**
 	 * @param player The player whose draw deck you are interested in.
@@ -63,10 +63,10 @@ public interface PileProperties extends TestBase, TestConstants {
 		return gameState().getDeck(player);
 	}
 
-	default PhysicalCardImpl GetFreepsBottomOfDeck() { return GetPlayerBottomOfDeck(P1); }
-	default PhysicalCardImpl GetShadowBottomOfDeck() { return GetPlayerBottomOfDeck(P2); }
-	default PhysicalCardImpl GetFromBottomOfFreepsDeck(int index) { return GetFromBottomOfPlayerDeck(P1, index); }
-	default PhysicalCardImpl GetFromBottomOfShadowDeck(int index) { return GetFromBottomOfPlayerDeck(P2, index); }
+	default PhysicalCardImpl GetFreepsBottomOfDeck() { return GetPlayerBottomOfDeck(P1()); }
+	default PhysicalCardImpl GetShadowBottomOfDeck() { return GetPlayerBottomOfDeck(P2()); }
+	default PhysicalCardImpl GetFromBottomOfFreepsDeck(int index) { return GetFromBottomOfPlayerDeck(P1(), index); }
+	default PhysicalCardImpl GetFromBottomOfShadowDeck(int index) { return GetFromBottomOfPlayerDeck(P2(), index); }
 	default PhysicalCardImpl GetPlayerBottomOfDeck(String player) { return GetFromBottomOfPlayerDeck(player, 1); }
 	default PhysicalCardImpl GetFromBottomOfPlayerDeck(String player, int index)
 	{
@@ -74,10 +74,10 @@ public interface PileProperties extends TestBase, TestConstants {
 		return (PhysicalCardImpl) deck.get(deck.size() - index);
 	}
 
-	default PhysicalCardImpl GetFreepsTopOfDeck() { return GetPlayerTopOfDeck(P1); }
-	default PhysicalCardImpl GetShadowTopOfDeck() { return GetPlayerTopOfDeck(P2); }
-	default PhysicalCardImpl GetFromTopOfFreepsDeck(int index) { return GetFromTopOfPlayerDeck(P1, index); }
-	default PhysicalCardImpl GetFromTopOfShadowDeck(int index) { return GetFromTopOfPlayerDeck(P2, index); }
+	default PhysicalCardImpl GetFreepsTopOfDeck() { return GetPlayerTopOfDeck(P1()); }
+	default PhysicalCardImpl GetShadowTopOfDeck() { return GetPlayerTopOfDeck(P2()); }
+	default PhysicalCardImpl GetFromTopOfFreepsDeck(int index) { return GetFromTopOfPlayerDeck(P1(), index); }
+	default PhysicalCardImpl GetFromTopOfShadowDeck(int index) { return GetFromTopOfPlayerDeck(P2(), index); }
 	default PhysicalCardImpl GetPlayerTopOfDeck(String player) { return GetFromTopOfPlayerDeck(player, 1); }
 
 	/**
@@ -91,9 +91,9 @@ public interface PileProperties extends TestBase, TestConstants {
 
 		return (PhysicalCardImpl) deck.get(index - 1);
 	}
-	default int GetFreepsDiscardCount() { return GetPlayerDiscardCount(P1); }
-	default int GetShadowDiscardCount() { return GetPlayerDiscardCount(P2); }
+	default int GetFreepsDiscardCount() { return GetPlayerDiscardCount(P1()); }
+	default int GetShadowDiscardCount() { return GetPlayerDiscardCount(P2()); }
 	default int GetPlayerDiscardCount(String player) { return gameState().getDiscard(player).size(); }
 
-	default int GetFreepsDeadCount() { return gameState().getDeadPile(P1).size(); }
+	default int GetFreepsDeadCount() { return gameState().getDeadPile(P1()).size(); }
 }
