@@ -73,6 +73,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("itemclassspot", new ItemClassSpot());
         modifierProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         modifierProducers.put("modifycost", new ModifyCost());
+        modifierProducers.put("modifyhandsize", new ModifyHandSize());
         modifierProducers.put("modifyinitiativehandsize", new ModifyInitiativeHandSize());
         modifierProducers.put("minimumbid", new ModifyMinimumBid());
         modifierProducers.put("mayincludeothercardtypesinstartingfellowship", new AddModifierFlag(ModifierFlag.EXTRA_CARD_TYPES_IN_STARTING_FELLOWSHIP));

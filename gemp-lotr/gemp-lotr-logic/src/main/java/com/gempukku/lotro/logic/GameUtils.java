@@ -10,7 +10,6 @@ import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class GameUtils {
     public static Side getSide(LotroGame game, String playerId) {
@@ -114,11 +113,13 @@ public class GameUtils {
         return result;
     }
 
-    public static List<PhysicalCard> getRandomCards(Collection<? extends PhysicalCard> cards, int count) {
-        List<PhysicalCard> randomizedCards = new ArrayList<>(cards);
-        Collections.shuffle(randomizedCards, ThreadLocalRandom.current());
-
-        return new LinkedList<>(randomizedCards.subList(0, Math.min(count, randomizedCards.size())));
+    /**
+     * Picks cards at random out of one of a player's piles.
+     * @param playerId Whose pile the cards are in.
+     * @param zone Which pile the cards are in.
+     */
+    public static List<PhysicalCard> getRandomCards(LotroGame game, String playerId, Zone zone, Collection<? extends PhysicalCard> cards, int count) {
+        return game.getGameState().getRandom().pickCards(playerId, zone, cards, count);
     }
 
     public static String s(Collection<PhysicalCard> cards) {

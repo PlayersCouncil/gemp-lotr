@@ -48,6 +48,12 @@ public interface ModifiersQuerying {
     // Movement
     int getMoveLimit(LotroGame game, int baseMoveLimit);
 
+    /**
+     * @return How many cards the given player's hand holds: the number they draw at the start of the game and
+     * reconcile to at the end of each turn.  This is the format's hand size unless something has changed it.
+     */
+    int getHandSize(LotroGame game, String playerId);
+
     int getThreatLimit(LotroGame game, int baseThreatLimit);
 
     boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion);

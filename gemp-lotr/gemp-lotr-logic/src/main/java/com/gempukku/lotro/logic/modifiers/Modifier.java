@@ -151,6 +151,8 @@ public interface Modifier {
 
     int getInitiativeHandSizeModifier(LotroGame game);
 
+    int getHandSizeModifier(LotroGame game, String playerId);
+
     boolean lostAllKeywords(LotroGame game, PhysicalCard card);
 
     Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);

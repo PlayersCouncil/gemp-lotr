@@ -82,7 +82,7 @@ public class PlayerReconcilesAction implements Action {
 
             _effectQueue = new LinkedList<>();
 
-            final int handSize = game.getFormat().getHandSize();
+            final int handSize = game.getModifiersQuerying().getHandSize(game, _playerId);
 
             GameState gameState = _game.getGameState();
             final Set<? extends PhysicalCard> cardsInHand = new HashSet<PhysicalCard>(gameState.getHand(_playerId));

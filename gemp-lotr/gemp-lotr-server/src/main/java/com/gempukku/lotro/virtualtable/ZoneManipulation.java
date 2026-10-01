@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,7 +18,7 @@ import java.util.Arrays;
  * decisions, meaning you may need to perform some other action (or a pass) to get Gemp to realize that you have moved
  * a card.
  */
-public interface ZoneManipulation extends TestBase, TestConstants {
+public interface ZoneManipulation extends TableBase {
 
 	/**
 	 * Removes a physical card's current zone.  This is a prerequisite to a card actually properly moving to a new zone.
@@ -174,7 +174,7 @@ public interface ZoneManipulation extends TestBase, TestConstants {
 
 	default void FreepsDrawCards(int count) {
 		for(int i = 0; i < count; i++) {
-			gameState().playerDrawsCard(P1);
+			gameState().playerDrawsCard(P1());
 		}
 	}
 
@@ -183,13 +183,13 @@ public interface ZoneManipulation extends TestBase, TestConstants {
 
 	default void ShadowDrawCards(int count) {
 		for(int i = 0; i < count; i++) {
-			gameState().playerDrawsCard(P2);
+			gameState().playerDrawsCard(P2());
 		}
 	}
 
 
-	default void ShuffleCardsIntoFreepsDeck(PhysicalCardImpl...cards) { ShuffleCardsIntoDrawDeck(P1, cards); }
-	default void ShuffleCardsIntoShadowDeck(PhysicalCardImpl...cards) { ShuffleCardsIntoDrawDeck(P2, cards); }
+	default void ShuffleCardsIntoFreepsDeck(PhysicalCardImpl...cards) { ShuffleCardsIntoDrawDeck(P1(), cards); }
+	default void ShuffleCardsIntoShadowDeck(PhysicalCardImpl...cards) { ShuffleCardsIntoDrawDeck(P2(), cards); }
 	default void ShuffleCardsIntoDrawDeck(String player, PhysicalCardImpl...cards) {
 		gameState().shuffleCardsIntoDeck(Arrays.stream(cards).toList(), player);
 	}
@@ -198,11 +198,11 @@ public interface ZoneManipulation extends TestBase, TestConstants {
 	/**
 	 * Shuffles the Free Peoples player's draw deck.
 	 */
-    default void ShuffleFreepsDeck() { ShuffleDeck(P1); }
+    default void ShuffleFreepsDeck() { ShuffleDeck(P1()); }
 	/**
 	 * Shuffles the Shadow player's reserve deck.
 	 */
-    default void ShuffleShadowDeck() { ShuffleDeck(P2); }
+    default void ShuffleShadowDeck() { ShuffleDeck(P2()); }
 
 	/**
 	 * Shuffles the given player's reserve deck.

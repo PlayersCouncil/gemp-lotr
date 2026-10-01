@@ -210,6 +210,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getHandSizeModifier(LotroGame game, String playerId) {
+        return delegate.getHandSizeModifier(game, playerId);
+    }
+
+    @Override
     public int getKeywordCountModifier(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         return delegate.getKeywordCountModifier(game, physicalCard, keyword);
     }

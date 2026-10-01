@@ -1,4 +1,4 @@
-package com.gempukku.lotro.framework;
+package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
@@ -18,12 +18,12 @@ public interface Actions extends Decisions, Choices {
 	 * @return Gets the text descriptions of all current actions available to the Free Peoples player. Will return an empty
 	 * list if that player does not have a currently pending decision.
 	 */
-	default List<String> FreepsGetAvailableActions() { return GetAvailableActions(P1); }
+	default List<String> FreepsGetAvailableActions() { return GetAvailableActions(P1()); }
 	/**
 	 * @return Gets the text descriptions of all current actions available to the Shadow player. Will return an empty
 	 * list if that player does not have a currently pending decision.
 	 */
-	default List<String> ShadowGetAvailableActions() { return GetAvailableActions(P2); }
+	default List<String> ShadowGetAvailableActions() { return GetAvailableActions(P2()); }
 	/**
 	 * @param playerID The player with a current decision
 	 * @return Gets the text descriptions of all current actions available to the given player.  Will return an empty
@@ -41,13 +41,13 @@ public interface Actions extends Decisions, Choices {
 	 * @return True if an action is available as part of the current decision, false if there are no actions or the
 	 * Free Peoples player has no pending decisions.
 	 */
-	default Boolean FreepsAnyActionsAvailable() { return AnyActionsAvailable(P1); }
+	default Boolean FreepsAnyActionsAvailable() { return AnyActionsAvailable(P1()); }
 
 	/**
 	 * @return True if an action is available as part of the current decision, false if there are no actions or the
 	 * Shadow player has no pending decisions.
 	 */
-	default Boolean ShadowAnyActionsAvailable() { return AnyActionsAvailable(P2); }
+	default Boolean ShadowAnyActionsAvailable() { return AnyActionsAvailable(P2()); }
 
 	/**
 	 * Returns whether the given player has any action at all available as part of the currently pending decision.
@@ -63,26 +63,26 @@ public interface Actions extends Decisions, Choices {
 
 
 	//TODO: Clean these up to use the correct search text
-	default Boolean FreepsActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P1, "Use " + GameUtils.getFullName(card)); }
-	default Boolean ShadowActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P2, "Use " + GameUtils.getFullName(card)); }
+	default Boolean FreepsActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Use " + GameUtils.getFullName(card)); }
+	default Boolean ShadowActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Use " + GameUtils.getFullName(card)); }
 
-	default Boolean FreepsPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P1, "Play " + GameUtils.getFullName(card)); }
-	default Boolean ShadowPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P2, "Play " + GameUtils.getFullName(card)); }
+	default Boolean FreepsPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Play " + GameUtils.getFullName(card)); }
+	default Boolean ShadowPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Play " + GameUtils.getFullName(card)); }
 
-	default Boolean FreepsTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P1, "Transfer " + GameUtils.getFullName(card)); }
-	default Boolean ShadowTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P2, "Transfer " + GameUtils.getFullName(card)); }
+	default Boolean FreepsTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Transfer " + GameUtils.getFullName(card)); }
+	default Boolean ShadowTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Transfer " + GameUtils.getFullName(card)); }
 	/**
 	 * Checks whether the Free Peoples player has an action available containing the provided text.
 	 * @param action The text to search for.
 	 * @return True if an active decision has an action matching text, otherwise false.
 	 */
-	default Boolean FreepsActionAvailable(String action) { return ActionAvailable(P1, action); }
+	default Boolean FreepsActionAvailable(String action) { return ActionAvailable(P1(), action); }
 	/**
 	 * Checks whether the Shadow player has an action available containing the provided text.
 	 * @param action The text to search for.
 	 * @return True if an active decision has an action matching text, otherwise false.
 	 */
-	default Boolean ShadowActionAvailable(String action) { return ActionAvailable(P2, action); }
+	default Boolean ShadowActionAvailable(String action) { return ActionAvailable(P2(), action); }
 	/**
 	 * Checks whether the given player has an action available containing the provided text.
 	 * @param player The player to check for.
@@ -98,24 +98,24 @@ public interface Actions extends Decisions, Choices {
 	}
 
 
-	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card)); }
-	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card)); }
+	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card)); }
+	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card)); }
 
-	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Transfer")); }
-	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card, "Transfer ")); }
+	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Transfer")); }
+	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Transfer ")); }
 
 	/**
 	 * Causes the Free Peoples player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void FreepsPlayCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Play")); }
+	default void FreepsPlayCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Play")); }
 	/**
 	 * Causes the Shadow player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void ShadowPlayCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card, "Play")); }
+	default void ShadowPlayCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Play")); }
 
 
 	/**
@@ -123,7 +123,7 @@ public interface Actions extends Decisions, Choices {
 	 * copy of that character in play.
 	 * @return Whether a discard-to-heal action is currently available
 	 */
-	default boolean FreepsHasDiscardToHealAvailable() { return ActionAvailable(P1, "Heal by discard"); }
+	default boolean FreepsHasDiscardToHealAvailable() { return ActionAvailable(P1(), "Heal by discard"); }
 
 	/**
 	 * Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a
@@ -131,7 +131,7 @@ public interface Actions extends Decisions, Choices {
 	 * @param card The card to discard from hand.
 	 * legal to use (due to costs, requirements, or other rules).
 	 */
-	default void FreepsDiscardToHeal(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Heal by discard")); }
+	default void FreepsDiscardToHeal(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Heal by discard")); }
 	/**
 	 * Searches the currently available actions on the current decision for the given player and returns the ID of an
 	 * action which contains the provided text in its description.
