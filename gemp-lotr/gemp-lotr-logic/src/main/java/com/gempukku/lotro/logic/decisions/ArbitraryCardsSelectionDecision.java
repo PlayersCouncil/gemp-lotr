@@ -72,6 +72,14 @@ public abstract class ArbitraryCardsSelectionDecision extends AbstractAwaitingDe
         return result;
     }
 
+    /**
+     * @return The cards on offer, in the order of the "temp" IDs the players are shown (the first is temp0).  Null if
+     * this decision was rebuilt from its serialized form and so has no cards behind it.
+     */
+    public Collection<? extends PhysicalCard> getPhysicalCards() {
+        return _physicalCards;
+    }
+
     protected PhysicalCard getPhysicalCardByIndex(int index) {
         int i = 0;
         for (PhysicalCard physicalCard : _physicalCards) {

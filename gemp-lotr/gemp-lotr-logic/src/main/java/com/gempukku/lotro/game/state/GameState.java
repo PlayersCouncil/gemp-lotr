@@ -87,6 +87,8 @@ public class GameState {
 
     private GameRandom _random = GameRandom.DEFAULT;
     private String _fixedFreePeoplePlayer;
+    private PregameSetup _pregameSetup;
+    private final Map<String, PhysicalCard> _cardLabels = new HashMap<>();
 
     private GameStats _mostRecentGameStats = null;
     private boolean _isInit = false;
@@ -1369,6 +1371,58 @@ public class GameState {
 
     public int getTwilightPool() {
         return _twilightPool;
+    }
+
+    /**
+     * @return What will arrange the board in place of the usual opening procedure, or null if the game opens as usual.
+     */
+    public PregameSetup getPregameSetup() {
+        return _pregameSetup;
+    }
+
+    /**
+     * Has this game begin with a prepared position.  Only do this before the game has started.
+     */
+    public void setPregameSetup(PregameSetup pregameSetup) {
+        _pregameSetup = pregameSetup;
+    }
+
+    /**
+     * Gives one particular card in this game a name of its own, so that it can be picked out later no matter where
+     * it has gone or what its card ID has become (see the "alias" filter).
+     * @param label The name; labelling a second card with the same name replaces the first.
+     */
+    public void labelCard(String label, PhysicalCard card) {
+        _cardLabels.put(label, card);
+    }
+
+    /**
+     * @return The card that was given this name with labelCard, or null if there is none.
+     */
+    public PhysicalCard getLabeledCard(String label) {
+        return _cardLabels.get(label);
+    }
+
+    /**
+     * @return The name a card was given with labelCard, or null if it has none.
+     */
+    public String getCardLabel(PhysicalCard card) {
+        for (Map.Entry<String, PhysicalCard> entry : _cardLabels.entrySet())
+            if (entry.getValue() == card)
+                return entry.getKey();
+        return null;
+    }
+
+    /**
+     * Creates a card that is in no deck and no zone, from a blueprint that need not be in the card library.  It is not
+     * shown to the players.  This is how a game gets a card whose only purpose is to carry rules (see
+     * PhysicalCardImpl.startAffectingGame).
+     */
+    public PhysicalCardImpl createLooseCard(String ownerPlayerId, String blueprintId, LotroCardBlueprint blueprint) {
+        int cardId = nextCardId();
+        PhysicalCardImpl result = new PhysicalCardImpl(cardId, blueprintId, ownerPlayerId, blueprint);
+        _allCards.put(cardId, result);
+        return result;
     }
 
     /**

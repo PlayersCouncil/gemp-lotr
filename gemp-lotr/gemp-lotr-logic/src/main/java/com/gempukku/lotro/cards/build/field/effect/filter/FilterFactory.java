@@ -633,6 +633,13 @@ public class FilterFactory {
                         return Filters.maxVitality(amount);
                     };
                 });
+        //One particular card in this game, by the name it was given with GameState.labelCard
+        parameterFilters.put("alias",
+                (parameter, environment) -> {
+                    final String label = parameter.trim();
+                    return (actionContext) -> (Filter)
+                            (game, physicalCard) -> physicalCard == game.getGameState().getLabeledCard(label);
+                });
         parameterFilters.put("memory",
                 (parameter, environment) -> (actionContext) -> Filters.in(actionContext.getCardsFromMemory(parameter)));
         parameterFilters.put("name",

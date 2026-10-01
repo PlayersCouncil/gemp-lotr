@@ -95,9 +95,16 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
 
         _game = new DefaultLotroGame(format, decks, _userFeedback, library, info);
         _userFeedback.setGame(_game);
-        _game.startGame();
         _gameState = _game.getGameState();
+        BeforeGameStarts();
+        _game.startGame();
     }
+
+    /**
+     * Called once the game exists but before it has started running, for anything that has to be in place from the
+     * very first step (e.g. where the game gets its random outcomes from).  Does nothing by default.
+     */
+    protected void BeforeGameStarts() { }
 
     private final List<PhysicalCardImpl> _createdCards = new ArrayList<>();
 
