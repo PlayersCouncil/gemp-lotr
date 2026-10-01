@@ -76,19 +76,31 @@ public class ScenarioSession implements DecisionObserver {
         if (!_table.Arranged())
             return;
 
-        Step step = _director.end() != null ? null : _director.match(player, decision);
+        Step step = null;
         ScenarioDirector.Presentation shown = null;
         String answer = null;
         String problem = null;
-        if (step != null) {
-            try {
-                shown = _director.present(step, player, decision);
-                answer = _director.scriptedAnswer(step, decision);
-            } catch (ScenarioScriptException exp) {
-                problem = exp.getMessage();
-                shown = _director.presentUnrestricted(step);
-                answer = null;
+        try {
+            //Once a step has ended the scenario, the script has nothing more to say
+            if (_director.end() == null)
+                step = _director.match(player, decision);
+            if (step != null) {
+                try {
+                    shown = _director.present(step, player, decision);
+                    answer = _director.scriptedAnswer(step, decision);
+                } catch (ScenarioScriptException exp) {
+                    problem = exp.getMessage();
+                    shown = _director.presentUnrestricted(step);
+                    answer = null;
+                }
             }
+        } catch (RuntimeException exp) {
+            //A mistake in the scenario must not take the game down with it: this is called from inside the game
+            StackTraceElement[] trace = exp.getStackTrace();
+            problem = "the script could not be applied: " + exp + (trace.length > 0 ? " at " + trace[0] : "");
+            step = null;
+            shown = null;
+            answer = null;
         }
         Ruling ruling = new Ruling(player, decision, step, shown, answer, problem);
         _rulings.put(player, ruling);

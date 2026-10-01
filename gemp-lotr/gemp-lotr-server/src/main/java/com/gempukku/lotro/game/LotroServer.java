@@ -13,10 +13,16 @@ import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.BotService;
+import com.gempukku.lotro.hall.GameTimer;
+import com.gempukku.lotro.scenario.LiveScenario;
+import com.gempukku.lotro.scenario.ScenarioDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -45,6 +51,17 @@ public class LotroServer extends AbstractServer {
 
     private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
+    /**
+     * A scenario's player is given a day to finish and half an hour over any one decision.  The clock is only there
+     * to notice that somebody has gone, never to hurry anybody who is still reading.
+     */
+    public static final GameTimer SCENARIO_TIMER = new GameTimer(false, "Scenario", 60 * 60 * 24, 60 * 30);
+
+    /** The scenario each player is in the middle of, by player name.  A player has one at a time. */
+    private final Map<String, String> _scenarioGames = new HashMap<>();
+    /** Gives the scenarios' scripted opponents their answers, each after its pause. */
+    private final ScheduledExecutorService _scenarioTimer;
+
     public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
             GameRecorder gameRecorder, MarkdownParser parser, BotService botService,
             PackOpener packOpener) {
@@ -55,6 +72,13 @@ public class LotroServer extends AbstractServer {
         _markdownParser = parser;
         _botService = botService;
         _packOpener = packOpener;
+
+        AtomicInteger threadNumber = new AtomicInteger();
+        _scenarioTimer = Executors.newScheduledThreadPool(2, runnable -> {
+            Thread thread = new Thread(runnable, "scenario-opponent-" + threadNumber.incrementAndGet());
+            thread.setDaemon(true);
+            return thread;
+        });
     }
 
     protected void cleanup() {
@@ -212,6 +236,74 @@ public class LotroServer extends AbstractServer {
             return lotroGameMediator;
         } finally {
             _lock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Starts a scenario for a player: a game against the scenario's scripted opponent, on the board and with the
+     * decks its file describes.  The game is not listed in the hall and nobody else can watch it.  If the player was
+     * in the middle of another scenario, that one is given up.
+     * @param format The scenario's format, already looked up.
+     * @param text Turns the text of the scenario's messages into what the client shows.
+     * @return The game, set going and waiting on its first decision.
+     * @throws RuntimeException if the scenario's board cannot be laid out.  A scenario that passes the headless
+     * runner never does this.
+     */
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format, LiveScenario.TextRenderer text) {
+        final String playerName = player.getName();
+        final String gameId;
+        final LotroGameMediator mediator;
+        LotroGameMediator previous;
+
+        _lock.writeLock().lock();
+        try {
+            String previousId = _scenarioGames.get(playerName);
+            previous = previousId == null ? null : _runningGames.get(previousId);
+
+            gameId = String.valueOf(_nextGameId);
+            LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer);
+            mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+
+            _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
+            mediator.addGameResultListener(
+                new GameResultListener() {
+                    @Override
+                    public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+
+                    @Override
+                    public void gameCancelled() {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+                });
+            mediator.sendMessageToPlayers("You are starting the " + scenario.kind.name().toLowerCase() + " \"" + scenario.title + "\"");
+
+            _runningGames.put(gameId, mediator);
+            _scenarioGames.put(playerName, gameId);
+            _nextGameId++;
+        } finally {
+            _lock.writeLock().unlock();
+        }
+
+        //Outside the server-wide lock: both of these take a game's own lock
+        if (previous != null && !previous.isFinished())
+            previous.concede(player);
+        mediator.startGame();
+        return mediator;
+    }
+
+    /**
+     * @return The scenario game a player is in the middle of, or null if they are not in one.
+     */
+    public LotroGameMediator getScenarioGame(String playerName) {
+        _lock.readLock().lock();
+        try {
+            String gameId = _scenarioGames.get(playerName);
+            LotroGameMediator mediator = gameId == null ? null : _runningGames.get(gameId);
+            return mediator == null || mediator.isFinished() ? null : mediator;
+        } finally {
+            _lock.readLock().unlock();
         }
     }
 

@@ -25,6 +25,7 @@ import com.gempukku.lotro.patchnotes.LibraryCardLookup;
 import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
 import com.gempukku.lotro.patchnotes.PatchNotesLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
+import com.gempukku.lotro.scenario.ScenarioLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import com.gempukku.lotro.bots.BotService;
@@ -166,6 +167,20 @@ public class ServerBuilder {
                 patchNoteCards);
         objectMap.put(PatchNoteAnnouncer.class, patchNoteAnnouncer);
         patchNoteAnnouncer.start(PatchNoteAnnouncer.DEFAULT_FIRST_CHECK_DELAY_MS, PatchNoteAnnouncer.DEFAULT_CHECK_INTERVAL_MS);
+
+        // Scenarios (tutorials, puzzles, sandboxes): the files that ship in the cards module's scenarios/ folder, and
+        // the ones players have written, which live in a folder of their own outside the repository.  Both are read
+        // on first use and again whenever a file changes, so a scenario can be edited in place on a running server.
+        String userScenarios = AppConfig.getProperty("scenarios.user.path");
+        ScenarioLibrary scenarios = new ScenarioLibrary(AppConfig.getResourceFile("scenarios"),
+                userScenarios == null || userScenarios.isBlank() ? null : new File(userScenarios),
+                extract(objectMap, LotroCardBlueprintLibrary.class),
+                extract(objectMap, LotroFormatLibrary.class)::getFormat,
+                patchNoteCards);
+        objectMap.put(ScenarioLibrary.class, scenarios);
+        extract(objectMap, CacheManager.class).addCache(scenarios);
+        // a scenario is checked against the cards, so it is checked again when they change
+        extract(objectMap, LotroCardBlueprintLibrary.class).subscribeToRefreshes(scenarios::clearCache);
 
         objectMap.put(AdminService.class,
                 new AdminService(

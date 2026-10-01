@@ -248,6 +248,12 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     }
 
     @Override
+    public void scenarioEvent(String playerId, String json) {
+        if (playerId.equals(_self))
+            appendEvent(new GameEvent(SCENARIO).participantId(playerId).scenario(json));
+    }
+
+    @Override
     public void sendWarning(String playerId, String warning) {
         if (playerId.equals(_self))
             appendEvent(new GameEvent(SEND_WARNING).message(warning));

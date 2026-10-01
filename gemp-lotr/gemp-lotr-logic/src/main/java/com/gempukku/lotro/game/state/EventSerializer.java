@@ -71,6 +71,8 @@ public class EventSerializer {
             }
 
         }
+        if (gameEvent.getScenario() != null)
+            eventElem.setAttribute("scenario", gameEvent.getScenario());
         if (gameEvent.getGameStats() != null)
             serializeGameStats(doc, eventElem, gameEvent.getGameStats());
         if (gameEvent.getAwaitingDecision() != null)

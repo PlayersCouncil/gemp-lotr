@@ -26,7 +26,8 @@ public class GameEvent {
         CHAT_MESSAGE("CM"),
         GAME_ENDED("EG"),
         CARD_AFFECTED_BY_CARD("CAC"), SHOW_CARD_ON_SCREEN("EP"), FLASH_CARD_IN_PLAY("CA"), DECISION("D"),
-        PRE_GAME_SETUP("PGS");
+        PRE_GAME_SETUP("PGS"),
+        SCENARIO("S");
 
         private final String code;
 
@@ -63,6 +64,7 @@ public class GameEvent {
     private ZonedDateTime _timestamp;
     private Integer _version;
     private boolean _discardIsPublic;
+    private String _scenario;
 
     public GameEvent(Type type) {
         _type = type;
@@ -286,6 +288,15 @@ public class GameEvent {
 
     public GameEvent phase(String phase) {
         _phase = phase;
+        return this;
+    }
+
+    public String getScenario() {
+        return _scenario;
+    }
+
+    public GameEvent scenario(String json) {
+        _scenario = json;
         return this;
     }
 
