@@ -31,7 +31,11 @@ public class CheckForCorruptionGameProcess implements GameProcess {
             game.getGameState().stopAffectingCardsForCurrentPlayer();
         }
 
-        _nextProcess = new PlayStartingFellowshipGameProcess(game.getGameState().getPlayerOrder().getClockwisePlayOrder(_firstPlayer, false), _firstPlayer);
+        var pregameSetup = game.getGameState().getPregameSetup();
+        if (pregameSetup != null)
+            _nextProcess = new PreparedBoardGameProcess(_firstPlayer, pregameSetup);
+        else
+            _nextProcess = new PlayStartingFellowshipGameProcess(game.getGameState().getPlayerOrder().getClockwisePlayOrder(_firstPlayer, false), _firstPlayer);
     }
 
     @Override
