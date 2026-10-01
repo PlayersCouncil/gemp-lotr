@@ -69,7 +69,7 @@ public final class ScenarioValidator {
             problems.add("setup.startAt: only turn 1, fellowship is supported so far");
 
         for (Step step : def.steps) {
-            String context = "step '" + step.id + "'";
+            String context = "step " + step.label();
             requirements(step.when.require, context + ".when.require", problems);
             if (step.until != null)
                 requirements(step.until.require, context + ".until.require", problems);

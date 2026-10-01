@@ -132,8 +132,8 @@ public final class ScenarioParser {
             int index = 0;
             for (JsonValue stepValue : steps.asArray()) {
                 index++;
-                Step step = parseStep(def, stepValue, "steps[" + index + "]");
-                if (!ids.add(step.id))
+                Step step = parseStep(def, stepValue, index);
+                if (step.id != null && !ids.add(step.id))
                     throw new ScenarioFormatException("steps: there are two steps called '" + step.id + "'");
                 def.steps.add(step);
             }
@@ -264,11 +264,16 @@ public final class ScenarioParser {
         return new RngEntry(kind, seat, zone, result);
     }
 
-    private static Step parseStep(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
-        JsonObject object = asObject(value, context);
+    private static Step parseStep(ScenarioDefinition def, JsonValue value, int number) throws ScenarioFormatException {
+        JsonObject object = asObject(value, "step " + number);
         Step step = new Step();
-        step.id = requireString(object, "id", context);
-        context = "step '" + step.id + "'";
+        //Steps are known by where they come in the list.  A step can be given a name as well, which shows up beside
+        // its number in reports; nothing else uses it.
+        step.number = number;
+        step.id = optionalString(object, "id", null, "step " + number);
+        if (step.id != null && !step.id.matches("[A-Za-z][A-Za-z0-9_-]*"))
+            throw new ScenarioFormatException("step " + number + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
+        String context = "step " + step.label();
         checkFields(object, context, "id", "when", "until", "skipWhen", "checkpoint", "do", "messages", "allow",
                 "answer", "end");
 
@@ -467,7 +472,7 @@ public final class ScenarioParser {
             Message message = new Message();
             if (entry.isObject()) {
                 JsonObject object = entry.asObject();
-                checkFields(object, entryContext, "title", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance");
+                checkFields(object, entryContext, "title", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on");
                 message.title = optionalString(object, "title", null, entryContext);
                 message.text = requireString(object, "text", entryContext);
                 message.anchor = optionalString(object, "anchor", null, entryContext);
@@ -478,6 +483,9 @@ public final class ScenarioParser {
                 if (!List.of("auto", "above", "below", "left", "right").contains(message.side))
                     throw new ScenarioFormatException(entryContext + ".side: has to be auto, above, below, left or right");
                 message.advance = optionalEnum(object, "advance", Advance.class, null, entryContext);
+                String on = optionalString(object, "on", null, entryContext);
+                if (on != null)
+                    message.on = parseMoment(def, on, entryContext + ".on");
             } else {
                 message.text = scalar(entry, entryContext);
             }
@@ -494,6 +502,23 @@ public final class ScenarioParser {
             result.add(message);
         }
         return result;
+    }
+
+    private static Moment parseMoment(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {
+        List<Terms.Term> terms = Terms.parse(text, context);
+        if (terms.size() == 1) {
+            Terms.Term term = terms.getFirst();
+            if (term.is("start") && term.args().isEmpty())
+                return new Moment(MomentKind.START, null);
+            if (term.is("ready") && term.args().isEmpty())
+                return new Moment(MomentKind.READY, null);
+            if (term.is("picked"))
+                return new Moment(MomentKind.PICKED, card(def, term.arg(0, context), context).alias());
+            if (term.is("assigned"))
+                return new Moment(MomentKind.ASSIGNED, card(def, term.arg(0, context), context).alias());
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + text + "' means.  Expected one of start, "
+                + "picked(card), assigned(character), ready");
     }
 
     private static Allow parseAllow(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {

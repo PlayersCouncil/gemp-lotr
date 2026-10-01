@@ -193,7 +193,6 @@ public class ScenarioEngineTest {
         ScenarioTable table = ScenarioTesting.table("""
                 	steps: [
                 		{
-                			id: change
                 			when: freeps, action
                 			do: wound(frodo, 2), move(gandalf, freeps.hand), move(runner1, shadow.minions), twilight(5), burdens(+2)
                 			messages: [
@@ -234,7 +233,6 @@ public class ScenarioEngineTest {
                 	}
                 	steps: [
                 		{
-                			id: prepare
                 			when: freeps, action, phase(fellowship)
                 			until: phase(regroup)
                 			messages: [
@@ -292,12 +290,10 @@ public class ScenarioEngineTest {
                 	coverage: guided
                 	steps: [
                 		{
-                			id: maneuver
                 			when: freeps, action, phase(maneuver)
                 			skipWhen: phase(regroup)
                 		}
                 		{
-                			id: regroup
                 			when: freeps, action, phase(regroup)
                 		}
                 	]
@@ -313,9 +309,9 @@ public class ScenarioEngineTest {
             if (matched == null)
                 table.PlayerDecided(player, AnswerCompiler.leastAnswer(decision));
         }
-        assertEquals("regroup", matched.id);
-        assertEquals(StepStatus.SKIPPED, director.statuses().get("maneuver"));
-        assertEquals(StepStatus.MATCHED, director.statuses().get("regroup"));
+        assertEquals("Steps are known by their place in the script", 2, matched.number);
+        assertEquals(StepStatus.SKIPPED, director.statuses().get("1"));
+        assertEquals(StepStatus.MATCHED, director.statuses().get("2"));
     }
 
     @Test
@@ -332,7 +328,6 @@ public class ScenarioEngineTest {
                 	}
                 	steps: [
                 		{
-                			id: play-a-minion
                 			when: human, action, phase(shadow)
                 			allow: play(runner1)
                 			end: complete
@@ -376,7 +371,7 @@ public class ScenarioEngineTest {
         assertTrue(problems.get(0), problems.get(0).contains("cards: 'aragorn': there is no card 4_9999"));
         assertTrue(problems.get(1), problems.get(1).contains("sites.freeps: 1_89 is not a site"));
         assertTrue(problems.get(2), problems.get(2).startsWith("rules.freeps:"));
-        assertTrue(problems.get(3), problems.get(3).startsWith("step 'a'.when.require:"));
+        assertTrue(problems.get(3), problems.get(3).startsWith("step 1 (a).when.require:"));
 
         ScenarioRunReport report = ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format(def.format));
         assertFails(report, "there is no card 4_9999");
@@ -394,7 +389,6 @@ public class ScenarioEngineTest {
         assertFails(ScenarioTesting.run("""
                 	steps: [
                 		{
-                			id: impossible
                 			when: freeps, action
                 			allow: play(aragorn)
                 		}
@@ -410,7 +404,6 @@ public class ScenarioEngineTest {
                 	]
                 	steps: [
                 		{
-                			id: only
                 			when: freeps, action
                 			allow: pass
                 			end: complete
@@ -421,10 +414,10 @@ public class ScenarioEngineTest {
                 		}
                 	]
                 """);
-        assertFails(report, "step 'leftover' was never reached");
+        assertFails(report, "step 2 (leftover) [when: freeps] was never reached");
         assertFails(report, "shuffle(freeps.deck: boromir) was never used");
-        assertEquals(StepStatus.MATCHED, report.steps.get("only"));
-        assertEquals(StepStatus.UNREACHED, report.steps.get("leftover"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1"));
+        assertEquals("A step that was given a name carries it beside its number", StepStatus.UNREACHED, report.steps.get("2 (leftover)"));
     }
 
     @Test
@@ -432,11 +425,10 @@ public class ScenarioEngineTest {
         assertFails(ScenarioTesting.run("""
                 	steps: [
                 		{
-                			id: open
                 			when: freeps, action
                 		}
                 	]
-                """), "step 'open' has no answer for the runner");
+                """), "step 1 has no answer for the runner");
     }
 
     @Test
@@ -448,7 +440,6 @@ public class ScenarioEngineTest {
                 	}
                 	steps: [
                 		{
-                			id: first
                 			when: freeps, action, phase(fellowship)
                 			allow: pass
                 		}
@@ -457,6 +448,6 @@ public class ScenarioEngineTest {
         assertTrue(report.toString(), report.passed());
         assertEquals(RunnerLevel.PREFIX, report.reached);
         assertEquals(RunnerLevel.PREFIX, report.required);
-        assertEquals(StepStatus.MATCHED, report.steps.get("first"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1"));
     }
 }

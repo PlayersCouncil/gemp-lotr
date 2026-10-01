@@ -65,7 +65,7 @@ public class ScenarioDirector {
         _table = table;
         _def = table.Definition();
         for (Step step : _def.steps)
-            _statuses.put(step.id, StepStatus.UNREACHED);
+            _statuses.put(step.label(), StepStatus.UNREACHED);
     }
 
     public Map<String, StepStatus> statuses() {
@@ -104,14 +104,14 @@ public class ScenarioDirector {
             if (step.repeats() && matches(step.until, player, decision)) {
                 //A repeating step that never got to apply was simply not needed
                 if (_timesApplied == 0)
-                    _statuses.put(step.id, StepStatus.SKIPPED);
+                    _statuses.put(step.label(), StepStatus.SKIPPED);
                 advance();
                 continue;
             }
 
             if (matches(step.when, player, decision)) {
                 if (_timesApplied == 0) {
-                    _statuses.put(step.id, StepStatus.MATCHED);
+                    _statuses.put(step.label(), StepStatus.MATCHED);
                     for (DoOp op : step.doOps)
                         _table.Apply(op);
                 }
@@ -119,7 +119,7 @@ public class ScenarioDirector {
             }
 
             if (_timesApplied == 0 && step.skipWhen != null && matches(step.skipWhen, player, decision)) {
-                _statuses.put(step.id, StepStatus.SKIPPED);
+                _statuses.put(step.label(), StepStatus.SKIPPED);
                 advance();
                 continue;
             }
@@ -211,7 +211,7 @@ public class ScenarioDirector {
             else if (step.answers.size() == 1)
                 answer = step.answers.getFirst();
             else
-                throw new ScenarioScriptException("step '" + step.id + "' lists " + step.answers.size()
+                throw new ScenarioScriptException("step " + step.label() + " lists " + step.answers.size()
                         + " answers but has been asked for another.  The decision is: " + AnswerCompiler.describe(_table, decision));
         } else if (step.allow != null && step.allow.answers.size() == 1 && step.allow.passWhen == null) {
             answer = step.allow.answers.getFirst();
@@ -255,7 +255,7 @@ public class ScenarioDirector {
             if (allow.passWhen != null && _table.Holds(allow.passWhen, player))
                 passAllowed = true;
             if (allowed.isEmpty() && !passAllowed)
-                throw new ScenarioScriptException("step '" + step.id + "' allows nothing that this decision offers.  The decision is: "
+                throw new ScenarioScriptException("step " + step.label() + " allows nothing that this decision offers.  The decision is: "
                         + AnswerCompiler.describe(_table, decision));
         }
         return new Presentation(step, messages, allowed, passAllowed);
