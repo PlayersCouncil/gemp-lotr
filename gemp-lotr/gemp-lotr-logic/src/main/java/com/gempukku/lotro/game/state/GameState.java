@@ -71,6 +71,8 @@ public class GameState {
     private final Map<String, List<PhysicalCard>> _metaSites = new HashMap<>();
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
+    /** Scenario games: what the scenario is showing each player at the moment, by player and then by kind. */
+    private final Map<String, Map<String, String>> _scenarioEvents = new HashMap<>();
     private boolean _finished = false;
 
     private LotroGame _lotroGame;
@@ -419,6 +421,9 @@ public class GameState {
             listener.initializePregameBoard(_preGameInfo);
         }
 
+        for (String json : _scenarioEvents.getOrDefault(playerId, Map.of()).values())
+            listener.scenarioEvent(playerId, json);
+
         // Someone joining or refreshing after the end must see the game as over, not be handed the decision that was
         // pending when it ended (a decision that timed out is never "finished" and would otherwise be re-sent)
         if (_finished) {
@@ -428,6 +433,13 @@ public class GameState {
             if (awaitingDecision != null)
                 listener.decisionRequired(playerId, awaitingDecision);
         }
+    }
+
+    /**
+     * Drops the messages kept for players who connect later.  Anybody already connected has had them.
+     */
+    public void forgetMessages() {
+        _lastMessages.clear();
     }
 
     public void sendMessage(String message) {
@@ -446,6 +458,31 @@ public class GameState {
 
     public void playerDecisionFinished(String playerId) {
         _playerDecisions.remove(playerId);
+    }
+
+    /**
+     * Shows a player something on a scenario's behalf, and keeps it so that it is shown again if the player
+     * reconnects.  Each player has one thing of each kind on show at a time: a later one replaces an earlier one.
+     * @param kind What sort of thing it is ("info", "step", "end").
+     * @param json What the client is to be sent.
+     */
+    public void showScenarioEvent(String playerId, String kind, String json) {
+        Map<String, String> events = _scenarioEvents.computeIfAbsent(playerId, x -> new LinkedHashMap<>());
+        //Taken out first so that the newest is always the last one sent to somebody reconnecting
+        events.remove(kind);
+        events.put(kind, json);
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.scenarioEvent(playerId, json);
+    }
+
+    /**
+     * Stops showing a player something on reconnecting.  The player is not told: whatever replaced it on their
+     * screen has already told them.
+     */
+    public void clearScenarioEvent(String playerId, String kind) {
+        Map<String, String> events = _scenarioEvents.get(playerId);
+        if (events != null)
+            events.remove(kind);
     }
 
     public void transferCard(PhysicalCard card, PhysicalCard transferTo) {

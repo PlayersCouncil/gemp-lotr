@@ -25,6 +25,7 @@ import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.BotDecisionFallback;
 import com.gempukku.lotro.bots.BotService;
+import com.gempukku.lotro.scenario.LiveScenario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,6 +53,8 @@ public class LotroGameMediator {
     private final boolean _soloGame;
     private final BotPlayer _botPlayer;
     private final LotroDeck _botDeck;
+    /** Set if this is a scenario's game: the scenario built the game, plays the other seat and decides when it ends. */
+    private final LiveScenario _scenario;
 
     private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock(true);
     private final ReentrantReadWriteLock.ReadLock _readLock = _lock.readLock();
@@ -75,6 +78,7 @@ public class LotroGameMediator {
         _cancellable = cancellable;
         this._showInGameHall = showInGameHall;
         _soloGame = isSolo;
+        _scenario = null;
         if (participants.length < 1)
             throw new IllegalArgumentException("Game can't have less than one participant");
 
@@ -129,6 +133,36 @@ public class LotroGameMediator {
         _userFeedback.setGame(_lotroGame);
     }
 
+    /**
+     * A scenario's game.  The scenario has already built the game, with the board and the decks its file describes;
+     * the mediator takes it over from there and lets the scenario answer for the seat nobody is sitting in.
+     */
+    public LotroGameMediator(String gameId, LiveScenario scenario, GameTimer gameTimer, boolean allowSpectators) {
+        _gameId = gameId;
+        _timeSettings = gameTimer;
+        _allowSpectators = allowSpectators;
+        _cancellable = false;
+        _showInGameHall = false;
+        _soloGame = true;
+        _botPlayer = null;
+        _botDeck = null;
+        _scenario = scenario;
+
+        for (Map.Entry<String, LotroDeck> deck : scenario.Table().Decks().entrySet()) {
+            _playerDecks.put(deck.getKey(), deck.getValue());
+            _playerClocks.put(deck.getKey(), 0);
+            _playersPlaying.add(deck.getKey());
+        }
+
+        _userFeedback = scenario.Table().userFeedback();
+        _lotroGame = scenario.Table().game();
+        scenario.SetHost(this::botAnswered);
+    }
+
+    public LiveScenario getScenario() {
+        return _scenario;
+    }
+
     public boolean isVisibleToUser(String username) {
         return !_showInGameHall || _playersPlaying.contains(username);
     }
@@ -152,6 +186,9 @@ public class LotroGameMediator {
     }
 
     public void setPlayerAutoPassSettings(String playerId, Set<Phase> phases) {
+        //A scenario says where its player is asked to pass; its script depends on it
+        if (_scenario != null)
+            return;
         if (_playersPlaying.contains(playerId)) {
             _lotroGame.setPlayerAutoPassSettings(playerId, phases);
         }
@@ -345,7 +382,10 @@ public class LotroGameMediator {
     public void startGame() {
         _writeLock.lock();
         try {
-            _lotroGame.startGame();
+            if (_scenario != null)
+                _scenario.Begin();
+            else
+                _lotroGame.startGame();
             startClocksForUsersPendingDecision();
         } finally {
             _writeLock.unlock();
@@ -372,7 +412,19 @@ public class LotroGameMediator {
                 }
             }
 
-            if (_lotroGame != null && _lotroGame.getWinnerPlayerId() == null) {
+            if (_scenario != null) {
+                //Whoever the game is waiting on, it is the person who is keeping it waiting: the scenario's own seat
+                // answers at once, unless it is waiting for the person to read something first.
+                if (_lotroGame.getWinnerPlayerId() == null) {
+                    for (long decisionSent : new ArrayList<>(_decisionQuerySentTimes.values())) {
+                        if (currentTime > decisionSent + _timeSettings.maxSecondsPerDecision() * 1000L) {
+                            _scenario.Abandoned();
+                            _lotroGame.playerLost(_scenario.HumanPlayer(), "Player decision timed-out");
+                            break;
+                        }
+                    }
+                }
+            } else if (_lotroGame != null && _lotroGame.getWinnerPlayerId() == null) {
                 for (Map.Entry<String, Long> playerDecision : new HashMap<>(_decisionQuerySentTimes).entrySet()) {
                     String player = playerDecision.getKey();
                     long decisionSent = playerDecision.getValue();
@@ -406,6 +458,8 @@ public class LotroGameMediator {
         try {
             if (_lotroGame.getWinnerPlayerId() == null && _playersPlaying.contains(playerId)) {
                 addTimeSpentOnDecisionToUserClock(playerId);
+                if (_scenario != null)
+                    _scenario.Abandoned();
                 _lotroGame.playerLost(playerId, "Concession");
             }
         } finally {
@@ -442,6 +496,7 @@ public class LotroGameMediator {
                             try {
                                 _userFeedback.participantDecided(playerName);
                                 awaitingDecision.decisionMade(answer);
+                                _userFeedback.decisionAccepted(playerName, awaitingDecision, answer);
 
                                 // Decision successfully made, add the time to user clock
                                 addTimeSpentOnDecisionToUserClock(playerName);
@@ -459,6 +514,7 @@ public class LotroGameMediator {
                             } finally {
                                 logIfSlow("player", playerName, decisionId, decisionText, answer, startedAt);
                             }
+                            scenarioAfterActions();
                         }
                     }
                 } else {
@@ -483,6 +539,8 @@ public class LotroGameMediator {
                         System.out.println(botName + " probably in non-trivial loop, ending the game");
 
                         addTimeSpentOnDecisionToUserClock(botName);
+                        if (_scenario != null)
+                            _scenario.Broke("the opponent has answered more than 1000 decisions: probably a loop");
                         _lotroGame.playerLost(botName, "Possible loop detected");
                         
                     }
@@ -494,6 +552,8 @@ public class LotroGameMediator {
                         if (!accepted.equals(answer))
                             LOG.warn("Bot " + botName + " game=" + _gameId + " decision=\"" + awaitingDecision.getText()
                                     + "\": answer \"" + answer + "\" was rejected, used fallback \"" + accepted + "\"");
+
+                        _userFeedback.decisionAccepted(botName, awaitingDecision, accepted);
 
                         // Decision successfully made, add the time to user clock
                         addTimeSpentOnDecisionToUserClock(botName);
@@ -508,13 +568,45 @@ public class LotroGameMediator {
                         System.out.println(botName + " wrong answer - " + decisionResultInvalidException.getWarningMessage());
 
                         addTimeSpentOnDecisionToUserClock(botName);
+                        if (_scenario != null)
+                            _scenario.Broke("the game would take no answer from the opponent to \"" + awaitingDecision.getText()
+                                    + "\": " + decisionResultInvalidException.getWarningMessage());
                         _lotroGame.playerLost(botName, "Invalid decision");
                     } catch (RuntimeException runtimeException) {
                         LOG.error("Error processing game decision", runtimeException);
                         _lotroGame.cancelGame();
                     }
+                    scenarioAfterActions();
                 }
             }
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
+    /**
+     * A scenario decides for itself when it is over, and looks each time its game comes to rest.
+     */
+    private void scenarioAfterActions() {
+        if (_scenario == null)
+            return;
+        try {
+            _scenario.AfterActions();
+            startClocksForUsersPendingDecision();
+        } catch (RuntimeException exp) {
+            LOG.error("Error in scenario " + _scenario.Definition().id + ", game " + _gameId, exp);
+            _lotroGame.cancelGame();
+        }
+    }
+
+    /**
+     * The person playing a scenario has read what one of the opponent's steps had to say, so the opponent may act.
+     */
+    public void scenarioAcknowledged(Player player, int stepNumber) {
+        _writeLock.lock();
+        try {
+            if (_scenario != null && !_lotroGame.isFinished())
+                _scenario.Acknowledge(player.getName(), stepNumber);
         } finally {
             _writeLock.unlock();
         }

@@ -41,6 +41,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final RtmdFeedbackRequestHandler _rtmdFeedbackRequestHandler;
     private final PatchNotesRequestHandler _patchNotesRequestHandler;
     private final ShareRequestHandler _shareRequestHandler;
+    private final ScenarioRequestHandler _scenarioRequestHandler;
 
     private final Pattern originPattern;
 
@@ -74,6 +75,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _rtmdFeedbackRequestHandler = new RtmdFeedbackRequestHandler(context);
         _patchNotesRequestHandler = new PatchNotesRequestHandler(context);
         _shareRequestHandler = new ShareRequestHandler(context);
+        _scenarioRequestHandler = new ScenarioRequestHandler(context);
     }
 
     @Override
@@ -141,6 +143,9 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _tableDraftRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "rtmdFeedback")) {
                 _rtmdFeedbackRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 12), request, context, responseWriter, remoteIp);
+            } else if (uri.startsWith(_serverContextPath + "scenarios")) {
+                // tutorials, puzzles and sandboxes: what there is to play, and starting one
+                _scenarioRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 9), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "patchnotes")) {
                 // public, read-only: Server Info > Patch Notes
                 _patchNotesRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);

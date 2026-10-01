@@ -75,4 +75,12 @@ public interface GameStateListener {
     void sendWarning(String playerId, String warning);
 
     void endGame();
+
+    /**
+     * Something a scenario wants shown to one player: a step of its script, or how it ended.  See
+     * GameState.showScenarioEvent.  Only a scenario game ever sends one.
+     * @param playerId Who it is for.
+     * @param json What to show, as the scenario wrote it for the client.
+     */
+    default void scenarioEvent(String playerId, String json) { }
 }

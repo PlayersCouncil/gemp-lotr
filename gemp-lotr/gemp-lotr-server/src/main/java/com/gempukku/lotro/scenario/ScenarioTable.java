@@ -295,6 +295,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         if (_def.setup.threats > 0)
             AddThreats(_def.setup.threats);
 
+        //How the table got to this point (the bid, the choice of seat) is not part of the scenario's story
+        _gameState.forgetMessages();
         _arranged = true;
     }
 

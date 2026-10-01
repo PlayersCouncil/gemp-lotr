@@ -60,6 +60,8 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             getCardInfo(request, uri.substring(1, uri.length() - 9), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/concede") && request.method() == HttpMethod.POST) {
             concede(request, uri.substring(1, uri.length() - 8), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/scenarioAck") && request.method() == HttpMethod.POST) {
+            scenarioAcknowledge(request, uri.substring(1, uri.length() - 12), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/cancel") && request.method() == HttpMethod.POST) {
             cancel(request, uri.substring(1, uri.length() - 7), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.GET) {
@@ -166,6 +168,35 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             throw new HttpProcessingException(404);
 
         gameMediator.cancel(resourceOwner);
+
+        responseWriter.writeXmlResponse(null);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * POST /game/&lt;id&gt;/scenarioAck (form: step) - in a scenario's game, the person has read what one of the
+     * opponent's steps had to say, and the opponent may now act.  step is the number the step event carried.
+     */
+    private void scenarioAcknowledge(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+        String participantId = getFormParameterSafely(postDecoder, "participantId");
+        String step = getFormParameterSafely(postDecoder, "step");
+        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+        LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
+        if (gameMediator == null)
+            throw new HttpProcessingException(404);
+
+        int stepNumber;
+        try {
+            stepNumber = Integer.parseInt(step);
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400);
+        }
+        gameMediator.scenarioAcknowledged(resourceOwner, stepNumber);
 
         responseWriter.writeXmlResponse(null);
         } finally {

@@ -150,6 +150,8 @@ public final class ScenarioParser {
             if (offScript != null) {
                 checkFields(offScript, "outcome.offScript", "message", "result");
                 def.outcome.offScriptMessage = optionalString(offScript, "message", null, "outcome.offScript");
+                if (def.outcome.offScriptMessage != null)
+                    Templates.check(def, def.outcome.offScriptMessage, "outcome.offScript.message");
                 def.outcome.offScriptResult = optionalEnum(offScript, "result", OffScriptResult.class, OffScriptResult.RESTART, "outcome.offScript");
             }
         }
@@ -531,10 +533,15 @@ public final class ScenarioParser {
             if (object.get("passWhen") != null)
                 allow.passWhen = jsonArrayText(object.get("passWhen"), context + ".passWhen");
             allow.otherwise = optionalString(object, "otherwise", null, context);
+            if (allow.otherwise != null)
+                Templates.check(def, allow.otherwise, context + ".otherwise");
             JsonObject hints = optionalObject(object, "hints", context);
             if (hints != null)
-                for (String alias : hints.names())
-                    allow.hints.put(card(def, alias, context + ".hints").alias(), scalar(hints.get(alias), context + ".hints." + alias));
+                for (String alias : hints.names()) {
+                    String hint = scalar(hints.get(alias), context + ".hints." + alias);
+                    Templates.check(def, hint, context + ".hints." + alias);
+                    allow.hints.put(card(def, alias, context + ".hints").alias(), hint);
+                }
         }
         if (answers != null)
             for (String line : lines(answers, context))
