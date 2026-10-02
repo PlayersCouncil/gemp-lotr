@@ -93,6 +93,7 @@ public class LiveScenario implements ScenarioSession.Listener {
     private boolean _begun;
     private Result _result;
     private final List<String> _problems = new ArrayList<>();
+    private final List<Runnable> _whenSettled = new ArrayList<>();
 
     private static final class Move {
         final AwaitingDecision decision;
@@ -158,6 +159,25 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     public void SetHost(Host host) {
         _host = host;
+    }
+
+    /**
+     * Has something done as soon as the scenario has settled how it ended.  That can be just before its game ends
+     * (the scenario ended the game) or just after (the game ended the scenario).  It is done inside the game's lock.
+     */
+    public void WhenSettled(Runnable action) {
+        _whenSettled.add(action);
+    }
+
+    private void settled(Result result) {
+        _result = result;
+        for (Runnable action : _whenSettled) {
+            try {
+                action.run();
+            } catch (RuntimeException exp) {
+                LOG.error("Scenario " + _def.id + ": something watching for its end failed", exp);
+            }
+        }
     }
 
     /**
@@ -333,7 +353,7 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public void Abandoned() {
         if (_result == null)
-            _result = Result.ABANDONED;
+            settled(Result.ABANDONED);
     }
 
     private boolean carriesOnOffScript() {
@@ -358,7 +378,6 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void finish(Result result, List<Map<String, Object>> messages, String message, boolean restart, boolean endGame) {
-        _result = result;
         _move = null;
         _table.gameState().clearScenarioEvent(_human, STEP);
 
@@ -368,7 +387,10 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("messages", messages);
         event.put("message", message);
         event.put("restart", restart);
+        //Whether there is a checkpoint to go back to, and if so which step it is
+        event.put("checkpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
         show(END, event);
+        settled(result);
 
         if (endGame) {
             if (result == Result.COMPLETE)

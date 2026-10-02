@@ -6,7 +6,9 @@ import com.gempukku.lotro.game.LotroGameMediator;
 import com.gempukku.lotro.game.LotroServer;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.scenario.ScenarioDefinition;
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
+import com.gempukku.lotro.scenario.ScenarioRunLog;
 import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -25,7 +27,9 @@ import java.util.Map;
  * Scenarios: tutorials, puzzles and sandboxes (see {@link ScenarioLibrary}).  Everything here needs a login.
  * <p>
  * GET /scenarios - what the player can start:
- * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified}], current:{gameId, id}|null}}.
+ * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified,
+ * progress:{status, attempts, version, firstCompleted, lastPlayed}|null}], current:{gameId, id}|null}}.
+ * {@code progress.status} is "started" or "complete".
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
  * offered one of those.  {@code current} is the scenario game the player is in the middle of, if any.<br>
  * POST /scenarios/start (form: id, optionally from=checkpoint) - starts a game of the scenario against its scripted
@@ -41,11 +45,13 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
     private static final Logger _log = LogManager.getLogger(ScenarioRequestHandler.class);
 
     private final ScenarioLibrary _scenarios;
+    private final ScenarioRunLog _runLog;
     private final LotroServer _lotroServer;
 
     public ScenarioRequestHandler(Map<Type, Object> context) {
         super(context);
         _scenarios = extractObject(context, ScenarioLibrary.class);
+        _runLog = extractObject(context, ScenarioRunLog.class);
         _lotroServer = extractObject(context, LotroServer.class);
     }
 
@@ -66,6 +72,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
         Player player = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
 
+        Map<String, DBDefs.ScenarioProgress> progress = _runLog.progressOf(player);
         List<Map<String, Object>> scenarios = new ArrayList<>();
         for (ScenarioLibrary.Entry entry : _scenarios.getAvailableTo(player.getName(), player.hasType(Player.Type.ADMIN))) {
             ScenarioDefinition def = entry.def();
@@ -79,6 +86,20 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             json.put("version", def.version);
             json.put("canonical", entry.canonical());
             json.put("verified", entry.verified());
+            DBDefs.ScenarioProgress played = progress.get(entry.id());
+            if (played == null) {
+                json.put("progress", null);
+            } else {
+                Map<String, Object> progressJson = new LinkedHashMap<>();
+                progressJson.put("status", played.status);
+                progressJson.put("attempts", played.attempts);
+                //The version last played or, once completed, the version completed: older than the scenario's own
+                // version means it has changed since
+                progressJson.put("version", played.version);
+                progressJson.put("firstCompleted", played.first_completed == null ? null : played.first_completed.toString());
+                progressJson.put("lastPlayed", played.last_played == null ? null : played.last_played.toString());
+                json.put("progress", progressJson);
+            }
             scenarios.add(json);
         }
 

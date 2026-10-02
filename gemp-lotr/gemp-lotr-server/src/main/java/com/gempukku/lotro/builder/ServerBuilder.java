@@ -26,6 +26,7 @@ import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
 import com.gempukku.lotro.patchnotes.PatchNotesLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
+import com.gempukku.lotro.scenario.ScenarioRunLog;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import com.gempukku.lotro.bots.BotService;
@@ -230,6 +231,10 @@ public class ServerBuilder {
                         extract(objectMap, MarkdownParser.class),
                         extract(objectMap, BotService.class),
                         new ProductLibraryPackOpener(extract(objectMap, ProductLibrary.class))));
+
+        ScenarioRunLog scenarioRunLog = new ScenarioRunLog(extract(objectMap, ScenarioDAO.class), extract(objectMap, GameRecorder.class));
+        objectMap.put(ScenarioRunLog.class, scenarioRunLog);
+        extract(objectMap, LotroServer.class).setScenarioRunLog(scenarioRunLog);
 
         objectMap.put(HallServer.class,
                 new HallServer(
