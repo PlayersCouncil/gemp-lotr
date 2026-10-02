@@ -1,5 +1,6 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.game.GameJournal;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -88,6 +89,8 @@ public class LiveScenario implements ScenarioSession.Listener {
     /** Set when the script has lost its place, to be dealt with as soon as the game stops working. */
     private String _offScript;
     private boolean _offScriptNoticeShown;
+    private int _lastCheckpoint;
+    private boolean _begun;
     private Result _result;
     private final List<String> _problems = new ArrayList<>();
 
@@ -111,6 +114,16 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
                         TextRenderer renderer, ScheduledExecutorService timer) {
+        this(def, library, format, humanPlayer, renderer, timer, null);
+    }
+
+    /**
+     * @param earlier The journal of an earlier game of this scenario for this game to repeat before anybody
+     *                connects, so that it starts where that journal ends; null to start at the beginning.  See
+     *                CheckpointJournal for the usual source of one.
+     */
+    public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
+                        TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier) {
         _def = def;
         _human = humanPlayer;
         _opponent = OPPONENT_PLAYER;
@@ -119,6 +132,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         _table = new ScenarioTable(def, library, format, humanPlayer, OPPONENT_PLAYER);
         _session = new ScenarioSession(_table);
         _session.Listen(this);
+        if (earlier != null)
+            _table.Follow(earlier);
         _table.Prepare();
     }
 
@@ -149,13 +164,48 @@ public class LiveScenario implements ScenarioSession.Listener {
      * Sets the game going.  To be called once, inside the game's lock, before anybody has connected.
      */
     public void Begin() {
-        _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.Serialize(infoEvent()));
+        //Until the game has got to where the person comes in (the first decision, or the end of an earlier game it
+        // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
+        _begun = true;
+        _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
+        for (String player : List.of(_opponent, _human)) {
+            Ruling ruling = _session.Ruling(player);
+            if (ruling != null)
+                act(ruling);
+        }
         AfterActions();
+    }
+
+    /**
+     * @return The journal to give a new game of this scenario so that it starts at the last checkpoint this game
+     * reached; null if it has not reached one.
+     */
+    public GameJournal CheckpointJournal() {
+        return _lastCheckpoint == 0 ? null : _table.Journal().upTo(stepMark(_lastCheckpoint));
+    }
+
+    /** The number of the last checkpoint step reached; 0 if none has been. */
+    public int LastCheckpoint() { return _lastCheckpoint; }
+
+    private static String stepMark(int stepNumber) {
+        return "step:" + stepNumber;
     }
 
     @Override
     public void ruled(Ruling ruling) {
+        //Each step's first decision is marked in the journal, so that a later game can be brought to that point
+        Step reached = ruling.step();
+        if (reached != null && !_session.Director().isContinuing(reached)) {
+            _table.Journal().mark(stepMark(reached.number));
+            if (reached.checkpoint)
+                _lastCheckpoint = reached.number;
+        }
+        if (_begun)
+            act(ruling);
+    }
+
+    private void act(Ruling ruling) {
         //Once the scenario is over, or about to be ended for leaving its script, nothing more is shown or played
         if (_result != null || (_offScript != null && !carriesOnOffScript()))
             return;
@@ -354,6 +404,9 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("opponent", _opponent);
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
+        //Set if the game did not start at the beginning: the checkpoint step it was brought back to
+        event.put("resumedAt", _table.AnswersFollowed() > 0 && _session.Director().currentStep() != null
+                ? _session.Director().currentStep().number : null);
         return event;
     }
 

@@ -163,6 +163,21 @@ public class LotroGameMediator {
         return _scenario;
     }
 
+    /**
+     * @return For a scenario's game, the journal that brings a new game of the scenario to the last checkpoint this
+     * one reached; null if it has reached none (or this is not a scenario's game).
+     */
+    public GameJournal checkpointJournal() {
+        if (_scenario == null)
+            return null;
+        _readLock.lock();
+        try {
+            return _scenario.CheckpointJournal();
+        } finally {
+            _readLock.unlock();
+        }
+    }
+
     public boolean isVisibleToUser(String username) {
         return !_showInGameHall || _playersPlaying.contains(username);
     }

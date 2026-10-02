@@ -9,6 +9,7 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.DecisionObserver;
+import com.gempukku.lotro.game.GameJournal;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
@@ -17,6 +18,7 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.PregameSetup;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
+import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -66,6 +68,12 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private final Map<String, LotroDeck> _decks = new HashMap<>();
     private ScenarioRandom _random;
     private boolean _arranged;
+
+    /** Players are written down by seat, so that a journal can be followed whoever is sitting there. */
+    private final GameJournal _journal = new GameJournal(player -> SeatOf(player).key());
+    private GameJournal _following;
+    private int _answersFollowed;
+    private String _followProblem;
 
     /**
      * @param humanPlayer The name of the player in the scenario's "human" seat.
@@ -144,6 +152,33 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     /**
+     * The record of this game: every answer either seat has given since the board was laid out, and every random
+     * outcome since the game began.  See GameJournal.
+     */
+    public GameJournal Journal() { return _journal; }
+
+    /**
+     * Has this game repeat an earlier game of the same scenario: Begin will give it the earlier game's random
+     * outcomes and then its answers, one after another, and leave it where the earlier journal ends.  Only before
+     * the game exists.
+     */
+    public void Follow(GameJournal earlier) {
+        if (_game != null)
+            throw new IllegalStateException("The game already exists; it is too late to have it follow another");
+        _following = earlier;
+        _journal.replayRandomFrom(earlier);
+    }
+
+    /** How many of the earlier game's answers this one was given. */
+    public int AnswersFollowed() { return _answersFollowed; }
+
+    /**
+     * @return Why this game could not follow the earlier one to its end; null if it did (or was not asked to).  A
+     * game that could not is somewhere between the start and where it was meant to get to, and is best thrown away.
+     */
+    public String FollowProblem() { return _followProblem; }
+
+    /**
      * @return Whether the scenario's board has been laid out yet.  Until it has, no alias refers to anything.
      */
     public boolean Arranged() { return _arranged; }
@@ -195,6 +230,33 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         FreepsDecided("1");
         ShadowDecided("0");
         FreepsDecided("0");
+
+        if (_following != null)
+            follow(_following);
+    }
+
+    private void follow(GameJournal earlier) {
+        for (GameJournal.Entry answer : earlier.answers()) {
+            Seat seat = answer.player().equals(Seat.FREEPS.key()) ? Seat.FREEPS : Seat.SHADOW;
+            String player = Player(seat);
+            AwaitingDecision decision = userFeedback().getAwaitingDecision(player);
+            if (!GameJournal.matches(answer, decision)) {
+                _followProblem = "answer " + (_answersFollowed + 1) + " was given by the " + seat.key() + " seat to a "
+                        + answer.detail() + ", but the game is "
+                        + (decision == null ? "not asking that seat anything" : "asking it a " + GameJournal.fingerprint(decision)
+                                + " (\"" + decision.getText() + "\")");
+                return;
+            }
+            try {
+                PlayerDecided(player, answer.value());
+            } catch (RuntimeException exp) {
+                _followProblem = "answer " + (_answersFollowed + 1) + " (\"" + answer.value() + "\") was not accepted: " + exp;
+                return;
+            }
+            _answersFollowed++;
+        }
+        if (_journal.divergence() != null)
+            _followProblem = _journal.divergence();
     }
 
     @Override
@@ -204,9 +266,20 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     protected void BeforeGameStarts() {
         for (DecisionObserver observer : _observers)
             _userFeedback.addDecisionObserver(observer);
+        //The table answers the bid and the choice of seat itself, the same way every time; they are not the game's story
+        _userFeedback.addDecisionObserver(new DecisionObserver() {
+            @Override
+            public void decisionIssued(String playerId, AwaitingDecision decision) { }
+
+            @Override
+            public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {
+                if (_arranged)
+                    _journal.decisionAnswered(playerId, decision, answer);
+            }
+        });
 
         _random = new ScenarioRandom(this, _def);
-        _gameState.setRandom(_random);
+        _gameState.setRandom(_journal.random(_random));
         _gameState.setPregameSetup(this);
         if (_def.oneSided)
             _gameState.setFixedFreePeoplePlayer(_freepsPlayer);
