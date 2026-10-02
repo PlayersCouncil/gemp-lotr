@@ -105,6 +105,9 @@ var GempLotrGameUI = Class.extend({
     
     escFunction: null,
 
+    // Set once a scenario (tutorial, puzzle) announces itself: the overlay that shows its messages
+    scenario: null,
+
     init: function (url, replayMode) {
         this.replayMode = replayMode;
 
@@ -779,6 +782,11 @@ var GempLotrGameUI = Class.extend({
                     }
                     this.lastSelectedCardId = clickedCardId;
                     this.lastSelectionTime = now;
+                    // a scenario step may not want this card clicked yet (it says so itself)
+                    if (this.scenario != null && !this.scenario.cardClicked(selectedCardElem)) {
+                        event.stopPropagation();
+                        return false;
+                    }
                     this.selectionFunction(clickedCardId, event);
                 }
                 event.stopPropagation();
@@ -1219,6 +1227,8 @@ var GempLotrGameUI = Class.extend({
 
     decisionFunction: function (decisionId, result) {
         var that = this;
+        if (this.scenario != null)
+            this.scenario.decisionAnswered();
         this.stopAnimatingTitle();
         this.stopTimerTick();
         this.communication.gameDecisionMade(decisionId, result,
@@ -1398,6 +1408,9 @@ var GempLotrGameUI = Class.extend({
             this.processGameEnd();
         } else if (eventType == "PGS") {
             this.preGameSetup(gameEvent);
+        } else if (eventType == "S") {
+            // a scenario (tutorial, puzzle) has something to show: see scenario/scenarioOverlay.js
+            this.animations.scenarioEvent(gameEvent, animate);
         }
     },
 

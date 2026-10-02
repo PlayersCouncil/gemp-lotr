@@ -1201,6 +1201,31 @@ var GameAnimations = Class.extend({
             });
     },
 
+    // Something a scenario wants shown.  It takes its place in the queue like any other event, so a step's messages
+    // appear after whatever led up to them has finished animating, and before the decision they are about.
+    scenarioEvent:function (element, animate) {
+        var that = this;
+        var json = element.getAttribute("scenario");
+        $("#main").queue(
+            function (next) {
+                if (that.game.scenario == null && typeof GempScenarioOverlay != "undefined")
+                    that.game.scenario = new GempScenarioOverlay(that.game);
+                if (that.game.scenario == null) {
+                    next();
+                    return;
+                }
+                if (that.game.replayMode) {
+                    // nobody is there to press Next in a replay: each message is held up for a while instead
+                    that.game.scenario.replayEvent(json, function (length) {
+                        return that.getAnimationLength(length);
+                    }, next);
+                } else {
+                    that.game.scenario.handleEvent(json);
+                    next();
+                }
+            });
+    },
+
     processDecision:function (decision, animate) {
         var that = this;
         $("#main").queue(
@@ -1228,6 +1253,9 @@ var GameAnimations = Class.extend({
                 
                 if (!animate)
                     that.game.layoutUI(false);
+
+                if (that.game.scenario != null)
+                    that.game.scenario.decisionShown(decision);
 
                 next();
             });

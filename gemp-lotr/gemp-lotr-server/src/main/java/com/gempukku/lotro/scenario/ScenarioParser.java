@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Reads a scenario file (HJSON) into a ScenarioDefinition.
@@ -31,6 +32,10 @@ import java.util.Set;
  * steps actually play out is for ScenarioRunner.
  */
 public final class ScenarioParser {
+    /** The outlines a client knows how to draw. */
+    private static final List<String> HIGHLIGHT_STYLES = List.of("gold", "red", "green", "blue");
+    private static final Pattern OPPONENT_NAME = Pattern.compile("[\\p{L}\\p{N} '.,\\-]{1,30}");
+
     private ScenarioParser() { }
 
     public static ScenarioDefinition parse(String hjson) throws ScenarioFormatException {
@@ -68,6 +73,9 @@ public final class ScenarioParser {
         if (opponent != null) {
             checkFields(opponent, "opponent", "name", "fallback");
             def.opponentName = optionalString(opponent, "name", null, "opponent");
+            //It is shown wherever a player's name is, the game log among them, so it is held to what a name may be
+            if (def.opponentName != null && !OPPONENT_NAME.matcher(def.opponentName).matches())
+                throw new ScenarioFormatException("opponent.name: has to be 1 to 30 letters, digits, spaces or any of ' . , -");
             def.fallback = optionalEnum(opponent, "fallback", Fallback.class, Fallback.FAIL, "opponent");
         }
 
@@ -479,7 +487,9 @@ public final class ScenarioParser {
                 message.text = requireString(object, "text", entryContext);
                 message.anchor = optionalString(object, "anchor", null, entryContext);
                 message.highlight = list(object.get("highlight"), entryContext + ".highlight");
-                message.highlightStyle = optionalString(object, "highlightStyle", "gold", entryContext);
+                message.highlightStyle = optionalString(object, "highlightStyle", "gold", entryContext).toLowerCase(Locale.ROOT);
+                if (!HIGHLIGHT_STYLES.contains(message.highlightStyle))
+                    throw new ScenarioFormatException(entryContext + ".highlightStyle: has to be one of " + String.join(", ", HIGHLIGHT_STYLES));
                 message.avoid = list(object.get("avoid"), entryContext + ".avoid");
                 message.side = optionalString(object, "side", "auto", entryContext).toLowerCase(Locale.ROOT);
                 if (!List.of("auto", "above", "below", "left", "right").contains(message.side))
@@ -488,6 +498,10 @@ public final class ScenarioParser {
                 String on = optionalString(object, "on", null, entryContext);
                 if (on != null)
                     message.on = parseMoment(def, on, entryContext + ".on");
+                //"start" is what a message with no moment already means, and everything downstream tells the two
+                // kinds of message apart by whether there is a moment at all
+                if (message.on != null && message.on.kind() == MomentKind.START)
+                    message.on = null;
             } else {
                 message.text = scalar(entry, entryContext);
             }

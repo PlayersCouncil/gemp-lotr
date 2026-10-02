@@ -472,6 +472,48 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    // Scenarios (tutorials, puzzles): see ScenarioRequestHandler on the server
+    getScenarios:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/scenarios",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    startScenario:function (id, fromCheckpoint, callback, failure) {
+        var data = {
+            participantId:getUrlParam("participantId"),
+            id:id};
+        if (fromCheckpoint)
+            data.from = "checkpoint";
+        $.ajax({
+            type:"POST",
+            url:this.url + "/scenarios/start",
+            cache:false,
+            data:data,
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    scenarioAcknowledge:function (step, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/scenarioAck",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                step:step},
+            success:callback,
+            error:failure,
+            dataType:"text"
+        });
+    },
     cancel:function (errorMap) {
         $.ajax({
             type:"POST",
