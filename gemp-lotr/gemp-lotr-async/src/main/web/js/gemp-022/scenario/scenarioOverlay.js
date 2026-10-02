@@ -483,6 +483,16 @@ var GempScenarioOverlay = Class.extend({
 
         this.layer = $("<div id='scenarioLayer'></div>").appendTo("body");
         this.highlights = $("<div class='scenario-highlights'></div>").appendTo(this.layer);
+        //A card shown large (see showZoom): a shade over the table, a frame the card is seen through, and over the
+        // card a darkening with holes in it where the message's subject is
+        this.zoomBox = $("<div class='scenario-zoom' style='display:none'><div class='scenario-zoom-shade'></div>"
+            + "<div class='scenario-zoom-frame'><img class='scenario-zoom-card' alt=''/>"
+            + "<svg class='scenario-zoom-dim' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd'/></svg>"
+            + "<div class='scenario-zoom-marks'></div></div></div>").appendTo(this.layer);
+        //The line from a bubble to what it is about, when the two are apart
+        this.pointer = $("<svg class='scenario-pointer' xmlns='http://www.w3.org/2000/svg' style='display:none'>"
+            + "<line class='scenario-pointer-edge'/><line class='scenario-pointer-line'/>"
+            + "<circle class='scenario-pointer-end' r='4'/></svg>").appendTo(this.layer);
         this.bubble = $("<div class='scenario-bubble' style='display:none'>"
             + "<div class='scenario-arrow'></div>"
             + "<div class='scenario-head'><span class='scenario-title'></span><span class='scenario-count'></span>"
@@ -1050,7 +1060,9 @@ var GempScenarioOverlay = Class.extend({
 
         this.bubble.removeClass("scenario-collapsed scenario-dragged");
         this.bubble.find(".scenario-collapse").html("&ndash;");
-        this.bubble.find(".scenario-title").text(message.title || (this.info != null ? this.info.title : ""));
+        //A heading is the author's to give; most messages have none
+        this.bubble.find(".scenario-title").text(message.header || "");
+        this.bubble.toggleClass("scenario-headed", !!message.header);
         this.bubble.find(".scenario-count").text(count);
         this.bubble.find(".scenario-body").html(message.html);
         this.bubble.find(".scenario-foot").css("display", message.advance == "next" ? "" : "none");
@@ -1058,6 +1070,7 @@ var GempScenarioOverlay = Class.extend({
             this.phase == "opponent" && position == this.startMessages.length - 1 ? "Continue" : "Next");
         this.bubble.css({display: "block", visibility: "hidden"});
 
+        this.showZoom(message.zoom);
         this.setHighlights(message.highlight || [], message.highlightStyle);
         this.refresh();
         this.bubble.css({visibility: "visible"});
@@ -1066,8 +1079,108 @@ var GempScenarioOverlay = Class.extend({
     hideBubble: function () {
         this.currentMessage = null;
         this.bubble.hide();
+        this.pointer.hide();
+        this.showZoom(null);
         this.setHighlights([]);
         this.refresh();
+    },
+
+    /* ---------------------------------------------------------------- a card shown large */
+
+    /**
+     * @param zoom {blueprint, magnify, focus: [{name, rect: [left, top, width, height]}]} with the rectangles in
+     *             percent of the card; null to put the card away
+     */
+    showZoom: function (zoom) {
+        this.zoom = zoom || null;
+        this.zoomFrame = null;
+        if (this.zoom == null) {
+            this.zoomBox.hide();
+            return;
+        }
+        var that = this;
+        var image = this.zoomBox.find(".scenario-zoom-card");
+        var url = Card.getImageUrl(zoom.blueprint);
+        //Until the picture has arrived its shape is taken from the kind of card it is
+        this.zoomShape = Card.isHorizontal(Card.StripBlueprintId(zoom.blueprint), "SPECIAL") ? 497 / 355 : 357 / 497;
+        image.unbind("load").bind("load", function () {
+            if (this.naturalWidth > 0 && this.naturalHeight > 0)
+                that.zoomShape = this.naturalWidth / this.naturalHeight;
+            that.bubbleSituation = null;
+        });
+        if (image.attr("src") != url)
+            image.attr("src", url);
+        var marks = this.zoomBox.find(".scenario-zoom-marks").empty();
+        for (var i = 0; i < zoom.focus.length; i++)
+            marks.append("<div class='scenario-zoom-mark'></div>");
+        this.zoomBox.show();
+    },
+
+    /**
+     * Sizes the large card to the window and puts the bubble's space beside it.
+     * @return the frame the card is seen through, and where on the screen each part in focus is
+     */
+    layoutZoom: function (bubbleWidth) {
+        var zoom = this.zoom;
+        var viewWidth = $(window).width(), viewHeight = $(window).height();
+        var gap = 28;
+        //As large as the window allows, with room left beside it for the bubble
+        var frameHeight = Math.max(120, viewHeight - 56);
+        var frameWidth = frameHeight * this.zoomShape;
+        var room = Math.max(160, viewWidth - bubbleWidth - gap - 40);
+        if (frameWidth > room) {
+            frameWidth = room;
+            frameHeight = frameWidth / this.zoomShape;
+        }
+        var frame = {
+            left: Math.max(12, (viewWidth - (frameWidth + gap + bubbleWidth)) / 2),
+            top: (viewHeight - frameHeight) / 2,
+            width: frameWidth, height: frameHeight
+        };
+
+        //Magnified, the card is larger than its frame, and is slid so that what is in focus sits in the middle
+        var scale = Math.max(1, zoom.magnify || 1);
+        var cardWidth = frameWidth * scale, cardHeight = frameHeight * scale;
+        var focusBox = null;
+        for (var i = 0; i < zoom.focus.length; i++) {
+            var rect = zoom.focus[i].rect;
+            focusBox = focusBox == null ? {left: rect[0], top: rect[1], right: rect[0] + rect[2], bottom: rect[1] + rect[3]} : {
+                left: Math.min(focusBox.left, rect[0]), top: Math.min(focusBox.top, rect[1]),
+                right: Math.max(focusBox.right, rect[0] + rect[2]), bottom: Math.max(focusBox.bottom, rect[1] + rect[3])
+            };
+        }
+        var centreX = focusBox == null ? 50 : (focusBox.left + focusBox.right) / 2;
+        var centreY = focusBox == null ? 50 : (focusBox.top + focusBox.bottom) / 2;
+        var cardLeft = Math.min(0, Math.max(frameWidth - cardWidth, frameWidth / 2 - cardWidth * centreX / 100));
+        var cardTop = Math.min(0, Math.max(frameHeight - cardHeight, frameHeight / 2 - cardHeight * centreY / 100));
+
+        this.zoomBox.find(".scenario-zoom-frame").css(frame);
+        this.zoomBox.find(".scenario-zoom-card").css({left: cardLeft, top: cardTop, width: cardWidth, height: cardHeight});
+
+        //Everything on the card but what is in focus is darkened; each part in focus gets an outline
+        var path = "M0 0H" + frameWidth + "V" + frameHeight + "H0Z";
+        var marks = this.zoomBox.find(".scenario-zoom-mark");
+        var onScreen = [];
+        for (var f = 0; f < zoom.focus.length; f++) {
+            var part = zoom.focus[f].rect;
+            var left = cardLeft + cardWidth * part[0] / 100, top = cardTop + cardHeight * part[1] / 100;
+            var width = cardWidth * part[2] / 100, height = cardHeight * part[3] / 100;
+            //Only as much of it as shows through the frame
+            var right = Math.min(frameWidth, left + width), bottom = Math.min(frameHeight, top + height);
+            left = Math.max(0, left);
+            top = Math.max(0, top);
+            if (right - left < 2 || bottom - top < 2) {
+                $(marks[f]).hide();
+                continue;
+            }
+            path += "M" + left + " " + top + "H" + right + "V" + bottom + "H" + left + "Z";
+            $(marks[f]).css({display: "block", left: left - 3, top: top - 3, width: right - left + 6, height: bottom - top + 6});
+            onScreen.push({left: frame.left + left, top: frame.top + top, width: right - left, height: bottom - top});
+        }
+        var dim = this.zoomBox.find(".scenario-zoom-dim");
+        dim.attr({width: frameWidth, height: frameHeight}).css("display", zoom.focus.length > 0 ? "block" : "none");
+        dim.find("path").attr("d", path);
+        return {frame: frame, focus: onScreen};
     },
 
     setHighlights: function (anchors, style) {
@@ -1121,13 +1234,30 @@ var GempScenarioOverlay = Class.extend({
     },
 
     placeBubble: function (cards, boxes) {
-        if (this.bubble.hasClass("scenario-dragged"))
-            return;
         var message = this.currentMessage;
         var anchor = ScenarioAnchors.resolve(this.game, message.anchor, cards);
         var width = this.bubble.outerWidth(), height = this.bubble.outerHeight();
         var viewWidth = $(window).width(), viewHeight = $(window).height();
         var margin = 8, gap = 16;
+
+        //What the bubble points at is usually what it sits beside.  With a card shown large it sits beside the card
+        // and points at the part of it in focus.
+        var target = anchor;
+        var side = message.side;
+        if (this.zoom != null) {
+            var zoomed = this.layoutZoom(width);
+            anchor = zoomed.frame;
+            target = zoomed.focus.length > 0 ? zoomed.focus[0] : null;
+            side = "right";
+            boxes = [];
+        }
+
+        //A bubble that has been moved stays where it was put, and keeps its line to what it is about
+        if (this.bubble.hasClass("scenario-dragged")) {
+            var moved = this.bubble[0].getBoundingClientRect();
+            this.drawPointer({left: moved.left, top: moved.top, width: moved.width, height: moved.height}, target, null);
+            return;
+        }
 
         //What the bubble must not cover: the thing it points at, everything outlined (which includes whatever is
         // to be clicked next), whatever the message says to avoid, and the buttons that answer the decision
@@ -1153,6 +1283,10 @@ var GempScenarioOverlay = Class.extend({
                 keepClear.push(rect);
         });
 
+        //A card shown large has the screen to itself: nothing on the table underneath matters
+        if (this.zoom != null)
+            keepClear = [anchor];
+
         //Nothing to do unless something it depends on has moved
         var situation = [width, height, viewWidth, viewHeight];
         for (var r = 0; r < keepClear.length; r++)
@@ -1165,7 +1299,7 @@ var GempScenarioOverlay = Class.extend({
 
         //Cards it would be a pity to cover, though not a mistake: the bubble goes where there are fewest
         var otherCards = [];
-        $(".card:visible").each(function () {
+        $(this.zoom != null ? [] : ".card:visible").each(function () {
             var rect = this.getBoundingClientRect();
             if (rect.width > 0 && rect.height > 0)
                 otherCards.push({left: rect.left, top: rect.top, width: rect.width, height: rect.height});
@@ -1216,11 +1350,11 @@ var GempScenarioOverlay = Class.extend({
                 above: function (slide) { return {left: slideAcross[slide], top: anchor.top - gap - height}; }
             };
             var order = ["right", "left", "below", "above"];
-            if (message.side != null && message.side != "auto" && sides[message.side] != null) {
-                order = $.grep(order, function (side) {
-                    return side != message.side;
+            if (side != null && side != "auto" && sides[side] != null) {
+                order = $.grep(order, function (candidate) {
+                    return candidate != side;
                 });
-                order.unshift(message.side);
+                order.unshift(side);
             }
             var best = null;
             for (var s = 0; s < order.length; s++) {
@@ -1251,21 +1385,73 @@ var GempScenarioOverlay = Class.extend({
             this.bubble.css({left: Math.round(place.left), top: Math.round(place.top)});
         }
 
+        this.drawPointer({left: place.left, top: place.top, width: width, height: height}, target,
+            target === anchor ? place.side : null);
+    },
+
+    /**
+     * Joins the bubble to what it is about.  Sitting right beside it, a small arrow on the bubble's edge does that.
+     * Anywhere else (moved by hand, or beside a large card and pointing into it) a thin line runs from one to the
+     * other.
+     * @param besideOn the side of the target the bubble was placed on ("right", "left", "below", "above"); null if
+     *                 it was not placed beside it
+     */
+    drawPointer: function (bubble, target, besideOn) {
         var arrow = this.bubble.find(".scenario-arrow");
-        if (anchor == null || this.overlap({left: place.left, top: place.top, width: width, height: height}, anchor) > 0) {
+        if (target == null || this.bubble.hasClass("scenario-collapsed") || this.overlap(bubble, target) > 0) {
             arrow.hide();
-        } else {
+            this.pointer.hide();
+            return;
+        }
+
+        //Beside it means flush against that side and level with some part of it
+        var reach = 22;
+        var beside = false;
+        if (besideOn == "right")
+            beside = Math.abs(bubble.left - (target.left + target.width)) <= reach;
+        else if (besideOn == "left")
+            beside = Math.abs(target.left - (bubble.left + bubble.width)) <= reach;
+        else if (besideOn == "below")
+            beside = Math.abs(bubble.top - (target.top + target.height)) <= reach;
+        else if (besideOn == "above")
+            beside = Math.abs(target.top - (bubble.top + bubble.height)) <= reach;
+        if (besideOn == "right" || besideOn == "left")
+            beside = beside && target.top < bubble.top + bubble.height && target.top + target.height > bubble.top;
+        else if (besideOn != null)
+            beside = beside && target.left < bubble.left + bubble.width && target.left + target.width > bubble.left;
+
+        if (beside) {
             //The arrow sits on the edge nearest the thing and slides along it to line up with the thing's middle
             var along;
-            if (place.side == "right" || place.side == "left") {
-                along = Math.max(14, Math.min(anchor.top + anchor.height / 2 - place.top, height - 14));
-                arrow.attr("class", "scenario-arrow scenario-arrow-" + (place.side == "right" ? "left" : "right")).css({top: along - 9, left: ""});
+            if (besideOn == "right" || besideOn == "left") {
+                along = Math.max(14, Math.min(target.top + target.height / 2 - bubble.top, bubble.height - 14));
+                arrow.attr("class", "scenario-arrow scenario-arrow-" + (besideOn == "right" ? "left" : "right")).css({top: along - 9, left: ""});
             } else {
-                along = Math.max(14, Math.min(anchor.left + anchor.width / 2 - place.left, width - 14));
-                arrow.attr("class", "scenario-arrow scenario-arrow-" + (place.side == "below" ? "up" : "down")).css({left: along - 9, top: ""});
+                along = Math.max(14, Math.min(target.left + target.width / 2 - bubble.left, bubble.width - 14));
+                arrow.attr("class", "scenario-arrow scenario-arrow-" + (besideOn == "below" ? "up" : "down")).css({left: along - 9, top: ""});
             }
             arrow.show();
+            this.pointer.hide();
+            return;
         }
+
+        //From the edge of the bubble to the edge of the thing, along the line between their middles
+        arrow.hide();
+        var from = this.edgePoint(bubble, target);
+        var to = this.edgePoint(target, bubble);
+        this.pointer.attr({width: $(window).width(), height: $(window).height()}).show();
+        this.pointer.find("line").attr({x1: from.x, y1: from.y, x2: to.x, y2: to.y});
+        this.pointer.find("circle").attr({cx: to.x, cy: to.y});
+    },
+
+    /** Where the line from the middle of one rectangle to the middle of another leaves the first. */
+    edgePoint: function (rect, towards) {
+        var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+        var dx = towards.left + towards.width / 2 - cx, dy = towards.top + towards.height / 2 - cy;
+        if (dx == 0 && dy == 0)
+            return {x: cx, y: cy};
+        var scale = Math.min(dx == 0 ? Infinity : (rect.width / 2) / Math.abs(dx), dy == 0 ? Infinity : (rect.height / 2) / Math.abs(dy));
+        return {x: cx + dx * scale, y: cy + dy * scale};
     },
 
     overlap: function (a, b) {
@@ -1293,7 +1479,7 @@ var GempScenarioOverlay = Class.extend({
                 left: start.left + event.clientX - start.x,
                 top: start.top + event.clientY - start.y
             });
-            that.bubble.find(".scenario-arrow").hide();
+            that.refresh();
         }).mouseup(function () {
             start = null;
         });
@@ -1370,7 +1556,7 @@ var GempScenarioOverlay = Class.extend({
                 that.restart(false);
             }, event.result != "complete" && event.checkpoint == null);
         addButton("Back to the Game Hall", function () {
-            location.href = "/gemp-lotr/hall.html";
+            that.backToHall();
         }, event.result == "complete" || event.result == "error");
 
         this.layer.find(".scenario-end, .scenario-shade").remove();
@@ -1388,7 +1574,7 @@ var GempScenarioOverlay = Class.extend({
             + "<div class='scenario-end-buttons'><button class='scenario-primary'>Back to the Game Hall</button>"
             + "<button>Carry on anyway</button></div></div>");
         panel.find("button").first().click(function () {
-            location.href = "/gemp-lotr/hall.html";
+            that.backToHall();
         });
         panel.find("button").last().click(function () {
             that.layer.find(".scenario-small, .scenario-shade").remove();
@@ -1412,15 +1598,67 @@ var GempScenarioOverlay = Class.extend({
 
     leave: function () {
         if (this.phase == "ended" || this.game.gameEnded) {
-            location.href = "/gemp-lotr/hall.html";
+            this.backToHall();
             return;
         }
         if (!confirm("Leave this scenario? You can start it again from the Game Hall."))
             return;
+        var that = this;
         this.leaving = true;
         this.game.communication.concede();
         setTimeout(function () {
-            location.href = "/gemp-lotr/hall.html";
+            that.backToHall();
         }, 300);
+    },
+
+    /**
+     * A game opens in a tab of its own, and the Game Hall it was started from is usually still open in the tab it
+     * came from.  Opening the hall again here would make two of them, which the server takes for somebody else
+     * logging in.  So: ask whether a hall is open (the hall answers on a channel between this site's tabs, see
+     * hallUi.js).  If one is, this tab closes and the browser goes back to it.  If none answers, the hall opens here.
+     */
+    backToHall: function () {
+        var that = this;
+        var here = function () {
+            location.href = "/gemp-lotr/hall.html";
+        };
+        var channel;
+        try {
+            channel = new BroadcastChannel("gemp-lotr-hall");
+        } catch (e) {
+            here();
+            return;
+        }
+        var answered = false;
+        channel.onmessage = function (event) {
+            if (answered || event.data == null || event.data.type != "here")
+                return;
+            answered = true;
+            channel.close();
+            window.close();
+            //A tab the player opened by hand is not a script's to close.  Still here a moment later means that.
+            setTimeout(function () {
+                that.showHallIsOpen(here);
+            }, 400);
+        };
+        channel.postMessage({type: "anyone"});
+        setTimeout(function () {
+            if (answered)
+                return;
+            channel.close();
+            here();
+        }, 350);
+    },
+
+    showHallIsOpen: function (openHere) {
+        this.layer.find(".scenario-end, .scenario-shade").remove();
+        var panel = $("<div class='scenario-end'><h2>The Game Hall is already open</h2>"
+            + "<div class='scenario-end-body'><p>It is in another tab of this browser. You can close this tab and go back to it.</p></div>"
+            + "<div class='scenario-end-buttons'><button>Open it here instead</button></div></div>");
+        panel.find("button").click(function () {
+            openHere();
+            return false;
+        });
+        this.layer.append("<div class='scenario-shade'></div>").append(panel);
     }
 });

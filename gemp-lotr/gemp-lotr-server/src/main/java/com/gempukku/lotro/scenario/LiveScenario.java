@@ -78,6 +78,7 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private final ScenarioDefinition _def;
+    private final LotroCardBlueprintLibrary _library;
     private final ScenarioTable _table;
     private final ScenarioSession _session;
     private final String _human;
@@ -138,6 +139,7 @@ public class LiveScenario implements ScenarioSession.Listener {
     public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
                         TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier) {
         _def = def;
+        _library = library;
         _human = humanPlayer;
         _opponent = OPPONENT_PLAYER;
         _renderer = renderer;
@@ -367,7 +369,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             List<Map<String, Object>> messages = new ArrayList<>();
             for (Message message : end.messages)
                 messages.add(messageJson(new RenderedMessage(message,
-                        message.title == null ? null : Templates.render(_table, message.title),
+                        message.header == null ? null : Templates.render(_table, message.header),
                         Templates.render(_table, message.text)), Advance.NEXT));
             finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, messages, null, false, true);
         } else if (_offScript != null) {
@@ -558,7 +560,7 @@ public class LiveScenario implements ScenarioSession.Listener {
     private Map<String, Object> messageJson(RenderedMessage rendered, Advance advance) {
         Message message = rendered.message();
         Map<String, Object> json = new LinkedHashMap<>();
-        json.put("title", rendered.title());
+        json.put("header", rendered.header());
         json.put("html", _renderer.render(rendered.text()));
         json.put("anchor", message.anchor);
         json.put("highlight", message.highlight);
@@ -574,6 +576,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             on.put("card", message.on.card());
             json.put("on", on);
         }
+        json.put("zoom", message.zoom == null ? null : CardFaces.describe(_def, message.zoom, _library));
         return json;
     }
 

@@ -21,6 +21,8 @@
 		freeps: {
 			# Frodo, Resolute Hobbit
 			frodo: 10_121
+			# The One Ring, The Great Ring.  It changes neither strength nor vitality, and its text is switched off below.
+			ring: 19_1
 			# Gandalf, Stormcrow
 			gandalf: 0_64
 			# Servant of the Secret Fire
@@ -59,6 +61,9 @@
 		freeps: frodo
 		shadow: oppFrodo
 	}
+	ring: {
+		freeps: ring
+	}
 
 	# Green Hill Country, Ettenmoors, Rivendell Terrace, Great Chasm
 	sites: {
@@ -74,6 +79,14 @@
 				modifier: {
 					type: modifyHandSize
 					amount: -4
+				}
+			}
+			# The Ring is on the table from the first lesson, but what it does is a later one
+			{
+				type: modifier
+				modifier: {
+					type: disableGameText
+					filter: name(The One Ring)
 				}
 			}
 			# Maneuver is introduced in a later lesson
@@ -108,7 +121,7 @@
 			when: freeps, action, phase(fellowship), turn(1)
 			messages: [
 				{
-					title: The road goes ever on
+					header: The road goes ever on
 					text: This is [[Frodo]]. He has to cross four sites alive. Right now he is alone, at site {site}.
 					anchor: card:frodo
 					highlight: card:frodo
@@ -131,7 +144,6 @@
 			when: opponent, action, phase(shadow), turn(1)
 			messages: [
 				{
-					title: Twilight
 					text: Moving has a price. The twilight pool now holds {twilight}: the site's shadow number, plus 1 for each companion. Your opponent spends twilight to play **minions**.
 					anchor: ui:twilightPool
 					highlight: ui:twilightPool
@@ -143,13 +155,11 @@
 			when: freeps, assign, turn(1)
 			messages: [
 				{
-					title: Archery
 					text: The [[Goblin Bowman]] is an **archer**. Before any fighting, each archer shoots: Frodo now has {wounds:frodo} wound, and can take {vitality:frodo} more before he dies.
 					anchor: card:bowman
 					highlight: card:bowman, card:frodo
 				}
 				{
-					title: Assignment
 					text: Next you choose who fights each minion. Start by clicking the Bowman.
 					anchor: card:bowman
 					highlight: card:bowman
@@ -183,7 +193,6 @@
 			when: freeps, action, phase(skirmish), skirmish(1)
 			messages: [
 				{
-					title: Skirmish
 					text: Strength decides a skirmish. Frodo has {strength:frodo}; the Bowman has {strength:bowman}. Frodo will lose and take another wound. Pass to let it happen.
 					anchor: ui:skirmish
 					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
@@ -198,7 +207,6 @@
 			when: freeps, choice, text(another move)
 			messages: [
 				{
-					title: Regroup
 					text: Frodo survived, with {wounds:frodo} wounds. You could move again this turn, but he's in no shape for it. Choose **No** to rest here.
 					anchor: ui:dialog
 					avoid: card:frodo
@@ -211,7 +219,6 @@
 			when: freeps, action, phase(fellowship), turn(2)
 			messages: [
 				{
-					title: Help arrives
 					text: At the end of your turn you **reconcile**: you draw back up to a full hand. You now hold four cards.
 					anchor: zone:self.hand
 					highlight: zone:self.hand

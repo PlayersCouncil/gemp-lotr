@@ -265,10 +265,72 @@
 }
 
 /* ---- Play > Scenarios ---- */
+/* folders on the left, the scenarios of the selected one on the right */
+.scenario-browser {
+	display: flex;
+	align-items: flex-start;
+	gap: 1em;
+}
+
+.scenario-folders {
+	flex: 0 0 13em;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #555;
+	background: #222;
+}
+
+.scenario-folder {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	padding: 0.45em 0.6em;
+	border: none;
+	border-bottom: 1px solid #3a3a3a;
+	background: none;
+	color: #ddd;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.scenario-folder:last-child {
+	border-bottom: none;
+}
+
+.scenario-folder:hover,
+.scenario-folder:focus-visible {
+	background: #303030;
+}
+
+.scenario-folder-selected,
+.scenario-folder-selected:hover {
+	background: #1f3d57;
+	color: #fff;
+}
+
+.scenario-folder-name {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.scenario-folder-count {
+	flex: 0 0 auto;
+	font-size: 85%;
+	color: #9a9a9a;
+}
+
 #scenario-list {
+	flex: 1 1 auto;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5em;
+}
+
+#scenario-list .scenario-kind:first-child {
+	margin-top: 0;
 }
 
 .scenario-kind {
@@ -381,5 +443,23 @@
 
 	.play-flow .table-blurb {
 		margin: 0;
+	}
+
+	/* the folders go above the list, as a row of chips */
+	.scenario-browser {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.scenario-folders {
+		flex: 0 0 auto;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.scenario-folder {
+		border-bottom: none;
+		border-right: 1px solid #3a3a3a;
+		padding-left: 0.6em !important;
 	}
 }

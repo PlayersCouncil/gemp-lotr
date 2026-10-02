@@ -27,7 +27,7 @@ import java.util.Map;
  * Scenarios: tutorials, puzzles and sandboxes (see {@link ScenarioLibrary}).  Everything here needs a login.
  * <p>
  * GET /scenarios - what the player can start:
- * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified,
+ * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified, path, owner, mine,
  * progress:{status, attempts, version, firstCompleted, lastPlayed}|null}], current:{gameId, id}|null}}.
  * {@code progress.status} is "started" or "complete".
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
@@ -86,6 +86,11 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             json.put("version", def.version);
             json.put("canonical", entry.canonical());
             json.put("verified", entry.verified());
+            //Where the file is within its folder ("tutorials/basics/01-into-the-wild.hjson", "users/<name>/..."), and
+            // whose it is: the picker shows scenarios in the folders they are kept in
+            json.put("path", entry.path());
+            json.put("owner", entry.owner());
+            json.put("mine", entry.owner() != null && entry.owner().equals(player.getName()));
             DBDefs.ScenarioProgress played = progress.get(entry.id());
             if (played == null) {
                 json.put("progress", null);

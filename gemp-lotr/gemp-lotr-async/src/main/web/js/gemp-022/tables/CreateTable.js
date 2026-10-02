@@ -1,5 +1,5 @@
 /**
- * The Play popup: the menu of five flows (Bot, Casual, League, Tournament, Scenarios) and the forms behind them.
+ * The Play popup: the menu of five flows (Scenarios, Bot, Casual, League, Tournament) and the forms behind them.
  *
  * Opening it refreshes formats, leagues and decks, resets every result box to "Ready." and, when "Open this flow by
  * default" is on, goes straight to the Casual form (whose remembered deck / format / timer are applied once the lists

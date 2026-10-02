@@ -180,7 +180,7 @@ public class ScenarioParserTest {
                 			messages: [
                 				Just some text about {twilight}.
                 				{
-                					title: Look here
+                					header: Look here
                 					text: Aragorn has {strength:aragorn}.
                 					anchor: card:aragorn
                 					highlight: card:aragorn, ui:twilightPool
@@ -195,10 +195,84 @@ public class ScenarioParserTest {
         List<Message> messages = def.steps.getFirst().messages;
         assertEquals("Just some text about {twilight}.", messages.get(0).text);
         assertNull(messages.get(0).anchor);
+        assertNull("A message has no heading unless it asks for one", messages.get(0).header);
+        assertEquals("Look here", messages.get(1).header);
         assertEquals("card:aragorn", messages.get(1).anchor);
         assertEquals(List.of("card:aragorn", "ui:twilightPool"), messages.get(1).highlight);
         assertEquals("below", messages.get(1).side);
         assertEquals(Advance.NEXT, messages.get(1).advance);
+    }
+
+    @Test
+    public void aMessageCanShowACardLarge() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, action
+                			messages: [
+                				{
+                					text: This is his strength, and under it his vitality.
+                					zoom: card:aragorn
+                					focus: strength, vitality
+                				}
+                				{
+                					text: Read the second line.
+                					zoom: site:2
+                					focus: rect(12, 80, 60, 6)
+                					magnify: 2.5
+                				}
+                				{
+                					text: Any card at all.
+                					zoom: blueprint:1_83
+                				}
+                				Now pass.
+                			]
+                		}
+                	]
+                """);
+        List<Message> messages = def.steps.getFirst().messages;
+        Zoom first = messages.get(0).zoom;
+        assertEquals("aragorn", first.card());
+        assertEquals(List.of("strength", "vitality"), first.focus().stream().map(Focus::name).toList());
+        assertEquals(1.0, first.magnify(), 0);
+        assertEquals("A card shown large is read and then put away", Advance.NEXT, messages.get(0).advance);
+
+        Zoom second = messages.get(1).zoom;
+        assertEquals(Integer.valueOf(2), second.site());
+        assertArrayEquals(new double[] {12, 80, 60, 6}, second.focus().getFirst().rect(), 0);
+        assertEquals(2.5, second.magnify(), 0);
+
+        assertEquals("1_83", messages.get(2).zoom.blueprint());
+        assertNull(messages.get(3).zoom);
+
+        //What a region is depends on the kind of card, which only the card library knows
+        assertTrue(ScenarioValidator.validate(def, ScenarioTesting.library()).isEmpty());
+        ScenarioDefinition wrong = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			messages: [
+                				{
+                					text: An event has no strength.
+                					zoom: card:servant1
+                					focus: strength, text
+                				}
+                				{
+                					text: There are only four sites.
+                					zoom: site:7
+                				}
+                			]
+                		}
+                	]
+                """);
+        List<String> problems = ScenarioValidator.validate(wrong, ScenarioTesting.library());
+        assertEquals(problems.toString(), 2, problems.size());
+        assertTrue(problems.get(0), problems.get(0).contains("'strength' is not something printed on Servant of the Secret Fire"));
+        assertTrue(problems.get(1), problems.get(1).contains("the scenario's path has no site 7"));
+
+        //Where each named region is comes from the kind of card
+        var described = CardFaces.describe(def, first, ScenarioTesting.library());
+        assertEquals("4_109", described.get("blueprint"));
+        assertEquals(2, ((List<?>) described.get("focus")).size());
     }
 
     @Test
@@ -285,6 +359,14 @@ public class ScenarioParserTest {
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: clicked(bowman)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "don't know what 'clicked(bowman)' means");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: picked(legolas)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\thighlightStyle: purple\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "highlightStyle: has to be one of gold, red, green, blue");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttitle: Hello\n\t\t\t\t\ttext: Hello\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "a message's heading is called 'header'");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tfocus: strength\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "'focus' and 'magnify' belong to a 'zoom'");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:legolas\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: aragorn\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "has to be card:<alias>, site:<number> or blueprint:<id>");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tfocus: nose\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "don't know what 'nose' means");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tfocus: rect(90, 10, 20, 5)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "does not lie on the card");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tmagnify: 3\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "needs a 'focus' to be centred on");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\ton: ready\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "cannot also wait for a moment");
         assertRejected("\topponent: {\n\t\tname: \"<b>Sauron</b>\"\n\t}", "opponent.name: has to be 1 to 30 letters");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: runner1\n\t\t}\n\t}", "belongs to the other seat");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: aragorn\n\t\t\tdeck: aragorn\n\t\t}\n\t}", "placed in more than one zone");
