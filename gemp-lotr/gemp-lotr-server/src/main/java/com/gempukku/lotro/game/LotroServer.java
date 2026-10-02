@@ -60,6 +60,7 @@ public class LotroServer extends AbstractServer {
 
     /** The scenario each player is in the middle of, by player name.  A player has one at a time. */
     private final Map<String, String> _scenarioGames = new HashMap<>();
+    private final Map<String, Object> _scenarioStartLocks = new ConcurrentHashMap<>();
     /** Gives the scenarios' scripted opponents their answers, each after its pause. */
     private final ScheduledExecutorService _scenarioTimer;
     /** Keeps the record of scenario games.  Set once the services it needs exist; until then nothing is recorded. */
@@ -263,77 +264,87 @@ public class LotroServer extends AbstractServer {
     public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
                                                 LiveScenario.TextRenderer text, boolean fromCheckpoint) {
         final String playerName = player.getName();
-        final String gameId;
-        final LotroGameMediator previous;
+        //One at a time for each player.  A second request waits for the first to finish, and then gives up the game
+        // the first one started, like any other request to start a scenario while in the middle of one.
+        synchronized (_scenarioStartLocks.computeIfAbsent(playerName, name -> new Object())) {
+            final String gameId;
+            final LotroGameMediator previous;
 
-        _lock.writeLock().lock();
-        try {
-            String previousId = _scenarioGames.get(playerName);
-            previous = previousId == null ? null : _runningGames.get(previousId);
-            gameId = String.valueOf(_nextGameId);
-            _nextGameId++;
-        } finally {
-            _lock.writeLock().unlock();
-        }
-
-        //Everything from here to the next lock is outside the server-wide one: it takes games' own locks, and
-        // laying out and replaying a game is real work.  Nobody else can reach the new game until it is registered.
-        GameJournal checkpoint = null;
-        if (previous != null) {
-            //The previous game is either still going or finished within the last few minutes
-            if (fromCheckpoint && previous.getScenario() != null && previous.getScenario().Definition() == scenario)
-                checkpoint = previous.checkpointJournal();
-            if (!previous.isFinished())
-                previous.concede(player);
-        }
-
-        LotroGameMediator mediator = null;
-        GameRecorder.ScenarioRecording recording = null;
-        if (checkpoint != null) {
-            LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer, checkpoint);
-            mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
-            recording = _gameRecorder.recordScenarioGame(mediator, format, playerName, scenario.id, scenario.version);
-            mediator.startGame();
-            if (live.Table().FollowProblem() != null) {
-                log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
-                        + playerName + " and was started from the beginning: " + live.Table().FollowProblem());
-                mediator = null;
+            _lock.writeLock().lock();
+            try {
+                String previousId = _scenarioGames.get(playerName);
+                previous = previousId == null ? null : _runningGames.get(previousId);
+                gameId = String.valueOf(_nextGameId);
+                _nextGameId++;
+            } finally {
+                _lock.writeLock().unlock();
             }
-        }
-        if (mediator == null) {
-            LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer);
-            mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
-            recording = _gameRecorder.recordScenarioGame(mediator, format, playerName, scenario.id, scenario.version);
-            mediator.startGame();
-        }
-        if (_scenarioRunLog != null)
-            _scenarioRunLog.follow(player, mediator, recording);
 
-        _lock.writeLock().lock();
-        try {
-            _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
-            mediator.addGameResultListener(
-                new GameResultListener() {
-                    @Override
-                    public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
-                        _finishedGamesTime.put(gameId, new Date());
-                    }
+            //Everything from here to the next lock is outside the server-wide one: it takes games' own locks, and
+            // laying out and replaying a game is real work.  Nobody else can reach the new game until it is registered.
+            GameJournal checkpoint = null;
+            if (previous != null) {
+                //The previous game is either still going or finished within the last few minutes
+                if (fromCheckpoint && previous.getScenario() != null && previous.getScenario().Definition() == scenario)
+                    checkpoint = previous.checkpointJournal();
+                if (!previous.isFinished())
+                    previous.concede(player);
+            }
 
-                    @Override
-                    public void gameCancelled() {
-                        _finishedGamesTime.put(gameId, new Date());
-                    }
-                });
-            //A game that was over before it began (it can happen: a scenario whose first step ends it)
-            if (mediator.isFinished())
-                _finishedGamesTime.put(gameId, new Date());
+            StartedScenario started = null;
+            if (checkpoint != null) {
+                started = startScenario(gameId, player, scenario, format, text, checkpoint);
+                String problem = started.mediator.getScenario().Table().FollowProblem();
+                if (problem != null) {
+                    log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
+                            + playerName + " and was started from the beginning: " + problem);
+                    started.mediator.discardScenario();
+                    started = null;
+                }
+            }
+            if (started == null)
+                started = startScenario(gameId, player, scenario, format, text, null);
+            if (started.watch != null)
+                started.watch.keep();
 
-            _runningGames.put(gameId, mediator);
-            _scenarioGames.put(playerName, gameId);
-        } finally {
-            _lock.writeLock().unlock();
+            _lock.writeLock().lock();
+            try {
+                _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
+                _runningGames.put(gameId, started.mediator);
+                _scenarioGames.put(playerName, gameId);
+            } finally {
+                _lock.writeLock().unlock();
+            }
+            return started.mediator;
         }
-        return mediator;
+    }
+
+    private record StartedScenario(LotroGameMediator mediator, ScenarioRunLog.Watch watch) { }
+
+    /**
+     * Builds a scenario's game and sets it going.  Everything that has to hear how the game ends is listening before
+     * it starts: the scripted opponent can act, and in principle end the game, the moment it does.
+     */
+    private StartedScenario startScenario(String gameId, Player player, ScenarioDefinition scenario, LotroFormat format,
+                                          LiveScenario.TextRenderer text, GameJournal checkpoint) {
+        LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, player.getName(), text, _scenarioTimer, checkpoint);
+        LotroGameMediator mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+        GameRecorder.ScenarioRecording recording = _gameRecorder.recordScenarioGame(mediator, format, player.getName(), scenario.id, scenario.version);
+        ScenarioRunLog.Watch watch = _scenarioRunLog == null ? null : _scenarioRunLog.watch(player, mediator, recording);
+        mediator.addGameResultListener(
+            new GameResultListener() {
+                @Override
+                public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                    _finishedGamesTime.put(gameId, new Date());
+                }
+
+                @Override
+                public void gameCancelled() {
+                    _finishedGamesTime.put(gameId, new Date());
+                }
+            });
+        mediator.startGame();
+        return new StartedScenario(mediator, watch);
     }
 
     /**

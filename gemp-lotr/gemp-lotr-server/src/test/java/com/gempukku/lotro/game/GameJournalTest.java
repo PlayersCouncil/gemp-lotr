@@ -140,4 +140,90 @@ public class GameJournalTest {
         assertTrue(journal.hasMark("here"));
         assertFalse(journal.hasMark("nowhere"));
     }
+
+    private static AwaitingDecision actions(String... cardAndText) {
+        List<String> cardIds = new ArrayList<>(), blueprints = new ArrayList<>(), texts = new ArrayList<>();
+        for (String entry : cardAndText) {
+            cardIds.add(entry.split("=")[0]);
+            blueprints.add("inPlay");
+            texts.add(entry.split("=")[1]);
+        }
+        return new com.gempukku.lotro.logic.decisions.CardActionSelectionDecision(1, "Play Fellowship action or Pass", cardIds, blueprints, texts) {
+            @Override
+            public void decisionMade(String result) { }
+        };
+    }
+
+    private static AwaitingDecision arbitrary(String... blueprints) {
+        List<String> ids = new ArrayList<>(), selectable = new ArrayList<>();
+        for (int i = 0; i < blueprints.length; i++) {
+            ids.add("temp" + i);
+            selectable.add("true");
+        }
+        return new com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision(1, "Choose cards from deck", ids, List.of(blueprints), selectable, 0, 2) {
+            @Override
+            public void decisionMade(String result) { }
+        };
+    }
+
+    private static AwaitingDecision choice(String... options) {
+        return new com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision(1, "Do you want to make another move?", options) {
+            @Override
+            protected void validDecisionMade(int index, String result) { }
+        };
+    }
+
+    @Test
+    public void TheSameQuestionWithItsOptionsInAnotherOrderHasTheSameFingerprint() {
+        AwaitingDecision one = actions("12=Play Gandalf", "15=Use Sam", "12=Use Gandalf");
+        AwaitingDecision two = actions("12=Use Gandalf", "12=Play Gandalf", "15=Use Sam");
+        assertEquals(GameJournal.fingerprint(one), GameJournal.fingerprint(two));
+        //It is the pairing that counts, not just which cards and which texts appear
+        assertNotEquals(GameJournal.fingerprint(one), GameJournal.fingerprint(actions("12=Play Gandalf", "12=Use Sam", "15=Use Gandalf")));
+        assertNotEquals(GameJournal.fingerprint(one), GameJournal.fingerprint(actions("12=Play Gandalf", "15=Use Sam")));
+
+        assertEquals(GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_83")), GameJournal.fingerprint(arbitrary("1_116", "1_83", "1_83")));
+        assertNotEquals(GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_83")), GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_116")));
+    }
+
+    @Test
+    public void AnAnswerThatIsAPositionIsWrittenDownAsWhatWasChosen() {
+        AwaitingDecision one = actions("12=Play Gandalf", "15=Use Sam", "12=Use Gandalf");
+        AwaitingDecision reordered = actions("12=Use Gandalf", "12=Play Gandalf", "15=Use Sam");
+        assertEquals("15|Use Sam", GameJournal.stable(one, "1"));
+        assertEquals("2", GameJournal.concrete(reordered, "15|Use Sam"));
+        assertEquals("1", GameJournal.concrete(reordered, GameJournal.stable(one, "0")));
+        assertEquals("Passing is passing", "", GameJournal.concrete(reordered, GameJournal.stable(one, "")));
+        assertNull("An action that is not on offer any more", GameJournal.concrete(actions("12=Play Gandalf"), "15|Use Sam"));
+
+        AwaitingDecision cards = arbitrary("1_83", "1_116", "1_83");
+        AwaitingDecision cardsReordered = arbitrary("1_116", "1_83", "1_83");
+        assertEquals("b1_83,b1_83", GameJournal.stable(cards, "temp0,temp2"));
+        assertEquals("temp1,temp2", GameJournal.concrete(cardsReordered, "b1_83,b1_83"));
+        assertEquals("temp0", GameJournal.concrete(cardsReordered, GameJournal.stable(cards, "temp1")));
+        assertNull("Two copies where there is only one", GameJournal.concrete(arbitrary("1_83", "1_116"), "b1_83,b1_83"));
+        assertEquals("", GameJournal.concrete(cardsReordered, GameJournal.stable(cards, "")));
+
+        assertEquals("No", GameJournal.stable(choice("Yes", "No"), "1"));
+        assertEquals("0", GameJournal.concrete(choice("No", "Yes"), "No"));
+        assertNull(GameJournal.concrete(choice("Yes", "Maybe"), "No"));
+    }
+
+    @Test
+    public void AnswersThatAreAlreadyStableAreLeftAlone() throws Exception {
+        ScenarioTable table = ScenarioTesting.table("""
+                	setup: {
+                		shadow: {
+                			minions: runner1
+                		}
+                	}
+                """);
+        //Card IDs and numbers mean the same thing in any run of the same game
+        AwaitingDecision decision = table.GetAwaitingDecision(table.P1());
+        assertEquals("", GameJournal.stable(decision, ""));
+        assertEquals("12 31,13 32", GameJournal.stable(new com.gempukku.lotro.logic.decisions.PlayerAssignMinionsDecision(1, "Assign", List.of("12", "13"), List.of("31", "32")) {
+            @Override
+            public void decisionMade(String result) { }
+        }, "12 31,13 32"));
+    }
 }

@@ -201,13 +201,17 @@ public class DefaultLotroGame implements LotroGame {
     }
 
     public void startGame() {
-        if (!_cancelled)
+        if (!_cancelled) {
             _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+            _userFeedback.atRest();
+        }
     }
 
     public void carryOutPendingActionsUntilDecisionNeeded() {
-        if (!_cancelled)
+        if (!_cancelled) {
             _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+            _userFeedback.atRest();
+        }
     }
 
     @Override

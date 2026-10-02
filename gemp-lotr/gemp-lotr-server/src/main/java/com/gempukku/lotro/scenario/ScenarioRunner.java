@@ -126,17 +126,19 @@ public final class ScenarioRunner {
                 return winner != null && winner.equals(table.HumanPlayer());
             }
 
-            String player = table.FreepsAnyDecisionsAvailable() ? table.P1() : table.ShadowAnyDecisionsAvailable() ? table.P2() : null;
+            //The session ruled on whatever the game is waiting on when the game stopped.  A decision with no ruling is
+            // waiting for the step in hand to be answered first, so it is not this one's turn.
+            String player = session.Ruling(table.P1()) != null ? table.P1() : session.Ruling(table.P2()) != null ? table.P2() : null;
             if (player == null) {
-                report.failures.add("The game is waiting on nobody, and has not ended");
+                report.failures.add(table.FreepsAnyDecisionsAvailable() || table.ShadowAnyDecisionsAvailable()
+                        ? "The game is waiting on a decision the script never got round to ruling on"
+                        : "The game is waiting on nobody, and has not ended");
                 report.stopped = "the game stalled";
                 return false;
             }
-            AwaitingDecision decision = table.GetAwaitingDecision(player);
-            boolean human = player.equals(table.HumanPlayer());
-
-            //The session ruled on the decision the moment the game asked for it
             ScenarioSession.Ruling ruling = session.Ruling(player);
+            AwaitingDecision decision = ruling.decision();
+            boolean human = player.equals(table.HumanPlayer());
             Step step = ruling.step();
             String description = director.describe(player, decision);
             String answer;

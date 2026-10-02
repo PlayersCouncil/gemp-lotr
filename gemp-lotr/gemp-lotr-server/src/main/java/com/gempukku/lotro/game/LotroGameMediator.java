@@ -156,11 +156,27 @@ public class LotroGameMediator {
 
         _userFeedback = scenario.Table().userFeedback();
         _lotroGame = scenario.Table().game();
-        scenario.SetHost(this::botAnswered);
+        scenario.SetHost(this::scenarioOpponentAnswered);
     }
 
     public LiveScenario getScenario() {
         return _scenario;
+    }
+
+    /**
+     * For a scenario's game that is not going to be used after all: stops it doing anything further.  Nobody has
+     * been told about the game, so there is nobody to tell that it is over.
+     */
+    public void discardScenario() {
+        _writeLock.lock();
+        try {
+            //The game itself is left as it is.  It will never be asked for anything again, and ending it would
+            // tell listeners that a game with this id had finished.
+            if (_scenario != null)
+                _scenario.Discard();
+        } finally {
+            _writeLock.unlock();
+        }
     }
 
     /**
@@ -523,6 +539,7 @@ public class LotroGameMediator {
                                 // Participant provided wrong answer - send a warning message, and ask again for the same decision
                                 _lotroGame.getGameState().sendWarning(playerName, decisionResultInvalidException.getWarningMessage());
                                 _userFeedback.sendAwaitingDecision(playerName, awaitingDecision);
+                                _userFeedback.atRest();
                             } catch (RuntimeException runtimeException) {
                                 LOG.error("Error processing game decision", runtimeException);
                                 _lotroGame.cancelGame();
@@ -611,6 +628,23 @@ public class LotroGameMediator {
         } catch (RuntimeException exp) {
             LOG.error("Error in scenario " + _scenario.Definition().id + ", game " + _gameId, exp);
             _lotroGame.cancelGame();
+            _scenario.Broke("the scenario threw " + exp);
+        }
+    }
+
+    /**
+     * A scenario's scripted opponent gives its answer.  Decision ids are no guide to which decision is meant (nearly
+     * every decision has the same one), so the answer is only taken if the opponent is still being asked the very
+     * decision it was worked out for, and the scenario is still going.
+     */
+    private synchronized void scenarioOpponentAnswered(String opponent, AwaitingDecision decision, String answer) {
+        //(synchronized first and the lock second, the same order botAnswered and playerAnswered take them in)
+        _writeLock.lock();
+        try {
+            if (_scenario.Result() == null && _userFeedback.getAwaitingDecision(opponent) == decision)
+                botAnswered(opponent, decision.getAwaitingDecisionId(), answer);
+        } finally {
+            _writeLock.unlock();
         }
     }
 

@@ -560,4 +560,291 @@ public class LiveScenarioTest {
         assertTrue(second.Table().FollowProblem(), second.Table().FollowProblem().startsWith("answer 2 was given by the shadow seat to a CARD_ACTION_CHOICE:"));
         assertEquals(1, second.Table().AnswersFollowed());
     }
+
+    /** Plays the person's side from the script's own answers (the session's rulings) until the game goes quiet. */
+    private static void playScripted(LiveScenario scenario, Client client) throws Exception {
+        for (int i = 0; i < 50 && client.end == null; i++) {
+            client.await();
+            if (client.end != null || client.mediator.isFinished())
+                return;
+            if (client.decision != null)
+                client.answer(scenario.Session().Ruling(HUMAN).answer());
+            else
+                client.acknowledge();
+        }
+    }
+
+    @Test
+    public void AQuestionAskedFromInsideAnAnswerIsShownWithItsOwnStep() throws Exception {
+        LiveScenario scenario = live(ScenarioParser.parse(ScenarioTesting.awkward("""
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	setup: {
+                		freeps: {
+                			characters: sam
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			messages: Use Sam.
+                			answer: use(sam)
+                		}
+                		{
+                			when: freeps, arbitrary, text(inspect)
+                			messages: This is your deck.
+                			answer: pass
+                		}
+                		{
+                			when: freeps, arbitrary, text(Choose cards from deck)
+                			messages: Take Bill.
+                			answer: choose(bill)
+                		}
+                		{
+                			when: freeps, cards, text(Attach Bill)
+                			messages: Sam looks after him.
+                			answer: choose(sam)
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: pass
+                			end: complete
+                		}
+                	]
+                """)));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+
+        List<String> seen = new ArrayList<>();
+        for (int i = 0; i < 10 && client.end == null; i++) {
+            client.await();
+            if (client.decision == null)
+                break;
+            assertNotNull("No step came with \"" + client.decision.getAwaitingDecision().getText() + "\"", client.step);
+            assertTrue("The step has to reach the client before its decision", client.stepAt < client.decisionAt);
+            seen.add(client.step.getIntValue("step") + ": " + client.decision.getAwaitingDecision().getText());
+            client.answer(scenario.Session().Ruling(HUMAN).answer());
+        }
+        client.poll();
+
+        assertEquals(List.of(
+                "1: Play Fellowship action or Pass",
+                "2: You may inspect the contents of your deck before retrieving cards",
+                "3: Choose cards from deck",
+                "4: Attach Bill the Pony. Choose target to attach to",
+                "5: Play Fellowship action or Pass"), seen);
+        assertEquals(LiveScenario.Result.COMPLETE, scenario.Result());
+        assertEquals(List.of(), scenario.Problems());
+        assertEquals(com.gempukku.lotro.common.Zone.ATTACHED, scenario.Table().Card("bill").getZone());
+    }
+
+    @Test
+    public void WhenBothSeatsAreAskedAtOnceThePersonWaitsForTheStepInHand() throws Exception {
+        //Master Proudfoot shows both players a card.  The script has the opponent look first, with something to say.
+        LiveScenario scenario = live(ScenarioParser.parse(ScenarioTesting.awkward("""
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	setup: {
+                		freeps: {
+                			support: proudfoot
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: use(proudfoot)
+                		}
+                		{
+                			when: opponent, arbitrary, text(revealed)
+                			messages: Your opponent gets to see it too.
+                			answer: pass
+                		}
+                		{
+                			when: freeps, arbitrary, text(revealed)
+                			messages: And so do you.
+                			answer: pass
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: pass
+                			end: complete
+                		}
+                	]
+                """)));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        client.answer(scenario.Session().Ruling(HUMAN).answer());
+        client.await();
+
+        //Both seats have been asked.  Only the opponent's step is on screen, and the person has not been asked yet.
+        assertEquals(2, client.step.getIntValue("step"));
+        assertTrue(client.step.getBooleanValue("acknowledge"));
+        assertNull("The person's own question waits for the opponent's step", client.decision);
+        assertNotNull(scenario.Table().userFeedback().getAwaitingDecision(HUMAN));
+        assertNull(scenario.Session().Ruling(HUMAN));
+
+        //Reloading the page in the middle changes nothing
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(2, again.step.getIntValue("step"));
+        assertNull(again.decision);
+
+        again.acknowledge();
+        again.await();
+        assertEquals(3, again.step.getIntValue("step"));
+        assertNotNull(again.decision);
+        assertTrue(again.stepAt < again.decisionAt);
+        assertTrue(again.decision.getAwaitingDecision().getText().endsWith("revealed card(s) from top of deck"));
+
+        playScripted(scenario, again);
+        again.poll();
+        assertEquals(LiveScenario.Result.COMPLETE, scenario.Result());
+        assertEquals(List.of(), scenario.Problems());
+    }
+
+    @Test
+    public void WhatTheGameAsksAfterTheLastStepIsNotAProblem() throws Exception {
+        //The step that ends the scenario is answered, and the game goes on to its next question before stopping
+        LiveScenario scenario = live(ScenarioTesting.parse("""
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: pass
+                			end: complete
+                		}
+                	]
+                """));
+        Client client = new Client(start(scenario));
+        client.connect();
+        client.await();
+        client.answer("");
+        client.await();
+        client.poll();
+
+        assertEquals(LiveScenario.Result.COMPLETE, scenario.Result());
+        assertEquals(List.of(), scenario.Problems());
+        assertNotNull(client.end);
+        assertNull("Nothing more is asked of the person once the scenario is over", client.decision);
+    }
+
+    @Test
+    public void AGameThatCarriesOnOffScriptSaysSoOnce() throws Exception {
+        LiveScenario scenario = live(ScenarioTesting.parse("""
+                	outcome: {
+                		offScript: {
+                			message: You're on your own now.
+                			result: continue
+                		}
+                	}
+                """ + TWO_STEPS));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        String aragorn = String.valueOf(scenario.Table().Card("aragorn").getCardId());
+        String[] cardIds = client.decision.getAwaitingDecision().getDecisionParameters().get("cardId");
+        String[] actionIds = client.decision.getAwaitingDecision().getDecisionParameters().get("actionId");
+        for (int i = 0; i < cardIds.length; i++)
+            if (cardIds[i].equals(aragorn)) {
+                client.answer(actionIds[i]);
+                break;
+            }
+        //A dozen decisions of an ordinary game, for both seats
+        for (int i = 0; i < 12 && !mediator.isFinished(); i++) {
+            client.await();
+            if (client.decision == null)
+                break;
+            client.answer(AnswerCompiler.leastAnswer(client.decision.getAwaitingDecision()));
+        }
+        assertEquals("Leaving the script is one problem, however long the game goes on", 1, scenario.Problems().size());
+    }
+
+    @Test
+    public void ConcedingTakesTheStepOffTheScreen() throws Exception {
+        LiveScenario scenario = live(opening());
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        assertEquals(1, client.step.getIntValue("step"));
+        mediator.concede(client.player);
+
+        Client again = new Client(mediator);
+        again.connect();
+        assertNull("A game that is over has no step to show", again.step);
+        assertNotNull(again.end);
+        assertEquals("abandoned", again.end.getString("result"));
+    }
+
+    @Test
+    public void ACheckpointIsReachedAgainHoweverTheGameOrdersItsOptions() throws Exception {
+        //Three companions and four minions: the decisions before the checkpoint each offer several cards, and the
+        // game lists them in a different order every time it is played
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	coverage: guided
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			characters: aragorn, gandalf, boromir
+                		}
+                		shadow: {
+                			minions: bowman, marksman, runner1, runner2
+                		}
+                	}
+                	steps: [
+                		{
+                			checkpoint: true
+                			when: freeps, choice, text(another move)
+                			answer: option(No)
+                		}
+                	]
+                """);
+        LiveScenario first = live(def);
+        Client client = new Client(start(first));
+        client.connect();
+        for (int i = 0; i < 40; i++) {
+            client.await();
+            assertNotNull("The game ended before the checkpoint", client.decision);
+            if (client.step != null && client.step.getIntValue("step") == 1)
+                break;
+            var decision = client.decision.getAwaitingDecision();
+            String answer = AnswerCompiler.leastAnswer(decision);
+            if (decision.getDecisionType() == com.gempukku.lotro.logic.decisions.AwaitingDecisionType.CARD_SELECTION) {
+                //Whichever cards have the lowest IDs, so that the same cards are chosen whatever order they are listed in
+                String[] ids = decision.getDecisionParameters().get("cardId").clone();
+                java.util.Arrays.sort(ids, java.util.Comparator.comparingInt(Integer::parseInt));
+                answer = String.join(",", java.util.Arrays.copyOf(ids, Integer.parseInt(decision.getDecisionParameters().get("min")[0])));
+            }
+            client.answer(answer);
+        }
+        GameJournal checkpoint = first.CheckpointJournal();
+        assertNotNull(checkpoint);
+        assertTrue("The test is only worth anything if several decisions lead up to the checkpoint", checkpoint.answers().size() > 5);
+        List<Integer> woundsThen = List.of(first.Table().GetWoundsOn(first.Table().Card("aragorn")),
+                first.Table().GetWoundsOn(first.Table().Card("gandalf")), first.Table().GetWoundsOn(first.Table().Card("boromir")),
+                first.Table().GetWoundsOn(first.Table().Card("frodo")));
+
+        for (int i = 0; i < 10; i++) {
+            LiveScenario again = live(def, checkpoint);
+            start(again);
+            assertNull(again.Table().FollowProblem());
+            assertEquals(Integer.valueOf(1), again.ResumedAt());
+            assertEquals(woundsThen, List.of(again.Table().GetWoundsOn(again.Table().Card("aragorn")),
+                    again.Table().GetWoundsOn(again.Table().Card("gandalf")), again.Table().GetWoundsOn(again.Table().Card("boromir")),
+                    again.Table().GetWoundsOn(again.Table().Card("frodo"))));
+        }
+    }
 }

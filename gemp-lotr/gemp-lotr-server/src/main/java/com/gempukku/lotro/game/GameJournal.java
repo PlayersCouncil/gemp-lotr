@@ -1,7 +1,9 @@
 package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,16 +27,22 @@ import java.util.TreeMap;
  *
  * To follow an earlier journal: call replayRandomFrom(earlier) before the game starts, so that its random outcomes
  * come out as they did before, then give the game each of earlier.answers() in turn, checking each against the
- * decision it is for with matches().  The new journal fills up as the game is replayed, so at the end it is a
+ * decision it is for with matches() and turning it back into an answer to that decision with concrete().  The new journal fills up as the game is replayed, so at the end it is a
  * complete journal in its own right.
  *
  * Players are written down by whatever keyOf says, so that a journal does not have to be replayed by the same people
  * (a scenario writes "freeps" and "shadow").  Cards are written down by card ID.  Those are handed out in a fixed
  * order as a game goes, so the same game gives the same card the same ID.
+ *
+ * What is NOT the same from one run of a game to the next is the order a decision lists its options in.  The engine
+ * collects cards and actions in hash sets of objects that have no hash of their own, so the same three companions
+ * come out in a different order each time.  Two things follow.  A decision's fingerprint must not depend on the
+ * order of its options.  And an answer that is a position in the list ("action 2", "the card called temp1", "option
+ * 0") means nothing in another run, so answers are written down by what was chosen instead: see stable().
  */
 public class GameJournal implements DecisionObserver {
     public enum Kind {
-        /** A player's answer to a decision.  detail is the decision's fingerprint; value the answer. */
+        /** A player's answer to a decision.  detail is the decision's fingerprint; value the answer, in its stable form. */
         ANSWER("A"),
         /** A deck was shuffled.  value is the card IDs in their new order, top first. */
         SHUFFLE("S"),
@@ -153,7 +161,7 @@ public class GameJournal implements DecisionObserver {
 
     @Override
     public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {
-        _entries.add(new Entry(Kind.ANSWER, _keys.keyOf(playerId), fingerprint(decision), answer == null ? "" : answer));
+        _entries.add(new Entry(Kind.ANSWER, _keys.keyOf(playerId), fingerprint(decision), stable(decision, answer == null ? "" : answer)));
     }
 
     /**
@@ -164,15 +172,193 @@ public class GameJournal implements DecisionObserver {
     }
 
     /**
-     * A short stand-in for everything a decision asks: what kind it is, its text, and every option it offers.  Two
-     * decisions with the same fingerprint are, for all practical purposes, the same question.  The kind is left
-     * readable because it is the first thing anybody wants to know when two do not match.
+     * A short stand-in for everything a decision asks: what kind it is, its text, and every option it offers, in no
+     * particular order.  Two decisions with the same fingerprint are, for all practical purposes, the same question.
+     * The kind is left readable because it is the first thing anybody wants to know when two do not match.
      */
     public static String fingerprint(AwaitingDecision decision) {
+        Map<String, String[]> parameters = new TreeMap<>(decision.getDecisionParameters());
+        //Position in the list is not part of the question
+        switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE, ACTION_CHOICE -> parameters.remove("actionId");
+            case ARBITRARY_CARDS -> {
+                String[] cards = arbitraryCards(decision);
+                if (cards != null)
+                    parameters.put("cardId", cards);
+                else
+                    parameters.remove("cardId");
+            }
+            default -> { }
+        }
+
+        //Some parameters describe the same options, one option to a position ("cardId" and "actionText" of a choice
+        // of actions).  Those are put together, each option on a line, and the lines sorted.  Every other parameter
+        // is a list of its own (the characters and the minions of an assignment) and is sorted by itself.
+        List<String> together = switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE -> List.of("cardId", "blueprintId", "actionText");
+            case ACTION_CHOICE -> List.of("blueprintId", "actionText");
+            case ARBITRARY_CARDS -> List.of("cardId", "blueprintId", "selectable");
+            default -> List.of();
+        };
         StringBuilder all = new StringBuilder(String.valueOf(decision.getText()));
-        for (Map.Entry<String, String[]> parameter : new TreeMap<>(decision.getDecisionParameters()).entrySet())
-            all.append('\u0001').append(parameter.getKey()).append('=').append(String.join("\u0002", parameter.getValue()));
+        int options = 0;
+        for (String name : together)
+            if (parameters.containsKey(name))
+                options = Math.max(options, parameters.get(name).length);
+        List<String> lines = new ArrayList<>();
+        for (int i = 0; i < options; i++) {
+            StringBuilder line = new StringBuilder();
+            for (String name : together) {
+                String[] values = parameters.get(name);
+                line.append(name).append('=').append(values != null && i < values.length ? values[i] : "").append('\u0002');
+            }
+            lines.add(line.toString());
+        }
+        Collections.sort(lines);
+        all.append('\u0001').append(String.join("\u0001", lines));
+        for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+            if (together.contains(parameter.getKey()))
+                continue;
+            String[] values = parameter.getValue().clone();
+            Arrays.sort(values);
+            all.append('\u0001').append(parameter.getKey()).append('=').append(String.join("\u0002", values));
+        }
         return decision.getDecisionType().name() + ":" + Integer.toHexString(all.toString().hashCode());
+    }
+
+    /**
+     * @return For a choice from an arbitrary list of cards: something that identifies each card on offer, in the
+     * order they are offered.  The card's ID if the decision knows its cards, otherwise all that can be said is
+     * which card it is a copy of.  Null if the decision is not that kind.
+     */
+    private static String[] arbitraryCards(AwaitingDecision decision) {
+        String[] blueprints = decision.getDecisionParameters().get("blueprintId");
+        if (decision.getDecisionType() != AwaitingDecisionType.ARBITRARY_CARDS || blueprints == null)
+            return null;
+        List<PhysicalCard> cards = decision instanceof ArbitraryCardsSelectionDecision arbitrary && arbitrary.getPhysicalCards() != null
+                ? new ArrayList<>(arbitrary.getPhysicalCards()) : null;
+        String[] result = new String[blueprints.length];
+        for (int i = 0; i < result.length; i++)
+            result[i] = cards != null && i < cards.size() ? "c" + cards.get(i).getCardId() : "b" + blueprints[i];
+        return result;
+    }
+
+    private static final String PART = "|";
+
+    /**
+     * Turns an answer into a form that means the same thing in another run of the same game.  Most answers already
+     * do (card IDs, numbers).  The ones that are positions in the decision's list of options do not:
+     *
+     *     a choice of a card's action      "2"            becomes   "&lt;card ID&gt;|&lt;the action's text&gt;"
+     *     a choice between actions         "2"            becomes   "&lt;blueprint&gt;|&lt;the action's text&gt;"
+     *     cards from an arbitrary list     "temp1,temp3"  becomes   "c&lt;card ID&gt;,c&lt;card ID&gt;" (or "b&lt;blueprint&gt;")
+     *     a multiple choice                "0"            becomes   the text of the option
+     *
+     * An answer that is not one of the decision's options is left as it is; the game will have refused it.
+     */
+    public static String stable(AwaitingDecision decision, String answer) {
+        Map<String, String[]> parameters = decision.getDecisionParameters();
+        try {
+            switch (decision.getDecisionType()) {
+                case CARD_ACTION_CHOICE -> {
+                    if (answer.isEmpty())
+                        return answer;
+                    int index = indexOf(parameters.get("actionId"), answer);
+                    return index < 0 ? answer : parameters.get("cardId")[index] + PART + parameters.get("actionText")[index];
+                }
+                case ACTION_CHOICE -> {
+                    int index = indexOf(parameters.get("actionId"), answer);
+                    return index < 0 ? answer : parameters.get("blueprintId")[index] + PART + parameters.get("actionText")[index];
+                }
+                case ARBITRARY_CARDS -> {
+                    if (answer.isEmpty())
+                        return answer;
+                    String[] cards = arbitraryCards(decision);
+                    List<String> chosen = new ArrayList<>();
+                    for (String id : answer.split(",")) {
+                        int index = indexOf(parameters.get("cardId"), id);
+                        if (index < 0)
+                            return answer;
+                        chosen.add(cards[index]);
+                    }
+                    return String.join(",", chosen);
+                }
+                case MULTIPLE_CHOICE -> {
+                    int index = Integer.parseInt(answer);
+                    String[] options = parameters.get("results");
+                    return index < 0 || index >= options.length ? answer : options[index];
+                }
+                default -> {
+                    return answer;
+                }
+            }
+        } catch (RuntimeException exp) {
+            return answer;
+        }
+    }
+
+    /**
+     * The other way: turns a stable answer into the answer to give this decision.
+     * @return The answer, or null if what was chosen is not among what this decision offers.
+     */
+    public static String concrete(AwaitingDecision decision, String stable) {
+        Map<String, String[]> parameters = decision.getDecisionParameters();
+        switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE -> {
+                if (stable.isEmpty())
+                    return stable;
+                return optionWith(parameters.get("actionId"), parameters.get("cardId"), parameters.get("actionText"), stable);
+            }
+            case ACTION_CHOICE -> {
+                return optionWith(parameters.get("actionId"), parameters.get("blueprintId"), parameters.get("actionText"), stable);
+            }
+            case ARBITRARY_CARDS -> {
+                if (stable.isEmpty())
+                    return stable;
+                String[] cards = arbitraryCards(decision);
+                String[] ids = parameters.get("cardId");
+                boolean[] used = new boolean[ids.length];
+                List<String> chosen = new ArrayList<>();
+                for (String card : stable.split(",")) {
+                    int found = -1;
+                    for (int i = 0; i < cards.length && found < 0; i++)
+                        if (!used[i] && cards[i].equals(card))
+                            found = i;
+                    if (found < 0)
+                        return null;
+                    used[found] = true;
+                    chosen.add(ids[found]);
+                }
+                return String.join(",", chosen);
+            }
+            case MULTIPLE_CHOICE -> {
+                int index = indexOf(parameters.get("results"), stable);
+                return index < 0 ? null : String.valueOf(index);
+            }
+            default -> {
+                return stable;
+            }
+        }
+    }
+
+    private static String optionWith(String[] ids, String[] firsts, String[] seconds, String stable) {
+        int bar = stable.indexOf(PART);
+        if (bar < 0 || ids == null)
+            return null;
+        String first = stable.substring(0, bar);
+        String second = stable.substring(bar + 1);
+        for (int i = 0; i < ids.length; i++)
+            if (firsts[i].equals(first) && seconds[i].equals(second))
+                return ids[i];
+        return null;
+    }
+
+    private static int indexOf(String[] values, String value) {
+        if (values != null)
+            for (int i = 0; i < values.length; i++)
+                if (values[i].equals(value))
+                    return i;
+        return -1;
     }
 
     /* ---- random outcomes ---- */

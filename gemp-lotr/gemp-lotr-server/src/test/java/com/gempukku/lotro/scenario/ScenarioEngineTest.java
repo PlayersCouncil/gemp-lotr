@@ -450,4 +450,89 @@ public class ScenarioEngineTest {
         assertEquals(RunnerLevel.PREFIX, report.required);
         assertEquals(StepStatus.MATCHED, report.steps.get("1"));
     }
+
+    private static ScenarioRunReport runAwkward(String rest) throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(ScenarioTesting.awkward(rest));
+        return ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format(def.format));
+    }
+
+    @Test
+    public void AQuestionAskedFromInsideAnAnswerBelongsToTheNextStep() throws Exception {
+        //Using Sam shows the deck, and choosing to stop looking is what asks which card to take.  The second question
+        // has been asked before the game has finished taking the answer to the first.
+        ScenarioRunReport report = runAwkward("""
+                	setup: {
+                		freeps: {
+                			characters: sam
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: use(sam)
+                		}
+                		{
+                			when: freeps, arbitrary, text(inspect)
+                			answer: pass
+                		}
+                		{
+                			when: freeps, arbitrary, text(Choose cards from deck)
+                			answer: choose(bill)
+                		}
+                		{
+                			when: freeps, cards, text(Attach Bill)
+                			answer: choose(sam)
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			answer: pass
+                			end: complete
+                		}
+                	]
+                """);
+        assertTrue(report.toString(), report.passed());
+        assertEquals(List.of("1", "2", "3", "4", "5"), report.decisions.stream().map(ScenarioRunReport.Decision::step).toList());
+    }
+
+    private static final String REVEAL_TO_BOTH = """
+            	setup: {
+            		freeps: {
+            			support: proudfoot
+            		}
+            	}
+            	steps: [
+            		{
+            			when: freeps, action, phase(fellowship)
+            			answer: use(proudfoot)
+            		}
+            		{
+            			when: FIRST, arbitrary, text(revealed)
+            			answer: pass
+            		}
+            		{
+            			when: SECOND, arbitrary, text(revealed)
+            			answer: pass
+            		}
+            		{
+            			when: freeps, action, phase(fellowship)
+            			answer: pass
+            			end: complete
+            		}
+            	]
+            """;
+
+    @Test
+    public void WhenBothSeatsAreAskedAtOnceTheScriptSaysWhoseTurnItIs() throws Exception {
+        //The game asks the Free Peoples seat first.  The script may take them in either order.
+        ScenarioRunReport report = runAwkward(REVEAL_TO_BOTH.replace("FIRST", "freeps").replace("SECOND", "opponent"));
+        assertTrue(report.toString(), report.passed());
+        assertTrue(report.decisions.get(1).decision(), report.decisions.get(1).decision().startsWith("freeps, arbitrary"));
+        assertTrue(report.decisions.get(2).decision(), report.decisions.get(2).decision().startsWith("shadow, arbitrary"));
+
+        report = runAwkward(REVEAL_TO_BOTH.replace("FIRST", "opponent").replace("SECOND", "freeps"));
+        assertTrue(report.toString(), report.passed());
+        assertTrue(report.decisions.get(1).decision(), report.decisions.get(1).decision().startsWith("shadow, arbitrary"));
+        assertTrue(report.decisions.get(2).decision(), report.decisions.get(2).decision().startsWith("freeps, arbitrary"));
+        assertEquals(List.of("1", "2", "3", "4"), report.decisions.stream().map(ScenarioRunReport.Decision::step).toList());
+    }
 }

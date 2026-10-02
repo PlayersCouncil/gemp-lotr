@@ -142,7 +142,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("gameId", mediator.getGameId());
             //Where the game picks up: the number of the checkpoint step, or null for the beginning
-            result.put("resumedAt", mediator.getScenario().Table().AnswersFollowed() > 0 ? mediator.getScenario().LastCheckpoint() : null);
+            result.put("resumedAt", mediator.getScenario().ResumedAt());
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {
             postDecoder.destroy();

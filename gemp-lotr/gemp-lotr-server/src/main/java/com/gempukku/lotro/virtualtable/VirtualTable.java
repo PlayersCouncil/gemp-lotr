@@ -271,6 +271,7 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
             decision.decisionMade(answer);
         } catch (DecisionResultInvalidException exp) {
             userFeedback().sendAwaitingDecision(player, decision);
+            userFeedback().atRest();
             throw new RuntimeException(exp);
         }
         userFeedback().decisionAccepted(player, decision, answer);
