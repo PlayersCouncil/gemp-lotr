@@ -26,7 +26,8 @@ import java.util.stream.Stream;
  * The scenarios the server can offer, read from two folders:
  *
  *     the canonical folder    the scenarios that ship with the game (gemp-lotr-cards, resources/scenarios).  Any
- *                             .hjson file in it or under it, except under campaigns/.
+ *                             .hjson file in it or under it, except under campaigns/, which holds campaign files
+ *                             (ScenarioCampaign): lists of scenarios to be played one after another.
  *     the user folder         scenarios that players have written, which are not part of the repository.  Only files
  *                             under users/&lt;player name&gt;/ are read; that player is the scenario's owner.
  *
@@ -103,6 +104,8 @@ public class ScenarioLibrary implements Cached {
     private Map<String, LoadedFile> _files = new HashMap<>();
     /** By id, in the order they are listed. */
     private Map<String, Entry> _byId = new LinkedHashMap<>();
+    /** In the order they come (ScenarioCampaign.order, then id). */
+    private List<ScenarioCampaign> _campaigns = List.of();
     private List<Entry> _entries = List.of();
     private boolean _loaded = false;
     private long _lastCheck = 0;
@@ -156,6 +159,128 @@ public class ScenarioLibrary implements Cached {
         return result;
     }
 
+    public synchronized List<ScenarioCampaign> getCampaigns() {
+        refresh();
+        return _campaigns;
+    }
+
+    /**
+     * @return The campaign a scenario is part of (the first, if it is listed by several); null if it is in none.
+     */
+    public synchronized ScenarioCampaign campaignOf(String scenarioId) {
+        refresh();
+        for (ScenarioCampaign campaign : _campaigns)
+            if (campaign.scenarios().contains(scenarioId))
+                return campaign;
+        return null;
+    }
+
+    /**
+     * @return Where a scenario stands in its campaign, for a client: {id, title, position, count, next: {id, title}}.
+     * next is the scenario after it that this player can start, or null if there is none.  Null altogether if the
+     * scenario is part of no campaign.
+     */
+    public synchronized Map<String, Object> campaignInfo(String scenarioId, String playerName, boolean admin) {
+        ScenarioCampaign campaign = campaignOf(scenarioId);
+        if (campaign == null)
+            return null;
+        int position = campaign.scenarios().indexOf(scenarioId);
+        Map<String, Object> info = new LinkedHashMap<>();
+        info.put("id", campaign.id());
+        info.put("title", campaign.title());
+        info.put("position", position + 1);
+        info.put("count", campaign.scenarios().size());
+        Map<String, Object> next = null;
+        for (int i = position + 1; i < campaign.scenarios().size() && next == null; i++) {
+            Entry entry = _byId.get(campaign.scenarios().get(i));
+            if (entry != null && entry.availableTo(playerName, admin)) {
+                next = new LinkedHashMap<>();
+                next.put("id", entry.id());
+                next.put("title", entry.def().title);
+            }
+        }
+        info.put("next", next);
+        return info;
+    }
+
+    /**
+     * @return A scenario's file as it is on disk; null if it cannot be read.
+     */
+    public synchronized String source(Entry entry) {
+        File folder = entry.owner() == null ? _canonicalFolder
+                : _userFolder == null ? null : new File(new File(_userFolder, "users"), entry.owner());
+        if (folder == null)
+            return null;
+        try {
+            return Files.readString(new File(folder, entry.path().replace('/', File.separatorChar)).toPath(), StandardCharsets.UTF_8);
+        } catch (IOException | RuntimeException exp) {
+            return null;
+        }
+    }
+
+    /** Whether there is anywhere to keep scenarios that are not part of the game itself. */
+    public boolean hasUserFolder() {
+        return _userFolder != null;
+    }
+
+    /** A name for a folder or a file that cannot lead anywhere but into the folder it is in. */
+    private static final String NAME = "[A-Za-z0-9_-][A-Za-z0-9_. -]*";
+
+    /**
+     * @return Where a scenario's file is (or would be).
+     * @throws IOException if that is not somewhere a scenario can be kept.
+     */
+    private File fileFor(String owner, String path) throws IOException {
+        if (path == null || !path.matches("(" + NAME + "/){0," + (MAX_DEPTH - 2) + "}" + NAME + "\\.hjson") || path.contains("..")
+                || path.startsWith("campaigns/"))
+            throw new IOException("'" + path + "' is not somewhere a scenario can be kept: up to " + (MAX_DEPTH - 2) + " folders and a file name, "
+                    + "each starting with a letter or digit and made of letters, digits, spaces, dots, dashes and underscores, "
+                    + "the file's ending in .hjson (and not under campaigns/)");
+        if (owner != null && (!owner.matches(NAME) || owner.contains("..")))
+            throw new IOException("'" + owner + "' cannot be the name of a folder");
+        File folder;
+        if (owner == null) {
+            folder = _canonicalFolder;
+        } else {
+            if (_userFolder == null)
+                throw new IOException("This server keeps no scenarios but its own (scenarios.user.path is not set)");
+            folder = new File(new File(_userFolder, "users"), owner);
+        }
+        return new File(folder, path.replace('/', File.separatorChar));
+    }
+
+    /** Whether there is a file where a scenario would be saved. */
+    public synchronized boolean exists(String owner, String path) {
+        try {
+            return fileFor(owner, path).exists();
+        } catch (IOException exp) {
+            return false;
+        }
+    }
+
+    /**
+     * Authoring: writes a scenario's file, new or in place of the one that is there, and reads the folders again.
+     * @param owner Whose scenario it is; null to write into the canonical folder.
+     * @param path Where in that folder, with forward slashes: "tutorials/basics-02.hjson".
+     * @return What the library now knows about the file.
+     * @throws IOException if the file cannot be written, or the path is not one a scenario can be kept at.
+     */
+    public synchronized Entry save(String owner, String path, String hjson) throws IOException {
+        File file = fileFor(owner, path);
+        Files.createDirectories(file.getParentFile().toPath());
+        Files.writeString(file.toPath(), hjson, StandardCharsets.UTF_8);
+
+        //Read at once, and whatever the file's time and size say: it has changed
+        _files.remove(file.getAbsolutePath());
+        _lastCheck = _clock.getAsLong();
+        load();
+        _loaded = true;
+        for (Entry entry : _entries)
+            if (entry.path().equals(path) && java.util.Objects.equals(entry.owner(), owner))
+                return entry;
+        throw new IOException("The file was written but the library did not find it again: " + file);
+    }
+
     /**
      * @return What turns the text of this scenario's messages into what a client shows.
      */
@@ -201,6 +326,19 @@ public class ScenarioLibrary implements Cached {
         }
         found.sort(Comparator.comparing((Found file) -> file.owner() == null ? "" : file.owner()).thenComparing(Found::path));
 
+        //Campaign files are few and small, and are read afresh every time the folders are looked at
+        List<ScenarioCampaign> campaigns = new ArrayList<>();
+        readCampaigns(_canonicalFolder, null, campaigns);
+        if (_userFolder != null) {
+            File[] owners = new File(_userFolder, "users").listFiles(File::isDirectory);
+            if (owners != null)
+                for (File ownerFolder : owners)
+                    readCampaigns(ownerFolder, ownerFolder.getName(), campaigns);
+        }
+        campaigns.sort(Comparator.comparing((ScenarioCampaign campaign) -> campaign.owner() == null ? "" : campaign.owner())
+                .thenComparingInt(ScenarioCampaign::order).thenComparing(ScenarioCampaign::id));
+        _campaigns = List.copyOf(campaigns);
+
         Map<String, LoadedFile> files = new HashMap<>();
         boolean changed = found.size() != _files.size();
         for (Found file : found) {
@@ -236,6 +374,19 @@ public class ScenarioLibrary implements Cached {
         _files = files;
         _byId = byId;
         _entries = List.copyOf(entries);
+    }
+
+    private static void readCampaigns(File folder, String owner, List<ScenarioCampaign> campaigns) {
+        File[] files = folder == null ? null : new File(folder, "campaigns").listFiles((dir, name) -> name.endsWith(".hjson"));
+        if (files == null)
+            return;
+        for (File file : files) {
+            try {
+                campaigns.add(ScenarioCampaign.parse(Files.readString(file.toPath(), StandardCharsets.UTF_8), owner));
+            } catch (ScenarioFormatException | IOException | RuntimeException exp) {
+                LOG.warn("Campaign " + (owner == null ? "" : owner + "/") + file.getName() + " cannot be read: " + exp.getMessage());
+            }
+        }
     }
 
     private static void find(File folder, String owner, List<Found> found) {

@@ -29,6 +29,7 @@ public class GameStats {
     private int _shadowSkirmishDamageBonus;
 
     private boolean _fpOverwhelmed;
+    private boolean _shadowOverwhelmed;
 
     private Map<String, Map<Zone, Integer>> _zoneSizes = new HashMap<>();
     private Map<String, Integer> _threats = new HashMap<>();
@@ -142,6 +143,21 @@ public class GameStats {
         if (newFpOverwhelmed != _fpOverwhelmed) {
             changed = true;
             _fpOverwhelmed = newFpOverwhelmed;
+        }
+
+        //The other way round: as the skirmish stands, the minions lose it and are overwhelmed (the same sums as
+        // ResolveSkirmishEffect, where a tie or a Free Peoples overwhelm comes first)
+        boolean newShadowOverwhelmed = false;
+        if (skirmish != null && skirmish.getFellowshipCharacter() != null && !skirmish.getShadowCharacters().isEmpty()
+                && !newFpOverwhelmed && newFellowshipStrength > newShadowStrength) {
+            int shadowMultiplier = 2;
+            for (PhysicalCard minion : skirmish.getShadowCharacters())
+                shadowMultiplier = Math.max(shadowMultiplier, game.getModifiersQuerying().getOverwhelmMultiplier(game, minion));
+            newShadowOverwhelmed = newFellowshipStrength >= (long) shadowMultiplier * newShadowStrength;
+        }
+        if (newShadowOverwhelmed != _shadowOverwhelmed) {
+            changed = true;
+            _shadowOverwhelmed = newShadowOverwhelmed;
         }
 
         Map<String, Map<Zone, Integer>> newZoneSizes = new HashMap<>();
@@ -316,6 +332,10 @@ public class GameStats {
         return _fpOverwhelmed;
     }
 
+    public boolean isShadowOverwhelmed() {
+        return _shadowOverwhelmed;
+    }
+
     public Map<String, Map<Zone, Integer>> getZoneSizes() {
         return Collections.unmodifiableMap(_zoneSizes);
     }
@@ -369,6 +389,7 @@ public class GameStats {
         copy._shadowSkirmishStrength = _shadowSkirmishStrength;
         copy._shadowSkirmishDamageBonus = _shadowSkirmishDamageBonus;
         copy._fpOverwhelmed = _fpOverwhelmed;
+        copy._shadowOverwhelmed = _shadowOverwhelmed;
         copy._zoneSizes = _zoneSizes;
         copy._threats = _threats;
         copy._threatTotals = _threatTotals;

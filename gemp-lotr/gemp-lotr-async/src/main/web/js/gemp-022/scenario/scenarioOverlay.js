@@ -687,6 +687,12 @@ var GempScenarioOverlay = Class.extend({
         this.addMenu();
         this.takeOverFeedback();
 
+        //Somebody writing the scenario as they play it gets the authoring panel beside the table (it is also what
+        // shows the way back from a player's game of a draft)
+        if (!game.replayMode && this.author == null && typeof GempScenarioAuthor != "undefined"
+            && (info.author || info.draftTest))
+            this.author = new GempScenarioAuthor(game, this, info.author);
+
         if (!game.replayMode && ($(window).width() < this.MIN_WIDTH || $(window).height() < this.MIN_HEIGHT))
             this.showTooSmall();
     },
@@ -791,6 +797,8 @@ var GempScenarioOverlay = Class.extend({
             else
                 this.showMessage(this.startMessages[0]);
             this.markCards();
+            if (this.author != null)
+                this.author.stepShown(step);
             return;
         }
 
@@ -804,10 +812,15 @@ var GempScenarioOverlay = Class.extend({
                 this.answeringMessage = this.startMessages[0];
             this.showMessage(this.startMessages[0]);
         }
-        //A step can arrive again for a decision already on the screen (its answer was rejected)
+        //A step can arrive again for a decision already on the screen (its answer was rejected).  For an author it
+        // arrives again whenever they change it, and what it allows may be what changed.
+        if (this.info != null && this.info.author && this.decision != null)
+            this.plan = null;
         if (this.decision != null && step.allow != null && this.plan == null)
             this.plan = new ScenarioPlan(this.decision, step.allow);
         this.markCards();
+        if (this.author != null)
+            this.author.stepShown(step);
     },
 
     /** The Next button. */
@@ -938,6 +951,9 @@ var GempScenarioOverlay = Class.extend({
 
     clickCaptured: function (event) {
         if (this.info == null || this.game.replayMode)
+            return;
+        //An author picking something on the table for a message to point at is not playing
+        if ($("body").hasClass("sa-picking"))
             return;
         //Whatever was last said about a click has been read by the time of the next one
         if (this.hintShownAt == null || Date.now() - this.hintShownAt > 400)
@@ -1112,10 +1128,35 @@ var GempScenarioOverlay = Class.extend({
 
     /* ---------------------------------------------------------------- bubbles and outlines */
 
+    /**
+     * Everything a bubble says goes into the game log as well, once, as chat from the scenario's opponent: a bubble
+     * is gone as soon as it has been read, and the log is where a player looks for what they missed.
+     */
+    logMessage: function (message) {
+        var chatBox = this.game.chatBox;
+        if (chatBox == null || this.step == null || message.html == null)
+            return;
+        var position = $.inArray(message, this.step.messages || []);
+        var key = (this.step.step != null ? this.step.step : this.step.seat) + ":" + position;
+        this.logged = this.logged || {};
+        if (position > -1 && this.logged[key]) {
+            //(an author's message is put up again each time they change it, and the log keeps up with it)
+            if (this.info != null && this.info.author)
+                $(".msg-content[data-scenario-says='" + key + "']").html(message.html);
+            return;
+        }
+        this.logged[key] = true;
+        var name = this.info != null && this.info.opponentName != null ? this.info.opponentName : "Scenario";
+        var from = $("<span></span>").text(name).html();
+        chatBox.appendMessage("<div class='msg-identifier'><span> <b>" + from + ": </b></span></div>"
+            + "<div class='msg-content' data-scenario-says='" + key + "'>" + message.html + "</div>", "chatMessage scenario-says");
+    },
+
     showMessage: function (message) {
         this.currentMessage = message;
         this.bubblePlaced = null;
         this.bubbleSituation = null;
+        this.logMessage(message);
         var count = "";
         var position = $.inArray(message, this.startMessages);
         if (position > -1 && this.startMessages.length > 1)
@@ -1197,7 +1238,7 @@ var GempScenarioOverlay = Class.extend({
      */
     layoutZoom: function (bubbleWidth) {
         var zoom = this.zoom;
-        var viewWidth = $(window).width(), viewHeight = $(window).height();
+        var viewWidth = $(window).width() - (this.game.reservedRight || 0), viewHeight = $(window).height();
         var gap = 28;
         //As large as the window allows, with room left beside it for the bubble
         var frameHeight = Math.max(120, viewHeight - 56);
@@ -1339,7 +1380,7 @@ var GempScenarioOverlay = Class.extend({
         var message = this.currentMessage;
         var anchor = ScenarioAnchors.resolve(this.game, message.anchor, cards);
         var width = this.bubble.outerWidth(), height = this.bubble.outerHeight();
-        var viewWidth = $(window).width(), viewHeight = $(window).height();
+        var viewWidth = $(window).width() - (this.game.reservedRight || 0), viewHeight = $(window).height();
         var margin = 8, gap = 16;
 
         //What the bubble points at is usually what it sits beside.  With a card shown large it sits beside the card
@@ -1644,22 +1685,43 @@ var GempScenarioOverlay = Class.extend({
 
         var buttons = panel.find(".scenario-end-buttons");
         var addButton = function (label, action, primary) {
-            $("<button></button>").text(label).addClass(primary ? "scenario-primary" : "").click(function () {
+            return $("<button></button>").text(label).addClass(primary ? "scenario-primary" : "").click(function () {
                 action();
                 return false;
             }).appendTo(buttons);
         };
-        if (event.result != "complete" && event.result != "abandoned" && event.checkpoint != null)
-            addButton("Back to the last checkpoint", function () {
-                that.restart(true);
-            }, true);
-        if (event.result != "error")
-            addButton(event.result == "complete" ? "Play it again" : "Start again", function () {
+        //One of a campaign, and done: the ways back on the left, and on to the next one on the right
+        var campaign = this.info != null ? this.info.campaign : null;
+        if (event.result == "complete" && campaign != null) {
+            buttons.addClass("scenario-end-campaign");
+            addButton("Back to the Game Hall", function () {
+                that.backToHall();
+            }, false);
+            addButton("Play it Again", function () {
                 that.restart(false);
-            }, event.result != "complete" && event.checkpoint == null);
-        addButton("Back to the Game Hall", function () {
-            that.backToHall();
-        }, event.result == "complete" || event.result == "error");
+            }, false);
+            if (campaign.next != null) {
+                addButton("Next Scenario", function () {
+                    that.startOther(campaign.next.id);
+                }, true).addClass("scenario-end-onward").attr("title", campaign.next.title);
+            } else {
+                panel.find(".scenario-end-body").append($("<p class='scenario-end-last'></p>").text(
+                    "That was the last of " + campaign.title + "."));
+                buttons.find("button").first().addClass("scenario-primary");
+            }
+        } else {
+            if (event.result != "complete" && event.result != "abandoned" && event.checkpoint != null)
+                addButton("Back to the last checkpoint", function () {
+                    that.restart(true);
+                }, true);
+            if (event.result != "error")
+                addButton(event.result == "complete" ? "Play it again" : "Start again", function () {
+                    that.restart(false);
+                }, event.result != "complete" && event.checkpoint == null);
+            addButton("Back to the Game Hall", function () {
+                that.backToHall();
+            }, event.result == "complete" || event.result == "error");
+        }
 
         this.layer.find(".scenario-end, .scenario-shade").remove();
         this.layer.append("<div class='scenario-shade'></div>").append(panel);
@@ -1687,10 +1749,18 @@ var GempScenarioOverlay = Class.extend({
     restart: function (fromCheckpoint) {
         if (this.info == null)
             return;
+        //An author's game starts again by the script playing itself, not from the scenario's file
+        if (this.author != null && this.author.restart(fromCheckpoint))
+            return;
+        this.startOther(this.info.id, fromCheckpoint);
+    },
+
+    /** Starts a game of a scenario (this one again, or the next of its campaign) in this tab. */
+    startOther: function (id, fromCheckpoint) {
         var that = this;
-        //Starting again gives this game up, and its ending is not news
+        //Starting another gives this game up, and its ending is not news
         this.leaving = true;
-        this.game.communication.startScenario(this.info.id, fromCheckpoint, function (result) {
+        this.game.communication.startScenario(id, fromCheckpoint === true, function (result) {
             location.href = "/gemp-lotr/game.html?gameId=" + result.gameId;
         }, function () {
             that.leaving = false;
@@ -1700,6 +1770,12 @@ var GempScenarioOverlay = Class.extend({
 
     leave: function () {
         if (this.phase == "ended" || this.game.gameEnded) {
+            this.backToHall();
+            return;
+        }
+        //An author's draft, and the game it is being written in, stay as they are to be come back to
+        if (this.author != null && this.author.authoring) {
+            this.leaving = true;
             this.backToHall();
             return;
         }

@@ -189,6 +189,7 @@ public class EventSerializer {
         eventElem.setAttribute("shadowDamageBonus", String.valueOf(gameStats.getShadowSkirmishDamageBonus()));
 
         eventElem.setAttribute("fpOverwhelmed", String.valueOf(gameStats.isFpOverwhelmed()));
+        eventElem.setAttribute("shadowOverwhelmed", String.valueOf(gameStats.isShadowOverwhelmed()));
 
         eventElem.setAttribute("moveLimit", String.valueOf(gameStats.getMoveLimit()));
         eventElem.setAttribute("moveCount", String.valueOf(gameStats.getMoveCount()));

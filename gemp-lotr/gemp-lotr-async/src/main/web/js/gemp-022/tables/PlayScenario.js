@@ -12,6 +12,10 @@
  *
  * A scenario game the player is still in the middle of is offered first, to carry on with or to start over.
  * Starting any scenario gives up the one in progress (the server does that), so the buttons say so.
+ *
+ * Whoever may write scenarios (the list says: mayAuthor) also gets an Edit button on each, and a way to start a new
+ * one.  Either opens a game with the authoring panel beside it (see scenario/scenarioAuthor.js); an author has one
+ * draft at a time, and its game is the one "in the middle of" above.
  */
 class PlayScenario extends TableFlow {
 	listDiv = null;
@@ -24,6 +28,11 @@ class PlayScenario extends TableFlow {
 	current = null;
 	//True from a click on a start button until the server has answered
 	starting = false;
+	//Whether this player may write scenarios, and the draft they have open: {gameId, id, title, over, test} (null if
+	// they have none)
+	mayAuthor = false;
+	authoring = null;
+	authorDiv = null;
 
 	// as GempScenarioOverlay.MIN_WIDTH / MIN_HEIGHT
 	static MIN_WIDTH = 1000;
@@ -40,6 +49,7 @@ class PlayScenario extends TableFlow {
 		this.listDiv = $("#scenario-list");
 		this.foldersDiv = $("#scenario-folders");
 		this.currentDiv = $("#scenario-current");
+		this.authorDiv = $("#scenario-author");
 		this.selectedFolder = TableFlow.cookie("scenario-folder");
 	}
 
@@ -63,6 +73,8 @@ class PlayScenario extends TableFlow {
 		this.comm.getScenarios(function (data) {
 			that.scenarios = (data && data.scenarios) || [];
 			that.current = (data && data.current) || null;
+			that.mayAuthor = !!(data && data.mayAuthor);
+			that.authoring = (data && data.authoring) || null;
 			that.render();
 		}, TableFlow.errorMap(function (message) {
 			that.listDiv.empty().append($("<div class='scenario-empty'></div>").text("The list of scenarios could not be loaded."));
@@ -154,6 +166,7 @@ class PlayScenario extends TableFlow {
 
 	render() {
 		this.renderCurrent();
+		this.renderAuthor();
 		this.foldersDiv.empty();
 		this.listDiv.empty();
 		if (this.scenarios.length == 0) {
@@ -216,6 +229,11 @@ class PlayScenario extends TableFlow {
 		var scenario = this.byId(this.current.id);
 		var title = scenario != null ? scenario.title : this.current.id;
 		var gameId = this.current.gameId;
+		//(a draft being written has its own line, with its own way back: see renderAuthor)
+		if (this.authoring != null && String(this.authoring.gameId) == String(gameId)) {
+			this.currentDiv.prop("hidden", true);
+			return;
+		}
 		this.currentDiv.append($("<div class='scenario-current-text'></div>")
 			.append(document.createTextNode("You are in the middle of "))
 			.append($("<b></b>").text(title))
@@ -250,12 +268,114 @@ class PlayScenario extends TableFlow {
 			text.append($("<div class='scenario-notes'></div>").text(notes.join(" · ")));
 		row.append(text);
 
+		if (this.mayAuthor)
+			row.append($("<button class='scenario-edit'></button>").attr("title", "Open it in the authoring tool").text("Edit").button().click(function () {
+				that.author({id: scenario.id});
+			}));
+
 		var inProgress = this.current != null && this.current.id == scenario.id;
 		var label = inProgress ? "Start Over" : (scenario.progress != null ? "Play Again" : "Play");
 		row.append($("<button class='scenario-play'></button>").text(label).button().click(function () {
 			that.start(scenario);
 		}));
 		return row;
+	}
+
+	// For those who may write scenarios: a new one, by id and title.
+	renderAuthor() {
+		var that = this;
+		this.authorDiv.empty();
+		if (!this.mayAuthor) {
+			this.authorDiv.prop("hidden", true);
+			return;
+		}
+		if (this.authoring != null) {
+			//The draft is on the server whatever has become of the game it was being written in
+			var draft = this.authoring;
+			this.authorDiv.append($("<span class='scenario-author-draft'></span>")
+				.append(document.createTextNode("You have a draft open: "))
+				.append($("<b></b>").text(draft.title || draft.id))
+				.append(document.createTextNode(draft.test ? " (being played as a player would)." : ".")));
+			this.authorDiv.append($("<button class='scenario-continue'></button>").text("Continue writing").button().click(function () {
+				that.resumeDraft();
+			}));
+			this.authorDiv.append($("<button class='scenario-close-draft'></button>").text("Close it").button().click(function () {
+				if (!confirm("Close the draft? Anything in it that has not been saved is lost."))
+					return;
+				that.comm.scenarioAuthor("POST", "close", {}, function () {
+					that.refresh();
+				}, function () {
+					that.refresh();
+				});
+			}));
+			this.authorDiv.append($("<span class='scenario-author-break'></span>"));
+		}
+		var id = $("<input type='text' maxlength='60'/>").attr("placeholder", "id: basics-02-the-ring").attr("aria-label", "The new scenario's id");
+		var title = $("<input type='text' maxlength='80'/>").attr("placeholder", "Title").attr("aria-label", "The new scenario's title");
+		this.authorDiv.append($("<span></span>").text("Write a scenario:")).append(id).append(title);
+		this.authorDiv.append($("<button class='scenario-new'></button>").text("New").button().click(function () {
+			that.author({"new": true, id: String(id.val()).trim(), title: String(title.val()).trim()});
+		}));
+		this.authorDiv.prop("hidden", false);
+	}
+
+	// Back to the draft: the game it is being written in if that is still going, and a fresh one (played by the script
+	// to where the last one had got) if it is not.
+	resumeDraft() {
+		var that = this;
+		if (this.starting)
+			return;
+		this.starting = true;
+		this.showResult("Setting up the table…", "pending");
+		var win = this.reserveWindow();
+		var failed = function (xhr) {
+			that.starting = false;
+			if (win != null)
+				win.close();
+			var message = null;
+			try {
+				message = JSON.parse(xhr.responseText).error;
+			} catch (e) {
+				message = null;
+			}
+			that.showResult(message || "The draft could not be gone back to.", "error");
+			that.refresh();
+		};
+		this.comm.scenarioAuthor("POST", "resume", {}, function (result) {
+			that.starting = false;
+			that.showResult("Opened.", "success");
+			that.open(win, result.gameId);
+			that.mainHall.tableCreator.closeAfterSuccess();
+		}, failed);
+	}
+
+	// Opens a scenario (or a new one) in the authoring tool: a game with the authoring panel beside it.
+	author(what) {
+		var that = this;
+		if (this.starting)
+			return;
+		if (this.authoring != null && !confirm("You have a draft open. Opening another drops it: anything in it that has not been saved is lost."))
+			return;
+		this.starting = true;
+		this.showResult("Setting up the table…", "pending");
+		var win = this.reserveWindow();
+		this.comm.scenarioAuthor("POST", "open", what, function (result) {
+			that.starting = false;
+			that.showResult("Opened.", "success");
+			that.open(win, result.gameId);
+			that.mainHall.tableCreator.closeAfterSuccess();
+		}, function (xhr) {
+			that.starting = false;
+			if (win != null)
+				win.close();
+			var message = null;
+			try {
+				message = JSON.parse(xhr.responseText).error;
+			} catch (e) {
+				message = null;
+			}
+			that.showResult(message || "The scenario could not be opened for writing (HTTP " + ((xhr && xhr.status) || 0) + ").", "error");
+		});
 	}
 
 	// {kind, text} for the badge next to a title; null when the scenario has not been played.

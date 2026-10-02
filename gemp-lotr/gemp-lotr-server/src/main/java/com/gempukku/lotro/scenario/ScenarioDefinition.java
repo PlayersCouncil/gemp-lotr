@@ -29,6 +29,8 @@ public final class ScenarioDefinition {
     public String summary;
     public String author;
     public List<String> tags = new ArrayList<>();
+    /** Whatever its author wanted to keep with the scenario.  Nothing reads it but people (and the authoring tool, which keeps it). */
+    public String note;
     /** Supplies the rules flags and errata mapping.  Deck legality is not checked. */
     public String format;
     /** Which seat the person playing the scenario sits in; the scripted opponent takes the other. */
@@ -230,6 +232,8 @@ public final class ScenarioDefinition {
     public record Zoom(String card, Integer site, String blueprint, List<Focus> focus, double magnify) { }
 
     public static final class Message {
+        /** An author's note about the message.  Never shown to a player. */
+        public String note;
         /** A heading over the text.  Most messages have none. */
         public String header;
         public String text;
@@ -277,6 +281,8 @@ public final class ScenarioDefinition {
         public int number;
         /** A name for the step, if its author wanted one.  It only makes reports easier to read. */
         public String id;
+        /** An author's note about the step.  Never shown to a player. */
+        public String note;
         public When when = new When();
         /** If present, the step keeps applying to decisions until one arrives that matches this. */
         public When until;

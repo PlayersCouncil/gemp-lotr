@@ -91,6 +91,67 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         table.OnNote(this::follow);
     }
 
+    /**
+     * Authoring: what a step says or allows has been changed while a decision it applies to is waiting.  Each such
+     * decision is ruled on again for the same step (the script does not move), and whoever is listening is told.
+     */
+    public void Refresh() {
+        for (Ruling ruling : new ArrayList<>(_rulings.values())) {
+            Step step = ruling.step();
+            if (step == null)
+                continue;
+            ScenarioDirector.Presentation shown;
+            String answer = null;
+            String problem = null;
+            String noAnswer = null;
+            try {
+                shown = _director.present(step, ruling.player(), ruling.decision());
+                try {
+                    answer = _director.scriptedAnswer(step, ruling.decision());
+                } catch (ScenarioScriptException exp) {
+                    if (ruling.player().equals(_table.HumanPlayer()))
+                        noAnswer = exp.getMessage();
+                    else
+                        problem = exp.getMessage();
+                }
+            } catch (ScenarioScriptException exp) {
+                problem = exp.getMessage();
+                shown = _director.presentUnrestricted(step);
+            } catch (RuntimeException exp) {
+                problem = "the script could not be applied: " + exp;
+                shown = _director.presentUnrestricted(step);
+            }
+            Ruling again = new Ruling(ruling.player(), ruling.decision(), step, shown, answer, problem, noAnswer);
+            _rulings.put(ruling.player(), again);
+            tell(again);
+        }
+    }
+
+    /**
+     * Authoring: a step has been written for a decision that is already in front of its player and that the script
+     * had nothing to say about.  Each such decision is ruled on afresh, the first of them that the step fits takes
+     * it, and whoever is listening is told.  (A pause cannot be put in this way: its decision would have had to be
+     * held back, and it has been asked.)
+     * @return Whether a step took a decision.
+     */
+    public boolean Reconsider() {
+        for (Ruling ruling : new ArrayList<>(_rulings.values())) {
+            if (ruling.step() != null)
+                return false;
+        }
+        for (Ruling ruling : new ArrayList<>(_rulings.values())) {
+            if (_table.userFeedback().getAwaitingDecision(ruling.player()) != ruling.decision())
+                continue;
+            Ruling again = rule(ruling.player(), ruling.decision());
+            if (again.step() == null)
+                continue;
+            _rulings.put(ruling.player(), again);
+            tell(again);
+            return true;
+        }
+        return false;
+    }
+
     private static final String READ = "read";
 
     /**

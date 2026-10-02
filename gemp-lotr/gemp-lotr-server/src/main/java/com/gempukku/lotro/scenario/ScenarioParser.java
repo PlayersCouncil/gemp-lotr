@@ -51,7 +51,7 @@ public final class ScenarioParser {
             throw new ScenarioFormatException("A scenario file has to be one { object }");
         JsonObject object = root.asObject();
 
-        checkFields(object, "scenario", "id", "version", "kind", "title", "summary", "author", "tags", "format",
+        checkFields(object, "scenario", "id", "version", "kind", "title", "summary", "author", "tags", "note", "format",
                 "human", "opponent", "coverage", "options", "cards", "ringBearer", "ring", "sites", "rules", "setup",
                 "rng", "steps", "outcome");
 
@@ -65,6 +65,7 @@ public final class ScenarioParser {
         def.summary = optionalString(object, "summary", null, "scenario");
         def.author = optionalString(object, "author", null, "scenario");
         def.tags = list(object.get("tags"), "tags");
+        def.note = optionalString(object, "note", null, "scenario");
         def.format = requireString(object, "format", "scenario");
         def.human = parseAbsoluteSeat(optionalString(object, "human", "freeps", "scenario"), "human");
         def.coverage = optionalEnum(object, "coverage", Coverage.class, Coverage.STRICT, "scenario");
@@ -312,7 +313,7 @@ public final class ScenarioParser {
         return new RngEntry(kind, seat, zone, result);
     }
 
-    private static Step parseStep(ScenarioDefinition def, JsonValue value, int number) throws ScenarioFormatException {
+    static Step parseStep(ScenarioDefinition def, JsonValue value, int number) throws ScenarioFormatException {
         JsonObject object = asObject(value, "step " + number);
         Step step = new Step();
         //Steps are known by where they come in the list.  A step can be given a name as well, which shows up beside
@@ -322,8 +323,9 @@ public final class ScenarioParser {
         if (step.id != null && !step.id.matches("[A-Za-z][A-Za-z0-9_-]*"))
             throw new ScenarioFormatException("step " + number + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
         String context = "step " + step.label();
-        checkFields(object, context, "id", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
+        checkFields(object, context, "id", "note", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
                 "messages", "allow", "answer", "end");
+        step.note = optionalString(object, "note", null, context);
 
         if (object.get("when") != null)
             step.when = parseWhen(def, object.get("when"), context + ".when");
@@ -498,7 +500,7 @@ public final class ScenarioParser {
                 + "assign(character: minion + minion, character: minion), raw(text)");
     }
 
-    private static DoOp parseDo(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
+    static DoOp parseDo(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
         if (term.is("move")) {
             String target = term.arg(1, context);
             parseZoneRef(def, target, context);
@@ -560,8 +562,9 @@ public final class ScenarioParser {
                 JsonObject object = entry.asObject();
                 if (object.get("title") != null)
                     throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
-                checkFields(object, entryContext, "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on",
+                checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on",
                         "zoom", "focus", "magnify", "choices");
+                message.note = optionalString(object, "note", null, entryContext);
                 message.header = optionalString(object, "header", null, entryContext);
                 message.text = requireString(object, "text", entryContext);
                 message.anchor = optionalString(object, "anchor", null, entryContext);

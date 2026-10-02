@@ -263,6 +263,15 @@ public class LotroServer extends AbstractServer {
      */
     public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
                                                 LiveScenario.TextRenderer text, boolean fromCheckpoint) {
+        return createScenarioGame(player, scenario, format, text, fromCheckpoint, null);
+    }
+
+    /**
+     * @param campaign Where the scenario stands in its campaign, for the person's screen (see
+     *                 ScenarioLibrary.campaignInfo); null if it is in none.
+     */
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
+                                                LiveScenario.TextRenderer text, boolean fromCheckpoint, Map<String, Object> campaign) {
         final String playerName = player.getName();
         //One at a time for each player.  A second request waits for the first to finish, and then gives up the game
         // the first one started, like any other request to start a scenario while in the middle of one.
@@ -293,7 +302,7 @@ public class LotroServer extends AbstractServer {
 
             StartedScenario started = null;
             if (checkpoint != null) {
-                started = startScenario(gameId, player, scenario, format, text, checkpoint);
+                started = startScenario(gameId, player, scenario, format, text, checkpoint, campaign);
                 String problem = started.mediator.getScenario().Table().FollowProblem();
                 if (problem != null) {
                     log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
@@ -303,7 +312,7 @@ public class LotroServer extends AbstractServer {
                 }
             }
             if (started == null)
-                started = startScenario(gameId, player, scenario, format, text, null);
+                started = startScenario(gameId, player, scenario, format, text, null, campaign);
             if (started.watch != null)
                 started.watch.keep();
 
@@ -319,6 +328,64 @@ public class LotroServer extends AbstractServer {
         }
     }
 
+    /**
+     * Somebody writing a scenario sits over a decision for as long as it takes to write what is said about it.  The
+     * clock is still only there to notice that they have gone.
+     */
+    public static final GameTimer AUTHORING_TIMER = new GameTimer(false, "Authoring", 60 * 60 * 24 * 3, 60 * 60 * 12);
+
+    /**
+     * Seats somebody at a game of a scenario they are writing (see ScenarioAuthoring, which builds the game).  It
+     * takes the place of whatever scenario they were in the middle of, like any other scenario's game, but nothing
+     * about it is recorded: it is not a play of anything.  The new game is set going before the old one is given up,
+     * so that a draft which cannot be laid out leaves its author where they were.
+     * @throws RuntimeException if the scenario's board cannot be laid out.
+     */
+    public LotroGameMediator seatAuthoringGame(Player player, LiveScenario live) {
+        final String playerName = player.getName();
+        synchronized (_scenarioStartLocks.computeIfAbsent(playerName, name -> new Object())) {
+            final String gameId;
+            final LotroGameMediator previous;
+            _lock.writeLock().lock();
+            try {
+                String previousId = _scenarioGames.get(playerName);
+                previous = previousId == null ? null : _runningGames.get(previousId);
+                gameId = String.valueOf(_nextGameId);
+                _nextGameId++;
+            } finally {
+                _lock.writeLock().unlock();
+            }
+
+            LotroGameMediator mediator = new LotroGameMediator(gameId, live, AUTHORING_TIMER, false);
+            mediator.addGameResultListener(
+                new GameResultListener() {
+                    @Override
+                    public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+
+                    @Override
+                    public void gameCancelled() {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+                });
+            mediator.startGame();
+
+            if (previous != null && !previous.isFinished())
+                previous.concede(player);
+
+            _lock.writeLock().lock();
+            try {
+                _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
+                _runningGames.put(gameId, mediator);
+                _scenarioGames.put(playerName, gameId);
+            } finally {
+                _lock.writeLock().unlock();
+            }
+            return mediator;
+        }
+    }
+
     private record StartedScenario(LotroGameMediator mediator, ScenarioRunLog.Watch watch) { }
 
     /**
@@ -326,8 +393,9 @@ public class LotroServer extends AbstractServer {
      * it starts: the scripted opponent can act, and in principle end the game, the moment it does.
      */
     private StartedScenario startScenario(String gameId, Player player, ScenarioDefinition scenario, LotroFormat format,
-                                          LiveScenario.TextRenderer text, GameJournal checkpoint) {
+                                          LiveScenario.TextRenderer text, GameJournal checkpoint, Map<String, Object> campaign) {
         LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, player.getName(), text, _scenarioTimer, checkpoint);
+        live.SetCampaign(campaign);
         LotroGameMediator mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
         GameRecorder.ScenarioRecording recording = _gameRecorder.recordScenarioGame(mediator, format, player.getName(), scenario.id, scenario.version);
         ScenarioRunLog.Watch watch = _scenarioRunLog == null ? null : _scenarioRunLog.watch(player, mediator, recording);

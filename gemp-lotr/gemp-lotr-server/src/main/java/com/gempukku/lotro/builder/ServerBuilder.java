@@ -25,6 +25,7 @@ import com.gempukku.lotro.patchnotes.LibraryCardLookup;
 import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
 import com.gempukku.lotro.patchnotes.PatchNotesLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
+import com.gempukku.lotro.scenario.ScenarioAuthoring;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
 import com.gempukku.lotro.scenario.ScenarioRunLog;
 import com.gempukku.lotro.service.AdminService;
@@ -235,6 +236,13 @@ public class ServerBuilder {
         ScenarioRunLog scenarioRunLog = new ScenarioRunLog(extract(objectMap, ScenarioDAO.class), extract(objectMap, GameRecorder.class));
         objectMap.put(ScenarioRunLog.class, scenarioRunLog);
         extract(objectMap, LotroServer.class).setScenarioRunLog(scenarioRunLog);
+        // Writing scenarios by playing them: each author's draft, and the game it is being written in
+        objectMap.put(ScenarioAuthoring.class, new ScenarioAuthoring(
+                extract(objectMap, ScenarioLibrary.class),
+                extract(objectMap, LotroCardBlueprintLibrary.class),
+                extract(objectMap, LotroFormatLibrary.class)::getFormat,
+                patchNoteCards,
+                extract(objectMap, LotroServer.class)::seatAuthoringGame));
 
         objectMap.put(HallServer.class,
                 new HallServer(
