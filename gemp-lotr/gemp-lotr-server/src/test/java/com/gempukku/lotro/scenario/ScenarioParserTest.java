@@ -223,6 +223,10 @@ public class ScenarioParserTest {
                 					anchor: ui:button:done
                 					on: ready
                 				}
+                				{
+                					text: This one says what the first one leaves out.
+                					on: start
+                				}
                 			]
                 			allow: assign(frodo: bowman)
                 		}
@@ -233,6 +237,7 @@ public class ScenarioParserTest {
         assertEquals(new Moment(MomentKind.PICKED, "bowman"), messages.get(1).on);
         assertEquals(new Moment(MomentKind.ASSIGNED, "frodo"), messages.get(2).on);
         assertEquals(new Moment(MomentKind.READY, null), messages.get(3).on);
+        assertNull("'start' is the same as no moment", messages.get(4).on);
     }
 
     @Test
@@ -279,6 +284,8 @@ public class ScenarioParserTest {
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tid: a\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tanchor: ui:minimap\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "is not an anchor");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: clicked(bowman)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "don't know what 'clicked(bowman)' means");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\ton: picked(legolas)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\thighlightStyle: purple\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "highlightStyle: has to be one of gold, red, green, blue");
+        assertRejected("\topponent: {\n\t\tname: \"<b>Sauron</b>\"\n\t}", "opponent.name: has to be 1 to 30 letters");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: runner1\n\t\t}\n\t}", "belongs to the other seat");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: aragorn\n\t\t\tdeck: aragorn\n\t\t}\n\t}", "placed in more than one zone");
         assertRejected("\tring: {\n\t\tfreeps: runner1\n\t}", "belongs to the other seat");

@@ -1,5 +1,5 @@
 /**
- * The Play popup: the menu of four flows (Bot, Casual, League, Tournament) and the forms behind them.
+ * The Play popup: the menu of five flows (Bot, Casual, League, Tournament, Scenarios) and the forms behind them.
  *
  * Opening it refreshes formats, leagues and decks, resets every result box to "Ready." and, when "Open this flow by
  * default" is on, goes straight to the Casual form (whose remembered deck / format / timer are applied once the lists
@@ -14,7 +14,7 @@ class CreateTable {
 	deckManager = null;
 	formatManager = null;
 
-	// Div that shows the 4 buttons when first creating a table
+	// Div that shows the 5 buttons when first creating a table
 	mainSelection = null;
 
 	backButton = null;
@@ -24,12 +24,14 @@ class CreateTable {
 	createUnrankedTable = null;     // the Casual form (class name kept: hallUi feeds it the player list)
 	createLeagueTable = null;
 	createTournament = null;
+	playScenario = null;            // not a table form: a list of scenarios, each started with one click
 
-	//These four buttons each summon the above appropriate forms
+	//These buttons each summon the above appropriate forms
 	createBotButton = null;
 	createUnrankedButton = null;
 	createLeagueButton = null;
 	createTournamentButton = null;
+	playScenarioButton = null;
 
 	constructor(mainHall, comm, popup, formatManager, deckManager) {
 		var that = this;
@@ -46,6 +48,7 @@ class CreateTable {
 		this.createUnrankedTable = new CreateUnrankedTable(mainHall, comm, $("#create-unranked-table"), formatManager, deckManager);
 		this.createLeagueTable = new CreateLeagueTable(mainHall, comm, $("#create-league-table"), formatManager, deckManager);
 		this.createTournament = new CreateTournament(mainHall, comm, $("#create-tournament"), formatManager, deckManager);
+		this.playScenario = new PlayScenario(mainHall, comm, $("#create-scenario"));
 
 		this.formatManager.setErrorOutput($("#play-load-error"));
 
@@ -77,6 +80,11 @@ class CreateTable {
 		this.createTournamentButton = $("#create-tournament-button").button().click(
 			function() {
 				that.openFlow(that.createTournament, "Tournament");
+			});
+
+		this.playScenarioButton = $("#create-scenario-button").button().click(
+			function() {
+				that.openFlow(that.playScenario, "Scenarios");
 			});
 
 		this.popup.dialog({
@@ -144,6 +152,7 @@ class CreateTable {
 		this.createUnrankedTable.hide();
 		this.createLeagueTable.hide();
 		this.createTournament.hide();
+		this.playScenario.hide();
 	}
 
 	hideAll() {
@@ -171,7 +180,7 @@ class CreateTable {
 		this.formatManager.updateFormats();
 		this.deckManager.updateDecks();
 		this.hideFlows();
-		for (const flow of [this.createBotTable, this.createUnrankedTable, this.createLeagueTable, this.createTournament])
+		for (const flow of [this.createBotTable, this.createUnrankedTable, this.createLeagueTable, this.createTournament, this.playScenario])
 			flow.resetResult();
 		this.createTournament.resetForm();
 

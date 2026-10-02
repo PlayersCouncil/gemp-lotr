@@ -200,7 +200,7 @@
 				{
 					title: Regroup
 					text: Frodo survived, with {wounds:frodo} wounds. You could move again this turn, but he's in no shape for it. Choose **No** to rest here.
-					anchor: ui:alertBox
+					anchor: ui:dialog
 					avoid: card:frodo
 				}
 			]

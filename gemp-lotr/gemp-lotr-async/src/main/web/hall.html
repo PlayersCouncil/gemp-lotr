@@ -62,6 +62,7 @@
 	<script type="text/javascript" src="js/gemp-022/tables/CreateUnrankedTable.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/CreateLeagueTable.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/CreateTournament.js"></script>
+	<script type="text/javascript" src="js/gemp-022/tables/PlayScenario.js"></script>
 	
 	<script type="text/javascript" src="js/gemp-022/tables/SelectDeck.js"></script>
 	<script type="text/javascript" src="js/gemp-022/tables/CreateTable.js"></script>
@@ -287,6 +288,7 @@
 		<button id="create-unranked-table-button"><span class="play-choice-title"><span class="bigger-icon icon-unranked"></span><span>Open Casual Table</span></span><span class="play-subtitle">A 1-on-1 game against another player.</span></button>
 		<button id="create-league-table-button"><span class="play-choice-title"><span class="bigger-icon icon-league"></span><span>Open League Table</span></span><span class="play-subtitle">Join a multi-week league and participate in themed Sealed or Constructed events of all kinds.</span></button>
 		<button id="create-tournament-button"><span class="play-choice-title"><span class="bigger-icon icon-tournament"></span><span>Create Tournament</span></span><span class="play-subtitle">Host an event that other players sign up for.</span></button>
+		<button id="create-scenario-button"><span class="play-choice-title"><span class="bigger-icon icon-scenario"></span><span>Scenarios</span></span><span class="play-subtitle">Play a tutorial or a single-player game puzzle.</span></button>
 	</div>
 
 	<div id="create-bot-table" style="display:none" class="table-form">
@@ -628,6 +630,30 @@
 
 		</div>
 
+	</div>
+
+	<div id="create-scenario" style="display:none" class="table-form">
+		<h1>Scenarios</h1>
+		<div id="scenario-options" class="inner-table-form">
+			<div class="flex-vert table-blurb">
+				A scenario is a game for one, played against a scripted opponent from a board that has already been set up.  A tutorial walks you through it one step at a time; a puzzle leaves the solving to you.  You need no deck of your own, and nothing here counts towards your record.
+			</div>
+
+			<div id="scenario-small-window" class="scenario-note" role="note" hidden>This window is small for a tutorial, which points at things on the game table.  It will be easier to follow on a desktop or laptop, or with the window made larger.</div>
+
+			<div id="scenario-current" class="scenario-current" hidden></div>
+
+			<div id="scenario-list"></div>
+
+			<div id="scenario-result-label" class="flex-horiz result-label">
+				<div class="label">
+					<b>Result:</b>
+				</div>
+				<div id="scenario-result" class="flex-fill result-box" role="status" aria-live="polite">
+					Ready.
+				</div>
+			</div>
+		</div>
 	</div>
 
 
