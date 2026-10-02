@@ -71,6 +71,45 @@ public final class ScenarioTesting {
                 """ + rest + "\n}";
     }
 
+    /**
+     * A scenario for the awkward corners of the game's question-asking: Sam, whose ability asks a second question
+     * from inside the answering of the first, and Master Proudfoot, whose ability shows both players a card at once.
+     * @param rest Whatever else the scenario should say, as top-level fields.
+     */
+    public static String awkward(String rest) {
+        return """
+                {
+                	id: test
+                	title: Test
+                	format: scenario
+                	cards: {
+                		freeps: {
+                			frodo: 10_121
+                			# Sam, Faithful Companion: play Bill the Pony from your draw deck
+                			sam: 1_310
+                			# Master Proudfoot: reveal the top card of your draw deck
+                			proudfoot: 1_301
+                			bill: 3_106
+                			aragorn: 4_109
+                			gandalf: 0_64
+                		}
+                		shadow: {
+                			oppFrodo: 10_121
+                			runner1: 1_178
+                			runner2: 1_178
+                		}
+                	}
+                	ringBearer: {
+                		freeps: frodo
+                		shadow: oppFrodo
+                	}
+                	sites: {
+                		freeps: 1_323, 1_331, 1_340, 2_118
+                		shadow: 1_323, 1_331, 1_340, 2_118
+                	}
+                """ + rest + "\n}";
+    }
+
     public static ScenarioDefinition parse(String rest) throws ScenarioFormatException {
         return ScenarioParser.parse(scenario(rest));
     }

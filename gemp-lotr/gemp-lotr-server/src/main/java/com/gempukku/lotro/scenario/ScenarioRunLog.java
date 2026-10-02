@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Keeps the record of scenario games: a row for every game (who, which scenario, how it ended, how far the script
@@ -52,34 +53,36 @@ public class ScenarioRunLog {
         }
     }
 
+    /** A scenario game that is being watched, from before it starts. */
+    public interface Watch {
+        /**
+         * The game is the one the player is going to play: its start is recorded now, and its end when it comes (or
+         * at once, if it has come already).  A watch that is never kept records nothing.
+         */
+        void keep();
+    }
+
     /**
-     * Records that a scenario game has started, and sees to it that its end is recorded when it comes.
-     * @param mediator The game, already started.
+     * Starts watching a scenario game, so that nothing about how it ends can be missed.  To be called before the
+     * game is started.
      * @param recording The game's replay in the making; null to keep none.
      */
-    public void follow(Player player, LotroGameMediator mediator, GameRecorder.ScenarioRecording recording) {
+    public Watch watch(Player player, LotroGameMediator mediator, GameRecorder.ScenarioRecording recording) {
         LiveScenario scenario = mediator.getScenario();
         ScenarioDefinition def = scenario.Definition();
-
-        int runId;
-        try {
-            runId = _dao.startRun(player.getId(), def.id, def.version,
-                    scenario.Table().AnswersFollowed() > 0 ? scenario.LastCheckpoint() : null);
-        } catch (RuntimeException exp) {
-            LOG.error("Could not record the start of scenario " + def.id + " for " + player.getName()
-                    + ".  The game goes ahead; nothing about it will be recorded.", exp);
-            return;
-        }
+        ZonedDateTime started = recording != null ? recording.started() : DateUtils.Now();
 
         //The scenario settles how it ended either just before the game ends or just after, depending on which of
-        // them ended the other.  The record is written when both have happened.
-        //(The game does not count itself as finished until it has told everybody that it is, so that is kept track of
-        // here instead of asked.)
+        // them ended the other.  The record is written when both have happened, and the game is known to be kept.
+        // (A game does not count itself as finished until it has told everybody that it is, so that is kept track
+        // of here instead of asked.)
         AtomicBoolean over = new AtomicBoolean();
         AtomicBoolean written = new AtomicBoolean();
+        AtomicInteger runId = new AtomicInteger(NOT_KEPT);
         Runnable finish = () -> {
-            if (scenario.Result() != null && over.get() && written.compareAndSet(false, true))
-                finished(player, mediator, runId, recording);
+            int id = runId.get();
+            if (id > 0 && scenario.Result() != null && over.get() && written.compareAndSet(false, true))
+                finished(player, mediator, id, recording);
         };
         scenario.WhenSettled(finish);
         mediator.addGameResultListener(new GameResultListener() {
@@ -95,11 +98,23 @@ public class ScenarioRunLog {
                 finish.run();
             }
         });
-        //A game that was already over by the time anybody was listening
-        if (mediator.isFinished())
-            over.set(true);
-        finish.run();
+
+        return () -> {
+            try {
+                //The run is dated by the same clock reading as its replay is filed under
+                runId.set(_dao.startRun(player.getId(), def.id, def.version, scenario.ResumedAt(), started));
+            } catch (RuntimeException exp) {
+                LOG.error("Could not record the start of scenario " + def.id + " for " + player.getName()
+                        + ".  The game goes ahead; nothing about it will be recorded.", exp);
+                return;
+            }
+            finish.run();
+        };
     }
+
+    private static final int NOT_KEPT = 0;
+    /** Characters.  Comfortably inside 64 KB even if every one of them takes three bytes. */
+    private static final int PROBLEMS_LIMIT = 20000;
 
     private void finished(Player player, LotroGameMediator mediator, int runId, GameRecorder.ScenarioRecording recording) {
         LiveScenario scenario = mediator.getScenario();
@@ -126,7 +141,11 @@ public class ScenarioRunLog {
             run.step_report = JsonUtils.Serialize(steps);
 
             List<String> problems = scenario.Problems();
-            run.problems = problems.isEmpty() ? null : String.join("\n", problems);
+            String allProblems = String.join("\n", problems);
+            //The column is a TEXT: 64 KB.  A run with more to say than that has said enough.
+            if (allProblems.length() > PROBLEMS_LIMIT)
+                allProblems = allProblems.substring(0, PROBLEMS_LIMIT) + "\n...";
+            run.problems = problems.isEmpty() ? null : allProblems;
             run.journal = scenario.Table().Journal().write();
 
             if (recording != null) {

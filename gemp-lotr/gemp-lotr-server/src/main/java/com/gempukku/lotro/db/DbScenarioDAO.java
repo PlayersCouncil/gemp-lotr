@@ -3,6 +3,7 @@ package com.gempukku.lotro.db;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class DbScenarioDAO implements ScenarioDAO {
@@ -18,11 +19,11 @@ public class DbScenarioDAO implements ScenarioDAO {
     }
 
     @Override
-    public int startRun(int playerId, String scenarioId, int version, Integer resumedAt) {
+    public int startRun(int playerId, String scenarioId, int version, Integer resumedAt, ZonedDateTime started) {
         try {
             var db = _dbAccess.openDB();
             try (org.sql2o.Connection conn = db.beginTransaction()) {
-                String now = now();
+                String now = DateUtils.FormatDateTime(started);
                 int id = conn.createQuery("""
                                 INSERT INTO gemp_db.scenario_run (player_id, scenario_id, version, started, resumed_at)
                                 VALUES (:player_id, :scenario_id, :version, :started, :resumed_at);

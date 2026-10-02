@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
+import com.gempukku.lotro.game.DecisionArbiter;
 import com.gempukku.lotro.game.DecisionObserver;
 import com.gempukku.lotro.game.GameJournal;
 import com.gempukku.lotro.game.LotroCardBlueprint;
@@ -65,6 +66,7 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private final Map<String, Requirement[]> _requirements = new HashMap<>();
     private final List<String> _problems = new ArrayList<>();
     private final List<DecisionObserver> _observers = new ArrayList<>();
+    private DecisionArbiter _arbiter;
     private final Map<String, LotroDeck> _decks = new HashMap<>();
     private ScenarioRandom _random;
     private boolean _arranged;
@@ -179,6 +181,16 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     public String FollowProblem() { return _followProblem; }
 
     /**
+     * Has the game hold its decisions back until it comes to rest, and lets the arbiter say which are put to their
+     * players then.  Only before the game exists.
+     */
+    public void Arbitrate(DecisionArbiter arbiter) {
+        if (_game != null)
+            throw new IllegalStateException("The game already exists; it is too late to arbitrate its decisions");
+        _arbiter = arbiter;
+    }
+
+    /**
      * @return Whether the scenario's board has been laid out yet.  Until it has, no alias refers to anything.
      */
     public boolean Arranged() { return _arranged; }
@@ -247,8 +259,14 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                                 + " (\"" + decision.getText() + "\")");
                 return;
             }
+            String concrete = GameJournal.concrete(decision, answer.value());
+            if (concrete == null) {
+                _followProblem = "answer " + (_answersFollowed + 1) + " (\"" + answer.value() + "\") is not among what the game is offering the "
+                        + seat.key() + " seat now";
+                return;
+            }
             try {
-                PlayerDecided(player, answer.value());
+                PlayerDecided(player, concrete);
             } catch (RuntimeException exp) {
                 _followProblem = "answer " + (_answersFollowed + 1) + " (\"" + answer.value() + "\") was not accepted: " + exp;
                 return;
@@ -266,6 +284,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     protected void BeforeGameStarts() {
         for (DecisionObserver observer : _observers)
             _userFeedback.addDecisionObserver(observer);
+        if (_arbiter != null)
+            _userFeedback.setDecisionArbiter(_arbiter);
         //The table answers the bid and the choice of seat itself, the same way every time; they are not the game's story
         _userFeedback.addDecisionObserver(new DecisionObserver() {
             @Override

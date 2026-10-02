@@ -66,8 +66,10 @@ public class LiveScenario implements ScenarioSession.Listener {
     public interface Host {
         /**
          * Answers a decision on the opponent's behalf.  Called from a timer thread, never from inside the game.
+         * @param decision The decision the answer is for.  If the opponent is no longer being asked exactly this,
+         *                 the answer is to be dropped.
          */
-        void opponentAnswers(String player, int decisionId, String answer);
+        void opponentAnswers(String player, AwaitingDecision decision, String answer);
     }
 
     /** Turns a message's text (Markdown, card links) into what the client displays. */
@@ -88,9 +90,19 @@ public class LiveScenario implements ScenarioSession.Listener {
     private Move _move;
     /** Set when the script has lost its place, to be dealt with as soon as the game stops working. */
     private String _offScript;
-    private boolean _offScriptNoticeShown;
+    /** Set once the game has left its script and been allowed to carry on: from then on it is an ordinary game. */
+    private boolean _carryingOn;
+    private boolean _botFallbackReported;
     private int _lastCheckpoint;
+    private Integer _resumedAt;
     private boolean _begun;
+    /** The decision whose answer takes the step now on the person's screen off it again; null if there is none. */
+    private Object _stepShownFor;
+    /** Stands in for "whatever the person answers next". */
+    private static final Object ANY_ANSWER = new Object();
+    /** A game that has gone wrong can go on going wrong; this many problems are kept and the rest only counted. */
+    private static final int PROBLEM_LIMIT = 100;
+    private int _problemsDropped;
     private Result _result;
     private final List<String> _problems = new ArrayList<>();
     private final List<Runnable> _whenSettled = new ArrayList<>();
@@ -153,6 +165,8 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public List<String> Problems() {
         List<String> all = new ArrayList<>(_problems);
+        if (_problemsDropped > 0)
+            all.add("... and " + _problemsDropped + " more");
         all.addAll(_table.Problems());
         return all;
     }
@@ -188,6 +202,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
         _begun = true;
+        if (_table.AnswersFollowed() > 0 && _session.Director().currentStep() != null)
+            _resumedAt = _session.Director().currentStep().number;
         _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
         for (String player : List.of(_opponent, _human)) {
             Ruling ruling = _session.Ruling(player);
@@ -196,6 +212,11 @@ public class LiveScenario implements ScenarioSession.Listener {
         }
         AfterActions();
     }
+
+    /**
+     * @return The number of the checkpoint step this game started at; null if it started at the beginning.
+     */
+    public Integer ResumedAt() { return _resumedAt; }
 
     /**
      * @return The journal to give a new game of this scenario so that it starts at the last checkpoint this game
@@ -226,8 +247,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void act(Ruling ruling) {
-        //Once the scenario is over, or about to be ended for leaving its script, nothing more is shown or played
-        if (_result != null || (_offScript != null && !carriesOnOffScript()))
+        //Once the scenario is over, or about to be ended (by its last step, or for leaving its script), nothing more
+        // is shown or played: the game is ended as soon as it has stopped working
+        if (_result != null || _session.Director().end() != null || (_offScript != null && !carriesOnOffScript()))
             return;
         Step step = ruling.step();
         if (ruling.problem() != null)
@@ -235,14 +257,18 @@ public class LiveScenario implements ScenarioSession.Listener {
 
         if (ruling.player().equals(_human)) {
             if (step != null) {
-                show(STEP, stepEvent(ruling, false));
+                showStep(stepEvent(ruling, false), ruling.decision());
             } else {
-                _table.gameState().clearScenarioEvent(_human, STEP);
+                clearStep();
                 if (_def.coverage == Coverage.STRICT)
                     offScript("no step covers the player's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
             }
             return;
         }
+
+        //Ruled on again (it can happen to any decision whose answer is rejected): the move already stands
+        if (_move != null && _move.decision == ruling.decision())
+            return;
 
         String answer = ruling.answer();
         if (answer == null) {
@@ -251,22 +277,36 @@ public class LiveScenario implements ScenarioSession.Listener {
                 if (!carriesOnOffScript())
                     return;
             }
-            if (step == null && _def.fallback == Fallback.BOT)
-                problem("opponent.fallback is 'bot', which a live game cannot do yet; the opponent did as little as it could instead");
+            if (step == null && _def.fallback == Fallback.BOT && !_carryingOn && !_botFallbackReported) {
+                _botFallbackReported = true;
+                problem("opponent.fallback is 'bot', which a live game cannot do yet; the opponent does as little as it can instead");
+            }
             answer = AnswerCompiler.leastAnswer(ruling.decision());
         }
 
         boolean hasMessages = step != null && !ruling.shown().messages().isEmpty();
         if (hasMessages)
-            show(STEP, stepEvent(ruling, true));
+            showStep(stepEvent(ruling, true), ruling.decision());
         _move = new Move(ruling.decision(), answer, hasMessages ? step.number : 0);
         if (!hasMessages)
             release(_move);
     }
 
+    private void showStep(Map<String, Object> event, Object shownFor) {
+        show(STEP, event);
+        _stepShownFor = shownFor;
+    }
+
+    private void clearStep() {
+        _table.gameState().clearScenarioEvent(_human, STEP);
+        _stepShownFor = null;
+    }
+
     @Override
     public void answered(Ruling ruling, String answer) {
-        _table.gameState().clearScenarioEvent(_human, STEP);
+        //Only the answer the step on screen was waiting for takes it off the screen
+        if (_stepShownFor == ruling.decision() || (_stepShownFor == ANY_ANSWER && ruling.player().equals(_human)))
+            clearStep();
         if (_move != null && _move.decision == ruling.decision()) {
             if (!_move.answer.equals(answer))
                 problem((ruling.step() == null ? "" : ruling.step().describe() + ": ") + "the game would not take the opponent's answer \""
@@ -283,29 +323,35 @@ public class LiveScenario implements ScenarioSession.Listener {
     public void Acknowledge(String player, int stepNumber) {
         if (!player.equals(_human) || _move == null || _move.released || _move.awaiting != stepNumber)
             return;
-        _table.gameState().clearScenarioEvent(_human, STEP);
+        clearStep();
         release(_move);
     }
 
     private void release(Move move) {
         move.released = true;
         String player = _opponent;
-        int decisionId = move.decision.getAwaitingDecisionId();
         _timer.schedule(() -> {
             try {
-                _host.opponentAnswers(player, decisionId, move.answer);
+                _host.opponentAnswers(player, move.decision, move.answer);
             } catch (RuntimeException exp) {
                 LOG.error("Scenario " + _def.id + ": the opponent could not answer", exp);
             }
         }, Math.max(0, _def.opponentDelayMs), TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    public void atRest() {
+        AfterActions();
+    }
+
     /**
      * To be called, inside the game's lock, each time the game has stopped working and is waiting again.  This is
-     * where the scenario ends, if it is time for it to.
+     * where the scenario ends, if it is time for it to.  (The session calls it too, before it rules on whatever is
+     * waiting; the caller of the game still has to, because a game that ends with nothing waiting never gets as far
+     * as the session.)
      */
     public void AfterActions() {
-        if (_result != null)
+        if (_result != null || !_begun)
             return;
 
         if (_table.game().isFinished()) {
@@ -326,16 +372,14 @@ public class LiveScenario implements ScenarioSession.Listener {
             finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, messages, null, false, true);
         } else if (_offScript != null) {
             if (carriesOnOffScript()) {
-                //The person carries on with an ordinary game.  The script is still followed if the game finds its
-                // way back to it.
-                if (!_offScriptNoticeShown) {
-                    _offScriptNoticeShown = true;
-                    Map<String, Object> notice = new LinkedHashMap<>();
-                    notice.put("type", "offscript");
-                    notice.put("message", text(_def.outcome.offScriptMessage));
-                    show(STEP, notice);
-                }
+                //The person carries on with an ordinary game, and is told so once.  The script is still followed if
+                // the game finds its way back to it.
+                Map<String, Object> notice = new LinkedHashMap<>();
+                notice.put("type", "offscript");
+                notice.put("message", text(_def.outcome.offScriptMessage));
+                showStep(notice, ANY_ANSWER);
                 _offScript = null;
+                _carryingOn = true;
             } else {
                 finish(Result.OFF_SCRIPT, List.of(), text(_def.outcome.offScriptMessage),
                         _def.outcome.offScriptResult == OffScriptResult.RESTART, true);
@@ -353,7 +397,18 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public void Abandoned() {
         if (_result == null)
-            settled(Result.ABANDONED);
+            finish(Result.ABANDONED, List.of(), null, false, false);
+    }
+
+    /**
+     * The game is being thrown away before anybody has seen it.  Nothing is shown, and nothing that was waiting to
+     * hear how the scenario ended is told anything.
+     */
+    public void Discard() {
+        _whenSettled.clear();
+        _move = null;
+        if (_result == null)
+            _result = Result.ABANDONED;
     }
 
     private boolean carriesOnOffScript() {
@@ -368,10 +423,20 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_result != null)
             return;
         problem(what);
-        finish(Result.ERROR, List.of(), null, false, false);
+        try {
+            finish(Result.ERROR, List.of(), null, false, false);
+        } catch (RuntimeException exp) {
+            //Whatever broke may well break this too.  The result has to be settled regardless.
+            LOG.error("Scenario " + _def.id + ": could not show how it ended", exp);
+            if (_result == null)
+                settled(Result.ERROR);
+        }
     }
 
     private void offScript(String what) {
+        //A game that has left its script and carried on is an ordinary game: nothing more is expected of it
+        if (_carryingOn)
+            return;
         _offScript = what;
         problem("off script: " + what + ".  The script was waiting on "
                 + (_session.Director().currentStep() == null ? "nothing: every step has been used" : _session.Director().currentStep().describe()));
@@ -379,7 +444,7 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     private void finish(Result result, List<Map<String, Object>> messages, String message, boolean restart, boolean endGame) {
         _move = null;
-        _table.gameState().clearScenarioEvent(_human, STEP);
+        clearStep();
 
         Map<String, Object> event = new LinkedHashMap<>();
         event.put("type", "end");
@@ -401,6 +466,10 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void problem(String problem) {
+        if (_problems.size() >= PROBLEM_LIMIT) {
+            _problemsDropped++;
+            return;
+        }
         _problems.add(problem);
         LOG.warn("Scenario " + _def.id + " v" + _def.version + " (player " + _human + "): " + problem);
     }
@@ -427,8 +496,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
         //Set if the game did not start at the beginning: the checkpoint step it was brought back to
-        event.put("resumedAt", _table.AnswersFollowed() > 0 && _session.Director().currentStep() != null
-                ? _session.Director().currentStep().number : null);
+        event.put("resumedAt", _resumedAt);
         return event;
     }
 
