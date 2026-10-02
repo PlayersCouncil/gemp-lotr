@@ -419,6 +419,56 @@ CREATE TABLE `prize_award` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `scenario_run`
+-- (db/2026-10-01_scenario-tables.sql: a row for every game of a scenario; its replay is found through recording_id)
+--
+
+DROP TABLE IF EXISTS `scenario_run`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scenario_run` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) NOT NULL,
+  `scenario_id` varchar(191) NOT NULL,
+  `version` int(11) NOT NULL,
+  `started` datetime NOT NULL,
+  `ended` datetime DEFAULT NULL,
+  `result` varchar(16) DEFAULT NULL,
+  `resumed_at` int(11) DEFAULT NULL,
+  `last_step` int(11) DEFAULT NULL,
+  `step_report` text DEFAULT NULL,
+  `problems` text DEFAULT NULL,
+  `recording_id` varchar(64) DEFAULT NULL,
+  `journal` mediumtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `scenario_run_player` (`player_id`,`scenario_id`),
+  KEY `scenario_run_scenario` (`scenario_id`,`version`),
+  KEY `scenario_run_recording` (`recording_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `scenario_progress`
+-- (db/2026-10-01_scenario-tables.sql: how far each player has got with each scenario)
+--
+
+DROP TABLE IF EXISTS `scenario_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scenario_progress` (
+  `player_id` int(11) NOT NULL,
+  `scenario_id` varchar(191) NOT NULL,
+  `version` int(11) NOT NULL,
+  `status` varchar(16) NOT NULL,
+  `attempts` int(11) NOT NULL DEFAULT 0,
+  `best_score` int(11) DEFAULT NULL,
+  `first_completed` datetime DEFAULT NULL,
+  `last_played` datetime NOT NULL,
+  PRIMARY KEY (`player_id`,`scenario_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping routines for database 'gemp_db'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

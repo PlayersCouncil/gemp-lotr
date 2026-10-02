@@ -16,6 +16,7 @@ import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.scenario.LiveScenario;
 import com.gempukku.lotro.scenario.ScenarioDefinition;
+import com.gempukku.lotro.scenario.ScenarioRunLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.*;
@@ -61,6 +62,12 @@ public class LotroServer extends AbstractServer {
     private final Map<String, String> _scenarioGames = new HashMap<>();
     /** Gives the scenarios' scripted opponents their answers, each after its pause. */
     private final ScheduledExecutorService _scenarioTimer;
+    /** Keeps the record of scenario games.  Set once the services it needs exist; until then nothing is recorded. */
+    private ScenarioRunLog _scenarioRunLog;
+
+    public void setScenarioRunLog(ScenarioRunLog scenarioRunLog) {
+        _scenarioRunLog = scenarioRunLog;
+    }
 
     public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
             GameRecorder gameRecorder, MarkdownParser parser, BotService botService,
@@ -281,9 +288,11 @@ public class LotroServer extends AbstractServer {
         }
 
         LotroGameMediator mediator = null;
+        GameRecorder.ScenarioRecording recording = null;
         if (checkpoint != null) {
             LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer, checkpoint);
             mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+            recording = _gameRecorder.recordScenarioGame(mediator, format, playerName, scenario.id, scenario.version);
             mediator.startGame();
             if (live.Table().FollowProblem() != null) {
                 log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
@@ -294,8 +303,11 @@ public class LotroServer extends AbstractServer {
         if (mediator == null) {
             LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer);
             mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+            recording = _gameRecorder.recordScenarioGame(mediator, format, playerName, scenario.id, scenario.version);
             mediator.startGame();
         }
+        if (_scenarioRunLog != null)
+            _scenarioRunLog.follow(player, mediator, recording);
 
         _lock.writeLock().lock();
         try {
