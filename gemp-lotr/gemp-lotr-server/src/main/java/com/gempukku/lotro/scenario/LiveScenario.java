@@ -30,7 +30,8 @@ import java.util.concurrent.TimeUnit;
  * A scenario with a person in one of its seats.
  *
  * The session rules on every decision; this acts on the rulings.  A ruling on the person's decision becomes a
- * "step event" on their screen: the step's messages, and which answers the step allows.  A ruling on the other
+ * "step event" on their screen: the step's messages, and which answers the step allows.  (If the step is a pause,
+ * the person reads it and says so, and the decision is ruled on again for the step behind it.)  A ruling on the other
  * seat's decision becomes that seat's answer, given after a short pause so that the person can follow what happened
  * (and, if the step has something to say first, not until the person has read it).  When the script says the
  * scenario is over, this ends the game.
@@ -204,7 +205,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
         _begun = true;
-        if (_table.AnswersFollowed() > 0 && _session.Director().currentStep() != null)
+        if (_table.FollowedAnything() && _session.Director().currentStep() != null)
             _resumedAt = _session.Director().currentStep().number;
         _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
         for (String player : List.of(_opponent, _human)) {
@@ -318,15 +319,28 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     /**
-     * The person has dismissed the messages of an opponent's step, so the opponent may go ahead.  To be called
-     * inside the game's lock.
+     * The person has read a step that waits to be read: the messages of an opponent's step, so that the opponent may
+     * go ahead; or a pause over one of their own decisions, so that the script moves on to the step that decision
+     * really belongs to.  To be called inside the game's lock, and followed by AfterActions (a pause can be the end
+     * of the scenario).
      * @param stepNumber The step whose messages they were.
+     * @param choice The name of the button they pressed, if the step ended in a choice; null otherwise.
      */
-    public void Acknowledge(String player, int stepNumber) {
-        if (!player.equals(_human) || _move == null || _move.released || _move.awaiting != stepNumber)
+    public void Acknowledge(String player, int stepNumber, String choice) {
+        if (!player.equals(_human) || _result != null)
             return;
-        clearStep();
-        release(_move);
+        if (_move != null && !_move.released && _move.awaiting == stepNumber) {
+            clearStep();
+            release(_move);
+            return;
+        }
+        //(the session tells this about the ruling that follows, and that puts the next step on the screen)
+        if (_session.Read(_human, stepNumber, choice) && _session.Director().end() != null)
+            clearStep();
+    }
+
+    public void Acknowledge(String player, int stepNumber) {
+        Acknowledge(player, stepNumber, null);
     }
 
     private void release(Move move) {
@@ -359,8 +373,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_table.game().isFinished()) {
             //The game got there first: somebody won it by its own rules
             String winner = _table.game().getWinnerPlayerId();
-            finish(_table.game().isCancelled() ? Result.ERROR : _human.equals(winner) ? Result.COMPLETE : Result.FAILED,
-                    List.of(), null, false, false);
+            Result result = _table.game().isCancelled() ? Result.ERROR : _human.equals(winner) ? Result.COMPLETE : Result.FAILED;
+            finish(result, List.of(), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
             return;
         }
 
@@ -387,7 +401,7 @@ public class LiveScenario implements ScenarioSession.Listener {
                         _def.outcome.offScriptResult == OffScriptResult.RESTART, true);
             }
         } else if (_def.outcome.lose != null && _table.Holds(_def.outcome.lose, _human)) {
-            finish(Result.FAILED, List.of(), null, false, true);
+            finish(Result.FAILED, List.of(), text(_def.outcome.loseMessage), false, true);
         } else if (_def.outcome.win != null && _table.Holds(_def.outcome.win, _human)) {
             finish(Result.COMPLETE, List.of(), null, false, true);
         }
@@ -510,13 +524,17 @@ public class LiveScenario implements ScenarioSession.Listener {
         Step step = ruling.step();
         ScenarioDirector.Presentation shown = ruling.shown();
         Map<String, Integer> cards = new LinkedHashMap<>();
+        //Where on its card each printed thing a message points at is: "frodo:strength" -> {left, top, width, height}
+        Map<String, double[]> parts = new LinkedHashMap<>();
 
         Map<String, Object> event = new LinkedHashMap<>();
         event.put("type", "step");
         event.put("step", step.number);
         event.put("name", step.id);
         event.put("seat", opponents ? "opponent" : "human");
-        event.put("acknowledge", opponents);
+        //A step that waits to be read: an opponent's (which then acts), or a pause over the person's own decision
+        event.put("acknowledge", opponents || step.pause);
+        event.put("pause", step.pause);
         event.put("checkpoint", step.checkpoint);
 
         //The last message shown when the decision arrives stays up while the person answers; the ones before it
@@ -528,14 +546,19 @@ public class LiveScenario implements ScenarioSession.Listener {
         List<Map<String, Object>> messages = new ArrayList<>();
         for (RenderedMessage message : shown.messages()) {
             Advance advance = message.message().advance;
-            if (opponents)
-                advance = Advance.NEXT;
-            else if (advance == null)
+            if (opponents || step.pause) {
+                //Nothing here waits for an answer: there is none to give until the step has been read
+                if (advance == null || advance == Advance.DECISION)
+                    advance = Advance.NEXT;
+            } else if (advance == null) {
                 advance = message == lastAtStart || message.message().on != null ? Advance.DECISION : Advance.NEXT;
+            }
             messages.add(messageJson(message, advance));
             noteCards(message.message(), cards);
+            noteParts(message.message(), parts);
         }
         event.put("messages", messages);
+        event.put("parts", parts);
 
         Allow allow = step.allow;
         if (opponents || shown.allowed() == null || allow == null) {
@@ -568,6 +591,15 @@ public class LiveScenario implements ScenarioSession.Listener {
         json.put("avoid", message.avoid);
         json.put("side", message.side);
         json.put("advance", advance.name().toLowerCase());
+        json.put("advanceCard", message.advanceCard);
+        List<Map<String, String>> choices = new ArrayList<>();
+        for (Map.Entry<String, String> choice : message.choices.entrySet()) {
+            Map<String, String> button = new LinkedHashMap<>();
+            button.put("name", choice.getKey());
+            button.put("label", choice.getValue());
+            choices.add(button);
+        }
+        json.put("choices", choices);
         if (message.on == null) {
             json.put("on", null);
         } else {
@@ -590,6 +622,23 @@ public class LiveScenario implements ScenarioSession.Listener {
             noteCard(Anchors.cardAlias(target), cards);
         if (message.on != null)
             noteCard(message.on.card(), cards);
+        noteCard(message.advanceCard, cards);
+    }
+
+    private void noteParts(Message message, Map<String, double[]> parts) {
+        List<String> anchors = new ArrayList<>(message.highlight);
+        anchors.addAll(message.avoid);
+        if (message.anchor != null)
+            anchors.add(message.anchor);
+        for (String anchor : anchors) {
+            String part = Anchors.printedPart(anchor);
+            if (part == null)
+                continue;
+            String alias = Anchors.cardAlias(anchor);
+            double[] rect = CardFaces.region(_def, alias, part, _library);
+            if (rect != null)
+                parts.put(alias + ":" + part.toLowerCase(), rect);
+        }
     }
 
     private void noteCard(String alias, Map<String, Integer> cards) {

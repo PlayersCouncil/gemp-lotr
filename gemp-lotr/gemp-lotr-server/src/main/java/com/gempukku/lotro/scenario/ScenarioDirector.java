@@ -1,8 +1,10 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.scenario.ScenarioDefinition.Allow;
 import com.gempukku.lotro.scenario.ScenarioDefinition.Answer;
 import com.gempukku.lotro.scenario.ScenarioDefinition.AnswerKind;
@@ -14,8 +16,10 @@ import com.gempukku.lotro.scenario.ScenarioDefinition.When;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Keeps a scenario's place in its script.
@@ -24,6 +28,11 @@ import java.util.Map;
  * the game asks either seat for a decision, the director is asked which step (if any) that decision belongs to; once
  * the decision has been answered, it is told so and moves on.  It never answers anything itself: whoever is running
  * the game (the headless runner, or a live game's mediator) asks it what the script says and does the answering.
+ *
+ * Two things can change which steps there are to work through.  A step marked as a pause is read, not answered: it
+ * applies to a decision, and once it has been read the script moves on and the same decision is looked at again.  And
+ * a pause can end in a choice, which gives the game a name ("help"); steps that say 'if: help' or 'unless: help' are
+ * part of the game or not accordingly, and the ones that are not are passed over as if they were not in the file.
  */
 public class ScenarioDirector {
     public enum StepStatus {
@@ -32,7 +41,9 @@ public class ScenarioDirector {
         /** The step applied to at least one decision. */
         MATCHED,
         /** The step was given up on: its skipWhen came true, or it was a repeating step whose until was already true. */
-        SKIPPED
+        SKIPPED,
+        /** The step belongs to a way through the scenario that this game did not take (its 'if' or 'unless'). */
+        BYPASSED
     }
 
     /**
@@ -48,6 +59,9 @@ public class ScenarioDirector {
     private final ScenarioTable _table;
     private final ScenarioDefinition _def;
     private final Map<String, StepStatus> _statuses = new LinkedHashMap<>();
+
+    /** The names chosen so far (see Message.choices). */
+    private final Set<String> _flags = new LinkedHashSet<>();
 
     private int _index = 0;
     /** How many decisions the current step has applied to so far. */
@@ -77,6 +91,66 @@ public class ScenarioDirector {
         return _index < _def.steps.size() ? _def.steps.get(_index) : null;
     }
 
+    /** The names chosen so far, in the order they were chosen. */
+    public Set<String> flags() {
+        return _flags;
+    }
+
+    /** Whether, with what has been chosen so far, a step is part of this game at all. */
+    private boolean partOfTheGame(Step step) {
+        for (String name : step.onlyIf)
+            if (!_flags.contains(name))
+                return false;
+        for (String name : step.unless)
+            if (_flags.contains(name))
+                return false;
+        return true;
+    }
+
+    /**
+     * Whether a player who has nothing to play in a phase has to be asked to pass all the same, because the script's
+     * next step is about exactly that: their passing in that phase.  This is what lets a scenario pass most phases
+     * for its player and still stop at the one it wants to talk about; and it is the only way the scripted opponent,
+     * which is never otherwise asked when it has nothing to do, gets to stop and have something said.
+     */
+    public boolean asksToPass(String player, Phase phase) {
+        for (int index = _index; index < _def.steps.size(); index++) {
+            Step step = _def.steps.get(index);
+            if (!partOfTheGame(step))
+                continue;
+            //A step that repeats and has already begun takes what comes and asks for nothing more.  What may be
+            // wanted is the pass that ends it: that is for the step after it to say.
+            if (index == _index && step.repeats() && _timesApplied > 0)
+                continue;
+            //Everything about the step that can be known before the decision exists.  (What the decision will say
+            // and offer cannot be: 'text' and 'offers' are left to the author to get right.)
+            When when = step.when;
+            observeSkirmish();
+            return when.phase == phase
+                    && (when.seat == null || when.seat == _table.SeatOf(player))
+                    && (when.decision == null || when.decision == AwaitingDecisionType.CARD_ACTION_CHOICE)
+                    && (when.turn == null || when.turn == _table.gameState().getTurnNumber())
+                    && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
+                    && (when.require == null || _table.Holds(when.require, player))
+                    && isAboutPassing(step);
+        }
+        return false;
+    }
+
+    /**
+     * A step that plays a card is waiting for the moment the card can be played, and being asked with nothing to
+     * play is not that moment.  A step whose answer is to pass, or which is only there to be read, is.
+     */
+    private static boolean isAboutPassing(Step step) {
+        if (step.pause)
+            return true;
+        if (!step.answers.isEmpty())
+            return step.answers.getFirst().kind() == AnswerKind.PASS;
+        if (step.allow == null)
+            return false;
+        return step.allow.passWhen != null || step.allow.answers.stream().anyMatch(answer -> answer.kind() == AnswerKind.PASS);
+    }
+
     /** Set once a step that ends the scenario has been answered. */
     public ScenarioDefinition.End end() {
         return _end;
@@ -100,6 +174,12 @@ public class ScenarioDirector {
         observeSkirmish();
         while (_index < _def.steps.size()) {
             Step step = _def.steps.get(_index);
+
+            if (!partOfTheGame(step)) {
+                _statuses.put(step.label(), StepStatus.BYPASSED);
+                advance();
+                continue;
+            }
 
             if (step.repeats() && matches(step.until, player, decision)) {
                 //A repeating step that never got to apply was simply not needed
@@ -140,6 +220,42 @@ public class ScenarioDirector {
             _end = step.end;
         if (!step.repeats())
             advance();
+    }
+
+    /**
+     * Tells the director that a pause has been read.
+     * @param choice The name the reader chose, if the pause ended in a choice; null otherwise.
+     */
+    public void read(Step step, String choice) {
+        if (step != currentStep() || !step.pause)
+            return;
+        if (choice != null)
+            _flags.add(choice);
+        if (step.end != null)
+            _end = step.end;
+        advance();
+        //The decision the pause was read over is looked at afresh, by whichever step comes next
+        _lastDecision = null;
+        _lastMatch = null;
+    }
+
+    /**
+     * @return What the opponent's standing orders say to a decision no step covers, in the game's own terms; null
+     * if none of them fits it.
+     */
+    public String order(String player, AwaitingDecision decision) {
+        for (ScenarioDefinition.Order order : _def.orders) {
+            if (!matches(order.when(), player, decision))
+                continue;
+            for (Answer answer : order.answers()) {
+                try {
+                    return AnswerCompiler.compile(_table, decision, answer);
+                } catch (ScenarioScriptException exp) {
+                    //Not on offer this time; an order is for whenever it is
+                }
+            }
+        }
+        return null;
     }
 
     private void advance() {
@@ -234,16 +350,22 @@ public class ScenarioDirector {
             allowed = new ArrayList<>();
             for (Answer answer : allow.answers) {
                 if (answer.kind() == AnswerKind.PASS) {
-                    AnswerCompiler.compile(_table, decision, answer);
-                    passAllowed = true;
+                    try {
+                        AnswerCompiler.compile(_table, decision, answer);
+                        passAllowed = true;
+                    } catch (ScenarioScriptException exp) {
+                        if (!answer.ifOffered())
+                            throw exp;
+                    }
                     continue;
                 }
                 try {
                     allowed.add(AnswerCompiler.compile(_table, decision, answer));
                 } catch (ScenarioScriptException exp) {
                     //In a step that spans several decisions, an allowed answer is expected to stop being on offer
-                    // once it has been used (a card that has been played cannot be played again)
-                    if (!step.repeats())
+                    // once it has been used (a card that has been played cannot be played again); and an answer
+                    // written with a ? is one its author knows may not be on offer
+                    if (!step.repeats() && !answer.ifOffered())
                         throw exp;
                 }
             }

@@ -501,14 +501,15 @@ var GempLotrCommunication = Class.extend({
             dataType:"json"
         });
     },
-    scenarioAcknowledge:function (step, callback, failure) {
+    scenarioAcknowledge:function (step, choice, callback, failure) {
         $.ajax({
             type:"POST",
             url:this.url + "/game/" + getUrlParam("gameId") + "/scenarioAck",
             cache:false,
             data:{
                 participantId:getUrlParam("participantId"),
-                step:step},
+                step:step,
+                choice:choice == null ? "" : choice},
             success:callback,
             error:failure,
             dataType:"text"

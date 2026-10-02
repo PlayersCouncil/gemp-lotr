@@ -71,7 +71,7 @@ public final class ScenarioParser {
 
         JsonObject opponent = optionalObject(object, "opponent", "scenario");
         if (opponent != null) {
-            checkFields(opponent, "opponent", "name", "fallback");
+            checkFields(opponent, "opponent", "name", "fallback", "orders");
             def.opponentName = optionalString(opponent, "name", null, "opponent");
             //It is shown wherever a player's name is, the game log among them, so it is held to what a name may be
             if (def.opponentName != null && !OPPONENT_NAME.matcher(def.opponentName).matches())
@@ -100,6 +100,9 @@ public final class ScenarioParser {
         }
 
         parseCards(def, requireObject(object, "cards", "scenario"));
+        //(after the cards, because orders name them)
+        if (opponent != null && get(opponent, "orders") != null)
+            parseOrders(def, get(opponent, "orders"));
         parsePerSeatAlias(def, optionalObject(object, "ringBearer", "scenario"), def.ringBearer, "ringBearer");
         parsePerSeatAlias(def, optionalObject(object, "ring", "scenario"), def.ring, "ring");
         for (Seat seat : Seat.values())
@@ -143,13 +146,20 @@ public final class ScenarioParser {
                 Step step = parseStep(def, stepValue, index);
                 if (step.id != null && !ids.add(step.id))
                     throw new ScenarioFormatException("steps: there are two steps called '" + step.id + "'");
+                for (Message message : step.messages)
+                    for (String name : message.choices.keySet())
+                        if (!def.flags.contains(name))
+                            def.flags.add(name);
                 def.steps.add(step);
             }
         }
 
         JsonObject outcome = optionalObject(object, "outcome", "scenario");
         if (outcome != null) {
-            checkFields(outcome, "outcome", "win", "lose", "offScript");
+            checkFields(outcome, "outcome", "win", "lose", "loseMessage", "offScript");
+            def.outcome.loseMessage = optionalString(outcome, "loseMessage", null, "outcome");
+            if (def.outcome.loseMessage != null)
+                Templates.check(def, def.outcome.loseMessage, "outcome.loseMessage");
             if (outcome.get("win") != null)
                 def.outcome.win = jsonArrayText(outcome.get("win"), "outcome.win");
             if (outcome.get("lose") != null)
@@ -247,6 +257,34 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException("setup.stack: '" + alias + "' is also placed in a zone or attached");
     }
 
+    /**
+     * opponent.orders: a [list] of { when, answer }.  See ScenarioDefinition.Order.
+     */
+    private static void parseOrders(ScenarioDefinition def, JsonValue value) throws ScenarioFormatException {
+        if (!value.isArray())
+            throw new ScenarioFormatException("opponent.orders: has to be a [list] of { when, answer }");
+        int index = 0;
+        for (JsonValue entry : value.asArray()) {
+            index++;
+            String context = "opponent.orders[" + index + "]";
+            JsonObject order = asObject(entry, context);
+            checkFields(order, context, "when", "answer");
+            if (order.get("when") == null || order.get("answer") == null)
+                throw new ScenarioFormatException(context + ": needs both a 'when' and an 'answer'");
+            When when = parseWhen(def, order.get("when"), context + ".when");
+            if (when.seat == def.human)
+                throw new ScenarioFormatException(context + ".when: orders are the opponent's; this one is about the player's seat");
+            when.seat = def.human.other();
+            List<Answer> answers = new ArrayList<>();
+            for (String line : lines(order.get("answer"), context + ".answer"))
+                for (Terms.Term term : Terms.parse(line, context + ".answer"))
+                    answers.add(parseAnswer(def, term, context + ".answer"));
+            if (answers.isEmpty())
+                throw new ScenarioFormatException(context + ".answer: is empty");
+            def.orders.add(new Order(when, answers, when.source));
+        }
+    }
+
     private static RngEntry parseRng(ScenarioDefinition def, Terms.Term term) throws ScenarioFormatException {
         RngKind kind;
         if (term.is("shuffle"))
@@ -284,8 +322,8 @@ public final class ScenarioParser {
         if (step.id != null && !step.id.matches("[A-Za-z][A-Za-z0-9_-]*"))
             throw new ScenarioFormatException("step " + number + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
         String context = "step " + step.label();
-        checkFields(object, context, "id", "when", "until", "skipWhen", "checkpoint", "do", "messages", "allow",
-                "answer", "end");
+        checkFields(object, context, "id", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
+                "messages", "allow", "answer", "end");
 
         if (object.get("when") != null)
             step.when = parseWhen(def, object.get("when"), context + ".when");
@@ -294,6 +332,15 @@ public final class ScenarioParser {
         if (object.get("skipWhen") != null)
             step.skipWhen = parseWhen(def, object.get("skipWhen"), context + ".skipWhen");
         step.checkpoint = optionalBoolean(object, "checkpoint", false, context);
+        step.pause = optionalBoolean(object, "pause", false, context);
+        step.onlyIf = list(object.get("if"), context + ".if");
+        step.unless = list(object.get("unless"), context + ".unless");
+        for (String name : step.onlyIf)
+            if (!def.flags.contains(name))
+                throw new ScenarioFormatException(context + ".if: no earlier step offers a choice called '" + name + "'");
+        for (String name : step.unless)
+            if (!def.flags.contains(name))
+                throw new ScenarioFormatException(context + ".unless: no earlier step offers a choice called '" + name + "'");
 
         if (object.get("do") != null)
             for (String line : lines(object.get("do"), context + ".do"))
@@ -319,6 +366,10 @@ public final class ScenarioParser {
                 step.end.result = optionalEnum(end.asObject(), "result", EndResult.class, EndResult.COMPLETE, context + ".end");
                 if (end.asObject().get("messages") != null)
                     step.end.messages = parseMessages(def, end.asObject().get("messages"), context + ".end.messages");
+                //These are shown together on the panel that closes the scenario: there is no game left behind them
+                for (Message message : step.end.messages)
+                    if (!message.choices.isEmpty() || message.on != null || message.advance == Advance.INSPECT || message.advance == Advance.CLOSE)
+                        throw new ScenarioFormatException(context + ".end.messages: closing messages are shown all together when the scenario is over; they cannot offer 'choices' or wait for anything ('on', 'advance')");
             } else {
                 step.end.result = parseEnum(scalar(end, context + ".end"), EndResult.class, context + ".end");
             }
@@ -326,6 +377,31 @@ public final class ScenarioParser {
 
         if (step.until == null && step.answers.size() > 1)
             throw new ScenarioFormatException(context + ": has several answers but answers only one decision (give it an 'until' to make it repeat)");
+
+        if (step.pause) {
+            //It is there to be read.  The decision it is read over belongs to the step after it.
+            if (step.allow != null || !step.answers.isEmpty())
+                throw new ScenarioFormatException(context + ": a pause is read, not answered, so it has no 'allow' and no 'answer' (those belong to the step after it)");
+            if (step.until != null)
+                throw new ScenarioFormatException(context + ": a pause is read once, so it has no 'until'");
+            if (step.messages.isEmpty())
+                throw new ScenarioFormatException(context + ": a pause with no messages has nothing to be read");
+            if (step.when.seat == def.human.other())
+                throw new ScenarioFormatException(context + ": a pause is over one of the player's own decisions (an opponent's step already waits for its messages to be read)");
+            step.when.seat = def.human;
+        }
+        for (int i = 0; i < step.messages.size(); i++) {
+            Message message = step.messages.get(i);
+            String where = context + ".messages[" + (i + 1) + "]";
+            if (!message.choices.isEmpty()) {
+                if (!step.pause)
+                    throw new ScenarioFormatException(where + ".choices: only a step with 'pause: true' can offer a choice (the decision in front of the player belongs to the step after it)");
+                if (i != step.messages.size() - 1)
+                    throw new ScenarioFormatException(where + ".choices: a choice has to be a pause's last message");
+            }
+            if (step.pause && (message.on != null || message.advance == Advance.DECISION))
+                throw new ScenarioFormatException(where + ": a pause's messages are read one after another; they cannot wait for the decision ('advance: decision') or for a moment in answering it ('on')");
+        }
         return step;
     }
 
@@ -485,7 +561,7 @@ public final class ScenarioParser {
                 if (object.get("title") != null)
                     throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
                 checkFields(object, entryContext, "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on",
-                        "zoom", "focus", "magnify");
+                        "zoom", "focus", "magnify", "choices");
                 message.header = optionalString(object, "header", null, entryContext);
                 message.text = requireString(object, "text", entryContext);
                 message.anchor = optionalString(object, "anchor", null, entryContext);
@@ -497,7 +573,21 @@ public final class ScenarioParser {
                 message.side = optionalString(object, "side", "auto", entryContext).toLowerCase(Locale.ROOT);
                 if (!List.of("auto", "above", "below", "left", "right").contains(message.side))
                     throw new ScenarioFormatException(entryContext + ".side: has to be auto, above, below, left or right");
-                message.advance = optionalEnum(object, "advance", Advance.class, null, entryContext);
+                String advance = optionalString(object, "advance", null, entryContext);
+                if (advance != null)
+                    parseAdvance(def, message, advance, entryContext + ".advance");
+                JsonObject choices = optionalObject(object, "choices", entryContext);
+                if (choices != null) {
+                    for (String name : choices.names()) {
+                        if (!name.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                            throw new ScenarioFormatException(entryContext + ".choices: '" + name + "' is not usable as a choice's name (letters, digits, dashes and underscores; starting with a letter)");
+                        message.choices.put(name, scalar(choices.get(name), entryContext + ".choices." + name));
+                    }
+                    if (message.choices.size() < 2)
+                        throw new ScenarioFormatException(entryContext + ".choices: a choice needs at least two buttons");
+                    if (message.advance != null && message.advance != Advance.NEXT)
+                        throw new ScenarioFormatException(entryContext + ": a message with 'choices' is left by pressing one of them, so it has no 'advance'");
+                }
                 String on = optionalString(object, "on", null, entryContext);
                 if (on != null)
                     message.on = parseMoment(def, on, entryContext + ".on");
@@ -510,10 +600,12 @@ public final class ScenarioParser {
                     //A card shown large is in the way of the table, so it is read and then put away
                     if (message.on != null)
                         throw new ScenarioFormatException(entryContext + ": a message with 'zoom' cannot also wait for a moment ('on')");
-                    if (message.advance == Advance.DECISION)
+                    if (message.advance != null && message.advance != Advance.NEXT)
                         throw new ScenarioFormatException(entryContext + ".advance: a message with 'zoom' always waits for Next");
                     message.advance = Advance.NEXT;
                 }
+                if (message.on != null && (message.advance == Advance.INSPECT || message.advance == Advance.CLOSE))
+                    throw new ScenarioFormatException(entryContext + ".advance: a message tied to a moment ('on') stays until the next moment or the answer");
             } else {
                 message.text = scalar(entry, entryContext);
             }
@@ -610,6 +702,36 @@ public final class ScenarioParser {
         return new Zoom(alias, site, blueprint, focus, magnify);
     }
 
+    /**
+     * advance: next | decision | inspect | inspect(card) | close
+     */
+    private static void parseAdvance(ScenarioDefinition def, Message message, String text, String context) throws ScenarioFormatException {
+        List<Terms.Term> terms = Terms.parse(text, context);
+        if (terms.size() == 1) {
+            Terms.Term term = terms.getFirst();
+            if (term.is("next") && term.args().isEmpty()) {
+                message.advance = Advance.NEXT;
+                return;
+            }
+            if (term.is("decision") && term.args().isEmpty()) {
+                message.advance = Advance.DECISION;
+                return;
+            }
+            if (term.is("close") && term.args().isEmpty()) {
+                message.advance = Advance.CLOSE;
+                return;
+            }
+            if (term.is("inspect") && term.args().size() <= 1) {
+                message.advance = Advance.INSPECT;
+                if (!term.args().isEmpty() && !term.args().getFirst().isEmpty())
+                    message.advanceCard = card(def, term.args().getFirst(), context).alias();
+                return;
+            }
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + text + "' means.  Expected one of next, decision, "
+                + "inspect (the player opens a card's information window), inspect(card), close (the player closes it again)");
+    }
+
     private static Moment parseMoment(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {
         List<Terms.Term> terms = Terms.parse(text, context);
         if (terms.size() == 1) {
@@ -649,8 +771,15 @@ public final class ScenarioParser {
         }
         if (answers != null)
             for (String line : lines(answers, context))
-                for (Terms.Term term : Terms.parse(line, context))
-                    allow.answers.add(parseAnswer(def, term, context));
+                for (String part : Terms.split(line, ',', context)) {
+                    //"play(servant1)?" is allowed if it is on offer, and no mistake if it is not
+                    boolean ifOffered = part.endsWith("?");
+                    String written = ifOffered ? part.substring(0, part.length() - 1).trim() : part;
+                    for (Terms.Term term : Terms.parse(written, context)) {
+                        Answer answer = parseAnswer(def, term, context);
+                        allow.answers.add(ifOffered ? answer.offeredOrNot() : answer);
+                    }
+                }
         if (allow.answers.isEmpty() && allow.passWhen == null)
             throw new ScenarioFormatException(context + ": allows nothing at all");
         return allow;

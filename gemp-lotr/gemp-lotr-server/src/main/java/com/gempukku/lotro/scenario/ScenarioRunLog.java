@@ -132,7 +132,9 @@ public class ScenarioRunLog {
                 if (status == ScenarioDirector.StepStatus.MATCHED)
                     lastStep = step.number;
                 //In a game that got all the way to the end, every step should have had its turn
-                if (scenario.Result() == LiveScenario.Result.COMPLETE && status != ScenarioDirector.StepStatus.MATCHED)
+                //(except the steps of a way through the scenario that this game did not take)
+                if (scenario.Result() == LiveScenario.Result.COMPLETE && status != ScenarioDirector.StepStatus.MATCHED
+                        && status != ScenarioDirector.StepStatus.BYPASSED)
                     LOG.warn("Scenario " + def.id + " v" + def.version + ": " + step.describe() + " was "
                             + (status == ScenarioDirector.StepStatus.SKIPPED ? "skipped" : "never reached")
                             + " in a completed game (run " + runId + ", player " + player.getName() + ")");

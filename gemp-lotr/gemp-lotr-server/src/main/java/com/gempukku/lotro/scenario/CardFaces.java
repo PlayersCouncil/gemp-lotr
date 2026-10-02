@@ -130,13 +130,50 @@ public final class CardFaces {
         }
         Frame frame = frameOf(blueprint.getCardType());
         for (ScenarioDefinition.Focus focus : zoom.focus())
-            if (focus.name() != null && (region(frame, focus.name()) == null
-                    //Only an item that changes its bearer's strength or vitality shows a number there
-                    || (frame == Frame.ITEM && focus.name().equalsIgnoreCase("strength") && blueprint.getStrength() == 0)
-                    || (frame == Frame.ITEM && focus.name().equalsIgnoreCase("vitality") && blueprint.getVitality() == 0)))
+            if (focus.name() != null && !prints(blueprint, frame, focus.name()))
                 return "'" + focus.name() + "' is not something printed on " + blueprint.getTitle() + ".  A card like that has: "
                         + String.join(", ", names(frame)) + ".  Anything else can be given as rect(left, top, width, height)";
         return null;
+    }
+
+    /**
+     * @return Where a part is on one of the scenario's cards; null if that card has no such part (or does not exist).
+     */
+    public static double[] region(ScenarioDefinition def, String alias, String part, LotroCardBlueprintLibrary library) {
+        try {
+            double[] rect = region(frameOf(library.getLotroCardBlueprint(def.cards.get(alias).blueprintId()).getCardType()), part);
+            return rect == null ? null : rect.clone();
+        } catch (CardNotFoundException exp) {
+            return null;
+        }
+    }
+
+    /**
+     * @return What is wrong with pointing at a part of one of the scenario's cards; null if nothing is.
+     */
+    public static String checkPart(ScenarioDefinition def, String alias, String part, LotroCardBlueprintLibrary library) {
+        LotroCardBlueprint blueprint;
+        try {
+            blueprint = library.getLotroCardBlueprint(def.cards.get(alias).blueprintId());
+        } catch (CardNotFoundException exp) {
+            return null;    //reported where the card is declared
+        }
+        Frame frame = frameOf(blueprint.getCardType());
+        if (!prints(blueprint, frame, part))
+            return "'" + part + "' is not something printed on " + blueprint.getTitle() + ".  A card like that has: "
+                    + String.join(", ", names(frame));
+        return null;
+    }
+
+    private static boolean prints(LotroCardBlueprint blueprint, Frame frame, String part) {
+        if (region(frame, part) == null)
+            return false;
+        //Only an item that changes its bearer's strength or vitality shows a number there
+        if (frame == Frame.ITEM && part.equalsIgnoreCase("strength"))
+            return blueprint.getStrength() != 0;
+        if (frame == Frame.ITEM && part.equalsIgnoreCase("vitality"))
+            return blueprint.getVitality() != 0;
+        return true;
     }
 
     /**

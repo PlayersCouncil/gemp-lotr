@@ -34,6 +34,51 @@ public class ScenarioRunReport {
     public final Map<String, String> stepDescriptions = new LinkedHashMap<>();
     /** Why the run stopped, in a sentence. */
     public String stopped = "";
+    /** Whether the scenario reached its end. */
+    public boolean completed;
+    /** What was chosen at each choice the run came to, in order. */
+    public final List<String> taken = new ArrayList<>();
+    /** What each of those choices offered. */
+    public final List<List<String>> offered = new ArrayList<>();
+
+    /**
+     * Several runs of the same scenario, one for each way through it, as one report: it passes if they all do, and
+     * a step counts as reached if any of them reached it.
+     */
+    public static ScenarioRunReport together(String scenarioId, List<ScenarioRunReport> runs) {
+        ScenarioRunReport all = new ScenarioRunReport(scenarioId);
+        all.completed = true;
+        all.reached = RunnerLevel.FULL;
+        List<String> stops = new ArrayList<>();
+        for (ScenarioRunReport run : runs) {
+            String way = run.taken.isEmpty() ? "no choice" : "choosing " + String.join(", ", run.taken);
+            all.required = run.required;
+            all.completed &= run.completed;
+            if (run.reached.compareTo(all.reached) < 0)
+                all.reached = run.reached;
+            for (String failure : run.failures)
+                all.failures.add("[" + way + "] " + failure);
+            for (String warning : run.warnings)
+                all.warnings.add("[" + way + "] " + warning);
+            stops.add("[" + way + "] " + run.stopped);
+            all.decisions.add(new Decision(-1, "Way through: " + way, null, null, null));
+            all.decisions.addAll(run.decisions);
+            all.stepDescriptions.putAll(run.stepDescriptions);
+            for (Map.Entry<String, ScenarioDirector.StepStatus> step : run.steps.entrySet())
+                all.steps.merge(step.getKey(), step.getValue(), (a, b) -> rank(a) >= rank(b) ? a : b);
+        }
+        all.stopped = String.join("; ", stops);
+        return all;
+    }
+
+    private static int rank(ScenarioDirector.StepStatus status) {
+        return switch (status) {
+            case MATCHED -> 3;
+            case SKIPPED -> 2;
+            case BYPASSED -> 1;
+            case UNREACHED -> 0;
+        };
+    }
 
     public ScenarioRunReport(String scenarioId) {
         this.scenarioId = scenarioId;
@@ -62,10 +107,14 @@ public class ScenarioRunReport {
                     .append("\n");
         sb.append("Decisions:\n");
         for (Decision decision : decisions) {
+            if (decision.number() < 0) {
+                sb.append(" ").append(decision.decision()).append("\n");
+                continue;
+            }
             sb.append("  ").append(String.format("%3d", decision.number())).append(". ")
                     .append(decision.step() == null ? "(no step)" : "[step " + decision.step() + "]")
                     .append(" ").append(decision.decision()).append("\n");
-            sb.append("       -> ").append(decision.answer() == null ? "(not answered)" : "\"" + decision.answer() + "\"");
+            sb.append("       -> ").append(decision.answer() != null ? "\"" + decision.answer() + "\"" : decision.note() != null ? "" : "(not answered)");
             if (decision.note() != null)
                 sb.append("  ").append(decision.note());
             sb.append("\n");

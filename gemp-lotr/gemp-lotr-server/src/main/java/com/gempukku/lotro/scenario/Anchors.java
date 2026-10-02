@@ -10,10 +10,14 @@ import java.util.Set;
  * needs to know that it is well-formed and, for cards, which card is meant.
  *
  *     card:<alias>                                   one card, wherever it currently is
+ *     card:<alias>:<part>                            part of that card: something printed on it (strength, vitality,
+ *                                                    text, cost ...; see CardFaces), or "wounds" for the wound
+ *                                                    tokens lying on it
  *     zone:<self|opp>.<hand|characters|support>      a player's row of cards
  *     zone:minions                                   the row of minions
  *     pile:<self|opp>.<deck|discard|deadPile|adventureDeck|removed|hand>   a pile counter
- *     ui:<name>                                      a fixed part of the screen (see UI below)
+ *     ui:<name>                                      a fixed part of the screen (see UI below); ui:dialog is whichever
+ *                                                    window is open, ui:cardInfo the card information window
  *     ui:site:<n>                                    one site on the adventure path
  *     ui:button:<pass|done|reset>                    a decision button
  *     ui:skirmish:<fpStrength|shadowStrength>        a total in the skirmish box
@@ -26,8 +30,10 @@ public final class Anchors {
     private Anchors() { }
 
     private static final Set<String> UI = Set.of("twilightpool", "phase", "initiative", "ruleof4", "clock", "advpath",
-            "alertbox", "skirmish", "stats", "chat", "gamelog", "settings", "dialog");
+            "alertbox", "skirmish", "stats", "chat", "gamelog", "settings", "dialog", "cardinfo");
     private static final Set<String> ROWS = Set.of("hand", "characters", "support");
+    /** Parts of a card that are things lying on it, not things printed on it. */
+    private static final Set<String> TOKENS = Set.of("wounds");
     private static final Set<String> PILES = Set.of("deck", "discard", "deadpile", "adventuredeck", "removed", "hand");
 
     public static void check(ScenarioDefinition def, String anchor, String context) throws ScenarioFormatException {
@@ -35,8 +41,12 @@ public final class Anchors {
         String kind = parts[0].toLowerCase(Locale.ROOT);
         switch (kind) {
             case "card" -> {
-                expectParts(parts, 2, anchor, context);
+                if (parts.length != 2 && parts.length != 3)
+                    throw bad(anchor, context);
                 ScenarioParser.card(def, parts[1], context);
+                if (parts.length == 3 && !TOKENS.contains(parts[2].trim().toLowerCase(Locale.ROOT)) && !CardFaces.known(parts[2].trim()))
+                    throw new ScenarioFormatException(context + ": '" + parts[2] + "' is not a part of a card.  The parts are wounds, "
+                            + String.join(", ", CardFaces.names()));
             }
             case "zone" -> {
                 expectParts(parts, 2, anchor, context);
@@ -94,9 +104,20 @@ public final class Anchors {
      */
     public static String cardAlias(String anchor) {
         String[] parts = anchor.trim().split(":");
-        if (parts[0].equalsIgnoreCase("card") && parts.length == 2)
+        if (parts[0].equalsIgnoreCase("card") && (parts.length == 2 || parts.length == 3))
             return parts[1].trim();
         if (parts[0].equalsIgnoreCase("ui") && parts.length == 3 && parts[1].equalsIgnoreCase("assignment"))
+            return parts[2].trim();
+        return null;
+    }
+
+    /**
+     * @return The part of a card an anchor refers to, if it is something printed on the card ("strength"); null if
+     * the anchor is not about part of a card, or is about what lies on it ("wounds").
+     */
+    public static String printedPart(String anchor) {
+        String[] parts = anchor.trim().split(":");
+        if (parts[0].equalsIgnoreCase("card") && parts.length == 3 && !TOKENS.contains(parts[2].trim().toLowerCase(Locale.ROOT)))
             return parts[2].trim();
         return null;
     }

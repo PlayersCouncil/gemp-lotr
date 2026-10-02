@@ -153,6 +153,35 @@
     filter: brightness(1.12);
 }
 
+/* A message that ends in a choice: its buttons stand in for Next, side by side, each as wide as its words */
+.scenario-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.scenario-choice {
+    font: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #d8b24a;
+    background: #d8b24a;
+    color: #1c1912;
+    cursor: pointer;
+}
+
+.scenario-choice:hover {
+    filter: brightness(1.12);
+}
+
+.scenario-choice[disabled] {
+    opacity: 0.55;
+    cursor: default;
+}
+
 .scenario-collapsed .scenario-body,
 .scenario-collapsed .scenario-foot,
 .scenario-collapsed .scenario-arrow {
