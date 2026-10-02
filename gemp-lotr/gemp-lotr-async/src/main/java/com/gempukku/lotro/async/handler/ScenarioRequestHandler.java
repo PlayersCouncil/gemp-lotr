@@ -28,9 +28,12 @@ import java.util.Map;
  * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified}], current:{gameId, id}|null}}.
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
  * offered one of those.  {@code current} is the scenario game the player is in the middle of, if any.<br>
- * POST /scenarios/start (form: id) - starts a game of the scenario against its scripted opponent and answers
- * {@code {gameId}}; the client then opens game.html?gameId=...  A scenario the player was already in the middle of is
- * given up.  An unknown id, or one the player is not offered, is a 404 with an {@code {error}} body.<br>
+ * POST /scenarios/start (form: id, optionally from=checkpoint) - starts a game of the scenario against its scripted
+ * opponent and answers {@code {gameId, resumedAt}}; the client then opens game.html?gameId=...  A scenario the player
+ * was already in the middle of is given up.  With from=checkpoint, and if that scenario was this same one and had
+ * reached a checkpoint, the new game picks up there and resumedAt is the checkpoint step's number; otherwise the game
+ * starts at the beginning and resumedAt is null.  An unknown id, or one the player is not offered, is a 404 with an
+ * {@code {error}} body.<br>
  * GET /scenarios/errors - admins only: every scenario file, with what is wrong with it and the report of its
  * headless run: {@code {files:[{path, owner, id, playable, verified, errors, warnings, report}]}}.
  */
@@ -107,7 +110,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
             LotroGameMediator mediator;
             try {
-                mediator = _lotroServer.createScenarioGame(player, entry.def(), entry.format(), _scenarios.textFor(entry));
+                mediator = _lotroServer.createScenarioGame(player, entry.def(), entry.format(), _scenarios.textFor(entry),
+                        "checkpoint".equals(getFormParameterSafely(postDecoder, "from")));
             } catch (RuntimeException exp) {
                 _log.error("Scenario " + id + " could not be started for " + player.getName(), exp);
                 writeError(responseWriter, 500, "The scenario could not be started.");
@@ -116,6 +120,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("gameId", mediator.getGameId());
+            //Where the game picks up: the number of the checkpoint step, or null for the beginning
+            result.put("resumedAt", mediator.getScenario().Table().AnswersFollowed() > 0 ? mediator.getScenario().LastCheckpoint() : null);
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {
             postDecoder.destroy();

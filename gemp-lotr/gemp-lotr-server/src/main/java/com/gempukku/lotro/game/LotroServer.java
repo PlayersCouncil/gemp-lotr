@@ -245,25 +245,60 @@ public class LotroServer extends AbstractServer {
      * in the middle of another scenario, that one is given up.
      * @param format The scenario's format, already looked up.
      * @param text Turns the text of the scenario's messages into what the client shows.
+     * @param fromCheckpoint Whether to pick up at the last checkpoint the player reached in their previous game of
+     *                       this same scenario, if that game is still known and reached one.  Otherwise, and if that
+     *                       cannot be done after all (the scenario has changed since), the game starts at the
+     *                       beginning.
      * @return The game, set going and waiting on its first decision.
      * @throws RuntimeException if the scenario's board cannot be laid out.  A scenario that passes the headless
      * runner never does this.
      */
-    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format, LiveScenario.TextRenderer text) {
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
+                                                LiveScenario.TextRenderer text, boolean fromCheckpoint) {
         final String playerName = player.getName();
         final String gameId;
-        final LotroGameMediator mediator;
-        LotroGameMediator previous;
+        final LotroGameMediator previous;
 
         _lock.writeLock().lock();
         try {
             String previousId = _scenarioGames.get(playerName);
             previous = previousId == null ? null : _runningGames.get(previousId);
-
             gameId = String.valueOf(_nextGameId);
+            _nextGameId++;
+        } finally {
+            _lock.writeLock().unlock();
+        }
+
+        //Everything from here to the next lock is outside the server-wide one: it takes games' own locks, and
+        // laying out and replaying a game is real work.  Nobody else can reach the new game until it is registered.
+        GameJournal checkpoint = null;
+        if (previous != null) {
+            //The previous game is either still going or finished within the last few minutes
+            if (fromCheckpoint && previous.getScenario() != null && previous.getScenario().Definition() == scenario)
+                checkpoint = previous.checkpointJournal();
+            if (!previous.isFinished())
+                previous.concede(player);
+        }
+
+        LotroGameMediator mediator = null;
+        if (checkpoint != null) {
+            LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer, checkpoint);
+            mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+            mediator.startGame();
+            if (live.Table().FollowProblem() != null) {
+                log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
+                        + playerName + " and was started from the beginning: " + live.Table().FollowProblem());
+                mediator = null;
+            }
+        }
+        if (mediator == null) {
             LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, playerName, text, _scenarioTimer);
             mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+            mediator.startGame();
+        }
 
+        _lock.writeLock().lock();
+        try {
             _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
             mediator.addGameResultListener(
                 new GameResultListener() {
@@ -277,19 +312,15 @@ public class LotroServer extends AbstractServer {
                         _finishedGamesTime.put(gameId, new Date());
                     }
                 });
-            mediator.sendMessageToPlayers("You are starting the " + scenario.kind.name().toLowerCase() + " \"" + scenario.title + "\"");
+            //A game that was over before it began (it can happen: a scenario whose first step ends it)
+            if (mediator.isFinished())
+                _finishedGamesTime.put(gameId, new Date());
 
             _runningGames.put(gameId, mediator);
             _scenarioGames.put(playerName, gameId);
-            _nextGameId++;
         } finally {
             _lock.writeLock().unlock();
         }
-
-        //Outside the server-wide lock: both of these take a game's own lock
-        if (previous != null && !previous.isFinished())
-            previous.concede(player);
-        mediator.startGame();
         return mediator;
     }
 

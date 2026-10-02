@@ -3,6 +3,7 @@ package com.gempukku.lotro.scenario;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.game.GameJournal;
 import com.gempukku.lotro.game.LotroGameMediator;
 import com.gempukku.lotro.game.LotroServer;
 import com.gempukku.lotro.game.ParticipantCommunicationVisitor;
@@ -142,8 +143,27 @@ public class LiveScenarioTest {
     }
 
     private static LiveScenario live(ScenarioDefinition def) throws Exception {
+        return live(def, null);
+    }
+
+    private static LiveScenario live(ScenarioDefinition def, GameJournal earlier) throws Exception {
         return new LiveScenario(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), HUMAN,
-                new ScenarioText(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), null), TIMER);
+                new ScenarioText(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), null), TIMER, earlier);
+    }
+
+    /** Plays the person's side as the script allows until a given step is on screen and waiting for its answer. */
+    private static void playUntil(Client client, int stepNumber) throws Exception {
+        for (int i = 0; i < 50; i++) {
+            client.await();
+            assertNotNull("The game ended before step " + stepNumber, client.step);
+            if (client.step.getIntValue("step") == stepNumber && client.decision != null)
+                return;
+            if (client.decision != null)
+                client.answerAsAllowed();
+            else
+                client.acknowledge();
+        }
+        fail("Step " + stepNumber + " never came");
     }
 
     private static LotroGameMediator start(LiveScenario scenario) {
@@ -469,5 +489,75 @@ public class LiveScenarioTest {
         assertEquals(LiveScenario.Result.FAILED, scenario.Result());
         assertNotNull(client.end);
         assertEquals("failed", client.end.getString("result"));
+    }
+
+    @Test
+    public void ANewGameCanPickUpAtACheckpoint() throws Exception {
+        ScenarioDefinition def = opening();
+        LiveScenario first = live(def);
+        Client client = new Client(start(first));
+        client.connect();
+        assertNull("Nothing to go back to yet", first.CheckpointJournal());
+        playUntil(client, 7);
+
+        assertEquals(7, first.LastCheckpoint());
+        GameJournal checkpoint = first.CheckpointJournal();
+        assertNotNull(checkpoint);
+        assertEquals("Five decisions of the person's and one of the opponent's lead up to it", 6, checkpoint.answers().size());
+        String allowedThen = client.step.getJSONObject("allow").toString();
+        List<Integer> handThen = first.Table().GetFreepsHand().stream().map(card -> card.getCardId()).toList();
+        //Carry on past it; the checkpoint is still where it was
+        client.answerAsAllowed();
+        client.await();
+        assertEquals(8, client.step.getIntValue("step"));
+        assertEquals(checkpoint.write(), first.CheckpointJournal().write());
+
+        //The journal goes by way of text, as it would if it had been stored
+        GameJournal stored = GameJournal.read(checkpoint.write(), player -> player);
+        LiveScenario second = live(def, stored);
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        assertEquals(6, second.Table().AnswersFollowed());
+
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(7, again.info.getIntValue("resumedAt"));
+        assertEquals("Nothing from before the checkpoint is shown", List.of(7), again.stepsSeen);
+        assertNotNull(again.decision);
+        assertEquals(allowedThen, again.step.getJSONObject("allow").toString());
+        assertEquals(handThen, second.Table().GetFreepsHand().stream().map(card -> card.getCardId()).toList());
+        assertEquals(2, second.Table().GetWoundsOn(second.Table().Card("frodo")));
+        assertEquals(2, second.Table().gameState().getTurnNumber());
+
+        //The new game can be gone back to in its turn, and plays on to the end
+        assertEquals(checkpoint.write(), second.CheckpointJournal().write());
+        for (int i = 0; i < 10 && again.end == null; i++) {
+            again.await();
+            if (again.decision != null)
+                again.answerAsAllowed();
+        }
+        again.poll();
+        assertNotNull(again.end);
+        assertEquals("complete", again.end.getString("result"));
+        assertEquals(List.of(), second.Problems());
+    }
+
+    @Test
+    public void AJournalFromADifferentGameIsNoticed() throws Exception {
+        ScenarioDefinition def = opening();
+        LiveScenario first = live(def);
+        Client client = new Client(start(first));
+        client.connect();
+        playUntil(client, 7);
+        GameJournal checkpoint = first.CheckpointJournal();
+
+        //The same scenario, except that the opponent now has nothing to play on the first turn
+        ScenarioDefinition changed = opening();
+        changed.setup.zones.get(Seat.SHADOW).clear();
+        LiveScenario second = live(changed, checkpoint);
+        start(second);
+        assertNotNull(second.Table().FollowProblem());
+        assertTrue(second.Table().FollowProblem(), second.Table().FollowProblem().startsWith("answer 2 was given by the shadow seat to a CARD_ACTION_CHOICE:"));
+        assertEquals(1, second.Table().AnswersFollowed());
     }
 }
