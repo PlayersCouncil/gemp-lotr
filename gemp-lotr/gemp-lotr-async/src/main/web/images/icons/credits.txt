@@ -1,5 +1,7 @@
 most icons taken from FontAwesome.com
 
+puzzle-question.svg was drawn for Gemp-LotR
+
 others taken from game-icons.net:
 
 https://delapouite.com/

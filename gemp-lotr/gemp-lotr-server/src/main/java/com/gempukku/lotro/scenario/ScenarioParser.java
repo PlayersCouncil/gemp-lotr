@@ -93,7 +93,7 @@ public final class ScenarioParser {
                         def.autoPass.add(parsePhase(phase, "options.autoPass"));
                 }
             }
-            def.autoAccept = optionalBoolean(options, "autoAccept", false, "options");
+            def.autoAccept = optionalBoolean(options, "autoAccept", true, "options");
             def.rngDefault = optionalEnum(options, "rngDefault", RngDefault.class, RngDefault.IDENTITY, "options");
             def.opponentDelayMs = optionalInt(options, "opponentDelayMs", 900, "options");
             def.runnerLevel = optionalEnum(options, "runnerLevel", RunnerLevel.class, null, "options");
@@ -482,8 +482,11 @@ public final class ScenarioParser {
             Message message = new Message();
             if (entry.isObject()) {
                 JsonObject object = entry.asObject();
-                checkFields(object, entryContext, "title", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on");
-                message.title = optionalString(object, "title", null, entryContext);
+                if (object.get("title") != null)
+                    throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
+                checkFields(object, entryContext, "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on",
+                        "zoom", "focus", "magnify");
+                message.header = optionalString(object, "header", null, entryContext);
                 message.text = requireString(object, "text", entryContext);
                 message.anchor = optionalString(object, "anchor", null, entryContext);
                 message.highlight = list(object.get("highlight"), entryContext + ".highlight");
@@ -502,6 +505,15 @@ public final class ScenarioParser {
                 // kinds of message apart by whether there is a moment at all
                 if (message.on != null && message.on.kind() == MomentKind.START)
                     message.on = null;
+                message.zoom = parseZoom(def, object, entryContext);
+                if (message.zoom != null) {
+                    //A card shown large is in the way of the table, so it is read and then put away
+                    if (message.on != null)
+                        throw new ScenarioFormatException(entryContext + ": a message with 'zoom' cannot also wait for a moment ('on')");
+                    if (message.advance == Advance.DECISION)
+                        throw new ScenarioFormatException(entryContext + ".advance: a message with 'zoom' always waits for Next");
+                    message.advance = Advance.NEXT;
+                }
             } else {
                 message.text = scalar(entry, entryContext);
             }
@@ -513,11 +525,89 @@ public final class ScenarioParser {
             for (String anchor : message.avoid)
                 Anchors.check(def, anchor, entryContext + ".avoid");
             Templates.check(def, message.text, entryContext + ".text");
-            if (message.title != null)
-                Templates.check(def, message.title, entryContext + ".title");
+            if (message.header != null)
+                Templates.check(def, message.header, entryContext + ".header");
             result.add(message);
         }
         return result;
+    }
+
+    /**
+     * zoom: card:<alias> | site:<n> | blueprint:<id>, with optional focus (region names or rect(l, t, w, h) in
+     * percent of the card) and magnify.
+     */
+    private static Zoom parseZoom(ScenarioDefinition def, JsonObject object, String context) throws ScenarioFormatException {
+        String zoom = optionalString(object, "zoom", null, context);
+        if (zoom == null) {
+            if (object.get("focus") != null || object.get("magnify") != null)
+                throw new ScenarioFormatException(context + ": 'focus' and 'magnify' belong to a 'zoom'");
+            return null;
+        }
+        String[] parts = zoom.trim().split(":", 2);
+        if (parts.length != 2 || parts[1].isBlank())
+            throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number> or blueprint:<id>");
+        String what = parts[1].trim();
+        String alias = null;
+        Integer site = null;
+        String blueprint = null;
+        switch (parts[0].trim().toLowerCase(Locale.ROOT)) {
+            case "card" -> alias = card(def, what, context + ".zoom").alias();
+            case "site" -> {
+                if (!what.matches("[1-9]"))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not a site number");
+                site = Integer.parseInt(what);
+            }
+            case "blueprint" -> {
+                if (!what.matches("\\d+_\\d+[*T]?"))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not a blueprint ID");
+                blueprint = what;
+            }
+            default -> throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number> or blueprint:<id>");
+        }
+
+        List<Focus> focus = new ArrayList<>();
+        JsonValue focusValue = object.get("focus");
+        if (focusValue != null && !focusValue.isNull()) {
+            for (String line : lines(focusValue, context + ".focus")) {
+                for (Terms.Term term : Terms.parse(line, context + ".focus")) {
+                    if (term.is("rect")) {
+                        if (term.args().size() != 4)
+                            throw new ScenarioFormatException(context + ".focus: rect needs left, top, width and height, in percent of the card");
+                        double[] rect = new double[4];
+                        for (int i = 0; i < 4; i++) {
+                            try {
+                                rect[i] = Double.parseDouble(term.args().get(i).trim());
+                            } catch (NumberFormatException exp) {
+                                throw new ScenarioFormatException(context + ".focus: '" + term.args().get(i) + "' is not a number");
+                            }
+                        }
+                        if (rect[0] < 0 || rect[1] < 0 || rect[2] <= 0 || rect[3] <= 0 || rect[0] + rect[2] > 100 || rect[1] + rect[3] > 100)
+                            throw new ScenarioFormatException(context + ".focus: " + term.raw() + " does not lie on the card (everything is in percent, 0 to 100)");
+                        focus.add(new Focus(null, rect));
+                    } else if (term.args().isEmpty() && CardFaces.known(term.name())) {
+                        focus.add(new Focus(term.name(), null));
+                    } else {
+                        throw new ScenarioFormatException(context + ".focus: don't know what '" + term.raw() + "' means.  Expected rect(left, top, width, height) or one of "
+                                + String.join(", ", CardFaces.names()));
+                    }
+                }
+            }
+        }
+
+        double magnify = 1;
+        String magnifyText = optionalString(object, "magnify", null, context);
+        if (magnifyText != null) {
+            try {
+                magnify = Double.parseDouble(magnifyText.trim());
+            } catch (NumberFormatException exp) {
+                throw new ScenarioFormatException(context + ".magnify: '" + magnifyText + "' is not a number");
+            }
+            if (magnify < 1 || magnify > 6)
+                throw new ScenarioFormatException(context + ".magnify: has to be from 1 (the whole card) to 6");
+            if (magnify > 1 && focus.isEmpty())
+                throw new ScenarioFormatException(context + ".magnify: a card shown larger than the screen needs a 'focus' to be centred on");
+        }
+        return new Zoom(alias, site, blueprint, focus, magnify);
     }
 
     private static Moment parseMoment(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {

@@ -78,7 +78,7 @@ public final class ScenarioText implements LiveScenario.TextRenderer {
     }
 
     private void check(Message message, String where, List<String> problems) {
-        check(message.title, where, problems);
+        check(message.header, where, problems);
         check(message.text, where, problems);
     }
 

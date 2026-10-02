@@ -43,7 +43,11 @@ public final class ScenarioDefinition {
      * scripted opponent is never asked: it only gets a choice of actions when it has one to make.)
      */
     public Set<Phase> autoPass = EnumSet.noneOf(Phase.class);
-    public boolean autoAccept = false;
+    /**
+     * Whether a click that completes a choice is sent at once, without a Done to confirm it.  It is fixed for the
+     * game, whatever the person's own setting is, so that the scenario's text can say what will happen.
+     */
+    public boolean autoAccept = true;
     public RngDefault rngDefault = RngDefault.IDENTITY;
     public int opponentDelayMs = 900;
     /** How much of the scenario the headless runner is required to prove.  Null means "as much as its coverage allows". */
@@ -176,8 +180,27 @@ public final class ScenarioDefinition {
      */
     public record Moment(MomentKind kind, String card) { }
 
+    /**
+     * Part of the face of a card being shown large.
+     * @param name A region every card of that kind has ("strength", "text"; see CardFaces); null if rect is given.
+     * @param rect {left, top, width, height} in percent of the card image; null if name is given.
+     */
+    public record Focus(String name, double[] rect) { }
+
+    /**
+     * A card shown as large as the screen allows while a message is up.  Exactly one of card, site and blueprint
+     * says which card.
+     * @param card The alias of one of the scenario's cards.
+     * @param site The number of a site on the person's adventure path.
+     * @param blueprint Any card at all, by its blueprint ID.
+     * @param focus The parts of its face the message is about; empty for the whole card.
+     * @param magnify 1 shows the whole card; more than that shows it that many times larger, centred on the focus.
+     */
+    public record Zoom(String card, Integer site, String blueprint, List<Focus> focus, double magnify) { }
+
     public static final class Message {
-        public String title;
+        /** A heading over the text.  Most messages have none. */
+        public String header;
         public String text;
         /** What the bubble points at.  Null means a bubble in the middle of the screen. */
         public String anchor;
@@ -189,6 +212,8 @@ public final class ScenarioDefinition {
         public Advance advance;
         /** When, within the answering of the decision, the message is shown.  Null means at the start. */
         public Moment on;
+        /** A card to show large while this message is up; null for none. */
+        public Zoom zoom;
     }
 
     public static final class Allow {

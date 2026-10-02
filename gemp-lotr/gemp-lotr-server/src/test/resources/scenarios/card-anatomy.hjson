@@ -1,0 +1,123 @@
+{
+	id: card-anatomy
+	version: 1
+	kind: tutorial
+	title: Reading a card
+	summary: What the numbers and symbols on a card mean, one card at a time.
+	author: ketura
+	tags: cards, basics
+	format: scenario
+	human: freeps
+	opponent: {
+		name: The Shadow
+		fallback: pass
+	}
+	coverage: strict
+
+	cards: {
+		freeps: {
+			# Frodo, Resolute Hobbit
+			frodo: 10_121
+			# The One Ring, The Great Ring
+			ring: 19_1
+			# Aragorn, Heir of Elendil
+			aragorn: 4_109
+			# Servant of the Secret Fire
+			servant: 1_83
+			# Hobbit Sword
+			sword: 1_299
+		}
+		shadow: {
+			oppFrodo: 10_121
+			# Goblin Bowman
+			bowman: 2_60
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+	}
+
+	# Green Hill Country, Ettenmoors, Rivendell Terrace, Great Chasm
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118
+		shadow: 1_323, 1_331, 1_340, 2_118
+	}
+
+	rules: {
+		oneSided: true
+		freeps: [
+			{
+				type: modifier
+				modifier: {
+					type: disableGameText
+					filter: name(The One Ring)
+				}
+			}
+		]
+	}
+
+	steps: [
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					header: Reading a card
+					text: This is a **companion**: one of the characters on your side. Everything you need to know about him is printed on the card.
+					zoom: card:aragorn
+				}
+				{
+					text: The number in the top corner is his **twilight cost**. Playing him adds that much to the twilight pool, for your opponent to spend.
+					zoom: card:aragorn
+					focus: cost
+				}
+				{
+					text: Down the left side are his **strength**, which decides skirmishes, and his **vitality**, which is how many wounds he can take.
+					zoom: card:aragorn
+					focus: strength, vitality
+				}
+				{
+					text: Under those is his **signet**. Some cards work better with companions who share one.
+					zoom: card:aragorn
+					focus: signet
+					magnify: 2
+				}
+				{
+					text: The box holds his **game text**: what he can do, and when.
+					zoom: card:aragorn
+					focus: text
+					magnify: 1.6
+				}
+				{
+					text: A **minion** is laid out the same way. Its third number is its **site number**: play it at an earlier site than that and it costs more.
+					zoom: card:bowman
+					focus: siteNumber
+				}
+				{
+					text: An **event** has a cost and text, and nothing else. The first word of its text says when it can be played.
+					zoom: card:servant
+					focus: cost, text
+				}
+				{
+					text: A **possession** is carried by a character. This one makes its bearer stronger by the number shown.
+					zoom: card:sword
+					focus: strength
+				}
+				{
+					text: A **site** has two numbers: where it sits on the adventure path, and its **shadow number**, the twilight added when a fellowship moves there.
+					zoom: site:2
+					focus: siteNumber, shadowNumber
+				}
+				{
+					text: That is every kind of card you will meet in your first games. Click **Pass** to finish.
+					anchor: ui:button:pass
+				}
+			]
+			allow: pass
+			end: complete
+		}
+	]
+}

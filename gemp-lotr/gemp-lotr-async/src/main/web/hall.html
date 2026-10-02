@@ -284,11 +284,11 @@
 	<div id="play-load-error" class="play-error" role="alert" hidden></div>
 
 	<div id="create-table-selection">
+		<button id="create-scenario-button"><span class="play-choice-title"><span class="bigger-icon icon-scenario"></span><span>Scenarios</span></span><span class="play-subtitle">Play a tutorial or a single-player game puzzle.</span></button>
 		<button id="create-bot-table-button"><span class="play-choice-title"><span class="bigger-icon icon-bot"></span><span>Play Against Bots (Beta)</span></span><span class="play-subtitle">A practice game against a computer opponent.</span></button>
 		<button id="create-unranked-table-button"><span class="play-choice-title"><span class="bigger-icon icon-unranked"></span><span>Open Casual Table</span></span><span class="play-subtitle">A 1-on-1 game against another player.</span></button>
 		<button id="create-league-table-button"><span class="play-choice-title"><span class="bigger-icon icon-league"></span><span>Open League Table</span></span><span class="play-subtitle">Join a multi-week league and participate in themed Sealed or Constructed events of all kinds.</span></button>
 		<button id="create-tournament-button"><span class="play-choice-title"><span class="bigger-icon icon-tournament"></span><span>Create Tournament</span></span><span class="play-subtitle">Host an event that other players sign up for.</span></button>
-		<button id="create-scenario-button"><span class="play-choice-title"><span class="bigger-icon icon-scenario"></span><span>Scenarios</span></span><span class="play-subtitle">Play a tutorial or a single-player game puzzle.</span></button>
 	</div>
 
 	<div id="create-bot-table" style="display:none" class="table-form">
@@ -643,7 +643,10 @@
 
 			<div id="scenario-current" class="scenario-current" hidden></div>
 
-			<div id="scenario-list"></div>
+			<div id="scenario-browser" class="scenario-browser">
+				<div id="scenario-folders" class="scenario-folders" role="tree" aria-label="Scenario folders"></div>
+				<div id="scenario-list" class="scenario-list"></div>
+			</div>
 
 			<div id="scenario-result-label" class="flex-horiz result-label">
 				<div class="label">

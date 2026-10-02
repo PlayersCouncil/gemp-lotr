@@ -43,7 +43,7 @@ public class ScenarioDirector {
      */
     public record Presentation(Step step, List<RenderedMessage> messages, List<String> allowed, boolean passAllowed) { }
 
-    public record RenderedMessage(Message message, String title, String text) { }
+    public record RenderedMessage(Message message, String header, String text) { }
 
     private final ScenarioTable _table;
     private final ScenarioDefinition _def;
@@ -268,7 +268,7 @@ public class ScenarioDirector {
         if (!isContinuing(step))
             for (Message message : step.messages)
                 messages.add(new RenderedMessage(message,
-                        message.title == null ? null : Templates.render(_table, message.title),
+                        message.header == null ? null : Templates.render(_table, message.header),
                         Templates.render(_table, message.text)));
         return messages;
     }

@@ -224,7 +224,7 @@ public class LiveScenarioTest {
         assertEquals(1, step.getIntValue("step"));
         List<JSONObject> messages = step.getList("messages", JSONObject.class);
         assertEquals(3, messages.size());
-        assertEquals("The road goes ever on", messages.get(0).getString("title"));
+        assertEquals("The road goes ever on", messages.get(0).getString("header"));
         //Text is rendered: the template is filled in and the card link opens the scenario's own Frodo
         String html = messages.get(0).getString("html");
         assertTrue(html, html.contains("at site 1"));

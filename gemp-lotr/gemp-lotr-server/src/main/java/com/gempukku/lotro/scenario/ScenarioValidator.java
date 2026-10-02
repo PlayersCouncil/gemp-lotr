@@ -78,6 +78,13 @@ public final class ScenarioValidator {
             if (step.allow != null)
                 requirements(step.allow.passWhen, context + ".allow.passWhen", problems);
         }
+        for (Step step : def.steps)
+            for (ScenarioDefinition.Message message : step.messages)
+                if (message.zoom != null) {
+                    String problem = CardFaces.check(def, message.zoom, library);
+                    if (problem != null)
+                        problems.add("step " + step.label() + ".messages.zoom: " + problem);
+                }
         requirements(def.outcome.win, "outcome.win", problems);
         requirements(def.outcome.lose, "outcome.lose", problems);
 
