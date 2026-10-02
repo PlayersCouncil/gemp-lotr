@@ -96,6 +96,63 @@ public class ScenarioDirector {
         return _flags;
     }
 
+    /**
+     * @return Whether the script has nothing more to say: every step that is part of this game has been used.
+     * Whatever the game asks from here on is past the end of the script.
+     */
+    public boolean atFrontier() {
+        for (int index = _index; index < _def.steps.size(); index++)
+            if (partOfTheGame(_def.steps.get(index)))
+                return false;
+        return true;
+    }
+
+    /**
+     * Authoring: writes a step into the script at the point the script has reached, as a step that has just been
+     * used.  This is how a decision that the script did not cover becomes part of it: the script now reads as if it
+     * had covered it all along, and stands where it stood.
+     */
+    public void record(Step step) {
+        restructure(() -> _def.steps.add(_index, step), null);
+        _statuses.put(step.label(), StepStatus.MATCHED);
+        _index++;
+    }
+
+    /**
+     * Authoring: the steps have been changed by somebody else (words reworded in place, steps added or removed
+     * after the one the script is waiting on).  The steps are numbered afresh, what became of each is kept, and the
+     * script goes on waiting on the same step it was waiting on.
+     * @param change Makes the change.  It must leave the current step, and every step before it, in the list.
+     * @param current The step the script is to wait on afterwards; null to stay at the same place in the list.
+     */
+    public void restructure(Runnable change, Step current) {
+        Map<Step, StepStatus> before = new java.util.IdentityHashMap<>();
+        for (Step step : _def.steps)
+            before.put(step, _statuses.getOrDefault(step.label(), StepStatus.UNREACHED));
+        change.run();
+        _statuses.clear();
+        for (int index = 0; index < _def.steps.size(); index++) {
+            Step step = _def.steps.get(index);
+            step.number = index + 1;
+            _statuses.put(step.label(), before.getOrDefault(step, StepStatus.UNREACHED));
+        }
+        if (current != null) {
+            int index = _def.steps.indexOf(current);
+            if (index >= 0)
+                _index = index;
+            //(a step named as the one to wait on is waited on from its beginning)
+            _timesApplied = 0;
+        }
+        _index = Math.min(_index, _def.steps.size());
+        _lastDecision = null;
+        _lastMatch = null;
+    }
+
+    /** How many decisions the step the script is waiting on has applied to so far. */
+    public int timesApplied() {
+        return _timesApplied;
+    }
+
     /** Whether, with what has been chosen so far, a step is part of this game at all. */
     private boolean partOfTheGame(Step step) {
         for (String name : step.onlyIf)

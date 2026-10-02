@@ -271,7 +271,7 @@ body {
     font-size: 300%;
 }
 
-.fpStrength.overwhelmed {
+.fpStrength.overwhelmed, .shadowStrength.overwhelmed {
     border-radius: 6px;
     text-align: center;
     vertical-align: middle;

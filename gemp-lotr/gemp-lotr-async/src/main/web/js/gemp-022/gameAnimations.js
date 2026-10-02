@@ -1162,6 +1162,14 @@ var GameAnimations = Class.extend({
                 }
                 if (that.game.shadowStrengthDiv != null) {
                     that.game.shadowStrengthDiv.text(element.getAttribute("shadowStrength"));
+                    var shadowOverwhelmed = element.getAttribute("shadowOverwhelmed");
+                    if (shadowOverwhelmed != null) {
+                        if (shadowOverwhelmed == "true") {
+                            that.game.shadowStrengthDiv.addClass("overwhelmed");
+                        } else {
+                            that.game.shadowStrengthDiv.removeClass("overwhelmed");
+                        }
+                    }
 
                     var damageBonus = element.getAttribute("shadowDamageBonus");
                     if (damageBonus != null) {

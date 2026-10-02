@@ -1,0 +1,617 @@
+/*
+ * The scenario authoring panel: see js/gemp-022/scenario/scenarioAuthor.js.
+ *
+ * It is docked down the right-hand side of the game screen.  The game lays itself out in what is left (gameUi.js,
+ * reservedRight), and so does everything the scenario overlay draws.
+ */
+body.scenario-authoring {
+    --sa-width: 430px;
+}
+
+body.scenario-authoring #scenarioLayer {
+    width: calc(100% - var(--sa-width));
+}
+
+.sa {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* over the scenario layer (100000), under a card's enlarged picture (100010) */
+    z-index: 100005;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #17150f;
+    color: #e9e0cb;
+    border-left: 2px solid #8c7436;
+    font: 13px/1.35 "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+.sa * {
+    box-sizing: border-box;
+}
+
+.sa-folded > *:not(.sa-head) {
+    display: none !important;
+}
+
+.sa-folded .sa-head > *:not(.sa-fold) {
+    display: none;
+}
+
+.sa-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px 4px 4px;
+    background: #231f15;
+}
+
+.sa-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: bold;
+    color: #f0cf6a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sa-busy {
+    color: #f0cf6a;
+    font-weight: bold;
+}
+
+.sa-where {
+    padding: 0 10px 6px 10px;
+    background: #231f15;
+    color: #b9ad8d;
+    font-size: 12px;
+}
+
+.sa-notices:empty {
+    display: none;
+}
+
+.sa-notice {
+    position: relative;
+    padding: 5px 26px 5px 10px;
+    font-size: 12px;
+    border-top: 1px solid #000;
+    white-space: pre-wrap;
+    max-height: 9em;
+    overflow-y: auto;
+}
+
+.sa-error {
+    background: #5a1d1a;
+    color: #ffe2dc;
+}
+
+.sa-warning {
+    background: #4a3a12;
+    color: #ffe9b0;
+}
+
+.sa-told {
+    background: #1d3a4a;
+    color: #d8f0ff;
+}
+
+.sa-dismiss {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+
+.sa-tabs {
+    display: flex;
+    background: #231f15;
+    border-bottom: 1px solid #8c7436;
+}
+
+.sa-button.sa-tabbutton {
+    flex: 1;
+    margin: 0;
+    padding: 5px 2px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: #b9ad8d;
+}
+
+.sa-button.sa-tabbutton.sa-active {
+    color: #f0cf6a;
+    border-bottom-color: #d8b24a;
+}
+
+.sa-button.sa-tabbutton.sa-attention {
+    color: #fff;
+    background: #7a3a12;
+}
+
+.sa-body {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+.sa-tab {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 6px 8px 14px 8px;
+}
+
+.sa-tab-timeline {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sa-button {
+    margin: 0 4px 3px 0;
+    padding: 2px 7px;
+    font: inherit;
+    font-size: 12px;
+    color: #e9e0cb;
+    background: #3a3322;
+    border: 1px solid #6b5a2c;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sa-button:hover:not(:disabled) {
+    background: #4d4430;
+}
+
+.sa-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.sa-button.sa-primary,
+.sa-button.sa-save.sa-dirty {
+    background: #7a6220;
+    border-color: #d8b24a;
+    color: #fff;
+}
+
+.sa-button.sa-danger {
+    border-color: #8a3a30;
+}
+
+.sa-button.sa-fold {
+    padding: 2px 5px;
+    margin: 0;
+}
+
+.sa-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 2px 0 4px 0;
+}
+
+.sa-options,
+.sa-way {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #cfc4a6;
+}
+
+.sa-check {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sa-check.sa-block {
+    display: block;
+    white-space: normal;
+    margin: 2px 0;
+}
+
+.sa-note {
+    margin: 3px 0 6px 0;
+    color: #a99e80;
+    font-size: 12px;
+}
+
+.sa-pending {
+    color: #ffe9b0;
+}
+
+/* ---- the timeline ---- */
+
+.sa-steps {
+    flex: 1;
+    min-height: 60px;
+    overflow-y: auto;
+    border: 1px solid #3a3322;
+    background: #100f0b;
+    margin-bottom: 5px;
+}
+
+.sa-step {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 2px 4px;
+    border-bottom: 1px solid #25221a;
+    cursor: pointer;
+}
+
+.sa-step:hover {
+    background: #26221a;
+}
+
+.sa-step.sa-selected {
+    background: #3a3220;
+}
+
+.sa-step.sa-current,
+.sa-end.sa-current {
+    box-shadow: inset 4px 0 0 #d8b24a;
+}
+
+.sa-num {
+    width: 24px;
+    text-align: right;
+    color: #8f8468;
+    font-size: 11px;
+}
+
+.sa-status-matched .sa-num {
+    color: #8fd08a;
+}
+
+.sa-status-bypassed,
+.sa-status-skipped {
+    opacity: 0.45;
+}
+
+.sa-who {
+    width: 32px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.sa-who-you { color: #9cc7ff; }
+.sa-who-opp { color: #ff9a8a; }
+.sa-who-read { color: #f0cf6a; }
+.sa-who-any { color: #b9ad8d; }
+
+.sa-what {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sa-when {
+    color: #b9ad8d;
+}
+
+.sa-act {
+    margin-left: 6px;
+    color: #fff;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+}
+
+.sa-id {
+    margin-left: 6px;
+    color: #8f8468;
+    font-style: italic;
+}
+
+.sa-tags {
+    white-space: nowrap;
+}
+
+.sa-tag {
+    margin-left: 3px;
+    padding: 0 3px;
+    font-size: 10px;
+    color: #cfc4a6;
+    border: 1px solid #5a4d2a;
+    border-radius: 3px;
+}
+
+.sa-tag.sa-bubbles {
+    color: #f0cf6a;
+}
+
+.sa-tag.sa-flag {
+    color: #8fd08a;
+    border-color: #3d6a3a;
+}
+
+.sa-button.sa-go {
+    margin: 0;
+    padding: 0 4px;
+    font-size: 10px;
+}
+
+.sa-end {
+    padding: 6px 8px;
+    color: #a99e80;
+    font-size: 12px;
+}
+
+.sa-asked {
+    margin: 3px 0 5px 0;
+    color: #fff;
+}
+
+/* ---- forms ---- */
+
+.sa-section {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #3a3322;
+}
+
+.sa-heading {
+    margin: 2px 0 4px 0;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-stephead {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+
+.sa-stepname {
+    font-size: 15px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-stepwhere {
+    margin-left: auto;
+    font-size: 12px;
+    color: #a99e80;
+    opacity: 1;
+}
+
+.sa-stepwhere.sa-status-matched {
+    color: #8fd08a;
+}
+
+.sa-field,
+.sa-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 3px 0;
+}
+
+.sa-row.sa-wrap {
+    flex-wrap: wrap;
+}
+
+.sa-label {
+    flex: 0 0 82px;
+    color: #b9ad8d;
+    font-size: 12px;
+    cursor: help;
+}
+
+.sa-row > .sa-label {
+    flex-basis: auto;
+}
+
+.sa-anchor > .sa-label {
+    flex: 0 0 82px;
+}
+
+.sa-input {
+    flex: 1;
+    min-width: 0;
+    padding: 2px 4px;
+    font: inherit;
+    font-size: 12px;
+    color: #f3ead6;
+    background: #0d0c09;
+    border: 1px solid #5a4d2a;
+    border-radius: 3px;
+}
+
+select.sa-input {
+    flex: 0 1 auto;
+    padding: 1px 2px;
+}
+
+.sa-input.sa-short {
+    flex: 0 0 76px;
+    width: 76px;
+}
+
+.sa-input.sa-bad {
+    border-color: #e0584a;
+}
+
+textarea.sa-input {
+    width: 100%;
+    resize: vertical;
+    line-height: 1.35;
+}
+
+textarea.sa-code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    white-space: pre;
+}
+
+.sa-more {
+    margin: 4px 0;
+}
+
+.sa-more > summary {
+    color: #b9ad8d;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sa-alias {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    color: #9cc7ff;
+}
+
+.sa-message {
+    margin-bottom: 6px;
+    padding: 5px 6px;
+    background: #211d14;
+    border: 1px solid #5a4d2a;
+    border-radius: 5px;
+}
+
+.sa-message:focus-within {
+    border-color: #d8b24a;
+}
+
+.sa-messagehead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.sa-messagenum {
+    width: 20px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-text {
+    font-size: 13px !important;
+}
+
+.sa-card {
+    padding: 3px 0;
+    border-bottom: 1px solid #25221a;
+}
+
+.sa-cardname {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sa-count {
+    min-width: 22px;
+    text-align: center;
+}
+
+.sa-results {
+    max-height: 190px;
+    overflow-y: auto;
+}
+
+.sa-result {
+    padding: 2px 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.sa-result:hover {
+    background: #3a3220;
+}
+
+.sa-button.sa-answer {
+    display: block;
+    width: 100%;
+    margin: 0 0 3px 0;
+    padding: 4px 7px;
+    text-align: left;
+}
+
+.sa-report {
+    max-height: 300px;
+    overflow: auto;
+    margin: 6px 0;
+    padding: 6px;
+    background: #0d0c09;
+    border: 1px solid #3a3322;
+    font: 11px/1.35 Consolas, "Courier New", monospace;
+    white-space: pre-wrap;
+}
+
+/* ---- picking something on the table ---- */
+
+.sa-pickbox {
+    position: fixed;
+    z-index: 100020;
+    pointer-events: none;
+    border: 3px solid #4fd0ff;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #4fd0ff;
+}
+
+.sa-picklabel {
+    position: fixed;
+    z-index: 100021;
+    pointer-events: none;
+    padding: 1px 6px;
+    background: #0a2a3a;
+    color: #d8f0ff;
+    font: 12px Consolas, "Courier New", monospace;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+body.sa-picking,
+body.sa-picking * {
+    cursor: crosshair !important;
+}
+
+/* a bubble would be in the way of what is behind it */
+body.sa-picking .scenario-bubble,
+body.sa-picking .scenario-pointer {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+/* ---- a player's game of the draft: the table has the screen, and the way back floats over a corner of it ---- */
+
+.sa.sa-floating {
+    top: 38px;
+    right: 8px;
+    bottom: auto;
+    width: 270px;
+    border: 2px solid #8c7436;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+}
+
+.sa.sa-floating .sa-body {
+    flex: none;
+}
+
+.sa.sa-floating .sa-tab {
+    position: static;
+}
+
+.sa.sa-floating .sa-fold {
+    display: none;
+}
+
+/* folded away, with the opponent waiting to be answered for */
+.sa.sa-folded.sa-wanted .sa-fold {
+    background: #7a3a12;
+    border-color: #d8b24a;
+    color: #fff;
+}

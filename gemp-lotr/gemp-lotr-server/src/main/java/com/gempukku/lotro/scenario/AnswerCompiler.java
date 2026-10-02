@@ -187,6 +187,130 @@ public final class AnswerCompiler {
     }
 
     /**
+     * The other way about: an answer the game was given, written the way a scenario would write it.  This is how
+     * what somebody did at the table becomes a line of script (see ScenarioAuthoring).  What comes back is a guess at
+     * the best wording, not a promise: whoever uses it should compile it again and see that it gives the same answer.
+     * @return The answer as a term ("play(gandalf)", "assign(frodo: bowman)", "pass"); "raw(...)" when the scenario's
+     * own words cannot say it (a card the scenario has no name for).
+     */
+    public static String decompile(ScenarioTable table, AwaitingDecision decision, String answer) {
+        Map<String, String[]> params = decision.getDecisionParameters();
+        String raw = "raw(" + answer + ")";
+        switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE: {
+                if (answer.isEmpty())
+                    return "pass";
+                String[] actionIds = params.get("actionId");
+                String[] cardIds = params.get("cardId");
+                String[] texts = params.get("actionText");
+                for (int i = 0; i < actionIds.length; i++) {
+                    if (!actionIds[i].equals(answer))
+                        continue;
+                    String alias = table.AliasOfCardId(cardIds[i]);
+                    if (alias == null)
+                        return raw;
+                    String text = stripHtml(texts[i]);
+                    //The first thing a card offers is what its name alone picks
+                    boolean first = true;
+                    for (int earlier = 0; earlier < i; earlier++)
+                        if (cardIds[earlier].equals(cardIds[i]))
+                            first = false;
+                    if (text.startsWith("Play "))
+                        return "play(" + alias + ")";
+                    return first ? "use(" + alias + ")" : "use(" + alias + ", " + text + ")";
+                }
+                return raw;
+            }
+            case CARD_SELECTION: {
+                if (answer.isEmpty())
+                    return "pass";
+                StringJoiner aliases = new StringJoiner(", ");
+                for (String cardId : answer.split(",")) {
+                    String alias = table.AliasOfCardId(cardId.trim());
+                    if (alias == null)
+                        return raw;
+                    aliases.add(alias);
+                }
+                return "choose(" + aliases + ")";
+            }
+            case ARBITRARY_CARDS: {
+                if (answer.isEmpty())
+                    return "pass";
+                String[] tempIds = params.get("cardId");
+                String[] blueprintIds = params.get("blueprintId");
+                List<? extends PhysicalCard> physical = decision instanceof ArbitraryCardsSelectionDecision arbitrary
+                        && arbitrary.getPhysicalCards() != null ? new ArrayList<>(arbitrary.getPhysicalCards()) : null;
+                StringJoiner aliases = new StringJoiner(", ");
+                Set<String> used = new HashSet<>();
+                for (String tempId : answer.split(",")) {
+                    int index = Arrays.asList(tempIds).indexOf(tempId.trim());
+                    if (index < 0)
+                        return raw;
+                    String alias = physical != null ? table.AliasOf(physical.get(index)) : null;
+                    if (alias == null) {
+                        //Shown by what it is, not which it is: any of the scenario's cards of that kind will do
+                        for (String candidate : table.Definition().cards.keySet()) {
+                            if (!used.contains(candidate) && table.Arranged()
+                                    && table.Card(candidate).getBlueprintId().equals(blueprintIds[index])) {
+                                alias = candidate;
+                                break;
+                            }
+                        }
+                    }
+                    if (alias == null)
+                        return raw;
+                    used.add(alias);
+                    aliases.add(alias);
+                }
+                return "choose(" + aliases + ")";
+            }
+            case MULTIPLE_CHOICE: {
+                String[] results = params.get("results");
+                try {
+                    int index = Integer.parseInt(answer.trim());
+                    if (index < 0 || index >= results.length)
+                        return raw;
+                    //By what it says, if that says which it is and can be written down; otherwise by where it comes
+                    String text = results[index];
+                    int same = 0;
+                    for (String result : results)
+                        if (result.equalsIgnoreCase(text))
+                            same++;
+                    boolean writable = same == 1 && !text.isEmpty() && !text.startsWith("#") && text.matches("[^(),\\n]*");
+                    return "option(" + (writable ? text : "#" + (index + 1)) + ")";
+                } catch (NumberFormatException exp) {
+                    return raw;
+                }
+            }
+            case INTEGER:
+                return answer.trim().matches("-?\\d+") ? "number(" + answer.trim() + ")" : raw;
+            case ASSIGN_MINIONS: {
+                if (answer.trim().isEmpty())
+                    return "pass";
+                StringJoiner pairings = new StringJoiner(", ");
+                for (String group : answer.split(",")) {
+                    String[] ids = group.trim().split(" +");
+                    String character = table.AliasOfCardId(ids[0]);
+                    if (character == null)
+                        return raw;
+                    StringJoiner minions = new StringJoiner(" + ");
+                    for (int i = 1; i < ids.length; i++) {
+                        String minion = table.AliasOfCardId(ids[i]);
+                        if (minion == null)
+                            return raw;
+                        minions.add(minion);
+                    }
+                    if (ids.length > 1)
+                        pairings.add(character + ": " + minions);
+                }
+                return pairings.length() == 0 ? "pass" : "assign(" + pairings + ")";
+            }
+            default:
+                return raw;
+        }
+    }
+
+    /**
      * @return What to answer when nobody has said what to answer: do as little as the decision allows.
      */
     public static String leastAnswer(AwaitingDecision decision) {

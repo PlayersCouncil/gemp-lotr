@@ -953,7 +953,8 @@ var GempLotrGameUI = Class.extend({
 
     layoutUI: function (sizeChanged) {
         var padding = this.padding;
-        var width = $(window).width();
+        // (the scenario authoring panel is docked down the right-hand side, and the table makes room for it)
+        var width = $(window).width() - (this.reservedRight || 0);
         var height = $(window).height();
         if (sizeChanged) {
             this.windowWidth = width;
@@ -1225,8 +1226,34 @@ var GempLotrGameUI = Class.extend({
             }, this.gameErrorMap());
     },
 
+    // Asks for news once, while a decision is waiting to be answered here, which is when nothing else asks: the
+    // server has just been made to send something (the scenario authoring panel changed the step on the screen).
+    // With no decision waiting the usual asking is already going on and nothing needs doing.
+    pollOnce: function () {
+        var that = this;
+        if (!this.decisionPending || this.pollingOnce)
+            return;
+        this.pollingOnce = true;
+        // (should the asking fail, it is not held against the next one for ever)
+        setTimeout(function () {
+            that.pollingOnce = false;
+        }, 20000);
+        this.communication.updateGameState(
+            this.channelNumber,
+            function (xml) {
+                that.pollingOnce = false;
+                that.answeringOnce = true;
+                try {
+                    that.processXml(xml, true);
+                } finally {
+                    that.answeringOnce = false;
+                }
+            }, this.gameErrorMap());
+    },
+
     decisionFunction: function (decisionId, result) {
         var that = this;
+        this.decisionPending = false;
         if (this.scenario != null)
             this.scenario.decisionAnswered();
         this.stopAnimatingTitle();
@@ -1469,11 +1496,17 @@ var GempLotrGameUI = Class.extend({
                     this.markExpiredTimers();
             }
 
-            if (!hasDecision) {
-                this.animations.updateGameState(animate);
-            } else {
+            if (hasDecision) {
+                this.decisionPending = true;
                 this.startAnimatingTitle();
+            } else if (!this.answeringOnce && !this.decisionPending) {
+                // (news asked for once, over a waiting decision, never starts the asking up; and nor does anything
+                // that arrives while a decision is waiting, which can now happen: the once-asked-for news may be
+                // what brings the next decision, with the reply to the last answer coming in empty behind it)
+                this.animations.updateGameState(animate);
             }
+            if (gameEvents.length > 0 && this.scenario != null && this.scenario.author != null)
+                this.scenario.author.gameMoved();
         } catch (e) {
             this.showErrorDialog("Game error", "There was an error while processing game events in your browser. Reload the game to continue", true, false, false);
             console.log(e);

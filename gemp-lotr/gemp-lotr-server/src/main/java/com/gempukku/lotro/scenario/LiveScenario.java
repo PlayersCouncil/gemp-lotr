@@ -78,6 +78,23 @@ public class LiveScenario implements ScenarioSession.Listener {
         String render(String text);
     }
 
+    /**
+     * Somebody writing the scenario while playing it (see ScenarioAuthoring).  A game with an author never ends for
+     * leaving its script: where the script has nothing to say, the person plays on, and what they do can become
+     * script.  The opponent's seat is theirs to answer as well, wherever the script does not answer for it.
+     */
+    public interface Author {
+        /**
+         * The opponent is being asked something the script gives no answer to.
+         * @return True to leave the decision waiting for the author to answer (see Held and AuthorAnswers); false to
+         * have the opponent do what it would do in a game with no author (its fallback).
+         */
+        boolean holds(Ruling ruling);
+
+        /** A decision, of either seat's, has been answered.  Called inside the game's lock. */
+        void answered(Ruling ruling, String answer);
+    }
+
     private final ScenarioDefinition _def;
     private final LotroCardBlueprintLibrary _library;
     private final ScenarioTable _table;
@@ -98,6 +115,8 @@ public class LiveScenario implements ScenarioSession.Listener {
     private int _lastCheckpoint;
     private Integer _resumedAt;
     private boolean _begun;
+    /** Where the scenario stands in its campaign, as the client is to be told; null if it is in none. */
+    private Map<String, Object> _campaign;
     /** The decision whose answer takes the step now on the person's screen off it again; null if there is none. */
     private Object _stepShownFor;
     /** Stands in for "whatever the person answers next". */
@@ -108,6 +127,17 @@ public class LiveScenario implements ScenarioSession.Listener {
     private Result _result;
     private final List<String> _problems = new ArrayList<>();
     private final List<Runnable> _whenSettled = new ArrayList<>();
+
+    private Author _author;
+    /** The opponent's decision that is waiting for the author to answer it; null if none is. */
+    private Ruling _held;
+    /** Set while a changed step is being shown afresh (see Reshow). */
+    private boolean _reshowing;
+    /** If set, the script plays itself up to this step before anybody is shown anything. */
+    private boolean _draftTest;
+    private Integer _runTo;
+    private java.util.function.Function<Step, String> _runChoices;
+    private String _runProblem;
 
     private static final class Move {
         final AwaitingDecision decision;
@@ -179,6 +209,121 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     /**
+     * Gives the game an author.  To be called before Begin.
+     */
+    public void SetAuthor(Author author) {
+        _author = author;
+    }
+
+    /**
+     * Has the script play itself, both seats, from the start up to a step: Begin leaves the game waiting on the
+     * first decision that step applies to, with nothing of the way there shown to anybody.  If the script cannot get
+     * that far (a decision it has no answer for, an answer the game will not take) the game is left where the script
+     * stopped, and RunProblem says why.  To be called before Begin.
+     * @param step The number of the step to stop at; anything past the last step runs the whole script.
+     * @param choices Says which of a pause's choices to take; null (or a null answer) takes the first.
+     */
+    public void RunTo(int step, java.util.function.Function<Step, String> choices) {
+        _runTo = step;
+        _runChoices = choices;
+    }
+
+    /**
+     * Says that this is a player's game of a draft somebody is writing: the person's screen is told, so that it can
+     * show them the way back to writing it.  To be called before Begin.
+     */
+    public void SetDraftTest() {
+        _draftTest = true;
+    }
+
+    /** Why the script could not play itself as far as it was asked to; null if it did (or was not asked). */
+    public String RunProblem() { return _runProblem; }
+
+    /** The opponent's decision that is waiting for the author; null if none is. */
+    public Ruling Held() { return _held; }
+
+    /**
+     * The author answers the opponent's waiting decision.  Like any answer of the opponent's, it is handed to the
+     * host, so this is to be called from outside the game's lock.
+     */
+    public void AuthorAnswers(String answer) {
+        Ruling held = _held;
+        if (held == null || _result != null)
+            return;
+        _host.opponentAnswers(_opponent, held.decision(), answer);
+    }
+
+    /**
+     * Authoring: the steps in hand have been changed, and are put on the person's screen again as they now are.  To
+     * be called inside the game's lock.
+     */
+    public void Reshow() {
+        _reshowing = true;
+        try {
+            _session.Refresh();
+        } finally {
+            _reshowing = false;
+        }
+    }
+
+    private void runScript() {
+        ScenarioDirector director = _session.Director();
+        for (int guard = 0; guard < 5000; guard++) {
+            if (_table.GameIsFinished() || director.end() != null) {
+                //Fair enough if the whole script was asked for.  Short of that, the script did not get where it was sent.
+                Step reached = director.currentStep();
+                if (_table.GameIsFinished())
+                    _runProblem = "the game was over (" + (_human.equals(_table.game().getWinnerPlayerId()) ? "won" : "lost")
+                            + " by its own rules) " + (reached == null ? "after the last step" : "before " + reached.describe());
+                else if (reached != null && reached.number <= _runTo)
+                    _runProblem = "the step before " + reached.describe() + " ended the scenario";
+                return;
+            }
+            Ruling ruling = _session.Ruling(_human) != null ? _session.Ruling(_human) : _session.Ruling(_opponent);
+            if (ruling == null)
+                return;
+            Step step = ruling.step();
+            if (step != null && step.number >= _runTo)
+                return;
+            if (step == null && director.atFrontier())
+                return;
+            if (ruling.problem() != null) {
+                _runProblem = (step == null ? "" : step.describe() + ": ") + ruling.problem();
+                return;
+            }
+            if (step != null && step.pause) {
+                _session.Read(ruling.player(), step.number, _runChoices == null ? null : _runChoices.apply(step));
+                continue;
+            }
+            String answer = ruling.answer();
+            if (answer == null && step == null && !ruling.player().equals(_human) && _def.fallback != Fallback.FAIL)
+                answer = AnswerCompiler.leastAnswer(ruling.decision());
+            if (answer == null) {
+                _runProblem = ruling.noAnswer() != null ? step.describe() + ": " + ruling.noAnswer()
+                        : step != null ? step.describe() + " has no answer for the script to play"
+                        : "no step covers " + director.describe(ruling.player(), ruling.decision());
+                return;
+            }
+            try {
+                _table.PlayerDecided(ruling.player(), answer);
+            } catch (RuntimeException exp) {
+                _runProblem = (step == null ? "" : step.describe() + ": ") + "the game would not take the answer \"" + answer + "\": " + exp;
+                return;
+            }
+        }
+        _runProblem = "the script went on for more than 5000 decisions";
+    }
+
+    /**
+     * Says where the scenario stands in a campaign ({id, title, position, count, next}; see
+     * ScenarioLibrary.campaignInfo), for the person's screen to offer the next one when this one is done.  To be
+     * called before Begin.
+     */
+    public void SetCampaign(Map<String, Object> campaign) {
+        _campaign = campaign;
+    }
+
+    /**
      * Has something done as soon as the scenario has settled how it ended.  That can be just before its game ends
      * (the scenario ended the game) or just after (the game ended the scenario).  It is done inside the game's lock.
      */
@@ -204,6 +349,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         //Until the game has got to where the person comes in (the first decision, or the end of an earlier game it
         // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
+        if (_runTo != null)
+            runScript();
         _begun = true;
         if (_table.FollowedAnything() && _session.Director().currentStep() != null)
             _resumedAt = _session.Director().currentStep().number;
@@ -263,19 +410,39 @@ public class LiveScenario implements ScenarioSession.Listener {
                 showStep(stepEvent(ruling, false), ruling.decision());
             } else {
                 clearStep();
-                if (_def.coverage == Coverage.STRICT)
+                //(with an author at the table, this is not the end of anything: it is where the writing happens)
+                if (_def.coverage == Coverage.STRICT && _author == null)
                     offScript("no step covers the player's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
             }
             return;
         }
 
-        //Ruled on again (it can happen to any decision whose answer is rejected): the move already stands
-        if (_move != null && _move.decision == ruling.decision())
-            return;
+        //Ruled on again (it can happen to any decision whose answer is rejected): the move already stands.  Unless
+        // its step has been rewritten meanwhile, and what it says and does is being put up afresh.
+        if (_move != null && _move.decision == ruling.decision()) {
+            if (!_reshowing || _move.released)
+                return;
+            _move = null;
+        }
 
+        //(ruled on again, a decision that was left for the author may no longer be)
+        if (_held != null && _held.decision() == ruling.decision())
+            _held = null;
         String answer = ruling.answer();
+        if (answer == null && _author != null && _author.holds(ruling)) {
+            //Left for the author.  Anything the step has to say is shown, with nothing waiting on its being read.
+            _held = ruling;
+            if (step != null && !ruling.shown().messages().isEmpty())
+                showStep(stepEvent(ruling, true), ruling.decision());
+            return;
+        }
         if (answer == null) {
-            if (step == null && _def.fallback == Fallback.FAIL) {
+            if (step == null && _def.fallback == Fallback.FAIL && _author != null) {
+                //An author who is not answering for the opponent has it do the least it can, and is told that a
+                // player's game would have stopped here
+                problem("no step covers the opponent's decision (" + _session.Director().describe(ruling.player(), ruling.decision())
+                        + "), and opponent.fallback is 'fail': a player's game leaves its script here.  The opponent has done as little as it can.");
+            } else if (step == null && _def.fallback == Fallback.FAIL) {
                 offScript("no step covers the opponent's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
                 if (!carriesOnOffScript())
                     return;
@@ -307,6 +474,17 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     @Override
     public void answered(Ruling ruling, String answer) {
+        if (_held != null && _held.decision() == ruling.decision())
+            _held = null;
+        //(the script playing itself to where its author wants to be is not the author doing anything)
+        if (_author != null && _begun) {
+            try {
+                _author.answered(ruling, answer);
+            } catch (RuntimeException exp) {
+                LOG.error("Scenario " + _def.id + ": its author could not be told about an answer", exp);
+                problem("an answer could not be written into the script: " + exp);
+            }
+        }
         //Only the answer the step on screen was waiting for takes it off the screen
         if (_stepShownFor == ruling.decision() || (_stepShownFor == ANY_ANSWER && ruling.player().equals(_human)))
             clearStep();
@@ -453,6 +631,9 @@ public class LiveScenario implements ScenarioSession.Listener {
         //A game that has left its script and carried on is an ordinary game: nothing more is expected of it
         if (_carryingOn)
             return;
+        //With an author at the table, where the script has nothing to say is where the writing happens
+        if (_author != null)
+            return;
         _offScript = what;
         problem("off script: " + what + ".  The script was waiting on "
                 + (_session.Director().currentStep() == null ? "nothing: every step has been used" : _session.Director().currentStep().describe()));
@@ -482,6 +663,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void problem(String problem) {
+        //(a step that is put up again, as an author's is each time they change it, says again whatever is wrong with it)
+        if (!_problems.isEmpty() && _problems.getLast().equals(problem))
+            return;
         if (_problems.size() >= PROBLEM_LIMIT) {
             _problemsDropped++;
             return;
@@ -513,6 +697,11 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("autoAccept", _def.autoAccept);
         //Set if the game did not start at the beginning: the checkpoint step it was brought back to
         event.put("resumedAt", _resumedAt);
+        event.put("campaign", _campaign);
+        //Whether the person is writing the scenario as they play it (the authoring panel goes with this)
+        event.put("author", _author != null);
+        //...or playing a draft of it as a player would, to see what they will see
+        event.put("draftTest", _draftTest);
         return event;
     }
 

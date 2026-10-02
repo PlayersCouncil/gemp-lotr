@@ -673,6 +673,23 @@ public class LotroGameMediator {
         }
     }
 
+    /**
+     * Does something to a scenario's game from outside it (the authoring tool: reading where the game stands,
+     * rewriting the step in hand, changing the board), with the game held still meanwhile.  Afterwards the scenario
+     * is given its usual look at whether it is over.
+     */
+    public <T> T scenarioLocked(java.util.function.Supplier<T> action) {
+        _writeLock.lock();
+        try {
+            T result = action.get();
+            if (!_lotroGame.isFinished())
+                scenarioAfterActions();
+            return result;
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
     public void scenarioAcknowledged(Player player, int stepNumber) {
         scenarioAcknowledged(player, stepNumber, null);
     }

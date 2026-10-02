@@ -124,6 +124,65 @@
     border-bottom: 1px dotted #9fc4ff;
 }
 
+/* Culture and twilight icons in a message ([gondor], (4)): the size of the text around them and in line with it.
+   The same icons a patch note has, which is where the look is taken from (patchNotes.css is not on the game page).
+   The log gets them too, now that it repeats what the bubbles say. */
+.scenario-body img.patchnote-culture,
+.scenario-hint img.patchnote-culture,
+.scenario-end-body img.patchnote-culture,
+.scenario-says img.patchnote-culture {
+    display: inline;
+    height: 1.15em;
+    width: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0 0.1em;
+    padding: 0;
+    vertical-align: -0.22em;
+    border: 0;
+    background: none;
+}
+
+/* The twilight icons are drawn in black, and everywhere a message is shown is dark */
+.scenario-body img.patchnote-culture[src*="/twilight_"],
+.scenario-hint img.patchnote-culture[src*="/twilight_"],
+.scenario-end-body img.patchnote-culture[src*="/twilight_"],
+.scenario-says img.patchnote-culture[src*="/twilight_"] {
+    filter: invert(1);
+}
+
+/* What the bubbles say is kept in the game log as well, as chat from the scenario's opponent */
+.scenario-says .msg-content p {
+    display: inline;
+    margin: 0;
+}
+
+.scenario-says .msg-content p + p:before {
+    content: " ";
+}
+
+/* The enlarged picture of whatever card the mouse is over belongs above everything a scenario draws: a bubble that
+   says "read this card" must not be what stops it being read.  (The layer is at 100000; see #scenarioLayer.) */
+body.scenario-game .previewImage {
+    z-index: 100010;
+}
+
+/* A scenario that is one of a campaign ends with "Next Scenario" on the right, and the ways back on the left */
+.scenario-end-buttons.scenario-end-campaign {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.scenario-end-buttons.scenario-end-campaign button {
+    margin-left: 0;
+}
+
+.scenario-end-buttons.scenario-end-campaign .scenario-end-onward {
+    margin-left: auto;
+}
+
 .scenario-foot {
     padding: 0 12px 11px 12px;
     text-align: right;
