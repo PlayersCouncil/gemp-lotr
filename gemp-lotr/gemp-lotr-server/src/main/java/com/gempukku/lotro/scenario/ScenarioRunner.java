@@ -25,6 +25,10 @@ import java.util.Map;
  *     prefix     the run was correct as far as it went, then met a decision the script leaves open
  *     setup      the board was laid out and the first decision arrived
  *
+ * A scenario whose reader is offered a choice of ways through it (a pause that ends in buttons) is played once for
+ * every way there is, and has to be right on all of them.  A step that only some ways reach is no mistake; a step
+ * that none reaches is.
+ *
  * Nothing here needs a server: only the card library and the scenario's format.
  */
 public final class ScenarioRunner {
@@ -37,8 +41,44 @@ public final class ScenarioRunner {
     public static final String OPPONENT = "~Scenario";
 
     public static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format) {
-        return run(def, library, format, false);
+        //Every way through: wherever a run met a choice, the ways it did not take are queued to be played as well
+        java.util.ArrayDeque<List<String>> waiting = new java.util.ArrayDeque<>();
+        waiting.add(List.of());
+        List<ScenarioRunReport> runs = new java.util.ArrayList<>();
+        while (!waiting.isEmpty() && runs.size() < WAYS_LIMIT) {
+            List<String> forced = waiting.poll();
+            ScenarioRunReport one = run(def, library, format, false, forced);
+            runs.add(one);
+            for (int i = forced.size(); i < one.taken.size(); i++)
+                for (String other : one.offered.get(i))
+                    if (!other.equals(one.taken.get(i))) {
+                        List<String> way = new java.util.ArrayList<>(one.taken.subList(0, i));
+                        way.add(other);
+                        waiting.add(way);
+                    }
+        }
+        for (ScenarioRunReport one : runs)
+            if (one.completed && one.failures.isEmpty())
+                one.reached = RunnerLevel.FULL;
+        ScenarioRunReport report = runs.size() == 1 ? runs.getFirst() : ScenarioRunReport.together(def.id, runs);
+        if (!waiting.isEmpty())
+            report.failures.add("There are more than " + WAYS_LIMIT + " ways through this scenario; not all of them were played");
+        if (report.completed) {
+            for (Map.Entry<String, ScenarioDirector.StepStatus> entry : report.steps.entrySet()) {
+                if (entry.getValue() == ScenarioDirector.StepStatus.UNREACHED || entry.getValue() == ScenarioDirector.StepStatus.BYPASSED)
+                    report.failures.add(def.findStep(entry.getKey()).describe() + " was never reached");
+                else if (entry.getValue() == ScenarioDirector.StepStatus.SKIPPED)
+                    report.warnings.add(def.findStep(entry.getKey()).describe() + " was skipped");
+            }
+        }
+        //(a step no way reaches is a failure, and a scenario with a failure in it has not been proved)
+        if (!report.failures.isEmpty() && report.reached == RunnerLevel.FULL)
+            report.reached = RunnerLevel.SETUP;
+        return report;
     }
+
+    /** A scenario with more ways through it than this is not played through all of them. */
+    private static final int WAYS_LIMIT = 64;
 
     /**
      * Plays a scenario as far as its script goes and then keeps going, answering every decision the script does not
@@ -47,13 +87,21 @@ public final class ScenarioRunner {
      * A report from here says nothing about whether the scenario is correct.
      */
     public static ScenarioRunReport explore(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format) {
-        return run(def, library, format, true);
+        return explore(def, library, format, List.of());
+    }
+
+    /**
+     * @param choices What to choose at each choice the run comes to, in order; where this runs out, the first thing
+     *                on offer is chosen.
+     */
+    public static ScenarioRunReport explore(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, List<String> choices) {
+        return run(def, library, format, true, choices);
     }
 
     /** In an exploring run, how many decisions to answer beyond the script before stopping. */
     private static final int EXPLORE_LIMIT = 60;
 
-    private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore) {
+    private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore, List<String> choices) {
         ScenarioRunReport report = new ScenarioRunReport(def.id);
         report.required = def.runnerLevel != null ? def.runnerLevel
                 : def.coverage == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
@@ -78,7 +126,7 @@ public final class ScenarioRunner {
 
         boolean completed = false;
         try {
-            completed = play(def, session, report, explore);
+            completed = play(def, session, report, explore, choices);
         } catch (RuntimeException exp) {
             report.failures.add("The game threw " + exp + rootCause(exp));
             report.stopped = "the game threw an exception";
@@ -90,26 +138,19 @@ public final class ScenarioRunner {
         for (String problem : table.Problems())
             report.failures.add(problem);
 
-        if (completed) {
+        if (completed)
             for (RngEntry entry : table.Random().remaining())
                 report.failures.add("rng: " + entry.kind().name().toLowerCase() + "(" + entry.seat().key() + "." + entry.zone()
                         + ": " + String.join(", ", entry.result()) + ") was never used");
-            for (Map.Entry<String, ScenarioDirector.StepStatus> entry : director.statuses().entrySet()) {
-                if (entry.getValue() == ScenarioDirector.StepStatus.UNREACHED)
-                    report.failures.add(def.findStep(entry.getKey()).describe() + " was never reached");
-                else if (entry.getValue() == ScenarioDirector.StepStatus.SKIPPED)
-                    report.warnings.add(def.findStep(entry.getKey()).describe() + " was skipped");
-            }
-            if (report.failures.isEmpty())
-                report.reached = RunnerLevel.FULL;
-        }
+        //Which steps the scenario as a whole never reaches is judged once every way through it has been played
+        report.completed = completed;
         return report;
     }
 
     /**
      * @return Whether the scenario reached its end.
      */
-    private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore) {
+    private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore, List<String> choices) {
         ScenarioTable table = session.Table();
         ScenarioDirector director = session.Director();
         boolean strict = def.coverage == Coverage.STRICT;
@@ -144,9 +185,44 @@ public final class ScenarioRunner {
             String answer;
             String note = null;
 
+            //What the step says, with its numbers filled in from the game as it stands: worth reading against the
+            // decisions around it, since nothing else checks that the words are true
+            if (step != null && ruling.shown() != null)
+                for (ScenarioDirector.RenderedMessage message : ruling.shown().messages())
+                    report.decisions.add(new ScenarioRunReport.Decision(-1, "      says: " + message.text(), null, null, null));
+
+            if (step != null && step.pause && ruling.problem() == null) {
+                //Nothing is answered: the pause is read (choosing, if it ends in a choice), and the same decision
+                // comes round again for the step behind it
+                Map<String, String> offered = ScenarioSession.ChoicesOf(step);
+                String choice = null;
+                if (!offered.isEmpty()) {
+                    int position = report.taken.size();
+                    choice = position < choices.size() && offered.containsKey(choices.get(position)) ? choices.get(position)
+                            : offered.keySet().iterator().next();
+                    report.taken.add(choice);
+                    report.offered.add(new java.util.ArrayList<>(offered.keySet()));
+                }
+                report.decisions.add(new ScenarioRunReport.Decision(number, description, step.label(), null,
+                        choice == null ? "(a pause: read)" : "(a pause: read, choosing '" + choice + "')"));
+                session.Read(player, step.number, choice);
+                if (director.end() != null) {
+                    report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
+                    if (director.end().result == EndResult.FAIL) {
+                        report.failures.add("The scripted path ends in failure");
+                        return false;
+                    }
+                    return true;
+                }
+                continue;
+            }
+
             try {
                 if (ruling.problem() != null)
                     throw new ScenarioScriptException(ruling.problem());
+                //With nobody at the table, the script's answer is the only answer there is
+                if (ruling.noAnswer() != null)
+                    throw new ScenarioScriptException(ruling.noAnswer());
                 if (step != null) {
                     ScenarioDirector.Presentation shown = ruling.shown();
                     if (shown.allowed() != null && decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS) {
@@ -168,6 +244,9 @@ public final class ScenarioRunner {
                             report.reached = RunnerLevel.PREFIX;
                         return false;
                     }
+                } else if (ruling.answer() != null) {
+                    answer = ruling.answer();
+                    note = "(no step covers this; one of the opponent's standing orders does)";
                 } else if (explore) {
                     if (++unscripted > EXPLORE_LIMIT) {
                         report.stopped = "explored " + EXPLORE_LIMIT + " decisions beyond the script";

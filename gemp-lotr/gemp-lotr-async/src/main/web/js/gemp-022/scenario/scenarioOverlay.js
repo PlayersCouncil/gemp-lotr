@@ -4,7 +4,10 @@
  * The server sends "S" game events to the person playing a scenario (see LiveScenario on the server):
  *
  *     info        once: which scenario this is, and what its opponent is called
- *     step        before the decision it is about: messages to show, and which answers the step allows
+ *     step        before the decision it is about: messages to show, and which answers the step allows.  A step can
+ *                 also be one that is only read (an opponent's, or a "pause" before a decision of the player's own,
+ *                 which the server holds back meanwhile): the server is told when it has been read, and which
+ *                 button was pressed if it ended in a choice
  *     offscript   once: the game has left its script and carries on as an ordinary game
  *     end         once: how the scenario ended
  *
@@ -44,6 +47,8 @@ var ScenarioAnchors = {
 
         if (kind == "card") {
             elem = ScenarioAnchors.cardElem(cards[parts[1]]);
+            if (parts.length > 2)
+                return ScenarioAnchors.cardPart(elem, parts[1], parts[2].toLowerCase());
         } else if (kind == "zone") {
             var zone = parts[1].toLowerCase();
             var group = {
@@ -98,11 +103,49 @@ var ScenarioAnchors = {
                     "chat": $("#bottomLeftTabs"),
                     "gamelog": $("#bottomLeftTabs"),
                     "settings": $("#settingsTab"),
-                    "dialog": $(".ui-dialog:visible").last()
+                    "dialog": $(".ui-dialog:visible").last(),
+                    "cardinfo": game.cardInfoDialog != null ? game.cardInfoDialog.infoDialog.closest(".ui-dialog") : null
                 }[name];
             }
         }
         return ScenarioAnchors.rectOf(elem);
+    },
+
+    /** Where things are printed on the cards the current step points at: "frodo:strength" -> [left, top, width, height] in percent. */
+    parts: {},
+
+    /**
+     * Part of a card on the table.  The figures the game screen writes over a card in play (its strength and vitality
+     * as they stand) are found as what they are; the wounds are the tokens lying on it; anything else is where the
+     * server says that thing is printed on a card of that kind.
+     */
+    cardPart: function (elem, alias, part) {
+        if (elem == null || elem.length == 0)
+            return null;
+        var card = elem.first();
+        var whole = ScenarioAnchors.rectOf(card);
+        if (part == "wounds") {
+            var wounds = ScenarioAnchors.rectOf(card.find(".token[src*='wound']"));
+            return wounds != null ? wounds : whole;
+        }
+        var written = {
+            strength: ".cardStrengthBg, .cardStrength",
+            vitality: ".cardVitalityBg, .cardVitality",
+            resistance: ".cardResistanceBg, .cardResistance",
+            sitenumber: ".cardSiteNumberBg, .cardSiteNumber"
+        }[part];
+        if (written != null) {
+            var figure = ScenarioAnchors.rectOf(card.find(written));
+            if (figure != null)
+                return figure;
+        }
+        var printed = (ScenarioAnchors.parts || {})[alias + ":" + part];
+        if (printed == null || whole == null)
+            return whole;
+        return {
+            left: whole.left + whole.width * printed[0] / 100, top: whole.top + whole.height * printed[1] / 100,
+            width: whole.width * printed[2] / 100, height: whole.height * printed[3] / 100
+        };
     },
 
     /** The card with this ID that is on show; a card can be drawn more than once, and one copy may be hidden. */
@@ -467,7 +510,8 @@ var GempScenarioOverlay = Class.extend({
      * idle        nothing of the scenario's is on the screen
      * reading     the step's opening messages are being read; the decision cannot be answered yet
      * answering   the last opening message is up (or there were none) and the decision can be answered
-     * opponent    an opponent's step: its messages are being read, and the opponent waits to be told they have been
+     * opponent    a step that is only read (an opponent's, or a pause): its messages are being read, and the server
+     *             waits to be told they have been
      * ended       the scenario is over
      */
     phase: "idle",
@@ -498,7 +542,7 @@ var GempScenarioOverlay = Class.extend({
             + "<div class='scenario-head'><span class='scenario-title'></span><span class='scenario-count'></span>"
             + "<a class='scenario-collapse' href='#' title='Fold this away'>&ndash;</a></div>"
             + "<div class='scenario-body'></div>"
-            + "<div class='scenario-foot'><button class='scenario-next'>Next</button></div>"
+            + "<div class='scenario-foot'><span class='scenario-choices'></span><button class='scenario-next'>Next</button></div>"
             + "</div>").appendTo(this.layer);
         this.hint = $("<div class='scenario-hint' style='display:none'></div>").appendTo(this.layer);
 
@@ -732,17 +776,21 @@ var GempScenarioOverlay = Class.extend({
     startStep: function (step) {
         this.step = step;
         this.hideHint();
+        ScenarioAnchors.parts = step.parts || {};
         this.startMessages = $.grep(step.messages, function (message) {
             return message.on == null || message.on.moment == "start";
         });
         this.messageIndex = 0;
 
-        if (step.seat == "opponent") {
+        if (step.seat == "opponent" || step.pause) {
+            //There is nothing to answer while it is up: the server sends the decision once it has been read
+            this.plan = null;
             this.phase = "opponent";
             if (this.startMessages.length == 0)
                 this.acknowledge();
             else
                 this.showMessage(this.startMessages[0]);
+            this.markCards();
             return;
         }
 
@@ -751,7 +799,7 @@ var GempScenarioOverlay = Class.extend({
             this.phase = "answering";
             this.hideBubble();
         } else {
-            this.phase = this.startMessages[0].advance == "next" ? "reading" : "answering";
+            this.phase = this.startMessages[0].advance == "decision" ? "answering" : "reading";
             if (this.phase == "answering")
                 this.answeringMessage = this.startMessages[0];
             this.showMessage(this.startMessages[0]);
@@ -769,7 +817,7 @@ var GempScenarioOverlay = Class.extend({
         this.messageIndex++;
         if (this.messageIndex < this.startMessages.length) {
             var message = this.startMessages[this.messageIndex];
-            if (this.phase == "reading" && message.advance != "next") {
+            if (this.phase == "reading" && message.advance == "decision") {
                 this.phase = "answering";
                 this.answeringMessage = message;
             }
@@ -785,17 +833,18 @@ var GempScenarioOverlay = Class.extend({
     },
 
     /**
-     * Tells the server that the opponent's step has been read.  The step stays up until the server has heard: if the
-     * message is lost the opponent would wait for ever, with nothing on the screen to say why.
+     * Tells the server that a step which is only read has been read.  The step stays up until the server has heard:
+     * if the message is lost the game would wait for ever, with nothing on the screen to say why.
+     * @param choice the name of the button pressed, if the step ended in a choice
      */
-    acknowledge: function () {
+    acknowledge: function (choice) {
         var that = this;
         var step = this.step;
         if (step == null || this.acknowledging === step)
             return;
         this.acknowledging = step;
-        var button = this.bubble.find(".scenario-next").attr("disabled", "disabled");
-        this.game.communication.scenarioAcknowledge(step.step, function () {
+        var button = this.bubble.find(".scenario-foot button").attr("disabled", "disabled");
+        this.game.communication.scenarioAcknowledge(step.step, choice, function () {
             that.acknowledging = null;
             button.removeAttr("disabled");
             //The game may already have moved on to its next step
@@ -807,7 +856,11 @@ var GempScenarioOverlay = Class.extend({
             if (that.step !== step)
                 return;
             if (that.currentMessage != null) {
-                button.text("Try again");
+                //(shown even on a message that had nothing to press: there has to be a way to say it again, and
+                // watchInfoWindow must not go on saying it by itself)
+                that.ackFailedFor = step;
+                that.bubble.find(".scenario-foot").css("display", "");
+                that.bubble.find(".scenario-next").css("display", "").text("Try again");
                 that.nudge();
             } else {
                 //Nothing is on the screen to press, so it is tried again without being asked
@@ -948,8 +1001,13 @@ var GempScenarioOverlay = Class.extend({
         //Escape confirms a choice from a list of cards, the same as its Done button
         if (event.keyCode != 27 || this.info == null || this.game.escFunction == null)
             return;
-        if (this.phase == "reading" || this.phase == "opponent" || (this.plan != null && !this.plan.isLive({kind: "done"})))
+        if (this.phase == "reading" || this.phase == "opponent" || (this.plan != null && !this.plan.isLive({kind: "done"}))) {
             this.stop(event);
+            //...but it still puts a card's information window away, which is all it would have been pressed for
+            var dialog = this.game.cardInfoDialog;
+            if (dialog != null && dialog.isOpen())
+                dialog.infoDialog.dialog("close");
+        }
     },
 
     stop: function (event) {
@@ -959,7 +1017,12 @@ var GempScenarioOverlay = Class.extend({
 
     /** Draws attention to the Next button when the player tries to get on with the game before reading. */
     nudge: function () {
-        var next = this.bubble.find(".scenario-next");
+        //Whatever the message is waiting for: its Next button, its choices, or (with neither) the message itself
+        var next = this.bubble.find(".scenario-next:visible, .scenario-choices button:visible");
+        if (next.length == 0)
+            next = this.bubble.find(".scenario-body");
+        if (next.length == 0 || this.currentMessage == null)
+            return;
         next.removeClass("scenario-nudge");
         void next[0].offsetWidth;
         next.addClass("scenario-nudge");
@@ -1065,9 +1128,21 @@ var GempScenarioOverlay = Class.extend({
         this.bubble.toggleClass("scenario-headed", !!message.header);
         this.bubble.find(".scenario-count").text(count);
         this.bubble.find(".scenario-body").html(message.html);
-        this.bubble.find(".scenario-foot").css("display", message.advance == "next" ? "" : "none");
-        this.bubble.find(".scenario-next").text(
+        //What takes the message away: Next; one of its own buttons; the player doing what it asks (answering the
+        // decision, opening or closing a card's information window), for which there is nothing to press
+        var that = this;
+        var choices = this.bubble.find(".scenario-choices").empty();
+        $.each(message.choices || [], function (index, choice) {
+            $("<button class='scenario-choice'></button>").text(choice.label).click(function () {
+                that.acknowledge(choice.name);
+                return false;
+            }).appendTo(choices);
+        });
+        var chooses = (message.choices || []).length > 0;
+        this.bubble.find(".scenario-foot").css("display", message.advance == "next" || chooses ? "" : "none");
+        this.bubble.find(".scenario-next").css("display", chooses ? "none" : "").text(
             this.phase == "opponent" && position == this.startMessages.length - 1 ? "Continue" : "Next");
+        this.infoWasOpen = this.infoIsOpen();
         this.bubble.css({display: "block", visibility: "hidden"});
 
         this.showZoom(message.zoom);
@@ -1201,8 +1276,35 @@ var GempScenarioOverlay = Class.extend({
         tick();
     },
 
+    infoIsOpen: function () {
+        var dialog = this.game.cardInfoDialog;
+        return dialog != null && dialog.isOpen();
+    },
+
+    /**
+     * A message can wait for the player to open a card's information window, or to close it again.  Nothing tells
+     * anybody when that happens, so it is looked for each time the screen is drawn.
+     */
+    watchInfoWindow: function () {
+        var message = this.currentMessage;
+        if (message == null || this.step == null || this.game.replayMode || this.ackFailedFor === this.step)
+            return;
+        var open = this.infoIsOpen();
+        var was = this.infoWasOpen;
+        this.infoWasOpen = open;
+        if (message.advance == "inspect" && open && !was) {
+            var wanted = message.advanceCard == null ? null : (this.step.cards || {})[message.advanceCard];
+            var shown = this.game.cardInfoDialog.card;
+            if (wanted == null || (shown != null && ("" + shown.cardId) == ("" + wanted)))
+                this.next();
+        } else if (message.advance == "close" && !open) {
+            this.next();
+        }
+    },
+
     /** @return whether there is anything on the screen that needs keeping in place */
     draw: function () {
+        this.watchInfoWindow();
         var cards = this.step != null && this.step.cards != null ? this.step.cards : {};
         var boxes = [];
         for (var i = 0; i < (this.highlightAnchors || []).length; i++) {

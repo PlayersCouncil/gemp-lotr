@@ -75,7 +75,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private final GameJournal _journal = new GameJournal(player -> SeatOf(player).key());
     private GameJournal _following;
     private int _answersFollowed;
+    private int _notesFollowed;
     private String _followProblem;
+    private java.util.function.Consumer<GameJournal.Entry> _noteFollower;
+    private java.util.function.BiPredicate<String, Phase> _askToPass;
 
     /**
      * @param humanPlayer The name of the player in the scenario's "human" seat.
@@ -171,8 +174,27 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _journal.replayRandomFrom(earlier);
     }
 
+    /**
+     * Has somebody handed each note of a journal this game follows, at the point where it was written.  Notes are
+     * about whatever runs the game, so it is for whatever runs the game to act on them.
+     */
+    public void OnNote(java.util.function.Consumer<GameJournal.Entry> follower) {
+        _noteFollower = follower;
+    }
+
+    /**
+     * Has a player asked to pass in a phase they would otherwise be passed through, whenever this says so (see
+     * ScenarioDirector.asksToPass).  It is not asked until the board has been laid out.
+     */
+    public void AskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
+        _askToPass = askToPass;
+    }
+
     /** How many of the earlier game's answers this one was given. */
     public int AnswersFollowed() { return _answersFollowed; }
+
+    /** Whether the earlier game it followed took this one anywhere: an answer given, or a note acted on. */
+    public boolean FollowedAnything() { return _answersFollowed > 0 || _notesFollowed > 0; }
 
     /**
      * @return Why this game could not follow the earlier one to its end; null if it did (or was not asked to).  A
@@ -248,7 +270,18 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     private void follow(GameJournal earlier) {
-        for (GameJournal.Entry answer : earlier.answers()) {
+        for (GameJournal.Entry answer : earlier.entries()) {
+            if (answer.kind() == GameJournal.Kind.NOTE && _noteFollower != null) {
+                try {
+                    _noteFollower.accept(answer);
+                    _notesFollowed++;
+                } catch (RuntimeException exp) {
+                    _followProblem = "the note \"" + answer.detail() + " " + answer.value() + "\" could not be followed: " + exp;
+                    return;
+                }
+            }
+            if (answer.kind() != GameJournal.Kind.ANSWER)
+                continue;
             Seat seat = answer.player().equals(Seat.FREEPS.key()) ? Seat.FREEPS : Seat.SHADOW;
             String player = Player(seat);
             AwaitingDecision decision = userFeedback().getAwaitingDecision(player);
@@ -308,6 +341,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         // scripted opponent is only ever asked when it has something it could do.
         _game.setPlayerAutoPassSettings(HumanPlayer(), EnumSet.copyOf(_def.autoPass.isEmpty() ? EnumSet.noneOf(Phase.class) : _def.autoPass));
         _game.setPlayerAutoPassSettings(OpponentPlayer(), EnumSet.allOf(Phase.class));
+        //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand
+        _game.setAskToPass((player, phase) -> _arranged && _askToPass != null && _askToPass.test(player, phase));
 
         for (Seat seat : Seat.values()) {
             try {

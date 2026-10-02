@@ -410,4 +410,161 @@ public class ScenarioParserTest {
             assertTrue(exp.getMessage(), exp.getMessage().contains("the shadow seat needs a Ring-bearer"));
         }
     }
+
+    @Test
+    public void aStepCanBeAPauseAndAPauseCanEndInAChoice() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			pause: true
+                			when: action, phase(fellowship)
+                			messages: [
+                				Think about it.
+                				{
+                					text: Well?
+                					choices: {
+                						plan: I have a plan
+                						help: Help me
+                					}
+                				}
+                			]
+                		}
+                		{
+                			if: help
+                			when: freeps, action
+                			allow: pass
+                		}
+                		{
+                			unless: help
+                			when: freeps, action
+                		}
+                	]
+                """);
+        Step pause = def.steps.get(0);
+        assertTrue(pause.pause);
+        assertEquals("A pause is over one of the player's own decisions", Seat.FREEPS, pause.when.seat);
+        assertEquals(List.of("plan", "help"), List.copyOf(pause.messages.get(1).choices.keySet()));
+        assertEquals("Help me", pause.messages.get(1).choices.get("help"));
+        assertEquals(List.of("plan", "help"), def.flags);
+        assertEquals(List.of("help"), def.steps.get(1).onlyIf);
+        assertEquals(List.of("help"), def.steps.get(2).unless);
+
+        rejects("a pause is read, not answered", """
+                	steps: [
+                		{
+                			pause: true
+                			messages: Read me.
+                			allow: pass
+                		}
+                	]
+                """);
+        rejects("only a step with 'pause: true' can offer a choice", """
+                	steps: [
+                		{
+                			messages: [
+                				{
+                					text: Well?
+                					choices: {
+                						a: A
+                						b: B
+                					}
+                				}
+                			]
+                		}
+                	]
+                """);
+        rejects("no earlier step offers a choice called 'help'", """
+                	steps: [
+                		{
+                			if: help
+                			when: freeps, action
+                		}
+                	]
+                """);
+        rejects("an opponent's step already waits", """
+                	steps: [
+                		{
+                			pause: true
+                			when: opponent, action
+                			messages: Read me.
+                		}
+                	]
+                """);
+    }
+
+    @Test
+    public void aMessageCanWaitForACardToBeLookedAtAndPointAtPartOfOne() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, action
+                			messages: [
+                				{
+                					text: Right-click on Aragorn.
+                					anchor: card:aragorn
+                					advance: inspect(aragorn)
+                				}
+                				{
+                					text: Now close it.
+                					anchor: ui:cardInfo
+                					advance: close
+                				}
+                				{
+                					text: This is his strength, and these are his wounds.
+                					anchor: card:aragorn
+                					highlight: card:aragorn:strength, card:aragorn:wounds
+                				}
+                			]
+                			allow: play(servant1)?, pass
+                		}
+                	]
+                """);
+        List<Message> messages = def.steps.getFirst().messages;
+        assertEquals(Advance.INSPECT, messages.get(0).advance);
+        assertEquals("aragorn", messages.get(0).advanceCard);
+        assertEquals(Advance.CLOSE, messages.get(1).advance);
+        assertNull(messages.get(2).advance);
+        assertEquals("aragorn", Anchors.cardAlias("card:aragorn:strength"));
+        assertEquals("strength", Anchors.printedPart("card:aragorn:strength"));
+        assertNull("Wounds lie on a card; they are not printed on it", Anchors.printedPart("card:aragorn:wounds"));
+        assertTrue(def.steps.getFirst().allow.answers.get(0).ifOffered());
+        assertFalse(def.steps.getFirst().allow.answers.get(1).ifOffered());
+        assertTrue(ScenarioValidator.validate(def, ScenarioTesting.library()).isEmpty());
+        assertArrayEquals(CardFaces.region(CardFaces.Frame.CHARACTER, "strength"),
+                CardFaces.region(def, "aragorn", "strength", ScenarioTesting.library()), 0);
+
+        rejects("'elbow' is not a part of a card", """
+                	steps: [
+                		{
+                			messages: [
+                				{
+                					text: Look.
+                					highlight: card:aragorn:elbow
+                				}
+                			]
+                		}
+                	]
+                """);
+        //What is printed on a card depends on the kind of card, which only the card library knows
+        ScenarioDefinition wrong = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			messages: [
+                				{
+                					text: An event has no vitality.
+                					highlight: card:servant1:vitality
+                				}
+                			]
+                		}
+                	]
+                """);
+        List<String> problems = ScenarioValidator.validate(wrong, ScenarioTesting.library());
+        assertEquals(problems.toString(), 1, problems.size());
+        assertTrue(problems.getFirst(), problems.getFirst().contains("'vitality' is not something printed on Servant of the Secret Fire"));
+    }
+
+    /** The same as assertRejected, with the reason first: easier to read when the scenario runs to several lines. */
+    private static void rejects(String messageFragment, String rest) {
+        assertRejected(rest, messageFragment);
+    }
 }

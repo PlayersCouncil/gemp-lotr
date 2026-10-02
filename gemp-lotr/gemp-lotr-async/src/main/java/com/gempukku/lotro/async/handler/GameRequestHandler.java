@@ -176,14 +176,17 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/&lt;id&gt;/scenarioAck (form: step) - in a scenario's game, the person has read what one of the
-     * opponent's steps had to say, and the opponent may now act.  step is the number the step event carried.
+     * POST /game/&lt;id&gt;/scenarioAck (form: step, choice) - in a scenario's game, the person has read a step that
+     * waits to be read: what one of the opponent's steps had to say (the opponent may now act), or a pause over a
+     * decision of their own.  step is the number the step event carried; choice, if the step ended in a choice, is
+     * the name of the button they pressed.
      */
     private void scenarioAcknowledge(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
         String participantId = getFormParameterSafely(postDecoder, "participantId");
         String step = getFormParameterSafely(postDecoder, "step");
+        String choice = getFormParameterSafely(postDecoder, "choice");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
@@ -196,7 +199,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         } catch (NumberFormatException exp) {
             throw new HttpProcessingException(400);
         }
-        gameMediator.scenarioAcknowledged(resourceOwner, stepNumber);
+        gameMediator.scenarioAcknowledged(resourceOwner, stepNumber, choice == null || choice.isEmpty() ? null : choice);
 
         responseWriter.writeXmlResponse(null);
         } finally {

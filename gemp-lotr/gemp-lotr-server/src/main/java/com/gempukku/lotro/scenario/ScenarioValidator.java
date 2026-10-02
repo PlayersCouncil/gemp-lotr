@@ -79,12 +79,25 @@ public final class ScenarioValidator {
                 requirements(step.allow.passWhen, context + ".allow.passWhen", problems);
         }
         for (Step step : def.steps)
-            for (ScenarioDefinition.Message message : step.messages)
+            for (ScenarioDefinition.Message message : step.messages) {
                 if (message.zoom != null) {
                     String problem = CardFaces.check(def, message.zoom, library);
                     if (problem != null)
                         problems.add("step " + step.label() + ".messages.zoom: " + problem);
                 }
+                List<String> anchors = new ArrayList<>(message.highlight);
+                anchors.addAll(message.avoid);
+                if (message.anchor != null)
+                    anchors.add(message.anchor);
+                for (String anchor : anchors) {
+                    String part = Anchors.printedPart(anchor);
+                    String problem = part == null ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
+                    if (problem != null)
+                        problems.add("step " + step.label() + ".messages: " + anchor + ": " + problem);
+                }
+            }
+        for (int i = 0; i < def.orders.size(); i++)
+            requirements(def.orders.get(i).when().require, "opponent.orders[" + (i + 1) + "].when.require", problems);
         requirements(def.outcome.win, "outcome.win", problems);
         requirements(def.outcome.lose, "outcome.lose", problems);
 

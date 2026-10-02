@@ -42,6 +42,7 @@ public class DefaultLotroGame implements LotroGame {
 
     private final Set<String> _allPlayers;
     private final Map<String, Set<Phase>> _autoPassConfiguration = new HashMap<>();
+    private java.util.function.BiPredicate<String, Phase> _askToPass;
 
     private String _winnerPlayerId;
     private final Map<String, String> _losers = new HashMap<>();
@@ -171,6 +172,8 @@ public class DefaultLotroGame implements LotroGame {
 
     @Override
     public boolean shouldAutoPass(String playerId, Phase phase) {
+        if (_askToPass != null && _askToPass.test(playerId, phase))
+            return false;
         final Set<Phase> passablePhases = _autoPassConfiguration.get(playerId);
         if (passablePhases == null)
             return false;
@@ -398,5 +401,13 @@ public class DefaultLotroGame implements LotroGame {
 
     public void setPlayerAutoPassSettings(String playerId, Set<Phase> phases) {
         _autoPassConfiguration.put(playerId, phases);
+    }
+
+    /**
+     * Has a player asked to pass in a phase even though their settings would pass it for them, whenever this says
+     * so.  It is asked each time the question comes up, so the answer can depend on how the game stands.
+     */
+    public void setAskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
+        _askToPass = askToPass;
     }
 }

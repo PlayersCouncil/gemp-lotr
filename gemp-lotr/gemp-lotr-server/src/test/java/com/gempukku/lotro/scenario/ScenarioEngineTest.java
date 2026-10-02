@@ -535,4 +535,233 @@ public class ScenarioEngineTest {
         assertTrue(report.decisions.get(2).decision(), report.decisions.get(2).decision().startsWith("freeps, arbitrary"));
         assertEquals(List.of("1", "2", "3", "4"), report.decisions.stream().map(ScenarioRunReport.Decision::step).toList());
     }
+
+    /** A pause that ends in a choice, and a step for each thing that can be chosen. */
+    private static final String CHOICE = """
+            	setup: {
+            		freeps: {
+            			hand: gandalf, aragorn
+            		}
+            	}
+            	steps: [
+            		{
+            			pause: true
+            			when: freeps, action, phase(fellowship)
+            			messages: [
+            				Somebody is coming with us.
+            				{
+            					text: Who?
+            					choices: {
+            						wizard: Gandalf
+            						king: Aragorn
+            					}
+            				}
+            			]
+            		}
+            		{
+            			if: wizard
+            			when: freeps, action, phase(fellowship)
+            			allow: play(gandalf)
+            		}
+            		{
+            			unless: wizard
+            			when: freeps, action, phase(fellowship)
+            			allow: play(ARAGORN)
+            		}
+            		{
+            			when: freeps, action, phase(fellowship)
+            			allow: pass
+            			end: complete
+            		}
+            	]
+            """;
+
+    @Test
+    public void aPauseIsReadAndItsDecisionGoesToTheStepBehindIt() throws Exception {
+        ScenarioTable table = new ScenarioTable(ScenarioTesting.parse(CHOICE.replace("ARAGORN", "aragorn")), ScenarioTesting.library(),
+                ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+        ScenarioSession session = new ScenarioSession(table);
+        table.Start();
+
+        //The pause is ruled on, and the decision it is read over is still the game's to ask
+        ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+        assertEquals(1, ruling.step().number);
+        assertEquals(List.of("wizard", "king"), List.copyOf(ScenarioSession.ChoicesOf(ruling.step()).keySet()));
+        assertNull(ruling.answer());
+        AwaitingDecision decision = ruling.decision();
+
+        assertFalse("Nothing but the pause in front of them can be read", session.Read(HUMAN, 2, "king"));
+        assertTrue(session.Read(HUMAN, 1, "king"));
+        assertEquals(java.util.Set.of("king"), session.Director().flags());
+
+        //The same decision, now belonging to the step that the choice leads to
+        ruling = session.Ruling(HUMAN);
+        assertSame(decision, ruling.decision());
+        assertEquals(3, ruling.step().number);
+        assertEquals(StepStatus.BYPASSED, session.Director().statuses().get("2"));
+        assertEquals(1, ruling.shown().allowed().size());
+
+        //...and written down, for a game that follows this one
+        assertTrue(table.Journal().entries().stream().anyMatch(entry ->
+                entry.kind() == com.gempukku.lotro.game.GameJournal.Kind.NOTE && entry.value().equals("1:king")));
+    }
+
+    @Test
+    public void everyWayThroughAScenarioIsPlayed() throws Exception {
+        ScenarioRunReport report = ScenarioTesting.run(CHOICE.replace("ARAGORN", "aragorn"));
+        assertTrue(report.toString(), report.passed());
+        assertEquals(RunnerLevel.FULL, report.reached);
+        //Each way bypasses one of the two steps; between them they reach both
+        assertEquals(StepStatus.MATCHED, report.steps.get("2"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("3"));
+        assertEquals(2, report.decisions.stream().filter(decision -> decision.number() < 0 && decision.decision().startsWith("Way through")).count());
+        assertTrue(report.toString(), report.toString().contains("says: Who?"));
+
+        //A mistake down one way is found, and said to be down that way
+        assertFails(ScenarioTesting.run(CHOICE.replace("ARAGORN", "boromir")), "[choosing king] step 3");
+
+        //A step that no way reaches is a mistake
+        assertFails(ScenarioTesting.run(CHOICE.replace("ARAGORN", "aragorn").replace("unless: wizard", "if: wizard, king")), "was never reached");
+    }
+
+    @Test
+    public void thePlayerIsAskedToPassWhereTheScriptIsAboutThePass() throws Exception {
+        //Every phase is passed for the player, and the opponent is never asked when it has nothing to play; but
+        // each is asked where the next step is about that very pass
+        ScenarioRunReport report = ScenarioTesting.run("""
+                	options: {
+                		autoPass: true
+                	}
+                	setup: {
+                		shadow: {
+                			minions: runner1
+                		}
+                	}
+                	steps: [
+                		{
+                			when: opponent, action, phase(shadow)
+                			answer: pass
+                		}
+                		{
+                			when: freeps, action, phase(archery)
+                			allow: pass
+                			end: complete
+                		}
+                	]
+                """);
+        assertTrue(report.toString(), report.passed());
+        List<String> asked = report.decisions.stream().map(ScenarioRunReport.Decision::decision).toList();
+        assertEquals(asked.toString(), 2, asked.size());
+        assertTrue(asked.get(0), asked.get(0).startsWith("shadow, action \"Play Shadow action or Pass\" offering nothing but Pass"));
+        assertTrue(asked.get(1), asked.get(1).startsWith("freeps, action \"Play Archery action or Pass\""));
+    }
+
+    @Test
+    public void theOpponentFollowsItsStandingOrdersWhereNoStepSaysWhatToDo() throws Exception {
+        String orders = """
+                	options: {
+                		autoPass: true
+                	}
+                	opponent: {
+                		fallback: pass
+                		orders: [
+                			{
+                				when: action, phase(shadow)
+                				answer: play(marksman), play(runner1)
+                			}
+                		]
+                	}
+                	setup: {
+                		shadow: {
+                			hand: runner1, runner2
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, assign
+                			allow: ASSIGNMENT
+                			end: complete
+                		}
+                	]
+                """;
+        //The Marksman is not in hand, so the order's second answer is the one taken; and it is taken only once,
+        // because after that the Runner is not on offer either
+        ScenarioRunReport report = ScenarioTesting.run(orders.replace("ASSIGNMENT", "assign(frodo: runner1)"));
+        assertTrue(report.toString(), report.passed());
+        assertTrue(report.toString(), report.decisions.stream().anyMatch(decision ->
+                decision.note() != null && decision.note().contains("standing orders")));
+
+        //An order is the opponent's
+        try {
+            ScenarioTesting.parse(orders.replace("when: action, phase(shadow)", "when: freeps, action"));
+            fail();
+        } catch (ScenarioFormatException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().contains("orders are the opponent's"));
+        }
+    }
+
+    @Test
+    public void anAllowedAnswerCanBeOneThatMayNotBeOnOffer() throws Exception {
+        String either = """
+                	setup: {
+                		freeps: {
+                			hand: gandalf
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: ALLOW
+                			answer: play(gandalf)
+                			end: complete
+                		}
+                	]
+                """;
+        assertTrue(ScenarioTesting.run(either.replace("ALLOW", "play(gandalf)?, play(aragorn)?")).passed());
+        assertFails(ScenarioTesting.run(either.replace("ALLOW", "play(gandalf), play(aragorn)")), "no such action is on offer");
+        //...but something it allows has to be
+        assertFails(ScenarioTesting.run(either.replace("ALLOW", "play(aragorn)?, play(boromir)?")), "allows nothing that this decision offers");
+    }
+
+    @Test
+    public void thePersonMayTakeAnAllowedRouteTheRunnerDoesNot() throws Exception {
+        //Two cards, either first.  The runner plays Gandalf and then Aragorn.
+        ScenarioTable table = new ScenarioTable(ScenarioTesting.parse("""
+                	setup: {
+                		freeps: {
+                			hand: gandalf, aragorn
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: play(gandalf)?, play(aragorn)?
+                			answer: play(gandalf)
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: play(gandalf)?, play(aragorn)?
+                			answer: play(aragorn)
+                		}
+                	]
+                """), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+        ScenarioSession session = new ScenarioSession(table);
+        table.Start();
+
+        //A person plays Aragorn first, which the step allows
+        ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+        assertEquals(2, ruling.shown().allowed().size());
+        table.PlayerDecided(HUMAN, ruling.shown().allowed().get(1));
+        assertTrue(table.Card("aragorn").getZone().isInPlay());
+
+        //The runner's answer to the second step (Aragorn) is no longer on offer.  That is nothing to a person:
+        // the step still applies, and still allows only what it allows
+        ruling = session.Ruling(HUMAN);
+        assertEquals(2, ruling.step().number);
+        assertNull(ruling.problem());
+        assertNotNull(ruling.noAnswer());
+        assertNull(ruling.answer());
+        assertEquals("Only Gandalf is left to play, and passing is still not allowed", 1, ruling.shown().allowed().size());
+        assertFalse(ruling.shown().passAllowed());
+    }
 }

@@ -26,9 +26,10 @@ import java.util.TreeMap;
  * the game journal.random(whatever random it would have used) as its random.
  *
  * To follow an earlier journal: call replayRandomFrom(earlier) before the game starts, so that its random outcomes
- * come out as they did before, then give the game each of earlier.answers() in turn, checking each against the
- * decision it is for with matches() and turning it back into an answer to that decision with concrete().  The new journal fills up as the game is replayed, so at the end it is a
- * complete journal in its own right.
+ * come out as they did before, then go through earlier.entries() in order.  Give the game each answer, checking it
+ * against the decision it is for with matches() and turning it back into an answer to that decision with concrete();
+ * and do again whatever each note says was done.  The new journal fills up as the game is replayed, so at the end
+ * it is a complete journal in its own right.
  *
  * Players are written down by whatever keyOf says, so that a journal does not have to be replayed by the same people
  * (a scenario writes "freeps" and "shadow").  Cards are written down by card ID.  Those are handed out in a fixed
@@ -51,7 +52,13 @@ public class GameJournal implements DecisionObserver {
         /** The players were put in a random order.  value is that order. */
         ORDER("O"),
         /** A point somebody wanted to be able to find again.  value is its name.  Has no effect on a replay. */
-        MARK("M");
+        MARK("M"),
+        /**
+         * Something that steered whatever is running the game, not the game itself (a scenario's reader choosing
+         * which way through it to take).  detail says what kind of thing; value what.  The game takes no notice;
+         * whoever follows the journal is expected to do the same thing again at the same point.
+         */
+        NOTE("N");
 
         private final String code;
 
@@ -104,6 +111,13 @@ public class GameJournal implements DecisionObserver {
     /** The answers, in the order they were given. */
     public List<Entry> answers() {
         return _entries.stream().filter(entry -> entry.kind() == Kind.ANSWER).toList();
+    }
+
+    /**
+     * Writes down something that happened outside the game and has to happen again when the journal is followed.
+     */
+    public void note(String playerId, String detail, String value) {
+        _entries.add(new Entry(Kind.NOTE, playerId == null ? "-" : _keys.keyOf(playerId), detail, value));
     }
 
     /**

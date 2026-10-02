@@ -847,4 +847,134 @@ public class LiveScenarioTest {
                     again.Table().GetWoundsOn(again.Table().Card("frodo"))));
         }
     }
+
+    @Test
+    public void APauseIsReadBeforeItsDecisionIsAsked() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	setup: {
+                		freeps: {
+                			hand: gandalf, aragorn
+                		}
+                	}
+                	steps: [
+                		{
+                			pause: true
+                			when: freeps, action, phase(fellowship)
+                			messages: [
+                				Somebody is coming with us.
+                				{
+                					text: Who?
+                					choices: {
+                						wizard: Gandalf
+                						king: Aragorn
+                					}
+                				}
+                			]
+                		}
+                		{
+                			if: wizard
+                			when: freeps, action, phase(fellowship)
+                			allow: play(gandalf)
+                		}
+                		{
+                			if: king
+                			when: freeps, action, phase(fellowship)
+                			allow: play(aragorn)
+                		}
+                		{
+                			checkpoint: true
+                			when: freeps, action, phase(fellowship)
+                			allow: pass
+                		}
+                		{
+                			pause: true
+                			when: freeps
+                			messages: That is all.
+                			end: complete
+                		}
+                	]
+                """);
+        LiveScenario first = live(def);
+        LotroGameMediator mediator = start(first);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+
+        //The pause is on the screen, and the decision it comes before has not been put to the person
+        assertEquals(1, client.step.getIntValue("step"));
+        assertTrue(client.step.getBooleanValue("pause"));
+        assertTrue(client.step.getBooleanValue("acknowledge"));
+        assertNull(client.decision);
+        List<JSONObject> messages = client.step.getList("messages", JSONObject.class);
+        assertEquals("next", messages.get(0).getString("advance"));
+        assertEquals(List.of("wizard", "king"), messages.get(1).getList("choices", JSONObject.class).stream().map(choice -> choice.getString("name")).toList());
+
+        //Read, choosing: the step the choice leads to arrives, and its decision after it
+        mediator.scenarioAcknowledged(client.player, 1, "king");
+        client.step = null;
+        client.await();
+        assertEquals(3, client.step.getIntValue("step"));
+        assertNotNull(client.decision);
+        assertTrue(client.stepAt < client.decisionAt);
+        client.answerAsAllowed();
+        client.await();
+        assertEquals(4, client.step.getIntValue("step"));
+        assertTrue(first.Table().Card("aragorn").getZone().isInPlay());
+
+        //A game brought back to the checkpoint has made the same choice
+        GameJournal checkpoint = first.CheckpointJournal();
+        LiveScenario again = live(def, checkpoint);
+        start(again);
+        assertNull(again.Table().FollowProblem());
+        assertEquals(Integer.valueOf(4), again.ResumedAt());
+        assertEquals(java.util.Set.of("king"), again.Session().Director().flags());
+        assertTrue(again.Table().Card("aragorn").getZone().isInPlay());
+
+        //A pause can be the last thing in a scenario: reading it ends the game
+        client.answerAsAllowed();
+        client.await();
+        assertEquals(5, client.step.getIntValue("step"));
+        assertNull(client.decision);
+        client.acknowledge();
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("complete", client.end.getString("result"));
+        assertTrue(mediator.isFinished());
+        assertEquals(HUMAN, mediator.getWinner());
+    }
+
+    @Test
+    public void AFailedScenarioCanSayWhy() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	options: {
+                		opponentDelayMs: 0
+                	}
+                	coverage: guided
+                	outcome: {
+                		lose: {
+                			type: canSpot
+                			filter: name(Gandalf)
+                		}
+                		loseMessage: You were told to leave the wizard at home.
+                	}
+                	setup: {
+                		freeps: {
+                			hand: gandalf
+                		}
+                	}
+                """);
+        LotroGameMediator mediator = start(live(def));
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        var options = client.decision.getAwaitingDecision().getDecisionParameters();
+        client.answer(options.get("actionId")[0]);
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("failed", client.end.getString("result"));
+        assertTrue(client.end.getString("message"), client.end.getString("message").contains("leave the wizard at home"));
+    }
 }

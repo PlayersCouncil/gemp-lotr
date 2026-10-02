@@ -28,6 +28,10 @@ import java.util.Map;
  * answered and the script has moved on.  Only when no waiting decision fits the current step are they ruled to be
  * outside the script.
  *
+ * A step can be a pause: something for the player to read before the decision is theirs to answer.  The decision a
+ * pause applies to is ruled on but still not put to its player.  When whoever is running the game says the pause
+ * has been read (Read), the script moves on and the decision is ruled on afresh, for the step behind the pause.
+ *
  * The session answers nothing itself.  A headless run (ScenarioRunner) reads each ruling and answers both seats from
  * it; a live game (LiveScenario) shows the human's ruling to the human and plays the opponent's.
  */
@@ -37,13 +41,19 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
      * @param step The step the decision belongs to; null if the script has nothing to say about it.
      * @param shown What the step shows the player.  Null if there is no step.  If the step does not fit the decision
      *              (see problem) this still carries the step's messages, with no restriction on the answer.
-     * @param answer The answer the script gives, in the game's own terms; null if it gives none.
+     * @param answer The answer the script gives, in the game's own terms; null if it gives none.  With no step, this is
+     *               what the opponent's standing orders say.
      * @param problem Why the script could not be applied to the decision; null if it could.  This is always a
      *                mistake in the scenario: an answer the decision does not offer, a card that is not where the
      *                step expects.
+     * @param noAnswer For the person's own decision: why the answer the script has for it could not be given; null
+     *                 if it could, or the script has none.  That answer is only there for a run with nobody at the
+     *                 table, and a person is free to have got here by another allowed route (playing the second
+     *                 copy of a card first), so this is a mistake only for such a run.  What the step shows and
+     *                 allows stands regardless.
      */
     public record Ruling(String player, AwaitingDecision decision, Step step, ScenarioDirector.Presentation shown,
-                         String answer, String problem) { }
+                         String answer, String problem, String noAnswer) { }
 
     /** Somebody who wants to know as soon as there is a ruling, without waiting to be the one who answers. */
     public interface Listener {
@@ -77,6 +87,53 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         _director = new ScenarioDirector(table);
         table.Observe(this);
         table.Arbitrate(this);
+        table.AskToPass(_director::asksToPass);
+        table.OnNote(this::follow);
+    }
+
+    private static final String READ = "read";
+
+    /**
+     * The person has read a pause (a step that is read, not answered).  The script moves on, and the decision the
+     * pause was read over, which has been held back all this time, is ruled on again and put to them: it belongs to
+     * whichever step comes next.
+     * @param choice The name they chose, if the pause ended in a choice.  Anything that is not one of its choices
+     *               (null included) counts as the first of them.
+     * @return Whether that player had such a pause in front of them.
+     */
+    public boolean Read(String player, int stepNumber, String choice) {
+        Ruling ruling = _rulings.get(player);
+        if (ruling == null || ruling.step() == null || !ruling.step().pause || ruling.step().number != stepNumber)
+            return false;
+        pass(ruling, choice);
+        //(nothing in the game has changed, but as far as its decisions go this is the game coming to rest again)
+        _table.userFeedback().atRest();
+        return true;
+    }
+
+    /**
+     * @return The choices a pause ends in, as name -> what its button says; empty if it does not end in one.
+     */
+    public static Map<String, String> ChoicesOf(Step step) {
+        return step.pause && !step.messages.isEmpty() ? step.messages.getLast().choices : Map.of();
+    }
+
+    private void pass(Ruling ruling, String choice) {
+        Step step = ruling.step();
+        Map<String, String> choices = ChoicesOf(step);
+        String chosen = choices.isEmpty() ? null : choices.containsKey(choice) ? choice : choices.keySet().iterator().next();
+        //Written down so that a game following this one's journal reads the same pause the same way
+        _table.Journal().note(ruling.player(), READ, step.number + (chosen == null ? "" : ":" + chosen));
+        _director.read(step, chosen);
+        _rulings.remove(ruling.player());
+    }
+
+    private void follow(com.gempukku.lotro.game.GameJournal.Entry note) {
+        if (!note.detail().equals(READ))
+            return;
+        String[] parts = note.value().split(":", 2);
+        Read(_table.Player(note.player().equals(Seat.FREEPS.key()) ? Seat.FREEPS : Seat.SHADOW),
+                Integer.parseInt(parts[0]), parts.length > 1 ? parts[1] : null);
     }
 
     public ScenarioTable Table() { return _table; }
@@ -112,6 +169,9 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         for (Map.Entry<String, AwaitingDecision> entry : waiting.entrySet()) {
             Ruling before = _rulings.get(entry.getKey());
             if (before != null && before.decision() == entry.getValue()) {
+                //Still being read over: the decision stays where it is until the pause has been read
+                if (before.step() != null && before.step().pause)
+                    continue;
                 //Asked again because its answer was rejected: the ruling stands
                 tell(before);
                 released.add(entry.getKey());
@@ -144,7 +204,10 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
     private void accept(Ruling ruling, List<String> released) {
         _rulings.put(ruling.player(), ruling);
         tell(ruling);
-        released.add(ruling.player());
+        //A pause is read before the decision it is over is put to anybody: the decision is held back, and comes
+        // round again once the pause has been read (see Read)
+        if (ruling.step() == null || !ruling.step().pause)
+            released.add(ruling.player());
     }
 
     private void tell(Ruling ruling) {
@@ -157,6 +220,7 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         ScenarioDirector.Presentation shown = null;
         String answer = null;
         String problem = null;
+        String noAnswer = null;
         try {
             //Once a step has ended the scenario, the script has nothing more to say
             if (_director.end() == null)
@@ -164,12 +228,24 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             if (step != null) {
                 try {
                     shown = _director.present(step, player, decision);
-                    answer = _director.scriptedAnswer(step, decision);
                 } catch (ScenarioScriptException exp) {
                     problem = exp.getMessage();
                     shown = _director.presentUnrestricted(step);
-                    answer = null;
                 }
+                if (problem == null) {
+                    try {
+                        answer = _director.scriptedAnswer(step, decision);
+                    } catch (ScenarioScriptException exp) {
+                        //The opponent has nothing but the script's answer to go on.  The person has their own.
+                        if (player.equals(_table.HumanPlayer()))
+                            noAnswer = exp.getMessage();
+                        else
+                            problem = exp.getMessage();
+                    }
+                }
+            } else if (_director.end() == null && !player.equals(_table.HumanPlayer())) {
+                //No step covers it: the opponent's standing orders may
+                answer = _director.order(player, decision);
             }
         } catch (RuntimeException exp) {
             //A mistake in the scenario must not take the game down with it
@@ -178,8 +254,9 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             step = null;
             shown = null;
             answer = null;
+            noAnswer = null;
         }
-        return new Ruling(player, decision, step, shown, answer, problem);
+        return new Ruling(player, decision, step, shown, answer, problem, noAnswer);
     }
 
     @Override
@@ -190,6 +267,13 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         Ruling ruling = _rulings.get(player);
         if (ruling == null || ruling.decision() != decision)
             return;
+        //Answered over a pause that was never read: the answer belongs to the step behind it
+        while (ruling.step() != null && ruling.step().pause) {
+            pass(ruling, null);
+            if (_director.end() != null)
+                break;
+            ruling = rule(player, decision);
+        }
         _rulings.remove(player);
         if (ruling.step() != null)
             _director.answered(ruling.step());

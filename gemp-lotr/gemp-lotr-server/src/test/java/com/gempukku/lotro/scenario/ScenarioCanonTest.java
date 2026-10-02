@@ -63,8 +63,12 @@ public class ScenarioCanonTest {
 
         //-Dscenario.explore=<part of a file name> prints what the game asks for beyond that scenario's script
         String explore = System.getProperty("scenario.explore");
+        //-Dscenario.choose=<name,name> says what to choose at each choice the exploring comes to (the first thing
+        // on offer otherwise)
+        String choose = System.getProperty("scenario.choose", "");
         if (explore != null && _path.toString().contains(explore))
-            System.out.println("EXPLORING " + _path.getFileName() + "\n" + ScenarioRunner.explore(def, ScenarioTesting.library(), format));
+            System.out.println("EXPLORING " + _path.getFileName() + "\n" + ScenarioRunner.explore(def, ScenarioTesting.library(), format,
+                    choose.isEmpty() ? List.of() : List.of(choose.split(","))));
 
         ScenarioRunReport report = ScenarioRunner.run(def, ScenarioTesting.library(), format);
         assertTrue(report.toString(), report.passed());

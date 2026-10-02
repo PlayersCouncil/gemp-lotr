@@ -2,6 +2,7 @@ package com.gempukku.lotro.scenario;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
  * Message text can quote the game instead of hard-coding a number that a later change to a card would make wrong:
  *
  *     {twilight} {burdens} {threats} {site} {turn}                 totals
+ *     {fpStrength} {shadowStrength}                                each side's total in the skirmish being fought
  *     {strength:x} {vitality:x} {wounds:x} {cost:x} {title:x}      a card, by alias
  *
  * Strength, vitality and cost are the current values, with everything that modifies them applied.  Vitality is what
@@ -20,7 +22,7 @@ public final class Templates {
     private Templates() { }
 
     private static final Pattern TEMPLATE = Pattern.compile("\\{([A-Za-z]+)(?::([^{}]+))?}");
-    private static final Set<String> TOTALS = Set.of("twilight", "burdens", "threats", "site", "turn");
+    private static final Set<String> TOTALS = Set.of("twilight", "burdens", "threats", "site", "turn", "fpstrength", "shadowstrength");
     private static final Set<String> PER_CARD = Set.of("strength", "vitality", "wounds", "cost", "title");
 
     public static void check(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {
@@ -55,6 +57,10 @@ public final class Templates {
                     case "threats" -> String.valueOf(table.GetThreats());
                     case "site" -> String.valueOf(table.GetCurrentSiteNumber());
                     case "turn" -> String.valueOf(table.gameState().getTurnNumber());
+                    case "fpstrength" -> table.gameState().getSkirmish() == null ? "0"
+                            : String.valueOf(RuleUtils.getFellowshipSkirmishStrength(table.game()));
+                    case "shadowstrength" -> table.gameState().getSkirmish() == null ? "0"
+                            : String.valueOf(RuleUtils.getShadowSkirmishStrength(table.game()));
                     default -> matcher.group();
                 };
             } else {

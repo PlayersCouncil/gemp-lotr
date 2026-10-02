@@ -649,16 +649,32 @@ public class LotroGameMediator {
     }
 
     /**
-     * The person playing a scenario has read what one of the opponent's steps had to say, so the opponent may act.
+     * The person playing a scenario has read a step that was waiting to be read: what one of the opponent's steps
+     * had to say, so the opponent may act; or a pause over a decision of their own.
+     * @param choice The button they pressed, if the step ended in a choice; null otherwise.
      */
-    public void scenarioAcknowledged(Player player, int stepNumber) {
+    public void scenarioAcknowledged(Player player, int stepNumber, String choice) {
         _writeLock.lock();
         try {
-            if (_scenario != null && !_lotroGame.isFinished())
-                _scenario.Acknowledge(player.getName(), stepNumber);
+            if (_scenario != null && !_lotroGame.isFinished()) {
+                try {
+                    _scenario.Acknowledge(player.getName(), stepNumber, choice);
+                } catch (RuntimeException exp) {
+                    //Reading a pause sets the game's decisions moving again, and that can go wrong like any answer
+                    LOG.error("Error in scenario " + _scenario.Definition().id + ", game " + _gameId, exp);
+                    _lotroGame.cancelGame();
+                    _scenario.Broke("the scenario threw " + exp);
+                }
+                //A pause can be the last thing in a scenario
+                scenarioAfterActions();
+            }
         } finally {
             _writeLock.unlock();
         }
+    }
+
+    public void scenarioAcknowledged(Player player, int stepNumber) {
+        scenarioAcknowledged(player, stepNumber, null);
     }
 
     public GameState getGameState() {

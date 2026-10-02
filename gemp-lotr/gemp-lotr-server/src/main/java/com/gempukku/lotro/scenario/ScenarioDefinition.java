@@ -69,6 +69,10 @@ public final class ScenarioDefinition {
     public final List<RngEntry> rng = new ArrayList<>();
     public final List<Step> steps = new ArrayList<>();
     public final Outcome outcome = new Outcome();
+    /** What the opponent does with a decision no step covers, before it falls back on its fallback. */
+    public final List<Order> orders = new ArrayList<>();
+    /** Every name a choice in the script can set, in the order the script offers them. */
+    public final List<String> flags = new ArrayList<>();
 
     public record CardDef(String alias, String blueprintId, Seat owner) { }
 
@@ -142,9 +146,26 @@ public final class ScenarioDefinition {
      * @param text USE: a fragment of the action's text, when the card offers more than one.  OPTION: the option's
      *             text, or "#n" for the n-th option counting from 1.  RAW: the literal answer.
      * @param assignments ASSIGN: Free Peoples character -> the minions assigned to it.
+     * @param ifOffered In an 'allow': the answer is allowed whenever the decision offers it, and it is no mistake if
+     *                  the decision does not (the other copy of a card that has already been played, say).
      */
     public record Answer(AnswerKind kind, List<String> cards, String text, int number,
-                         Map<String, List<String>> assignments, String source) { }
+                         Map<String, List<String>> assignments, String source, boolean ifOffered) {
+        public Answer(AnswerKind kind, List<String> cards, String text, int number,
+                      Map<String, List<String>> assignments, String source) {
+            this(kind, cards, text, number, assignments, source, false);
+        }
+
+        public Answer offeredOrNot() {
+            return new Answer(kind, cards, text, number, assignments, source, true);
+        }
+    }
+
+    /**
+     * A standing order: what the opponent does whenever it is asked something that no step covers and this fits.
+     * Orders are tried in the order they are written, and the first whose answer the decision offers is taken.
+     */
+    public record Order(When when, List<Answer> answers, String source) { }
 
     public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS }
 
@@ -156,7 +177,17 @@ public final class ScenarioDefinition {
      */
     public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) { }
 
-    public enum Advance { NEXT, DECISION }
+    /** What takes a message off the screen and brings the next one. */
+    public enum Advance {
+        /** The Next button. */
+        NEXT,
+        /** The answer to the decision: the message stays up while the player answers. */
+        DECISION,
+        /** The player opens a card's information window (right-click, shift-click, or a swipe up). */
+        INSPECT,
+        /** The player closes the card information window again. */
+        CLOSE
+    }
 
     /**
      * A point inside the answering of one decision.  Some decisions take several clicks before anything is sent to
@@ -210,6 +241,13 @@ public final class ScenarioDefinition {
         public String side = "auto";
         /** Null means "decide from position": the last message of a step waits for the decision, the others for Next. */
         public Advance advance;
+        /** INSPECT: the card whose information window has to be opened; null for any card. */
+        public String advanceCard;
+        /**
+         * Buttons the message ends with, in place of Next: name -> what the button says.  Pressing one sets that
+         * name for the rest of the game, for later steps to depend on ('if', 'unless').  Empty for most messages.
+         */
+        public Map<String, String> choices = new LinkedHashMap<>();
         /** When, within the answering of the decision, the message is shown.  Null means at the start. */
         public Moment on;
         /** A card to show large while this message is up; null for none. */
@@ -245,6 +283,15 @@ public final class ScenarioDefinition {
         /** If a decision arrives that matches this while the step is still waiting, the step is given up on. */
         public When skipWhen;
         public boolean checkpoint;
+        /**
+         * A step to be read, not answered: it applies to the player's decision, shows its messages, and once they
+         * have been read the script moves on and the same decision goes to the next step.
+         */
+        public boolean pause;
+        /** Names that all have to have been chosen (see Message.choices) for the step to be part of the game. */
+        public List<String> onlyIf = new ArrayList<>();
+        /** Names of which none may have been chosen. */
+        public List<String> unless = new ArrayList<>();
         public List<DoOp> doOps = new ArrayList<>();
         public List<Message> messages = new ArrayList<>();
         /** Null means the player may answer however they like. */
@@ -274,6 +321,8 @@ public final class ScenarioDefinition {
         /** Card-definition requirements, as JSON array text.  All must hold. */
         public String win;
         public String lose;
+        /** What to say when the scenario is failed; null for the stock line. */
+        public String loseMessage;
         public String offScriptMessage;
         public OffScriptResult offScriptResult = OffScriptResult.RESTART;
     }
