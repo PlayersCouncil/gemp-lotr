@@ -419,6 +419,21 @@ public class ScenarioAuthoringTest {
         }
     }
 
+    private static JSONObject cardNamed(JSONObject state, String alias) {
+        for (Object card : state.getJSONObject("board").getJSONArray("cards"))
+            if (((JSONObject) card).getString("alias").equals(alias))
+                return (JSONObject) card;
+        throw new AssertionError("No card called " + alias);
+    }
+
+    private static List<String> inZone(JSONObject state, String owner, String zone) {
+        List<String> found = new ArrayList<>();
+        for (Object card : state.getJSONObject("board").getJSONArray("cards"))
+            if (((JSONObject) card).getString("owner").equals(owner) && ((JSONObject) card).getString("zone").equals(zone))
+                found.add(((JSONObject) card).getString("alias"));
+        return found;
+    }
+
     private static int wounds(JSONObject state, String alias) {
         for (Object card : state.getJSONObject("board").getJSONArray("cards"))
             if (((JSONObject) card).getString("alias").equals(alias))
@@ -431,8 +446,16 @@ public class ScenarioAuthoringTest {
         JSONObject result = json(authoring.create(player, "my-first", "My First"));
         assertTrue(result.getBooleanValue("rebuilt"));
         JSONObject state = result.getJSONObject("state");
-        assertNull(state.getString("path"));
+        //It has a place from the start, named after it, and a file there once it has been saved
+        assertEquals("users/" + AUTHOR + "/my-first.hjson", state.getString("path"));
+        assertEquals("my-first.hjson", state.getString("file"));
+        assertFalse(state.getBooleanValue("onDisk"));
+        assertFalse(new File(users, "users/" + AUTHOR + "/my-first.hjson").exists());
         assertEquals("My First", state.getJSONObject("draft").getString("title"));
+        //Both Ring-bearers have a Ring
+        assertEquals("oppRing", state.getJSONObject("draft").getJSONObject("ring").getString("shadow"));
+        assertEquals("attached", cardNamed(state, "oppRing").getString("zone"));
+        assertEquals("oppFrodo", cardNamed(state, "oppRing").getString("on"));
 
         Client client = new Client(game());
         client.answer("");
@@ -443,6 +466,7 @@ public class ScenarioAuthoringTest {
         assertEquals(AUTHOR + "/my-first", saved.getString("id"));
         assertTrue(saved.toString(), saved.getBooleanValue("playable"));
         assertFalse(result.getJSONObject("state").getBooleanValue("dirty"));
+        assertTrue(result.getJSONObject("state").getBooleanValue("onDisk"));
         File file = new File(users, "users/" + AUTHOR + "/my-first.hjson");
         assertTrue(file.isFile());
         String text = Files.readString(file.toPath(), StandardCharsets.UTF_8);
@@ -899,6 +923,179 @@ public class ScenarioAuthoringTest {
         assertEquals(1, steps(state).size());
         assertEquals("freeps, action, phase(fellowship), turn(1)", steps(state).getJSONObject(0).getString("when"));
         assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+    }
+
+    /**
+     * A scenario's first step can wait for the opening: the board as it is laid out, before the first turn.  It is
+     * read with nothing drawn; what it does, it does once it has been read; and the first turn's decision is worked
+     * out after that, so that what was drawn can be played.
+     */
+    @Test
+    public void TheOpeningIsReadBeforeTheFirstTurnAndBeforeItsOwnChanges() throws Exception {
+        openBlank();
+        new Client(game());
+        JSONObject opening = new JSONObject(Map.of("when", "opening", "do", "draw(freeps, 2), twilight(3)",
+                "messages", List.of(new JSONObject(Map.of("text", "Before anything is drawn.")))));
+        JSONObject insert = new JSONObject(Map.of("op", "insert", "index", 0, "step", opening));
+        JSONObject state = json(authoring.edit(player, new JSONObject(Map.of("steps", List.of(insert))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(1, steps(state).size());
+        assertEquals("opening", steps(state).getJSONObject(0).getString("when"));
+        assertTrue("The opening is in hand", state.getJSONObject("position").getBooleanValue("inHand"));
+        assertEquals(1, state.getJSONObject("position").getIntValue("step"));
+        assertEquals("Nothing has been drawn while it is being read", List.of("aragorn"), inZone(state, "freeps", "hand"));
+        assertNull("The person is asked nothing yet", state.getJSONObject("waiting").getJSONObject("human"));
+        assertNull(state.getJSONObject("uncovered"));
+
+        Client client = new Client(game());
+        assertNull(client.decision);
+        assertEquals(1, client.lastStep().getIntValue("step"));
+        assertTrue("It is read, and the game waits to be told it has been", client.lastStep().getBooleanValue("acknowledge"));
+        game().scenarioAcknowledged(player, 1);
+        for (int i = 0; i < 100 && client.decision == null; i++) {
+            Thread.sleep(50);
+            client.poll();
+        }
+        assertNotNull("The first turn has begun", client.decision);
+        state = state();
+        assertEquals("The top two of the deck, in the order the scenario declares them",
+                List.of("aragorn", "gandalf", "servant1"), inZone(state, "freeps", "hand"));
+        assertEquals(1, steps(state).size());
+        assertEquals("matched", state.getJSONArray("statuses").getString(0));
+        String offered = state.getJSONObject("waiting").getJSONObject("human").getJSONArray("options").toString();
+        assertTrue("What was drawn is in the first decision: " + offered, offered.contains("play(gandalf)"));
+        assertEquals("(the first turn starts the pool at nothing, whatever was put in it before)", 0, state.getJSONObject("board").getIntValue("twilight"));
+
+        //The script plays itself through it, and the file says it as it was written
+        state = json(authoring.goTo(player, 5)).getJSONObject("state");
+        assertNull(state.getString("notice"), state.getString("notice"));
+        assertEquals(List.of("aragorn", "gandalf", "servant1"), inZone(state, "freeps", "hand"));
+        assertTrue(authoring.source(player).contains("when: opening"));
+        assertTrue(authoring.source(player).contains("do: draw(freeps, 2), twilight(3)"));
+
+        //Only the first step can wait for it
+        JSONObject second = new JSONObject(Map.of("op", "insert", "step", new JSONObject(Map.of("when", "opening", "do", "draw(1)"))));
+        try {
+            authoring.edit(player, new JSONObject(Map.of("steps", List.of(second))).toJSONString(), null);
+            fail();
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("only the first step"));
+        }
+    }
+
+    @Test
+    public void ADraftIsSavedAsAnotherScenarioOrItsFileMoved() throws Exception {
+        openBlank();
+        assertEquals("tutorials/blank.hjson", state().getString("file"));
+
+        //Moved: the same scenario, somewhere else
+        JSONObject result = json(authoring.rename(player, "tutorials/first steps/blank-moved.hjson", true, true));
+        assertEquals("tutorials/first steps/blank-moved.hjson", result.getString("renamed"));
+        assertEquals("tutorials/first steps/blank-moved.hjson", result.getJSONObject("state").getString("path"));
+        assertFalse(new File(canon, "tutorials/blank.hjson").exists());
+        assertTrue(new File(canon, "tutorials/first steps/blank-moved.hjson").isFile());
+        assertEquals("blank", result.getJSONObject("state").getJSONObject("draft").getString("id"));
+        assertNotNull("The library knows it where it now is", library.get("blank"));
+        assertEquals("tutorials/first steps/blank-moved.hjson", library.get("blank").path());
+
+        //To the author's own folder
+        result = json(authoring.rename(player, "blank.hjson", false, true));
+        assertEquals("users/" + AUTHOR + "/blank.hjson", result.getString("renamed"));
+        assertTrue(new File(users, "users/" + AUTHOR + "/blank.hjson").isFile());
+        assertFalse(new File(canon, "tutorials/first steps/blank-moved.hjson").exists());
+        authoring.rename(player, "tutorials/blank.hjson", true, true);
+
+        //Saved as another: a file and an id of its own, and the first one left as it was
+        Client client = new Client(game());
+        client.answer("");
+        result = json(authoring.saveAs(player, "tutorials/Blank Two.hjson", true, true));
+        assertEquals("tutorials/Blank Two.hjson", result.getJSONObject("saved").getString("path"));
+        assertEquals("blank-two", result.getJSONObject("saved").getString("id"));
+        assertEquals("blank-two", result.getJSONObject("state").getJSONObject("draft").getString("id"));
+        assertFalse(result.getJSONObject("state").getBooleanValue("dirty"));
+        assertEquals(1, library.get("blank-two").def().steps.size());
+        assertEquals("The one it was copied from has not been written to", 0, library.get("blank").def().steps.size());
+        assertEquals(List.of(), library.get("blank-two").errors());
+        assertEquals(List.of(), library.get("blank").errors());
+
+        //Not over another scenario, not under another's name, not somewhere a scenario cannot be
+        for (String bad : List.of("tutorials/blank.hjson", "elsewhere/blank.hjson", "../out.hjson", "x".repeat(130) + ".hjson", "tutorials/!.hjson")) {
+            try {
+                authoring.saveAs(player, bad, true, true);
+                fail("Should not have been saved as " + bad);
+            } catch (ScenarioAuthoring.AuthoringException expected) {
+                //(as it should be)
+            }
+        }
+        try {
+            authoring.rename(player, "tutorials/blank.hjson", true, true);
+            fail();
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("already a scenario"));
+        }
+    }
+
+    /** The parts of the file are given to the panel as the file has them, and taken back the same way. */
+    @Test
+    public void ThePartsOfTheFileAreReadAndWrittenAsTheFileHasThem() throws Exception {
+        openBlank();
+        JSONObject parts = state().getJSONObject("parts");
+        String cards = parts.getString("cards");
+        assertTrue(cards, cards.startsWith("{\n\tfreeps: {\n\t\t# Frodo, Resolute Hobbit\n\t\tfrodo: 10_121\n"));
+        assertEquals("{\n\tfreeps: {\n\t\thand: aragorn\n\t}\n\tshadow: {\n\t\thand: runner1, runner2\n\t}\n}", parts.getString("setup"));
+        assertFalse(parts.containsKey("steps"));
+
+        //As it is in the file, name and comments and all
+        String pasted = "# what each seat starts with\nsetup: {\n\tfreeps: {\n\t\thand: aragorn, boromir\n\t}\n}\n";
+        JSONObject state = json(authoring.edit(player, new JSONObject(Map.of("topText", new JSONObject(Map.of("setup", pasted)))).toJSONString(), null))
+                .getJSONObject("state");
+        assertEquals("aragorn, boromir", state.getJSONObject("draft").getJSONObject("setup").getJSONObject("freeps").getString("hand"));
+        assertNull(state.getJSONObject("draft").getJSONObject("setup").getJSONObject("shadow"));
+        //Or only what the name is given; and JSON is HJSON too
+        state = json(authoring.edit(player, new JSONObject(Map.of("topText", new JSONObject(Map.of("setup", "{ \"freeps\": { \"hand\": \"boromir\" } }")))).toJSONString(), null))
+                .getJSONObject("state");
+        assertEquals(List.of("boromir"), inZone(state, "freeps", "hand"));
+        //Emptied, the part is gone
+        state = json(authoring.edit(player, new JSONObject(Map.of("topText", new JSONObject(Map.of("setup", "  ")))).toJSONString(), null)).getJSONObject("state");
+        assertNull(state.getJSONObject("draft").getJSONObject("setup"));
+        try {
+            authoring.edit(player, new JSONObject(Map.of("topText", new JSONObject(Map.of("setup", "{ freeps: { hand: [ }")))).toJSONString(), null);
+            fail();
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().startsWith("setup: that is not HJSON"));
+        }
+    }
+
+    /** A draft with nothing unsaved in it, whose page has gone, is not something the Game Hall asks about. */
+    @Test
+    public void ASavedDraftWhosePageIsClosedIsDoneWith() throws Exception {
+        openBlank();
+        assertFalse(authoring.currentForHall(player) == null);
+        authoring.left(player);
+        //(a page that was only reloaded is heard from again)
+        authoring.state(player);
+        assertNotNull(authoring.currentForHall(player));
+
+        new Client(game()).answer("");
+        authoring.left(player);
+        JSONObject current = json(authoring.currentForHall(player));
+        assertTrue("With something unsaved in it, it is still there to go back to", current.getBooleanValue("dirty"));
+
+        authoring.save(player, null, false, true);
+        authoring.left(player);
+        assertNull(authoring.currentForHall(player));
+        assertFalse(state().getBooleanValue("session"));
+    }
+
+    @Test
+    public void PicturesThatAreNotCardsAreListed() throws Exception {
+        File images = temp.newFolder("images");
+        Files.writeString(new File(images, "placeholder.png").toPath(), "x");
+        Files.writeString(new File(images, "A Map.jpg").toPath(), "x");
+        Files.writeString(new File(images, "notes.txt").toPath(), "x");
+        ScenarioAuthoring tool = new ScenarioAuthoring(library, ScenarioTesting.library(), ScenarioAuthoringTest::format, null, null, images);
+        assertEquals("[{\"name\":\"A Map.jpg\",\"url\":\"/gemp-lotr/images/scenarios/A%20Map.jpg\"},"
+                + "{\"name\":\"placeholder.png\",\"url\":\"/gemp-lotr/images/scenarios/placeholder.png\"}]", JSON.toJSONString(tool.images()));
+        assertEquals(List.of(), authoring.images());
     }
 
     @Test

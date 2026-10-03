@@ -75,6 +75,7 @@ class PlayScenario extends TableFlow {
 			that.current = (data && data.current) || null;
 			that.mayAuthor = !!(data && data.mayAuthor);
 			that.authoring = (data && data.authoring) || null;
+			that.ownFolder = !!(data && data.ownFolder);
 			that.render();
 		}, TableFlow.errorMap(function (message) {
 			that.listDiv.empty().append($("<div class='scenario-empty'></div>").text("The list of scenarios could not be loaded."));
@@ -295,12 +296,13 @@ class PlayScenario extends TableFlow {
 			this.authorDiv.append($("<span class='scenario-author-draft'></span>")
 				.append(document.createTextNode("You have a draft open: "))
 				.append($("<b></b>").text(draft.title || draft.id))
-				.append(document.createTextNode(draft.test ? " (being played as a player would)." : ".")));
+				.append(document.createTextNode((draft.test ? " (being played as a player would)" : "")
+					+ (draft.dirty ? ", with changes that have not been saved." : "."))));
 			this.authorDiv.append($("<button class='scenario-continue'></button>").text("Continue writing").button().click(function () {
 				that.resumeDraft();
 			}));
 			this.authorDiv.append($("<button class='scenario-close-draft'></button>").text("Close it").button().click(function () {
-				if (!confirm("Close the draft? Anything in it that has not been saved is lost."))
+				if (draft.dirty !== false && !confirm("Close the draft? It has changes that have not been saved, and they are lost."))
 					return;
 				that.comm.scenarioAuthor("POST", "close", {}, function () {
 					that.refresh();
@@ -310,11 +312,44 @@ class PlayScenario extends TableFlow {
 			}));
 			this.authorDiv.append($("<span class='scenario-author-break'></span>"));
 		}
-		var id = $("<input type='text' maxlength='60'/>").attr("placeholder", "id: basics-02-the-ring").attr("aria-label", "The new scenario's id");
+		//The id is what the scenario is known by, and what its file is called: it is asked once, here.  Left empty,
+		// it is made from the title.
+		var id = $("<input type='text' maxlength='60'/>").attr("placeholder", "id: basics-02-the-ring").attr("aria-label", "The new scenario's id")
+			.attr("title", "What the scenario is known by, and its file's name: small letters, digits and dashes. Empty: made from the title.");
 		var title = $("<input type='text' maxlength='80'/>").attr("placeholder", "Title").attr("aria-label", "The new scenario's title");
+		var slug = function (text) {
+			return String(text).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").substring(0, 60);
+		};
+		title.bind("input", function () {
+			id.attr("placeholder", slug(title.val()) != "" ? "id: " + slug(title.val()) : "id: basics-02-the-ring");
+		});
 		this.authorDiv.append($("<span></span>").text("Write a scenario:")).append(id).append(title);
+		//Where its file goes, for a server that has somewhere besides its own scenarios to keep one.  What was chosen
+		// last time is what is offered next time.
+		var where = null;
+		if (this.ownFolder) {
+			var last = null;
+			try {
+				last = localStorage.getItem("gemp-scenario-new-where");
+			} catch (e) {
+				last = null;
+			}
+			where = $("<select></select>").attr("aria-label", "Where the new scenario's file is kept")
+				.attr("title", "Where its file is kept. One of the game's own goes in the scenarios folder, under tutorials/; your own is offered only to you and the admins.")
+				.append($("<option value='own'></option>").text("in my own folder"))
+				.append($("<option value='canonical'></option>").text("with the game's own"))
+				.val(last == "canonical" ? "canonical" : "own");
+			this.authorDiv.append(where);
+		}
 		this.authorDiv.append($("<button class='scenario-new'></button>").text("New").button().click(function () {
-			that.author({"new": true, id: String(id.val()).trim(), title: String(title.val()).trim()});
+			var canonical = where == null || where.val() == "canonical";
+			try {
+				localStorage.setItem("gemp-scenario-new-where", canonical ? "canonical" : "own");
+			} catch (e) {
+				// only a convenience
+			}
+			var name = String(id.val()).trim() != "" ? String(id.val()).trim() : slug(title.val());
+			that.author({"new": true, id: name, title: String(title.val()).trim(), canonical: canonical});
 		}));
 		this.authorDiv.prop("hidden", false);
 	}
@@ -354,7 +389,9 @@ class PlayScenario extends TableFlow {
 		var that = this;
 		if (this.starting)
 			return;
-		if (this.authoring != null && !confirm("You have a draft open. Opening another drops it: anything in it that has not been saved is lost."))
+		//(a draft with nothing unsaved in it is given up without a word)
+		if (this.authoring != null && this.authoring.dirty !== false
+			&& !confirm("You have a draft open with changes that have not been saved. Opening another drops it, and they are lost."))
 			return;
 		this.starting = true;
 		this.showResult("Setting up the table…", "pending");

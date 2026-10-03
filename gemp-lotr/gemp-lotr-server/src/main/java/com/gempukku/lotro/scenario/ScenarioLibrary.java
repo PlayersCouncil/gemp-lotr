@@ -225,12 +225,16 @@ public class ScenarioLibrary implements Cached {
 
     /** A name for a folder or a file that cannot lead anywhere but into the folder it is in. */
     private static final String NAME = "[A-Za-z0-9_-][A-Za-z0-9_. -]*";
+    /** How long the path of a scenario's file may be, folders and all. */
+    public static final int MAX_PATH = 120;
 
     /**
      * @return Where a scenario's file is (or would be).
      * @throws IOException if that is not somewhere a scenario can be kept.
      */
     private File fileFor(String owner, String path) throws IOException {
+        if (path != null && path.length() > MAX_PATH)
+            throw new IOException("That is too long a path for a scenario's file: " + MAX_PATH + " characters at most, folders and all");
         if (path == null || !path.matches("(" + NAME + "/){0," + (MAX_DEPTH - 2) + "}" + NAME + "\\.hjson") || path.contains("..")
                 || path.startsWith("campaigns/"))
             throw new IOException("'" + path + "' is not somewhere a scenario can be kept: up to " + (MAX_DEPTH - 2) + " folders and a file name, "
@@ -247,6 +251,38 @@ public class ScenarioLibrary implements Cached {
             folder = new File(new File(_userFolder, "users"), owner);
         }
         return new File(folder, path.replace('/', File.separatorChar));
+    }
+
+    /** @throws IOException saying why, if a scenario's file cannot be kept there. */
+    public void check(String owner, String path) throws IOException {
+        fileFor(owner, path);
+    }
+
+    /**
+     * Authoring: moves a scenario's file, and reads the folders again.
+     * @throws IOException if there is no such file, there is already one where it is to go, or it cannot be moved.
+     */
+    public synchronized void move(String owner, String path, String toOwner, String toPath) throws IOException {
+        File from = fileFor(owner, path);
+        File to = fileFor(toOwner, toPath);
+        if (!from.isFile())
+            throw new IOException("There is no file at " + path);
+        if (to.exists())
+            throw new IOException("There is already a file at " + toPath);
+        Files.createDirectories(to.getParentFile().toPath());
+        Files.move(from.toPath(), to.toPath());
+        //A folder that had nothing else in it is not left behind (nor the one it was in, and so on up to the top)
+        File top = owner == null ? _canonicalFolder : new File(new File(_userFolder, "users"), owner);
+        for (File folder = from.getParentFile(); folder != null && !folder.equals(top) && folder.toPath().startsWith(top.toPath()); folder = folder.getParentFile()) {
+            String[] left = folder.list();
+            if (left == null || left.length > 0 || !folder.delete())
+                break;
+        }
+        _files.remove(from.getAbsolutePath());
+        _files.remove(to.getAbsolutePath());
+        _lastCheck = _clock.getAsLong();
+        load();
+        _loaded = true;
     }
 
     /** Whether there is a file where a scenario would be saved. */

@@ -325,7 +325,8 @@ public final class ScenarioWriter {
             json.add("on", message.on.card() == null ? lower(message.on.kind()) : lower(message.on.kind()) + "(" + message.on.card() + ")");
         if (message.zoom != null) {
             Zoom zoom = message.zoom;
-            json.add("zoom", zoom.card() != null ? "card:" + zoom.card() : zoom.site() != null ? "site:" + zoom.site() : "blueprint:" + zoom.blueprint());
+            json.add("zoom", zoom.card() != null ? "card:" + zoom.card() : zoom.site() != null ? "site:" + zoom.site()
+                    : zoom.image() != null ? "image:" + zoom.image() : "blueprint:" + zoom.blueprint());
             if (!zoom.focus().isEmpty()) {
                 StringJoiner focus = new StringJoiner(", ");
                 for (Focus part : zoom.focus())
@@ -413,6 +414,33 @@ public final class ScenarioWriter {
         write(out, root, 0, "", comments);
         out.append('\n');
         return out.toString();
+    }
+
+    /**
+     * @return Each top-level part of the scenario's file but its steps, as the text the file has for it (a card's name
+     * as a comment above it, and so on): what an author copies between the file and the authoring tool.
+     */
+    public static Map<String, String> parts(ScenarioDefinition def, LotroCardBlueprintLibrary library) {
+        JsonObject root = toJson(def);
+        Map<String, String> comments = new HashMap<>();
+        if (library != null) {
+            for (CardDef card : def.cards.values())
+                comments.put("cards." + card.owner().key() + "." + card.alias(), nameOf(library, card.blueprintId()));
+            List<String> sites = new ArrayList<>();
+            for (String site : def.sites.getOrDefault(def.human, List.of()))
+                sites.add(nameOf(library, site));
+            comments.put("sites", String.join(", ", sites));
+        }
+        Map<String, String> parts = new java.util.LinkedHashMap<>();
+        for (JsonObject.Member member : root) {
+            if (member.getName().equals("steps"))
+                continue;
+            StringBuilder out = new StringBuilder();
+            comment(out, comments.get(member.getName()), 0);
+            write(out, member.getValue(), 0, member.getName(), comments);
+            parts.put(member.getName(), out.toString());
+        }
+        return parts;
     }
 
     private static String nameOf(LotroCardBlueprintLibrary library, String blueprintId) {

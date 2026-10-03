@@ -104,6 +104,133 @@ body.scenario-authoring #scenarioLayer {
     color: #dcffdf;
 }
 
+/* ---- the file: where it is, and the form for saving it elsewhere ---- */
+
+.sa-note.sa-path {
+    color: #e9e0cb;
+    word-break: break-all;
+}
+
+.sa-button.sa-on {
+    border-color: #d8b24a;
+    color: #f0cf6a;
+}
+
+.sa-filing {
+    margin: 4px 0 6px 0;
+    padding: 6px 8px;
+    background: #231f15;
+    border: 1px solid #4d4226;
+    border-radius: 4px;
+}
+
+/* ---- pictures to choose from ---- */
+
+.sa-pictures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 6px 0;
+    padding: 6px;
+    max-height: 250px;
+    overflow-y: auto;
+    background: #100e09;
+    border: 1px solid #4d4226;
+    border-radius: 4px;
+}
+
+.sa-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 86px;
+    padding: 3px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sa-picture:hover {
+    border-color: #d8b24a;
+    background: #231f15;
+}
+
+.sa-picture img {
+    display: block;
+    max-width: 80px;
+    max-height: 100px;
+}
+
+.sa-picture span {
+    margin-top: 2px;
+    max-width: 84px;
+    font-size: 10px;
+    color: #b9ad8d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---- asked on the way out with something unsaved ---- */
+
+.sa-leave-shade {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100020;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.sa-leave {
+    position: fixed;
+    left: 50%;
+    top: 34%;
+    transform: translate(-50%, -50%);
+    z-index: 100021;
+    box-sizing: border-box;
+    width: 440px;
+    max-width: calc(100vw - 30px);
+    padding: 16px 20px 16px 20px;
+    background: #17150f;
+    color: #e9e0cb;
+    border: 2px solid #d8b24a;
+    border-radius: 8px;
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.9);
+    font: 14px/1.4 "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+.sa-leave h2 {
+    margin: 0 0 6px 0;
+    font-size: 19px;
+    color: #f0cf6a;
+}
+
+.sa-leave p {
+    margin: 0 0 12px 0;
+}
+
+.sa-leave-problem {
+    color: #ffb3a8;
+    white-space: pre-wrap;
+}
+
+.sa-leave-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.sa-leave-buttons .sa-button {
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.sa-leave-buttons .sa-button:last-child {
+    margin-left: auto;
+}
+
 /* A decision nobody has written a step for: what is being asked, and the button that writes one */
 .sa-notice.sa-uncovered {
     padding: 7px 10px 8px 10px;

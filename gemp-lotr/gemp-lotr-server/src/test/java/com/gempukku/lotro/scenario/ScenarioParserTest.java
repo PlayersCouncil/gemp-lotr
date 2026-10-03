@@ -6,6 +6,7 @@ import com.gempukku.lotro.scenario.ScenarioDefinition.*;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -32,6 +33,77 @@ public class ScenarioParserTest {
         assertTrue(def.autoPass.isEmpty());
         assertEquals("Tutorial", def.opponentDisplayName());
         assertFalse(def.oneSided);
+    }
+
+    @Test
+    public void aMessageCanShowAPictureThatIsNotACard() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(ScenarioTesting.scenario("""
+                	steps: [
+                		{
+                			pause: true
+                			messages: [
+                				{
+                					text: A picture.
+                					zoom: image:Middle-earth map.png
+                					focus: rect(10, 20, 30, 40)
+                					magnify: 2
+                				}
+                				{
+                					text: A card, larger, with nothing picked out.
+                					zoom: card:aragorn
+                					magnify: 3
+                				}
+                			]
+                		}
+                	]
+                """));
+        ScenarioDefinition.Zoom zoom = def.steps.getFirst().messages.getFirst().zoom;
+        assertEquals("Middle-earth map.png", zoom.image());
+        assertNull(zoom.blueprint());
+        assertEquals(2, zoom.magnify(), 0);
+        assertEquals("It is centred on its middle", 3, def.steps.getFirst().messages.get(1).zoom.magnify(), 0);
+        Map<String, Object> shown = CardFaces.describe(def, zoom, ScenarioTesting.library());
+        assertEquals("/gemp-lotr/images/scenarios/Middle-earth%20map.png", shown.get("image"));
+        assertNull(shown.get("blueprint"));
+        assertEquals(List.of(), ScenarioValidator.validate(def, ScenarioTesting.library()));
+
+        ScenarioDefinition again = ScenarioParser.parse(ScenarioWriter.toHjson(def, ScenarioTesting.library()));
+        assertEquals("Middle-earth map.png", again.steps.getFirst().messages.getFirst().zoom.image());
+
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: image:../../secret.png\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "is not the name of a picture");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: image:notes.txt\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "is not the name of a picture");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: image:map.png\n\t\t\t\t\tfocus: strength\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "a picture has no named parts");
+    }
+
+    @Test
+    public void theOpeningIsItsOwnKindOfStep() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(ScenarioTesting.scenario("""
+                	steps: [
+                		{
+                			when: opening
+                			messages: [
+                				The board, before anything is drawn.
+                			]
+                			do: draw(3), draw(shadow, 2)
+                		}
+                	]
+                """));
+        ScenarioDefinition.Step opening = def.steps.getFirst();
+        assertTrue(opening.when.opening);
+        assertEquals("It is the scripted seat that is kept waiting", Seat.SHADOW, opening.when.seat);
+        assertEquals(ScenarioDefinition.DoKind.DRAW, opening.doOps.getFirst().kind());
+        assertEquals("freeps", opening.doOps.getFirst().target());
+        assertEquals(3, opening.doOps.getFirst().amount());
+        assertEquals("shadow", opening.doOps.get(1).target());
+        String written = ScenarioWriter.toHjson(def, ScenarioTesting.library());
+        assertTrue(written, written.contains("when: opening"));
+        assertTrue(written, written.contains("do: draw(3), draw(shadow, 2)"));
+
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\twhen: opening, freeps\n\t\t\tmessages: [\n\t\t\t\tHello\n\t\t\t]\n\t\t}\n\t]", "stands by itself");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\twhen: opening\n\t\t\tmessages: [\n\t\t\t\tHello\n\t\t\t]\n\t\t\tallow: pass\n\t\t}\n\t]", "read, not answered");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\twhen: opening\n\t\t}\n\t]", "does nothing");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\twhen: freeps, action\n\t\t\tuntil: opening\n\t\t\tanswer: pass\n\t\t}\n\t]", "only a 'when' can wait for");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\twhen: freeps, action\n\t\t\tdo: draw(0)\n\t\t\tanswer: pass\n\t\t}\n\t]", "from 1 to 60");
     }
 
     @Test
@@ -409,10 +481,9 @@ public class ScenarioParserTest {
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttitle: Hello\n\t\t\t\t\ttext: Hello\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "a message's heading is called 'header'");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tfocus: strength\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "'focus' and 'magnify' belong to a 'zoom'");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:legolas\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "there is no card called 'legolas'");
-        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: aragorn\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "has to be card:<alias>, site:<number> or blueprint:<id>");
+        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: aragorn\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "has to be card:<alias>, site:<number>, blueprint:<id> or image:<file>");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tfocus: nose\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "don't know what 'nose' means");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tfocus: rect(90, 10, 20, 5)\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "does not lie on the card");
-        assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\tmagnify: 3\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "needs a 'focus' to be centred on");
         assertRejected("\tsteps: [\n\t\t{\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Hello\n\t\t\t\t\tzoom: card:aragorn\n\t\t\t\t\ton: ready\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]", "cannot also wait for a moment");
         assertRejected("\topponent: {\n\t\tname: \"<b>Sauron</b>\"\n\t}", "opponent.name: has to be 1 to 30 letters");
         assertRejected("\tsetup: {\n\t\tfreeps: {\n\t\t\thand: runner1\n\t\t}\n\t}", "belongs to the other seat");

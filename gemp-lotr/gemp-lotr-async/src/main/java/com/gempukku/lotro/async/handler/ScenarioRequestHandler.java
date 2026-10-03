@@ -55,7 +55,8 @@ import java.util.Map;
  * GET source - {@code {source}}: the draft as the file it would be saved as.<br>
  * GET cards?q=&sites= - {@code {cards:[{id, name, type, culture, side, cost}]}}: cards by name.<br>
  * POST open (id | new=true, id, title); edit (patch, goto); goto (step); answer (term, record | least=true);
- * do (op, setup); here; retake; settings (recording, askOpponent, way); save (path, canonical); check; test (step);
+ * do (op, setup); here; retake; settings (recording, askOpponent, way); save (path, canonical, as: copy|rename); left;
+ * check; test (step);
  * resume; close.
  */
 public class ScenarioRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
@@ -136,7 +137,9 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         //Whether the player may write scenarios, and the draft they have open (if they have one): {gameId, id, title,
         // over, test}
         result.put("mayAuthor", mayAuthor(player));
-        result.put("authoring", mayAuthor(player) ? _authoring.current(player) : null);
+        result.put("authoring", mayAuthor(player) ? _authoring.currentForHall(player) : null);
+        //(whether a new scenario can be kept somewhere other than among the game's own)
+        result.put("ownFolder", _scenarios.hasUserFolder());
         LotroGameMediator current = _lotroServer.getScenarioGame(player.getName());
         if (current == null) {
             result.put("current", null);
@@ -227,6 +230,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "source" -> result.put("source", _authoring.source(player));
                     case "cards" -> result.put("cards", _authoring.findCards(getQueryParameterSafely(query, "q"),
                             "true".equals(getQueryParameterSafely(query, "sites"))));
+                    case "images" -> result.put("images", _authoring.images());
                     default -> throw new HttpProcessingException(404);
                 }
                 responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
@@ -240,7 +244,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                 Map<String, Object> result;
                 switch (what) {
                     case "open" -> result = "true".equals(getFormParameterSafely(form, "new"))
-                            ? _authoring.create(player, getFormParameterSafely(form, "id"), getFormParameterSafely(form, "title"))
+                            ? _authoring.create(player, getFormParameterSafely(form, "id"), getFormParameterSafely(form, "title"),
+                                    "true".equals(getFormParameterSafely(form, "canonical")), admin)
                             : _authoring.open(player, getFormParameterSafely(form, "id"), admin);
                     case "edit" -> result = _authoring.edit(player, getFormParameterSafely(form, "patch"), number(form, "goto"));
                     case "goto" -> {
@@ -264,8 +269,19 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                         }
                         result = _authoring.settings(player, flag(form, "recording"), flag(form, "askOpponent"), names);
                     }
-                    case "save" -> result = _authoring.save(player, getFormParameterSafely(form, "path"),
-                            "true".equals(getFormParameterSafely(form, "canonical")), admin);
+                    case "save" -> {
+                        String path = getFormParameterSafely(form, "path");
+                        boolean canonical = "true".equals(getFormParameterSafely(form, "canonical"));
+                        String as = getFormParameterSafely(form, "as");
+                        result = "copy".equals(as) ? _authoring.saveAs(player, path, canonical, admin)
+                                : "rename".equals(as) ? _authoring.rename(player, path, canonical, admin)
+                                : _authoring.save(player, path, canonical, admin);
+                    }
+                    case "left" -> {
+                        _authoring.left(player);
+                        result = new LinkedHashMap<>();
+                        result.put("ok", true);
+                    }
                     case "check" -> result = _authoring.check(player);
                     case "test" -> {
                         Integer step = number(form, "step");

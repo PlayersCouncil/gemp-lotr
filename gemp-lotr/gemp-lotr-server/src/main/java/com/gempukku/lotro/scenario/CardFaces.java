@@ -119,6 +119,9 @@ public final class CardFaces {
      * @return What is wrong with a zoom, given what its card turns out to be; null if nothing is.
      */
     public static String check(ScenarioDefinition def, ScenarioDefinition.Zoom zoom, LotroCardBlueprintLibrary library) {
+        //(a picture is whatever is in the file; its parts are rectangles, which the parser has seen to)
+        if (zoom.image() != null)
+            return null;
         String blueprintId = blueprintOf(def, zoom);
         if (blueprintId == null)
             return "the scenario's path has no site " + zoom.site();
@@ -176,15 +179,19 @@ public final class CardFaces {
         return true;
     }
 
+    /** Where the web server has the pictures a scenario can show that are not cards. */
+    public static final String IMAGES_URL = "/gemp-lotr/images/scenarios/";
+
     /**
-     * @return What a client needs to show the card and pick out the parts of it: {blueprint, magnify,
-     * focus: [{name, rect: [left, top, width, height]}]}.
+     * @return What a client needs to show the card and pick out the parts of it: {blueprint, image, magnify,
+     * focus: [{name, rect: [left, top, width, height]}]}.  One of blueprint and image is null.
      */
     public static Map<String, Object> describe(ScenarioDefinition def, ScenarioDefinition.Zoom zoom, LotroCardBlueprintLibrary library) {
-        String blueprintId = blueprintOf(def, zoom);
+        String blueprintId = zoom.image() != null ? null : blueprintOf(def, zoom);
         Frame frame = Frame.ITEM;
         try {
-            frame = frameOf(library.getLotroCardBlueprint(blueprintId).getCardType());
+            if (blueprintId != null)
+                frame = frameOf(library.getLotroCardBlueprint(blueprintId).getCardType());
         } catch (CardNotFoundException exp) {
             //The validator has already said so; the card is still shown, with whatever rectangles were given
         }
@@ -200,6 +207,7 @@ public final class CardFaces {
         }
         Map<String, Object> json = new LinkedHashMap<>();
         json.put("blueprint", blueprintId);
+        json.put("image", zoom.image() == null ? null : IMAGES_URL + zoom.image().replace(" ", "%20"));
         json.put("magnify", zoom.magnify());
         json.put("focus", regions);
         return json;
