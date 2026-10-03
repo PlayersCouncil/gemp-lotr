@@ -568,6 +568,9 @@ var GempScenarioAuthor = Class.extend({
         var state = this.state;
         if (state == null || !state.session)
             return;
+        //What the file had wrong with it when it was opened, and was opened without
+        if ((state.leftOut || []).length > 0)
+            box.append(this.leftOutNotice(state.leftOut));
         //A decision nobody has written a step for is said first, with the way to write one
         var open = this.uncovered();
         if (open != null)
@@ -611,6 +614,49 @@ var GempScenarioAuthor = Class.extend({
         }
         if (this.told)
             box.append(this.el("div", "sa-notice sa-told", this.told));
+    },
+
+    /**
+     * The file had mistakes in it, and was opened with the mistaken parts left out: each of them, what was wrong with
+     * it and what it said, with the way to the step it was in.  It stays until it is put away: what the parts said is
+     * in the file only until the draft is saved over it.
+     */
+    leftOutNotice: function (leftOut) {
+        var that = this;
+        var uids = this.state.uids || [];
+        var box = this.el("div", "sa-notice sa-error sa-leftout");
+        box.append(this.el("div", "sa-leftout-head", (leftOut.length == 1 ? "One part of the file was" : leftOut.length + " parts of the file were")
+            + " mistaken, and " + (leftOut.length == 1 ? "has" : "have") + " been left out so that it could be opened."
+            + (this.state.dirty ? " Saving writes the file without " + (leftOut.length == 1 ? "it" : "them") + "." : "")));
+        $.each(leftOut, function (index, one) {
+            var row = that.el("div", "sa-leftout-row").appendTo(box);
+            var at = one.uid == null ? -1 : $.inArray(one.uid, uids);
+            var where = one.where;
+            //(a step is said by where it is now; the file's number for it only if that is another)
+            if (at > -1)
+                where = "step " + (at + 1) + where.replace(/^step \d+( \([^)]*\))?/, "") + (one.step != at + 1 ? " (step " + one.step + " of the file)" : "");
+            else if (one.step > 0)
+                where += " of the file" + (/^step \d+( \([^)]*\))?$/.test(one.where) ? ", left out whole" : "");
+            row.append(that.el("span", "sa-leftout-where", where));
+            row.append(document.createTextNode(": " + one.message));
+            if (at > -1)
+                row.append(that.button("Show", "Go to step " + (at + 1), function () {
+                    that.ui.tab = "step";
+                    that.selectStep(at + 1);
+                }, "sa-inline"));
+            row.append(that.el("pre", "sa-leftout-was", one.was));
+        });
+        box.append(this.button("\u00d7", "Put this away for good. What the parts said is not kept anywhere else once the draft is saved.", function () {
+            that.call("POST", "settings", {seenLeftOut: true});
+        }, "sa-dismiss"));
+        return box;
+    },
+
+    /** What was left out of a step when the file was opened: [{where, message, was}]. */
+    leftOutOf: function (uid) {
+        return $.grep((this.state && this.state.leftOut) || [], function (one) {
+            return uid != null && one.uid == uid;
+        });
     },
 
     /** Whether the draft has anything in it that is in no file (and this is the game it is being written in). */
@@ -904,6 +950,11 @@ var GempScenarioAuthor = Class.extend({
                 tags.append(that.el("span", "sa-tag", "end"));
             if (that.isAwaiting(state.uids[index]))
                 tags.append(that.el("span", "sa-tag sa-noanswer", "no answer yet").attr("title", "It says nothing yet about what is done. When the game comes to it, what you do there is written in."));
+            var mistaken = that.leftOutOf(state.uids[index]);
+            if (mistaken.length > 0)
+                tags.append(that.el("span", "sa-tag sa-mistake", "left out").attr("title", $.map(mistaken, function (one) {
+                    return one.where.replace(/^step \d+( \([^)]*\))?\.?/, "") + ": " + one.message + "\nIt said: " + one.was;
+                }).join("\n\n")));
             row.append(that.button("\u25b6", "A fresh game, played by the script up to this step", function () {
                 that.goTo(number);
             }, "sa-go"));
@@ -1424,6 +1475,12 @@ var GempScenarioAuthor = Class.extend({
             acts.append(this.button("Answer it again", "This step forgets what it allows and how it is answered, and takes both from what you do next. Its messages stay.", function () {
                 that.retake();
             }));
+        $.each(this.leftOutOf(form.uid), function (at, one) {
+            var part = one.where.replace(/^step \d+( \([^)]*\))?\.?/, "");
+            var note = that.el("div", "sa-note sa-mistaken").appendTo(box);
+            note.append(that.el("div", null, "Left out when the file was opened" + (part == "" ? "" : ", from '" + part + "'") + ": " + one.message));
+            note.append(that.el("pre", "sa-leftout-was", one.was));
+        });
         if (this.isAwaiting(form.uid))
             box.append(this.el("div", "sa-note sa-awaiting", inHandNow
                 ? "This step says nothing yet about what is done. Do it in the game now, and what you do is written in as what it allows. Messages put on it here first are shown before it is answered."
@@ -2371,7 +2428,11 @@ var GempScenarioAuthor = Class.extend({
             results.empty();
             chosen.empty();
             var taken = that.aliases();
-            var stem = card.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" ")[0] || "card";
+            //The first word of its name that says something: "The One Ring" is "one", not "the"
+            var words = $.grep(card.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" "), function (word) {
+                return word.length > 0 && $.inArray(word, ["the", "a", "an", "of"]) < 0;
+            });
+            var stem = words[0] || "card";
             if (/^[0-9]/.test(stem))
                 stem = "c" + stem;
             var alias = stem;

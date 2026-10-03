@@ -126,7 +126,11 @@ public class ScenarioLibraryTest {
         ScenarioLibrary.Entry bad = library.getAll().get(0);
         assertNull(bad.def());
         assertFalse(bad.playable());
-        assertEquals(1, bad.errors().size());
+        assertFalse(bad.openable());
+        //(what can be left out is, to see what else is wrong; here that leaves a file with no format)
+        assertEquals(bad.errors().toString(), 2, bad.errors().size());
+        assertTrue(bad.errors().getFirst(), bad.errors().getFirst().contains("unrecognized field 'nonsense'"));
+        assertTrue(bad.errors().getLast(), bad.errors().getLast().contains("format: is missing"));
 
         ScenarioLibrary.Entry noCard = library.get("nocard");
         assertFalse(noCard.playable());
@@ -189,6 +193,149 @@ public class ScenarioLibraryTest {
         assertEquals(List.of("first"), ids(library.getAll()));
         library = new ScenarioLibrary(new File(canon, "nowhere"), null, ScenarioTesting.library(), ScenarioLibraryTest::format, null);
         assertEquals(List.of(), ids(library.getAll()));
+    }
+
+    /** A card renamed by hand under 'cards', and still called by its old name ('the') in three other places. */
+    private static String renamed(String id) {
+        return working(id)
+                .replace("allow: pass", "do: attach(the, frodo), exert(the)\n\t\t\tmessages: [\n\t\t\t\t{\n\t\t\t\t\ttext: Put the Ring on.\n\t\t\t\t}\n\t\t\t]\n\t\t\tallow: pass")
+                .replace("steps: [", "# the old name was 'the'\n\tsetup: {\n\t\tfreeps: {\n\t\t\thand: aragorn, the, boromir\n\t\t}\n\t\tshadow: {\n\t\t\thand: the\n\t\t}\n\t}\n\tsteps: [");
+    }
+
+    @Test
+    public void AFileWithMistakesIsReadWithThemLeftOutForItsAuthorOnly() throws Exception {
+        write(canon, "first.hjson", renamed("first"));
+        ScenarioLibrary library = library();
+        ScenarioLibrary.Entry broken = library.get("first");
+        assertNotNull("It is known by its id, so that it can be opened", broken);
+        assertFalse(broken.playable());
+        assertFalse(broken.verified());
+        assertFalse("Nobody is offered it to play, an admin included", broken.availableTo("anybody", true));
+        assertEquals(List.of(), library.getAvailableTo("anybody", true));
+        assertTrue(broken.openable());
+        assertNull(broken.report());
+
+        //Every mistake is found, not only the first
+        assertEquals(broken.errors().toString(), 3, broken.errors().size());
+        assertTrue(broken.errors().get(0), broken.errors().get(0).startsWith("setup.freeps.hand: there is no card called 'the'"));
+        assertTrue(broken.errors().get(1), broken.errors().get(1).startsWith("setup.shadow.hand: there is no card called 'the'"));
+        assertTrue(broken.errors().get(2), broken.errors().get(2).startsWith("step 1.do: there is no card called 'the'"));
+
+        //Where the card is named is said once, and neither the comment nor the message's words are among the lines
+        String[] lines = Files.readString(new File(canon, "first.hjson").toPath(), StandardCharsets.UTF_8).split("\n", -1);
+        List<Integer> named = new java.util.ArrayList<>();
+        for (int i = 0; i < lines.length; i++)
+            if (lines[i].strip().startsWith("hand: ") && lines[i].contains("the") || lines[i].strip().startsWith("do: attach(the"))
+                named.add(i + 1);
+        assertEquals(3, named.size());
+        assertTrue(broken.errors().get(0), broken.errors().get(0).endsWith(
+                "('the' is named on lines " + named.get(0) + ", " + named.get(1) + ", " + named.get(2) + " of the file.)"));
+        assertFalse(broken.errors().get(1).contains("is named on"));
+
+        //What is left: the cards that are declared stay in a list, and what names only the other goes whole
+        assertEquals(3, broken.leftOut().size());
+        ScenarioSalvage.LeftOut hand = broken.leftOut().get(0);
+        assertEquals("setup.freeps.hand", hand.where());
+        assertEquals("aragorn, the, boromir", hand.was());
+        assertEquals(0, hand.stepInFile());
+        assertEquals(List.of("aragorn", "boromir"), broken.def().setup.zones.get(Seat.FREEPS).get(ScenarioDefinition.SetupZone.HAND));
+        assertEquals("the", broken.leftOut().get(1).was());
+        ScenarioSalvage.LeftOut does = broken.leftOut().get(2);
+        assertEquals("step 1.do", does.where());
+        assertEquals("attach(the, frodo), exert(the)", does.was());
+        assertTrue(does.message(), does.message().startsWith("there is no card called 'the'"));
+        assertEquals(1, does.stepInFile());
+        assertEquals(1, does.step());
+        assertTrue(broken.def().steps.getFirst().doOps.isEmpty());
+        assertEquals("Put the Ring on.", broken.def().steps.getFirst().messages.getFirst().text);
+
+        assertEquals("", ScenarioLibrary.elsewhere("steps: []", "step 1.when: something else is wrong"));
+        assertEquals("", ScenarioLibrary.elsewhere(null, "there is no card called 'the'"));
+    }
+
+    @Test
+    public void AStepThatCannotBeMendedIsLeftOutWholeAndTheRestKeepTheFilesNumbers() throws Exception {
+        write(canon, "first.hjson", working("first").replace("steps: [", """
+                setup: {
+                		startAt: {
+                			turn: 1
+                			site: 3
+                		}
+                	}
+                	steps: [
+                		{
+                			pause: true
+                			when: freeps, action, phase(fellowship)
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: play(nobody)
+                		}"""));
+        ScenarioLibrary.Entry broken = library().get("first");
+        assertTrue(broken.errors().toString(), broken.openable());
+        assertEquals(broken.errors().toString(), 3, broken.leftOut().size());
+
+        assertEquals("setup.startAt", broken.leftOut().get(0).where());
+        assertEquals("site: 3", broken.leftOut().get(0).was());
+
+        ScenarioSalvage.LeftOut pause = broken.leftOut().get(1);
+        assertEquals("step 1", pause.where());
+        assertTrue(pause.message(), pause.message().contains("a pause with no messages"));
+        assertTrue(pause.was(), pause.was().contains("pause: true"));
+        assertEquals(1, pause.stepInFile());
+        assertEquals("The whole step went", 0, pause.step());
+
+        ScenarioSalvage.LeftOut allow = broken.leftOut().get(2);
+        assertEquals("It is still step 2 to whoever has the file in front of them", "step 2.allow", allow.where());
+        assertTrue(broken.errors().get(2), broken.errors().get(2).startsWith("step 2.allow: there is no card called 'nobody'"));
+        assertEquals(2, allow.stepInFile());
+        assertEquals(1, allow.step());
+        assertEquals(2, broken.def().steps.size());
+    }
+
+    @Test
+    public void SomeMistakesCannotBeLeftOut() throws Exception {
+        write(canon, "a-no-title.hjson", working("first").replace("title: Test", ""));
+        write(canon, "b-not-hjson.hjson", working("second") + "\n}");
+        write(canon, "c-no-such-format.hjson", working("third").replace("format: scenario", "format: nonesuch"));
+        //A card that is no card goes, and everything that named it after it; a Ring-bearer cannot go
+        write(canon, "d-no-such-card.hjson", working("fourth").replace("aragorn: 4_109", "aragorn: 99_999")
+                .replace("steps: [", "setup: {\n\t\tfreeps: {\n\t\t\thand: aragorn, boromir\n\t\t}\n\t}\n\tsteps: ["));
+        write(canon, "e-no-ring-bearer.hjson", working("fifth").replace("oppFrodo: 10_121", "oppFrodo: 99_999"));
+        ScenarioLibrary library = library();
+        List<ScenarioLibrary.Entry> all = library.getAll();
+        assertEquals(5, all.size());
+
+        assertFalse(all.get(0).openable());
+        assertTrue(all.get(0).errors().toString(), all.get(0).errors().getLast().contains("title: is missing"));
+        assertFalse(all.get(1).openable());
+        assertTrue(all.get(1).errors().toString(), all.get(1).errors().getFirst().startsWith("Not valid HJSON"));
+        assertFalse(all.get(2).openable());
+        assertNotNull("It reads; it is its format there is none of", all.get(2).def());
+        assertTrue(all.get(2).errors().toString(), all.get(2).errors().getFirst().startsWith("format: there is no format"));
+
+        ScenarioLibrary.Entry card = all.get(3);
+        assertTrue(card.errors().toString(), card.openable());
+        assertEquals(2, card.leftOut().size());
+        assertEquals("aragorn: 99_999", card.leftOut().get(0).was());
+        assertEquals("aragorn, boromir", card.leftOut().get(1).was());
+        assertNull(card.def().cards.get("aragorn"));
+
+        assertFalse(all.get(4).errors().toString(), all.get(4).openable());
+        assertTrue(all.get(4).errors().toString(), all.get(4).errors().getLast().startsWith("ringBearer"));
+    }
+
+    @Test
+    public void AFileThatCannotBePlayedDoesNotTakeAnIdFromOneThatCan() throws Exception {
+        write(canon, "a-broken.hjson", renamed("first"));
+        write(canon, "b-working.hjson", working("first"));
+        ScenarioLibrary library = library();
+        assertTrue(library.get("first").playable());
+        assertEquals("b-working.hjson", library.get("first").path());
+        ScenarioLibrary.Entry loser = library.getAll().getFirst();
+        assertNull(loser.id());
+        assertFalse("With no id of its own there is nothing to open it by", loser.openable());
+        assertTrue(loser.errors().getLast(), loser.errors().getLast().contains("is already the id of b-working.hjson"));
     }
 
     @Test

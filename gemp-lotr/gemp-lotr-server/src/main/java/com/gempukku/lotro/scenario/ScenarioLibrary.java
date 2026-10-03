@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.LongSupplier;
 import java.util.stream.Stream;
@@ -60,11 +61,19 @@ public class ScenarioLibrary implements Cached {
      * @param errors Why the scenario cannot be played at all.  Empty if it can.
      * @param warnings Things that are wrong but do not stop it being played (a card link that names no card).
      * @param report What happened when it was played through headless; null if it could not be played at all.
+     * @param leftOut What had to be left out of the file for 'def' to be read at all (see ScenarioSalvage); empty if
+     *                'def' is the file as it stands.  A scenario read like this has its mistakes among 'errors', so
+     *                it cannot be played; it is for the authoring tool to open, and for nothing else.
      */
     public record Entry(String id, String path, String owner, ScenarioDefinition def, LotroFormat format,
-                        List<String> errors, List<String> warnings, ScenarioRunReport report) {
+                        List<String> errors, List<String> warnings, ScenarioRunReport report, List<ScenarioSalvage.LeftOut> leftOut) {
         public boolean canonical() {
             return owner == null;
+        }
+
+        /** Whether the authoring tool can open it: it can be played, or it could be read with its mistakes left out. */
+        public boolean openable() {
+            return id != null && def != null && format != null && (errors.isEmpty() || !leftOut.isEmpty());
         }
 
         /** Whether a game of it can be started. */
@@ -392,16 +401,24 @@ public class ScenarioLibrary implements Cached {
         if (!changed && _loaded)
             return;
 
-        //Ids are settled afresh each time, since which file loses a clash depends on which files there are
+        //Ids are settled afresh each time, since which file loses a clash depends on which files there are: the
+        // first that can be played has the id, and a file that cannot be played only has it if none can
+        Map<String, Entry> holders = new HashMap<>();
+        for (boolean playable : new boolean[]{true, false})
+            for (Found file : found) {
+                Entry entry = files.get(file.file().getAbsolutePath()).entry();
+                if (entry.id() != null && entry.playable() == playable)
+                    holders.putIfAbsent(entry.id(), entry);
+            }
         Map<String, Entry> byId = new LinkedHashMap<>();
         List<Entry> entries = new ArrayList<>();
         for (Found file : found) {
             Entry entry = files.get(file.file().getAbsolutePath()).entry();
-            Entry holder = entry.id() == null ? null : byId.get(entry.id());
-            if (holder != null) {
+            Entry holder = entry.id() == null ? null : holders.get(entry.id());
+            if (holder != null && holder != entry) {
                 List<String> errors = new ArrayList<>(entry.errors());
                 errors.add("id: '" + entry.id() + "' is already the id of " + holder.path() + ".  Ids have to be unique");
-                entry = new Entry(null, entry.path(), entry.owner(), entry.def(), entry.format(), errors, entry.warnings(), entry.report());
+                entry = new Entry(null, entry.path(), entry.owner(), entry.def(), entry.format(), errors, entry.warnings(), entry.report(), entry.leftOut());
             } else if (entry.id() != null) {
                 byId.put(entry.id(), entry);
             }
@@ -442,32 +459,100 @@ public class ScenarioLibrary implements Cached {
         }
     }
 
+    private static final java.util.regex.Pattern NO_SUCH_CARD = java.util.regex.Pattern.compile("there is no card called '([A-Za-z0-9_]+)'");
+    /** The parts of a file that are for people to read, in which a card's name may turn up as a word of the language. */
+    private static final Set<String> PROSE = Set.of("text", "header", "messages", "note", "title", "name", "summary", "otherwise", "author", "tags");
+
+    /**
+     * The parser stops at the first thing wrong, and a card that was renamed or taken out by hand is usually named in
+     * more places than one.  For "there is no card called X", this is every line of the file that names X where a
+     * card would be named, so that they can all be put right in one go.
+     * @return Something to add to the message; empty if there is nothing to add.
+     */
+    static String elsewhere(String source, String message) {
+        java.util.regex.Matcher missing = message == null || source == null ? null : NO_SUCH_CARD.matcher(message);
+        if (missing == null || !missing.find())
+            return "";
+        String alias = missing.group(1);
+        java.util.regex.Pattern named = java.util.regex.Pattern.compile("(?<![A-Za-z0-9_])" + java.util.regex.Pattern.quote(alias) + "(?![A-Za-z0-9_])");
+        java.util.regex.Pattern keyed = java.util.regex.Pattern.compile("^\"?([A-Za-z][A-Za-z0-9_]*)\"?\\s*:(.*)$");
+        List<String> lines = new ArrayList<>();
+        String[] all = source.split("\n", -1);
+        for (int i = 0; i < all.length; i++) {
+            String line = all[i].strip();
+            if (line.startsWith("#") || line.startsWith("//"))
+                continue;
+            java.util.regex.Matcher key = keyed.matcher(line);
+            //(a line with no "name:" in front is a message's words)
+            if (!key.matches() || PROSE.contains(key.group(1)))
+                continue;
+            if (named.matcher(key.group(2)).find())
+                lines.add(String.valueOf(i + 1));
+        }
+        if (lines.isEmpty())
+            return "";
+        return "  ('" + alias + "' is named on line" + (lines.size() == 1 ? " " : "s ") + String.join(", ", lines) + " of the file.)";
+    }
+
+    /** What is wrong with a scenario that its file reads as, beyond what the parser sees. */
+    private List<String> problems(ScenarioDefinition def) {
+        List<String> problems = new ArrayList<>();
+        if (_formats.apply(def.format) == null)
+            problems.add("format: there is no format called '" + def.format + "'");
+        problems.addAll(ScenarioValidator.validate(def, _library));
+        return problems;
+    }
+
     private Entry read(Found file) {
         List<String> errors = new ArrayList<>();
         List<String> warnings = new ArrayList<>();
+        List<ScenarioSalvage.LeftOut> leftOut = List.of();
         ScenarioDefinition def = null;
         LotroFormat format = null;
         ScenarioRunReport report = null;
         String id = null;
         String where = (file.owner() == null ? "" : file.owner() + "/") + file.path();
+        String source = null;
         try {
-            def = ScenarioParser.parse(Files.readString(file.file().toPath(), StandardCharsets.UTF_8));
-            //A user's scenario is known by its owner's name as well, whatever the file says
-            if (file.owner() != null)
-                def.id = file.owner() + "/" + def.id;
-            id = def.id;
-
-            format = _formats.apply(def.format);
-            if (format == null)
-                errors.add("format: there is no format called '" + def.format + "'");
-            errors.addAll(ScenarioValidator.validate(def, _library));
+            source = Files.readString(file.file().toPath(), StandardCharsets.UTF_8);
+            try {
+                def = ScenarioParser.parse(source);
+                errors.addAll(problems(def));
+            } catch (ScenarioFormatException exp) {
+                errors.add(exp.getMessage());
+            }
+            if (!errors.isEmpty()) {
+                //It cannot be played.  It may still be something the authoring tool can open, with its mistakes
+                // left out and shown; and reading it that way finds every mistake rather than the first.
+                ScenarioSalvage.Result salvaged = ScenarioSalvage.read(source, this::problems);
+                if (salvaged.def() != null) {
+                    def = salvaged.def();
+                    leftOut = salvaged.leftOut();
+                }
+                if (salvaged.def() != null || salvaged.errors().size() > errors.size()) {
+                    errors.clear();
+                    errors.addAll(salvaged.errors());
+                }
+                //(and where else a card that is not declared is named, once for each such card)
+                Set<String> said = new java.util.HashSet<>();
+                for (int i = 0; i < errors.size(); i++) {
+                    String also = elsewhere(source, errors.get(i));
+                    if (!also.isEmpty() && said.add(also))
+                        errors.set(i, errors.get(i) + also);
+                }
+            }
+            if (def != null) {
+                //A user's scenario is known by its owner's name as well, whatever the file says
+                if (file.owner() != null)
+                    def.id = file.owner() + "/" + def.id;
+                id = def.id;
+                format = _formats.apply(def.format);
+            }
 
             if (errors.isEmpty()) {
                 warnings.addAll(new ScenarioText(def, _library, format, _cardLookup).check(def));
                 report = ScenarioRunner.run(def, _library, format);
             }
-        } catch (ScenarioFormatException exp) {
-            errors.add(exp.getMessage());
         } catch (IOException exp) {
             errors.add("The file could not be read: " + exp.getMessage());
         } catch (RuntimeException exp) {
@@ -480,6 +565,6 @@ public class ScenarioLibrary implements Cached {
             LOG.warn("Scenario " + where + " cannot be played: " + String.join("; ", errors));
         else if (report != null && !report.passed())
             LOG.warn("Scenario " + where + " does not play through:\n" + report);
-        return new Entry(id, file.path(), file.owner(), def, format, List.copyOf(errors), List.copyOf(warnings), report);
+        return new Entry(id, file.path(), file.owner(), def, format, List.copyOf(errors), List.copyOf(warnings), report, leftOut);
     }
 }

@@ -27,7 +27,9 @@ import java.util.Map;
 /**
  * Scenarios: tutorials, puzzles and sandboxes (see {@link ScenarioLibrary}).  Everything here needs a login.
  * <p>
- * GET /scenarios - what the player can start (and, for somebody who may write scenarios, {@code mayAuthor: true} and
+ * GET /scenarios - what the player can start, and {@code unreadable: [{path, owner, mine, id, errors}]}: the files a
+ * game cannot be started of, with why (all of them for an admin, their own for anybody else); and, for somebody who
+ * may write scenarios, {@code mayAuthor: true} and
  * {@code authoring: {gameId, id, title, over, test}|null}, the draft they have open):
  * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified, path, owner, mine,
  * campaign:{id, title, position, count, next:{id, title}|null}|null,
@@ -132,8 +134,31 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             scenarios.add(json);
         }
 
+        //The files that are not in that list because a game of them cannot be started at all (a file that is not
+        // HJSON, a card that was never declared, a format that does not exist), each with why.  An admin is told of
+        // every one; anybody else, of their own.  Without this a scenario that has been edited into a mistake just
+        // disappears from the list, and nothing says why.  'openable' is whether the authoring tool can open it all
+        // the same, with what is mistaken left out (see ScenarioSalvage).
+        boolean admin = player.hasType(Player.Type.ADMIN);
+        List<Map<String, Object>> unreadable = new ArrayList<>();
+        for (ScenarioLibrary.Entry entry : _scenarios.getAll()) {
+            boolean mine = entry.owner() != null && entry.owner().equals(player.getName());
+            if (entry.playable() || !(admin || mine))
+                continue;
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("path", (entry.owner() == null ? "" : "users/" + entry.owner() + "/") + entry.path());
+            json.put("owner", entry.owner());
+            json.put("mine", mine);
+            json.put("id", entry.id());
+            json.put("title", entry.def() == null ? null : entry.def().title);
+            json.put("errors", entry.errors());
+            json.put("openable", entry.openable() && mayAuthor(player));
+            unreadable.add(json);
+        }
+
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("scenarios", scenarios);
+        result.put("unreadable", unreadable);
         //Whether the player may write scenarios, and the draft they have open (if they have one): {gameId, id, title,
         // over, test}
         result.put("mayAuthor", mayAuthor(player));
@@ -199,6 +224,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             json.put("id", entry.id());
             json.put("playable", entry.playable());
             json.put("verified", entry.verified());
+            json.put("openable", entry.openable());
             json.put("errors", entry.errors());
             json.put("warnings", entry.warnings());
             json.put("report", entry.report() == null ? null : entry.report().toString());
@@ -267,7 +293,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                                 if (!name.isBlank())
                                     names.add(name.trim());
                         }
-                        result = _authoring.settings(player, flag(form, "recording"), flag(form, "askOpponent"), names);
+                        result = _authoring.settings(player, flag(form, "recording"), flag(form, "askOpponent"), names,
+                                "true".equals(getFormParameterSafely(form, "seenLeftOut")));
                     }
                     case "save" -> {
                         String path = getFormParameterSafely(form, "path");

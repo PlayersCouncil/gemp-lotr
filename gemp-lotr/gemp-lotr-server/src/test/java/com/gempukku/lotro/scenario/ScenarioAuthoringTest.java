@@ -1087,6 +1087,74 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void AFileWithMistakesIsOpenedWithoutThemAndTheAuthorIsTold() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        File file = new File(canon, "tutorials/mended.hjson");
+        Files.writeString(file.toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, the
+                		}
+                	}
+                	steps: [
+                		{
+                			pause: true
+                			when: freeps, action, phase(fellowship)
+                		}
+                		{
+                			when: freeps, action, phase(fellowship)
+                			do: exert(the)
+                			allow: play(aragorn)
+                		}
+                	]
+                """).replace("id: test", "id: mended"), StandardCharsets.UTF_8);
+        assertFalse(library.get("mended").playable());
+
+        JSONObject state = json(authoring.open(player, "mended", true)).getJSONObject("state");
+        assertEquals(1, steps(state).size());
+        assertNull(steps(state).getJSONObject(0).get("do"));
+        assertTrue("The draft is not what the file says, so there is something to save", state.getBooleanValue("dirty"));
+        JSONArray leftOut = state.getJSONArray("leftOut");
+        assertEquals(3, leftOut.size());
+        assertEquals("setup.freeps.hand", leftOut.getJSONObject(0).getString("where"));
+        assertEquals("aragorn, the", leftOut.getJSONObject(0).getString("was"));
+        assertNull(leftOut.getJSONObject(0).get("uid"));
+        assertEquals("step 1", leftOut.getJSONObject(1).getString("where"));
+        assertNull("The whole step went", leftOut.getJSONObject(1).get("uid"));
+        assertEquals("step 2.do", leftOut.getJSONObject(2).getString("where"));
+        assertEquals("exert(the)", leftOut.getJSONObject(2).getString("was"));
+        assertEquals(2, leftOut.getJSONObject(2).getIntValue("step"));
+        assertEquals("It is the draft's first step now", state.getJSONArray("uids").getString(0), leftOut.getJSONObject(2).getString("uid"));
+
+        //It plays like any other draft
+        Client client = new Client(game());
+        client.poll();
+        assertNotNull(client.decision);
+
+        //Saving it writes the file without its mistakes; what they were is still there to be read until it is put away
+        authoring.save(player, null, false, true);
+        assertTrue(library.get("mended").errors().toString(), library.get("mended").playable());
+        assertTrue(library.get("mended").leftOut().isEmpty());
+        assertFalse(Files.readString(file.toPath(), StandardCharsets.UTF_8).contains("the)"));
+        assertEquals(3, state().getJSONArray("leftOut").size());
+        authoring.settings(player, null, null, null, true);
+        assertEquals(0, state().getJSONArray("leftOut").size());
+
+        //A file that cannot be read even so is not opened, and the author is told what is wrong with it
+        Files.writeString(new File(canon, "tutorials/hopeless.hjson").toPath(),
+                ScenarioTesting.scenario("").replace("id: test", "id: hopeless").replace("format: scenario", "format: nonesuch"), StandardCharsets.UTF_8);
+        try {
+            authoring.open(player, "hopeless", true);
+            fail("It has no format to be played in");
+        } catch (ScenarioAuthoring.AuthoringException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().contains("format: there is no format called 'nonesuch'"));
+        }
+    }
+
+    @Test
     public void PicturesThatAreNotCardsAreListed() throws Exception {
         File images = temp.newFolder("images");
         Files.writeString(new File(images, "placeholder.png").toPath(), "x");

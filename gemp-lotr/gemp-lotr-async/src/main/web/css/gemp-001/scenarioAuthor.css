@@ -94,6 +94,53 @@ body.scenario-authoring #scenarioLayer {
     color: #ffe9b0;
 }
 
+/* What was left out of a file with mistakes in it, so that it could be opened */
+.sa-notice.sa-leftout {
+    max-height: 16em;
+    white-space: normal;
+}
+
+.sa-leftout-head {
+    font-weight: bold;
+}
+
+.sa-leftout-row {
+    margin-top: 5px;
+    padding-top: 4px;
+    border-top: 1px solid #7a3a34;
+}
+
+.sa-leftout-where {
+    font-weight: bold;
+    color: #fff;
+}
+
+.sa-leftout-was {
+    margin: 3px 0 0 0;
+    padding: 3px 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #ffd9d2;
+    font-family: Consolas, Menlo, monospace;
+    font-size: 11px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 7em;
+    overflow-y: auto;
+}
+
+.sa-tag.sa-mistake {
+    color: #ffb4a8;
+    border-color: #b0483c;
+}
+
+.sa-note.sa-mistaken {
+    margin: 2px 0 6px 0;
+    padding: 5px 8px;
+    background: #3a1714;
+    color: #ffe2dc;
+    box-shadow: inset 3px 0 0 #e0564a;
+}
+
 .sa-told {
     background: #1d3a4a;
     color: #d8f0ff;
