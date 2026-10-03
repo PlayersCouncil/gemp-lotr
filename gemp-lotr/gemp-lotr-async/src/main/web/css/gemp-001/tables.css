@@ -447,6 +447,54 @@
 	display: none;
 }
 
+/* Scenario files with mistakes in them, which cannot be played (admins see them all, a writer their own) */
+.scenario-unreadable {
+	border: 1px solid #a55;
+	color: #f2c4c4;
+	padding: 0.4em 0.8em;
+	max-height: 14em;
+	overflow-y: auto;
+}
+
+.scenario-unreadable[hidden] {
+	display: none;
+}
+
+.scenario-unreadable-heading {
+	font-weight: bold;
+}
+
+.scenario-unreadable-file {
+	margin-top: 0.4em;
+	display: flex;
+	align-items: flex-start;
+	gap: 1em;
+}
+
+.scenario-unreadable-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.scenario-unreadable-note {
+	font-style: italic;
+	margin-top: 0.15em;
+}
+
+.scenario-unreadable-file code {
+	color: #fff;
+	overflow-wrap: anywhere;
+}
+
+.scenario-unreadable-file ul {
+	margin: 0.15em 0 0;
+	padding-left: 1.4em;
+}
+
+.scenario-unreadable-file li {
+	overflow-wrap: anywhere;
+}
+
 .scenario-empty {
 	padding: 1em;
 	text-align: center;

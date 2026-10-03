@@ -33,6 +33,13 @@ class PlayScenario extends TableFlow {
 	mayAuthor = false;
 	authoring = null;
 	authorDiv = null;
+	//Scenario files with mistakes in them, which are in no list: [{path, owner, mine, id, title, errors: [...],
+	// openable}].  The server sends an admin all of them and anyone else their own.  'openable' ones can be opened
+	// in the authoring tool all the same, with the mistaken parts left out.
+	unreadable = [];
+	unreadableDiv = null;
+	//What the Result box was last made to say about them (null if it says something else)
+	unreadableSaid = null;
 
 	// as GempScenarioOverlay.MIN_WIDTH / MIN_HEIGHT
 	static MIN_WIDTH = 1000;
@@ -50,6 +57,7 @@ class PlayScenario extends TableFlow {
 		this.foldersDiv = $("#scenario-folders");
 		this.currentDiv = $("#scenario-current");
 		this.authorDiv = $("#scenario-author");
+		this.unreadableDiv = $("#scenario-unreadable");
 		this.selectedFolder = TableFlow.cookie("scenario-folder");
 	}
 
@@ -76,7 +84,9 @@ class PlayScenario extends TableFlow {
 			that.mayAuthor = !!(data && data.mayAuthor);
 			that.authoring = (data && data.authoring) || null;
 			that.ownFolder = !!(data && data.ownFolder);
+			that.unreadable = (data && data.unreadable) || [];
 			that.render();
+			that.sayUnreadable();
 		}, TableFlow.errorMap(function (message) {
 			that.listDiv.empty().append($("<div class='scenario-empty'></div>").text("The list of scenarios could not be loaded."));
 			that.showResult(message, "error");
@@ -165,9 +175,73 @@ class PlayScenario extends TableFlow {
 		return null;
 	}
 
+	// The files with mistakes in them, each with what is wrong with it.  A file like that is in no list, so without
+	// this it would simply be gone.  Most can still be opened in the authoring tool, which leaves the mistaken parts
+	// out and says what they were; one that cannot (it is not HJSON, it has no title) has to be put right by hand.
+	renderUnreadable() {
+		var that = this;
+		this.unreadableDiv.empty();
+		if (this.unreadable.length == 0) {
+			this.unreadableDiv.prop("hidden", true);
+			return;
+		}
+		this.unreadableDiv.prop("hidden", false);
+		var count = this.unreadable.length;
+		this.unreadableDiv.append($("<div class='scenario-unreadable-heading'></div>").text(
+			(count == 1 ? "1 scenario file has" : count + " scenario files have") + " mistakes in "
+			+ (count == 1 ? "it" : "them") + ", and cannot be played:"));
+		for (const file of this.unreadable) {
+			var row = $("<div class='scenario-unreadable-file'></div>");
+			var text = $("<div class='scenario-unreadable-text'></div>").appendTo(row);
+			text.append($("<code></code>").text(file.path));
+			var errors = file.errors || [];
+			if (errors.length == 0)
+				errors = ["It could not be read."];
+			var list = $("<ul></ul>");
+			for (const error of errors)
+				list.append($("<li></li>").text(error));
+			text.append(list);
+			if (file.openable && file.id != null) {
+				let id = file.id;
+				row.append($("<button class='scenario-edit'></button>")
+					.attr("title", "Open it in the authoring tool, with the mistaken parts left out. The tool shows what they were.")
+					.text("Edit").button().click(function () {
+						that.author({id: id});
+					}));
+			} else if (this.mayAuthor) {
+				text.append($("<div class='scenario-unreadable-note'></div>").text("The authoring tool cannot open this one: the file itself has to be put right."));
+			}
+			this.unreadableDiv.append(row);
+		}
+	}
+
+	// The same in the Result box, in a line.  It only takes the box when the box has nothing to say, and gives it
+	// back when the files have been put right.
+	sayUnreadable() {
+		var quiet = this.resultDiv.hasClass("result-ready") || this.unreadableSaid != null && this.resultDiv.text() == this.unreadableSaid;
+		if (!quiet) {
+			this.unreadableSaid = null;
+			return;
+		}
+		if (this.unreadable.length == 0) {
+			if (this.unreadableSaid != null)
+				this.resetResult();
+			this.unreadableSaid = null;
+			return;
+		}
+		var first = this.unreadable[0];
+		var errors = first.errors || [];
+		var text = this.unreadable.length == 1
+			? first.path + " cannot be played: " + (errors[0] || "see above.") + (errors.length > 1 ? "  (and " + (errors.length - 1) + " more, above)" : "")
+			: this.unreadable.length + " scenario files have mistakes in them and cannot be played (they are listed above).";
+		this.showResult(text, "error");
+		this.unreadableSaid = this.resultDiv.text();
+	}
+
 	render() {
 		this.renderCurrent();
 		this.renderAuthor();
+		this.renderUnreadable();
 		this.foldersDiv.empty();
 		this.listDiv.empty();
 		if (this.scenarios.length == 0) {

@@ -22,3 +22,9 @@ them: `mvn test -pl gemp-lotr-server -Dtest=ScenarioCanonTest -DargLine="-Dscena
 A message can show a picture that is not a card (`zoom: image:<file>`). Those are files in the web folder's
 `images/scenarios/` (`gemp-lotr-async/src/main/web/images/scenarios`), which has a card-shaped `placeholder.png` and
 a note of its own.
+
+A file with a mistake in it (a card it names and does not declare, a field nothing knows) cannot be played, and is
+not in the list of scenarios. Play > Scenarios says so underneath, with everything that is wrong with it, to admins
+and to whoever owns the file. Edit there opens it in the authoring tool with the mistaken parts left out; the tool
+shows what they were, and saving writes the file without them. A file that is not HJSON at all, or has no id, title,
+format, cards, sites or Ring-bearers, has to be put right by hand.

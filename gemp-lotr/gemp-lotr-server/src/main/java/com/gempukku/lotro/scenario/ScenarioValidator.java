@@ -81,11 +81,14 @@ public final class ScenarioValidator {
                 requirements(step.allow.passWhen, context + ".allow.passWhen", problems);
         }
         for (Step step : def.steps)
-            for (ScenarioDefinition.Message message : step.messages) {
+            for (int i = 0; i < step.messages.size(); i++) {
+                ScenarioDefinition.Message message = step.messages.get(i);
+                //(said as the parser says where a message is, so that whatever reads the two can find it)
+                String context = "step " + step.label() + ".messages[" + (i + 1) + "]";
                 if (message.zoom != null) {
                     String problem = CardFaces.check(def, message.zoom, library);
                     if (problem != null)
-                        problems.add("step " + step.label() + ".messages.zoom: " + problem);
+                        problems.add(context + ".zoom: " + problem);
                 }
                 List<String> anchors = new ArrayList<>(message.highlight);
                 anchors.addAll(message.avoid);
@@ -94,7 +97,7 @@ public final class ScenarioValidator {
                     String part = Anchors.printedPart(anchor);
                     String problem = part == null ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
                     if (problem != null)
-                        problems.add("step " + step.label() + ".messages: " + anchor + ": " + problem);
+                        problems.add(context + ": " + anchor + ": " + problem);
                 }
             }
         for (int i = 0; i < def.orders.size(); i++)

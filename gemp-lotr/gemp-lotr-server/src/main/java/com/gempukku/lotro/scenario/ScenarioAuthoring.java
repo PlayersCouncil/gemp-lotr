@@ -160,6 +160,13 @@ public class ScenarioAuthoring {
         Integer testFrom;
         /** How many lines of comment the file has that saving the draft over it would lose. */
         int commentsLost;
+        /**
+         * What was left out of the file for it to be opened at all (see ScenarioSalvage): the draft is the file
+         * without these, and saving it writes the file without them.  Kept until the author says they have seen it.
+         */
+        volatile List<ScenarioSalvage.LeftOut> leftOut = List.of();
+        /** For each of those, the name of the step it was in (null if it was in none, or the whole step went). */
+        volatile List<String> leftOutSteps = List.of();
 
         Session(Player player) {
             this.player = player;
@@ -789,11 +796,16 @@ public class ScenarioAuthoring {
 
     /**
      * Opens one of the library's scenarios for writing.  Whatever draft the author had open is dropped.
+     *
+     * A file with mistakes in it is opened as well, if it can be read with the mistaken parts left out: the draft is
+     * then the file without them, the author is shown what they were, and the draft counts as changed from the start.
      */
     public Map<String, Object> open(Player player, String id, boolean admin) throws AuthoringException {
         ScenarioLibrary.Entry entry = _scenarios.get(id);
         if (entry == null || entry.def() == null)
             throw new AuthoringException("There is no scenario called '" + id + "' that can be read.");
+        if (!entry.openable())
+            throw new AuthoringException("That scenario's file has mistakes that have to be put right in the file itself:\n" + String.join("\n", entry.errors()));
         if (!admin && (entry.owner() == null || !entry.owner().equals(player.getName())))
             throw new AuthoringException("That scenario is not yours to change.");
         //A user's scenario is known to the library by its owner's name as well; its file is not
@@ -806,6 +818,17 @@ public class ScenarioAuthoring {
             ScenarioDefinition draft = copy(entry.def(), fileId);
             session.commentsLost = commentsLost(_scenarios.source(entry), draft);
             start(session, draft, true, fromTheStart());
+            if (!entry.leftOut().isEmpty()) {
+                //(steps keep their names as the author moves them about; where one was when the file was read is
+                // only where it is until then)
+                List<String> names = session.sitting.uids();
+                List<String> steps = new ArrayList<>();
+                for (ScenarioSalvage.LeftOut one : entry.leftOut())
+                    steps.add(one.step() >= 1 && one.step() <= names.size() ? names.get(one.step() - 1) : null);
+                session.leftOut = entry.leftOut();
+                session.leftOutSteps = steps;
+                session.dirty = true;
+            }
             _sessions.put(player.getName(), session);
             return result(session, false, true);
         }
@@ -1481,8 +1504,20 @@ public class ScenarioAuthoring {
     }
 
     public Map<String, Object> settings(Player player, Boolean recording, Boolean askOpponent, List<String> way) throws AuthoringException {
+        return settings(player, recording, askOpponent, way, false);
+    }
+
+    /**
+     * @param seenLeftOut True when the author has seen what was left out of the file to open it, and wants no more
+     *                    said of it.
+     */
+    public Map<String, Object> settings(Player player, Boolean recording, Boolean askOpponent, List<String> way, boolean seenLeftOut) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
+            if (seenLeftOut) {
+                session.leftOut = List.of();
+                session.leftOutSteps = List.of();
+            }
             if (recording != null)
                 session.recording = recording;
             if (askOpponent != null)
@@ -1738,6 +1773,24 @@ public class ScenarioAuthoring {
             state.put("canonical", session.path != null && session.owner == null);
             state.put("canSaveAnywhere", _scenarios.hasUserFolder());
             state.put("commentsLost", session.commentsLost);
+            //What was left out of the file to open it: [{where, message, was, step, uid}], 'step' being the step of
+            // the file it was in (0 if none) and 'uid' that step's name in the draft (null if the whole step went)
+            List<Map<String, Object>> leftOut = new ArrayList<>();
+            List<String> names = sitting.uids();
+            List<ScenarioSalvage.LeftOut> out = session.leftOut;
+            List<String> outSteps = session.leftOutSteps;
+            for (int i = 0; i < out.size(); i++) {
+                ScenarioSalvage.LeftOut one = out.get(i);
+                String uid = i < outSteps.size() ? outSteps.get(i) : null;
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("where", one.where());
+                json.put("message", one.message());
+                json.put("was", one.was());
+                json.put("step", one.stepInFile());
+                json.put("uid", uid != null && names.contains(uid) ? uid : null);
+                leftOut.add(json);
+            }
+            state.put("leftOut", leftOut);
             state.put("recording", session.recording);
             state.put("askOpponent", session.askOpponent);
             state.put("way", new ArrayList<>(session.way));
