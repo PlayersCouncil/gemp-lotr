@@ -368,12 +368,16 @@
 	font-weight: bold;
 	font-size: 110%;
 	display: flex;
-	flex-wrap: wrap;
 	align-items: baseline;
 	gap: 0.6em;
 }
 
+/* the tag in front of a title: as wide whatever it says, so that the titles start in a line */
 .scenario-status {
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	min-width: 7.6em;
+	text-align: center;
 	font-size: 70%;
 	font-weight: normal;
 	padding: 0.1em 0.5em;
@@ -382,9 +386,22 @@
 	white-space: nowrap;
 }
 
+.scenario-title-text {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.scenario-status-new { color: #b8b8b8; }
+.scenario-status-progress { color: #8ab4e8; }
 .scenario-status-complete { color: #7ecb7e; }
 .scenario-status-updated { color: #e0c060; }
-.scenario-status-started { color: #8ab4e8; }
+/* the one to play next stands out: filled, where the others are outlined */
+.scenario-status-next {
+	color: #1c1608;
+	background: #e8c14a;
+	border-color: #e8c14a;
+	font-weight: bold;
+}
 
 .scenario-summary {
 	margin-top: 0.2em;
@@ -403,8 +420,10 @@
 	min-width: 7em;
 }
 
-/* Writing scenarios (those who may): a new one, and the Edit button on each row */
+/* Writing scenarios (those who may): a new one, and the button that brings the Edit buttons.  Under the list, and
+   set apart from it: the list is what the screen is for. */
 .scenario-author {
+	margin-top: 1.4em;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -425,6 +444,16 @@
 
 .scenario-author-draft {
 	flex: 1 1 auto;
+}
+
+.scenario-author-label {
+	flex: 0 0 auto;
+	font-weight: bold;
+}
+
+.scenario-author-note {
+	flex: 1 1 auto;
+	font-style: italic;
 }
 
 /* (the draft's line, then the new one's on a line of its own) */

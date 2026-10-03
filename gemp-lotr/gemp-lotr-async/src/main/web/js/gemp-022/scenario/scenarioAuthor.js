@@ -26,6 +26,12 @@ var GempScenarioAuthor = Class.extend({
     TYPES: ["action", "actionChoice", "cards", "arbitrary", "choice", "number", "assign"],
     SEATS: ["freeps", "shadow", "human", "opponent"],
     ZONES: ["characters", "support", "minions", "hand", "deck.top", "deck.bottom", "discard", "deadPile", "removed"],
+    /** Where a card can be, in the order the Board tab lists them, with what each is called there. */
+    PLACED: [["characters", "Characters"], ["minions", "Minions"], ["support", "Support area"], ["attached", "On another card"],
+        ["stacked", "Stacked on another card"], ["hand", "Hand"], ["deck", "Deck, top first"], ["discard", "Discard pile, top first"],
+        ["deadPile", "Dead pile"], ["removed", "Removed from the game"]],
+    /** The places whose cards come in an order that can be changed: order(seat.zone, card, card). */
+    ORDERED: ["hand", "deck", "discard", "deadPile"],
     PARTS: ["strength", "vitality", "resistance", "siteNumber", "wounds", "cost", "title", "culture", "type", "text", "art", "stats", "signet", "shadowNumber"],
     PLACES: ["zone:self.hand", "zone:self.characters", "zone:self.support", "zone:opp.characters", "zone:opp.support",
         "zone:minions", "pile:self.deck", "pile:self.discard", "pile:self.deadPile", "pile:self.adventureDeck",
@@ -2354,14 +2360,64 @@ var GempScenarioAuthor = Class.extend({
             var zones = $.map(that.ZONES, function (zone) {
                 return [[seat + "." + zone, zone]];
             });
+            //The seat's cards by where they are: what is on the table, then the hand and the piles, each of those in
+            // the order its cards come (which the arrows change)
+            var places = that.PLACED.slice();
+            var held = {};
             $.each(board.cards, function (i, card) {
                 if (card.owner != seat)
                     return;
+                if (held[card.zone] == null) {
+                    held[card.zone] = [];
+                    if ($.grep(places, function (place) { return place[0] == card.zone; }).length == 0)
+                        places.push([card.zone, card.zone]);
+                }
+                held[card.zone].push(card);
+            });
+            var listed = [];
+            $.each(places, function (p, place) {
+                var there = held[place[0]];
+                if (there == null)
+                    return;
+                var ordered = $.inArray(place[0], that.ORDERED) > -1;
+                if (ordered)
+                    there.sort(function (a, b) {
+                        return (a.at == null ? 9999 : a.at) - (b.at == null ? 9999 : b.at);
+                    });
+                $.each(there, function (at, card) {
+                    listed.push({card: card, first: at == 0, label: place[1] + " (" + there.length + ")", ordered: ordered && there.length > 1, at: at, among: there});
+                });
+            });
+            $.each(listed, function (i, entry) {
+                var card = entry.card;
+                if (entry.first)
+                    section.append(that.el("div", "sa-zonehead", entry.label));
                 var row = that.el("div", "sa-card").appendTo(section);
                 var name = that.el("div", "sa-cardname").appendTo(row);
-                name.append(that.el("span", "sa-alias", card.alias));
+                //(a card hint, as the game's chat has them: the game screen shows the card while the pointer is on
+                // it, and opens its window on a click)
+                name.append(that.el("span", "sa-alias cardHint", card.alias).attr("value", card.blueprintId).attr("title", ""));
                 name.append(document.createTextNode(" " + card.name));
                 var controls = that.el("div", "sa-row").appendTo(row);
+                if (entry.ordered) {
+                    //Where it comes in its hand or pile: one place earlier or later, or first
+                    var reorder = function (to) {
+                        var aliases = $.map(entry.among, function (other) { return other.alias; });
+                        aliases.splice(entry.at, 1);
+                        aliases.splice(to, 0, card.alias);
+                        act("order(" + seat + "." + card.zone + ", " + aliases.join(", ") + ")");
+                    };
+                    var pile = card.zone != "hand";
+                    controls.append(that.button("\u2191", pile ? "One nearer the top" : "One earlier in the hand", function () {
+                        reorder(entry.at - 1);
+                    }, "sa-order").prop("disabled", entry.at == 0));
+                    controls.append(that.button("\u2193", pile ? "One nearer the bottom" : "One later in the hand", function () {
+                        reorder(entry.at + 1);
+                    }, "sa-order").prop("disabled", entry.at == entry.among.length - 1));
+                    controls.append(that.button("\u2912", pile ? "To the top" : "To the front of the hand", function () {
+                        reorder(0);
+                    }, "sa-order").prop("disabled", entry.at == 0));
+                }
                 controls.append(that.select([["", card.zone + (card.on ? " on " + card.on : "")]].concat(zones), "", function (zone) {
                     if (zone != "")
                         act("move(" + card.alias + ", " + zone + ")");
@@ -2540,10 +2596,14 @@ var GempScenarioAuthor = Class.extend({
 
         var file = this.el("div", "sa-section").appendTo(box);
         file.append(this.el("div", "sa-heading", "The file"));
-        file.append(this.el("div", "sa-note sa-path", state.path + (state.canonical ? " (one of the game's own)" : "")
+        file.append(this.el("div", "sa-note sa-path", state.path + (state.canonical ? " (public)" : "")
             + (!state.onDisk ? " \u2014 not saved yet" : state.dirty ? " \u2014 changed since it was saved" : " \u2014 saved")));
         if ((state.commentsLost || 0) > 0)
             file.append(this.el("div", "sa-note sa-pending", "The file has " + state.commentsLost + " line(s) of comment that saving will drop. Notes are kept."));
+        //A scenario is kept under the folder of its kind: one that is not is moved there as it is saved
+        if (state.onDisk && state.fileOnSave != null && state.fileOnSave != state.file)
+            file.append(this.el("div", "sa-note sa-pending", "Saving moves the file to " + state.fileOnSave + ": a " + (draft.kind || "tutorial")
+                + " is kept under " + state.kindFolder + "/."));
         var buttons = this.el("div", "sa-bar").appendTo(file);
         buttons.append(this.button("Save", "Write the draft to its file", function () {
             that.save();
@@ -2702,9 +2762,21 @@ var GempScenarioAuthor = Class.extend({
             + "(Notes are part of the scenario, and are kept.)\n\nSave over it?");
     },
 
+    /** The folders scenarios are kept under by kind: no path is given with one of these in front (the server puts it there). */
+    KIND_FOLDERS: ["tutorials", "puzzles", "sandboxes"],
+
+    /** A file's place as its author says it: without the folder of its kind in front, and without .hjson on the end. */
+    bareName: function (path) {
+        var bare = ("" + (path == null ? "" : path)).replace(/\.hjson$/i, "");
+        var slash = bare.indexOf("/");
+        if (slash > 0 && $.inArray(bare.substring(0, slash).toLowerCase(), this.KIND_FOLDERS) > -1)
+            bare = bare.substring(slash + 1);
+        return bare;
+    },
+
     /**
      * What an author types for where a file goes, as a path the server will take: slashes one way, nothing but what
-     * a file's name may be made of, and .hjson on the end.
+     * a file's name may be made of, and .hjson on the end (whether or not it was typed).
      */
     tidyPath: function (typed) {
         var path = $.trim(("" + typed).replace(/\\/g, "/")).replace(/\.hjson$/i, "").replace(/[^A-Za-z0-9_. \/-]+/g, "-");
@@ -2726,23 +2798,32 @@ var GempScenarioAuthor = Class.extend({
         form.append(this.el("div", "sa-note", copy
             ? "Saves the draft as another scenario. The copy is known by its file's name (that becomes its id), and is what you are writing from then on. The scenario it came from stays as it was last saved."
             : "Gives the file another name, or moves it to another folder. It stays the same scenario: its id, and players' progress in it, do not change." + (state.dirty ? " What has not been saved stays unsaved." : "")));
-        var suggested = state.file || (this.draft.id + ".hjson");
+        //The name is given without its ending (.hjson is always put on), and without the folder of its kind (it is
+        // always kept under that): both are shown either side of it
+        var folder = (state.kindFolder || "tutorials") + "/";
+        var suggested = this.bareName(state.file || this.draft.id);
         if (copy)
-            suggested = suggested.replace(/(\.hjson)?$/i, "-copy.hjson");
-        var path = $("<input type='text'/>").addClass("sa-input").attr("maxlength", this.MAX_PATH).val(suggested)
-            .attr("title", "Folders and a file name: tutorials/basics-02-the-ring.hjson. Letters, digits, spaces, dots, dashes and underscores; " + this.MAX_PATH + " characters at most.");
+            suggested += "-copy";
+        var path = $("<input type='text'/>").addClass("sa-input").attr("maxlength", this.MAX_PATH - folder.length - 6).val(suggested)
+            .attr("title", "A name, with folders before it if it goes in any: basics/basics-02-the-ring. Letters, digits, spaces, dots, dashes and underscores. "
+                + "It is kept under " + folder + " because of its kind, and .hjson is put on the end.");
         var shown = this.el("div", "sa-note");
-        var canonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere || !!state.canonical).prop("disabled", !state.canSaveAnywhere);
+        //Only somebody who may publish, on a server that keeps authors' own scenarios too, has anything to choose
+        var chooses = !!state.mayPublish && !!state.canSaveAnywhere;
+        var canonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere || (chooses && !!state.canonical));
         var show = function () {
             var tidy = that.tidyPath(path.val());
-            shown.text(tidy == "" ? "" : (canonical.prop("checked") ? "" : "your own folder: ") + tidy
+            shown.text(tidy == "" ? "" : (canonical.prop("checked") ? "" : "your own folder: ") + folder + tidy
                 + (copy ? "  (id: " + tidy.replace(/^.*\//, "").replace(/\.hjson$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ")" : ""));
         };
         path.bind("input", show);
         canonical.change(show);
-        form.append(this.field(copy ? "Save as" : "Move to", path));
-        form.append(this.el("label", "sa-check sa-block").attr("title", "Otherwise it goes in your own folder, where only you and the admins are offered it")
-            .append(canonical).append(document.createTextNode(" among the game's own scenarios")));
+        var named = this.el("span", "sa-named");
+        named.append(this.el("span", "sa-affix", folder)).append(path).append(this.el("span", "sa-affix", ".hjson"));
+        form.append(this.field(copy ? "Save as" : "Rename to", named));
+        if (chooses)
+            form.append(this.el("label", "sa-check sa-block").attr("title", "Kept with the game's own scenarios, and offered to everybody once it plays through. Otherwise it goes in your own folder, where only you and the admins are offered it.")
+                .append(canonical).append(document.createTextNode(" Public Scenario")));
         form.append(shown);
         var go = function () {
             var tidy = that.tidyPath(path.val());
@@ -2791,14 +2872,14 @@ var GempScenarioAuthor = Class.extend({
             var broken = (saved.errors || []).length > 0;
             var warnings = (saved.warnings || []).length;
             //Saving leaves the author where they were.  What there is to read about it is kept under Scenario.
-            that.report = "Saved to " + saved.path + ".\n"
+            that.report = "Saved to " + saved.path + (saved.movedFrom ? " (moved from " + saved.movedFrom + ": that is where its kind is kept)" : "") + ".\n"
                 + (broken ? "It cannot be played:\n" + saved.errors.join("\n")
                     : saved.verified ? "Scenario validated." : "It does not play through yet:\n" + (saved.report || ""))
                 + (warnings > 0 ? "\n\nWarnings:\n" + saved.warnings.join("\n") : "");
             that.saved = {
                 good: !broken && !!saved.verified,
                 why: broken || !saved.verified || warnings > 0,
-                text: "Saved to " + saved.path + ". " + (broken ? "It cannot be played as it stands."
+                text: "Saved to " + saved.path + (saved.movedFrom ? ", moved from " + saved.movedFrom : "") + ". " + (broken ? "It cannot be played as it stands."
                     : saved.verified ? "Scenario validated." : "It does not play through yet.")
                     + (warnings > 0 ? " " + warnings + " warning" + (warnings == 1 ? "" : "s") + "." : "")
             };

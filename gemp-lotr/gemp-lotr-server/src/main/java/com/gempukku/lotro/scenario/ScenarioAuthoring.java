@@ -702,6 +702,37 @@ public class ScenarioAuthoring {
         }
     }
 
+    /** The folder scenarios of a kind are kept under: the first division of the game's own folder, and of an author's. */
+    public static String kindFolder(ScenarioDefinition.Kind kind) {
+        return switch (kind) {
+            case TUTORIAL -> "tutorials";
+            case PUZZLE -> "puzzles";
+            case SANDBOX -> "sandboxes";
+        };
+    }
+
+    private static final Set<String> KIND_FOLDERS = Set.of("tutorials", "puzzles", "sandboxes");
+
+    /**
+     * Where a scenario's file goes, given where its author would have it: under the folder of its kind, whatever
+     * folders and name were asked for below that.  A path that already begins with the folder of a kind (this one or
+     * another) has that folder replaced, so that a scenario whose kind changes moves across.
+     */
+    public static String filed(String path, ScenarioDefinition.Kind kind) {
+        if (path == null)
+            return null;
+        String rest = path.trim();
+        int slash = rest.indexOf('/');
+        if (slash > 0 && KIND_FOLDERS.contains(rest.substring(0, slash).toLowerCase(Locale.ROOT)))
+            rest = rest.substring(slash + 1);
+        return kindFolder(kind) + "/" + rest;
+    }
+
+    private static ScenarioDefinition.Kind kindOf(Session session) {
+        Sitting sitting = session.sitting;
+        return sitting.mediator.scenarioLocked(() -> sitting.def.kind);
+    }
+
     /**
      * @param path Folders and a file name, ending in .hjson.  (The page tidies what its author types; here it is
      *             taken as it comes, and anything that is not plainly a place in the folder is refused.)
@@ -847,8 +878,7 @@ public class ScenarioAuthoring {
     public Map<String, Object> create(Player player, String id, String title, boolean canonical, boolean admin) throws AuthoringException {
         if (id == null || !id.matches("[a-z0-9][a-z0-9-]{1,60}"))
             throw new AuthoringException("A scenario's id is made of small letters, digits and dashes: basics-02-the-ring");
-        boolean ownFolder = _scenarios.hasUserFolder() && !(canonical && admin);
-        Place place = place(player, (ownFolder ? "" : "tutorials/") + id + ".hjson", canonical, admin);
+        Place place = place(player, filed(id + ".hjson", ScenarioDefinition.Kind.TUTORIAL), canonical, admin);
         if (_scenarios.exists(place.owner(), place.path()))
             throw new AuthoringException("There is already a scenario at " + place.shown() + ".  Give the new one another id (or open that one, if it is the one you mean to change).");
         if (_scenarios.get(place.owner() == null ? id : place.owner() + "/" + id) != null)
@@ -1314,6 +1344,7 @@ public class ScenarioAuthoring {
                 Step opening = sitting.inHand();
                 if (opening != null && opening.when.opening) {
                     //What the opening does, it does once it has been read: the board it is read on is the one laid out
+                    reordered(opening.doOps, op);
                     opening.doOps.add(op);
                     session.notice = "Written into the opening's Do: it happens once the opening has been read.";
                     return null;
@@ -1324,10 +1355,9 @@ public class ScenarioAuthoring {
                 if (problems.size() > before)
                     return problems.getLast();
                 Step inHand = sitting.inHand();
-                if (inHand != null)
-                    inHand.doOps.add(op);
-                else
-                    sitting.pending.add(op);
+                List<DoOp> ops = inHand != null ? inHand.doOps : sitting.pending;
+                reordered(ops, op);
+                ops.add(op);
                 return null;
             });
             if (problem != null)
@@ -1337,9 +1367,59 @@ public class ScenarioAuthoring {
         }
     }
 
+    /**
+     * Putting a hand in order one card at a time is one ordering, not one for every press: an ordering of the same
+     * place that is the last thing a step does gives way to the one that follows it.
+     */
+    private static void reordered(List<DoOp> ops, DoOp op) {
+        if (op.kind() == ScenarioDefinition.DoKind.ORDER && !ops.isEmpty()
+                && ops.getLast().kind() == ScenarioDefinition.DoKind.ORDER && ops.getLast().target().equalsIgnoreCase(op.target()))
+            ops.removeLast();
+    }
+
     private static void putInSetup(ScenarioDefinition def, DoOp op) throws AuthoringException {
         ScenarioDefinition.Setup setup = def.setup;
         switch (op.kind()) {
+            case ORDER -> {
+                ScenarioParser.ZoneRef ref;
+                try {
+                    ref = ScenarioParser.parseZoneRef(def, op.target(), "do");
+                } catch (ScenarioFormatException exp) {
+                    throw new AuthoringException(exp.getMessage());
+                }
+                List<String> wanted = new ArrayList<>();
+                for (String alias : op.card().split(","))
+                    wanted.add(alias.trim());
+                Map<SetupZone, List<String>> zones = setup.zones.computeIfAbsent(ref.seat(), seat -> new EnumMap<>(SetupZone.class));
+                List<String> listed = zones.getOrDefault(ref.zone(), List.of());
+                List<String> ordered = new ArrayList<>();
+                if (ref.zone() == SetupZone.DECK) {
+                    //The deck the scenario starts with is every card of the seat's that the setup puts nowhere else,
+                    // in the order they are declared, under whatever it lists for the deck.  Listing them all for
+                    // the deck is what puts them in an order of their own.
+                    Set<String> elsewhere = new HashSet<>(setup.attach.keySet());
+                    elsewhere.addAll(setup.stack.keySet());
+                    elsewhere.addAll(def.ringBearer.values());
+                    elsewhere.addAll(def.ring.values());
+                    for (Map<SetupZone, List<String>> seatZones : setup.zones.values())
+                        for (Map.Entry<SetupZone, List<String>> zone : seatZones.entrySet())
+                            if (zone.getKey() != SetupZone.DECK)
+                                elsewhere.addAll(zone.getValue());
+                    for (String alias : wanted)
+                        if (!elsewhere.contains(alias))
+                            ordered.add(alias);
+                } else {
+                    for (String alias : wanted)
+                        if (listed.contains(alias))
+                            ordered.add(alias);
+                }
+                if (ordered.isEmpty())
+                    throw new AuthoringException("None of those cards is in " + op.target() + " on the board the scenario starts with.");
+                for (String alias : listed)
+                    if (!ordered.contains(alias))
+                        ordered.add(alias);
+                zones.put(ref.zone(), ordered);
+            }
             case MOVE -> {
                 ScenarioParser.ZoneRef ref;
                 try {
@@ -1541,21 +1621,39 @@ public class ScenarioAuthoring {
     }
 
     /**
-     * Writes the draft to its file.
+     * Writes the draft to its file.  The file is kept under the folder of the scenario's kind (see filed): one that is
+     * somewhere else, because its kind has been changed or because it was put there by hand, is moved as it is saved.
      * @param path For a scenario that has no file yet: somewhere other than where it was named for when it was
-     *             started ("tutorials/basics-02.hjson").  Null to save it where it is.
+     *             started ("basics/basics-02.hjson").  Null to save it where it is.
      * @param canonical With a path: whether that is among the game's own scenarios.
      */
     public Map<String, Object> save(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            Place to = new Place(session.owner, session.path);
+            ScenarioDefinition.Kind kind = kindOf(session);
+            Place from = new Place(session.owner, session.path);
+            Place to = new Place(session.owner, filed(session.path, kind));
             if (!session.onDisk && path != null && !path.isBlank())
-                to = place(player, path, canonical, admin);
-            if (!session.onDisk && _scenarios.exists(to.owner(), to.path()))
+                to = place(player, filed(path, kind), canonical, admin);
+            boolean moves = session.onDisk && !to.equals(from);
+            if ((!session.onDisk || moves) && _scenarios.exists(to.owner(), to.path()))
                 throw new AuthoringException("There is already a scenario at " + to.shown()
-                        + ".  Give this one a path of its own (or open that one, if it is the one you mean to change).");
-            return write(session, to);
+                        + (moves ? ", which is where a " + kind.name().toLowerCase(Locale.ROOT) + " called this goes.  Rename one of them."
+                        : ".  Give this one a path of its own (or open that one, if it is the one you mean to change)."));
+            if (moves) {
+                try {
+                    _scenarios.check(to.owner(), to.path());
+                    _scenarios.move(from.owner(), from.path(), to.owner(), to.path());
+                } catch (IOException exp) {
+                    throw new AuthoringException("It could not be moved to " + to.shown() + ": " + exp.getMessage());
+                }
+                session.owner = to.owner();
+                session.path = to.path();
+            }
+            Map<String, Object> result = write(session, to);
+            if (moves)
+                ((Map<String, Object>) result.get("saved")).put("movedFrom", from.shown());
+            return result;
         }
     }
 
@@ -1568,7 +1666,7 @@ public class ScenarioAuthoring {
         Session session = session(player);
         synchronized (session) {
             requireAuthor(session.sitting);
-            Place to = place(player, path, canonical, admin);
+            Place to = place(player, filed(path, kindOf(session)), canonical, admin);
             if (_scenarios.exists(to.owner(), to.path()))
                 throw new AuthoringException("There is already a scenario at " + to.shown() + ".  A copy needs a file of its own.");
             String name = to.path().substring(to.path().lastIndexOf('/') + 1, to.path().length() - ".hjson".length());
@@ -1591,7 +1689,7 @@ public class ScenarioAuthoring {
     public Map<String, Object> rename(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            Place to = place(player, path, canonical, admin);
+            Place to = place(player, filed(path, kindOf(session)), canonical, admin);
             Place from = new Place(session.owner, session.path);
             if (!to.equals(from)) {
                 if (_scenarios.exists(to.owner(), to.path()))
@@ -1769,6 +1867,12 @@ public class ScenarioAuthoring {
             state.put("path", session.path == null ? null : (session.owner == null ? "" : "users/" + session.owner + "/") + session.path);
             //(the same without whose folder it is in, which is how an author says where a file goes)
             state.put("file", session.path);
+            //The folder its kind puts it under, and where saving will have it (which is somewhere else when its kind
+            // has been changed since it was last saved, or its file was put where it is by hand)
+            state.put("kindFolder", kindFolder(def.kind));
+            state.put("fileOnSave", filed(session.path, def.kind));
+            //(whether the author may put a scenario among the game's own)
+            state.put("mayPublish", session.player.hasType(Player.Type.ADMIN));
             state.put("onDisk", session.onDisk);
             state.put("canonical", session.path != null && session.owner == null);
             state.put("canSaveAnywhere", _scenarios.hasUserFolder());
@@ -1873,6 +1977,14 @@ public class ScenarioAuthoring {
 
     private Map<String, Object> describeBoard(Sitting sitting) {
         ScenarioTable table = sitting.live.Table();
+        //Where each card comes in its hand or its pile (0 first: the top of a pile)
+        Map<PhysicalCard, Integer> places = new IdentityHashMap<>();
+        for (Seat seat : Seat.values())
+            for (SetupZone zone : ScenarioParser.ORDERED) {
+                List<? extends PhysicalCard> there = table.CardsIn(seat, zone);
+                for (int i = 0; i < there.size(); i++)
+                    places.put(there.get(i), i);
+            }
         List<Map<String, Object>> cards = new ArrayList<>();
         for (CardDef card : sitting.def.cards.values()) {
             PhysicalCardImpl physical = table.Card(card.alias());
@@ -1884,6 +1996,7 @@ public class ScenarioAuthoring {
             json.put("owner", card.owner().key());
             json.put("cardId", physical.getCardId());
             json.put("zone", zoneOf(physical));
+            json.put("at", places.get(physical));
             json.put("wounds", table.gameState().getWounds(physical));
             Token token = physical.getBlueprint().getCulture() == null ? null : Token.findTokenForCulture(physical.getBlueprint().getCulture());
             json.put("tokens", token == null ? 0 : table.gameState().getTokenCount(physical, token));

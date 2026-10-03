@@ -525,6 +525,30 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                     for (int i = 0; i < op.amount(); i++)
                         _gameState.playerDrawsCard(player);
                 }
+                case ORDER -> {
+                    ScenarioParser.ZoneRef ref = ScenarioParser.parseZoneRef(_def, op.target(), "do");
+                    List<? extends PhysicalCard> there = CardsIn(ref.seat(), ref.zone());
+                    List<PhysicalCardImpl> ordered = new ArrayList<>();
+                    for (String alias : op.card().split(",")) {
+                        PhysicalCardImpl card = Card(alias.trim());
+                        if (there.contains(card))
+                            ordered.add(card);
+                        else
+                            _problems.add(op.source() + ": '" + alias.trim() + "' is not in " + op.target());
+                    }
+                    for (PhysicalCard card : List.copyOf(there))
+                        if (!ordered.contains(card))
+                            ordered.add((PhysicalCardImpl) card);
+                    //A card is put in its place by being taken out and put back at the end (the bottom, of a deck).
+                    // The cards that already come first, in this order, are left where they are: every card moved
+                    // is a card the players watch move.
+                    int settled = 0;
+                    for (PhysicalCard card : there)
+                        if (settled < ordered.size() && card == ordered.get(settled))
+                            settled++;
+                    for (PhysicalCardImpl card : ordered.subList(settled, ordered.size()))
+                        place(card, ref.seat(), ref.zone(), true);
+                }
                 case TWILIGHT -> SetTwilight(Math.max(0, op.relative() ? GetTwilight() + op.amount() : op.amount()));
                 case BURDENS -> setTotal(GetBurdens(), op, this::AddBurdens, this::RemoveBurdens);
                 case THREATS -> setTotal(GetThreats(), op, this::AddThreats, this::RemoveThreats);
@@ -532,6 +556,21 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         } catch (ScenarioFormatException exp) {
             _problems.add(exp.getMessage());
         }
+    }
+
+    /**
+     * @return The cards in a seat's hand or in one of its piles, in order: a hand as it is shown, a pile from the top
+     * down.  Empty for anywhere that has no order.
+     */
+    public List<? extends PhysicalCard> CardsIn(Seat seat, SetupZone zone) {
+        String player = Player(seat);
+        return switch (zone) {
+            case HAND -> _gameState.getHand(player);
+            case DECK -> _gameState.getDeck(player);
+            case DISCARD -> _gameState.getDiscard(player);
+            case DEAD_PILE -> _gameState.getDeadPile(player);
+            default -> List.of();
+        };
     }
 
     private static void setTotal(int current, DoOp op, java.util.function.IntConsumer add, java.util.function.IntConsumer remove) {

@@ -29,7 +29,7 @@ import java.util.Map;
  * <p>
  * GET /scenarios - what the player can start, and {@code unreadable: [{path, owner, mine, id, errors}]}: the files a
  * game cannot be started of, with why (all of them for an admin, their own for anybody else); and, for somebody who
- * may write scenarios, {@code mayAuthor: true} and
+ * may write scenarios, {@code mayAuthor: true}, {@code mayPublish} (whether they may put one among the game's own) and
  * {@code authoring: {gameId, id, title, over, test}|null}, the draft they have open):
  * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified, path, owner, mine,
  * campaign:{id, title, position, count, next:{id, title}|null}|null,
@@ -165,6 +165,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         result.put("authoring", mayAuthor(player) ? _authoring.currentForHall(player) : null);
         //(whether a new scenario can be kept somewhere other than among the game's own)
         result.put("ownFolder", _scenarios.hasUserFolder());
+        //(and whether this player may put one among the game's own: the admins)
+        result.put("mayPublish", admin);
         LotroGameMediator current = _lotroServer.getScenarioGame(player.getName());
         if (current == null) {
             result.put("current", null);

@@ -176,13 +176,14 @@ public final class ScenarioDefinition {
      */
     public record Order(When when, List<Answer> answers, String source) { }
 
-    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW }
+    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER }
 
     /**
      * Something the director does to the board directly.
-     * @param card The card acted on (not used by TWILIGHT, BURDENS, THREATS, DRAW).
+     * @param card The card acted on (not used by TWILIGHT, BURDENS, THREATS, DRAW).  ORDER: the cards, in the order
+     *             they are to come, with ", " between them.
      * @param target MOVE: where to, e.g. "freeps.hand", "shadow.deck.top".  ATTACH, STACK: the other card.  DRAW: the
-     *               seat that draws.
+     *               seat that draws.  ORDER: the hand or pile, e.g. "freeps.hand".
      * @param amount How many.  For TWILIGHT, BURDENS and THREATS this is a new total unless relative is set.
      */
     public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) { }

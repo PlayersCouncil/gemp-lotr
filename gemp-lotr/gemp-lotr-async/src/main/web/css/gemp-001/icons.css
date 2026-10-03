@@ -110,7 +110,7 @@
 
 /* drawn in its own colour (a light indigo), so no filter */
 .icon-scenario {
-	background-image: url("../../images/icons/puzzle-question.svg");
+	background-image: url("../../images/icons/puzzle-piece.svg");
 	filter: none;
 }
 

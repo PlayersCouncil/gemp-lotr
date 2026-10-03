@@ -447,10 +447,11 @@ public class ScenarioAuthoringTest {
         assertTrue(result.getBooleanValue("rebuilt"));
         JSONObject state = result.getJSONObject("state");
         //It has a place from the start, named after it, and a file there once it has been saved
-        assertEquals("users/" + AUTHOR + "/my-first.hjson", state.getString("path"));
-        assertEquals("my-first.hjson", state.getString("file"));
+        assertEquals("users/" + AUTHOR + "/tutorials/my-first.hjson", state.getString("path"));
+        assertEquals("A tutorial, so it is filed with the tutorials", "tutorials/my-first.hjson", state.getString("file"));
+        assertEquals("tutorials", state.getString("kindFolder"));
         assertFalse(state.getBooleanValue("onDisk"));
-        assertFalse(new File(users, "users/" + AUTHOR + "/my-first.hjson").exists());
+        assertFalse(new File(users, "users/" + AUTHOR + "/tutorials/my-first.hjson").exists());
         assertEquals("My First", state.getJSONObject("draft").getString("title"));
         //Both Ring-bearers have a Ring
         assertEquals("oppRing", state.getJSONObject("draft").getJSONObject("ring").getString("shadow"));
@@ -462,12 +463,12 @@ public class ScenarioAuthoringTest {
 
         result = json(authoring.save(player, null, false, true));
         JSONObject saved = result.getJSONObject("saved");
-        assertEquals("users/" + AUTHOR + "/my-first.hjson", saved.getString("path"));
+        assertEquals("users/" + AUTHOR + "/tutorials/my-first.hjson", saved.getString("path"));
         assertEquals(AUTHOR + "/my-first", saved.getString("id"));
         assertTrue(saved.toString(), saved.getBooleanValue("playable"));
         assertFalse(result.getJSONObject("state").getBooleanValue("dirty"));
         assertTrue(result.getJSONObject("state").getBooleanValue("onDisk"));
-        File file = new File(users, "users/" + AUTHOR + "/my-first.hjson");
+        File file = new File(users, "users/" + AUTHOR + "/tutorials/my-first.hjson");
         assertTrue(file.isFile());
         String text = Files.readString(file.toPath(), StandardCharsets.UTF_8);
         assertTrue(text, text.contains("id: my-first"));
@@ -659,7 +660,7 @@ public class ScenarioAuthoringTest {
         } catch (ScenarioAuthoring.AuthoringException expected) {
             assertTrue(expected.getMessage(), expected.getMessage().contains("already a scenario"));
         }
-        for (String bad : List.of("../escape.hjson", "/etc/passwd.hjson", "a/../../b.hjson", ".hidden.hjson", "campaigns/x.hjson", "x.txt", "a\\b.hjson")) {
+        for (String bad : List.of("../escape.hjson", "/etc/passwd.hjson", "a/../../b.hjson", ".hidden.hjson", "x.txt", "a\\b.hjson")) {
             try {
                 authoring.save(player, bad, true, true);
                 fail("Should not have been saved to " + bad);
@@ -667,9 +668,108 @@ public class ScenarioAuthoringTest {
                 //(as it should be)
             }
         }
+        //Whatever folders it is given, they are folders among the tutorials: it is one
         JSONObject saved = json(authoring.save(player, "my drafts/brand new v1.2.hjson", true, true)).getJSONObject("saved");
-        assertEquals("my drafts/brand new v1.2.hjson", saved.getString("path"));
-        assertTrue(new File(canon, "my drafts/brand new v1.2.hjson").isFile());
+        assertEquals("tutorials/my drafts/brand new v1.2.hjson", saved.getString("path"));
+        assertTrue(new File(canon, "tutorials/my drafts/brand new v1.2.hjson").isFile());
+    }
+
+    @Test
+    public void AScenarioIsFiledUnderItsKind() throws Exception {
+        assertEquals("puzzles/a/b.hjson", ScenarioAuthoring.filed("a/b.hjson", ScenarioDefinition.Kind.PUZZLE));
+        assertEquals("puzzles/a/b.hjson", ScenarioAuthoring.filed("tutorials/a/b.hjson", ScenarioDefinition.Kind.PUZZLE));
+        assertEquals("sandboxes/b.hjson", ScenarioAuthoring.filed("Puzzles/b.hjson", ScenarioDefinition.Kind.SANDBOX));
+        assertEquals("tutorials/tutorials.hjson", ScenarioAuthoring.filed("tutorials.hjson", ScenarioDefinition.Kind.TUTORIAL));
+
+        //Its kind is changed: saving moves its file to where that kind is kept
+        openBlank();
+        JSONObject state = json(authoring.edit(player, "{top: {kind: \"puzzle\"}}", null)).getJSONObject("state");
+        assertEquals("tutorials/blank.hjson", state.getString("file"));
+        assertEquals("puzzles", state.getString("kindFolder"));
+        assertEquals("puzzles/blank.hjson", state.getString("fileOnSave"));
+        JSONObject result = json(authoring.save(player, null, false, true));
+        assertEquals("puzzles/blank.hjson", result.getJSONObject("saved").getString("path"));
+        assertEquals("tutorials/blank.hjson", result.getJSONObject("saved").getString("movedFrom"));
+        assertEquals("puzzles/blank.hjson", result.getJSONObject("state").getString("file"));
+        assertFalse(new File(canon, "tutorials/blank.hjson").exists());
+        assertTrue(new File(canon, "puzzles/blank.hjson").isFile());
+        assertEquals("puzzles/blank.hjson", library.get("blank").path());
+        assertEquals(ScenarioDefinition.Kind.PUZZLE, library.get("blank").def().kind);
+        //(and saving again leaves it where it is)
+        result = json(authoring.save(player, null, false, true));
+        assertNull(result.getJSONObject("saved").get("movedFrom"));
+
+        //A file that was put somewhere else by hand is filed as it is saved; not over another, though
+        File loose = new File(users, "users/" + AUTHOR + "/loose.hjson");
+        loose.getParentFile().mkdirs();
+        Files.writeString(loose.toPath(), ScenarioTesting.scenario("").replace("id: test", "id: loose"), StandardCharsets.UTF_8);
+        authoring.open(player, AUTHOR + "/loose", true);
+        assertEquals("loose.hjson", state().getString("file"));
+        File inTheWay = new File(users, "users/" + AUTHOR + "/tutorials/loose.hjson");
+        inTheWay.getParentFile().mkdirs();
+        Files.writeString(inTheWay.toPath(), "not a scenario", StandardCharsets.UTF_8);
+        try {
+            authoring.save(player, null, false, true);
+            fail();
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("already a scenario"));
+        }
+        assertTrue(inTheWay.delete());
+        result = json(authoring.save(player, null, false, true));
+        assertEquals("users/" + AUTHOR + "/tutorials/loose.hjson", result.getJSONObject("saved").getString("path"));
+        assertFalse(loose.exists());
+        assertTrue(inTheWay.isFile());
+    }
+
+    @Test
+    public void AHandOrAPileIsPutInOrder() throws Exception {
+        openBlank();
+        new Client(game());
+        JSONObject state = state();
+        assertEquals(0, cardNamed(state, "runner1").getIntValue("at"));
+        assertEquals(1, cardNamed(state, "runner2").getIntValue("at"));
+        assertNull("Where a card on the table comes is not a matter of order", cardNamed(state, "frodo").get("at"));
+
+        //Now: done at once, and one ordering however many times it is changed
+        state = json(authoring.apply(player, "order(shadow.hand, runner2, runner1)", false)).getJSONObject("state");
+        assertEquals(0, cardNamed(state, "runner2").getIntValue("at"));
+        assertEquals(1, cardNamed(state, "runner1").getIntValue("at"));
+        assertEquals(List.of("order(shadow.hand, runner2, runner1)"), state.getJSONArray("pending").toJavaList(String.class));
+        state = json(authoring.apply(player, "order(shadow.hand, runner1)", false)).getJSONObject("state");
+        assertEquals("The one named comes first, and the rest after it as they were", 0, cardNamed(state, "runner1").getIntValue("at"));
+        assertEquals(List.of("order(shadow.hand, runner1)"), state.getJSONArray("pending").toJavaList(String.class));
+
+        //From the start: the deck is what the setup places nowhere, and listing it is what orders it
+        List<String> deck = new ArrayList<>(inZone(state, "freeps", "deck"));
+        deck.sort(java.util.Comparator.comparingInt(alias -> cardNamed(state(), alias).getIntValue("at")));
+        assertEquals("As they are declared", List.of("gandalf", "servant1", "servant2", "swordarm", "boromir"), deck);
+        JSONObject result = json(authoring.apply(player, "order(freeps.deck, boromir, aragorn, gandalf)", true));
+        assertTrue(result.getBooleanValue("rebuilt"));
+        state = result.getJSONObject("state");
+        assertEquals("Aragorn is in the hand, and stays there", "boromir, gandalf",
+                state.getJSONObject("draft").getJSONObject("setup").getJSONObject("freeps").getString("deck"));
+        assertEquals(0, cardNamed(state, "boromir").getIntValue("at"));
+        assertEquals(1, cardNamed(state, "gandalf").getIntValue("at"));
+        assertEquals(2, cardNamed(state, "servant1").getIntValue("at"));
+        state = json(authoring.apply(player, "order(shadow.hand, runner2, runner1)", true)).getJSONObject("state");
+        assertEquals("runner2, runner1", state.getJSONObject("draft").getJSONObject("setup").getJSONObject("shadow").getString("hand"));
+        assertEquals(0, cardNamed(state, "runner2").getIntValue("at"));
+
+        for (String bad : List.of("order(freeps.characters, frodo)", "order(freeps.hand, runner1)", "order(freeps.deck.top, boromir)",
+                "order(freeps.hand)", "order(freeps.hand, aragorn, aragorn)")) {
+            try {
+                authoring.apply(player, bad, false);
+                fail("Should not have been taken: " + bad);
+            } catch (ScenarioAuthoring.AuthoringException expected) {
+                //(as it should be)
+            }
+        }
+        try {
+            authoring.apply(player, "order(freeps.discard, aragorn)", true);
+            fail();
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("None of those cards"));
+        }
     }
 
     @Test
@@ -999,8 +1099,8 @@ public class ScenarioAuthoringTest {
 
         //To the author's own folder
         result = json(authoring.rename(player, "blank.hjson", false, true));
-        assertEquals("users/" + AUTHOR + "/blank.hjson", result.getString("renamed"));
-        assertTrue(new File(users, "users/" + AUTHOR + "/blank.hjson").isFile());
+        assertEquals("users/" + AUTHOR + "/tutorials/blank.hjson", result.getString("renamed"));
+        assertTrue(new File(users, "users/" + AUTHOR + "/tutorials/blank.hjson").isFile());
         assertFalse(new File(canon, "tutorials/first steps/blank-moved.hjson").exists());
         authoring.rename(player, "tutorials/blank.hjson", true, true);
 

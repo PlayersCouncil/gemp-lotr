@@ -284,7 +284,7 @@
 	<div id="play-load-error" class="play-error" role="alert" hidden></div>
 
 	<div id="create-table-selection">
-		<button id="create-scenario-button"><span class="play-choice-title"><span class="bigger-icon icon-scenario"></span><span>Scenarios</span></span><span class="play-subtitle">Play a tutorial or a single-player game puzzle.</span></button>
+		<button id="create-scenario-button"><span class="play-choice-title"><span class="bigger-icon icon-scenario"></span><span>Play Scenario or Tutorial</span></span><span class="play-subtitle">Play an interactive tutorial or a single-player game puzzle.</span></button>
 		<button id="create-bot-table-button"><span class="play-choice-title"><span class="bigger-icon icon-bot"></span><span>Play Against Bots (Beta)</span></span><span class="play-subtitle">A practice game against a computer opponent.</span></button>
 		<button id="create-unranked-table-button"><span class="play-choice-title"><span class="bigger-icon icon-unranked"></span><span>Open Casual Table</span></span><span class="play-subtitle">A 1-on-1 game against another player.</span></button>
 		<button id="create-league-table-button"><span class="play-choice-title"><span class="bigger-icon icon-league"></span><span>Open League Table</span></span><span class="play-subtitle">Join a multi-week league and participate in themed Sealed or Constructed events of all kinds.</span></button>
@@ -633,22 +633,23 @@
 	</div>
 
 	<div id="create-scenario" style="display:none" class="table-form">
-		<h1>Scenarios</h1>
+		<h1>Scenarios &amp; Tutorials</h1>
 		<div id="scenario-options" class="inner-table-form">
 			<div class="flex-vert table-blurb">
-				A scenario is a game for one, played against a scripted opponent from a board that has already been set up.  A tutorial walks you through it one step at a time; a puzzle leaves the solving to you.  You need no deck of your own, and nothing here counts towards your record.
+				Scenarios are single-player puzzles or examples of gameplay.  Tutorial scenarios walk the player through the basics of the game, or explore more advanced topics in an interactive guide.
 			</div>
 
 			<div id="scenario-small-window" class="scenario-note" role="note" hidden>This window is small for a tutorial, which points at things on the game table.  It will be easier to follow on a desktop or laptop, or with the window made larger.</div>
 
 			<div id="scenario-current" class="scenario-current" hidden></div>
 
-			<div id="scenario-author" class="scenario-author" hidden></div>
-
 			<div id="scenario-browser" class="scenario-browser">
 				<div id="scenario-folders" class="scenario-folders" role="tree" aria-label="Scenario folders"></div>
 				<div id="scenario-list" class="scenario-list"></div>
 			</div>
+
+			<!-- for those who may write scenarios; under the list, which is what everybody else is here for -->
+			<div id="scenario-author" class="scenario-author" hidden></div>
 
 			<div id="scenario-unreadable" class="scenario-unreadable" role="alert" hidden></div>
 

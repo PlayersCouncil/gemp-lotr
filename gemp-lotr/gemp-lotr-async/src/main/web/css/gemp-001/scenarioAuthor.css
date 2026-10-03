@@ -171,6 +171,27 @@ body.scenario-authoring #scenarioLayer {
     border-radius: 4px;
 }
 
+/* a file's name, between the folder its kind puts it in and the ending it always has */
+.sa-named {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    min-width: 0;
+}
+
+.sa-named .sa-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.sa-affix {
+    color: #a99e80;
+    font-family: Consolas, Menlo, monospace;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
 /* ---- pictures to choose from ---- */
 
 .sa-pictures {
@@ -767,6 +788,29 @@ textarea.sa-code {
 .sa-card {
     padding: 3px 0;
     border-bottom: 1px solid #25221a;
+}
+
+/* where the cards under it are: the table, a hand, a pile */
+.sa-zonehead {
+    margin-top: 7px;
+    padding: 1px 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #a99e80;
+    border-bottom: 1px solid #4d4226;
+}
+
+/* a card's name in the scenario: the pointer on it shows the card */
+.sa-alias.cardHint {
+    cursor: help;
+    border-bottom: 1px dotted #5d7fa8;
+}
+
+.sa-button.sa-order {
+    min-width: 22px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .sa-cardname {

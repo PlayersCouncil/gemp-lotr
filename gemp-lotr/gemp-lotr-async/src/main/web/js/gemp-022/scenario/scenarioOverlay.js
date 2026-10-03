@@ -36,9 +36,12 @@
 var ScenarioAnchors = {
     /**
      * @param cards alias -> card ID, as the current step gave them
+     * @param onCards true to have a zone be the cards that are in it, rather than the whole of the place they are
+     *                laid out in: what a bubble points at.  (An outline goes round the place; and a zone with no
+     *                cards in it is the place either way.)
      * @return {left, top, width, height} in window coordinates, or null if the thing is not on the screen
      */
-    resolve: function (game, anchor, cards) {
+    resolve: function (game, anchor, cards, onCards) {
         if (anchor == null || game == null)
             return null;
         var parts = ("" + anchor).split(":");
@@ -59,6 +62,11 @@ var ScenarioAnchors = {
                 "opp.support": game.supportOpponent,
                 "minions": game.shadow
             }[zone];
+            if (onCards && group != null) {
+                var held = ScenarioAnchors.rectOf(ScenarioAnchors.cardsIn(group));
+                if (held != null)
+                    return held;
+            }
             elem = group != null ? group.descDiv : null;
         } else if (kind == "pile") {
             var pile = parts[1].split(".");
@@ -146,6 +154,22 @@ var ScenarioAnchors = {
             left: whole.left + whole.width * printed[0] / 100, top: whole.top + whole.height * printed[1] / 100,
             width: whole.width * printed[2] / 100, height: whole.height * printed[3] / 100
         };
+    },
+
+    /** The cards laid out in a group, and whatever is attached to them (which shows from under them). */
+    cardsIn: function (group) {
+        if (group == null || typeof group.getCardElems != "function")
+            return null;
+        var found = [];
+        $.each(group.getCardElems(), function (index, elem) {
+            found.push(elem[0]);
+            var card = elem.data("card");
+            $.each((card && card.attachedCards) || [], function (i, attached) {
+                if (attached != null && attached[0] != null)
+                    found.push(attached[0]);
+            });
+        });
+        return $(found);
     },
 
     /** The card with this ID that is on show; a card can be drawn more than once, and one copy may be hidden. */
@@ -539,6 +563,8 @@ var GempScenarioOverlay = Class.extend({
     STOCK_GAP: "1.8",
     /** Below this the game screen has no room left for bubbles. */
     MIN_WIDTH: 1000,
+    /** Where a bug is reported: the form behind the Game Hall's "Report a Bug" button (hall.html). */
+    BUG_REPORT_URL: "https://forms.gle/pks6CHMWcpBsTcwv9",
     MIN_HEIGHT: 600,
 
     game: null,
@@ -803,8 +829,12 @@ var GempScenarioOverlay = Class.extend({
         var that = this;
         this.menu = $("<div class='scenario-menu'><span class='scenario-menu-title'></span>"
             + "<a href='#' class='scenario-menu-restart'>Start again</a>"
-            + "<a href='#' class='scenario-menu-leave'>Leave</a></div>").appendTo(this.layer);
+            + "<a href='#' class='scenario-menu-leave'>Leave</a>"
+            + "<a class='scenario-menu-bug' target='_blank' rel='noopener'>Report a Bug</a></div>").appendTo(this.layer);
         this.menu.find(".scenario-menu-title").text(this.info.title);
+        //(the form the Game Hall's own Report a Bug button opens)
+        this.menu.find(".scenario-menu-bug").attr("href", this.BUG_REPORT_URL)
+            .attr("title", "Something wrong with this scenario, or with the game? Tell us (opens in a new tab).");
         this.menu.find(".scenario-menu-restart").click(function () {
             if (that.phase == "ended" || that.game.gameEnded || confirm("Start this scenario again from the beginning?"))
                 that.restart(false);
@@ -1421,7 +1451,8 @@ var GempScenarioOverlay = Class.extend({
         var names = message.anchors != null ? message.anchors : (message.anchor != null ? [message.anchor] : []);
         var rects = [];
         for (var i = 0; i < names.length; i++) {
-            var rect = ScenarioAnchors.resolve(this.game, names[i], cards);
+            //(a zone is pointed at where its cards are)
+            var rect = ScenarioAnchors.resolve(this.game, names[i], cards, true);
             if (rect != null)
                 rects.push(rect);
         }

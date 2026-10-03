@@ -1,10 +1,11 @@
 /**
- * Play ▸ Scenarios: tutorials, puzzles and sandboxes, each a solo game against a scripted opponent (GET /scenarios).
+ * Play ▸ Play Scenario or Tutorial: tutorials, puzzles and sandboxes, each a solo game against a scripted opponent
+ * (GET /scenarios).
  *
  * The list is fetched every time the form is shown.  On the left are the folders the scenarios are kept in; on the
  * right, the scenarios of the folder that is selected and of the folders inside it, with the player's progress on
- * each.  The top level is by kind (Tutorials, Puzzles, Sandboxes) and then the player's own scenarios; below that
- * the folders are the directories the files are in.
+ * each.  The top level is by kind (Tutorials, Puzzles, Sandboxes) and then the player's own scenarios, which are
+ * divided by kind in the same way; below that the folders are the directories the files are in.
  * Starting one (POST /scenarios/start) answers with a game id and the game opens in its own window, as every other
  * game does.  The window is opened on the click itself and pointed at the game once the server has answered: a
  * window opened from the answer has no user gesture behind it and pop-up blockers stop it.  If it is blocked anyway,
@@ -13,8 +14,10 @@
  * A scenario game the player is still in the middle of is offered first, to carry on with or to start over.
  * Starting any scenario gives up the one in progress (the server does that), so the buttons say so.
  *
- * Whoever may write scenarios (the list says: mayAuthor) also gets an Edit button on each, and a way to start a new
- * one.  Either opens a game with the authoring panel beside it (see scenario/scenarioAuthor.js); an author has one
+ * Whoever may write scenarios (the list says: mayAuthor) also gets, under the list, a way to start a new one and an
+ * "Enable editing" button.  The Edit buttons on the scenarios are only there while that is on, and it is off every
+ * time the screen is opened: an author looks at the list as everybody else sees it unless they have asked not to.
+ * New or Edit opens a game with the authoring panel beside it (see scenario/scenarioAuthor.js); an author has one
  * draft at a time, and its game is the one "in the middle of" above.
  */
 class PlayScenario extends TableFlow {
@@ -33,6 +36,12 @@ class PlayScenario extends TableFlow {
 	mayAuthor = false;
 	authoring = null;
 	authorDiv = null;
+	//Whether this player may put a scenario among the game's own (the public ones): the admins
+	mayPublish = false;
+	//Whether the Edit buttons are shown.  Never remembered: it is asked for each time the screen is opened.
+	editing = false;
+	//The scenarios that are next in their campaigns, {id: true}; null until asked for (see nextIds)
+	next = null;
 	//Scenario files with mistakes in them, which are in no list: [{path, owner, mine, id, title, errors: [...],
 	// openable}].  The server sends an admin all of them and anyone else their own.  'openable' ones can be opened
 	// in the authoring tool all the same, with the mistaken parts left out.
@@ -67,6 +76,7 @@ class PlayScenario extends TableFlow {
 
 	show() {
 		this.mainDiv.show();
+		this.editing = false;
 		//The game opens in a window like this one, and a tutorial's bubbles need room to point at things (the game
 		// screen makes the same check and says so again)
 		$("#scenario-small-window").prop("hidden",
@@ -84,6 +94,7 @@ class PlayScenario extends TableFlow {
 			that.mayAuthor = !!(data && data.mayAuthor);
 			that.authoring = (data && data.authoring) || null;
 			that.ownFolder = !!(data && data.ownFolder);
+			that.mayPublish = !!(data && data.mayPublish);
 			that.unreadable = (data && data.unreadable) || [];
 			that.render();
 			that.sayUnreadable();
@@ -106,22 +117,22 @@ class PlayScenario extends TableFlow {
 		return text.length == 0 ? String(name) : text.charAt(0).toUpperCase() + text.slice(1);
 	}
 
-	// The folder a scenario is shown in, as a list of names from the top down.
+	// The folder a scenario is shown in, as a list of names from the top down.  Its kind is the first division,
+	// among the public scenarios and within a player's own alike; the folders its file is in come below that.
 	static folderOf(scenario) {
 		var dirs = String(scenario.path || "").split("/").slice(0, -1);
-		if (scenario.owner != null) {
-			//A player's files give their place within that player's own folder
-			dirs = dirs.map(PlayScenario.prettyFolder);
-			return scenario.mine ? ["My scenarios"].concat(dirs) : ["Other players", scenario.owner].concat(dirs);
-		}
 		var heading = scenario.kind;
 		for (const known of PlayScenario.KINDS)
 			if (known.kind == scenario.kind)
 				heading = known.heading;
-		//Files already sorted into tutorials/, puzzles/ or sandboxes/ are not put in a second folder of that name
+		//Files are kept under tutorials/, puzzles/ or sandboxes/ (the authoring tool sees to it): that folder is the
+		// division itself, not a folder inside it
 		if (dirs.length > 0 && [scenario.kind, scenario.kind + "s", scenario.kind + "es"].indexOf(dirs[0].toLowerCase()) > -1)
 			dirs = dirs.slice(1);
-		return [PlayScenario.prettyFolder(heading)].concat(dirs.map(PlayScenario.prettyFolder));
+		var within = [PlayScenario.prettyFolder(heading)].concat(dirs.map(PlayScenario.prettyFolder));
+		if (scenario.owner == null)
+			return within;
+		return (scenario.mine ? ["My scenarios"] : ["Other players", scenario.owner]).concat(within);
 	}
 
 	// {name, key, children: [...], scenarios: [...]} for every folder that has a scenario in or under it.
@@ -153,7 +164,12 @@ class PlayScenario extends TableFlow {
 				return index;
 			return node.name == "My scenarios" ? 100 : node.name == "Other players" ? 101 : 50;
 		};
-		root.children.sort(function (a, b) { return rank(a) - rank(b); });
+		var sort = function (node) {
+			//(stable: folders that are not kinds stay as their paths ordered them)
+			node.children.sort(function (a, b) { return rank(a) - rank(b); });
+			node.children.forEach(sort);
+		};
+		sort(root);
 		return root;
 	}
 
@@ -201,7 +217,10 @@ class PlayScenario extends TableFlow {
 			for (const error of errors)
 				list.append($("<li></li>").text(error));
 			text.append(list);
-			if (file.openable && file.id != null) {
+			if (file.openable && file.id != null && !this.editing) {
+				if (this.mayAuthor)
+					text.append($("<div class='scenario-unreadable-note'></div>").text("The authoring tool can open this one (Enable editing)."));
+			} else if (file.openable && file.id != null) {
 				let id = file.id;
 				row.append($("<button class='scenario-edit'></button>")
 					.attr("title", "Open it in the authoring tool, with the mistaken parts left out. The tool shows what they were.")
@@ -239,6 +258,7 @@ class PlayScenario extends TableFlow {
 	}
 
 	render() {
+		this.next = null;
 		this.renderCurrent();
 		this.renderAuthor();
 		this.renderUnreadable();
@@ -324,10 +344,11 @@ class PlayScenario extends TableFlow {
 		var that = this;
 		var row = $("<div class='scenario-row'></div>").attr("data-scenario", scenario.id);
 		var text = $("<div class='scenario-text'></div>");
-		var title = $("<div class='scenario-title'></div>").append($("<span></span>").text(scenario.title));
-		var status = PlayScenario.statusOf(scenario);
-		if (status != null)
-			title.append($("<span class='scenario-status'></span>").addClass("scenario-status-" + status.kind).text(status.text));
+		//The tag comes first, and is as wide whatever it says: the titles start in a line
+		var status = this.statusOf(scenario);
+		var title = $("<div class='scenario-title'></div>")
+			.append($("<span class='scenario-status'></span>").addClass("scenario-status-" + status.kind).attr("title", status.hint).text(status.text))
+			.append($("<span class='scenario-title-text'></span>").text(scenario.title));
 		text.append(title);
 		if (scenario.summary)
 			text.append($("<div class='scenario-summary'></div>").text(scenario.summary));
@@ -343,7 +364,7 @@ class PlayScenario extends TableFlow {
 			text.append($("<div class='scenario-notes'></div>").text(notes.join(" · ")));
 		row.append(text);
 
-		if (this.mayAuthor)
+		if (this.mayAuthor && this.editing)
 			row.append($("<button class='scenario-edit'></button>").attr("title", "Open it in the authoring tool").text("Edit").button().click(function () {
 				that.author({id: scenario.id});
 			}));
@@ -397,11 +418,11 @@ class PlayScenario extends TableFlow {
 		title.bind("input", function () {
 			id.attr("placeholder", slug(title.val()) != "" ? "id: " + slug(title.val()) : "id: basics-02-the-ring");
 		});
-		this.authorDiv.append($("<span></span>").text("Write a scenario:")).append(id).append(title);
-		//Where its file goes, for a server that has somewhere besides its own scenarios to keep one.  What was chosen
-		// last time is what is offered next time.
+		this.authorDiv.append($("<span class='scenario-author-label'></span>").text("New Scenario:")).append(id).append(title);
+		//Where its file goes: the author's own folder, or among the public scenarios.  Only somebody who may publish
+		// is asked, and only on a server that has both; what was chosen last time is what is offered next time.
 		var where = null;
-		if (this.ownFolder) {
+		if (this.ownFolder && this.mayPublish) {
 			var last = null;
 			try {
 				last = localStorage.getItem("gemp-scenario-new-where");
@@ -409,22 +430,35 @@ class PlayScenario extends TableFlow {
 				last = null;
 			}
 			where = $("<select></select>").attr("aria-label", "Where the new scenario's file is kept")
-				.attr("title", "Where its file is kept. One of the game's own goes in the scenarios folder, under tutorials/; your own is offered only to you and the admins.")
-				.append($("<option value='own'></option>").text("in my own folder"))
-				.append($("<option value='canonical'></option>").text("with the game's own"))
+				.attr("title", "Where its file is kept. A public scenario goes in the game's scenarios folder and is offered to everybody once it plays through; one of your own is offered only to you and the admins.")
+				.append($("<option value='own'></option>").text("My Scenarios"))
+				.append($("<option value='canonical'></option>").text("Public Scenarios"))
 				.val(last == "canonical" ? "canonical" : "own");
 			this.authorDiv.append(where);
 		}
-		this.authorDiv.append($("<button class='scenario-new'></button>").text("New").button().click(function () {
-			var canonical = where == null || where.val() == "canonical";
-			try {
-				localStorage.setItem("gemp-scenario-new-where", canonical ? "canonical" : "own");
-			} catch (e) {
-				// only a convenience
+		this.authorDiv.append($("<button class='scenario-new'></button>").text("Create").button().click(function () {
+			//(with nothing to choose between: the author's own folder where there is one, the public ones where not)
+			var canonical = where != null ? where.val() == "canonical" : !that.ownFolder;
+			if (where != null) {
+				try {
+					localStorage.setItem("gemp-scenario-new-where", canonical ? "canonical" : "own");
+				} catch (e) {
+					// only a convenience
+				}
 			}
 			var name = String(id.val()).trim() != "" ? String(id.val()).trim() : slug(title.val());
 			that.author({"new": true, id: name, title: String(title.val()).trim(), canonical: canonical});
 		}));
+		//The Edit buttons: asked for each time, so that what an author sees until then is what a player sees
+		this.authorDiv.append($("<span class='scenario-author-break'></span>"));
+		this.authorDiv.append($("<span class='scenario-author-note'></span>").text(this.editing
+			? "Editing is on: each scenario has an Edit button."
+			: "The list is shown as players see it."));
+		this.authorDiv.append($("<button class='scenario-editing'></button>").attr("aria-pressed", this.editing ? "true" : "false")
+			.text(this.editing ? "Disable editing" : "Enable editing").button().click(function () {
+				that.editing = !that.editing;
+				that.render();
+			}));
 		this.authorDiv.prop("hidden", false);
 	}
 
@@ -489,18 +523,53 @@ class PlayScenario extends TableFlow {
 		});
 	}
 
-	// {kind, text} for the badge next to a title; null when the scenario has not been played.
-	static statusOf(scenario) {
+	// {kind, text, hint} for the tag in front of a title: New, In Progress, Complete (or Updated, when the scenario
+	// has been revised since it was finished), and Next for the one a campaign has the player on.
+	statusOf(scenario) {
+		var status = PlayScenario.progressOf(scenario, this.current);
+		if (status.kind == "new" && this.nextIds()[scenario.id])
+			return {kind: "next", text: "Next", hint: "The next one in " + ((scenario.campaign && scenario.campaign.title) || "its campaign")};
+		return status;
+	}
+
+	static progressOf(scenario, current) {
 		var progress = scenario.progress;
-		if (progress == null)
-			return null;
-		if (progress.status == "complete") {
-			//Finished, but the scenario has been revised since
+		if (progress != null && progress.status == "complete") {
 			if (progress.version != null && scenario.version != null && progress.version < scenario.version)
-				return {kind: "updated", text: "Completed · updated since"};
-			return {kind: "complete", text: "Completed"};
+				return {kind: "updated", text: "Updated", hint: "You have completed it, and it has been revised since"};
+			return {kind: "complete", text: "Complete", hint: "You have played it through"};
 		}
-		return {kind: "started", text: "Started"};
+		if (progress != null || (current != null && current.id == scenario.id))
+			return {kind: "progress", text: "In Progress", hint: "You have started it, and not finished it"};
+		return {kind: "new", text: "New", hint: "You have not played it"};
+	}
+
+	// In each campaign: the first scenario the player has not played that comes after one they have finished.
+	// {id: true}; worked out once for each list.
+	nextIds() {
+		if (this.next != null)
+			return this.next;
+		var campaigns = {};
+		for (const scenario of this.scenarios) {
+			if (scenario.campaign == null || scenario.campaign.id == null)
+				continue;
+			(campaigns[scenario.campaign.id] = campaigns[scenario.campaign.id] || []).push(scenario);
+		}
+		this.next = {};
+		for (const id in campaigns) {
+			var inOrder = campaigns[id].slice().sort(function (a, b) { return a.campaign.position - b.campaign.position; });
+			var finished = false;
+			for (const scenario of inOrder) {
+				var kind = PlayScenario.progressOf(scenario, this.current).kind;
+				if (kind == "complete" || kind == "updated") {
+					finished = true;
+				} else if (kind == "new" && finished) {
+					this.next[scenario.id] = true;
+					break;
+				}
+			}
+		}
+		return this.next;
 	}
 
 	// A window opened while the click is still a user gesture; null if the browser will not give one.
