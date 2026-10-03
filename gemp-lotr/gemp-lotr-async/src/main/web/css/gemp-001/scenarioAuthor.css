@@ -104,6 +104,51 @@ body.scenario-authoring #scenarioLayer {
     color: #dcffdf;
 }
 
+/* A decision nobody has written a step for: what is being asked, and the button that writes one */
+.sa-notice.sa-uncovered {
+    padding: 7px 10px 8px 10px;
+    max-height: none;
+    white-space: normal;
+    background: #33240f;
+    color: #f3e6c8;
+    box-shadow: inset 4px 0 0 #ffb347;
+}
+
+.sa-uncovered-head {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffcf8a;
+    margin-bottom: 2px;
+}
+
+.sa-uncovered-how {
+    margin-top: 6px;
+}
+
+.sa-uncovered-how .sa-button {
+    margin: 0 8px 2px 0;
+    padding: 3px 9px;
+    font-weight: bold;
+}
+
+.sa-uncovered-or {
+    margin-top: 4px;
+    color: #b9ad8d;
+}
+
+.sa-tag.sa-noanswer {
+    color: #ffcf8a;
+    border-color: #a8742a;
+}
+
+.sa-note.sa-awaiting {
+    margin: 2px 0 6px 0;
+    padding: 5px 8px;
+    background: #33240f;
+    color: #f3e6c8;
+    box-shadow: inset 3px 0 0 #ffb347;
+}
+
 .sa-button.sa-inline {
     margin: 0 0 0 8px;
     padding: 0 6px;

@@ -423,7 +423,8 @@ var GempScenarioAuthor = Class.extend({
         if (ui.selectedUid != null && $.inArray(ui.selectedUid, uids) > -1)
             ui.selected = $.inArray(ui.selectedUid, uids) + 1;
         var at = state.position.step;
-        var current = steps.length == 0 ? null : Math.max(1, Math.min(state.position.inHand ? at : at - 1, steps.length));
+        //(the step in hand; or one that repeats and is between its decisions; or, failing those, the last one played)
+        var current = steps.length == 0 ? null : Math.max(1, Math.min(state.position.inHand || state.position.underWay ? at : at - 1, steps.length));
         var currentUid = current == null ? null : uids[current - 1];
         var lost = ui.selected == null || ui.selected > steps.length;
         var due = false;
@@ -516,7 +517,8 @@ var GempScenarioAuthor = Class.extend({
         var position = state.position;
         var count = this.draft.steps.length;
         var where = position.over ? "The game is over" : position.frontier ? "Past the end of the script (" + count + " steps)"
-            : "Step " + position.step + " of " + count + (position.inHand ? "" : " (waiting to come to it)");
+            : "Step " + position.step + " of " + count + (position.inHand ? ""
+                : position.underWay ? " (which repeats, and is under way)" : " (waiting to come to it)");
         this.whereElem.text(where + (position.over ? "" : " \u00b7 turn " + position.turn + ", " + position.phase));
         this.renderNotices();
 
@@ -552,11 +554,24 @@ var GempScenarioAuthor = Class.extend({
         var state = this.state;
         if (state == null || !state.session)
             return;
-        if (state.notice && state.notice != this.noticeRead)
-            box.append(this.el("div", "sa-notice sa-warning", state.notice).append(this.button("\u00d7", "Dismiss", function () {
+        //A decision nobody has written a step for is said first, with the way to write one
+        var open = this.uncovered();
+        if (open != null)
+            box.append(this.uncoveredNotice(open));
+        //(where the script stopped is what that says, when that is why it stopped)
+        if (state.notice && state.notice != this.noticeRead && !(open != null && state.stopped == "uncovered")) {
+            var notice = this.el("div", "sa-notice sa-warning", state.notice).appendTo(box);
+            var at = state.position;
+            //Stopped at a step it could not play: the step can be given its answer by doing it
+            if (state.stopped == "step" && at.inHand && !at.over && !(this.draft.steps[at.step - 1] || {}).pause)
+                notice.append(this.button("Take its answer from what I do next", "Step " + at.step + " forgets what it allows and how it is answered, and takes both from what you do next in the game. Its messages stay.", function () {
+                    that.retake();
+                }, "sa-inline"));
+            notice.append(this.button("\u00d7", "Dismiss", function () {
                 that.noticeRead = state.notice;
                 that.renderNotices();
-            }, "sa-dismiss")));
+            }, "sa-dismiss"));
+        }
         //What has gone wrong with the script in this game.  Once read it is not said again; what goes wrong next is.
         var problems = (state.problems || []).slice(this.problemsRead || 0);
         if (problems.length > 0)
@@ -582,6 +597,79 @@ var GempScenarioAuthor = Class.extend({
         }
         if (this.told)
             box.append(this.el("div", "sa-notice sa-told", this.told));
+    },
+
+    /** The decision that is waiting with no step to cover it, where that is something to do something about. */
+    uncovered: function () {
+        var state = this.state;
+        var open = state == null || !state.session ? null : state.uncovered;
+        if (open == null || state.mode == "test" || state.position.over || state.position.frontier)
+            return null;
+        if ((open.seat == "human" ? state.waiting.human : state.waiting.opponent) == null)
+            return null;
+        //A scenario that leaves its player free between steps has such decisions as a matter of course: there it is
+        // only said where the script, playing itself, could get no further
+        if (this.draft.coverage == "guided" && open.seat == "human" && state.stopped != "uncovered")
+            return null;
+        return open;
+    },
+
+    /** What is said about it: what is being asked, the button that writes a step for it, and what that will do. */
+    uncoveredNotice: function (open) {
+        var that = this;
+        var state = this.state;
+        var asked = open.seat == "human" ? state.waiting.human : state.waiting.opponent;
+        var box = this.el("div", "sa-notice sa-uncovered");
+        box.append(this.el("div", "sa-uncovered-head", state.stopped == "uncovered"
+            ? "The script stopped here: no step covers this decision." : "No step covers this decision."));
+        var offers = $.map(asked.options || [], function (option) {
+            return option.term || option.alias || option.label;
+        });
+        box.append(this.el("div", null, (open.seat == "human" ? "You are" : "The opponent is") + " being asked \"" + asked.text + "\" ("
+            + asked.where.replace(/_/g, " ") + ")" + (offers.length == 0 ? (asked.pass ? ". It offers nothing but Pass." : ".")
+                : ". It offers: " + offers.slice(0, 4).join(", ") + (offers.length > 4 ? ", and " + (offers.length - 4) + " more" : "") + (asked.pass ? ", or Pass." : "."))));
+        if (open.problem != null) {
+            box.append(this.el("div", "sa-uncovered-how", "A step cannot be added for it as things stand: " + open.problem));
+            return box;
+        }
+        var how = open.reuses != null ? "Step " + open.reuses + ", which says nothing yet, becomes the step for it."
+            : open.repeating != null ? "It goes in after step " + open.repeating + ". That step repeats until \"" + open.until + "\"; that becomes \""
+                + open.becomes + "\", so that it ends where the new step begins."
+            : open.after == 0 ? "It goes in at the start of the script." : "It goes in after step " + open.after + ".";
+        var row = this.el("div", "sa-uncovered-how").appendTo(box);
+        row.append(this.button("Add a step for this decision", "Writes a step in the right place, waiting for exactly this decision. What is then done in the game becomes its answer; messages can be put on it first.", function () {
+            that.addStepHere();
+        }, "sa-primary"));
+        row.append(document.createTextNode(how));
+        box.append(this.el("div", "sa-uncovered-or", open.seat == "opponent"
+            ? "Or answer for it under Opponent: with \"write it into the script\" ticked, that writes the same step."
+            : state.recording ? "Or just answer it in the game: that writes the same step, with what you did as what it allows. Add the step first if it is to say something before it is answered."
+                : "\"Write down what I do\" is off, so answering it in the game writes nothing."));
+        return box;
+    },
+
+    /** A step for the decision that is waiting, written where the script stands; the Step tab turns to it. */
+    addStepHere: function () {
+        var that = this;
+        this.flush(function () {
+            that.ui.jump = true;
+            that.ui.tab = "step";
+            that.form = null;
+            that.call("POST", "here", {});
+        });
+    },
+
+    /** The step in hand takes what it allows, and its answer, from what its author does next. */
+    retake: function () {
+        var that = this;
+        this.flush(function () {
+            that.form = null;
+            that.call("POST", "retake", {});
+        });
+    },
+
+    isAwaiting: function (uid) {
+        return uid != null && $.inArray(uid, (this.state && this.state.awaiting) || []) > -1;
     },
 
     renderElsewhere: function () {
@@ -745,6 +833,8 @@ var GempScenarioAuthor = Class.extend({
                 tags.append(that.el("span", "sa-tag sa-flag", "\u2691").attr("title", "A checkpoint"));
             if (step.end)
                 tags.append(that.el("span", "sa-tag", "end"));
+            if (that.isAwaiting(state.uids[index]))
+                tags.append(that.el("span", "sa-tag sa-noanswer", "no answer yet").attr("title", "It says nothing yet about what is done. When the game comes to it, what you do there is written in."));
             row.append(that.button("\u25b6", "A fresh game, played by the script up to this step", function () {
                 that.goTo(number);
             }, "sa-go"));
@@ -769,10 +859,8 @@ var GempScenarioAuthor = Class.extend({
         if (unscripted) {
             var asked = waiting.human != null ? waiting.human : waiting.opponent;
             end.append(this.el("div", "sa-asked", (waiting.human != null ? "You are" : "The opponent is") + " being asked: " + asked.text + " (" + asked.where + ")"));
-            end.append(this.button("Write a step for this decision", "A step to hang messages on before the decision is answered; its answer is filled in when it is given", function () {
-                that.ui.jump = true;
-                that.ui.tab = "step";
-                that.call("POST", "here", {});
+            end.append(this.button("Add a step for this decision", "A step to hang messages on before the decision is answered; its answer is filled in when it is given", function () {
+                that.addStepHere();
             }, "sa-primary"));
         }
 
@@ -781,9 +869,15 @@ var GempScenarioAuthor = Class.extend({
             var index = that.ui.selected == null ? steps.length : that.ui.selected - 1;
             that.insertStep(index, {pause: true, messages: [{text: "..."}]});
         }));
-        foot.append(this.button("+ Step after", "An empty step after the selected one, to be filled in by hand", function () {
+        foot.append(this.button("+ Step after", "A step after the selected one. It says nothing yet: when the game comes to it, what you do there is written in as what it allows. (After the step the game is at, with a decision waiting that no step covers, it is the step for that decision.)", function () {
             var index = that.ui.selected == null ? steps.length : that.ui.selected;
-            that.insertStep(index, {when: (that.draft.human || "freeps") + ", action"});
+            //Put in where the script stands, with a decision waiting that nothing covers: that decision is what it is for
+            var open = state.uncovered;
+            if (open != null && open.problem == null && open.reuses == null && index == open.after && !position.over) {
+                that.addStepHere();
+                return;
+            }
+            that.insertStep(index, {when: (that.draft.human || "freeps") + ", action"}, true);
         }));
         foot.append(this.button("Rewrite from here", "Take the step the game is at, and every step after it, out of the script, and play on from here writing new ones", function () {
             var from = position.step;
@@ -827,11 +921,15 @@ var GempScenarioAuthor = Class.extend({
         this.edit({steps: ops}, goTo);
     },
 
-    insertStep: function (index, step) {
+    /** @param awaiting whether the step is to take its answer from what is done when the game comes to it */
+    insertStep: function (index, step, awaiting) {
         var that = this;
         this.flush(function () {
             that.ui.tab = "step";
-            that.changeSteps([{op: "insert", before: that.state.uids[index] || null, step: step}], index + 1, index + 1);
+            var op = {op: "insert", before: that.state.uids[index] || null, step: step};
+            if (awaiting)
+                op.awaiting = true;
+            that.changeSteps([op], index + 1, index + 1);
         });
     },
 
@@ -1206,6 +1304,8 @@ var GempScenarioAuthor = Class.extend({
         var status = this.state.statuses[form.index] || "unreached";
         var where = number == position.step && position.inHand ? "in hand now" : status == "matched" ? "played"
             : status == "bypassed" ? "not on this way through" : status == "skipped" ? "skipped" : "not reached";
+        if (this.isAwaiting(form.uid))
+            where += ", no answer yet";
         this.stepHead.find(".sa-stepname").text("Step " + number + " of " + this.draft.steps.length);
         this.stepHead.find(".sa-stepwhere").text(where).attr("class", "sa-stepwhere sa-status-" + status);
     },
@@ -1246,13 +1346,15 @@ var GempScenarioAuthor = Class.extend({
             if (confirm("Take step " + number + " out of the script?"))
                 that.changeSteps([{op: "delete", uid: form.uid}], number, Math.max(1, number - 1));
         }, "sa-danger"));
-        if (number == this.state.position.step && this.state.position.inHand && !work.pause)
+        var inHandNow = number == this.state.position.step && this.state.position.inHand;
+        if (inHandNow && !work.pause)
             acts.append(this.button("Answer it again", "This step forgets what it allows and how it is answered, and takes both from what you do next. Its messages stay.", function () {
-                that.flush(function () {
-                    that.form = null;
-                    that.call("POST", "retake", {});
-                });
+                that.retake();
             }));
+        if (this.isAwaiting(form.uid))
+            box.append(this.el("div", "sa-note sa-awaiting", inHandNow
+                ? "This step says nothing yet about what is done. Do it in the game now, and what you do is written in as what it allows. Messages put on it here first are shown before it is answered."
+                : "This step says nothing yet about what is done. When the game comes to it, what you do there is written in as what it allows."));
 
         /* ---- what it waits for ---- */
         var when = this.el("div", "sa-section").appendTo(box);
@@ -1313,7 +1415,7 @@ var GempScenarioAuthor = Class.extend({
             var type = this.select([["", "any kind"]].concat(this.TYPES), "", function (value) {
                 put(plain(that.TYPES), value);
             });
-            var phase = this.select([["", "any phase"]].concat(this.PHASES), "", function (value) {
+            var phase = this.select([["", "any phase"]].concat(this.PHASES).concat([["between_turns", "between turns"]]), "", function (value) {
                 put(call("phase"), value == "" ? null : "phase(" + value + ")");
             });
             var turn = $("<input type='number' min='1'/>").addClass("sa-input sa-short").attr("placeholder", "turn").change(function () {
