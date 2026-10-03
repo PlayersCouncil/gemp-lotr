@@ -119,6 +119,23 @@ public class ScenarioDirector {
     }
 
     /**
+     * Authoring: writes a step in after the step the script is waiting on, and has the script wait on the new one.
+     * This is for a step that repeats and is under way when a decision arrives that it neither applies to nor ends
+     * at: the repeating step is thereby done (its author sees to it that its 'until' says so for the next game).
+     */
+    public void insertAfterCurrent(Step step) {
+        int at = Math.min(_index + 1, _def.steps.size());
+        restructure(() -> _def.steps.add(at, step), step);
+    }
+
+    /** Authoring: the same, for a decision that has already been answered: the script stands after the new step. */
+    public void recordAfterCurrent(Step step) {
+        insertAfterCurrent(step);
+        _statuses.put(step.label(), StepStatus.MATCHED);
+        advance();
+    }
+
+    /**
      * Authoring: the steps have been changed by somebody else (words reworded in place, steps added or removed
      * after the one the script is waiting on).  The steps are numbered afresh, what became of each is kept, and the
      * script goes on waiting on the same step it was waiting on.

@@ -758,6 +758,149 @@ public class ScenarioAuthoringTest {
         assertEquals(count, written.steps.size());
     }
 
+    /** The first tutorial, opened for writing, with the rule that switches Gandalf's text off taken out. */
+    private ScenarioAuthoring tutorialWithGandalfsTextOn() throws Exception {
+        File shipped = new File("../gemp-lotr-cards/src/main/resources/scenarios");
+        ScenarioLibrary real = new ScenarioLibrary(shipped, null, ScenarioTesting.library(), ScenarioAuthoringTest::format, null);
+        ScenarioAuthoring tool = new ScenarioAuthoring(real, ScenarioTesting.library(), ScenarioAuthoringTest::format, null, (who, live) -> {
+            LotroGameMediator mediator = new LotroGameMediator(String.valueOf(games.size() + 1), live, LotroServer.AUTHORING_TIMER, false);
+            mediator.startGame();
+            games.add(mediator);
+            return mediator;
+        });
+        JSONObject state = json(tool.open(player, "basics-01-into-the-wild", true)).getJSONObject("state");
+        JSONObject rules = state.getJSONObject("draft").getJSONObject("rules");
+        JSONArray kept = new JSONArray();
+        for (Object rule : rules.getJSONArray("freeps"))
+            if (!rule.toString().contains("Gandalf"))
+                kept.add(rule);
+        assertEquals(rules.getJSONArray("freeps").size() - 1, kept.size());
+        rules.put("freeps", kept);
+        tool.edit(player, new JSONObject(Map.of("top", new JSONObject(Map.of("rules", rules)))).toJSONString(), null);
+        return tool;
+    }
+
+    private static int stepWaitingFor(JSONObject state, String when) {
+        JSONArray steps = steps(state);
+        for (int i = 0; i < steps.size(); i++)
+            if (when.equals(steps.getJSONObject(i).getString("when")))
+                return i;
+        fail("No step waits for " + when);
+        return -1;
+    }
+
+    /**
+     * A card's text is switched on, and at the start of turn 3 its trigger is offered: a decision that arrives while
+     * the step before (sanctuary healing, which repeats) is still under way, and that it neither applies to nor ends
+     * at.  One request writes a step for it, in the right place, and has the repeating step give way.
+     */
+    @Test
+    public void AStepIsAddedForADecisionThatArrivesWhileARepeatingStepIsUnderWay() throws Exception {
+        ScenarioAuthoring tool = tutorialWithGandalfsTextOn();
+        JSONObject state = json(tool.goTo(player, 99)).getJSONObject("state");
+        int count = steps(state).size();
+        int healing = stepWaitingFor(state, "freeps, cards, text(Sanctuary healing)");
+        assertEquals("freeps, action, phase(fellowship)", steps(state).getJSONObject(healing).getString("until"));
+
+        //The script stopped at the trigger, and the state says what a step for it would take
+        assertEquals("uncovered", state.getString("stopped"));
+        assertTrue("The game is at the step that repeats, between its decisions", state.getJSONObject("position").getBooleanValue("underWay"));
+        assertEquals(healing + 1, state.getJSONObject("position").getIntValue("step"));
+        JSONObject uncovered = state.getJSONObject("uncovered");
+        assertNotNull(uncovered);
+        assertEquals("human", uncovered.getString("seat"));
+        assertEquals(healing + 1, uncovered.getIntValue("repeating"));
+        assertEquals("It goes in after the step that repeats", healing + 1, uncovered.getIntValue("after"));
+        assertEquals("freeps, action", uncovered.getString("becomes"));
+        assertEquals("freeps, action, phase(between_turns), turn(3), text(Optional responses)", uncovered.getString("when"));
+        assertNull(uncovered.getString("problem"));
+
+        state = json(tool.stepHere(player)).getJSONObject("state");
+        assertEquals(count + 1, steps(state).size());
+        JSONObject added = steps(state).getJSONObject(healing + 1);
+        assertEquals("freeps, action, phase(between_turns), turn(3), text(Optional responses)", added.getString("when"));
+        assertEquals("freeps, action", steps(state).getJSONObject(healing).getString("until"));
+        assertEquals(healing + 2, state.getJSONObject("position").getIntValue("step"));
+        assertTrue("The decision that was waiting is the new step's", state.getJSONObject("position").getBooleanValue("inHand"));
+        assertNull(state.getJSONObject("uncovered"));
+        assertEquals(List.of(state.getJSONArray("uids").getString(healing + 1)), state.getJSONArray("awaiting").toList(String.class));
+        assertTrue(state.getString("notice"), state.getString("notice").contains("is now \"freeps, action\""));
+        assertNull("Where the script stopped is no longer news", state.getString("stopped"));
+
+        //What is done at it is what it allows
+        Client client = new Client(game());
+        client.answer(client.decision.getAwaitingDecision().getDecisionParameters().get("actionId")[0]);
+        state = json(tool.state(player));
+        assertEquals("use(gandalf)", steps(state).getJSONObject(healing + 1).getString("allow"));
+        assertEquals(List.of(), state.getJSONArray("awaiting").toList(String.class));
+
+        //And the script plays itself through the trigger from now on
+        state = json(tool.goTo(player, healing + 5)).getJSONObject("state");
+        assertNull(state.getString("notice"), state.getString("notice"));
+        assertNull(state.getString("stopped"));
+        assertTrue(state.getJSONObject("position").getIntValue("step") >= healing + 5);
+        assertEquals("matched", state.getJSONArray("statuses").getString(healing));
+        assertEquals("matched", state.getJSONArray("statuses").getString(healing + 1));
+    }
+
+    /** The same, with nothing asked for: the author just answers the decision in the game. */
+    @Test
+    public void AnsweringItInTheGameWritesTheSameStep() throws Exception {
+        ScenarioAuthoring tool = tutorialWithGandalfsTextOn();
+        JSONObject state = json(tool.goTo(player, 99)).getJSONObject("state");
+        int count = steps(state).size();
+        int healing = stepWaitingFor(state, "freeps, cards, text(Sanctuary healing)");
+
+        Client client = new Client(game());
+        client.answer("");
+        state = json(tool.state(player));
+        assertEquals(count + 1, steps(state).size());
+        JSONObject added = steps(state).getJSONObject(healing + 1);
+        assertEquals("freeps, action, phase(between_turns), turn(3), text(Optional responses)", added.getString("when"));
+        assertEquals("Declining the trigger is passing", "pass", added.getString("allow"));
+        assertEquals("freeps, action", steps(state).getJSONObject(healing).getString("until"));
+        assertEquals("The game has gone on to the step after", healing + 3, state.getJSONObject("position").getIntValue("step"));
+
+        state = json(tool.goTo(player, 99)).getJSONObject("state");
+        assertNull("The whole script plays: " + state.getString("notice"), state.getString("notice"));
+        assertTrue(json(tool.check(player)).getBooleanValue("passed"));
+    }
+
+    /** A step put in by hand says nothing yet: it takes its answer from what is done when the game comes to it. */
+    @Test
+    public void AStepPutInByHandTakesItsAnswerFromWhatIsDone() throws Exception {
+        openBlank();
+        new Client(game());
+        JSONObject insert = new JSONObject(Map.of("op", "insert", "awaiting", true, "step", new JSONObject(Map.of("when", "freeps, action"))));
+        JSONObject state = json(authoring.edit(player, new JSONObject(Map.of("steps", List.of(insert))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(1, steps(state).size());
+        assertEquals(state.getJSONArray("uids").toList(String.class), state.getJSONArray("awaiting").toList(String.class));
+        assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+
+        Client client = new Client(game());
+        client.answer(client.decision.getAwaitingDecision().getDecisionParameters().get("actionId")[0]);
+        state = state();
+        assertEquals("play(aragorn)", steps(state).getJSONObject(0).getString("allow"));
+        assertEquals(List.of(), state.getJSONArray("awaiting").toList(String.class));
+    }
+
+    /** A step put in by hand for a decision, whose 'when' does not fit it, is made to fit: a second is not written. */
+    @Test
+    public void AnEmptyStepThatDoesNotFitIsMadeToFit() throws Exception {
+        openBlank();
+        new Client(game());
+        JSONObject insert = new JSONObject(Map.of("op", "insert", "awaiting", true, "step", new JSONObject(Map.of("when", "freeps, cards"))));
+        JSONObject state = json(authoring.edit(player, new JSONObject(Map.of("steps", List.of(insert))).toJSONString(), 1)).getJSONObject("state");
+        assertFalse("It is the wrong kind of decision for the step", state.getJSONObject("position").getBooleanValue("inHand"));
+        assertEquals(1, state.getJSONObject("uncovered").getIntValue("reuses"));
+
+        new Client(game());
+        state = json(authoring.stepHere(player)).getJSONObject("state");
+        assertEquals(1, steps(state).size());
+        assertEquals("freeps, action, phase(fellowship), turn(1)", steps(state).getJSONObject(0).getString("when"));
+        assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+    }
+
     @Test
     public void CardsAreFoundByName() {
         List<Map<String, Object>> found = authoring.findCards("aragorn heir", false);

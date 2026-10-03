@@ -22,6 +22,7 @@ import com.gempukku.lotro.scenario.ScenarioDefinition.CardDef;
 import com.gempukku.lotro.scenario.ScenarioDefinition.DoOp;
 import com.gempukku.lotro.scenario.ScenarioDefinition.SetupZone;
 import com.gempukku.lotro.scenario.ScenarioDefinition.Step;
+import com.gempukku.lotro.scenario.ScenarioDefinition.When;
 import com.gempukku.lotro.scenario.ScenarioSession.Ruling;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -138,6 +140,10 @@ public class ScenarioAuthoring {
         final Set<String> way = new LinkedHashSet<>();
         /** The last thing worth telling the author that nothing on the game screen says. */
         volatile String notice;
+        /** The notice that says where the script stopped when it played itself, while that is still the notice. */
+        volatile String stopNotice;
+        /** Whether it stopped at a decision that no step covers (and said nothing else). */
+        volatile boolean stoppedUncovered;
         /** Set while the game in hand is a player's game of the draft: the step it was started at. */
         Integer testFrom;
         /** How many lines of comment the file has that saving the draft over it would lose. */
@@ -150,6 +156,13 @@ public class ScenarioAuthoring {
         void changed() {
             dirty = true;
             revision.incrementAndGet();
+        }
+
+        /** The game has gone on from where the script stopped: that it stopped there is no longer news. */
+        void movedOn() {
+            if (stopNotice != null && stopNotice.equals(notice))
+                notice = null;
+            stopNotice = null;
         }
 
         String choice(Step step) {
@@ -232,6 +245,7 @@ public class ScenarioAuthoring {
 
         @Override
         public void answered(Ruling ruling, String answer) {
+            session.movedOn();
             try {
                 Step step = ruling.step();
                 boolean human = ruling.player().equals(live.HumanPlayer());
@@ -249,7 +263,10 @@ public class ScenarioAuthoring {
                         pending.clear();
                         changed = true;
                     }
-                    boolean wanted = awaiting.remove(step) || (!human && !step.pause && ruling.answer() == null && step.answers.isEmpty());
+                    //(a step that was waiting to be given its answer, and has not been given one by hand meanwhile)
+                    boolean unanswered = step.answers.isEmpty() && (step.allow == null || (step.allow.answers.isEmpty() && step.allow.passWhen == null));
+                    boolean wanted = (awaiting.remove(step) && unanswered)
+                            || (!human && !step.pause && ruling.answer() == null && step.answers.isEmpty());
                     if (wanted && unrecorded != ruling.decision()) {
                         JsonObject json = ScenarioWriter.step(step);
                         String term = term(ruling.decision(), answer);
@@ -271,21 +288,26 @@ public class ScenarioAuthoring {
                 // will do again without being told.  Only what the author has it do is written.
                 if (!human && left != ruling.decision())
                     return;
-                //A step that repeats and is under way has the script's place; nothing can be written in before it
-                // without the script then reading differently from what was played
                 ScenarioDirector director = live.Session().Director();
-                if (director.timesApplied() > 0 && director.currentStep() != null) {
-                    session.notice = "Not written down: " + director.currentStep().describe() + " repeats and is still under way, "
-                            + "and what was just done is not something it applies to.";
+                Placing placing = placing(ruling.player(), ruling.decision());
+                if (placing.problem() != null) {
+                    session.notice = "Not written down: " + placing.problem();
                     return;
                 }
                 JsonObject json = new JsonObject();
-                json.add("when", whenFor(ruling.player(), ruling.decision()));
+                json.add("when", placing.when());
                 json.add(human ? "allow" : "answer", term(ruling.decision(), answer));
                 Step written = ScenarioParser.parseStep(def, json, 0);
                 written.doOps.addAll(pending);
                 pending.clear();
-                live.Session().Director().record(written);
+                if (placing.repeating() != null) {
+                    //A step that repeats was under way, and this is not a decision it applies to or ends at.  It ends
+                    // here now, and says so, so that the script reads as it was played
+                    giveWay(placing);
+                    director.recordAfterCurrent(written);
+                } else {
+                    director.record(written);
+                }
                 session.changed();
             } catch (ScenarioFormatException exp) {
                 session.notice = "What was just done could not be written into the script: " + exp.getMessage();
@@ -305,7 +327,142 @@ public class ScenarioAuthoring {
             if (Phase.findPhase(name) == phase)
                 when.append(", phase(").append(name).append(")");
             when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
+            //A card's trigger being offered ("Optional responses") is the same kind of decision, in the same phase
+            // of the same turn, as the phase's own "play something or pass": only what it says tells them apart
+            String said = decision.getText() == null ? "" : decision.getText().replaceAll("<[^>]*>", "").trim();
+            if (decision.getDecisionType() == AwaitingDecisionType.CARD_ACTION_CHOICE && said.matches("(?i)(optional|required) responses"))
+                when.append(", text(").append(said).append(")");
             return when.toString();
+        }
+
+        /**
+         * Where a step for a decision that no step covers goes, and what has to give way to it.
+         * @param index Where in the list of steps it is put.
+         * @param repeating The step that repeats and is under way, which the new step comes after; null if there is
+         *                  none, and the new step comes before the step the script is waiting on.
+         * @param until What the repeating step's 'until' has to become for it to end at this decision.
+         * @param when The new step's 'when'.
+         * @param problem Why no step can be written for it; null if one can.
+         */
+        record Placing(int index, Step repeating, String until, String when, String problem) { }
+
+        Placing placing(String player, AwaitingDecision decision) {
+            ScenarioDirector director = live.Session().Director();
+            String when = whenFor(player, decision);
+            Step current = director.currentStep();
+            if (current == null || director.timesApplied() == 0)
+                return new Placing(position() - 1, null, null, when, null);
+            try {
+                return new Placing(current.number, current, givingWay(current, player, decision), when, null);
+            } catch (AuthoringException exp) {
+                return new Placing(current.number, current, null, when, exp.getMessage());
+            }
+        }
+
+        /**
+         * A step that repeats goes on applying until a decision arrives that fits its 'until'.  One has arrived that
+         * it does not apply to and that does not fit: for a step to be written for that decision, the repeating step
+         * has to end there.  This is its 'until' with whatever the decision does not fit taken out; and, if that
+         * could then be taken for one of the decisions the step itself applies to, with enough of what the decision
+         * is (its seat, its kind, the phase, the turn) put in to tell them apart.
+         */
+        String givingWay(Step repeating, String player, AwaitingDecision decision) throws AuthoringException {
+            ScenarioDirector director = live.Session().Director();
+            ScenarioTable table = live.Table();
+            When until = repeating.until;
+            String cannot = repeating.describe() + " repeats and is under way, and ";
+            if (until.require != null || until.source.startsWith("{"))
+                throw new AuthoringException(cannot + "its 'until' is written out with requirements.  Change it by hand so that it fits this decision; "
+                        + "then a step can be added for the decision.");
+            When kept = new When();
+            if (until.seat != null && fits(director, player, decision, part -> part.seat = until.seat))
+                kept.seat = until.seat;
+            if (until.decision != null && fits(director, player, decision, part -> part.decision = until.decision))
+                kept.decision = until.decision;
+            if (until.phase != null && fits(director, player, decision, part -> part.phase = until.phase))
+                kept.phase = until.phase;
+            if (until.turn != null && fits(director, player, decision, part -> part.turn = until.turn))
+                kept.turn = until.turn;
+            if (until.skirmish != null && fits(director, player, decision, part -> part.skirmish = until.skirmish))
+                kept.skirmish = until.skirmish;
+            if (until.offers != null && fits(director, player, decision, part -> part.offers = until.offers))
+                kept.offers = until.offers;
+            if (until.text != null && fits(director, player, decision, part -> part.text = until.text))
+                kept.text = until.text;
+            When own = repeating.when;
+            if (!apart(kept, own))
+                kept.seat = table.SeatOf(player);
+            if (!apart(kept, own))
+                kept.decision = decision.getDecisionType();
+            if (!apart(kept, own))
+                kept.phase = table.GetCurrentPhase();
+            if (!apart(kept, own))
+                kept.turn = table.gameState().getTurnNumber();
+            if (!apart(kept, own))
+                throw new AuthoringException(cannot + "nothing simple tells this decision from the ones it applies to.  Change its 'until' by hand "
+                        + "so that it fits this decision; then a step can be added for the decision.");
+            List<String> terms = new ArrayList<>();
+            if (kept.seat != null)
+                terms.add(kept.seat.key());
+            if (kept.decision != null)
+                terms.add(AnswerCompiler.typeName(kept.decision));
+            if (kept.phase != null)
+                terms.add("phase(" + kept.phase.name().toLowerCase(Locale.ROOT) + ")");
+            if (kept.turn != null)
+                terms.add("turn(" + kept.turn + ")");
+            if (kept.skirmish != null)
+                terms.add("skirmish(" + kept.skirmish + ")");
+            if (kept.offers != null)
+                terms.add("offers(" + kept.offers + ")");
+            if (kept.text != null)
+                terms.add("text(" + kept.text + ")");
+            return String.join(", ", terms);
+        }
+
+        private boolean fits(ScenarioDirector director, String player, AwaitingDecision decision, Consumer<When> part) {
+            When one = new When();
+            part.accept(one);
+            return director.matches(one, player, decision);
+        }
+
+        /** Whether no decision can fit both: they say different things about the same part of it. */
+        private boolean apart(When one, When other) {
+            return (one.seat != null && other.seat != null && one.seat != other.seat)
+                    || (one.decision != null && other.decision != null && one.decision != other.decision)
+                    || (one.phase != null && other.phase != null && one.phase != other.phase)
+                    || (one.turn != null && other.turn != null && !one.turn.equals(other.turn))
+                    || (one.skirmish != null && other.skirmish != null && !one.skirmish.equals(other.skirmish));
+        }
+
+        /** Has the repeating step end at the decision a step is being written for, and tells the author it has. */
+        void giveWay(Placing placing) throws ScenarioFormatException {
+            Step repeating = placing.repeating();
+            String was = repeating.until.source;
+            JsonObject json = ScenarioWriter.step(repeating);
+            json.set("until", placing.until());
+            copyInto(repeating, ScenarioParser.parseStep(def, json, repeating.number));
+            session.notice = "Step " + repeating.label() + " repeats, and was still under way.  Its 'until' was \"" + was + "\" and is now \""
+                    + placing.until() + "\", so that it ends where the new step begins.";
+        }
+
+        /** The decision that is waiting and that no step covers: the player's, or the opponent's if it has been left for the author. */
+        Ruling uncovered() {
+            if (over() || inHand() != null)
+                return null;
+            for (String name : List.of(live.HumanPlayer(), live.OpponentPlayer())) {
+                Ruling ruling = live.Session().Ruling(name);
+                if (ruling == null || ruling.step() != null || live.Table().userFeedback().getAwaitingDecision(name) != ruling.decision())
+                    continue;
+                if (name.equals(live.HumanPlayer()) || (live.Held() != null && live.Held().decision() == ruling.decision()))
+                    return ruling;
+            }
+            return null;
+        }
+
+        /** A step somebody put in by hand and has said nothing in yet, apart perhaps from what it waits for. */
+        boolean blank(Step step) {
+            return !step.pause && step.allow == null && step.answers.isEmpty() && step.messages.isEmpty() && step.doOps.isEmpty()
+                    && step.end == null && step.until == null && step.skipWhen == null && step.onlyIf.isEmpty() && step.unless.isEmpty();
         }
 
         /**
@@ -382,6 +539,9 @@ public class ScenarioAuthoring {
                 }
             }
 
+            Set<String> unanswered = new HashSet<>();
+            for (Step step : awaiting)
+                unanswered.add(uid(step));
             director.restructure(() -> {
                 for (int i = 0; i < kept; i++)
                     copyInto(def.steps.get(i), fresh.steps.get(i));
@@ -399,9 +559,15 @@ public class ScenarioAuthoring {
             def.flags.clear();
             def.flags.addAll(fresh.flags);
             awaiting.retainAll(def.steps.subList(0, kept));
-            for (int i = kept; i < def.steps.size(); i++)
-                if (i < uids.size() && uids.get(i) != null)
-                    names.put(def.steps.get(i), uids.get(i));
+            for (int i = kept; i < def.steps.size(); i++) {
+                if (i >= uids.size() || uids.get(i) == null)
+                    continue;
+                Step step = def.steps.get(i);
+                names.put(step, uids.get(i));
+                //(the steps after the ones in use are new copies of themselves)
+                if (unanswered.contains(uids.get(i)) && !step.pause && step.allow == null && step.answers.isEmpty())
+                    awaiting.add(step);
+            }
 
             if (inHand != null) {
                 live.Reshow();
@@ -557,8 +723,10 @@ public class ScenarioAuthoring {
         }
         session.sitting = sitting;
         session.testFrom = author ? null : runTo;
-        String notice = sitting.live.RunProblem() == null ? null
-                : "The script stopped before step " + runTo + ": " + sitting.live.RunProblem();
+        String problem = sitting.live.RunProblem();
+        String notice = problem == null ? null : "The script stopped before step " + runTo + ": " + problem;
+        session.stopNotice = notice;
+        session.stoppedUncovered = problem != null && problem.startsWith("no step covers");
         if (!carried.dropped().isEmpty())
             notice = (notice == null ? "" : notice + "\n") + "Changes to the board that no step carried yet are not in this game: "
                     + String.join(", ", carried.dropped());
@@ -720,6 +888,14 @@ public class ScenarioAuthoring {
      *             hand if it can take the change and in a fresh one at the same step if not.
      */
     private Map<String, Object> change(Session session, Integer goTo, Patcher patcher) throws AuthoringException {
+        return change(session, goTo, patcher, Set.of());
+    }
+
+    /**
+     * @param unanswered The names of steps the change puts in that are to be given their answer by what the author
+     *                   does when the game comes to them.
+     */
+    private Map<String, Object> change(Session session, Integer goTo, Patcher patcher, Set<String> unanswered) throws AuthoringException {
         Sitting sitting = session.sitting;
         Object[] out = new Object[2];
         String problem = sitting.mediator.scenarioLocked(() -> {
@@ -733,10 +909,17 @@ public class ScenarioAuthoring {
                 List<String> errors = ScenarioValidator.validate(fresh, _library);
                 if (!errors.isEmpty())
                     return String.join("\n", errors);
-                if (goTo == null && sitting.follow(fresh, uids))
+                if (goTo == null && sitting.follow(fresh, uids)) {
+                    for (Step step : sitting.def.steps)
+                        if (unanswered.contains(sitting.names.get(step)) && !step.pause && step.allow == null && step.answers.isEmpty())
+                            sitting.awaiting.add(step);
                     return null;
+                }
                 out[0] = fresh;
-                out[1] = sitting.carry(uids, goTo != null ? goTo : sitting.position());
+                Carried carried = sitting.carry(uids, goTo != null ? goTo : sitting.position());
+                Set<String> waiting = new HashSet<>(carried.awaiting());
+                waiting.addAll(unanswered);
+                out[1] = new Carried(carried.draft(), carried.uids(), waiting, carried.position(), carried.dropped());
                 return null;
             } catch (AuthoringException | ScenarioFormatException exp) {
                 return exp.getMessage();
@@ -795,7 +978,9 @@ public class ScenarioAuthoring {
      *                  writes new ones, and their names do not.  The ops: "merge" changes parts of a step ('set':
      *                  {part: value}, 'unset': [parts]) and leaves the rest as the server has it; "set" replaces
      *                  the step whole; "insert" puts 'step' in before the step called 'before' (at the end without
-     *                  one); "delete" takes the step out; "move" takes it out and puts it in again before 'before'.
+     *                  one), and with 'awaiting' true has it take its answer from what the author does when the game
+     *                  comes to it; "delete" takes the step out; "move" takes it out and puts it in again before
+     *                  'before'.
      * @param goTo See change.
      */
     public Map<String, Object> edit(Player player, String patchJson, Integer goTo) throws AuthoringException {
@@ -808,6 +993,7 @@ public class ScenarioAuthoring {
             } catch (RuntimeException exp) {
                 throw new AuthoringException("That is not a change to a scenario: " + exp.getMessage());
             }
+            Set<String> unanswered = new HashSet<>();
             return change(session, goTo, (json, uids) -> {
                 if (patch.get("top") != null) {
                     for (JsonObject.Member member : patch.get("top").asObject()) {
@@ -841,7 +1027,14 @@ public class ScenarioAuthoring {
                         case "insert" -> {
                             int at = place(op, "before", "index", uids, true);
                             steps.add(at, op.get("step"));
-                            uids.add(at, null);
+                            if (op.getBoolean("awaiting", false)) {
+                                //(it is named now, so that it can be told which step is waiting for its answer)
+                                String uid = "s" + session.uids.incrementAndGet();
+                                uids.add(at, uid);
+                                unanswered.add(uid);
+                            } else {
+                                uids.add(at, null);
+                            }
                         }
                         case "delete" -> {
                             int at = place(op, "uid", "index", uids, false);
@@ -862,7 +1055,7 @@ public class ScenarioAuthoring {
                 org.hjson.JsonArray changed = new org.hjson.JsonArray();
                 steps.forEach(changed::add);
                 json.set("steps", changed);
-            });
+            }, unanswered);
         }
     }
 
@@ -1063,6 +1256,9 @@ public class ScenarioAuthoring {
     /**
      * Writes a step for the decision that is waiting and that the script says nothing about, so that there is
      * something to hang a message on before the decision is answered.  Its answer is filled in when it is given.
+     * The step goes in where the script stands: before the step it is waiting on, or, if that is a step that repeats
+     * and is under way, after it (and that step's 'until' is made to end at this decision).  A step that was put in
+     * there by hand and says nothing yet is used rather than a second one written.
      */
     public Map<String, Object> stepHere(Player player) throws AuthoringException {
         Session session = session(player);
@@ -1074,8 +1270,6 @@ public class ScenarioAuthoring {
                     return "The game is over: go back to a step first.";
                 if (sitting.inHand() != null)
                     return "The decision that is waiting already has a step: step " + sitting.inHand().label() + ".";
-                if (sitting.live.Session().Director().timesApplied() > 0)
-                    return "A step that repeats is under way, and a step cannot be written in before it is done.";
                 Ruling waiting = null;
                 for (String name : List.of(sitting.live.HumanPlayer(), sitting.live.OpponentPlayer())) {
                     Ruling ruling = sitting.live.Session().Ruling(name);
@@ -1085,21 +1279,50 @@ public class ScenarioAuthoring {
                 }
                 if (waiting == null)
                     return "Nothing is waiting to be decided.";
+                Sitting.Placing placing = sitting.placing(waiting.player(), waiting.decision());
+                if (placing.problem() != null)
+                    return placing.problem();
                 try {
-                    JsonObject json = new JsonObject();
-                    json.add("when", sitting.whenFor(waiting.player(), waiting.decision()));
-                    Step step = ScenarioParser.parseStep(sitting.def, json, 0);
                     ScenarioDirector director = sitting.live.Session().Director();
-                    int index = sitting.position() - 1;
-                    director.restructure(() -> sitting.def.steps.add(index, step), step);
-                    sitting.awaiting.add(step);
+                    Step current = director.currentStep();
+                    //The step the script is waiting on was put in by hand for this, and says nothing but a 'when'
+                    // that does not fit: it is made to fit, in place of a second step being written in front of it
+                    boolean reused = placing.repeating() == null && current != null && sitting.awaiting.contains(current) && sitting.blank(current);
+                    Step step;
+                    String was = null;
+                    if (reused) {
+                        step = current;
+                        was = step.when.source;
+                        JsonObject json = ScenarioWriter.step(step);
+                        json.set("when", placing.when());
+                        copyInto(step, ScenarioParser.parseStep(sitting.def, json, step.number));
+                        director.restructure(() -> { }, step);
+                    } else {
+                        JsonObject json = new JsonObject();
+                        json.add("when", placing.when());
+                        step = ScenarioParser.parseStep(sitting.def, json, 0);
+                        if (placing.repeating() != null)
+                            director.insertAfterCurrent(step);
+                        else
+                            director.restructure(() -> sitting.def.steps.add(placing.index(), step), step);
+                        sitting.awaiting.add(step);
+                    }
                     sitting.live.Session().Reconsider();
                     if (sitting.inHand() != step) {
                         //It ought to fit the very decision it was written for.  If it does not, it is not left behind.
-                        director.restructure(() -> sitting.def.steps.remove(step), null);
-                        sitting.awaiting.remove(step);
+                        if (reused) {
+                            JsonObject json = ScenarioWriter.step(step);
+                            json.set("when", was);
+                            copyInto(step, ScenarioParser.parseStep(sitting.def, json, step.number));
+                        } else {
+                            director.restructure(() -> sitting.def.steps.remove(step), placing.repeating());
+                            sitting.awaiting.remove(step);
+                        }
                         return "A step could not be written for this decision.";
                     }
+                    session.movedOn();
+                    if (placing.repeating() != null)
+                        sitting.giveWay(placing);
                     return null;
                 } catch (ScenarioFormatException exp) {
                     return exp.getMessage();
@@ -1130,6 +1353,7 @@ public class ScenarioAuthoring {
                 step.allow = null;
                 step.answers = new ArrayList<>();
                 sitting.awaiting.add(step);
+                session.movedOn();
                 sitting.live.Reshow();
                 return null;
             });
@@ -1326,6 +1550,9 @@ public class ScenarioAuthoring {
             state.put("way", new ArrayList<>(session.way));
             state.put("flags", new ArrayList<>(def.flags));
             state.put("notice", session.notice);
+            //(where the script stopped when it played itself, for as long as that is the last thing that was said)
+            boolean stopped = session.stopNotice != null && session.stopNotice.equals(session.notice);
+            state.put("stopped", !stopped ? null : session.stoppedUncovered ? "uncovered" : "step");
             state.put("draft", JSON.parseObject(ScenarioWriter.toJson(def).toString()));
 
             List<String> statuses = new ArrayList<>();
@@ -1333,11 +1560,18 @@ public class ScenarioAuthoring {
                 statuses.add(director.statuses().getOrDefault(step.label(), ScenarioDirector.StepStatus.UNREACHED).name().toLowerCase(Locale.ROOT));
             state.put("statuses", statuses);
             state.put("uids", sitting.uids());
+            List<String> unanswered = new ArrayList<>();
+            for (Step step : def.steps)
+                if (sitting.awaiting.contains(step))
+                    unanswered.add(sitting.uid(step));
+            state.put("awaiting", unanswered);
 
             Step inHand = sitting.inHand();
             Map<String, Object> position = new LinkedHashMap<>();
             position.put("step", sitting.position());
             position.put("inHand", inHand != null);
+            //(a step that repeats, has applied at least once, and has not ended: the game is at it, between its decisions)
+            position.put("underWay", inHand == null && director.currentStep() != null && director.timesApplied() > 0);
             position.put("frontier", director.atFrontier() && inHand == null);
             position.put("over", sitting.over());
             position.put("result", live.Result() == null ? null : live.Result().name().toLowerCase(Locale.ROOT));
@@ -1360,6 +1594,25 @@ public class ScenarioAuthoring {
                 waiting.put(human ? "human" : "opponent", described);
             }
             state.put("waiting", waiting);
+
+            //A decision that is waiting and that no step covers, and what adding a step for it would do
+            Map<String, Object> uncovered = null;
+            Ruling open = sitting.author && table.Arranged() ? sitting.uncovered() : null;
+            if (open != null) {
+                Sitting.Placing placing = sitting.placing(open.player(), open.decision());
+                uncovered = new LinkedHashMap<>();
+                uncovered.put("seat", open.player().equals(live.HumanPlayer()) ? "human" : "opponent");
+                uncovered.put("after", placing.index());
+                uncovered.put("when", placing.when());
+                uncovered.put("repeating", placing.repeating() == null ? null : placing.repeating().number);
+                uncovered.put("until", placing.repeating() == null ? null : placing.repeating().until.source);
+                uncovered.put("becomes", placing.until());
+                uncovered.put("problem", placing.problem());
+                Step current = director.currentStep();
+                uncovered.put("reuses", placing.repeating() == null && current != null && sitting.awaiting.contains(current) && sitting.blank(current)
+                        ? current.number : null);
+            }
+            state.put("uncovered", uncovered);
 
             List<String> pending = new ArrayList<>();
             sitting.pending.forEach(op -> pending.add(op.source()));
