@@ -242,7 +242,8 @@ public class ServerBuilder {
                 extract(objectMap, LotroCardBlueprintLibrary.class),
                 extract(objectMap, LotroFormatLibrary.class)::getFormat,
                 patchNoteCards,
-                extract(objectMap, LotroServer.class)::seatAuthoringGame));
+                extract(objectMap, LotroServer.class)::seatAuthoringGame,
+                new File(AppConfig.getWebPath(), "images/scenarios")));
 
         objectMap.put(HallServer.class,
                 new HallServer(

@@ -70,6 +70,8 @@ public final class ScenarioValidator {
 
         for (Step step : def.steps) {
             String context = "step " + step.label();
+            if (step.when.opening && step != def.steps.getFirst())
+                problems.add(context + ".when: the opening comes before the first turn, so only the first step can wait for it");
             requirements(step.when.require, context + ".when.require", problems);
             if (step.until != null)
                 requirements(step.until.require, context + ".until.require", problems);

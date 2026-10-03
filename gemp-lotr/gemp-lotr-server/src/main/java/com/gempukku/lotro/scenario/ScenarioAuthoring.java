@@ -102,9 +102,17 @@ public class ScenarioAuthoring {
     private final Tables _tables;
     private final ScheduledExecutorService _timer;
     private final Map<String, Session> _sessions = new ConcurrentHashMap<>();
+    /** Where the web server keeps the pictures a scenario can show that are not cards; null if nowhere is known. */
+    private final java.io.File _images;
 
     public ScenarioAuthoring(ScenarioLibrary scenarios, LotroCardBlueprintLibrary library, Function<String, LotroFormat> formats,
                              CardLookup cardLookup, Tables tables) {
+        this(scenarios, library, formats, cardLookup, tables, null);
+    }
+
+    public ScenarioAuthoring(ScenarioLibrary scenarios, LotroCardBlueprintLibrary library, Function<String, LotroFormat> formats,
+                             CardLookup cardLookup, Tables tables, java.io.File images) {
+        _images = images;
         _scenarios = scenarios;
         _library = library;
         _formats = formats;
@@ -125,8 +133,12 @@ public class ScenarioAuthoring {
         final Player player;
         /** Whose file it is: null for one of the game's own.  Settled when it is first saved. */
         String owner;
-        /** Where its file is within its folder; null until it has been saved. */
+        /** Where its file is (or will be) within its folder. */
         String path;
+        /** Whether there is a file there yet: a new scenario has a name from the start, and a file once it is saved. */
+        boolean onDisk;
+        /** Set when the author's page says it is going away; any request from the page afterwards unsets it. */
+        volatile boolean left;
         Sitting sitting;
         final AtomicInteger revision = new AtomicInteger();
         /** Numbers the names steps are given (see Sitting.uid). */
@@ -665,7 +677,42 @@ public class ScenarioAuthoring {
         Session session = _sessions.get(player.getName());
         if (session == null)
             throw new AuthoringException("You have no scenario open for writing.  Open one from the Game Hall.");
+        session.left = false;
         return session;
+    }
+
+    /** The author's page says it is being closed (or reloaded: if so, it will be heard from again in a moment). */
+    public void left(Player player) {
+        Session session = _sessions.get(player.getName());
+        if (session != null)
+            session.left = true;
+    }
+
+    /** A place for a scenario's file: whose folder (null for the game's own), and where in it. */
+    private record Place(String owner, String path) {
+        String shown() {
+            return (owner == null ? "" : "users/" + owner + "/") + path;
+        }
+    }
+
+    /**
+     * @param path Folders and a file name, ending in .hjson.  (The page tidies what its author types; here it is
+     *             taken as it comes, and anything that is not plainly a place in the folder is refused.)
+     * @throws AuthoringException if a scenario cannot be kept there.
+     */
+    private Place place(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
+        boolean ownFolder = _scenarios.hasUserFolder() && !(canonical && admin);
+        if (!ownFolder && !admin)
+            throw new AuthoringException("This server has nowhere to keep scenarios that are not its own.");
+        if (path == null || path.isBlank())
+            throw new AuthoringException("Say where: a file name, with folders before it if it goes in any (tutorials/basics-02-the-ring.hjson).");
+        Place place = new Place(ownFolder ? player.getName() : null, path.trim());
+        try {
+            _scenarios.check(place.owner(), place.path());
+        } catch (IOException exp) {
+            throw new AuthoringException(exp.getMessage());
+        }
+        return place;
     }
 
     /** A copy of a definition that shares nothing with it: written out as its file would be, and read back. */
@@ -754,6 +801,7 @@ public class ScenarioAuthoring {
         Session session = new Session(player);
         session.owner = entry.owner();
         session.path = entry.path();
+        session.onDisk = true;
         synchronized (session) {
             ScenarioDefinition draft = copy(entry.def(), fileId);
             session.commentsLost = commentsLost(_scenarios.source(entry), draft);
@@ -763,12 +811,25 @@ public class ScenarioAuthoring {
         }
     }
 
-    /**
-     * Starts a new scenario: two Ring-bearers, a Fellowship adventure path, and nothing else.
-     */
     public Map<String, Object> create(Player player, String id, String title) throws AuthoringException {
+        return create(player, id, title, false, true);
+    }
+
+    /**
+     * Starts a new scenario: two Ring-bearers with their Rings, a Fellowship adventure path, and nothing else.  Its
+     * file is named after it there and then (and written when it is first saved): a tutorial of the game's own goes
+     * in tutorials/, an author's own in their folder.
+     * @param canonical Whether it is to be one of the game's own (an admin's to say; otherwise it is the author's).
+     */
+    public Map<String, Object> create(Player player, String id, String title, boolean canonical, boolean admin) throws AuthoringException {
         if (id == null || !id.matches("[a-z0-9][a-z0-9-]{1,60}"))
             throw new AuthoringException("A scenario's id is made of small letters, digits and dashes: basics-02-the-ring");
+        boolean ownFolder = _scenarios.hasUserFolder() && !(canonical && admin);
+        Place place = place(player, (ownFolder ? "" : "tutorials/") + id + ".hjson", canonical, admin);
+        if (_scenarios.exists(place.owner(), place.path()))
+            throw new AuthoringException("There is already a scenario at " + place.shown() + ".  Give the new one another id (or open that one, if it is the one you mean to change).");
+        if (_scenarios.get(place.owner() == null ? id : place.owner() + "/" + id) != null)
+            throw new AuthoringException("There is already a scenario called '" + id + "'.  Give the new one another id.");
         String text = """
                 {
                 	id: %s
@@ -789,6 +850,7 @@ public class ScenarioAuthoring {
                 		}
                 		shadow: {
                 			oppFrodo: 10_121
+                			oppRing: 1_2
                 		}
                 	}
                 	ringBearer: {
@@ -797,6 +859,7 @@ public class ScenarioAuthoring {
                 	}
                 	ring: {
                 		freeps: ring
+                		shadow: oppRing
                 	}
                 	sites: {
                 		freeps: 1_323, 1_329, 1_341, 1_348, 1_349, 1_350, 1_355, 1_358, 1_362
@@ -815,6 +878,8 @@ public class ScenarioAuthoring {
             throw new AuthoringException(exp.getMessage());
         }
         Session session = new Session(player);
+        session.owner = place.owner();
+        session.path = place.path();
         synchronized (session) {
             start(session, def, true, fromTheStart());
             session.dirty = true;
@@ -860,7 +925,22 @@ public class ScenarioAuthoring {
         info.put("title", sitting.def.title);
         info.put("over", sitting.mediator.isFinished() || sitting.mediator.isDestroyed());
         info.put("test", !sitting.author);
+        info.put("dirty", session.dirty);
         return info;
+    }
+
+    /**
+     * The Game Hall is asking what its player has open.  A draft whose page has been closed, with nothing in it that
+     * is not in its file, is done with: there is nothing to go back to it for, and it is closed here.
+     * @return As current.
+     */
+    public Map<String, Object> currentForHall(Player player) {
+        Session session = _sessions.get(player.getName());
+        if (session != null && session.left && !session.dirty) {
+            close(player);
+            return null;
+        }
+        return current(player);
     }
 
     public Map<String, Object> state(Player player) {
@@ -870,6 +950,7 @@ public class ScenarioAuthoring {
             none.put("session", false);
             return none;
         }
+        session.left = false;
         synchronized (session) {
             return describe(session);
         }
@@ -971,8 +1052,10 @@ public class ScenarioAuthoring {
     /**
      * The author's client says what it has changed in the draft.  (It does not send the whole draft back each time:
      * a scenario's file is larger than the server lets a request be.)
-     * @param patchJson What changed: {top: {name: value, ...}, steps: [{op, ...}, ...]}.  'top' replaces top-level
-     *                  parts of the file (anything but its steps), a null value taking the part out.  'steps' is
+     * @param patchJson What changed: {top: {name: value, ...}, topText: {name: text, ...}, steps: [{op, ...}, ...]}.
+     *                  'top' replaces top-level parts of the file (anything but its steps), a null value taking the
+     *                  part out.  'topText' does the same with each part given as the file would have it, in HJSON
+     *                  (with or without its name in front; empty to take the part out).  'steps' is
      *                  carried out in order.  A step is said by its name, 'uid', as the state gives it (or, failing
      *                  that, by 'index', counting from 0): where steps come changes under the client as the game
      *                  writes new ones, and their names do not.  The ops: "merge" changes parts of a step ('set':
@@ -1003,6 +1086,29 @@ public class ScenarioAuthoring {
                             json.remove(member.getName());
                         else
                             json.set(member.getName(), member.getValue());
+                    }
+                }
+                if (patch.get("topText") != null) {
+                    for (JsonObject.Member member : patch.get("topText").asObject()) {
+                        String name = member.getName();
+                        if (name.equals("steps"))
+                            throw new AuthoringException("Steps are changed one at a time, not all at once.");
+                        String text = member.getValue().isString() ? member.getValue().asString() : member.getValue().toString();
+                        if (text.isBlank()) {
+                            json.remove(name);
+                            continue;
+                        }
+                        org.hjson.JsonValue value;
+                        try {
+                            value = org.hjson.JsonValue.readHjson(text);
+                        } catch (RuntimeException exp) {
+                            throw new AuthoringException(name + ": that is not HJSON: " + exp.getMessage());
+                        }
+                        //(copied out of a file with its name in front, "cards: { ... }": the part is what the name is given)
+                        if (value.isObject() && value.asObject().size() == 1 && value.asObject().names().getFirst().equals(name)
+                                && text.stripLeading().replaceAll("(?m)^\\s*(#|//).*\\n", "").stripLeading().startsWith(name))
+                            value = value.asObject().get(name);
+                        json.set(name, value);
                     }
                 }
                 if (patch.get("steps") == null)
@@ -1177,9 +1283,18 @@ public class ScenarioAuthoring {
                 return result(session, false, true);
             }
 
+            if (op.kind() == ScenarioDefinition.DoKind.DRAW && sitting.mediator.scenarioLocked(() -> sitting.inHand() == null))
+                throw new AuthoringException("Drawing is something a step does: write it in the step's Do.");
             String problem = sitting.mediator.scenarioLocked(() -> {
                 if (sitting.over() || !sitting.live.Table().Arranged())
                     return "The game is over: go back to a step first.";
+                Step opening = sitting.inHand();
+                if (opening != null && opening.when.opening) {
+                    //What the opening does, it does once it has been read: the board it is read on is the one laid out
+                    opening.doOps.add(op);
+                    session.notice = "Written into the opening's Do: it happens once the opening has been read.";
+                    return null;
+                }
                 int before = sitting.live.Table().Problems().size();
                 sitting.live.Table().Apply(op);
                 List<String> problems = sitting.live.Table().Problems();
@@ -1238,6 +1353,7 @@ public class ScenarioAuthoring {
                     setup.wounds.remove(op.card());
             }
             case TOKENS -> setup.tokens.merge(op.card(), op.amount(), Integer::sum);
+            case DRAW -> throw new AuthoringException("The starting board has no drawing: put the cards in the hand, or have a step draw them.");
             case BURDENS -> setup.burdens = Math.max(0, op.relative() ? setup.burdens + op.amount() : op.amount());
             case THREATS -> setup.threats = Math.max(0, op.relative() ? setup.threats + op.amount() : op.amount());
             case TWILIGHT -> throw new AuthoringException("The starting board has no twilight pool to set: the first turn starts it at nothing.  "
@@ -1391,51 +1507,125 @@ public class ScenarioAuthoring {
 
     /**
      * Writes the draft to its file.
-     * @param path Where to keep a scenario that has not been saved before ("tutorials/basics-02.hjson"); null to
-     *             name the file after the scenario.  A scenario that has a file keeps it.
-     * @param canonical For a scenario that has not been saved before: whether it goes among the game's own.
+     * @param path For a scenario that has no file yet: somewhere other than where it was named for when it was
+     *             started ("tutorials/basics-02.hjson").  Null to save it where it is.
+     * @param canonical With a path: whether that is among the game's own scenarios.
      */
     public Map<String, Object> save(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            Sitting sitting = session.sitting;
-            String text = sitting.mediator.scenarioLocked(() -> ScenarioWriter.toHjson(sitting.def, _library));
-            String owner = session.owner;
-            String file = session.path;
-            if (file == null) {
-                boolean ownFolder = _scenarios.hasUserFolder() && !(canonical && admin);
-                if (!ownFolder && !admin)
-                    throw new AuthoringException("This server has nowhere to keep scenarios that are not its own.");
-                owner = ownFolder ? player.getName() : null;
-                file = path != null && !path.isBlank() ? path.trim() : (ownFolder ? "" : "drafts/") + sitting.def.id + ".hjson";
-            }
-            if (session.path == null && _scenarios.exists(owner, file))
-                throw new AuthoringException("There is already a scenario at " + (owner == null ? "" : "users/" + owner + "/") + file
+            Place to = new Place(session.owner, session.path);
+            if (!session.onDisk && path != null && !path.isBlank())
+                to = place(player, path, canonical, admin);
+            if (!session.onDisk && _scenarios.exists(to.owner(), to.path()))
+                throw new AuthoringException("There is already a scenario at " + to.shown()
                         + ".  Give this one a path of its own (or open that one, if it is the one you mean to change).");
-            ScenarioLibrary.Entry entry;
-            try {
-                entry = _scenarios.save(owner, file, text);
-            } catch (IOException exp) {
-                throw new AuthoringException("It could not be saved: " + exp.getMessage());
-            }
-            session.owner = owner;
-            session.path = file;
-            session.dirty = false;
-            session.commentsLost = 0;
-            session.revision.incrementAndGet();
+            return write(session, to);
+        }
+    }
 
-            Map<String, Object> saved = new LinkedHashMap<>();
-            saved.put("path", (owner == null ? "" : "users/" + owner + "/") + file);
-            saved.put("id", entry.id());
-            saved.put("playable", entry.playable());
-            saved.put("verified", entry.verified());
-            saved.put("errors", entry.errors());
-            saved.put("warnings", entry.warnings());
-            saved.put("report", entry.report() == null ? null : entry.report().toString());
+    /**
+     * Saves the draft as another scenario: a file of its own, and (since no two scenarios have the same one) an id of
+     * its own, taken from the file's name.  The scenario it was opened from is left as it was last saved, and the
+     * draft is the new one from here on.
+     */
+    public Map<String, Object> saveAs(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            requireAuthor(session.sitting);
+            Place to = place(player, path, canonical, admin);
+            if (_scenarios.exists(to.owner(), to.path()))
+                throw new AuthoringException("There is already a scenario at " + to.shown() + ".  A copy needs a file of its own.");
+            String name = to.path().substring(to.path().lastIndexOf('/') + 1, to.path().length() - ".hjson".length());
+            String id = name.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", "");
+            if (!id.matches("[a-z0-9][a-z0-9-]{1,60}"))
+                throw new AuthoringException("The copy is known by its file's name, which has to have at least two letters or digits in it.");
+            if (_scenarios.get(to.owner() == null ? id : to.owner() + "/" + id) != null)
+                throw new AuthoringException("There is already a scenario called '" + id + "', and a copy needs a name of its own.  "
+                        + "(To move this scenario's file and keep it the same scenario, rename it.)");
+            Sitting sitting = session.sitting;
+            sitting.mediator.scenarioLocked(() -> sitting.def.id = id);
+            return write(session, to);
+        }
+    }
+
+    /**
+     * Moves the draft's file: another name, another folder, or from the author's own folder to the game's and back.
+     * It stays the same scenario (its id is not the file's name), and what has not been saved is still not saved.
+     */
+    public Map<String, Object> rename(Player player, String path, boolean canonical, boolean admin) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            Place to = place(player, path, canonical, admin);
+            Place from = new Place(session.owner, session.path);
+            if (!to.equals(from)) {
+                if (_scenarios.exists(to.owner(), to.path()))
+                    throw new AuthoringException("There is already a scenario at " + to.shown() + ".");
+                if (session.onDisk) {
+                    try {
+                        _scenarios.move(from.owner(), from.path(), to.owner(), to.path());
+                    } catch (IOException exp) {
+                        throw new AuthoringException("It could not be moved: " + exp.getMessage());
+                    }
+                }
+                session.owner = to.owner();
+                session.path = to.path();
+                session.revision.incrementAndGet();
+            }
             Map<String, Object> result = result(session, false, false);
-            result.put("saved", saved);
+            result.put("renamed", to.shown());
             return result;
         }
+    }
+
+    private Map<String, Object> write(Session session, Place to) throws AuthoringException {
+        Sitting sitting = session.sitting;
+        String text = sitting.mediator.scenarioLocked(() -> ScenarioWriter.toHjson(sitting.def, _library));
+        ScenarioLibrary.Entry entry;
+        try {
+            entry = _scenarios.save(to.owner(), to.path(), text);
+        } catch (IOException exp) {
+            throw new AuthoringException("It could not be saved: " + exp.getMessage());
+        }
+        session.owner = to.owner();
+        session.path = to.path();
+        session.onDisk = true;
+        session.dirty = false;
+        session.commentsLost = 0;
+        session.revision.incrementAndGet();
+
+        Map<String, Object> saved = new LinkedHashMap<>();
+        saved.put("path", to.shown());
+        saved.put("id", entry.id());
+        saved.put("playable", entry.playable());
+        saved.put("verified", entry.verified());
+        saved.put("errors", entry.errors());
+        saved.put("warnings", entry.warnings());
+        saved.put("report", entry.report() == null ? null : entry.report().toString());
+        Map<String, Object> result = result(session, false, false);
+        result.put("saved", saved);
+        return result;
+    }
+
+    /**
+     * @return The pictures a scenario can show that are not cards: [{name, url}], by name.  They are files in the web
+     * folder's images/scenarios, put there by whoever runs the server.
+     */
+    public List<Map<String, Object>> images() {
+        List<Map<String, Object>> found = new ArrayList<>();
+        java.io.File[] files = _images == null ? null : _images.listFiles();
+        if (files == null)
+            return found;
+        Arrays.sort(files, java.util.Comparator.comparing(file -> file.getName().toLowerCase(Locale.ROOT)));
+        for (java.io.File file : files) {
+            if (!file.isFile() || !file.getName().matches(ScenarioDefinition.Zoom.IMAGE_NAME))
+                continue;
+            Map<String, Object> image = new LinkedHashMap<>();
+            image.put("name", file.getName());
+            image.put("url", CardFaces.IMAGES_URL + file.getName().replace(" ", "%20"));
+            found.add(image);
+        }
+        return found;
     }
 
     /** Plays the draft through with nobody at the table, the way the library does before it offers a scenario. */
@@ -1542,6 +1732,9 @@ public class ScenarioAuthoring {
             state.put("testFrom", session.testFrom);
             state.put("dirty", session.dirty);
             state.put("path", session.path == null ? null : (session.owner == null ? "" : "users/" + session.owner + "/") + session.path);
+            //(the same without whose folder it is in, which is how an author says where a file goes)
+            state.put("file", session.path);
+            state.put("onDisk", session.onDisk);
             state.put("canonical", session.path != null && session.owner == null);
             state.put("canSaveAnywhere", _scenarios.hasUserFolder());
             state.put("commentsLost", session.commentsLost);
@@ -1554,6 +1747,8 @@ public class ScenarioAuthoring {
             boolean stopped = session.stopNotice != null && session.stopNotice.equals(session.notice);
             state.put("stopped", !stopped ? null : session.stoppedUncovered ? "uncovered" : "step");
             state.put("draft", JSON.parseObject(ScenarioWriter.toJson(def).toString()));
+            //Each part of the file but its steps, as the file has it: what is copied between the file and the panel
+            state.put("parts", ScenarioWriter.parts(def, _library));
 
             List<String> statuses = new ArrayList<>();
             for (Step step : def.steps)

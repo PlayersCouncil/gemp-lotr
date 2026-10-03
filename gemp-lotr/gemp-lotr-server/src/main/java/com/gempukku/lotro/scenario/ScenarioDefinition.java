@@ -133,12 +133,17 @@ public final class ScenarioDefinition {
         public String offers;
         /** Card-definition requirements, as JSON array text. */
         public String require;
+        /**
+         * "opening": not a decision of the game's at all, but the moment before the first turn, with the board laid
+         * out and nothing yet begun.  Only a scenario's first step can wait for it (see ScenarioTable.arrangeBoard).
+         */
+        public boolean opening;
         /** How it was written, for reports. */
         public String source = "";
 
         public boolean isEmpty() {
             return seat == null && decision == null && text == null && phase == null && turn == null
-                    && skirmish == null && offers == null && require == null;
+                    && skirmish == null && offers == null && require == null && !opening;
         }
     }
 
@@ -171,12 +176,13 @@ public final class ScenarioDefinition {
      */
     public record Order(When when, List<Answer> answers, String source) { }
 
-    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS }
+    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW }
 
     /**
      * Something the director does to the board directly.
-     * @param card The card acted on (not used by TWILIGHT, BURDENS, THREATS).
-     * @param target MOVE: where to, e.g. "freeps.hand", "shadow.deck.top".  ATTACH, STACK: the other card.
+     * @param card The card acted on (not used by TWILIGHT, BURDENS, THREATS, DRAW).
+     * @param target MOVE: where to, e.g. "freeps.hand", "shadow.deck.top".  ATTACH, STACK: the other card.  DRAW: the
+     *               seat that draws.
      * @param amount How many.  For TWILIGHT, BURDENS and THREATS this is a new total unless relative is set.
      */
     public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) { }
@@ -223,15 +229,20 @@ public final class ScenarioDefinition {
     public record Focus(String name, double[] rect) { }
 
     /**
-     * A card shown as large as the screen allows while a message is up.  Exactly one of card, site and blueprint
-     * says which card.
+     * A card (or a picture) shown as large as the screen allows while a message is up.  Exactly one of card, site,
+     * blueprint and image says what.
      * @param card The alias of one of the scenario's cards.
      * @param site The number of a site on the person's adventure path.
      * @param blueprint Any card at all, by its blueprint ID.
-     * @param focus The parts of its face the message is about; empty for the whole card.
-     * @param magnify 1 shows the whole card; more than that shows it that many times larger, centred on the focus.
+     * @param image A picture that is not a card: the name of a file in the web folder's images/scenarios.
+     * @param focus The parts of its face the message is about; empty for the whole of it.
+     * @param magnify 1 shows the whole of it; more than that shows it that many times larger, centred on the focus
+     *                (on its middle if there is none).
      */
-    public record Zoom(String card, Integer site, String blueprint, List<Focus> focus, double magnify) { }
+    public record Zoom(String card, Integer site, String blueprint, String image, List<Focus> focus, double magnify) {
+        /** What a picture's file can be called: nothing that leads out of the folder it is kept in. */
+        public static final String IMAGE_NAME = "[A-Za-z0-9_-][A-Za-z0-9_. -]{0,80}\\.(?i:png|jpe?g|gif|webp)";
+    }
 
     public static final class Message {
         /** An author's note about the message.  Never shown to a player. */

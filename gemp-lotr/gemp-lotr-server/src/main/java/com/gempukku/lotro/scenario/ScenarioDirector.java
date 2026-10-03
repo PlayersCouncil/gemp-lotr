@@ -266,8 +266,10 @@ public class ScenarioDirector {
             if (matches(step.when, player, decision)) {
                 if (_timesApplied == 0) {
                     _statuses.put(step.label(), StepStatus.MATCHED);
-                    for (DoOp op : step.doOps)
-                        _table.Apply(op);
+                    //(the opening is read on the board as it was laid out: what it does, it does once it has been read)
+                    if (!step.when.opening)
+                        for (DoOp op : step.doOps)
+                            _table.Apply(op);
                 }
                 return step;
             }
@@ -289,6 +291,9 @@ public class ScenarioDirector {
     public void answered(Step step) {
         if (step != currentStep())
             return;
+        if (step.when.opening)
+            for (DoOp op : step.doOps)
+                _table.Apply(op);
         _timesApplied++;
         if (step.end != null)
             _end = step.end;
@@ -359,6 +364,9 @@ public class ScenarioDirector {
     }
 
     public boolean matches(When when, String player, AwaitingDecision decision) {
+        //The opening is not one of the game's decisions, and nothing but a step that waits for it has it
+        if (when.opening != _table.IsOpening(decision))
+            return false;
         if (when.seat != null && when.seat != _table.SeatOf(player))
             return false;
         if (when.decision != null && when.decision != decision.getDecisionType())
@@ -394,6 +402,9 @@ public class ScenarioDirector {
      * @throws ScenarioScriptException if the script's answer does not fit the decision.
      */
     public String scriptedAnswer(Step step, AwaitingDecision decision) throws ScenarioScriptException {
+        //The opening is the table's own question, and has one answer
+        if (_table.IsOpening(decision))
+            return "0";
         Answer answer = null;
         if (!step.answers.isEmpty()) {
             if (_timesApplied < step.answers.size())

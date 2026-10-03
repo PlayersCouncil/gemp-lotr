@@ -1255,9 +1255,10 @@ var GempScenarioOverlay = Class.extend({
         }
         var that = this;
         var image = this.zoomBox.find(".scenario-zoom-card");
-        var url = Card.getImageUrl(zoom.blueprint);
-        //Until the picture has arrived its shape is taken from the kind of card it is
-        this.zoomShape = Card.isHorizontal(Card.StripBlueprintId(zoom.blueprint), "SPECIAL") ? 497 / 355 : 357 / 497;
+        //A card, or a picture that is not one (a file in images/scenarios, by the address the server gives for it)
+        var url = zoom.image != null ? zoom.image : Card.getImageUrl(zoom.blueprint);
+        //Until the picture has arrived its shape is taken from the kind of card it is (and a picture's for a card's)
+        this.zoomShape = zoom.image == null && Card.isHorizontal(Card.StripBlueprintId(zoom.blueprint), "SPECIAL") ? 497 / 355 : 357 / 497;
         image.unbind("load").bind("load", function () {
             if (this.naturalWidth > 0 && this.naturalHeight > 0)
                 that.zoomShape = this.naturalWidth / this.naturalHeight;
@@ -1891,9 +1892,9 @@ var GempScenarioOverlay = Class.extend({
             this.backToHall();
             return;
         }
-        //An author's draft, and the game it is being written in, stay as they are to be come back to
+        //An author's draft, and the game it is being written in, stay as they are to be come back to (unless there
+        // is something in it that has not been saved: then they are asked what is to become of it)
         if (this.author != null && this.author.authoring) {
-            this.leaving = true;
             this.backToHall();
             return;
         }
@@ -1914,7 +1915,17 @@ var GempScenarioOverlay = Class.extend({
      * hallUi.js).  If one is, this tab closes and the browser goes back to it.  If none answers, the hall opens here.
      */
     backToHall: function () {
+        //Somebody writing a scenario, with changes that are in no file, says first what is to become of them
+        if (this.author != null && this.author.unsaved()) {
+            this.author.askBeforeLeaving();
+            return;
+        }
+        this.goToHall();
+    },
+
+    goToHall: function () {
         var that = this;
+        this.leaving = true;
         var here = function () {
             location.href = "/gemp-lotr/hall.html";
         };

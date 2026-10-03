@@ -497,3 +497,7 @@
 		padding-left: 0.6em !important;
 	}
 }
+
+.scenario-author select {
+	flex: 0 0 auto;
+}

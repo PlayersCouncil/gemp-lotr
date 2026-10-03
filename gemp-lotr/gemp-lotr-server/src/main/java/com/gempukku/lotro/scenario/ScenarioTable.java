@@ -20,6 +20,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.PregameSetup;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -70,6 +71,7 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private final Map<String, LotroDeck> _decks = new HashMap<>();
     private ScenarioRandom _random;
     private boolean _arranged;
+    private AwaitingDecision _opening;
 
     /** Players are written down by seat, so that a journal can be followed whoever is sitting there. */
     private final GameJournal _journal = new GameJournal(player -> SeatOf(player).key());
@@ -426,6 +428,23 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         //How the table got to this point (the bid, the choice of seat) is not part of the scenario's story
         _gameState.forgetMessages();
         _arranged = true;
+
+        //A scenario whose first step waits for the opening has the game wait here, with the board laid out and the
+        // first turn not begun, until that step has been read.  The game is made to wait the only way it can be: by
+        // being asked something.  The scripted seat is asked, and the script answers for it once the step is done
+        // with (ScenarioDirector.scriptedAnswer), so nobody ever sees the question.
+        if (!_def.steps.isEmpty() && _def.steps.getFirst().when.opening) {
+            _opening = new MultipleChoiceAwaitingDecision(1, "The scenario begins", new String[] {"Begin"}) {
+                @Override
+                protected void validDecisionMade(int index, String result) { }
+            };
+            _userFeedback.sendAwaitingDecision(OpponentPlayer(), _opening);
+        }
+    }
+
+    /** Whether this is the table's own question at the opening (see arrangeBoard), not one of the game's. */
+    public boolean IsOpening(AwaitingDecision decision) {
+        return decision != null && decision == _opening;
     }
 
     private void bindAliases(Seat seat) {
@@ -500,6 +519,12 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                 case WOUND -> AddWoundsToChar(Card(op.card()), op.amount());
                 case HEAL -> RemoveWoundsFromChar(Card(op.card()), Math.min(op.amount(), GetWoundsOn(Card(op.card()))));
                 case TOKENS -> AddTokensToCard(Card(op.card()), op.amount());
+                case DRAW -> {
+                    //(from the top of the deck, as far as the deck goes)
+                    String player = Player(ScenarioParser.parseZoneRef(_def, op.target() + ".hand", "do").seat());
+                    for (int i = 0; i < op.amount(); i++)
+                        _gameState.playerDrawsCard(player);
+                }
                 case TWILIGHT -> SetTwilight(Math.max(0, op.relative() ? GetTwilight() + op.amount() : op.amount()));
                 case BURDENS -> setTotal(GetBurdens(), op, this::AddBurdens, this::RemoveBurdens);
                 case THREATS -> setTotal(GetThreats(), op, this::AddThreats, this::RemoveThreats);

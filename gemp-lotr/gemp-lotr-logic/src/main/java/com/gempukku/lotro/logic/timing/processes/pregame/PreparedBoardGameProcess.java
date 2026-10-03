@@ -34,18 +34,40 @@ public class PreparedBoardGameProcess implements GameProcess {
         // player's point of view.
         gameState.startPlayerTurn(_firstPlayer, false);
         _setup.arrangeBoard(game);
-
-        //The turn that follows goes to whoever comes after the current player, so leave the last player current.
-        PlayOrder playOrder = gameState.getPlayerOrder().getClockwisePlayOrder(_firstPlayer, false);
-        String lastPlayer = _firstPlayer;
-        String nextPlayer;
-        while ((nextPlayer = playOrder.getNextPlayer()) != null)
-            lastPlayer = nextPlayer;
-        gameState.startPlayerTurn(lastPlayer, false);
     }
 
     @Override
     public GameProcess getNextProcess() {
-        return new BetweenTurnsProcess();
+        return new HandOver(_firstPlayer);
+    }
+
+    /**
+     * The turn that follows goes to whoever comes after the current player, so the last player is made current.
+     * This is a step of its own, after the board is arranged, because arranging the board may leave the game waiting
+     * on a question (a scenario that has something to say before the first turn asks one): while it waits, the
+     * board is still the first player's, and is shown to them as theirs.
+     */
+    private static class HandOver implements GameProcess {
+        private final String _firstPlayer;
+
+        private HandOver(String firstPlayer) {
+            _firstPlayer = firstPlayer;
+        }
+
+        @Override
+        public void process(LotroGame game) {
+            GameState gameState = game.getGameState();
+            PlayOrder playOrder = gameState.getPlayerOrder().getClockwisePlayOrder(_firstPlayer, false);
+            String lastPlayer = _firstPlayer;
+            String nextPlayer;
+            while ((nextPlayer = playOrder.getNextPlayer()) != null)
+                lastPlayer = nextPlayer;
+            gameState.startPlayerTurn(lastPlayer, false);
+        }
+
+        @Override
+        public GameProcess getNextProcess() {
+            return new BetweenTurnsProcess();
+        }
     }
 }

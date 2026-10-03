@@ -380,6 +380,24 @@ public final class ScenarioParser {
 
         if (step.until == null && step.answers.size() > 1)
             throw new ScenarioFormatException(context + ": has several answers but answers only one decision (give it an 'until' to make it repeat)");
+        if ((step.until != null && step.until.opening) || (step.skipWhen != null && step.skipWhen.opening))
+            throw new ScenarioFormatException(context + ": 'opening' is something only a 'when' can wait for");
+
+        if (step.when.opening) {
+            //The board as it is laid out, before the first turn.  It is read; then its 'do' happens; then the game begins.
+            if (step.pause)
+                throw new ScenarioFormatException(context + ": the opening is read as it is: it needs no 'pause'");
+            if (step.allow != null || !step.answers.isEmpty())
+                throw new ScenarioFormatException(context + ": the opening is read, not answered, so it has no 'allow' and no 'answer'");
+            if (step.until != null || step.skipWhen != null || !step.onlyIf.isEmpty() || !step.unless.isEmpty() || step.end != null)
+                throw new ScenarioFormatException(context + ": the opening happens once, at the start of every game: it has no 'until', 'skipWhen', 'if', 'unless' or 'end'");
+            if (step.messages.isEmpty() && step.doOps.isEmpty())
+                throw new ScenarioFormatException(context + ": an opening with no messages and no 'do' does nothing");
+            for (Message message : step.messages)
+                if (message.on != null || message.advance == Advance.DECISION || !message.choices.isEmpty())
+                    throw new ScenarioFormatException(context + ".messages: the opening's messages are read one after another; they cannot wait for a decision ('advance: decision', 'on') or offer 'choices'");
+            step.when.seat = def.human.other();
+        }
 
         if (step.pause) {
             //It is there to be read.  The decision it is read over belongs to the step after it.
@@ -450,11 +468,16 @@ public final class ScenarioParser {
                 when.offers = card(def, term.arg(0, context), context).alias();
             else if (term.is("text"))
                 when.text = term.wholeArg();
+            else if (term.args().isEmpty() && term.is("opening"))
+                when.opening = true;
             else
                 throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
                         + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
                         + "number, assign), or one of phase(...), turn(...), skirmish(...), offers(...), text(...)");
         }
+        if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null
+                || when.skirmish != null || when.offers != null))
+            throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
         return when;
     }
 
@@ -521,9 +544,18 @@ public final class ScenarioParser {
             DoKind kind = term.is("twilight") ? DoKind.TWILIGHT : term.is("burdens") ? DoKind.BURDENS : DoKind.THREATS;
             return new DoOp(kind, null, null, parseInt(amount.startsWith("+") ? amount.substring(1) : amount, context), relative, term.raw());
         }
+        if (term.is("draw")) {
+            //draw(n) is the person's own seat; draw(seat, n) says whose
+            boolean seated = term.args().size() > 1;
+            Seat seat = seated ? parseSeat(def, term.arg(0, context), context) : def.human;
+            int amount = parseInt(term.arg(seated ? 1 : 0, context), context);
+            if (amount < 1 || amount > 60)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": a number of cards from 1 to 60");
+            return new DoOp(DoKind.DRAW, null, seat.key(), amount, false, term.raw());
+        }
         throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of "
                 + "move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), heal(card, n), tokens(card, n), "
-                + "twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it)");
+                + "draw(n) or draw(seat, n), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it)");
     }
 
     /**
@@ -642,12 +674,19 @@ public final class ScenarioParser {
         }
         String[] parts = zoom.trim().split(":", 2);
         if (parts.length != 2 || parts[1].isBlank())
-            throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number> or blueprint:<id>");
+            throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number>, blueprint:<id> or image:<file>");
         String what = parts[1].trim();
         String alias = null;
         Integer site = null;
         String blueprint = null;
+        String image = null;
         switch (parts[0].trim().toLowerCase(Locale.ROOT)) {
+            case "image" -> {
+                if (!what.matches(Zoom.IMAGE_NAME))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not the name of a picture: letters, digits, spaces, dots, "
+                            + "dashes and underscores, ending in .png, .jpg, .gif or .webp (a file in the web folder's images/scenarios)");
+                image = what;
+            }
             case "card" -> alias = card(def, what, context + ".zoom").alias();
             case "site" -> {
                 if (!what.matches("[1-9]"))
@@ -659,7 +698,7 @@ public final class ScenarioParser {
                     throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not a blueprint ID");
                 blueprint = what;
             }
-            default -> throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number> or blueprint:<id>");
+            default -> throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number>, blueprint:<id> or image:<file>");
         }
 
         List<Focus> focus = new ArrayList<>();
@@ -701,10 +740,12 @@ public final class ScenarioParser {
             }
             if (magnify < 1 || magnify > 6)
                 throw new ScenarioFormatException(context + ".magnify: has to be from 1 (the whole card) to 6");
-            if (magnify > 1 && focus.isEmpty())
-                throw new ScenarioFormatException(context + ".magnify: a card shown larger than the screen needs a 'focus' to be centred on");
         }
-        return new Zoom(alias, site, blueprint, focus, magnify);
+        if (image != null)
+            for (Focus part : focus)
+                if (part.name() != null)
+                    throw new ScenarioFormatException(context + ".focus: a picture has no named parts ('" + part.name() + "'): say where with rect(left, top, width, height), in percent of the picture");
+        return new Zoom(alias, site, blueprint, image, focus, magnify);
     }
 
     /**

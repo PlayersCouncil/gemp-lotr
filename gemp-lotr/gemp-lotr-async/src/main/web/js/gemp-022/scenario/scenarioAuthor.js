@@ -21,6 +21,8 @@ var GempScenarioAuthor = Class.extend({
     WIDTH: 430,
     FOLDED: 30,
     PHASES: ["fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"],
+    /** How long the path of a scenario's file may be (the server's ScenarioLibrary.MAX_PATH). */
+    MAX_PATH: 120,
     TYPES: ["action", "actionChoice", "cards", "arbitrary", "choice", "number", "assign"],
     SEATS: ["freeps", "shadow", "human", "opponent"],
     ZONES: ["characters", "support", "minions", "hand", "deck.top", "deck.bottom", "discard", "deadPile", "removed"],
@@ -207,6 +209,18 @@ var GempScenarioAuthor = Class.extend({
                 setTimeout(function () {
                     that.catchUp();
                 }, 300);
+        });
+        //The server is told when this page goes away, so that the Game Hall does not go on offering a draft that has
+        // been saved and left.  (Going on to a fresh game of the draft is not going away; and a page that is only
+        // being reloaded is heard from again as soon as it is back.)
+        window.addEventListener("pagehide", function () {
+            if (that.gone || that.state == null || !that.state.session || !navigator.sendBeacon)
+                return;
+            try {
+                navigator.sendBeacon(that.game.communication.url + "/scenarios/author/left", new URLSearchParams({left: "true"}));
+            } catch (e) {
+                // only a courtesy
+            }
         });
         //The game's own windows open in the middle of the browser's, which is partly under the panel
         $(document).bind("dialogopen dialogresizestop", function (event) {
@@ -581,7 +595,7 @@ var GempScenarioAuthor = Class.extend({
                 that.renderNotices();
             }, "sa-dismiss")));
         //How the last save went; no longer news once the draft has been changed again
-        if (this.saved != null && state.dirty && !this.saved.asks)
+        if (this.saved != null && state.dirty && !this.saved.stays)
             this.saved = null;
         if (this.saved != null) {
             var saved = this.el("div", "sa-notice " + (this.saved.good ? "sa-good" : "sa-warning"), this.saved.text).appendTo(box);
@@ -597,6 +611,54 @@ var GempScenarioAuthor = Class.extend({
         }
         if (this.told)
             box.append(this.el("div", "sa-notice sa-told", this.told));
+    },
+
+    /** Whether the draft has anything in it that is in no file (and this is the game it is being written in). */
+    unsaved: function () {
+        var state = this.state;
+        return this.authoring && !this.gone && state != null && !!state.session && state.mode != "test" && !!state.dirty
+            && ("" + state.gameId) == this.gameId();
+    },
+
+    /** Asked on the way back to the Game Hall with unsaved changes: save them, drop them, or stay. */
+    askBeforeLeaving: function () {
+        var that = this;
+        $(".sa-leave, .sa-leave-shade").remove();
+        var shade = this.el("div", "sa-leave-shade").appendTo("body");
+        var box = this.el("div", "sa-leave").appendTo("body");
+        box.append(this.el("h2", null, "You have unsaved changes."));
+        box.append(this.el("p", null, (this.draft.title || this.draft.id) + " has changes that are not in its file"
+            + (this.state.path ? " (" + this.state.path + ")." : ".")));
+        var said = this.el("p", "sa-leave-problem").appendTo(box).hide();
+        var buttons = this.el("div", "sa-leave-buttons").appendTo(box);
+        var put = function () {
+            shade.remove();
+            box.remove();
+        };
+        var failed = function () {
+            buttons.find("button").prop("disabled", false);
+            said.text(that.problem || "That could not be done.").show();
+        };
+        var away = function () {
+            that.call("POST", "close", {}, function () {
+                put();
+                that.gone = true;
+                that.overlay.goToHall();
+            }, failed);
+        };
+        buttons.append(this.button("Save and exit", "Write the draft to its file, and go back to the Game Hall", function () {
+            if (!that.mayOverwrite())
+                return;
+            buttons.find("button").prop("disabled", true);
+            that.flush(function () {
+                that.call("POST", "save", {}, away, failed);
+            });
+        }, "sa-primary"));
+        buttons.append(this.button("Discard changes", "Go back to the Game Hall. The file stays as it was last saved; what has been changed since is lost.", function () {
+            buttons.find("button").prop("disabled", true);
+            away();
+        }, "sa-danger"));
+        buttons.append(this.button("Stay here", "Carry on writing", put));
     },
 
     /** The decision that is waiting with no step to cover it, where that is something to do something about. */
@@ -731,13 +793,20 @@ var GempScenarioAuthor = Class.extend({
             else
                 rest.push(term);
         }
-        var who = step.pause ? "Read" : seat == null ? "Any" : this.isHumanSeat(seat) ? "You" : "Opp";
+        var who = step.pause || this.isOpening(step) ? "Read" : seat == null ? "Any" : this.isHumanSeat(seat) ? "You" : "Opp";
         var act = "";
-        if (step.answer)
+        if (this.isOpening(step))
+            act = step["do"] || "";
+        else if (step.answer)
             act = step.answer;
         else if (step.allow)
             act = typeof step.allow == "string" ? step.allow : (step.allow.answers || "pass when it may");
         return {who: who, when: rest.join(" "), act: act};
+    },
+
+    /** Whether a step is the one that is read before the first turn, on the board as it is laid out. */
+    isOpening: function (step) {
+        return step != null && typeof step.when == "string" && $.trim(step.when).toLowerCase() == "opening";
     },
 
     messagesOf: function (step) {
@@ -865,6 +934,10 @@ var GempScenarioAuthor = Class.extend({
         }
 
         var foot = this.el("div", "sa-bar").appendTo(box);
+        if (!this.isOpening(steps[0]))
+            foot.append(this.button("+ Opening", "A first step that is read before the first turn begins, on the board as the scenario lays it out: nothing drawn, nothing asked. What it does (drawing a hand, say) it does once it has been read.", function () {
+                that.insertStep(0, {when: "opening", messages: [{text: "..."}]});
+            }));
         foot.append(this.button("+ Pause", "A step that is only read, put in before the selected step (or at the end)", function () {
             var index = that.ui.selected == null ? steps.length : that.ui.selected - 1;
             that.insertStep(index, {pause: true, messages: [{text: "..."}]});
@@ -1347,7 +1420,7 @@ var GempScenarioAuthor = Class.extend({
                 that.changeSteps([{op: "delete", uid: form.uid}], number, Math.max(1, number - 1));
         }, "sa-danger"));
         var inHandNow = number == this.state.position.step && this.state.position.inHand;
-        if (inHandNow && !work.pause)
+        if (inHandNow && !work.pause && !this.isOpening(work))
             acts.append(this.button("Answer it again", "This step forgets what it allows and how it is answered, and takes both from what you do next. Its messages stay.", function () {
                 that.retake();
             }));
@@ -1357,9 +1430,14 @@ var GempScenarioAuthor = Class.extend({
                 : "This step says nothing yet about what is done. When the game comes to it, what you do there is written in as what it allows."));
 
         /* ---- what it waits for ---- */
+        var opening = this.isOpening(work);
         var when = this.el("div", "sa-section").appendTo(box);
-        when.append(this.el("div", "sa-heading", work.pause ? "Read over the player's decision when it is" : "Applies to the decision that is"));
-        if (work.when != null && typeof work.when != "string") {
+        when.append(this.el("div", "sa-heading", opening ? "The opening" : work.pause ? "Read over the player's decision when it is" : "Applies to the decision that is"));
+        if (opening) {
+            when.append(this.el("div", "sa-note", "Read before the first turn begins, on the board as the scenario lays it out: nobody has been asked anything, and nothing has been drawn. "
+                + "Its messages are read one after another; then what it does is done; then the first turn begins. Only a scenario's first step can be this."));
+            when.append(this.field("name", this.bound(work, "id", "text").addClass("sa-short"), "Only to make reports easier to read"));
+        } else if (work.when != null && typeof work.when != "string") {
             when.append(this.field("When", this.bound(work, "when", "json"), "Written out in full because it has requirements"));
         } else {
             var raw = this.bound(work, "when", "text", function () {
@@ -1435,7 +1513,7 @@ var GempScenarioAuthor = Class.extend({
             when.append(this.el("div", "sa-row").append(seat).append(type).append(phase).append(turn));
             when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), offers(card), text(part of what the decision says)"));
         }
-        var flagsRow = this.el("div", "sa-row").appendTo(when);
+        var flagsRow = this.el("div", "sa-row").appendTo(when).toggle(!opening);
         flagsRow.append(this.el("label", "sa-check").attr("title", "A step that is only read: it has messages, and no answer. The decision goes to the step after it.")
             .append(this.bound(work, "pause", "check", function () {
                 that.sendStep();
@@ -1443,13 +1521,20 @@ var GempScenarioAuthor = Class.extend({
         flagsRow.append(this.el("label", "sa-check").attr("title", "A player who fails later can come back to here")
             .append(this.bound(work, "checkpoint", "check")).append(document.createTextNode(" checkpoint")));
         flagsRow.append(this.field("name", this.bound(work, "id", "text").addClass("sa-short"), "Only to make reports easier to read"));
-        if ((this.state.flags || []).length > 0) {
+        if ((this.state.flags || []).length > 0 && !opening) {
             when.append(this.field("If", this.bound(work, "if", "text"), "Only part of the game if these were chosen at a pause's choice: " + this.state.flags.join(", ")));
             when.append(this.field("Unless", this.bound(work, "unless", "text"), "Not part of the game if any of these was chosen"));
         }
 
         /* ---- what happens ---- */
-        if (!work.pause) {
+        if (opening) {
+            var after = this.el("div", "sa-section").appendTo(box);
+            after.append(this.el("div", "sa-heading", "What is done once it has been read"));
+            after.append(this.field("Do", this.bound(work, "do", "text").attr("placeholder", "draw(5)"),
+                "Changes to the board, made after the opening's messages and before the first turn begins, so that the first decision is worked out with them: "
+                + "draw(n) or draw(seat, n) from the top of the deck, move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), burdens(n). "
+                + "(Twilight set here is gone again when the turn starts.)"));
+        } else if (!work.pause) {
             var does = this.el("div", "sa-section").appendTo(box);
             does.append(this.el("div", "sa-heading", "What is done"));
             does.append(this.field("Allow", this.bound(work.allow, "answers", "text"),
@@ -1457,7 +1542,8 @@ var GempScenarioAuthor = Class.extend({
             does.append(this.field("Answer", this.bound(work, "answer", "text"),
                 "What the script plays: the opponent's answer, or the player's when the script plays itself"));
             does.append(this.field("Do", this.bound(work, "do", "text"),
-                "Changes to the board when the step's decision arrives: move(card, seat.zone), wound(card, n), heal(card, n), twilight(n), burdens(n), attach(card, bearer)"));
+                "Changes to the board when the step's decision arrives: move(card, seat.zone), draw(n), wound(card, n), heal(card, n), twilight(n), burdens(n), attach(card, bearer), stack(card, host). "
+                + "The decision itself was worked out before them: what they put in a hand can be played from the next decision on."));
             var more = $("<details class='sa-more'></details>").appendTo(does);
             more.append($("<summary></summary>").text("Wrong clicks, repeating, giving up"));
             more.append(this.field("Otherwise", this.bound(work.allow, "otherwise", "area").attr("rows", 2), "What to say when the player clicks something legal that is not allowed. Empty: the stock line."));
@@ -1653,7 +1739,7 @@ var GempScenarioAuthor = Class.extend({
             }));
 
             var more = $("<details class='sa-more'></details>").appendTo(card);
-            more.append($("<summary></summary>").text("Heading, what takes it away, a card shown large"));
+            more.append($("<summary></summary>").text("Heading, what takes it away, a card or a picture shown large"));
             more.append(that.field("Heading", that.bound(message, "header", "text"), "Most messages have none"));
             var avoid = that.bound(message, "avoid", "text");
             var avoidRow = that.el("div", "sa-row sa-anchor").appendTo(more);
@@ -1669,14 +1755,39 @@ var GempScenarioAuthor = Class.extend({
             }));
             more.append(that.field("Goes away on", that.bound(message, "advance", "text").attr("placeholder", "next, decision, inspect, inspect(card), close"),
                 "Empty: Next, except the step's last message, which stays up while the decision is answered. inspect: the player opens a card's information window; close: they close it."));
-            if (!work.pause)
+            if (!work.pause && !that.isOpening(work))
                 more.append(that.field("Shown when", that.bound(message, "on", "text").attr("placeholder", "picked(card), assigned(character), ready"),
                     "A moment inside the answering: the player has clicked that card; that character has all its minions; the answer is complete and only Done remains. Empty: when the decision arrives."));
-            more.append(that.field("Shows large", that.bound(message, "zoom", "text").attr("placeholder", "card:alias, site:3, blueprint:1_83"),
-                "A card shown as large as the screen allows while the message is up"));
-            more.append(that.field("Its parts", that.bound(message, "focus", "text").attr("placeholder", "strength, text, rect(l, t, w, h)"),
-                "The parts of the large card the message is about: " + that.PARTS.join(", ")));
-            more.append(that.field("Magnified", that.bound(message, "magnify", "text").addClass("sa-short"), "1 shows the whole card; up to 6"));
+            //What is shown large, the parts of it the message is about, and how much larger than fits it is drawn.
+            // The last two do nothing without the first, and say so.
+            var large = that.bound(message, "zoom", "text", function () {
+                syncLarge();
+            }).attr("placeholder", "card:alias, site:3, blueprint:1_83, image:file.png");
+            var largeRow = that.el("div", "sa-row sa-anchor").appendTo(more);
+            largeRow.append(that.el("span", "sa-label", "Shows large").attr("title", "A card, or a picture, shown as large as the window allows while the message is up, with the bubble beside it. "
+                + "card:alias is one of the scenario's cards, site:3 a site on the path, blueprint:1_83 any card at all, image:file.png a picture from the server's images/scenarios folder."));
+            largeRow.append(large);
+            var pictures = that.el("div", "sa-pictures").hide();
+            largeRow.append(that.button("Picture" + "\u2026", "Choose from the pictures in the server's images/scenarios folder", function () {
+                that.choosePicture(pictures, function (name) {
+                    large.val("image:" + name).change();
+                });
+            }));
+            more.append(pictures);
+            var parts = that.bound(message, "focus", "text");
+            more.append(that.field("Its parts", parts,
+                "The parts of what is shown large that the message is about: each is outlined, and the rest is dimmed. On a card: " + that.PARTS.join(", ")
+                + ". On anything, a picture included: rect(left, top, width, height), in percent of it. Several, separated by commas."));
+            var magnified = that.bound(message, "magnify", "text").addClass("sa-short");
+            more.append(that.field("Magnified", magnified,
+                "How many times larger than fits the window it is drawn: 2 is twice as large, up to 6; empty (or 1) is the whole of it. "
+                + "It is seen through a frame the size the whole would have been, with Its parts in the middle of the frame (its own middle, if there are none)."));
+            var syncLarge = function () {
+                var none = $.trim(large.val()) == "";
+                parts.attr("placeholder", none ? "(nothing is shown large)" : "strength, text, rect(l, t, w, h)").prop("disabled", none && $.trim(parts.val()) == "");
+                magnified.attr("placeholder", none ? "(nothing)" : "1").prop("disabled", none && $.trim(magnified.val()) == "");
+            };
+            syncLarge();
             if (work.pause && position == messages.length - 1) {
                 message.choices = message.choices || {};
                 var choiceBox = that.el("div", "sa-hints").appendTo(more);
@@ -1857,6 +1968,34 @@ var GempScenarioAuthor = Class.extend({
         overlay.showMessage(message);
         overlay.markCards();
         return true;
+    },
+
+    /**
+     * The pictures a message can show that are not cards, to choose one from.
+     * @param box where to list them (pressed again with the list open, it is put away)
+     */
+    choosePicture: function (box, done) {
+        var that = this;
+        if (box.is(":visible")) {
+            box.hide();
+            return;
+        }
+        box.empty().append(this.el("div", "sa-note", "Looking in images/scenarios" + "\u2026")).show();
+        this.call("GET", "images", null, function (result) {
+            box.empty();
+            var images = result.images || [];
+            if (images.length == 0)
+                box.append(that.el("div", "sa-note", "There are no pictures. They are files (.png, .jpg, .gif, .webp) in the web folder's images/scenarios, put there by whoever runs the server."));
+            $.each(images, function (index, image) {
+                var item = that.el("div", "sa-picture").attr("title", "image:" + image.name).appendTo(box);
+                item.append($("<img alt=''/>").attr("src", image.url));
+                item.append(that.el("span", null, image.name));
+                item.click(function () {
+                    box.hide();
+                    done(image.name);
+                });
+            });
+        });
     },
 
     /* ---------------------------------------------------------------- picking things on the table */
@@ -2148,8 +2287,9 @@ var GempScenarioAuthor = Class.extend({
         counter("Burdens", "burdens", board.burdens);
         counter("Threats", "threats", board.threats);
 
+        //(what another card can be put on: anything on the table, a card that is itself on another included)
         var bearers = $.grep(board.cards, function (card) {
-            return card.zone == "characters" || card.zone == "minions" || card.zone == "support";
+            return card.zone == "characters" || card.zone == "minions" || card.zone == "support" || card.zone == "attached";
         });
         $.each(["freeps", "shadow"], function (index, seat) {
             var section = that.el("div", "sa-section").appendTo(box);
@@ -2183,13 +2323,20 @@ var GempScenarioAuthor = Class.extend({
                     controls.append(that.button("+token" + (card.tokens > 0 ? " (" + card.tokens + ")" : ""), "Add a culture token", function () {
                         act("tokens(" + card.alias + ", 1)");
                     }));
-                if (card.type == "POSSESSION" || card.type == "CONDITION" || card.type == "ARTIFACT")
-                    controls.append(that.select([["", "attach to\u2026"]].concat($.map(bearers, function (bearer) {
-                        return bearer.alias;
-                    })), "", function (bearer) {
-                        if (bearer != "")
-                            act("attach(" + card.alias + ", " + bearer + ")");
-                    }));
+                //Any card can be put on any other that is on the table: attached to it (as a possession is borne),
+                // or stacked on it (as cards are kept under another)
+                var hosts = $.grep(bearers, function (bearer) {
+                    return bearer.alias != card.alias;
+                });
+                if (hosts.length > 0)
+                    controls.append(that.select([["", "put on" + "\u2026"]].concat($.map(hosts, function (host) {
+                        return [["attach(" + card.alias + ", " + host.alias + ")", "attach to " + host.alias]];
+                    })).concat($.map(hosts, function (host) {
+                        return [["stack(" + card.alias + ", " + host.alias + ")", "stack on " + host.alias]];
+                    })), "", function (op) {
+                        if (op != "")
+                            act(op);
+                    }).attr("title", "Attach it to another card, or stack it on one"));
                 controls.append(that.button("\u00d7", "Take this card out of the scenario", function () {
                     if (confirm("Take " + card.alias + " out of the scenario? (A fresh game is played back to here.)"))
                         that.removeCard(card);
@@ -2232,18 +2379,27 @@ var GempScenarioAuthor = Class.extend({
                 alias = stem + n;
             var name = $("<input type='text'/>").addClass("sa-input sa-short").val(alias);
             var seat = that.select(["freeps", "shadow"], card.side == "shadow" ? "shadow" : "freeps");
-            var zone = that.select([["", "deck (bottom)"], "hand", "characters", "support", "minions", "discard", "deadPile"], card.side == "shadow" ? "" : "hand");
+            var host = that.select($.map(bearers, function (bearer) {
+                return bearer.alias;
+            }), bearers.length > 0 ? bearers[0].alias : "").attr("title", "The card it is put on").hide();
+            var places = [["", "deck (bottom)"], "hand", "characters", "support", "minions", "discard", "deadPile"];
+            if (bearers.length > 0)
+                places = places.concat([["attach", "attached to" + "\u2026"], ["stack", "stacked on" + "\u2026"]]);
+            var zone = that.select(places, card.side == "shadow" ? "" : "hand", function (value) {
+                host.toggle(value == "attach" || value == "stack");
+            });
             chosen.append(that.el("div", "sa-cardname", card.name + " (" + card.id + ")"));
-            var row = that.el("div", "sa-row").appendTo(chosen);
-            row.append(that.el("span", "sa-label", "called")).append(name).append(seat).append(zone);
+            var row = that.el("div", "sa-row sa-wrap").appendTo(chosen);
+            row.append(that.el("span", "sa-label", "called")).append(name).append(seat).append(zone).append(host);
             row.append(that.button("Add", "A fresh game is played by the script back to here", function () {
-                that.addCard(card.id, $.trim(name.val()), seat.val(), zone.val());
+                that.addCard(card.id, $.trim(name.val()), seat.val(), zone.val(), host.val());
             }, "sa-primary"));
         };
         box.scrollTop(scroll);
     },
 
-    addCard: function (blueprintId, alias, seat, zone) {
+    /** @param zone a zone of the seat's; "" for the deck; or "attach" / "stack", with the card it goes on as host */
+    addCard: function (blueprintId, alias, seat, zone, host) {
         if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(alias)) {
             this.problem = "A card's name in the scenario is made of letters, digits and underscores, starting with a letter.";
             this.renderNotices();
@@ -2253,7 +2409,12 @@ var GempScenarioAuthor = Class.extend({
         cards[seat] = cards[seat] || {};
         cards[seat][alias] = blueprintId;
         var top = {cards: cards};
-        if (zone != "") {
+        if (zone == "attach" || zone == "stack") {
+            var onto = this.clone(this.draft.setup) || {};
+            onto[zone] = onto[zone] || {};
+            onto[zone][alias] = host;
+            top.setup = onto;
+        } else if (zone != "") {
             var setup = this.clone(this.draft.setup) || {};
             setup[seat] = setup[seat] || {};
             setup[seat][zone] = setup[seat][zone] ? setup[seat][zone] + ", " + alias : alias;
@@ -2318,26 +2479,27 @@ var GempScenarioAuthor = Class.extend({
 
         var file = this.el("div", "sa-section").appendTo(box);
         file.append(this.el("div", "sa-heading", "The file"));
-        if (state.path != null) {
-            file.append(this.el("div", "sa-note", state.path + (state.canonical ? " (one of the game's own)" : "")
-                + (state.dirty ? " \u2014 changed since it was saved" : " \u2014 saved")));
-            if ((state.commentsLost || 0) > 0)
-                file.append(this.el("div", "sa-note sa-pending", "The file has " + state.commentsLost + " line(s) of comment that saving will drop. Notes are kept."));
-        } else {
-            file.append(this.el("div", "sa-note", "Not saved yet."));
-            this.savePath = $("<input type='text'/>").addClass("sa-input").attr("placeholder", draft.id + ".hjson");
-            file.append(this.field("Path", this.savePath, "Folders and a file name, such as tutorials/basics-02.hjson. Empty: named after the scenario."));
-            this.saveCanonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere).prop("disabled", !state.canSaveAnywhere);
-            file.append(this.el("label", "sa-check sa-block").attr("title", "Otherwise it goes in your own folder, where only you and the admins are offered it")
-                .append(this.saveCanonical).append(document.createTextNode(" among the game's own scenarios")));
-        }
+        file.append(this.el("div", "sa-note sa-path", state.path + (state.canonical ? " (one of the game's own)" : "")
+            + (!state.onDisk ? " \u2014 not saved yet" : state.dirty ? " \u2014 changed since it was saved" : " \u2014 saved")));
+        if ((state.commentsLost || 0) > 0)
+            file.append(this.el("div", "sa-note sa-pending", "The file has " + state.commentsLost + " line(s) of comment that saving will drop. Notes are kept."));
         var buttons = this.el("div", "sa-bar").appendTo(file);
         buttons.append(this.button("Save", "Write the draft to its file", function () {
             that.save();
         }, "sa-primary"));
+        var filing = function (how) {
+            return function () {
+                that.filing = that.filing == how ? null : how;
+                that.renderScenario();
+            };
+        };
+        buttons.append(this.button("Save as" + "\u2026", "Save the draft as another scenario, with a file and an id of its own", filing("copy")).toggleClass("sa-on", this.filing == "copy"));
+        buttons.append(this.button("Rename" + "\u2026", "Give the file another name, or move it to another folder. It stays the same scenario.", filing("rename")).toggleClass("sa-on", this.filing == "rename"));
+        if (this.filing != null)
+            file.append(this.filingForm(this.filing));
         buttons.append(this.button("Check", "Play the draft through with nobody at the table, the way the server does before it offers a scenario", function () {
             that.call("POST", "check", {}, function (result) {
-                that.report = (result.passed ? "It plays through.\n\n" : "It does not play through.\n\n") + result.report
+                that.report = (result.passed ? "Scenario validated.\n\n" : "It does not play through.\n\n") + result.report
                     + ((result.warnings || []).length > 0 ? "\n\nWarnings:\n" + result.warnings.join("\n") : "");
                 that.renderScenario();
             });
@@ -2351,8 +2513,8 @@ var GempScenarioAuthor = Class.extend({
         buttons.append(this.button("Close the draft", "Give the draft up. Anything not saved is lost.", function () {
             if (!state.dirty || confirm("The draft has changes that have not been saved. Close it anyway?"))
                 that.call("POST", "close", {}, function () {
-                    that.overlay.leaving = true;
-                    that.overlay.backToHall();
+                    that.gone = true;
+                    that.overlay.goToHall();
                 });
         }, "sa-danger"));
         if (this.report != null) {
@@ -2434,26 +2596,29 @@ var GempScenarioAuthor = Class.extend({
 
         var parts = this.el("div", "sa-section").appendTo(box);
         parts.append(this.el("div", "sa-heading", "The rest of the file"));
-        parts.append(this.el("p", "sa-note", "Each part as the file has it. Changing one starts a fresh game, played by the script back to here."));
+        parts.append(this.el("p", "sa-note", "Each part as the file has it, in HJSON: what is copied out of a scenario's file can be pasted here (with or without its name in front), and the other way about. "
+            + "Changing one starts a fresh game, played by the script back to here."));
         $.each(["cards", "ringBearer", "ring", "sites", "setup", "rules", "rng", "opponent", "options", "outcome"], function (index, name) {
             var details = $("<details class='sa-more'></details>").appendTo(parts);
             details.append($("<summary></summary>").text(name + (draft[name] == null ? " (none)" : "")));
-            var area = that.el("textarea", "sa-input sa-code").attr("rows", 8).val(draft[name] == null ? "" : JSON.stringify(draft[name], null, 2));
+            var written = (state.parts || {})[name] || "";
+            var area = that.el("textarea", "sa-input sa-code").attr("rows", Math.max(4, Math.min(22, written.split("\n").length + 1)))
+                .attr("spellcheck", "false").val(written);
+            //(a tab is part of what is being written, not a way out of the box)
+            area.keydown(function (event) {
+                if (event.keyCode != 9 || event.shiftKey || event.ctrlKey || event.altKey)
+                    return;
+                event.preventDefault();
+                var at = this.selectionStart, value = this.value;
+                this.value = value.substring(0, at) + "\t" + value.substring(this.selectionEnd);
+                this.selectionStart = this.selectionEnd = at + 1;
+            });
             details.append(area);
             details.append(that.button("Apply", "", function () {
-                var value = null;
-                if ($.trim(area.val()) != "") {
-                    try {
-                        value = JSON.parse(area.val());
-                        area.removeClass("sa-bad");
-                    } catch (e) {
-                        area.addClass("sa-bad");
-                        that.problem = name + ": " + e.message;
-                        that.renderNotices();
-                        return;
-                    }
-                }
-                top(name, value);
+                //The server reads it, as it reads the file: what is wrong with it is said at the top of the panel
+                var given = {};
+                given[name] = area.val();
+                that.edit({topText: given}, null);
             }));
         });
         box.scrollTop(scroll);
@@ -2462,50 +2627,123 @@ var GempScenarioAuthor = Class.extend({
     save: function () {
         var that = this;
         var data = {};
-        var lost = this.state.commentsLost || 0;
-        if (lost > 0 && !confirm("The file has " + lost + " line" + (lost == 1 ? "" : "s") + " of comment that will not be in it after saving: "
-            + "what is saved is the scenario written out afresh, with the names of its cards and the numbers of its steps as its only comments. "
-            + "(Notes are part of the scenario, and are kept.)\n\nSave over it?"))
+        if (!this.mayOverwrite())
             return;
-        if (this.state.path == null) {
-            //A draft with no file yet has to be told where to go, which is asked under Scenario
-            if (this.ui.tab != "scenario") {
-                this.saved = {good: false, asks: true, text: "It has no file yet. Say where it goes (or leave that empty), and Save."};
-                this.report = null;
-                this.showTab("scenario");
-                return;
-            }
-            this.saved = null;
-            if (this.savePath != null && $.trim(this.savePath.val()) != "")
-                data.path = $.trim(this.savePath.val());
-            data.canonical = this.saveCanonical != null ? this.saveCanonical.prop("checked") : false;
-        }
         this.flush(function () {
             that.sendSave(data);
         });
     },
 
+    /** Whether the file may be written over, where that loses the comments somebody wrote in it by hand. */
+    mayOverwrite: function () {
+        var lost = this.state.commentsLost || 0;
+        return lost == 0 || confirm("The file has " + lost + " line" + (lost == 1 ? "" : "s") + " of comment that will not be in it after saving. "
+            + "(Notes are part of the scenario, and are kept.)\n\nSave over it?");
+    },
+
+    /**
+     * What an author types for where a file goes, as a path the server will take: slashes one way, nothing but what
+     * a file's name may be made of, and .hjson on the end.
+     */
+    tidyPath: function (typed) {
+        var path = $.trim(("" + typed).replace(/\\/g, "/")).replace(/\.hjson$/i, "").replace(/[^A-Za-z0-9_. \/-]+/g, "-");
+        //(each folder's name, and the file's: nothing but a letter or a digit at either end)
+        path = $.grep($.map(path.split("/"), function (name) {
+            return name.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
+        }), function (name) {
+            return name != "";
+        }).join("/");
+        return path == "" ? "" : path + ".hjson";
+    },
+
+    /** The form under Save as / Rename: where the file is to go. */
+    filingForm: function (how) {
+        var that = this;
+        var state = this.state;
+        var copy = how == "copy";
+        var form = this.el("div", "sa-filing");
+        form.append(this.el("div", "sa-note", copy
+            ? "Saves the draft as another scenario. The copy is known by its file's name (that becomes its id), and is what you are writing from then on. The scenario it came from stays as it was last saved."
+            : "Gives the file another name, or moves it to another folder. It stays the same scenario: its id, and players' progress in it, do not change." + (state.dirty ? " What has not been saved stays unsaved." : "")));
+        var suggested = state.file || (this.draft.id + ".hjson");
+        if (copy)
+            suggested = suggested.replace(/(\.hjson)?$/i, "-copy.hjson");
+        var path = $("<input type='text'/>").addClass("sa-input").attr("maxlength", this.MAX_PATH).val(suggested)
+            .attr("title", "Folders and a file name: tutorials/basics-02-the-ring.hjson. Letters, digits, spaces, dots, dashes and underscores; " + this.MAX_PATH + " characters at most.");
+        var shown = this.el("div", "sa-note");
+        var canonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere || !!state.canonical).prop("disabled", !state.canSaveAnywhere);
+        var show = function () {
+            var tidy = that.tidyPath(path.val());
+            shown.text(tidy == "" ? "" : (canonical.prop("checked") ? "" : "your own folder: ") + tidy
+                + (copy ? "  (id: " + tidy.replace(/^.*\//, "").replace(/\.hjson$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + ")" : ""));
+        };
+        path.bind("input", show);
+        canonical.change(show);
+        form.append(this.field(copy ? "Save as" : "Move to", path));
+        form.append(this.el("label", "sa-check sa-block").attr("title", "Otherwise it goes in your own folder, where only you and the admins are offered it")
+            .append(canonical).append(document.createTextNode(" among the game's own scenarios")));
+        form.append(shown);
+        var go = function () {
+            var tidy = that.tidyPath(path.val());
+            if (tidy == "") {
+                path.addClass("sa-bad");
+                return;
+            }
+            that.flush(function () {
+                that.call("POST", "save", {as: how, path: tidy, canonical: canonical.prop("checked")}, function (result) {
+                    that.filing = null;
+                    if (copy) {
+                        that.afterSave(result);
+                        return;
+                    }
+                    that.saved = {good: true, stays: true, text: "The file is now " + result.renamed + "."};
+                    that.render();
+                });
+            });
+        };
+        path.keydown(function (event) {
+            if (event.keyCode == 13)
+                go();
+        });
+        var row = this.el("div", "sa-bar").appendTo(form);
+        row.append(this.button(copy ? "Save the copy" : "Rename", "", go, "sa-primary"));
+        row.append(this.button("Cancel", "", function () {
+            that.filing = null;
+            that.renderScenario();
+        }));
+        show();
+        return form;
+    },
+
     sendSave: function (data) {
         var that = this;
         this.call("POST", "save", data, function (result) {
+            that.afterSave(result);
+        });
+    },
+
+    /** What is said about a save that went through: at the top of the panel, and in full under Scenario. */
+    afterSave: function (result) {
+        var that = this;
+        (function () {
             var saved = result.saved || {};
             var broken = (saved.errors || []).length > 0;
             var warnings = (saved.warnings || []).length;
             //Saving leaves the author where they were.  What there is to read about it is kept under Scenario.
             that.report = "Saved to " + saved.path + ".\n"
                 + (broken ? "It cannot be played:\n" + saved.errors.join("\n")
-                    : saved.verified ? "It plays through from start to finish." : "It does not play through yet:\n" + (saved.report || ""))
+                    : saved.verified ? "Scenario validated." : "It does not play through yet:\n" + (saved.report || ""))
                 + (warnings > 0 ? "\n\nWarnings:\n" + saved.warnings.join("\n") : "");
             that.saved = {
                 good: !broken && !!saved.verified,
                 why: broken || !saved.verified || warnings > 0,
                 text: "Saved to " + saved.path + ". " + (broken ? "It cannot be played as it stands."
-                    : saved.verified ? "It plays through from start to finish." : "It does not play through yet.")
+                    : saved.verified ? "Scenario validated." : "It does not play through yet.")
                     + (warnings > 0 ? " " + warnings + " warning" + (warnings == 1 ? "" : "s") + "." : "")
             };
             if (that.saved.good && warnings == 0 && that.ui.tab != "scenario")
                 that.report = null;
             that.render();
-        });
+        })();
     }
 });

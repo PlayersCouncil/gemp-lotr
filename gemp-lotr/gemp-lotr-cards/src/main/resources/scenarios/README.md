@@ -18,3 +18,7 @@ form the writer gives them, so that a save changes only what was changed.
 
 To see what a scenario's messages say with the game's numbers filled in, and every decision the game asks around
 them: `mvn test -pl gemp-lotr-server -Dtest=ScenarioCanonTest -DargLine="-Dscenario.explore=<part of the file name>"`.
+
+A message can show a picture that is not a card (`zoom: image:<file>`). Those are files in the web folder's
+`images/scenarios/` (`gemp-lotr-async/src/main/web/images/scenarios`), which has a card-shaped `placeholder.png` and
+a note of its own.
