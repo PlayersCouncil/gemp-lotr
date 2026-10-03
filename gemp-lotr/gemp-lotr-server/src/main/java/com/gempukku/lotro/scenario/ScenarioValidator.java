@@ -87,8 +87,7 @@ public final class ScenarioValidator {
                 }
                 List<String> anchors = new ArrayList<>(message.highlight);
                 anchors.addAll(message.avoid);
-                if (message.anchor != null)
-                    anchors.add(message.anchor);
+                anchors.addAll(message.anchor);
                 for (String anchor : anchors) {
                     String part = Anchors.printedPart(anchor);
                     String problem = part == null ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);

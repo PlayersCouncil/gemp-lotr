@@ -52,6 +52,8 @@ public final class ScenarioDefinition {
     public boolean autoAccept = true;
     public RngDefault rngDefault = RngDefault.IDENTITY;
     public int opponentDelayMs = 900;
+    /** How far a bubble sits from what it points at, where its message does not say (see Message.gap); null for the stock distance. */
+    public String bubbleGap;
     /** How much of the scenario the headless runner is required to prove.  Null means "as much as its coverage allows". */
     public RunnerLevel runnerLevel;
 
@@ -237,8 +239,17 @@ public final class ScenarioDefinition {
         /** A heading over the text.  Most messages have none. */
         public String header;
         public String text;
-        /** What the bubble points at.  Null means a bubble in the middle of the screen. */
-        public String anchor;
+        /**
+         * What the bubble points at: usually one thing, which it sits beside; with several it sits beside them all
+         * and has a line to each.  Empty means a bubble in the middle of the screen.
+         */
+        public List<String> anchor = new ArrayList<>();
+        /**
+         * How far the bubble sits from what it points at: a number is in hundredths of the window's shorter side (so
+         * that it keeps pace with the table, which is laid out to the window), and a number followed by "px" is in
+         * pixels.  Null means the scenario's own (options.bubbleGap), and failing that the stock distance.
+         */
+        public String gap;
         public List<String> highlight = new ArrayList<>();
         public String highlightStyle = "gold";
         public List<String> avoid = new ArrayList<>();

@@ -695,6 +695,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("opponent", _opponent);
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
+        //How far a bubble sits from what it points at where its message does not say; null for the stock distance
+        event.put("bubbleGap", _def.bubbleGap);
         //Set if the game did not start at the beginning: the checkpoint step it was brought back to
         event.put("resumedAt", _resumedAt);
         event.put("campaign", _campaign);
@@ -774,7 +776,11 @@ public class LiveScenario implements ScenarioSession.Listener {
         Map<String, Object> json = new LinkedHashMap<>();
         json.put("header", rendered.header());
         json.put("html", _renderer.render(rendered.text()));
-        json.put("anchor", message.anchor);
+        //(the first of them by itself as well, which is all there was before a message could point at several things:
+        // the recorded games of that time say it so, and the client reads either)
+        json.put("anchor", message.anchor.isEmpty() ? null : message.anchor.getFirst());
+        json.put("anchors", message.anchor);
+        json.put("gap", message.gap);
         json.put("highlight", message.highlight);
         json.put("highlightStyle", message.highlightStyle);
         json.put("avoid", message.avoid);
@@ -803,8 +809,8 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     /** Collects the cards a message refers to, with the IDs they have at this moment. */
     private void noteCards(Message message, Map<String, Integer> cards) {
-        if (message.anchor != null)
-            noteCard(Anchors.cardAlias(message.anchor), cards);
+        for (String target : message.anchor)
+            noteCard(Anchors.cardAlias(target), cards);
         for (String target : message.highlight)
             noteCard(Anchors.cardAlias(target), cards);
         for (String target : message.avoid)
@@ -817,8 +823,7 @@ public class LiveScenario implements ScenarioSession.Listener {
     private void noteParts(Message message, Map<String, double[]> parts) {
         List<String> anchors = new ArrayList<>(message.highlight);
         anchors.addAll(message.avoid);
-        if (message.anchor != null)
-            anchors.add(message.anchor);
+        anchors.addAll(message.anchor);
         for (String anchor : anchors) {
             String part = Anchors.printedPart(anchor);
             if (part == null)

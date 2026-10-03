@@ -296,6 +296,41 @@ var ScenarioPlan = Class.extend({
         return result;
     },
 
+    /**
+     * The allowed answers to an assignment as their pairings in the order the scenario wrote them:
+     * [{minion, character}].  That order is the order they are to be clicked in.
+     */
+    orderedAssignments: function () {
+        var result = [];
+        for (var i = 0; i < this.answers.length; i++) {
+            var pairs = [];
+            var groups = this.answers[i] == "" ? [] : this.answers[i].split(",");
+            for (var g = 0; g < groups.length; g++) {
+                var ids = $.trim(groups[g]).split(" ");
+                for (var m = 1; m < ids.length; m++)
+                    pairs.push({minion: ids[m], character: ids[0]});
+            }
+            result.push(pairs);
+        }
+        if (this.allow.pass)
+            result.push([]);
+        return result;
+    },
+
+    /** The same, of the assignments that what has been assigned so far could still become. */
+    possibleOrders: function () {
+        var that = this;
+        return $.grep(this.orderedAssignments(), function (pairs) {
+            var gives = {};
+            for (var p = 0; p < pairs.length; p++)
+                gives[pairs[p].minion] = pairs[p].character;
+            for (var minion in that.assigned)
+                if (that.assigned.hasOwnProperty(minion) && gives[minion] != that.assigned[minion])
+                    return false;
+            return true;
+        });
+    },
+
     /** The allowed assignments that what has been assigned so far could still become. */
     possibleAssignments: function () {
         var that = this;
@@ -379,14 +414,17 @@ var ScenarioPlan = Class.extend({
                 });
                 break;
             case "ASSIGN_MINIONS":
-                $.each(this.possibleAssignments(), function (index, target) {
-                    if (that.picked != null) {
-                        if (target[that.picked] != null)
-                            add(target[that.picked]);
-                    } else {
-                        for (var minion in target)
-                            if (target.hasOwnProperty(minion) && that.assigned[minion] != target[minion])
-                                add(minion);
+                //One pairing at a time, in the order the step gives them: what a message says about "this one"
+                // and "now the other" is only true if the player cannot take them the other way round
+                $.each(this.possibleOrders(), function (index, pairs) {
+                    for (var p = 0; p < pairs.length; p++) {
+                        if (that.picked != null) {
+                            if (pairs[p].minion == that.picked)
+                                add(pairs[p].character);
+                        } else if (that.assigned[pairs[p].minion] != pairs[p].character) {
+                            add(pairs[p].minion);
+                            break;
+                        }
                     }
                 });
                 break;
@@ -497,6 +535,8 @@ var ScenarioPlan = Class.extend({
 
 var GempScenarioOverlay = Class.extend({
     STOCK_NOT_NOW: "You could do that in a real game, but for this lesson let's hold off for now.",
+    /** How far a bubble sits from what it points at when nobody has said: in hundredths of the window's shorter side. */
+    STOCK_GAP: "1.8",
     /** Below this the game screen has no room left for bubbles. */
     MIN_WIDTH: 1000,
     MIN_HEIGHT: 600,
@@ -534,9 +574,8 @@ var GempScenarioOverlay = Class.extend({
             + "<svg class='scenario-zoom-dim' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd'/></svg>"
             + "<div class='scenario-zoom-marks'></div></div></div>").appendTo(this.layer);
         //The line from a bubble to what it is about, when the two are apart
-        this.pointer = $("<svg class='scenario-pointer' xmlns='http://www.w3.org/2000/svg' style='display:none'>"
-            + "<line class='scenario-pointer-edge'/><line class='scenario-pointer-line'/>"
-            + "<circle class='scenario-pointer-end' r='4'/></svg>").appendTo(this.layer);
+        // (one line for each thing it is about: see pointerLines)
+        this.pointer = $("<svg class='scenario-pointer' xmlns='http://www.w3.org/2000/svg' style='display:none'></svg>").appendTo(this.layer);
         this.bubble = $("<div class='scenario-bubble' style='display:none'>"
             + "<div class='scenario-arrow'></div>"
             + "<div class='scenario-head'><span class='scenario-title'></span><span class='scenario-count'></span>"
@@ -1376,21 +1415,65 @@ var GempScenarioOverlay = Class.extend({
         return this.currentMessage != null || boxes.length > 0;
     },
 
+    /** The things a message points at that are on the screen, as rectangles. */
+    anchorsOf: function (message, cards) {
+        var names = message.anchors != null ? message.anchors : (message.anchor != null ? [message.anchor] : []);
+        var rects = [];
+        for (var i = 0; i < names.length; i++) {
+            var rect = ScenarioAnchors.resolve(this.game, names[i], cards);
+            if (rect != null)
+                rects.push(rect);
+        }
+        return rects;
+    },
+
+    /** The rectangle around several; of one, that one itself; of none, null. */
+    around: function (rects) {
+        if (rects.length < 2)
+            return rects.length == 0 ? null : rects[0];
+        var left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+        for (var i = 0; i < rects.length; i++) {
+            left = Math.min(left, rects[i].left);
+            top = Math.min(top, rects[i].top);
+            right = Math.max(right, rects[i].left + rects[i].width);
+            bottom = Math.max(bottom, rects[i].top + rects[i].height);
+        }
+        return {left: left, top: top, width: right - left, height: bottom - top};
+    },
+
+    /**
+     * How far from what it points at a message's bubble sits, in pixels.  Written as a plain number it is in
+     * hundredths of the window's shorter side, which keeps its proportion to the cards whatever the screen; "20px"
+     * is pixels.  A message that does not say takes the scenario's, and a scenario that does not say the stock one.
+     */
+    gapOf: function (message) {
+        var written = message.gap;
+        if (written == null || written === "")
+            written = this.info != null ? this.info.bubbleGap : null;
+        if (written == null || written === "" || isNaN(parseFloat(written)))
+            written = this.STOCK_GAP;
+        written = ("" + written).toLowerCase();
+        var amount = parseFloat(written);
+        return written.indexOf("px") > -1 ? amount : amount * Math.min($(window).width(), $(window).height()) / 100;
+    },
+
     placeBubble: function (cards, boxes) {
         var message = this.currentMessage;
-        var anchor = ScenarioAnchors.resolve(this.game, message.anchor, cards);
+        var anchors = this.anchorsOf(message, cards);
+        var anchor = this.around(anchors);
         var width = this.bubble.outerWidth(), height = this.bubble.outerHeight();
         var viewWidth = $(window).width() - (this.game.reservedRight || 0), viewHeight = $(window).height();
-        var margin = 8, gap = 16;
+        var margin = 8, gap = this.gapOf(message);
 
         //What the bubble points at is usually what it sits beside.  With a card shown large it sits beside the card
         // and points at the part of it in focus.
-        var target = anchor;
+        var targets = anchors;
         var side = message.side;
         if (this.zoom != null) {
             var zoomed = this.layoutZoom(width);
             anchor = zoomed.frame;
-            target = zoomed.focus.length > 0 ? zoomed.focus[0] : null;
+            anchors = [anchor];
+            targets = zoomed.focus.length > 0 ? [zoomed.focus[0]] : [];
             side = "right";
             boxes = [];
         }
@@ -1398,15 +1481,13 @@ var GempScenarioOverlay = Class.extend({
         //A bubble that has been moved stays where it was put, and keeps its line to what it is about
         if (this.bubble.hasClass("scenario-dragged")) {
             var moved = this.bubble[0].getBoundingClientRect();
-            this.drawPointer({left: moved.left, top: moved.top, width: moved.width, height: moved.height}, target, null);
+            this.drawPointer({left: moved.left, top: moved.top, width: moved.width, height: moved.height}, targets, null);
             return;
         }
 
-        //What the bubble must not cover: the thing it points at, everything outlined (which includes whatever is
+        //What the bubble must not cover: the things it points at, everything outlined (which includes whatever is
         // to be clicked next), whatever the message says to avoid, and the buttons that answer the decision
-        var keepClear = [];
-        if (anchor != null)
-            keepClear.push(anchor);
+        var keepClear = anchors.slice(0);
         for (var b = 0; b < boxes.length; b++)
             keepClear.push(boxes[b].rect);
         for (var a = 0; a < (message.avoid || []).length; a++) {
@@ -1431,7 +1512,7 @@ var GempScenarioOverlay = Class.extend({
             keepClear = [anchor];
 
         //Nothing to do unless something it depends on has moved
-        var situation = [width, height, viewWidth, viewHeight];
+        var situation = [width, height, viewWidth, viewHeight, Math.round(gap)];
         for (var r = 0; r < keepClear.length; r++)
             situation.push(Math.round(keepClear[r].left), Math.round(keepClear[r].top),
                 Math.round(keepClear[r].width), Math.round(keepClear[r].height));
@@ -1479,44 +1560,47 @@ var GempScenarioOverlay = Class.extend({
                 middlePrice += this.overlap(middle, otherCards[mc]) / 400;
             place = (free == null || middlePrice <= free.cost) ? {side: "none", left: wantLeft, top: wantTop} : free;
         } else {
-            var centreX = anchor.left + anchor.width / 2, centreY = anchor.top + anchor.height / 2;
-            var right = anchor.left + anchor.width, bottom = anchor.top + anchor.height;
-            //Beside the thing, on each side in turn: level with its middle if there is room, otherwise slid along
-            // towards one end or the other, as far as still leaves the pointer something to point from
-            var lap = 30;
-            var slideDown = [centreY - height / 2, anchor.top, bottom - height, bottom - lap, anchor.top + lap - height];
-            var slideAcross = [centreX - width / 2, anchor.left, right - width, right - lap, anchor.left + lap - width];
-            var sides = {
-                right: function (slide) { return {left: right + gap, top: slideDown[slide]}; },
-                left: function (slide) { return {left: anchor.left - gap - width, top: slideDown[slide]}; },
-                below: function (slide) { return {left: slideAcross[slide], top: bottom + gap}; },
-                above: function (slide) { return {left: slideAcross[slide], top: anchor.top - gap - height}; }
-            };
+            //A side the scenario names is the side it goes on, and level with the middle of the thing, whatever
+            // cards that covers: the author has seen what it covers.  Only what it must not cover (what is outlined,
+            // what is to be clicked, what the message says to keep clear of) still slides it along that side.  Left
+            // to itself it goes on whichever side costs least.
             var order = ["right", "left", "below", "above"];
-            if (side != null && side != "auto" && sides[side] != null) {
-                order = $.grep(order, function (candidate) {
-                    return candidate != side;
-                });
-                order.unshift(side);
-            }
+            var named = side != null && side != "auto" && $.inArray(side, order) > -1;
+            if (named)
+                order = [side];
+            //Beside all of what it points at taken together; or, pointing at several things, beside any one of them
+            var beside = anchors.length > 1 ? [anchor].concat(anchors) : [anchor];
             var best = null;
-            for (var s = 0; s < order.length; s++) {
-                for (var slide = 0; slide < 5; slide++) {
-                    var candidate = sides[order[s]](slide);
-                    var left = Math.max(margin, Math.min(candidate.left, viewWidth - width - margin));
-                    var top = Math.max(margin, Math.min(candidate.top, viewHeight - height - margin));
-                    //How far it had to be pushed back onto the screen, and how much it covers of what it must not
-                    var cost = Math.abs(left - candidate.left) + Math.abs(top - candidate.top);
-                    var where = {left: left, top: top, width: width, height: height};
-                    for (var k = 0; k < keepClear.length; k++)
-                        cost += this.overlap(where, keepClear[k]) / 50;
-                    for (var c = 0; c < otherCards.length; c++)
-                        cost += this.overlap(where, otherCards[c]) / 400;
-                    //Earlier sides win ties, and a little more, so the bubble does not hop about; and level with
-                    // the middle beats slid along
-                    cost += s * 4 + (slide == 0 ? 0 : 3 + slide);
-                    if (best == null || cost < best.cost)
-                        best = {side: order[s], left: left, top: top, cost: cost};
+            for (var w = 0; w < beside.length; w++) {
+                var box = beside[w];
+                var centreX = box.left + box.width / 2, centreY = box.top + box.height / 2;
+                var right = box.left + box.width, bottom = box.top + box.height;
+                //On each side in turn: level with its middle if there is room, otherwise slid along towards one
+                // end or the other, as far as still leaves the pointer something to point from
+                var lap = 30;
+                var slideDown = [centreY - height / 2, box.top, bottom - height, bottom - lap, box.top + lap - height];
+                var slideAcross = [centreX - width / 2, box.left, right - width, right - lap, box.left + lap - width];
+                for (var s = 0; s < order.length; s++) {
+                    for (var slide = 0; slide < 5; slide++) {
+                        var candidate = order[s] == "right" ? {left: right + gap, top: slideDown[slide]}
+                            : order[s] == "left" ? {left: box.left - gap - width, top: slideDown[slide]}
+                            : order[s] == "below" ? {left: slideAcross[slide], top: bottom + gap}
+                            : {left: slideAcross[slide], top: box.top - gap - height};
+                        var left = Math.max(margin, Math.min(candidate.left, viewWidth - width - margin));
+                        var top = Math.max(margin, Math.min(candidate.top, viewHeight - height - margin));
+                        //How far it had to be pushed back onto the screen, and how much it covers of what it must not
+                        var cost = Math.abs(left - candidate.left) + Math.abs(top - candidate.top);
+                        var where = {left: left, top: top, width: width, height: height};
+                        for (var k = 0; k < keepClear.length; k++)
+                            cost += this.overlap(where, keepClear[k]) / 50;
+                        for (var c = 0; !named && c < otherCards.length; c++)
+                            cost += this.overlap(where, otherCards[c]) / 400;
+                        //Earlier sides win ties, and a little more, so the bubble does not hop about; level with
+                        // the middle beats slid along; and beside the lot beats beside one of them
+                        cost += s * 4 + (slide == 0 ? 0 : 3 + slide) + (w == 0 ? 0 : 2);
+                        if (best == null || cost < best.cost)
+                            best = {side: order[s], left: left, top: top, cost: cost};
+                    }
                 }
             }
             place = best;
@@ -1528,27 +1612,58 @@ var GempScenarioOverlay = Class.extend({
             this.bubble.css({left: Math.round(place.left), top: Math.round(place.top)});
         }
 
-        this.drawPointer({left: place.left, top: place.top, width: width, height: height}, target,
-            target === anchor ? place.side : null);
+        this.drawPointer({left: place.left, top: place.top, width: width, height: height}, targets,
+            targets.length == 1 && targets[0] === anchor ? place.side : null);
+    },
+
+    /** The lines of the pointer, one (with its dark edge and the dot at its end) for each thing pointed at. */
+    pointerLines: function (count) {
+        var svg = this.pointer[0];
+        var space = "http://www.w3.org/2000/svg";
+        var groups = svg.getElementsByTagName("g");
+        while (groups.length > count)
+            svg.removeChild(groups[groups.length - 1]);
+        while (groups.length < count) {
+            var group = document.createElementNS(space, "g");
+            $.each([["line", "scenario-pointer-edge"], ["line", "scenario-pointer-line"], ["circle", "scenario-pointer-end"]], function (index, part) {
+                var node = document.createElementNS(space, part[0]);
+                node.setAttribute("class", part[1]);
+                if (part[0] == "circle")
+                    node.setAttribute("r", "4");
+                group.appendChild(node);
+            });
+            svg.appendChild(group);
+        }
+        return groups;
     },
 
     /**
-     * Joins the bubble to what it is about.  Sitting right beside it, a small arrow on the bubble's edge does that.
-     * Anywhere else (moved by hand, or beside a large card and pointing into it) a thin line runs from one to the
-     * other.
-     * @param besideOn the side of the target the bubble was placed on ("right", "left", "below", "above"); null if
-     *                 it was not placed beside it
+     * Joins the bubble to what it is about.  Sitting right beside the one thing, a small arrow on the bubble's edge
+     * does that.  Anywhere else (moved by hand, set further off, beside a large card and pointing into it) a thin
+     * line runs from one to the other; and about several things, a line to each.
+     * @param targets  the things it is about, as rectangles
+     * @param besideOn the side of the one target the bubble was placed on ("right", "left", "below", "above"); null
+     *                 if it was not placed beside it
      */
-    drawPointer: function (bubble, target, besideOn) {
+    drawPointer: function (bubble, targets, besideOn) {
+        var that = this;
         var arrow = this.bubble.find(".scenario-arrow");
-        if (target == null || this.bubble.hasClass("scenario-collapsed") || this.overlap(bubble, target) > 0) {
+        //(nothing points at a thing the bubble is lying on)
+        targets = this.bubble.hasClass("scenario-collapsed") ? [] : $.grep(targets || [], function (each) {
+            return that.overlap(bubble, each) == 0;
+        });
+        if (targets.length == 0) {
             arrow.hide();
             this.pointer.hide();
             return;
         }
+        var target = targets[0];
+        if (targets.length > 1)
+            besideOn = null;
 
-        //Beside it means flush against that side and level with some part of it
-        var reach = 22;
+        //Beside it means close against that side and level with some part of it: as close as a bubble is put when
+        // nobody says how close.  Set further off than that, an arrow would point at nothing in particular.
+        var reach = Math.max(22, parseFloat(this.STOCK_GAP) * Math.min($(window).width(), $(window).height()) / 100 + 6);
         var beside = false;
         if (besideOn == "right")
             beside = Math.abs(bubble.left - (target.left + target.width)) <= reach;
@@ -1578,13 +1693,16 @@ var GempScenarioOverlay = Class.extend({
             return;
         }
 
-        //From the edge of the bubble to the edge of the thing, along the line between their middles
+        //From the edge of the bubble to the edge of each thing, along the line between their middles
         arrow.hide();
-        var from = this.edgePoint(bubble, target);
-        var to = this.edgePoint(target, bubble);
         this.pointer.attr({width: $(window).width(), height: $(window).height()}).show();
-        this.pointer.find("line").attr({x1: from.x, y1: from.y, x2: to.x, y2: to.y});
-        this.pointer.find("circle").attr({cx: to.x, cy: to.y});
+        var lines = this.pointerLines(targets.length);
+        for (var t = 0; t < targets.length; t++) {
+            var from = this.edgePoint(bubble, targets[t]);
+            var to = this.edgePoint(targets[t], bubble);
+            $(lines[t]).find("line").attr({x1: from.x, y1: from.y, x2: to.x, y2: to.y});
+            $(lines[t]).find("circle").attr({cx: to.x, cy: to.y});
+        }
     },
 
     /** Where the line from the middle of one rectangle to the middle of another leaves the first. */

@@ -40,7 +40,11 @@ var GempScenarioAuthor = Class.extend({
     authoring: true,
     state: null,
     draft: null,
-    /** What the panel remembers from one game of the draft to the next: {tab, selected, follow, where, folded}. */
+    /**
+     * What the panel remembers from one game of the draft to the next: {tab, selected, selectedUid, follow, where,
+     * folded}, and for the step selected (see settle): atUid, the step the game was last seen at; hold, the step
+     * selected was asked for across a change and stays; jump, the step the game is at is to be selected whatever.
+     */
     ui: null,
     /** The step being edited: {index, step (a working copy), sent, base}. */
     form: null,
@@ -196,6 +200,13 @@ var GempScenarioAuthor = Class.extend({
         //Typing in the panel is not for the game to hear
         this.panel.bind("keydown keyup keypress", function (event) {
             event.stopPropagation();
+        });
+        //The game moved on while a step was being typed in: its step is turned to once the typing has stopped
+        this.tabs.step.bind("focusout", function () {
+            if (that.followDue)
+                setTimeout(function () {
+                    that.catchUp();
+                }, 300);
         });
         //The game's own windows open in the middle of the browser's, which is partly under the panel
         $(document).bind("dialogopen dialogresizestop", function (event) {
@@ -390,20 +401,62 @@ var GempScenarioAuthor = Class.extend({
         var uids = state.uids || [];
         if ((state.mode == "test") != this.panel.hasClass("sa-floating"))
             this.dock();
-        //The step selected is known by its name: where it comes changes when the game writes a step in before it
-        if (!this.ui.follow && this.ui.selectedUid != null && $.inArray(this.ui.selectedUid, uids) > -1)
-            this.ui.selected = $.inArray(this.ui.selectedUid, uids) + 1;
-        if (this.ui.follow || this.ui.selected == null || this.ui.selected > steps.length) {
-            var at = state.position.step;
-            this.ui.selected = steps.length == 0 ? null : Math.max(1, Math.min(state.position.inHand ? at : at - 1, steps.length));
-        }
-        this.ui.selectedUid = this.ui.selected == null ? null : uids[this.ui.selected - 1];
+        this.settle();
         this.panel.toggleClass("sa-wanted", state.waiting != null && state.waiting.opponent != null && !!state.waiting.opponent.held);
         //Somebody has to have asked for the Opponent tab to be given it; but it is where to look when it is waiting
         var held = state.waiting != null && state.waiting.opponent != null && state.waiting.opponent.held;
         if (held && !this.wasHeld && this.authoring)
             this.flash("opponent");
         this.wasHeld = held;
+        this.render();
+    },
+
+    /**
+     * Which step is selected.  That is the author's to say, until the game comes to another step: then the step the
+     * game is at is selected, so that the Step tab is about what is on the table unless it has been turned to
+     * something else since the table last changed.
+     */
+    settle: function () {
+        var state = this.state, ui = this.ui;
+        var steps = this.draft.steps, uids = state.uids || [];
+        //The step selected is known by its name: where it comes changes when the game writes a step in before it
+        if (ui.selectedUid != null && $.inArray(ui.selectedUid, uids) > -1)
+            ui.selected = $.inArray(ui.selectedUid, uids) + 1;
+        var at = state.position.step;
+        var current = steps.length == 0 ? null : Math.max(1, Math.min(state.position.inHand ? at : at - 1, steps.length));
+        var currentUid = current == null ? null : uids[current - 1];
+        var lost = ui.selected == null || ui.selected > steps.length;
+        var due = false;
+        if (ui.hold && !lost) {
+            //(asked for by the change that moved the game: moving a step, taking one out)
+            ui.hold = false;
+        } else if (lost || ui.jump || (ui.follow && currentUid != ui.atUid)) {
+            //Nobody's place is taken from under them while they are typing in it, or choosing something on the
+            // table for it: the game's step waits until they have done
+            if (!lost && !ui.jump && this.engaged())
+                due = true;
+            else
+                ui.selected = current;
+        }
+        this.followDue = due;
+        if (!due) {
+            ui.atUid = currentUid;
+            ui.jump = false;
+        }
+        ui.selectedUid = ui.selected == null ? null : uids[ui.selected - 1];
+        this.remember();
+    },
+
+    /** Whether the author is in the middle of something in the Step tab that turning to another step would lose. */
+    engaged: function () {
+        return this.ui.tab == "step" && (this.picking != null || this.typingIn(this.tabs.step));
+    },
+
+    /** Turns to the step the game came to while the author was busy with another, now that they are not. */
+    catchUp: function () {
+        if (!this.followDue || this.state == null || !this.state.session || this.draft == null || this.engaged())
+            return;
+        this.settle();
         this.render();
     },
 
@@ -455,8 +508,11 @@ var GempScenarioAuthor = Class.extend({
         }
         this.tabBar.show();
         this.saveButton.show();
-        this.titleElem.text(this.draft.title || this.draft.id);
-        this.saveButton.toggleClass("sa-dirty", !!state.dirty).text(state.dirty ? "Save*" : "Save");
+        //Changes that are in no file are said where nobody can miss them
+        this.titleElem.text((state.dirty ? "* " : "") + (this.draft.title || this.draft.id))
+            .attr("title", state.dirty ? "Changed since it was saved" : "");
+        this.panel.toggleClass("sa-unsaved", !!state.dirty);
+        this.saveButton.toggleClass("sa-dirty", !!state.dirty);
         var position = state.position;
         var count = this.draft.steps.length;
         var where = position.over ? "The game is over" : position.frontier ? "Past the end of the script (" + count + " steps)"
@@ -509,6 +565,21 @@ var GempScenarioAuthor = Class.extend({
                 that.problemsRead = (state.problems || []).length;
                 that.renderNotices();
             }, "sa-dismiss")));
+        //How the last save went; no longer news once the draft has been changed again
+        if (this.saved != null && state.dirty && !this.saved.asks)
+            this.saved = null;
+        if (this.saved != null) {
+            var saved = this.el("div", "sa-notice " + (this.saved.good ? "sa-good" : "sa-warning"), this.saved.text).appendTo(box);
+            if (this.saved.why && this.ui.tab != "scenario")
+                saved.append(this.button("See why", "The whole report, under Scenario", function () {
+                    that.saved = null;
+                    that.showTab("scenario");
+                }, "sa-inline"));
+            saved.append(this.button("\u00d7", "Dismiss", function () {
+                that.saved = null;
+                that.renderNotices();
+            }, "sa-dismiss"));
+        }
         if (this.told)
             box.append(this.el("div", "sa-notice sa-told", this.told));
     },
@@ -517,7 +588,8 @@ var GempScenarioAuthor = Class.extend({
         var that = this;
         this.tabBar.hide();
         this.saveButton.hide();
-        this.titleElem.text("Scenario authoring");
+        this.panel.removeClass("sa-unsaved");
+        this.titleElem.text("Scenario authoring").attr("title", "");
         this.whereElem.text("");
         this.renderNotices();
         for (var name in this.tabs)
@@ -623,13 +695,11 @@ var GempScenarioAuthor = Class.extend({
         options.append(check("Ask me for the opponent", "Where the script does not answer for the opponent, it waits for you (see the Opponent tab). Otherwise it does what its orders and its fallback say.", state.askOpponent, function (on) {
             that.call("POST", "settings", {askOpponent: on});
         }));
-        options.append(check("Follow the game", "Keep the step the game is at selected", this.ui.follow, function (on) {
+        options.append(check("Follow the game", "When the game comes to another step, that step is selected (and the Step tab turns to it)", this.ui.follow, function (on) {
             that.ui.follow = on;
-            that.remember();
-            if (on) {
-                that.stateText = null;
-                that.setState(that.state);
-            }
+            that.ui.jump = on;
+            that.settle();
+            that.render();
         }));
         if ((state.flags || []).length > 0) {
             var way = this.el("div", "sa-way").appendTo(box);
@@ -681,7 +751,6 @@ var GempScenarioAuthor = Class.extend({
             row.click(function () {
                 that.ui.selected = number;
                 that.ui.selectedUid = state.uids[index];
-                that.ui.follow = false;
                 that.ui.tab = "step";
                 that.remember();
                 that.render();
@@ -701,7 +770,7 @@ var GempScenarioAuthor = Class.extend({
             var asked = waiting.human != null ? waiting.human : waiting.opponent;
             end.append(this.el("div", "sa-asked", (waiting.human != null ? "You are" : "The opponent is") + " being asked: " + asked.text + " (" + asked.where + ")"));
             end.append(this.button("Write a step for this decision", "A step to hang messages on before the decision is answered; its answer is filled in when it is given", function () {
-                that.ui.follow = true;
+                that.ui.jump = true;
                 that.ui.tab = "step";
                 that.call("POST", "here", {});
             }, "sa-primary"));
@@ -723,7 +792,7 @@ var GempScenarioAuthor = Class.extend({
             var ops = [];
             for (var i = steps.length - 1; i >= from - 1; i--)
                 ops.push({op: "delete", uid: state.uids[i]});
-            that.ui.follow = true;
+            that.ui.jump = true;
             that.changeSteps(ops, from, null);
         }, "sa-danger").prop("disabled", position.step > steps.length || position.over));
         foot.append(this.button("Test from here", "A player's game of the draft from the selected step: no panel, no author", function () {
@@ -733,13 +802,14 @@ var GempScenarioAuthor = Class.extend({
             that.startTest(1);
         }));
 
-        if (this.ui.follow) {
-            var current = list.find(".sa-current").first();
-            if (current.length > 0)
-                list.scrollTop(Math.max(0, current[0].offsetTop - list[0].offsetTop - 60));
-        } else {
+        //The list is brought to where the game is when the game has moved; otherwise it stays where it was put
+        var seenAt = position.step + "/" + position.inHand + "/" + this.gameId();
+        var current = list.find(".sa-current").first();
+        if (this.ui.follow && seenAt != this.timelineAt && current.length > 0)
+            list.scrollTop(Math.max(0, current[0].offsetTop - list[0].offsetTop - 60));
+        else
             list.scrollTop(scroll);
-        }
+        this.timelineAt = seenAt;
     },
 
     /** A change to which steps there are.  One at or before where the game is brings a fresh game, at the step changed. */
@@ -750,7 +820,7 @@ var GempScenarioAuthor = Class.extend({
             this.ui.selected = select;
             //(whichever step ends up there: its name is learnt from what comes back)
             this.ui.selectedUid = null;
-            this.ui.follow = false;
+            this.ui.hold = true;
         }
         this.form = null;
         this.remember();
@@ -773,6 +843,15 @@ var GempScenarioAuthor = Class.extend({
         var work = this.clone(step);
         work.messages = $.map(this.messagesOf(step), function (message) {
             return [typeof message == "string" ? {text: message} : that.clone(message)];
+        });
+        //(lists of things on the table are edited as the line of text a file usually has them as)
+        $.each(work.messages, function (index, message) {
+            $.each(["anchor", "highlight", "avoid"], function (i, name) {
+                if ($.isArray(message[name]))
+                    message[name] = message[name].join(", ");
+            });
+            if (typeof message.gap == "number")
+                message.gap = "" + message.gap;
         });
         if (work.allow != null && typeof work.allow == "string")
             work.allow = {answers: work.allow};
@@ -1336,7 +1415,6 @@ var GempScenarioAuthor = Class.extend({
             return;
         this.ui.selected = number;
         this.ui.selectedUid = this.state.uids[number - 1];
-        this.ui.follow = false;
         this.remember();
         //(what has not been sent of the step being left goes as the form for the other is made)
         this.render();
@@ -1402,7 +1480,7 @@ var GempScenarioAuthor = Class.extend({
 
             var anchor = that.bound(message, "anchor", "text");
             var anchorRow = that.el("div", "sa-row sa-anchor").appendTo(card);
-            anchorRow.append(that.el("span", "sa-label", "Points at").attr("title", "What the bubble sits beside and points at. Empty: the middle of the screen."));
+            anchorRow.append(that.el("span", "sa-label", "Points at").attr("title", "What the bubble sits beside and points at. Several things, separated by commas, and it points at each of them. Empty: the middle of the screen."));
             anchorRow.append(anchor);
             anchorRow.append(that.button("Pick", "Click the thing on the table", function () {
                 focus();
@@ -1413,7 +1491,46 @@ var GempScenarioAuthor = Class.extend({
                         highlight.val(picked).change();
                 });
             }));
+            anchorRow.append(that.button("+", "Click another thing on the table for it to point at as well", function () {
+                focus();
+                that.pick(function (picked) {
+                    var have = that.splitTerms(anchor.val());
+                    if ($.inArray(picked, have) < 0)
+                        have.push(picked);
+                    anchor.val(have.join(", ")).change();
+                });
+            }));
             anchorRow.append(that.partSelect(anchor));
+
+            //Which side of it, and how far off: tried on the screen as they are changed, without waiting to be sent
+            var stockGap = (that.draft.options || {}).bubbleGap || that.overlay.STOCK_GAP;
+            var placeRow = that.el("div", "sa-row sa-anchor").appendTo(card);
+            placeRow.append(that.el("span", "sa-label", "Sits").attr("title", "Where the bubble goes, of what it points at"));
+            placeRow.append(that.select([["", "wherever fits best"], ["right", "to its right"], ["left", "to its left"], ["above", "above it"], ["below", "below it"]], message.side || "", function (value) {
+                message.side = value;
+                that.tryOnScreen(position, "side", value);
+                that.stepChanged(true);
+            }).attr("title", "Which side of what it points at the bubble goes on. A side named here is the side it goes on, whatever else that covers; left to itself it goes where it covers least."));
+            placeRow.append(that.el("span", "sa-label sa-inline", "gap").attr("title", "How far from what it points at"));
+            var gap = that.bound(message, "gap", "text", function (value) {
+                if (/^\s*-?\d+(\.\d+)?\s*(px)?\s*$/i.test(value) || $.trim(value) == "")
+                    that.tryOnScreen(position, "gap", $.trim(value));
+            }).addClass("sa-short").attr("placeholder", stockGap)
+                .attr("title", "How far from what it points at the bubble sits. A plain number is hundredths of the window's shorter side, so it keeps its proportion to the cards on any screen; 20px is pixels whatever the screen. "
+                    + "Empty: the scenario's own (" + stockGap + "). Up and down arrows change it a little at a time.");
+            gap.keydown(function (event) {
+                if (event.keyCode != 38 && event.keyCode != 40)
+                    return;
+                var written = $.trim(gap.val()) == "" ? "" + stockGap : $.trim(gap.val()).toLowerCase();
+                var pixels = written.indexOf("px") > -1;
+                var amount = parseFloat(written);
+                if (isNaN(amount))
+                    return;
+                amount += (event.keyCode == 38 ? 1 : -1) * (pixels ? 2 : 0.25);
+                gap.val((Math.round(amount * 100) / 100) + (pixels ? "px" : "")).trigger("input");
+                event.preventDefault();
+            });
+            placeRow.append(gap);
 
             var highlight = that.bound(message, "highlight", "text");
             var highlightRow = that.el("div", "sa-row sa-anchor").appendTo(card);
@@ -1434,12 +1551,8 @@ var GempScenarioAuthor = Class.extend({
             }));
 
             var more = $("<details class='sa-more'></details>").appendTo(card);
-            more.append($("<summary></summary>").text("Heading, side, what takes it away, a card shown large"));
+            more.append($("<summary></summary>").text("Heading, what takes it away, a card shown large"));
             more.append(that.field("Heading", that.bound(message, "header", "text"), "Most messages have none"));
-            more.append(that.field("Side", that.select([["", "wherever fits"], "right", "left", "above", "below"], message.side || "", function (value) {
-                message.side = value;
-                that.stepChanged(true);
-            }), "Which side of what it points at the bubble goes on"));
             var avoid = that.bound(message, "avoid", "text");
             var avoidRow = that.el("div", "sa-row sa-anchor").appendTo(more);
             avoidRow.append(that.el("span", "sa-label", "Keeps clear of").attr("title", "Things the bubble must not cover"));
@@ -1505,8 +1618,9 @@ var GempScenarioAuthor = Class.extend({
     partSelect: function (input) {
         var that = this;
         var current = function () {
+            //(one card: of several things, each is written out in full)
             var parts = $.trim(input.val()).split(":");
-            return parts[0] == "card" && parts.length >= 2 ? parts : null;
+            return parts[0] == "card" && parts.length >= 2 && input.val().indexOf(",") < 0 ? parts : null;
         };
         var select = this.select([["", "the whole card"]].concat(this.PARTS), "", function (part) {
             var parts = current();
@@ -1555,7 +1669,7 @@ var GempScenarioAuthor = Class.extend({
         this.form = null;
         this.ui.selected = toIndex + 1;
         this.ui.selectedUid = uids[toIndex];
-        this.ui.follow = false;
+        this.ui.hold = true;
         this.focusMessage = {step: toIndex + 1, index: toIndex < form.index ? target.messages.length - 1 : 0};
         this.remember();
         this.edit({steps: ops}, null);
@@ -1600,6 +1714,22 @@ var GempScenarioAuthor = Class.extend({
     },
 
     /* ---------------------------------------------------------------- what is on the screen */
+
+    /**
+     * Shows what a change to where a message's bubble sits looks like, at once, if that message is the one on the
+     * screen.  The change itself goes to the server in its own time, and comes back as the step put up again.
+     */
+    tryOnScreen: function (position, name, value) {
+        var overlay = this.overlay, form = this.form;
+        if (form == null || overlay.step == null || overlay.step.step != form.index + 1)
+            return;
+        var message = (overlay.step.messages || [])[position];
+        if (message == null || message !== overlay.currentMessage)
+            return;
+        message[name] = value === "" ? null : value;
+        overlay.bubbleSituation = null;
+        overlay.refresh();
+    },
 
     stepShown: function (step) {
         var focus = this.focusMessage;
@@ -1689,12 +1819,20 @@ var GempScenarioAuthor = Class.extend({
             for (var name in this.picking)
                 if (this.picking.hasOwnProperty(name))
                     document.removeEventListener(name, this.picking[name], true);
+        var was = this.picking != null;
         this.picking = null;
         this.told = null;
         $("body").removeClass("sa-picking");
         this.pickBox.hide();
         this.pickLabel.hide();
         this.renderNotices();
+        if (was && this.followDue) {
+            //(once what was picked has been written into the step it was picked for)
+            var that = this;
+            setTimeout(function () {
+                that.catchUp();
+            }, 300);
+        }
     },
 
     /** The smallest thing a scenario can point at that is under a point of the screen: {anchor, rect}. */
@@ -2182,6 +2320,16 @@ var GempScenarioAuthor = Class.extend({
             })).append(document.createTextNode(" " + phase)));
         });
 
+        var bubbleGap = $("<input type='text'/>").addClass("sa-input sa-short").val(options.bubbleGap || "").attr("placeholder", this.overlay.STOCK_GAP).change(function () {
+            var changed = that.clone(options);
+            if ($.trim($(this).val()) == "")
+                delete changed.bubbleGap;
+            else
+                changed.bubbleGap = $.trim($(this).val());
+            top("options", $.isEmptyObject(changed) ? null : changed);
+        });
+        play.append(this.field("Bubble gap", bubbleGap, "How far from what it points at a bubble sits, for every message that does not say. A plain number is hundredths of the window's shorter side; 20px is pixels. Empty: " + this.overlay.STOCK_GAP + "."));
+
         var parts = this.el("div", "sa-section").appendTo(box);
         parts.append(this.el("div", "sa-heading", "The rest of the file"));
         parts.append(this.el("p", "sa-note", "Each part as the file has it. Changing one starts a fresh game, played by the script back to here."));
@@ -2218,6 +2366,14 @@ var GempScenarioAuthor = Class.extend({
             + "(Notes are part of the scenario, and are kept.)\n\nSave over it?"))
             return;
         if (this.state.path == null) {
+            //A draft with no file yet has to be told where to go, which is asked under Scenario
+            if (this.ui.tab != "scenario") {
+                this.saved = {good: false, asks: true, text: "It has no file yet. Say where it goes (or leave that empty), and Save."};
+                this.report = null;
+                this.showTab("scenario");
+                return;
+            }
+            this.saved = null;
             if (this.savePath != null && $.trim(this.savePath.val()) != "")
                 data.path = $.trim(this.savePath.val());
             data.canonical = this.saveCanonical != null ? this.saveCanonical.prop("checked") : false;
@@ -2231,11 +2387,22 @@ var GempScenarioAuthor = Class.extend({
         var that = this;
         this.call("POST", "save", data, function (result) {
             var saved = result.saved || {};
+            var broken = (saved.errors || []).length > 0;
+            var warnings = (saved.warnings || []).length;
+            //Saving leaves the author where they were.  What there is to read about it is kept under Scenario.
             that.report = "Saved to " + saved.path + ".\n"
-                + ((saved.errors || []).length > 0 ? "It cannot be played:\n" + saved.errors.join("\n")
+                + (broken ? "It cannot be played:\n" + saved.errors.join("\n")
                     : saved.verified ? "It plays through from start to finish." : "It does not play through yet:\n" + (saved.report || ""))
-                + ((saved.warnings || []).length > 0 ? "\n\nWarnings:\n" + saved.warnings.join("\n") : "");
-            that.ui.tab = "scenario";
+                + (warnings > 0 ? "\n\nWarnings:\n" + saved.warnings.join("\n") : "");
+            that.saved = {
+                good: !broken && !!saved.verified,
+                why: broken || !saved.verified || warnings > 0,
+                text: "Saved to " + saved.path + ". " + (broken ? "It cannot be played as it stands."
+                    : saved.verified ? "It plays through from start to finish." : "It does not play through yet.")
+                    + (warnings > 0 ? " " + warnings + " warning" + (warnings == 1 ? "" : "s") + "." : "")
+            };
+            if (that.saved.good && warnings == 0 && that.ui.tab != "scenario")
+                that.report = null;
             that.render();
         });
     }

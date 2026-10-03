@@ -276,29 +276,48 @@ body.scenario-game .previewImage {
 
 /* ---- outlines ---- */
 
+/* An outline breathes a little, so that nobody new to the table takes it for part of how the table looks.  It is
+   slower and gentler than what is to be clicked next, which stays the more urgent of the two. */
+@keyframes scenario-glow {
+    0%, 100% {
+        box-shadow: 0 0 9px 1px rgba(var(--scenario-glow), 0.6), inset 0 0 8px rgba(var(--scenario-glow), 0.2);
+        opacity: 1;
+    }
+    50% {
+        box-shadow: 0 0 18px 5px rgba(var(--scenario-glow), 0.95), inset 0 0 12px rgba(var(--scenario-glow), 0.4);
+        opacity: 0.72;
+    }
+}
+
 .scenario-highlight {
+    --scenario-glow: 240, 207, 106;
     position: absolute;
     box-sizing: border-box;
     border-radius: 9px;
     pointer-events: none;
+    animation: scenario-glow 1.9s ease-in-out infinite;
 }
 
 .scenario-highlight-gold {
+    --scenario-glow: 240, 207, 106;
     border: 3px solid #f0cf6a;
     box-shadow: 0 0 12px 2px rgba(240, 207, 106, 0.75), inset 0 0 10px rgba(240, 207, 106, 0.3);
 }
 
 .scenario-highlight-red {
+    --scenario-glow: 255, 107, 94;
     border: 3px solid #ff6b5e;
     box-shadow: 0 0 12px 2px rgba(255, 107, 94, 0.75), inset 0 0 10px rgba(255, 107, 94, 0.3);
 }
 
 .scenario-highlight-green {
+    --scenario-glow: 127, 220, 127;
     border: 3px solid #7fdc7f;
     box-shadow: 0 0 12px 2px rgba(127, 220, 127, 0.75), inset 0 0 10px rgba(127, 220, 127, 0.3);
 }
 
 .scenario-highlight-blue {
+    --scenario-glow: 127, 180, 255;
     border: 3px solid #7fb4ff;
     box-shadow: 0 0 12px 2px rgba(127, 180, 255, 0.75), inset 0 0 10px rgba(127, 180, 255, 0.3);
 }
@@ -312,6 +331,20 @@ body.scenario-game .previewImage {
 .scenario-next-click {
     border: 3px dashed #7fe0ff;
     animation: scenario-pulse 1.2s ease-in-out infinite;
+}
+
+/* (for whoever has asked their machine for less movement, an outline is still an outline) */
+@media (prefers-reduced-motion: reduce) {
+    .scenario-highlight,
+    .scenario-next-click {
+        animation: none;
+    }
+}
+
+/* The phase's name is as wide as its words, not as the panel it is in: outlined, it does not run under the
+   twilight pool beside it */
+body.scenario-game .phase {
+    display: inline-block;
 }
 
 /* A card the game would let the player choose, but which the lesson is not using: still marked as a legal choice,
