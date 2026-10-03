@@ -81,6 +81,7 @@ public final class ScenarioWriter {
             options.add("opponentDelayMs", def.opponentDelayMs);
         if (def.runnerLevel != null)
             options.add("runnerLevel", lower(def.runnerLevel));
+        addIfSet(options, "bubbleGap", def.bubbleGap);
         if (!options.isEmpty())
             root.add("options", options);
 
@@ -305,7 +306,8 @@ public final class ScenarioWriter {
         addIfSet(json, "note", message.note);
         addIfSet(json, "header", message.header);
         json.add("text", message.text);
-        addIfSet(json, "anchor", message.anchor);
+        if (!message.anchor.isEmpty())
+            json.add("anchor", String.join(", ", message.anchor));
         if (!message.highlight.isEmpty())
             json.add("highlight", String.join(", ", message.highlight));
         if (!"gold".equals(message.highlightStyle))
@@ -314,6 +316,7 @@ public final class ScenarioWriter {
             json.add("avoid", String.join(", ", message.avoid));
         if (!"auto".equals(message.side))
             json.add("side", message.side);
+        addIfSet(json, "gap", message.gap);
         //(a card shown large always waits for Next; the parser fills that in, and it need not be said)
         if (message.advance != null && !(message.zoom != null && message.advance == Advance.NEXT))
             json.add("advance", message.advance == Advance.INSPECT && message.advanceCard != null

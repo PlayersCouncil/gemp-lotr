@@ -82,7 +82,7 @@ public final class ScenarioParser {
 
         JsonObject options = optionalObject(object, "options", "scenario");
         if (options != null) {
-            checkFields(options, "options", "autoPass", "autoAccept", "rngDefault", "opponentDelayMs", "runnerLevel");
+            checkFields(options, "options", "autoPass", "autoAccept", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap");
             JsonValue autoPass = get(options, "autoPass");
             if (autoPass != null) {
                 String written = autoPass.isArray() ? "" : scalar(autoPass, "options.autoPass");
@@ -98,6 +98,7 @@ public final class ScenarioParser {
             def.rngDefault = optionalEnum(options, "rngDefault", RngDefault.class, RngDefault.IDENTITY, "options");
             def.opponentDelayMs = optionalInt(options, "opponentDelayMs", 900, "options");
             def.runnerLevel = optionalEnum(options, "runnerLevel", RunnerLevel.class, null, "options");
+            def.bubbleGap = gap(optionalString(options, "bubbleGap", null, "options"), "options.bubbleGap");
         }
 
         parseCards(def, requireObject(object, "cards", "scenario"));
@@ -562,12 +563,13 @@ public final class ScenarioParser {
                 JsonObject object = entry.asObject();
                 if (object.get("title") != null)
                     throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
-                checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "advance", "on",
+                checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "gap", "advance", "on",
                         "zoom", "focus", "magnify", "choices");
                 message.note = optionalString(object, "note", null, entryContext);
                 message.header = optionalString(object, "header", null, entryContext);
                 message.text = requireString(object, "text", entryContext);
-                message.anchor = optionalString(object, "anchor", null, entryContext);
+                message.anchor = list(object.get("anchor"), entryContext + ".anchor");
+                message.gap = gap(optionalString(object, "gap", null, entryContext), entryContext + ".gap");
                 message.highlight = list(object.get("highlight"), entryContext + ".highlight");
                 message.highlightStyle = optionalString(object, "highlightStyle", "gold", entryContext).toLowerCase(Locale.ROOT);
                 if (!HIGHLIGHT_STYLES.contains(message.highlightStyle))
@@ -613,8 +615,8 @@ public final class ScenarioParser {
                 message.text = scalar(entry, entryContext);
             }
 
-            if (message.anchor != null)
-                Anchors.check(def, message.anchor, entryContext + ".anchor");
+            for (String anchor : message.anchor)
+                Anchors.check(def, anchor, entryContext + ".anchor");
             for (String anchor : message.highlight)
                 Anchors.check(def, anchor, entryContext + ".highlight");
             for (String anchor : message.avoid)
@@ -703,6 +705,23 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException(context + ".magnify: a card shown larger than the screen needs a 'focus' to be centred on");
         }
         return new Zoom(alias, site, blueprint, focus, magnify);
+    }
+
+    /**
+     * A distance between a bubble and what it points at: "2.5" (hundredths of the window's shorter side) or "24px".
+     * It may be less than nothing, for a bubble that is to sit over the edge of a large thing.
+     */
+    private static String gap(String text, String context) throws ScenarioFormatException {
+        if (text == null || text.isBlank())
+            return null;
+        String written = text.trim().toLowerCase(Locale.ROOT);
+        if (!written.matches("-?\\d+(\\.\\d+)?(px)?"))
+            throw new ScenarioFormatException(context + ": '" + text + "' is not a distance.  Write a number (hundredths of the window's shorter side: "
+                    + "2 is a little, 10 is a lot) or a number of pixels as 24px");
+        double amount = Double.parseDouble(written.replace("px", ""));
+        if (written.endsWith("px") ? Math.abs(amount) > 1000 : Math.abs(amount) > 60)
+            throw new ScenarioFormatException(context + ": " + text + " is further than any screen is wide");
+        return written;
     }
 
     /**

@@ -35,6 +35,53 @@ public class ScenarioParserTest {
     }
 
     @Test
+    public void aMessageCanPointAtSeveralThingsAndSayHowFarOffItSits() throws Exception {
+        String steps = """
+                	options: {
+                		bubbleGap: 3
+                	}
+                	steps: [
+                		{
+                			when: freeps, action
+                			messages: [
+                				{
+                					text: These two fight side by side.
+                					anchor: card:aragorn, card:boromir
+                					side: left
+                					gap: 2.5
+                				}
+                				{
+                					text: Close by.
+                					anchor: ui:twilightPool
+                					gap: 24PX
+                				}
+                				Nothing in particular.
+                			]
+                		}
+                	]
+                """;
+        ScenarioDefinition def = ScenarioTesting.parse(steps);
+        assertEquals("3", def.bubbleGap);
+        List<Message> messages = def.steps.getFirst().messages;
+        assertEquals(List.of("card:aragorn", "card:boromir"), messages.get(0).anchor);
+        assertEquals("2.5", messages.get(0).gap);
+        assertEquals("24px", messages.get(1).gap);
+        assertNull(messages.get(2).gap);
+
+        //Written out and read back, it says the same
+        ScenarioDefinition again = ScenarioParser.parse(ScenarioWriter.toHjson(def, null));
+        assertEquals(List.of("card:aragorn", "card:boromir"), again.steps.getFirst().messages.get(0).anchor);
+        assertEquals("2.5", again.steps.getFirst().messages.get(0).gap);
+        assertEquals("24px", again.steps.getFirst().messages.get(1).gap);
+        assertEquals("3", again.bubbleGap);
+
+        assertRejected(steps.replace("gap: 2.5", "gap: wide"), "is not a distance");
+        assertRejected(steps.replace("gap: 2.5", "gap: 400"), "further than any screen");
+        assertRejected(steps.replace("card:aragorn, card:boromir", "card:aragorn, card:legolas"), "there is no card called 'legolas'");
+        assertRejected(steps.replace("bubbleGap: 3", "bubbleGap: lots"), "options.bubbleGap");
+    }
+
+    @Test
     public void cardsKeepTheOrderTheyWereDeclaredIn() throws Exception {
         ScenarioDefinition def = ScenarioTesting.parse("");
         assertEquals(List.of("frodo", "aragorn", "gandalf", "servant1", "servant2", "swordarm", "boromir",
@@ -194,10 +241,10 @@ public class ScenarioParserTest {
                 """);
         List<Message> messages = def.steps.getFirst().messages;
         assertEquals("Just some text about {twilight}.", messages.get(0).text);
-        assertNull(messages.get(0).anchor);
+        assertEquals(List.of(), messages.get(0).anchor);
         assertNull("A message has no heading unless it asks for one", messages.get(0).header);
         assertEquals("Look here", messages.get(1).header);
-        assertEquals("card:aragorn", messages.get(1).anchor);
+        assertEquals(List.of("card:aragorn"), messages.get(1).anchor);
         assertEquals(List.of("card:aragorn", "ui:twilightPool"), messages.get(1).highlight);
         assertEquals("below", messages.get(1).side);
         assertEquals(Advance.NEXT, messages.get(1).advance);

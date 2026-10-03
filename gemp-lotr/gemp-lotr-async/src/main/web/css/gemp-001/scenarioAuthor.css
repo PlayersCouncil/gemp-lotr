@@ -99,6 +99,38 @@ body.scenario-authoring #scenarioLayer {
     color: #d8f0ff;
 }
 
+.sa-good {
+    background: #1d4a26;
+    color: #dcffdf;
+}
+
+.sa-button.sa-inline {
+    margin: 0 0 0 8px;
+    padding: 0 6px;
+}
+
+/* A draft with changes that are in no file: the whole head of the panel says so */
+.sa.sa-unsaved .sa-head {
+    background: #8a2a0e;
+    box-shadow: inset 0 -3px 0 #ff9a4a;
+}
+
+.sa.sa-unsaved .sa-title {
+    color: #fff;
+}
+
+.sa.sa-unsaved .sa-where {
+    background: #4a1a0c;
+    color: #ffd9b8;
+}
+
+.sa.sa-unsaved .sa-button.sa-save.sa-dirty {
+    background: #ffb347;
+    border-color: #fff;
+    color: #2a1400;
+    font-weight: bold;
+}
+
 .sa-dismiss {
     position: absolute;
     right: 3px;
@@ -367,11 +399,19 @@ body.scenario-authoring #scenarioLayer {
     color: #f0cf6a;
 }
 
+/* Which step this is stays in sight however far down its messages the tab has been scrolled */
 .sa-stephead {
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-bottom: 2px;
+    position: sticky;
+    top: -6px;
+    z-index: 3;
+    margin: -6px -8px 4px -8px;
+    padding: 6px 8px 4px 8px;
+    background: #17150f;
+    border-bottom: 1px solid #4d4226;
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.6);
 }
 
 .sa-stepname {
@@ -416,6 +456,11 @@ body.scenario-authoring #scenarioLayer {
 
 .sa-anchor > .sa-label {
     flex: 0 0 82px;
+}
+
+.sa-anchor > .sa-label.sa-inline {
+    flex: 0 0 auto;
+    margin-left: 6px;
 }
 
 .sa-input {
