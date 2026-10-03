@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- A jigsaw piece with a slanted question mark cut out of it.  Drawn for Gemp-LotR (the Scenarios button). -->
+<!-- A jigsaw piece.  Drawn for Gemp-LotR (the Play Scenario or Tutorial button). -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <mask id="piece" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
@@ -14,11 +14,6 @@
       <circle cx="78" cy="312" r="46" fill="#000"/>
       <rect x="184" y="462" width="48" height="40" fill="#000"/>
       <circle cx="208" cy="442" r="46" fill="#000"/>
-      <!-- the question mark, leaning -->
-      <g transform="translate(-8 34) rotate(-14 262 262)">
-        <path d="M208 208a54 54 0 1 1 84 45q-30 20 -30 50" fill="none" stroke="#000" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="262" cy="352" r="23" fill="#000"/>
-      </g>
     </mask>
   </defs>
   <rect x="0" y="0" width="512" height="512" fill="#aab0ff" mask="url(#piece)"/>

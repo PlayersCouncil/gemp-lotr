@@ -553,10 +553,32 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException(context + ": " + term.raw() + ": a number of cards from 1 to 60");
             return new DoOp(DoKind.DRAW, null, seat.key(), amount, false, term.raw());
         }
+        if (term.is("order")) {
+            //order(freeps.hand, a, b, c): those cards first (topmost, in a pile), in that order; the rest after them
+            String target = term.arg(0, context).trim();
+            ZoneRef ref = parseZoneRef(def, target, context);
+            if (target.split("\\.").length != 2 || !ORDERED.contains(ref.zone()))
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": what has an order is a hand, a deck, a discard pile or a dead pile (freeps.hand, shadow.deck)");
+            List<String> cards = new ArrayList<>();
+            for (int i = 1; i < term.args().size(); i++) {
+                CardDef card = card(def, term.arg(i, context), context);
+                if (card.owner() != ref.seat())
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + card.alias() + "' belongs to the other seat");
+                if (cards.contains(card.alias()))
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + card.alias() + "' is there twice");
+                cards.add(card.alias());
+            }
+            if (cards.isEmpty())
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": needs the cards, in the order they are to come");
+            return new DoOp(DoKind.ORDER, String.join(", ", cards), target, 0, false, term.raw());
+        }
         throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of "
                 + "move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), heal(card, n), tokens(card, n), "
-                + "draw(n) or draw(seat, n), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it)");
+                + "draw(n) or draw(seat, n), order(seat.zone, card, card), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it)");
     }
+
+    /** The places whose cards come in an order that matters: a hand as it is shown, a pile from the top down. */
+    public static final Set<SetupZone> ORDERED = EnumSet.of(SetupZone.HAND, SetupZone.DECK, SetupZone.DISCARD, SetupZone.DEAD_PILE);
 
     /**
      * A place on the board a card can be moved to mid-game: "freeps.hand", "shadow.deck.top", and so on.

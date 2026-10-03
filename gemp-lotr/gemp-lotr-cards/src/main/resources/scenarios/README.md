@@ -28,3 +28,7 @@ not in the list of scenarios. Play > Scenarios says so underneath, with everythi
 and to whoever owns the file. Edit there opens it in the authoring tool with the mistaken parts left out; the tool
 shows what they were, and saving writes the file without them. A file that is not HJSON at all, or has no id, title,
 format, cards, sites or Ring-bearers, has to be put right by hand.
+
+A scenario is kept under the folder of its kind: `tutorials/`, `puzzles/` or `sandboxes/`, with whatever folders its
+author likes below that. The authoring tool puts a new one there, and moves a file that is somewhere else when it is
+saved (a scenario whose kind was changed, say). The same goes for an author's own folder.

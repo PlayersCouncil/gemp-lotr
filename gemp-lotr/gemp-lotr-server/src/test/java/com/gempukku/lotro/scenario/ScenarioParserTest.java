@@ -271,7 +271,7 @@ public class ScenarioParserTest {
                 	steps: [
                 		{
                 			id: change
-                			do: move(servant2, freeps.deck.bottom), wound(frodo), twilight(+2), burdens(0)
+                			do: move(servant2, freeps.deck.bottom), wound(frodo), twilight(+2), burdens(0), order(freeps.hand, servant1, gandalf)
                 		}
                 	]
                 """);
@@ -288,6 +288,10 @@ public class ScenarioParserTest {
         assertTrue(ops.get(2).relative());
         assertEquals(2, ops.get(2).amount());
         assertFalse(ops.get(3).relative());
+        assertEquals(DoKind.ORDER, ops.get(4).kind());
+        assertEquals("freeps.hand", ops.get(4).target());
+        assertEquals("The cards, in the order they are to come", "servant1, gandalf", ops.get(4).card());
+        assertEquals("order(freeps.hand, servant1, gandalf)", ops.get(4).source());
     }
 
     @Test

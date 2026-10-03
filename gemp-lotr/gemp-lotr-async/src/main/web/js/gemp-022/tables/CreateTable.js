@@ -84,7 +84,7 @@ class CreateTable {
 
 		this.playScenarioButton = $("#create-scenario-button").button().click(
 			function() {
-				that.openFlow(that.playScenario, "Scenarios");
+				that.openFlow(that.playScenario, "Scenarios & Tutorials");
 			});
 
 		this.popup.dialog({
