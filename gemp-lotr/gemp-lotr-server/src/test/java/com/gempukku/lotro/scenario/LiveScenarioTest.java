@@ -977,4 +977,72 @@ public class LiveScenarioTest {
         assertEquals("failed", client.end.getString("result"));
         assertTrue(client.end.getString("message"), client.end.getString("message").contains("leave the wizard at home"));
     }
+
+
+    /**
+     * A block in a person's game: its steps come up in the order the person plays the stretch in, each saying which
+     * of the block's steps it is; and the block is one place for a failed attempt to come back to.
+     */
+    @Test
+    public void ABlockIsPlayedInThePersonsOrder() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(Files.readString(
+                new File("src/test/resources/scenarios/two-skirmishes.hjson").toPath(), StandardCharsets.UTF_8));
+        def.opponentDelayMs = 0;
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+
+        //The assignment, with what it has to say
+        client.await();
+        assertEquals(1, client.step.getIntValue("step"));
+        assertEquals(1, client.step.getIntValue("sub"));
+        assertEquals(1, client.step.getJSONArray("messages").size());
+        assertEquals("The block is the checkpoint, reached at its first decision", 1, scenario.LastCheckpoint());
+        GameJournal checkpoint = scenario.CheckpointJournal();
+        assertNotNull(checkpoint);
+        client.answerAsAllowed();
+
+        //Aragorn's skirmish first: not the order the script would play them in, and one it allows
+        client.await();
+        assertEquals(2, client.step.getIntValue("sub"));
+        assertEquals(2, client.step.getJSONObject("allow").getList("answers", String.class).size());
+        client.answer(String.valueOf(scenario.Table().Card("aragorn").getCardId()));
+        client.await();
+        assertEquals("The step for his skirmish", 3, client.step.getIntValue("sub"));
+        assertEquals("aragornFights", client.step.getString("name"));
+        assertEquals(1, client.step.getJSONArray("messages").size());
+        client.answerAsAllowed();
+
+        //The picking step again, with the one skirmish that is left; then the step for any other skirmish
+        client.await();
+        assertEquals(2, client.step.getIntValue("sub"));
+        assertEquals(1, client.step.getJSONObject("allow").getList("answers", String.class).size());
+        client.answerAsAllowed();
+        client.await();
+        assertEquals(4, client.step.getIntValue("sub"));
+        client.answer("");
+
+        //The block ends where it says, and the script goes on
+        client.await();
+        assertEquals(2, client.step.getIntValue("step"));
+        assertEquals(0, client.step.getIntValue("sub"));
+        assertEquals(checkpoint.write(), scenario.CheckpointJournal().write());
+        client.answerAsAllowed();
+        client.await();
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("complete", client.end.getString("result"));
+        assertEquals(List.of(), scenario.Problems());
+
+        //Started again from the checkpoint, the game is at the block's first decision
+        LiveScenario second = live(def, GameJournal.read(checkpoint.write(), player -> player));
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        Client again = new Client(mediator);
+        again.connect();
+        again.await();
+        assertEquals(1, again.step.getIntValue("step"));
+        assertEquals(1, again.step.getIntValue("sub"));
+        assertEquals(1, second.LastCheckpoint());
+    }
 }

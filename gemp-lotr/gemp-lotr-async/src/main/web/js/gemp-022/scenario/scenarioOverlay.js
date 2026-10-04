@@ -1082,7 +1082,39 @@ var GempScenarioOverlay = Class.extend({
         return true;
     },
 
+    /**
+     * Space or Escape reads on: it presses the Next on the message that is up.  Not while something is being typed
+     * (the chat box, most of all), not for a key that is being held down, and not when the key is for something
+     * else (a card's information window to be closed, an author picking a thing on the table).
+     * @return whether the key was taken
+     */
+    pressesNext: function (event) {
+        if ((event.keyCode != 32 && event.keyCode != 27) || event.repeat || event.ctrlKey || event.altKey || event.metaKey
+            || this.info == null || this.game.replayMode)
+            return false;
+        var active = document.activeElement;
+        if (active != null && (active.tagName == "INPUT" || active.tagName == "TEXTAREA" || active.tagName == "SELECT" || active.isContentEditable))
+            return false;
+        if ($(event.target).closest("#scenarioAuthor").length > 0 || $("body").hasClass("sa-picking"))
+            return false;
+        var dialog = this.game.cardInfoDialog;
+        if (event.keyCode == 27 && dialog != null && dialog.isOpen())
+            return false;
+        var next = this.bubble.find(".scenario-next");
+        if (this.currentMessage == null || !this.bubble.is(":visible") || !next.is(":visible") || next.is(":disabled"))
+            return false;
+        //(a button that has the keyboard would be pressed by the space as well)
+        if (active != null && active.tagName == "BUTTON")
+            active.blur();
+        next.click();
+        return true;
+    },
+
     keyCaptured: function (event) {
+        if (this.pressesNext(event)) {
+            this.stop(event);
+            return;
+        }
         //Escape confirms a choice from a list of cards, the same as its Done button
         if (event.keyCode != 27 || this.info == null || this.game.escFunction == null)
             return;
@@ -1120,7 +1152,11 @@ var GempScenarioOverlay = Class.extend({
     markCards: function () {
         $(".scenario-live, .scenario-notnow").removeClass("scenario-live scenario-notnow");
         this.nextTargets = [];
-        if (this.plan == null || this.phase != "answering") {
+        //What a step allows holds for the whole of the step.  While its first messages are being read nothing can
+        // be clicked yet, but the cards it does not allow are already marked "not now": a table lit up with
+        // everything the game offers, and then with one card, reads as if the step had changed its mind.
+        var reading = this.phase == "reading";
+        if (this.plan == null || (this.phase != "answering" && !reading)) {
             this.refresh();
             return;
         }
@@ -1132,11 +1168,17 @@ var GempScenarioOverlay = Class.extend({
                 return;
             if ($.inArray("" + card.cardId, live) > -1) {
                 $(this).addClass("scenario-live");
-                that.nextTargets.push($(this));
+                if (!reading)
+                    that.nextTargets.push($(this));
             } else {
                 $(this).addClass("scenario-notnow");
             }
         });
+        if (reading) {
+            //(what to click next is pointed out once there is something to click)
+            this.refresh();
+            return;
+        }
         if (this.plan.isReady()) {
             var done = ScenarioAnchors.button("done");
             if (done != null && done.length > 0)

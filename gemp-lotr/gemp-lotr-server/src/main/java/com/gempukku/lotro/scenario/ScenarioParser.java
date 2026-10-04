@@ -148,6 +148,9 @@ public final class ScenarioParser {
                 Step step = parseStep(def, stepValue, index);
                 if (step.id != null && !ids.add(step.id))
                     throw new ScenarioFormatException("steps: there are two steps called '" + step.id + "'");
+                for (Step child : step.children)
+                    if (child.id != null && !ids.add(child.id))
+                        throw new ScenarioFormatException("steps: there are two steps called '" + child.id + "'");
                 for (Message message : step.messages)
                     for (String name : message.choices.keySet())
                         if (!def.flags.contains(name))
@@ -315,18 +318,33 @@ public final class ScenarioParser {
     }
 
     static Step parseStep(ScenarioDefinition def, JsonValue value, int number) throws ScenarioFormatException {
-        JsonObject object = asObject(value, "step " + number);
+        return parseStep(def, value, number, null, 0);
+    }
+
+    /**
+     * @param parent The block the step is in, with the place it has there (from 1); null and 0 for a step of the
+     *               script itself.
+     */
+    static Step parseStep(ScenarioDefinition def, JsonValue value, int number, Step parent, int sub) throws ScenarioFormatException {
+        //(a block's steps are said as the parts of the file they are, so that whatever reads a complaint can find them)
+        String place = parent == null ? "step " + number : "step " + number + ".anyOrder[" + sub + "]";
+        JsonObject object = asObject(value, place);
         Step step = new Step();
         //Steps are known by where they come in the list.  A step can be given a name as well, which shows up beside
         // its number in reports; nothing else uses it.
         step.number = number;
-        step.id = optionalString(object, "id", null, "step " + number);
+        step.parent = parent;
+        step.sub = sub;
+        step.id = optionalString(object, "id", null, place);
         if (step.id != null && !step.id.matches("[A-Za-z][A-Za-z0-9_-]*"))
-            throw new ScenarioFormatException("step " + number + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
-        String context = "step " + step.label();
+            throw new ScenarioFormatException(place + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
+        String context = parent == null ? "step " + step.label() : place;
         checkFields(object, context, "id", "note", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
-                "messages", "allow", "answer", "end");
+                "messages", "allow", "answer", "end", "anyOrder", "once");
         step.note = optionalString(object, "note", null, context);
+        step.once = optionalBoolean(object, "once", false, context);
+        if (step.once && parent == null)
+            throw new ScenarioFormatException(context + ": 'once' is for a step in an 'anyOrder' block (a step of the script itself applies once anyway, unless it has an 'until')");
 
         if (object.get("when") != null)
             step.when = parseWhen(def, object.get("when"), context + ".when");
@@ -378,7 +396,43 @@ public final class ScenarioParser {
             }
         }
 
-        if (step.until == null && step.answers.size() > 1)
+        JsonValue anyOrder = object.get("anyOrder");
+        if (anyOrder != null) {
+            //A block: steps for a stretch of the game whose decisions come in no order the script can know
+            if (parent != null)
+                throw new ScenarioFormatException(context + ": a block cannot have another block in it");
+            if (!anyOrder.isArray())
+                throw new ScenarioFormatException(context + ".anyOrder: has to be a [list] of steps");
+            if (step.until == null)
+                throw new ScenarioFormatException(context + ": an 'anyOrder' block needs an 'until': the decision at which it is over (the next phase, say: until: phase(regroup))");
+            if (step.pause || step.allow != null || !step.answers.isEmpty() || !step.messages.isEmpty() || !step.doOps.isEmpty() || step.end != null)
+                throw new ScenarioFormatException(context + ": an 'anyOrder' block has no decision of its own, so it has no 'pause', 'messages', 'allow', 'answer', 'do' or 'end': those belong to the steps in it");
+            if (step.when.opening)
+                throw new ScenarioFormatException(context + ": the opening is one moment, and is a step by itself");
+            step.block = true;
+            int place2 = 0;
+            for (JsonValue child : anyOrder.asArray()) {
+                place2++;
+                step.children.add(parseStep(def, child, number, step, place2));
+                //(a choice one of them offers is one the steps after it, in the block and out of it, can depend on)
+                for (Message message : step.children.getLast().messages)
+                    for (String name : message.choices.keySet())
+                        if (!def.flags.contains(name))
+                            def.flags.add(name);
+            }
+        }
+        if (parent != null) {
+            if (step.until != null || step.skipWhen != null)
+                throw new ScenarioFormatException(context + ": a step in a block applies whenever a decision fits it, for as long as the block lasts: it has no 'until' or 'skipWhen' of its own (the block has)");
+            if (step.checkpoint)
+                throw new ScenarioFormatException(context + ": a checkpoint is a place the script always comes to; a step in a block is not.  Put it on the block.");
+            if (step.when.opening)
+                throw new ScenarioFormatException(context + ": the opening is one moment, and is a step by itself");
+            if (step.once && step.answers.size() > 1)
+                throw new ScenarioFormatException(context + ": is 'once' and has several answers");
+        }
+
+        if (!step.recurs() && step.answers.size() > 1)
             throw new ScenarioFormatException(context + ": has several answers but answers only one decision (give it an 'until' to make it repeat)");
         if ((step.until != null && step.until.opening) || (step.skipWhen != null && step.skipWhen.opening))
             throw new ScenarioFormatException(context + ": 'opening' is something only a 'when' can wait for");
@@ -430,7 +484,7 @@ public final class ScenarioParser {
         When when = new When();
         if (value.isObject()) {
             JsonObject object = value.asObject();
-            checkFields(object, context, "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "require");
+            checkFields(object, context, "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "fighting", "require");
             when.source = object.toString();
             if (object.get("seat") != null)
                 when.seat = parseSeat(def, scalar(object.get("seat"), context + ".seat"), context + ".seat");
@@ -445,6 +499,8 @@ public final class ScenarioParser {
                 when.skirmish = asInt(object.get("skirmish"), context + ".skirmish");
             if (object.get("offers") != null)
                 when.offers = card(def, scalar(object.get("offers"), context + ".offers"), context + ".offers").alias();
+            if (object.get("fighting") != null)
+                when.fighting = card(def, scalar(object.get("fighting"), context + ".fighting"), context + ".fighting").alias();
             if (object.get("require") != null)
                 when.require = jsonArrayText(object.get("require"), context + ".require");
             return when;
@@ -466,6 +522,8 @@ public final class ScenarioParser {
                 when.skirmish = parseInt(term.arg(0, context), context);
             else if (term.is("offers"))
                 when.offers = card(def, term.arg(0, context), context).alias();
+            else if (term.is("fighting"))
+                when.fighting = card(def, term.arg(0, context), context).alias();
             else if (term.is("text"))
                 when.text = term.wholeArg();
             else if (term.args().isEmpty() && term.is("opening"))
@@ -473,10 +531,10 @@ public final class ScenarioParser {
             else
                 throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
                         + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
-                        + "number, assign), or one of phase(...), turn(...), skirmish(...), offers(...), text(...)");
+                        + "number, assign), or one of phase(...), turn(...), skirmish(n), fighting(card), offers(card), text(...)");
         }
         if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null
-                || when.skirmish != null || when.offers != null))
+                || when.skirmish != null || when.offers != null || when.fighting != null))
             throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
         return when;
     }

@@ -131,6 +131,8 @@ public final class ScenarioDefinition {
         public Integer skirmish;
         /** A card that has to be among the decision's options. */
         public String offers;
+        /** A card that has to be in the skirmish being fought: the character on either side of it. */
+        public String fighting;
         /** Card-definition requirements, as JSON array text. */
         public String require;
         /**
@@ -143,7 +145,7 @@ public final class ScenarioDefinition {
 
         public boolean isEmpty() {
             return seat == null && decision == null && text == null && phase == null && turn == null
-                    && skirmish == null && offers == null && require == null && !opening;
+                    && skirmish == null && offers == null && fighting == null && require == null && !opening;
         }
     }
 
@@ -329,13 +331,45 @@ public final class ScenarioDefinition {
         public List<Answer> answers = new ArrayList<>();
         public End end;
 
+        /**
+         * Set for a block ("anyOrder"): a stretch of the game whose decisions come in an order the script cannot
+         * know (which skirmish is fought first, how many times each side acts in it).  A block has no decision of
+         * its own.  It has steps, and while it is the step the script is at, each decision that arrives goes to the
+         * first of its steps that fits, wherever that step comes; it is over when a decision arrives that fits its
+         * 'until', which is then the next step's.  Its own 'when', if it has one, is something every decision its
+         * steps take has to fit as well.
+         */
+        public boolean block;
+        /** A block's steps, in the order they are tried. */
+        public List<Step> children = new ArrayList<>();
+        /** The block a step is in; null for a step of the script itself. */
+        public Step parent;
+        /** Where a step comes in its block, counting from 1; 0 for a step of the script itself. */
+        public int sub;
+        /**
+         * In a block: the step applies to one decision and is then done with.  Without it a block's step applies to
+         * every decision that fits it (and shows its messages at the first).
+         */
+        public boolean once;
+
         public boolean repeats() {
             return until != null;
         }
 
-        /** What the step is called in reports: its number, with its name if it has one. */
+        /** Whether the step can apply to more than one decision: it repeats, or it is a block's and not 'once'. */
+        public boolean recurs() {
+            return until != null || (parent != null && !once && !pause);
+        }
+
+        /** What the step is called in reports: its number, with its name if it has one.  A block's steps are 12.1, 12.2. */
         public String label() {
-            return id == null ? String.valueOf(number) : number + " (" + id + ")";
+            String place = parent == null ? String.valueOf(number) : parent.number + "." + sub;
+            return id == null ? place : place + " (" + id + ")";
+        }
+
+        /** Where the step is in the file, as the parser says where things are: "step 12", "step 12.anyOrder[2]". */
+        public String context() {
+            return parent == null ? "step " + label() : "step " + parent.number + ".anyOrder[" + sub + "]";
         }
 
         /** The label, plus what the step waits for, to say which step is meant to somebody reading the file. */
@@ -360,9 +394,19 @@ public final class ScenarioDefinition {
      * @param label A step's label, as given by Step.label().
      */
     public Step findStep(String label) {
-        for (Step step : steps)
+        for (Step step : allSteps())
             if (step.label().equals(label))
                 return step;
         return null;
+    }
+
+    /** Every step: the steps of the script in order, each block followed by the steps in it. */
+    public List<Step> allSteps() {
+        List<Step> all = new ArrayList<>();
+        for (Step step : steps) {
+            all.add(step);
+            all.addAll(step.children);
+        }
+        return all;
     }
 }

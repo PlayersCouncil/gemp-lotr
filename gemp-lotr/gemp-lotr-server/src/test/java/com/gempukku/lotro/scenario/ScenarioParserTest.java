@@ -689,4 +689,55 @@ public class ScenarioParserTest {
     private static void rejects(String messageFragment, String rest) {
         assertRejected(rest, messageFragment);
     }
+
+
+    @Test
+    public void aBlockIsStepsInNoParticularOrder() throws Exception {
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: turn(1)
+                			until: phase(regroup)
+                			anyOrder: [
+                				{
+                					once: true
+                					when: freeps, assign
+                					allow: assign(aragorn: runner1)
+                				}
+                				{
+                					when: freeps, action, fighting(aragorn)
+                					answer: pass, pass
+                				}
+                			]
+                		}
+                		{
+                			when: freeps, action, phase(regroup)
+                			allow: pass
+                		}
+                	]
+                """);
+        ScenarioDefinition.Step block = def.steps.getFirst();
+        assertTrue(block.block);
+        assertEquals(2, block.children.size());
+        assertEquals("1.1", block.children.get(0).label());
+        assertEquals("step 1.anyOrder[2]", block.children.get(1).context());
+        assertTrue(block.children.get(0).once);
+        assertFalse(block.children.get(0).recurs());
+        assertTrue("A step in a block applies for as long as the block lasts", block.children.get(1).recurs());
+        assertEquals("aragorn", block.children.get(1).when.fighting);
+        assertSame(block, block.children.get(1).parent);
+        assertEquals(List.of(block, block.children.get(0), block.children.get(1), def.steps.get(1)), def.allSteps());
+        assertSame(block.children.get(1), def.findStep("1.2"));
+
+        String blockOf = "\tsteps: [\n\t\t{\n\t\t\tBLOCK\n\t\t\tanyOrder: [\n\t\t\t\t{\n\t\t\t\t\tCHILD\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]";
+        rejects("needs an 'until'", blockOf.replace("BLOCK", "when: turn(1)").replace("CHILD", "when: freeps, action"));
+        rejects("has no decision of its own", blockOf.replace("BLOCK", "until: phase(regroup)\n\t\t\tallow: pass").replace("CHILD", "when: freeps, action"));
+        rejects("it has no 'until' or 'skipWhen' of its own", blockOf.replace("BLOCK", "until: phase(regroup)").replace("CHILD", "when: freeps, action\n\t\t\t\t\tuntil: shadow"));
+        rejects("Put it on the block", blockOf.replace("BLOCK", "until: phase(regroup)").replace("CHILD", "when: freeps, action\n\t\t\t\t\tcheckpoint: true"));
+        rejects("a block cannot have another block in it", blockOf.replace("BLOCK", "until: phase(regroup)")
+                .replace("CHILD", "until: phase(regroup)\n\t\t\t\t\tanyOrder: [\n\t\t\t\t\t]"));
+        rejects("is 'once' and has several answers", blockOf.replace("BLOCK", "until: phase(regroup)").replace("CHILD", "once: true\n\t\t\t\t\tanswer: pass, pass"));
+        rejects("'once' is for a step in an 'anyOrder' block", "\tsteps: [\n\t\t{\n\t\t\tonce: true\n\t\t\twhen: freeps, action\n\t\t}\n\t]");
+        rejects("there is no card called 'strider'", blockOf.replace("BLOCK", "until: phase(regroup)").replace("CHILD", "when: fighting(strider)"));
+    }
 }

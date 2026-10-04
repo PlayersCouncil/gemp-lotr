@@ -65,6 +65,12 @@ public final class ScenarioRunner {
             report.failures.add("There are more than " + WAYS_LIMIT + " ways through this scenario; not all of them were played");
         if (report.completed) {
             for (Map.Entry<String, ScenarioDirector.StepStatus> entry : report.steps.entrySet()) {
+                //A step of a block that no decision went to is nothing out of the ordinary, however the block (or
+                // the game) ended: a game played in another order would have used it.  What is wrong with a block
+                // that was never come to is said of the block.
+                boolean inBlock = def.findStep(entry.getKey()).parent != null;
+                if (inBlock && (entry.getValue() == ScenarioDirector.StepStatus.UNREACHED || entry.getValue() == ScenarioDirector.StepStatus.SKIPPED))
+                    continue;
                 if (entry.getValue() == ScenarioDirector.StepStatus.UNREACHED || entry.getValue() == ScenarioDirector.StepStatus.BYPASSED)
                     report.failures.add(def.findStep(entry.getKey()).describe() + " was never reached");
                 else if (entry.getValue() == ScenarioDirector.StepStatus.SKIPPED)
@@ -133,8 +139,9 @@ public final class ScenarioRunner {
         }
 
         report.steps.putAll(director.statuses());
-        for (Step step : def.steps)
-            report.stepDescriptions.put(step.label(), step.when.source);
+        for (Step step : def.allSteps())
+            report.stepDescriptions.put(step.label(), step.block
+                    ? (step.when.source.isEmpty() ? "" : step.when.source + "; ") + "any order, until " + step.until.source : step.when.source);
         for (String problem : table.Problems())
             report.failures.add(problem);
 

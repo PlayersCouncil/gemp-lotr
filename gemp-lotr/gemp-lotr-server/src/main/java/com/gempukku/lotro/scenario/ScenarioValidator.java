@@ -68,8 +68,8 @@ public final class ScenarioValidator {
         if (def.setup.turn != 1 || def.setup.phase != Phase.FELLOWSHIP)
             problems.add("setup.startAt: only turn 1, fellowship is supported so far");
 
-        for (Step step : def.steps) {
-            String context = "step " + step.label();
+        for (Step step : def.allSteps()) {
+            String context = step.context();
             if (step.when.opening && step != def.steps.getFirst())
                 problems.add(context + ".when: the opening comes before the first turn, so only the first step can wait for it");
             requirements(step.when.require, context + ".when.require", problems);
@@ -80,11 +80,11 @@ public final class ScenarioValidator {
             if (step.allow != null)
                 requirements(step.allow.passWhen, context + ".allow.passWhen", problems);
         }
-        for (Step step : def.steps)
+        for (Step step : def.allSteps())
             for (int i = 0; i < step.messages.size(); i++) {
                 ScenarioDefinition.Message message = step.messages.get(i);
                 //(said as the parser says where a message is, so that whatever reads the two can find it)
-                String context = "step " + step.label() + ".messages[" + (i + 1) + "]";
+                String context = step.context() + ".messages[" + (i + 1) + "]";
                 if (message.zoom != null) {
                     String problem = CardFaces.check(def, message.zoom, library);
                     if (problem != null)

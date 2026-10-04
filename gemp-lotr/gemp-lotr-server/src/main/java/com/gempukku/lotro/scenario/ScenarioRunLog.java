@@ -126,11 +126,14 @@ public class ScenarioRunLog {
 
             Map<String, String> steps = new LinkedHashMap<>();
             Integer lastStep = null;
-            for (ScenarioDefinition.Step step : def.steps) {
+            for (ScenarioDefinition.Step step : def.allSteps()) {
                 ScenarioDirector.StepStatus status = scenario.Session().Director().statuses().get(step.label());
                 steps.put(step.label(), status.name().toLowerCase());
                 if (status == ScenarioDirector.StepStatus.MATCHED)
                     lastStep = step.number;
+                //(a block's step that no decision of this game went to is nothing out of the ordinary)
+                if (step.parent != null)
+                    continue;
                 //In a game that got all the way to the end, every step should have had its turn
                 //(except the steps of a way through the scenario that this game did not take)
                 if (scenario.Result() == LiveScenario.Result.COMPLETE && status != ScenarioDirector.StepStatus.MATCHED

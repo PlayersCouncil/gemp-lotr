@@ -136,6 +136,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     /** If set, the script plays itself up to this step before anybody is shown anything. */
     private boolean _draftTest;
     private Integer _runTo;
+    /** In a block, how far into it the script plays itself: to one of its steps (from 1), or past so many decisions. */
+    private int _runToSub;
+    private int _runToTimes;
     private java.util.function.Function<Step, String> _runChoices;
     private String _runProblem;
 
@@ -224,8 +227,28 @@ public class LiveScenario implements ScenarioSession.Listener {
      * @param choices Says which of a pause's choices to take; null (or a null answer) takes the first.
      */
     public void RunTo(int step, java.util.function.Function<Step, String> choices) {
+        RunTo(step, 0, 0, choices);
+    }
+
+    /**
+     * The same, to somewhere inside a block (where the step is one; otherwise the two say nothing).
+     * @param sub One of the block's steps, counting from 1: the script stops at the first decision that goes to it
+     *            (or where the block ends, if none does).  0 for none in particular.
+     * @param times With no step named: how many decisions the block's steps are to have answered before the script
+     *              stops.  0 stops at the block's first.
+     */
+    public void RunTo(int step, int sub, int times, java.util.function.Function<Step, String> choices) {
         _runTo = step;
+        _runToSub = Math.max(0, sub);
+        _runToTimes = Math.max(0, times);
         _runChoices = choices;
+    }
+
+    /** Whether a decision that goes to the step the script was sent to is where it was sent. */
+    private boolean farEnough(Step step, ScenarioDirector director) {
+        if (step.parent == null)
+            return true;
+        return _runToSub > 0 ? step.sub == _runToSub : director.answeredInBlock() >= _runToTimes;
     }
 
     /**
@@ -283,9 +306,14 @@ public class LiveScenario implements ScenarioSession.Listener {
             if (ruling == null)
                 return;
             Step step = ruling.step();
-            if (step != null && step.number >= _runTo)
+            if (step != null && (step.number > _runTo || (step.number == _runTo && farEnough(step, director))))
                 return;
             if (step == null && director.atFrontier())
+                return;
+            //(sent so far into a block, to a decision that none of the block's steps covers: that is where it is)
+            Step at = director.currentStep();
+            if (step == null && at != null && at.block && at.number == _runTo && _runToSub == 0 && _runToTimes > 0
+                    && director.answeredInBlock() >= _runToTimes)
                 return;
             if (ruling.problem() != null) {
                 _runProblem = (step == null ? "" : step.describe() + ": ") + ruling.problem();
@@ -386,10 +414,11 @@ public class LiveScenario implements ScenarioSession.Listener {
     @Override
     public void ruled(Ruling ruling) {
         //Each step's first decision is marked in the journal, so that a later game can be brought to that point
+        //(a block is reached once, by whichever of its steps takes its first decision; a checkpoint is the block's)
         Step reached = ruling.step();
-        if (reached != null && !_session.Director().isContinuing(reached)) {
+        if (reached != null && _session.Director().arrives(reached)) {
             _table.Journal().mark(stepMark(reached.number));
-            if (reached.checkpoint)
+            if (reached.parent != null ? reached.parent.checkpoint : reached.checkpoint)
                 _lastCheckpoint = reached.number;
         }
         if (_begun)
@@ -721,6 +750,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         Map<String, Object> event = new LinkedHashMap<>();
         event.put("type", "step");
         event.put("step", step.number);
+        //(one of the steps of a block: which of them, counting from 1; 0 for a step of the script itself)
+        event.put("sub", step.sub);
         event.put("name", step.id);
         event.put("seat", opponents ? "opponent" : "human");
         //A step that waits to be read: an opponent's (which then acts), or a pause over the person's own decision
