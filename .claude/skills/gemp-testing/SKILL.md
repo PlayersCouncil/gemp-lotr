@@ -1,273 +1,185 @@
 ---
 name: gemp-testing
 description: >
-  Comprehensive guide for writing unit tests in the Gemp-LotR codebase using the VirtualTableScenario test framework.
-  Use this skill whenever writing, modifying, or debugging Gemp card tests, site tests, or errata tests.
-  Trigger when: the user mentions writing tests for Gemp cards, Card_V*_Tests files, VirtualTableScenario,
-  test framework methods, or asks to test card behavior, site behavior, or errata changes.
-  Also trigger when debugging test failures in the gemp-lotr-server test suite.
+  The Gemp-LotR test rig: what VirtualTableScenario is, where its code lives, how a test drives a game with it, how
+  to run tests quickly, the behaviours of the rig and engine that catch people out, and the rules for adding to the
+  rig. Use this skill whenever writing, running or debugging a test that uses VirtualTableScenario, when a test
+  needs something the rig cannot yet do, or when changing anything under virtualtable/ or test framework/. For
+  what a card's tests must cover and how they are laid out, use the test-generation skill alongside this one.
 user-invocable: false
 ---
 
-# Gemp-LotR Test Framework Guide
+# The Gemp-LotR test rig
 
-For the full VTS API reference (every method signature, all overloads), read `${CLAUDE_SKILL_DIR}/references/vts-api.md`.
+A test plays a real game of LotR TCG through a headless client that sits in both seats. The rig is that client: it
+answers the engine's decisions for both players, reads the game's state, and can rearrange the board directly.
 
-## VirtualTableScenario Basics
+For every method, with its signature, read `${CLAUDE_SKILL_DIR}/references/vts-api.md`. That file is generated
+from the rig's source by `card-test-campaign/scripts/gen_vts_api.py`; never edit it by hand.
 
-Tests use `VirtualTableScenario` to simulate games. Constructor takes:
+## Where the rig lives
+
+The rig used to be one class in the test sources. Its machinery has since moved into the server proper, because the
+scenario and tutorial system drives games the same way:
+
+| Piece | Where | What it is |
+|---|---|---|
+| `VirtualTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/virtualtable/` | The table: holds the game, answers decisions, looks cards up by alias, walks the game through its opening. Abstract. |
+| `Actions`, `Choices`, `Decisions`, `GameProcedures`, `GameProperties`, `CardProperties`, `PileProperties`, `Skirmishes`, `ZoneManipulation` | same folder | Interfaces of default methods that `VirtualTable` implements: partial classes in all but name. `TableBase` holds the handful of accessors they are built on. |
+| `VirtualTableScenario` | `gemp-lotr-server/src/test/java/com/gempukku/lotro/framework/` | The unit-test table: two made-up players, every named card put in both decks, the shared card library, Race to Mount Doom set-up. This is the `scn` in every test. |
+| `TestConstants`, `Assertions`, `AdHocEffects` | same test folder | Canned sites, Ring-bearers, Rings and formats; zone assertions; ad hoc modifiers and effects. Test sources only. |
+| `ScenarioTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/scenario/` | The other subclass of `VirtualTable`: a table laid out from a scenario file, for tutorials and puzzles, with a person in one seat. |
+
+The consequence to keep in mind: **anything added under `virtualtable/` ships in the server and becomes a public
+method of `ScenarioTable`.** Read `${CLAUDE_SKILL_DIR}/references/changing-the-rig.md` before changing anything
+there.
+
+## How a test goes
 
 ```java
-new VirtualTableScenario(
-    cardsMap,    // HashMap<String, String> — named cards (both FP + Shadow auto-sorted by side)
-    sitesMap,    // HashMap<String, String> — "site1" through "site9" adventure deck
-    frodoVariant, // e.g. VirtualTableScenario.FOTRFrodo
-    ringVariant   // e.g. VirtualTableScenario.RulingRing or "9_1" for Binding Ring
-);
+var scn = GetScenario();                       // 1. a table, from this file's Get...Scenario() method
+var elrond = scn.GetFreepsCard("elrond");      // 2. the cards, by the names the scenario gave them
+var runner = scn.GetShadowCard("runner");
+scn.MoveCompanionsToTable(elrond);             // 3. arrange the board by cheating
+scn.StartGame();                               // 4. fellowship phase of turn 1, at site 1
+scn.MoveMinionsToTable(runner);                //    (minions go down after StartGame or SkipToSite)
+scn.SkipToPhase(Phase.MANEUVER);               // 5. get to the moment under test
+scn.FreepsUseCardAction(elrond);               // 6. act, as a player would
+assertEquals(1, scn.GetWoundsOn(elrond));      // 7. assert
+assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 ```
 
-Card IDs: official sets 1-19, errata 50-69, V-sets 101/102/103 prefix (e.g. `103_126`).
-Card naming: use descriptive variable names, NOT `card` (that's the auto-generated placeholder).
+The constructor builds two identical decks from the alias map, so both players own a copy of every card:
+`GetFreepsCard("x")` and `GetShadowCard("x")` are different physical cards. It also runs the bid (player 1 bids 1
+and goes first) and puts the opening hands back on the decks. `StartGame()` skips starting fellowships and
+mulligans and removes the bid burden, so a test starts with 0 burdens, an empty twilight pool, and only the cards
+it placed itself. Defaults when a constructor argument is left out: King-block sites, Frodo 10_121 as
+Ring-bearer, The Ruling Ring, the `multipath` format.
 
-### Canned Constants
-- `VirtualTableScenario.FOTRFrodo` — Frodo, str 3, vit 2
-- `VirtualTableScenario.RulingRing` — "1_2", str +1, optional wound-to-burden on skirmish loss
-- `VirtualTableScenario.FellowshipSites` — set 1 sites 1-9
-- `VirtualTableScenario.KingSites` — sets 7-10 sites 1-9
-- `VirtualTableScenario.ShadowsSites` — Shadows-era sites
+"Freeps" methods act for player 1 and "Shadow" methods for player 2. On player 2's turn the roles are the other
+way round: player 2 is the one moving a fellowship, so the `Shadow…` methods are then the Free Peoples player's.
 
-## Cheating vs Legal Play
-The test rig has three main uses: interfacing with Gemp (replacing the visual GUI), inspecting the internals of the game state, and manipulating the internals of the game state.  The first is concerned with "legal play", while the last is about "cheating".
+### Cheating and legal play
 
-When setting up tests, we invariably utilize cheating to quickly and clearly establish the scenario--utilizing scn.MoveCardsToSupportArea() teleports those cards into the appropriate zone and does not check for paid costs or fulfilled requirements; these are illegal plays but given that the test at hand is not specifically testing for the correctness of those costs or requirements, this doesn't erode the test integrity.
+The rig does three things: it stands in for the client (legal play), it inspects the game, and it rewrites the
+game (cheating). `MoveCompanionsToTable`, `AttachCardsTo`, `AddWoundsToChar`, `SetTwilight` and the rest of
+`ZoneManipulation` put things where you say without paying costs or checking requirements. Use them freely to
+arrange a board, and never for the thing a test is about: if a test is about an ability exerting a character, the
+ability does the exerting and the test reads the wound.
 
-In general, we try to quarantine cheating to before the scn.StartGame() call, but there may be situations where it is called for after that when used sparingly.
+Cheating bypasses rules that legal play enforces. Uniqueness is one: a second copy of a unique card cannot be
+*played* while the first is in play, but can be cheated in. Item class is another: a character can be stuffed with
+two hand weapons by `AttachCardsTo`, and will then not be offered as a bearer for a third by legal play.
 
-## Critical Gotchas
+## Running tests
 
-These are the most common sources of test failures. Read carefully.
+All of this needs Java 21 and Maven, and the working directory does not matter.
 
-### 1. Decisions are batched — no mid-decision updates
-Gemp queries available actions ONCE when a decision is presented. If you cheat a card in while a
-decision is pending, the choices do NOT retroactively update. To test play conditions becoming
-satisfied, use actual game actions (`FreepsPlayCard`, `ShadowPlayCard`) that complete the current
-decision first, then check the new state.
+```
+python3 .claude/skills/card-test-campaign/scripts/cardtest.py setup        # once per checkout: builds everything
+python3 .claude/skills/card-test-campaign/scripts/cardtest.py run 1_40     # one card: about five seconds
+python3 .claude/skills/card-test-campaign/scripts/cardtest.py run file:set01-Elven --out elven
+python3 .claude/skills/card-test-campaign/scripts/cardtest.py suite cards  # every card test: under half a minute
+```
 
-### 2. Shadow cards must be cheated in AFTER SkipToSite (when applicable)
-When utilizing SkipToSite(N) to traverse the adventure path, this procedure will result in minions being discarded before final arrival.  If you ever use SkipToSite, you must ensure that Shadow minions and their attachments are cheated shadow cards in AFTER `SkipToSite(n)`:
+`run` compiles only the files asked for, into a folder named by `--out`, so several agents can run their own cards
+at the same time. Card definitions are read from `gemp-lotr-cards/src/main/resources/` as each test starts, so an
+edited `.hjson` takes effect on the next run with no rebuild. An edit to engine or rig source needs `setup` again
+(or `mvn -q compile` in the module that changed).
+
+`mvn test` in `gemp-lotr-server` still runs everything the slow way, and is what a build runs.
+
+## Things that catch people out
+
+Each of these has been checked against the engine as it stands on this branch.
+
+**The engine asks once.** The choices in a decision are worked out when the decision is sent. Cheating a card
+onto the table while a decision is pending does not change what that decision offers. To see a card become
+playable, complete the pending decision with a real action and look at the next one.
+
+**One candidate is chosen for you; none is skipped.** When a choice has exactly as many valid candidates as it
+needs, the engine makes it without asking. When it has none, that part of the effect is skipped. So a test that
+means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
+one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
+Celeborn himself when no other Elven ally is wounded.
+
+**Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its
+costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
+no burdens to remove. To test that an effect finds nothing to do, use the action, check the cost was paid, and
+check the game is back at the phase's actions.
+
+**Exerting is not wounding.** A character with one vitality left cannot exert and so cannot pay an exertion cost,
+but can still be wounded.
+
+**Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
+player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
+Shadow player, until both pass in a row. A test of a Shadow action in those phases passes for the Free Peoples
+player first. `SkipToPhase` leaves the Free Peoples player with the decision.
+
+**No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
+A test that needs a maneuver phase needs a minion on the table.
+
+**Minions do not survive a turn.** `SkipToSite(n)` plays whole turns for both players and ends in player 1's
+fellowship phase at site n. Minions and anything attached to them are discarded on the way, so put Shadow cards
+down after `SkipToSite`, not before.
+
+**Site 9 ends the game.** A fellowship that survives the skirmishes at site 9 has won, so `SkipToSite(9)` returns
+with the game over. To test something at site 9, `SkipToSite(8)` and then pass the fellowship phase: the
+fellowship moves, and the test is in the Shadow phase at site 9.
+
+**The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
+phase arrives. Make the assertions that matter before the event that ends the game.
+
+**Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
+triggers, but it does not assign archery wounds or answer optional triggers. An archer on the table stops it, or
+kills the minion the test was about. Leave archers and cards with optional triggers out of a scenario unless they
+are the point, or put them down after skipping.
+
+**Searching a deck shows the deck first.** An effect that looks through a hidden zone shows the cards before it
+asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choose with
+`FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
+to the client.
+
+**The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
+skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
+skirmishes that are not about him.
+
+## Choosing helper cards
+
+A helper card with text of its own can change the game under a test. Read the definition of every card that goes
+into a scenario; a name is not evidence of what a card does.
+
+| Need | Card | Id | Why |
+|---|---|---|---|
+| A minion that does nothing | Goblin Patrol Troop | 1_177 | Strength 13, vitality 3, cost 6, site 4, no text at all |
+| A cheap minion | Goblin Runner | 1_178 | Strength 5, vitality 1; when played, may add (2): harmless if cheated onto the table |
+| A sturdy companion | Aragorn, Ranger of the North | 1_89 | Strength 8, vitality 4; Ranger; a maneuver ability that is only ever used on purpose |
+| A weak companion | Dwarf Guard | 1_7 | Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in |
+| An archer, when archery is the point | Legolas, Greenleaf | 1_50 | Strength 6, vitality 3; Archer, with an archery ability |
+| Damage +1, when damage is the point | Gimli, Son of Glóin | 1_13 | Strength 6, vitality 3; Damage +1, with a skirmish ability |
+
+Prefer cards from the same set and block as the card under test, and prefer a card with no text over one whose
+text "shouldn't matter".
+
+## Race to Mount Doom
+
+Meta-site modifiers are passed to the constructor by blueprint id and created by the engine during set-up; they
+are never cheated in. The modifier card is then `scn.GetFreepsCard("mod")` or `scn.GetShadowCard("mod")`.
+
 ```java
-scn.StartGame();
-scn.SkipToSite(7);
-scn.MoveMinionsToTable(runner);        // AFTER SkipToSite
-scn.AttachCardsTo(runner, paleBlade);  // AFTER SkipToSite
+new VirtualTableScenario(cards, sites, frodo, ring, "91_3", null);      // player 1 has the modifier
+new VirtualTableScenario(cards, sites, frodo, ring, null, "91_3");      // player 2 has it
+new VirtualTableScenario(cards, sites, frodo, ring, "91_18", null,      // a modifier that changes the bid
+    scn -> { scn.FreepsDecided("6"); scn.ShadowDecided("0"); scn.FreepsDecided("0"); });
 ```
 
-However if you do not utilize SkipToSite, you may disregard this point.
+A modifier that reads the same for both sides gets a `GetFreepsScenario()` and a `GetShadowScenario()` and is
+tested from each.
 
-### 3. Item class restriction
-One item per class per bearer (one hand weapon, one pipe, etc.). Cheating via `AttachCardsTo`
-bypasses such play restrictions, but the bearer becomes ineligible for additional items of the same
-class through normal play. If you put a Pipe on Frodo, he can't be targeted by another Pipe's
-play action (but you could "stuff" him with several pipes via cheating).
+## When the rig cannot do what a test needs
 
-### 4. SkipToSite swaps player roles
-Each site traversal swaps FP/Shadow roles. After an even number of traversals, roles return to
-normal. This is handled internally but can cause confusion with assertions.
-
-### 5. Site 9 has no Fellowship phase
-At site 9, the game skips straight to Shadow phase. "You either win or you die." Check Maneuver
-actions (not Fellowship) for testing card abilities at site 9.
-
-### 6. No minions = skip to Regroup
-If no minions are spottable (including if all are hindered), maneuver, archery, and assignment and skirmish phases are
-skipped entirely.
-
-### 7. Abilities and triggers with 0 or 1 valid targets auto-resolve
-In situations where there is only 1 valid target for an action, that target will be selected automatically for the action if it is required.  If there are 0 valid targets for an action, then that action will be skipped entirely (optional or required).
-
-This means that if you want to explicitly confirm the existence or nonexistence of a valid target in a prompt, you must provide 2 or more targets lest the system auto-select the only option for you.
-
-### 8. Exert is not wound
-Exerting requires the character to not be exhausted (wounds < vitality - 1). Wounding has no
-such restriction. A character at 1 remaining vitality can be wounded but not exerted.
-
-### 9. Uniqueness is deck-building only
-Not enforced in tests. You can cheat duplicate uniques onto the table.
-
-### 10. Game ends conditions
-When Frodo dies or is corrupted (burdens >= resistance), the game ends immediately. This can
-prevent reaching later phases (e.g., regroup after a lethal skirmish at site 9). Plan test
-assertions to occur BEFORE the game-ending event.
-
-### 11. Action Procedure
-The Fellowship phase is Free-Peoples-player-only, while the Shadow phase is Shadow-player-only, but all other phases have a back-and-forth procedure where the Free Peoples player is offered the chance to perform actions, then the Shadow player, which procedes back and forth like this until both players pass.
-
-This means that if you are testing Shadow actions you will likely need to remember to pass the Free Peoples action at the start of a given phase.  If using SkipToPhase this will be handled for you.
-
-## Quick API Reference
-
-For full method listings with all overloads, see `${CLAUDE_SKILL_DIR}/references/vts-api.md`.
-
-### Card Retrieval
-```java
-scn.GetFreepsCard("name")   // FP card by HashMap key
-scn.GetShadowCard("name")   // Shadow card by HashMap key
-scn.GetRingBearer()          // The Ring-bearer (Frodo)
-scn.GetRing()                // The One Ring card
-scn.GetFreepsSite(n)         // Site n from FP adventure deck
-```
-
-### Zone Manipulation (Pre-Game Setup)
-```java
-scn.MoveCompanionsToTable(card1, card2, ...)
-scn.MoveMinionsToTable(card1, card2, ...)
-scn.AttachCardsTo(bearer, card1, card2, ...)
-scn.MoveCardsToSupportArea(card1, card2, ...)
-scn.MoveCardsToHand(card1, card2, ...)
-scn.MoveCardsToDiscard(card1, card2, ...)
-```
-
-### Game State Queries
-```java
-scn.GetTwilight()                    // Current twilight pool
-scn.SetTwilight(amount)              // Override twilight
-scn.GetStrength(card)                // Current strength (with modifiers)
-scn.GetWoundsOn(card)                // Wound count
-scn.GetBurdens()                     // Burden count
-scn.GetCurrentSiteNumber()           // Current site (1-9)
-scn.GetCurrentPhase()                // Current phase enum
-scn.HasKeyword(card, Keyword.X)      // Boolean keyword check
-```
-
-### Actions and Decisions
-```java
-scn.FreepsActionAvailable(card)          // "Use [card name]" available?
-scn.FreepsPlayAvailable(card)            // "Play [card name]" available?
-scn.FreepsPlayCard(card)                 // Play from hand
-scn.FreepsUseCardAction(card)            // Activate an ability
-scn.FreepsHasOptionalTriggerAvailable()  // Optional trigger pending?
-scn.FreepsAcceptOptionalTrigger()        // Accept
-scn.FreepsDeclineOptionalTrigger()       // Decline
-```
-
-### Card Choice Validation
-```java
-scn.FreepsHasCardChoiceAvailable(card)              // Card is selectable
-scn.FreepsHasCardChoicesAvailable(card1, card2)      // ALL are selectable
-scn.FreepsHasCardChoicesNotAvailable(card1, card2)   // NONE are selectable
-scn.FreepsChooseCard(card)                           // Select a card
-```
-
-### Phase Flow
-```java
-scn.SkipToPhase(Phase.MANEUVER)         // Auto-pass to target phase
-scn.PassCurrentPhaseActions()           // Both players pass
-scn.FreepsPassCurrentPhaseAction()      // Just FP passes
-scn.ShadowPassCurrentPhaseAction()      // Just Shadow passes
-scn.SkipToSite(n)                       // Traverse to site n
-scn.FreepsChooseToMove()                // Move again at regroup
-scn.FreepsChooseToStay()                // Stay at current site
-```
-
-### Skirmish Flow Pattern
-```java
-scn.PassAssignmentActions();
-scn.FreepsAssignAndResolve(companion, minion);
-scn.PassSkirmishActions();
-scn.FreepsDeclineOptionalTrigger();   // Ruling Ring
-```
-
-### Decision Bookending
-```java
-// After actions complete, assert we're back at the expected phase:
-scn.AwaitingFellowshipPhaseActions()
-scn.AwaitingShadowPhaseActions()
-scn.AwaitingFreepsManeuverPhaseActions()
-// ... etc for all phases
-```
-
-### Assertions
-```java
-assertEquals(expected, actual)
-assertTrue(condition)
-assertFalse(condition)
-assertAttachedTo(card, bearer)
-assertInZone(Zone.HAND, card)
-assertInDiscard(card)
-assertInHand(card)
-assertInPlay(card)
-```
-
-## Commonly Used Test Cards
-
-| Card | ID | Stats | Notes |
-|------|----|-------|-------|
-| FOTR Frodo | (auto) | str 3, vit 2 | Ring-bearer |
-| Ruling Ring | 1_2 | str +1 | Optional wound-to-burden trigger |
-| Binding Ring | 9_1 | str +1, vit +1 | 3 effects all check ringIsActive |
-| Goblin Runner | 1_178 | str 5, vit 1 | Basic shadow minion |
-| Aragorn, Ranger | 1_89 | str 8, vit 4 | Basic FP companion |
-| Uruk Savage | 1_151 | str 5, vit 3, damage+1 | Uruk-hai for Reach cost |
-| Old Toby | 1_305 | Pipeweed, support area | On-play trigger (decline with FreepsDeclineOptionalTrigger) |
-
-## RTMD (Race to Mount Doom) Meta-Site Testing
-
-For full RTMD constructor overloads, see `${CLAUDE_SKILL_DIR}/references/vts-api.md`.
-
-### Constructor
-Meta-site modifiers are passed as blueprint IDs to VirtualTableScenario:
-```java
-new VirtualTableScenario(cards, sites, frodo, ring, "91_3", null);      // Freeps has mod
-new VirtualTableScenario(cards, sites, frodo, ring, null, "91_3");      // Shadow has mod
-```
-
-Do NOT manually cheat RTMD modifiers via `MoveCardsToSupportArea`. They are spawned by
-the game engine during init.
-
-### Bid Handler Lambda
-For modifiers that affect bidding:
-```java
-new VirtualTableScenario(cards, sites, frodo, ring, "91_18", null,
-    scn -> {
-        scn.FreepsDecided("6");
-        scn.ShadowDecided("0");
-        scn.FreepsDecided("0");
-    }
-);
-```
-
-### Two-Scenario Pattern
-```java
-protected VirtualTableScenario GetFreepsScenario() {
-    return new VirtualTableScenario(cards, sites, frodo, ring, "91_X", null);
-}
-protected VirtualTableScenario GetShadowScenario() {
-    return new VirtualTableScenario(cards, sites, frodo, ring, null, "91_X");
-}
-```
-
-## Creating New Game Modifiers (ModifierEffect Pipeline)
-
-When a card needs to modify a normally-static game value:
-
-1. **`ModifierEffect` enum** — Add new entry
-2. **`Modifier` interface** — Add new method with default
-3. **`AbstractModifier`** — Override with default return
-4. **`DelegateModifier`** — Delegate to wrapped modifier
-5. **New modifier class** — Stores evaluator, returns result
-6. **`ModifiersQuerying` interface** — Add query method
-7. **`ModifiersLogic`** — Implement query: iterate modifiers, sum results
-8. **Game process** — Replace hard-coded value with modifier query
-9. **HJSON bridge class** — Reads HJSON fields, creates modifier instance
-10. **`ModifierSourceFactory`** — Register with lowercase key
-
-## Card Verification Discipline
-
-**ALWAYS verify card properties before using them in tests.** Do not assume a card has a particular
-ability, keyword, or card type based on its name. Read the actual HJSON definition. Common pitfalls:
-- "Blade Tip" is a **condition**, not a possession
-- Not all weapons grant damage bonuses
-- Not all named characters have maneuver/archery/regroup abilities
-- A card's phase actions may differ between errata versions
-
-Every card in a test deck should serve a specific, verified purpose.
+Then the rig is what changes, not the test. A card's test class has `Get...Scenario()` methods and tests and
+nothing else: no helper methods, no reaching into `scn.game()` or `scn.gameState()`, no raw decision strings. If
+a check cannot be written with the methods in `vts-api.md`, write down what was needed and stop work on that card
+(the card-test-campaign skill says where the request goes). A helper buried in one card's file is a capability
+the next card's author will not find and will write again differently.

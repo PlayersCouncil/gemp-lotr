@@ -1,581 +1,479 @@
-# VirtualTableScenario (VTS) API Reference
-
-## Test Lifecycle
-
-Every Gemp unit test follows this flow:
-
-```
-1. Define card aliases      →  HashMap<String, String> cards
-2. Construct VTS            →  new VirtualTableScenario(cards, sites, frodo, ring)
-3. Retrieve card references →  scn.GetFreepsCard("alias"), scn.GetShadowCard("alias")
-4. Cheat cards into position →  scn.MoveCompanionsToTable(card), scn.MoveCardsToHand(card)
-5. Start the game           →  scn.StartGame()
-6. Advance to relevant phase →  scn.SkipToPhase(Phase.MANEUVER)
-7. Perform actions & choices →  scn.FreepsPlayCard(card), scn.FreepsChooseCard(card)
-8. Assert results           →  assertEquals(expected, scn.GetStrength(card))
-```
-
-Steps 3-4 happen before `StartGame()`. The constructor handles bidding and deck setup automatically. `StartGame()` skips starting fellowship selection, mulligans, and removes the bid burden. After `StartGame()`, you're in the Fellowship phase of turn 1.
-
-**Critical:** Cheating (step 4) places cards without paying costs or checking legality. This is intentional — tests should only exercise the specific mechanic under test, not re-prove that card deployment works. However, Shadow minions must be cheated AFTER `SkipToSite()` if you use it, because site traversal discards minions.
-
----
-
-## Setup
-
-### Constants
-
-```java
-// Player IDs
-String P1 = "Free Peoples Player"
-String P2 = "Shadow Player"
-
-// Canned site decks (benign sites with no passive effects)
-HashMap FellowshipSites   // Set 1 sites 1-9
-HashMap TowersSites       // Set 4 sites 1-9
-HashMap KingSites         // Sets 7-10 sites 1-9 (DEFAULT if null)
-HashMap ShadowsSites      // Sets 11-18 sites 1-9
-
-// Ring-bearers
-String FOTRFrodo  = "1_290"   // str 3, vit 4, res 10. Fellowship: exert Frodo-signet companion to heal
-String MDFrodo    = "10_121"  // DEFAULT if null
-String GimliRB    = "9_4"     // str 6, vit 3, res 5, damage +1
-String GaladrielRB = "9_14"  // str 3, vit 3, res 4
-String SmeagolRB  = "9_30"   // str 3, vit 4, res 8. Moves kill unbound companions
-String SamRB      = "13_156" // str 3, vit 4, res 5
-
-// One Rings
-String RulingRing       = "1_2"   // +1 str. Response: wound→burden in skirmish (DEFAULT)
-String IsildursBaneRing = "1_1"   // +1 str, +1 vit. Response: wound→2 burdens
-String ATARRing         = "4_1"   // +2 vit. Skirmish: add burden to wear
-String GreatRing        = "19_1"  // Maneuver: wear. Skirmish: burden for +3 str
-
-// Formats
-String Fellowship = "fotr_block"  // Sets 1-3, RB skirmish cancelable
-String Multipath  = "multipath"   // Sets 1-10 (DEFAULT)
-String PCMovie    = "pc_movie"    // Sets 1-10 + V1/V2
-String Shadows    = "expanded"    // Sets 1-19, Shadows path
-```
-
-### Constructors
-
-```java
-// Most common — cards + sites + ring-bearer + ring
-new VirtualTableScenario(cards, sites, frodo, ring)
-
-// With RTMD meta-sites (pass null for whichever side doesn't have one)
-new VirtualTableScenario(cards, sites, frodo, ring, freepsMetaSiteId, shadowMetaSiteId)
-
-// With custom bid handler (for meta-sites that alter bidding)
-new VirtualTableScenario(cards, sites, frodo, ring, freepsMetaSiteId, shadowMetaSiteId, bidHandler)
-
-// With format override
-new VirtualTableScenario(cards, sites, frodo, ring, format)
-
-// Minimal — just cards, all other params use defaults
-new VirtualTableScenario(cards)
-```
-
-Meta-site cards are auto-registered during construction and accessible as `scn.GetFreepsCard("mod")` or `scn.GetShadowCard("mod")`.
-
-### Card Retrieval
-
-```java
-scn.GetFreepsCard("alias")   // By test alias — throws if not found
-scn.GetShadowCard("alias")
-scn.GetRingBearer()           // The FP Ring-bearer
-scn.GetShadowRingBearer()
-scn.GetRing()                 // The One Ring (FP)
-```
-
-Sites are retrieved differently:
-```java
-scn.GetFreepsSite(3)           // Site 3 from FP adventure deck (by number)
-scn.GetShadowSite(3)
-scn.GetCurrentSite()           // The site the fellowship is currently at
-scn.GetSite(3)                 // Site 3 from the adventure path (already placed)
-```
-
-### Game Start
-
-```java
-scn.StartGame()                        // Standard: skip fellowships, reset hands, remove bid burden
-scn.StartGame(false)                   // Don't reset drawn hands
-scn.StartGame(true, false)             // Reset hands but DON'T skip starting fellowship selection
-scn.StartGame(site1Card)               // On Shadows paths only, prompt the Shadow player to play the given site 1
-```
-
-After `StartGame()`, you are in the Fellowship phase. Hands contain only what you explicitly placed via `MoveCardsToHand()` before calling `StartGame()`.
-
----
-
-## Zone Manipulation (Cheating)
-
-All of these bypass costs, requirements, and legality. Call before `StartGame()` unless you have a specific reason not to.
-
-### Characters
-```java
-scn.MoveCompanionsToTable(card1, card2, ...)    // FP companions → in play
-scn.MoveMinionsToTable(card1, card2, ...)       // Shadow minions → in play
-// String-alias variants:
-scn.MoveCompanionsToTable("aragorn", "gimli")
-scn.MoveMinionsToTable("runner", "troll")
-```
-
-### Attachments & Stacking
-```java
-scn.AttachCardsTo(bearer, card1, card2, ...)    // Attach to a character
-scn.StackCardsOn(target, card1, card2, ...)     // Stack on a card
-```
-
-### Hand
-```java
-scn.MoveCardsToHand(card1, card2, ...)
-scn.MoveCardsToFreepsHand("alias1", "alias2")   // By alias, if you will not reference them again
-scn.MoveCardsToShadowHand("alias1", "alias2")
-```
-
-### Support Area
-```java
-scn.MoveCardsToSupportArea(card1, card2, ...)
-scn.MoveFreepsCardsToSupportArea("alias")
-scn.MoveShadowCardsToSupportArea("alias")
-```
-
-### Discard & Dead
-```java
-scn.MoveCardsToDiscard(card1, card2, ...)
-scn.MoveCardsToFreepsDiscard("alias")
-scn.MoveCardsToShadowDiscard("alias")
-scn.MoveCardsToDeadPile(card1, ...)
-```
-
-### Draw Deck
-```java
-scn.MoveCardsToTopOfDeck(card1, ...)
-scn.MoveCardsToBottomOfDeck(card1, ...)
-scn.MoveCardsToTopOfFreepsDeck("alias")
-scn.MoveCardsToTopOfShadowDeck("alias")
-scn.ShuffleCardsIntoFreepsDeck(card1, ...)
-scn.ShuffleCardsIntoShadowDeck(card1, ...)
-scn.ShuffleFreepsDeck()
-scn.ShuffleShadowDeck()
-```
-
-### Drawing Cards
-```java
-scn.FreepsDrawCards(3)    // Draw 3 cards
-scn.ShadowDrawCards(1)
-```
-
-### Other
-```java
-scn.MoveCardToAdventurePath(card)       // Place as next site on adventure path
-scn.MoveCardsToAdventureDeck(card, ...) // Back to adventure deck
-scn.MoveCardToZone(card, Zone.X)        // Raw teleport to any zone
-```
-
----
-
-## Game Flow
-
-### Phase Order
-```
-Fellowship → Shadow → Maneuver → Archery → Assignment → Skirmish(s) → Regroup
-```
-Fellowship is FP-only. Shadow is Shadow-only. All other phases alternate FP/Shadow until both pass.
-
-### Skipping to a Phase
-```java
-scn.SkipToPhase(Phase.MANEUVER)   // Auto-pass through all earlier phases
-scn.SkipToPhase(Phase.ARCHERY)    // Skipping past this point WILL FAIL if an archer is on the table (archery wound assignment blocks), so avoid using archers unless needed
-scn.SkipToPhase(Phase.ASSIGNMENT)
-scn.SkipToPhase(Phase.REGROUP)
-```
-`SkipToPhase` handles Fellowship→move→Shadow→etc automatically. It tries up to 20 pass rounds. Required triggers are auto-accepted; optional triggers or reacts will cause it to fail — place problematic cards after skipping.
-
-### Skipping to a Site
-```java
-scn.SkipToSite(5)   // Traverse from current site to site 5
-```
-Each traversal swaps FP/Shadow roles internally. After even traversals, roles return to normal. **Cheat Shadow minions AFTER this call**, not before — traversal discards them.
-
-### Phase Passing
-```java
-// Named phase passes (all aliases for PassCurrentPhaseActions):
-scn.PassManeuverActions()
-scn.PassArcheryActions()
-scn.PassAssignmentActions()
-scn.PassSkirmishActions()       // After this, skirmish resolves and wounds are applied
-scn.PassRegroupActions()
-
-// Single-player passes:
-scn.FreepsPassCurrentPhaseAction()   // Only FP passes
-scn.ShadowPassCurrentPhaseAction()   // Only Shadow passes
-
-// Both pass:
-scn.PassCurrentPhaseActions()   // Current decider first, then other
-```
-
-### Movement Decisions
-```java
-scn.FreepsChooseToMove()   // Move again (at regroup movement decision)
-scn.FreepsChooseToStay()   // Stay at current site
-```
-
-### Convenience Shortcuts
-```java
-scn.SkipToAssignments()        // SkipToPhase(ASSIGNMENT) + PassCurrentPhaseActions
-scn.SkipToArcheryWounds()      // SkipToPhase(ARCHERY) + PassCurrentPhaseActions
-scn.SkipToMovementDecision()   // All the way to regroup movement prompt
-scn.SkipToShadowAssignments()  // SkipToAssignments + FreepsDeclineAssignments
-scn.SkipPastAllAssignments()   // Skip all assignment sub-phases
-```
-
----
-
-## Playing & Using Cards
-
-### Availability Checks
-```java
-scn.FreepsPlayAvailable(card)     // "Play [name]" in current actions?
-scn.ShadowPlayAvailable(card)
-scn.FreepsActionAvailable(card)   // "Use [name]" in current actions?
-scn.ShadowActionAvailable(card)
-scn.FreepsActionAvailable("text") // Any action containing arbitrary text?
-scn.ShadowActionAvailable("text")
-scn.FreepsTransferAvailable(card)
-scn.FreepsAnyActionsAvailable()   // Any action at all?
-scn.ShadowAnyActionsAvailable()
-```
-
-### Performing Actions
-```java
-scn.FreepsPlayCard(card)          // Play card from hand
-scn.ShadowPlayCard(card)
-scn.FreepsUseCardAction(card)     // Activate an ability ("Use")
-scn.ShadowUseCardAction(card)
-scn.FreepsTransferCard(card)      // Transfer a possession
-scn.FreepsDiscardToHeal(card)     // Discard unique from hand to heal in-play copy
-```
-
----
-
-## Decisions & Choices
-
-### Optional Triggers
-```java
-scn.FreepsHasOptionalTriggerAvailable()          // An optional trigger is pending?
-scn.FreepsHasOptionalTriggerAvailable("text")    // Optional trigger with specific text?
-scn.ShadowHasOptionalTriggerAvailable()
-
-scn.FreepsAcceptOptionalTrigger()     // Accept (answer "0")
-scn.FreepsDeclineOptionalTrigger()    // Decline (answer "")
-scn.ShadowAcceptOptionalTrigger()
-scn.ShadowDeclineOptionalTrigger()
-```
-Note: `FreepsDeclineOptionalTrigger()` is frequently used to decline the Ruling Ring's wound-to-burden after a skirmish loss.
-
-### Choosing Cards
-```java
-scn.FreepsChooseCard(card)         // Select one card from choices
-scn.FreepsChooseCards(card1, card2) // Select multiple
-scn.ShadowChooseCard(card)
-scn.FreepsChooseAnyCard()          // Pick the first available card
-
-// Verify card is/isn't in choices:
-scn.FreepsHasCardChoiceAvailable(card)          // true if selectable
-scn.FreepsHasCardChoicesAvailable(card1, card2) // ALL must be available
-scn.FreepsHasCardChoicesNotAvailable(card1, card2) // NONE must be available
-scn.ShadowHasCardChoiceAvailable(card)
-// etc.
-```
-
-### General Choices
-```java
-scn.FreepsChoose("2")       // Choose by text/number (for X values, multiple choice, etc.)
-scn.ShadowChoose("option")
-scn.FreepsChooseYes()
-scn.FreepsChooseNo()
-scn.ShadowChooseYes()
-scn.ShadowChooseNo()
-```
-
-### Choosing Among Triggers
-When multiple cards trigger simultaneously:
-```java
-scn.FreepsChooseOptionalTrigger(card)   // Pick which card's trigger to resolve
-scn.ShadowChooseOptionalTrigger(card)
-```
-
-### Numeric Bounds on Current Choice
-```java
-scn.FreepsGetChoiceMin()   // Minimum acceptable answer
-scn.FreepsGetChoiceMax()   // Maximum acceptable answer
-```
-
-### Raw Decision Answers
-```java
-scn.FreepsDecided("answer")   // Send raw answer string
-scn.ShadowDecided("answer")
-scn.FreepsDecided(0)           // Send integer answer
-```
-
-### Decision Inspection
-```java
-scn.FreepsDecisionAvailable("text")   // Current decision contains text?
-scn.ShadowDecisionAvailable("text")
-scn.FreepsAnyDecisionsAvailable()     // Any decision at all?
-
-// Phase-specific checks:
-scn.AwaitingFellowshipPhaseActions()
-scn.AwaitingShadowPhaseActions()
-scn.AwaitingFreepsManeuverPhaseActions()
-// ... etc for all phases
-```
-
----
-
-## Querying Game State
-
-### Twilight Pool
-```java
-scn.GetTwilight()          // Current pool amount
-scn.SetTwilight(5)         // Override pool (cheating)
-```
-
-### Burdens & Threats
-```java
-scn.GetBurdens()
-scn.AddBurdens(2)
-scn.RemoveBurdens(1)
-
-scn.GetThreats()
-scn.GetThreatLimit()
-scn.AddThreats(1)
-scn.RemoveThreats(1)
-```
-
-### Phase & Turn
-```java
-scn.GetCurrentPhase()      // Phase enum
-scn.GetCurrentSiteNumber() // 1-9
-scn.GetMoveCount()         // Times moved this turn
-scn.GetMoveLimit()         // Current move limit (default 2)
-scn.GameIsFinished()       // Game over?
-```
-
-### Players
-```java
-scn.GetCurrentPlayer()     // Whose turn
-scn.GetOffPlayer()         // Not their turn
-scn.GetDecidingPlayer()    // Who has an active decision
-```
-
-### Initiative & Archery
-```java
-scn.FreepsHasInitiative()
-scn.ShadowHasInitiative()
-scn.GetFreepsArcheryTotal()
-scn.GetShadowArcheryTotal()
-```
-
-### Ring State
-```java
-scn.RBWearingOneRing()     // Ring-bearer wearing the ring?
-```
-
-### Culture Count
-```java
-scn.GetFreepsCultureCount()   // Distinct spottable FP cultures
-scn.GetShadowCultureCount()
-```
-
----
-
-## Querying Card State
-
-All of these reflect current in-game modifiers, not just printed stats.
-
-```java
-scn.GetStrength(card)
-scn.GetVitality(card)
-scn.GetResistance(card)
-scn.GetTwilightCost(card)
-scn.GetOverwhelmMultiplier(card)
-scn.GetMinionSiteNumber(card)
-```
-
-### Wounds
-```java
-scn.GetWoundsOn(card)
-scn.FreepsGetWoundsOn("alias")     // By card alias
-scn.IsExhausted(card)              // Vitality == 1
-scn.AddWoundsToChar(card, 2)       // Cheating
-scn.RemoveWoundsFromChar(card, 1)  // Cheating
-```
-
-### Keywords & Properties
-```java
-scn.HasKeyword(card, Keyword.DAMAGE)
-scn.GetKeywordCount(card, Keyword.DAMAGE)   // For damage+X, archer+X, etc.
-scn.HasTimeword(card, Timeword.FELLOWSHIP)
-scn.IsType(card, CardType.COMPANION)
-scn.IsRace(card, Race.ELF)
-scn.IsHindered(card)
-scn.HinderCard(card)       // Cheating
-scn.RestoreCard(card)      // Cheating
-```
-
-### Tokens
-```java
-scn.GetCultureTokensOn(card)
-scn.AddTokensToCard(card, 2)
-scn.RemoveTokensFromCard(card, 1)
-```
-
-### Attachments & Control
-```java
-scn.GetAttachedCards(card)    // List of cards attached to this card
-scn.GetStackedCards(card)     // List of cards stacked on this card
-scn.IsSiteControlled(card)
-scn.FreepsControls(card)
-scn.ShadowControls(card)
-```
-
----
-
-## Skirmishes
-
-### Standard Skirmish Flow
-```java
-// 1. Get to assignment phase
-scn.SkipToPhase(Phase.ASSIGNMENT);
-scn.PassAssignmentActions();
-
-// 2. Assign and resolve
-scn.FreepsAssignAndResolve(companion, minion);
-// This does: assign companion↔minion, decline Shadow assignments, choose skirmish to resolve
-
-// 3. Skirmish actions
-scn.PassSkirmishActions();  // Both pass → skirmish resolves, wounds applied
-
-// 4. Handle Ruling Ring trigger (if applicable)
-scn.FreepsDeclineOptionalTrigger();  // Decline wound-to-burden
-```
-
-### Assignment (manual)
-```java
-scn.FreepsAssignToMinions(comp, minion1, minion2)   // Assign without auto-resolve
-scn.ShadowAssignToMinions(comp, minion)
-scn.FreepsDeclineAssignments()   // Pass assignment opportunity
-scn.ShadowDeclineAssignments()
-
-// Multi-group: each array is [companion, minion1, ...]
-scn.FreepsAssignToMinions(new PhysicalCardImpl[]{comp1, min1}, new PhysicalCardImpl[]{comp2, min2})
-
-scn.FreepsResolveSkirmish(companion)   // Choose which skirmish to resolve next
-```
-
-### Skirmish State Queries
-```java
-scn.IsCharAssigned(card)
-scn.IsCharAssignedAgainst(card1, card2)
-scn.IsCharSkirmishing(card)
-scn.IsCharSkirmishingAgainst(card1, card2)
-scn.GetActiveSkirmish()
-
-scn.FreepsCanAssign(card)           // Normal FP assignment rules
-scn.ShadowCanAssign(card)
-scn.CanBeAssignedViaAction(card)    // Either side, via action
-```
-
----
+# The test rig's API
+
+<!-- GENERATED by .claude/skills/card-test-campaign/scripts/gen_vts_api.py from the rig's source.
+     Do not edit by hand: change the Javadoc in the source and run the script again. -->
+
+Every method a test can call on a `VirtualTableScenario` (`scn`), grouped by the source file that declares
+it.  Files under `virtualtable/` are in the server's main sources and are shared with the scenario and
+tutorial system; files under `framework/` are in the test sources.  A `Freeps… · Shadow…` entry is two
+methods that do the same thing for each player.  An entry with no description has no Javadoc in the source.
+
+## Setting up
+
+`framework/VirtualTableScenario.java` (test sources)
+
+The unit test rig: a virtual table with two made-up players, where every card the tester names is put in both players' decks so that either side can reach it.  All of the table's actual machinery lives in VirtualTable and the interfaces it implements (see com.gempukku.lotro.virtualtable); what is here is only what makes it a test rig.
+
+- `new VirtualTableScenario(HashMap<String, String> cardIDs)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String freepsMetaSiteId, String shadowMetaSiteId)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)`
+- `static LotroCardBlueprint FindCard(String bpid)`
+- `static LotroFormat FindFormat(String code)`
+- `static PackBox FindProduct(String name)`
+- `ActionContext FreepsFilterContext()  ·  ShadowFilterContext`
+- `String P1()`
+- `String P2()`
+- `void Verify(boolean condition, String message)` — In a test, a failed sanity check inside the rig is a test failure like any other.
+- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId)` — Starts up a game of LOTR-TCG with the given decks and format.
+- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.
+- `void UseTestBoosters()` — When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic booster pack results, which requires that we override the default pack opener with a custom one.
+
+## The table itself
+
+`virtualtable/VirtualTable.java` (main sources)
+
+A game of LOTR-TCG with a headless client attached to both seats.  Everything here is the part of that which does not care who is using it: holding the game, answering its decisions, walking it through the opening procedure, and looking cards up by the human-readable names they were given. Who the two players are, which cards go in whose deck, and how those cards get their names is left to the subclass.  The unit test rig (VirtualTableScenario, in the test sources) is one such subclass.
+
+- `DefaultLotroGame game()`
+- `GameState gameState()`
+- `DefaultUserFeedback userFeedback()`
+- `PhysicalCardImpl GetFreepsCard(String cardName)` — Returns a card from the Free Peoples player's deck by its human-readable alias.
+- `PhysicalCardImpl GetShadowCard(String cardName)` — Returns a card from the Shadow player's deck by its human-readable alias.
+- `PhysicalCardImpl GetCard(String player, String cardName)` — Returns a given player's card by its human-readable alias.
+- `PhysicalCardImpl GetFreepsCardByID(String id)`
+- `PhysicalCardImpl GetFreepsCardByID(int id)`
+- `PhysicalCardImpl GetShadowCardByID(String id)`
+- `PhysicalCardImpl GetShadowCardByID(int id)`
+- `PhysicalCardImpl GetCardByID(String player, int id)`
+- `void StartCardCapture()` — Registers a callback on the game state that captures any cards created dynamically mid-game (e.g. from booster pack opening).
+- `void StopCardCapture()` — Stops capturing dynamically created cards and clears the callback.
+- `List<PhysicalCardImpl> GetCreatedCards()` — Returns all cards captured since the last `StartCardCapture()` call.
+- `PhysicalCardImpl GetLastCreatedCard()` — Returns the most recently captured card, or null if none were captured.
+- `void BidAndSeatPlayers()` — Handles the bidding and seating placement of both players, then removes the burdens that were bid for consistency.
+- `void StartGame()` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
+- `void StartGame(PhysicalCardImpl site1)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
+- `void StartGame(boolean resetHand)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
+- `void StartGame(boolean resetHand, boolean skipStartingFellowships)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
+- `void SkipStartingFellowships()` — When both players are asked to select a starting fellowship, this can be used to skip past the prompt and choose 0 companions to go down (since you can cheat in any companions you may need anyway).
+- `void SkipMulligans()` — When both players are prompted to mulligan their hand, this can be used to choose "no" for both players.
+- `void PlayerDecided(String player, String answer)` — Low-level function used by the rest of the virtual table to return a decision result back to the server.
+
+## Constants
+
+`framework/TestConstants.java` (test sources)
+
+This interface holds various convenience constants frequently referenced elsewhere
+
+- `String P1 = "Free Peoples Player"` — The first player, which the vast majority of the time is the Free Peoples player by convention.
+- `String P2 = "Shadow Player"` — The second player, which the vast majority of the time is the Shadow player by convention
+- `double epsilon = 0.001` — A constant used for performing floating-point numeric comparisons in test assertions.
+- `HashMap<String, String> FellowshipSites = sites 1 to 9` — A set of benign default sites from Fellowship Block.
+- `HashMap<String, String> TowersSites = sites 1 to 9` — A set of benign default sites from Towers Block.
+- `HashMap<String, String> KingSites = sites 1 to 9` — A set of benign default sites from King Block.
+- `HashMap<String, String> ShadowsSites = sites 1 to 9` — A set of benign default sites from Shadows Block.
+- `String FOTRFrodo = "1_290"` — Frodo, Son of Drogo.
+- `String MDFrodo = "10_121"`
+- `String GimliRB = "9_4"` — Gimli, Bearer of Grudges 6 strength 3 vitality 4 resistance Damage +1.
+- `String GaladrielRB = "9_14"` — Galadriel, Bearer of Wisdom 3 strength 3 vitality 4 resistance While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
+- `String SmeagolRB = "9_30"` — Smeagol, Bearer of Great Secrets 3 strength 4 vitality 8 resistance Ring-bound.
+- `String SamRB = "13_156"` — Sam, Bearer of Great Need 3 strength 4 vitality 5 resistance Ring-bound.
+- `String RulingRing = "1_2"` — The One Ring, The Ruling Ring +1 strength Response: If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.
+- `String IsildursBaneRing = "1_1"` — The One Ring, Isildur's Bane +1 strength +1 vitality Response: If bearer is about to take a wound, he wears The One Ring until the regroup phase.
+- `String ATARRing = "4_1"` — The One Ring, Answer To All Riddles +2 vitality While wearing The One Ring, the Ring-bearer is strength +2, and each time he is about to take a wound in a skirmish, add a burden instead.
+- `String GreatRing = "19_1"` — The One Ring, The Great Ring While wearing The One Ring, each time bearer is about to take a wound, add a burden instead.
+- `String Fellowship = "fotr_block"` — Fellowship Block format.
+- `String Multipath = "multipath"` — Pre-Shadows Multipath format.
+- `String PCMovie = "pc_movie"` — PC-Movie format.
+- `String Shadows = "expanded"` — Expanded format.
+
+## Putting cards where they need to be (cheating)
+
+`virtualtable/ZoneManipulation.java` (main sources)
+
+While the ability to programmatically execute games is a boon to testing efforts, the real strength of this test rig is in bald-faced cheating to arrange the table however we like without needing to abide by all the costs, requirements, and game rules that slow things down.  Use these functions to stack the table just the way you want, and then your tests will only be a handful of true steps and assertions. Note that these functions can be called at any time and they will be executed by Gemp, even if it is currently awaiting a decision.  This can be used and abused by a clever tester, but remember that if you were hoping to utilize the action on a card, that card must be in the proper zone at the time that Gemp checks for pending decisions, meaning you may need to perform some other action (or a pass) to get Gemp to realize that you have moved a card.
+
+- `void RemoveCardZone(PhysicalCardImpl card)` — Removes a physical card's current zone.
+- `void MoveCardToZone(PhysicalCardImpl card, Zone zone)` — Manually moves a given card to a given zone.
+- `void MoveCompanionsToTable(String...names)`
+- `void MoveCompanionsToTable(PhysicalCardImpl...cards)`
+- `void MoveMinionsToTable(String...names)`
+- `void MoveMinionsToTable(PhysicalCardImpl...cards)`
+- `void MoveFreepsCardsToSupportArea(String...names)`
+- `void MoveShadowCardsToSupportArea(String...names)`
+- `void MoveCardsToSupportArea(PhysicalCardImpl...cards)`
+- `void MoveCardsToTopOfFreepsDeck(String...names)`
+- `void MoveCardsToTopOfShadowDeck(String...names)`
+- `void MoveCardsToTopOfDeck(PhysicalCardImpl...cards)`
+- `void MoveCardsToBottomOfFreepsDeck(String...names)`
+- `void MoveCardsToBottomOfShadowDeck(String...names)`
+- `void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards)`
+- `void MoveCardsToFreepsDiscard(String...names)`
+- `void MoveCardsToShadowDiscard(String...names)`
+- `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
+- `void MoveCardToAdventurePath(PhysicalCardImpl card)`
+- `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
+- `void MoveCardsToDeadPile(PhysicalCardImpl...cards)`
+- `void MoveCardsToFreepsHand(String...names)`
+- `void MoveCardsToShadowHand(String...names)`
+- `void MoveCardsToHand(PhysicalCardImpl...cards)`
+- `void AttachCardsTo(PhysicalCardImpl bearer, PhysicalCardImpl...cards)` — Directly attaches one or more cards to a target card, regardless of legality or costs.
+- `void StackCardsOn(PhysicalCardImpl on, PhysicalCardImpl...cards)` — Directly stacks one or more cards on a target card, regardless of legality or costs.
+- `void FreepsDrawCard()  ·  ShadowDrawCard`
+- `void FreepsDrawCards()  ·  ShadowDrawCards`
+- `void FreepsDrawCards(int count)  ·  ShadowDrawCards`
+- `void ShuffleCardsIntoFreepsDeck(PhysicalCardImpl...cards)`
+- `void ShuffleCardsIntoShadowDeck(PhysicalCardImpl...cards)`
+- `void ShuffleCardsIntoDrawDeck(String player, PhysicalCardImpl...cards)`
+- `void ShuffleFreepsDeck()` — Shuffles the Free Peoples player's draw deck.
+- `void ShuffleShadowDeck()` — Shuffles the Shadow player's reserve deck.
+- `void ShuffleDeck(String player)` — Shuffles the given player's reserve deck.
+
+## Moving the game along
+
+`virtualtable/GameProcedures.java` (main sources)
+
+These functions are for progressing through the game itself.  For instance, if your test is really about battle attrition and the phases before that point are just in the way, here you will find functions to skip past phases so that your test can remain mostly clean of irrelevant procedure. Do be warned that these functions assume a best-case scenario that can be safely passed through; if a card has a required decision that does not have an obvious "decline" option, then these functions will fail and you will have to do it manually.  If you actually do need such a pestering card on the table, it is advised that you only place it at the last possible second rather than putting it down early and requiring you to do all the manual procedure.
+
+- `void SkipToArcheryWounds()`
+- `void SkipToAssignments()`
+- `void FreepsResolveSkirmish(PhysicalCardImpl comp)  ·  ShadowResolveSkirmish`
+- `void SkipToMovementDecision()` — Stops at the regroup "do you want to make another move?" decision of whichever player's turn is under way.
+- `void SkipToOtherPlayersTurn()` — Plays out the rest of the turn that is under way and stops at the start of the other player's fellowship phase; the moving fellowship declines the optional regroup move.
+- `void PassManeuverActions()` — Causes both players to pass during the Maneuver phase.
+- `void PassArcheryActions()` — Causes both players to pass during the Archery phase.
+- `void PassAssignmentActions()` — Causes both players to pass during the Assignment phase.
+- `void PassFierceAssignmentActions()` — Causes both players to pass during the Fierce Assignment phase.
+- `void PassSkirmishActions()` — Causes both players to pass during a Skirmish phase.
+- `void PassFierceSkirmishActions()` — Causes both players to pass during a fierce Skirmish phase.
+- `void PassRegroupActions()` — Causes both players to pass during the Regroup phase.
+- `void FreepsChooseToMove()  ·  ShadowChooseToMove`
+- `void FreepsChooseToStay()  ·  ShadowChooseToStay`
+- `void FreepsDeclineReconciliation()  ·  ShadowDeclineReconciliation`
+- `void PassResponses()` — Causes both players to pass, first the player with a current decision and then the other.
+- `void PassResponses(String text)` — Causes both players to pass any decisions that contain the provided text.
+- `void PassCurrentPhaseActions()` — Causes both players to pass, first the player with a current decision and then the other.
+- `void FreepsPassCurrentPhaseAction()  ·  ShadowPassCurrentPhaseAction`
+- `void BothPass()` — Causes both players to pass.
+- `void BothPass(String text)` — Causes both players to pass any decisions that contain the provided text.
+- `void BothPassInverted()` — Causes both players to pass, but makes the opponent pass before the current player.
+- `void BothPassInverted(String text)` — Causes both players to pass any decisions that contain the provided text.
+- `void SkipToPhase(Phase target)` — Causes players to spam pass until the provided target phase is current.
+- `void SkipToPhaseInverted(Phase target)`
+- `void SkipToSite(int siteNum)`
+- `void SkipCurrentSite()`
+- `void FreepsDismissRevealedCards()  ·  ShadowDismissRevealedCards`
+- `void DismissRevealedCards()`
+
+## Playing and using cards
+
+`virtualtable/Actions.java` (main sources)
+
+Actions are top-level decisions that involve legal game operations available to players.  For example, deploying a card, playing an interrupt, and activating a card ability are all Actions.
+
+- `List<String> FreepsGetAvailableActions()  ·  ShadowGetAvailableActions`
+- `List<String> GetAvailableActions(String playerID)`
+- `Boolean FreepsAnyActionsAvailable()  ·  ShadowAnyActionsAvailable`
+- `Boolean AnyActionsAvailable(String player)` — Returns whether the given player has any action at all available as part of the currently pending decision.
+- `Boolean FreepsActionAvailable(PhysicalCardImpl card)  ·  ShadowActionAvailable`
+- `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable`
+- `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable`
+- `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
+- `Boolean ActionAvailable(String player, String action)` — Checks whether the given player has an action available containing the provided text.
+- `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction`
+- `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
+- `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
+- `boolean FreepsHasDiscardToHealAvailable()` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
+- `void FreepsDiscardToHeal(PhysicalCardImpl card)` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
+- `String GetCardActionId(String playerId, String text)` — Searches the currently available actions on the current decision for the given player and returns the ID of an action which contains the provided text in its description.
+- `String GetCardActionId(String playerId, PhysicalCardImpl card)` — Searches the currently available actions on the current decision for the given player and returns the ID of an action which was sourced by the provided card's ID.
+- `String GetCardActionId(String playerId, PhysicalCardImpl card, String text)` — Searches the currently available actions on the current decision for the given player.
+
+## Decisions
+
+`virtualtable/Decisions.java` (main sources)
+
+A set of functions within the test rig that pertain to decisions.  Decisions in Gemp are a catch-all term referring to any point where the game simulation cannot continue until a player makes a choice.  Thus, awaiting passes, choosing targets, selecting cards from a group, or initiating actions are all "decisions". These functions should give you everything you need to assert that a decision is or is not available, or give you the tools to make a decision properly.  See Choices for selecting among multiple options, and see Actions for top-level card actions.
+
+- `AwaitingDecision FreepsGetAwaitingDecision()  ·  ShadowGetAwaitingDecision`
+- `AwaitingDecision GetAwaitingDecision(String playerID)` — Gets a decision for a given player that Gemp is currently waiting on.
+- `AwaitingDecision GetCurrentDecision()`
+- `Boolean FreepsDecisionAvailable(String text)  ·  ShadowDecisionAvailable` — Determines if that player is currently presented with a decision which contains the given text.
+- `Boolean DecisionAvailable(String playerID, String text)` — Determines if the given player is currently presented with a decision which contains the given text.
+- `Boolean FreepsAnyDecisionsAvailable()  ·  ShadowAnyDecisionsAvailable`
+- `boolean AwaitingFellowshipPhaseActions()`
+- `boolean AwaitingShadowPhaseActions()`
+- `boolean AwaitingFreepsManeuverPhaseActions()`
+- `boolean AwaitingShadowManeuverPhaseActions()`
+- `boolean AwaitingFreepsArcheryPhaseActions()`
+- `boolean AwaitingShadowArcheryPhaseActions()`
+- `boolean AwaitingFreepsAssignmentPhaseActions()`
+- `boolean AwaitingShadowAssignmentPhaseActions()`
+- `boolean AwaitingFreepsSkirmishPhaseActions()`
+- `boolean AwaitingShadowSkirmishPhaseActions()`
+- `boolean AwaitingFreepsRegroupPhaseActions()`
+- `boolean AwaitingShadowRegroupPhaseActions()`
+- `Boolean AnyDecisionsAvailable(String player)` — Returns whether the given player is currently presented with any decision at all.
+- `void FreepsPass()  ·  ShadowPass`
+- `void FreepsPass(String text)  ·  ShadowPass`
+- `void PlayerPass(String player)` — Causes the given player to pass whatever decision they are currently being presented with, if any.
+- `void FreepsDecided(int answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.
+- `void FreepsDecided(String answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.
+- `boolean FreepsHasOptionalTriggerAvailable()  ·  ShadowHasOptionalTriggerAvailable`
+- `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable`
+- `boolean FreepsHasOptionalTriggerAvailable(String text)  ·  ShadowHasOptionalTriggerAvailable`
+- `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger`
+- `void FreepsDeclineOptionalTrigger()  ·  ShadowDeclineOptionalTrigger`
+- `String[] GetADParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the current awaiting decision as an array of strings.
+- `List<String> FreepsGetADParamAsList(String paramName)  ·  ShadowGetADParamAsList`
+- `List<String> GetADParamAsList(String playerID, String paramName)`
+- `int GetADParamEqualsCount(String playerID, String paramName, String value)`
+- `String[] FreepsGetADParam(String paramName)  ·  ShadowGetADParam`
+- `String FreepsGetFirstADParam(String paramName)  ·  ShadowGetFirstADParam`
+- `String[] GetAwaitingDecisionParam(String playerID, String paramName)`
+- `Map<String, String[]> GetAwaitingDecisionParams(String playerID)`
+
+## Choices within a decision
+
+`virtualtable/Choices.java` (main sources)
+
+Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will let you inspect the choices available and offer shortcuts for e.g. selecting a physical card which you have previously stored.
+
+- `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing`
+- `void FreepsDeclineSanctuaryHealing()`
+- `Boolean FreepsChoiceAvailable(String choice)  ·  ShadowChoiceAvailable` — Determines whether that player has any choices on the current decision whose description matches the provided search text.
+- `Boolean ChoiceAvailable(String player, String choice)` — Determines whether the given player has any choices on the current decision whose description matches the provided search text.
+- `void FreepsChoose(String choice)  ·  ShadowChoose` — Causes that player to choose the given option.
+- `void FreepsChoose(String...choices)  ·  ShadowChoose` — Causes that player to choose the given options.
+- `void FreepsChooseYes()  ·  ShadowChooseYes` — Causes that player to return a canned "Yes" response to a Yes or No question.
+- `void FreepsChooseNo()  ·  ShadowChooseNo` — Causes that player to return a canned "No" response to a Yes or No question.
+- `void FreepsChooseOption(String option)  ·  ShadowChooseOption`
+- `void FreepsChooseOptionalTrigger(PhysicalCardImpl card)  ·  ShadowChooseOptionalTrigger` — Used in situations where there are simultaneous triggers from cards with the same title and we need to pick a specific one.
+- `void ChooseOption(String playerID, String option)`
+- `void FreepsChooseAction(String paramName, String option)  ·  ShadowChooseAction`
+- `void FreepsChooseAction(String option)  ·  ShadowChooseAction`
+- `void ChooseAction(String playerID, String paramName, String option)`
+- `void FreepsChooseAny()`
+- `void FreepsResolveRuleFirst()`
+- `void FreepsResolveActionOrder(String option)`
+- `int FreepsGetChoiceMin()  ·  ShadowGetChoiceMin`
+- `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax`
+- `int FreepsGetSelectableCount()  ·  ShadowGetSelectableCount`
+- `int FreepsGetTotalRevealedCardCount()`
+- `int ShadowGetGetTotalRevealedCardCount()`
+- `boolean FreepsHasBPChoice(PhysicalCardImpl card)  ·  ShadowHasBPChoice`
+- `List<String> FreepsGetBPChoices()  ·  ShadowGetBPChoices`
+- `int FreepsGetBPChoiceCount()  ·  ShadowGetBPChoiceCount`
+- `List<String> FreepsGetActionChoices()  ·  ShadowGetActionChoices`
+- `List<String> FreepsGetMultipleChoices()  ·  ShadowGetMultipleChoices`
+- `List<String> FreepsGetCardChoices()  ·  ShadowGetCardChoices`
+- `int FreepsGetMultipleChoiceCount()  ·  ShadowGetMultipleChoiceCount`
+- `int FreepsGetActionCount()  ·  ShadowGetActionCount`
+- `int GetChoiceCount(List<String> list)`
+- `List<String> FreepsGetFreepsAssignmentTargets()  ·  ShadowGetFreepsAssignmentTargets`
+- `List<String> FreepsGetShadowAssignmentTargets()  ·  ShadowGetShadowAssignmentTargets`
+- `void FreepsChooseAnyCard()  ·  ShadowChooseAnyCard`
+- `void FreepsChooseCard(PhysicalCardImpl card)  ·  ShadowChooseCard`
+- `void FreepsChooseCards(PhysicalCardImpl...cards)  ·  ShadowChooseCards`
+- `void ChooseCards(String player, PhysicalCardImpl...cards)`
+- `int FreepsGetCardChoiceCount()  ·  ShadowGetCardChoiceCount`
+- `void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardBPFromSelection`
+- `void FreepsChooseCardBPFromSelection(String...bpids)  ·  ShadowChooseCardBPFromSelection`
+- `void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
+- `void ChooseCardBPFromSelection(String player, String...bpids)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
+- `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable)  ·  ShadowHasCardChoiceAvailable`
+- `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl...cards)  ·  ShadowHasCardChoiceAvailable`
+- `boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl...cards)  ·  ShadowHasCardChoiceNotAvailable`
+- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card)` — Checks whether the given card is one of the options being presented to the player.
+- `boolean FreepsHasBPChoiceAvailable(String blueprintId)  ·  ShadowHasBPChoiceAvailable`
+- `boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable)  ·  ShadowHasBPChoiceAvailable`
+- `boolean HasBPChoiceAvailable(String player, String blueprintId, boolean selectable)` — Checks whether a card with the given blueprint ID is among the selectable options presented to the player.
+- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable)` — Checks whether the given card is one of the options being presented to the player.
+- `void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardIDFromSelection` — Causes that player to issue a decision response composed of a comma-separated list of the provided card IDs.
+- `void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card IDs.
+
+## Assignments and skirmishes
+
+`virtualtable/Skirmishes.java` (main sources)
+
+- `void SkipToShadowAssignments()`
+- `void SkipPastAllAssignments()`
+- `boolean IsCharAssigned(PhysicalCardImpl card)`
+- `boolean IsCharAssignedAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent)`
+- `boolean IsCharSkirmishing(PhysicalCardImpl card)`
+- `boolean IsCharSkirmishingAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent)`
+- `Boolean CanBeAssignedViaAction(PhysicalCardImpl card)`
+- `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign`
+- `Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)`
+- `Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)`
+- `Skirmish GetActiveSkirmish()`
+- `int FreepsGetFreepsAssignmentTargetCount()  ·  ShadowGetFreepsAssignmentTargetCount`
+- `int FreepsGetShadowAssignmentTargetCount()  ·  ShadowGetShadowAssignmentTargetCount`
+- `void FreepsDeclineAssignments()  ·  ShadowDeclineAssignments`
+- `void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions)`
+- `void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions)  ·  ShadowAssignToMinions`
+- `void AssignToMinions(String player, PhysicalCardImpl comp, PhysicalCardImpl...minions)`
+- `void FreepsAssignToMinions(PhysicalCardImpl[]...groups)  ·  ShadowAssignToMinions`
+- `void AssignToMinions(String player, PhysicalCardImpl[]...groups)`
+
+## Reading the game
+
+`virtualtable/GameProperties.java` (main sources)
+
+- `int GetBurdens()`
+- `void AddBurdens(int count)`
+- `void RemoveBurdens(int count)`
+- `int GetFreepsCultureCount()`
+- `int GetShadowCultureCount()`
+- `int GetThreats()`
+- `int GetThreatLimit()`
+- `void AddThreats(int count)`
+- `void RemoveThreats(int count)`
+- `boolean FreepsHasInitiative()  ·  ShadowHasInitiative`
+- `int GetFreepsArcheryTotal()`
+- `int GetShadowArcheryTotal()`
+- `int GetTwilight()`
+- `void SetTwilight(int amount)`
+- `int GetMoveCount()`
+- `int GetMoveLimit()`
+- `boolean GameIsFinished()`
+- `Phase GetCurrentPhase()`
+- `String GetCurrentPlayer()`
+- `String GetOffPlayer()`
+- `String GetDecidingPlayer()`
+- `String GetNextDecider()`
+- `boolean RBWearingOneRing()`
+- `PhysicalCardImpl GetRing()`
+- `PhysicalCardImpl GetShadowRing()`
+- `PhysicalCardImpl GetRingBearer()`
+- `PhysicalCardImpl GetShadowRingBearer()`
+- `int GetFreepsControlledSiteCount()`
+- `int GetShadowControlledSiteCount()`
+- `PhysicalCardImpl GetCurrentSite()`
+- `int GetCurrentSiteNumber()`
+- `PhysicalCardImpl GetFreepsSite(int siteNum)`
+- `PhysicalCardImpl GetShadowSite(int siteNum)`
+- `PhysicalCardImpl GetSite(String playerID, int siteNum)`
+- `PhysicalCardImpl GetSite(int siteNum)`
+- `PhysicalCardImpl GetFreepsSite(String name)`
+- `PhysicalCardImpl GetShadowSite(String name)`
+- `PhysicalCardImpl GetSiteByName(String player, String name)`
+
+## Reading a card
+
+`virtualtable/CardProperties.java` (main sources)
+
+Functions for checking aspects of a card, such as numeric states and other state-based properties. If you are just checking the printed stats, then you can retrieve the blueprint of a card and check those values directly.  These helper functions are more for live cards which may be affected by modifiers sourced from other cards.
+
+- `int FreepsGetWoundsOn(String cardName)  ·  ShadowGetWoundsOn`
+- `int GetWoundsOn(PhysicalCardImpl card)`
+- `boolean IsExhausted(PhysicalCardImpl card)`
+- `void AddWoundsToChar(PhysicalCardImpl card, int count)`
+- `void RemoveWoundsFromChar(PhysicalCardImpl card, int count)`
+- `int GetCultureTokensOn(PhysicalCardImpl card)`
+- `void AddTokensToCard(PhysicalCardImpl card, int count)`
+- `void RemoveTokensFromCard(PhysicalCardImpl card, int count)`
+- `List<PhysicalCardImpl> GetAttachedCards(PhysicalCardImpl card)`
+- `List<PhysicalCardImpl> GetStackedCards(PhysicalCardImpl card)`
+- `Boolean IsSiteControlled(PhysicalCardImpl card)`
+- `Boolean FreepsControls(PhysicalCardImpl card)  ·  ShadowControls`
+- `int GetTwilightCost(PhysicalCardImpl card)`
+- `int GetStrength(PhysicalCardImpl card)`
+- `int GetOverwhelmMultiplier(PhysicalCardImpl card)`
+- `int GetVitality(PhysicalCardImpl card)`
+- `int GetResistance(PhysicalCardImpl card)`
+- `int GetMinionSiteNumber(PhysicalCardImpl card)`
+- `boolean HasKeyword(PhysicalCardImpl card, Keyword keyword)`
+- `int GetKeywordCount(PhysicalCardImpl card, Keyword keyword)`
+- `boolean HasTimeword(PhysicalCardImpl card, Timeword timeword)`
+- `boolean IsType(PhysicalCardImpl card, CardType type)`
+- `boolean IsRace(PhysicalCardImpl card, Race race)`
+- `boolean IsHindered(PhysicalCardImpl card)`
+- `void HinderCard(PhysicalCardImpl...cards)`
+- `void RestoreCard(PhysicalCardImpl...cards)`
+
+## Reading the piles
+
+`virtualtable/PileProperties.java` (main sources)
+
+These functions will help you determine pile counts or add/remove a card to a pile at a particular point.
+
+- `int GetFreepsHandCount()`
+- `int GetShadowHandCount()`
+- `List<? extends PhysicalCard> GetFreepsHand()`
+- `List<? extends PhysicalCard> GetShadowHand()`
+- `List<? extends PhysicalCard> GetHand(String player)`
+- `int GetFreepsDeckCount()`
+- `int GetShadowDeckCount()`
+- `List<? extends PhysicalCard> GetFreepsDrawDeck()`
+- `List<? extends PhysicalCard> GetShadowDrawDeck()`
+- `List<? extends PhysicalCard> GetDrawDeck(String player)`
+- `PhysicalCardImpl GetFreepsBottomOfDeck()`
+- `PhysicalCardImpl GetShadowBottomOfDeck()`
+- `PhysicalCardImpl GetFromBottomOfFreepsDeck(int index)`
+- `PhysicalCardImpl GetFromBottomOfShadowDeck(int index)`
+- `PhysicalCardImpl GetPlayerBottomOfDeck(String player)`
+- `PhysicalCardImpl GetFromBottomOfPlayerDeck(String player, int index)`
+- `PhysicalCardImpl GetFreepsTopOfDeck()`
+- `PhysicalCardImpl GetShadowTopOfDeck()`
+- `PhysicalCardImpl GetFromTopOfFreepsDeck(int index)`
+- `PhysicalCardImpl GetFromTopOfShadowDeck(int index)`
+- `PhysicalCardImpl GetPlayerTopOfDeck(String player)`
+- `PhysicalCardImpl GetFromTopOfPlayerDeck(String player, int index)` — Index is 1-based (1 is first, 2 is second, etc)
+- `int GetFreepsDiscardCount()`
+- `int GetShadowDiscardCount()`
+- `int GetPlayerDiscardCount(String player)`
+- `int GetFreepsDeadCount()`
 
 ## Assertions
 
-Import: `import static com.gempukku.lotro.framework.Assertions.*;`
+`framework/Assertions.java` (test sources)
 
-```java
-assertInZone(Zone.HAND, card)           // Card is in zone
-assertNotInZone(Zone.DISCARD, card)     // Card is NOT in zone
-assertInPlay(card)                       // Card is in any in-play zone
-assertInDiscard(card)                    // Shorthand for assertInZone(Zone.DISCARD, ...)
-assertInHand(card)                       // Shorthand for assertInZone(Zone.HAND, ...)
-assertAttachedTo(card, bearer)           // Card attached to bearer
-assertNotAttachedTo(card, bearer)        // Card NOT attached to bearer
-```
+- `static void assertInZone(Zone zone, PhysicalCardImpl...cards)` — Asserts that one or more cards are all contained within the provided zone.
+- `static void assertNotInZone(Zone zone, PhysicalCardImpl...cards)` — Asserts that one or more cards are all NOT contained within the provided zone.
+- `static void assertInPlay(PhysicalCardImpl...cards)` — Asserts that one or more cards are all in zones considered in play.
+- `static void assertInDiscard(PhysicalCardImpl...cards)` — Asserts that one or more cards are all the discard pile.
+- `static void assertInHand(PhysicalCardImpl...cards)` — Asserts that one or more cards are all in either player's hand.
+- `static void assertAttachedTo(PhysicalCardImpl card, PhysicalCardImpl bearer)` — Asserts that a given card is currently attached to another.
+- `static void assertNotAttachedTo(PhysicalCardImpl card, PhysicalCardImpl bearer)` — Asserts that a given card is currently not attached to another.
 
-All accept varargs — you can check multiple cards at once:
-```java
-assertInDiscard(card1, card2, card3);
-```
+## Ad hoc effects (test sources only)
 
----
+`framework/AdHocEffects.java` (test sources)
 
-## Pile Inspection
+Sometimes, there just isn't a card that has the precise action or effect that you want to use (especially when developing new mechanics), so these functions permit the tester to staple actions, effects, and modifiers onto physical cards as needed.  This is also useful when testing fundamental existing mechanics without any confounding variables. Be warned: just because an action or effect has been added to the game does not automatically mean that Gemp will respect it or be aware of it just yet.  In nearly all cases, after you have used any of these functions you will need to execute a decision so that Gemp's game loop will process what's on the table (at which point it will become aware of the changes you have made).  While awaiting a decision Gemp is effectively paused and thus needs that moment to become aware of changes.
 
-### Hand
-```java
-scn.GetFreepsHandCount()
-scn.GetShadowHandCount()
-scn.GetFreepsHand()         // List<? extends PhysicalCard>
-scn.GetShadowHand()
-```
+- `void ApplyAdHocModifier(Modifier mod)` — Staples a given modifier to the game state for the duration of the game.
+- `void ApplyAdHocAction(ActionProxy action)` — Causes the given action to be stapled to the game state for the duration of the game.
+- `void ShadowTakeControlOfSite()`
+- `void FreepsExecuteAdHocEffect(Effect effect)  ·  ShadowExecuteAdHocEffect` — Causes that player to execute an arbitrary effect.
+- `void ExecuteAdHocEffect(String playerId, Effect effect)` — Causes the given player to execute an arbitrary effect.
+- `Filterable GenerateFreepsFilter(String filter)` — Takes a filter string and produces the proper Java code that the filter represents.
+- `Filterable GenerateShadowFilter(String filter)` — Takes a filter string and produces the proper Java code that the filter represents.
+- `void ApplyAdHocFreepsAutoDiscard(String filter)` — Adds a permanent effect that automatically discards cards that match the provided filter.
+- `void ApplyAdHocShadowAutoDiscard(String filter)` — Adds a permanent effect that automatically discards cards that match the provided filter.
+- `void ApplyAdHocAutoDiscard(Filterable...filterables)` — Adds a permanent effect that automatically discards cards that match the provided filterables.
+- `void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect)`
+- `void carryOutEffectInPhaseActionByPlayer(String playerId, Action action)`
 
-### Draw Deck
-```java
-scn.GetFreepsDeckCount()
-scn.GetShadowDeckCount()
-scn.GetFreepsTopOfDeck()            // Top card (1-based)
-scn.GetFromTopOfFreepsDeck(2)       // 2nd from top
-scn.GetFreepsBottomOfDeck()
-scn.GetFromBottomOfFreepsDeck(2)    // 2nd from bottom
-```
+## Underpinnings
 
-### Discard & Dead
-```java
-scn.GetFreepsDiscardCount()
-scn.GetShadowDiscardCount()
-scn.GetFreepsDeadCount()
-```
+`virtualtable/TableBase.java` (main sources)
 
----
+This interface holds the handful of accessors that every other virtual table interface is built on.  It is not a true interface, but since Java does not support partial classes this will have to do. The virtual table is a headless client: it owns a game, answers that game's decisions for both players, and can rearrange the board directly.  It is shared by the unit test rig (VirtualTableScenario, in the test sources) and by anything in the server proper that needs to drive a game without a human on each side.
 
-## Advanced: Ad-Hoc Effects
-
-For testing mechanics without existing cards, or injecting effects/modifiers directly.
-
-```java
-// Permanent modifier for rest of game
-scn.ApplyAdHocModifier(modifier)
-
-// Permanent action proxy (invisible card with abilities)
-scn.ApplyAdHocAction(actionProxy)
-
-// Execute an arbitrary effect (finicky — only works when 0 legal actions available)
-scn.FreepsExecuteAdHocEffect(effect)
-scn.ShadowExecuteAdHocEffect(effect)
-
-// Shadow takes control of a site
-scn.ShadowTakeControlOfSite()
-
-// Generate Java Filterable from HJSON filter string
-scn.GenerateFreepsFilter("your,companion,elf")   // "you" = FP
-scn.GenerateShadowFilter("your,minion,nazgul")   // "you" = Shadow
-
-// Auto-discard anything matching filter (permanent, fires every trigger check)
-scn.ApplyAdHocFreepsAutoDiscard("your,condition")
-scn.ApplyAdHocShadowAutoDiscard("minion")
-```
+- `DefaultLotroGame game()`
+- `GameState gameState()`
+- `DefaultUserFeedback userFeedback()`
+- `String P1()`
+- `String P2()`
+- `PhysicalCardImpl GetFreepsCard(String cardName)`
+- `PhysicalCardImpl GetShadowCard(String cardName)`
+- `PhysicalCardImpl GetCard(String player, String cardName)`
+- `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-
-## Advanced: Blueprint Lookup (Static)
-
-No game needed — for StatsAreCorrect tests or pre-game inspection:
-```java
-var bp = VirtualTableScenario.FindCard("1_50");
-assertEquals("Legolas", bp.getTitle());
-assertEquals(CardType.COMPANION, bp.getCardType());
-```
+368 entries, 256 of them with no description in the source.
