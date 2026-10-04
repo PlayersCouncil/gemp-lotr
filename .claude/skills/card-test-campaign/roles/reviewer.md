@@ -1,0 +1,63 @@
+# Brief: reviewer
+
+You are reviewing unit tests that another agent has just written for a few cards of the Lord of the Rings TCG as
+implemented in Gemp. The campaign is testing every card the same way, and thousands of test files will be written
+to the pattern these set, so a weak test passed now is a weak test copied many times. Your job is to find what is
+wrong, not to confirm that it looks fine. The cards and a name for your working folder are given at the end.
+
+You have not seen how the tests were written and should not go looking for the author's notes. Read these first:
+
+- `.claude/skills/test-generation/SKILL.md`: the Card Test Standard, including the reviewer's checklist at its end
+- `.claude/skills/gemp-testing/SKILL.md`: the test rig
+- `.claude/skills/card-test-campaign/references/rulings-log.md`: what Ketura has ruled
+
+## For each card
+
+1. **Read the card before the tests.** `packet.py <id> --blind --terms`. Decide for yourself what clauses it has
+   and what checks their wording calls for. Only then open the test file and compare its ledger with yours. A
+   check the wording calls for and the ledger leaves out is the most valuable thing you can find, because nothing
+   mechanical will ever find it.
+
+2. **Run the mechanical checks.**
+
+       python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
+       python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
+       python3 .claude/skills/card-test-campaign/scripts/mutate.py <id> --out <your folder name>
+
+   `mutate.py` makes deliberate mistakes in a copy of the card's definition and lists the ones no test noticed.
+   For each survivor decide: is it a gap in the tests (the mistake would change how the card plays, and no test
+   sees it), or does the mistake make no difference to play? Say which, in one line each.
+
+3. **Read each test against the check it claims.** Does it really show that check? The usual failures: a `-` that
+   is not the nearest miss; an `F` with only one valid candidate, or no invalid one; a `D` that looks at only one
+   side of the boundary; an assertion after an action with no reading before it; an expected value that could
+   only have come from running the game; a helper card whose own text is doing part of the work.
+
+4. **Try to knock down every finding and every parked test.** For a test parked with `@Ignore("F-...")`, the
+   claim is that the game is wrong. Look for the rule or ruling that would make the game right:
+   `rules.py card <id>`, `rules.py term <word>`, `rules.py grep <phrase>`. If you find one, the finding is a
+   misreading; say so and cite it. If you cannot, say that you tried and what you looked at. For a question
+   parked with `Q-...`, check that the rules really do not settle it.
+
+5. **Check the existing tests were not lost.** If the card had behavioural tests before, compare with
+   `git show HEAD:<path to the test file>`. Anything the old tests asserted that the new ones no longer do should
+   have been dropped on purpose.
+
+## What you may and may not touch
+
+You change nothing. You do not fix the tests, edit definitions, or commit. Scratch files go under
+`/tmp/<your folder name>/`.
+
+## Reporting back
+
+Your final message goes to the orchestrator and is all it sees. For each card:
+
+- the card id and name, and a verdict: `PASS`, `FIX` (with a numbered list of what must change, each specific
+  enough to act on without asking you), or `PARK` (with what is holding it)
+- your own ledger where it differs from the file's, and why
+- the mutation survivors, each marked gap or no-difference
+- for each finding and question: stands, or refuted with the citation
+- anything in the standard that let a bad test through, or that you had to interpret: the standard is still being
+  corrected by what reviewers run into
+
+Do not pad a clean card with minor remarks to seem thorough. If it is right, say `PASS` and stop.

@@ -17,14 +17,10 @@ import reconcile
 import rules as rulebook
 
 FORMAT_HINTS = [
-    (r"cancel", "Cancelling a skirmish: a Ring-bearer's skirmish may be cancelled in Fellowship and Towers era "
-                "formats and may not in later ones.  If this can cancel a skirmish the Ring-bearer is in, test both."),
-    (r"\bdraw\b|into (your|his|her|their|its owner's) hand|take .* into hand",
-     "Drawing or taking cards into hand: the Rule of 4 limits this in the fellowship phase."),
-    (r"\bcontrol", "Site control: one format wins on controlling 5 sites."),
-    (r"discard pile", "Discard piles are public in PC formats and private elsewhere (affects what is revealed, "
-                      "not what the card does)."),
-    (r"\bregroup\b.*\b(win|game)\b|\bwins? the game\b", "The moment the game is won differs between formats."),
+    (r"cancel", "Cancelling a skirmish: a Ring-bearer's skirmish may be cancelled in Fellowship, Towers and King "
+                "block formats and may not in the others.  If this can cancel a skirmish the Ring-bearer is in, "
+                "it needs a FormatRule clause and a test under each."),
+    (r"\bsite \d|\bsites? \d|\b(fellowship|towers|king) block", "Names a site number or a block: test it on that block's path."),
 ]
 
 
