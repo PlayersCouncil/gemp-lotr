@@ -163,7 +163,7 @@ def parse_ledger(lines):
         elif clauses and re.match(r"^\s*\*\s{6,}\S", line) and not re.match(r"^\s*\*\s+(Sources|Findings|Formats|Notes)\s*:", line):
             # A continuation of the previous clause's text.
             clauses[last][2] += " " + line.strip().lstrip("*").strip()
-        f = re.findall(r"\bF-\d{4}\b", line)
+        f = re.findall(r"\b[FQ]-\d{4}\b", line)
         findings += f
     return clauses, start, findings
 
@@ -276,8 +276,8 @@ def lint_file(path: Path):
                     covered[cid].add(c)
         ignore = [t for _, t in above if t.startswith("@Ignore")]
         for t in ignore:
-            if not re.search(r"F-\d{4}", t):
-                add("error", "ignore", start, "%s: @Ignore must name the finding it is parked on (F-0000)" % name)
+            if not re.search(r"\b[FQ]-\d{4}\b", t):
+                add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000) or question (Q-0000) it is parked on" % name)
     for cid, (ctype, codes, text, line) in clauses.items():
         missing = (codes & CODES) - covered.get(cid, set())
         if missing:
