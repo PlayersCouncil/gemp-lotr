@@ -17,6 +17,7 @@ public class Card_01_040_Tests
 	 * LEDGER  1_40  Elrond, Lord of Rivendell
 	 * Sources: sheet; CR 4.2 names this card nowhere
 	 *
+	 * P1 Play       [+]          Played from hand for (4), to the support area.
 	 * C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
 	 * C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
 	 * C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
@@ -30,7 +31,6 @@ public class Card_01_040_Tests
 				{{
 					put("elrond", "1_40");
 					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk
-					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf companion
 					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: Elf ally, home site 3
 					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: Dwarf ally, home site 3
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, home site 6
@@ -78,7 +78,7 @@ public class Card_01_040_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// C1: + - B
+	// P1: +; C1: + - B
 	@Test
 	public void CannotBePlayedUntilGandalfIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -97,7 +97,7 @@ public class Card_01_040_Tests
 		assertTrue(scn.FreepsPlayAvailable(elrond));
 
 		scn.FreepsPlayCard(elrond);
-		assertInPlay(elrond);
+		assertInZone(Zone.SUPPORT, elrond);
 		// 4 for Gandalf + 4 for Elrond
 		assertEquals(8, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -109,20 +109,21 @@ public class Card_01_040_Tests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCardsToHand(elrond, arwen);
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCardsToHand(elrond, orophin);
 
 		scn.StartGame();
 
 		assertFalse(scn.FreepsPlayAvailable(elrond));
 
-		scn.FreepsPlayCard(arwen);
+		// An Elf who is an ally: the text asks for an Elf, not for an Elf companion.
+		scn.FreepsPlayCard(orophin);
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(elrond));
 
 		scn.FreepsPlayCard(elrond);
-		assertInPlay(elrond);
-		// 2 for Arwen + 4 for Elrond
+		assertInZone(Zone.SUPPORT, elrond);
+		// 2 for Orophin + 4 for Elrond
 		assertEquals(6, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -136,7 +137,7 @@ public class Card_01_040_Tests
 		var silinde = scn.GetFreepsCard("silinde");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionsToTable(elrond, silinde, thrarin, orophin);
+		scn.MoveCardsToSupportArea(elrond, silinde, thrarin, orophin);
 
 		scn.AddWoundsToChar(elrond, 2);
 		scn.AddWoundsToChar(silinde, 1);
@@ -168,7 +169,7 @@ public class Card_01_040_Tests
 
 		var elrond = scn.GetFreepsCard("elrond");
 		var silinde = scn.GetFreepsCard("silinde");
-		scn.MoveCompanionsToTable(elrond, silinde);
+		scn.MoveCardsToSupportArea(elrond, silinde);
 
 		scn.StartGame();
 
@@ -194,7 +195,7 @@ public class Card_01_040_Tests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionsToTable(elrond);
+		scn.MoveCardsToSupportArea(elrond);
 
 		scn.StartGame();
 
