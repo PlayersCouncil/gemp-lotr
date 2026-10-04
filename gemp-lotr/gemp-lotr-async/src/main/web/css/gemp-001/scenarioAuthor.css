@@ -614,6 +614,34 @@ body.scenario-authoring #scenarioLayer {
     font-size: 10px;
 }
 
+/* a block, and under it the steps in it */
+.sa-step.sa-blockstep {
+    border-top: 1px solid #5a4d2a;
+}
+
+.sa-step.sa-substep {
+    padding-left: 14px;
+    background: #15130d;
+    box-shadow: inset 2px 0 0 #6d5a96;
+}
+
+.sa-step.sa-substep.sa-selected {
+    background: #3a3220;
+}
+
+.sa-step.sa-substep.sa-current {
+    box-shadow: inset 4px 0 0 #d8b24a;
+}
+
+.sa-step.sa-substep .sa-num {
+    width: 32px;
+}
+
+.sa-who-block {
+    width: auto;
+    color: #c9a6ff;
+}
+
 .sa-end {
     padding: 6px 8px;
     color: #a99e80;
@@ -739,6 +767,8 @@ textarea.sa-code {
     font-family: Consolas, "Courier New", monospace;
     font-size: 11px;
     white-space: pre;
+    tab-size: 4;
+    -moz-tab-size: 4;
 }
 
 .sa-more {
@@ -783,6 +813,125 @@ textarea.sa-code {
 
 .sa-text {
     font-size: 13px !important;
+}
+
+/* ---- a block's page: a section for the block, and one for each of the steps in it ---- */
+
+.sa-panel {
+    margin-bottom: 7px;
+    background: #1b1811;
+    border: 1px solid #5a4d2a;
+    border-left: 4px solid #6b5c36;
+    border-radius: 5px;
+}
+
+.sa-panel.sa-panel-block {
+    border-left-color: #6d5a96;
+}
+
+.sa-panel.sa-open {
+    background: #17150f;
+    border-color: #d8b24a;
+}
+
+.sa-panelhead {
+    padding: 3px 6px 4px 6px;
+    background: #262117;
+    border-radius: 0 4px 4px 0;
+}
+
+.sa-panel.sa-open > .sa-panelhead {
+    background: #3a3220;
+    border-bottom: 1px solid #5a4d2a;
+    border-radius: 0 4px 0 0;
+}
+
+.sa-paneltitle {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.sa-panel:not(.sa-open) > .sa-panelhead:hover {
+    background: #322b1c;
+}
+
+.sa-panel.sa-open .sa-paneltitle {
+    cursor: default;
+}
+
+.sa-twist {
+    width: 10px;
+    color: #a99e80;
+}
+
+.sa-paneltitle .sa-num {
+    width: auto;
+    min-width: 30px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-panelacts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.sa-panelacts:empty {
+    display: none;
+}
+
+.sa-panelacts .sa-button {
+    margin: 0 0 0 3px;
+    padding: 0 5px;
+    font-size: 11px;
+}
+
+.sa-panelwhere {
+    margin-right: auto;
+    padding-left: 15px;
+    font-size: 11px;
+    color: #a99e80;
+    opacity: 1;
+}
+
+.sa-panelwhere.sa-status-matched {
+    color: #8fd08a;
+}
+
+/* what a step that is not open says to the player */
+.sa-panelsays {
+    padding: 2px 8px 3px 21px;
+    font-size: 12px;
+    color: #cfc4a6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.sa-panelbody {
+    padding: 6px 7px 2px 7px;
+}
+
+.sa-panelbody > .sa-section:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.sa-heading.sa-substeps {
+    margin-top: 9px;
+}
+
+.sa-button.sa-rename {
+    margin-left: 6px;
+    padding: 0 4px;
+    font-size: 11px;
 }
 
 .sa-card {

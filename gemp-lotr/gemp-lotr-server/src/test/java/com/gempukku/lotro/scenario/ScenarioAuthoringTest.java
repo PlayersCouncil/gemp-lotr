@@ -1276,4 +1276,350 @@ public class ScenarioAuthoringTest {
         assertFalse(found.isEmpty());
         assertTrue(authoring.findCards("a", false).isEmpty());
     }
+
+
+    private static JSONObject edit(Object... ops) {
+        return new JSONObject(Map.of("steps", List.of(ops)));
+    }
+
+    private static JSONArray under(JSONObject state, int index) {
+        JSONArray under = steps(state).getJSONObject(index).getJSONArray("anyOrder");
+        return under == null ? new JSONArray() : under;
+    }
+
+    /**
+     * A block is written the way any step is: by playing.  With the script at a block, what is done where none of
+     * its steps applies becomes one more of its steps, until the decision the block ends at arrives.
+     */
+    @Test
+    public void ABlockIsWrittenByPlayingThroughIt() throws Exception {
+        openBlank();
+        JSONObject block = new JSONObject(Map.of("when", "turn(1)", "until", "phase(regroup)", "anyOrder", new JSONArray()));
+        JSONObject state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "insert", "step", block))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(1, steps(state).size());
+        assertEquals(1, state.getJSONObject("position").getIntValue("step"));
+        JSONObject uncovered = state.getJSONObject("uncovered");
+        assertNotNull("The decision in front of the author is one the block is for, and none of its steps covers", uncovered);
+        assertEquals(1, uncovered.getIntValue("block"));
+        assertEquals(1, uncovered.getIntValue("sub"));
+        assertEquals("What the block says for all its steps is not said again", "freeps, action, phase(fellowship)", uncovered.getString("when"));
+
+        //Answered in the game, it is a step of the block, done once
+        Client client = new Client(game());
+        client.answer(client.decision.getAwaitingDecision().getDecisionParameters().get("actionId")[0]);
+        state = state();
+        assertEquals("The script has one step: the block", 1, steps(state).size());
+        assertEquals(1, under(state, 0).size());
+        JSONObject first = under(state, 0).getJSONObject(0);
+        assertEquals("freeps, action, phase(fellowship)", first.getString("when"));
+        assertEquals("play(aragorn)", first.getString("allow"));
+        assertTrue(first.getBooleanValue("once"));
+        assertEquals(1, state.getJSONArray("kids").getJSONArray(0).size());
+        assertEquals("matched", state.getJSONArray("substatuses").getJSONArray(0).getString(0));
+        assertTrue("The game is in the block, between its decisions", state.getJSONObject("position").getBooleanValue("underWay"));
+
+        //A step can be written for the next decision before it is answered, to hang a message on
+        state = json(authoring.stepHere(player)).getJSONObject("state");
+        assertEquals(2, under(state, 0).size());
+        assertEquals(2, state.getJSONObject("position").getIntValue("sub"));
+        assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+        String second = state.getJSONArray("kids").getJSONArray(0).getString(1);
+        assertEquals(List.of(second), state.getJSONArray("awaiting").toList(String.class));
+        String gameBefore = state.getString("gameId");
+        JSONObject merged = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", second,
+                "set", new JSONObject(Map.of("messages", List.of("Now pass.")))))).toJSONString(), null));
+        assertFalse("What a block's step in hand says is changed where the game stands", merged.getBooleanValue("rebuilt"));
+        assertEquals(gameBefore, merged.getString("gameId"));
+        client.poll();
+        assertEquals(1, client.lastStep().getIntValue("step"));
+        assertEquals(2, client.lastStep().getIntValue("sub"));
+        client.answer("");
+        state = state();
+        assertEquals("pass", under(state, 0).getJSONObject(1).getString("allow"));
+        assertEquals(List.of(), state.getJSONArray("awaiting").toList(String.class));
+
+        //On through the turn.  What the author has the opponent do goes into the block as well.
+        boolean played = false;
+        for (int i = 0; i < 40 && steps(state).size() == 1; i++) {
+            JSONObject held = state.getJSONObject("waiting").getJSONObject("opponent");
+            if (held != null && held.getBooleanValue("held")) {
+                authoring.answer(player, played ? "pass" : "play(runner1)", true);
+                played = true;
+            } else {
+                client.poll();
+                client.answer("");
+            }
+            state = state();
+        }
+        assertEquals("The regroup phase is where the block ends: what is done there is a step of the script", 2, steps(state).size());
+        assertTrue(steps(state).getJSONObject(1).getString("when"), steps(state).getJSONObject(1).getString("when").startsWith("freeps, action, phase(regroup), turn(1)"));
+        JSONArray written = under(state, 0);
+        assertTrue("Several decisions were written into the block: " + written, written.size() > 3);
+        boolean runner = false;
+        for (Object step : written) {
+            assertTrue(((JSONObject) step).getBooleanValue("once"));
+            runner |= "play(runner1)".equals(((JSONObject) step).getString("answer"));
+        }
+        assertTrue("The opponent's play is one of the block's steps: " + written, runner);
+
+        //The script plays itself through the block, and to any of the steps in it
+        state = json(authoring.goTo(player, 99)).getJSONObject("state");
+        assertNull(state.getString("notice"), state.getString("notice"));
+        assertEquals(written.size(), under(state, 0).size());
+        for (Object status : state.getJSONArray("substatuses").getJSONArray(0))
+            assertEquals("matched", status);
+        state = json(authoring.goTo(player, 1, 2)).getJSONObject("state");
+        assertNull(state.getString("notice"), state.getString("notice"));
+        assertEquals(1, state.getJSONObject("position").getIntValue("step"));
+        assertEquals(2, state.getJSONObject("position").getIntValue("sub"));
+        assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+        assertEquals("The steps keep their names from one game to the next", second, state.getJSONArray("kids").getJSONArray(0).getString(1));
+    }
+
+    private void openTwoSkirmishes() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/two-skirmishes.hjson").toPath(),
+                Files.readString(new File("src/test/resources/scenarios/two-skirmishes.hjson").toPath(), StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+        authoring.open(player, "two-skirmishes", true);
+    }
+
+    /** The steps in a block are changed, put in, moved and taken out by name, as the steps of the script are. */
+    @Test
+    public void TheStepsInABlockAreChangedByName() throws Exception {
+        openTwoSkirmishes();
+        JSONObject state = state();
+        String block = state.getJSONArray("uids").getString(0);
+        String after = state.getJSONArray("uids").getString(1);
+        List<String> kids = state.getJSONArray("kids").getJSONArray(0).toList(String.class);
+        assertEquals(4, kids.size());
+        assertEquals(List.of(), state.getJSONArray("kids").getJSONArray(1).toList(String.class));
+
+        //One put in at the end, and one before another
+        state = json(authoring.edit(player, edit(
+                new JSONObject(Map.of("op", "insert", "into", block, "step", new JSONObject(Map.of("when", "shadow, action", "answer", "pass")))),
+                new JSONObject(Map.of("op", "insert", "before", kids.get(0), "step", new JSONObject(Map.of("pause", true, "when", "freeps, assign", "messages", List.of("Read me."))))))
+                .toJSONString(), 1)).getJSONObject("state");
+        assertEquals(2, steps(state).size());
+        assertEquals(6, under(state, 0).size());
+        assertTrue(under(state, 0).getJSONObject(0).getBooleanValue("pause"));
+        assertEquals("shadow, action", under(state, 0).getJSONObject(5).getString("when"));
+        List<String> now = state.getJSONArray("kids").getJSONArray(0).toList(String.class);
+        assertEquals("The ones that were there keep their names", kids, now.subList(1, 5));
+
+        //Changed by its name, wherever it now comes
+        state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", kids.get(2),
+                "set", new JSONObject(Map.of("note", "The one about Aragorn")), "unset", List.of("id")))).toJSONString(), null)).getJSONObject("state");
+        assertEquals("The one about Aragorn", under(state, 0).getJSONObject(3).getString("note"));
+        assertNull(under(state, 0).getJSONObject(3).getString("id"));
+
+        //Out of the block, where 'once' cannot be said; and back in, where it has to be
+        state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "move", "uid", kids.get(0), "before", after))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(3, steps(state).size());
+        assertEquals(5, under(state, 0).size());
+        assertEquals("freeps, assign", steps(state).getJSONObject(1).getString("when"));
+        assertFalse(steps(state).getJSONObject(1).containsKey("once"));
+        assertEquals(kids.get(0), state.getJSONArray("uids").getString(1));
+        state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "move", "uid", kids.get(0), "into", block))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(2, steps(state).size());
+        assertEquals(6, under(state, 0).size());
+        assertTrue(under(state, 0).getJSONObject(5).getBooleanValue("once"));
+        assertEquals(kids.get(0), state.getJSONArray("kids").getJSONArray(0).getString(5));
+
+        //Taken out
+        state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "delete", "uid", kids.get(0)))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals(5, under(state, 0).size());
+        try {
+            authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", kids.get(0), "set", new JSONObject(Map.of("note", "gone"))))).toJSONString(), null);
+            fail("That step is no longer there");
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("no longer in the script"));
+        }
+        //A step of a block cannot say what only the block can
+        try {
+            authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", kids.get(1), "set", new JSONObject(Map.of("until", "phase(regroup)"))))).toJSONString(), null);
+            fail("A step in a block has no until");
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("it has no 'until' or 'skipWhen' of its own"));
+        }
+    }
+
+    /**
+     * The parts of a step that can be written out in full are typed in as the file has them, in HJSON, with or
+     * without their name in front; and are given back the same way.
+     */
+    @Test
+    public void WhatAStepWaitsForIsTypedAsTheFileHasIt() throws Exception {
+        openTwoSkirmishes();
+        JSONObject state = state();
+        String block = state.getJSONArray("uids").getString(0);
+        String last = state.getJSONArray("uids").getString(1);
+        assertTrue("Nothing is written out in full yet", state.getJSONObject("texts").isEmpty());
+
+        String until = """
+                until: {
+                	# when the fighting is over
+                	phase: regroup
+                	require: {
+                		type: canSpot
+                		filter: alias(aragorn)
+                	}
+                }
+                """;
+        String passWhen = """
+                [
+                	{
+                		type: canSpot
+                		filter: alias(gandalf)
+                	}
+                ]""";
+        state = json(authoring.edit(player, edit(
+                new JSONObject(Map.of("op", "merge", "uid", block, "set", new JSONObject(Map.of("until", until)))),
+                new JSONObject(Map.of("op", "merge", "uid", last, "set", new JSONObject(Map.of("allow", new JSONObject(Map.of("passWhen", passWhen)))))))
+                .toJSONString(), 1)).getJSONObject("state");
+        JSONObject read = steps(state).getJSONObject(0).getJSONObject("until");
+        assertEquals("regroup", read.getString("phase"));
+        assertEquals("alias(aragorn)", read.getJSONObject("require").getString("filter"));
+        assertEquals("""
+                {
+                	phase: regroup
+                	require: {
+                		type: canSpot
+                		filter: alias(aragorn)
+                	}
+                }""", state.getJSONObject("texts").getJSONObject(block).getString("until"));
+        assertTrue(state.getJSONObject("texts").getJSONObject(last).getString("passWhen"),
+                state.getJSONObject("texts").getJSONObject(last).getString("passWhen").contains("filter: alias(gandalf)"));
+
+        //A line of terms is a line of terms, with its name in front or without
+        state = json(authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", block,
+                "set", new JSONObject(Map.of("until", "until: freeps, action, phase(regroup)", "when", "turn(1)"))))).toJSONString(), 1)).getJSONObject("state");
+        assertEquals("freeps, action, phase(regroup)", steps(state).getJSONObject(0).getString("until"));
+        assertEquals("turn(1)", steps(state).getJSONObject(0).getString("when"));
+        assertFalse(state.getJSONObject("texts").containsKey(block));
+
+        try {
+            authoring.edit(player, edit(new JSONObject(Map.of("op", "merge", "uid", block, "set", new JSONObject(Map.of("until", "{ phase: regroup"))))).toJSONString(), null);
+            fail("That is not HJSON");
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().startsWith("until: that is not HJSON"));
+        }
+    }
+
+    /** A card is given another name, and every part of the scenario that said the old one says the new. */
+    @Test
+    public void ACardIsRenamedWhereverTheScenarioNamesIt() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/named.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                		orders: [
+                			{
+                				when: shadow, cards, text(aragorn), offers(aragorn)
+                				answer: choose(aragorn)
+                			}
+                		]
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, swordarm
+                			characters: gandalf
+                		}
+                		wounds: {
+                			gandalf: 1
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), offers(aragorn)
+                			do: wound(gandalf, 1), move(servant1, freeps.hand)
+                			messages: [
+                				{
+                					text: Play [[aragorn]], whose strength is {strength:aragorn}. Not [[Aragorn]] the name, nor aragorn the word.
+                					anchor: card:aragorn:strength, zone:self.hand
+                					highlight: card:aragorn, card:gandalf
+                					advance: inspect(aragorn)
+                				}
+                				{
+                					text: Then [[aragorn|the ranger]] is in play.
+                					on: picked(aragorn)
+                				}
+                			]
+                			allow: {
+                				answers: play(aragorn), use(aragorn, text aragorn says)?
+                				passWhen: {
+                					type: canSpot
+                					filter: alias(aragorn)
+                				}
+                				hints: {
+                					aragorn: Yes, [[aragorn]].
+                					swordarm: Not yet.
+                				}
+                			}
+                			answer: play(aragorn)
+                		}
+                		{
+                			when: {
+                				seat: freeps
+                				decision: action
+                				text: Fellowship
+                				require: {
+                					type: canSpot
+                					filter: alias(aragorn)
+                				}
+                			}
+                			allow: play(swordarm)?, pass
+                			answer: pass
+                			end: complete
+                		}
+                	]
+                """).replace("id: test", "id: named"), StandardCharsets.UTF_8);
+        authoring.open(player, "named", true);
+        JSONObject result = json(authoring.renameCard(player, "aragorn", "strider"));
+        assertTrue("A fresh game of it, with the card under its new name", result.getBooleanValue("rebuilt"));
+        JSONObject state = result.getJSONObject("state");
+        JSONObject draft = state.getJSONObject("draft");
+        assertTrue(draft.getJSONObject("cards").getJSONObject("freeps").containsKey("strider"));
+        assertFalse(draft.getJSONObject("cards").getJSONObject("freeps").containsKey("aragorn"));
+        assertEquals("It keeps its place among the cards", List.of("frodo", "strider", "gandalf"),
+                new ArrayList<>(draft.getJSONObject("cards").getJSONObject("freeps").keySet()).subList(0, 3));
+        assertEquals("strider, swordarm", draft.getJSONObject("setup").getJSONObject("freeps").getString("hand"));
+        JSONObject order = draft.getJSONObject("opponent").getJSONArray("orders").getJSONObject(0);
+        assertEquals("shadow, cards, text(aragorn), offers(strider)", order.getString("when"));
+        assertEquals("choose(strider)", order.getString("answer"));
+
+        JSONObject first = steps(state).getJSONObject(0);
+        assertEquals("freeps, action, phase(fellowship), offers(strider)", first.getString("when"));
+        assertEquals("Other cards, and places, are left alone", "wound(gandalf, 1), move(servant1, freeps.hand)", first.getString("do"));
+        JSONObject message = first.getJSONArray("messages").getJSONObject(0);
+        assertEquals("What a player reads is the same; what it is looked up by is the new name",
+                "Play [[strider|aragorn]], whose strength is {strength:strider}. Not [[Aragorn]] the name, nor aragorn the word.", message.getString("text"));
+        assertEquals("card:strider:strength, zone:self.hand", message.getString("anchor"));
+        assertEquals("card:strider, card:gandalf", message.getString("highlight"));
+        assertEquals("inspect(strider)", message.getString("advance"));
+        assertEquals("Then [[strider|the ranger]] is in play.", first.getJSONArray("messages").getJSONObject(1).getString("text"));
+        assertEquals("picked(strider)", first.getJSONArray("messages").getJSONObject(1).getString("on"));
+        JSONObject allow = first.getJSONObject("allow");
+        assertEquals("What is quoted from the game is not the card's name", "play(strider), use(strider, text aragorn says)?", allow.getString("answers"));
+        assertEquals("alias(strider)", allow.getJSONArray("passWhen").getJSONObject(0).getString("filter"));
+        assertEquals("Yes, [[strider|aragorn]].", allow.getJSONObject("hints").getString("strider"));
+        assertEquals("play(strider)", first.getString("answer"));
+        JSONObject when = steps(state).getJSONObject(1).getJSONObject("when");
+        assertEquals("alias(strider)", when.getJSONObject("require").getString("filter"));
+
+        //It still plays, and the board knows the card by its new name
+        assertTrue(json(authoring.check(player)).getString("report"), json(authoring.check(player)).getBooleanValue("passed"));
+        boolean found = false;
+        for (Object card : state.getJSONObject("board").getJSONArray("cards"))
+            found |= ((JSONObject) card).getString("alias").equals("strider");
+        assertTrue(found);
+
+        for (String[] bad : new String[][] {{"strider", "gandalf"}, {"aragorn", "elessar"}, {"strider", "two words"}, {"strider", "9lives"}}) {
+            try {
+                authoring.renameCard(player, bad[0], bad[1]);
+                fail("Should have been refused: " + bad[0] + " to " + bad[1]);
+            } catch (ScenarioAuthoring.AuthoringException expected) {
+                assertTrue(steps(state()).getJSONObject(0).getString("answer").equals("play(strider)"));
+            }
+        }
+    }
 }

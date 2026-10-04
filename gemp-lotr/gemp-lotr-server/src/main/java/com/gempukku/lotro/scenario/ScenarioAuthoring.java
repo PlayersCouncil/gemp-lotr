@@ -77,6 +77,9 @@ public class ScenarioAuthoring {
     private static final Set<String> ABOUT_IT = Set.of("title", "summary", "author", "tags", "note", "version", "steps");
     /** Parts of a step that change what is shown and allowed, and nothing about which decisions it takes or how it answers. */
     private static final Set<String> SHOWN = Set.of("messages", "note", "id", "checkpoint", "allow");
+    private static final Set<String> SHOWN_OR_UNDER = Set.of("messages", "note", "id", "checkpoint", "allow", "anyOrder");
+    /** Parts of a step that can be written out in full, as { ... }: typed in as the file has them, they are read as HJSON. */
+    private static final List<String> TYPED = List.of("when", "until", "skipWhen");
     private static final int SEARCH_LIMIT = 60;
 
     /** Whatever seats an author at a game: the server, or a test. */
@@ -241,17 +244,44 @@ public class ScenarioAuthoring {
             return all;
         }
 
+        /** For each step in order, the names of the steps in it: none, unless it is a block. */
+        List<List<String>> kids() {
+            List<List<String>> all = new ArrayList<>();
+            for (Step step : def.steps) {
+                List<String> under = new ArrayList<>();
+                for (Step child : step.children)
+                    under.add(uid(child));
+                all.add(under);
+            }
+            return all;
+        }
+
+        /**
+         * Where the game is, for a fresh game to be brought to the same place: the step the script is at and, if
+         * that is a block, how many decisions its steps have answered.
+         */
+        At at() {
+            ScenarioDirector director = live.Session().Director();
+            Step current = director.currentStep();
+            return new At(position(), 0, current != null && current.block ? director.answeredInBlock() : 0);
+        }
+
         /**
          * What a fresh game of the draft takes over from this one.
-         * @param uids The names of the steps of the draft the fresh game is of, in order (null where a step is new).
+         * @param names The names of the steps of the draft the fresh game is of (null where a step is new).
          */
-        Carried carry(List<String> uids, int position) throws AuthoringException {
+        Carried carry(Names names, At at) {
             Set<String> unanswered = new HashSet<>();
             for (Step step : awaiting)
                 unanswered.add(uid(step));
             List<String> dropped = new ArrayList<>();
             pending.forEach(op -> dropped.add(op.source()));
-            return new Carried(null, new ArrayList<>(uids), unanswered, position, dropped);
+            return new Carried(null, names, unanswered, at, dropped);
+        }
+
+        /** A step read again from what its file would say, in the place it has. */
+        Step reparsed(Step step, JsonObject json) throws ScenarioFormatException {
+            return ScenarioParser.parseStep(def, json, step.number, step.parent, step.sub);
         }
 
         @Override
@@ -294,7 +324,7 @@ public class ScenarioAuthoring {
                             json.get("allow").asObject().set("answers", term);
                         else
                             json.set(human ? "allow" : "answer", term);
-                        copyInto(step, ScenarioParser.parseStep(def, json, step.number));
+                        copyInto(step, reparsed(step, json));
                         changed = true;
                     }
                     if (changed)
@@ -315,11 +345,19 @@ public class ScenarioAuthoring {
                 }
                 JsonObject json = new JsonObject();
                 json.add("when", placing.when());
+                //(what was done once is written as something done once: the block's other decisions of the same
+                // kind are still to be written, or to be let through by taking the 'once' off)
+                Step block = placing.block();
+                if (block != null)
+                    json.add("once", true);
                 json.add(human ? "allow" : "answer", term(ruling.decision(), answer));
-                Step written = ScenarioParser.parseStep(def, json, 0);
+                Step written = block == null ? ScenarioParser.parseStep(def, json, 0)
+                        : ScenarioParser.parseStep(def, json, block.number, block, block.children.size() + 1);
                 written.doOps.addAll(pending);
                 pending.clear();
-                if (placing.repeating() != null) {
+                if (block != null) {
+                    director.addToBlock(written, true);
+                } else if (placing.repeating() != null) {
                     //A step that repeats was under way, and this is not a decision it applies to or ends at.  It ends
                     // here now, and says so, so that the script reads as it was played
                     giveWay(placing);
@@ -336,16 +374,21 @@ public class ScenarioAuthoring {
             }
         }
 
-        /** What a decision's step waits for, as tightly as can be said without knowing what the decision will offer. */
-        String whenFor(String player, AwaitingDecision decision) {
+        /**
+         * What a decision's step waits for, as tightly as can be said without knowing what the decision will offer.
+         * @param block The block the step is for, if it is for one: what the block already says for all its steps
+         *              is not said again.
+         */
+        String whenFor(String player, AwaitingDecision decision, Step block) {
             ScenarioTable table = live.Table();
             StringBuilder when = new StringBuilder();
             when.append(table.SeatOf(player).key()).append(", ").append(AnswerCompiler.typeName(decision.getDecisionType()));
             Phase phase = table.GetCurrentPhase();
             String name = phase.name().toLowerCase(Locale.ROOT);
-            if (Phase.findPhase(name) == phase)
+            if (Phase.findPhase(name) == phase && (block == null || block.when.phase != phase))
                 when.append(", phase(").append(name).append(")");
-            when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
+            if (block == null || block.when.turn == null)
+                when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
             //A card's trigger being offered ("Optional responses") is the same kind of decision, in the same phase
             // of the same turn, as the phase's own "play something or pass": only what it says tells them apart
             String said = decision.getText() == null ? "" : decision.getText().replaceAll("<[^>]*>", "").trim();
@@ -362,19 +405,25 @@ public class ScenarioAuthoring {
          * @param until What the repeating step's 'until' has to become for it to end at this decision.
          * @param when The new step's 'when'.
          * @param problem Why no step can be written for it; null if one can.
+         * @param block The block the script is at, if the step goes into it (as the last of its steps); null if it
+         *              is a step of the script itself.
          */
-        record Placing(int index, Step repeating, String until, String when, String problem) { }
+        record Placing(int index, Step repeating, String until, String when, String problem, Step block) { }
 
         Placing placing(String player, AwaitingDecision decision) {
             ScenarioDirector director = live.Session().Director();
-            String when = whenFor(player, decision);
             Step current = director.currentStep();
+            //The script is at a block, and this is one of the decisions the block is for (it fits what the block
+            // waits for, and is not where the block ends): none of the block's steps takes it, so one more does
+            if (current != null && current.block && director.matches(current.when, player, decision))
+                return new Placing(current.number - 1, null, null, whenFor(player, decision, current), null, current);
+            String when = whenFor(player, decision, null);
             if (current == null || director.timesApplied() == 0)
-                return new Placing(position() - 1, null, null, when, null);
+                return new Placing(position() - 1, null, null, when, null, null);
             try {
-                return new Placing(current.number, current, givingWay(current, player, decision), when, null);
+                return new Placing(current.number, current, givingWay(current, player, decision), when, null, null);
             } catch (AuthoringException exp) {
-                return new Placing(current.number, current, null, when, exp.getMessage());
+                return new Placing(current.number, current, null, when, exp.getMessage(), null);
             }
         }
 
@@ -389,7 +438,7 @@ public class ScenarioAuthoring {
             ScenarioDirector director = live.Session().Director();
             ScenarioTable table = live.Table();
             When until = repeating.until;
-            String cannot = repeating.describe() + " repeats and is under way, and ";
+            String cannot = repeating.describe() + (repeating.block ? " is a block that" : " repeats and") + " is under way, and ";
             if (until.require != null || until.source.startsWith("{"))
                 throw new AuthoringException(cannot + "its 'until' is written out with requirements.  Change it by hand so that it fits this decision; "
                         + "then a step can be added for the decision.");
@@ -406,6 +455,8 @@ public class ScenarioAuthoring {
                 kept.skirmish = until.skirmish;
             if (until.offers != null && fits(director, player, decision, part -> part.offers = until.offers))
                 kept.offers = until.offers;
+            if (until.fighting != null && fits(director, player, decision, part -> part.fighting = until.fighting))
+                kept.fighting = until.fighting;
             if (until.text != null && fits(director, player, decision, part -> part.text = until.text))
                 kept.text = until.text;
             When own = repeating.when;
@@ -433,6 +484,8 @@ public class ScenarioAuthoring {
                 terms.add("skirmish(" + kept.skirmish + ")");
             if (kept.offers != null)
                 terms.add("offers(" + kept.offers + ")");
+            if (kept.fighting != null)
+                terms.add("fighting(" + kept.fighting + ")");
             if (kept.text != null)
                 terms.add("text(" + kept.text + ")");
             return String.join(", ", terms);
@@ -459,8 +512,8 @@ public class ScenarioAuthoring {
             String was = repeating.until.source;
             JsonObject json = ScenarioWriter.step(repeating);
             json.set("until", placing.until());
-            copyInto(repeating, ScenarioParser.parseStep(def, json, repeating.number));
-            session.notice = "Step " + repeating.label() + " repeats, and was still under way.  Its 'until' was \"" + was + "\" and is now \""
+            copyInto(repeating, reparsed(repeating, json));
+            session.notice = "Step " + repeating.label() + (repeating.block ? " is a block, and was still under way.  Its 'until' was \"" : " repeats, and was still under way.  Its 'until' was \"") + was + "\" and is now \""
                     + placing.until() + "\", so that it ends where the new step begins.";
         }
 
@@ -530,7 +583,8 @@ public class ScenarioAuthoring {
          * waited for or answered.
          * @return Whether it did.  If not, nothing has been changed.
          */
-        boolean follow(ScenarioDefinition fresh, List<String> uids) {
+        boolean follow(ScenarioDefinition fresh, Names given) {
+            List<String> uids = given.uids;
             shown = false;
             if (!author || over())
                 return false;
@@ -542,16 +596,55 @@ public class ScenarioAuthoring {
             int kept = inHand != null || director.timesApplied() > 0 ? done + 1 : done;
             if (fresh.steps.size() < kept || def.steps.size() < kept)
                 return false;
-            for (int i = 0; i < kept; i++)
-                if (!without(ScenarioWriter.step(def.steps.get(i)), SHOWN).equals(without(ScenarioWriter.step(fresh.steps.get(i)), SHOWN)))
-                    return false;
-            //A decision that is already in front of somebody cannot be taken back to be read over
             boolean somethingWaiting = live.Session().Ruling(live.HumanPlayer()) != null || live.Session().Ruling(live.OpponentPlayer()) != null;
+            for (int i = 0; i < kept; i++) {
+                Step was = def.steps.get(i), now = fresh.steps.get(i);
+                if (was.block != now.block || !sameButShown(was, now))
+                    return false;
+                if (!was.block)
+                    continue;
+                List<String> names = given.under(i);
+                if (was != director.currentStep()) {
+                    //A block the game has been through: its steps are the ones that were played, in the order they came
+                    if (was.children.size() != now.children.size())
+                        return false;
+                    for (int k = 0; k < was.children.size(); k++)
+                        if (!uid(was.children.get(k)).equals(k < names.size() ? names.get(k) : null)
+                                || !sameButShown(was.children.get(k), now.children.get(k)))
+                            return false;
+                    continue;
+                }
+                //The block the game is in: the steps it has used are still there and still answer as they did.  The
+                // rest of them are what the block's remaining decisions will be put to, and can be anything.
+                for (Step child : was.children) {
+                    boolean used = child == inHand
+                            || director.statuses().get(child.label()) == ScenarioDirector.StepStatus.MATCHED;
+                    if (!used)
+                        continue;
+                    int at = names.indexOf(uid(child));
+                    if (at < 0 || at >= now.children.size() || !sameButShown(child, now.children.get(at)))
+                        return false;
+                }
+                //(a decision that is already in front of somebody cannot be taken back to be read over: a pause
+                // that is new to the block, or that waits for something else than it did, might be over that one)
+                if (inHand == null && somethingWaiting) {
+                    Map<String, Step> had = new LinkedHashMap<>();
+                    for (Step child : was.children)
+                        had.put(uid(child), child);
+                    for (int k = 0; k < now.children.size(); k++) {
+                        Step child = now.children.get(k);
+                        Step same = k < names.size() && names.get(k) != null ? had.get(names.get(k)) : null;
+                        if (child.pause && (same == null || !sameButShown(same, child)))
+                            return false;
+                    }
+                }
+            }
+            //A decision that is already in front of somebody cannot be taken back to be read over
             if (inHand == null && somethingWaiting) {
                 //(the first step still to come, or any that may be passed over on the way to it)
                 for (int i = kept; i < fresh.steps.size(); i++) {
                     Step next = fresh.steps.get(i);
-                    if (next.pause)
+                    if (next.pause || next.children.stream().anyMatch(child -> child.pause))
                         return false;
                     if (next.onlyIf.isEmpty() && next.unless.isEmpty())
                         break;
@@ -562,8 +655,28 @@ public class ScenarioAuthoring {
             for (Step step : awaiting)
                 unanswered.add(uid(step));
             director.restructure(() -> {
-                for (int i = 0; i < kept; i++)
-                    copyInto(def.steps.get(i), fresh.steps.get(i));
+                for (int i = 0; i < kept; i++) {
+                    Step was = def.steps.get(i), now = fresh.steps.get(i);
+                    copyInto(was, now);
+                    if (!was.block)
+                        continue;
+                    //The steps in a block are known by their names: the ones it had stay the steps they were (the
+                    // script knows which of them it has used), wherever in the block they now come
+                    List<String> names = given.under(i);
+                    Map<String, Step> had = new LinkedHashMap<>();
+                    for (Step child : was.children)
+                        had.put(uid(child), child);
+                    List<Step> children = new ArrayList<>();
+                    for (int k = 0; k < now.children.size(); k++) {
+                        Step child = now.children.get(k);
+                        Step same = k < names.size() && names.get(k) != null ? had.remove(names.get(k)) : null;
+                        if (same != null)
+                            copyInto(same, child);
+                        children.add(same != null ? same : child);
+                    }
+                    was.children.clear();
+                    was.children.addAll(children);
+                }
                 while (def.steps.size() > kept)
                     def.steps.removeLast();
                 for (int i = kept; i < fresh.steps.size(); i++)
@@ -577,15 +690,16 @@ public class ScenarioAuthoring {
             def.version = fresh.version;
             def.flags.clear();
             def.flags.addAll(fresh.flags);
-            awaiting.retainAll(def.steps.subList(0, kept));
-            for (int i = kept; i < def.steps.size(); i++) {
-                if (i >= uids.size() || uids.get(i) == null)
-                    continue;
+            //(the steps after the ones in use are new copies of themselves, and so is any step new to a block)
+            Set<Step> still = Collections.newSetFromMap(new IdentityHashMap<>());
+            still.addAll(def.allSteps());
+            awaiting.retainAll(still);
+            for (int i = 0; i < def.steps.size(); i++) {
                 Step step = def.steps.get(i);
-                names.put(step, uids.get(i));
-                //(the steps after the ones in use are new copies of themselves)
-                if (unanswered.contains(uids.get(i)) && !step.pause && step.allow == null && step.answers.isEmpty())
-                    awaiting.add(step);
+                named(this, step, i < uids.size() ? uids.get(i) : null, unanswered);
+                List<String> under = given.under(i);
+                for (int k = 0; k < step.children.size(); k++)
+                    named(this, step.children.get(k), k < under.size() ? under.get(k) : null, unanswered);
             }
 
             if (inHand != null) {
@@ -606,7 +720,28 @@ public class ScenarioAuthoring {
         return rest.toString();
     }
 
+    /** Whether two steps wait for, do and answer the same: they differ, if at all, in what they show and allow. */
+    private static boolean sameButShown(Step one, Step other) {
+        return without(ScenarioWriter.step(one), SHOWN_OR_UNDER).equals(without(ScenarioWriter.step(other), SHOWN_OR_UNDER));
+    }
+
+    /** Whether a step says nothing yet about what is done at it, so that what its author does there can be written in. */
+    private static boolean unanswered(Step step) {
+        return !step.pause && !step.block && step.allow == null && step.answers.isEmpty();
+    }
+
+    /** Gives a step of a fresh game the name it had, and has it go on waiting for its answer if it was. */
+    private static void named(Sitting sitting, Step step, String uid, Set<String> awaiting) {
+        if (uid == null)
+            return;
+        sitting.names.put(step, uid);
+        if (awaiting.contains(uid) && unanswered(step))
+            sitting.awaiting.add(step);
+    }
+
+    /** Everything about a step but the steps in it (a block's are its own, and are seen to one by one). */
     private static void copyInto(Step target, Step source) {
+        target.once = source.once;
         target.id = source.id;
         target.note = source.note;
         target.when = source.when;
@@ -654,22 +789,57 @@ public class ScenarioAuthoring {
     }
 
     /**
+     * A place in the script for a game to be brought to.
+     * @param step The number of the step.
+     * @param sub If that step is a block: the one of its steps to be brought to, counting from 1; 0 for none.
+     * @param times If it is a block and none of its steps is named: how many decisions its steps are to have answered.
+     */
+    private record At(int step, int sub, int times) {
+        static At step(int number) {
+            return new At(Math.max(1, number), 0, 0);
+        }
+    }
+
+    /**
+     * The names the steps of a draft go by between here and the author's client, as a change to the draft has them.
+     * A step cannot be known there by where it comes: that changes whenever the game writes a step in.
+     */
+    private static final class Names {
+        /** One for each step, in order; null where a step is new. */
+        List<String> uids;
+        /** For each step, in order, the names of the steps in it (none, unless it is a block). */
+        List<List<String>> kids;
+
+        Names(List<String> uids, List<List<String>> kids) {
+            this.uids = uids;
+            this.kids = kids;
+        }
+
+        List<String> under(int index) {
+            return kids != null && index < kids.size() && kids.get(index) != null ? kids.get(index) : List.of();
+        }
+    }
+
+    /**
      * What a fresh game takes over from the one before it.
      * @param draft The draft the fresh game is of; null if whoever asked has it already.
-     * @param uids The names of the draft's steps, in order; null where a step is new.
+     * @param names The names of the draft's steps; null if they have none yet.
      * @param awaiting The names of the steps that are waiting to be given their answer.
-     * @param position The step to play the script up to.
+     * @param at Where to play the script up to.
      * @param dropped Changes to the board that no step carried yet: the fresh game does not have them.
      */
-    private record Carried(ScenarioDefinition draft, List<String> uids, Set<String> awaiting, int position, List<String> dropped) { }
+    private record Carried(ScenarioDefinition draft, Names names, Set<String> awaiting, At at, List<String> dropped) { }
 
-    /** A copy of the draft as the game in hand has it, and what goes with it, taken while that game is held still. */
-    private Carried carry(Sitting sitting, Integer position) throws AuthoringException {
+    /**
+     * A copy of the draft as the game in hand has it, and what goes with it, taken while that game is held still.
+     * @param at Where the fresh game is to be brought to; null for where this one is.
+     */
+    private Carried carry(Sitting sitting, At at) throws AuthoringException {
         AuthoringException[] failure = new AuthoringException[1];
         Carried carried = sitting.mediator.scenarioLocked(() -> {
             try {
-                Carried rest = sitting.carry(sitting.uids(), position != null ? position : sitting.position());
-                return new Carried(copy(sitting.def, null), rest.uids(), rest.awaiting(), rest.position(), rest.dropped());
+                Carried rest = sitting.carry(new Names(sitting.uids(), sitting.kids()), at != null ? at : sitting.at());
+                return new Carried(copy(sitting.def, null), rest.names(), rest.awaiting(), rest.at(), rest.dropped());
             } catch (AuthoringException exp) {
                 failure[0] = exp;
                 return null;
@@ -779,17 +949,16 @@ public class ScenarioAuthoring {
         if (!errors.isEmpty())
             throw new AuthoringException(String.join("\n", errors));
 
-        int runTo = carried.position();
+        int runTo = carried.at().step();
         Sitting sitting = new Sitting(session, def, format, author);
-        if (carried.uids() != null) {
-            for (int i = 0; i < def.steps.size() && i < carried.uids().size(); i++) {
+        Names names = carried.names();
+        if (names != null) {
+            for (int i = 0; i < def.steps.size() && i < names.uids.size(); i++) {
                 Step step = def.steps.get(i);
-                String uid = carried.uids().get(i);
-                if (uid == null)
-                    continue;
-                sitting.names.put(step, uid);
-                if (carried.awaiting().contains(uid) && !step.pause && step.allow == null && step.answers.isEmpty())
-                    sitting.awaiting.add(step);
+                named(sitting, step, names.uids.get(i), carried.awaiting());
+                List<String> under = names.under(i);
+                for (int k = 0; k < step.children.size() && k < under.size(); k++)
+                    named(sitting, step.children.get(k), under.get(k), carried.awaiting());
             }
         }
         try {
@@ -799,7 +968,7 @@ public class ScenarioAuthoring {
                 live.SetAuthor(sitting);
             else
                 live.SetDraftTest();
-            live.RunTo(runTo, session::choice);
+            live.RunTo(runTo, carried.at().sub(), carried.at().times(), session::choice);
             sitting.live = live;
             sitting.mediator = _tables.seat(session.player, live);
         } catch (RuntimeException exp) {
@@ -820,7 +989,7 @@ public class ScenarioAuthoring {
     }
 
     private static Carried fromTheStart() {
-        return new Carried(null, null, Set.of(), 1, List.of());
+        return new Carried(null, null, Set.of(), At.step(1), List.of());
     }
 
     /* ------------------------------------------------------------------ what an author can ask for */
@@ -1009,9 +1178,9 @@ public class ScenarioAuthoring {
         }
     }
 
-    /** Changes the draft as its file would have it, and the names of its steps alongside (one for each step, in order). */
+    /** Changes the draft as its file would have it, and the names of its steps alongside. */
     private interface Patcher {
-        void patch(JsonObject json, List<String> uids) throws AuthoringException;
+        void patch(JsonObject json, Names names) throws AuthoringException;
     }
 
     /**
@@ -1035,25 +1204,25 @@ public class ScenarioAuthoring {
         String problem = sitting.mediator.scenarioLocked(() -> {
             try {
                 JsonObject json = ScenarioWriter.toJson(sitting.def);
-                List<String> uids = sitting.uids();
-                patcher.patch(json, uids);
+                Names names = new Names(sitting.uids(), sitting.kids());
+                patcher.patch(json, names);
                 ScenarioDefinition fresh = ScenarioParser.parse(json.toString());
                 if (_formats.apply(fresh.format) == null)
                     return "format: there is no format called '" + fresh.format + "'";
                 List<String> errors = ScenarioValidator.validate(fresh, _library);
                 if (!errors.isEmpty())
                     return String.join("\n", errors);
-                if (goTo == null && sitting.follow(fresh, uids)) {
-                    for (Step step : sitting.def.steps)
-                        if (unanswered.contains(sitting.names.get(step)) && !step.pause && step.allow == null && step.answers.isEmpty())
+                if (goTo == null && sitting.follow(fresh, names)) {
+                    for (Step step : sitting.def.allSteps())
+                        if (unanswered.contains(sitting.names.get(step)) && unanswered(step))
                             sitting.awaiting.add(step);
                     return null;
                 }
                 out[0] = fresh;
-                Carried carried = sitting.carry(uids, goTo != null ? goTo : sitting.position());
+                Carried carried = sitting.carry(names, goTo != null ? At.step(goTo) : sitting.at());
                 Set<String> waiting = new HashSet<>(carried.awaiting());
                 waiting.addAll(unanswered);
-                out[1] = new Carried(carried.draft(), carried.uids(), waiting, carried.position(), carried.dropped());
+                out[1] = new Carried(carried.draft(), carried.names(), waiting, carried.at(), carried.dropped());
                 return null;
             } catch (AuthoringException | ScenarioFormatException exp) {
                 return exp.getMessage();
@@ -1081,7 +1250,8 @@ public class ScenarioAuthoring {
     public Map<String, Object> draft(Player player, String json, Integer goTo) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            return change(session, goTo, (draft, uids) -> {
+            return change(session, goTo, (draft, names) -> {
+                List<String> uids = names.uids;
                 JsonObject given;
                 try {
                     given = org.hjson.JsonValue.readHjson(json).asObject();
@@ -1098,6 +1268,20 @@ public class ScenarioAuthoring {
                     uids.removeLast();
                 while (uids.size() < count)
                     uids.add(null);
+                //(and the steps in a block likewise: the ones it had, as far as it still has that many)
+                List<List<String>> kids = new ArrayList<>();
+                for (int i = 0; i < count; i++) {
+                    org.hjson.JsonValue step = given.get("steps").asArray().get(i);
+                    org.hjson.JsonValue under = step.isObject() ? step.asObject().get("anyOrder") : null;
+                    int size = under != null && under.isArray() ? under.asArray().size() : 0;
+                    List<String> had = new ArrayList<>(names.under(i));
+                    while (had.size() > size)
+                        had.removeLast();
+                    while (had.size() < size)
+                        had.add(null);
+                    kids.add(had);
+                }
+                names.kids = kids;
             });
         }
     }
@@ -1130,7 +1314,7 @@ public class ScenarioAuthoring {
                 throw new AuthoringException("That is not a change to a scenario: " + exp.getMessage());
             }
             Set<String> unanswered = new HashSet<>();
-            return change(session, goTo, (json, uids) -> {
+            return change(session, goTo, (json, names) -> {
                 if (patch.get("top") != null) {
                     for (JsonObject.Member member : patch.get("top").asObject()) {
                         if (member.getName().equals("steps"))
@@ -1166,89 +1350,256 @@ public class ScenarioAuthoring {
                 }
                 if (patch.get("steps") == null)
                     return;
-                List<org.hjson.JsonValue> steps = new ArrayList<>(json.get("steps") == null ? List.of() : json.get("steps").asArray().values());
+                List<Node> nodes = new ArrayList<>();
+                int count = 0;
+                for (org.hjson.JsonValue step : json.get("steps") == null ? List.<org.hjson.JsonValue>of() : json.get("steps").asArray().values()) {
+                    nodes.add(Node.of(step, count < names.uids.size() ? names.uids.get(count) : null, names.under(count)));
+                    count++;
+                }
                 for (org.hjson.JsonValue value : patch.get("steps").asArray()) {
                     JsonObject op = value.asObject();
                     String what = op.getString("op", "");
                     switch (what) {
-                        case "set" -> steps.set(place(op, "uid", "index", uids, false), op.get("step"));
+                        case "set" -> {
+                            Spot spot = named(nodes, op);
+                            Node was = spot.node();
+                            spot.list().set(spot.at(), Node.of(op.get("step"), was.uid, was.under()));
+                        }
                         case "merge" -> {
-                            int at = place(op, "uid", "index", uids, false);
-                            JsonObject step = new JsonObject(steps.get(at).asObject());
+                            Node node = named(nodes, op).node();
+                            List<String> under = node.under();
                             if (op.get("set") != null)
                                 for (JsonObject.Member member : op.get("set").asObject())
-                                    step.set(member.getName(), member.getValue());
+                                    node.json.set(member.getName(), member.getValue());
                             if (op.get("unset") != null)
-                                for (org.hjson.JsonValue name : op.get("unset").asArray())
-                                    step.remove(name.asString());
-                            steps.set(at, step);
+                                for (org.hjson.JsonValue name : op.get("unset").asArray()) {
+                                    node.json.remove(name.asString());
+                                    if (name.asString().equals("anyOrder"))
+                                        node.children = null;
+                                }
+                            typed(node.json);
+                            if (node.json.get("anyOrder") != null)
+                                node.take(under);
                         }
                         case "insert" -> {
-                            int at = place(op, "before", "index", uids, true);
-                            steps.add(at, op.get("step"));
+                            Spot to = destination(nodes, op, "index");
+                            Node node = Node.of(op.get("step"), null, null);
                             if (op.getBoolean("awaiting", false)) {
                                 //(it is named now, so that it can be told which step is waiting for its answer)
-                                String uid = "s" + session.uids.incrementAndGet();
-                                uids.add(at, uid);
-                                unanswered.add(uid);
-                            } else {
-                                uids.add(at, null);
+                                node.uid = "s" + session.uids.incrementAndGet();
+                                unanswered.add(node.uid);
                             }
+                            to.list().add(to.at(), node);
                         }
                         case "delete" -> {
-                            int at = place(op, "uid", "index", uids, false);
-                            steps.remove(at);
-                            uids.remove(at);
+                            Spot spot = named(nodes, op);
+                            spot.list().remove(spot.at());
                         }
                         case "move" -> {
-                            int from = place(op, "uid", "index", uids, false);
-                            org.hjson.JsonValue step = steps.remove(from);
-                            String uid = uids.remove(from);
-                            int to = place(op, "before", "to", uids, true);
-                            steps.add(to, step);
-                            uids.add(to, uid);
+                            Spot from = named(nodes, op);
+                            Node node = from.list().remove(from.at());
+                            Spot to = destination(nodes, op, "to");
+                            if (to.list() != from.list()) {
+                                //Into a block, or out of one.  A step of the script applies once; in a block that
+                                // has to be said, and out of one it cannot be.
+                                if (to.list() == nodes) {
+                                    node.json.remove("once");
+                                } else if (node.children != null) {
+                                    throw new AuthoringException("A block cannot have another block in it.");
+                                } else if (node.json.get("until") == null && !node.json.getBoolean("pause", false)) {
+                                    node.json.set("once", true);
+                                }
+                            }
+                            to.list().add(to.at(), node);
                         }
                         default -> throw new AuthoringException("'" + what + "' is not something that can be done to a step.");
                     }
                 }
                 org.hjson.JsonArray changed = new org.hjson.JsonArray();
-                steps.forEach(changed::add);
+                names.uids = new ArrayList<>();
+                names.kids = new ArrayList<>();
+                for (Node node : nodes) {
+                    changed.add(node.written());
+                    names.uids.add(node.uid);
+                    names.kids.add(node.under() == null ? new ArrayList<>() : node.under());
+                }
                 json.set("steps", changed);
             }, unanswered);
         }
     }
 
     /**
-     * Where in the script a change is to be made.
-     * @param named The part of the change that says it by a step's name.
-     * @param numbered The part that says it by where the step comes, for a change that names no step.
-     * @param orEnd Whether saying neither means the end of the script (true), or is a mistake.
+     * A step while a change is being made to the draft: what the file would say of it, the name it goes by, and (a
+     * block) the steps in it, which are kept beside what it says of itself.
      */
-    private static int place(JsonObject op, String named, String numbered, List<String> uids, boolean orEnd) throws AuthoringException {
-        org.hjson.JsonValue name = op.get(named);
+    private static final class Node {
+        JsonObject json;
+        String uid;
+        /** The steps of a block; null for a step that is not one. */
+        List<Node> children;
+
+        /** @param under The names of the steps in it, as far as they have any; null if they have none. */
+        static Node of(org.hjson.JsonValue value, String uid, List<String> under) throws AuthoringException {
+            if (value == null || !value.isObject())
+                throw new AuthoringException("A step is written as { ... }.");
+            Node node = new Node();
+            node.uid = uid;
+            node.json = new JsonObject(value.asObject());
+            typed(node.json);
+            node.take(under);
+            return node;
+        }
+
+        /** Takes the steps in it out of what it says of itself, to be kept beside that. */
+        void take(List<String> under) throws AuthoringException {
+            org.hjson.JsonValue anyOrder = json.get("anyOrder");
+            json.remove("anyOrder");
+            if (anyOrder == null) {
+                children = null;
+                return;
+            }
+            if (!anyOrder.isArray())
+                throw new AuthoringException("anyOrder: has to be a [list] of steps");
+            children = new ArrayList<>();
+            for (org.hjson.JsonValue child : anyOrder.asArray())
+                children.add(of(child, under != null && children.size() < under.size() ? under.get(children.size()) : null, null));
+        }
+
+        /** The names of the steps in it; null if it is not a block. */
+        List<String> under() {
+            if (children == null)
+                return null;
+            List<String> under = new ArrayList<>();
+            for (Node child : children)
+                under.add(child.uid);
+            return under;
+        }
+
+        JsonObject written() {
+            JsonObject whole = new JsonObject(json);
+            if (children != null) {
+                org.hjson.JsonArray anyOrder = new org.hjson.JsonArray();
+                for (Node child : children)
+                    anyOrder.add(child.written());
+                whole.set("anyOrder", anyOrder);
+            }
+            return whole;
+        }
+    }
+
+    /** A place among the steps: in the script itself, or in one of its blocks. */
+    private record Spot(List<Node> list, int at) {
+        Node node() {
+            return list.get(at);
+        }
+    }
+
+    private static Spot find(List<Node> nodes, String uid) {
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+            if (uid.equals(node.uid))
+                return new Spot(nodes, i);
+            if (node.children != null)
+                for (int k = 0; k < node.children.size(); k++)
+                    if (uid.equals(node.children.get(k).uid))
+                        return new Spot(node.children, k);
+        }
+        return null;
+    }
+
+    /** The step a change is to be made to: said by its name ('uid'), or, failing that, by where it comes in the script ('index'). */
+    private static Spot named(List<Node> nodes, JsonObject op) throws AuthoringException {
+        org.hjson.JsonValue name = op.get("uid");
         if (name != null && !name.isNull()) {
-            int at = uids.indexOf(name.asString());
-            if (at < 0)
+            Spot spot = find(nodes, name.asString());
+            if (spot == null)
                 throw new AuthoringException("That step is no longer in the script: it has changed since this page last heard of it.");
-            return at;
+            return spot;
+        }
+        org.hjson.JsonValue number = op.get("index");
+        if (number == null || number.isNull())
+            throw new AuthoringException("The change does not say which step it is for.");
+        int at = number.asInt();
+        if (at < 0 || at >= nodes.size())
+            throw new AuthoringException("There is no step " + (at + 1) + ".");
+        return new Spot(nodes, at);
+    }
+
+    /**
+     * Where a step is put: before the step called 'before' (wherever that is: in the script, or in a block); or as
+     * the last step of the block called 'into'; or, failing both, where the script's steps are counted to
+     * ('numbered', from 0); or at the end of the script.
+     */
+    private static Spot destination(List<Node> nodes, JsonObject op, String numbered) throws AuthoringException {
+        org.hjson.JsonValue before = op.get("before");
+        if (before != null && !before.isNull()) {
+            Spot spot = find(nodes, before.asString());
+            if (spot == null)
+                throw new AuthoringException("That step is no longer in the script: it has changed since this page last heard of it.");
+            return spot;
+        }
+        org.hjson.JsonValue into = op.get("into");
+        if (into != null && !into.isNull()) {
+            Spot block = find(nodes, into.asString());
+            if (block == null || block.node().children == null)
+                throw new AuthoringException("That block is no longer in the script: it has changed since this page last heard of it.");
+            return new Spot(block.node().children, block.node().children.size());
         }
         org.hjson.JsonValue number = op.get(numbered);
-        if (number == null || number.isNull()) {
-            if (orEnd)
-                return uids.size();
-            throw new AuthoringException("The change does not say which step it is for.");
-        }
+        if (number == null || number.isNull())
+            return new Spot(nodes, nodes.size());
         int at = number.asInt();
-        if (at < 0 || at > uids.size() || (!orEnd && at == uids.size()))
+        if (at < 0 || at > nodes.size())
             throw new AuthoringException("There is no step " + (at + 1) + ".");
-        return at;
+        return new Spot(nodes, at);
+    }
+
+    /**
+     * The parts of a step that can be written out in full are typed in as the file has them.  What was typed is
+     * text; where it is HJSON (it opens with a bracket, or has the part's name in front, as copied from a file) it
+     * is read, and the part is what it says.
+     */
+    private static void typed(JsonObject step) throws AuthoringException {
+        for (String name : TYPED)
+            if (step.get(name) != null)
+                step.set(name, typed(name, step.get(name)));
+        org.hjson.JsonValue allow = step.get("allow");
+        if (allow != null && allow.isObject() && allow.asObject().get("passWhen") != null) {
+            JsonObject read = new JsonObject(allow.asObject());
+            read.set("passWhen", typed("passWhen", read.get("passWhen")));
+            step.set("allow", read);
+        }
+    }
+
+    private static org.hjson.JsonValue typed(String name, org.hjson.JsonValue value) throws AuthoringException {
+        if (!value.isString())
+            return value;
+        String text = value.asString().strip();
+        String said = text.replaceAll("(?m)^\\s*(#|//).*\\n?", "").stripLeading();
+        boolean named = said.matches("(?s)" + name + "\\s*:.*");
+        if (!named && !said.startsWith("{") && !said.startsWith("["))
+            return value;
+        try {
+            org.hjson.JsonValue read = org.hjson.JsonValue.readHjson(named ? "{\n" + text + "\n}" : text);
+            return named ? read.asObject().get(name) : read;
+        } catch (RuntimeException exp) {
+            throw new AuthoringException(name + ": that is not HJSON: " + exp.getMessage());
+        }
     }
 
     /** A fresh game, with the script played up to a step. */
     public Map<String, Object> goTo(Player player, int step) throws AuthoringException {
+        return goTo(player, step, 0);
+    }
+
+    /**
+     * @param sub If the step is a block: which of its steps the script is played up to, counting from 1 (the first
+     *            decision that goes to it); 0 for the block's first decision, whichever of its steps takes that.
+     */
+    public Map<String, Object> goTo(Player player, int step, int sub) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            Carried carried = carry(session.sitting, Math.max(1, step));
+            Carried carried = carry(session.sitting, new At(Math.max(1, step), Math.max(0, sub), 0));
             start(session, carried.draft(), true, carried);
             return result(session, false, true);
         }
@@ -1364,6 +1715,35 @@ public class ScenarioAuthoring {
                 throw new AuthoringException(problem);
             session.changed();
             return result(session, true, false);
+        }
+    }
+
+    /**
+     * Gives one of the scenario's cards another name, and says the new name wherever the scenario said the old one
+     * (see AliasRename).  A fresh game of the draft is brought to where this one is.
+     */
+    public Map<String, Object> renameCard(Player player, String from, String to) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            requireAuthor(session.sitting);
+            String name = to == null ? "" : to.trim();
+            if (!name.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new AuthoringException("A card's name in the scenario is made of letters, digits, dashes and underscores, starting with a letter.");
+            return change(session, null, (json, names) -> {
+                boolean known = false;
+                JsonObject cards = json.get("cards") != null && json.get("cards").isObject() ? json.get("cards").asObject() : new JsonObject();
+                for (JsonObject.Member seat : cards) {
+                    if (!seat.getValue().isObject())
+                        continue;
+                    if (seat.getValue().asObject().get(name) != null && !name.equals(from))
+                        throw new AuthoringException("The scenario already has a card called '" + name + "'.");
+                    known |= from != null && seat.getValue().asObject().get(from) != null;
+                }
+                if (!known)
+                    throw new AuthoringException("The scenario has no card called '" + from + "'.");
+                if (!name.equals(from))
+                    AliasRename.rename(json, from, name);
+            });
         }
     }
 
@@ -1504,6 +1884,24 @@ public class ScenarioAuthoring {
                 try {
                     ScenarioDirector director = sitting.live.Session().Director();
                     Step current = director.currentStep();
+                    if (placing.block() != null) {
+                        //One more step in the block the script is at, for this decision and no other
+                        Step block = placing.block();
+                        JsonObject json = new JsonObject();
+                        json.add("when", placing.when());
+                        json.add("once", true);
+                        Step step = ScenarioParser.parseStep(sitting.def, json, block.number, block, block.children.size() + 1);
+                        director.addToBlock(step, false);
+                        sitting.awaiting.add(step);
+                        sitting.live.Session().Reconsider();
+                        if (sitting.inHand() != step) {
+                            director.removeFromBlock(step);
+                            sitting.awaiting.remove(step);
+                            return "A step could not be written for this decision.";
+                        }
+                        session.movedOn();
+                        return null;
+                    }
                     //The step the script is waiting on was put in by hand for this, and says nothing but a 'when'
                     // that does not fit: it is made to fit, in place of a second step being written in front of it
                     boolean reused = placing.repeating() == null && current != null && sitting.awaiting.contains(current) && sitting.blank(current);
@@ -1514,7 +1912,7 @@ public class ScenarioAuthoring {
                         was = step.when.source;
                         JsonObject json = ScenarioWriter.step(step);
                         json.set("when", placing.when());
-                        copyInto(step, ScenarioParser.parseStep(sitting.def, json, step.number));
+                        copyInto(step, sitting.reparsed(step, json));
                         director.restructure(() -> { }, step);
                     } else {
                         JsonObject json = new JsonObject();
@@ -1532,7 +1930,7 @@ public class ScenarioAuthoring {
                         if (reused) {
                             JsonObject json = ScenarioWriter.step(step);
                             json.set("when", was);
-                            copyInto(step, ScenarioParser.parseStep(sitting.def, json, step.number));
+                            copyInto(step, sitting.reparsed(step, json));
                         } else {
                             director.restructure(() -> sitting.def.steps.remove(step), placing.repeating());
                             sitting.awaiting.remove(step);
@@ -1540,8 +1938,11 @@ public class ScenarioAuthoring {
                         return "A step could not be written for this decision.";
                     }
                     session.movedOn();
-                    if (placing.repeating() != null)
+                    if (placing.repeating() != null) {
                         sitting.giveWay(placing);
+                        if (placing.repeating().block)
+                            director.doneWith(placing.repeating());
+                    }
                     return null;
                 } catch (ScenarioFormatException exp) {
                     return exp.getMessage();
@@ -1795,7 +2196,7 @@ public class ScenarioAuthoring {
     public Map<String, Object> test(Player player, int step) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
-            Carried carried = carry(session.sitting, Math.max(1, step));
+            Carried carried = carry(session.sitting, At.step(step));
             start(session, carried.draft(), false, carried);
             return result(session, false, true);
         }
@@ -1811,7 +2212,7 @@ public class ScenarioAuthoring {
             Sitting sitting = session.sitting;
             if (sitting.author && !sitting.mediator.isFinished() && !sitting.mediator.isDestroyed())
                 return result(session, false, false);
-            Carried carried = carry(sitting, session.testFrom);
+            Carried carried = carry(sitting, session.testFrom == null ? null : At.step(session.testFrom));
             start(session, carried.draft(), true, carried);
             return result(session, false, true);
         }
@@ -1912,15 +2313,44 @@ public class ScenarioAuthoring {
                 statuses.add(director.statuses().getOrDefault(step.label(), ScenarioDirector.StepStatus.UNREACHED).name().toLowerCase(Locale.ROOT));
             state.put("statuses", statuses);
             state.put("uids", sitting.uids());
+            //The steps in each block: for each step in order, their names and what became of each (none, for a step
+            // that is not a block)
+            List<List<String>> substatuses = new ArrayList<>();
+            for (Step step : def.steps) {
+                List<String> under = new ArrayList<>();
+                for (Step child : step.children)
+                    under.add(director.statuses().getOrDefault(child.label(), ScenarioDirector.StepStatus.UNREACHED).name().toLowerCase(Locale.ROOT));
+                substatuses.add(under);
+            }
+            state.put("kids", sitting.kids());
+            state.put("substatuses", substatuses);
             List<String> unanswered = new ArrayList<>();
-            for (Step step : def.steps)
+            for (Step step : def.allSteps())
                 if (sitting.awaiting.contains(step))
                     unanswered.add(sitting.uid(step));
             state.put("awaiting", unanswered);
+            //The parts of steps that are written out in full ({ ... }), as the file has them: by the step's name,
+            // {part: text}.  They are typed in the same way (see typed).
+            Map<String, Object> texts = new LinkedHashMap<>();
+            for (Step step : def.allSteps()) {
+                JsonObject written = ScenarioWriter.step(step);
+                Map<String, String> parts = new LinkedHashMap<>();
+                for (String name : TYPED)
+                    if (written.get(name) != null && !written.get(name).isString())
+                        parts.put(name, ScenarioWriter.text(written.get(name)));
+                org.hjson.JsonValue allow = written.get("allow");
+                if (allow != null && allow.isObject() && allow.asObject().get("passWhen") != null)
+                    parts.put("passWhen", ScenarioWriter.text(allow.asObject().get("passWhen")));
+                if (!parts.isEmpty())
+                    texts.put(sitting.uid(step), parts);
+            }
+            state.put("texts", texts);
 
             Step inHand = sitting.inHand();
             Map<String, Object> position = new LinkedHashMap<>();
             position.put("step", sitting.position());
+            //(in a block: which of its steps is in hand, counting from 1; 0 if none is, or it is no block)
+            position.put("sub", inHand != null ? inHand.sub : 0);
             position.put("inHand", inHand != null);
             //(a step that repeats, has applied at least once, and has not ended: the game is at it, between its decisions)
             position.put("underWay", inHand == null && director.currentStep() != null && director.timesApplied() > 0);
@@ -1941,6 +2371,7 @@ public class ScenarioAuthoring {
                 if (decision != null && table.Arranged()) {
                     described = describeDecision(sitting, player, decision);
                     described.put("step", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().number : null);
+                    described.put("sub", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().sub : 0);
                     described.put("held", !human && live.Held() != null && live.Held().decision() == decision);
                 }
                 waiting.put(human ? "human" : "opponent", described);
@@ -1960,6 +2391,9 @@ public class ScenarioAuthoring {
                 uncovered.put("until", placing.repeating() == null ? null : placing.repeating().until.source);
                 uncovered.put("becomes", placing.until());
                 uncovered.put("problem", placing.problem());
+                //(a step for it would go into the block the script is at: which block, and where in it)
+                uncovered.put("block", placing.block() == null ? null : placing.block().number);
+                uncovered.put("sub", placing.block() == null ? 0 : placing.block().children.size() + 1);
                 Step current = director.currentStep();
                 uncovered.put("reuses", placing.repeating() == null && current != null && sitting.awaiting.contains(current) && sitting.blank(current)
                         ? current.number : null);

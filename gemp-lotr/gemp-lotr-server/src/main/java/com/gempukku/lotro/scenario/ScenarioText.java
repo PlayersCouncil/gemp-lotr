@@ -61,7 +61,7 @@ public final class ScenarioText implements LiveScenario.TextRenderer {
      */
     public List<String> check(ScenarioDefinition def) {
         List<String> problems = new ArrayList<>();
-        for (Step step : def.steps) {
+        for (Step step : def.allSteps()) {
             for (Message message : step.messages)
                 check(message, step.describe(), problems);
             if (step.end != null)

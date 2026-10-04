@@ -197,6 +197,8 @@ public final class ScenarioWriter {
             json.add("checkpoint", true);
         if (step.pause)
             json.add("pause", true);
+        if (step.once)
+            json.add("once", true);
         if (!step.onlyIf.isEmpty())
             json.add("if", String.join(", ", step.onlyIf));
         if (!step.unless.isEmpty())
@@ -229,6 +231,12 @@ public final class ScenarioWriter {
                 json.add("end", end);
             }
         }
+        if (step.block) {
+            JsonArray children = new JsonArray();
+            for (Step child : step.children)
+                children.add(step(child));
+            json.add("anyOrder", children);
+        }
         return json;
     }
 
@@ -250,6 +258,8 @@ public final class ScenarioWriter {
                 terms.add("skirmish(" + when.skirmish + ")");
             if (when.offers != null)
                 terms.add("offers(" + when.offers + ")");
+            if (when.fighting != null)
+                terms.add("fighting(" + when.fighting + ")");
             if (when.text != null)
                 terms.add("text(" + when.text + ")");
             return JsonValue.valueOf(terms.toString());
@@ -267,6 +277,7 @@ public final class ScenarioWriter {
         if (when.skirmish != null)
             json.add("skirmish", when.skirmish);
         addIfSet(json, "offers", when.offers);
+        addIfSet(json, "fighting", when.fighting);
         json.add("require", requirements(when.require));
         return json;
     }
@@ -407,8 +418,12 @@ public final class ScenarioWriter {
                 sites.add(nameOf(library, site));
             comments.put("sites", String.join(", ", sites));
         }
-        for (Step step : def.steps)
-            comments.put("steps." + (step.number - 1), "---- " + step.number + (step.id == null ? "" : " (" + step.id + ")"));
+        for (Step step : def.steps) {
+            comments.put("steps." + (step.number - 1), "---- " + step.number + (step.id == null ? "" : " (" + step.id + ")")
+                    + (step.block ? ": these in whatever order the game asks for them" : ""));
+            for (Step child : step.children)
+                comments.put("steps." + (step.number - 1) + ".anyOrder." + (child.sub - 1), "-- " + child.label());
+        }
 
         StringBuilder out = new StringBuilder();
         write(out, root, 0, "", comments);
@@ -441,6 +456,13 @@ public final class ScenarioWriter {
             parts.put(member.getName(), out.toString());
         }
         return parts;
+    }
+
+    /** A part of a scenario as the file would have it: what is copied between a file and the authoring tool. */
+    public static String text(JsonValue value) {
+        StringBuilder out = new StringBuilder();
+        write(out, value, 0, "", Map.of());
+        return out.toString();
     }
 
     private static String nameOf(LotroCardBlueprintLibrary library, String blueprintId) {

@@ -33,6 +33,12 @@ import java.util.Set;
  * applies to a decision, and once it has been read the script moves on and the same decision is looked at again.  And
  * a pause can end in a choice, which gives the game a name ("help"); steps that say 'if: help' or 'unless: help' are
  * part of the game or not accordingly, and the ones that are not are passed over as if they were not in the file.
+ *
+ * One kind of step is not taken in order: a block ("anyOrder").  A block stands in the script like any step, and the
+ * script stays at it until a decision arrives that fits its 'until'.  Meanwhile each decision goes to the first of
+ * the block's own steps that fits it, wherever in the block that step comes and however often it has applied
+ * already (a step marked 'once', or a pause, applies once).  This is for the stretches of a game whose order is the
+ * game's and the player's to decide: which skirmish is fought first, how many times each side acts in it.
  */
 public class ScenarioDirector {
     public enum StepStatus {
@@ -40,7 +46,10 @@ public class ScenarioDirector {
         UNREACHED,
         /** The step applied to at least one decision. */
         MATCHED,
-        /** The step was given up on: its skipWhen came true, or it was a repeating step whose until was already true. */
+        /**
+         * The step was given up on: its skipWhen came true, or it was a repeating step whose until was already true,
+         * or it is a block's step and the block was over before any decision went to it.
+         */
         SKIPPED,
         /** The step belongs to a way through the scenario that this game did not take (its 'if' or 'unless'). */
         BYPASSED
@@ -64,8 +73,12 @@ public class ScenarioDirector {
     private final Set<String> _flags = new LinkedHashSet<>();
 
     private int _index = 0;
-    /** How many decisions the current step has applied to so far. */
+    /** How many decisions the current step has applied to so far (a block: its steps between them, readings included). */
     private int _timesApplied = 0;
+    /** In the block the script is at: how many decisions each of its steps has applied to. */
+    private final Map<Step, Integer> _applied = new java.util.IdentityHashMap<>();
+    /** In the block the script is at: the steps that are done with (a 'once' that has applied, a pause that has been read). */
+    private final Set<Step> _spent = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
     private ScenarioDefinition.End _end;
 
     private AwaitingDecision _lastDecision;
@@ -78,7 +91,7 @@ public class ScenarioDirector {
     public ScenarioDirector(ScenarioTable table) {
         _table = table;
         _def = table.Definition();
-        for (Step step : _def.steps)
+        for (Step step : _def.allSteps())
             _statuses.put(step.label(), StepStatus.UNREACHED);
     }
 
@@ -128,11 +141,55 @@ public class ScenarioDirector {
         restructure(() -> _def.steps.add(at, step), step);
     }
 
+    /**
+     * Authoring: a block has been made to end where it was (see insertAfterCurrent).  It is done with as it is when
+     * it ends by itself: the steps in it that no decision went to were not needed.
+     */
+    public void doneWith(Step block) {
+        for (Step child : block.children)
+            if (_statuses.get(child.label()) == StepStatus.UNREACHED)
+                _statuses.put(child.label(), StepStatus.SKIPPED);
+    }
+
     /** Authoring: the same, for a decision that has already been answered: the script stands after the new step. */
     public void recordAfterCurrent(Step step) {
+        Step done = currentStep();
         insertAfterCurrent(step);
+        if (done != null && done.block)
+            doneWith(done);
         _statuses.put(step.label(), StepStatus.MATCHED);
         advance();
+    }
+
+    /**
+     * Authoring: writes a step into the block the script is at, as the last of its steps.  (The decision it is for
+     * fitted none of the others, so nothing that comes before it in the block takes that decision from it.)
+     * @param used Whether the decision has been answered already, so that the step has applied to it.
+     */
+    public void addToBlock(Step step, boolean used) {
+        Step block = currentStep();
+        if (block == null || !block.block)
+            throw new IllegalStateException("The script is not at a block");
+        step.parent = block;
+        restructure(() -> block.children.add(step), null);
+        if (used) {
+            _statuses.put(step.label(), StepStatus.MATCHED);
+            _statuses.put(block.label(), StepStatus.MATCHED);
+            _applied.merge(step, 1, Integer::sum);
+            _timesApplied++;
+            if (step.once)
+                _spent.add(step);
+        }
+    }
+
+    /** Authoring: takes a step that was written into a block out of it again. */
+    public void removeFromBlock(Step step) {
+        Step block = step.parent;
+        if (block == null)
+            return;
+        restructure(() -> block.children.remove(step), null);
+        _applied.remove(step);
+        _spent.remove(step);
     }
 
     /**
@@ -144,14 +201,23 @@ public class ScenarioDirector {
      */
     public void restructure(Runnable change, Step current) {
         Map<Step, StepStatus> before = new java.util.IdentityHashMap<>();
-        for (Step step : _def.steps)
+        for (Step step : _def.allSteps())
             before.put(step, _statuses.getOrDefault(step.label(), StepStatus.UNREACHED));
         change.run();
         _statuses.clear();
         for (int index = 0; index < _def.steps.size(); index++) {
             Step step = _def.steps.get(index);
             step.number = index + 1;
+            step.parent = null;
+            step.sub = 0;
             _statuses.put(step.label(), before.getOrDefault(step, StepStatus.UNREACHED));
+            for (int place = 0; place < step.children.size(); place++) {
+                Step child = step.children.get(place);
+                child.number = step.number;
+                child.parent = step;
+                child.sub = place + 1;
+                _statuses.put(child.label(), before.getOrDefault(child, StepStatus.UNREACHED));
+            }
         }
         if (current != null) {
             int index = _def.steps.indexOf(current);
@@ -168,6 +234,34 @@ public class ScenarioDirector {
     /** How many decisions the step the script is waiting on has applied to so far. */
     public int timesApplied() {
         return _timesApplied;
+    }
+
+    /**
+     * @return How many decisions the steps of the block the script is at have had answered.  (What was only read is
+     * not counted: a pause is over a decision that then goes to another of the block's steps.)
+     */
+    public int answeredInBlock() {
+        Step block = currentStep();
+        int answered = 0;
+        if (block != null)
+            for (Step child : block.children)
+                answered += _applied.getOrDefault(child, 0);
+        return answered;
+    }
+
+    /** How many decisions a step has applied to so far: the step the script is at, or one of the steps in it. */
+    private int times(Step step) {
+        if (step.parent != null)
+            return step.parent == currentStep() ? _applied.getOrDefault(step, 0) : 0;
+        return step == currentStep() ? _timesApplied : 0;
+    }
+
+    /**
+     * @return Whether a decision that goes to this step is the first thing the script has had to do with the place
+     * it is at: the step's own first decision or, in a block, the first decision any of the block's steps takes.
+     */
+    public boolean arrives(Step step) {
+        return step.parent != null ? step.parent == currentStep() && _timesApplied == 0 : !isContinuing(step);
     }
 
     /** Whether, with what has been chosen so far, a step is part of this game at all. */
@@ -192,23 +286,56 @@ public class ScenarioDirector {
             Step step = _def.steps.get(index);
             if (!partOfTheGame(step))
                 continue;
+            observeSkirmish();
+            if (step.block) {
+                //If the block would be over at this decision, it is the steps after it that have a say.  If not,
+                // it is the first of its own steps that the decision could go to.
+                if ((index != _index || _timesApplied == 0) && step.skipWhen != null && couldFit(step.skipWhen, player, phase, false))
+                    continue;
+                if (couldFit(step.until, player, phase, false))
+                    continue;
+                if (!couldFit(step.when, player, phase, false))
+                    return false;
+                for (Step child : step.children) {
+                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child))
+                        continue;
+                    //(the phase is said for it if the block says it for all its steps)
+                    if (couldFit(child.when, player, phase, !(saysPhase(child.when, phase) || (child.when.phase == null && step.when.phase == phase))))
+                        return isAboutPassing(child);
+                }
+                return false;
+            }
             //A step that repeats and has already begun takes what comes and asks for nothing more.  What may be
             // wanted is the pass that ends it: that is for the step after it to say.
             if (index == _index && step.repeats() && _timesApplied > 0)
                 continue;
-            //Everything about the step that can be known before the decision exists.  (What the decision will say
-            // and offer cannot be: 'text' and 'offers' are left to the author to get right.)
-            When when = step.when;
-            observeSkirmish();
-            return when.phase == phase
-                    && (when.seat == null || when.seat == _table.SeatOf(player))
-                    && (when.decision == null || when.decision == AwaitingDecisionType.CARD_ACTION_CHOICE)
-                    && (when.turn == null || when.turn == _table.gameState().getTurnNumber())
-                    && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
-                    && (when.require == null || _table.Holds(when.require, player))
-                    && isAboutPassing(step);
+            return couldFit(step.when, player, phase, !saysPhase(step.when, phase)) && isAboutPassing(step);
         }
         return false;
+    }
+
+    /**
+     * Everything about a 'when' that can be known before the decision exists: a player's "play something or pass"
+     * in a phase.  (What the decision will say and offer cannot be: 'text' and 'offers' are left to the author to
+     * get right.)
+     * @param phaseSaid Whether the 'when' has to name the phase itself.  A step that is about a pass in a phase
+     *                  says which; a block's 'until' need not.
+     */
+    /** Whether a 'when' that names no phase says which it is all the same: a card is only ever fighting in a skirmish. */
+    private static boolean saysPhase(When when, Phase phase) {
+        return when.phase == null && when.fighting != null && phase == Phase.SKIRMISH;
+    }
+
+    private boolean couldFit(When when, String player, Phase phase, boolean phaseSaid) {
+        if (when.opening)
+            return false;
+        return (when.phase == phase || (!phaseSaid && when.phase == null))
+                && (when.seat == null || when.seat == _table.SeatOf(player))
+                && (when.decision == null || when.decision == AwaitingDecisionType.CARD_ACTION_CHOICE)
+                && (when.turn == null || when.turn == _table.gameState().getTurnNumber())
+                && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
+                && (when.fighting == null || isFighting(when.fighting))
+                && (when.require == null || _table.Holds(when.require, player));
     }
 
     /**
@@ -251,8 +378,44 @@ public class ScenarioDirector {
 
             if (!partOfTheGame(step)) {
                 _statuses.put(step.label(), StepStatus.BYPASSED);
+                for (Step child : step.children)
+                    _statuses.put(child.label(), StepStatus.BYPASSED);
                 advance();
                 continue;
+            }
+
+            if (step.block) {
+                boolean over = matches(step.until, player, decision);
+                if (over || (_timesApplied == 0 && step.skipWhen != null && matches(step.skipWhen, player, decision))) {
+                    //The block is done.  Its steps that no decision went to were not needed this time.
+                    if (_timesApplied == 0)
+                        _statuses.put(step.label(), StepStatus.SKIPPED);
+                    for (Step child : step.children)
+                        if (_statuses.get(child.label()) == StepStatus.UNREACHED)
+                            _statuses.put(child.label(), StepStatus.SKIPPED);
+                    advance();
+                    continue;
+                }
+                if (!matches(step.when, player, decision))
+                    return null;
+                for (Step child : step.children) {
+                    if (_spent.contains(child))
+                        continue;
+                    if (!partOfTheGame(child)) {
+                        _statuses.put(child.label(), StepStatus.BYPASSED);
+                        continue;
+                    }
+                    if (!matches(child.when, player, decision))
+                        continue;
+                    if (_applied.getOrDefault(child, 0) == 0) {
+                        _statuses.put(child.label(), StepStatus.MATCHED);
+                        for (DoOp op : child.doOps)
+                            _table.Apply(op);
+                    }
+                    _statuses.put(step.label(), StepStatus.MATCHED);
+                    return child;
+                }
+                return null;
             }
 
             if (step.repeats() && matches(step.until, player, decision)) {
@@ -289,6 +452,18 @@ public class ScenarioDirector {
      * Tells the director that the decision a step applied to has been answered.
      */
     public void answered(Step step) {
+        if (step.parent != null) {
+            //One of a block's steps: the script stays at the block
+            if (step.parent != currentStep())
+                return;
+            _applied.merge(step, 1, Integer::sum);
+            _timesApplied++;
+            if (step.end != null)
+                _end = step.end;
+            if (step.once)
+                _spent.add(step);
+            return;
+        }
         if (step != currentStep())
             return;
         if (step.when.opening)
@@ -306,13 +481,19 @@ public class ScenarioDirector {
      * @param choice The name the reader chose, if the pause ended in a choice; null otherwise.
      */
     public void read(Step step, String choice) {
-        if (step != currentStep() || !step.pause)
+        if (!step.pause || (step.parent == null ? step != currentStep() : step.parent != currentStep()))
             return;
         if (choice != null)
             _flags.add(choice);
         if (step.end != null)
             _end = step.end;
-        advance();
+        if (step.parent != null) {
+            //A block's pause has been read: the decision goes to whichever of the block's other steps fits it
+            _spent.add(step);
+            _timesApplied++;
+        } else {
+            advance();
+        }
         //The decision the pause was read over is looked at afresh, by whichever step comes next
         _lastDecision = null;
         _lastMatch = null;
@@ -340,13 +521,25 @@ public class ScenarioDirector {
     private void advance() {
         _index++;
         _timesApplied = 0;
+        _applied.clear();
+        _spent.clear();
     }
 
     /**
-     * @return Whether the current step has already applied to an earlier decision (only a repeating step can have).
+     * @return Whether the step has already applied to an earlier decision (only a repeating step, or one of a
+     * block's, can have).
      */
     public boolean isContinuing(Step step) {
-        return step == currentStep() && _timesApplied > 0;
+        return times(step) > 0;
+    }
+
+    /** Whether a card is in the skirmish being fought, on either side of it. */
+    private boolean isFighting(String alias) {
+        var skirmish = _table.gameState().getSkirmish();
+        if (skirmish == null)
+            return false;
+        PhysicalCard card = _table.Card(alias);
+        return skirmish.getFellowshipCharacter() == card || skirmish.getShadowCharacters().contains(card);
     }
 
     private void observeSkirmish() {
@@ -381,6 +574,8 @@ public class ScenarioDirector {
             return false;
         if (when.offers != null && !offers(decision, when.offers))
             return false;
+        if (when.fighting != null && !isFighting(when.fighting))
+            return false;
         return when.require == null || _table.Holds(when.require, player);
     }
 
@@ -407,8 +602,9 @@ public class ScenarioDirector {
             return "0";
         Answer answer = null;
         if (!step.answers.isEmpty()) {
-            if (_timesApplied < step.answers.size())
-                answer = step.answers.get(_timesApplied);
+            int times = times(step);
+            if (times < step.answers.size())
+                answer = step.answers.get(times);
             else if (step.answers.size() == 1)
                 answer = step.answers.getFirst();
             else
@@ -450,7 +646,7 @@ public class ScenarioDirector {
                     //In a step that spans several decisions, an allowed answer is expected to stop being on offer
                     // once it has been used (a card that has been played cannot be played again); and an answer
                     // written with a ? is one its author knows may not be on offer
-                    if (!step.repeats() && !answer.ifOffered())
+                    if (!step.recurs() && !answer.ifOffered())
                         throw exp;
                 }
             }

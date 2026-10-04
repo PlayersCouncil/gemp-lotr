@@ -41,6 +41,8 @@ var GempScenarioAuthor = Class.extend({
         "ui:skirmish:shadowStrength", "ui:stats", "ui:stats:archery", "ui:stats:move", "ui:chat", "ui:settings",
         "ui:dialog", "ui:cardInfo", "ui:button:pass", "ui:button:done", "ui:button:reset"],
     TABS: [["timeline", "Timeline"], ["step", "Step"], ["opponent", "Opponent"], ["board", "Board"], ["scenario", "Scenario"]],
+    /** The parts of a step that a file can have written out in full, as { ... }: typed here as the file has them. */
+    TYPED: ["when", "until", "skipWhen"],
 
     game: null,
     overlay: null,
@@ -54,9 +56,13 @@ var GempScenarioAuthor = Class.extend({
      * selected was asked for across a change and stays; jump, the step the game is at is to be selected whatever.
      */
     ui: null,
-    /** The step being edited: {index, step (a working copy), sent, base}. */
+    /**
+     * The step being edited: {uid, index, sub, kind, step (a working copy), origin, base}.  'index' is where it comes
+     * in the script (from 0) and, for one of the steps in a block, 'sub' is where it comes in the block (-1 for a
+     * step of the script itself).  'kind' is "step", "block" (what a block says of itself) or "child" (a step in one).
+     */
     form: null,
-    /** The message the author is working on, which is the one to show when its step is put up again: {step, index}. */
+    /** The message the author is working on, which is the one to show when its step is put up again: {step, sub, index}. */
     focusMessage: null,
     requests: 0,
 
@@ -215,6 +221,12 @@ var GempScenarioAuthor = Class.extend({
                 setTimeout(function () {
                     that.catchUp();
                 }, 300);
+            //(what a block's page shows besides the form, which changed while the form was being typed in)
+            if (that.redrawDue)
+                setTimeout(function () {
+                    if (that.redrawDue && that.ui.tab == "step" && !that.typingIn(that.tabs.step))
+                        that.render();
+                }, 300);
         });
         //The server is told when this page goes away, so that the Game Hall does not go on offering a draft that has
         // been saved and left.  (Going on to a fresh game of the draft is not going away; and a page that is only
@@ -357,10 +369,11 @@ var GempScenarioAuthor = Class.extend({
         this.call("POST", "edit", data, done, failed);
     },
 
-    goTo: function (step) {
+    /** @param sub in a block, the one of its steps to play up to (from 1); nothing for the block's first decision */
+    goTo: function (step, sub) {
         var that = this;
         this.flush(function () {
-            that.call("POST", "goto", {step: step});
+            that.call("POST", "goto", sub ? {step: step, sub: sub} : {step: step});
         });
     },
 
@@ -439,32 +452,55 @@ var GempScenarioAuthor = Class.extend({
     settle: function () {
         var state = this.state, ui = this.ui;
         var steps = this.draft.steps, uids = state.uids || [];
-        //The step selected is known by its name: where it comes changes when the game writes a step in before it
-        if (ui.selectedUid != null && $.inArray(ui.selectedUid, uids) > -1)
-            ui.selected = $.inArray(ui.selectedUid, uids) + 1;
+        //The step selected is known by its name: where it comes changes when the game writes a step in before it.
+        // In a block, the one of its steps that is selected ('sub') is known by its name too.
+        var found = ui.sub == null ? null : this.locate(ui.sub);
+        if (found != null) {
+            ui.selected = found.index + 1;
+            ui.selectedUid = uids[found.index];
+            //(taken out of its block, it is a step of the script)
+            if (found.sub < 0)
+                ui.sub = null;
+        } else {
+            ui.sub = null;
+            if (ui.selectedUid != null && $.inArray(ui.selectedUid, uids) > -1)
+                ui.selected = $.inArray(ui.selectedUid, uids) + 1;
+        }
         var at = state.position.step;
         //(the step in hand; or one that repeats and is between its decisions; or, failing those, the last one played)
         var current = steps.length == 0 ? null : Math.max(1, Math.min(state.position.inHand || state.position.underWay ? at : at - 1, steps.length));
         var currentUid = current == null ? null : uids[current - 1];
+        //(in a block, the one of its steps that is in hand)
+        var currentSub = current != null && current == at && state.position.inHand && state.position.sub > 0
+            ? (this.kidsOf(current - 1)[state.position.sub - 1] || null) : null;
+        var here = currentUid == null ? null : currentUid + (currentSub == null ? "" : "/" + currentSub);
         var lost = ui.selected == null || ui.selected > steps.length;
         var due = false;
         if (ui.hold && !lost) {
             //(asked for by the change that moved the game: moving a step, taking one out)
             ui.hold = false;
-        } else if (lost || ui.jump || (ui.follow && currentUid != ui.atUid)) {
+            //(...and in a block, by where in the block the step asked for would come)
+            if (ui.subAt != null)
+                ui.sub = this.kidsOf(ui.selected - 1)[ui.subAt] || null;
+        } else if (lost || ui.jump || (ui.follow && here != ui.atUid)) {
             //Nobody's place is taken from under them while they are typing in it, or choosing something on the
             // table for it: the game's step waits until they have done
-            if (!lost && !ui.jump && this.engaged())
+            if (!lost && !ui.jump && this.engaged()) {
                 due = true;
-            else
+            } else {
                 ui.selected = current;
+                ui.sub = currentSub;
+            }
         }
+        ui.subAt = null;
         this.followDue = due;
         if (!due) {
-            ui.atUid = currentUid;
+            ui.atUid = here;
             ui.jump = false;
         }
         ui.selectedUid = ui.selected == null ? null : uids[ui.selected - 1];
+        if (ui.sub != null && $.inArray(ui.sub, this.kidsOf(ui.selected - 1)) < 0)
+            ui.sub = null;
         this.remember();
     },
 
@@ -484,6 +520,45 @@ var GempScenarioAuthor = Class.extend({
     flash: function (tab) {
         var button = this.tabBar.find(".sa-tabbutton-" + tab);
         button.addClass("sa-attention");
+    },
+
+    /** The names of the steps in a block, by where the block comes among the steps of the script (from 0). */
+    kidsOf: function (index) {
+        return ((this.state && this.state.kids) || [])[index] || [];
+    },
+
+    /** A step without the steps in it: what a block says of itself. */
+    own: function (step) {
+        if (step == null || step.anyOrder == null)
+            return step;
+        var own = {};
+        for (var name in step)
+            if (step.hasOwnProperty(name) && name != "anyOrder")
+                own[name] = step[name];
+        return own;
+    },
+
+    /**
+     * Where the step of a name is: {index, sub, step}, 'sub' being where it comes in its block (-1 for a step of
+     * the script itself); null if there is no such step.
+     */
+    locate: function (uid) {
+        var steps = (this.draft && this.draft.steps) || [], uids = (this.state && this.state.uids) || [];
+        if (uid == null)
+            return null;
+        for (var i = 0; i < steps.length; i++) {
+            if (uids[i] == uid)
+                return {index: i, sub: -1, step: steps[i]};
+            var at = $.inArray(uid, this.kidsOf(i));
+            if (at > -1 && steps[i].anyOrder != null && steps[i].anyOrder[at] != null)
+                return {index: i, sub: at, step: steps[i].anyOrder[at]};
+        }
+        return null;
+    },
+
+    /** What a step is called: "34", or "34.2" for the second of the steps in a block. */
+    numberOf: function (index, sub) {
+        return (index + 1) + (sub > -1 ? "." + (sub + 1) : "");
     },
 
     aliasOfCard: function (cardId) {
@@ -536,9 +611,10 @@ var GempScenarioAuthor = Class.extend({
         this.saveButton.toggleClass("sa-dirty", !!state.dirty);
         var position = state.position;
         var count = this.draft.steps.length;
+        var inBlock = (this.draft.steps[position.step - 1] || {}).anyOrder != null;
         var where = position.over ? "The game is over" : position.frontier ? "Past the end of the script (" + count + " steps)"
-            : "Step " + position.step + " of " + count + (position.inHand ? ""
-                : position.underWay ? " (which repeats, and is under way)" : " (waiting to come to it)");
+            : "Step " + position.step + (position.sub > 0 ? "." + position.sub : "") + " of " + count + (position.inHand ? ""
+                : position.underWay ? (inBlock ? " (a block, between its decisions)" : " (which repeats, and is under way)") : " (waiting to come to it)");
         this.whereElem.text(where + (position.over ? "" : " \u00b7 turn " + position.turn + ", " + position.phase));
         this.renderNotices();
 
@@ -746,7 +822,8 @@ var GempScenarioAuthor = Class.extend({
             box.append(this.el("div", "sa-uncovered-how", "A step cannot be added for it as things stand: " + open.problem));
             return box;
         }
-        var how = open.reuses != null ? "Step " + open.reuses + ", which says nothing yet, becomes the step for it."
+        var how = open.block != null ? "It goes into the block the game is in, as step " + open.block + "." + open.sub + "."
+            : open.reuses != null ? "Step " + open.reuses + ", which says nothing yet, becomes the step for it."
             : open.repeating != null ? "It goes in after step " + open.repeating + ". That step repeats until \"" + open.until + "\"; that becomes \""
                 + open.becomes + "\", so that it ends where the new step begins."
             : open.after == 0 ? "It goes in at the start of the script." : "It goes in after step " + open.after + ".";
@@ -847,6 +924,8 @@ var GempScenarioAuthor = Class.extend({
         }
         var who = step.pause || this.isOpening(step) ? "Read" : seat == null ? "Any" : this.isHumanSeat(seat) ? "You" : "Opp";
         var act = "";
+        if (step.anyOrder != null)
+            return {who: "Block", when: rest.join(" "), act: "any order, until " + (typeof step.until == "string" ? step.until : "{...}")};
         if (this.isOpening(step))
             act = step["do"] || "";
         else if (step.answer)
@@ -926,13 +1005,18 @@ var GempScenarioAuthor = Class.extend({
         }
 
         var list = this.el("div", "sa-steps").appendTo(box);
-        $.each(steps, function (index, step) {
+        //A row for each step; and under a block, a row for each of the steps in it
+        var drawRow = function (step, index, sub) {
             var number = index + 1;
+            var child = sub > -1;
+            var uid = child ? that.kidsOf(index)[sub] : state.uids[index];
+            var status = child ? ((state.substatuses || [])[index] || [])[sub] : state.statuses[index];
             var summary = that.summary(step);
-            var row = that.el("div", "sa-step sa-status-" + (state.statuses[index] || "unreached")).appendTo(list);
-            row.toggleClass("sa-current", number == position.step && !position.over && !position.frontier);
-            row.toggleClass("sa-selected", number == that.ui.selected);
-            row.append(that.el("span", "sa-num", number));
+            var row = that.el("div", "sa-step sa-status-" + (status || "unreached")).appendTo(list);
+            row.toggleClass("sa-substep", child).toggleClass("sa-blockstep", step.anyOrder != null);
+            row.toggleClass("sa-current", number == position.step && !position.over && !position.frontier && (!child || position.sub == sub + 1));
+            row.toggleClass("sa-selected", number == that.ui.selected && (child ? that.ui.sub == uid : that.ui.sub == null));
+            row.append(that.el("span", "sa-num", that.numberOf(index, sub)));
             row.append(that.el("span", "sa-who sa-who-" + summary.who.toLowerCase(), summary.who));
             var what = that.el("span", "sa-what").appendTo(row);
             what.append(that.el("span", "sa-when", summary.when));
@@ -950,26 +1034,35 @@ var GempScenarioAuthor = Class.extend({
                 tags.append(that.el("span", "sa-tag", "do").attr("title", step["do"]));
             if (count > 0)
                 tags.append(that.el("span", "sa-tag sa-bubbles", "\u25ac" + count).attr("title", count + " message" + (count == 1 ? "" : "s")));
+            if (step.once)
+                tags.append(that.el("span", "sa-tag", "once").attr("title", "It applies to one decision. Without this, a step in a block applies to every decision that fits it, for as long as the block lasts."));
             if (step.checkpoint)
                 tags.append(that.el("span", "sa-tag sa-flag", "\u2691").attr("title", "A checkpoint"));
             if (step.end)
                 tags.append(that.el("span", "sa-tag", "end"));
-            if (that.isAwaiting(state.uids[index]))
+            if (that.isAwaiting(uid))
                 tags.append(that.el("span", "sa-tag sa-noanswer", "no answer yet").attr("title", "It says nothing yet about what is done. When the game comes to it, what you do there is written in."));
-            var mistaken = that.leftOutOf(state.uids[index]);
+            var mistaken = child ? [] : that.leftOutOf(uid);
             if (mistaken.length > 0)
                 tags.append(that.el("span", "sa-tag sa-mistake", "left out").attr("title", $.map(mistaken, function (one) {
                     return one.where.replace(/^step \d+( \([^)]*\))?\.?/, "") + ": " + one.message + "\nIt said: " + one.was;
                 }).join("\n\n")));
-            row.append(that.button("\u25b6", "A fresh game, played by the script up to this step", function () {
-                that.goTo(number);
+            row.append(that.button("\u25b6", child ? "A fresh game, played by the script up to the first decision this step takes" : "A fresh game, played by the script up to this step", function () {
+                that.goTo(number, child ? sub + 1 : null);
             }, "sa-go"));
             row.click(function () {
                 that.ui.selected = number;
                 that.ui.selectedUid = state.uids[index];
+                that.ui.sub = child ? uid : null;
                 that.ui.tab = "step";
                 that.remember();
                 that.render();
+            });
+        };
+        $.each(steps, function (index, step) {
+            drawRow(step, index, -1);
+            $.each(step.anyOrder || [], function (sub, child) {
+                drawRow(child, index, sub);
             });
         });
 
@@ -1003,11 +1096,19 @@ var GempScenarioAuthor = Class.extend({
             var index = that.ui.selected == null ? steps.length : that.ui.selected;
             //Put in where the script stands, with a decision waiting that nothing covers: that decision is what it is for
             var open = state.uncovered;
-            if (open != null && open.problem == null && open.reuses == null && index == open.after && !position.over) {
+            if (open != null && open.problem == null && open.reuses == null && open.block == null && index == open.after && !position.over) {
                 that.addStepHere();
                 return;
             }
             that.insertStep(index, {when: (that.draft.human || "freeps") + ", action"}, true);
+        }));
+        foot.append(this.button("+ Block", "A block, after the selected step: steps for a stretch of the game whose decisions come in no order the script can know (which skirmish is fought first, how often each side acts in it). "
+            + "Each decision goes to the first of the block's steps that fits it, until one arrives that fits the block's Until. It starts as this turn, until the regroup phase; with the game in it, what you do is written into it.", function () {
+            var index = that.ui.selected == null ? steps.length : that.ui.selected;
+            var block = {until: "phase(regroup)", anyOrder: []};
+            if (position.turn > 0)
+                block.when = "turn(" + position.turn + ")";
+            that.insertStep(index, block);
         }));
         foot.append(this.button("Rewrite from here", "Take the step the game is at, and every step after it, out of the script, and play on from here writing new ones", function () {
             var from = position.step;
@@ -1040,15 +1141,61 @@ var GempScenarioAuthor = Class.extend({
     changeSteps: function (ops, firstChanged, select) {
         var that = this;
         var goTo = firstChanged <= this.state.position.step ? Math.max(1, firstChanged) : null;
+        var was = this.selection();
         if (select != null) {
             this.ui.selected = select;
             //(whichever step ends up there: its name is learnt from what comes back)
             this.ui.selectedUid = null;
+            this.ui.sub = null;
             this.ui.hold = true;
         }
         this.form = null;
         this.remember();
-        this.edit({steps: ops}, goTo);
+        this.edit({steps: ops}, goTo, null, function () {
+            that.refused(was);
+        });
+    },
+
+    /** Which step the Step tab is on: {selected, selectedUid, sub}. */
+    selection: function () {
+        return {selected: this.ui.selected, selectedUid: this.ui.selectedUid, sub: this.ui.sub};
+    },
+
+    /**
+     * A change to which steps there are was not taken by the server (what went wrong is said at the top of the
+     * panel).  The Step tab goes back to the step it was on, with a form made afresh: the one it had was given up
+     * when the change was sent.
+     */
+    refused: function (was) {
+        this.ui.selected = was.selected;
+        this.ui.selectedUid = was.selectedUid;
+        this.ui.sub = was.sub;
+        this.ui.subAt = null;
+        this.ui.hold = false;
+        this.form = null;
+        this.remember();
+        this.render();
+    },
+
+    /**
+     * A change to which steps a block has.  In a block the game has been through it brings a fresh game, at the
+     * block; in the block the game is in, the game carries on if it can.
+     * @param subAt where in the block the step to turn to will come (from 0); nothing for the block itself
+     */
+    changeBlock: function (ops, index, subAt) {
+        var that = this;
+        var number = index + 1;
+        var was = this.selection();
+        this.ui.selected = number;
+        this.ui.selectedUid = null;
+        this.ui.sub = null;
+        this.ui.subAt = subAt;
+        this.ui.hold = true;
+        this.form = null;
+        this.remember();
+        this.edit({steps: ops}, number < this.state.position.step ? number : null, null, function () {
+            that.refused(was);
+        });
     },
 
     /** @param awaiting whether the step is to take its answer from what is done when the game comes to it */
@@ -1066,9 +1213,18 @@ var GempScenarioAuthor = Class.extend({
     /* ---------------------------------------------------------------- one step */
 
     /** A step as the form works on it: every part there, messages as objects, 'allow' taken apart. */
-    working: function (step) {
+    working: function (step, uid) {
         var that = this;
-        var work = this.clone(step);
+        var work = this.clone(this.own(step));
+        //What is written out in full ({ ... }) is edited as the file has it: the server gives it that way, and
+        // reads it that way
+        var texts = uid == null ? {} : (((this.state && this.state.texts) || {})[uid] || {});
+        var filed = function (value, text) {
+            return value == null || typeof value == "string" ? value : text != null ? text : JSON.stringify(value, null, "\t");
+        };
+        $.each(this.TYPED, function (index, name) {
+            work[name] = filed(work[name], texts[name]);
+        });
         work.messages = $.map(this.messagesOf(step), function (message) {
             return [typeof message == "string" ? {text: message} : that.clone(message)];
         });
@@ -1084,6 +1240,7 @@ var GempScenarioAuthor = Class.extend({
         if (work.allow != null && typeof work.allow == "string")
             work.allow = {answers: work.allow};
         work.allow = work.allow || {};
+        work.allow.passWhen = filed(work.allow.passWhen, texts.passWhen);
         if (work.end != null && typeof work.end == "string")
             work.end = {result: work.end};
         if (work.end != null)
@@ -1120,7 +1277,7 @@ var GempScenarioAuthor = Class.extend({
                 out.text = "";
             return out;
         };
-        $.each(["id", "note", "checkpoint", "pause", "if", "unless", "when", "until", "skipWhen", "do"], function (index, name) {
+        $.each(["id", "note", "checkpoint", "pause", "once", "if", "unless", "when", "until", "skipWhen", "do"], function (index, name) {
             if (!blank(work[name]))
                 step[name] = work[name];
         });
@@ -1173,14 +1330,21 @@ var GempScenarioAuthor = Class.extend({
             return;
         }
         var index = number - 1;
-        var uid = this.state.uids[index];
-        var base = JSON.stringify(steps[index]);
+        var step = steps[index];
+        //A block's page has a section for the block and one for each of the steps in it.  One of them is open,
+        // and that is the form: the block's own, unless one of its steps is selected.
+        var kids = this.kidsOf(index);
+        var sub = step.anyOrder == null || this.ui.sub == null ? -1 : $.inArray(this.ui.sub, kids);
+        var uid = sub > -1 ? kids[sub] : this.state.uids[index];
+        var base = JSON.stringify(this.own(sub > -1 ? step.anyOrder[sub] : step));
         if (this.form != null && this.form.uid == uid && box.children().length > 0) {
             //The same step.  The form is left as it is unless the step has been changed from somewhere else (the
             // game giving it its answer, say).  Then whatever of the form has not been sent goes first, and the
             // form is made again from the step as it now is.
             this.form.index = index;
-            if (this.form.base == base || this.form.sending) {
+            this.form.sub = sub;
+            var same = this.form.base == base || this.form.sending;
+            if (same && this.around == this.aroundOf(index, sub)) {
                 this.renderStepHead();
                 return;
             }
@@ -1189,24 +1353,61 @@ var GempScenarioAuthor = Class.extend({
                 this.sendStep();
                 return;
             }
+            //What has changed is the rest of a block's page (another of its steps, written in by the game): it is
+            // drawn again once nobody is typing in the form
+            if (same && this.typingIn(box)) {
+                this.redrawDue = true;
+                this.renderStepHead();
+                return;
+            }
         } else if (this.form != null && this.dirty().any) {
             //Another step is being turned to: what was not sent of this one still goes
             this.sendStep();
         }
-        this.makeForm(index);
+        this.makeForm(index, sub);
     },
 
-    /** Makes the form for a step afresh, leaving whoever was typing in one of its messages where they were. */
-    makeForm: function (index) {
+    /**
+     * What the Step tab's page shows besides the form: where the step comes in the script and, for a block, the
+     * block's other steps and (when the form is one of its steps) what the block says of itself.
+     */
+    aroundOf: function (index, sub) {
+        var step = this.draft.steps[index];
+        //(where the step comes is part of it: the page's buttons know the step by that)
+        if (step == null || step.anyOrder == null)
+            return "" + index;
+        var others = [];
+        for (var i = 0; i < step.anyOrder.length; i++)
+            others.push(i == sub ? null : step.anyOrder[i]);
+        return JSON.stringify([index, this.kidsOf(index), sub > -1 ? this.own(step) : null, others, this.state.awaiting]);
+    },
+
+    /**
+     * Makes the form for a step afresh, leaving whoever was typing in one of its messages where they were.
+     * @param sub for one of the steps in a block, where it comes in the block (from 0); otherwise -1 or nothing
+     */
+    makeForm: function (index, sub) {
         var box = this.tabs.step;
         var caret = null;
         var active = document.activeElement;
         if (active != null && $.contains(box[0], active) && $(active).hasClass("sa-text"))
             caret = {message: box.find("textarea.sa-text").index(active), at: active.selectionStart};
-        var step = this.draft.steps[index];
-        var work = this.working(step);
-        this.form = {uid: this.state.uids[index], index: index, step: work, origin: this.written(work), base: JSON.stringify(step)};
+        var top = this.draft.steps[index];
+        sub = sub == null || top.anyOrder == null ? -1 : sub;
+        var step = sub > -1 ? top.anyOrder[sub] : top;
+        var uid = sub > -1 ? this.kidsOf(index)[sub] : this.state.uids[index];
+        //(turned to another step, the tab starts at its top: where the one before was scrolled to means nothing here)
+        var turned = this.form == null || this.form.index != index || (sub < 0 && this.form.uid != uid);
+        var work = this.working(step, uid);
+        this.form = {uid: uid, index: index, sub: sub, kind: sub > -1 ? "child" : top.anyOrder != null ? "block" : "step",
+            step: work, origin: this.written(work), base: JSON.stringify(this.own(step))};
+        this.around = this.aroundOf(index, sub);
+        this.redrawDue = false;
+        if (turned)
+            this.panelShown = null;
         this.buildStepForm();
+        if (turned && sub < 0)
+            box.scrollTop(0);
         if (caret != null) {
             var area = box.find("textarea.sa-text").eq(caret.message);
             if (area.length > 0) {
@@ -1312,12 +1513,14 @@ var GempScenarioAuthor = Class.extend({
             });
             form.refused = null;
             if (that.form === form && that.draft != null) {
-                var at = $.inArray(form.uid, that.state.uids || []);
-                if (at > -1) {
-                    form.index = at;
-                    form.base = JSON.stringify(that.draft.steps[at]);
+                var found = that.locate(form.uid);
+                if (found != null) {
+                    form.index = found.index;
+                    form.sub = found.sub;
+                    form.base = JSON.stringify(that.own(found.step));
                     //Anything else about the step that is not as the form has it was changed somewhere else
-                    var theirs = that.written(that.working(that.draft.steps[at]));
+                    var theirs = that.written(that.working(found.step, form.uid));
+                    that.asFiled(form, sent, theirs, changes);
                     var mine = that.written(form.step);
                     var stale = false;
                     for (name in theirs)
@@ -1327,7 +1530,7 @@ var GempScenarioAuthor = Class.extend({
                         if (mine.hasOwnProperty(name) && !theirs.hasOwnProperty(name) && !changes.set.hasOwnProperty(name))
                             stale = true;
                     if (stale && !form.again && !that.dirty().any && that.ui.tab == "step")
-                        that.makeForm(at);
+                        that.makeForm(found.index, found.sub);
                 }
                 that.renderNotices();
             }
@@ -1380,11 +1583,40 @@ var GempScenarioAuthor = Class.extend({
         });
     },
 
+    /**
+     * What was typed in full ({ ... }) has been read by the server, and comes back written the way a file has it.
+     * Where the form still has what was sent, it takes the file's way of writing it: left as it was typed, it would
+     * look from then on as if somebody else had changed the step.
+     */
+    asFiled: function (form, sent, theirs, changes) {
+        var now = this.written(form.step);
+        var take = function (name, mine, filed, was) {
+            var typed = (form.typed || {})[name];
+            if (typed == null || filed == null || typeof filed != "string" || mine == filed || mine != was || document.activeElement === typed.input[0])
+                return false;
+            typed.object[name] = filed;
+            typed.input.val(filed).trigger("sa-fit");
+            return true;
+        };
+        $.each(this.TYPED, function (index, name) {
+            if (changes.set.hasOwnProperty(name) && take(name, now[name], theirs[name], sent[name]))
+                form.origin[name] = theirs[name];
+        });
+        var passWhen = function (allow) {
+            return allow != null && typeof allow == "object" ? allow.passWhen : null;
+        };
+        if (changes.set.hasOwnProperty("allow") && take("passWhen", passWhen(now.allow), passWhen(theirs.allow), passWhen(sent.allow))) {
+            var kept = this.clone(sent.allow);
+            kept.passWhen = passWhen(theirs.allow);
+            form.origin.allow = kept;
+        }
+    },
+
     /** An input that reads and writes one part of an object, and says so when it is changed. */
     bound: function (object, name, kind, changed) {
         var that = this;
         var input;
-        if (kind == "area")
+        if (kind == "area" || kind == "hjson")
             input = this.el("textarea", "sa-input").attr("rows", 3);
         else if (kind == "check")
             input = $("<input type='checkbox'/>");
@@ -1394,22 +1626,33 @@ var GempScenarioAuthor = Class.extend({
             input.prop("checked", !!object[name]);
         else
             input.val(object[name] == null ? "" : (typeof object[name] == "string" ? object[name] : JSON.stringify(object[name])));
+        if (kind == "hjson") {
+            //Something a file can have written out in full: it is typed as the file has it, and the server reads
+            // it.  It is as tall as what is in it, and is sent when it is left, not while it is half written.
+            input.addClass("sa-code").attr("spellcheck", "false").bind("sa-fit", function () {
+                input.attr("rows", Math.max(1, Math.min(16, ("" + input.val()).split("\n").length)));
+            }).trigger("sa-fit");
+            input.keydown(function (event) {
+                //(a tab is part of what is being written, not a way out of the box)
+                if (event.keyCode != 9 || event.shiftKey || event.ctrlKey || event.altKey || this.value.indexOf("\n") < 0)
+                    return;
+                event.preventDefault();
+                var at = this.selectionStart, value = this.value;
+                this.value = value.substring(0, at) + "\t" + value.substring(this.selectionEnd);
+                this.selectionStart = this.selectionEnd = at + 1;
+            });
+            if (this.form != null)
+                (this.form.typed = this.form.typed || {})[name] = {object: object, input: input};
+        }
         var read = function (now) {
             var value = kind == "check" ? input.prop("checked") : input.val();
-            if (kind == "json" && $.trim(value) != "") {
-                //(something written as { ... } is kept as what it is, not as its text)
-                try {
-                    value = /^\s*[\[{]/.test(value) ? JSON.parse(value) : value;
-                    input.removeClass("sa-bad");
-                } catch (e) {
-                    input.addClass("sa-bad");
-                    return;
-                }
-            }
             object[name] = value;
             if (changed)
                 changed(value);
-            that.stepChanged(now);
+            if (kind == "hjson")
+                input.trigger("sa-fit");
+            if (kind != "hjson" || now)
+                that.stepChanged(now);
         };
         if (kind == "check") {
             input.change(function () {
@@ -1425,25 +1668,53 @@ var GempScenarioAuthor = Class.extend({
         return input;
     },
 
+    /**
+     * What has become of a step in the game in hand, in words: {words, status}.
+     * @param sub for one of the steps in a block, where it comes in the block (from 0); otherwise -1
+     */
+    whereOf: function (index, sub) {
+        var state = this.state, position = state.position;
+        var child = sub > -1;
+        var uid = child ? this.kidsOf(index)[sub] : state.uids[index];
+        var status = (child ? ((state.substatuses || [])[index] || [])[sub] : state.statuses[index]) || "unreached";
+        var here = index + 1 == position.step && !position.over;
+        //(a block is where the game is for as long as it lasts; one of its steps, while its decision is in hand)
+        var current = here && (child ? position.inHand && position.sub == sub + 1
+            : position.inHand || (position.underWay && this.draft.steps[index].anyOrder != null));
+        var words = current ? "Current Step" : status == "matched" ? "Completed Step" : status == "bypassed" ? "not on this way through"
+            : status == "skipped" ? "skipped" : "Future Step";
+        if (this.isAwaiting(uid))
+            words += ", no answer yet";
+        return {words: words, status: status};
+    },
+
     renderStepHead: function () {
+        var that = this;
         var form = this.form;
         if (form == null || this.stepHead == null)
             return;
         var number = form.index + 1;
-        var position = this.state.position;
-        var status = this.state.statuses[form.index] || "unreached";
-        var where = number == position.step && position.inHand ? "in hand now" : status == "matched" ? "played"
-            : status == "bypassed" ? "not on this way through" : status == "skipped" ? "skipped" : "not reached";
-        if (this.isAwaiting(form.uid))
-            where += ", no answer yet";
+        var where = this.whereOf(form.index, -1);
         this.stepHead.find(".sa-stepname").text("Step " + number + " of " + this.draft.steps.length);
-        this.stepHead.find(".sa-stepwhere").text(where).attr("class", "sa-stepwhere sa-status-" + status);
+        this.stepHead.find(".sa-stepwhere").text(where.words).attr("class", "sa-stepwhere sa-status-" + where.status);
+        //(on a block's page, each of the steps in it says what has become of it)
+        this.tabs.step.find(".sa-panelwhere").each(function () {
+            var each = that.whereOf(form.index, parseInt($(this).attr("data-sub")));
+            $(this).text(each.words).attr("class", "sa-panelwhere sa-status-" + each.status);
+        });
     },
 
+    /**
+     * The Step tab: which step it is and what can be done with it as a whole, and then either its form or, for a
+     * block, a section for the block and one for each of the steps in it (the open one of which has the form).
+     */
     buildStepForm: function () {
         var that = this;
-        var form = this.form, work = form.step, index = form.index, number = index + 1;
-        var steps = this.draft.steps;
+        var form = this.form, index = form.index, number = index + 1;
+        var steps = this.draft.steps, uids = this.state.uids;
+        var top = steps[index], topUid = uids[index];
+        var isBlock = top.anyOrder != null;
+        var position = this.state.position;
         var box = this.tabs.step.empty();
 
         var head = this.stepHead = this.el("div", "sa-stephead").appendTo(box);
@@ -1455,38 +1726,260 @@ var GempScenarioAuthor = Class.extend({
             that.selectStep(number + 1);
         }).prop("disabled", number >= steps.length));
         head.append(this.el("span", "sa-stepwhere"));
-        this.renderStepHead();
 
         var acts = this.el("div", "sa-bar").appendTo(box);
         acts.append(this.button("\u21bb Play to here", "A fresh game, played by the script up to this step", function () {
             that.goTo(number);
         }));
-        var uids = this.state.uids;
         acts.append(this.button("\u2191", "Move this step earlier", function () {
             that.flush(function () {
-                that.changeSteps([{op: "move", uid: form.uid, before: uids[index - 1]}], number - 1, number - 1);
+                that.changeSteps([{op: "move", uid: topUid, before: uids[index - 1]}], number - 1, number - 1);
             });
         }).prop("disabled", index == 0));
         acts.append(this.button("\u2193", "Move this step later", function () {
             that.flush(function () {
-                that.changeSteps([{op: "move", uid: form.uid, before: uids[index + 2] || null}], number, number + 1);
+                that.changeSteps([{op: "move", uid: topUid, before: uids[index + 2] || null}], number, number + 1);
             });
         }).prop("disabled", index >= steps.length - 1));
-        acts.append(this.button("Delete", "Take this step out of the script", function () {
-            if (confirm("Take step " + number + " out of the script?"))
-                that.changeSteps([{op: "delete", uid: form.uid}], number, Math.max(1, number - 1));
+        //A new step before this one, or after it.  It says nothing yet: what is done when the game comes to it is
+        // written in.  (Put in where the game stands, with a decision waiting that no step covers, it is the step
+        // for that decision.)
+        var blank = function (at) {
+            var open = that.state.uncovered;
+            if (open != null && open.problem == null && open.reuses == null && open.block == null && at == open.after && !position.over) {
+                that.addStepHere();
+                return;
+            }
+            that.insertStep(at, {when: (that.draft.human || "freeps") + ", action"}, true);
+        };
+        acts.append(this.button("Before", "A new step before this one. It says nothing yet: when the game comes to it, what you do there is written in as what it allows.", function () {
+            blank(index);
+        }));
+        acts.append(this.button("After", "A new step after this one. It says nothing yet: when the game comes to it, what you do there is written in as what it allows.", function () {
+            blank(index + 1);
+        }));
+        acts.append(this.button("Delete", isBlock ? "Take this block, and the steps in it, out of the script" : "Take this step out of the script", function () {
+            if (confirm(isBlock ? "Take step " + number + " out of the script, with the " + top.anyOrder.length + " step" + (top.anyOrder.length == 1 ? "" : "s") + " in it?"
+                : "Take step " + number + " out of the script?"))
+                that.changeSteps([{op: "delete", uid: topUid}], number, Math.max(1, number - 1));
         }, "sa-danger"));
-        var inHandNow = number == this.state.position.step && this.state.position.inHand;
-        if (inHandNow && !work.pause && !this.isOpening(work))
-            acts.append(this.button("Answer it again", "This step forgets what it allows and how it is answered, and takes both from what you do next. Its messages stay.", function () {
-                that.retake();
-            }));
-        $.each(this.leftOutOf(form.uid), function (at, one) {
+        //A step next to a block can be made one of the block's
+        if (!isBlock && !this.isOpening(top)) {
+            var into = function (toIndex, first) {
+                var kids = that.kidsOf(toIndex);
+                var op = {op: "move", uid: topUid};
+                if (first && kids.length > 0)
+                    op.before = kids[0];
+                else
+                    op.into = uids[toIndex];
+                that.flush(function () {
+                    //(the block is where it was, or one earlier now that this step is not in front of it)
+                    var blockAt = toIndex > index ? toIndex - 1 : toIndex;
+                    var was = that.selection();
+                    that.ui.selected = blockAt + 1;
+                    that.ui.selectedUid = null;
+                    that.ui.sub = null;
+                    that.ui.subAt = first ? 0 : kids.length;
+                    that.ui.hold = true;
+                    that.form = null;
+                    that.remember();
+                    //(a step that says what only a step of the script can, an 'until' say, is not taken into a block)
+                    that.edit({steps: [op]}, Math.min(number, blockAt + 1) <= position.step ? Math.min(number, blockAt + 1) : null, null, function () {
+                        that.refused(was);
+                    });
+                });
+            };
+            if (index > 0 && steps[index - 1].anyOrder != null)
+                acts.append(this.button("Into block " + index, "Make this step the last of the steps in the block before it", function () {
+                    into(index - 1, false);
+                }));
+            if (index < steps.length - 1 && steps[index + 1].anyOrder != null)
+                acts.append(this.button("Into block " + (number + 1), "Make this step the first of the steps in the block after it", function () {
+                    into(index + 1, true);
+                }));
+        }
+        $.each(this.leftOutOf(topUid), function (at, one) {
             var part = one.where.replace(/^step \d+( \([^)]*\))?\.?/, "");
             var note = that.el("div", "sa-note sa-mistaken").appendTo(box);
             note.append(that.el("div", null, "Left out when the file was opened" + (part == "" ? "" : ", from '" + part + "'") + ": " + one.message));
             note.append(that.el("pre", "sa-leftout-was", one.was));
         });
+
+        if (!isBlock) {
+            this.buildFields(box);
+            this.renderStepHead();
+            return;
+        }
+
+        box.append(this.el("div", "sa-note", "A block: steps for a stretch of the game whose decisions come in no order the script can know. "
+            + "Each decision goes to the first of its steps that fits it, wherever in the list that step comes, until a decision arrives that fits the block's Until."));
+        var own = this.blockPanel(box, -1);
+        if (own != null)
+            this.buildFields(own);
+        box.append(this.el("div", "sa-heading sa-substeps", top.anyOrder.length == 0 ? "It has no steps yet"
+            : "Its " + top.anyOrder.length + " step" + (top.anyOrder.length == 1 ? "" : "s") + ", in whatever order the game asks for them"));
+        $.each(top.anyOrder, function (sub) {
+            var body = that.blockPanel(box, sub);
+            if (body != null)
+                that.buildFields(body);
+        });
+        var foot = this.el("div", "sa-bar").appendTo(box);
+        foot.append(this.button("+ Step", "Another step in this block, after the others. It says nothing yet: what you do at its decision is written in. "
+            + "(With the game in this block, and a decision waiting that none of its steps takes, it is the step for that decision.)", function () {
+            var open = that.state.uncovered;
+            if (open != null && open.problem == null && open.block == number && !position.over) {
+                that.addStepHere();
+                return;
+            }
+            that.insertInBlock(index, top.anyOrder.length, {once: true, when: (that.draft.human || "freeps") + ", action"}, true);
+        }, "sa-primary"));
+        foot.append(this.button("+ Pause", "A step of this block that is only read: once, over the first of the player's decisions that fits it", function () {
+            that.insertInBlock(index, top.anyOrder.length, {pause: true, when: (that.draft.human || "freeps") + ", action", messages: [{text: "..."}]});
+        }));
+        this.renderStepHead();
+        //(the open section is what was asked for: it is brought into sight)
+        var opened = box.find(".sa-panel.sa-open");
+        if (form.sub > -1 && opened.length > 0 && this.panelShown != form.uid)
+            box.scrollTop(Math.max(0, box.scrollTop() + opened.position().top - 70));
+        this.panelShown = form.uid;
+    },
+
+    /**
+     * One section of a block's page: the block itself (sub -1), or one of the steps in it.  Its head says what it
+     * is and is the way to open it; the one that is open is the form.
+     * @return where the open section's form goes; null for a section that is not open
+     */
+    blockPanel: function (box, sub) {
+        var that = this;
+        var form = this.form, index = form.index, number = index + 1;
+        var top = this.draft.steps[index], kids = this.kidsOf(index);
+        var child = sub > -1;
+        var step = child ? top.anyOrder[sub] : top;
+        var uid = child ? kids[sub] : this.state.uids[index];
+        var open = form.sub == sub;
+        var panel = this.el("div", "sa-panel " + (child ? "sa-panel-step" : "sa-panel-block") + (open ? " sa-open" : "")).appendTo(box);
+        var head = this.el("div", "sa-panelhead").appendTo(panel);
+        var title = this.el("div", "sa-paneltitle").attr("title", open ? "" : "Open this to change it").appendTo(head);
+        title.append(this.el("span", "sa-twist", open ? "\u25be" : "\u25b8"));
+        var summary = this.summary(step);
+        if (child)
+            title.append(this.el("span", "sa-num", this.numberOf(index, sub)));
+        title.append(this.el("span", "sa-who sa-who-" + summary.who.toLowerCase(), child ? summary.who : "Block"));
+        var what = this.el("span", "sa-what").appendTo(title);
+        what.append(this.el("span", "sa-when", summary.when != "" ? summary.when : child ? "any decision" : "every decision"));
+        if (summary.act != "")
+            what.append(this.el("span", "sa-act", summary.act));
+        if (step.id)
+            what.append(this.el("span", "sa-id", step.id));
+        var tags = this.el("span", "sa-tags").appendTo(title);
+        var count = this.messagesOf(step).length;
+        if (step.once)
+            tags.append(this.el("span", "sa-tag", "once"));
+        if (step["do"])
+            tags.append(this.el("span", "sa-tag", "do").attr("title", step["do"]));
+        if (count > 0)
+            tags.append(this.el("span", "sa-tag sa-bubbles", "\u25ac" + count).attr("title", count + " message" + (count == 1 ? "" : "s")));
+        if (step.checkpoint)
+            tags.append(this.el("span", "sa-tag sa-flag", "\u2691").attr("title", "A checkpoint"));
+        if (step.end)
+            tags.append(this.el("span", "sa-tag", "end"));
+        title.click(function () {
+            if (!open)
+                that.openPanel(sub);
+        });
+        var line = this.el("div", "sa-panelacts").appendTo(head);
+        if (child) {
+            line.append(this.el("span", "sa-panelwhere").attr("data-sub", sub));
+            line.append(this.button("\u25b6", "A fresh game, played by the script up to the first decision this step takes", function () {
+                that.goTo(number, sub + 1);
+            }));
+            line.append(this.button("Insert", "A new step in the block, before this one. It says nothing yet: what you do at its decision is written in.", function () {
+                that.insertInBlock(index, sub, {once: true, when: (that.draft.human || "freeps") + ", action"}, true);
+            }));
+            line.append(this.button("\u2191", "Earlier in the block. (Where a step comes matters only when a decision fits more than one of them: it goes to the first.)", function () {
+                that.flush(function () {
+                    that.changeBlock([{op: "move", uid: uid, before: kids[sub - 1]}], index, sub - 1);
+                });
+            }).prop("disabled", sub == 0));
+            line.append(this.button("\u2193", "Later in the block", function () {
+                that.flush(function () {
+                    var op = {op: "move", uid: uid};
+                    if (kids[sub + 2] != null)
+                        op.before = kids[sub + 2];
+                    else
+                        op.into = that.state.uids[index];
+                    that.changeBlock([op], index, sub + 1);
+                });
+            }).prop("disabled", sub >= kids.length - 1));
+            line.append(this.button("Out", "Take this step out of the block, and make it the step of the script after the block", function () {
+                that.flush(function () {
+                    that.changeSteps([{op: "move", uid: uid, before: that.state.uids[index + 1] || null}], number, number + 1);
+                });
+            }));
+            line.append(this.button("\u00d7", "Take this step out of the script", function () {
+                if (confirm("Take step " + that.numberOf(index, sub) + " out of the script?"))
+                    that.flush(function () {
+                        that.changeBlock([{op: "delete", uid: uid}], index, null);
+                    });
+            }, "sa-danger"));
+        }
+        if (!open) {
+            //(what it says, so that the block can be read through without opening each of its steps)
+            $.each(this.messagesOf(step), function (i, message) {
+                panel.append(that.el("div", "sa-panelsays", typeof message == "string" ? message : message.text).click(function () {
+                    that.openPanel(sub);
+                }));
+            });
+            return null;
+        }
+        return this.el("div", "sa-panelbody").appendTo(panel);
+    },
+
+    /** Opens one of the sections of a block's page: the block's own (-1), or one of its steps. */
+    openPanel: function (sub) {
+        var kids = this.kidsOf(this.ui.selected - 1);
+        this.ui.sub = sub > -1 ? kids[sub] : null;
+        this.panelShown = null;
+        this.remember();
+        //(what has not been sent of the section being left goes as the form for the other is made)
+        this.render();
+    },
+
+    /**
+     * Puts a step into a block, and turns to it.
+     * @param at where in the block it goes (from 0; the number of steps the block has puts it last)
+     * @param awaiting whether the step is to take its answer from what is done when the game comes to it
+     */
+    insertInBlock: function (index, at, step, awaiting) {
+        var that = this;
+        this.flush(function () {
+            var kids = that.kidsOf(index);
+            var op = {op: "insert", step: step};
+            if (kids[at] != null)
+                op.before = kids[at];
+            else
+                op.into = that.state.uids[index];
+            if (awaiting)
+                op.awaiting = true;
+            that.ui.tab = "step";
+            that.changeBlock([op], index, at);
+        });
+    },
+
+    /**
+     * The form for one step: a step of the script, what a block says of itself, or one of the steps in a block
+     * (form.kind says which).
+     */
+    buildFields: function (box) {
+        var that = this;
+        var form = this.form, work = form.step, index = form.index, number = index + 1;
+        var child = form.kind == "child", block = form.kind == "block";
+        var position = this.state.position;
+        var inHandNow = number == position.step && position.inHand && (position.sub || 0) == (child ? form.sub + 1 : 0);
+        if (inHandNow && !block && !work.pause && !this.isOpening(work))
+            box.append(this.el("div", "sa-bar").append(this.button("Answer it again", "This step forgets what it allows and how it is answered, and takes both from what you do next. Its messages stay.", function () {
+                that.retake();
+            })));
         if (this.isAwaiting(form.uid))
             box.append(this.el("div", "sa-note sa-awaiting", inHandNow
                 ? "This step says nothing yet about what is done. Do it in the game now, and what you do is written in as what it allows. Messages put on it here first are shown before it is answered."
@@ -1495,15 +1988,17 @@ var GempScenarioAuthor = Class.extend({
         /* ---- what it waits for ---- */
         var opening = this.isOpening(work);
         var when = this.el("div", "sa-section").appendTo(box);
-        when.append(this.el("div", "sa-heading", opening ? "The opening" : work.pause ? "Read over the player's decision when it is" : "Applies to the decision that is"));
+        when.append(this.el("div", "sa-heading", opening ? "The opening" : block ? "Covers the decisions that are"
+            : work.pause ? (child ? "Read once, over the player's first decision that is" : "Read over the player's decision when it is")
+            : child ? (work.once ? "Applies to one decision that is" : "Applies to each decision that is") : "Applies to the decision that is"));
+        if (block)
+            when.append(this.el("div", "sa-note", "Every decision that fits this is put to the steps below, from where the script comes to the block until it ends. Empty: every decision there is."));
         if (opening) {
             when.append(this.el("div", "sa-note", "Read before the first turn begins, on the board as the scenario lays it out: nobody has been asked anything, and nothing has been drawn. "
                 + "Its messages are read one after another; then what it does is done; then the first turn begins. Only a scenario's first step can be this."));
             when.append(this.field("name", this.bound(work, "id", "text").addClass("sa-short"), "Only to make reports easier to read"));
-        } else if (work.when != null && typeof work.when != "string") {
-            when.append(this.field("When", this.bound(work, "when", "json"), "Written out in full because it has requirements"));
         } else {
-            var raw = this.bound(work, "when", "text", function () {
+            var raw = this.bound(work, "when", "hjson", function () {
                 syncWhen();
             });
             var terms = function () {
@@ -1534,7 +2029,7 @@ var GempScenarioAuthor = Class.extend({
                     return rank(a) - rank(b);
                 });
                 work.when = kept.join(", ");
-                raw.val(work.when);
+                raw.val(work.when).trigger("sa-fit");
                 that.stepChanged(true);
             };
             var plain = function (names) {
@@ -1562,7 +2057,13 @@ var GempScenarioAuthor = Class.extend({
             var turn = $("<input type='number' min='1'/>").addClass("sa-input sa-short").attr("placeholder", "turn").change(function () {
                 put(call("turn"), $(this).val() == "" ? null : "turn(" + $(this).val() + ")");
             });
+            var pickers = this.el("div", "sa-row").append(seat).append(type).append(phase).append(turn);
             var syncWhen = function () {
+                //(written out in full, as { ... }, it is not a line of terms to be taken apart)
+                var full = /^\s*([{\[]|when\s*:)/.test(work.when || "");
+                pickers.toggle(!full);
+                if (full)
+                    return;
                 var found = has(plain(that.SEATS));
                 seat.val(found == null ? "" : found.toLowerCase());
                 found = has(plain(that.TYPES));
@@ -1573,16 +2074,25 @@ var GempScenarioAuthor = Class.extend({
                 turn.val(has(call("turn")) || "");
             };
             syncWhen();
-            when.append(this.el("div", "sa-row").append(seat).append(type).append(phase).append(turn));
-            when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), offers(card), text(part of what the decision says)"));
+            when.append(pickers);
+            when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), fighting(card), offers(card), text(part of what the decision says). "
+                + "Or written out in full, as the file has it, in HJSON: { seat: freeps, require: { ... } }. What is copied out of a file can be pasted here, with or without 'when:' in front."));
         }
         var flagsRow = this.el("div", "sa-row").appendTo(when).toggle(!opening);
-        flagsRow.append(this.el("label", "sa-check").attr("title", "A step that is only read: it has messages, and no answer. The decision goes to the step after it.")
-            .append(this.bound(work, "pause", "check", function () {
-                that.sendStep();
-            })).append(document.createTextNode(" pause")));
-        flagsRow.append(this.el("label", "sa-check").attr("title", "A player who fails later can come back to here")
-            .append(this.bound(work, "checkpoint", "check")).append(document.createTextNode(" checkpoint")));
+        if (!block)
+            flagsRow.append(this.el("label", "sa-check").attr("title", child ? "A step that is only read: it has messages, and no answer. It is read once, and the decision then goes to whichever of the block's other steps fits it."
+                : "A step that is only read: it has messages, and no answer. The decision goes to the step after it.")
+                .append(this.bound(work, "pause", "check", function () {
+                    that.sendStep();
+                })).append(document.createTextNode(" pause")));
+        if (child && !work.pause)
+            flagsRow.append(this.el("label", "sa-check").attr("title", "It applies to one decision, and is then done with. Without this it applies to every decision that fits it, for as long as the block lasts (and what it says is said the first time).")
+                .append(this.bound(work, "once", "check", function () {
+                    that.sendStep();
+                })).append(document.createTextNode(" once")));
+        if (!child)
+            flagsRow.append(this.el("label", "sa-check").attr("title", "A player who fails later can come back to here")
+                .append(this.bound(work, "checkpoint", "check")).append(document.createTextNode(" checkpoint")));
         flagsRow.append(this.field("name", this.bound(work, "id", "text").addClass("sa-short"), "Only to make reports easier to read"));
         if ((this.state.flags || []).length > 0 && !opening) {
             when.append(this.field("If", this.bound(work, "if", "text"), "Only part of the game if these were chosen at a pause's choice: " + this.state.flags.join(", ")));
@@ -1597,6 +2107,13 @@ var GempScenarioAuthor = Class.extend({
                 "Changes to the board, made after the opening's messages and before the first turn begins, so that the first decision is worked out with them: "
                 + "draw(n) or draw(seat, n) from the top of the deck, move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), burdens(n). "
                 + "(Twilight set here is gone again when the turn starts.)"));
+        } else if (block) {
+            var ends = this.el("div", "sa-section").appendTo(box);
+            ends.append(this.el("div", "sa-heading", "Where it ends"));
+            ends.append(this.field("Until", this.bound(work, "until", "hjson"),
+                "The block is over at the first decision that fits this, which goes to the step after the block: phase(regroup), say, or turn(3). A block has to have one. "
+                + "Written like When: a line of terms, or in full as the file has it, in HJSON."));
+            ends.append(this.field("Skip when", this.bound(work, "skipWhen", "hjson"), "Given up on, before any of its steps has applied, if a decision that fits this arrives"));
         } else if (!work.pause) {
             var does = this.el("div", "sa-section").appendTo(box);
             does.append(this.el("div", "sa-heading", "What is done"));
@@ -1608,9 +2125,9 @@ var GempScenarioAuthor = Class.extend({
                 "Changes to the board when the step's decision arrives: move(card, seat.zone), draw(n), wound(card, n), heal(card, n), twilight(n), burdens(n), attach(card, bearer), stack(card, host). "
                 + "The decision itself was worked out before them: what they put in a hand can be played from the next decision on."));
             var more = $("<details class='sa-more'></details>").appendTo(does);
-            more.append($("<summary></summary>").text("Wrong clicks, repeating, giving up"));
+            more.append($("<summary></summary>").text(child ? "Wrong clicks" : "Wrong clicks, repeating, giving up"));
             more.append(this.field("Otherwise", this.bound(work.allow, "otherwise", "area").attr("rows", 2), "What to say when the player clicks something legal that is not allowed. Empty: the stock line."));
-            more.append(this.field("Pass when", this.bound(work.allow, "passWhen", "json"), "Requirements (as on a card) that have to hold before Pass is allowed"));
+            more.append(this.field("Pass when", this.bound(work.allow, "passWhen", "hjson"), "Requirements (as on a card) that have to hold before Pass is allowed, as the file has them, in HJSON: { type: canSpot, filter: alias(aragorn) }"));
             work.allow.hints = work.allow.hints || {};
             var hintBox = this.el("div", "sa-hints").appendTo(more);
             var drawHints = function () {
@@ -1634,30 +2151,37 @@ var GempScenarioAuthor = Class.extend({
                 hintBox.append(add);
             };
             drawHints();
-            more.append(this.field("Until", this.bound(work, "until", "json"), "Keeps applying to decisions until one arrives that fits this"));
-            more.append(this.field("Skip when", this.bound(work, "skipWhen", "json"), "Given up on if a decision that fits this arrives first"));
+            if (!child) {
+                //(written like When: a line of terms, or in full as the file has it)
+                more.append(this.field("Until", this.bound(work, "until", "hjson"), "Keeps applying to decisions until one arrives that fits this. Written like When: a line of terms, or in full as the file has it, in HJSON."));
+                more.append(this.field("Skip when", this.bound(work, "skipWhen", "hjson"), "Given up on if a decision that fits this arrives first"));
+            }
             if (work.allow.passWhen != null || work.allow.otherwise || work.until != null || work.skipWhen != null)
                 more.attr("open", "open");
         }
 
         /* ---- what it says ---- */
-        var says = this.el("div", "sa-section").appendTo(box);
-        says.append(this.el("div", "sa-heading", "Messages"));
-        this.messageBox = this.el("div", "sa-messages").appendTo(says);
-        this.drawMessages(work.messages, this.messageBox, false);
+        if (!block) {
+            var says = this.el("div", "sa-section").appendTo(box);
+            says.append(this.el("div", "sa-heading", "Messages"));
+            this.messageBox = this.el("div", "sa-messages").appendTo(says);
+            this.drawMessages(work.messages, this.messageBox, false);
+        }
 
         /* ---- the rest ---- */
         var rest = this.el("div", "sa-section").appendTo(box);
         work.end = work.end || {result: "", messages: []};
-        var endBox = this.el("div", "sa-messages");
-        rest.append(this.field("Ends the scenario", this.select([["", "no"], ["complete", "yes: complete"], ["fail", "yes: failed"]], work.end.result || "", function (value) {
-            work.end.result = value;
-            endBox.toggle(value != "");
-            that.stepChanged(true);
-        }), "Once this step has been answered (or, for a pause, read)"));
-        rest.append(endBox);
-        this.drawMessages(work.end.messages, endBox, true);
-        endBox.toggle((work.end.result || "") != "");
+        if (!block) {
+            var endBox = this.el("div", "sa-messages");
+            rest.append(this.field("Ends the scenario", this.select([["", "no"], ["complete", "yes: complete"], ["fail", "yes: failed"]], work.end.result || "", function (value) {
+                work.end.result = value;
+                endBox.toggle(value != "");
+                that.stepChanged(true);
+            }), "Once this step has been answered (or, for a pause, read)"));
+            rest.append(endBox);
+            this.drawMessages(work.end.messages, endBox, true);
+            endBox.toggle((work.end.result || "") != "");
+        }
         rest.append(this.field("Note", this.bound(work, "note", "area").attr("rows", 2), "For whoever works on the scenario next. Never shown to a player."));
     },
 
@@ -1666,6 +2190,7 @@ var GempScenarioAuthor = Class.extend({
             return;
         this.ui.selected = number;
         this.ui.selectedUid = this.state.uids[number - 1];
+        this.ui.sub = null;
         this.remember();
         //(what has not been sent of the step being left goes as the form for the other is made)
         this.render();
@@ -1680,28 +2205,33 @@ var GempScenarioAuthor = Class.extend({
         var that = this;
         var form = this.form, work = form.step, index = form.index, number = index + 1;
         var steps = this.draft.steps;
+        var child = form.sub > -1;
         box.empty();
         $.each(messages, function (position, message) {
             var card = that.el("div", "sa-message").appendTo(box);
             var focus = function () {
                 if (!closing)
-                    that.focusMessage = {step: number, index: position};
+                    that.focusMessage = {step: number, sub: child ? form.sub + 1 : 0, index: position};
             };
             card.bind("focusin", focus);
 
             var top = that.el("div", "sa-messagehead").appendTo(card);
             top.append(that.el("span", "sa-messagenum", (position + 1) + "."));
+            top.append(that.button("Insert", "A new message before this one", function () {
+                messages.splice(position, 0, {text: ""});
+                that.drawMessages(messages, box, closing);
+                box.find(".sa-message").eq(position).find("textarea").first().focus();
+            }));
             if (!closing) {
-                top.append(that.button("Show", "Put this message on the screen as it stands (when its step is the one in hand)", function () {
-                    focus();
-                    that.showOnScreen();
-                }));
-                top.append(that.button("\u25c0 Earlier", "Move this message to the step before", function () {
-                    that.moveMessage(position, index - 1);
-                }).prop("disabled", index == 0));
-                top.append(that.button("Later \u25b6", "Move this message to the step after", function () {
-                    that.moveMessage(position, index + 1);
-                }).prop("disabled", index >= steps.length - 1));
+                //(from one step of the script to the next: the steps in a block come in no order to move it along)
+                if (!child) {
+                    top.append(that.button("\u25c0 Earlier", "Move this message to the step before", function () {
+                        that.moveMessage(position, index - 1);
+                    }).prop("disabled", index == 0 || steps[index - 1].anyOrder != null));
+                    top.append(that.button("Later \u25b6", "Move this message to the step after", function () {
+                        that.moveMessage(position, index + 1);
+                    }).prop("disabled", index >= steps.length - 1 || steps[index + 1].anyOrder != null));
+                }
                 top.append(that.button("Before\u2026", "Take this message (and the ones before it in this step) out into a pause of their own, read before this step's decision is answered", function () {
                     that.splitToPause(position);
                 }));
@@ -1923,7 +2453,7 @@ var GempScenarioAuthor = Class.extend({
         var moved = from.messages.splice(position, 1)[0];
         if (from.messages.length == 0)
             delete from.messages;
-        var target = this.written(this.working(steps[toIndex]));
+        var target = this.written(this.working(steps[toIndex], this.state.uids[toIndex]));
         target.messages = target.messages || [];
         //Going earlier it is the last thing that step says; going later, the first
         if (toIndex < form.index)
@@ -1945,8 +2475,9 @@ var GempScenarioAuthor = Class.extend({
         this.form = null;
         this.ui.selected = toIndex + 1;
         this.ui.selectedUid = uids[toIndex];
+        this.ui.sub = null;
         this.ui.hold = true;
-        this.focusMessage = {step: toIndex + 1, index: toIndex < form.index ? target.messages.length - 1 : 0};
+        this.focusMessage = {step: toIndex + 1, sub: 0, index: toIndex < form.index ? target.messages.length - 1 : 0};
         this.remember();
         this.edit({steps: ops}, null);
     },
@@ -1971,7 +2502,7 @@ var GempScenarioAuthor = Class.extend({
             pause["if"] = from["if"];
         if (from.unless)
             pause.unless = from.unless;
-        if (typeof from.when == "string") {
+        if (typeof from.when == "string" && !/^\s*([{\[]|when\s*:)/.test(from.when)) {
             var kept = $.grep(this.splitTerms(from.when), function (term) {
                 return !/^(offers|text)\(/i.test(term);
             });
@@ -1986,6 +2517,11 @@ var GempScenarioAuthor = Class.extend({
             if ($.inArray("messages", merge.unset) < 0)
                 merge.unset.push("messages");
         }
+        if (form.sub > -1) {
+            //In a block the pause is one of its steps, before this one: it is read first, and once
+            this.changeBlock([merge, {op: "insert", before: form.uid, step: pause}], form.index, form.sub);
+            return;
+        }
         this.changeSteps([merge, {op: "insert", before: form.uid, step: pause}], form.index + 1, form.index + 1);
     },
 
@@ -1997,7 +2533,7 @@ var GempScenarioAuthor = Class.extend({
      */
     tryOnScreen: function (position, name, value) {
         var overlay = this.overlay, form = this.form;
-        if (form == null || overlay.step == null || overlay.step.step != form.index + 1)
+        if (form == null || overlay.step == null || overlay.step.step != form.index + 1 || (overlay.step.sub || 0) != (form.sub > -1 ? form.sub + 1 : 0))
             return;
         var message = (overlay.step.messages || [])[position];
         if (message == null || message !== overlay.currentMessage)
@@ -2009,7 +2545,7 @@ var GempScenarioAuthor = Class.extend({
 
     stepShown: function (step) {
         var focus = this.focusMessage;
-        if (focus == null || step == null || focus.step != step.step)
+        if (focus == null || step == null || focus.step != step.step || (focus.sub || 0) != (step.sub || 0))
             return;
         this.showOnScreen();
     },
@@ -2017,7 +2553,7 @@ var GempScenarioAuthor = Class.extend({
     /** Puts the message being worked on up, if its step is the one on the screen. */
     showOnScreen: function () {
         var overlay = this.overlay, focus = this.focusMessage;
-        if (focus == null || overlay.step == null || overlay.step.step != focus.step)
+        if (focus == null || overlay.step == null || overlay.step.step != focus.step || (overlay.step.sub || 0) != (focus.sub || 0))
             return false;
         var message = (overlay.step.messages || [])[focus.index];
         if (message == null)
@@ -2191,7 +2727,7 @@ var GempScenarioAuthor = Class.extend({
             section.append(this.el("div", "sa-heading", "The opponent is asked"));
             section.append(this.el("div", "sa-asked", asked.text + " (" + asked.where + ")"));
             if (!asked.held) {
-                section.append(this.el("p", "sa-note", asked.step != null ? "Step " + asked.step + " answers it, once what it says has been read."
+                section.append(this.el("p", "sa-note", asked.step != null ? "Step " + asked.step + (asked.sub > 0 ? "." + asked.sub : "") + " answers it, once what it says has been read."
                     : "It answers by itself in a moment (its standing orders, or its fallback)."));
             } else {
                 var write = $("<input type='checkbox'/>").prop("checked", true);
@@ -2283,7 +2819,7 @@ var GempScenarioAuthor = Class.extend({
             yours.append(this.el("p", "sa-note", "Nothing, for now."));
         } else {
             yours.append(this.el("div", "sa-asked", waiting.human.text + " (" + waiting.human.where + ")"));
-            yours.append(this.el("p", "sa-note", waiting.human.step != null ? "Step " + waiting.human.step + " applies to it."
+            yours.append(this.el("p", "sa-note", waiting.human.step != null ? "Step " + waiting.human.step + (waiting.human.sub > 0 ? "." + waiting.human.sub : "") + " applies to it."
                 : "No step applies to it." + (this.state.recording ? " What you answer becomes a step." : "")));
         }
 
@@ -2398,6 +2934,9 @@ var GempScenarioAuthor = Class.extend({
                 // it, and opens its window on a click)
                 name.append(that.el("span", "sa-alias cardHint", card.alias).attr("value", card.blueprintId).attr("title", ""));
                 name.append(document.createTextNode(" " + card.name));
+                name.append(that.button("\u270e", "Give this card another name in the scenario. Every part of the scenario that says the old name is changed to say the new one.", function () {
+                    that.renameCard(card, name);
+                }, "sa-rename"));
                 var controls = that.el("div", "sa-row").appendTo(row);
                 if (entry.ordered) {
                     //Where it comes in its hand or pile: one place earlier or later, or first
@@ -2513,6 +3052,57 @@ var GempScenarioAuthor = Class.extend({
             }, "sa-primary"));
         };
         box.scrollTop(scroll);
+    },
+
+    /**
+     * A card's name in the scenario, changed where it stands in the Board tab: Enter (or Rename) to change it, Esc
+     * (or Cancel) to leave it.  The server puts the new name wherever the scenario said the old one.
+     */
+    renameCard: function (card, holder) {
+        var that = this;
+        var input = $("<input type='text'/>").addClass("sa-input sa-short").attr("maxlength", 40).val(card.alias);
+        var over = false;
+        var leave = function () {
+            if (over)
+                return;
+            over = true;
+            holder.empty();
+            that.renderBoard();
+        };
+        var rename = function () {
+            var to = $.trim(input.val());
+            if (over)
+                return;
+            if (to == card.alias) {
+                leave();
+                return;
+            }
+            if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(to) || $.inArray(to, that.aliases()) > -1) {
+                input.addClass("sa-bad").attr("title", $.inArray(to, that.aliases()) > -1 ? "The scenario already has a card called that"
+                    : "Letters, digits, dashes and underscores, starting with a letter");
+                return;
+            }
+            that.flush(function () {
+                over = true;
+                that.call("POST", "alias", {from: card.alias, to: to}, function () {
+                    holder.empty();
+                    that.render();
+                }, function () {
+                    holder.empty();
+                    that.renderBoard();
+                });
+            });
+        };
+        holder.empty().append(input);
+        holder.append(this.button("Rename", "A fresh game is played by the script back to here", rename, "sa-primary"));
+        holder.append(this.button("Cancel", "", leave));
+        input.keydown(function (event) {
+            if (event.keyCode == 13)
+                rename();
+            else if (event.keyCode == 27)
+                leave();
+        });
+        input.focus().select();
     },
 
     /** @param zone a zone of the seat's; "" for the deck; or "attach" / "stack", with the card it goes on as host */

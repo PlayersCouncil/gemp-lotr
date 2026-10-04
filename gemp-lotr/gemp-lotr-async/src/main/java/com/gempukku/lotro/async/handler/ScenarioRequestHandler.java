@@ -56,8 +56,9 @@ import java.util.Map;
  * statuses, position, waiting, pending, board, problems, ...}}; {@code {session:false}} with no draft open.<br>
  * GET source - {@code {source}}: the draft as the file it would be saved as.<br>
  * GET cards?q=&sites= - {@code {cards:[{id, name, type, culture, side, cost}]}}: cards by name.<br>
- * POST open (id | new=true, id, title); edit (patch, goto); goto (step); answer (term, record | least=true);
- * do (op, setup); here; retake; settings (recording, askOpponent, way); save (path, canonical, as: copy|rename); left;
+ * POST open (id | new=true, id, title); edit (patch, goto); goto (step, sub); answer (term, record | least=true);
+ * do (op, setup); alias (from, to); here; retake; settings (recording, askOpponent, way);
+ * save (path, canonical, as: copy|rename); left;
  * check; test (step);
  * resume; close.
  */
@@ -278,12 +279,14 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "edit" -> result = _authoring.edit(player, getFormParameterSafely(form, "patch"), number(form, "goto"));
                     case "goto" -> {
                         Integer step = number(form, "step");
-                        result = _authoring.goTo(player, step == null ? 1 : step);
+                        Integer sub = number(form, "sub");
+                        result = _authoring.goTo(player, step == null ? 1 : step, sub == null ? 0 : sub);
                     }
                     case "answer" -> result = "true".equals(getFormParameterSafely(form, "least"))
                             ? _authoring.answer(player, null, "true".equals(getFormParameterSafely(form, "record")))
                             : _authoring.answer(player, getFormParameterSafely(form, "term"), !"false".equals(getFormParameterSafely(form, "record")));
                     case "do" -> result = _authoring.apply(player, getFormParameterSafely(form, "op"), "true".equals(getFormParameterSafely(form, "setup")));
+                    case "alias" -> result = _authoring.renameCard(player, getFormParameterSafely(form, "from"), getFormParameterSafely(form, "to"));
                     case "here" -> result = _authoring.stepHere(player);
                     case "retake" -> result = _authoring.retake(player);
                     case "settings" -> {

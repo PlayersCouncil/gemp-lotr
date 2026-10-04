@@ -764,4 +764,161 @@ public class ScenarioEngineTest {
         assertEquals("Only Gandalf is left to play, and passing is still not allowed", 1, ruling.shown().allowed().size());
         assertFalse(ruling.shown().passAllowed());
     }
+
+
+    /** The scenario in src/test/resources with a block in it: an assignment and two skirmishes, either fought first. */
+    private static String twoSkirmishes() throws Exception {
+        return java.nio.file.Files.readString(java.nio.file.Path.of("src/test/resources/scenarios/two-skirmishes.hjson"));
+    }
+
+    @Test
+    public void aBlockTakesItsDecisionsInWhateverOrderTheyCome() throws Exception {
+        String scenario = twoSkirmishes();
+        //The runner fights Gandalf's skirmish first.  Every step of the block is used, the block is one place in the
+        // script, and its steps are told apart in the report by where they come in it.
+        ScenarioRunReport report = ScenarioRunner.run(ScenarioParser.parse(scenario), ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+        assertEquals(StepStatus.MATCHED, report.steps.get("1 (fights)"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1.1"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1.2"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1.3 (aragornFights)"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("1.4"));
+        assertEquals(StepStatus.MATCHED, report.steps.get("2"));
+        List<String> order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("Gandalf's skirmish, then Aragorn's", List.of("1.1", "1.2", "1.4", "1.2", "1.3 (aragornFights)", "2"), order);
+
+        //The other way about, with nothing else changed: the same steps, in the order the game asks for them
+        report = ScenarioRunner.run(ScenarioParser.parse(scenario.replace("answer: choose(gandalf), choose(aragorn)", "answer: choose(aragorn), choose(gandalf)")),
+                ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+        order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("Aragorn's skirmish, then Gandalf's", List.of("1.1", "1.2", "1.3 (aragornFights)", "1.2", "1.4", "2"), order);
+
+        //A step the block never needed is not a failure: with Aragorn kept out of it, his step has nothing to apply to
+        report = ScenarioRunner.run(ScenarioParser.parse(scenario
+                        .replace("allow: assign(aragorn: runner1, gandalf: runner2)", "allow: assign(gandalf: runner1)")),
+                ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+        assertEquals(StepStatus.SKIPPED, report.steps.get("1.3 (aragornFights)"));
+    }
+
+    @Test
+    public void aBlocksStepsApplyOnceOrForAsLongAsItLasts() throws Exception {
+        ScenarioTable table = new ScenarioTable(ScenarioParser.parse(twoSkirmishes()), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+        ScenarioSession session = new ScenarioSession(table);
+        table.Start();
+        ScenarioDirector director = session.Director();
+
+        //The assignment: the block's first decision, and so the place the script arrives at
+        ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+        assertEquals("1.1", ruling.step().label());
+        assertTrue(director.arrives(ruling.step()));
+        assertEquals(1, ruling.shown().messages().size());
+        table.PlayerDecided(HUMAN, ruling.answer());
+
+        //A person takes Aragorn's skirmish first, which the step allows and the runner does not do
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.2", ruling.step().label());
+        assertFalse("The block has been arrived at already", director.arrives(ruling.step()));
+        assertEquals(2, ruling.shown().allowed().size());
+        table.PlayerDecided(HUMAN, String.valueOf(table.Card("aragorn").getCardId()));
+
+        //His skirmish is the step that says so, though it comes after the picking in the block and before the step
+        // for any other skirmish
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.3 (aragornFights)", ruling.step().label());
+        assertEquals("Aragorn's skirmish.", ruling.shown().messages().getFirst().text());
+        table.PlayerDecided(HUMAN, "");
+
+        //The picking step applies again, for as long as the block lasts; what it allows is what is still on offer
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.2", ruling.step().label());
+        assertTrue(director.isContinuing(ruling.step()));
+        assertEquals(1, ruling.shown().allowed().size());
+        table.PlayerDecided(HUMAN, ruling.shown().allowed().getFirst());
+
+        //Gandalf's skirmish: the step for Aragorn's is 'once' and spent, and would not fit anyway
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.4", ruling.step().label());
+        table.PlayerDecided(HUMAN, "");
+
+        //The regroup phase is where the block ends, and the step after it takes over
+        ruling = session.Ruling(HUMAN);
+        assertEquals("2", ruling.step().label());
+        assertEquals(2, director.currentStep().number);
+    }
+
+
+    @Test
+    public void aScenarioCanEndInsideABlock() throws Exception {
+        //The player is passed through every phase.  The step for Aragorn's skirmish names no phase, and is asked for
+        // all the same: a card is only ever fighting in a skirmish.  It ends the scenario, with one of the block's
+        // steps never having been needed; that is not a step the scenario failed to reach.
+        String ending = """
+                	options: {
+                		autoPass: fellowship, maneuver, archery, assignment, skirmish, regroup
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			characters: aragorn, gandalf
+                		}
+                		shadow: {
+                			minions: runner1, runner2
+                		}
+                	}
+                	steps: [
+                		{
+                			when: WHEN
+                			until: phase(regroup)
+                			anyOrder: [
+                				{
+                					once: true
+                					when: freeps, assign
+                					answer: assign(aragorn: runner1, gandalf: runner2)
+                				}
+                				{
+                					when: freeps, cards, text(next skirmish)
+                					answer: choose(gandalf), choose(aragorn)
+                				}
+                				{
+                					when: opponent, cards
+                					answer: choose(runner1)
+                				}
+                				{
+                					id: last
+                					when: LAST
+                					answer: pass
+                					end: complete
+                				}
+                			]
+                		}
+                	]
+                """;
+        //(a second site with nothing to do in a skirmish, so that being asked there is the script's doing)
+        java.util.function.Function<String, ScenarioRunReport> run = rest -> {
+            try {
+                return ScenarioRunner.run(ScenarioParser.parse(ScenarioTesting.scenario(rest).replace("1_331", "1_329")),
+                        ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+            } catch (Exception exp) {
+                throw new RuntimeException(exp);
+            }
+        };
+        ScenarioRunReport report = run.apply(ending.replace("WHEN", "turn(1)").replace("LAST", "freeps, fighting(aragorn)"));
+        assertTrue(report.toString(), report.passed());
+        assertEquals(StepStatus.MATCHED, report.steps.get("1.4 (last)"));
+        assertEquals(StepStatus.UNREACHED, report.steps.get("1.3"));
+        assertTrue(report.toString(), report.warnings.isEmpty());
+        List<String> order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("Nothing is asked in Gandalf's skirmish, which no step is about", List.of("1.1", "1.2", "1.2", "1.4 (last)"), order);
+
+        //A phase the block names for all its steps is one its steps need not name: the pass is asked for in it
+        report = run.apply(ending.replace("WHEN", "phase(skirmish)").replace("LAST", "freeps, action")
+                .replace("steps: [", "steps: [\n\t\t{\n\t\t\twhen: freeps, assign\n\t\t\tanswer: assign(aragorn: runner1, gandalf: runner2)\n\t\t}\n\t\t{\n\t\t\twhen: freeps, cards, text(next skirmish)\n\t\t\tanswer: choose(gandalf)\n\t\t}"));
+        assertTrue(report.toString(), report.passed());
+        order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("The first skirmish's pass is the block's, though its step says only whose it is", List.of("1", "2", "3.4 (last)"), order);
+    }
 }

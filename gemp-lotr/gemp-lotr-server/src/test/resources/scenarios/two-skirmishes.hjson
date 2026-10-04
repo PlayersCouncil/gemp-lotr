@@ -1,0 +1,81 @@
+{
+	id: two-skirmishes
+	title: Two skirmishes, either first
+	format: scenario
+	cards: {
+		freeps: {
+			frodo: 10_121
+			aragorn: 4_109
+			gandalf: 0_64
+		}
+		shadow: {
+			oppFrodo: 10_121
+			runner1: 1_178
+			runner2: 1_178
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118
+		shadow: 1_323, 1_331, 1_340, 2_118
+	}
+	options: {
+		autoPass: true
+	}
+	opponent: {
+		fallback: pass
+	}
+	setup: {
+		freeps: {
+			characters: aragorn, gandalf
+		}
+		shadow: {
+			minions: runner1, runner2
+		}
+	}
+	steps: [
+		{
+			id: fights
+			note: The assignment and both skirmishes, whichever is fought first.
+			when: turn(1)
+			until: phase(regroup)
+			checkpoint: true
+			anyOrder: [
+				{
+					once: true
+					when: freeps, assign
+					messages: [
+						One Goblin each.
+					]
+					allow: assign(aragorn: runner1, gandalf: runner2)
+				}
+				{
+					when: freeps, cards, text(next skirmish)
+					allow: choose(aragorn)?, choose(gandalf)?
+					answer: choose(gandalf), choose(aragorn)
+				}
+				{
+					id: aragornFights
+					once: true
+					when: freeps, action, fighting(aragorn)
+					messages: [
+						Aragorn's skirmish.
+					]
+					allow: pass
+				}
+				{
+					when: freeps, action, phase(skirmish)
+					answer: pass
+				}
+			]
+		}
+		{
+			when: freeps, action, phase(regroup)
+			allow: pass
+			end: complete
+		}
+	]
+}
