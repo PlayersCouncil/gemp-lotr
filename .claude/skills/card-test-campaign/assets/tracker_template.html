@@ -1,0 +1,215 @@
+<title>Card Test Campaign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: a ledger. One row per part of the campaign, each with a bar split by status; a row opens into its sets,
+   a set into its cultures, a culture into its cards.  Approved cards leave the lists. */
+:root {
+  --bg: #f5f7f5; --surface: #ffffff; --ink: #1b2420; --muted: #5c6a64; --line: #dce2de; --accent: #2b6b5a;
+  --todo: #cdd5d0; --prog: #3b78c2; --ready: #c4861a; --parked: #b24a40; --ok: #2e8d5a; --hover: #eef2ef;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121715; --surface: #1a211e; --ink: #e5ebe7; --muted: #98a69f; --line: #2a3430; --accent: #6dbfa4;
+  --todo: #3a4640; --prog: #6aa2e8; --ready: #e0ab48; --parked: #e27c72; --ok: #5cc58a; --hover: #212a26;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121715; --surface: #1a211e; --ink: #e5ebe7; --muted: #98a69f; --line: #2a3430; --accent: #6dbfa4;
+  --todo: #3a4640; --prog: #6aa2e8; --ready: #e0ab48; --parked: #e27c72; --ok: #5cc58a; --hover: #212a26;
+  color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 14px/1.45 var(--sans); padding-inline: 16px; padding-block: 20px 48px }
+.wrap { max-width: 1120px; margin-inline: auto; display: flex; flex-direction: column; gap: 20px }
+header { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between }
+h1 { font: 600 26px/1.15 var(--cond); margin: 0; letter-spacing: .01em; text-wrap: balance }
+.stamp { color: var(--muted); font-size: 12.5px }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line) }
+.tabs button { font: 500 14px var(--cond); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); background: none;
+  border: 0; border-bottom: 2px solid transparent; padding: 8px 12px; cursor: pointer }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent) }
+.tabs button:focus-visible, .row:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line) }
+.totals div { background: var(--surface); padding: 10px 12px; min-width: 0 }
+.totals b { display: block; font: 500 22px/1.1 var(--mono); font-variant-numeric: tabular-nums }
+.totals span { color: var(--muted); font: 500 11.5px var(--cond); letter-spacing: .06em; text-transform: uppercase }
+.swatch { display: inline-block; width: 9px; height: 9px; margin-right: 6px; vertical-align: baseline }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.chip { font: 500 12.5px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  padding: 4px 10px; cursor: pointer }
+.chip[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent) }
+.ledger { border: 1px solid var(--line); background: var(--surface) }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) 86px minmax(110px, 30%); gap: 12px; align-items: center;
+  width: 100%; padding: 9px 12px; border: 0; border-top: 1px solid var(--line); background: none; color: inherit;
+  font: inherit; text-align: left; cursor: pointer }
+.ledger > .row:first-child { border-top: 0 }
+.row:hover { background: var(--hover) }
+.row .name { min-width: 0; display: flex; gap: 8px; align-items: baseline }
+.row .name i { font-style: normal; color: var(--muted); width: 10px; flex: none; font-family: var(--mono) }
+.row .count { font: 400 12.5px var(--mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums }
+.row.l0 .name b { font: 600 15px var(--cond); letter-spacing: .01em }
+.row.l1 { padding-left: 30px }
+.row.l1 .name b { font-weight: 500 }
+.row.l2 { padding-left: 50px; font-size: 13px }
+.row.l2 .name b { font-weight: 400 }
+.row.done .name b { color: var(--muted) }
+.bar { display: flex; height: 10px; background: var(--todo); overflow: hidden }
+.bar span { display: block; height: 100% }
+.cards { border-top: 1px solid var(--line); overflow-x: auto; padding-left: 50px }
+table { border-collapse: collapse; width: 100%; font-size: 13px }
+th { font: 500 11px var(--cond); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left;
+  padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+td { padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+tr:last-child td { border-bottom: 0 }
+.cards table { table-layout: fixed; min-width: 700px }
+.cards th:nth-child(1) { width: 84px } .cards th:nth-child(2) { width: 30% } .cards th:nth-child(3) { width: 150px }
+.cards th:nth-child(4) { width: 80px } .cards th:nth-child(5) { width: 86px } .cards th:nth-child(6) { width: 96px }
+td.id { font: 400 12.5px var(--mono); white-space: nowrap; color: var(--muted) }
+td.num { font: 400 12.5px var(--mono); white-space: nowrap; font-variant-numeric: tabular-nums }
+td.note { color: var(--muted); min-width: 180px }
+.pill { display: inline-block; font: 500 11.5px var(--cond); letter-spacing: .05em; text-transform: uppercase; padding: 1px 7px;
+  border: 1px solid currentColor; white-space: nowrap }
+.pill.todo { color: var(--muted) } .pill.in-progress { color: var(--prog) } .pill.ready { color: var(--ready) }
+.pill.parked { color: var(--parked) } .pill.approved { color: var(--ok) }
+.pill.candidate { color: var(--ready) } .pill.confirmed, .pill.fixed { color: var(--ok) } .pill.question { color: var(--prog) }
+.pill.not-a-bug { color: var(--muted) }
+.empty { color: var(--muted); padding: 10px 12px 10px 50px; border-top: 1px solid var(--line); font-size: 13px }
+h2 { font: 600 16px var(--cond); letter-spacing: .02em; margin: 8px 0 0 }
+.plain { border: 1px solid var(--line); background: var(--surface); overflow-x: auto }
+.plain table td, .plain table th { padding-inline: 12px }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 12.5px }
+p.lead { margin: 0; color: var(--muted); max-width: 70ch }
+@media (max-width: 620px) {
+  .row { grid-template-columns: minmax(0, 1fr) 64px; row-gap: 6px }
+  .row .bar { grid-column: 1 / -1 }
+  .row.l1 { padding-left: 20px } .row.l2 { padding-left: 30px } .cards { padding-left: 0 } .empty { padding-left: 30px }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Card Test Campaign</h1>
+    <span class="stamp" id="stamp"></span>
+  </header>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-progress" aria-selected="true" aria-controls="progress">Progress</button>
+    <button role="tab" id="tab-findings" aria-selected="false" aria-controls="findings">Findings</button>
+  </div>
+
+  <section id="progress" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="totals" id="totals"></div>
+    <div class="chips" id="filters"></div>
+    <div class="ledger" id="ledger"></div>
+    <div class="legend" id="legend"></div>
+    <h2>Other work</h2>
+    <div class="plain"><table id="other"></table></div>
+  </section>
+
+  <section id="findings" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">Everything the campaign has turned up, by what kind of mistake it was. A candidate is something the
+      text and the game disagree on that has not been ruled on yet.</p>
+    <div class="plain"><table id="tally"></table></div>
+    <div class="plain"><table id="flist"></table></div>
+  </section>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const STATUSES = ["approved", "ready", "parked", "in-progress", "todo"];
+const LABEL = { "approved": "Approved", "ready": "Ready for review", "parked": "Parked", "in-progress": "In progress", "todo": "To do" };
+const COLOR = { "approved": "var(--ok)", "ready": "var(--ready)", "parked": "var(--parked)", "in-progress": "var(--prog)", "todo": "var(--todo)" };
+const KINDS = { "hjson-typo": "Typo in the definition", "hjson-logic": "Implementation oversight", "gametext": "Displayed text wrong",
+  "engine": "Engine bug", "rig": "Test rig bug", "test": "Existing test wrong or empty", "sheet": "Spreadsheet wrong",
+  "ruling": "Needs a ruling", "data": "Data oddity" };
+const el = (tag, attrs, ...kids) => { const e = document.createElement(tag);
+  for (const k in (attrs || {})) { if (k === "class") e.className = attrs[k]; else if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  for (const kid of kids) if (kid != null) e.append(kid); return e; };
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+function counts(cards) { const c = { total: cards.length }; for (const s of STATUSES) c[s] = 0; for (const x of cards) c[x.status]++; return c; }
+function bar(c) { const b = el("div", { class: "bar", role: "img", "aria-label": STATUSES.map(s => c[s] + " " + LABEL[s].toLowerCase()).join(", ") });
+  for (const s of STATUSES) { if (s === "todo" || !c[s]) continue; const seg = el("span"); seg.style.width = (100 * c[s] / Math.max(1, c.total)) + "%"; seg.style.background = COLOR[s]; b.append(seg); }
+  return b; }
+
+function start() {
+  if (!DATA) { document.getElementById("ledger").append(el("div", { class: "empty", text: "No data in this page." })); return; }
+  document.getElementById("stamp").textContent = "As of " + DATA.generated;
+  const all = counts(DATA.cards);
+  const totals = document.getElementById("totals");
+  totals.append(el("div", null, el("b", { text: all.total.toLocaleString() }), el("span", { text: "Cards" })));
+  for (const s of STATUSES) { const d = el("div", null, el("b", { text: all[s].toLocaleString() }));
+    const sp = el("span"); const sw = el("i", { class: "swatch" }); sw.style.background = COLOR[s]; sp.append(sw, LABEL[s]); d.append(sp); totals.append(d); }
+
+  // Which rows are open.  The page opens at whatever the campaign is working on, unless the viewer has opened or shut rows themselves.
+  const focusKey = (DATA.focus || []).join("/");
+  let open = store.get("open", null);
+  if (!open || store.get("focus", "") !== focusKey) { open = {}; if (DATA.focus && DATA.focus[0]) { open["p:" + DATA.focus[0]] = true; if (DATA.focus[1]) open["s:" + DATA.focus[0] + "/" + DATA.focus[1]] = true; } store.set("focus", focusKey); store.set("open", open); }
+  let filter = store.get("filter", "all");
+  let showApproved = false;
+
+  const filters = document.getElementById("filters");
+  function drawFilters() { filters.replaceChildren();
+    for (const f of ["all", "ready", "parked", "in-progress", "todo"]) { const b = el("button", { class: "chip", "aria-pressed": String(filter === f), id: "filter-" + f, text: f === "all" ? "Everything open" : LABEL[f] });
+      b.onclick = () => { filter = f; store.set("filter", f); drawFilters(); draw(); }; filters.append(b); }
+    const a = el("button", { class: "chip", "aria-pressed": String(showApproved), id: "filter-approved", text: (showApproved ? "Hide" : "Show") + " approved cards" });
+    a.onclick = () => { showApproved = !showApproved; drawFilters(); draw(); }; filters.append(a); }
+
+  const ledger = document.getElementById("ledger");
+  function groupBy(cards, key) { const m = new Map(); for (const c of cards) { if (!m.has(c[key])) m.set(c[key], []); m.get(c[key]).push(c); } return m; }
+  function row(level, key, title, cards) { const c = counts(cards); const isOpen = !!open[key];
+    const r = el("button", { class: "row l" + level + (c.approved === c.total ? " done" : ""), "aria-expanded": String(isOpen) },
+      el("span", { class: "name" }, el("i", { text: isOpen ? "–" : "+" }), el("b", { text: title })),
+      el("span", { class: "count", text: c.approved + " / " + c.total }), bar(c));
+    r.onclick = () => { open[key] = !open[key]; store.set("open", open); draw(); }; return r; }
+  function cardTable(cards) {
+    const shown = cards.filter(c => (showApproved || c.status !== "approved") && (filter === "all" || c.status === filter));
+    if (!shown.length) return el("div", { class: "empty", text: cards.every(c => c.status === "approved") ? "Every card here is approved." : "Nothing here matches the filter." });
+    const t = el("table"); t.append(el("tr", null, ...["Card", "Name", "Status", "Tests", "Standard", "Findings", "Note"].map(h => el("th", { text: h }))));
+    for (const c of shown) t.append(el("tr", null, el("td", { class: "id", text: c.id }), el("td", { text: c.name }),
+      el("td", null, el("span", { class: "pill " + c.status, text: LABEL[c.status] })), el("td", { class: "num", text: c.was + " → " + c.now }),
+      el("td", { text: c.lint ? "meets" : "not yet" }), el("td", { class: "id", text: c.findings || "" }), el("td", { class: "note", text: c.note || "" })));
+    return el("div", { class: "cards" }, t); }
+  function draw() { ledger.replaceChildren();
+    for (const p of DATA.phases) { const pc = DATA.cards.filter(c => c.phase === p.key); if (!pc.length) continue;
+      ledger.append(row(0, "p:" + p.key, p.title, pc)); if (!open["p:" + p.key]) continue;
+      for (const [setName, sc] of groupBy(pc, "set")) { const sk = "s:" + p.key + "/" + setName; ledger.append(row(1, sk, setName, sc)); if (!open[sk]) continue;
+        const groups = groupBy(sc, "group");
+        if (groups.size === 1) { ledger.append(cardTable(sc)); continue; }
+        for (const [gName, gc] of groups) { const gk = "g:" + p.key + "/" + setName + "/" + gName; const small = sc.length <= 150;
+          if (open[gk] === undefined && small) open[gk] = true;
+          ledger.append(row(2, gk, gName, gc)); if (open[gk]) ledger.append(cardTable(gc)); } } } }
+  drawFilters(); draw();
+
+  const legend = document.getElementById("legend");
+  legend.append(el("span", { text: "Counts are approved / total. \"Tests\" is how many active tests the card had before the campaign and has now. \"Standard\" is whether its test file passes the conformance check." }));
+
+  const other = document.getElementById("other");
+  other.append(el("tr", null, el("th", { text: "What" }), el("th", { text: "Size" })));
+  const legacyTotal = (DATA.legacy || []).reduce((a, l) => a + l.tests, 0);
+  other.append(el("tr", null, el("td", { text: "Tests written before the rig (the at folder), to be rewritten as card tests or as card-agnostic mechanic tests" }), el("td", { class: "num", text: legacyTotal + " tests in " + (DATA.legacy || []).length + " files" })));
+  other.append(el("tr", null, el("td", { text: "Test files kept for earlier iterations of PC cards, kept in step but not switched on" }), el("td", { class: "num", text: DATA.dormant + " files" })));
+
+  // Findings.
+  const F = DATA.findings || [];
+  const tally = document.getElementById("tally"); const fs = ["candidate", "question", "confirmed", "fixed", "not-a-bug"];
+  tally.append(el("tr", null, el("th", { text: "Kind" }), ...fs.map(s => el("th", { text: s.replace(/-/g, " ") })), el("th", { text: "All" })));
+  const kinds = [...new Set(F.map(f => f.kind))];
+  for (const k of kinds) { const of = F.filter(f => f.kind === k);
+    tally.append(el("tr", null, el("td", { text: KINDS[k] || k }), ...fs.map(s => el("td", { class: "num", text: String(of.filter(f => f.status === s).length || "") })), el("td", { class: "num", text: String(of.length) }))); }
+  if (!F.length) tally.append(el("tr", null, el("td", { text: "Nothing yet.", colspan: "7" })));
+  const flist = document.getElementById("flist");
+  flist.append(el("tr", null, ...["Id", "Card", "Kind", "Status", "What", "How it was found", "Outcome"].map(h => el("th", { text: h }))));
+  for (const f of F) flist.append(el("tr", null, el("td", { class: "id", text: f.id }), el("td", null, el("span", { class: "id", text: f.card + " " }), f.name || ""),
+    el("td", { text: KINDS[f.kind] || f.kind }), el("td", null, el("span", { class: "pill " + f.status, text: (f.status || "").replace(/-/g, " ") })),
+    el("td", { text: f.summary || "" }), el("td", { class: "note", text: f.found || "" }), el("td", { class: "note", text: f.outcome || "" })));
+
+  // Tabs.
+  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings") };
+  function show(name) { for (const k in tabs) { tabs[k].setAttribute("aria-selected", String(k === name)); document.getElementById(k).hidden = k !== name; } }
+  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings");
+  if (location.hash === "#findings") show("findings");
+}
+start();
+</script>
