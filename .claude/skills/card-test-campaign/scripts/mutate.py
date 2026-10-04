@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """Finds out whether a card's tests would notice if the card were wrong.
 
-    mutate.py <id> [--out <name>] [--show]
+    mutate.py <id> [--out <name>]           makes its own mistakes and lists the survivors
+    mutate.py <id> --all                    lists every mistake and what noticed it
+    mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
+    mutate.py <id> --replace <old> <new>    makes one mistake of your choosing: the first <old> in the
+                                            definition becomes <new>
 
-Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off, a word
-dropped from a filter, a phase changed, a cost or a requirement removed, "may" turned into "must"), and runs the
-card's tests against each.  A mistake that no test notices is a *survivor*: either the tests have a gap there, or
+Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off either way, a
+word dropped from a filter, a filter narrowed to the card's own culture or to companions, a phase changed, a cost
+or a requirement removed, "may" turned into "must"), and runs the card's tests against each.  A mistake that no test notices is a *survivor*: either the tests have a gap there, or
 the mistake makes no difference to how the card plays.  Deciding which is the reviewer's job; this only finds them.
 
 This is a check on tests that already exist.  It is run after the tests are written and never before: the
@@ -25,11 +29,13 @@ from pathlib import Path
 import cardtest
 import gempcards as g
 
-NUMBER = re.compile(r"^(\s*)(amount|count|times|limit|limitPerPhase|limitPerTurn|min|max|multiplier|value|"
-                    r"twilight|strength|vitality|resistance|site|memorizedCount)(\s*:\s*)(-?\d+)\s*$")
+NUMBER = re.compile(r"^(\s*)([A-Za-z]+)(\s*:\s*)(-?\d+)\s*$")
 FLAG = re.compile(r"^(\s*)(optional|forced|shuffle|showAll|player)(\s*:\s*)(true|false)\s*$", re.I)
 PHASE = re.compile(r"^(\s*)(phase)(\s*:\s*)(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\s*$", re.I)
-FILTER = re.compile(r"^(\s*)(filter|select|on|against|target|bearer|from|to)(\s*:\s*)(.+?)\s*$")
+FILTER = re.compile(r"^(\s*)(filter|select|on|against|target|bearer|from|to|where)(\s*:\s*)(.+?)\s*$")
+DEFAULTED = re.compile(r"^(\s*)(on|where|fromZone|against)\s*:\s*\S")
+KIND_WORDS = ("companion", "minion", "ally", "possession", "condition", "artifact", "event", "site", "follower",
+              "self", "bearer", "memory(", "weapon", "item", "ring", "character")
 BLOCK = re.compile(r"^(\s*)(requires|cost|until|limitPerPhase|limitPerTurn)\s*:")
 OTHER_PHASE = {"fellowship": "maneuver", "shadow": "maneuver", "maneuver": "regroup", "archery": "maneuver",
                "assignment": "maneuver", "skirmish": "maneuver", "regroup": "maneuver"}
@@ -52,7 +58,7 @@ def split_terms(text: str) -> list:
     return out
 
 
-def mistakes(lines: list) -> list:
+def mistakes(lines: list, culture: str = "") -> list:
     """Every mistake worth making, as (line index, description, the new lines for the whole card)."""
     out = []
 
@@ -75,9 +81,12 @@ def mistakes(lines: list) -> list:
         m = NUMBER.match(line)
         if m:
             n = int(m.group(4))
-            new = lines[:]
-            new[i] = "%s%s%s%d" % (m.group(1), m.group(2), m.group(3), n + 1)
-            add(i, "%s: %d becomes %d" % (m.group(2), n, n + 1), new)
+            for other in (n + 1, n - 1):
+                if other < 0 and n >= 0:
+                    continue
+                new = lines[:]
+                new[i] = "%s%s%s%d" % (m.group(1), m.group(2), m.group(3), other)
+                add(i, "%s: %d becomes %d" % (m.group(2), n, other), new)
             continue
         m = FLAG.match(line)
         if m and m.group(2).lower() in ("optional", "forced"):
@@ -99,13 +108,29 @@ def mistakes(lines: list) -> list:
             wrapper = re.match(r"^(choose|all)\((.*)\)$", value)
             inner = wrapper.group(2) if wrapper else value
             terms = split_terms(inner)
+
+            def rewritten(new_inner):
+                new_value = "%s(%s)" % (wrapper.group(1), new_inner) if wrapper else new_inner
+                new = lines[:]
+                new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), new_value)
+                return new
+
+            # Wider: each word dropped in turn.
             if len(terms) > 1:
                 for t in range(len(terms)):
                     kept = ",".join(terms[:t] + terms[t + 1:])
-                    new_value = "%s(%s)" % (wrapper.group(1), kept) if wrapper else kept
-                    new = lines[:]
-                    new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), new_value)
-                    add(i, "%s: '%s' dropped from %s" % (m.group(2), terms[t].strip(), value), new)
+                    add(i, "%s: '%s' dropped from %s" % (m.group(2), terms[t].strip(), value), rewritten(kept))
+            # Narrower: the commonest way a filter is written too tight is with the card's own culture or with
+            # "companion" where the text says neither.
+            low = inner.lower()
+            plain = not any(w in low for w in ("self", "bearer", "memory(", "storedculture", "choose(")) and m.group(2) != "where"
+            if plain and culture and "culture(" not in low:
+                add(i, "%s: narrowed to culture(%s): %s" % (m.group(2), culture, value), rewritten(inner + ",culture(%s)" % culture))
+            if plain and not any(w in low for w in KIND_WORDS):
+                add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
+        m = DEFAULTED.match(line)
+        if m and not stripped.endswith("{") and not stripped.endswith("["):
+            add(i, "%s removed, so its default applies" % m.group(2), lines[:i] + lines[i + 1:])
         m = BLOCK.match(line)
         if m:
             # Take the whole field out, however many lines it runs to.
@@ -158,11 +183,13 @@ def run_tests(cwd: Path, cp: str, test_class: str):
 
 
 def main(argv):
-    args = [a for a in argv[1:] if not a.startswith("--")]
-    out_name = "default"
-    if "--out" in argv:
-        out_name = argv[argv.index("--out") + 1]
-        args = [a for a in args if a != out_name]
+    skip = set()
+    for flag, width in (("--out", 1), ("--replace", 2)):
+        if flag in argv:
+            i = argv.index(flag)
+            skip.update(range(i, i + width + 1))
+    args = [a for n, a in enumerate(argv) if n > 0 and n not in skip and not a.startswith("--")]
+    out_name = argv[argv.index("--out") + 1] if "--out" in argv else "default"
     if not args:
         print(__doc__)
         return 0
@@ -175,7 +202,14 @@ def main(argv):
     file_lines = file_text.replace("\r", "").split("\n")
     first = card.line - 1
     card_lines = card.raw.split("\n")
-    todo = mistakes(card_lines)
+    todo = mistakes(card_lines, (card.field("culture", "") or "").strip().lower())
+    if "--replace" in argv:
+        i = argv.index("--replace")
+        old_text, new_text = argv[i + 1], argv[i + 2]
+        if old_text not in card.raw:
+            raise SystemExit("'%s' is not in the definition of %s." % (old_text, card_id))
+        todo = [(card.raw[:card.raw.index(old_text)].count("\n"), "'%s' becomes '%s'" % (old_text, new_text),
+                 card.raw.replace(old_text, new_text, 1).split("\n"))]
     if "--show" in argv:
         for i, what, _ in todo:
             print("line %d: %s" % (card.line + i, what))

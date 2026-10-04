@@ -22,14 +22,22 @@ _HEADING = re.compile(r"^(={2,6})\s*(.*?)\s*\1\s*$")
 BASIC_TERMS = {
     "action", "active", "ally", "artifact", "bearer", "card type", "character", "companion", "condition", "culture",
     "event", "free peoples cards", "game text", "minion", "opponent", "possession", "shadow cards", "site",
-    "strength", "vitality", "wound", "race", "man", "uruk-hai", "keyword", "token", "unique", "non-unique", "lore",
-    "collector's info", "block symbol", "twilight cost", "twilight pool", "phase action", "special ability",
-    "fellowship phase", "shadow phase(s)", "maneuver phase", "archery phase", "assignment phase",
-    "skirmish phase(s)", "regroup phase", "turn sequence", "draw deck", "discard pile", "dead pile", "support area",
-    "adventure deck", "adventure path", "kinds of cards", "building your deck", "setting up the game",
-    "starting fellowship", "who goes first?", "winning the game", "losing the game", "format", "x-list", "bid",
-    "frodo", "sam", "the one ring", "resistance", "signet", "burden", "killed", "effect", "cost", "when", "while",
-    "each time", "helper text", "playing a card", "start of turn", "moving your fellowship", "requirement",
+    "strength", "vitality", "race", "man", "uruk-hai", "keyword", "token", "lore", "collector's info",
+    "block symbol", "twilight pool", "phase action", "fellowship phase", "shadow phase(s)", "maneuver phase",
+    "archery phase", "assignment phase", "skirmish phase(s)", "regroup phase", "turn sequence", "draw deck",
+    "discard pile", "support area", "adventure deck", "adventure path", "kinds of cards", "building your deck",
+    "setting up the game", "starting fellowship", "who goes first?", "format", "x-list", "bid", "helper text",
+}
+
+
+# Other forms a glossary term takes in game text.
+STEMS = {
+    "healing": ["heals?", "healed"], "killed": ["kills?", "dies", "die", "killing"], "exhausted": ["exhaust"],
+    "overwhelmed": ["overwhelm"], "corrupted": ["corrupt"], "mounted": ["mount"], "stack": ["stacked", "stacks"],
+    "losing the game": ["loses? the game"], "winning the game": ["wins? the game"], "leaving play": ["leaves play"],
+    "moving your fellowship": ["fellowship moves", "moves?"], "playing a card": ["play", "plays", "played"],
+    "preventing effects": ["prevent", "prevented"], "replacing sites": ["replace"], "ring-bound": ["ring-bearer"],
+    "redrawing your hand": ["redraw"], "twilight cost": ["twilight cost"], "the one ring": ["one ring", "ring-bearer"],
 }
 
 
@@ -207,6 +215,21 @@ def cmd_card(rules: Rules, arg: str, quiet_if_none=False) -> bool:
             print("### Named in \"%s\", line %d%s" % (sec[1], i + 1, tag))
             print(clean("\n".join(rules.lines[lo:hi + 1])).strip())
             print()
+    # A ruling on another card that speaks of this one by its title in passing ("the Ring passes to Sam").
+    if is_id:
+        title = g.card_index()[arg].field("title", "")
+        if title and len(title) > 2:
+            word = re.compile(r"(?<![A-Za-z])" + re.escape(title) + r"(?![A-Za-z])")
+            for names, kind, text, line_no in rules.rulings():
+                normed = [norm(n) for n in names]
+                if any(n in keys or n in weak for n in normed):
+                    continue
+                if word.search(text):
+                    found = True
+                    print("### A ruling on another card mentions \"%s\", line %d: %s" % (title, line_no, kind))
+                    print("Cards: " + "; ".join(names))
+                    print(text)
+                    print()
     if not found and not quiet_if_none:
         print("The rules do not name this card.")
     return found
@@ -216,7 +239,9 @@ def terms_for(rules: Rules, card_id: str, include_basic=False):
     card = g.card_index()[card_id]
     text = g.plain_text(card.field("gametext", "")).lower()
     keywords = (card.field("keywords", "") or "").lower()
-    hay = text + " " + keywords
+    # The card's own name counts: the glossary has entries for Frodo, Sam and Gollum/Smeagol as characters.
+    title = norm(card.field("title", ""))
+    hay = text + " " + keywords + " " + title
     out = []
     for sec in rules.glossary():
         term = sec[1].lower()
@@ -225,7 +250,8 @@ def terms_for(rules: Rules, card_id: str, include_basic=False):
         pat = re.escape(term)
         pat = pat.replace(r"\+x", r"\+\s*\d+").replace(r"\ x", r"\s*\(?\d+\)?")
         pat = re.sub(r"\\\(s\\\)", "s?", pat)
-        variants = [pat]
+        variants = [pat] + [re.escape(part.strip()) for part in term.split("/") if "/" in term]
+        variants += STEMS.get(term, [])
         if term.endswith("ing") or term.endswith("ed"):
             pass
         elif not term.endswith("s"):

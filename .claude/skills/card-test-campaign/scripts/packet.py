@@ -68,9 +68,13 @@ def main(argv):
         test = tests.get(card_id)
         if test:
             text = test.read_text(encoding="utf-8", errors="replace")
-            print("- Test file: %s (%d active tests)" % (g.rel(test), active_test_count(text)))
+            n = active_test_count(text)
+            print("- Test file: %s (%d active tests, the stat check included)" % (g.rel(test), n))
         else:
             print("- Test file: none yet")
+        revision = re.search(r"^\s*revision\s*:\s*(\d+)", card.raw, re.M)
+        if revision and revision.group(1) != "0":
+            print("- This is revision %s of the card: its text has been changed since it was first released." % revision.group(1))
         for relation, other in errata_family(card_id):
             other_card = cards.get(other)
             print("- Versions: %s %s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else ""))

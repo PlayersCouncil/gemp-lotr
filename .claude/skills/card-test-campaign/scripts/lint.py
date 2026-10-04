@@ -19,6 +19,7 @@ import gempcards as g
 # The checks a clause of each type has to list at the very least.  The standard says which further checks a
 # clause's wording calls for; those are the analyst's to list and the reviewer's to confirm.
 CORE = {
+    "Play": {"+"},
     "Keyword": {"K"},
     "ToPlay": {"+", "-"},
     "ExtraCost": {"+", "-", "C"},
@@ -31,9 +32,12 @@ CORE = {
     "Restriction": {"+", "-"},
     "Choice": {"B"},
     "Ruling": {"+"},
+    "Rule": {"+"},
     "Interaction": {"+"},
     "FormatRule": {"+", "-"},
 }
+# Card types that a player plays from hand and that then stay in play.  Events are played by their Event clause.
+PLAYED = {"companion", "ally", "minion", "possession", "artifact", "condition", "follower"}
 CODES = {"+", "-", "C", "C-", "F", "D", "L", "O", "S", "R", "B", "Z", "K"}
 
 LEDGER_LINE = re.compile(r"^\s*\*\s+([A-Z]\d+)\s+([A-Za-z]+)\s+\[([^\]]*)\]\s*(.*?)\s*$")
@@ -151,6 +155,7 @@ def parse_ledger(lines):
     if start is None:
         return None, None, []
     clauses, findings = {}, []
+    last, in_header = None, False
     for i in range(start + 1, len(lines)):
         line = lines[i]
         if "*/" in line:
@@ -159,12 +164,15 @@ def parse_ledger(lines):
         if m:
             codes = set(m.group(3).split())
             clauses[m.group(1)] = [m.group(2), codes, m.group(4), i]
-            last = m.group(1)
-        elif clauses and re.match(r"^\s*\*\s{6,}\S", line) and not re.match(r"^\s*\*\s+(Sources|Findings|Formats|Notes)\s*:", line):
+            last, in_header = m.group(1), False
+        elif re.match(r"^\s*\*\s+(Sources|Findings|Formats|Notes)\s*:", line):
+            in_header = True
+        elif not line.strip().strip("*").strip():
+            pass
+        elif last is not None and not in_header:
             # A continuation of the previous clause's text.
             clauses[last][2] += " " + line.strip().lstrip("*").strip()
-        f = re.findall(r"\b[FQ]-\d{4}\b", line)
-        findings += f
+        findings += re.findall(r"\b[FQ]-\d{4}\b", line)
     return clauses, start, findings
 
 
@@ -250,6 +258,8 @@ def lint_file(path: Path):
             missing = CORE[ctype] - codes
             if missing:
                 add("error", "ledger", line, "%s: a %s clause must list at least %s" % (cid, ctype, " ".join(sorted(CORE[ctype]))))
+        if card is not None and (card.field("type", "") or "").lower() in PLAYED and not any(c[0] == "Play" for c in clauses.values()):
+            add("error", "ledger", ledger_line, "no Play clause (P1 Play [+] ...): a card that is played from hand has a test that plays it")
         if card is not None:
             want = squash(card.field("gametext", ""))
             text_clauses = [c for cid, c in clauses.items() if cid.startswith("C")]

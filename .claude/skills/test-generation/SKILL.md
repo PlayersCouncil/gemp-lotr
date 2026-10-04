@@ -29,6 +29,10 @@ the text does not say, the test keeps saying what the text says, and the disagre
 3. **The card's text.** For a Decipher card this is the reviewed spreadsheet row; for a PC card it is the
    definition's `gametext` and printed fields. `packet.py <id> --blind` prints exactly this and nothing else.
 
+The PC's own mechanics (hinder and restore, and whatever later V-sets add) are in none of these: Comprehensive
+Rules 4.2 predates them. Until there is a rules text for them in the campaign's references, what such a word means
+is a question for Ketura the first time a card turns on it, and her answer goes in the rulings log.
+
 What you remember about the game is not on the list. Where the text and rules leave a real doubt about what
 should happen, that is a question for Ketura, and asking is always better than guessing: obscure rulings are the
 commonest reason a correct implementation gets reported as a bug.
@@ -46,6 +50,7 @@ public class Card_01_040_Tests
 	 * LEDGER  1_40  Elrond, Lord of Rivendell
 	 * Sources: sheet; CR 4.2 names this card nowhere
 	 *
+	 * P1 Play       [+]          Played from hand for (4), to the support area.
 	 * C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
 	 * C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
 	 * C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
@@ -84,7 +89,7 @@ public class Card_01_040_Tests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionsToTable(elrond);
+		scn.MoveCardsToSupportArea(elrond);
 
 		scn.StartGame();
 
@@ -117,11 +122,16 @@ sees, without reading Java, what was understood about the card and what was test
 - **`C` clauses are the game text, word for word, in order.** Cut at sentences and line breaks. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the card.
+- **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
+  has one: the card is played from hand by legal play, and the test reads what it cost and where it ended up. An
+  event is played by its own `Event` clause and needs no `P1`.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
 - `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
-  (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know.
+  (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
+  all why a check the wording seems to call for was left off. Each may run onto following lines. Put `Sources:`
+  above the clauses and `Findings:` and `Notes:` below them.
 
 ### The checks
 
@@ -134,15 +144,15 @@ then claimed by a test.
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
-| `F` | Who or what can be chosen or affected is exactly who the wording says: at least one more valid candidate than is needed, all offered or affected, and at least one invalid candidate for each thing the wording excludes, none offered or affected. |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. |
 | `D` | The effect is still in force just before the boundary the text names and gone just after. |
 | `L` | A limit holds: it works up to the limit and is refused or capped beyond it. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
 | `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. |
 | `R` | "Each time" happens a second time. |
-| `B` | Each alternative of an "or" or "choose one" is taken in some test. |
+| `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. |
-| `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test. |
+| `K` | The keyword, with its number if it has one, is on the card. Claimed by a tag on the stats test (`// C1: K; C2: K`). |
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
 
@@ -150,7 +160,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`
 - "until", "this phase", "this turn" → `D`
 - "limit", "once per" → `L`
-- "may" → `O`
+- "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
+  so; list `O` for one only where declining has a consequence worth showing
 - "for each", "X" → `S`
 - "each time" → `R`
 - "or", "choose one" → `B`
@@ -162,7 +173,8 @@ The type says what kind of statement the clause is, and sets the checks it must 
 
 | Type | The clause is | At least | Notes |
 |---|---|---|---|
-| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. |
+| `Play` | the card being played from hand (`P1`) | `+` | Twilight moves by the cost (plus roaming for a minion, and say so in the comment); the card ends in play, in the support area, or on its bearer. May share a test with a `ToPlay` or `PlayOn` clause. |
+| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. |
 | `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. |
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable. |
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |
@@ -173,7 +185,8 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. |
 | `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. |
 | `Choice` | a sentence that is only a choice between alternatives | `B` | Usually a choice is part of another clause, which then lists `B`. |
-| `Ruling` | an individual ruling on this card | `+` | Reproduce the ruling's situation. |
+| `Ruling` | an entry in Section Three of the rules that names this card | `+` | Reproduce the ruling's situation. |
+| `Rule` | a glossary entry that bears on this card in a way its text does not show | `+` | For example, the entry "Sam": a Sam who can become the Ring-bearer when Frodo dies can only do so if Frodo was the Ring-bearer. Cite the entry. Not for rules that every card of the kind obeys, which are mechanics. |
 | `Interaction` | a rules example that names this card with another | `+` | Lives in the file of the card named first; the other card's ledger mentions it under `Notes:`. |
 | `FormatRule` | behaviour that differs by format | `+ -` | One scenario method per format. See `references/format-rules.md`. |
 
@@ -216,7 +229,12 @@ the proof in a test that something did *not* happen.
 
 **Expected values come from the text.** Work out what should happen, write it down, then run it. Do not run the
 game and copy what it did. Where a number is a sum, the comment spells the sum:
-`// 5 to play + 2 roaming + 4 tax`.
+`// 5 to play + 2 roaming + 4 tax`. The words the game uses to present a choice or an action ("Remove (4)",
+"draw deck") are not expectations; take those from the game as they are.
+
+**A reading that could not have come out otherwise shows nothing.** A before and an after that are equal, or an
+assertion that would hold on that board whatever the card did, is not a check. Arrange the board so that the
+right behaviour and the nearest wrong one give different readings.
 
 **One behaviour, shown once.** A positive and a negative case that the same board shows belong in one test.
 Stages that build on each other belong in one test. Two tests that would pass or fail together are one test.
@@ -254,8 +272,12 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
 - **The rig cannot express a check.** Write a rig request (what the test needed, the signature proposed, the
   interface it belongs in) and leave the check untested. No helper method, no reaching past the rig.
 - **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
-  would mean for the test. If one reading is clearly likelier, write the test for it and park it with
-  `@Ignore("Q-0000: ...")` above the tag line.
+  would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
+  reading, keep that test active: it is the best evidence there is of what was meant. Otherwise, if one reading
+  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")` above the tag line.
+- **The card turns on a PC mechanic the rules do not cover** (hinder, say). That the card *becomes* hindered is
+  what its text says and can be asserted. What being hindered *does* is the mechanic's, and waits for Ketura's
+  ruling: park any assertion that depends on it with a `Q-`.
 - **The game disagrees with the text.** Keep the test asserting what the text says. Park it with
   `@Ignore("F-0000: ...")`, and record the finding with what was expected, what happened, and which of these it
   looks like: a typo in the definition, an oversight in the implementation, wrong displayed text, an engine bug, a
@@ -286,8 +308,10 @@ Run `lint.py <id>` first; it settles layout, tags, coverage of listed checks, fo
    for. Read the card, not the tests.
 2. Does each test really show the check it claims? A `-` that is not the *nearest* miss, an `F` with one
    candidate, a `D` that only looks at one side of the boundary, all pass the conformance check.
-3. Would the test fail if the card were wrong? Imagine the filter one word different, the number one off, the
-   trigger on the neighbouring event. If the test would still pass, it is not testing that.
+3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
+   number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
+   `mutate.py <id>` tries the common ones; `mutate.py <id> --replace <old> <new>` tries one of your own; and
+   `cardtest.py probe <file.java>` runs a throwaway test from `/tmp` to see what the game really does.
 4. Did an expectation come from the definition or from running the game?
 5. Is any helper card doing something the test does not account for?
 6. For a failure: is the test wrong, or is it a finding? Check the rules before deciding, and ask if unsure.

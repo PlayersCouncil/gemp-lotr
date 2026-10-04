@@ -55,8 +55,9 @@ game is wrong: they report, and the orchestrator and Ketura decide.
 2. Author, sighted: `packet.py <id> --with-test`. For an existing test file, account for every existing test: it
    claims a check, or it is redundant, or it knows something the ledger missed (then the ledger is what changes),
    or it contradicts the ledger (then it is a question; existing PC tests often encode a ruling).
-3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`. A test that fails is looked at
-   three ways before anything else: is the test wrong, is the expectation wrong, or is the game wrong.
+3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`; then `mutate.py <id>` to see
+   what the tests would miss. A test that fails is looked at three ways before anything else: is the test wrong,
+   is the expectation wrong, or is the game wrong.
 4. Reviewer: `lint.py`, `cardtest.py run`, `mutate.py <id>`, then the checklist at the end of the
    test-generation skill. Every surviving mistake from `mutate.py` is either a gap (back to the author, once) or
    explained in one line.

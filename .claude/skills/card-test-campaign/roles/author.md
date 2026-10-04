@@ -44,7 +44,15 @@ for PC cards were written with Ketura and often encode a ruling. Then write the 
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
 
-until both are clean. Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name.
+until both are clean. Then run `mutate.py <id> --out <your folder name>`: it makes deliberate mistakes in a copy
+of the definition and lists the ones your tests did not notice. A survivor is a gap to close or a mistake that
+makes no difference to play; say which for each in your report.
+
+Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name. Reading a helper
+card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.
+
+If an existing test asserts one reading of something you wrote down as a question, keep that test active, and
+report the question with a note that the existing test takes that reading.
 
 ## When a test fails
 
@@ -63,7 +71,9 @@ an obscure ruling looks exactly like a bug, and a wrongly reported bug costs mor
 
 ## What you may and may not touch
 
-You edit the test files of your own cards, and files under `/tmp/<your folder name>/`. Nothing else: not card
+You edit the test files of your own cards, and files under `/tmp/<your folder name>/`. To find out what the game
+does in some situation without adding a test, put a throwaway JUnit class there and run it with
+`cardtest.py probe <file.java>`; use this to understand a failure, never to decide what a test should expect. Nothing else: not card
 definitions, not the engine, not the rig, not other cards' tests, not git, not the campaign's state files.
 
 If a check cannot be written with the rig's existing methods, do not write a helper method and do not reach into

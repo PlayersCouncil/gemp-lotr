@@ -236,6 +236,10 @@ def plain_text(text: str) -> str:
     t = re.sub(r"<helper>.*?</helper>", "", t, flags=re.S | re.I)
     t = re.sub(r"<br\s*/?>", " ", t, flags=re.I)
     t = re.sub(r"\\n", " ", t)
+    # A bare backslash is how some definitions write a line break; before a bracket it only stops the client
+    # from drawing a twilight symbol.
+    t = re.sub(r"\\(?=[(\[])", "", t)
+    t = t.replace("\\", " ")
     t = re.sub(r"</?[a-zA-Z][^>]*>", "", t)
     t = t.replace("&nbsp;", " ")
     t = t.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')

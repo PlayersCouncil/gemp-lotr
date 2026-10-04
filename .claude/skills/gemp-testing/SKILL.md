@@ -67,6 +67,10 @@ game (cheating). `MoveCompanionsToTable`, `AttachCardsTo`, `AddWoundsToChar`, `S
 arrange a board, and never for the thing a test is about: if a test is about an ability exerting a character, the
 ability does the exerting and the test reads the wound.
 
+Several names can be given to the same blueprint (`put("runner1", "1_178"); put("runner2", "1_178");`), which is
+how a test gets two copies of a card. An ad hoc modifier applies to cards wherever they are, including the draw
+deck and discard pile, which is the way to make a card something it is not for the sake of a filter.
+
 Cheating bypasses rules that legal play enforces. Uniqueness is one: a second copy of a unique card cannot be
 *played* while the first is in play, but can be cheated in. Item class is another: a character can be stuffed with
 two hand weapons by `AttachCardsTo`, and will then not be offered as a bearer for a third by legal play.
@@ -81,6 +85,9 @@ python3 .claude/skills/card-test-campaign/scripts/cardtest.py run 1_40     # one
 python3 .claude/skills/card-test-campaign/scripts/cardtest.py run file:set01-Elven --out elven
 python3 .claude/skills/card-test-campaign/scripts/cardtest.py suite cards  # every card test: under half a minute
 ```
+
+`cardtest.py probe /tmp/x/Probe.java` compiles and runs a throwaway JUnit class kept outside the repository, for
+finding out what the game does in some situation without adding a test.
 
 `run` compiles only the files asked for, into a folder named by `--out`, so several agents can run their own cards
 at the same time. Card definitions are read from `gemp-lotr-cards/src/main/resources/` as each test starts, so an
@@ -108,8 +115,26 @@ costs can be paid, whether or not its effect can do anything: Sam's "exert Sam t
 no burdens to remove. To test that an effect finds nothing to do, use the action, check the cost was paid, and
 check the game is back at the phase's actions.
 
+**Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
+player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
+after other skirmishes, call `FreepsResolveSkirmish(companion)`.
+
 **Exerting is not wounding.** A character with one vitality left cannot exert and so cannot pay an exertion cost,
 but can still be wounded.
+
+**Allies live in the support area.** `MoveCompanionsToTable` puts cards where companions go. An ally played
+legally goes to the support area, so cheat allies in with `MoveCardsToSupportArea`.
+
+**Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
+Shadow player's decision is already pending does not make a minion playable. Set it during the fellowship phase,
+then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
+exact pool adds those in: `// 10 set + 1 companion + 2 for the site`.
+
+**Two copies of one card are hard to tell apart.** `FreepsActionAvailable(card)` and its kin look for the card's
+name in the actions on offer, so with two copies in play they answer for either. `FreepsUseCardAction(card)` does
+go by the physical card. The card-choice checks match by blueprint whenever the decision lists its cards
+by blueprint, as a search of a deck or discard pile does. Until the rig changes (both are open rig requests), give the candidates in a choice different blueprints,
+and test a per-copy limit by counting the actions on offer with `FreepsGetAvailableActions()`.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
@@ -139,6 +164,10 @@ are the point, or put them down after skipping.
 asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choose with
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
 to the client.
+
+**"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
+optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
+card: `FreepsHasOptionalTriggerAvailable(card)`.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of

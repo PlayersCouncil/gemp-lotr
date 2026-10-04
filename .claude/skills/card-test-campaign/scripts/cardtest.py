@@ -4,6 +4,8 @@
     cardtest.py setup                    builds every module once and records the classpath (a minute or so)
     cardtest.py run <what...>            compiles just those test files and runs them (a few seconds)
     cardtest.py suite [cards|all|<pkg>]  recompiles all the tests and runs a whole tree of them
+    cardtest.py probe <file.java>        compiles and runs a throwaway JUnit class kept anywhere (/tmp, say), for
+                                         finding out what the game does without adding a test to the repository
 
 <what> is a blueprint id (1_40), a test file's path, or a selector (set:1, file:set01-Elven, seg:vset).
 
@@ -114,6 +116,32 @@ def run(argv) -> int:
     return run_junit([g.test_class_name(f.resolve()) for f in files], cp)
 
 
+def probe(argv) -> int:
+    """Compiles and runs any JUnit class, wherever its file is: for trying something out without adding a test."""
+    out_name = "probe"
+    if "--out" in argv:
+        i = argv.index("--out")
+        out_name = argv[i + 1]
+        argv = argv[:i] + argv[i + 2:]
+    files = [Path(a).resolve() for a in argv]
+    out_dir = TARGET / "cardtest" / (out_name + "-probe")
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True)
+    cp = classpath(out_dir)
+    javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(out_dir), "-cp", cp]
+                           + [str(f) for f in files], cwd=g.SERVER, env=env(), capture_output=True, text=True)
+    if javac.returncode != 0:
+        sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
+        print("\nDid not compile.")
+        return 2
+    classes = []
+    for f in files:
+        package = re.search(r"^\s*package\s+([\w.]+)\s*;", f.read_text(encoding="utf-8"), re.M)
+        classes.append((package.group(1) + "." if package else "") + f.stem)
+    return run_junit(classes, cp)
+
+
 def suite(argv) -> int:
     which = argv[0] if argv else "cards"
     subprocess.check_call(["mvn", "-q", "-B", "-o", "test-compile"], cwd=g.SERVER, env=env())
@@ -152,6 +180,8 @@ def main(argv):
         return 0
     if argv[1] == "run":
         return run(argv[2:])
+    if argv[1] == "probe":
+        return probe(argv[2:])
     if argv[1] == "suite":
         return suite(argv[2:])
     print(__doc__)

@@ -26,7 +26,10 @@ You have not seen how the tests were written and should not go looking for the a
 
    `mutate.py` makes deliberate mistakes in a copy of the card's definition and lists the ones no test noticed.
    For each survivor decide: is it a gap in the tests (the mistake would change how the card plays, and no test
-   sees it), or does the mistake make no difference to play? Say which, in one line each.
+   sees it), or does the mistake make no difference to play? Say which, in one line each. It only makes the
+   commonest mistakes. Where you suspect a gap it would not find, make the mistake yourself with
+   `mutate.py <id> --replace "<old>" "<new>"`, and settle what the game really does with a throwaway test:
+   `cardtest.py probe /tmp/<your folder name>/Probe.java`.
 
 3. **Read each test against the check it claims.** Does it really show that check? The usual failures: a `-` that
    is not the nearest miss; an `F` with only one valid candidate, or no invalid one; a `D` that looks at only one
@@ -46,7 +49,9 @@ You have not seen how the tests were written and should not go looking for the a
 ## What you may and may not touch
 
 You change nothing. You do not fix the tests, edit definitions, or commit. Scratch files go under
-`/tmp/<your folder name>/`.
+`/tmp/<your folder name>/`. (The campaign scripts keep their own working files under
+`gemp-lotr-server/target/cardtest/`, which git ignores.) The dormant `.old` siblings of a test file are not yours
+to review.
 
 ## Reporting back
 
