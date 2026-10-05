@@ -33,16 +33,13 @@ PHASES = [
     ("vset", "PC V-set cards that only have a stat check"),
     ("errata", "PC errata that only have a stat check, or no test"),
     ("decipher", "Decipher cards, one set and culture at a time"),
-    ("rtmd", "Race to Mount Doom cards with no test"),
 ]
 
 
 def state_dir(argv) -> Path:
     if "--state" in argv:
         return Path(argv[argv.index("--state") + 1])
-    if os.environ.get("GEMP_CAMPAIGN_STATE"):
-        return Path(os.environ["GEMP_CAMPAIGN_STATE"])
-    return g.REPO / "Claude outputs" / "card-tests"
+    return g.state_dir()
 
 
 def active_tests(text: str) -> int:
@@ -64,8 +61,8 @@ def baseline(state: Path):
     rows = []
     for card_id in sorted(cards, key=g.id_sort_key):
         seg = g.segment_of(card_id)
-        if seg in ("hobbit", "other"):
-            continue
+        if seg in ("hobbit", "other") or g.split_id(card_id)[0] == 90:
+            continue  # no text to test yet (Hobbit), or nothing but a picture (set 90)
         card = cards[card_id]
         test = tests.get(card_id)
         n = active_tests(test.read_text(encoding="utf-8", errors="replace")) if test else 0
@@ -77,7 +74,7 @@ def baseline(state: Path):
         elif seg == "errata":
             phase = "errata"
         elif seg == "rtmd":
-            phase = "rtmd"
+            phase = "audit"
         else:
             phase = "decipher"
         rows.append([card_id, g.full_name(card), seg, g.set_label(card_id), group_of(card_id, card), phase, kind, str(n)])
@@ -89,11 +86,18 @@ def baseline(state: Path):
     print("baseline.tsv: %d cards" % len(rows))
 
 
+def flat(value) -> str:
+    """A value as one cell of a tab-separated file: no tabs, no line breaks, and nothing escaped (escaping is
+    what once turned a single quote mark into a longer run of backslashes every time the file was rewritten)."""
+    return str(value if value is not None else "").replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
 def read_tsv(path: Path) -> list:
     if not path.is_file():
         return []
-    with open(path, encoding="utf-8", newline="") as f:
-        return list(csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+    lines = path.read_text(encoding="utf-8").split("\n")
+    header = lines[0].split("\t")
+    return [dict(zip(header, line.split("\t") + [""] * len(header))) for line in lines[1:] if line.strip()]
 
 
 def read_status(state: Path) -> dict:
@@ -101,12 +105,11 @@ def read_status(state: Path) -> dict:
 
 
 def write_status(state: Path, status: dict):
-    with open(state / "status.tsv", "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f, delimiter="\t", lineterminator="\n", quoting=csv.QUOTE_NONE, escapechar="\\")
-        w.writerow(["id", "status", "findings", "note", "updated"])
-        for card_id in sorted(status, key=g.id_sort_key):
-            r = status[card_id]
-            w.writerow([card_id, r["status"], r.get("findings", ""), r.get("note", ""), r.get("updated", "")])
+    lines = ["\t".join(["id", "status", "findings", "note", "updated"])]
+    for card_id in sorted(status, key=g.id_sort_key):
+        r = status[card_id]
+        lines.append("\t".join(flat(v) for v in [card_id, r["status"], r.get("findings", ""), r.get("note", ""), r.get("updated", "")]))
+    (state / "status.tsv").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def set_status(state: Path, argv):
@@ -145,11 +148,10 @@ FINDING_STATUSES = ["candidate", "question", "confirmed", "fixed", "not-a-bug"]
 
 
 def write_findings(state: Path, rows: list):
-    with open(state / "findings.tsv", "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f, delimiter="\t", lineterminator="\n", quoting=csv.QUOTE_NONE, escapechar="\\")
-        w.writerow(FINDING_FIELDS)
-        for r in rows:
-            w.writerow([str(r.get(k, "")).replace("\t", " ").replace("\n", " ") for k in FINDING_FIELDS])
+    lines = ["\t".join(FINDING_FIELDS)]
+    for r in rows:
+        lines.append("\t".join(flat(r.get(k, "")) for k in FINDING_FIELDS))
+    (state / "findings.tsv").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def option(argv, flag, default=""):

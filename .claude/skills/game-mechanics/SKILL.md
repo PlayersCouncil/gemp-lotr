@@ -15,6 +15,12 @@ Cross-referenced against Comprehensive Rules 4.2.
 
 For the full unabridged rules text, read `${CLAUDE_SKILL_DIR}/references/comprehensive-rules-4.2.wiki.txt`.
 
+What the Players' Council has added or changed since (hinder, restore, relentless, "item", two- and three-dot
+uniqueness, public discard piles, when the game ends at site 9) is in
+`${CLAUDE_SKILL_DIR}/references/comprehensive-rules-5.0-excerpts.wiki.txt`. Where the two differ, 5.0 is in
+force. To look something up in either without reading the whole of it, use
+`card-test-campaign/scripts/rules.py` (`term`, `card`, `grep`).
+
 ---
 
 ## Turn Structure

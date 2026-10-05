@@ -31,6 +31,24 @@ SKILLS = REPO / ".claude" / "skills"
 RULES_FILE = SKILLS / "game-mechanics" / "references" / "comprehensive-rules-4.2.wiki.txt"
 
 
+def state_dir() -> Path:
+    """Where the campaign keeps its bookkeeping (statuses, findings, ledgers): $GEMP_CAMPAIGN_STATE, or
+    "Claude outputs/card-tests" under the repository, or the cloud workspace's outputs folder.  Not in git."""
+    if os.environ.get("GEMP_CAMPAIGN_STATE"):
+        return Path(os.environ["GEMP_CAMPAIGN_STATE"])
+    local = REPO / "Claude outputs" / "card-tests"
+    cloud = Path("/mnt/user-data/outputs/card-tests")
+    if not local.is_dir() and cloud.is_dir():
+        return cloud
+    return local
+
+
+def ledger_path(card_id: str) -> Path:
+    """A card's ledger: its text cut into clauses, the checks each calls for, and the tests that claim them.
+    Working material for authors and reviewers, kept beside the campaign's other bookkeeping and out of the tests."""
+    return state_dir() / "ledgers" / card_id.split("_")[0] / (card_id + ".txt")
+
+
 def tsv_path() -> Path:
     override = os.environ.get("GEMP_CARD_TSV")
     return Path(override) if override else REPO / "gen_en_standard.tsv"
@@ -200,32 +218,127 @@ def full_name(card: CardDef) -> str:
 
 
 # ----------------------------------------------------------------------------------------------------------------
-# The reviewed spreadsheet (Decipher cards only)
+# The generator sheets: what each card is, independently of its definition
 # ----------------------------------------------------------------------------------------------------------------
 
+def sheets_dir() -> Path:
+    """Where the generator sheets are: gen_en_standard.tsv (Decipher cards), V1.tsv, V2.tsv, V3.tsv and
+    master_errata.tsv.  $GEMP_CARD_SHEETS, or generator_sheets/ at the root of the repository.  Not in git."""
+    override = os.environ.get("GEMP_CARD_SHEETS")
+    return Path(override) if override else REPO / "generator_sheets"
+
+
+def _read_sheet(path: Path) -> list:
+    if not path.is_file():
+        return []
+    with open(path, encoding="utf-8", newline="") as f:
+        reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
+        header = next(reader)
+        return [{h: (r[i] if i < len(r) else "") for i, h in enumerate(header)} for r in reader]
+
+
+def _sheet_set(value: str):
+    """A sheet's set_num as Gemp numbers it: 1 is 1, V1 is 101."""
+    value = (value or "").strip()
+    if re.match(r"^[Vv]\d+$", value):
+        return 100 + int(value[1:])
+    return int(value) if value.isdigit() else None
+
+
 _tsv = None
+_errata = None
 
 
 def tsv_rows() -> dict:
-    """The reviewed spreadsheet's rows by blueprint id, or an empty dictionary if the file is not there."""
+    """The sheet rows of cards as first released, by blueprint id: Decipher's cards and the V-sets."""
     global _tsv
     if _tsv is not None:
         return _tsv
-    path = tsv_path()
     rows = {}
-    if path.is_file():
-        with open(path, encoding="utf-8", newline="") as f:
-            reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
-            header = next(reader)
-            for r in reader:
-                row = {h: (r[i] if i < len(r) else "") for i, h in enumerate(header)}
-                if not row.get("set_num") or not row.get("card_num"):
-                    continue
-                card_id = "%d_%d" % (int(row["set_num"]), int(row["card_num"]))
-                # The sheet lists a card's alternate images as extra rows; the first row is the card.
-                rows.setdefault(card_id, row)
+    standard = tsv_path() if tsv_path().is_file() else sheets_dir() / "gen_en_standard.tsv"
+    for name, path in [("gen_en_standard", standard)] + [(v, sheets_dir() / (v + ".tsv")) for v in ("V1", "V2", "V3")]:
+        for row in _read_sheet(path):
+            card_set = _sheet_set(row.get("set_num"))
+            if card_set is None or not (row.get("card_num") or "").strip().isdigit():
+                continue
+            row["_sheet"] = name
+            # The standard sheet lists a card's alternate images as extra rows; the first row is the card.
+            rows.setdefault("%d_%d" % (card_set, int(row["card_num"])), row)
     _tsv = rows
     return rows
+
+
+def errata_rows() -> dict:
+    """The master errata sheet, by (blueprint id of the card as first released, revision number).
+    Ketura's caution about this sheet: it was assembled from some twenty sheets, some of them holding errata
+    that were proposed and never released or were held back a release, and is about 95% accurate.  Where it and a
+    definition disagree, that is something to flag, not necessarily an error on either side."""
+    global _errata
+    if _errata is not None:
+        return _errata
+    rows = {}
+    for row in _read_sheet(sheets_dir() / "master_errata.tsv"):
+        card_set = _sheet_set(row.get("set_num"))
+        if card_set is None or not (row.get("card_num") or "").strip().isdigit():
+            continue
+        try:
+            revision = int(row.get("revision") or 0)
+        except ValueError:
+            continue
+        row["_sheet"] = "master_errata"
+        rows[("%d_%d" % (card_set, int(row["card_num"])), revision)] = row
+    _errata = rows
+    return rows
+
+
+def revision_of(card: CardDef) -> int:
+    m = re.search(r"^\s*revision\s*:\s*(\d+)", card.raw, re.M)
+    return int(m.group(1)) if m else 0
+
+
+def base_id(card_id: str) -> str:
+    """The id of the card as first released: 51_5 is an erratum of 1_5; a V-set card is revised in place."""
+    s, n = split_id(card_id)
+    return "%d_%d" % (s - 50, n) if 50 <= s <= 69 else card_id
+
+
+def sheet_for(card_id: str):
+    """The sheet row that describes a definition, and a note when the match is not exact.
+    Returns (row or None, note).  The row is matched on the definition's own revision number."""
+    card = card_index().get(card_id)
+    if card is None:
+        return None, ""
+    base, revision = base_id(card_id), revision_of(card)
+    is_erratum = segment_of(card_id) == "errata"
+    if revision == 0 and not is_erratum:
+        row = tsv_rows().get(card_id)
+        return row, ("" if row else "no sheet has this card")
+    row = errata_rows().get((base, revision))
+    if row:
+        return row, ""
+    have = sorted(r for (b, r) in errata_rows() if b == base)
+    if have:
+        nearest = max([r for r in have if r <= revision] or have)
+        return errata_rows()[(base, nearest)], ("the definition is revision %d; the errata sheet has revision(s) %s for this card, and "
+                                                "revision %d is shown" % (revision, ", ".join(str(r) for r in have), nearest))
+    original = tsv_rows().get(base)
+    if original:
+        return original, ("the definition is revision %d and the errata sheet has no row for this card; the card as first "
+                          "released is shown" % revision)
+    return None, "no sheet has this card"
+
+
+def sheet_label(row) -> str:
+    if row is None:
+        return ""
+    if row.get("_sheet") == "master_errata":
+        bits = ["master errata sheet, revision %s" % row.get("revision", "?")]
+        if row.get("errata_date"):
+            bits.append("dated " + row["errata_date"])
+        if row.get("batch"):
+            bits.append("batch \"%s\"" % row["batch"])
+        return ", ".join(bits)
+    return {"gen_en_standard": "reviewed spreadsheet of Decipher cards"}.get(row.get("_sheet"), "%s sheet" % row.get("_sheet"))
 
 
 def plain_text(text: str) -> str:
