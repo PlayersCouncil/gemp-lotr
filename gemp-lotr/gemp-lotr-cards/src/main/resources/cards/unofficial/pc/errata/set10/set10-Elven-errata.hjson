@@ -399,7 +399,7 @@
 				}
 			}
 		]
-		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
+		gametext: When Galadriel is in your starting fellowship, her twilight cost is -3.<br><b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
 		lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
 		promotext: ""
 		alts: {
