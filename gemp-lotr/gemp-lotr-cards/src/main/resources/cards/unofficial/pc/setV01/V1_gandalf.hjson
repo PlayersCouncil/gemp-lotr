@@ -20,32 +20,50 @@
 				type: canSpot
 				filter: name(Gandalf)
 			}
-			cost: {
-				type: chooseCardsFromDrawDeck
-				select: choose(culture(elven),ally)
-				memorize: chosenAlly
-				text: Choose an [Elven] ally to reveal from your draw deck.
-				showAll: true
-			}
-			effect: {
-				type: optional
-				text: Would you like to pay {chosenAlly} twilight cost to take it into hand?
-				cost: {
-					type: addtwilight
-					amount: {
-						type: twilightCostInMemory
+			effect: [
+				{
+					type: chooseCardsFromDrawDeck
+					select: choose(culture(elven),ally)
+					memorize: chosenAlly
+					text: Choose an [Elven] ally to reveal from your draw deck.
+					showAll: true
+				}
+				{
+					type: revealCardsFromDrawDeck
+					select: memory(chosenAlly)
+					memorize: revealedAlly
+				}
+				{
+					type: If
+					check: {
+						type: HasCardInMemory
 						memory: chosenAlly
 					}
+					true: {
+						type: optional
+						text: Would you like to pay {chosenAlly} twilight cost to take it into hand?
+						cost: {
+							type: addtwilight
+							amount: {
+								type: twilightCostInMemory
+								memory: chosenAlly
+							}
+						}
+						effect: {
+							type: putcardsfromdeckintohand
+							count: 1
+							select: memory(chosenAlly)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
+					}
 				}
-				effect: {
-					type: putcardsfromdeckintohand
-					count: 1
-					select: memory(chosenAlly)
-					reveal: true
-					shuffle: false
-					showAll: false
+				# The draw deck has been looked through, so it is reshuffled, whether or not an ally was taken.
+				{
+					type: shuffleDeck
 				}
-			}
+			]
 		}
 		gametext: Spot Gandalf to reveal an [elven] ally from your draw deck.  You may add (X) to take that ally into hand, where X is that ally's twilight cost.
 		lore: "Beside Glorfindel there were several other counsellors of Elrond's household, of whom Erestor was the chief; and with him was Galdor, an Elf from the Grey Havens..."

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -149,6 +148,8 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetFreepsDiscardCount());
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int opponentShuffles = scn.GetShadowDeckShuffleCount();
 		assertTrue(scn.FreepsPlayAvailable(counsel));
 
 		scn.FreepsPlayCard(counsel);
@@ -160,6 +161,13 @@ public class Card_V1_013_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, orophin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, barliman, silinde));
 		scn.FreepsChooseCardBPFromSelection(orophin);
+
+		// The ally that was chosen is revealed: both players are shown Orophin.  A card that is only being shown is
+		// listed as not selectable.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(orophin, false));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(orophin, false));
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
 
 		// The event itself cost nothing, and nothing is added or taken until the player agrees to it.
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
@@ -174,6 +182,10 @@ public class Card_V1_013_Tests
 		assertInZone(Zone.DECK, elrond);
 		assertInZone(Zone.DISCARD, counsel);
 		assertEquals(1, scn.GetFreepsHandCount());
+		// A draw deck that has been looked through is reshuffled when the looking is done: once, and only the deck
+		// that was looked through.
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -198,6 +210,9 @@ public class Card_V1_013_Tests
 		scn.FreepsPlayCard(counsel);
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(elrond);
+		// Elrond is revealed to both players.
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
 		assertEquals(3, scn.GetTwilight());
 		scn.FreepsChooseYes();
 
@@ -226,10 +241,15 @@ public class Card_V1_013_Tests
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertInZone(Zone.DECK, elrond, orophin);
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int opponentShuffles = scn.GetShadowDeckShuffleCount();
 
 		scn.FreepsPlayCard(counsel);
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(elrond);
+		// Elrond is revealed to both players.
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
 
 		scn.FreepsChooseNo();
@@ -240,11 +260,14 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInZone(Zone.DISCARD, counsel);
 		assertEquals(1, scn.GetFreepsDiscardCount());
+		// The ally stays in the draw deck, but the deck was looked through to find it, so it is reshuffled all the
+		// same: once, and only the deck that was looked through.
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	@Ignore("F-0021: the ally chosen is shown only to the player of the event, and the opponent is shown nothing")
 	public void RevealedAllyIsShownToTheOpponentBeforeAnythingIsPaid() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -261,6 +284,9 @@ public class Card_V1_013_Tests
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 
 		scn.FreepsPlayCard(counsel);
+		// It is the ally that is revealed, not the draw deck: while the deck is looked through the opponent is
+		// shown nothing.
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(elrond);
 
@@ -269,13 +295,25 @@ public class Card_V1_013_Tests
 		// as not selectable.
 		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DECK, elrond);
+		assertTrue(scn.ShadowDecisionAvailable("Revealed card"));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(elrond, false));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(orophin, false));
-		assertTrue(scn.ShadowDecisionAvailable("Revealed card"));
+		// "Every player" includes the one who chose it.
+		assertTrue(scn.FreepsDecisionAvailable("Revealed card"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, false));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(orophin, false));
+
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
+
+		// Only when both have seen it is the player asked about the twilight, with nothing yet paid or taken.
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, elrond);
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
 	}
 
 	@Test
-	@Ignore("F-0022: cannot be played with Gandalf spotted when no [elven] ally is in the draw deck")
 	public void CanBePlayedWithNoElvenAllyInTheDrawDeckAndThenDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -296,6 +334,8 @@ public class Card_V1_013_Tests
 		assertInZone(Zone.DECK, lorienelf, barliman);
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int opponentShuffles = scn.GetShadowDeckShuffleCount();
 
 		// Spotting Gandalf is all the event asks for; revealing an ally is what it then does, if it can.
 		assertTrue(scn.FreepsPlayAvailable(counsel));
@@ -303,10 +343,16 @@ public class Card_V1_013_Tests
 		// The draw deck is still looked through.
 		scn.FreepsDismissRevealedCards();
 
+		// No ally was found, so nothing is revealed to anybody and nobody is asked about twilight.
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertInZone(Zone.DISCARD, counsel);
 		assertInZone(Zone.DECK, lorienelf, barliman);
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
+		// The deck was looked through for an ally that was not there, and a deck that has been looked through is
+		// reshuffled whether or not the card looked for was found: once, and only that deck.
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -339,6 +385,9 @@ public class Card_V1_013_Tests
 		scn.FreepsPlayCard(counsel);
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(elrond);
+		// Elrond is revealed to both players.
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
 		scn.FreepsChooseYes();
 
 		// Elrond is taken into hand, not played, so the site does not touch his cost: 3 in the pool + 4, not + 7.
