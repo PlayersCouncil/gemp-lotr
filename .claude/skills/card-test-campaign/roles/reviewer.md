@@ -83,3 +83,11 @@ Your final message goes to the orchestrator and is all it sees. For each card:
   corrected by what reviewers run into
 
 Do not pad a clean card with minor remarks to seem thorough. If it is right, say `PASS` and stop.
+
+## Running the mistake-maker on a busy machine
+
+Other batches are running beside yours. A card with twenty-odd mistakes can run past the ten-minute limit of a
+foreground command: start `mutate.py` in the background and read its output file. One run at a time for each
+`--out` name: a second run with the same name deletes the first one's working folder, so give a second run
+(`--with-parked`, a `--replace`) a name of its own (`<folder>-r-p`). Do not run several cards' mistakes at once;
+it is no faster and slows everyone.

@@ -32,3 +32,6 @@ what any test asserts.
 For each card: its id and name; `READY` or `PARKED`; then the reviewer's items by number, each `done` (and what
 you did, in a line) or `refused` (and why); the last output of `lint.py` and `cardtest.py run`; and any finding,
 question or rig request that is new since the author's report, in the detail `roles/author.md` asks for.
+
+On a busy machine, run `mutate.py` for one card at a time and in the background if it has many mistakes to make;
+see the reviewer's brief for why.

@@ -88,6 +88,10 @@ def main(argv):
             print("## The card as the sheets have it (%s)" % g.sheet_label(row))
             if sheet_note:
                 print("Not an exact match: %s." % sheet_note)
+            if row.get("_sheet") == "master_errata" and str(row.get("revision", "")).strip() != str(g.revision_of(card)):
+                print("The definition is marked revision %d and the sheet's row is revision %s.  The numbers not lining "
+                      "up is already known (F-0032, with Ketura): say so on the ledger's Sources line and do not "
+                      "report it again." % (g.revision_of(card), row.get("revision", "?")))
             if row.get("_sheet") == "master_errata":
                 print("The errata sheet is about 95% accurate: some of its rows are errata that were proposed and never "
                       "released. Where it and the definition disagree, flag it; neither is assumed right.")

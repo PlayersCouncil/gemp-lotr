@@ -68,14 +68,19 @@ _culture_words = None
 
 
 def words_of_one_culture(culture: str) -> set:
-    """Races and titles every card of which is of the given culture.  Narrowing "dwarf" to [dwarven] makes no
-    card behave differently, because there is no Dwarf of another culture to leave out."""
+    """Races, titles and keywords every card of which is of the given culture.  Narrowing "dwarf" to [dwarven]
+    makes no card behave differently, because there is no Dwarf of another culture to leave out; likewise
+    "tentacle" and [moria]."""
     global _culture_words
     if _culture_words is None:
         _culture_words = {}
         for card in g.card_index().values():
             c = (card.field("culture", "") or "").strip().lower()
-            for word in (card.field("race", ""), card.field("title", "")):
+            words = [card.field("race", ""), card.field("title", "")]
+            m = re.search(r"^\s*keywords\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M)
+            if m:
+                words += re.split(r"[\n,\[\]]", m.group(1))
+            for word in words:
                 word = re.sub(r"[^a-z]", "", (word or "").lower())
                 if word:
                     _culture_words.setdefault(word, set()).add(c)

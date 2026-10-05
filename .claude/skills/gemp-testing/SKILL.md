@@ -108,7 +108,8 @@ playable, complete the pending decision with a real action and look at the next 
 needs, the engine makes it without asking. When it has none, that part of the effect is skipped. So a test that
 means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
 one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
-Celeborn himself when no other Elven ally is wounded.
+Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
+minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
 
 **Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its
 costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
@@ -227,7 +228,9 @@ start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`
 `StartGame()` returns. Answer it, or put the card down afterwards.
 
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
-the way. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. And as
+the way. `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
+before the second move is asked about, so a test that turns on his hand at the second move empties his draw deck
+first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
 until some legal action has been taken.
 
@@ -239,6 +242,22 @@ until some legal action has been taken.
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, and filters see it. That is how to tell a
 filter written with a race from one written with a culture when every card of the race has the culture.
+`AddKeywordModifier` does the same for a keyword (an [isengard] minion made a tentacle; every site made a marsh
+with `new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH)`).
+
+**An ad hoc modifier aimed at one card goes on after that card is in play.** A card is given a new id each time
+it enters play, and a modifier whose filter is a physical card holds the id it had when the modifier was built.
+`ApplyAdHocModifier(new VitalityModifier(null, vile, null, 1))` before `MoveMinionsToTable(vile)` does nothing
+and says nothing. A modifier with a general filter (a card type, a keyword) can go on at any time.
+
+**A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
+only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
+nothing when used (F-0036, Out of Dark Waters). A definition written that way is a finding, not a quirk to test
+round.
+
+**A card that passes through a zone.** Where an effect takes a card out of a place it has only just arrived in
+(a tentacle killed by a wound and then stacked from the discard pile), read it there while the decision is
+pending. A count that is 0 before and 0 after shows nothing by itself.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
@@ -263,6 +282,8 @@ into a scenario; a name is not evidence of what a card does.
 | A weak minion that survives a hit | Uruk Savage | 1_151 | Strength 5, vitality 3; Damage +1 is its whole text. An unboosted strength-6 companion beats it without killing it |
 | Wounds in the regroup phase | Morgul Slayer | 3_93 | Strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to read "until the regroup phase" at its boundary |
 | A Shadow card a companion bears | Spider Poison | 8_28 | Possession; its bearer must exert each time it is assigned to a skirmish, and nothing else |
+| A tentacle that stays put | Vile Tentacle | 101_36 | The only tentacle not discarded away from a marsh. Reaching (19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh, make every site one with an ad hoc keyword |
+| A way to discard a [moria] condition | Song of Durin | 3_5 | Free Peoples event: "discard up to 2 [moria] conditions" |
 
 The sites of `FellowshipSites`, for tests that turn on terrain or on where the fellowship is:
 
