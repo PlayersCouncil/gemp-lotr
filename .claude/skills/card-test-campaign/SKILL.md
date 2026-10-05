@@ -41,34 +41,51 @@ talks to Ketura. Only the orchestrator touches git, the campaign's state, card d
 working out what the card should do from its text and the rules alone, then writing and running the tests. Brief:
 `roles/author.md`.
 
-**A reviewer** takes cards an author has finished, with no knowledge of how they were written, and tries to find
-what is wrong with them: a ledger that misreads the card, a test that would pass whatever the card did, a finding
-that is really a misread ruling. Brief: `roles/reviewer.md`.
+**A reviewer** takes cards an author has finished, with no knowledge of how they were written, tries to find
+what is wrong with them (a ledger that misreads the card, a test that would pass whatever the card did, a finding
+that is really a misread ruling), and puts right what it finds. Brief: `roles/review-and-fix.md`.
 
-**A fixer** takes a reviewer's list for cards that did not pass and works through it, item by item, changing what
-the list faults and nothing else, and refusing an item the card's text does not support. Brief: `roles/fixer.md`.
-A second reviewer then re-checks just those items (the "Re-checking" section of the reviewer's brief). A card gets
-one round of fixing; what is still wrong after it comes back to the orchestrator.
+**A fixer** is only for a list from the orchestrator after the review: a ruling to apply, a definition that
+changed. It works through the list, changing what it faults and nothing else. Brief: `roles/fixer.md`.
 
-An author or fixer works only on its own cards' test and ledger files. No role edits anything else, commits, or
-decides that the game is wrong: they report, and the orchestrator and Ketura decide.
+An author, reviewer or fixer works only on its own cards' test and ledger files. No role edits anything else,
+commits, or decides that the game is wrong: they report, and the orchestrator and Ketura decide. Nobody checks a
+reviewer's or a fixer's changes but the orchestrator's gate (`land.py`: the conformance check and the card's
+tests).
 
 ### Running the pipelines
 
-`workflows/card-batch.js` is the whole passage of a few cards as a Workflow script: author, reviewer, and where the review
-asks for changes, fixer and re-check. Run it with `args` of `{repo, cards, folder, notes}`: the repository's
-absolute path, the card ids, a short unique folder name (`v1-b07`), and anything the author should
-know that the documents do not say. With `fixes` (a numbered list per card) it goes straight to fix and re-check.
-It returns each stage's report as structured data.
+`workflows/card-batch.js` is the whole passage of a few cards as a Workflow script: an author, then a reviewer
+who fixes what it finds. Run it with `args` of `{repo, cards, folder, notes}`: the repository's absolute path, the
+card ids, a short unique folder name (`v1-b07`), and anything the author should know that the documents do not
+say. With `fixes` (a numbered list per card) it runs a fixer on that list and nothing else. It returns each
+stage's report as structured data.
 
-**Three cards to a pipeline, several pipelines at once.** An agent carries about 100K tokens before it has
-done anything (the harness, then the documents its brief has it read), and re-reads all of it on every step, so
-that fixed load is most of what a card costs. Measured on V1: three cards through all four stages cost about 6M
-cache-read tokens a card; one card on its own cost the same for two stages. Group cards of one culture, so
-helper cards and context are shared. Six pipelines saturate two cores (the mutation check starts a JVM per
-mistake) but run. Do not run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite
-classes the agents' tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between
-waves. `usage.tsv` has what each pipeline cost; `scripts/orchestrator/wf.py usage <folder>` works it out.
+**Three cards to a pipeline, three pipelines at once.** This shape was cut down on 2026-10-05 from four stages
+(author, review, fix, re-check) run six at a time, after measuring 34 cards (`cost-breakdown.md` in the
+campaign's state; `scripts/orchestrator/cost.py` produces it):
+
+- An agent carries 54K tokens before it has read a word and about 100K once it has read its brief's documents,
+  and re-reads all of it on every step. Steps are what cost: about 57 a card over four agents, 9M cache-read
+  tokens a card.
+- The stock mistakes (`mutate.py <id>` on its own) took 54% of all agent time and were run three times a card.
+  They found no fault in the game; they led authors to close 14 test gaps in 34 cards, and the two re-runs found
+  about 3 more. So they are run once, by the author, and the kinds of mistake that only ever made no difference
+  have been taken out of the set. Reviewers and fixers make single mistakes with `--replace`, which is how most
+  of the reviewers' gaps were proved anyway.
+- The separate fixer and re-check cost 23% of the tokens. The re-check found 3 leftover gaps in 12 runs.
+- Two cores carry about 7 cards an hour whether three pipelines run or six; six cost about 28% more tokens a
+  card, the agents waiting on each other's Java processes.
+
+**To look at again after 20 cards through the cut-down pipeline** (Ketura, 2026-10-05), with `cost.py` and the
+reports: whether to drop the stock mistakes altogether (how many gaps did they lead authors to close in those 20,
+and were they gaps a real card can show?), and whether to review only cards whose author raised a finding, a
+question or a rig request (in the first 34, all three faults reviewers found in the game were on such cards, and
+about 9 test gaps were on cards that would have been skipped).
+
+Do not run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite classes the agents'
+tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between waves. `usage.tsv` has
+what each pipeline cost; `scripts/orchestrator/wf.py usage <folder>` works it out.
 
 **Nothing reports back by itself reliably.** A finished workflow sends a notification, but the workspace can
 restart or go quiet and the notification is then lost; the results are still in each run's `journal.jsonl`.
@@ -81,8 +98,9 @@ When a pipeline returns, the orchestrator gives every finding, question and rig 
 `F-0000` and `Q-0000` placeholders in `@Ignore` lines) and records them, then runs `land.py <ids>`, which checks
 each card again and commits and marks the ones that clear. It sends the commits across and adds a row to
 `usage.tsv`. What authors and reviewers report under "documentation issues" and "standard issues" is the
-campaign's main source of improvement: read every one, and change the standard, the briefs or the tools while
-no pipeline is running.
+campaign's main source of improvement, but reading them costs the orchestrator its own context on every later
+step: collect them in a file as batches land and go through them together every ten cards or so, changing the
+standard, the briefs or the tools then.
 
 ### One card, start to finish
 
@@ -94,9 +112,8 @@ no pipeline is running.
 3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`; then `mutate.py <id>` to see
    what the tests would miss. A test that fails is looked at three ways before anything else: is the test wrong,
    is the expectation wrong, or is the game wrong.
-4. Reviewer: `lint.py`, `cardtest.py run`, `mutate.py <id>`, then the checklist at the end of the
-   test-generation skill. Every surviving mistake from `mutate.py` is either a gap (back to the author, once) or
-   explained in one line.
+4. Reviewer: `lint.py`, `cardtest.py run`, then the checklist at the end of the test-generation skill, with
+   single mistakes (`mutate.py <id> --replace`) to prove a suspected gap. The reviewer fixes what it finds.
 5. Orchestrator: commit the card on its own, send the commit across, mark the card `ready` or `parked`.
 6. At the end of the chunk: `cardtest.py suite all`, rebuild the tracker, and give Ketura the chunk to review.
 7. Ketura approves, or asks for changes. Approved cards leave the tracker's lists.
@@ -209,7 +226,9 @@ running processes do not, so commit and send often.
 
 ## Reference
 
-- `roles/author.md`, `roles/reviewer.md`, `roles/fixer.md`: the briefs given to sub-agents.
+- `roles/author.md`, `roles/review-and-fix.md`, `roles/fixer.md`: the briefs given to sub-agents.
+  (`roles/reviewer.md` is the review-only brief of the four-stage pipeline, kept until the last runs launched
+  under it have finished.)
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `references/rulings-log.md`: what Ketura has ruled.
 - `assets/tracker_template.html`: the tracker page; `tracker.py html` fills it.

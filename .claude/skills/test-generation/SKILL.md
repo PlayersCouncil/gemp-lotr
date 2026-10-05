@@ -407,7 +407,8 @@ bookends, and that none of the ledger has leaked into the test file. Then:
    candidate, a `D` that only looks at one side of the boundary, all pass the conformance check.
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
    number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
-   `mutate.py <id>` tries the common ones; `mutate.py <id> --replace <old> <new>` tries one of your own; and
+   The author's one run of `mutate.py <id>` has tried the common ones; `mutate.py <id> --replace <old> <new>`
+   tries one of your own in seconds; and
    `cardtest.py probe <file.java>` runs a throwaway test from `/tmp` to see what the game really does.
 4. Did an expectation come from the definition or from running the game?
 5. Is any helper card doing something the test does not account for?

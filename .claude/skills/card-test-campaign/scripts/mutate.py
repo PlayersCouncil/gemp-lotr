@@ -40,6 +40,11 @@ FLAG = re.compile(r"^(\s*)(optional|forced|shuffle|showAll|reveal)(\s*:\s*)(true
 PHASE = re.compile(r"^(\s*)(phase)(\s*:\s*)(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\s*$", re.I)
 FILTER = re.compile(r"^(\s*)(filter|select|on|against|target|bearer|from|to|where)(\s*:\s*)(.+?)\s*$")
 DEFAULTED = re.compile(r"^(\s*)(on|where|fromZone|against)\s*:\s*\S")
+# A type word, and the beginnings of other filter words that already imply it.
+IMPLIED = (("companion", ("signet(", "unbound", "ringbound", "ring-bound")),
+           ("minion", ("inskirmishagainst(", "assignedtoskirmish(", "assignedagainst(")),
+           ("event", ("timeword(",)))
+
 KIND_WORDS = ("companion", "minion", "ally", "possession", "condition", "artifact", "event", "site", "follower",
               "self", "bearer", "memory(", "weapon", "item", "ring", "character")
 BLOCK = re.compile(r"^(\s*)(requires|cost|until|limitPerPhase|limitPerTurn)\s*:")
@@ -138,6 +143,23 @@ def mistakes(lines: list, culture: str = "") -> list:
     def add(i, what, new_lines):
         out.append((i, what, new_lines))
 
+    def beside(i, pattern):
+        """Whether a line matching the pattern sits in the same block as line i (same indentation, no shallower
+        line between)."""
+        indent = len(lines[i]) - len(lines[i].lstrip())
+        for step in (-1, 1):
+            j = i + step
+            while 0 <= j < len(lines):
+                text = lines[j]
+                if text.strip():
+                    d = len(text) - len(text.lstrip())
+                    if d < indent:
+                        break
+                    if d == indent and re.search(pattern, text, re.I):
+                        return True
+                j += step
+        return False
+
     in_meta, depth = 0, 0
     for i, line in enumerate(lines):
         stripped = line.strip()
@@ -152,6 +174,11 @@ def mistakes(lines: list, culture: str = "") -> list:
             continue
 
         m = NUMBER.match(line)
+        # Two numbers that have never made a difference in play: the ceiling an incrementPer...Limit counts
+        # towards (the requirement's own limit is what refuses), and a count beside a remembered selection.
+        if m and ((m.group(2).lower() == "limit" and beside(i, r"^\s*type\s*:\s*incrementPer"))
+                  or (m.group(2).lower() == "count" and beside(i, r"^\s*select\s*:\s*memory\("))):
+            continue
         if m:
             n = int(m.group(4))
             for other in (n + 1, n - 1):
@@ -187,7 +214,9 @@ def mistakes(lines: list, culture: str = "") -> list:
                 add(i, "until: %s becomes %s" % (line.split(":", 1)[1].strip(), other), new)
             # ...and then on to "until removed" below.
         m = FLAG.match(line)
-        if m and m.group(2).lower() in ("optional", "forced", "shuffle", "showall", "reveal"):
+        # Not "forced" (it only tells other cards whether a discard was imposed) and not "reveal" (on a move it
+        # only writes a line in the game log): neither has ever changed how the card under test plays.
+        if m and m.group(2).lower() in ("optional", "shuffle", "showall"):
             flipped = "false" if m.group(4).lower() == "true" else "true"
             new = lines[:]
             new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), flipped)
@@ -213,9 +242,19 @@ def mistakes(lines: list, culture: str = "") -> list:
                 new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), new_value)
                 return new
 
-            # Wider: each word dropped in turn.
+            # Wider: each word dropped in turn.  Not a type word that another word of the filter already
+            # implies: only companions have a signet or are unbound, only minions skirmish a companion, only
+            # events have a timeword.
+            squashed = [re.sub(r"\s", "", t.lower()) for t in terms]
+
+            def implied(t):
+                others = squashed[:t] + squashed[t + 1:]
+                return any(o.startswith(prefixes) for o in others for word, prefixes in IMPLIED if squashed[t] == word)
+
             if len(terms) > 1:
                 for t in range(len(terms)):
+                    if implied(t):
+                        continue
                     kept = ",".join(terms[:t] + terms[t + 1:])
                     add(i, "%s: '%s' dropped from %s" % (m.group(2), terms[t].strip(), value), rewritten(kept))
             # Narrower: the commonest way a filter is written too tight is with the card's own culture or with
@@ -234,7 +273,7 @@ def mistakes(lines: list, culture: str = "") -> list:
                     commonest = max(title_types, key=title_types.get)
                     add(i, "%s: narrowed to the commonest type of that title (%s): %s" % (m.group(2), commonest, value),
                         rewritten(inner + "," + commonest))
-                if set(title_types) != {"companion"}:
+                if set(title_types) != {"companion"} and not any(o.startswith(IMPLIED[0][1]) for o in squashed):
                     add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
             # "Skirmishing" loosened to "assigned to a skirmish with": true before the skirmish begins as well.
             swapped = re.sub(r"(?i)inSkirmishAgainst\(", "assignedToSkirmish(", value)

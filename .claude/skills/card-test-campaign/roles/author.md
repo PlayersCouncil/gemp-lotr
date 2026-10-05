@@ -53,7 +53,14 @@ file the line for each test under each clause it claims checks of, and run
 
 until both are clean. Then run `mutate.py <id> --out <your folder name>`: it makes deliberate mistakes in a copy
 of the definition and lists the ones your tests did not notice. A survivor is a gap to close or a mistake that
-makes no difference to play; say which for each in your report.
+makes no difference to play; say which for each in your report, with the reason. This is the only time the whole
+set of stock mistakes is run on the card: the reviewer works from your account of the survivors and does not run
+it again. So run it once the tests are otherwise finished, close the gaps, and check each gap closed with that
+one mistake (`mutate.py <id> --replace "<old>" "<new>"`) and not with the whole set again.
+
+Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
+step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
+thing twice.
 
 Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name. Reading a helper
 card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.
@@ -108,10 +115,7 @@ files are found at their usual paths and need no mention. For each card give:
 ## The mistake-maker on a busy machine
 
 One `mutate.py` run at a time for each `--out` name, and one card at a time: runs that share a name share a
-working folder. Run a card with many mistakes in the background and read its output file. Before calling a
+working folder. Run a card with many mistakes in the background and read its output file; meanwhile do work
+that does not need it, or wait with one long `sleep` (eight or nine minutes) before looking. Before calling a
 "narrowed to culture(...)" survivor on a name harmless, look for a card of that name in another culture
 (Aragorn, Defender of Rohan is a [rohan] Aragorn).
-
-While a background run is going, do other work that does not need it (the ledger, reading the rules), or wait
-with one long `sleep` (eight or nine minutes) before looking. Every look re-reads everything you have read so
-far; checking every half minute is the most expensive thing an agent here can do.

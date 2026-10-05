@@ -1,12 +1,11 @@
 export const meta = {
   name: 'card-test-batch',
-  description: 'Author, review, fix and re-check the unit tests of one batch of cards',
-  whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to skip straight to fix and re-check',
+  description: 'Author the unit tests of one batch of cards, then review them and put right what the review finds',
+  whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to run a fixer on that list and nothing else',
   phases: [
-    { title: 'Author', detail: 'blind plan, then the tests, the conformance check and the mutation check' },
-    { title: 'Review', detail: 'an independent review against the Card Test Standard' },
-    { title: 'Fix', detail: 'only when the review asks for changes' },
-    { title: 'Re-check', detail: 'only after a fix' },
+    { title: 'Author', detail: 'blind plan, then the tests, the conformance check and the stock mistakes, once' },
+    { title: 'Review', detail: 'an independent review against the Card Test Standard; the reviewer fixes what it finds' },
+    { title: 'Fix', detail: 'only with args.fixes: a list from the orchestrator worked through' },
   ],
 }
 
@@ -84,13 +83,18 @@ const REVIEW = {
         required: ['id', 'verdict'],
         properties: {
           id: TEXT,
-          verdict: { type: 'string', enum: ['PASS', 'FIX', 'PARK'] },
-          fixes: { type: 'array', items: TEXT, description: 'For FIX: each change that must be made, specific enough to act on without asking' },
+          verdict: { type: 'string', enum: ['PASS', 'FIXED', 'PARK'], description: 'PASS: changed nothing. FIXED: changed something and the card is now right. PARK: something holds it that you could not put right' },
+          changes: { type: 'array', items: TEXT, description: 'For FIXED: each change made: what was wrong, the evidence, what you did' },
           parked_on: TEXT,
-          ledger_differences: { type: 'string', description: 'Where your own reading of the card differs from the ledger file, and why' },
-          mutation_survivors: { type: 'string', description: 'Each survivor marked gap or no-difference' },
-          findings_and_questions: { type: 'string', description: 'Each finding and question: stands, or refuted with the citation' },
+          ledger_differences: { type: 'string', description: 'Where your own reading of the card differed from the ledger file, and why' },
+          findings_and_questions: { type: 'string', description: "Each of the author's findings and questions: stands, or refuted with the citation" },
+          survivor_claims: { type: 'string', description: "Only where you disagree with one of the author's no-difference claims: which, and what you found" },
           lost_tests: { type: 'string', description: 'Anything the old tests asserted that the new ones no longer do' },
+          new_findings: LIST,
+          new_questions: LIST,
+          new_rig_requests: LIST,
+          lint: TEXT,
+          run: TEXT,
         },
       },
     },
@@ -137,23 +141,14 @@ const FIXED = {
 const where = `Work in the repository at ${repo}. `
 const numbered = (items) => (items || []).map((t, i) => `${i + 1}. ${t}`).join('\n')
 
-// A batch that has been through review already and only needs a list worked through: args.fixes is that list.
+// A list from the orchestrator (a ruling to apply, a definition that changed) worked through by a fixer.
 if (args.fixes) {
   phase('Fix')
   const fix = await agent(
     where + `Read ${roles}fixer.md and do what it says.\n\n` +
     `The cards and the list for each:\n\n${args.fixes}\n\nYour working folder name: ${folder}-f\n`,
     { label: `fix ${folder}`, phase: 'Fix', schema: FIXED })
-  if (!fix) return { folder, cards, failed: 'fix' }
-  const account = (fix.cards || []).map(c =>
-    `${c.id}:\n` + (c.items || []).map(i => `${i.number}. ${i.outcome}${i.note ? ': ' + i.note : ''}`).join('\n')).join('\n\n')
-  phase('Re-check')
-  const recheck = await agent(
-    where + `Read ${roles}reviewer.md and do what it says. This is a re-check: see its section "Re-checking after a fix".\n\n` +
-    `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-c\n\n` +
-    `The list:\n\n${args.fixes}\n\nThe fixer's account of each item:\n\n${account}\n`,
-    { label: `re-check ${folder}`, phase: 'Re-check', schema: REVIEW })
-  return { folder, cards, fix, recheck }
+  return { folder, cards, fix }
 }
 
 phase('Author')
@@ -168,37 +163,16 @@ const reported = (author.cards || []).map(c =>
   `${c.id} (${c.state})` +
   (c.findings && c.findings.length ? `\n  findings:\n` + c.findings.map(f => `  - ${f.summary} [${f.kind}]${f.parked_test ? ' parked test: ' + f.parked_test : ''}`).join('\n') : '') +
   (c.questions && c.questions.length ? `\n  questions:\n` + c.questions.map(q => `  - ${q.question}${q.readings ? ' Readings: ' + q.readings : ''}${q.parked_test ? ' parked test: ' + q.parked_test : ''}`).join('\n') : '') +
-  (c.rig_requests && c.rig_requests.length ? `\n  rig requests:\n` + c.rig_requests.map(r => `  - ${r}`).join('\n') : '')
+  (c.rig_requests && c.rig_requests.length ? `\n  rig requests:\n` + c.rig_requests.map(r => `  - ${r}`).join('\n') : '') +
+  `\n  stock mistakes that survived, by the author's account:\n  ${c.mutation_survivors || '(none reported)'}`
 ).join('\n')
 
 phase('Review')
 const review = await agent(
-  where + `Read ${roles}reviewer.md and do what it says.\n\n` +
+  where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
   `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r\n\n` +
-  `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
+  `What the author reported as findings, questions and rig requests, and its account of the stock mistakes its tests did not notice (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
   { label: `review ${folder}`, phase: 'Review', schema: REVIEW })
 if (!review) return { folder, cards, author, failed: 'review' }
 
-const toFix = (review.cards || []).filter(c => c.verdict === 'FIX' && c.fixes && c.fixes.length)
-if (!toFix.length) return { folder, cards, author, review }
-
-const fixList = toFix.map(c => `${c.id}:\n${numbered(c.fixes)}`).join('\n\n')
-
-phase('Fix')
-const fix = await agent(
-  where + `Read ${roles}fixer.md and do what it says.\n\n` +
-  `The cards and the reviewer's list for each:\n\n${fixList}\n\nYour working folder name: ${folder}-f\n`,
-  { label: `fix ${folder}`, phase: 'Fix', schema: FIXED })
-if (!fix) return { folder, cards, author, review, failed: 'fix' }
-
-const account = (fix.cards || []).map(c =>
-  `${c.id}:\n` + (c.items || []).map(i => `${i.number}. ${i.outcome}${i.note ? ': ' + i.note : ''}`).join('\n')).join('\n\n')
-
-phase('Re-check')
-const recheck = await agent(
-  where + `Read ${roles}reviewer.md and do what it says. This is a re-check: see its section "Re-checking after a fix".\n\n` +
-  `The cards: ${toFix.map(c => c.id).join(', ')}\nYour working folder name: ${folder}-c\n\n` +
-  `The first review's list:\n\n${fixList}\n\nThe fixer's account of each item:\n\n${account}\n`,
-  { label: `re-check ${folder}`, phase: 'Re-check', schema: REVIEW })
-
-return { folder, cards, author, review, fix, recheck }
+return { folder, cards, author, review }
