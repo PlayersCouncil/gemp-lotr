@@ -62,10 +62,10 @@ unique folder name (`v1-b03`), and anything the author should know that the docu
 stage's report as structured data. Several batches can run at once; each uses its own working folders. Do not run
 `cardtest.py suite` while batches are running: it recompiles the shared test classes under them.
 
-When a batch returns, the orchestrator runs `lint.py` and `cardtest.py run` on each card itself, gives every
-finding, question and rig request its number (replacing the `F-0000` and `Q-0000` placeholders in `@Ignore`
-lines), records them, commits each card on its own, sends the commits across, sets each card's status, and adds a
-row to `usage.tsv`.
+When a batch returns, the orchestrator gives every finding, question and rig request its number (replacing the
+`F-0000` and `Q-0000` placeholders in `@Ignore` lines) and records them, then runs `land.py <ids>`, which checks
+each card again and commits and marks the ones that clear. It sends the commits across and adds a row to
+`usage.tsv`.
 
 ### One card, start to finish
 
@@ -96,6 +96,7 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 | `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds; `suite` for everything. |
 | `lint.py` | The conformance check. |
 | `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. |
+| `land.py <ids>` | The orchestrator's gate: re-runs the conformance check and the tests on each card, and commits each card that clears them on its own. `--check` to look without committing. |
 | `tracker.py` | The campaign's state: statuses, findings, the tracker. |
 | `gen_vts_api.py` | Rewrites the rig's API reference from source; `--check` says whether it has drifted. |
 
