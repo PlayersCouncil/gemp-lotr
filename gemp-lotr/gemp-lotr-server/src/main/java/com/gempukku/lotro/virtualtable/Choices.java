@@ -4,6 +4,7 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -257,6 +258,34 @@ public interface Choices extends Decisions {
 
 	default List<String> ShadowGetFreepsAssignmentTargets() { return GetADParamAsList(P2(), "freeCharacters"); }
 	default List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2(), "minions"); }
+
+	/**
+	 * @param card A companion, ally or minion.
+	 * @return True if the assignment decision the Free Peoples player is facing offers that character, on either
+	 * side of it.  False if it does not, or the player is not facing an assignment decision.
+	 */
+	default boolean FreepsHasAssignmentTargetAvailable(PhysicalCardImpl card) { return HasAssignmentTargetAvailable(P1(), card); }
+	/**
+	 * @param card A companion, ally or minion.
+	 * @return True if the assignment decision the Shadow player is facing offers that character, on either side of
+	 * it.  False if it does not, or the player is not facing an assignment decision.
+	 */
+	default boolean ShadowHasAssignmentTargetAvailable(PhysicalCardImpl card) { return HasAssignmentTargetAvailable(P2(), card); }
+	/**
+	 * Reads the decision in front of the player, where FreepsCanAssign and ShadowCanAssign read the game's rule.
+	 * @param player The player facing an assignment decision.
+	 * @param card A companion, ally or minion.
+	 * @return True if that decision lists the character among those who may be assigned.
+	 */
+	default boolean HasAssignmentTargetAvailable(String player, PhysicalCardImpl card) {
+		String id = String.valueOf(card.getCardId());
+		for (String param : new String[] { "freeCharacters", "minions" }) {
+			String[] ids = GetAwaitingDecisionParam(player, param);
+			if(ids != null && Arrays.asList(ids).contains(id))
+				return true;
+		}
+		return false;
+	}
 
 
 

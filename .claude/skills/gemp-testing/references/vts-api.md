@@ -187,6 +187,10 @@ Actions are top-level decisions that involve legal game operations available to 
 - `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
 - `Boolean ActionAvailable(String player, String action)` — Checks whether the given player has an action available containing the provided text.
 - `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction`
+- `void FreepsUseCardAction(PhysicalCardImpl card, String text)  ·  ShadowUseCardAction` — Causes that player to take one particular action of a card that offers several.
+- `void UseCardAction(String player, PhysicalCardImpl card, String text)` — Causes the given player to take the action of the given card whose description contains the given words.
+- `Boolean FreepsActionAvailable(PhysicalCardImpl card, String text)  ·  ShadowActionAvailable`
+- `String FindCardAction(String player, PhysicalCardImpl card, String text)` — Finds the action of one particular card whose description contains the given words, among the actions the given player is being offered.
 - `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
 - `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
 - `boolean FreepsHasDiscardToHealAvailable()` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
@@ -227,6 +231,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `void FreepsDecided(String answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.
 - `boolean FreepsHasOptionalTriggerAvailable()  ·  ShadowHasOptionalTriggerAvailable`
 - `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable`
+- `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card)` — Checks by the physical card each offered action belongs to, so a trigger whose definition words its own prompt is found, and another copy of the same card does not answer for this one.
 - `boolean FreepsHasOptionalTriggerAvailable(String text)  ·  ShadowHasOptionalTriggerAvailable`
 - `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger`
 - `void FreepsDeclineOptionalTrigger()  ·  ShadowDeclineOptionalTrigger`
@@ -278,6 +283,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int GetChoiceCount(List<String> list)`
 - `List<String> FreepsGetFreepsAssignmentTargets()  ·  ShadowGetFreepsAssignmentTargets`
 - `List<String> FreepsGetShadowAssignmentTargets()  ·  ShadowGetShadowAssignmentTargets`
+- `boolean FreepsHasAssignmentTargetAvailable(PhysicalCardImpl card)  ·  ShadowHasAssignmentTargetAvailable`
+- `boolean HasAssignmentTargetAvailable(String player, PhysicalCardImpl card)` — Reads the decision in front of the player, where FreepsCanAssign and ShadowCanAssign read the game's rule.
 - `void FreepsChooseAnyCard()  ·  ShadowChooseAnyCard`
 - `void FreepsChooseCard(PhysicalCardImpl card)  ·  ShadowChooseCard`
 - `void FreepsChooseCards(PhysicalCardImpl...cards)  ·  ShadowChooseCards`
@@ -411,6 +418,9 @@ These functions will help you determine pile counts or add/remove a card to a pi
 - `List<? extends PhysicalCard> GetHand(String player)`
 - `int GetFreepsDeckCount()`
 - `int GetShadowDeckCount()`
+- `int GetFreepsDeckShuffleCount()`
+- `int GetShadowDeckShuffleCount()`
+- `int GetDeckShuffleCount(String player)`
 - `List<? extends PhysicalCard> GetFreepsDrawDeck()`
 - `List<? extends PhysicalCard> GetShadowDrawDeck()`
 - `List<? extends PhysicalCard> GetDrawDeck(String player)`
@@ -479,4 +489,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-371 entries, 252 of them with no description in the source.
+381 entries, 257 of them with no description in the source.

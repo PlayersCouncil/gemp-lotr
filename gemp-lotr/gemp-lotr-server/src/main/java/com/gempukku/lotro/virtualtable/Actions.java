@@ -184,6 +184,65 @@ public interface Actions extends Decisions, Choices {
 	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card)); }
 	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card)); }
 
+	/**
+	 * Causes the Free Peoples player to take one particular action of a card that offers several.
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 */
+	default void FreepsUseCardAction(PhysicalCardImpl card, String text) { UseCardAction(P1(), card, text); }
+	/**
+	 * Causes the Shadow player to take one particular action of a card that offers several.
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 */
+	default void ShadowUseCardAction(PhysicalCardImpl card, String text) { UseCardAction(P2(), card, text); }
+	/**
+	 * Causes the given player to take the action of the given card whose description contains the given words.
+	 * @param player The player facing a choice of actions.
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description.  Case is ignored.
+	 */
+	default void UseCardAction(String player, PhysicalCardImpl card, String text) {
+		String actionId = FindCardAction(player, card, text);
+		Verify(actionId != null, GameUtils.getFullName(card) + " is not offering " + player + " an action described as '" + text + "'.");
+		PlayerDecided(player, actionId);
+	}
+
+	/**
+	 * @param card The card the action must belong to.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return True if the Free Peoples player is being offered such an action of that particular card.
+	 */
+	default Boolean FreepsActionAvailable(PhysicalCardImpl card, String text) { return FindCardAction(P1(), card, text) != null; }
+	/**
+	 * @param card The card the action must belong to.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return True if the Shadow player is being offered such an action of that particular card.
+	 */
+	default Boolean ShadowActionAvailable(PhysicalCardImpl card, String text) { return FindCardAction(P2(), card, text) != null; }
+	/**
+	 * Finds the action of one particular card whose description contains the given words, among the actions the
+	 * given player is being offered.
+	 * @param player The player facing a choice of actions.
+	 * @param card The card the action must belong to.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return The id of the action, which answers the decision, or null if there is none or nothing is being asked.
+	 */
+	default String FindCardAction(String player, PhysicalCardImpl card, String text) {
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] actionIds = GetAwaitingDecisionParam(player, "actionId");
+		if(texts == null || cardIds == null || actionIds == null)
+			return null;
+		String id = String.valueOf(card.getCardId());
+		String wanted = text.toLowerCase();
+		for (int i = 0; i < texts.length && i < cardIds.length && i < actionIds.length; i++) {
+			if(cardIds[i].equals(id) && texts[i].toLowerCase().contains(wanted))
+				return actionIds[i];
+		}
+		return null;
+	}
+
 	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Transfer")); }
 	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Transfer ")); }
 

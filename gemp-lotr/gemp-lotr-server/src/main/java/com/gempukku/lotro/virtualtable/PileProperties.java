@@ -46,6 +46,23 @@ public interface PileProperties extends TableBase {
 	default int GetShadowDeckCount() { return GetShadowDrawDeck().size(); }
 
 	/**
+	 * @return How many times the Free Peoples player's draw deck has been shuffled so far this game.  Read it before
+	 * and after an action to see whether the action shuffled the deck.
+	 */
+	default int GetFreepsDeckShuffleCount() { return GetDeckShuffleCount(P1()); }
+	/**
+	 * @return How many times the Shadow player's draw deck has been shuffled so far this game.  Read it before and
+	 * after an action to see whether the action shuffled the deck.
+	 */
+	default int GetShadowDeckShuffleCount() { return GetDeckShuffleCount(P2()); }
+	/**
+	 * @param player The player whose draw deck is asked about.
+	 * @return How many times that player's draw deck has been shuffled so far this game, the shuffle before the
+	 * opening hand included.
+	 */
+	default int GetDeckShuffleCount(String player) { return gameState().getDeckShuffleCount(player); }
+
+	/**
 	 * @return Gets all the cards in the Free Peoples player's DRaw Deck.
 	 */
 	default List<? extends PhysicalCard> GetFreepsDrawDeck() { return GetDrawDeck(P1()); }

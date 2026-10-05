@@ -242,9 +242,39 @@ public interface Decisions extends TableBase {
 	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
-	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return FreepsHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if the Free Peoples player is being asked about optional actions and one of them is that
+	 * particular card's, whatever its wording.
+	 */
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return HasOptionalTriggerAvailable(P1(), card); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
-	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return ShadowHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if the Shadow player is being asked about optional actions and one of them is that particular
+	 * card's, whatever its wording.
+	 */
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return HasOptionalTriggerAvailable(P2(), card); }
+	/**
+	 * Checks by the physical card each offered action belongs to, so a trigger whose definition words its own
+	 * prompt is found, and another copy of the same card does not answer for this one.  A decision that does not
+	 * say which card its actions belong to is matched on the card's name appearing in the prompt, as before.
+	 * @param player The player being asked about optional actions.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if one of the optional actions on offer is that card's.
+	 */
+	default boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card) {
+		if(!DecisionAvailable(player, "Optional"))
+			return false;
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		if(cardIds != null)
+			return Arrays.asList(cardIds).contains(String.valueOf(card.getCardId()));
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		if(texts == null)
+			return false;
+		String name = GameUtils.getFullName(card).toLowerCase();
+		return Arrays.stream(texts).anyMatch(x -> x.toLowerCase().contains(name));
+	}
 
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))

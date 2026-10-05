@@ -25,6 +25,7 @@ public class GameState {
 
     private final Map<String, List<PhysicalCardImpl>> _adventureDecks = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _decks = new HashMap<>();
+    private final Map<String, Integer> _deckShuffles = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _hands = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _discards = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _deadPiles = new HashMap<>();
@@ -1764,6 +1765,15 @@ public class GameState {
     public void shuffleDeck(String player) {
         List<PhysicalCardImpl> deck = _decks.get(player);
         _random.shuffleDeck(player, deck);
+        _deckShuffles.merge(player, 1, Integer::sum);
+    }
+
+    /**
+     * @return How many times that player's draw deck has been shuffled so far this game, the shuffle before the
+     * opening hand included.  Kept so that a test can tell that a card shuffled a deck, or left it alone.
+     */
+    public int getDeckShuffleCount(String player) {
+        return _deckShuffles.getOrDefault(player, 0);
     }
 
     /**
