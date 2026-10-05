@@ -116,6 +116,13 @@ standard, the briefs or the tools then.
    single mistakes (`mutate.py <id> --replace`) to prove a suspected gap. The reviewer fixes what it finds.
 5. Orchestrator: commit the card on its own, send the commit across, mark the card `ready` or `parked`.
 6. At the end of the chunk: `cardtest.py suite all`, rebuild the tracker, and give Ketura the chunk to review.
+   While pipelines are in flight, do not run the suite (or `mvn`) in the main clone: it compiles every test file,
+   the half-written ones included, and rewrites the classes the agents are running against. Run
+   `scripts/orchestrator/suite-run.sh` instead, which tests the committed head in a second clone. For a small
+   engine change that cannot wait for a gap, compile the changed classes with `javac` to a scratch folder
+   (classpath from `cardtest.classpath()`) and copy them into `gemp-lotr-logic/target/classes`; do the proper
+   `mvn install` at the next gap. `workflows/one-agent.js` runs one agent on a brief file in the background, for
+   work that is not a card batch (data clean-up, a report).
 7. Ketura approves, or asks for changes. Approved cards leave the tracker's lists.
 
 ## Tools
