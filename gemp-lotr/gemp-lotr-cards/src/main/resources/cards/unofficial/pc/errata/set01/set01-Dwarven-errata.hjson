@@ -37,7 +37,7 @@
 				}
 			]
 		}
-		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b> and discard a Shadow item borne by a minion that Dwarf is skirmishing.
+		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. Discard a Shadow item borne by a minion that Dwarf is skirmishing.
 		lore: "The shoddy workmanship of Orc-smiths cannot withstand the fury of Durin's folk."
 		promotext: ""
 		alts: {

@@ -123,7 +123,7 @@
 				]
 			}
 		]
-		gametext: <b>Aid</b> - (2). <i>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</i>\Each time you attach this follower to a [shire] companion, you may discard up to 3 cards from hand and draw an equal amount.
+		gametext: <b>Aid</b> - (2). <i>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</i>\Each time you attach this follower to a [shire] companion, you may discard up to 3 cards from hand to draw an equal amount.
 		lore: ""
 		promotext: ""
 		alts: {

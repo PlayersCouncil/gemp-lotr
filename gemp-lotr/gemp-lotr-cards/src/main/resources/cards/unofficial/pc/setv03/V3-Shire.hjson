@@ -398,7 +398,7 @@
 				]
 			}
 		]
-		gametext: Spot a Hobbit skirmishing more than 1 minion.  Resolve skirmishes between that Hobbit and those minions individually.  Until the regroup phase, add a burden each time that Hobbit loses a skirmish and a threat each time that Hobbit wins.
+		gametext: Spot a Hobbit skirmishing more than 1 minion to resolve skirmishes between that Hobbit and those minions individually.  Until the regroup phase, add a burden each time that Hobbit loses a skirmish and a threat each time that Hobbit wins.
 		lore: "The orc wheeled round, but before it could make a move Sam slashed its whip-hand from its arm."
 		promotext: ""
 		alts: {
@@ -1219,7 +1219,7 @@
 				]
 			}
 		]
-		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
+		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition (or discard this if you can spot more than 4 companions).
 		lore: ""
 		promotext: ""
 		alts: {

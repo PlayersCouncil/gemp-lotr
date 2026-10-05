@@ -103,7 +103,7 @@
 				]
 			}
 		]
-		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves during the regroup phase, you may discard this possession to make the Free Peoples player shuffle 2 cards from their hand into their draw deck.  Search that draw deck and discard 2 Free Peoples cards.
+		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves during the regroup phase, you may discard this possession to make the Free Peoples player shuffle 2 cards from their hand into their draw deck.  Search that deck and discard 2 Free Peoples cards from it.
 		lore: "'Grond! Grond! Grond! Grond! Grond! Grond!'"
 		promotext: ""
 		alts: {

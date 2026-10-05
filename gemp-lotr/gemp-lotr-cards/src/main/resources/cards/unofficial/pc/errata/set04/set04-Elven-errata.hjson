@@ -56,7 +56,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf. <br>While Erethón bears a ranged weapon, he is strength +1 and <b>damage +1,</b> and he does not add to the fellowship archery total.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf. <br>While Erethón bears a ranged weapon, he is strength +1 and <b>damage +1,</b> and he does not add to the fellowship archery total.
 		lore: At close range, Erethón's accuracy is uncanny.
 		promotext: ""
 		alts: {
@@ -118,7 +118,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf. <br><b>Skirmish:</b> Exert Fereveldir and discard an [elven] token from your condition to wound a minion Fereveldir is skirmishing.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf. <br><b>Skirmish:</b> Exert Fereveldir and discard an [elven] token from your condition to wound a minion Fereveldir is skirmishing.
 		lore: Thandronen's sons patrol the borders of Lórien together.
 		promotext: ""
 		alts: {
@@ -174,7 +174,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf.  <br><b>Skirmish:</b> Exert Ferevellon to make a minion skirmishing him strength -2.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf.  <br><b>Skirmish:</b> Exert Ferevellon to make a minion skirmishing him strength -2.
 		lore: The Uruks at Helm's Deep fell to his blade as easily as Goblins from the mountains.
 		promotext: ""
 		alts: {
@@ -242,7 +242,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>While no opponent controls a site, Haldir is strength +2. <br><b>Regroup:</b> Exert Haldir at a battleground and exert another Elf to liberate a site.
+		gametext: <b>Valiant.</b> <br>While no opponent controls a site, Haldir is strength +2. <br><b>Regroup:</b> Exert Haldir at a battleground and exert another Elf to liberate a site.
 		lore: "'In days of old, my people stood beside the King of Gondor – we come to honor that allegiance.'"
 		promotext: ""
 		alts: {
@@ -387,7 +387,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br><b>Regroup:</b> Exert this companion to make a Shadow player wound a minion.
+		gametext: <b>Valiant.</b> <br><b>Regroup:</b> Exert this companion to make a Shadow player wound a minion.
 		lore: Haldir's Elven bowmen were experienced defenders of the borders of the Golden Wood
 		promotext: ""
 		alts: {
@@ -433,7 +433,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>Each minion skirmishing this companion is strength -2 for each wound on that minion.
+		gametext: <b>Valiant.</b> <br>Each minion skirmishing this companion is strength -2 for each wound on that minion.
 		lore: Long, curved Elven steel cut down Uruks already weakened by Elven arrows.
 		promotext: ""
 		alts: {
@@ -485,7 +485,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf.  <br>The twilight cost of each ranged weapon played on Ordulus is -1.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf.  <br>The twilight cost of each ranged weapon played on Ordulus is -1.
 		lore: Ordulus always has an arrow nocked and a full quiver too.
 		promotext: ""
 		alts: {
@@ -543,7 +543,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf. <br>While Pengedhel bears a ranged weapon, he is strength +2 and he does not add to the fellowship archery total.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf. <br>While Pengedhel bears a ranged weapon, he is strength +2 and he does not add to the fellowship archery total.
 		lore: Pengedhel can wield an arrow like a short spear.
 		promotext: ""
 		alts: {
@@ -599,7 +599,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf.  <br><b>Regroup:</b> Exert Thandronen to discard a minion stacked on a condition or stacked on a site.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf.  <br><b>Regroup:</b> Exert Thandronen to discard a minion stacked on a condition or stacked on a site.
 		lore: The twin sons of Thandronen marched with their father to defend Helm's Deep.
 		promotext: ""
 		alts: {
@@ -657,7 +657,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</> <br>To play, spot an Elf. <br>While Thónnas bears a ranged weapon, each minion skirmishing him is strength -2 and Thónnas does not add to the fellowship archery total.
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf. <br>While Thónnas bears a ranged weapon, each minion skirmishing him is strength -2 and Thónnas does not add to the fellowship archery total.
 		lore: Elves of Lórien hone their knife-work fighting Goblin raiders.
 		promotext: ""
 		alts: {

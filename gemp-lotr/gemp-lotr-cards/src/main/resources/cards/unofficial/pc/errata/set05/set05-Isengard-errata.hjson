@@ -115,7 +115,7 @@
 				}
 			}
 		]
-		gametext: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder that companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
+		gametext: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder a companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
 		lore: "'I care for you and yours as best I may.... Let others deal with these irksome guests.'"
 		promotext: ""
 		alts: {
@@ -189,7 +189,7 @@
 			}
 		]
 
-		gametext: Machine.\Shadow: Exert an Uruk-hai to place an [isengard] token on this card (limit 2).\Skirmish: Discard this condition to heal an Uruk-hai for each [isengard] token on this card.
+		gametext: Machine.\Shadow: Exert an Uruk-hai to place an [isengard] token here (limit 2 per phase).\Skirmish: For each [isengard] token here, heal an Uruk-hai. Discard this condition.
 		lore: "Hundreds of long ladders were lifted up. Many were cast down in ruin, but many more replaced them...."
 		promotext: ""
 		alts: {

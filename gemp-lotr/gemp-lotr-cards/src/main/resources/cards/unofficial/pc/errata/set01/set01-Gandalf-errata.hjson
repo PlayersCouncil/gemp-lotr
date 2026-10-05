@@ -141,7 +141,7 @@
 				}
 			]
 		}
-		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all condition.
+		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all other conditions.
 		lore: "'Losto Caradhras, sedho, hodo, nuitho i ruith.'"
 		promotext: ""
 		alts: {

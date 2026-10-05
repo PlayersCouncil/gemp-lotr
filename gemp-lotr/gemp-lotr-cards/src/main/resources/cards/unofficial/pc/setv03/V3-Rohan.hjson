@@ -66,7 +66,7 @@
 				]
 			}
 		]
-		gametext: The Shadow player may hinder any of their own support cards.<br>Spot an unhindered Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
+		gametext: The Shadow player may hinder any of their own support cards.<br>Spot an unhindered Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card you can spot.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -213,7 +213,7 @@
 				}
 			}
 		]
-		gametext: To play, exert a [sauron] Orc.<br>The Ring-bearer is strength +1 per burden you can spot.\If you cannot spot a companion besides the Ring-bearer, the Ring-bearer is resistance -2 per burden you can spot.
+		gametext: To play, exert a [sauron] Orc.<br>The Ring-bearer is strength +1 for each burden you can spot.\If you cannot spot another companion, the Ring-bearer is resistance -2 for each burden you can spot.
 		lore: "Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before."
 		promotext: ""
 		alts: {
@@ -419,7 +419,7 @@
 			}
 			
 		]
-		gametext: If a companion is killed by a [sauron] Orc, for each card in the dead pile the Free Peoples player must choose to add a burden or discard 4 cards from the top of their draw deck.
+		gametext: If a companion is killed by a [sauron] Orc, then for each card in the dead pile the Free Peoples player must choose to add a burden or discard 4 cards from the top of their draw deck.
 		lore: For sport, Orcs hew cruelly at the bodies of those they slay.
 		promotext: ""
 		alts: {

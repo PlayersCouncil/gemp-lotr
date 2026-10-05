@@ -262,7 +262,7 @@
 				}
 			}
 		]
-		gametext: Bearer's special abilities cannot be used.<br>Maneuver: Exert a Nazgul to transfer this from your support area to a Ring-bound companion.
+		gametext: Bearer's special abilities cannot be used.<br>Maneuver: If this is in your support area, exert a Nazgul to transfer this to a Ring-bound companion.
 		lore: "He heard Frodo's voice, but it seemed to come from a great distance...crying out strange words."
 		promotext: ""
 		alts: {

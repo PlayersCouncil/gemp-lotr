@@ -85,7 +85,7 @@
 				]
 			}
 		]
-		gametext: Maneuver: If you can spot an [isengard] minion, spot a fortification.  Make the Free Peoples player distribute X + 1 wounds among your [isengard] minions to discard that fortification, where X is its twilight cost.\<b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
+		gametext: Maneuver: If you can spot an [isengard] minion, spot a fortification.  Make the Free Peoples player distribute X + 1 wounds among your [isengard] minions, where X is its twilight cost. Discard that fortification.\<b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
 		lore: ""
 		promotext: ""
 		alts: {

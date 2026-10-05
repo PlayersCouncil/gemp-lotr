@@ -56,7 +56,7 @@
 				}
 			]
 		}
-		gametext: Choose one: exert an [isengard] minion to make a Nazgul damage +1 until the regroup phase, or exert a Nazgul to prevent all wounds to an [isengard] minion until the regroup phase.
+		gametext: Choose one: exert an [isengard] minion to make a Nazgul damage +1 until the regroup phase, or exert a Nazgul to make an [isengard] minion unable to take wounds until the regroup phase.
 		lore: "'Build me an army worthy of Mordor.'"
 		promotext: ""
 		alts: {

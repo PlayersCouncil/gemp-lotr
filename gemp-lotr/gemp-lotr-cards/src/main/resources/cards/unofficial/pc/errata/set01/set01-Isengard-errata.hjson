@@ -73,7 +73,7 @@
 				}
 			]
 		}
-		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all conditions.
+		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all other conditions.
 		lore: "The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty."
 		promotext: ""
 		alts: {
@@ -293,7 +293,7 @@
 				]
 			}
 		}
-		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and strength +2 more until the regroup phase).
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
 		promotext: ""
 		alts: {

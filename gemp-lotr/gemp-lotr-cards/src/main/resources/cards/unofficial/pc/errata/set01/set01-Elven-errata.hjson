@@ -60,7 +60,7 @@
 				}
 			]
 		}
-		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; that minion's owner may discard a card from hand to prevent this.
+		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; any Shadow player may discard a card from hand to prevent this.
 		lore: Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery.
 		promotext: ""
 		alts: {
@@ -339,7 +339,7 @@
 				}
 			]
 		}
-		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may draw 2 cards if an [isengard] minion was revealed.
+		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. If an [isengard] minion was revealed, you may draw 2 cards.
 		lore: "Saruman's Uruk-hai mirrored the singular focus of their master, viewing with contempt and disgust all they encountered."
 		promotext: ""
 		alts: {

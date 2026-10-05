@@ -92,7 +92,7 @@
 				]
 			}
 		]
-		gametext: <b>River.</b> When the fellowship moves to this site in region 3, each player heals each of his or her characters.
+		gametext: <b>River.</b> When the fellowship moves to this site in region 3, each player heals each of their characters.
 		lore: ""
 		promotext: ""
 		alts: {

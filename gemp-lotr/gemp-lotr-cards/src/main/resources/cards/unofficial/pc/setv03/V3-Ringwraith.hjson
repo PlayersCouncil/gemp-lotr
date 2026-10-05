@@ -1319,7 +1319,7 @@
 				]
 			}
 		]
-		gametext: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i><br>At the start of each skirmish involving Ulaire Enquea and a wounded character, you may exert him to heal that character and exert a companion.
+		gametext: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i><br>At the start of each skirmish involving Ulaire Enquea and a wounded companion or ally, you may exert him to heal that character and exert a companion.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1706,7 +1706,7 @@
 				]
 			}
 		]
-		gametext: Fierce.<br>Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
+		gametext: Fierce.<br>Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you also exert this minion).
 		lore: "'And they skin the body off you as soon as look at you, and leave you all cold in the dark on the other side.'"
 		promotext: ""
 		alts: {

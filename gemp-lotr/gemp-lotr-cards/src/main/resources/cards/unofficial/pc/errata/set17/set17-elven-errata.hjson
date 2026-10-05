@@ -43,7 +43,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</b> <br><b>Hunter 1.</b> <i>(While skirmishing a non-hunter character, this character is strength +1.)</i><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
+		gametext: <b>Valiant.</b> <br><b>Hunter 1.</b><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
 		lore: We are proud to fight alongside Men, once more
 		promotext: ""
 		alts: {
@@ -146,7 +146,7 @@
 			}
 		]
 		
-		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3).\<b>Maneuver:</b> Remove an [elven] token from here (or discard this) and discard a card from hand to discard a condition.
+		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3).\<b>Maneuver:</b> Discard this condition (or remove a token from here) and discard a card from hand to discard a condition.
 		lore: "'We shall not meet again, Elessar.'"
 		promotext: ""
 		alts: {

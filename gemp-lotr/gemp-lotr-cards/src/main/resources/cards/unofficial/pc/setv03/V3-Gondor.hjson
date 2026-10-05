@@ -61,7 +61,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be Aragorn.  He is <b>damage +1</b>.<br>Response: If an unbound companion is about to take a wound (except Aragorn),<br>add 2 threats to hinder that companion.<br>Add (2) unless that companion was [gondor] or a Man.
+		gametext: Bearer must be Aragorn.  He is <b>damage +1</b>.<br>Response: If an unbound companion (except Aragorn) is about to take a wound,<br>add 2 threats to hinder that companion.<br>Add (2) unless that companion was [gondor] or a Man.
 		lore: "'Here is the Sword that was Broken and is forged again! Will you aid me or thwart me? Choose swiftly!'"
 		promotext: ""
 		alts: {
