@@ -48,6 +48,15 @@ its test file, and compare the ledger with yours. A
    `git show HEAD:<path to the test file>`. Anything the old tests asserted that the new ones no longer do should
    have been dropped on purpose.
 
+## Re-checking after a fix
+
+If you are told this is a re-check, the cards have been through a review already and a fixer has worked through
+its list. You are given that list and the fixer's account of each item. Do steps 2 and 5 above in full. For
+steps 1, 3 and 4, confine yourself to the items on the list and to whatever the fixer changed
+(`git diff -- <test file>` shows everything changed since the last commit, the author's work and the fixer's together): check that each item
+marked done is done, and that each refusal is right, by reading the rule or ruling it cites. Do not start a fresh
+review of what the first reviewer passed. A fault you notice in passing is still worth one line.
+
 ## What you may and may not touch
 
 You change nothing. You do not fix the tests, edit definitions, or commit. Scratch files go under

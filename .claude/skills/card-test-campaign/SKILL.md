@@ -45,8 +45,27 @@ working out what the card should do from its text and the rules alone, then writ
 what is wrong with them: a ledger that misreads the card, a test that would pass whatever the card did, a finding
 that is really a misread ruling. Brief: `roles/reviewer.md`.
 
-An author works only on its own cards' test files. Neither role edits anything else, commits, or decides that the
-game is wrong: they report, and the orchestrator and Ketura decide.
+**A fixer** takes a reviewer's list for cards that did not pass and works through it, item by item, changing what
+the list faults and nothing else, and refusing an item the card's text does not support. Brief: `roles/fixer.md`.
+A second reviewer then re-checks just those items (the "Re-checking" section of the reviewer's brief). A card gets
+one round of fixing; what is still wrong after it comes back to the orchestrator.
+
+An author or fixer works only on its own cards' test and ledger files. No role edits anything else, commits, or
+decides that the game is wrong: they report, and the orchestrator and Ketura decide.
+
+### Running a batch
+
+`workflows/card-batch.js` is the whole of one batch as a Workflow script: author, reviewer, and where the review
+asks for changes, fixer and re-check. Run it with `args` of `{repo, cards, folder, notes}`: the repository's
+absolute path, two to four card ids (one culture where possible, so helper cards and context are shared), a short
+unique folder name (`v1-b03`), and anything the author should know that the documents do not say. It returns each
+stage's report as structured data. Several batches can run at once; each uses its own working folders. Do not run
+`cardtest.py suite` while batches are running: it recompiles the shared test classes under them.
+
+When a batch returns, the orchestrator runs `lint.py` and `cardtest.py run` on each card itself, gives every
+finding, question and rig request its number (replacing the `F-0000` and `Q-0000` placeholders in `@Ignore`
+lines), records them, commits each card on its own, sends the commits across, sets each card's status, and adds a
+row to `usage.tsv`.
 
 ### One card, start to finish
 
@@ -167,6 +186,7 @@ running processes do not, so commit and send often.
 
 ## Reference
 
-- `roles/author.md`, `roles/reviewer.md`: the briefs given to sub-agents.
+- `roles/author.md`, `roles/reviewer.md`, `roles/fixer.md`: the briefs given to sub-agents.
+- `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `references/rulings-log.md`: what Ketura has ruled.
 - `assets/tracker_template.html`: the tracker page; `tracker.py html` fills it.
