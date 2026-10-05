@@ -266,6 +266,12 @@ def tsv_rows() -> dict:
             row["_sheet"] = name
             # The standard sheet lists a card's alternate images as extra rows; the first row is the card.
             rows.setdefault("%d_%d" % (card_set, int(row["card_num"])), row)
+            # Forth the Three Hunters! was printed three ways under one collector's number, one in each of three
+            # cultures.  The sheet has them as three rows of 15_60; Gemp gives each its own id.
+            if card_set == 15 and int(row["card_num"]) == 60:
+                alias = {"dwarven": "15_204", "elven": "15_205", "gondor": "15_206"}.get((row.get("culture") or "").strip().lower())
+                if alias:
+                    rows.setdefault(alias, row)
     _tsv = rows
     return rows
 
@@ -304,16 +310,60 @@ def base_id(card_id: str) -> str:
     return "%d_%d" % (s - 50, n) if 50 <= s <= 69 else card_id
 
 
+def _same_text(a, b) -> bool:
+    import unicodedata
+
+    def squash(text):
+        text = unicodedata.normalize("NFKD", plain_text(text or "")).encode("ascii", "ignore").decode().lower()
+        return re.sub(r"[\s.,:;'\"()\-]+", "", text)
+    return squash(a) == squash(b)
+
+
+def revision_read_as(card_id: str):
+    """(the revision the definition says it is, the revision whose sheet text it actually has), when those differ:
+    a definition whose `revision:` was not moved on when its text was.  None when the marker and the text agree,
+    or when no sheet row has the definition's text.  Revision 0 is the card as first released."""
+    card = card_index().get(card_id)
+    if card is None:
+        return None
+    base, marked = base_id(card_id), revision_of(card)
+    text = card.field("gametext", "")
+    rows = {r: row for (b, r), row in errata_rows().items() if b == base}
+    if tsv_rows().get(base):
+        rows.setdefault(0, tsv_rows()[base])
+    def numbers(get):
+        out = []
+        for field in ("twilight", "strength", "vitality"):
+            value = str(get(field) or "").strip()
+            out.append(int(value) if re.match(r"^-?\d+$", value) else None)
+        return out
+
+    def reads_as(row):
+        return _same_text(row.get("game_text"), text) and numbers(row.get) == numbers(lambda f: card.field(f, ""))
+    if marked in rows and reads_as(rows[marked]):
+        return None
+    matches = [r for r, row in rows.items() if r != marked and reads_as(row)]
+    return (marked, max(matches)) if matches else None
+
+
 def sheet_for(card_id: str):
     """The sheet row that describes a definition, and a note when the match is not exact.
-    Returns (row or None, note).  The row is matched on the definition's own revision number."""
+    Returns (row or None, note).  The row is matched on the definition's own revision number, unless the
+    definition's text is word for word another revision's: then that revision's row, with a note."""
     card = card_index().get(card_id)
     if card is None:
         return None, ""
+    other = revision_read_as(card_id)
+    if other and other[1] > 0:
+        return errata_rows()[(base_id(card_id), other[1])], ""
+    if other:
+        return tsv_rows()[base_id(card_id)], ""
     base, revision = base_id(card_id), revision_of(card)
     is_erratum = segment_of(card_id) == "errata"
     if revision == 0 and not is_erratum:
-        row = tsv_rows().get(card_id)
+        # A card as first released is in its set's sheet, or, for the odd PC card with no set sheet of its own
+        # (Rath Dinen, V0), in the errata sheet as revision 0.
+        row = tsv_rows().get(card_id) or errata_rows().get((base, 0))
         return row, ("" if row else "no sheet has this card")
     row = errata_rows().get((base, revision))
     if row:

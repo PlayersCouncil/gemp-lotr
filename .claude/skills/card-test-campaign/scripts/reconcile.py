@@ -181,10 +181,15 @@ def report(ids) -> str:
     named = set()
     for book, names, kind, text, line_no in rulebook.all_rulings():
         named.update(rulebook.norm(n) for n in names)
-    groups = {"numbers": [], "stats": [], "wording": [], "inexact": [], "none": []}
+    groups = {"numbers": [], "stats": [], "wording": [], "inexact": [], "none": [], "marker": []}
     for card_id in ids:
         row, note = g.sheet_for(card_id)
         card = cards[card_id]
+        other = g.revision_read_as(card_id)
+        if other:
+            image = re.search(r"^\s*image\s*:\s*(\S+)", card.raw, re.M)
+            groups["marker"].append("| %s | %s | %d | %d | %s | %s |" % (card_id, g.full_name(card), other[0], other[1],
+                                    g.sheet_label(row), image.group(1) if image else ""))
         if row is None:
             groups["none"].append("| %s | %s |" % (card_id, g.full_name(card)))
             continue
@@ -211,6 +216,11 @@ def report(ids) -> str:
            "## Game text where the numbers differ (%d)" % len(groups["numbers"]), "", head] + groups["numbers"] + ["",
            "## Printed fields that differ (%d)" % len(groups["stats"]), "", head] + groups["stats"] + ["",
            "## Game text that differs in wording only (%d)" % len(groups["wording"]), "", head] + groups["wording"] + ["",
+           "## Definitions marked as one revision whose text is another's (%d)" % len(groups["marker"]), "",
+           "The definition's `revision:` says one thing and its game text is word for word the sheet's text for another.",
+           "These are compared, above, with the revision they read as. The image name is shown because it carries a",
+           "revision number too.", "",
+           "| Card | Name | Marked | Reads as | Sheet row it matches | Image |\n|---|---|---|---|---|---|"] + groups["marker"] + ["",
            "## Definitions whose revision has no row in the errata sheet (%d)" % len(groups["inexact"]), "",
            "These were not compared. The sheet row shown to authors for them is the nearest earlier revision, marked as such.", "",
            "| Card | Name | What the sheets have |\n|---|---|---|"] + groups["inexact"] + ["",

@@ -181,7 +181,8 @@ Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a
 **When a wound kills and something answers the same wound.** The owner of a required trigger that answers the
 wound gets a "Required responses" decision listing "Character death" and the trigger.
 `FreepsResolveRuleFirst()` takes the rule first; `FreepsResolveActionOrder(text)` picks by the text of the entry.
-There is no Shadow twin of either yet (rig request G-0005).
+There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
+simultaneous actions, whoever's they are.
 
 **An ally in a skirmish.** An ally can be assigned at its home site (CR 4.2 "ally"). On `FellowshipSites`, Elrond
 (1_40, home site 3) can skirmish once the fellowship has moved to site 3: `SkipToSite(2)` and then a move.

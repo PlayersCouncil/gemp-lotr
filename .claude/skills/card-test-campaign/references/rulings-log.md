@@ -152,3 +152,45 @@ in all.
 **2026-10-05. X may be zero (101_5 One Dwarf in Moria).** "X may indeed be zero. The only time that X cannot be
 zero is in the case of 'exerting X times', which has an explicit ruling, but every other case has no such guard
 rail." Bears on: every card that says "X" of anything but exertions.
+
+**2026-10-05. Who orders simultaneous actions (G-0005).** "After all other procedures have been followed, the
+Free Peoples player is the 'tiebreaker' on deciding timing of two simultaneous actions." So only the Free Peoples
+player is ever asked to order required responses, and Shadow twins of `FreepsResolveRuleFirst` and
+`FreepsResolveActionOrder` would be invalid.
+
+**2026-10-05. Copies in hidden zones (G-0003).** That a choice listed by blueprint cannot tell two copies apart is
+a limitation of the engine: it cannot distinguish two blueprint ids of non-physical cards.
+
+**2026-10-05. Freeps logic in Shadow twins (G-0006).** Many of the rig's twins were produced by copy and paste,
+"and it's therefore been a common occurrence for the freeps logic to be lurking inside the shadow twin." A Shadow
+method that asks about the Free Peoples side is to be fixed when found.
+
+## Rulings on sheet discrepancies (2026-10-05)
+
+Which side was right, card by card. Where the definition was wrong it has been corrected (findings F-0024 to
+F-0030); where the sheet was, the difference is in `known-differences.tsv` or was a matter of revisions.
+
+- **51_245 Desperate Measures:** "top 8" is correct.
+- **52_45 Too Much Attention:** "top 5" is correct.
+- **57_190 Morgul Destroyer:** +3 is correct.
+- **60_11 Galadriel, Lady Redeemed:** the text should have the starting fellowship discount; it was not removed.
+- **68_134 Doorway to Doom:** "2", not "two". "Game text should always use numerals where possible for space
+  reasons, particularly on sites like this."
+- **102_15 Watching and Waiting:** "remove (3)" is correct.
+- **53_106 Bill the Pony:** should have the Pony item class; it was added to the engine and never put on the one
+  card that has it.
+- **54_245 Southron Archer:** no limit is correct; it was made unique instead of having its text altered.
+- **102_75, 102_76 (the maps):** they have no culture; they are neutral.
+- **The Bladetusk cards (103_41 to 103_43):** printed with a strength and vitality "rather than cram even more
+  game text in", but "from a mechanical perspective it doesn't gain them until the text is triggered, as
+  implemented."
+- **Revisions.** Several differences were one revision set beside another: 53_120 ("heal a companion" is revision
+  2, the most recent), 58_57 ("assigned to a skirmish" is revision 1; the definition's text looks like the base
+  card's; revision 2 is different again), 60_17 ("twice to discard 3" is revision 1, "hinder" is revision 2),
+  51_80 (revision 1 had vitality 2, revision 2 has 4), 53_103 (revision 3 is Maneuver, revision 4 Response),
+  101_26 and 101_28 (revision 0 and revision 1; 101_28 was Maneuver for 1 and is Shadow for 0), 102_51
+  ("remove 2 tokens" is revision 1). "Make sure this check is lining up revision numbers."
+- **Rath Dinen** is in the errata sheet as V0U1.0. **Forth the Three Hunters!** was printed by Decipher three ways
+  with the same collector's info, one in each culture, identical otherwise; "a perpetual headache in all systems
+  that needed a way of handling their unique ID situation."
+- The V2 errata were missing from the master sheet and have been added (most add Valiant to various Elves).
