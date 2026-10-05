@@ -67,6 +67,10 @@
 						showAll: false
 					}
 				}
+				# The draw deck has been looked through, so it is reshuffled, whether or not the card was taken.
+				{
+					type: shuffleDeck
+				}
 			]
 		}
 		gametext: Exert a [sauron] minion to reveal a card at random from the Free Peoples player's hand.  You may take a minion into hand from your draw deck costing up to X, where X is the twilight cost of the card revealed.  The Free Peoples player may discard X cards from hand to prevent this.

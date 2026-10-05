@@ -120,9 +120,12 @@ public class Card_02_045_ErrataTests
 		scn.ShadowChooseCardBPFromSelection(sauron);
 
 		//Decline the prevention
+		int shuffles = scn.GetShadowDeckShuffleCount();
 		scn.FreepsChooseNo();
 		assertEquals(Zone.DISCARD,  attention.getZone());
 		assertEquals(Zone.HAND,  sauron.getZone());
+		// The draw deck was looked through, so it is reshuffled (Comprehensive Rules 4.2, "draw deck").
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
 	}
 
 	@Test
@@ -161,11 +164,14 @@ public class Card_02_045_ErrataTests
 		//Accept the prevention
 		assertEquals(7, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
+		int shuffles = scn.GetShadowDeckShuffleCount();
 		scn.FreepsChooseYes();
 		assertEquals(2, scn.GetFreepsDeckCount());
 		assertEquals(5, scn.GetFreepsDiscardCount());
 		assertEquals(Zone.DISCARD,  attention.getZone());
 		assertEquals(Zone.DECK,  sauron.getZone());
+		// Prevented or not, the draw deck was looked through and is reshuffled.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
 	}
 
 }
