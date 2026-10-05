@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -394,10 +393,12 @@ public class Card_V1_012_Tests
 		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		// The heal is done first and without asking whether; only which companion is asked.
+		// The heal is offered first, as a choice of a companion that may be passed: one or none.
 		scn.FreepsPassCurrentPhaseAction();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gandalf));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(elrond));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
@@ -473,8 +474,7 @@ public class Card_V1_012_Tests
 	}
 
 	@Test
-	@Ignore("Q-0010: is the heal part of the trigger the player may decline, or done on every move with 3 rings whether or not the trigger is used?")
-	public void WithThreeRingsTheHealIsPartOfTheTriggerAndIsDeclinedWithIt() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithThreeRingsTheHealMayBePassedAndTheTriggerIsStillOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var three = scn.GetFreepsCard("three");
@@ -508,18 +508,25 @@ public class Card_V1_012_Tests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
-		// Read as one sentence, the heal belongs to "you may ... to ...": nothing is healed before the player
-		// has said yes, and nothing at all once the player has said no.
+		// The heal is a "may" of its own: a companion is clicked, or the choice is passed.  It is not asked as
+		// a yes or no.
 		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 
-		scn.FreepsDeclineOptionalTrigger();
+		scn.FreepsDeclineChoosing();
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertInHand(guard, troop);
-		assertEquals(2, scn.GetFreepsHandCount());
-		assertSame(raiders, scn.GetFreepsTopOfDeck());
+
+		// Passing the heal does not pass the rest: the card may still be placed and another drawn.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, troop));
+		scn.FreepsChooseCard(guard);
+		assertSame(guard, scn.GetFreepsBottomOfDeck());
+		assertInHand(troop, raiders);
 		assertEquals(deckCount, scn.GetFreepsDeckCount());
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());

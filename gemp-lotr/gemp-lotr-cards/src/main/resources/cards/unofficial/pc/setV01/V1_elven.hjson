@@ -471,8 +471,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
-				text: Would you like to spot 3 [elven] or [gandalf] rings to heal a companion?
 				trigger: {
 					type: moves
 				}
@@ -484,6 +482,7 @@
 				effect: {
 					type: heal
 					select: choose(companion)
+					count: 0-1
 					times: 1
 				}
 			}
