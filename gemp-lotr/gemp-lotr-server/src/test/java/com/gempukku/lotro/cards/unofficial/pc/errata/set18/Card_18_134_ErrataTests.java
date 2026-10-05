@@ -54,7 +54,7 @@ public class Card_18_134_ErrataTests
 		* Twilight Cost: 1
 		* Type: site
 		* Subtype: Standard
-		* Game Text: <b>Mountain.</b> When the fellowship moves to this site, each player wounds two of their characters.
+		* Game Text: <b>Mountain.</b> When the fellowship moves to this site, each player wounds 2 of their characters.
 		 *  This site cannot be replaced.
 		*/
 
