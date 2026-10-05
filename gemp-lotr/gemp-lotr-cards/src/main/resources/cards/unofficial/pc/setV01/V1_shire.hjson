@@ -20,6 +20,14 @@
 		vitality: 3
 		effects: [
 			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: companion,signet(Frodo)
+					count: 2
+				}
+			}
+			{
 				type: activated
 				phase: fellowship
 				requires: {

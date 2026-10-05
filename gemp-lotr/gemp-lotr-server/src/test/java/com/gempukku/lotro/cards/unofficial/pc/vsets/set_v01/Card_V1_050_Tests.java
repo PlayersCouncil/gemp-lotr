@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -105,7 +104,6 @@ public class Card_V1_050_Tests
 	}
 
 	@Test
-	@Ignore("F-0040: the definition has no requirement to play; Bilbo is playable with one Frodo-signet companion in play")
 	public void CannotBePlayedUntilASecondCompanionWithTheFrodoSignetIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
