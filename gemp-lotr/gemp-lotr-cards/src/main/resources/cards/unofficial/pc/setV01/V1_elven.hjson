@@ -98,7 +98,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: regroup
@@ -116,7 +115,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: startOfPhase
@@ -226,7 +224,6 @@
 		keywords: Archer
 		effects: {
 			type: Trigger
-			optional: false
 			optional: false
 			requires: {
 				type: Phase

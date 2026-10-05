@@ -667,15 +667,6 @@
 			}
 		]
 		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
-		lore: Food and drink would pay off some of my score against you.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
 		lore: "'Food and drink would pay off some of my score against you.'"
 		promotext: ""
 		alts: {

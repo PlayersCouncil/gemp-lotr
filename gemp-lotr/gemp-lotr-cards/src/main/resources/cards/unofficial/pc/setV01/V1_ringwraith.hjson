@@ -205,7 +205,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: startofphase
 					phase: maneuver

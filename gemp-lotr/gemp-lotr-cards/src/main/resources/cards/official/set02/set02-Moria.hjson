@@ -277,7 +277,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: takesWound
 					filter: bearer

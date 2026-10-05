@@ -421,7 +421,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: WinsSkirmish
 					filter: your,or(man, elf, dwarf)

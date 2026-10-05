@@ -18,7 +18,6 @@
 		effects:[
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: startOfTurn
 				}

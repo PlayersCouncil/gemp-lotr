@@ -316,7 +316,6 @@
 		keywords: Marsh
 		effects: {
 			type: Trigger
-			optional: true
 			player: freeps
 			trigger: {
 				type: startOfPhase
@@ -803,7 +802,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -965,7 +963,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1006,7 +1003,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1180,7 +1176,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
 				player: free people
 				optional: true
 				trigger: {
@@ -1298,7 +1293,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1344,7 +1338,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {

@@ -85,8 +85,15 @@ def words_of_one_culture(culture: str) -> set:
 def repeated_keys(lines: list) -> list:
     """(line index, key, earlier line index) wherever one block gives the same key twice.  The later one is the
     one the game reads, so a mistake made in the earlier one cannot be noticed."""
-    out, stack = [], [{}]
+    out, stack, commented = [], [{}], False
     for i, line in enumerate(lines):
+        # Whole alternatives are sometimes kept in a definition inside /* ... */: not part of the card.
+        if commented:
+            commented = "*/" not in line
+            continue
+        if line.strip().startswith("/*"):
+            commented = "*/" not in line
+            continue
         m = re.match(r"^\s*([A-Za-z]\w*)\s*:", line)
         if m:
             if m.group(1) in stack[-1]:

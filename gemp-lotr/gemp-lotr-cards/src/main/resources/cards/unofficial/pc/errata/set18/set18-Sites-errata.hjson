@@ -19,7 +19,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -76,7 +75,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: movesTo

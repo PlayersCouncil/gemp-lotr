@@ -412,7 +412,6 @@
 			{
 				type: Trigger
 				optional: true
-				trigger: optional
 				trigger: {
 						type: winsSkirmish
 						filter: self

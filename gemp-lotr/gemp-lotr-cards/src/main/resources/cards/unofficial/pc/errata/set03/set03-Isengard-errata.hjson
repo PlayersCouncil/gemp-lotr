@@ -169,7 +169,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
@@ -298,7 +297,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: startofphase
 					phase: Shadow

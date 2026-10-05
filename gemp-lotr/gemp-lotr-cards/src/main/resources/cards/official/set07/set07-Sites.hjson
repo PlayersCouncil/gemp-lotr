@@ -709,7 +709,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				player: free peoples
 				trigger: {
 					type: startOfPhase

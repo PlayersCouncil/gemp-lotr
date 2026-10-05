@@ -423,7 +423,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: killed
 					filter: name(Aragorn)

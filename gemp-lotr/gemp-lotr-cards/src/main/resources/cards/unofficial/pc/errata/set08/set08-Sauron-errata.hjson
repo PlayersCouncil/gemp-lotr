@@ -136,8 +136,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
-				optional:true
+				optional: true
 				trigger: {
 					type: played
 					filter: self

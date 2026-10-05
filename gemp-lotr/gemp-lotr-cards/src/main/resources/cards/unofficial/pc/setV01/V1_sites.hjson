@@ -381,7 +381,6 @@
 		effects: {
 			type: Trigger
 			optional: false
-			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: skirmish
