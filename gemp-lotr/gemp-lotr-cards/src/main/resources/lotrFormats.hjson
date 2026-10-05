@@ -321,7 +321,7 @@
 	}
 	{
 		name: Towers Block - Sets 4-5
-		code: ttt2_block"
+		code: ttt2_block
 		order: 12
 		sites: TWO_TOWERS
 		cancelRingBearerSkirmish: true
