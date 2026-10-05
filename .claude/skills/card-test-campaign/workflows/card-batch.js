@@ -151,6 +151,19 @@ if (args.fixes) {
   return { folder, cards, fix }
 }
 
+// A batch whose author finished and whose review did not (a run cut off): args.reported is the author's account,
+// built by the orchestrator from that run's journal.
+if (args.reported) {
+  phase('Review')
+  const review = await agent(
+    where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
+    `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r2\n\n` +
+    `What the author reported as findings, questions and rig requests, and its account of the stock mistakes its tests did not notice (the rest of the author's report is kept from you on purpose):\n${args.reported}\n`,
+    { label: `review ${folder}`, phase: 'Review', schema: REVIEW })
+  if (!review) return { folder, cards, failed: 'review' }
+  return { folder, cards, review }
+}
+
 phase('Author')
 const author = await agent(
   where + `Read ${roles}author.md and do what it says.\n\n` +

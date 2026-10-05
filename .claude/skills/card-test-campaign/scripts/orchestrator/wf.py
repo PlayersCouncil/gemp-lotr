@@ -116,7 +116,7 @@ elif cmd == "brief":
     for d in k.get("standard_issues", []): print("  std:", d[:W])
 elif cmd == "lean":
     # How many cards have landed through the cut-down pipeline (author, then a reviewer who fixes), and which runs.
-    runs = [f for f, t in tracked.items() if t.get("lean") and t.get("landed") and "author" in load(t["run"])[1].values()]
+    runs = [f for f, t in tracked.items() if t.get("lean") and t.get("landed") and not t.get("hybrid") and not t.get("cut_off") and "author" in load(t["run"])[1].values()]
     n = sum(len(tracked[f].get("cards", [])) for f in runs)
     print("%d cards landed through the cut-down pipeline (%s). Ketura's review of the two further cuts is due at 20: cost.py %s" % (n, ", ".join(runs) or "none yet", " ".join(runs)))
 elif cmd == "show":
