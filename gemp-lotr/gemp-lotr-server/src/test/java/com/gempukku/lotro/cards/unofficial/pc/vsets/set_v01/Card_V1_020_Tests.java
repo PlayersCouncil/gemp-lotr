@@ -208,6 +208,8 @@ public class Card_V1_020_Tests
 		scn.PassArcheryActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		// "Make Boromir defender +1 if you can spot": nothing for the player to decide.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(merry, Keyword.DEFENDER));
@@ -310,29 +312,6 @@ public class Card_V1_020_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		// Defender +1 once more, and not +2: the first did not last the turn.
-		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
-		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
-	}
-
-	@Test
-	public void DefenderPlusOneIsMadeWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var boromir = scn.GetFreepsCard("boromir");
-		var merry = scn.GetFreepsCard("merry");
-		var savage = scn.GetShadowCard("savage");
-		scn.MoveCompanionsToTable(boromir, merry);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		scn.PassArcheryActions();
-
-		// "Make Boromir defender +1 if you can spot": nothing for the player to decide.
-		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
