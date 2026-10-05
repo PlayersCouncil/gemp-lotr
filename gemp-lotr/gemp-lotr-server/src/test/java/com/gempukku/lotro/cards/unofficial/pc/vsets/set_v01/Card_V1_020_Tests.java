@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -208,12 +207,7 @@ public class Card_V1_020_Tests
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		scn.PassArcheryActions();
 
-		// The game asks before making him a defender.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		scn.FreepsAcceptOptionalTrigger();
-
 		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(merry, Keyword.DEFENDER));
@@ -246,9 +240,6 @@ public class Card_V1_020_Tests
 		scn.PassArcheryActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-		scn.FreepsAcceptOptionalTrigger();
-
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		// Gimli's signet earns Boromir the keyword, not Gimli.
 		assertFalse(scn.HasKeyword(gimli, Keyword.DEFENDER));
@@ -289,46 +280,6 @@ public class Card_V1_020_Tests
 	}
 
 	@Test
-	public void IsOfferedAgainAtTheStartOfTheFierceAssignmentPhaseWithTheFirstDefenderPlusOneStillOnHim() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var boromir = scn.GetFreepsCard("boromir");
-		var sam = scn.GetFreepsCard("sam");
-		var nelya = scn.GetShadowCard("nelya");
-		// Sam is Ring-bound, so he is no unbound Hobbit: he counts as another companion with the Aragorn
-		// signet.
-		scn.MoveCompanionsToTable(boromir, sam);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(nelya);
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertEquals(0, scn.GetWoundsOn(sam));
-
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
-		// Spotting Sam costs Sam nothing.
-		assertEquals(0, scn.GetWoundsOn(sam));
-
-		// Boromir (5 + 2 = 7) loses to Ulaire Nelya (10) and survives; Nelya is fierce.
-		scn.PassAssignmentActions();
-		scn.FreepsAssignToMinions(boromir, nelya);
-		scn.FreepsResolveSkirmish(boromir);
-		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(boromir));
-
-		// The fierce assignment phase is another assignment phase, and the offer is made again.  The
-		// defender +1 made in the first is still on Boromir when it comes.
-		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-	}
-
-	@Test
 	public void IsGoneByTheRegroupPhaseAndMadeAgainInTheAssignmentPhaseOfASecondMove() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -341,8 +292,6 @@ public class Card_V1_020_Tests
 		scn.MoveMinionsToTable(savage);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 
 		// Boromir (5 + 2 = 7) beats the Uruk Savage (5), which survives its one wound.
@@ -360,17 +309,12 @@ public class Card_V1_020_Tests
 		scn.FreepsChooseToMove();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
-		scn.FreepsAcceptOptionalTrigger();
-
 		// Defender +1 once more, and not +2: the first did not last the turn.
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0017: the text has no \"may\", but the game asks before making Boromir defender +1")
 	public void DefenderPlusOneIsMadeWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -394,35 +338,44 @@ public class Card_V1_020_Tests
 	}
 
 	@Test
-	@Ignore("Q-0018: the text names no duration; the game keeps defender +1 until the regroup phase, so it is still on in skirmishes and stacks to +2 in a fierce assignment phase")
 	public void DefenderPlusOneLastsOnlyForTheAssignmentPhaseItWasMadeIn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var boromir = scn.GetFreepsCard("boromir");
-		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
 		var nelya = scn.GetShadowCard("nelya");
-		scn.MoveCompanionsToTable(boromir, merry);
+		var runner = scn.GetShadowCard("runner1");
+		// Sam is Ring-bound, so he is no unbound Hobbit: he counts as another companion with the Aragorn
+		// signet.
+		scn.MoveCompanionsToTable(boromir, sam);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(nelya);
+		scn.MoveMinionsToTable(nelya, runner);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+		// Spotting Sam costs Sam nothing.
+		assertEquals(0, scn.GetWoundsOn(sam));
 
-		// The assignment phase is over once the skirmish has begun.
+		// It lasts long enough to assign by: Boromir takes both minions.
 		scn.PassAssignmentActions();
-		scn.FreepsAssignToMinions(boromir, nelya);
+		scn.FreepsAssignToMinions(boromir, nelya, runner);
+		assertTrue(scn.IsCharAssignedAgainst(boromir, nelya));
+		assertTrue(scn.IsCharAssignedAgainst(boromir, runner));
+
+		// The assignment phase is over once the skirmish has begun, and the keyword with it.
 		scn.FreepsResolveSkirmish(boromir);
 		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
 
-		// Boromir (7) loses to Ulaire Nelya (10) and survives.  In the fierce assignment phase he is made
-		// defender +1 again: +1 in each assignment phase, not +1 and then +2.
+		// Boromir (5 + 2 + 2 = 9) loses to Ulaire Nelya and the Goblin Runner (10 + 5) and survives.  Nelya
+		// is fierce, and the fierce assignment phase is another assignment phase: Boromir is made defender +1
+		// again, unasked.  +1 in each assignment phase, not +1 and then +2.
 		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(boromir));
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		scn.FreepsAcceptOptionalTrigger();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
