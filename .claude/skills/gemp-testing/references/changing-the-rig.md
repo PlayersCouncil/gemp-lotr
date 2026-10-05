@@ -55,5 +55,7 @@ scenario code, so more of those are no concern to it.
    both call.
 3. Get it agreed before writing it. The rig is shared ground and the scenario work is going on at the same time.
 4. Add it with its Javadoc, add a test of the method itself if it is more than a one-line reading, run
-   `cardtest.py setup` and then `suite all` (the scenario tests exercise the same classes).
+   `cardtest.py setup` and then `suite all` (the scenario tests exercise the same classes). The rig's own tests
+   are in `gemp-lotr-server/src/test/java/com/gempukku/lotro/virtualtable/`, the test-side mirror of the rig's
+   package; they use plain Decipher cards whose behaviour is not in question.
 5. Run `gen_vts_api.py` so the reference picks it up, and commit the rig change on its own, apart from any card.

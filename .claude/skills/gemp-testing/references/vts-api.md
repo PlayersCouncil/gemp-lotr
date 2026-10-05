@@ -181,6 +181,7 @@ Actions are top-level decisions that involve legal game operations available to 
 - `Boolean FreepsActionAvailable(PhysicalCardImpl card)  ·  ShadowActionAvailable`
 - `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable`
 - `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable`
+- `Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb)` — Checks whether the given player is currently being offered an action of the given kind on one particular card.
 - `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
 - `Boolean ActionAvailable(String player, String action)` — Checks whether the given player has an action available containing the provided text.
 - `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction`
@@ -233,7 +234,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `int GetADParamEqualsCount(String playerID, String paramName, String value)`
 - `String[] FreepsGetADParam(String paramName)  ·  ShadowGetADParam`
 - `String FreepsGetFirstADParam(String paramName)  ·  ShadowGetFirstADParam`
-- `String[] GetAwaitingDecisionParam(String playerID, String paramName)`
+- `String[] GetAwaitingDecisionParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the given player's current decision.
 - `Map<String, String[]> GetAwaitingDecisionParams(String playerID)`
 
 ## Choices within a decision
@@ -476,4 +477,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-368 entries, 256 of them with no description in the source.
+369 entries, 255 of them with no description in the source.

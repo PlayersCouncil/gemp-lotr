@@ -130,11 +130,17 @@ Shadow player's decision is already pending does not make a minion playable. Set
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
 exact pool adds those in: `// 10 set + 1 companion + 2 for the site`.
 
-**Two copies of one card are hard to tell apart.** `FreepsActionAvailable(card)` and its kin look for the card's
-name in the actions on offer, so with two copies in play they answer for either. `FreepsUseCardAction(card)` does
-go by the physical card. The card-choice checks match by blueprint whenever the decision lists its cards
-by blueprint, as a search of a deck or discard pile does. Until the rig changes (both are open rig requests), give the candidates in a choice different blueprints,
-and test a per-copy limit by counting the actions on offer with `FreepsGetAvailableActions()`.
+**Two copies of one card.** `FreepsActionAvailable(card)`, `FreepsPlayAvailable(card)`,
+`FreepsTransferAvailable(card)` and their Shadow twins answer for the physical card they are given: with two
+copies in play, each is asked about separately, and a per-copy limit is tested by asking about each copy. The
+overloads that take text (`FreepsActionAvailable("Use Orc Taskmaster")`) still match any action so described.
+The card-choice checks are different: when a decision lists its cards by blueprint, as a search of a deck or
+discard pile does, `FreepsHasCardChoiceAvailable(card)` matches by blueprint and either copy answers for the
+other, so give the candidates in such a choice different blueprints.
+
+**A check on a player who is not being asked anything answers false.** The availability and card-choice checks
+return false, and the readers of a decision's parameters return null, when that player has no pending decision.
+The methods that *answer* a decision still fail, as they should.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the

@@ -62,15 +62,83 @@ public interface Actions extends Decisions, Choices {
 
 
 
-	//TODO: Clean these up to use the correct search text
-	default Boolean FreepsActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Use " + GameUtils.getFullName(card)); }
-	default Boolean ShadowActionAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Use " + GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card whose special ability is being asked about.
+	 * @return True if the Free Peoples player is currently being offered the use of that particular card's special
+	 * ability.  Another copy of the same card being usable does not count.
+	 */
+	default Boolean FreepsActionAvailable(PhysicalCardImpl card) { return CardActionAvailable(P1(), card, "Use"); }
+	/**
+	 * @param card The card whose special ability is being asked about.
+	 * @return True if the Shadow player is currently being offered the use of that particular card's special
+	 * ability.  Another copy of the same card being usable does not count.
+	 */
+	default Boolean ShadowActionAvailable(PhysicalCardImpl card) { return CardActionAvailable(P2(), card, "Use"); }
 
-	default Boolean FreepsPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Play " + GameUtils.getFullName(card)); }
-	default Boolean ShadowPlayAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Play " + GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card being asked about.
+	 * @return True if the Free Peoples player is currently being offered the play of that particular card.  Another
+	 * copy of the same card being playable does not count.
+	 */
+	default Boolean FreepsPlayAvailable(PhysicalCardImpl card) { return CardActionAvailable(P1(), card, "Play"); }
+	/**
+	 * @param card The card being asked about.
+	 * @return True if the Shadow player is currently being offered the play of that particular card.  Another copy
+	 * of the same card being playable does not count.
+	 */
+	default Boolean ShadowPlayAvailable(PhysicalCardImpl card) { return CardActionAvailable(P2(), card, "Play"); }
 
-	default Boolean FreepsTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P1(), "Transfer " + GameUtils.getFullName(card)); }
-	default Boolean ShadowTransferAvailable(PhysicalCardImpl card) { return ActionAvailable(P2(), "Transfer " + GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card being asked about.
+	 * @return True if the Free Peoples player is currently being offered the transfer of that particular card.
+	 */
+	default Boolean FreepsTransferAvailable(PhysicalCardImpl card) { return CardActionAvailable(P1(), card, "Transfer"); }
+	/**
+	 * @param card The card being asked about.
+	 * @return True if the Shadow player is currently being offered the transfer of that particular card.
+	 */
+	default Boolean ShadowTransferAvailable(PhysicalCardImpl card) { return CardActionAvailable(P2(), card, "Transfer"); }
+
+	/**
+	 * Checks whether the given player is currently being offered an action of the given kind on one particular
+	 * card.  The action has to be described as "[verb] [the card's full name]", as before, and now also has to
+	 * belong to that card and not to another copy of it.
+	 *
+	 * How an action is tied to its card depends on what the decision says about its actions.  A choice of card
+	 * actions names the physical card each action belongs to, and that is what is compared.  A decision that names
+	 * its actions' cards only by blueprint (a choice among triggers, say, where there may be no card on the table
+	 * to point at) is compared by blueprint.  A decision that names neither is matched on the description alone.
+	 * @param player The player who would be offered the action.
+	 * @param card The card the action must belong to.
+	 * @param verb How the action's description starts: "Use", "Play" or "Transfer".
+	 * @return True if such an action is on offer, false if it is not or the player has no pending decision.
+	 */
+	default Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb) {
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		if(texts == null)
+			return false;
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] blueprintIds = GetAwaitingDecisionParam(player, "blueprintId");
+		String wanted = (verb + " " + GameUtils.getFullName(card)).toLowerCase();
+		String id = String.valueOf(card.getCardId());
+
+		for (int i = 0; i < texts.length; i++) {
+			if(!texts[i].toLowerCase().contains(wanted))
+				continue;
+			if(cardIds != null && i < cardIds.length) {
+				if(cardIds[i].equals(id))
+					return true;
+			}
+			else if(blueprintIds != null && i < blueprintIds.length) {
+				if(blueprintIds[i].equals(card.getBlueprintId()))
+					return true;
+			}
+			else {
+				return true;
+			}
+		}
+		return false;
+	}
 	/**
 	 * Checks whether the Free Peoples player has an action available containing the provided text.
 	 * @param action The text to search for.

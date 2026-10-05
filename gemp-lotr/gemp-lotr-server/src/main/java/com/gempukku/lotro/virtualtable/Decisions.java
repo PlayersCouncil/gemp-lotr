@@ -291,10 +291,7 @@ public interface Decisions extends TableBase {
 	 * options on the current decision, so option 0 is tied to the first choice on the decision, option 1 is the second
 	 * choice on the decision, etc.
 	 */
-	default String[] GetADParam(String playerID, String paramName) {
-		var decision = userFeedback().getAwaitingDecision(playerID);
-		return decision.getDecisionParameters().get(paramName);
-	}
+	default String[] GetADParam(String playerID, String paramName) { return GetAwaitingDecisionParam(playerID, paramName); }
 
 	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1(), paramName); }
 	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2(), paramName); }
@@ -313,13 +310,29 @@ public interface Decisions extends TableBase {
 	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName); }
 	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName)[0]; }
 	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName)[0]; }
+	/**
+	 * Gets all of the options for a particular parameter of the given player's current decision.
+	 * @param playerID The player making the current decision.
+	 * @param paramName The parameter options to return.
+	 * @return An array of strings indexed like the choices on the decision, or null if the decision has no such
+	 * parameter or the player is not being asked anything at all.
+	 */
 	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
 		var decision = userFeedback().getAwaitingDecision(playerID);
+		if(decision == null)
+			return null;
 		return decision.getDecisionParameters().get(paramName);
 	}
 
+	/**
+	 * @param playerID The player making the current decision.
+	 * @return Every parameter of the given player's current decision, or null if the player is not being asked
+	 * anything.
+	 */
 	default Map<String, String[]> GetAwaitingDecisionParams(String playerID) {
 		var decision = userFeedback().getAwaitingDecision(playerID);
+		if(decision == null)
+			return null;
 		return decision.getDecisionParameters();
 	}
 
