@@ -40,9 +40,9 @@ CORE = {
 PLAYED = {"companion", "ally", "minion", "possession", "artifact", "condition", "follower"}
 CODES = {"+", "-", "C", "C-", "F", "D", "L", "O", "S", "R", "B", "Z", "K"}
 
-LEDGER_LINE = re.compile(r"^\s*\*\s+([A-Z]\d+)\s+([A-Za-z]+)\s+\[([^\]]*)\]\s*(.*?)\s*$")
+LEDGER_LINE = re.compile(r"^\s*([A-Z]\d+)\s+([A-Za-z]+)\s+\[([^\]]*)\]\s*(.*?)\s*$")
+CLAIM_LINE = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s*$")
 TAG_LINE = re.compile(r"^\s*//\s*((?:[A-Z]\d+\s*:\s*[^;]+;?\s*)+)$")
-TAG_PART = re.compile(r"([A-Z]\d+)\s*:\s*([^;]+)")
 METHOD = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\(([^)]*)\)")
 
 FORBIDDEN = [
@@ -145,35 +145,33 @@ def split_methods(lines):
     return methods, code
 
 
-def parse_ledger(lines):
-    """The ledger's clauses as {id: (type, codes, text, line)} and the line it starts on, or (None, None)."""
-    start = None
-    for i, line in enumerate(lines):
-        if re.match(r"^\s*/?\*+\s*LEDGER\b", line):
-            start = i
-            break
-    if start is None:
+def parse_ledger(path: Path):
+    """A card's ledger file as ({id: [type, checks, text, line]}, {id: {check: [test names]}}, cited ids), or
+    (None, None, []) if there is no file."""
+    if not path.is_file():
         return None, None, []
-    clauses, findings = {}, []
+    lines = path.read_text(encoding="utf-8").replace("\r", "").split("\n")
+    clauses, claims, cited = {}, {}, []
     last, in_header = None, False
-    for i in range(start + 1, len(lines)):
-        line = lines[i]
-        if "*/" in line:
-            break
+    for i, line in enumerate(lines):
         m = LEDGER_LINE.match(line)
+        c = CLAIM_LINE.match(line)
         if m:
-            codes = set(m.group(3).split())
-            clauses[m.group(1)] = [m.group(2), codes, m.group(4), i]
+            clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i]
+            claims[m.group(1)] = {}
             last, in_header = m.group(1), False
-        elif re.match(r"^\s*\*\s+(Sources|Findings|Formats|Notes)\s*:", line):
+        elif c and last is not None and not in_header:
+            for check in c.group(1).split():
+                claims[last].setdefault(check, []).append(c.group(2))
+        elif re.match(r"^\s*(LEDGER|Sources|Findings|Formats|Notes)\b", line):
             in_header = True
-        elif not line.strip().strip("*").strip():
+        elif not line.strip():
             pass
         elif last is not None and not in_header:
             # A continuation of the previous clause's text.
-            clauses[last][2] += " " + line.strip().lstrip("*").strip()
-        findings += re.findall(r"\b[FQ]-\d{4}\b", line)
-    return clauses, start, findings
+            clauses[last][2] += " " + line.strip()
+        cited += re.findall(r"\b[FQ]-\d{4}\b", line)
+    return clauses, claims, cited
 
 
 def squash(text: str) -> str:
@@ -241,57 +239,61 @@ def lint_file(path: Path):
     if not stats:
         add("error", "stats", None, "no ...StatsAndKeywordsAreCorrect test")
 
-    clauses, ledger_line, cited = parse_ledger(lines)
+    for i, line in enumerate(lines):
+        if re.match(r"^\s*/?\*+\s*LEDGER\b", line):
+            add("error", "in-file", i, "a LEDGER comment in the test file: the ledger lives in its own file, not in the tests")
+        if TAG_LINE.match(line):
+            add("error", "in-file", i, "a clause tag comment in the test file: which test claims what is recorded in the ledger file")
+
+    ledger_file = g.ledger_path(card_id) if card_id else None
+    clauses, claims, cited = parse_ledger(ledger_file) if ledger_file else (None, None, [])
+    test_names = {m[0] for m in tests}
     if clauses is None:
-        add("error", "ledger", None, "no LEDGER comment")
-        clauses = {}
+        add("error", "ledger", None, "no ledger file (%s)" % (ledger_file if ledger_file else "unknown card"))
+        clauses, claims = {}, {}
     else:
         if not clauses:
-            add("error", "ledger", ledger_line, "the LEDGER has no clause lines (ID Type [checks] text)")
+            add("error", "ledger", None, "the ledger has no clause lines (ID Type [checks] text)")
         for cid, (ctype, codes, text, line) in clauses.items():
             if ctype not in CORE:
-                add("error", "ledger", line, "%s: unknown clause type '%s'" % (cid, ctype))
+                add("error", "ledger", None, "%s: unknown clause type '%s'" % (cid, ctype))
                 continue
             bad = codes - CODES
             if bad:
-                add("error", "ledger", line, "%s: unknown check %s" % (cid, " ".join(sorted(bad))))
+                add("error", "ledger", None, "%s: unknown check %s" % (cid, " ".join(sorted(bad))))
             missing = CORE[ctype] - codes
             if missing:
-                add("error", "ledger", line, "%s: a %s clause must list at least %s" % (cid, ctype, " ".join(sorted(CORE[ctype]))))
+                add("error", "ledger", None, "%s: a %s clause must list at least %s" % (cid, ctype, " ".join(sorted(CORE[ctype]))))
         if card is not None and (card.field("type", "") or "").lower() in PLAYED and not any(c[0] == "Play" for c in clauses.values()):
-            add("error", "ledger", ledger_line, "no Play clause (P1 Play [+] ...): a card that is played from hand has a test that plays it")
+            add("error", "ledger", None, "no Play clause (P1 Play [+] ...): a card that is played from hand has a test that plays it")
         if card is not None:
             want = squash(card.field("gametext", ""))
             text_clauses = [c for cid, c in clauses.items() if cid.startswith("C")]
             have = squash(" ".join(c[2] for c in sorted(text_clauses, key=lambda c: c[3])))
             if want != have:
-                add("error", "ledger-text", ledger_line,
-                    "the C clauses, read in order, are not the card's game text word for word")
+                add("error", "ledger-text", None, "the C clauses, read in order, are not the card's game text word for word")
 
-    # What each test says it covers.
-    covered = {cid: set() for cid in clauses}
-    for name, start, end, above, ret in tests:
-        tags = [t for _, t in above if TAG_LINE.match(t)]
-        if not tags:
-            if name not in [s[0] for s in stats]:
-                add("error", "tag", start, "%s: no clause tag above @Test (e.g. // C2: + F)" % name)
-        for t in tags:
-            for cid, codes in TAG_PART.findall(TAG_LINE.match(t).group(1)):
-                if cid not in clauses:
-                    add("error", "tag", start, "%s: tagged with %s, which is not in the LEDGER" % (name, cid))
-                    continue
-                for c in codes.split():
-                    if c not in CODES:
-                        add("error", "tag", start, "%s: unknown check '%s'" % (name, c))
-                    covered[cid].add(c)
-        ignore = [t for _, t in above if t.startswith("@Ignore")]
-        for t in ignore:
-            if not re.search(r"\b[FQ]-\d{4}\b", t):
-                add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000) or question (Q-0000) it is parked on" % name)
+    # Which tests the ledger says claim what.
+    claimed_tests = set()
+    for cid, by_check in claims.items():
+        for check, names in by_check.items():
+            for name in names:
+                claimed_tests.add(name)
+                if name not in test_names:
+                    add("error", "claim", None, "%s: the ledger gives check %s to %s, which is not a test in the file" % (cid, check, name))
     for cid, (ctype, codes, text, line) in clauses.items():
-        missing = (codes & CODES) - covered.get(cid, set())
+        missing = (codes & CODES) - set(claims.get(cid, {}))
         if missing:
-            add("error", "coverage", line, "%s: no test is tagged for %s" % (cid, " ".join(sorted(missing))))
+            add("error", "coverage", None, "%s: no test claims %s" % (cid, " ".join(sorted(missing))))
+        extra = set(claims.get(cid, {})) - codes
+        if extra:
+            add("error", "claim", None, "%s: tests claim %s, which the clause does not list" % (cid, " ".join(sorted(extra))))
+    for name, start, end, above, ret in tests:
+        if clauses and name not in claimed_tests and name not in [x[0] for x in stats]:
+            add("error", "claim", start, "%s: the ledger gives this test nothing to claim" % name)
+        for _, t in above:
+            if t.startswith("@Ignore") and not re.search(r"\b[FQ]-\d{4}\b", t):
+                add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000) or question (Q-0000) it is parked on" % name)
 
     # Inside the tests.
     for name, start, end, above, ret in tests:
@@ -319,7 +321,7 @@ def lint_file(path: Path):
         if not is_stats and not re.search(r"\bassert\w+\s*\(", text):
             add("error", "assert", start, "%s: asserts nothing" % name)
 
-    if card is not None and g.segment_of(card_id) == "decipher" and g.tsv_rows():
+    if card is not None and g.sheet_for(card_id)[0] is not None:
         import reconcile
         diffs = reconcile.compare(card_id)
         if diffs and not cited:

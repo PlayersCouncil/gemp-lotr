@@ -15,30 +15,6 @@ import static org.junit.Assert.*;
 
 public class Card_V1_054_Tests
 {
-	/*
-	 * LEDGER  101_54  Sam, Of Bagshot Row
-	 * Sources: definition's gametext and printed fields (PC card, no sheet row); CR 4.2 has no individual ruling on
-	 *   this card, but its glossary entries "Sam" and "Ring-bound" speak of every version of Sam (R1, R2)
-	 *
-	 * P1 Play      [+]           Played from hand for (2), as a companion.
-	 * C1 Trigger   [+ - F O R]   Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to
-	 *                            heal that companion.
-	 * C2 Response  [+ - O]       Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
-	 * R1 Rule      [+]           CR 4.2 glossary "Sam": Any version of Sam that can become the Ring-bearer if Frodo
-	 *                            dies can only become the Ring-bearer if Frodo was the Ring-bearer when he was killed.
-	 * R2 Keyword   [K]           CR 4.2 glossary "Ring-bound": All versions of Frodo and Sam are Ring-bound.
-	 *
-	 * Findings: Q-0008
-	 * Notes: C1 has no C: "spot Frodo" is a requirement, not a cost (CR "cost"), and its absence is one of the two -.
-	 *   C2 lists O though the text has no "may": declining the response is what loses the game.
-	 *   C2's "(resistance 5)": Sam's resistance is asserted only as 5 before and 5 after, with no burdens.  Whether
-	 *   the Ring is worn after the succession, and what becomes of burdens and resistance, is Q-0008 and will be a
-	 *   mechanic test; nothing here rests on it.
-	 *   CR 4.2 Section Three, Ulaire Otsea, Ringwraith in Twilight: "If Frodo dies in a skirmish involving Otsea
-	 *   with Sam also in play, The One Ring is transferred to Sam before Blade Tip may be transferred".  That is an
-	 *   Interaction and lives in Otsea's file.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -79,7 +55,6 @@ public class Card_V1_054_Tests
 		);
 	}
 
-	// R2: K
 	@Test
 	public void SamStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -121,7 +96,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 	}
 
-	// P1: +
 	@Test
 	public void PlaysFromHandAsACompanionForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -143,7 +117,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C1: + O R
 	@Test
 	public void FrodoSignetCompanionWhoWinsASkirmishMayBeHealedEachTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -191,7 +164,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C1: F
 	@Test
 	public void OnlyAWinnerWithTheFrodoSignetIsOfferedAndOnlyTheWinnerIsHealed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -251,7 +223,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C1: -
 	@Test
 	public void FrodoSignetCompanionWhoLosesASkirmishIsNotOfferedHealing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -277,7 +248,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C1: -
 	@Test
 	public void WinnerIsNotOfferedHealingWhenFrodoCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielRingBearerScenario();
@@ -306,7 +276,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C2: +
 	@Test
 	public void WhenFrodoIsKilledSamCanBecomeTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -346,7 +315,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C2: O
 	@Test
 	public void DecliningTheResponseWhenFrodoIsKilledLosesTheGame() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -373,7 +341,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.GameIsFinished());
 	}
 
-	// C2: -
 	@Test
 	public void ResponseIsNotOfferedWhenAnotherCompanionIsKilled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -400,7 +367,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// C2: -
 	@Test
 	public void ResponseIsNotOfferedWhenARingBearerWhoIsNotFrodoIsKilled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielRingBearerScenario();
@@ -427,7 +393,6 @@ public class Card_V1_054_Tests
 		assertTrue(scn.GameIsFinished());
 	}
 
-	// R1: +
 	@Test
 	public void ResponseIsNotOfferedWhenAFrodoWhoIsNotTheRingBearerIsKilled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielRingBearerScenario();

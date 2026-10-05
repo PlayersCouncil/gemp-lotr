@@ -14,30 +14,6 @@ import static org.junit.Assert.*;
 
 public class Card_V1_025_Tests
 {
-	/*
-	 * LEDGER  101_25  Crebain Flock
-	 * Sources: the definition's gametext and printed fields (PC card); CR 4.2 names this card nowhere
-	 *
-	 * P1 Play       [+]             Played from hand for (2), and (2) more while roaming, to the minions in play.
-	 * C1 Modifier   [+ - F S]       This minion is twilight cost -1 for each companion you can spot over 3.
-	 * C2 Activated  [+ - B F L Z]   Shadow: Spot 2 wounded companions (or spot Saruman) to take an [isengard]
-	 *                               weather into hand from your draw deck or discard pile (limit once per phase).
-	 *
-	 * Findings: F-0011
-	 * Notes:
-	 *   C2 has no C or C-: what stands before "to" is "spot", which is a requirement and not a cost
-	 *   (CR 4.2 "spot"), so nothing is paid and the unmet requirement is the - check.
-	 *   C1's cap is zero: CR 4.2 "modifier" changes a value that ends below zero to zero, and CR 4.2 "roaming"
-	 *   makes the penalty an additional two on top of that cost, so with six companions the Flock still
-	 *   takes (2) from the pool at a site before its own.
-	 *   C2's L follows CR 4.2 "limit": the limit is per copy and does not span phases.
-	 *   Every weather card in the game is [isengard], so the "[isengard]" in C2 is shown with a [moria]
-	 *   card that an ad hoc modifier makes weather.
-	 *   "Saruman" in C2 is any card of that title: the Saruman spotted is an [uruk-hai] one.
-	 *   F-0011 / G-0001: ShadowActionAvailable(card) goes by the card's name and cannot tell two copies apart,
-	 *   so the per-copy limit test counts the offered actions itself until the rig can.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -101,7 +77,6 @@ public class Card_V1_025_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// P1: +; C1: - F
 	@Test
 	public void CostsItsPrintedTwoWithThreeCompanionsAndAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -131,7 +106,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C1: + S
 	@Test
 	public void CostsOneLessWithFourCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -156,7 +130,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C1: S
 	@Test
 	public void CostsTwoLessWithFiveCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -181,7 +154,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C1: S
 	@Test
 	public void CostDoesNotGoBelowZeroWithSixCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -206,7 +178,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C2: + - B F Z
 	@Test
 	public void SpottingTwoWoundedCompanionsTakesAnIsengardWeatherFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -274,7 +245,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C2: + - B
 	@Test
 	public void SpottingSarumanIsEnoughWithNoWoundedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -316,7 +286,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C2: B F L Z
 	@Test
 	public void EachCopyTakesFromTheDiscardPileOnceInAPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -376,7 +345,6 @@ public class Card_V1_025_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C2: L
 	@Test
 	public void CanBeUsedAgainInASecondShadowPhaseOfTheSameTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

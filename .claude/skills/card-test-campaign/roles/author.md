@@ -15,9 +15,13 @@ Before anything else, read these three files in full. They are short and everyth
 
 ## What done looks like
 
-For each card: its test file meets the standard, `lint.py <id>` reports no errors, `cardtest.py run <id>` passes
-(apart from tests parked on a finding or question), and you have reported back as described at the end. Or the
-card is parked, and your report says exactly what is holding it.
+For each card: its test file and its ledger file meet the standard, `lint.py <id>` reports no errors,
+`cardtest.py run <id>` passes (apart from tests parked on a finding or question), and you have reported back as
+described at the end. Or the card is parked, and your report says exactly what is holding it.
+
+The ledger is a file of its own, at the path `packet.py <id>` prints as "Ledger file". Nothing of it goes into
+the test file: no ledger comment, no clause ids, no tags above tests. The test file is what Ketura reads, and she
+wants it to read as plain tests.
 
 ## The two stages, in this order
 
@@ -28,9 +32,9 @@ So the order matters and is not a formality.
 
     python3 .claude/skills/card-test-campaign/scripts/packet.py <id> --blind --terms
 
-and from that alone write the card's ledger: the clauses, their types, the checks each one's wording calls for.
-Then, for each check, write one line: the situation, and what the text and rules say happens. Save this as
-`/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
+and from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
+for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
+what the text and rules say happens. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
 file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
@@ -39,7 +43,8 @@ does.
 through them one by one against your plan: each either claims one of your checks (keep it, adapted to the
 standard), or duplicates another, or covers something your ledger missed (then your ledger was wrong: fix it), or
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
-for PC cards were written with Ketura and often encode a ruling. Then write the file, and run
+for PC cards were written with Ketura and often encode a ruling. Then write the test file, add to the ledger
+file the line for each test under each clause it claims checks of, and run
 
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
@@ -71,7 +76,7 @@ an obscure ruling looks exactly like a bug, and a wrongly reported bug costs mor
 
 ## What you may and may not touch
 
-You edit the test files of your own cards, and files under `/tmp/<your folder name>/`. To find out what the game
+You edit the test files and ledger files of your own cards, and files under `/tmp/<your folder name>/`. To find out what the game
 does in some situation without adding a test, put a throwaway JUnit class there and run it with
 `cardtest.py probe <file.java>`; use this to understand a failure, never to decide what a test should expect. Nothing else: not card
 definitions, not the engine, not the rig, not other cards' tests, not git, not the campaign's state files.
@@ -86,7 +91,7 @@ Your final message is read by the orchestrator, not by a person, and is all the 
 For each card give, in this order:
 
 - the card id and name, and `READY` or `PARKED`
-- the ledger as it ended up
+- the path of the ledger file (the orchestrator reads it there; do not paste it)
 - the number of tests before and after, and the output of the last `lint.py` and `cardtest.py run`
 - for an existing test file: what happened to each existing test (kept, merged, dropped as duplicate, contradicted)
 - findings, questions and rig requests, each with the detail asked for above

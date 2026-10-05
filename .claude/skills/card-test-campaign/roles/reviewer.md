@@ -14,7 +14,8 @@ You have not seen how the tests were written and should not go looking for the a
 ## For each card
 
 1. **Read the card before the tests.** `packet.py <id> --blind --terms`. Decide for yourself what clauses it has
-   and what checks their wording calls for. Only then open the test file and compare its ledger with yours. A
+   and what checks their wording calls for. Only then open the card's ledger file (the path is in the packet) and
+its test file, and compare the ledger with yours. A
    check the wording calls for and the ledger leaves out is the most valuable thing you can find, because nothing
    mechanical will ever find it.
 
@@ -31,7 +32,8 @@ You have not seen how the tests were written and should not go looking for the a
    `mutate.py <id> --replace "<old>" "<new>"`, and settle what the game really does with a throwaway test:
    `cardtest.py probe /tmp/<your folder name>/Probe.java`.
 
-3. **Read each test against the check it claims.** Does it really show that check? The usual failures: a `-` that
+3. **Read each test against the checks the ledger says it claims.** The test file itself carries no ledger and
+   no clause ids, by design; if you find any, that is a fix. Does it really show that check? The usual failures: a `-` that
    is not the nearest miss; an `F` with only one valid candidate, or no invalid one; a `D` that looks at only one
    side of the boundary; an assertion after an action with no reading before it; an expected value that could
    only have come from running the game; a helper card whose own text is doing part of the work.

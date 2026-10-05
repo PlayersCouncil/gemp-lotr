@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,30 +14,6 @@ import static org.junit.Assert.*;
 
 public class Card_V3_050_Tests
 {
-	/*
-	 * LEDGER  103_50  Desert Wind Whisper
-	 * Sources: the definition's gametext and printed fields (PC card, erratum revision 1); CR 4.2 names this
-	 *   card nowhere. Hinder is a PC mechanic that CR 4.2 does not cover: that the minion becomes hindered is
-	 *   the card's own text, and what being hindered does is Q-0006.
-	 *
-	 * P1 Play      [+]         Played from hand for (5), and (2) more while roaming, to the minions in play.
-	 * C1 Keyword   [K]         Southron.
-	 * C2 Keyword   [K]         Tracker.
-	 * C3 Trigger   [+ - B]     When you play this minion, remove (4) or hinder this minion.
-	 * C4 Modifier  [+ - F S]   Each minion with ambush (X) is strength +X.
-	 *
-	 * Findings: Q-0006 Q-0007
-	 * Notes:
-	 *   C3 has no O (no "may"), no C (removing (4) is one of two effects, not a cost) and no F ("this
-	 *   minion" is the card itself). Its B includes the pool being too small to remove (4) in full, when
-	 *   hindering is what happens (CR 4.2 "effect").
-	 *   Q-0006: what being hindered does to a card is not in any rules text. The one test that depends on it
-	 *   (the bonus of C4 stopping while Whisper is hindered) is parked.
-	 *   Q-0007, open: a minion with a printed ambush (2) that is given ambush (1) by another card. CR 4.2
-	 *   "ambush" calls these separate instances and does not say what X is then. The test takes the reading
-	 *   that the bonuses add (+3), as the test this file had before the campaign did, and stays active.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -57,7 +32,6 @@ public class Card_V3_050_Tests
 		);
 	}
 
-	// C1: K; C2: K
 	@Test
 	public void DesertWindWhisperStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -98,7 +72,6 @@ public class Card_V3_050_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// P1: +; C3: + B; C4: +
 	@Test
 	public void WhenPlayedOffersTheChoiceAndRemovingFourLeavesItUnhindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -140,7 +113,6 @@ public class Card_V3_050_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C3: + B
 	@Test
 	public void WhenPlayedChoosingToHinderRemovesNothingAndHindersIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -172,8 +144,6 @@ public class Card_V3_050_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("Q-0006: what being hindered does to a card's game text is not in any rules text; awaits Ketura's ruling")
-	// C4: -
 	@Test
 	public void WhileItIsHinderedMinionsWithAmbushGetNoBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -198,12 +168,11 @@ public class Card_V3_050_Tests
 		scn.ShadowChoose("Hinder");
 
 		assertTrue(scn.IsHindered(whisper));
-		// The reading being asked about: a hindered card's text is switched off, so the Soldier is back to its own strength.
+		// The game text of a hindered card does not apply, so the Soldier is back to its own strength.
 		assertEquals(4, scn.GetStrength(soldier));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C3: B
 	@Test
 	public void WhenPlayedWithFewerThanFourLeftInThePoolItIsHinderedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -229,7 +198,6 @@ public class Card_V3_050_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C3: -
 	@Test
 	public void PlayingAnotherMinionWhileItIsInPlayRemovesAndHindersNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -258,7 +226,6 @@ public class Card_V3_050_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C4: + - F S
 	@Test
 	public void EachMinionWithAmbushIsStrongerByItsOwnAmbushNumberAndNothingElseIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -305,7 +272,6 @@ public class Card_V3_050_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C4: S
 	@Test
 	public void AmbushGainedFromAnotherCardCountsAndAddsToPrintedAmbush() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

@@ -50,8 +50,8 @@ game is wrong: they report, and the orchestrator and Ketura decide.
 
 ### One card, start to finish
 
-1. Author, blind: `packet.py <id> --blind --terms`. Write the ledger and, for each check, the situation and the
-   outcome the text calls for. Write down every doubt as a question.
+1. Author, blind: `packet.py <id> --blind --terms`. Write the ledger file and, for each check, the situation and
+   the outcome the text calls for. Write down every doubt as a question.
 2. Author, sighted: `packet.py <id> --with-test`. For an existing test file, account for every existing test: it
    claims a check, or it is redundant, or it knows something the ledger missed (then the ledger is what changes),
    or it contradicts the ledger (then it is a question; existing PC tests often encode a ruling).
@@ -82,9 +82,17 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 
 Selectors work wherever an id does: `set:1`, `file:set01-Elven`, `seg:vset`.
 
-The reviewed spreadsheet of Decipher cards is `gen_en_standard.tsv` at the root of the repository (or wherever
-`GEMP_CARD_TSV` points). It is not in git. It holds each card's current official text, Decipher's own errata
-included. PC cards are not in it.
+The generator sheets are in `generator_sheets/` at the root of the repository (or wherever `GEMP_CARD_SHEETS`
+points). They are not in git.
+
+- `gen_en_standard.tsv`: every Decipher card's current official text, Decipher's own errata included. Reviewed.
+- `V1.tsv`, `V2.tsv`, `V3.tsv`: the V-sets as first released.
+- `master_errata.tsv`: every PC erratum by revision, assembled from some twenty older sheets. About 95% accurate:
+  some rows are errata that were proposed and never released, or held back a release.
+
+The tools match a definition to its sheet row by the definition's revision number. `reconcile.py --all --report`
+writes every disagreement as a document (`sheet-discrepancies.md` in the campaign's state); for PC cards those
+are flags for Ketura, not findings.
 
 ## Where state is kept
 
@@ -93,9 +101,11 @@ Three places, each for one kind of thing.
 - **Git, on `feature/card-test-overhaul`:** the tests, the skills, the scripts, the rulings log. One commit per
   card (`Card tests: 1_40 Elrond, Lord of Rivendell`), rig changes and tooling in commits of their own.
 - **`Claude outputs/card-tests/` in Ketura's folder (not in git):** `baseline.tsv` (what every card's tests looked
-  like before the campaign), `status.tsv`, `findings.tsv`, `questions.md`, `rig-requests.md`, `focus.txt`, and the
-  generated `tracker.md`, `tracker.json` and `tracker.html`. Point the scripts at a working copy with
-  `GEMP_CAMPAIGN_STATE`.
+  like before the campaign), `status.tsv`, `findings.tsv`, `questions.md`, `rig-requests.md`, `usage.tsv` (tokens
+  spent per batch of cards), `sheet-discrepancies.md`, `focus.txt`, `ledgers/<set>/<id>.txt` (each card's ledger:
+  Ketura wants these kept out of the test files), and the generated `tracker.md`, `tracker.json` and
+  `tracker.html`. In the cloud workspace the working copy is `/mnt/user-data/outputs/card-tests/`, which the
+  scripts find by themselves; `GEMP_CAMPAIGN_STATE` points them anywhere else.
 - **The tracker artifact:** `tracker.html` published; republished from the same file after each chunk and whenever
   statuses change.
 
@@ -125,7 +135,8 @@ of mistake it was:
 and a status: `candidate` (believed wrong, not yet confirmed by Ketura), `question`, `confirmed`, `fixed`,
 `not-a-bug`. For now a candidate is parked and never fixed on the spot: Ketura rules on it first, because a
 correct implementation of an obscure ruling looks exactly like a bug. When she changes that, this paragraph
-changes.
+changes. Of the first ten findings about cards and rules, she ruled five real errors, two deliberate departures
+for the sake of play, and three accounted for by a ruling or a convention; that is the rate to expect.
 
 ### Questions and rulings
 
@@ -149,9 +160,10 @@ and never run `git status` there: her working tree is large enough on that mount
 ### Starting again in a fresh session
 
 The cloud clone does not outlive the session. To rebuild it: clone `PlayersCouncil/gemp-lotr`, bundle
-`origin/master..feature/card-test-overhaul` on her machine and fetch it into the clone, copy the state folder and
-`gen_en_standard.tsv` across, run `cardtest.py setup`, then `cardtest.py suite cards` to confirm the starting
-point is green.
+`origin/master..feature/card-test-overhaul` on her machine and fetch it into the clone, copy the state folder
+(ledgers included) and `generator_sheets/` across, run `cardtest.py setup`, then `cardtest.py suite cards` to
+confirm the starting point is green. The workspace can also restart in the middle of a session: files survive,
+running processes do not, so commit and send often.
 
 ## Reference
 

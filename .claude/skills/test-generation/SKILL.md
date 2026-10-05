@@ -24,40 +24,41 @@ the text does not say, the test keeps saying what the text says, and the disagre
 ### Where an expectation may come from, in order
 
 1. **Ketura's rulings**, recorded in `card-test-campaign/references/rulings-log.md`.
-2. **Comprehensive Rules 4.2**: the individual card rulings (Section Three) and the glossary. Look things up with
-   `card-test-campaign/scripts/rules.py`; do not rely on remembering the document.
-3. **The card's text.** For a Decipher card this is the reviewed spreadsheet row; for a PC card it is the
-   definition's `gametext` and printed fields. `packet.py <id> --blind` prints exactly this and nothing else.
-
-The PC's own mechanics (hinder and restore, and whatever later V-sets add) are in none of these: Comprehensive
-Rules 4.2 predates them. Until there is a rules text for them in the campaign's references, what such a word means
-is a question for Ketura the first time a card turns on it, and her answer goes in the rulings log.
+2. **The rules.** Comprehensive Rules 4.2 is Decipher's last and holds the individual card rulings (Section
+   Three) and the glossary. The Comprehensive Rules 5.0 excerpts are the Players' Council's and cover what the
+   PC added or changed (hinder, restore, relentless, items, multi-dot uniqueness, when the game ends); where the
+   two differ, 5.0 is in force. Look things up with `card-test-campaign/scripts/rules.py`, which searches both;
+   do not rely on remembering either document.
+3. **The card's text**, as the generator sheets have it: the reviewed spreadsheet for a Decipher card, the V-set
+   sheets and the master errata sheet for a PC card, matched to the definition by revision number.
+   `packet.py <id> --blind` prints the sheet row and the definition's own printed fields and game text, and
+   nothing of how the card is implemented.
 
 What you remember about the game is not on the list. Where the text and rules leave a real doubt about what
 should happen, that is a question for Ketura, and asking is always better than guessing: obscure rulings are the
 commonest reason a correct implementation gets reported as a bug.
 
+**When the sheet and the definition disagree.** For a Decipher card the sheet is the reviewed source, and a
+difference is a finding unless a ruling accounts for it (check `packet.py`'s rulings section first: a reprint
+ruled to keep an earlier card's signet looks exactly like a wrong signet). For a PC card the master errata sheet
+is only about 95% accurate, because some of its rows are errata that were proposed and never released: write the
+tests to the definition's own game text, and report the difference as a flag, not as an error.
+
+**Deliberate departures.** A few things the game does are knowingly not what the text or rules say, for the
+sake of how it plays: Goblin Runner adds its (2) without asking, and separate instances of ambush are offered as
+one. The rulings log lists them. Something of the same kind that is not on the list is a question, not a finding.
+
 ## The file
 
-One class per card, in the folder and under the name it already has. The class has a ledger, one or more
+One class per card, in the folder and under the name it already has. The class has one or more
 `Get...Scenario()` methods, a stats test, and behaviour tests. Nothing else: no base class, no helper methods, no
-fields.
+fields, and none of the campaign's bookkeeping. What a reader finds is test names that say what happens, the
+card's printed text in the stats test's header, and comments where a number or a choice of helper card needs
+explaining.
 
 ```java
 public class Card_01_040_Tests
 {
-	/*
-	 * LEDGER  1_40  Elrond, Lord of Rivendell
-	 * Sources: sheet; CR 4.2 names this card nowhere
-	 *
-	 * P1 Play       [+]          Played from hand for (4), to the support area.
-	 * C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
-	 * C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
-	 * C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
-	 *
-	 * Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -83,7 +84,6 @@ public class Card_01_040_Tests
 		...
 	}
 
-	// C3: + - C C-
 	@Test
 	public void FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -116,22 +116,51 @@ The whole of this file is `cards/official/set01/Card_01_040_Tests.java`, and is 
 
 ### The ledger
 
-The ledger is the card's text cut into clauses, each with a type and the checks it calls for. It is how a reviewer
-sees, without reading Java, what was understood about the card and what was tested.
+The ledger is the card's text cut into clauses, each with a type and the checks it calls for, and under each
+clause the tests that claim those checks. It is working material: how an author plans a card, how a reviewer
+sees what was understood and what was tested, and what the conformance check holds the tests to. **It is not
+part of the test file.** It lives in a file of its own beside the campaign's other bookkeeping, at the path
+`packet.py <id>` prints (`<campaign state>/ledgers/<set>/<id>.txt`). Ketura does not want it in the finished
+tests: no ledger comment, and no clause tags above the tests.
+
+```
+LEDGER  1_40  Elrond, Lord of Rivendell
+Sources: sheet; neither rules document names this card for anything that bears on its tests
+
+P1 Play       [+]          Played from hand for (4), to the support area.
+     +  ->  CannotBePlayedUntilGandalfIsSpotted
+C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
+     + - B  ->  CannotBePlayedUntilGandalfIsSpotted
+     + B    ->  CannotBePlayedUntilAnElfIsSpotted
+C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
+     + F  ->  StartOfTurnHealsEveryAllyWhoseHomeIsSite3AndNoOthers
+     - R  ->  HealsAtTheStartOfItsOwnersTurnsAndNotTheOpponents
+C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
+     + - C C-  ->  FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted
+
+Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
+```
 
 - **`C` clauses are the game text, word for word, in order.** Cut at sentences and line breaks. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
-  conformance check joins the `C` clauses and compares them with the card.
+  conformance check joins the `C` clauses and compares them with the definition's game text.
 - **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
   has one: the card is played from hand by legal play, and the test reads what it cost and where it ended up. An
   event is played by its own `Event` clause and needs no `P1`.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
+- **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
+  claim checks of several clauses and a check may be claimed by several tests. Every check a clause lists must be
+  claimed, and every behaviour test in the file must claim something. A test that claims nothing is either
+  missing from the ledger or testing nothing the card says.
 - `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
   (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
   all why a check the wording seems to call for was left off. Each may run onto following lines. Put `Sources:`
   above the clauses and `Findings:` and `Notes:` below them.
+
+Something in the Notes that a later reader of the *test* would need (why a helper card was chosen, why a number
+is what it is) belongs in the test as an ordinary comment, in plain words, with no clause ids.
 
 ### The checks
 
@@ -152,7 +181,7 @@ then claimed by a test.
 | `R` | "Each time" happens a second time. |
 | `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. |
-| `K` | The keyword, with its number if it has one, is on the card. Claimed by a tag on the stats test (`// C1: K; C2: K`). |
+| `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
 
@@ -192,20 +221,14 @@ The type says what kind of statement the clause is, and sets the checks it must 
 
 A sentence that is several of these at once takes the type of its main verb and lists the checks of all of them.
 
-### Tags
-
-The line above each `@Test` says which clauses and checks that test claims: `// C2: + F` or
-`// C1: -; C3: + C`. A test may claim several, and a check may be claimed by several tests. Every check a clause
-lists must be claimed somewhere, and every behaviour test must claim something. A test that claims nothing is
-either missing its tag or testing nothing the card says.
-
 ### The stats test
 
 `<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
 subtitle, uniqueness, side, culture, type, race or item class, twilight cost, strength, vitality, resistance,
-signet, site number or home, and each keyword with its number. Its header comment reproduces the card. For a
-Decipher card the expected values are the spreadsheet's; `reconcile.py <id>` shows any field where the
-spreadsheet and the definition disagree, and a disagreement is a finding.
+signet, site number or home, and each keyword with its number. Its header comment reproduces the card. The
+expected values are the sheet's; `reconcile.py <id>` shows any field where the sheet and the definition disagree
+(see "When the sheet and the definition disagree" above). Timewords are not a printed field: they are how a
+definition says when an event may be played, and a definition may carry more of them than the card prints.
 
 ## Rules every test follows
 
@@ -274,10 +297,10 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
 - **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
   would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
   reading, keep that test active: it is the best evidence there is of what was meant. Otherwise, if one reading
-  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")` above the tag line.
-- **The card turns on a PC mechanic the rules do not cover** (hinder, say). That the card *becomes* hindered is
-  what its text says and can be asserted. What being hindered *does* is the mechanic's, and waits for Ketura's
-  ruling: park any assertion that depends on it with a `Q-`.
+  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`.
+- **The card turns on a PC mechanic that neither rules document covers.** What the card's own text says happens
+  can be asserted. What the mechanic then *does* is a question for Ketura: park any assertion that depends on it
+  with a `Q-`. (Hinder, restore, relentless and items are covered: `rules.py term hinder`.)
 - **The game disagrees with the text.** Keep the test asserting what the text says. Park it with
   `@Ignore("F-0000: ...")`, and record the finding with what was expected, what happened, and which of these it
   looks like: a typo in the definition, an oversight in the implementation, wrong displayed text, an engine bug, a
@@ -302,7 +325,8 @@ else to them.
 
 ## What a reviewer checks that the conformance check cannot
 
-Run `lint.py <id>` first; it settles layout, tags, coverage of listed checks, forbidden calls and bookends. Then:
+Run `lint.py <id>` first; it settles layout, the ledger's claims, coverage of listed checks, forbidden calls and
+bookends, and that none of the ledger has leaked into the test file. Then:
 
 1. Is the ledger right? Each clause's type, and above all whether a check was left off that the wording calls
    for. Read the card, not the tests.

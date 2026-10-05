@@ -13,27 +13,6 @@ import static org.junit.Assert.*;
 
 public class Card_V1_002_Tests
 {
-	/*
-	 * LEDGER  101_2  Deepest Delvings
-	 * Sources: definition's gametext and printed fields (PC card, no sheet row); CR 4.2 names this card nowhere
-	 *
-	 * P1 Play       [+]               Played from hand for (1), to the support area.
-	 * C1 Trigger    [+ - C F O R Z]   Each time a [dwarven] card is discarded from the top of your draw deck, you
-	 *                                 may add (1) to stack that card here.
-	 * C2 Activated  [+ - C C- F Z]    Maneuver: Exert a Dwarf to take a card stacked here into hand.
-	 *
-	 * Findings: F-0008, Q-0009
-	 * Notes: "Support Area" is a printed field and not a line of the game text, so it has no clause; the stats test
-	 *   asserts it.
-	 *   C1 has no C-: its cost is adding a twilight token, which the board cannot make unpayable.
-	 *   C1 is in the passive ("is discarded"), so both the owner's own cost and an opponent's effect are shown
-	 *   setting it off.
-	 *   C2's - is the phase next door: the text names no requirement but the cost, and the unpayable cost is C-.
-	 *   F-0008: C2 says "a card stacked here"; the game offers only the [dwarven] cards stacked here.
-	 *   Q-0009: whether "a card stacked here" takes in a Shadow card stacked here.  The parked test asserts that
-	 *   it does, and is to be changed if the answer is that it does not.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -100,7 +79,6 @@ public class Card_V1_002_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// P1: +
 	@Test
 	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -123,7 +101,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C1: + C O Z
 	@Test
 	public void DwarvenCardDiscardedFromTopOfDeckMayBeStackedHereForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -175,7 +152,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C1: F R
 	@Test
 	public void EveryDwarvenCardDiscardedFromTopOfDeckIsOfferedAndACardOfAnotherCultureIsNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -235,7 +211,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C1: -
 	@Test
 	public void DwarvenCardDiscardedFromHandIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -269,7 +244,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
-	// C1: + F
 	@Test
 	public void OpponentsEffectDiscardingFromMyDeckIsOfferedAndADiscardFromTheOpponentsDeckIsNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -326,7 +300,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// C2: + - C F Z
 	@Test
 	public void ManeuverActionExertsAChosenDwarfToTakeAChosenStackedCardIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -392,7 +365,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	// C2: F
 	@Test
 	public void ManeuverActionCanTakeAStackedCardThatIsNotDwarven() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -433,7 +405,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	// C2: C-
 	@Test
 	public void ManeuverActionIsNotOfferedOnceNoDwarfCanExert() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

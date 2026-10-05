@@ -13,18 +13,6 @@ import static org.junit.Assert.*;
 
 public class Card_01_040_Tests
 {
-	/*
-	 * LEDGER  1_40  Elrond, Lord of Rivendell
-	 * Sources: sheet; CR 4.2 names this card nowhere
-	 *
-	 * P1 Play       [+]          Played from hand for (4), to the support area.
-	 * C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
-	 * C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
-	 * C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
-	 *
-	 * Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
-	 */
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -78,7 +66,6 @@ public class Card_01_040_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// P1: +; C1: + - B
 	@Test
 	public void CannotBePlayedUntilGandalfIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -103,7 +90,6 @@ public class Card_01_040_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C1: + B
 	@Test
 	public void CannotBePlayedUntilAnElfIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -128,7 +114,6 @@ public class Card_01_040_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C2: + F
 	@Test
 	public void StartOfTurnHealsEveryAllyWhoseHomeIsSite3AndNoOthers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -162,7 +147,6 @@ public class Card_01_040_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C2: - R
 	@Test
 	public void HealsAtTheStartOfItsOwnersTurnsAndNotTheOpponents() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -189,7 +173,6 @@ public class Card_01_040_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// C3: + - C C-
 	@Test
 	public void FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
