@@ -55,10 +55,10 @@
 						forced: false
 						count: {
 							type: fromMemory
-							memory: twilightCostInMemory
+							memory: revealedTwilightCost
 						}
 					}
-					text: Discard {twilightCostInMemory} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
+					text: Discard {revealedTwilightCost} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						select: memory(chosenCard)
