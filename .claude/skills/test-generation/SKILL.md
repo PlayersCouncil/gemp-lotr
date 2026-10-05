@@ -42,7 +42,10 @@ commonest reason a correct implementation gets reported as a bug.
 difference is a finding unless a ruling accounts for it (check `packet.py`'s rulings section first: a reprint
 ruled to keep an earlier card's signet looks exactly like a wrong signet). For a PC card the master errata sheet
 is only about 95% accurate, because some of its rows are errata that were proposed and never released: write the
-tests to the definition's own game text, and report the difference as a flag, not as an error.
+tests to the definition's own game text, and report the difference as a flag, not as an error. Before flagging,
+look at which sheet row the packet matched and at the rulings log's "Revisions" entry: a V-set sheet row that is
+simply an earlier revision, where an errata row matches the definition, is no discrepancy. `Sources:` then cites
+the errata row, and a revision number that does not line up is F-0032, already known.
 
 **Deliberate departures.** A few things the game does are knowingly not what the text or rules say, for the
 sake of how it plays: Goblin Runner adds its (2) without asking, and separate instances of ambush are offered as
@@ -184,7 +187,7 @@ then claimed by a test.
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
-| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. Where the text picks cards out by title and a type word ("these characters: Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower named Saruman). Where a word is in one filter of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid candidates of the second vary in it. Where the text names two places a card is taken from ("from play or from hand"), the candidates are laid out in each. An "or" inside the noun phrase ("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. Where the card is not unique and its text says "here", "this condition" or the like, a second copy is in play and the test shows which copy the card went to or came from (`ShadowChooseOptionalTrigger(card)` where each copy makes its own offer). |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. Where the text picks cards out by title and a type word ("these characters: Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower named Saruman). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of that title of each type there is (Saruman the minion and Saruman the follower). Where a word is in one filter of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid candidates of the second vary in it. Where the text names two places a card is taken from ("from play or from hand"), the candidates are laid out in each. An "or" inside the noun phrase ("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. Where the card is not unique and its text says "here", "this condition" or the like, a second copy is in play and the test shows which copy the card went to or came from (`ShadowChooseOptionalTrigger(card)` where each copy makes its own offer). |
 | `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
 | `L` | A limit holds: it works up to the limit and is refused or capped beyond it. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
@@ -211,8 +214,11 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   card's to show. (Ketura has confirmed it for special abilities as for events.)
 - "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
   by another card before the time is up
-- a search of a draw deck ("from your draw deck", when the whole deck is looked through) → the deck is
-  reshuffled afterwards, read with the shuffle count, whether or not the card says "shuffle"
+- a search of a draw deck ("from your draw deck", when the whole deck is looked through) → a `Rule` clause
+  citing CR 4.2 "draw deck", whether or not the card says "shuffle": `+` is one more shuffle of that deck and
+  none of the other player's, read with the shuffle count; `-` is no shuffle on any alternative that does not
+  look through the deck ("or discard pile"), and none when the player declines before looking. Like the
+  snapshot, this is a rule tested card by card because the game writes it into each definition
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
   dismiss, and end somewhere that shows the dismissals were of a reveal (the dismiss methods are plain passes)
@@ -262,8 +268,11 @@ be shown at all, not for one that is awkward to arrange.
 `<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
 subtitle, uniqueness, side, culture, type, race or item class, twilight cost, strength, vitality, resistance,
 signet, site number or home, and each keyword with its number. Its header comment reproduces the card. The
-expected values are the sheet's; `reconcile.py <id>` shows any field where the sheet and the definition disagree
-(see "When the sheet and the definition disagree" above). Timewords are not a printed field: they are how a
+expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
+definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
+and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
+possession's +2) is a printed field: asserted here, and read on the bearer in the test of the Play clause, with
+no clause of its own. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 
 On a PC card the header comment already in the file often describes an earlier version of the card, above

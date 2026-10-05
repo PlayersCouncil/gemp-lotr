@@ -87,6 +87,23 @@ def words_of_one_culture(culture: str) -> set:
     return {w for w, cultures in _culture_words.items() if cultures == {culture}}
 
 
+_title_types = None
+
+
+def types_of_title(title: str) -> dict:
+    """How many cards of each card type bear a title: {"minion": 14, "follower": 1} for Saruman."""
+    global _title_types
+    if _title_types is None:
+        _title_types = {}
+        for card in g.card_index().values():
+            t = re.sub(r"[^a-z]", "", (card.field("title", "") or "").lower())
+            kind = re.sub(r"[^a-z]", "", (card.field("type", "") or "").lower())
+            if t and kind:
+                _title_types.setdefault(t, {})
+                _title_types[t][kind] = _title_types[t].get(kind, 0) + 1
+    return _title_types.get(re.sub(r"[^a-z]", "", title.lower()), {})
+
+
 def repeated_keys(lines: list) -> list:
     """(line index, key, earlier line index) wherever one block gives the same key twice.  The later one is the
     one the game reads, so a mistake made in the earlier one cannot be noticed."""
@@ -208,8 +225,17 @@ def mistakes(lines: list, culture: str = "") -> list:
             named = {re.sub(r"[^a-z]", "", w) for w in re.split(r"[,()]", low)}
             if plain and culture and "culture(" not in low and not (named & one_culture):
                 add(i, "%s: narrowed to culture(%s): %s" % (m.group(2), culture, value), rewritten(inner + ",culture(%s)" % culture))
+            # A title on its own picks out every card of that title.  Where the title is borne by cards of more
+            # than one type, the tight version is the type most of them have (Saruman: minions, and one follower).
+            titled = re.search(r"(?i)\b(?:name|title)\(([^()]+)\)", inner)
+            title_types = types_of_title(titled.group(1)) if titled else {}
             if plain and not any(w in low for w in KIND_WORDS):
-                add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
+                if len(title_types) > 1:
+                    commonest = max(title_types, key=title_types.get)
+                    add(i, "%s: narrowed to the commonest type of that title (%s): %s" % (m.group(2), commonest, value),
+                        rewritten(inner + "," + commonest))
+                if set(title_types) != {"companion"}:
+                    add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
             # "Skirmishing" loosened to "assigned to a skirmish with": true before the skirmish begins as well.
             swapped = re.sub(r"(?i)inSkirmishAgainst\(", "assignedToSkirmish(", value)
             if swapped != value:

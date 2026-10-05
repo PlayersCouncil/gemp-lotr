@@ -248,7 +248,17 @@ with `new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH)`).
 **An ad hoc modifier aimed at one card goes on after that card is in play.** A card is given a new id each time
 it enters play, and a modifier whose filter is a physical card holds the id it had when the modifier was built.
 `ApplyAdHocModifier(new VitalityModifier(null, vile, null, 1))` before `MoveMinionsToTable(vile)` does nothing
-and says nothing. A modifier with a general filter (a card type, a keyword) can go on at any time.
+and says nothing. A modifier with a general filter (a card type, a keyword) can go on at any time, and where the
+card has to be played legally afterwards, build the modifier on a filter and not on the card:
+`scn.GenerateShadowFilter("name(Goblin Armory)")`.
+
+**`FreepsResolveRuleFirst()` takes the first action of whatever is pending.** That includes an optional-responses
+decision. A test that drives a required trigger through it does not notice the trigger being made optional:
+assert `FreepsDecisionAvailable("Required responses")` and no optional trigger first.
+
+**A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
+`StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
+site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
 
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does

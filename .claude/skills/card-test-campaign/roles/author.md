@@ -104,3 +104,10 @@ files are found at their usual paths and need no mention. For each card give:
 - findings, questions and rig requests, each with the detail asked for above
 - anything in the standard or the rig documentation that was wrong, unclear or missing: this is early in the
   campaign and the documents are still being corrected by what authors run into
+
+## The mistake-maker on a busy machine
+
+One `mutate.py` run at a time for each `--out` name, and one card at a time: runs that share a name share a
+working folder. Run a card with many mistakes in the background and read its output file. Before calling a
+"narrowed to culture(...)" survivor on a name harmless, look for a card of that name in another culture
+(Aragorn, Defender of Rohan is a [rohan] Aragorn).
