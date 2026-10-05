@@ -234,7 +234,7 @@
 				}
 			}
 		]
-		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
+		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and each valiant Elf does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
 		lore: ""
 		promotext: ""
 		alts: {

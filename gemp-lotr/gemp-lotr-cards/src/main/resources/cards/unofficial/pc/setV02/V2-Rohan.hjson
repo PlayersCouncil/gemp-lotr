@@ -701,7 +701,7 @@
 				]
 			}
 		]
-		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For each Shadow card discarded, exert a minion. For each Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For each Shadow card discarded, exert a minion. For each Free Peoples card discarded, heal a valiant or [rohan] companion. You cannot make any more Maneuver actions.
 		lore: "'The end will not be long,' said the king. 'But I will not end here, taken like an old badger in a trap.'"
 		promotext: ""
 		alts: {
