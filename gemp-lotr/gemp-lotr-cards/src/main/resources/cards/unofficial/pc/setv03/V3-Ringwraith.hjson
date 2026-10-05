@@ -1998,7 +1998,7 @@
 					memorizeAssigned: comp
 				}
 				requires: {
-					type: IsNotEqual
+					type: IsLessThan
 					firstNumber: {
 						type: ForEachStrength
 						filter: self
@@ -2008,71 +2008,56 @@
 						filter: memory(comp)
 					}
 				}
-				effect: [
-					{
-						type: If
-						check: {
-							type: IsLessThan
-							firstNumber: {
-								type: ForEachStrength
-								filter: self
-							}
-							secondNumber: {
-								type: ForEachStrength
-								filter: memory(comp)
-							}
-						}
-						true: {
-							type: CostToEffect
-							cost: {
-								type: Exhaust
-								select: self
-							}
-							effect: {
-								type: Hinder
-								select: memory(comp)
-							}
-						}
+				cost: {
+					type: Exhaust
+					select: self
+				}
+				effect: {
+					type: Hinder
+					select: memory(comp)
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: AssignedAgainst
+					filter: companion
+					against: self
+					memorizeAssigned: comp
+				}
+				requires: {
+					type: IsGreaterThan
+					firstNumber: {
+						type: ForEachStrength
+						filter: self
 					}
-					{
-						type: If
-						check: {
-							type: IsGreaterThan
-							firstNumber: {
-								type: ForEachStrength
-								filter: self
-							}
-							secondNumber: {
-								type: ForEachStrength
-								filter: memory(comp)
-							}
-						}
-						true: {
-							type: CostToEffect
-							cost: {
-								type: Exert
-								select: self
-							}
-							effect: {
-								type: Choice
-								texts: [
-									Exert that companion
-									Add a threat
-								]
-								effects: [
-									{
-										type: Exert
-										select: memory(comp)
-									}
-									{
-										type: AddThreats
-										amount: 1
-									}
-								]
-							}
-						}
+					secondNumber: {
+						type: ForEachStrength
+						filter: memory(comp)
 					}
-				]
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Exert that companion
+						Add a threat
+					]
+					effects: [
+						{
+							type: Exert
+							select: memory(comp)
+						}
+						{
+							type: AddThreats
+							amount: 1
+						}
+					]
+				}
 			}
 		]
 		gametext: Fierce.<br>Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.<br>Each time this minion is assigned to a weaker companion, you may exert this minion to exert that companion or add a threat.

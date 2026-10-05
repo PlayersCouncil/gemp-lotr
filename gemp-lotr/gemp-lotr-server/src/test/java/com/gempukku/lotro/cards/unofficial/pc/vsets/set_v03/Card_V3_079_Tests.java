@@ -125,9 +125,10 @@ public class Card_V3_079_Tests
 
 		scn.FreepsAssignToMinions(aragorn, toldea);
 
-		// Can't exhaust when already exhausted
-		//Actually this needs fixed once the exhaust rule is in
-		//assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		// An exhausted character cannot be exhausted, so the cost cannot be paid and the trigger is not offered.
+		assertTrue(scn.IsExhausted(toldea));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(aragorn));
 	}
 
 // ======== EQUAL STRENGTH (NO TRIGGER) ========
@@ -218,5 +219,30 @@ public class Card_V3_079_Tests
 		assertEquals(threatsBefore + 1, scn.GetThreats());
 		// Guard should not be exerted since we chose threat instead
 		assertEquals(0, scn.GetWoundsOn(guard));
+	}
+
+	@Test
+	public void ToldeaExertOptionNotAvailableIfAlreadyExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.MoveMinionsToTable(toldea);
+		scn.MoveCompanionsToTable(guard);
+		scn.AddWoundsToChar(toldea, 2);  // Already exhausted
+
+		scn.StartGame();
+
+		// Guard STR 6, Toldea STR 13. Guard is weaker.
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(guard, toldea);
+
+		// An exhausted character cannot exert, so the cost cannot be paid and the trigger is not offered.
+		assertTrue(scn.IsExhausted(toldea));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetThreats());
 	}
 }
