@@ -201,7 +201,7 @@
 			}
 		}
 		
-		gametext: <b>Corsair.</b> <br>When you play this minion, if you can spot another corsair, you may discard a Shadow possession to reinforce a [raider] card twice.
+		gametext: <b>Corsair.</b> <br>When you play this minion, if you can spot another corsair, you may choose 1: discard a Shadow possession to reinforce a [raider] token twice; or remove 2 [raider] tokens to discard a possession.
 		lore: "Umbar remained at war with Gondor for many lives of men...."
 		promotext: ""
 		alts: {
