@@ -208,7 +208,12 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
   (some effects affect only what was there when they were used): a test that a card which becomes one of them
   afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
-  card's to show. (The rule speaks of events; reading it across to abilities awaits Ketura, Q-0011.)
+  card's to show. (Ketura has confirmed it for special abilities as for events.)
+- "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
+  by another card before the time is up
+- a search of a draw deck ("from your draw deck", when the whole deck is looked through) → the deck is
+  reshuffled afterwards, read with the shuffle count, whether or not the card says "shuffle"
+- "reveal" → the card is shown to the other player, who has a decision to dismiss
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`

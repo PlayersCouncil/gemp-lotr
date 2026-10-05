@@ -194,11 +194,8 @@ to the client.
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
-card: `FreepsHasOptionalTriggerAvailable(card)`. **But** that overload looks for the card's name in the prompt,
-and a trigger whose definition has its own `text:` ("Would you like to spot...") does not carry the name: the
-check then answers false whatever is on offer, so an `assertFalse` with it proves nothing (rig request G-0008).
-If `assertTrue` with the card fails on a trigger you can see is pending, use the overload that takes text, with
-a few words of the prompt, for the `assertFalse` cases too.
+card: `FreepsHasOptionalTriggerAvailable(card)` goes by the card each offered action belongs to, whatever its
+prompt says.
 
 **Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
@@ -206,11 +203,18 @@ asking the Free Peoples player which goes first, and the next action fails with 
 `GetCardActionId` that says nothing of why. Put the second such card down after `StartGame()`, or answer the
 ordering with `FreepsResolveActionOrder(text)`.
 
-**An ability with wording of its own.** `FreepsActionAvailable(card)` sees an ability whose definition gives it
-its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as well as one the game words
-"Use <card name>": among the actions of a phase it answers for any action of that card that is not a play or a
-transfer of it. Where a card offers several actions and the test means one of them, ask by wording,
-`FreepsActionAvailable("Stack your tale")`, and choose with `FreepsChooseAction(text)`.
+**An ability with wording of its own, and a card with several.** `FreepsActionAvailable(card)` sees an ability
+whose definition gives it its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as
+well as one the game words "Use <card name>". Where a card offers several actions, name the one meant:
+`FreepsActionAvailable(card, "from hand")` and `FreepsUseCardAction(card, "from hand")`.
+
+**Who is offered for assignment.** `FreepsHasAssignmentTargetAvailable(card)` and its Shadow twin read the
+assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowCanAssign(card)` read the game's
+rule, whatever is being asked.
+
+**Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
+after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
+deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show.
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.

@@ -194,3 +194,55 @@ F-0030); where the sheet was, the difference is in `known-differences.tsv` or wa
   with the same collector's info, one in each culture, identical otherwise; "a perpetual headache in all systems
   that needed a way of handling their unique ID situation."
 - The V2 errata were missing from the master sheet and have been added (most add Valiant to various Elves).
+
+## How card text is read
+
+**2026-10-05. Cards are code (Q-0012).** "In general I hold to the philosophy that cards are code: the text should
+do *what it says*, not *what the coder meant*; if the author meant something else they should have *written*
+something else." Library of Rivendell (101_11) says "your tale or artifact" with no side, so a Shadow artifact in
+hand may be stacked: "This was unintended, but it's legal 'code', so it ships as-is. If someone doesn't like it,
+we'll issue a formal errata." She adds that this "does sometimes conflict with the QOL ruling, and I admit it's a
+bit subjective where and when it gets applied." So: a literal reading the game already takes is not a finding,
+however odd; a quality-of-life shortcut that departs from the text is still a question.
+
+**2026-10-05. Costs and effects around "to" (F-0022).** On Counsel of the Wise (101_13): "Since the text says
+'spot Gandalf *to*...' that is the only actual cost of the card; everything following is an effect." A definition
+that writes something after the "to" as a cost, so that the card cannot be played when that thing cannot be done,
+is wrong.
+
+**2026-10-05. Reveal means shown (F-0021).** A card "revealed" from the draw deck that only the player choosing it
+sees is an oversight; the opponent is to be shown it.
+
+**2026-10-05. Looking through a draw deck (Q-0013).** CR 4.2 "draw deck": "When you finish looking through it" is
+the timing. "So as per rules, we always reshuffle." Other Decipher games lacked the rule and wrote the reshuffle
+on every card, and later LOTR sets fall back on that habit, but here an instruction to reshuffle after revealing
+the deck is almost always redundant. A definition that searches the whole deck and leaves it in order is a bug.
+
+**2026-10-05. The snapshot (Q-0011).** "Make all X ... until Y" on a special ability affects only what was on
+the table when it was used, "as per the Snapshot Rule", as on an event.
+
+**2026-10-05. "Can't" beats "can" (Q-0011).** "This falls under our modern 'can't > can', and so 'lose > gain'."
+A character who has lost a keyword until some time cannot be given it again by another card before then.
+
+**2026-10-05. A parenthesis that is a separate may (Q-0010).** On Three for the Elven-Kings (101_12) the heal in
+parentheses "should be a separate may (definitely a bit convoluted)", and "implemented as its own 0-1 choice that
+is either a click on a companion or clicking 'pass/done', not a 'do you want to heal' pester prompt."
+
+**2026-10-05. Followers are not characters (F-0023).** A filter that goes by name alone where the text says
+"these characters" is to have "character" added.
+
+**2026-10-05. Race and culture are different filters (F-0019).** "Bearer must be a unique [elven] companion"
+filtered by the race Elf is "an implementation error ... moot in gameplay today, but someday a non-[Elven] Elf
+could be printed or vice versa." To be fixed where found.
+
+**2026-10-05. Keys written twice (F-0017).** "Almost certainly a migration or automation error. In repeat cases,
+reduce them to one, and if they do not match we'll have to investigate the text to see which is correct."
+
+**2026-10-05. What a card looks like today.** "The URL of the card can be pulled to inspect the actual text on
+the card image used today as a further piece of information."
+
+## Rig requests agreed on 2026-10-05
+
+G-0007 (asking whether a character is offered for assignment), G-0008 (the optional-trigger check by card),
+G-0009 (the by-card availability check and wording of its own), G-0010 (one of several actions of a card) and
+G-0011 (a shuffle counter: "I think it shouldn't harm anything") were all approved, and are in the rig.
