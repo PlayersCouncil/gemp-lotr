@@ -88,10 +88,10 @@ you would propose, and which rig interface it belongs in.
 ## Reporting back
 
 Your final message is read by the orchestrator, not by a person, and is all the orchestrator sees of your work.
-For each card give, in this order:
+When the report is collected as named fields, fill the fields and add nothing outside them; the ledger and test
+files are found at their usual paths and need no mention. For each card give:
 
 - the card id and name, and `READY` or `PARKED`
-- the path of the ledger file (the orchestrator reads it there; do not paste it)
 - the number of tests before and after, and the output of the last `lint.py` and `cardtest.py run`
 - for an existing test file: what happened to each existing test (kept, merged, dropped as duplicate, contradicted)
 - findings, questions and rig requests, each with the detail asked for above
