@@ -9,7 +9,8 @@ Before anything else, read these three files in full. They are short and everyth
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.
 - `.claude/skills/gemp-testing/SKILL.md`: the test rig and the behaviours that catch people out.
-  `.claude/skills/gemp-testing/references/vts-api.md` lists every rig method.
+  `.claude/skills/gemp-testing/references/vts-api.md` lists every rig method by interface. It is long: search it
+  for what you need (`grep -n -i wound vts-api.md`) and do not read it through.
 - `.claude/skills/card-test-campaign/references/rulings-log.md`: what Ketura, who knows this game's rulings better
   than any document, has already ruled.
 

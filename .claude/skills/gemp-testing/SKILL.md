@@ -193,7 +193,17 @@ to the client.
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
-card: `FreepsHasOptionalTriggerAvailable(card)`.
+card: `FreepsHasOptionalTriggerAvailable(card)`. **But** that overload looks for the card's name in the prompt,
+and a trigger whose definition has its own `text:` ("Would you like to spot...") does not carry the name: the
+check then answers false whatever is on offer, so an `assertFalse` with it proves nothing (rig request G-0008).
+If `assertTrue` with the card fails on a trigger you can see is pending, use the overload that takes text, with
+a few words of the prompt, for the `assertFalse` cases too.
+
+**Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
+that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
+asking the Free Peoples player which goes first, and the next action fails with a `NullPointerException` in
+`GetCardActionId` that says nothing of why. Put the second such card down after `StartGame()`, or answer the
+ordering with `FreepsResolveActionOrder(text)`.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of

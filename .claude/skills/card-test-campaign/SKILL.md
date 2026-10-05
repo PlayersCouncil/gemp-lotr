@@ -55,17 +55,20 @@ decides that the game is wrong: they report, and the orchestrator and Ketura dec
 
 ### Running the pipelines
 
-`workflows/card-batch.js` is one card's whole passage as a Workflow script: author, reviewer, and where the review
+`workflows/card-batch.js` is the whole passage of a few cards as a Workflow script: author, reviewer, and where the review
 asks for changes, fixer and re-check. Run it with `args` of `{repo, cards, folder, notes}`: the repository's
-absolute path, the card id in a list, a short unique folder name (`v1-101_12`), and anything the author should
+absolute path, the card ids, a short unique folder name (`v1-b07`), and anything the author should
 know that the documents do not say. With `fixes` (a numbered list per card) it goes straight to fix and re-check.
 It returns each stage's report as structured data.
 
-**One card to a pipeline, several pipelines at once.** An agent's cost grows with the square of how long it
-runs, because every step re-reads everything before it: three cards in one agent cost more than three agents
-with one card each, and a slow card holds up its neighbours. Six pipelines run comfortably on two cores. Do not
-run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite classes the agents'
-tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between waves.
+**Three cards to a pipeline, several pipelines at once.** An agent carries about 100K tokens before it has
+done anything (the harness, then the documents its brief has it read), and re-reads all of it on every step, so
+that fixed load is most of what a card costs. Measured on V1: three cards through all four stages cost about 6M
+cache-read tokens a card; one card on its own cost the same for two stages. Group cards of one culture, so
+helper cards and context are shared. Six pipelines saturate two cores (the mutation check starts a JVM per
+mistake) but run. Do not run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite
+classes the agents' tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between
+waves. `usage.tsv` has what each pipeline cost; `scripts/orchestrator/wf.py usage <folder>` works it out.
 
 **Nothing reports back by itself reliably.** A finished workflow sends a notification, but the workspace can
 restart or go quiet and the notification is then lost; the results are still in each run's `journal.jsonl`.

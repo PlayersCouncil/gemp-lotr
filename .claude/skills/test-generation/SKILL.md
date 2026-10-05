@@ -142,7 +142,9 @@ C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
 Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 ```
 
-- **`C` clauses are the game text, word for word, in order.** Cut at sentences and line breaks. Every word of the
+- **`C` clauses are the game text, word for word, in order.** Cut at sentences and line breaks; a conditional
+  effect in parentheses that is game text ("(and heal a companion if you can spot 3 rings)") may be cut off as an
+  `Effect` clause of its own, since it has checks of its own. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the definition's game text.
 - **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
@@ -200,6 +202,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "for each", "X" → `S` (and for an X, the zero case)
 - "each time" → `R`
 - "or", "choose one" → `B`
+- a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
+  beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
 
 ### Clause types
@@ -322,7 +326,10 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
 - **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
   would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
   reading, keep that test active: it is the best evidence there is of what was meant. Otherwise, if one reading
-  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`.
+  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`. Where the existing
+  test's reading goes against the plain text, do both: the existing reading stays active and a test of the
+  text's reading is written and parked, ready to go live on a ruling. The parked test may claim a check an active
+  test already claims.
 - **The card turns on a PC mechanic that neither rules document covers.** What the card's own text says happens
   can be asserted. What the mechanic then *does* is a question for Ketura: park any assertion that depends on it
   with a `Q-`. (Hinder, restore, relentless and items are covered: `rules.py term hinder`.)
