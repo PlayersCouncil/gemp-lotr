@@ -1,13 +1,18 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
+import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_004_Tests
@@ -18,15 +23,34 @@ public class Card_V2_004_Tests
 				new HashMap<>()
 				{{
 					put("horsemen", "102_4");
-					put("band", "4_4");
-					put("chief", "4_20");
-					put("club", "4_36");
-					put("hides", "4_19");
 
-					put("card1", "1_3");
-					put("card2", "1_4");
-					put("card3", "1_5");
-					put("card4", "1_6");
+					// [dunland] minions that are not unique. All are Men of site 3, so they roam at site 2.
+					put("brigand", "4_10");     // Dunlending Brigand: cost 2, strength 8, no text
+					put("brigand2", "4_10");
+					put("savage", "4_17");      // Dunlending Savage: cost 4, no text
+					put("warrior", "4_18");     // Dunlending Warrior: cost 3; an assignment ability that needs an ally
+					put("robber", "4_16");      // Dunlending Robber: cost 3; a trigger on winning a skirmish
+					// Minions that nearly qualify
+					put("chief", "4_20");       // Hill Chief: a unique [dunland] Man, cost 4; a Shadow ability that needs a controlled site
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion that is not unique, cost 6, site 4, no text
+
+					// The two [dunland] possessions a minion can bear: "Bearer must be a [dunland] Man."
+					put("axe", "4_26");         // Iron Axe: cost 1, strength +3, nothing else
+					put("club", "4_36");        // War Club: cost 0, strength +2; a trigger on its bearer winning a skirmish
+					put("club2", "4_36");
+					// Cards that nearly qualify
+					put("hides", "4_19");       // Hides: a [dunland] possession that plays to the support area, not on a minion
+					put("nodefense", "4_28");   // No Defense: a [dunland] condition
+					put("sword", "1_160");      // Uruk-hai Sword: an [isengard] possession, cost 1; "Bearer must be an Uruk-hai."
+					put("sword2", "1_160");
+					put("enraged", "1_254");    // Mordor Enraged: a [sauron] condition, cost 0; "Plays on a [sauron] minion."; a Shadow ability that exerts its bearer
+					put("enraged2", "1_254");
+
+					// Cards for the Free Peoples player's hand: 4 or more there and initiative is his
+					put("guard1", "1_7");       // Dwarf Guard
+					put("guard2", "1_7");
+					put("guard3", "1_7");
+					put("guard4", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,74 +88,255 @@ public class Card_V2_004_Tests
 	}
 
 	@Test
-	public void HorsemenTookYourLandsPlaysNonUniqueDunlendingFromDiscardWithPossessionWithInitiative() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlaysANonUniqueDunlandMinionFromTheDiscardPileAndNoPossessionWithoutInitiative() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horsemen = scn.GetShadowCard("horsemen");
-		var band = scn.GetShadowCard("band");
+		var brigand = scn.GetShadowCard("brigand");
+		var savage = scn.GetShadowCard("savage");
+		var warrior = scn.GetShadowCard("warrior");
+		var robber = scn.GetShadowCard("robber");
 		var chief = scn.GetShadowCard("chief");
+		var troop = scn.GetShadowCard("troop");
+		var axe = scn.GetShadowCard("axe");
 		var club = scn.GetShadowCard("club");
-		var hides = scn.GetShadowCard("hides");
-		scn.MoveCardsToHand(horsemen);
-		scn.MoveCardsToDiscard(band, chief, club, hides);
-
-		var card1 = scn.GetFreepsCard("card1");
-		var card2 = scn.GetFreepsCard("card2");
-		var card3 = scn.GetFreepsCard("card3");
-		var card4 = scn.GetFreepsCard("card4");
-		scn.MoveCardsToHand(card1, card2, card3);
-		scn.MoveCardsToDiscard(card4);
+		scn.MoveCardsToHand(horsemen, warrior);
+		scn.MoveCardsToDiscard(brigand, savage, chief, troop, axe, club);
+		// The Robber is in the Shadow player's draw deck and in the other player's discard pile, and in neither
+		// player's hand.
+		scn.MoveCardsToDiscard(scn.GetFreepsCard("robber"));
+		// Four cards in the Free Peoples player's hand: initiative is his.
+		scn.MoveCardsToFreepsHand("guard1", "guard2", "guard3", "guard4");
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.SetTwilight(9);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(Zone.DISCARD, band.getZone());
-		assertEquals(Zone.DISCARD, chief.getZone());
-		assertEquals(Zone.DISCARD, club.getZone());
-		assertEquals(Zone.DISCARD, hides.getZone());
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 9 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(12, scn.GetTwilight());
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertFalse(scn.ShadowHasInitiative());
+		assertInZone(Zone.HAND, horsemen, warrior);
+		assertInZone(Zone.DISCARD, brigand, savage, chief, troop, axe, club);
+		assertInZone(Zone.DECK, robber);
 		assertTrue(scn.ShadowPlayAvailable(horsemen));
+
 		scn.ShadowPlayCard(horsemen);
-		assertEquals(Zone.SHADOW_CHARACTERS, band.getZone());
-		assertEquals(Zone.DISCARD, chief.getZone());
-		assertEquals(Zone.ATTACHED, club.getZone());
-		assertEquals(band, club.getAttachedTo());
-		assertEquals(Zone.DISCARD, hides.getZone());
+
+		// The event's own cost
+		assertEquals(11, scn.GetTwilight());
+		// Two [dunland] minions that are not unique, of different costs
+		assertTrue(scn.ShadowHasCardChoiceAvailable(brigand, savage));
+		// A unique [dunland] minion, a minion of another culture (8 with its roaming penalty, which the pool
+		// could pay), a [dunland] possession, a [dunland] minion in hand, and one that is in the draw deck and
+		// in the other player's discard pile
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(chief, troop, axe, warrior, robber));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCardBPFromSelection(savage);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		// 4 for the Savage + 2 for roaming at site 2
+		assertEquals(5, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, horsemen, brigand, chief, troop);
+		assertInZone(Zone.HAND, warrior);
+
+		// Without initiative no possession is offered, though two are there and the pool could pay for either.
+		assertInZone(Zone.DISCARD, axe, club);
+		assertTrue(scn.GetAttachedCards(savage).isEmpty());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void HorsemenTookYourLandsPlaysNonUniqueDunlendingFromDiscardWithNoPossessionWithNoInitiative() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithInitiativeADunlandPossessionFromTheDiscardPileIsPlayedOnThatMinion() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
 		var scn = GetScenario();
 
 		var horsemen = scn.GetShadowCard("horsemen");
-		var band = scn.GetShadowCard("band");
+		var brigand = scn.GetShadowCard("brigand");
+		var savage = scn.GetShadowCard("savage");
+		var axe = scn.GetShadowCard("axe");
+		var club = scn.GetShadowCard("club");
+		var club2 = scn.GetShadowCard("club2");
+		var hides = scn.GetShadowCard("hides");
+		var nodefense = scn.GetShadowCard("nodefense");
+		var sword = scn.GetShadowCard("sword");
+		var sword2 = scn.GetShadowCard("sword2");
+		var enraged = scn.GetShadowCard("enraged");
+		var enraged2 = scn.GetShadowCard("enraged2");
+		scn.MoveCardsToHand(horsemen, club2, sword2, enraged2);
+		scn.MoveCardsToDiscard(brigand, axe, club, hides, nodefense, sword, enraged);
+		// Three cards in the Free Peoples player's hand: the most with which the Shadow has initiative.
+		scn.MoveCardsToFreepsHand("guard1", "guard2", "guard3");
+		// No possession of another culture can be borne by a [dunland] Man. Making every [dunland] minion an
+		// Uruk-hai as well lets them bear the Uruk-hai Sword, so that only its culture keeps it out.
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("culture(dunland),minion"), null, Race.URUK_HAI));
+		// No [dunland] card but a possession goes on a minion. Making every [dunland] minion a [sauron] minion as
+		// well lets them bear Mordor Enraged, and making Mordor Enraged a [dunland] card as well leaves only its
+		// being a condition to keep it out.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateShadowFilter("culture(dunland),minion"), null, Culture.SAURON));
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateShadowFilter("name(Mordor Enraged)"), null, Culture.DUNLAND));
+
+		scn.StartGame();
+		// A [dunland] Man already in play, who is not "that minion"
+		scn.MoveMinionsToTable(savage);
+		scn.SetTwilight(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 4 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(7, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasInitiative());
+		assertInZone(Zone.DISCARD, brigand, axe, club, hides, nodefense, sword, enraged);
+		// The Sword in hand can be played: a [dunland] Man can now bear one.
+		assertTrue(scn.ShadowPlayAvailable(sword2));
+		// So can the Mordor Enraged in hand.
+		assertTrue(scn.ShadowPlayAvailable(enraged2));
+		assertTrue(scn.ShadowPlayAvailable(horsemen));
+
+		scn.ShadowPlayCard(horsemen);
+
+		// The Brigand is the one minion the event can play, and is played unasked.
+		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+		// 1 for the event + 2 for the Brigand + 2 for roaming at site 2
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, club));
+		// A [dunland] possession that does not go on a minion, a [dunland] condition, a possession of another
+		// culture that the Brigand could bear, and a [dunland] condition that the Brigand could bear
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hides, nodefense, sword, enraged));
+		scn.ShadowChooseCardBPFromSelection(axe);
+
+		// On the minion the event played, not the [dunland] Man who was there before
+		assertAttachedTo(axe, brigand);
+		assertTrue(scn.GetAttachedCards(savage).isEmpty());
+		// 1 for the Iron Axe
+		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, horsemen, club, hides, nodefense, sword, enraged);
+		// The copy of the War Club in hand was no part of the choice.
+		assertInZone(Zone.HAND, club2, sword2, enraged2);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithInitiativeAndOnePossessionInTheDiscardPileItIsPlayedWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horsemen = scn.GetShadowCard("horsemen");
+		var brigand = scn.GetShadowCard("brigand");
 		var chief = scn.GetShadowCard("chief");
 		var club = scn.GetShadowCard("club");
 		var hides = scn.GetShadowCard("hides");
 		scn.MoveCardsToHand(horsemen);
-		scn.MoveCardsToDiscard(band, chief, club, hides);
-
-		var card1 = scn.GetFreepsCard("card1");
-		var card2 = scn.GetFreepsCard("card2");
-		var card3 = scn.GetFreepsCard("card3");
-		var card4 = scn.GetFreepsCard("card4");
-		scn.MoveCardsToHand(card1, card2, card3, card4);
+		scn.MoveCardsToDiscard(brigand, chief, club, hides);
+		scn.MoveCardsToFreepsHand("guard1", "guard2", "guard3");
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.SetTwilight(2);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(Zone.DISCARD, band.getZone());
-		assertEquals(Zone.DISCARD, chief.getZone());
-		assertEquals(Zone.DISCARD, club.getZone());
-		assertEquals(Zone.DISCARD, hides.getZone());
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 2 set + 1 for Frodo + 2 for the shadow number of site 2: exactly what the event and the Brigand cost
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.ShadowHasInitiative());
+		assertInZone(Zone.DISCARD, brigand, chief, club, hides);
 		assertTrue(scn.ShadowPlayAvailable(horsemen));
+
 		scn.ShadowPlayCard(horsemen);
-		assertEquals(Zone.SHADOW_CHARACTERS, band.getZone());
-		assertEquals(Zone.DISCARD, chief.getZone());
-		assertEquals(Zone.DISCARD, club.getZone());
-		assertEquals(Zone.DISCARD, hides.getZone());
+
+		// 1 for the event + 2 for the Brigand + 2 for roaming at site 2 + 0 for the War Club
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+		assertAttachedTo(club, brigand);
+		assertInZone(Zone.DISCARD, horsemen, chief, hides);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0032: the text says \"you may play\" a possession; the game makes the Shadow player play one whenever one can be played")
+	public void ThePossessionMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horsemen = scn.GetShadowCard("horsemen");
+		var brigand = scn.GetShadowCard("brigand");
+		var axe = scn.GetShadowCard("axe");
+		var club = scn.GetShadowCard("club");
+		scn.MoveCardsToHand(horsemen);
+		scn.MoveCardsToDiscard(brigand, axe, club);
+		scn.MoveCardsToFreepsHand("guard1", "guard2", "guard3");
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowHasInitiative());
+		assertTrue(scn.ShadowPlayAvailable(horsemen));
+
+		scn.ShadowPlayCard(horsemen);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+		// 4 set + 1 for Frodo + 2 for site 2, less 1 for the event and 2 + 2 roaming for the Brigand
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, club));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		scn.ShadowDeclineChoosing();
+
+		assertInZone(Zone.DISCARD, axe, club);
+		assertTrue(scn.GetAttachedCards(brigand).isEmpty());
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWithNoNonUniqueDunlandMinionInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horsemen = scn.GetShadowCard("horsemen");
+		var warrior = scn.GetShadowCard("warrior");
+		var chief = scn.GetShadowCard("chief");
+		var troop = scn.GetShadowCard("troop");
+		var axe = scn.GetShadowCard("axe");
+		scn.MoveCardsToHand(horsemen, warrior);
+		// A unique [dunland] minion, a minion of another culture that is not unique, and a [dunland] possession
+		scn.MoveCardsToDiscard(chief, troop, axe);
+
+		scn.StartGame();
+		scn.SetTwilight(9);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 9 set + 1 for Frodo + 2 for the shadow number of site 2: enough for the event and any of the minions
+		assertEquals(12, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, chief, troop, axe);
+		// The [dunland] minion in hand can be played from there, and is no use to the event.
+		assertTrue(scn.ShadowPlayAvailable(warrior));
+		assertFalse(scn.ShadowPlayAvailable(horsemen));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0046: with the pool one short of the event and the minion together the event is offered, takes its (1) and plays nothing")
+	public void CannotBePlayedWhenThePoolIsOneShortOfTheEventAndTheMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horsemen = scn.GetShadowCard("horsemen");
+		var brigand = scn.GetShadowCard("brigand");
+		var brigand2 = scn.GetShadowCard("brigand2");
+		scn.MoveCardsToHand(horsemen, brigand2);
+		scn.MoveCardsToDiscard(brigand);
+
+		scn.StartGame();
+		scn.SetTwilight(1);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 1 set + 1 for Frodo + 2 for the shadow number of site 2. The event is 1 and the Brigand 2 + 2 roaming:
+		// 5 in all.
+		assertEquals(4, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, brigand);
+		// 4 pays for a Brigand played from hand, so it is the event's own cost that leaves the pool short.
+		assertTrue(scn.ShadowPlayAvailable(brigand2));
+		assertFalse(scn.ShadowPlayAvailable(horsemen));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
