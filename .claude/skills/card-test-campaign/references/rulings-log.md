@@ -305,3 +305,73 @@ about revealed cards: all three parts) and G-0014 (`FreepsResolveRuleFirst()` ch
 the required-responses ordering: "This will cause a great number of test changes downstream of this, but
 approved nonetheless").
 
+## Rulings of 2026-10-05, evening
+
+**Historical formats are left alone (F-0014).** "We won't touch these formats. There is one card that can cancel
+a RB skirmish, and there's no reason to alter the historical format." King block's settings stand.
+
+**X counts what was actually returned (F-0016).** One Dwarf in Moria (101_5) "should only count cards
+successfully returned to their owner's hands, not ones discarded after the fact, even if they were slated for
+return." The definition now remembers the items chosen and wounds one minion for each.
+
+**"From your support area" is a requirement where the card says it (Q-0022).** "If the card explicitly states
+'from the support area', then it clearly can't bounce." Pale Crown (101_39) does, so its ability is not offered
+once the Crown is on a Nazgul. Where a card says only "transfer this" (many fortifications), whether it may be
+moved again from its bearer "is completely unknown if that was intended or not" and is case by case: ask, card
+by card, and do not report it as a finding.
+
+**Being made to play the card found (Q-0022, rider).** That a "play ... from your draw deck or discard pile"
+card with something playable in the deck makes the player play it (the choice has a minimum of 1) "looks like a
+bug to me": CR 4.2 "draw deck" lets a player choose not to. It is the engine's `mustExist` that does it
+(F-0042).
+
+**A discard that follows from its bearer leaving play cannot be responded to (Q-0023).** "When we're responding
+to cards about to be discarded with the intent of preventing their discard, we can't usefully respond in the
+case of bearer death. Where would the prevented-discard card go afterwards? ... we won't respond to cards
+discarded on bearer death because there's no meaningful place to put them, usually." (V2 Haldir's wording was
+changed for this.)
+
+**Who is shown a reveal (Q-0024, Q-0025, F-0039).** A player who needs to see the card is shown it: the
+opponent of a card revealed from a draw deck by the printed word "reveal" (F-0021), everyone for an opened
+booster (F-0039: "it should reveal it to everyone just for fun"). The owner of a hand that cards are revealed
+from gets no pop-up ("which blocks play until dismissed"), but the game log must say which cards were revealed:
+"If the log isn't being populated that needs addressed." A card taken from a draw deck by type, where the text
+does not say "reveal", is revealed by the log line alone: "The log has links any player can click to see what
+card it's talking about."
+
+**"You may" is asked (Q-0021).** Their Eyes Fell Upon Him (101_41) drawing without asking "wasn't intentional,
+that's an oversight." Changed to an optional trigger. 68_50 and 13_75, built the same way, are for their own
+phases (F-0041).
+
+**Items on [shire] companions (Q-0026).** Bilbo's two items "can go on multiple": each goes on any [shire]
+companion, the same one or another.
+
+**Fixes agreed.** F-0033 (Gwaihir: "up to 2" is 0 to 2, "clearly an oversight"), F-0035 (The Dark Lord Advances:
+"a clearly broken implementation"), F-0036 (Out of Dark Waters' action "should be fixed to not be available all
+the time"), F-0038 (Pale Crown: "very nice find ... definitely good to fix and test for it"), F-0039 (92_29).
+F-0037 (the Hobbit Gandalfs sharing Saruman's flag) is confirmed and waits for the Hobbit sets: "Those hobbit
+cards should have made their own flag."
+
+**The sheets (2026-10-05, evening).** 58_57 Corsair Marauder: the sheet's row is the revision 1 that was
+released, and the definition "is an old candidate and needs altered to match the sheet." 67_7: helper text
+"should be removed from the game text (so it isn't interpreted as a secondary cumulative effect). In print those
+are italicized and ignored." Of the wording-only differences, 60_8 keeps its wording ("so players right-clicking
+on it see the rounding-down ruling"), 53_17 is revision 2 with revision 1 missing from the file, and "all other
+cards in this section should be altered to use the wording in the sheet." `PC_Cards.js` shows which revision's
+image is in use and is one more source. On revision markers: a later revision was copied from the one before,
+so a live block mislabelled with the earlier number is the common fault; look in the comments for the old
+revision before concluding anything.
+
+**"Here" on a site is the site's title (Q-0027).** "Yes, if the Farmer is out on site 1, you should get double
+the benefit, but only on site 1. 'here' is supposed to be a synonym for '[title]'." An ally who has a site's
+game text (Hobbit Farmer, Uruviel, Silinde) therefore makes the site's "here" offer too, while the fellowship
+is at that site. Bag End Study (101_57) was right; Lorien Throne Room (101_61) required the site itself and is
+corrected to go by its name (F-0043).
+
+**"One" stands for the noun before it (Q-0028).** On Rivendell Gateway (101_59), "the intent is (when game text
+is at such a premium as it is for sites) 'one' is a stand-in for 'an unbound companion'."
+
+**"May draw a card for each" is one offer (Q-0029).** "It's better UX for it to be one big batch or not. The
+vast, vast majority of the time, the player will want to draw, and they will not be amused needing to hit yes
+for every individual card draw." The offer is left as it is when there is nothing to draw.
+
