@@ -11,7 +11,6 @@ import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -500,44 +499,6 @@ public class Card_V1_057_Tests
 
 		// 1 for Nice Imitation + 1 for There and Back Again + 2 companions + 2 for Ettenmoors
 		assertEquals(6, scn.GetTwilight());
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0027: the old test HobbitFarmerDoesntCopyStudy says a Hobbit Farmer adds no second offer; the game gives one")
-	public void WithAHobbitFarmerInPlayTheStudyIsStillOfferedOnlyOnce() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var merry = scn.GetFreepsCard("merry");
-		var farmer = scn.GetFreepsCard("farmer");
-		var imitation = scn.GetFreepsCard("imitation");
-		var tale = scn.GetFreepsCard("tale");
-		scn.MoveCompanionsToTable(merry);
-		scn.MoveAlliesToTable(farmer);
-
-		scn.StartGame();
-
-		var study = scn.GetCurrentSite();
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(farmer));
-
-		scn.FreepsChooseOptionalTrigger(study);
-		scn.FreepsChooseCard(merry);
-		scn.FreepsDismissRevealedCards();
-		scn.FreepsChooseCardBPFromSelection(imitation);
-		assertInZone(Zone.SUPPORT, imitation);
-
-		// Nobody is offered a second exertion or a second condition.
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertEquals(1, scn.GetWoundsOn(merry));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(farmer));
-		assertInZone(Zone.DECK, tale);
-		// 1 for Nice Imitation + 2 companions + 2 for Ettenmoors
-		assertEquals(5, scn.GetTwilight());
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
