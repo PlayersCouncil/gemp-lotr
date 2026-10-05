@@ -87,7 +87,8 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(arwen);
 
 		scn.StartGame();
 
@@ -115,7 +116,8 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(arwen);
 
 		var marksman = scn.GetShadowCard("marksman");
 		scn.MoveMinionsToTable(marksman);

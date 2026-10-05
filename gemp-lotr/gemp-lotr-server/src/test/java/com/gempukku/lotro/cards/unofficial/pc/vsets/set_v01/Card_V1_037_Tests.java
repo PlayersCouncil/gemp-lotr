@@ -99,7 +99,7 @@ public class Card_V1_037_Tests
 		PhysicalCardImpl blade = scn.GetShadowCard("blade");
 		PhysicalCardImpl ring = scn.GetShadowCard("ring");
 		scn.MoveCardsToHand(fell, fell2);
-		scn.MoveCompanionsToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 		scn.MoveCardsToDiscard(ring);
 		scn.MoveCardsToTopOfDeck(blade);
 

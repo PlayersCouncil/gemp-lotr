@@ -105,7 +105,8 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl shireart = scn.GetFreepsCard("shireart");
 
 		scn.MoveCardsToSupportArea(library);
-		scn.MoveCompanionsToTable(gandalf, aragorn, gimli, galadriel);
+		scn.MoveCompanionsToTable(gandalf, aragorn, gimli);
+		scn.MoveAlliesToTable(galadriel);
 		scn.MoveCardsToHand(dwarftale, elftale, gondortale, shiretale, dwarfart, elfart, gandalfart, gondorart, shireart);
 
 		PhysicalCardImpl savage1 = scn.GetShadowCard("savage1");
@@ -251,7 +252,8 @@ public class Card_V1_011_Tests
 
 		scn.MoveCardsToSupportArea(library);
 
-		scn.MoveCompanionsToTable(gandalf, aragorn, gimli, galadriel);
+		scn.MoveCompanionsToTable(gandalf, aragorn, gimli);
+		scn.MoveAlliesToTable(galadriel);
 
 		PhysicalCardImpl savage1 = scn.GetShadowCard("savage1");
 		PhysicalCardImpl savage2 = scn.GetShadowCard("savage2");

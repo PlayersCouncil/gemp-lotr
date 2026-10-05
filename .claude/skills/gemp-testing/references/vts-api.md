@@ -98,8 +98,10 @@ While the ability to programmatically execute games is a boon to testing efforts
 
 - `void RemoveCardZone(PhysicalCardImpl card)` — Removes a physical card's current zone.
 - `void MoveCardToZone(PhysicalCardImpl card, Zone zone)` — Manually moves a given card to a given zone.
-- `void MoveCompanionsToTable(String...names)`
-- `void MoveCompanionsToTable(PhysicalCardImpl...cards)`
+- `void MoveCompanionsToTable(String...names)` — Puts the Free Peoples player's named companions into play, without playing them.
+- `void MoveCompanionsToTable(PhysicalCardImpl...cards)` — Puts companions into play, where companions go, without playing them.
+- `void MoveAlliesToTable(String...names)` — Puts the Free Peoples player's named allies into play, without playing them.
+- `void MoveAlliesToTable(PhysicalCardImpl...cards)` — Puts allies into play, in the support area where a legally played ally goes, without playing them.
 - `void MoveMinionsToTable(String...names)`
 - `void MoveMinionsToTable(PhysicalCardImpl...cards)`
 - `void MoveFreepsCardsToSupportArea(String...names)`
@@ -477,4 +479,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-369 entries, 255 of them with no description in the source.
+371 entries, 253 of them with no description in the source.

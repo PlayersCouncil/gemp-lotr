@@ -122,7 +122,7 @@ public class Card_01_040_Tests
 		var silinde = scn.GetFreepsCard("silinde");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCardsToSupportArea(elrond, silinde, thrarin, orophin);
+		scn.MoveAlliesToTable(elrond, silinde, thrarin, orophin);
 
 		scn.AddWoundsToChar(elrond, 2);
 		scn.AddWoundsToChar(silinde, 1);
@@ -153,7 +153,7 @@ public class Card_01_040_Tests
 
 		var elrond = scn.GetFreepsCard("elrond");
 		var silinde = scn.GetFreepsCard("silinde");
-		scn.MoveCardsToSupportArea(elrond, silinde);
+		scn.MoveAlliesToTable(elrond, silinde);
 
 		scn.StartGame();
 
@@ -178,7 +178,7 @@ public class Card_01_040_Tests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCardsToSupportArea(elrond);
+		scn.MoveAlliesToTable(elrond);
 
 		scn.StartGame();
 

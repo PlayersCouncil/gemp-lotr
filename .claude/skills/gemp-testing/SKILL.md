@@ -40,7 +40,7 @@ there.
 var scn = GetScenario();                       // 1. a table, from this file's Get...Scenario() method
 var elrond = scn.GetFreepsCard("elrond");      // 2. the cards, by the names the scenario gave them
 var runner = scn.GetShadowCard("runner");
-scn.MoveCompanionsToTable(elrond);             // 3. arrange the board by cheating
+scn.MoveAlliesToTable(elrond);                 // 3. arrange the board by cheating
 scn.StartGame();                               // 4. fellowship phase of turn 1, at site 1
 scn.MoveMinionsToTable(runner);                //    (minions go down after StartGame or SkipToSite)
 scn.SkipToPhase(Phase.MANEUVER);               // 5. get to the moment under test
@@ -122,8 +122,9 @@ after other skirmishes, call `FreepsResolveSkirmish(companion)`.
 **Exerting is not wounding.** A character with one vitality left cannot exert and so cannot pay an exertion cost,
 but can still be wounded.
 
-**Allies live in the support area.** `MoveCompanionsToTable` puts cards where companions go. An ally played
-legally goes to the support area, so cheat allies in with `MoveCardsToSupportArea`.
+**Allies live in the support area.** `MoveAlliesToTable` puts allies there, where an ally played legally goes.
+`MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
+does if handed anything but an ally.
 
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
 Shadow player's decision is already pending does not make a minion playable. Set it during the fellowship phase,

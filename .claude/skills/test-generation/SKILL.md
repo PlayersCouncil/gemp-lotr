@@ -89,7 +89,7 @@ public class Card_01_040_Tests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCardsToSupportArea(elrond);
+		scn.MoveAlliesToTable(elrond);
 
 		scn.StartGame();
 

@@ -71,7 +71,7 @@ public class Card_V1_066_Tests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
-		scn.MoveCompanionsToTable(card);
+		scn.MoveMinionsToTable(card);
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCardsToDiscard(card);
 		scn.MoveCardsToTopOfDeck(card);

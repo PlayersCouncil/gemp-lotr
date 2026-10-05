@@ -91,7 +91,8 @@ public class Card_01_060_Tests
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.MoveCardsToHand(elrond, pathfinder);
-		scn.MoveCompanionsToTable(silinde, arwen);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
 
@@ -114,7 +115,8 @@ public class Card_01_060_Tests
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.MoveCardsToHand(elrond, pathfinder);
-		scn.MoveCompanionsToTable(silinde, arwen);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
 
@@ -132,7 +134,8 @@ public class Card_01_060_Tests
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.MoveCardsToHand(elrond, pathfinder);
-		scn.MoveCompanionsToTable(silinde, arwen);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
 
@@ -169,7 +172,8 @@ public class Card_01_060_Tests
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.MoveCardsToHand(elrond, pathfinder);
-		scn.MoveCompanionsToTable(silinde, arwen);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
 

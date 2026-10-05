@@ -111,7 +111,7 @@ public class Card_03_017_ErrataTests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2F");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -138,7 +138,7 @@ public class Card_03_017_ErrataTests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2T");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -164,7 +164,7 @@ public class Card_03_017_ErrataTests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2K");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -193,7 +193,7 @@ public class Card_03_017_ErrataTests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var freepsSite2 = scn.GetFreepsSite("site2");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowForest = scn.GetShadowSite("site9");
 
@@ -215,7 +215,7 @@ public class Card_03_017_ErrataTests
 		var frodo = scn.GetRingBearer();
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2F");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -238,7 +238,7 @@ public class Card_03_017_ErrataTests
 		var scn = GetFellowshipScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		scn.AddWoundsToChar(galadriel, 1);
 
@@ -255,7 +255,8 @@ public class Card_03_017_ErrataTests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.MoveCompanionsToTable(galadriel, celeborn, greenleaf);
+		scn.MoveCompanionsToTable(greenleaf);
+		scn.MoveAlliesToTable(galadriel, celeborn);
 
 		scn.AddWoundsToChar(galadriel, 1);
 		scn.AddWoundsToChar(celeborn, 1);

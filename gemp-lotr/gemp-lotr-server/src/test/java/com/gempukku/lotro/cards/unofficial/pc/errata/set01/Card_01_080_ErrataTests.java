@@ -88,7 +88,7 @@ public class Card_01_080_ErrataTests
 		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
 		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
 		scn.MoveCardsToHand(chaff1);
-		scn.MoveCompanionsToTable(ottar);
+		scn.MoveAlliesToTable(ottar);
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(chaff2);
@@ -115,7 +115,7 @@ public class Card_01_080_ErrataTests
 		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
 		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
 		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		scn.MoveCompanionsToTable(ottar);
+		scn.MoveAlliesToTable(ottar);
 
 		scn.StartGame();
 

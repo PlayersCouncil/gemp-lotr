@@ -1,7 +1,9 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,11 +49,42 @@ public interface ZoneManipulation extends TableBase {
 	}
 
 
+	/**
+	 * Puts the Free Peoples player's named companions into play, without playing them.
+	 * @param names The names the companions were given when the table was set up.
+	 */
 	default void MoveCompanionsToTable(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCompanionsToTable(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts companions into play, where companions go, without playing them.  Only companions: an ally put here
+	 * would sit where no legally played ally ever does, so allies have {@link #MoveAlliesToTable}.
+	 * @param cards The companions to put into play.
+	 */
 	default void MoveCompanionsToTable(PhysicalCardImpl...cards) {
-		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.FREE_CHARACTERS));
+		Arrays.stream(cards).forEach(card -> {
+			Verify(card.getBlueprint().getCardType() == CardType.COMPANION,
+					GameUtils.getFullName(card) + " is not a companion.  Allies go to the table with MoveAlliesToTable.");
+			MoveCardToZone(card, Zone.FREE_CHARACTERS);
+		});
+	}
+	/**
+	 * Puts the Free Peoples player's named allies into play, without playing them.
+	 * @param names The names the allies were given when the table was set up.
+	 */
+	default void MoveAlliesToTable(String...names) {
+		Arrays.stream(names).forEach(name -> MoveAlliesToTable(GetFreepsCard(name)));
+	}
+	/**
+	 * Puts allies into play, in the support area where a legally played ally goes, without playing them.
+	 * @param cards The allies to put into play.
+	 */
+	default void MoveAlliesToTable(PhysicalCardImpl...cards) {
+		Arrays.stream(cards).forEach(card -> {
+			Verify(card.getBlueprint().getCardType() == CardType.ALLY,
+					GameUtils.getFullName(card) + " is not an ally.  Companions go to the table with MoveCompanionsToTable.");
+			MoveCardToZone(card, Zone.SUPPORT);
+		});
 	}
 	default void MoveMinionsToTable(String...names) {
 		Arrays.stream(names).forEach(name -> MoveMinionsToTable(GetShadowCard(name)));

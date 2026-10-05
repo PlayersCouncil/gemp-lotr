@@ -90,7 +90,7 @@ public class Card_01_172_ErrataTests
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(6, scn.GetFreepsArcheryTotal());
-		scn.MoveCompanionsToTable(archer);
+		scn.MoveMinionsToTable(archer);
 		// -5 for the 5 archers, the runner doesn't count
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}

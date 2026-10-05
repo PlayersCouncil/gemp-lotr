@@ -78,7 +78,7 @@ public class Card_V1_053_Tests
 		scn.MoveCompanionsToTable(pippin);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.MoveCompanionsToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 
@@ -114,7 +114,7 @@ public class Card_V1_053_Tests
 		scn.MoveCompanionsToTable(pippin, sam);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.MoveCompanionsToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 

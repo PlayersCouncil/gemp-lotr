@@ -113,7 +113,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2F");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -142,7 +142,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2T");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -171,7 +171,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2K");
-		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveAlliesToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -234,7 +234,8 @@ public class Card_03_017_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.MoveCompanionsToTable(galadriel, celeborn, greenleaf);
+		scn.MoveCompanionsToTable(greenleaf);
+		scn.MoveAlliesToTable(galadriel, celeborn);
 
 		scn.AddWoundsToChar(galadriel, 1);
 		scn.AddWoundsToChar(celeborn, 1);

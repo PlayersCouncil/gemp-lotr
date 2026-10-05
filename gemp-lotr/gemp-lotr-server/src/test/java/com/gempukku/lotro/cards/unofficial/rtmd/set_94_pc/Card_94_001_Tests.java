@@ -63,7 +63,7 @@ public class Card_94_001_Tests {
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var backstabber = scn.GetShadowCard("backstabber");
 
-		scn.MoveCompanionsToTable(celeborn);
+		scn.MoveAlliesToTable(celeborn);
 		scn.StartGame();
 		scn.MoveMinionsToTable(backstabber);
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -96,7 +96,7 @@ public class Card_94_001_Tests {
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var backstabber = scn.GetShadowCard("backstabber");
 
-		scn.MoveCompanionsToTable(celeborn);
+		scn.MoveAlliesToTable(celeborn);
 		scn.StartGame();
 		scn.MoveMinionsToTable(backstabber);
 
@@ -116,7 +116,7 @@ public class Card_94_001_Tests {
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var backstabber = scn.GetShadowCard("backstabber");
 
-		scn.MoveCompanionsToTable(celeborn);
+		scn.MoveAlliesToTable(celeborn);
 		scn.StartGame();
 		scn.MoveMinionsToTable(backstabber);
 		scn.SkipToPhase(Phase.MANEUVER);

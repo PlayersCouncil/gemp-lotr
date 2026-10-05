@@ -82,7 +82,8 @@ public class Card_V1_061_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionsToTable(aragorn, orophin);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(orophin);
 
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveCardsToHand(runner);
@@ -127,7 +128,8 @@ public class Card_V1_061_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionsToTable(aragorn, gimli, orophin);
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(orophin);
 
 		var savage = scn.GetShadowCard("savage");
 		var oneOfYou = scn.GetShadowCard("oneOfYou");
@@ -170,7 +172,8 @@ public class Card_V1_061_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var uruviel = scn.GetFreepsCard("uruviel");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.MoveCompanionsToTable(aragorn, uruviel);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(uruviel);
 		scn.MoveCardsToHand(pathfinder);
 
 		var runner = scn.GetShadowCard("runner");

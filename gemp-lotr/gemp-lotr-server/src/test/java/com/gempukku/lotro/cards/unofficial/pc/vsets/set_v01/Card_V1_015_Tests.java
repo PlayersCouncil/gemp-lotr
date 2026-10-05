@@ -103,7 +103,8 @@ public class Card_V1_015_Tests
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.MoveCompanionsToTable(gwaihir, aragorn);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(gwaihir);
 		scn.MoveCardsToHand(pathfinder);
 
 		scn.StartGame();
@@ -132,7 +133,7 @@ public class Card_V1_015_Tests
 		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
-		scn.MoveCompanionsToTable(gwaihir);
+		scn.MoveAlliesToTable(gwaihir);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");
@@ -145,7 +146,7 @@ public class Card_V1_015_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertTrue(scn.FreepsActionAvailable(gwaihir));
-		assertEquals(Zone.FREE_CHARACTERS, gwaihir.getZone());
+		assertEquals(Zone.SUPPORT, gwaihir.getZone());
 		assertEquals(Zone.DISCARD, runner.getZone());
 		assertEquals(Zone.DISCARD, spear.getZone());
 		assertEquals(Zone.DISCARD, troll.getZone());

@@ -131,7 +131,7 @@ public class Card_V2_053_Tests
 		var albert = scn.GetFreepsCard("albert");
 		var valor = scn.GetFreepsCard("valor");
 
-		scn.MoveCompanionsToTable(albert);
+		scn.MoveAlliesToTable(albert);
 		scn.MoveCardsToHand(valor);
 
 		var freeps1 = scn.GetFreepsCard("freeps1");

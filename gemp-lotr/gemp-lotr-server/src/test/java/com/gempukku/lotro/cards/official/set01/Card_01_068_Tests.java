@@ -69,7 +69,8 @@ public class Card_01_068_Tests
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionsToTable(legolas, galadriel);
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveAlliesToTable(galadriel);
 		scn.MoveCardsToHand(arrows);
 
 		scn.StartGame();
