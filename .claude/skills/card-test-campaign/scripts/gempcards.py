@@ -165,7 +165,8 @@ class CardDef:
         return default
 
     def without_effects(self) -> str:
-        """The definition with its `effects` taken out: what the card says, without how it was implemented."""
+        """The definition with its `effects` and `target` taken out: what the card says, without how it was
+        implemented.  (`target` is how "Bearer must be..." is implemented.)"""
         out, skipping = [], False
         for depth, line in self._top_level():
             if depth == 1:
@@ -173,8 +174,9 @@ class CardDef:
                     skipping = False
                     if line.strip().rstrip(",") in ("}", "]"):
                         continue
-                if re.match(r"^\s*effects\s*:", line):
-                    out.append(re.match(r"^\s*", line).group(0) + "effects: <withheld>")
+                held = re.match(r"^(\s*)(effects|target)\s*:", line)
+                if held:
+                    out.append(held.group(1) + held.group(2) + ": <withheld>")
                     skipping = line.rstrip().endswith(("{", "["))
                     continue
             if skipping:

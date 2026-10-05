@@ -26,6 +26,7 @@ CORE = {
     "PlayOn": {"F"},
     "Activated": {"+", "-"},
     "Event": {"+", "-"},
+    "Effect": {"+"},
     "Trigger": {"+", "-"},
     "Response": {"+", "-"},
     "Modifier": {"+", "-"},
@@ -41,6 +42,7 @@ PLAYED = {"companion", "ally", "minion", "possession", "artifact", "condition", 
 CODES = {"+", "-", "C", "C-", "F", "D", "L", "O", "S", "R", "B", "Z", "K"}
 
 LEDGER_LINE = re.compile(r"^\s*([A-Z]\d+)\s+([A-Za-z]+)\s+\[([^\]]*)\]\s*(.*?)\s*$")
+WAIVER_LINE = re.compile(r"^\s+no\s+(C-|[+\-CFDLOSRBZK])\s*:\s*\S")
 CLAIM_LINE = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s*$")
 TAG_LINE = re.compile(r"^\s*//\s*((?:[A-Z]\d+\s*:\s*[^;]+;?\s*)+)$")
 METHOD = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\(([^)]*)\)")
@@ -157,12 +159,15 @@ def parse_ledger(path: Path):
         m = LEDGER_LINE.match(line)
         c = CLAIM_LINE.match(line)
         if m:
-            clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i]
+            clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i, set()]
             claims[m.group(1)] = {}
             last, in_header = m.group(1), False
         elif c and last is not None and not in_header:
             for check in c.group(1).split():
                 claims[last].setdefault(check, []).append(c.group(2))
+        elif WAIVER_LINE.match(line) and last is not None and not in_header:
+            # "no -: why": a check the clause's type asks for and this clause cannot have.
+            clauses[last][4].add(WAIVER_LINE.match(line).group(1))
         elif re.match(r"^\s*(LEDGER|Sources|Findings|Formats|Notes)\b", line):
             in_header = True
         elif not line.strip():
@@ -254,14 +259,19 @@ def lint_file(path: Path):
     else:
         if not clauses:
             add("error", "ledger", None, "the ledger has no clause lines (ID Type [checks] text)")
-        for cid, (ctype, codes, text, line) in clauses.items():
+        for cid, (ctype, codes, text, line, waived) in clauses.items():
             if ctype not in CORE:
                 add("error", "ledger", None, "%s: unknown clause type '%s'" % (cid, ctype))
                 continue
             bad = codes - CODES
             if bad:
                 add("error", "ledger", None, "%s: unknown check %s" % (cid, " ".join(sorted(bad))))
-            missing = CORE[ctype] - codes
+            for check in sorted(waived):
+                if check in codes:
+                    add("error", "ledger", None, "%s: lists %s and also says it has none" % (cid, check))
+                else:
+                    add("warning", "waived", None, "%s: no %s, with a reason given in the ledger (for the reviewer to read)" % (cid, check))
+            missing = CORE[ctype] - codes - waived
             if missing:
                 add("error", "ledger", None, "%s: a %s clause must list at least %s" % (cid, ctype, " ".join(sorted(CORE[ctype]))))
         if card is not None and (card.field("type", "") or "").lower() in PLAYED and not any(c[0] == "Play" for c in clauses.values()):
@@ -281,7 +291,11 @@ def lint_file(path: Path):
                 claimed_tests.add(name)
                 if name not in test_names:
                     add("error", "claim", None, "%s: the ledger gives check %s to %s, which is not a test in the file" % (cid, check, name))
-    for cid, (ctype, codes, text, line) in clauses.items():
+    parked_tests = {m[0] for m in tests if any(t.startswith("@Ignore") for _, t in m[3])}
+    for cid, (ctype, codes, text, line, waived) in clauses.items():
+        for check, names in sorted(claims.get(cid, {}).items()):
+            if names and all(n in parked_tests for n in names):
+                add("warning", "parked-only", None, "%s: %s is claimed only by a parked test, so nothing exercises it at present" % (cid, check))
         missing = (codes & CODES) - set(claims.get(cid, {}))
         if missing:
             add("error", "coverage", None, "%s: no test claims %s" % (cid, " ".join(sorted(missing))))

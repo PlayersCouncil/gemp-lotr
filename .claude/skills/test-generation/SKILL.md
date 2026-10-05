@@ -132,9 +132,10 @@ P1 Play       [+]          Played from hand for (4), to the support area.
 C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
      + - B  ->  CannotBePlayedUntilGandalfIsSpotted
      + B    ->  CannotBePlayedUntilAnElfIsSpotted
-C2 Trigger    [+ - F R]    At the start of each of your turns, heal every ally whose home is site 3.
+C2 Trigger    [+ F R]      At the start of each of your turns, heal every ally whose home is site 3.
      + F  ->  StartOfTurnHealsEveryAllyWhoseHomeIsSite3AndNoOthers
-     - R  ->  HealsAtTheStartOfItsOwnersTurnsAndNotTheOpponents
+     R    ->  HealsAtTheStartOfItsOwnersTurnsAndNotTheOpponents
+     no -: the only turns that are not yours are ones on which this card is not active
 C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
      + - C C-  ->  FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted
 
@@ -153,7 +154,9 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 - **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
   claim checks of several clauses and a check may be claimed by several tests. Every check a clause lists must be
   claimed, and every behaviour test in the file must claim something. A test that claims nothing is either
-  missing from the ledger or testing nothing the card says.
+  missing from the ledger or testing nothing the card says. A test parked with `@Ignore` claims the checks it
+  would show if the reading it asserts is right; the conformance check warns where a parked test is a check's
+  only claimant, because that check is not being exercised.
 - `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
   (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
   all why a check the wording seems to call for was left off. Each may run onto following lines. Put `Sources:`
@@ -170,17 +173,17 @@ then claimed by a test.
 | Check | Shows that |
 |---|---|
 | `+` | With everything the text asks for in place, the thing happens. State is read before and after. |
-| `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. |
+| `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
 | `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. |
-| `D` | The effect is still in force just before the boundary the text names and gone just after. |
+| `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish, not in an assignment phase where nobody was assigned. |
 | `L` | A limit holds: it works up to the limit and is refused or capped beyond it. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
-| `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. |
+| `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts, unless X is a number of exertions (see the rulings log: X may be zero everywhere but "exert X times"). Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
 | `R` | "Each time" happens a second time. |
 | `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
-| `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. |
+| `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
 | `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
@@ -191,7 +194,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "limit", "once per" → `L`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing
-- "for each", "X" → `S`
+- "for each", "X" → `S` (and for an X, the zero case)
 - "each time" → `R`
 - "or", "choose one" → `B`
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
@@ -209,6 +212,7 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |
 | `Activated` | "Phase: cost to effect." on a card in play | `+ -` | For `-`, prefer in this order: a requirement in the text unmet; the cost unpayable; a phase the text does not name. |
 | `Event` | the text of an event card | `+ -` | `+` includes the event leaving the hand. `-` as for `Activated`. |
+| `Effect` | a further sentence of an event or special ability, with no phase, requirement or cost of its own ("Then…", "If you do, …", a second sentence) | `+` | Its `-` is the first sentence's. It lists whatever else its own wording calls for. |
 | `Trigger` | "Each time…", "When…", "At the start of…" | `+ -` | `-` is the nearest event that should not set it off. |
 | `Response` | "Response: If…" | `+ -` | `+` shows the response offered and its effect; for a prevention, that the prevented thing did not happen. |
 | `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. |
@@ -221,6 +225,17 @@ The type says what kind of statement the clause is, and sets the checks it must 
 
 A sentence that is several of these at once takes the type of its main verb and lists the checks of all of them.
 
+**A check the type asks for and the clause cannot have** is written under the clause, in place of a claim, as
+`no <check>: <why>`:
+
+```
+C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally whose home is site 3.
+     no -: the only turns that are not yours are ones on which this card is not active
+```
+
+The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
+be shown at all, not for one that is awkward to arrange.
+
 ### The stats test
 
 `<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
@@ -230,13 +245,19 @@ expected values are the sheet's; `reconcile.py <id>` shows any field where the s
 (see "When the sheet and the definition disagree" above). Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 
+On a PC card the header comment already in the file often describes an earlier version of the card, above
+assertions that are current. Rewrite it from the packet; never keep it on trust. The V-set and errata sheets have
+no resistance column, so resistance is asserted at the definition's value.
+
 ## Rules every test follows
 
 **Its own table.** A test's first statement gets a table from a `Get...Scenario()` method. Tests share nothing.
 
 **Arrange by cheating, act by playing.** Put the board where it needs to be with the rig's cheats, then do the
 thing under test the way a player would. Never cheat the thing under test, and never play out something that is
-only set-up.
+only set-up. Where a clause counts something ("strength +2 while he bears 3 items"), changing the counted thing
+is part of the act: do it by legal play in one test, which shows the modifier switching on as the count is
+reached, and cheat it in the others.
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
 ability exerts, read 0 wounds, act, read 1.
@@ -268,7 +289,8 @@ Stages that build on each other belong in one test. Two tests that would pass or
 definition read. Prefer cards with no text.
 
 **Only the rig.** No `scn.game()`, `scn.gameState()`, `getModifiersQuerying`, raw `FreepsDecided("0")`, decision
-parameters, reflection, sleeping or randomness. `ApplyAdHocModifier` is allowed for arranging a board (a strength
+parameters, reflection, sleeping or randomness. (The rig's own getters for a decision's bounds,
+`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, are the rig and are fine.) `ApplyAdHocModifier` is allowed for arranging a board (a strength
 the test needs, a keyword). Any other ad hoc effect needs its reason on the same line as a `// lint-ok: ...`
 comment, which the reviewer reads.
 

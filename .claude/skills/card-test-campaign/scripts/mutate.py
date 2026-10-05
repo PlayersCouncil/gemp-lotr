@@ -58,9 +58,47 @@ def split_terms(text: str) -> list:
     return out
 
 
+_culture_words = None
+
+
+def words_of_one_culture(culture: str) -> set:
+    """Races and titles every card of which is of the given culture.  Narrowing "dwarf" to [dwarven] makes no
+    card behave differently, because there is no Dwarf of another culture to leave out."""
+    global _culture_words
+    if _culture_words is None:
+        _culture_words = {}
+        for card in g.card_index().values():
+            c = (card.field("culture", "") or "").strip().lower()
+            for word in (card.field("race", ""), card.field("title", "")):
+                word = re.sub(r"[^a-z]", "", (word or "").lower())
+                if word:
+                    _culture_words.setdefault(word, set()).add(c)
+    return {w for w, cultures in _culture_words.items() if cultures == {culture}}
+
+
+def repeated_keys(lines: list) -> list:
+    """(line index, key, earlier line index) wherever one block gives the same key twice.  The later one is the
+    one the game reads, so a mistake made in the earlier one cannot be noticed."""
+    out, stack = [], [{}]
+    for i, line in enumerate(lines):
+        m = re.match(r"^\s*([A-Za-z]\w*)\s*:", line)
+        if m:
+            if m.group(1) in stack[-1]:
+                out.append((i, m.group(1), stack[-1][m.group(1)]))
+            stack[-1][m.group(1)] = i
+        change = g._depth_change(line)
+        for _ in range(max(0, change)):
+            stack.append({})
+        for _ in range(max(0, -change)):
+            if len(stack) > 1:
+                stack.pop()
+    return out
+
+
 def mistakes(lines: list, culture: str = "") -> list:
     """Every mistake worth making, as (line index, description, the new lines for the whole card)."""
     out = []
+    one_culture = words_of_one_culture(culture) if culture else set()
 
     def add(i, what, new_lines):
         out.append((i, what, new_lines))
@@ -124,10 +162,20 @@ def mistakes(lines: list, culture: str = "") -> list:
             # "companion" where the text says neither.
             low = inner.lower()
             plain = not any(w in low for w in ("self", "bearer", "memory(", "storedculture", "choose(")) and m.group(2) != "where"
-            if plain and culture and "culture(" not in low:
+            named = {re.sub(r"[^a-z]", "", w) for w in re.split(r"[,()]", low)}
+            if plain and culture and "culture(" not in low and not (named & one_culture):
                 add(i, "%s: narrowed to culture(%s): %s" % (m.group(2), culture, value), rewritten(inner + ",culture(%s)" % culture))
             if plain and not any(w in low for w in KIND_WORDS):
                 add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
+            # A number inside the filter, as in HasAttachedCount(2,item) or maxTwilight(3): one more and one fewer.
+            for n in re.finditer(r"(?<![\w-])(\d+)(?![\w-])", value):
+                for other in (int(n.group(1)) + 1, int(n.group(1)) - 1):
+                    if other < 0:
+                        continue
+                    new_value = value[:n.start(1)] + str(other) + value[n.end(1):]
+                    new = lines[:]
+                    new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), new_value)
+                    add(i, "%s: %s becomes %s" % (m.group(2), value, new_value), new)
         m = DEFAULTED.match(line)
         if m and not stripped.endswith("{") and not stripped.endswith("["):
             add(i, "%s removed, so its default applies" % m.group(2), lines[:i] + lines[i + 1:])
@@ -210,6 +258,10 @@ def main(argv):
             raise SystemExit("'%s' is not in the definition of %s." % (old_text, card_id))
         todo = [(card.raw[:card.raw.index(old_text)].count("\n"), "'%s' becomes '%s'" % (old_text, new_text),
                  card.raw.replace(old_text, new_text, 1).split("\n"))]
+    repeats = repeated_keys(card_lines)
+    for i, key, earlier in repeats:
+        print("note: line %d gives '%s' again in the same block as line %d; the game reads the later one, so a "
+              "mistake made in the earlier one cannot be noticed" % (card.line + i, key, card.line + earlier))
     if "--show" in argv:
         for i, what, _ in todo:
             print("line %d: %s" % (card.line + i, what))

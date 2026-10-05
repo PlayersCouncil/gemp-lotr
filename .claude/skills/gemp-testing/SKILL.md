@@ -162,9 +162,28 @@ fellowship moves, and the test is in the Shadow phase at site 9.
 phase arrives. Make the assertions that matter before the event that ends the game.
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
-triggers, but it does not assign archery wounds or answer optional triggers. An archer on the table stops it, or
-kills the minion the test was about. Leave archers and cards with optional triggers out of a scenario unless they
-are the point, or put them down after skipping.
+triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
+was about. Leave archers out of a scenario unless they are the point, or put them down after skipping.
+
+**`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
+still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
+answered by the skipper's next pass, which declines it. The test arrives in the new phase with nothing pending
+and nothing done. To test such a trigger, pass the phase yourself with `FreepsPassCurrentPhaseAction()` and
+answer the trigger; keep cards with optional triggers out of other tests' scenarios, or put them down after
+skipping.
+
+**The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
+Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
+filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
+Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish.
+
+**When a wound kills and something answers the same wound.** The owner of a required trigger that answers the
+wound gets a "Required responses" decision listing "Character death" and the trigger.
+`FreepsResolveRuleFirst()` takes the rule first; `FreepsResolveActionOrder(text)` picks by the text of the entry.
+There is no Shadow twin of either yet (rig request G-0005).
+
+**An ally in a skirmish.** An ally can be assigned at its home site (CR 4.2 "ally"). On `FellowshipSites`, Elrond
+(1_40, home site 3) can skirmish once the fellowship has moved to site 3: `SkipToSite(2)` and then a move.
 
 **Searching a deck shows the deck first.** An effect that looks through a hidden zone shows the cards before it
 asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choose with
@@ -192,6 +211,27 @@ into a scenario; a name is not evidence of what a card does.
 | A weak companion | Dwarf Guard | 1_7 | Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in |
 | An archer, when archery is the point | Legolas, Greenleaf | 1_50 | Strength 6, vitality 3; Archer, with an archery ability |
 | Damage +1, when damage is the point | Gimli, Son of Glóin | 1_13 | Strength 6, vitality 3; Damage +1, with a skirmish ability |
+| A minion with damage +1 and nothing else | Uruk-hai Raiding Party | 1_158 | Strength 9, vitality 3, cost 4, site 5; Damage +1 is its whole text |
+| A Shadow archer and nothing else | Goblin Marksman | 1_176 | Strength 7, vitality 1, cost 3, site 4; Archer is its whole text |
+| An item that changes no number | Dwarven Armor | 1_8 | Possession, cost 0, bearer must be a Dwarf; bearer may not be overwhelmed unless strength is tripled |
+| A Shadow card a companion bears | Spider Poison | 8_28 | Possession; its bearer must exert each time it is assigned to a skirmish, and nothing else |
+
+The sites of `FellowshipSites`, for tests that turn on terrain or on where the fellowship is:
+
+| Site | Card | Shadow number | Terrain and text |
+|---|---|---|---|
+| 1 | Bag End 1_319 | 0 | Fellowship: exert a Hobbit to play The Gaffer from the draw deck |
+| 2 | Ettenmoors 1_331 | 2 | Plains. Skirmish: exert your companion or minion to make it stronger |
+| 3 | Rivendell Valley 1_341 | 0 | Sanctuary. Fellowship: play an Elf to draw a card |
+| 4 | Balin's Tomb 1_343 | 3 | Underground. Maneuver: discard your tale to heal |
+| 5 | The Bridge of Khazad-dûm 1_349 | 6 | Underground. Shadow: play The Balrog |
+| 6 | Galadriel's Glade 1_351 | 3 | Sanctuary. Fellowship: exert an Elf to look at an opponent's hand |
+| 7 | Anduin Confluence 1_353 | 6 | River. **When the fellowship moves here, every ally is discarded** |
+| 8 | Anduin Banks 1_356 | 6 | River. Adds to the minion archery total for each companion over 4 |
+| 9 | Emyn Muil 1_360 | 9 | Maneuver: exert your minion to make it fierce |
+
+`SkipToSite(3)` followed by `SkipToPhase(Phase.MANEUVER)` puts a test in the maneuver phase at site 4. Read a
+site's definition before relying on it, as for any helper card.
 
 Prefer cards from the same set and block as the card under test, and prefer a card with no text over one whose
 text "shouldn't matter".

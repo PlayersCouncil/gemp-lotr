@@ -333,12 +333,18 @@ def main(argv):
             else:
                 print("%-28s %s, lines %d-%d" % (s[1], book.name, s[2] + 1, s[3]))
     elif cmd == "grep":
-        pat = re.compile(" ".join(args), re.I)
+        # Always case-insensitive; a leading grep-style flag (-i and the like) is taken as meant and dropped.
+        words = [a for a in args if not re.match(r"^-[a-zA-Z]+$", a)]
+        pat = re.compile(" ".join(words), re.I)
+        found = 0
         for book in books():
             for i, line in enumerate(book.lines):
                 if pat.search(line):
+                    found += 1
                     sec = book.section_at(i)
                     print("%s %5d [%s] %s" % ("5.0" if book.in_force else "4.2", i + 1, sec[1] if sec else "", clean(line).strip()[:300]))
+        if not found:
+            print("No line of either rules document matches /%s/ (case-insensitive)." % " ".join(words))
     elif cmd == "interactions":
         for book in books():
             by_para = {}
