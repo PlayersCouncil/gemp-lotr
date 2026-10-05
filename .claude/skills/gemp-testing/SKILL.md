@@ -163,6 +163,13 @@ fellowship moves, and the test is in the Shadow phase at site 9.
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
 phase arrives. Make the assertions that matter before the event that ends the game.
 
+**Who places archery wounds.** The fellowship's archery wounds are placed by the Shadow player on his minions
+(`ShadowChooseCard` after `SkipToArcheryWounds()`), the minions' by the Free Peoples player on companions.
+
+**A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
+constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
+companion into it and player 2's choice is then pending. End the test there: going on deals opening hands.
+
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
 was about. Leave archers out of a scenario unless they are the point, or put them down after skipping.
@@ -179,8 +186,9 @@ Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inacti
 filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
 Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish.
 
-**When a wound kills and something answers the same wound.** The owner of a required trigger that answers the
-wound gets a "Required responses" decision listing the rule and the trigger. The rule's entry may have no action
+**When a wound kills and something answers the same wound.** The Free Peoples player, whoever owns the trigger,
+gets a "Required responses" decision listing the rule and the trigger (a Shadow card's "wins a skirmish" trigger
+beside "Resolve skirmish damage" is the same decision; it is not only for deaths). The rule's entry may have no action
 text at all (seen on a death: `[null, "Required trigger from ..."]`), so pick the rule with
 `FreepsResolveRuleFirst()` and a card's trigger with `FreepsResolveActionOrder(text)`.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders

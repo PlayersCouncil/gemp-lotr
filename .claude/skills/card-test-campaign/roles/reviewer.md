@@ -46,7 +46,10 @@ its test file, and compare the ledger with yours. A
    tests too, and should report the parked test failing against the card as it is and every test passing
    ("survived") against the correction. Where the standard had the author keep the old reading active beside
    the parked one (a question), that active test is the one failure to expect against the correction. Pass
-   `--all` with `--replace` to be told which test noticed. For a question about how a sentence is to be parsed, look at how other
+   `--all` with `--replace` to be told which test noticed. On a card with two questions each parked test
+   also fails under the other's correction: what to look for is the parked test's own name missing from the
+   failing list. Where the wrong text is in another card's definition, the replacement cannot be made this way;
+   use a probe. For a question about how a sentence is to be parsed, look at how other
    cards with the same shape of sentence are worded and built (`grep` the game texts): it is often the best
    evidence there is. For a question
    parked with `Q-...`, check that the rules really do not settle it.
@@ -97,3 +100,9 @@ it is no faster and slows everyone.
 While a background run is going, do other work that does not need it (the ledger, reading the rules), or wait
 with one long `sleep` (eight or nine minutes) before looking. Every look re-reads everything you have read so
 far; checking every half minute is the most expensive thing an agent here can do.
+
+## A flag with a name of its own
+
+Where a definition sets a flag or a modifier with a name of its own (`sarumanFirstSentenceInactive`), `grep` the
+card definitions for everything that reads it. Any reader the card's text does not name is an invalid candidate
+the F check could not have derived from the wording, and probably a finding (F-0037).

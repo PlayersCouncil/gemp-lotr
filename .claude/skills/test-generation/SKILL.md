@@ -201,7 +201,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 
 - anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`
-- "until", "this phase", "this turn" → `D`
+- "until", "this phase", "this turn" → `D`. A phase ability that changes something and names no duration has
+  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. A trigger whose effect names
+  no duration has no rule to fall back on: a question
 - "limit", "once per", "no more than", "up to", "at most" → `L`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing
@@ -362,6 +364,10 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   and the card's old test asserts what the game does, it is still a question: the old test is evidence that the
   departure was meant. Park the ruling's reading, keep the old reading active, and name the other cards built
   the same way so that one answer covers them.
+- **Only a card outside the campaign's order shows it.** A disagreement between game and text that takes a
+  Hobbit-set card to show (those sets have no text sheet, and come last) is still a finding, filed against the
+  card whose definition is at fault, with its test parked in the file of the card whose text it is. A mere doubt
+  of that kind is a rider to the nearest open question, or a line in Notes.
 - **The card turns on a PC mechanic that neither rules document covers.** What the card's own text says happens
   can be asserted. What the mechanic then *does* is a question for Ketura: park any assertion that depends on it
   with a `Q-`. (Hinder, restore, relentless and items are covered: `rules.py term hinder`.)
