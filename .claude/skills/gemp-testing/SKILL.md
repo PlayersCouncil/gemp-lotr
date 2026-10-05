@@ -287,8 +287,8 @@ being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown
 `FreepsChooseOptionalTrigger(card)` fails unless that very card is offering. The plain pass methods are not like
 this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay harmless), and
 `FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger included. Do not
-write one "to be safe". Write `FreepsPass()` and `ShadowPass()`: the older, wordier
-`FreepsPassCurrentPhaseAction()` and `ShadowPassCurrentPhaseAction()` do the same thing and are being retired.
+write one "to be safe". (The older, wordier `FreepsPassCurrentPhaseAction()` and `ShadowPassCurrentPhaseAction()`
+were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in git history may still show them.)
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next

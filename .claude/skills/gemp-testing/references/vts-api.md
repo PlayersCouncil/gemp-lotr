@@ -158,7 +158,6 @@ These functions are for progressing through the game itself.  For instance, if y
 - `void PassResponses()` — Causes both players to pass, first the player with a current decision and then the other.
 - `void PassResponses(String text)` — Causes both players to pass any decisions that contain the provided text.
 - `void PassCurrentPhaseActions()` — Causes both players to pass, first the player with a current decision and then the other.
-- `void FreepsPassCurrentPhaseAction()  ·  ShadowPassCurrentPhaseAction`
 - `void BothPass()` — Causes both players to pass.
 - `void BothPass(String text)` — Causes both players to pass any decisions that contain the provided text.
 - `void BothPassInverted()` — Causes both players to pass, but makes the opponent pass before the current player.
@@ -493,4 +492,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-385 entries, 256 of them with no description in the source.
+384 entries, 255 of them with no description in the source.

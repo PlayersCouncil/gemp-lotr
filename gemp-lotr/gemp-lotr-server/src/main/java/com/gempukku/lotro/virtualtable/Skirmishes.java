@@ -122,8 +122,8 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 
 
 
-	default void FreepsDeclineAssignments() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineAssignments() { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineAssignments() { FreepsPass(); }
+	default void ShadowDeclineAssignments() { ShadowPass(); }
 
 	default void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) {
 		AssignToMinions(P1(), comp, minions);

@@ -96,8 +96,8 @@ public class Card_10_008_ErrataTests
         scn.FreepsChoose(scn.FreepsGetCardChoices().get(0), scn.FreepsGetCardChoices().get(1), scn.FreepsGetCardChoices().get(2));
 
         assertEquals(6, scn.GetStrength(nazgul));
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertEquals(1, scn.GetWoundsOn(cirdan));
         assertEquals(1, scn.GetWoundsOn(nazgul));

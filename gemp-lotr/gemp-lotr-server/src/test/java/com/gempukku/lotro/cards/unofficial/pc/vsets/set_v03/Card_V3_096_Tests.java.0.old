@@ -99,7 +99,7 @@ public class Card_V3_096_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 twilight condition in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(night));
@@ -240,7 +240,7 @@ public class Card_V3_096_Tests
 		// Wait - night can't be hindered. So valid targets are: hollowing, ithilstone
 		// That's only 2 discount, so we need 18 - 2 = 16 twilight minimum
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowDeclineOptionalTrigger(); //Ithil Stone's draw
 
 		int twilightBefore = scn.GetTwilight();
@@ -285,7 +285,7 @@ public class Card_V3_096_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowDeclineOptionalTrigger(); //Ithil Stone's draw
 
 		int twilightBefore = scn.GetTwilight();
@@ -316,7 +316,7 @@ public class Card_V3_096_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(25); // Enough for full 18 + 2 cost
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -346,7 +346,7 @@ public class Card_V3_096_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10); // Not enough for Sauron even with max discount (18 - 0 hindered = 18)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Ability should not be available - can't afford Sauron
 		assertFalse(scn.ShadowActionAvailable(night));
@@ -368,7 +368,7 @@ public class Card_V3_096_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(25);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertInZone(Zone.DECK, sauron);
 		assertFalse(scn.ShadowActionAvailable(night));

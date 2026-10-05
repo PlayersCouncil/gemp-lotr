@@ -96,7 +96,7 @@ public class Card_V3_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow plays Shadow's Reach targeting the Gondor condition
 		scn.ShadowPlayCard(reach);
@@ -126,7 +126,7 @@ public class Card_V3_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow discards the Dwarven condition
 		scn.ShadowPlayCard(reach);
@@ -156,7 +156,7 @@ public class Card_V3_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.IsHindered(citadel));
 
@@ -191,7 +191,7 @@ public class Card_V3_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(reach);
 

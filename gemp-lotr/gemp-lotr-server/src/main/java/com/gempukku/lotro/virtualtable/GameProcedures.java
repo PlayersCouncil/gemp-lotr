@@ -133,8 +133,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	default void ShadowChooseToMove() { PlayerDecided(P2(), "0"); }
 	default void ShadowChooseToStay() { PlayerDecided(P2(), "1"); }
 
-	default void FreepsDeclineReconciliation() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineReconciliation() { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineReconciliation() { FreepsPass(); }
+	default void ShadowDeclineReconciliation() { ShadowPass(); }
 
 	/**
 	 * Causes both players to pass, first the player with a current decision and then the other.
@@ -183,17 +183,6 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
 	}
 
-	default void FreepsPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P1()) != null) {
-			PlayerDecided(P1(), "");
-		}
-	}
-
-	default void ShadowPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P2()) != null) {
-			PlayerDecided(P2(), "");
-		}
-	}
 
 	/**
 	 * Causes both players to pass. Both will check to ensure that they have a currently available decision to be passing first.
@@ -279,12 +268,12 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 					break;
 
 				if (current == Phase.FELLOWSHIP) {
-					FreepsPassCurrentPhaseAction();
+					FreepsPass();
 					if (game().getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
 						ShadowChooseAnyCard();
 					}
 				} else if (current == Phase.SHADOW) {
-					ShadowPassCurrentPhaseAction();
+					ShadowPass();
 				} else {
 					var freeps = FreepsGetAwaitingDecision();
 					var shadow = ShadowGetAwaitingDecision();
@@ -319,10 +308,10 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 				break;
 
 			if(current == Phase.FELLOWSHIP) {
-				ShadowPassCurrentPhaseAction();
+				ShadowPass();
 			}
 			else if(current == Phase.SHADOW) {
-				FreepsPassCurrentPhaseAction();
+				FreepsPass();
 			}
 			else {
 				PassCurrentPhaseActions();
@@ -371,8 +360,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 		//Shadow player
 		SkipToPhaseInverted(Phase.REGROUP);
-		ShadowPassCurrentPhaseAction(); // actually freeps with the swap
-		FreepsPassCurrentPhaseAction(); // actually shadow with the swap
+		ShadowPass(); // actually freeps with the swap
+		FreepsPass(); // actually shadow with the swap
 		if(FreepsDecisionAvailable("reconcile"))
 		{
 			FreepsDeclineReconciliation();

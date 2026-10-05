@@ -79,7 +79,7 @@ public class Card_V1_033_Tests
 		scn.StartGame();
 		scn.SetTwilight(3);
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(ttent);
 
 		assertFalse(scn.ShadowActionAvailable("Goblin Spear"));
@@ -95,7 +95,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(ttent);
 
 		assertEquals(1, scn.GetShadowDiscardCount());
@@ -118,7 +118,7 @@ public class Card_V1_033_Tests
 		scn.StartGame();
 		scn.SetTwilight(16);
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(ftentacle1);
         scn.ShadowDeclineOptionalTrigger();

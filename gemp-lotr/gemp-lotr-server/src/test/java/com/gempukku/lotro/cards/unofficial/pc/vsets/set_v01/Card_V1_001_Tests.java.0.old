@@ -112,7 +112,7 @@ public class Card_V1_001_Tests
         scn.PassCurrentPhaseActions(); // skips the assignment on both sides
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 4
@@ -130,7 +130,7 @@ public class Card_V1_001_Tests
         assertEquals(1, scn.GetWoundsOn(gimli));
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 5
@@ -147,7 +147,7 @@ public class Card_V1_001_Tests
         assertEquals(Zone.DEAD, gimli.getZone());
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 6
@@ -159,7 +159,7 @@ public class Card_V1_001_Tests
         scn.PassCurrentPhaseActions(); // skips the assignment on both sides
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 7
@@ -171,7 +171,7 @@ public class Card_V1_001_Tests
         scn.PassCurrentPhaseActions(); // skips the assignment on both sides
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 8
@@ -183,7 +183,7 @@ public class Card_V1_001_Tests
         scn.PassCurrentPhaseActions(); // skips the assignment on both sides
 
         scn.PassCurrentPhaseActions(); //in regroup
-        scn.ShadowPassCurrentPhaseAction(); //reconcile
+        scn.ShadowPass(); //reconcile
         scn.FreepsChooseToMove();
 
         //Site 5
