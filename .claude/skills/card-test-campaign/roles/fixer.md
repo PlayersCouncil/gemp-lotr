@@ -14,6 +14,10 @@ questions are parked applies to you unchanged. What differs:
   it and say why with the rule, ruling or card text that shows it. A reviewer is as fallible as an author; an item
   that asks for an expectation the card's text does not support is to be refused, not obeyed.
 - **A fix that changes what a test claims changes the ledger too.** Keep the ledger file's claim lines true.
+- **A ruling that arrived after the review is an item on the list.** Before starting, read the end of
+  `rulings-log.md`. If Ketura has since ruled on something a test of yours is parked on, or a question your card
+  raised, deal with it as if the reviewer had listed it: take the `@Ignore` off, make the test assert the ruled
+  reading, and bring the ledger into line.
 - **A reviewer's item that says the game is wrong** (a new finding, or a finding the author missed) is handled the
   way an author handles one: the test asserts what the text says and is parked with `@Ignore("F-0000: ...")`.
 - **An item that refutes a finding** means the parked test was wrong about the game. Take the `@Ignore` off and

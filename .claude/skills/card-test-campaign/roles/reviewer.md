@@ -54,7 +54,8 @@ If you are told this is a re-check, the cards have been through a review already
 its list. You are given that list and the fixer's account of each item. Do steps 2 and 5 above in full. For
 steps 1, 3 and 4, confine yourself to the items on the list and to whatever the fixer changed
 (`git diff -- <test file>` shows everything changed since the last commit, the author's work and the fixer's together): check that each item
-marked done is done, and that each refusal is right, by reading the rule or ruling it cites. Do not start a fresh
+marked done is done, and that each refusal is right, by reading the rule or ruling it cites. Check every test parked on a
+question against `rulings-log.md` again, whoever parked it: a ruling may have arrived since. Do not start a fresh
 review of what the first reviewer passed. A fault you notice in passing is still worth one line.
 
 ## What you may and may not touch

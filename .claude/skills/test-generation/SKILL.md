@@ -157,10 +157,13 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   missing from the ledger or testing nothing the card says. A test parked with `@Ignore` claims the checks it
   would show if the reading it asserts is right; the conformance check warns where a parked test is a check's
   only claimant, because that check is not being exercised.
+- `Dropped:` is for a card that had behaviour tests before: anything they asserted that the new tests do not,
+  and why, or `none`. A reviewer compares the old file with the new and should find nothing this line does not
+  account for.
 - `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
   (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
   all why a check the wording seems to call for was left off. Each may run onto following lines. Put `Sources:`
-  above the clauses and `Findings:` and `Notes:` below them.
+  above the clauses and `Findings:`, `Dropped:` and `Notes:` below them.
 
 Something in the Notes that a later reader of the *test* would need (why a helper card was chosen, why a number
 is what it is) belongs in the test as an ordinary comment, in plain words, with no clause ids.
@@ -176,12 +179,12 @@ then claimed by a test.
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
-| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. |
-| `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish, not in an assignment phase where nobody was assigned. |
-| `L` | A limit holds: it works up to the limit and is refused or capped beyond it. |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. |
+| `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
+| `L` | A limit holds: it works up to the limit and is refused or capped beyond it. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
 | `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts, unless X is a number of exertions (see the rulings log: X may be zero everywhere but "exert X times"). Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
-| `R` | "Each time" happens a second time. |
+| `R` | "Each time" happens a second time, on the same subject where the wording allows: two wounds on one minion tell "for each wound" from "for each minion wounded", which two minions wounded once cannot. |
 | `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
 | `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
@@ -191,7 +194,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`
 - "until", "this phase", "this turn" → `D`
-- "limit", "once per" → `L`
+- "limit", "once per", "no more than", "up to", "at most" → `L`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing
 - "for each", "X" → `S` (and for an X, the zero case)
@@ -210,13 +213,13 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. |
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable. |
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |
-| `Activated` | "Phase: cost to effect." on a card in play | `+ -` | For `-`, prefer in this order: a requirement in the text unmet; the cost unpayable; a phase the text does not name. |
+| `Activated` | "Phase: cost to effect." on a card in play | `+ -` | For `-`, prefer in this order: a requirement in the text unmet; the cost unpayable; a phase the text does not name. The phase is the next one in which that player is asked for actions, not any phase: for a Maneuver event, the archery phase. |
 | `Event` | the text of an event card | `+ -` | `+` includes the event leaving the hand. `-` as for `Activated`. |
 | `Effect` | a further sentence of an event or special ability, with no phase, requirement or cost of its own ("Then…", "If you do, …", a second sentence) | `+` | Its `-` is the first sentence's. It lists whatever else its own wording calls for. |
 | `Trigger` | "Each time…", "When…", "At the start of…" | `+ -` | `-` is the nearest event that should not set it off. |
 | `Response` | "Response: If…" | `+ -` | `+` shows the response offered and its effect; for a prevention, that the prevented thing did not happen. |
 | `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. |
-| `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. |
+| `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. Others being offered in the very choice that leaves this one out is a control too, provided nothing else about them explains the difference. |
 | `Choice` | a sentence that is only a choice between alternatives | `B` | Usually a choice is part of another clause, which then lists `B`. |
 | `Ruling` | an entry in Section Three of the rules that names this card | `+` | Reproduce the ruling's situation. |
 | `Rule` | a glossary entry that bears on this card in a way its text does not show | `+` | For example, the entry "Sam": a Sam who can become the Ring-bearer when Frodo dies can only do so if Frodo was the Ring-bearer. Cite the entry. Not for rules that every card of the kind obeys, which are mechanics. |
@@ -338,6 +341,9 @@ skirmish when a side is removed. A card may be how it was noticed, but the test 
 it (`FierceTests`, `RuleOfFourTests`). They follow every rule above except the ledger; the class comment cites
 the rules section instead. The old tests under `at/` are rewritten into one place or the other.
 
+What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
+wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works.
+
 ## Earlier iterations of PC cards
 
 `Card_..._Tests.java.old` and its numbered kin hold the tests of superseded versions of PC cards, kept for a
@@ -361,3 +367,7 @@ bookends, and that none of the ledger has leaked into the test file. Then:
 4. Did an expectation come from the definition or from running the game?
 5. Is any helper card doing something the test does not account for?
 6. For a failure: is the test wrong, or is it a finding? Check the rules before deciding, and ask if unsure.
+7. Does the definition say one thing twice? Where it repeats an effect in two branches (the same blocks under
+   an `If`'s true and false), tests written from the text tend to hold one copy only. A mistake that survives in
+   one copy is a gap. A second, near-identical test is right where the card's text gives the second copy a
+   clause of its own; `mutate.py --replace old new --nth 2` reaches the second copy.

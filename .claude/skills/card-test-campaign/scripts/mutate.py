@@ -2,10 +2,9 @@
 """Finds out whether a card's tests would notice if the card were wrong.
 
     mutate.py <id> [--out <name>]           makes its own mistakes and lists the survivors
+    mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs
     mutate.py <id> --all                    lists every mistake and what noticed it
     mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
-    mutate.py <id> --replace <old> <new>    makes one mistake of your choosing: the first <old> in the
-                                            definition becomes <new>
 
 Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off either way, a
 word dropped from a filter, a filter narrowed to the card's own culture or to companions, a phase changed, a cost
@@ -30,6 +29,9 @@ import cardtest
 import gempcards as g
 
 NUMBER = re.compile(r"^(\s*)([A-Za-z]+)(\s*:\s*)(-?\d+)\s*$")
+RANGE = re.compile(r"^(\s*)([A-Za-z]+)(\s*:\s*)(\d+)-(\d+)\s*$")
+UNTIL = re.compile(r"^(\s*)(until)(\s*:\s*)(?:(start|end)\()?(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\)?\s*$", re.I)
+PHASES = ["fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"]
 FLAG = re.compile(r"^(\s*)(optional|forced|shuffle|showAll|player)(\s*:\s*)(true|false)\s*$", re.I)
 PHASE = re.compile(r"^(\s*)(phase)(\s*:\s*)(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\s*$", re.I)
 FILTER = re.compile(r"^(\s*)(filter|select|on|against|target|bearer|from|to|where)(\s*:\s*)(.+?)\s*$")
@@ -126,6 +128,31 @@ def mistakes(lines: list, culture: str = "") -> list:
                 new[i] = "%s%s%s%d" % (m.group(1), m.group(2), m.group(3), other)
                 add(i, "%s: %d becomes %d" % (m.group(2), n, other), new)
             continue
+        m = RANGE.match(line)
+        if m:
+            low, high = int(m.group(4)), int(m.group(5))
+            for new_low, new_high in ((low + 1, high), (low - 1, high), (low, high - 1)):
+                if new_low < 0 or new_high < new_low:
+                    continue
+                new = lines[:]
+                new[i] = "%s%s%s%d-%d" % (m.group(1), m.group(2), m.group(3), new_low, new_high)
+                add(i, "%s: %d-%d becomes %d-%d" % (m.group(2), low, high, new_low, new_high), new)
+            continue
+        m = UNTIL.match(line)
+        if m:
+            # The boundary moved to its neighbours: the other end of the same phase, and the end of the phase before.
+            edge, phase = (m.group(4) or "start").lower(), m.group(5).lower()
+            others = ["%s(%s)" % ("end" if edge == "start" else "start", phase)]
+            if phase in PHASES and PHASES.index(phase) > 0:
+                others.append("end(%s)" % PHASES[PHASES.index(phase) - 1])
+                if PHASES.index(phase) > 1:
+                    others.append("end(%s)" % PHASES[PHASES.index(phase) - 2])
+            others.append("endofturn")
+            for other in others:
+                new = lines[:]
+                new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), other)
+                add(i, "until: %s becomes %s" % (line.split(":", 1)[1].strip(), other), new)
+            # ...and then on to "until removed" below.
         m = FLAG.match(line)
         if m and m.group(2).lower() in ("optional", "forced"):
             flipped = "false" if m.group(4).lower() == "true" else "true"
@@ -167,6 +194,12 @@ def mistakes(lines: list, culture: str = "") -> list:
                 add(i, "%s: narrowed to culture(%s): %s" % (m.group(2), culture, value), rewritten(inner + ",culture(%s)" % culture))
             if plain and not any(w in low for w in KIND_WORDS):
                 add(i, "%s: narrowed to companions: %s" % (m.group(2), value), rewritten(inner + ",companion"))
+            # "Skirmishing" loosened to "assigned to a skirmish with": true before the skirmish begins as well.
+            swapped = re.sub(r"(?i)inSkirmishAgainst\(", "assignedToSkirmish(", value)
+            if swapped != value:
+                new = lines[:]
+                new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), swapped)
+                add(i, "%s: %s becomes %s" % (m.group(2), value, swapped), new)
             # A number inside the filter, as in HasAttachedCount(2,item) or maxTwilight(3): one more and one fewer.
             for n in re.finditer(r"(?<![\w-])(\d+)(?![\w-])", value):
                 for other in (int(n.group(1)) + 1, int(n.group(1)) - 1):
@@ -232,7 +265,7 @@ def run_tests(cwd: Path, cp: str, test_class: str):
 
 def main(argv):
     skip = set()
-    for flag, width in (("--out", 1), ("--replace", 2)):
+    for flag, width in (("--out", 1), ("--replace", 2), ("--nth", 1)):
         if flag in argv:
             i = argv.index(flag)
             skip.update(range(i, i + width + 1))
@@ -254,11 +287,18 @@ def main(argv):
     if "--replace" in argv:
         i = argv.index("--replace")
         old_text, new_text = argv[i + 1], argv[i + 2]
-        if old_text not in card.raw:
-            raise SystemExit("'%s' is not in the definition of %s." % (old_text, card_id))
-        todo = [(card.raw[:card.raw.index(old_text)].count("\n"), "'%s' becomes '%s'" % (old_text, new_text),
-                 card.raw.replace(old_text, new_text, 1).split("\n"))]
+        nth = int(argv[argv.index("--nth") + 1]) if "--nth" in argv else 1
+        at = -1
+        for _ in range(nth):
+            at = card.raw.find(old_text, at + 1)
+            if at < 0:
+                raise SystemExit("'%s' is not in the definition of %s %d time(s)." % (old_text, card_id, nth))
+        todo = [(card.raw[:at].count("\n"), "'%s' becomes '%s'%s" % (old_text, new_text, " (occurrence %d)" % nth if nth > 1 else ""),
+                 (card.raw[:at] + new_text + card.raw[at + len(old_text):]).split("\n"))]
     repeats = repeated_keys(card_lines)
+    if "--replace" not in argv:
+        shadowed = {earlier for _, _, earlier in repeats}
+        todo = [t for t in todo if t[0] not in shadowed]
     for i, key, earlier in repeats:
         print("note: line %d gives '%s' again in the same block as line %d; the game reads the later one, so a "
               "mistake made in the earlier one cannot be noticed" % (card.line + i, key, card.line + earlier))

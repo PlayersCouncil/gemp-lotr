@@ -147,6 +147,26 @@ def split_methods(lines):
     return methods, code
 
 
+_baseline = None
+
+
+def baseline_tests() -> dict:
+    """How many tests each card had before the campaign, from the campaign's baseline.tsv."""
+    global _baseline
+    if _baseline is None:
+        _baseline = {}
+        path = g.state_dir() / "baseline.tsv"
+        if path.is_file():
+            rows = path.read_text(encoding="utf-8").split("\n")
+            head = rows[0].split("\t")
+            if "id" in head and "tests" in head:
+                for row in rows[1:]:
+                    cells = row.split("\t")
+                    if len(cells) == len(head) and cells[head.index("tests")].isdigit():
+                        _baseline[cells[head.index("id")]] = int(cells[head.index("tests")])
+    return _baseline
+
+
 def parse_ledger(path: Path):
     """A card's ledger file as ({id: [type, checks, text, line]}, {id: {check: [test names]}}, cited ids), or
     (None, None, []) if there is no file."""
@@ -168,7 +188,7 @@ def parse_ledger(path: Path):
         elif WAIVER_LINE.match(line) and last is not None and not in_header:
             # "no -: why": a check the clause's type asks for and this clause cannot have.
             clauses[last][4].add(WAIVER_LINE.match(line).group(1))
-        elif re.match(r"^\s*(LEDGER|Sources|Findings|Formats|Notes)\b", line):
+        elif re.match(r"^\s*(LEDGER|Sources|Findings|Formats|Dropped|Notes)\b", line):
             in_header = True
         elif not line.strip():
             pass
@@ -302,6 +322,16 @@ def lint_file(path: Path):
         extra = set(claims.get(cid, {})) - codes
         if extra:
             add("error", "claim", None, "%s: tests claim %s, which the clause does not list" % (cid, " ".join(sorted(extra))))
+    if card_id and re.search(r'@Ignore\("Q-', raw):
+        log = g.SKILLS / "card-test-campaign" / "references" / "rulings-log.md"
+        if log.is_file() and re.search(r"\b%s\b" % re.escape(card_id), log.read_text(encoding="utf-8")):
+            add("warning", "ruled", None, "a test is parked on a question, and the rulings log names this card: "
+                                          "check whether the question has been answered")
+    if card_id and clauses and ledger_file is not None:
+        had = baseline_tests().get(card_id, 0)
+        if had > 1 and not re.search(r"^\s*Dropped\s*:", ledger_file.read_text(encoding="utf-8"), re.M):
+            add("warning", "dropped", None, "the card had %d tests before the campaign and the ledger has no Dropped: line "
+                                            "(what the old tests asserted that the new ones do not, or 'none')" % had)
     for name, start, end, above, ret in tests:
         if clauses and name not in claimed_tests and name not in [x[0] for x in stats]:
             add("error", "claim", start, "%s: the ledger gives this test nothing to claim" % name)
