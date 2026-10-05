@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -413,7 +412,6 @@ public class Card_V1_039_Tests
 	}
 
 	@Test
-	@Ignore("F-0038: the crowned Nazgul loses a strength bonus that a condition borne by the character it is skirmishing gives to the Nazgul")
 	public void TheCrownedNazgulKeepsTheStrengthBonusItGetsFromAConditionItsOpponentBears() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -573,17 +571,20 @@ public class Card_V1_039_Tests
 	}
 
 	@Test
-	public void OnceOnANazgulTheCrownsSkirmishActionStillTakesItsTwilightTokenAndTransfersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishActionIsOfferedByACrownInTheSupportAreaAndNoLongerOnceThatCrownIsOnANazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var nelya = scn.GetShadowCard("nelya");
+		var lemenya = scn.GetShadowCard("lemenya");
 		var otsea = scn.GetShadowCard("otsea");
+		var crown = scn.GetShadowCard("crown");
 		var crown3 = scn.GetShadowCard("crown3");
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(nelya, otsea);
+		scn.MoveMinionsToTable(nelya, lemenya, otsea);
+		scn.MoveCardsToSupportArea(crown);
 		scn.AttachCardsTo(otsea, crown3);
 		scn.SetTwilight(2);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -596,22 +597,34 @@ public class Card_V1_039_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		// 2 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
 		assertEquals(6, scn.GetTwilight());
-		// The only Crown is on Otsea and not in the support area. Nelya, who is in the skirmish, has no helm.
+		// One Crown is in the support area and one is on Otsea. Nelya, who is in the skirmish, and Lemenya have no helm.
+		assertInZone(Zone.SUPPORT, crown);
 		assertAttachedTo(crown3, otsea);
-		assertEquals(4, scn.GetVitality(otsea));
 		assertEquals(3, scn.GetVitality(nelya));
+		assertEquals(2, scn.GetVitality(lemenya));
 
-		// Removing (1) is the whole of the cost, and it can be paid, so the ability can be used.
-		assertTrue(scn.ShadowActionAvailable(crown3));
-		scn.ShadowUseCardAction(crown3);
+		// The transfer is "from your support area": the Crown that is there offers it, and the Crown on Otsea does not.
+		assertTrue(scn.ShadowActionAvailable(crown));
+		assertFalse(scn.ShadowActionAvailable(crown3));
 
+		scn.ShadowUseCardAction(crown);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(nelya, lemenya));
+		scn.ShadowChooseCard(nelya);
+
+		assertAttachedTo(crown, nelya);
 		assertEquals(5, scn.GetTwilight());
-		// The transfer is from the support area, and this Crown is not there: it stays where it is.
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Now that Crown is on a Nazgul too. There is twilight to remove and Lemenya still has no helm, and
+		// neither Crown offers anything: nothing is removed and nothing moves.
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(crown));
+		assertFalse(scn.ShadowActionAvailable(crown3));
+		assertEquals(5, scn.GetTwilight());
+		assertAttachedTo(crown, nelya);
 		assertAttachedTo(crown3, otsea);
-		assertNotAttachedTo(crown3, nelya);
-		assertEquals(4, scn.GetVitality(otsea));
-		assertEquals(3, scn.GetVitality(nelya));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(2, scn.GetVitality(lemenya));
 	}
 
 	@Test

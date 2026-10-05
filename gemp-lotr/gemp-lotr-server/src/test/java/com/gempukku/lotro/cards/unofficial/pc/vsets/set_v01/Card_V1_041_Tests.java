@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -205,6 +204,11 @@ public class Card_V1_041_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
+		// "You may": the draw is offered, and nothing is drawn until it is taken.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
+		assertEquals(0, scn.GetShadowHandCount());
+		scn.ShadowAcceptOptionalTrigger();
+
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(10, scn.GetShadowDeckCount());
 		// "You" is the Shadow player whose condition it is.
@@ -213,7 +217,6 @@ public class Card_V1_041_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("Q-0021: the text says 'you may', and the game draws without asking")
 	@Test
 	public void TheDrawIsOfferedAndMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -297,6 +300,8 @@ public class Card_V1_041_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
+		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(10, scn.GetShadowDeckCount());
 
@@ -311,6 +316,11 @@ public class Card_V1_041_Tests
 		scn.FreepsChooseToMove();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
+		// Offered again on the second move, and still nothing drawn until it is taken.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
+		assertEquals(8, scn.GetShadowHandCount());
+		scn.ShadowAcceptOptionalTrigger();
+
 		// Two cards, with a third left in the draw deck undrawn.
 		assertEquals(10, scn.GetShadowHandCount());
 		assertEquals(1, scn.GetShadowDeckCount());

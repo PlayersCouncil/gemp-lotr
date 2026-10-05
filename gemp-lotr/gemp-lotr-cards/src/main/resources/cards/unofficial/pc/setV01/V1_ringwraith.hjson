@@ -137,7 +137,7 @@
 				type: modifier
 				modifier: {
 					type: cancelStrengthBonus
-					filter: any
+					filter: inSkirmishAgainst(bearer)
 					from: attachedTo(inSkirmishAgainst(bearer))
 					requires: {
 						type: canSpot
@@ -149,6 +149,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
 				cost: {
 					type: removeTwilight
 					amount: 1
@@ -266,7 +270,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: moves
 				}
