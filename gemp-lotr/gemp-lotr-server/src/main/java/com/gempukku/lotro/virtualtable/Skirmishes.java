@@ -81,14 +81,26 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 		return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
 	}
 
+	/**
+	 * Asks the game's own rule for who may be assigned, not the decision in front of the player.
+	 * @param card A companion, ally or minion.
+	 * @return True if the Free Peoples player could assign that character in the ordinary assignment of the
+	 * assignment phase.
+	 */
 	default Boolean FreepsCanAssign(PhysicalCardImpl card)
 	{
 		return CanBeAssignedNormally(card, Side.FREE_PEOPLE);
 	}
 
+	/**
+	 * Asks the game's own rule for who may be assigned, not the decision in front of the player.
+	 * @param card A companion, ally or minion.
+	 * @return True if the Shadow player could assign that character in the ordinary assignment of the assignment
+	 * phase, which is of whatever the Free Peoples player left unassigned.
+	 */
 	default Boolean ShadowCanAssign(PhysicalCardImpl card)
 	{
-		return CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
+		return CanBeAssignedNormally(card, Side.SHADOW);
 	}
 
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)

@@ -206,11 +206,11 @@ asking the Free Peoples player which goes first, and the next action fails with 
 `GetCardActionId` that says nothing of why. Put the second such card down after `StartGame()`, or answer the
 ordering with `FreepsResolveActionOrder(text)`.
 
-**The by-card availability checks have the same blind spot, for now.** `FreepsActionAvailable(card)` looks for an
-action of that card worded "Use <card name>". An ability whose definition gives it its own `text:` (Library of
-Rivendell's "Stack your tale or artifact from play") is never seen, and `assertFalse` with it proves nothing (rig
-request G-0009). For such a card ask by wording, `FreepsActionAvailable("Stack your tale")`, and choose with
-`FreepsChooseAction(text)`.
+**An ability with wording of its own.** `FreepsActionAvailable(card)` sees an ability whose definition gives it
+its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as well as one the game words
+"Use <card name>": among the actions of a phase it answers for any action of that card that is not a play or a
+transfer of it. Where a card offers several actions and the test means one of them, ask by wording,
+`FreepsActionAvailable("Stack your tale")`, and choose with `FreepsChooseAction(text)`.
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.

@@ -29,6 +29,12 @@ public class ActionAvailabilityTests
 					put("taskmaster1", "2_90");     // Orc Taskmaster: 3 twilight, vitality 3. Shadow: Exert this minion to add (1).
 					put("taskmaster2", "2_90");
 					put("gollum", "7_58");          // Gollum, Plotting Deceiver: may be played from the discard pile with initiative
+
+					// Library of Rivendell.  "Fellowship: Stack your tale or artifact from play or from hand here to
+					// draw a card."  Its definition words the ability itself, so the game does not offer it as
+					// "Use Library of Rivendell".
+					put("library", "101_11");
+					put("staff", "2_22");           // Gandalf's Staff: an artifact
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -130,6 +136,38 @@ public class ActionAvailabilityTests
 
 		scn.ShadowUseCardAction(gollum);
 		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+	}
+
+	@Test
+	public void UseAvailabilitySeesAnAbilityThatHasWordingOfItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var library = scn.GetFreepsCard("library");
+		var staff = scn.GetFreepsCard("staff");
+		var sword = scn.GetFreepsCard("sword1");
+		scn.MoveCardsToSupportArea(library);
+		scn.MoveCardsToHand(sword);
+
+		scn.StartGame();
+
+		// A Hobbit Sword in hand is neither a tale nor an artifact: there is nothing to stack, and the sword's own
+		// play is not the Library's ability.
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsPlayAvailable(sword));
+		assertFalse(scn.FreepsActionAvailable("Use Library of Rivendell"));
+		assertFalse(scn.FreepsActionAvailable(library));
+		assertFalse(scn.FreepsActionAvailable(sword));
+
+		// With an artifact in hand the ability is on offer, under its own wording.
+		scn.MoveCardsToHand(staff);
+		scn.FreepsPlayCard(sword);
+		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from hand"));
+		assertFalse(scn.FreepsActionAvailable("Use Library of Rivendell"));
+		assertTrue(scn.FreepsActionAvailable(library));
+		// It is the Library's and nobody else's, and it is a use and not a play.
+		assertFalse(scn.FreepsActionAvailable(staff));
+		assertFalse(scn.FreepsPlayAvailable(library));
+		assertFalse(scn.ShadowActionAvailable(library));
 	}
 
 	@Test

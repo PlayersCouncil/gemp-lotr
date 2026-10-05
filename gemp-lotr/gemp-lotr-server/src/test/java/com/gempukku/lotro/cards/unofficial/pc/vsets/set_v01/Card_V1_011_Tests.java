@@ -278,7 +278,9 @@ public class Card_V1_011_Tests
 
 		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from hand"));
 		assertFalse(scn.FreepsActionAvailable("Stack your tale or artifact from play"));
-		assertFalse(scn.FreepsActionAvailable(library));
+		// The Library's one offer is the stacking: the regroup ability is not among the fellowship actions.
+		assertTrue(scn.FreepsActionAvailable(library));
+		assertFalse(scn.FreepsActionAvailable("Use Library of Rivendell"));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

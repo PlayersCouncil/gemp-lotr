@@ -183,7 +183,7 @@ Actions are top-level decisions that involve legal game operations available to 
 - `Boolean FreepsActionAvailable(PhysicalCardImpl card)  ·  ShadowActionAvailable`
 - `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable`
 - `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable`
-- `Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb)` — Checks whether the given player is currently being offered an action of the given kind on one particular card.
+- `Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb)` — Checks whether the given player is currently being offered an action of the given kind on one particular card, and not on another copy of it.
 - `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
 - `Boolean ActionAvailable(String player, String action)` — Checks whether the given player has an action available containing the provided text.
 - `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction`
@@ -309,7 +309,7 @@ Decisions will always come with at least one choice, even if that single choice 
 - `boolean IsCharSkirmishing(PhysicalCardImpl card)`
 - `boolean IsCharSkirmishingAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent)`
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card)`
-- `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign`
+- `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign` — Asks the game's own rule for who may be assigned, not the decision in front of the player.
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)`
 - `Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)`
 - `Skirmish GetActiveSkirmish()`
@@ -479,4 +479,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-371 entries, 253 of them with no description in the source.
+371 entries, 252 of them with no description in the source.

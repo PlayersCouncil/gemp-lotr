@@ -101,13 +101,17 @@ public interface Actions extends Decisions, Choices {
 
 	/**
 	 * Checks whether the given player is currently being offered an action of the given kind on one particular
-	 * card.  The action has to be described as "[verb] [the card's full name]", as before, and now also has to
-	 * belong to that card and not to another copy of it.
+	 * card, and not on another copy of it.
+	 *
+	 * A play or a transfer is recognised by its description, "Play [the card's full name]" or "Transfer [...]".
+	 * The use of a special ability is described as "Use [the card's full name]" unless the card's definition gives
+	 * the ability wording of its own, in which case, among the actions a player may take in a phase, it is any
+	 * action of that card that is not a play or a transfer of it.
 	 *
 	 * How an action is tied to its card depends on what the decision says about its actions.  A choice of card
 	 * actions names the physical card each action belongs to, and that is what is compared.  A decision that names
-	 * its actions' cards only by blueprint (a choice among triggers, say, where there may be no card on the table
-	 * to point at) is compared by blueprint.  A decision that names neither is matched on the description alone.
+	 * its actions' cards only by blueprint is compared by blueprint.  A decision that names neither is matched on
+	 * the description alone.
 	 * @param player The player who would be offered the action.
 	 * @param card The card the action must belong to.
 	 * @param verb How the action's description starts: "Use", "Play" or "Transfer".
@@ -119,21 +123,32 @@ public interface Actions extends Decisions, Choices {
 			return false;
 		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
 		String[] blueprintIds = GetAwaitingDecisionParam(player, "blueprintId");
-		String wanted = (verb + " " + GameUtils.getFullName(card)).toLowerCase();
+		String name = GameUtils.getFullName(card).toLowerCase();
+		String wanted = verb.toLowerCase() + " " + name;
 		String id = String.valueOf(card.getCardId());
+		// "Play Maneuver action or Pass", "Choose action to play or Pass": the actions of a phase, as opposed to
+		// the triggers and responses a player is asked about at other times.
+		String asked = userFeedback().getAwaitingDecision(player).getText();
+		boolean phaseActions = asked != null && asked.toLowerCase().contains("action") && asked.toLowerCase().contains("pass");
 
 		for (int i = 0; i < texts.length; i++) {
-			if(!texts[i].toLowerCase().contains(wanted))
-				continue;
+			String text = texts[i].toLowerCase();
+			boolean described = text.contains(wanted);
 			if(cardIds != null && i < cardIds.length) {
-				if(cardIds[i].equals(id))
+				if(!cardIds[i].equals(id))
+					continue;
+				if(described)
+					return true;
+				// An ability with wording of its own.
+				if(verb.equalsIgnoreCase("Use") && phaseActions
+						&& !text.contains("play " + name) && !text.contains("transfer " + name) && !text.startsWith("heal by discard"))
 					return true;
 			}
 			else if(blueprintIds != null && i < blueprintIds.length) {
-				if(blueprintIds[i].equals(card.getBlueprintId()))
+				if(described && blueprintIds[i].equals(card.getBlueprintId()))
 					return true;
 			}
-			else {
+			else if(described) {
 				return true;
 			}
 		}
