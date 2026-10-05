@@ -97,8 +97,8 @@ public class ErrataCatalogTest extends AbstractAtTest {
         assertFalse(formats.contains("movie"));
         @SuppressWarnings("unchecked") var before = (Map<String, Object>) e.get("before");
         @SuppressWarnings("unchecked") var after = (Map<String, Object>) e.get("after");
-        assertTrue(((String) after.get("gametext")).contains("discard a Shadow item"));
-        assertFalse(((String) before.get("gametext")).contains("discard a Shadow item"));
+        assertTrue(((String) after.get("gametext")).contains("Discard a Shadow item"));
+        assertFalse(((String) before.get("gametext")).contains("Shadow item"));
         @SuppressWarnings("unchecked") var stats = (Map<String, Object>) after.get("stats");
         assertEquals(1, stats.get("Twilight"));
         assertEquals(Boolean.FALSE, stats.get("Unique"));
