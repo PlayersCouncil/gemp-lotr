@@ -17,6 +17,7 @@
 		side: free_people
 		twilight: 0
 		type: possession
+		itemclass: Pony
 		keyword: [
 			stealth
 		]

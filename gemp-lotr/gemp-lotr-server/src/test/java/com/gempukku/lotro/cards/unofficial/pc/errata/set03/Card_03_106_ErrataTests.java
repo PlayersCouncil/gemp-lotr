@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.PossessionClass;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
@@ -51,6 +52,7 @@ public class Card_03_106_ErrataTests
         assertEquals(0, bill.getBlueprint().getTwilightCost());
 
         assertTrue(scn.HasKeyword(bill, Keyword.STEALTH));
+        assertTrue(bill.getBlueprint().getPossessionClasses().contains(PossessionClass.PONY));
     }
 
     @Test
