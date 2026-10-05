@@ -33,3 +33,7 @@ blueprint id the scenario names: `1_5` is the Decipher card and `51_5` is its PC
 
 The settings above were read from `lotrFormats.hjson` and from the engine on this branch. If a card's behaviour
 seems to turn on the format in a way this table does not account for, that is a question for Ketura.
+
+The Ring-bearer rule arrived with set 9, Reflections. That the King block formats (sets 7, 8 and 10) still allow
+the cancel is an oversight nobody noticed because the block is hardly played (F-0014); do not use them as the
+"allows it" format in a test. Use `fotr_block` for allowed and `multipath` or `movie` for refused.

@@ -116,3 +116,31 @@ transcribed from the card images first.
 esoteric; presumably this is used by the author/reviewer, but it should be elsewhere and not in the final
 product." It is kept in a file of its own outside the tests.
 
+## Rulings on questions
+
+**2026-10-05. When the Ring-bearer's skirmish stopped being cancellable (Q-0001).** The rule came about from set
+9, Reflections, "which has several non-Frodo ring-bearers who warp the format if they are able to have their
+skirmishes canceled, so it was with the release of set 9 that the rule was added." King block is sets 7, 8 and
+10; "there's not really a good reason for King Block itself to permit Ring-bearer skirmish canceling. I think
+nobody noticed because King Block itself is a rounding error of usage; it's far more common to play Movie Block
+(1-10), which does indeed have the proper RB canceling rule." Format-aware cancel tests use `fotr_block` (allows)
+and `multipath` or `movie` (refuses), and leave the King block formats out until F-0014 is settled.
+
+**2026-10-05. Ambush instances and Desert Wind Whisper (Q-0007).** "This is a case where I don't think it matters
+if they're combined or not. A minion with 'ambush (2)' and 'ambush (1)' would get +2 strength and +1 strength, I
+think. So the QOL combination doesn't affect the end result."
+
+**2026-10-05. Sam as Ring-bearer (Q-0008).** Resistance was fleshed out in sets 9 and 11, codifying what had been
+improvised with Frodo and Sam earlier. "Resistance is a numeric stat that they always have, similar to Strength
+or Vitality, but originally on Sam it was dormant and unused unless and until he became the Ring-bearer. With set
+11 they expanded the concept such that every companion has a resistance that is always reduced by the number of
+burdens, but which does nothing on its own if reduced to 0 unless the 0 companion is the Ring-bearer." And: "When
+any character dies, as the 'leaving play' section indicates, 'Any tokens on that card are removed', and as
+burdens are tokens they are thus flushed away, meaning Sam inherits the mantle of Ring-bearer with no burdens to
+his name." Bears on: every Sam with "make Sam the Ring-bearer (resistance 5)".
+
+**2026-10-05. Hinder.** `at/HinderTests.java` has an exhaustive set of tests for the hinder mechanic; read it
+where the 5.0 excerpts leave a detail of hinder open.
+
+**2026-10-05. A cheat for allies (G-0004).** "There's nothing wrong with a MoveAlliesToTable function. Go for it;
+you can enforce the card type if you like."
