@@ -35,3 +35,7 @@ question or rig request that is new since the author's report, in the detail `ro
 
 On a busy machine, run `mutate.py` for one card at a time and in the background if it has many mistakes to make;
 see the reviewer's brief for why.
+
+While a background run is going, do other work that does not need it (the ledger, reading the rules), or wait
+with one long `sleep` (eight or nine minutes) before looking. Every look re-reads everything you have read so
+far; checking every half minute is the most expensive thing an agent here can do.

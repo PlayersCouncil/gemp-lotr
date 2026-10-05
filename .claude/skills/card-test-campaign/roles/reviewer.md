@@ -91,3 +91,7 @@ foreground command: start `mutate.py` in the background and read its output file
 `--out` name: a second run with the same name deletes the first one's working folder, so give a second run
 (`--with-parked`, a `--replace`) a name of its own (`<folder>-r-p`). Do not run several cards' mistakes at once;
 it is no faster and slows everyone.
+
+While a background run is going, do other work that does not need it (the ledger, reading the rules), or wait
+with one long `sleep` (eight or nine minutes) before looking. Every look re-reads everything you have read so
+far; checking every half minute is the most expensive thing an agent here can do.

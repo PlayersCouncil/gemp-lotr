@@ -111,3 +111,7 @@ One `mutate.py` run at a time for each `--out` name, and one card at a time: run
 working folder. Run a card with many mistakes in the background and read its output file. Before calling a
 "narrowed to culture(...)" survivor on a name harmless, look for a card of that name in another culture
 (Aragorn, Defender of Rohan is a [rohan] Aragorn).
+
+While a background run is going, do other work that does not need it (the ledger, reading the rules), or wait
+with one long `sleep` (eight or nine minutes) before looking. Every look re-reads everything you have read so
+far; checking every half minute is the most expensive thing an agent here can do.
