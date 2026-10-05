@@ -85,6 +85,10 @@ card's title never appears to players.
 **2026-10-04. Exhausting the exhausted (F-0005).** "Exhausted" is a state in the original game, but "exhaust" as
 a verb on Decipher's cards never appears as a cost. The PC has ruled that you may not exhaust an exhausted card.
 The ruling had not been implemented; it is to be treated as an engine bug and implemented.
+(What was found when implementing it: the rule has been in the exhaust effect since 74b4a685d, 2025-06-28, where
+a character who cannot exert is not a candidate for exhausting. The card that prompted the finding, Ulaire Toldea
+103_79, got round it by nesting its cost inside an `If` in its effect, where a cost does not decide whether a
+trigger is offered. The definition was fixed; the engine needed nothing. `mechanics/ExhaustTests` holds the rule.)
 
 **2026-10-04. Errata with no tests (F-0006).** On some errata, repeat errata especially, the tests were
 commented out rather than written, under time pressure. They are to be written.
