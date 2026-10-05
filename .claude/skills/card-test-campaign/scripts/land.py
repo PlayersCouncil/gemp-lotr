@@ -5,8 +5,9 @@
 
 For each card, in turn: the conformance check must find no errors, the card's tests must pass (parked tests
 apart), no `F-0000` or `Q-0000` placeholder may be left in the test file, and the ledger file must exist.  A card
-that clears all four has its test file committed as `Card tests: <id> <name>`, and its status set to ready (or to
-parked with --parked, or when the file has a parked test).  A card that does not is reported and left alone; the
+that clears all four has its test file committed as `Card tests: <id> <name>`, and its status set to ready, with
+a note of any test parked on a finding or question (or to parked, with --parked, for a card that could not be
+finished).  A card that does not is reported and left alone; the
 others still land.
 
 --check does everything except commit and set the status.
@@ -76,7 +77,9 @@ def land(card_id, note, force_parked, check_only, before):
         body += " Parked on %s." % ", ".join(sorted(set(parked)))
     if note:
         body += "\n\n" + note
-    status = "parked" if (force_parked or parked) else "ready"
+    # A card with a test parked on a finding or question is still ready for review; the note says what is parked.
+    # "parked" is for a card that could not be finished at all.
+    status = "parked" if force_parked else "ready"
     if check_only:
         return "would land as %s: %s" % (status, body.split("\n")[0])
 
@@ -95,7 +98,11 @@ def land(card_id, note, force_parked, check_only, before):
         outcome = "committed " + git("rev-parse", "--short=9", "HEAD").stdout.strip()
     args = ["set", status, card_id]
     if parked:
-        args += ["--note", "Parked on " + ", ".join(sorted(set(parked)))]
+        args += ["--note", "%d test(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
+        for found in sorted(set(parked)):
+            if found.startswith("F-"):
+                args += ["--finding", found]
+                break
     script("tracker.py", *args)
     return "%s, %s: %s" % (outcome, status, body.split("\n")[0])
 
