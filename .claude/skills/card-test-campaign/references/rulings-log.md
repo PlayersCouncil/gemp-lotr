@@ -373,5 +373,8 @@ is at such a premium as it is for sites) 'one' is a stand-in for 'an unbound com
 
 **"May draw a card for each" is one offer (Q-0029).** "It's better UX for it to be one big batch or not. The
 vast, vast majority of the time, the player will want to draw, and they will not be amused needing to hit yes
-for every individual card draw." The offer is left as it is when there is nothing to draw.
+for every individual card draw." And with an empty draw deck: "while it is technically a pester to ask them when
+they have 0 cards in their deck, that is both rare and a bit of a chance for them to *realize* they have no cards
+in their deck ... I'd say let it ask with 0 cards in deck." She spoke of the empty deck only. Whether the offer
+should be made when the count itself is zero (four companions or fewer) is not ruled: Q-0033.
 
