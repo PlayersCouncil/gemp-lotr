@@ -180,8 +180,9 @@ filter sees it. To put a card the opponent owns on a companion, use a Shadow car
 Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish.
 
 **When a wound kills and something answers the same wound.** The owner of a required trigger that answers the
-wound gets a "Required responses" decision listing "Character death" and the trigger.
-`FreepsResolveRuleFirst()` takes the rule first; `FreepsResolveActionOrder(text)` picks by the text of the entry.
+wound gets a "Required responses" decision listing the rule and the trigger. The rule's entry may have no action
+text at all (seen on a death: `[null, "Required trigger from ..."]`), so pick the rule with
+`FreepsResolveRuleFirst()` and a card's trigger with `FreepsResolveActionOrder(text)`.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
 
@@ -292,6 +293,7 @@ into a scenario; a name is not evidence of what a card does.
 | A weak minion that survives a hit | Uruk Savage | 1_151 | Strength 5, vitality 3; Damage +1 is its whole text. An unboosted strength-6 companion beats it without killing it |
 | Wounds in the regroup phase | Morgul Slayer | 3_93 | Strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to read "until the regroup phase" at its boundary |
 | A Shadow card a companion bears | Spider Poison | 8_28 | Possession; its bearer must exert each time it is assigned to a skirmish, and nothing else |
+| An Aragorn who is not [gondor] | Aragorn, Defender of Rohan | 17_93 | The only Aragorn of another culture ([rohan]), and no signet; his text does nothing unless the Ring-bearer is assigned to a skirmish. Without him a `name(Aragorn)` filter narrowed to [gondor] passes every test. Aragorn signet: 1_365 (optional start-of-turn trigger, so put him down after `StartGame()`), 4_364. Gandalf signet: 1_89, 4_109. There is no Boromir outside [gondor] |
 | A tentacle that stays put | Vile Tentacle | 101_36 | The only tentacle not discarded away from a marsh. Reaching (19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh, make every site one with an ad hoc keyword |
 | A way to discard a [moria] condition | Song of Durin | 3_5 | Free Peoples event: "discard up to 2 [moria] conditions" |
 
@@ -311,6 +313,10 @@ The sites of `FellowshipSites`, for tests that turn on terrain or on where the f
 
 `SkipToSite(3)` followed by `SkipToPhase(Phase.MANEUVER)` puts a test in the maneuver phase at site 4. Read a
 site's definition before relying on it, as for any helper card.
+
+Some words cannot be told apart by any card there is: only companions have a signet, only events have a
+timeword, every Aragorn and every Gandalf is a companion. A filter mistake that drops or adds such a word makes
+no difference to play; say so in the ledger's Notes and move on.
 
 Prefer cards from the same set and block as the card under test, and prefer a card with no text over one whose
 text "shouldn't matter".

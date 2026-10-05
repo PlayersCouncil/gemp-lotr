@@ -44,7 +44,9 @@ its test file, and compare the ledger with yours. A
    misreading; say so and cite it. If you cannot, say that you tried and what you looked at. Then check the parked
    test is sound: `mutate.py <id> --replace "<the wrong text>" "<the correction>" --with-parked` runs the parked
    tests too, and should report the parked test failing against the card as it is and every test passing
-   ("survived") against the correction. For a question about how a sentence is to be parsed, look at how other
+   ("survived") against the correction. Where the standard had the author keep the old reading active beside
+   the parked one (a question), that active test is the one failure to expect against the correction. Pass
+   `--all` with `--replace` to be told which test noticed. For a question about how a sentence is to be parsed, look at how other
    cards with the same shape of sentence are worded and built (`grep` the game texts): it is often the best
    evidence there is. For a question
    parked with `Q-...`, check that the rules really do not settle it.
