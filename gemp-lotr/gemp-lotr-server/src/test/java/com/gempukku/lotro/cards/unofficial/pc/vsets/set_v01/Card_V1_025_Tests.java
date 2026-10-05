@@ -312,8 +312,9 @@ public class Card_V1_025_Tests
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
-		// One action for each copy. (ShadowActionAvailable(card) goes by the card's name, so it cannot tell the copies apart.)
-		assertEquals(2, scn.ShadowGetAvailableActions().stream().filter(x -> x.contains("Use Crebain Flock")).count()); // G-0001
+		// One action for each copy.
+		assertTrue(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.ShadowActionAvailable(flock2));
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDiscardCount());
 
@@ -331,8 +332,8 @@ public class Card_V1_025_Tests
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(3, scn.GetShadowDiscardCount());
 		// The first copy has had its once; the limit of the second copy is its own (CR 4.2 "limit").
-		// One action is left, and it is the second copy's: ShadowUseCardAction goes by the card itself.
-		assertEquals(1, scn.ShadowGetAvailableActions().stream().filter(x -> x.contains("Use Crebain Flock")).count()); // G-0001
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.ShadowActionAvailable(flock2));
 
 		scn.ShadowUseCardAction(flock2);
 		scn.ShadowChoose("discard pile");

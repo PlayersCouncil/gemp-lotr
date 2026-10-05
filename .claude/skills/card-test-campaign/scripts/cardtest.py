@@ -161,7 +161,10 @@ def suite(argv) -> int:
         if p.stem.startswith("Abstract"):
             continue
         source = (g.SERVER / "src" / "test" / "java" / p.relative_to(root)).with_suffix(".java")
-        if source.is_file() and not re.search(r"^\s*@(Test|ParameterizedTest)\b", source.read_text(encoding="utf-8", errors="replace"), re.M):
+        # What runs here is JUnit 4's JUnitCore. A class with no @Test of its own has nothing for it to run, and
+        # neither has one whose only tests are JUnit 5's @ParameterizedTest (FormatLibraryTests): Maven's JUnit
+        # Platform provider runs those, this runner cannot.
+        if source.is_file() and not re.search(r"^\s*@Test\b", source.read_text(encoding="utf-8", errors="replace"), re.M):
             empty.append(source.name)
             continue
         classes.append(".".join(p.relative_to(root).with_suffix("").parts))
