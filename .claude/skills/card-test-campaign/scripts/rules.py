@@ -9,10 +9,17 @@
     rules.py grep <regex>           matching lines, each with the section it is in
     rules.py interactions           every place outside the individual rulings where a ruling names a card
 
+    rules.py council                the Rules Councils' rulings since 4.2 (LR 1-8, MR 1-2): title and status
+    rules.py council <LR 6 | word>  one of them in full
+
 Two documents are searched.  Comprehensive Rules 4.2 is Decipher's last, and holds the individual card rulings.
 The Comprehensive Rules 5.0 excerpts are the Players' Council's: they cover what the PC added or changed (hinder,
 restore, relentless, items, two- and three-dot uniqueness, when the game ends at site 9), and where the two
 disagree, 5.0 is the one in force.  Results from 5.0 are marked and come first.
+
+The Legacy Rules Team's rulings (LR) bind Decipher's cards and the Modern Rules Team's (MR) the Players'
+Council's; each is a wiki page with the question, the options and the decision.  Read the status line: some are
+decided and enacted, some are still under discussion and decide nothing yet.  `card` and `grep` search them too.
 """
 import re
 import sys
@@ -21,6 +28,9 @@ import unicodedata
 import gempcards as g
 
 PC_RULES_FILE = g.SKILLS / "game-mechanics" / "references" / "comprehensive-rules-5.0-excerpts.wiki.txt"
+
+COUNCIL_DIR = g.SKILLS / "game-mechanics" / "references" / "council-rulings"
+BOLD = "'" * 3
 
 _HEADING = re.compile(r"^(={2,6})\s*(.*?)\s*\1\s*$")
 
@@ -189,6 +199,43 @@ def books() -> list:
     return _books
 
 
+_council = None
+
+
+def council() -> list:
+    """The councils' rulings as (id, title, status, lines)."""
+    global _council
+    if _council is None:
+        _council = []
+        for f in sorted(COUNCIL_DIR.glob("*_ruling_*.wiki.txt")) if COUNCIL_DIR.is_dir() else []:
+            m = re.match(r"(legacy|modern)_ruling_(\d+)", f.name)
+            lines = f.read_text(encoding="utf-8", errors="replace").split("\n")
+            title = next((re.sub(r"^=\s*|\s*=$", "", l.strip()) for l in lines if re.match(r"^=[^=].*[^=]=\s*$", l.strip())), f.name)
+            status = next((re.sub(r"Status:\s*", "", l.replace(BOLD, "")).strip() for l in lines if "Status:" in l), "status not given")
+            _council.append(("%s %d" % ("LR" if m.group(1) == "legacy" else "MR", int(m.group(2))), title, status, lines))
+    return _council
+
+
+def council_text(lines) -> str:
+    out = []
+    for line in lines:
+        line = re.sub(r"\{\{(?:Card|CardSplashImage|C|CI)\|([^}|]*)\}\}", r"\1", line)
+        line = re.sub(r"\{\{CardText\|([^}|]*)\}\}", r"[the game text of \1]", line)
+        if re.match(r"^\s*(\{\{|\|[a-z]+=|\}\}|__TOC__|----)", line):
+            continue
+        out.append(line.replace(BOLD, "").rstrip())
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()
+
+
+def council_decision(lines) -> str:
+    at = next((i for i, l in enumerate(lines) if re.match(r"^=+.*Decision.*=+\s*$", l.strip())), None)
+    return council_text(lines[at:]) if at is not None else "(no decision yet: read the page with rules.py council)"
+
+
+def council_names(lines) -> set:
+    return {norm(n) for l in lines for n in re.findall(r"\{\{(?:Card|CardText|CardSplashImage)\|([^}|]*)\}\}", l)}
+
+
 def card_keys(card_id=None, name=None):
     """The ways the rules might refer to a card: full name, collector's info, and (weaker) title alone."""
     keys, weak = set(), set()
@@ -264,6 +311,16 @@ def cmd_card(arg: str, quiet_if_none=False) -> bool:
                     print("Cards: " + "; ".join(names))
                     print(text)
                     print()
+    for cid, title, status, lines in council():
+        names = council_names(lines)
+        strong = bool(names & keys)
+        if strong or (names & weak):
+            found = True
+            print("### Council ruling %s, \"%s\" (%s)%s" % (cid, title, status,
+                  "" if strong else "  (names the title only: check which version it means)"))
+            print(council_decision(lines))
+            print("(the whole page: rules.py council %s)" % cid)
+            print()
     if not found and not quiet_if_none:
         print("The rules do not name this card.")
     return found
@@ -343,8 +400,28 @@ def main(argv):
                     found += 1
                     sec = book.section_at(i)
                     print("%s %5d [%s] %s" % ("5.0" if book.in_force else "4.2", i + 1, sec[1] if sec else "", clean(line).strip()[:300]))
+        for cid, title, status, lines in council():
+            for i, line in enumerate(lines):
+                if pat.search(line):
+                    found += 1
+                    print("%s %5d [%s; %s] %s" % (cid, i + 1, title, status, council_text([line])[:300]))
         if not found:
-            print("No line of either rules document matches /%s/ (case-insensitive)." % " ".join(words))
+            print("No line of either rules document or of the councils' rulings matches /%s/ (case-insensitive)." % " ".join(words))
+    elif cmd == "council":
+        want = norm(" ".join(args))
+        if not want:
+            for cid, title, status, lines in council():
+                print("%-5s %-45s %s" % (cid, title, status))
+            return 0
+        hits = [c for c in council() if norm(c[0]).replace(" ", "") == want.replace(" ", "")] \
+            or [c for c in council() if want in norm(c[1]) or want in norm(" ".join(c[3]))]
+        for cid, title, status, lines in hits:
+            print("## %s: %s (%s)" % (cid, title, status))
+            print(council_text(lines))
+            print()
+        if not hits:
+            print("No council ruling matches '%s'.  rules.py council lists them." % " ".join(args))
+            return 1
     elif cmd == "interactions":
         for book in books():
             by_para = {}

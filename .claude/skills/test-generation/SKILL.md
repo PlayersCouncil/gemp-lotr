@@ -48,8 +48,9 @@ simply an earlier revision, where an errata row matches the definition, is no di
 the errata row, and a revision number that does not line up is F-0032, already known.
 
 **Deliberate departures.** A few things the game does are knowingly not what the text or rules say, for the
-sake of how it plays: Goblin Runner adds its (2) without asking, and separate instances of ambush are offered as
-one. The rulings log lists them. Something of the same kind that is not on the list is a question, not a finding.
+sake of how it plays: Goblin Runner adds its (2) without asking, separate instances of ambush are offered as
+one, an X of zero that would do nothing is not offered, and a card that plays something "from your draw deck or
+discard pile" is not offered when neither pile has anything it could play. The rulings log lists them. Something of the same kind that is not on the list is a question, not a finding.
 
 ## The file
 
@@ -191,7 +192,7 @@ then claimed by a test.
 | `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
 | `L` | A limit holds: it works up to the limit and is refused or capped beyond it. Where a limit caps what an X buys ("discard X cards to make … strength +X (limit +3)"), X itself is not capped: a test shows it, with one use beyond the cap or by reading the choice's maximum. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
-| `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts, unless X is a number of exertions (see the rulings log: X may be zero everywhere but "exert X times"). Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
+| `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts where the action still does something at zero (One Dwarf in Moria heals whatever X is). Not where X is a number of exertions, and not where X of zero would do nothing at all: such a use is deliberately not offered (rulings log, Q-0015), and the `-` is that it is not. Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
 | `R` | "Each time" happens a second time, on the same subject where the wording allows: two wounds on one minion tell "for each wound" from "for each minion wounded", which two minions wounded once cannot. |
 | `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. Where a card arrives somewhere and is taken out again in one effect, it is read there in between. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
@@ -202,8 +203,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`
 - "until", "this phase", "this turn" → `D`. A phase ability that changes something and names no duration has
-  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. A trigger whose effect names
-  no duration has no rule to fall back on: a question
+  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. So has a trigger's effect:
+  by Ketura's ruling (Q-0018) it lasts to the end of the current phase → `D`
 - "limit", "once per", "no more than", "up to", "at most" → `L`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing

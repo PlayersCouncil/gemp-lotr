@@ -129,6 +129,7 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
 | `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds; `suite` for everything. |
 | `lint.py` | The conformance check. |
+| `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |
 | `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. |
 | `land.py <ids>` | The orchestrator's gate: re-runs the conformance check and the tests on each card, and commits each card that clears them on its own. `--check` to look without committing. |
 | `tracker.py` | The campaign's state: statuses, findings, the tracker. |

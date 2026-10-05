@@ -246,3 +246,62 @@ the card image used today as a further piece of information."
 G-0007 (asking whether a character is offered for assignment), G-0008 (the optional-trigger check by card),
 G-0009 (the by-card availability check and wording of its own), G-0010 (one of several actions of a card) and
 G-0011 (a shuffle counter: "I think it shouldn't harm anything") were all approved, and are in the rig.
+
+## Rulings of 2026-10-05, afternoon
+
+**The Rules Councils' own rulings.** Ketura has supplied the eight Legacy Rules Team rulings (Decipher's cards)
+and two Modern Rules Team rulings (the PC's) made since CR 4.2. `rules.py council` lists them and
+`rules.py card` and `rules.py grep` search them. Look there before asking: Q-0016 had been ruled already (LR 6).
+Their status lines are not all current (MR 1 and MR 2 say "Discussion" above a dated decision); a page with a
+decision section is decided.
+
+**"The first sentence of Saruman's game text" (Q-0016; LR 6).** Saruman's Staff has no effect on Saruman, Of
+Many Colours (12_54) or Saruman, Agent of the Dark Lord (12_144), whose text opens with keywords. The White
+Council (101_18) "was essentially binding itself to how Saruman's Staff works", so it leaves those two alone as
+well, which is what the game does. The follower Saruman, Servant of Sauron (17_38) is not named by the ruling;
+the game leaves it alone too, and the ruling's reasoning (the sentence meant is the one about not skirmishing)
+covers it.
+
+**X of zero that would do nothing is not offered (Q-0015).** A deliberate departure for quality of life: "we
+don't offer to 'discard 0 cards to make a user strength +0'. Besides being strategically useless and
+distracting the player with options that don't actually do anything for them, this is a potential griefing
+angle if the player can click on the same pointless action over and over and time out the game without getting
+kicked on the decision timer." So I Would Have Gone With You to the End (101_23), Breaching Shot (102_21) and
+Northern Signal-fire (103_30) are right to start X at 1. X may still be zero where the action does something
+without it (One Dwarf in Moria, 101_5, heals whatever X is). A definition that offers a do-nothing X of zero is
+not thereby wrong; one that withholds it is not a finding.
+
+**An effect with no stated duration lasts to the end of the current phase (Q-0018).** On Boromir, Redeemed
+(101_20): "Since it does not specify a duration, it defaults to 'the end of the current phase', which is long
+enough to assign but not long enough to e.g. use Swordarm of the White Tower on him in the Skirmish phase."
+This holds for a trigger's effect as for a phase action's. The definition's "until the regroup phase" was left
+over from an earlier revision and has been changed.
+
+**No "may", no asking (Q-0017).** Boromir, Redeemed's defender +1 "should definitely be an automatic required
+trigger; the optional bit is indeed a holdover from the prior version." Changed to `optional: false`.
+
+**Playing a card from the draw deck or discard pile (Q-0019).** "Playing a card from discard as an effect is
+always treated as a cost" (the ruling on They Are Coming, "canonized as the standard way of treating it"). There
+must be "no penalty" for failing to play from the draw deck, so the same does not hold there, and by the rules
+Just a Wisp of Cloud (101_28) could be played at any time. "That said, it's a pretty shit UX to let the player
+play when it's not in the draw deck if they thought they had one and did not. I believe the current
+implementation threads the needle of UX and rules." So `mustExist: true` on the eight "from your draw deck or
+discard pile" definitions (5_30, 7_53, 8_92, 8_118, 11_106, 17_17, 101_28, 101_37) is a deliberate departure:
+with nothing playable in either pile the card is not offered, and that is asserted as the game has it.
+
+**A tentacle killed by the wound may still be stacked (Q-0014).** "The tentacle being killed doesn't preclude
+also subsequently being stacked due to another card's game text." Out of Dark Waters (101_34) stacks it from
+the discard pile.
+
+**A card's own required trigger still happens when the same loss removes the card (Q-0020).** Thrashing
+Tentacle (101_33) adds its burden when the skirmish it loses kills it. "Consider something like Freca, that
+produces an optional trigger *and also* lets the original card it was attached to get killed. If the required
+version didn't work, the optional definitely wouldn't." (LR 2 is the related ruling on who counts as a losing
+character; LR 8, still preliminary, is about "skirmish about to end" triggers on a card that is discarded
+first, which is another matter.)
+
+**Rig requests agreed.** G-0012 (an optional trigger chosen by card is matched exactly), G-0013 (the methods
+about revealed cards: all three parts) and G-0014 (`FreepsResolveRuleFirst()` checks that what is pending is
+the required-responses ordering: "This will cause a great number of test changes downstream of this, but
+approved nonetheless").
+
