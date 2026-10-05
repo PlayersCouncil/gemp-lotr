@@ -1,145 +1,349 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V1_013_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-                new HashMap<>() {{
-                    put("counsel", "101_13");
-                    put("gandalf", "1_364");
-                    put("elrond", "1_40");
-                    put("galadriel", "1_45");
-                    put("orophin", "1_56");
-                }},
+				new HashMap<>()
+				{{
+					put("counsel", "101_13");
+
+					// Gandalf, Friend of the Shirefolk: companion, cost 4.  His text only changes his own strength.
+					put("gandalf", "1_72");
+					// Barliman Butterbur: a [gandalf] ally, cost 0.  A [gandalf] card that is not Gandalf, and an ally
+					// that is not [elven].  His fellowship ability is never used here.
+					put("barliman", "1_70");
+					// Lorien Elf: an [elven] companion, so [elven] and not an ally.
+					put("lorienelf", "1_53");
+
+					// [elven] allies.  None of their texts does anything from the draw deck or the hand.
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: cost 4, home site 3
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: cost 2, home site 6
+					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: cost 2, home site 3
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
 
-	@Test
-	public void CounselStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-
-		/**
-		 * Set: V1
-		 * Title: Counsel of the Wise
-		 * Side: Free Peoples
-		 * Culture: elven
-		 * Twilight Cost: 0
-		 * Type: event
-		 * Subtype: Fellowship
-		 * Game Text: Add (X) to take an [elven] ally with a twilight cost of X or less into hand from your draw deck.
-		 */
-
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
-
-		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
-
-		assertEquals(Side.FREE_PEOPLE, counsel.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, counsel.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, counsel.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(counsel, Timeword.FELLOWSHIP)); // test for keywords as needed
-		//assertTrue(scn.HasKeyword(counsel, Keyword.TALE));
-		assertEquals(0, counsel.getBlueprint().getTwilightCost());
-
+	protected VirtualTableScenario GetEredNimraisScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("counsel", "101_13");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk
+					put("barliman", "1_70");    // Barliman Butterbur: an ally, cost 0
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: [elven] ally, cost 4
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: [elven] ally, cost 2
+				}},
+				new HashMap<>()
+				{{
+					// The rig's Towers path, with Ered Nimrais as site 4.  Sites 1 to 3 have nothing but abilities
+					// that are never used here.
+					put("site1", "4_325");
+					put("site2", "4_331");
+					put("site3", "4_337");
+					// Ered Nimrais: "The twilight cost of each companion and ally played at Ered Nimrais is +3."
+					put("site4", "4_343");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
 	}
 
 	@Test
-	public void CounselRequiresGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void CounselOfTheWiseStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		/**
+		 * Set: V1
+		 * Name: Counsel of the Wise
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: Spot Gandalf to reveal an [elven] ally from your draw deck.  You may add (X) to take that
+		 * ally into hand, where X is that ally's twilight cost.
+		 */
+
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("counsel");
+
+		assertEquals("Counsel of the Wise", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	@Test
+	public void CannotBePlayedUntilGandalfIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var barliman = scn.GetFreepsCard("barliman");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		// A [gandalf] card in play that is not Gandalf.
+		scn.MoveAlliesToTable(barliman);
 		scn.MoveCardsToHand(counsel, gandalf);
 
 		scn.StartGame();
 
+		// There are [elven] allies in the draw deck to reveal; only Gandalf is missing.
+		assertInZone(Zone.DECK, elrond, orophin);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.FreepsPlayAvailable(counsel));
+
 		scn.FreepsPlayCard(gandalf);
+
+		assertInZone(Zone.FREE_CHARACTERS, gandalf);
 		assertTrue(scn.FreepsPlayAvailable(counsel));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void CounseloftheWiseChoosing4PermitsTakingElrondIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void RevealsAnElvenAllyFromYourDrawDeckAndTakesItIntoHandForItsTwilightCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCardsToHand(counsel);
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var barliman = scn.GetFreepsCard("barliman");
+		var lorienelf = scn.GetFreepsCard("lorienelf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		var silinde = scn.GetFreepsCard("silinde");
 		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+		// An [elven] ally that is not in the draw deck.  The opponent's copy of Silinde is in the opponent's draw
+		// deck, so Silinde stands for both "not your draw deck" cases.
+		scn.MoveCardsToDiscard(silinde);
 
 		scn.StartGame();
 
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(3, scn.GetFreepsDeckCount());
+		assertInZone(Zone.DECK, elrond, orophin, lorienelf, barliman, scn.GetShadowCard("silinde"));
 		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		assertTrue(scn.FreepsPlayAvailable(counsel));
 
 		scn.FreepsPlayCard(counsel);
+		// Looking through the draw deck shows the whole of it first.
 		scn.FreepsDismissRevealedCards();
-        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
-		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
-		assertEquals(3, scn.FreepsGetCardChoiceCount());
-		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
+
+		// Both [elven] allies in the draw deck, and nothing else: not the [elven] companion, not the [gandalf] ally,
+		// not the [elven] ally in the discard pile and in the opponent's draw deck.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, orophin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, barliman, silinde));
+		scn.FreepsChooseCardBPFromSelection(orophin);
+
+		// The event itself cost nothing, and nothing is added or taken until the player agrees to it.
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, orophin);
+
 		scn.FreepsChooseYes();
 
+		// Orophin costs 2.
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.HAND, orophin);
+		assertInZone(Zone.DECK, elrond);
+		assertInZone(Zone.DISCARD, counsel);
 		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(Zone.HAND, elrond.getZone());
-		assertEquals(2, scn.GetFreepsDeckCount());
-		assertEquals(1, scn.GetFreepsDiscardCount());
-		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void CanRevealWithoutPaying() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void TakingAnAllyWhoCostsFourAddsFourToThePool() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCardsToHand(counsel);
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
 
 		scn.StartGame();
+		// A pool that is not empty, to tell adding X from leaving X in the pool.
+		scn.SetTwilight(3);
 
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(3, scn.GetFreepsDeckCount());
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.DECK, elrond, orophin);
 
 		scn.FreepsPlayCard(counsel);
 		scn.FreepsDismissRevealedCards();
-        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
-		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
-		assertEquals(3, scn.FreepsGetCardChoiceCount());
-		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
+		scn.FreepsChooseCardBPFromSelection(elrond);
+		assertEquals(3, scn.GetTwilight());
+		scn.FreepsChooseYes();
+
+		// 3 in the pool + 4 for Elrond
+		assertEquals(7, scn.GetTwilight());
+		assertInZone(Zone.HAND, elrond);
+		assertInZone(Zone.DECK, orophin);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DecliningToAddTwilightLeavesTheRevealedAllyInTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+
+		scn.StartGame();
+
+		int deck = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertInZone(Zone.DECK, elrond, orophin);
+
+		scn.FreepsPlayCard(counsel);
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(elrond);
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
+
 		scn.FreepsChooseNo();
 
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertEquals(Zone.DECK, elrond.getZone());
-		assertEquals(3, scn.GetFreepsDeckCount());
-		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, elrond, orophin);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInZone(Zone.DISCARD, counsel);
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0021: the ally chosen is shown only to the player of the event, and the opponent is shown nothing")
+	public void RevealedAllyIsShownToTheOpponentBeforeAnythingIsPaid() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+
+		scn.StartGame();
+
+		assertInZone(Zone.DECK, elrond, orophin);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsPlayCard(counsel);
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(elrond);
+
+		// A revealed card is shown to every player.  That happens whether or not the ally is then taken, so it is
+		// read here before the player has been asked about the twilight.  A card that is only being shown is listed
+		// as not selectable.
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, elrond);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(elrond, false));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(orophin, false));
+		assertTrue(scn.ShadowDecisionAvailable("Revealed card"));
+	}
+
+	@Test
+	@Ignore("F-0022: cannot be played with Gandalf spotted when no [elven] ally is in the draw deck")
+	public void CanBePlayedWithNoElvenAllyInTheDrawDeckAndThenDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var barliman = scn.GetFreepsCard("barliman");
+		var lorienelf = scn.GetFreepsCard("lorienelf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+		scn.MoveCardsToDiscard(elrond, orophin, silinde);
+
+		scn.StartGame();
+
+		// What is left in the draw deck is an [elven] companion and a [gandalf] ally.
+		assertInZone(Zone.DECK, lorienelf, barliman);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		// Spotting Gandalf is all the event asks for; revealing an ally is what it then does, if it can.
+		assertTrue(scn.FreepsPlayAvailable(counsel));
+		scn.FreepsPlayCard(counsel);
+		// The draw deck is still looked through.
+		scn.FreepsDismissRevealedCards();
+
+		assertInZone(Zone.DISCARD, counsel);
+		assertInZone(Zone.DECK, lorienelf, barliman);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AtEredNimraisXIsStillTheAllysPrintedCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetEredNimraisScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var barliman = scn.GetFreepsCard("barliman");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel, barliman);
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+
+		// The turns that were skipped drew the rest of the deck into hand.
+		scn.MoveCardsToTopOfDeck(elrond, orophin);
+
+		assertEquals("Ered Nimrais", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertInZone(Zone.HAND, counsel, barliman);
+		assertEquals(0, scn.GetTwilight());
+
+		// An ally played here costs 3 more: Barliman costs 0 + 3 for the site.
+		scn.FreepsPlayCard(barliman);
+		assertEquals(3, scn.GetTwilight());
+
+		scn.FreepsPlayCard(counsel);
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(elrond);
+		scn.FreepsChooseYes();
+
+		// Elrond is taken into hand, not played, so the site does not touch his cost: 3 in the pool + 4, not + 7.
+		assertEquals(7, scn.GetTwilight());
+		assertInZone(Zone.HAND, elrond);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
-
-
-
