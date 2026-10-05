@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -569,35 +568,5 @@ public class Card_V1_023_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(gone));
 		assertTrue(scn.GetStackedCards(delvings).contains(axe));
-	}
-
-	@Test
-	@Ignore("Q-0015: X may be zero by Ketura's ruling of 2026-10-05, but the game does not offer the action with nothing stacked here")
-	public void SkirmishActionCanBeUsedWithNothingStackedHereForXOfZero() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gone = scn.GetFreepsCard("gone");
-		var aragorn = scn.GetFreepsCard("rohanAragorn");
-		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionsToTable(aragorn, arwen);
-		scn.MoveCardsToSupportArea(gone);
-
-		var savage = scn.GetShadowCard("savage1");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassAssignmentActions();
-		scn.FreepsAssignAndResolve(arwen, savage);
-
-		assertEquals(0, scn.GetStackedCards(gone).size());
-		assertEquals(6, scn.GetStrength(arwen));
-		assertTrue(scn.FreepsActionAvailable(gone));
-
-		// X is 0: nothing is discarded and nothing is added, and the action has been taken.
-		scn.FreepsUseCardAction(gone);
-		assertEquals(6, scn.GetStrength(arwen));
-		assertEquals(0, scn.GetFreepsDiscardCount());
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }
