@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -128,7 +127,6 @@ public class Card_V1_010_Tests
 	}
 
 	@Test
-	@Ignore("F-0019: the bearer is filtered by race (Elf) where the text says [elven]")
 	public void BearerIsJudgedByElvenCultureAndNotByBeingAnElf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -374,5 +372,44 @@ public class Card_V1_010_Tests
 		assertEquals(1, scn.GetKeywordCount(legolas, Keyword.DAMAGE));
 
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	@Test
+	public void ACharacterWhoHasLostArcherCannotBeGivenItAgainBeforeTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var darts = scn.GetFreepsCard("darts");
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var bow = scn.GetFreepsCard("bow");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(arwen, legolas);
+		scn.AttachCardsTo(arwen, darts);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertTrue(scn.HasKeyword(legolas, Keyword.ARCHER));
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+
+		scn.FreepsUseCardAction(darts);
+		assertFalse(scn.HasKeyword(legolas, Keyword.ARCHER));
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		// An Elven Bow ("Bearer is an archer") arrives on Legolas afterwards.  Losing beats gaining: he has lost
+		// archer until the regroup phase, and the bow does not give it back before then.
+		scn.AttachCardsTo(legolas, bow);
+		assertAttachedTo(bow, legolas);
+		assertFalse(scn.HasKeyword(legolas, Keyword.ARCHER));
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetKeywordCount(legolas, Keyword.DAMAGE));
+
+		// At the regroup phase the loss ends, and the bow counts.
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.HasKeyword(legolas, Keyword.ARCHER));
+		assertEquals(0, scn.GetKeywordCount(legolas, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

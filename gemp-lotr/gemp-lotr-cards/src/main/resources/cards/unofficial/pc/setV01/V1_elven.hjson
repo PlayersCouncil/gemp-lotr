@@ -267,7 +267,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		target: unique,elf,companion
+		target: unique,culture(elven),companion
 		keywords: Tale
 		effects: {
 			type: activated
