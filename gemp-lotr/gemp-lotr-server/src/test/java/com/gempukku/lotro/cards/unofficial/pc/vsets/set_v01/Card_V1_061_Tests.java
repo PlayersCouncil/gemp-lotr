@@ -1,12 +1,18 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,29 +21,48 @@ import static org.junit.Assert.*;
 
 public class Card_V1_061_Tests
 {
-
+	// The Ring-bearer is Frodo, Son of Drogo: a [shire] Hobbit, Ring-bound, vitality 4.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<>() {{
+				new HashMap<>()
+				{{
+					// Aragorn, Ranger of the North: [gondor] Man, vitality 4.
+					// "Maneuver: Exert Aragorn to make him defender +1 until the regroup phase."
 					put("aragorn", "1_89");
-					put("orophin", "1_56");
-					put("uruviel", "1_67");
-					put("pathfinder", "1_110");
-
-					put("runner", "1_178");
+					// Gimli, Son of Gloin: [dwarven] Dwarf, strength 6, vitality 3, damage +1.
+					// "Skirmish: Exert Gimli to make him strength +2."
 					put("gimli", "1_13");
-					put("savage", "1_151");     // Uruk Savage: [isengard] minion to pay for One of You Must Do This
-					put("oneOfYou", "3_63");    // One of You Must Do This: the Free Peoples player exerts X companions
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] companion, vitality 3
 
+					// Celeborn, Lord of Lorien: [elven] ally, home site 6, vitality 3; a fellowship ability only
+					put("celeborn", "1_34");
+					// Saelbeth, Elven Councilor: [elven] ally, home site 3, vitality 3.
+					// "Skirmish: Exert Saelbeth to make an Uruk-hai strength -1."
+					put("saelbeth", "3_25");
+					// Uruviel, Maid of Lorien: [elven] ally, home site 6, vitality 2.
+					// "While you can spot your site 6, Uruviel has the game text of that site."
+					put("uruviel", "1_67");
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] Dwarf ally, vitality 3
+					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] Hobbit ally, vitality 3
+
+					// Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, damage +1 and nothing else
+					put("savage", "1_151");
+					put("savage2", "1_151");
+					// One of You Must Do This: "Maneuver: Exert an [isengard] minion to make the Free Peoples player
+					// exert X companions, where X is the number of these races you can spot in the fellowship: Dwarf,
+					// Elf, Man, and Wizard."  Costs 1.
+					put("oneOfYou", "3_63");
 				}},
-				new HashMap<>() {{
+				new HashMap<>()
+				{{
 					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "1_337");
+					put("site2", "1_331");
+					put("site3", "1_341");
 					put("site4", "1_343");
 					put("site5", "1_349");
 					put("site6", "101_61");
-					put("site7", "3_118"); //NOT Anduin Confluence!  lol
+					// The Great River and not Anduin Confluence, which discards every ally
+					put("site7", "3_118");
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
@@ -53,181 +78,405 @@ public class Card_V1_061_Tests
 		 * Set: V1
 		 * Name: Lorien Throne Room
 		 * Unique: False
-		 * Side:
-		 * Culture:
-		 * Shadow Number: 3
-		 * Type: Sanctuary
-		 * Subtype:
+		 * Type: Site
+		 * Block: Fellowship
 		 * Site Number: 6
-		 * Game Text: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that companion (limit once per phase).
+		 * Shadow Number: 3
+		 * Direction: Left
+		 * Game Text: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that
+		 * 	companion (limit once per phase).
 		 */
 
 		var scn = GetScenario();
+
 		var card = scn.GetFreepsSite(6);
 
 		assertEquals("Lorien Throne Room", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getSiteBlock());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
 		assertTrue(scn.HasKeyword(card, Keyword.FOREST));
 		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	@Test
-	public void WhenCompanionsExertAnElvenAllyMayExertToHealThatCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WhenACompanionExertsHereAnElvenAllyMayExertToHealThatCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveAlliesToTable(orophin);
+		var gimli = scn.GetFreepsCard("gimli");
+		var arwen = scn.GetFreepsCard("arwen");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var grimir = scn.GetFreepsCard("grimir");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		scn.MoveCompanionsToTable(aragorn, gimli, arwen);
+		scn.MoveAlliesToTable(celeborn, saelbeth, grimir, bilbo);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToHand(runner);
+		// No ally is an Elf of another culture, or [elven] and of another race: Grimir is made an Elf and stays
+		// [dwarven]; Bilbo is made [elven] and stays a Hobbit.
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, grimir, null, Race.ELF));
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, bilbo, null, Culture.ELVEN));
 
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-
 		scn.SkipToSite(5);
 
-		scn.MoveMinionsToTable(runner);
+		scn.MoveMinionsToTable(savage);
+		// Gimli is wounded and stands by.
+		scn.AddWoundsToChar(gimli, 1);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(6, scn.GetCurrentSiteNumber());
-		assertEquals(scn.GetShadowSite(6), scn.GetCurrentSite());
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertEquals(0, scn.GetWoundsOn(orophin));
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(orophin));
-		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		//Limit once per phase
-		scn.ShadowPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Who may exert for it: the [elven] allies, of either home site, and Bilbo.  Not Arwen, an [elven] companion;
+		// not Grimir, an ally who is an Elf and not [elven].
+		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, saelbeth, bilbo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(arwen, grimir, aragorn, gimli));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(0, scn.GetWoundsOn(saelbeth));
+		scn.FreepsChooseCard(saelbeth);
+
+		assertEquals(1, scn.GetWoundsOn(saelbeth));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		// The companion who exerted is the one healed; nobody is asked which, and Gimli keeps his wound.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		scn.FreepsUseCardAction(aragorn);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void SimultaneousExertionsOfferOneLabelledTriggerPerCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		// Regression for #1079: One of You Must Do This exerts several companions in one batch, so the site offers
-		// its trigger once per companion. Each offer must say which companion it heals.
+	public void DecliningExertsAndHealsNobodyAndDoesNotUseUpThePhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(celeborn);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		scn.MoveMinionsToTable(savage);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// Declining is not using it: Aragorn's next exertion in the same maneuver phase is offered it again.
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+
+		// Celeborn is the only [elven] ally, so he is not asked for.
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(celeborn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void HealsOnceInASkirmishAndAgainInTheNextSkirmishOfTheSameTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
-		var orophin = scn.GetFreepsCard("orophin");
+		var celeborn = scn.GetFreepsCard("celeborn");
 		scn.MoveCompanionsToTable(aragorn, gimli);
-		scn.MoveAlliesToTable(orophin);
+		scn.MoveAlliesToTable(celeborn);
+
+		var savage = scn.GetShadowCard("savage");
+		var savage2 = scn.GetShadowCard("savage2");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		scn.MoveMinionsToTable(savage, savage2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[]{gimli, savage},
+				new PhysicalCardImpl[]{aragorn, savage2}
+		);
+
+		// Gimli's skirmish.  He exerts, and Celeborn (vitality 3) exerts to heal him.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(celeborn));
+
+		// He exerts again in the same skirmish: nothing is offered, though Celeborn could exert again.
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.IsExhausted(celeborn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// 6 + 2 + 2 against 5: the Savage is overwhelmed.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		// Aragorn's skirmish is another phase.  Gimli exerts in it, and is offered the heal again.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishing(aragorn));
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(2, scn.GetWoundsOn(celeborn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AnAllyExertingHereIsOfferedNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(celeborn, saelbeth);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		scn.MoveMinionsToTable(savage);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, savage);
+
+		// Saelbeth exerts for his own ability.  The Savage is the only Uruk-hai: 5 - 1.
+		scn.FreepsUseCardAction(saelbeth);
+		assertEquals(1, scn.GetWoundsOn(saelbeth));
+		assertEquals(4, scn.GetStrength(savage));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// On the same board, in the same skirmish, a companion's exertion is offered it.
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+	}
+
+	@Test
+	public void IsNotOfferedWhileNoElvenAllyCanExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var grimir = scn.GetFreepsCard("grimir");
+		scn.MoveCompanionsToTable(aragorn, arwen);
+		scn.MoveAlliesToTable(celeborn, grimir);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		scn.MoveMinionsToTable(savage);
+		// Celeborn (vitality 3) is exhausted.  Arwen, an [elven] companion, and Grimir, a [dwarven] ally, are not.
+		scn.AddWoundsToChar(celeborn, 2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// With one wound taken off Celeborn, the next exertion is offered it.
+		scn.RemoveWoundsFromChar(celeborn, 1);
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+	}
+
+	@Test
+	public void CompanionsMadeToExertTogetherAreEachOfferedByNameAndOnlyTheOneChosenIsHealed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(celeborn);
 
 		var savage = scn.GetShadowCard("savage");
 		var oneOfYou = scn.GetShadowCard("oneOfYou");
 
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
 		scn.StartGame();
 		scn.SkipToSite(5);
 
 		scn.MoveMinionsToTable(savage);
 		scn.MoveCardsToHand(oneOfYou);
 		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(6, scn.GetCurrentSiteNumber());
+
+		var throneRoom = scn.GetCurrentSite();
+		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
-		scn.SetTwilight(5);
 
-		// A Man and a Dwarf in the fellowship: X = 2
+		// A Man and a Dwarf in the fellowship: the Free Peoples player exerts 2 companions, and chooses the
+		// Ring-bearer and Gimli.
 		scn.ShadowPlayCard(oneOfYou);
-		scn.FreepsChooseCards(aragorn, gimli);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		scn.FreepsChooseCards(frodo, gimli);
+		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Aragorn, Ranger of the North"));
+		// One offer for each, and each says whom it would heal.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Frodo, Son of Drogo"));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Gimli, Son of Gl"));
-		scn.FreepsChooseAction("Gimli, Son of Gl");
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable("Aragorn"));
+		scn.FreepsChooseAction("Frodo, Son of Drogo");
 
-		assertEquals(0, scn.GetWoundsOn(gimli));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetWoundsOn(orophin));
-		// Limit once per phase: the other copy is no longer offered
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(celeborn));
+		// Once in a phase: the offer for Gimli is gone with it.
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
-	public void UruvielDoesNotCopyLorienThroneRoom() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ACompanionExertingAtAnotherSiteIsOfferedNothingEvenWithUruvielBorrowingTheText() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var uruviel = scn.GetFreepsCard("uruviel");
-		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveAlliesToTable(uruviel);
-		scn.MoveCardsToHand(pathfinder);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToHand(runner);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
+		scn.SkipToSite(5);
 
-		// 1 -> 3
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		// The Free Peoples player's own copy is laid as site 6, so that it is "your site 6" to Uruviel.
+		var throneRoom = scn.GetFreepsSite(6);
+		scn.MoveCardToAdventurePath(throneRoom);
 
-		// 3 -> 4
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
+		scn.SkipToSite(6);
+		assertEquals(throneRoom, scn.GetCurrentSite());
+		assertEquals(scn.P1(), throneRoom.getOwner());
 
-		// 4 -> 5
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		// 5 -> 6
-		scn.SkipToPhase(Phase.REGROUP);
-		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
-		scn.FreepsPlayCard(pathfinder); //ensure that it counts as "ours"
-		scn.ShadowPassCurrentPhaseAction();
+		scn.MoveMinionsToTable(savage);
 		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-		assertEquals("Lorien Throne Room", scn.GetCurrentSite().getBlueprint().getTitle());
-
-		// 6 -> 7
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-		assertEquals(7, (long)scn.GetCurrentSite().getSiteNumber());
-
-		scn.MoveMinionsToTable(runner);
-
-		assertEquals(VirtualTableScenario.P1, scn.GetFreepsSite(6).getOwner());
-		assertEquals(7, scn.GetCurrentSite().getSiteNumber().intValue());
+		assertEquals(7, scn.GetCurrentSiteNumber());
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(uruviel));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithUruvielBorrowingTheTextACompanionExertingHereIsOfferedTheSitesHealAndNoSecond() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var uruviel = scn.GetFreepsCard("uruviel");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(celeborn, uruviel);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+
+		// The Free Peoples player's own copy is laid as site 6, so that it is "your site 6" to Uruviel.
+		var throneRoom = scn.GetFreepsSite(6);
+		scn.MoveCardToAdventurePath(throneRoom);
+
+		scn.MoveMinionsToTable(savage);
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(throneRoom, scn.GetCurrentSite());
+		assertEquals(scn.P1(), throneRoom.getOwner());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		// "Here" is the site: the site offers, and Uruviel, who has its text, does not.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(uruviel));
+		scn.FreepsChooseOptionalTrigger(throneRoom);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, uruviel));
+		scn.FreepsChooseCard(celeborn);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(celeborn));
+		assertEquals(0, scn.GetWoundsOn(uruviel));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// Once in the phase, not once for the site and once for Uruviel: Aragorn's next exertion is offered nothing,
+		// though both allies could exert.
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.IsExhausted(celeborn));
+		assertFalse(scn.IsExhausted(uruviel));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
