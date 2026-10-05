@@ -376,5 +376,25 @@ vast, vast majority of the time, the player will want to draw, and they will not
 for every individual card draw." And with an empty draw deck: "while it is technically a pester to ask them when
 they have 0 cards in their deck, that is both rare and a bit of a chance for them to *realize* they have no cards
 in their deck ... I'd say let it ask with 0 cards in deck." She spoke of the empty deck only. Whether the offer
-should be made when the count itself is zero (four companions or fewer) is not ruled: Q-0033.
+should be made when the count itself is zero (four companions or fewer) was Q-0033, ruled below.
 
+## Rulings of 2026-10-05, night
+
+**A draw of nothing because the count is zero is not offered (Q-0033).** "If there's 4 or fewer companions,
+there's no reason to nag the player with 0 draws, yeah. Let's make it smarter." Nen Hithoel (101_63), Orthanc
+Library (4_362) and Summit of Amon Hen (1_362) now require something to count before the Shadow player is asked.
+The empty-deck offer of Q-0029 stays. Other "may draw a card for each X" cards are to be read the same way as
+they come up: an offer with X at zero is a finding, kind hjson-logic, already ruled.
+
+**Bilbo, Of Bag End (101_50) had no requirement to play (F-0040).** "Implementation is wrong, needs fixing."
+Fixed.
+
+**Passes stay harmless (G-0015).** "Let's leave passes harmless for now." And the names: "we should really use
+FreepsPass and ShadowPass rather than the (needlessly) wordier FreepsPassCurrentPhaseAction /
+ShadowPassCurrentPhaseAction." Tests are written with `FreepsPass()` and `ShadowPass()`.
+
+**Corsair Marauder (58_57) and the history of a card's revisions.** "The current implementation is good, it just
+needs to have its revision number updated." The earlier implementation "should be put into a comment above it in
+the HJSON, as should any of the other missing revisions, so that the file has a one-stop-shop for history." So
+an errata definition file carries every earlier revision of a card as a commented-out block above the live one,
+oldest first, and the live block's `revision:` is the number of the revision released.
