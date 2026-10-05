@@ -214,6 +214,8 @@ public class Card_08_092_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		scn.FreepsAcceptOptionalTrigger();
+		// The draw deck is looked through and Eomer may be played or left (F-0042: he used to be played unasked).
+		scn.FreepsChooseCardBPFromSelection(eomer);
 		assertEquals(Zone.DEAD, theoden.getZone());
 		assertEquals(Zone.FREE_CHARACTERS, eomer.getZone());
 		assertEquals(Zone.DEAD, rider.getZone());

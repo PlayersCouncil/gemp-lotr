@@ -40,33 +40,36 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
 
         // If the card is not in the deck, you can still attempt this action to no effect.
         // If the card is in the deck, you can choose to not play it.
-        ValueSource countSource = actionContext -> new RangeEvaluator(0, 1);
-        if(mustExist)
-        {
-            //HOWEVER, if we are in a situation where a card can be played "from draw deck or discard pile", we
-            // DO NOT WANT to pretend that there is a card in the draw deck if it's not actually there.  Else the
-            // player will be offered a "play from draw deck" button that lies to them and will cause the effect to
-            // fizzle.
-            countSource = actionContext -> new ConstantEvaluator(1);
-        }
-
+        final ValueSource countSource = actionContext -> new RangeEvaluator(0, 1);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.setPlayabilityCheckedForEffect(true);
 
+        final FilterableSource playableFilterSource = (actionContext) -> {
+            final LotroGame game = actionContext.getGame();
+            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+            if (onFilterableSource != null) {
+                final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
+                return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
+            }
+            return Filters.playable(costModifier, 0, false, false, true);
+        };
+
+        // HOWEVER, if we are in a situation where a card can be played "from draw deck or discard pile", we
+        // DO NOT WANT to pretend that there is a card in the draw deck if it's not actually there.  Else the
+        // player will be offered a "play from draw deck" button that lies to them and will cause the effect to
+        // fizzle.  mustExist therefore asks that the deck hold such a card before the effect is offered.  It
+        // does not make the player play one once the deck is being looked through: that choice stays 0 to 1
+        // ("There is no penalty if you ... choose not to play a card you are looking for").  This appender is
+        // only ever asked whether it could be carried out; it is never added to the result.
+        final EffectAppender existenceCheck = !mustExist ? null :
+                CardResolver.resolveCardsInDeck(select, playableFilterSource,
+                        actionContext -> new ConstantEvaluator(1), memorize, "you", "you", showAll, "Choose card to play", environment);
+
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(select,
-                        (actionContext) -> {
-                            final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
-                            if (onFilterableSource != null) {
-                                final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
-                            }
-                            return Filters.playable(costModifier, 0, false, false, true);
-                        },
+                CardResolver.resolveCardsInDeck(select, playableFilterSource,
                         countSource, memorize, "you", "you", showAll, "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
@@ -89,6 +92,8 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                     @Override
                     public boolean isPlayableInFull(ActionContext actionContext) {
                         final LotroGame game = actionContext.getGame();
+                        if (existenceCheck != null && !existenceCheck.isPlayableInFull(actionContext))
+                            return false;
                         return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK,
                                 actionContext.getPerformingPlayer());
                     }
