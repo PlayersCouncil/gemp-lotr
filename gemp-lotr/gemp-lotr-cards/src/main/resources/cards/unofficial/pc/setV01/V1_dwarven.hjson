@@ -240,7 +240,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					select: choose(culture(dwarven))
+					select: choose(any)
 					on: self
 				}
 			}

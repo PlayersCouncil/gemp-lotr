@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -393,7 +392,6 @@ public class Card_V1_002_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	@Ignore("F-0008: the text says 'a card stacked here' but only [dwarven] cards stacked here are offered (Shadow cards: Q-0009)")
 	// C2: F
 	@Test
 	public void ManeuverActionCanTakeAStackedCardThatIsNotDwarven() throws DecisionResultInvalidException, CardNotFoundException {
@@ -410,9 +408,7 @@ public class Card_V1_002_Tests
 		// The trigger only ever stacks [dwarven] cards here, but Come Here Lad (4_43) and Suspended Palaces (6_10)
 		// stack cards from the top of the draw deck, whatever they are, on a [dwarven] condition that already has
 		// a card stacked on it.  So a [gondor] card and a Shadow card of my own deck can lawfully be here; they
-		// are put here by cheating.  The text says "a card stacked here".
-		// Whether that takes in the Shadow card is Q-0009: this test takes the reading that it does, so that a
-		// fix which offers Free Peoples cards only does not pass unnoticed.
+		// are put here by cheating.  The text says "a card stacked here", which is any of them.
 		scn.StackCardsOn(delvings, strike, aragorn, stackedTroop);
 
 		scn.StartGame();
