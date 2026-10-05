@@ -107,7 +107,7 @@
 				}
 			]
 		}
-		gametext: Spot a [sauron] Orc and remove a burden to take a [sauron] card into hand from your discard pile.  The Free Peoples player may discard the top 5 cards of their draw deck to prevent this.
+		gametext: Spot a [sauron] Orc and remove a burden to take a [sauron] card into hand from your discard pile.  The Free Peoples player may discard the top 8 cards of their draw deck to prevent this.
 		lore: "'Go back, Sam. You can't swim. I'm going to Mordor alone.'"
 		promotext: ""
 		alts: {
