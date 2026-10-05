@@ -144,3 +144,11 @@ where the 5.0 excerpts leave a detail of hinder open.
 
 **2026-10-05. A cheat for allies (G-0004).** "There's nothing wrong with a MoveAlliesToTable function. Go for it;
 you can enforce the card type if you like."
+
+**2026-10-05. Hospitality of the Dwarves, "no more than 1 wound until the regroup phase" (101_1).** "Each dwarf
+has their own per-phase limit of 1 wound." The limit is one wound in each phase while the effect lasts, not one
+in all.
+
+**2026-10-05. X may be zero (101_5 One Dwarf in Moria).** "X may indeed be zero. The only time that X cannot be
+zero is in the case of 'exerting X times', which has an explicit ruling, but every other case has no such guard
+rail." Bears on: every card that says "X" of anything but exertions.
