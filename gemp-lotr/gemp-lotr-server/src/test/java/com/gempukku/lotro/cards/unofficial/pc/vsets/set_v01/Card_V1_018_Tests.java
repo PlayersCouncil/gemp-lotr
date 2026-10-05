@@ -63,6 +63,15 @@ public class Card_V1_018_Tests
 					// Saruman, Curunir: an [uruk-hai] minion.  "Each time an [uruk-hai] hunter wins a skirmish,
 					// heal a different [uruk-hai] minion."
 					put("curunir", "17_115");
+					// The two whose game text opens with keywords.  The Rules Council ruled that Saruman's
+					// Staff, where "the first sentence of Saruman's game text" comes from, has no effect on
+					// either, and this card works as the Staff does.
+					// Saruman, Of Many Colours: "Damage +1. Fierce. Lurker."  The rest of his text answers his
+					// being played, and he is never played here.
+					put("colours", "12_54");
+					// Saruman, Agent of the Dark Lord: "Lurker."  A skirmish ability and a heal when a companion
+					// is killed; neither comes up.
+					put("agent", "12_144");
 
 					put("axeman", "11_69");     // Axeman of Harad: a [men] minion, strength 11; his text is about his cost
 					put("poleaxe", "11_95");    // Poleaxe: a [men] possession, strength +2; its ability is a skirmish action
@@ -398,6 +407,45 @@ public class Card_V1_018_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetWoundsOn(tracker3));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheTwoSarumansWhoseGameTextOpensWithKeywordsKeepThemWhenTheFirstSentenceStopsApplying() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var council = scn.GetFreepsCard("council");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var colours = scn.GetShadowCard("colours");
+		var agent = scn.GetShadowCard("agent");
+		var whiteHand = scn.GetShadowCard("whiteHand");
+		scn.MoveCardsToSupportArea(council);
+		// Gandalf and one [elven] ally, with the second in hand.
+		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"));
+		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"));
+		scn.MoveCardsToHand(saelbeth);
+
+		scn.StartGame();
+
+		// The Master of the White Hand is beside them to show the moment the first sentence stops applying:
+		// his is "Each companion is resistance -1."
+		scn.MoveMinionsToTable(colours, agent, whiteHand);
+		assertEquals(5, scn.GetResistance(aragorn));    // 6 - 1
+		assertEquals(1, scn.GetKeywordCount(colours, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(colours, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(colours, Keyword.LURKER));
+		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
+
+		scn.FreepsPlayCard(saelbeth);
+		assertInZone(Zone.SUPPORT, saelbeth);
+		assertEquals(6, scn.GetResistance(aragorn));
+
+		// Neither of the two has lost anything: not the first keyword, and not the whole line of them.
+		assertEquals(1, scn.GetKeywordCount(colours, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(colours, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(colours, Keyword.LURKER));
+		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
