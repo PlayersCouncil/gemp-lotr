@@ -40,7 +40,7 @@
 				}
 				{
 					type: ChooseCardsFromDrawDeck
-					select: choose(minion,MaxTwilight(memory(revealedCard)))
+					select: choose(minion,MaxTwilight(memory(revealedTwilightCost)))
 					memorize: chosenCard
 					text: Choose a minion to take into hand from your draw deck
 					showAll: true
