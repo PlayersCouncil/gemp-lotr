@@ -188,6 +188,31 @@ public class Card_V1_063_Tests
 	}
 
 	@Test
+	public void ShadowPlayerIsStillAskedWithNoCardsInHisDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		// Frodo and four Guards: one companion over 4.
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"),
+				scn.GetFreepsCard("guard3"), scn.GetFreepsCard("guard4"));
+		// The turns played on the way here have drawn the Shadow player's whole deck into his hand.
+		assertEquals(0, scn.GetShadowDeckCount());
+		int shadowHand = scn.GetShadowHandCount();
+
+		scn.FreepsPassCurrentPhaseAction();
+		var nen = scn.GetCurrentSite();
+		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
+		// He is asked all the same: it is his chance to notice that his deck has run out.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nen));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(shadowHand, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
 	public void NothingIsOfferedWhenAFellowshipOfFiveMovesOnFromNenHithoel() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
