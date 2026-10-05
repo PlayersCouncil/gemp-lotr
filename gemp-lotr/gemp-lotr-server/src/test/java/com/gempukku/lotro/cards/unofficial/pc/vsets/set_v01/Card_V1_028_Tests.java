@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -323,31 +322,6 @@ public class Card_V1_028_Tests
 		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertTrue(scn.ShadowPlayAvailable(eye));
 		assertFalse(scn.ShadowPlayAvailable(wisp));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0019: with no Saruman to play, can the event still be played for its cost alone?")
-	public void CanBePlayedForItsCostAloneWithNoSarumanInTheDrawDeckOrDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wisp = scn.GetShadowCard("wisp");
-		var promise = scn.GetShadowCard("promise");
-		// Every Saruman is in hand again. The other reading of the rules: a card may be played though it will
-		// have no effect, and nothing is lost by looking for a card in the draw deck and not finding it.
-		scn.MoveCardsToHand(wisp, promise);
-		scn.MoveCardsToHand(scn.GetShadowCard("eye"), scn.GetShadowCard("agent"), scn.GetShadowCard("keeper"), scn.GetShadowCard("still"), scn.GetShadowCard("servant"));
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, wisp, promise);
-		assertEquals(0, scn.GetShadowDiscardCount());
-		assertTrue(scn.ShadowPlayAvailable(wisp));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
