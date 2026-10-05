@@ -213,7 +213,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   by another card before the time is up
 - a search of a draw deck ("from your draw deck", when the whole deck is looked through) → the deck is
   reshuffled afterwards, read with the shuffle count, whether or not the card says "shuffle"
-- "reveal" → the card is shown to the other player, who has a decision to dismiss
+- "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
+  for each player (the shown card listed and not selectable, a card not revealed absent); the others only
+  dismiss, and end somewhere that shows the dismissals were of a reveal (the dismiss methods are plain passes)
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
