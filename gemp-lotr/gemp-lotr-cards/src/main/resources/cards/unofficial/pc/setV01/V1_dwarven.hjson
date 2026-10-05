@@ -457,31 +457,23 @@
 					times: 1
 				}
 				{
-					type: memorizenumber
-					memory: originalItemCount
-					amount: {
-						type: forEachYouCanSpot
-						filter: item,attachedTo(memory(chosenDwarf))
-					}
+					type: chooseActiveCards
+					count: 0-50
+					select: choose(item,attachedTo(memory(chosenDwarf)))
+					memorize: returnedItems
+					text: Choose items on that Dwarf to return to their owners' hands
 				}
 				{
 					type: returntohand
-					select: choose(item,attachedTo(memory(chosenDwarf)))
+					select: memory(returnedItems)
 					count: 0-50
 				}
 				{
 					type: wound
 					select: choose(minion)
 					count: {
-						type: subtract
-						firstNumber: {
-							type: fromMemory
-							memory: originalItemCount
-						}
-						secondNumber: {
-							type: forEachYouCanSpot
-							filter: item,attachedTo(memory(chosenDwarf))
-						}
+						type: forEachInMemory
+						memory: returnedItems
 					}
 				}
 			]

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -430,7 +429,6 @@ public class Card_V1_005_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	@Ignore("F-0016: wounds as many minions as items left the Dwarf, not as many as were returned, when returning an item kills him")
 	@Test
 	public void ReturningAnItemWhoseLossKillsTheDwarfWoundsOnlyAsManyMinionsAsItemsWereReturned() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
