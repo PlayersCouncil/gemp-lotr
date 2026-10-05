@@ -87,7 +87,7 @@
 			requires: [
 				{
 					type: CanSpot
-					filter: or(elf,dwarf), companion
+					filter: or(culture(elven),culture(dwarven)), companion
 				}
 			]
 			effect: [
@@ -109,7 +109,7 @@
 							]
 							cost: {
 								type: Spot
-								filter: elf, companion
+								filter: culture(elven), companion
 							}
 							effect: {
 								type: ReinforceTokens
@@ -127,7 +127,7 @@
 							]
 							cost: {
 								type: Spot
-								filter: dwarf, companion
+								filter: culture(dwarven), companion
 							}
 							effect: {
 								type: ReinforceTokens
