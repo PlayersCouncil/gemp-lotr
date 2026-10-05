@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -380,7 +379,6 @@ public class Card_V1_015_Tests
 	}
 
 	@Test
-	@Ignore("F-0033: the Shadow player cannot take just 1 of several Shadow cards: after saying yes, exactly 2 must be chosen")
 	public void TheShadowPlayerMayTakeJustOneOfSeveralShadowCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

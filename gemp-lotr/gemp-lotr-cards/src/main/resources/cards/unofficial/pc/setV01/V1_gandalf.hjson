@@ -273,7 +273,7 @@
 						effect: {
 							type: putCardsFromDiscardIntoHand
 							select: choose(side(shadow))
-							count: 2
+							count: 0-2
 						}
 
 					}
