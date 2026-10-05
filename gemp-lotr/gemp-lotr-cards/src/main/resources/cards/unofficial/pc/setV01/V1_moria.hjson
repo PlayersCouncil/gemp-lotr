@@ -749,7 +749,7 @@
 				modifier: {
 					type: cantBear
 					filter: self
-					cardFilter: possession
+					cardFilter: item
 				}
 			}
 			{
@@ -790,7 +790,7 @@
 				}
 			}
 		]
-		gametext: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles (except Writhing Tentacle) from your discard pile on that card.
+		gametext: Tentacle. This minion may not bear items and is discarded if not at a marsh.<br>Shadow: If this minion is stacked on a Shadow card, play it to stack 2 tentacles (except Writhing Tentacle) from your discard pile on that card.
 		lore: "Many coiling arms seized the doors on either side, and with horrible strength, swung them round."
 		promotext: ""
 		alts: {
