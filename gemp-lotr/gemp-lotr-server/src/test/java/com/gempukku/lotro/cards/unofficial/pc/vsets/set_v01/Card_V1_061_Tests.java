@@ -430,7 +430,7 @@ public class Card_V1_061_Tests
 	}
 
 	@Test
-	public void WithUruvielBorrowingTheTextACompanionExertingHereIsOfferedTheSitesHealAndNoSecond() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithUruvielBorrowingTheTextACompanionExertingHereIsHealedOnceByTheSiteAndOnceByUruvielInAPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -449,34 +449,49 @@ public class Card_V1_061_Tests
 		scn.MoveCardToAdventurePath(throneRoom);
 
 		scn.MoveMinionsToTable(savage);
+		// Aragorn (vitality 4) starts with a wound, so that a second heal has something to take off.
+		scn.AddWoundsToChar(aragorn, 1);
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(throneRoom, scn.GetCurrentSite());
 		assertEquals(scn.P1(), throneRoom.getOwner());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsUseCardAction(aragorn);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		// "Here" is the site: the site offers, and Uruviel, who has its text, does not.
+		// "Here" is Lorien Throne Room, and that is where the fellowship is: the site offers, and so does Uruviel,
+		// who has its text.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(uruviel));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(uruviel));
+
 		scn.FreepsChooseOptionalTrigger(throneRoom);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, uruviel));
 		scn.FreepsChooseCard(celeborn);
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 		assertEquals(0, scn.GetWoundsOn(uruviel));
+
+		// The site has healed once this phase.  Uruviel's offer for the same exertion is still to be answered.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(uruviel));
+
+		// Uruviel is an [elven] ally herself, and may be the one who exerts.
+		scn.FreepsChooseOptionalTrigger(uruviel);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, uruviel));
+		scn.FreepsChooseCard(uruviel);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(celeborn));
+		assertEquals(1, scn.GetWoundsOn(uruviel));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-		// Once in the phase, not once for the site and once for Uruviel: Aragorn's next exertion is offered nothing,
-		// though both allies could exert.
+		// Once in the phase for the site and once for Uruviel, and no more: Aragorn's next exertion is offered
+		// nothing, though Celeborn (vitality 3) could exert again.
 		scn.ShadowPassCurrentPhaseAction();
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertFalse(scn.IsExhausted(celeborn));
-		assertFalse(scn.IsExhausted(uruviel));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

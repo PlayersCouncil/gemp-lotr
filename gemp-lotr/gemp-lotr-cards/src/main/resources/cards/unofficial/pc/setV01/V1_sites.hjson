@@ -329,8 +329,10 @@
 			}
 			requires: [
 				{
+					# "here" stands for the site's title (Ketura on Q-0027), so an ally who has this site's text
+					# (Uruviel) makes the offer too while the fellowship is at a Lorien Throne Room.
 					type: Location
-					filter: self
+					filter: name(Lorien Throne Room)
 				}
 				{
 					type: PerPhaseLimit
