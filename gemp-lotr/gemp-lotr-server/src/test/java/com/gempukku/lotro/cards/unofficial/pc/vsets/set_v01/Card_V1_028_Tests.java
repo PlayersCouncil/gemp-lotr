@@ -103,7 +103,7 @@ public class Card_V1_028_Tests
 		// An [isengard] minion that is not a Crow
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -175,7 +175,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(flock1, crows1);
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 1 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -229,7 +229,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows1);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -272,7 +272,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable("flock1", "flock2", "flock3", "crows1", "crows2");
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -290,6 +290,119 @@ public class Card_V1_028_Tests
 		// Five Crows: 4 - 5 is below zero, so Saruman costs 0. 10 - 0 - 2 roaming at site 2
 		assertEquals(8, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, wisp, eye);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ASarumanFoundInTheDrawDeckNeedNotBePlayedAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wisp = scn.GetShadowCard("wisp");
+		var eye = scn.GetShadowCard("eye");
+		var agent = scn.GetShadowCard("agent");
+		var keeper = scn.GetShadowCard("keeper");
+		var promise = scn.GetShadowCard("promise");
+		scn.MoveCardsToHand(wisp, promise);
+		// Servant of the Eye and Agent of the Dark Lord, with the other Sarumans, stay in the draw deck;
+		// Keeper of Isengard gives the discard pile a Saruman too.
+		scn.MoveCardsToDiscard(keeper);
+
+		scn.StartGame();
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for a Saruman, who costs 4 + 2 roaming at site 2
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.HAND, wisp, promise);
+		assertInZone(Zone.DECK, eye, agent);
+		assertInZone(Zone.DISCARD, keeper);
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+
+		scn.ShadowPlayCard(wisp);
+		// A Promise is the only Free Peoples card in hand, so it is discarded without asking.
+		assertInZone(Zone.DISCARD, promise);
+
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		// Either Saruman could be played and paid for, and the player may still play neither:
+		// "There is no penalty if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.ShadowHasCardChoiceAvailable(eye, agent));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		// No Saruman was played: both are still in the deck, and the game has not gone to the discard pile for one instead.
+		assertInZone(Zone.DECK, eye, agent);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, keeper);
+		// The event is spent and its cost stays paid. Nothing was taken from the pool.
+		assertInZone(Zone.DISCARD, wisp, promise);
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(10, scn.GetTwilight());
+		// The deck was looked through, so it is reshuffled though nothing came out of it.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoSarumanInTheDiscardPileALoneSarumanInTheDrawDeckIsOfferedAndNeedNotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wisp = scn.GetShadowCard("wisp");
+		var eye = scn.GetShadowCard("eye");
+		var agent = scn.GetShadowCard("agent");
+		var keeper = scn.GetShadowCard("keeper");
+		var still = scn.GetShadowCard("still");
+		var servant = scn.GetShadowCard("servant");
+		var party = scn.GetShadowCard("party");
+		var promise = scn.GetShadowCard("promise");
+		// Servant of the Eye is the one Saruman left in the draw deck: the other four are in hand.
+		// The discard pile has only a minion that is not Saruman.
+		scn.MoveCardsToHand(wisp, promise, agent, keeper, still, servant);
+		scn.MoveCardsToDiscard(party);
+
+		scn.StartGame();
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for Saruman, who costs 4 + 2 roaming at site 2
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.DECK, eye);
+		assertInZone(Zone.HAND, wisp, promise, agent, keeper, still, servant);
+		assertEquals(1, scn.GetShadowDiscardCount());
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		assertTrue(scn.ShadowPlayAvailable(wisp));
+
+		scn.ShadowPlayCard(wisp);
+		// A Promise is the only Free Peoples card in hand, so it is discarded without asking.
+		assertInZone(Zone.DISCARD, promise);
+
+		// Playing from the discard pile cannot be done, so it is not offered: the deck is shown at once.
+		assertFalse(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowDismissRevealedCards();
+
+		// Servant of the Eye is the only card that could be chosen, and he is still not played unasked:
+		// finding him does not oblige the player to play him.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(eye));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(agent, keeper, still, servant));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		assertInZone(Zone.DECK, eye);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		// The event is spent and its cost stays paid. Nothing was taken from the pool.
+		assertInZone(Zone.DISCARD, wisp, promise, party);
+		assertEquals(10, scn.GetTwilight());
+		// The deck was looked through, so it is reshuffled though nothing came out of it.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -312,7 +425,7 @@ public class Card_V1_028_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for a Saruman
@@ -341,7 +454,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable("flock1");
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 1 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -364,7 +477,7 @@ public class Card_V1_028_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for any Saruman
