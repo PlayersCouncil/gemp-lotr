@@ -284,7 +284,7 @@
 				}
 			]
 		}
-		gametext: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		gametext: Spot 2 valiant Elves to wound a minion (or wound a minion twice if each of those Elves bears a ranged weapon).
 		lore: "'I must go and seek some arrows,' said Legolas. 'Would that this night would end, and I could have better light for shooting.'"
 		promotext: ""
 		alts: {
