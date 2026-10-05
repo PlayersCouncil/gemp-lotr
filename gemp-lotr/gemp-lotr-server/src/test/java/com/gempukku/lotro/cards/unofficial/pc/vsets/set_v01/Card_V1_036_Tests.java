@@ -118,7 +118,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 2 set + 1 companion + 2 for Ettenmoors
@@ -154,7 +154,7 @@ public class Card_V1_036_Tests
 		assertEquals(3, scn.GetStrength(vile2));
 		assertEquals(13, scn.GetStrength(troop));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
@@ -192,7 +192,7 @@ public class Card_V1_036_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// At a marsh, so that what follows is not "while not at a marsh".
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
@@ -234,7 +234,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var bagEnd = scn.GetSite(1);
 		var ettenmoors = scn.GetCurrentSite();
@@ -268,7 +268,7 @@ public class Card_V1_036_Tests
 
 		// It is a Shadow ability: with [moria] cards still in hand, it is not there in the maneuver phase.
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(vile));
@@ -288,7 +288,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile, runner);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetShadowHandCount());
 		assertInZone(Zone.HAND, savage);
@@ -308,7 +308,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var ettenmoors = scn.GetCurrentSite();
 		assertFalse(scn.HasKeyword(ettenmoors, Keyword.MARSH));
@@ -336,7 +336,7 @@ public class Card_V1_036_Tests
 
 		// Player 2's fellowship now moves to the same Ettenmoors, where a Vile Tentacle is waiting.
 		scn.MoveMinionsToTable(nextTurnsVile);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertSame(ettenmoors, scn.GetCurrentSite());
 		assertEquals(3, scn.GetStrength(nextTurnsVile));
@@ -353,7 +353,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var ettenmoors = scn.GetCurrentSite();
 		assertFalse(scn.HasKeyword(ettenmoors, Keyword.MARSH));

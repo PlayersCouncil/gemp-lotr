@@ -123,7 +123,7 @@ public class Card_V2_077_Tests
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Staff doesn't trigger a second time
 		assertEquals(0, scn.GetWoundsOn(gandalf));

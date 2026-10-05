@@ -86,7 +86,7 @@ public class Card_V3_044_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int tokensBefore = scn.GetCultureTokensOn(ships);
 		assertFalse(scn.IsHindered(southron1));
@@ -128,7 +128,7 @@ public class Card_V3_044_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(burn);
 		// Hinder 3 Raider cards
@@ -158,7 +158,7 @@ public class Card_V3_044_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int tokensBefore = scn.GetCultureTokensOn(ships);
 
@@ -190,7 +190,7 @@ public class Card_V3_044_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(burn);
 		// Hinder 2 more Raider cards

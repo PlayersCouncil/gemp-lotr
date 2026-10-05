@@ -106,7 +106,7 @@ public class Card_01_306_Tests
 		scn.MoveCardsToHand(power);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.ATTACHED, taba.getZone());
 		scn.ShadowPlayCard(power);

@@ -83,7 +83,7 @@ public class Card_01_363_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertSame(tolbrandir, scn.GetCurrentSite());
 		assertTrue(scn.ShadowActionAvailable(tolbrandir));
@@ -130,7 +130,7 @@ public class Card_01_363_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertSame(tolbrandir, scn.GetCurrentSite());
 		assertTrue(scn.ShadowActionAvailable(tolbrandir));
@@ -167,7 +167,7 @@ public class Card_01_363_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertSame(tolbrandir, scn.GetCurrentSite());
 		assertTrue(scn.ShadowActionAvailable(tolbrandir));
@@ -207,7 +207,7 @@ public class Card_01_363_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertSame(tolbrandir, scn.GetCurrentSite());
 		assertTrue(scn.ShadowActionAvailable(tolbrandir));

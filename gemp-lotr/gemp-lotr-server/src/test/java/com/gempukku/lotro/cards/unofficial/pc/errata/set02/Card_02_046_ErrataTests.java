@@ -82,7 +82,7 @@ public class Card_02_046_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(captain));
 		int twilight = scn.GetTwilight();
@@ -114,7 +114,7 @@ public class Card_02_046_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(captain);
 		// the Captain is the only unique Uruk-hai, so he is exerted without a choice
@@ -139,7 +139,7 @@ public class Card_02_046_ErrataTests
 		// the Captain (vitality 2) is exhausted; only the non-unique Uruk Savage could exert
 		scn.AddWoundsToChar(captain, 1);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(captain));
 	}
@@ -155,7 +155,7 @@ public class Card_02_046_ErrataTests
 		scn.MoveCardsToDiscard(brood);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SetTwilight(0);
 		assertFalse(scn.ShadowActionAvailable(captain));

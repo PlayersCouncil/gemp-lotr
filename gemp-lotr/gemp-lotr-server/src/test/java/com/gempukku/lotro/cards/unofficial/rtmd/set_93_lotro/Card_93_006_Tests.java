@@ -78,8 +78,8 @@ public class Card_93_006_Tests
 		scn.ShadowResolveSkirmish(aragorn);
 
 		// Now in Aragorn's skirmish — pass through it
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		// Shadow chooses second skirmish
 		assertFalse(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
@@ -87,8 +87,8 @@ public class Card_93_006_Tests
 		scn.ShadowResolveSkirmish(boromir);
 
 		// In Boromir's skirmish now
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 	}
 
 	@Test

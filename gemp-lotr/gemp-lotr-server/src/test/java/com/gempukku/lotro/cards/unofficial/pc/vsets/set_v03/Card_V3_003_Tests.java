@@ -131,7 +131,7 @@ public class Card_V3_003_Tests
 		assertEquals(1, scn.GetWoundsOn(legolas));
 
 		// Move automatically happens to site 3 (sanctuary) after Fellowship phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 
@@ -176,7 +176,7 @@ public class Card_V3_003_Tests
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
 		// Move automatically happens to site 4 (moving FROM sanctuary)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Should trigger
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
@@ -210,7 +210,7 @@ public class Card_V3_003_Tests
 		scn.SkipToSite(2);
 
 		// Move automatically happens to site 3 (sanctuary)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 

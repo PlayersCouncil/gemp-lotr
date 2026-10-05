@@ -122,7 +122,7 @@ public class Card_V3_127_Tests
 		// Effect: FP must exert 2 companions OR put on Ring
 		// With only Frodo, forced to put on Ring
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(reach);
 
 		// Savage started with 1 wound, got exerted, then wounded, so it should be dead

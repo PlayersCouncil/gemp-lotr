@@ -155,7 +155,7 @@ public class Card_01_031_Tests
 		scn.FreepsPlayCard(asfaloth);
 		scn.FreepsChooseCard(arwen);
 		assertEquals(8, scn.GetStrength(arwen));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(10, scn.GetStrength(arwen));
 	}
@@ -181,7 +181,7 @@ public class Card_01_031_Tests
 		scn.FreepsPlayCard(asfaloth);
 		scn.FreepsChooseCard(arwen);
 		assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.DISCARD, asfaloth.getZone());
 	}

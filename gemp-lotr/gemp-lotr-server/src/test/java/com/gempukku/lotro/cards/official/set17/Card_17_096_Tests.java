@@ -92,10 +92,10 @@ public class Card_17_096_Tests
 		assertTrue(scn.IsCharAssigned(frodo));
 		assertTrue(scn.IsCharAssigned(scout));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowAnyActionsAvailable());
 	}

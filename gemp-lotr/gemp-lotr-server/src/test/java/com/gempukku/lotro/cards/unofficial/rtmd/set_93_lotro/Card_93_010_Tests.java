@@ -94,7 +94,7 @@ public class Card_93_010_Tests
 		scn.MoveMinionsToTable(madman);
 		scn.AttachCardsTo(madman, axe);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.REGROUP);
 
 		// Decline
@@ -119,7 +119,7 @@ public class Card_93_010_Tests
 		scn.AttachCardsTo(madman, axe);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.REGROUP);
 
 		// Freeps owns the mod — trigger doesn't fire for Shadow

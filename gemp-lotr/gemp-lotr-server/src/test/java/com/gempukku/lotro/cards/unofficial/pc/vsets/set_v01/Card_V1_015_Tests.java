@@ -141,7 +141,7 @@ public class Card_V1_015_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		// The move to site 2, which the opponent puts down.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(scn.P2(), scn.GetCurrentSite().getOwner());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
@@ -175,7 +175,7 @@ public class Card_V1_015_Tests
 		scn.AddWoundsToChar(aragorn, 2);
 		scn.AddWoundsToChar(gimli, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 
 		scn.FreepsDeclineOptionalTrigger();
@@ -201,7 +201,7 @@ public class Card_V1_015_Tests
 		// Site 2 is already on the adventure path, and it came from the adventure deck of Gwaihir's owner.
 		scn.MoveCardToAdventurePath(scn.GetFreepsSite(2));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(scn.P1(), scn.GetCurrentSite().getOwner());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
@@ -238,7 +238,7 @@ public class Card_V1_015_Tests
 		scn.AddWoundsToChar(aragorn, 2);
 
 		// The move from site 1 to site 2.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(scn.P2(), scn.GetCurrentSite().getOwner());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 

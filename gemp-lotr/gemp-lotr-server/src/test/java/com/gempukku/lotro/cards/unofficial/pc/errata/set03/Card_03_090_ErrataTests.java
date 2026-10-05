@@ -84,7 +84,7 @@ public class Card_03_090_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(hand));
 		assertEquals(0, scn.GetWoundsOn(warden));
@@ -142,7 +142,7 @@ public class Card_03_090_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(hand));
 		assertEquals(0, scn.GetWoundsOn(warden));

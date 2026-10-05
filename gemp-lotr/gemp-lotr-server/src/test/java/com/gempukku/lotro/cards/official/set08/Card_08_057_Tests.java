@@ -81,7 +81,7 @@ public class Card_08_057_Tests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(blacksails1);
         scn.ShadowAcceptOptionalTrigger();
@@ -116,7 +116,7 @@ public class Card_08_057_Tests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(blacksails1);
         scn.ShadowAcceptOptionalTrigger();

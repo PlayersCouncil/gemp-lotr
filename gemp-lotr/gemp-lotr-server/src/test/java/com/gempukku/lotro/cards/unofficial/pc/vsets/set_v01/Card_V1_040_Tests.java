@@ -87,7 +87,7 @@ public class Card_V1_040_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2

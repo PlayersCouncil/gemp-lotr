@@ -137,7 +137,7 @@ public class HinderTests
 
         scn.SkipToAssignments();
         scn.FreepsAssignAndResolve(frodo, dunlending);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(8, scn.GetStrength(dunlending));
         scn.ShadowPlayCard(wall); //"Spot a companion to make a [Men] minion strength +1 for each wound on that companion."
@@ -232,7 +232,7 @@ public class HinderTests
         scn.FreepsUseCardAction(frodo);
 
         scn.SkipToPhase(Phase.MANEUVER);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(1, scn.GetBurdens());
         //Frodo + Sam + Merry + Gandalf + Gimli = 5.  The hindered Aragorn should not count.
@@ -426,7 +426,7 @@ public class HinderTests
         scn.FreepsUseCardAction(frodo);
 
         scn.SkipToPhase(Phase.REGROUP);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowUseCardAction(grond);
         scn.ShadowChoose("4");
 
@@ -475,7 +475,7 @@ public class HinderTests
         scn.FreepsUseCardAction(frodo);
 
         scn.SkipToPhase(Phase.REGROUP);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowUseCardAction(grond);
         scn.ShadowChoose("0");
 
@@ -719,7 +719,7 @@ public class HinderTests
         assertTrue(scn.IsHindered(aragorn));
 
         scn.SkipToPhase(Phase.ARCHERY);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowUseCardAction(lord); //"Archery: Exert Desert Lord to exert a companion (except the Ring-bearer)..."
 
         assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -1277,7 +1277,7 @@ public class HinderTests
         scn.FreepsUseCardAction(frodo);
         assertTrue(scn.IsHindered(aragorn));
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         assertFalse(scn.FreepsHasOptionalTriggerAvailable());
     }
 
@@ -1405,7 +1405,7 @@ public class HinderTests
         assertTrue(scn.IsHindered(aragorn));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowUseCardAction(troll); // Assignment: exert this minion twice to assign it to a companion (except the Ring-bearer).
         assertEquals(2, scn.GetWoundsOn(troll));
         assertFalse(scn.IsCharAssigned(troll));
@@ -1450,7 +1450,7 @@ public class HinderTests
         assertTrue(scn.IsHindered(aragorn));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
 
@@ -1878,7 +1878,7 @@ public class HinderTests
         scn.StartGame();
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
 
@@ -1935,7 +1935,7 @@ public class HinderTests
         scn.StartGame();
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable("Assign this minion to bearer of Unexpected Visitor"));
 

@@ -76,7 +76,7 @@ public class Card_07_275_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));

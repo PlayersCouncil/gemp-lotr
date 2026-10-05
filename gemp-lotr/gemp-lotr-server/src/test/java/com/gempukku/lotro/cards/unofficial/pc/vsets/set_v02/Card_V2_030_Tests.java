@@ -82,7 +82,7 @@ public class Card_V2_030_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//base 9 + 4 from warg
 		assertEquals(12, scn.GetStrength(orc1));
@@ -116,7 +116,7 @@ public class Card_V2_030_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetTwilightCost(warg));
 		assertEquals(4, scn.GetTwilightCost(warwarg));

@@ -75,7 +75,7 @@ public class Card_01_254_ErrataTests
 		scn.StartGame();
 		scn.AddWoundsToChar(wraith, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetWoundsOn(wraith));
 		assertEquals(Zone.FREE_CHARACTERS, greenleaf.getZone());
@@ -97,7 +97,7 @@ public class Card_01_254_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(wraith));
 		assertEquals(Zone.HAND, greenleaf.getZone());
@@ -119,7 +119,7 @@ public class Card_01_254_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(wraith));
 		assertEquals(Zone.FREE_CHARACTERS, greenleaf.getZone());
@@ -147,7 +147,7 @@ public class Card_01_254_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(mordor);
 		assertEquals(2, scn.ShadowGetCardChoiceCount());

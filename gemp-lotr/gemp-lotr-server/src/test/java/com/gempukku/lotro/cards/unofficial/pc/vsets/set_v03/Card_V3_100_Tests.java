@@ -104,7 +104,7 @@ public class Card_V3_100_Tests
 		scn.StartGame();
 
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowDeclineOptionalTrigger(); //ithil stone
 		assertEquals(18 - 5, scn.GetTwilightCost(sauron));
 

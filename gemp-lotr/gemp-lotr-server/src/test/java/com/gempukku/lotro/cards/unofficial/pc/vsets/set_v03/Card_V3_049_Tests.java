@@ -87,7 +87,7 @@ public class Card_V3_049_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -118,7 +118,7 @@ public class Card_V3_049_Tests
 		assertFalse(scn.HasKeyword(orc, Keyword.AMBUSH));
 
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(stalker);
 		scn.ShadowChoose("Remove"); // Stay active
 
@@ -150,7 +150,7 @@ public class Card_V3_049_Tests
 		assertEquals(3, scn.GetKeywordCount(initiate, Keyword.AMBUSH));
 
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(stalker);
 		scn.ShadowChoose("Remove");
 
@@ -172,7 +172,7 @@ public class Card_V3_049_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(stalker1);
 		scn.ShadowChoose("Remove");
@@ -202,7 +202,7 @@ public class Card_V3_049_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(stalker);
 		scn.ShadowChoose("Hinder"); // Deploy hindered

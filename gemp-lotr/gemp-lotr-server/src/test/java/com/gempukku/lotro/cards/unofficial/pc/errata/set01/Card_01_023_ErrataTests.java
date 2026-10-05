@@ -109,8 +109,8 @@ public class Card_01_023_ErrataTests
 		scn.FreepsResolveSkirmish(gimli);
 		//pump gimli to beat the uruk
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
@@ -141,8 +141,8 @@ public class Card_01_023_ErrataTests
 		scn.FreepsResolveSkirmish(gimli);
 		//pump gimli to beat the uruk
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		var bot1 = scn.GetFromBottomOfShadowDeck(1);
 		var bot2 = scn.GetFromBottomOfShadowDeck(2);

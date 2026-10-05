@@ -148,7 +148,7 @@ public class Card_V3_004_Tests
 		scn.StartGame();
 
 		// Move from site 1 to site 2 - only 2 pipes, so modifier doesn't trigger
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 

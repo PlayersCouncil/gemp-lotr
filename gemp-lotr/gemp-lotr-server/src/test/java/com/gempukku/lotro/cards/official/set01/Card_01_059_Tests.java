@@ -104,7 +104,7 @@ public class Card_01_059_Tests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(rumil));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable("Exert a Dwarf"));
 		scn.FreepsChooseAction("Exert a Dwarf");
 
@@ -161,7 +161,7 @@ public class Card_01_059_Tests
 		assertEquals(2, scn.GetWoundsOn(legolas));
 		assertEquals(0, scn.GetWoundsOn(gimli));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable("Exert an Elf"));
 		scn.FreepsChooseAction("Exert an Elf");
 

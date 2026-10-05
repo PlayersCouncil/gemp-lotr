@@ -99,7 +99,7 @@ public class Card_02_039_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(beyond));
 		scn.ShadowPlayCard(beyond);
@@ -153,7 +153,7 @@ public class Card_02_039_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(beyond);
 		scn.ShadowChooseCard(helm);
@@ -193,7 +193,7 @@ public class Card_02_039_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(beyond);
 
@@ -242,7 +242,7 @@ public class Card_02_039_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(beyond);
 

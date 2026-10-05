@@ -257,8 +257,8 @@ public class Card_V1_010_Tests
 
 		// Archery fire with no archer left: neither minion is wounded, and the Shadow player is not asked to
 		// place a wound.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertEquals(0, scn.GetWoundsOn(savage));
@@ -313,7 +313,7 @@ public class Card_V1_010_Tests
 		assertFalse(scn.HasKeyword(legolas, Keyword.ARCHER));
 		assertEquals(1, scn.GetKeywordCount(legolas, Keyword.DAMAGE));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(darts));
 
 		// Legolas pays again, but he is no longer an archer and there is no other: nobody gains anything.
@@ -323,7 +323,7 @@ public class Card_V1_010_Tests
 		assertEquals(1, scn.GetKeywordCount(legolas, Keyword.DAMAGE));
 
 		// Vitality 3 with 2 wounds: exhausted, so he can no longer exert.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(darts));
 	}

@@ -100,7 +100,7 @@ public class Card_V3_073_Tests
 		assertFalse(scn.IsHindered(lastalliance2));
 		assertEquals(0, scn.GetWoundsOn(cantea));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(cantea);
 
 		// Cantëa exerts
@@ -134,7 +134,7 @@ public class Card_V3_073_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(boromir);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(cantea);
 
 		// Boromir's Athelas hindered
@@ -172,7 +172,7 @@ public class Card_V3_073_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(boromir);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(cantea);
 
 		// Boromir's attachments hindered (direct effect)
@@ -209,7 +209,7 @@ public class Card_V3_073_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(boromir);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Can't exert when exhausted
 		assertFalse(scn.ShadowActionAvailable(cantea));
@@ -238,7 +238,7 @@ public class Card_V3_073_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(boromir);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(cantea);
 
 		// No cards on Boromir to hinder, so bonus effect doesn't fire

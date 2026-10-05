@@ -86,7 +86,7 @@ public class Card_01_198_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(ttmm));
 		scn.ShadowPlayCard(scout);
@@ -116,7 +116,7 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 3
+		scn.FreepsPass(); // move to 3
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -125,28 +125,28 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 4
+		scn.FreepsPass(); // move to 4
 		assertEquals(3, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 5
+		scn.FreepsPass(); // move to 5
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 6
+		scn.FreepsPass(); // move to 6
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 7
+		scn.FreepsPass(); // move to 7
 		//did not draw:
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -172,7 +172,7 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 3
+		scn.FreepsPass(); // move to 3
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -181,28 +181,28 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 4
+		scn.FreepsPass(); // move to 4
 		assertEquals(3, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 5
+		scn.FreepsPass(); // move to 5
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 6
+		scn.FreepsPass(); // move to 6
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
 		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 7
+		scn.FreepsPass(); // move to 7
 		//did not draw:
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -226,7 +226,7 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 3
+		scn.FreepsPass(); // move to 3
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -235,7 +235,7 @@ public class Card_01_198_ErrataTests
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 4
+		scn.FreepsPass(); // move to 4
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -243,7 +243,7 @@ public class Card_01_198_ErrataTests
 		scn.SkipToSite(5);
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 5
+		scn.FreepsPass(); // move to 5
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -251,7 +251,7 @@ public class Card_01_198_ErrataTests
 		scn.SkipToSite(6);
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 6
+		scn.FreepsPass(); // move to 6
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -259,7 +259,7 @@ public class Card_01_198_ErrataTests
 		scn.SkipToSite(7);
 
 		assertEquals(8, scn.GetShadowHandCount());
-		scn.FreepsPassCurrentPhaseAction(); // move to 7
+		scn.FreepsPass(); // move to 7
 		//did not draw
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -279,7 +279,7 @@ public class Card_01_198_ErrataTests
 		scn.StartGame();
 
 		scn.SkipToSite(3);
-		scn.FreepsPassCurrentPhaseAction(); // move to 4
+		scn.FreepsPass(); // move to 4
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());

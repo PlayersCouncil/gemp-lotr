@@ -187,8 +187,8 @@ public class Card_V3_105_Tests
 
 		// Play event in skirmish, then let skirmish resolve
 		scn.FreepsPlayCard(driven);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// At end of skirmish, hinder trigger fires — Savage is only minion, auto-chosen
 		assertTrue(scn.IsHindered(gpt));
@@ -224,8 +224,8 @@ public class Card_V3_105_Tests
 
 		// Play event in skirmish, then let skirmish resolve
 		scn.FreepsPlayCard(driven);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// Skirmish ends — with 5 companions, hinder should NOT trigger
 		assertFalse(scn.IsHindered(savage));

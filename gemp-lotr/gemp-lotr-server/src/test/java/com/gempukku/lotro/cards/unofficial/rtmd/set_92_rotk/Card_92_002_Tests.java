@@ -151,7 +151,7 @@ public class Card_92_002_Tests
 		assertTrue(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
 		scn.ShadowUseCardAction(scn.GetShadowCard("mod"));
 		scn.ShadowDismissRevealedCards();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Skip to regroup and choose to move again
 		scn.SkipToPhase(Phase.REGROUP);

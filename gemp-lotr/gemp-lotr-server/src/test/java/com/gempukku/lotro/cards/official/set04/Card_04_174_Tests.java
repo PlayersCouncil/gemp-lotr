@@ -73,7 +73,7 @@ public class Card_04_174_Tests
 		scn.MoveCardsToHand(staff);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.HasKeyword(saruman, Keyword.DAMAGE));
 		assertFalse(scn.HasKeyword(saruman, Keyword.FIERCE));
@@ -95,7 +95,7 @@ public class Card_04_174_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(staff));
 		scn.ShadowUseCardAction(staff);
@@ -120,10 +120,10 @@ public class Card_04_174_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(staff);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(saruman));
 		scn.ShadowUseCardAction(saruman);

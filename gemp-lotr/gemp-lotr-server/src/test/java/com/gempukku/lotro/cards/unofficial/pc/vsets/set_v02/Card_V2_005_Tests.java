@@ -72,7 +72,7 @@ public class Card_V2_005_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -116,7 +116,7 @@ public class Card_V2_005_Tests
 		scn.MoveCardsToDiscard(oath3);
 		scn.MoveCardsToHand(threat);
 		scn.SetTwilight(17);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// Site 3 is the last site of region 1.
@@ -167,7 +167,7 @@ public class Card_V2_005_Tests
 		scn.MoveCardsToSupportArea(oath1, oath2);
 		scn.MoveCardsToHand(threat);
 		scn.SetTwilight(24);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// Site 3 is the last site of region 1.
@@ -222,7 +222,7 @@ public class Card_V2_005_Tests
 		scn.MoveCardsToTopOfDeck(oath2);
 		scn.MoveCardsToHand(threat);
 		scn.SetTwilight(28);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(4, scn.GetCurrentSiteNumber());
@@ -268,7 +268,7 @@ public class Card_V2_005_Tests
 		scn.MoveCardsToTopOfDeck(oath2);
 		scn.MoveCardsToHand(threat);
 		scn.SetTwilight(25);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(7, scn.GetCurrentSiteNumber());
@@ -313,7 +313,7 @@ public class Card_V2_005_Tests
 		scn.AddTokensToCard(oath1, 1);
 		scn.AddTokensToCard(oath2, 1);
 		scn.SetTwilight(0);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var site1 = scn.GetSite(1);
 		var site2 = scn.GetSite(2);
@@ -358,7 +358,7 @@ public class Card_V2_005_Tests
 		scn.MoveCardsToSupportArea(oath1);
 		scn.AddTokensToCard(oath1, 1);
 		scn.SetTwilight(0);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var site1 = scn.GetSite(1);
 		var site2 = scn.GetSite(2);
@@ -389,7 +389,7 @@ public class Card_V2_005_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(oath1, 1);
 		scn.SetTwilight(0);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var site1 = scn.GetSite(1);
 

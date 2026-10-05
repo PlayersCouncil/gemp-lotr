@@ -188,19 +188,19 @@ public class Card_V2_038_Tests
 		scn.FreepsChoose("0"); //Have to pick whether to buff smeagol or debuff gollum
 
 		//One Ring ability used by the Free Peoples player
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(ring);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(3, scn.GetWoundsOn(frodo));
 
 		//Cheat and take the Ring off so we don't have to count burdens
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(frodo);
 		scn.ShadowDeclineOptionalTrigger(); //Ironically, the balrog's ability responds to our cheating
 
 		//Site ability used by the Free Peoples player
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(ettenmoors);
 		assertEquals(4, scn.GetWoundsOn(frodo)); // 1 exertion from site
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
@@ -208,7 +208,7 @@ public class Card_V2_038_Tests
 		assertEquals(5, scn.GetWoundsOn(frodo)); //1 exertion from site, 1 wound from balrog
 
 		//Free Peoples event should not trigger
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsPlayCard(severed);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(5, scn.GetWoundsOn(frodo));
@@ -220,13 +220,13 @@ public class Card_V2_038_Tests
 		assertEquals(5, scn.GetWoundsOn(frodo));
 
 		//Shadow use of site
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(ettenmoors);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(5, scn.GetWoundsOn(frodo));
 
 		//Shadow event
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(drums);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(5, scn.GetWoundsOn(frodo));

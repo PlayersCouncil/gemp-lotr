@@ -92,7 +92,7 @@ public class Card_V3_057_Tests
 		int aragornStrengthBefore = scn.GetStrength(aragorn);
 		assertInZone(Zone.SUPPORT, harpoon);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(harpoon));
 		scn.ShadowUseCardAction(harpoon);
@@ -176,7 +176,7 @@ public class Card_V3_057_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transfer first harpoon to Aragorn
 		scn.ShadowUseCardAction(harpoon1);
@@ -187,7 +187,7 @@ public class Card_V3_057_Tests
 		scn.RemoveWoundsFromChar(helmsman1, 1);
 		scn.RemoveWoundsFromChar(helmsman2, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Second harpoon should not be able to target Aragorn (limit 1 per bearer)
 		assertTrue(scn.ShadowActionAvailable(harpoon2));

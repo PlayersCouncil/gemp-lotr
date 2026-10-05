@@ -148,7 +148,7 @@ public class Card_V1_012_Tests
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -198,7 +198,7 @@ public class Card_V1_012_Tests
 		assertEquals(1, scn.GetCurrentSiteNumber());
 
 		// The move from site 1 to site 2.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -266,7 +266,7 @@ public class Card_V1_012_Tests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetCurrentSiteNumber());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// The fellowship has moved and nothing was offered.
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
@@ -300,7 +300,7 @@ public class Card_V1_012_Tests
 		var bottom = scn.GetFreepsBottomOfDeck();
 		assertEquals(2, scn.GetFreepsHandCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
 		scn.FreepsDeclineOptionalTrigger();
@@ -335,7 +335,7 @@ public class Card_V1_012_Tests
 
 		// Placing a card is part of what the trigger does, not a cost of it, so having no card to place does
 		// not stop the rest: as much is done as can be.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -394,7 +394,7 @@ public class Card_V1_012_Tests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		// The heal is offered first, as a choice of a companion that may be passed: one or none.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gandalf));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(elrond));
 		assertEquals(0, scn.FreepsGetChoiceMin());
@@ -456,7 +456,7 @@ public class Card_V1_012_Tests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable("place a card from hand beneath your draw deck"));
 
@@ -510,7 +510,7 @@ public class Card_V1_012_Tests
 
 		// The heal is a "may" of its own: a companion is clicked, or the choice is passed.  It is not asked as
 		// a yes or no.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());

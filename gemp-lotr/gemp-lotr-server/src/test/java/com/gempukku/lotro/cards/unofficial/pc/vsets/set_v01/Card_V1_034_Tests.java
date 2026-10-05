@@ -91,7 +91,7 @@ public class Card_V1_034_Tests
 		scn.MoveCardsToHand(waters);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertEquals(3, scn.GetTwilight());
@@ -137,7 +137,7 @@ public class Card_V1_034_Tests
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// The same wound on a tentacle.
 		scn.FreepsUseCardAction(legolas);
@@ -296,7 +296,7 @@ public class Card_V1_034_Tests
 		assertEquals(1, scn.GetWoundsOn(vile));
 		assertEquals(0, scn.GetStackedCards(waters).size());
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.FreepsUseCardAction(legolas);
 		scn.FreepsChooseCard(vile);
@@ -330,7 +330,7 @@ public class Card_V1_034_Tests
 		// Site 2 is Ettenmoors: "Skirmish: Exert your companion or minion to make that character strength +2."
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(0, scn.GetWoundsOn(vile));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(scn.GetCurrentSite()));
 
 		scn.ShadowUseCardAction(scn.GetCurrentSite());
@@ -370,7 +370,7 @@ public class Card_V1_034_Tests
 		// Strong Tentacle's 3 + 2 and the Huge Tentacle's 2 + 2 as well.  With less, the Orc would be out of
 		// reach anyway and its absence from the choice would show nothing.
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 5 set + 1 companion + 2 for site 2
 		assertEquals(8, scn.GetTwilight());
@@ -397,8 +397,8 @@ public class Card_V1_034_Tests
 		assertTrue(scn.ShadowActionAvailable(waters));
 
 		// In the maneuver phase, on the same board, it is not offered.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(waters));
 	}
@@ -417,7 +417,7 @@ public class Card_V1_034_Tests
 		scn.StackCardsOn(waters2, troop);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2.  The Vile Tentacle costs 2 + 2 roaming, one more than the pool holds, and
 		// the Goblin Patrol Troop, at 6 + 2, is not a tentacle.

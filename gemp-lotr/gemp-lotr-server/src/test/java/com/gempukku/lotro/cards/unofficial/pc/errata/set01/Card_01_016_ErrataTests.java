@@ -101,7 +101,7 @@ public class Card_01_016_ErrataTests
 		scn.SetTwilight(20);
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
@@ -134,7 +134,7 @@ public class Card_01_016_ErrataTests
 		scn.SetTwilight(20);
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
@@ -174,7 +174,7 @@ public class Card_01_016_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
@@ -205,7 +205,7 @@ public class Card_01_016_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());

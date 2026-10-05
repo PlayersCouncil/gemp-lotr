@@ -79,7 +79,7 @@ public class Card_01_262_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(assassin));
 		scn.ShadowUseCardAction(assassin);
@@ -120,7 +120,7 @@ public class Card_01_262_Tests
 		scn.FreepsUseCardAction(sam);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(assassin));
 		scn.ShadowUseCardAction(assassin);

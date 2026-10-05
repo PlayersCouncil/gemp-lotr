@@ -73,7 +73,7 @@ public class Card_01_160_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
 		assertEquals(Zone.HAND, sword.getZone());
@@ -96,7 +96,7 @@ public class Card_01_160_ErrataTests
 		scn.AttachCardsTo(uruk, sword);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, uruk);
@@ -125,7 +125,7 @@ public class Card_01_160_ErrataTests
 		scn.AttachCardsTo(uruk, sword);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, uruk);

@@ -156,7 +156,7 @@ public class Card_V1_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 3 set + 1 companion + 1 for Midgewater Marshes
@@ -184,7 +184,7 @@ public class Card_V1_066_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(vile, troop);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 3 set + 1 companion + 2 for Ettenmoors
@@ -212,7 +212,7 @@ public class Card_V1_066_Tests
 		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(writhing, writhing2, vile, troop);
 
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
@@ -250,7 +250,7 @@ public class Card_V1_066_Tests
 		// show that the ban is on this minion and not on tentacles.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, runner, null, Keyword.TENTACLE));
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The tentacles would be discarded at Bag End, so they are played here, at the marsh.
 		scn.ShadowPlayCard(writhing);
@@ -285,7 +285,7 @@ public class Card_V1_066_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, lemenya);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The tentacle would be discarded at Bag End, so it is played here, at the marsh: 2 + 2 roaming, out of
 		// 2 set + 1 companion + 1 for Midgewater Marshes.
@@ -339,7 +339,7 @@ public class Card_V1_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(vile);
 
 		// 2 set + 1 companion + 1 for Midgewater Marshes: exactly what it costs to play here.
@@ -391,7 +391,7 @@ public class Card_V1_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 set + 1 companion + 1 for Midgewater Marshes, against 2 to play + 2 roaming
 		assertEquals(3, scn.GetTwilight());
@@ -425,7 +425,7 @@ public class Card_V1_066_Tests
 		var bagEnd = scn.GetSite(1);
 		scn.StackCardsOn(bagEnd, writhing4);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(vile);
 
 		// 10 set + 1 companion + 1 for Midgewater Marshes: three times what it costs.
@@ -439,8 +439,8 @@ public class Card_V1_066_Tests
 		assertFalse(scn.ShadowActionAvailable(writhing2));
 
 		// The maneuver phase: the copy on the Shadow card is still there and the pool still covers it.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertEquals(12, scn.GetTwilight());
@@ -463,7 +463,7 @@ public class Card_V1_066_Tests
 		scn.MoveMinionsToTable(savage);
 		scn.StackCardsOn(savage, writhing);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 2 set + 1 companion + 1 for Midgewater Marshes
 		assertEquals(4, scn.GetTwilight());
@@ -499,7 +499,7 @@ public class Card_V1_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 1 set + 1 companion + 2 for Ettenmoors

@@ -157,7 +157,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(strider));
 		assertFalse(scn.IsHindered(beacon1));
@@ -191,7 +191,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(knight));
 
@@ -226,7 +226,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
@@ -260,7 +260,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(slayer);
 
@@ -310,7 +310,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(slayer);
 		//Strider chosen as the only option automatically
@@ -344,7 +344,7 @@ public class Card_V3_028_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 

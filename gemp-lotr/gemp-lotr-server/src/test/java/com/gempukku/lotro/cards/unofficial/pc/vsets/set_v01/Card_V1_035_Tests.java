@@ -88,7 +88,7 @@ public class Card_V1_035_Tests
 		scn.MoveCardsToHand(darkness);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertEquals(3, scn.GetTwilight());
@@ -125,7 +125,7 @@ public class Card_V1_035_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.AttachCardsTo(troop, spear2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertEquals(3, scn.GetTwilight());
@@ -177,7 +177,7 @@ public class Card_V1_035_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(balrog);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetStackedCards(darkness).size());
@@ -219,7 +219,7 @@ public class Card_V1_035_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 10 set + 1 companion + 2 for site 2
 		assertEquals(13, scn.GetTwilight());
@@ -286,7 +286,7 @@ public class Card_V1_035_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(balrog2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(1, scn.GetStackedCards(darkness).size());
@@ -340,14 +340,14 @@ public class Card_V1_035_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(balrog);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// An item in hand to stack, and The Balrog in play with a [moria] card stacked here to take.
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.ShadowActionAvailable(darkness));
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertInZone(Zone.HAND, spear);

@@ -93,7 +93,7 @@ public class Card_V3_042_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetStackedCards(matriarch).size());
 
@@ -126,7 +126,7 @@ public class Card_V3_042_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(southron1);
 		scn.ShadowAcceptOptionalTrigger();
@@ -151,7 +151,7 @@ public class Card_V3_042_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(orc);
 
@@ -182,7 +182,7 @@ public class Card_V3_042_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -226,7 +226,7 @@ public class Card_V3_042_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int shadowArcheryBefore = scn.GetShadowArcheryTotal();
 
@@ -255,7 +255,7 @@ public class Card_V3_042_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(matriarch);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, matriarch);

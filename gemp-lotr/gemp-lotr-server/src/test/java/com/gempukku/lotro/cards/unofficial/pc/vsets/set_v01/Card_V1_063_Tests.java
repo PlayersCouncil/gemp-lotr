@@ -96,7 +96,7 @@ public class Card_V1_063_Tests
 		int freepsDeck = scn.GetFreepsDeckCount();
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nen));
@@ -124,7 +124,7 @@ public class Card_V1_063_Tests
 		int shadowHand = scn.GetShadowHandCount();
 		int shadowDeck = scn.GetShadowDeckCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nen));
@@ -151,7 +151,7 @@ public class Card_V1_063_Tests
 		int shadowDeck = scn.GetShadowDeckCount();
 		assertTrue(shadowDeck >= 5);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nen));
@@ -175,7 +175,7 @@ public class Card_V1_063_Tests
 		int shadowHand = scn.GetShadowHandCount();
 		int shadowDeck = scn.GetShadowDeckCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		// The game still asks, with nothing to draw; saying yes draws nothing.
@@ -200,7 +200,7 @@ public class Card_V1_063_Tests
 		assertEquals(0, scn.GetShadowDeckCount());
 		int shadowHand = scn.GetShadowHandCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		// He is asked all the same: it is his chance to notice that his deck has run out.
@@ -219,7 +219,7 @@ public class Card_V1_063_Tests
 		scn.StartGame();
 		scn.SkipToSite(7);
 		// Frodo arrives at Nen Hithoel alone and the Shadow player says no to a draw of nothing.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Nen Hithoel", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.ShadowDeclineOptionalTrigger();
 
@@ -246,7 +246,7 @@ public class Card_V1_063_Tests
 		scn.StartGame();
 		scn.SkipToSite(7);
 		// The first player's Frodo goes on to Nen Hithoel alone, and his turn ends there.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
 		scn.ShadowDeclineOptionalTrigger();
@@ -263,7 +263,7 @@ public class Card_V1_063_Tests
 		int secondHand = scn.GetShadowHandCount();
 		int secondDeck = scn.GetShadowDeckCount();
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nen));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

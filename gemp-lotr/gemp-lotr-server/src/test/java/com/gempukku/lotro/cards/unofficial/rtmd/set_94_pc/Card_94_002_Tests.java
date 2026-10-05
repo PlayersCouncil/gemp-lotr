@@ -96,7 +96,7 @@ public class Card_94_002_Tests {
 		scn.AddWoundsToChar(frodo, frodo.getBlueprint().getVitality());
 		// A single pump is enough to run the death check; a full SkipToPhase can't complete once
 		// the Ring-bearer's death has ended the game.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertInZone(Zone.DEAD, frodo);
 		assertEquals(deadCount + 1, scn.GetFreepsDeadCount());

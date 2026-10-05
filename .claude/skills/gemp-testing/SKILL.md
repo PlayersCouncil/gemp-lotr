@@ -185,7 +185,7 @@ was about. Leave archers out of a scenario unless they are the point, or put the
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
 answered by the skipper's next pass, which declines it. The test arrives in the new phase with nothing pending
-and nothing done. To test such a trigger, pass the phase yourself with `FreepsPassCurrentPhaseAction()` and
+and nothing done. To test such a trigger, pass the phase yourself with `FreepsPass()` and
 answer the trigger; keep cards with optional triggers out of other tests' scenarios, or put them down after
 skipping. In the fellowship phase the skipper passes for the Free Peoples player alone, so a trigger offered
 to the Shadow player there is never answered and the skipper stops ("halted in phase FELLOWSHIP ... after 20
@@ -285,8 +285,10 @@ optional is noticed. `FreepsDismissRevealedCards()` and `ShadowDismissRevealedCa
 being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown some and fails if nobody is.
 `FreepsGetTotalRevealedCardCount()` and its Shadow twin count the cards a player is being shown, 0 if none.
 `FreepsChooseOptionalTrigger(card)` fails unless that very card is offering. The plain pass methods are not like
-this: a pass with nothing pending does nothing and says nothing, and `FreepsPassCurrentPhaseAction()` and its
-Shadow twin answer whatever is pending with nothing, an optional trigger included. Do not write one "to be safe".
+this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay harmless), and
+`FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger included. Do not
+write one "to be safe". Write `FreepsPass()` and `ShadowPass()`: the older, wordier
+`FreepsPassCurrentPhaseAction()` and `ShadowPassCurrentPhaseAction()` do the same thing and are being retired.
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next

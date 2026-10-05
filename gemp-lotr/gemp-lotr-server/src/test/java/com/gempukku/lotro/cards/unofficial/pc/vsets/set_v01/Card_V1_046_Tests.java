@@ -84,7 +84,7 @@ public class Card_V1_046_Tests
 		scn.StartGame();
 		scn.AddBurdens(4);
 		scn.MoveMinionsToTable(soldier2, guard, troop);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// 1 companion + 2 for the site

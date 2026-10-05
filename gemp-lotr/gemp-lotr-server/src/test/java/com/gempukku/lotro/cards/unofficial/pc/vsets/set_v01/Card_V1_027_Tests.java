@@ -146,7 +146,7 @@ public class Card_V1_027_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// In play: an [isengard] condition that is not weather, and a weather card that is not a condition.
@@ -185,7 +185,7 @@ public class Card_V1_027_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 2 companions + 2 for the shadow number of site 2
@@ -228,7 +228,7 @@ public class Card_V1_027_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 3 companions + 2 for the shadow number of site 2
@@ -278,7 +278,7 @@ public class Card_V1_027_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 4 set + 2 companions + 2 for the shadow number of site 2
@@ -333,7 +333,7 @@ public class Card_V1_027_Tests
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(4);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		// 4 set + 2 companions + 2 for the shadow number of site 2
@@ -441,7 +441,7 @@ public class Card_V1_027_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 set + 2 companions + 2 for the shadow number of site 2: enough for Saruman's 4 + 2 roaming
@@ -478,7 +478,7 @@ public class Card_V1_027_Tests
 		scn.StartGame(scn.GetFreepsSite("site1"));
 
 		// The Shadow player lays the next site, and the fellowship moves to it.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(heights);
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals("Heights of Isengard", scn.GetCurrentSite().getBlueprint().getTitle());

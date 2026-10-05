@@ -101,7 +101,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -133,7 +133,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.IsHindered(athelas1));
 		assertFalse(scn.IsHindered(athelas2));
@@ -179,7 +179,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -222,7 +222,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 		scn.ShadowChooseCard(athelas1);
@@ -259,7 +259,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -291,7 +291,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -324,7 +324,7 @@ public class Card_V3_080_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 

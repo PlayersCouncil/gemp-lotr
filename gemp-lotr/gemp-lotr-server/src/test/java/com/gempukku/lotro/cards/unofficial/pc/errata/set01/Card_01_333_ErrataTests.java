@@ -82,7 +82,7 @@ public class Card_01_333_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
 
@@ -111,7 +111,7 @@ public class Card_01_333_ErrataTests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.AddWoundsToChar(frodo, 3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
 
@@ -141,7 +141,7 @@ public class Card_01_333_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
 

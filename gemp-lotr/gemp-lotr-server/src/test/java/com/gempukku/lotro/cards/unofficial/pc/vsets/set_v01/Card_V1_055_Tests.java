@@ -218,7 +218,7 @@ public class Card_V1_055_Tests
 		assertEquals(11, scn.GetStrength(boromir));
 
 		// The limit is each card's own: the second copy is not held to what the first gave.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsPlayAvailable(yet2));
 		scn.FreepsPlayCard(yet2);
 		assertEquals(2, scn.GetWoundsOn(boromir));

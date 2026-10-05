@@ -198,7 +198,7 @@ public class Card_09_026_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard 2 cards to draw 2 cards?"));
 		scn.ShadowChooseYes();
@@ -237,7 +237,7 @@ public class Card_09_026_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseNo(); //ignore the fellowship phase movement
 
 		scn.SkipToPhase(Phase.REGROUP);

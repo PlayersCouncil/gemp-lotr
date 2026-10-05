@@ -146,7 +146,7 @@ public class UniquenessTests
 
         scn.SetTwilight(20);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowPlayAvailable(enqueaaccent));
         assertTrue(scn.ShadowPlayAvailable(enqueanoaccent));

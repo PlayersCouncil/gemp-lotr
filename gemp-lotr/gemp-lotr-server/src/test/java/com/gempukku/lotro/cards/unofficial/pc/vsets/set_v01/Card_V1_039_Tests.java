@@ -104,7 +104,7 @@ public class Card_V1_039_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya, lemenya);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -140,8 +140,8 @@ public class Card_V1_039_Tests
 		scn.MoveMinionsToTable(wraith);
 		scn.MoveCardsToSupportArea(crown);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 		// The Ringwraith's own offer, at the start of the maneuver phase, to exert and become fierce
 		scn.ShadowDeclineOptionalTrigger();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -158,7 +158,7 @@ public class Card_V1_039_Tests
 		// 2 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
 		assertEquals(6, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(crown));
 		scn.ShadowUseCardAction(crown);
 
@@ -442,7 +442,7 @@ public class Card_V1_039_Tests
 		assertEquals(12, scn.GetStrength(nelya));
 		assertEquals(10, scn.GetStrength(aragorn));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(crown);
 
 		assertAttachedTo(crown, nelya);
@@ -475,16 +475,16 @@ public class Card_V1_039_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		// The phase before: nothing is offered.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(crown));
 		assertFalse(scn.ShadowActionAvailable(crown2));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsAssignToMinions(aragorn, nelya);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		// 1 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
@@ -512,12 +512,12 @@ public class Card_V1_039_Tests
 		assertEquals(4, scn.GetTwilight());
 
 		// The copy still in the support area is offered again; then the skirmish is left to resolve.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(crown2));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// The phase after: a Crown in the support area, a Nazgul with no helm and twilight to pay, and no offer.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		assertInZone(Zone.SUPPORT, crown2);
 		assertEquals(4, scn.GetTwilight());
@@ -547,7 +547,7 @@ public class Card_V1_039_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		// Exactly enough for one use
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(1, scn.GetTwilight());
@@ -561,7 +561,7 @@ public class Card_V1_039_Tests
 		assertAttachedTo(crown, nelya);
 		assertEquals(0, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The second Crown is still in the support area and Lemenya has no helm; only the twilight is missing.
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
@@ -592,7 +592,7 @@ public class Card_V1_039_Tests
 		scn.FreepsAssignToMinions(aragorn, nelya);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		// 2 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
@@ -614,7 +614,7 @@ public class Card_V1_039_Tests
 		assertAttachedTo(crown, nelya);
 		assertEquals(5, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Now that Crown is on a Nazgul too. There is twilight to remove and Lemenya still has no helm, and
 		// neither Crown offers anything: nothing is removed and nothing moves.

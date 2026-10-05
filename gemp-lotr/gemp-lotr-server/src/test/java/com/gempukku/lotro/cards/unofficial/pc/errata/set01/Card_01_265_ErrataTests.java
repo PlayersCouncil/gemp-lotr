@@ -130,7 +130,7 @@ public class Card_01_265_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(slayer);
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());

@@ -174,8 +174,8 @@ public class Card_01_224_Tests
 
         //Need the One Ring to be worn
         scn.FreepsUseCardAction(onering);
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowPlayAvailable(rtim));
         scn.ShadowPlayCard(rtim);

@@ -275,7 +275,7 @@ public class Card_V1_008_Tests
 
 		scn.MoveMinionsToTable(bowman);
 		scn.SkipToPhase(Phase.ARCHERY);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(bowman));
 		scn.ShadowUseCardAction(bowman);
@@ -311,7 +311,7 @@ public class Card_V1_008_Tests
 
 		scn.MoveMinionsToTable(soldier, marksman);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Hate exerts the Orc Soldier, the only [sauron] Orc, to wound a companion who is not the Ring-bearer.
 		scn.ShadowPlayCard(hate);
@@ -355,7 +355,7 @@ public class Card_V1_008_Tests
 		scn.AddBurdens(4);
 		scn.MoveMinionsToTable(toldea, troop, savage);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// An assignment action: Toldea's own text leaves out the Ring-bearer; the Lament leaves out Aragorn.
 		scn.ShadowUseCardAction(toldea);
@@ -406,11 +406,11 @@ public class Card_V1_008_Tests
 		scn.StartGame();
 
 		// With no minion in play the Shadow phase is the last thing before the regroup phase.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertAttachedTo(lament, aragorn);
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertInDiscard(lament);
 		assertAttachedTo(coat, aragorn);
@@ -442,11 +442,11 @@ public class Card_V1_008_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(lament, alliance, defense));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(coat, gilgalad, mallorn));
@@ -476,12 +476,12 @@ public class Card_V1_008_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertAttachedTo(lament, aragorn);
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertInDiscard(lament);
 		assertEquals(1, scn.GetWoundsOn(aragorn));

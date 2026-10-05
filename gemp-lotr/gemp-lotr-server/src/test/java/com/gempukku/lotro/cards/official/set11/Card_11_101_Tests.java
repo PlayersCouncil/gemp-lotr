@@ -91,7 +91,7 @@ public class Card_11_101_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.SHADOW);
 		scn.SetTwilight(10);
-		scn.ShadowPassCurrentPhaseAction();          // start of maneuver
+		scn.ShadowPass();          // start of maneuver
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();

@@ -70,7 +70,7 @@ public class Card_11_157_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(scout));
 		scn.ShadowUseCardAction(scout);

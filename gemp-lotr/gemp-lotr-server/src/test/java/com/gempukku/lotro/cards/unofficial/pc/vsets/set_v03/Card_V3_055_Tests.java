@@ -80,7 +80,7 @@ public class Card_V3_055_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(schooner);
 
@@ -98,7 +98,7 @@ public class Card_V3_055_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(schooner);
 
@@ -127,7 +127,7 @@ public class Card_V3_055_Tests
 
 		assertFalse(scn.IsHindered(athelas));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(schooner));
 		scn.ShadowUseCardAction(schooner);
@@ -162,7 +162,7 @@ public class Card_V3_055_Tests
 		assertFalse(scn.IsHindered(anduril));
 		assertFalse(scn.IsHindered(schooner2));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(schooner1));
 		scn.ShadowUseCardAction(schooner1);
@@ -198,7 +198,7 @@ public class Card_V3_055_Tests
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Only one Schooner - Maneuver ability not available
 		// (Shadow ability would be available, but wrong phase)
@@ -225,7 +225,7 @@ public class Card_V3_055_Tests
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Corsair to spot - Maneuver ability not available
 		assertFalse(scn.ShadowActionAvailable(schooner1));

@@ -130,7 +130,7 @@ public class Card_V1_057_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertEquals(0, scn.GetTwilight());
@@ -188,7 +188,7 @@ public class Card_V1_057_Tests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertInZone(Zone.DECK, tale);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 
 		// Frodo is the only [shire] companion, so he exerts without being chosen.
@@ -224,7 +224,7 @@ public class Card_V1_057_Tests
 		int opponentShuffles = scn.GetShadowDeckShuffleCount();
 		int deck = scn.GetFreepsDeckCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 
 		scn.FreepsDeclineOptionalTrigger();
@@ -262,7 +262,7 @@ public class Card_V1_057_Tests
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		assertEquals(1, scn.GetCurrentSiteNumber());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(3, scn.GetWoundsOn(merry));
@@ -299,7 +299,7 @@ public class Card_V1_057_Tests
 		assertInZone(Zone.DECK, sword, wisdom);
 
 		// There is no penalty for looking and not finding, so the player may still try.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 
 		scn.FreepsChooseOptionalTrigger(study);
@@ -333,7 +333,7 @@ public class Card_V1_057_Tests
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		int deck = scn.GetFreepsDeckCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.FreepsChooseOptionalTrigger(study);
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		scn.FreepsDismissRevealedCards();
@@ -368,7 +368,7 @@ public class Card_V1_057_Tests
 		scn.StartGame();
 
 		var study = scn.GetCurrentSite();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -401,7 +401,7 @@ public class Card_V1_057_Tests
 		scn.StartGame();
 
 		var study = scn.GetCurrentSite();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.FreepsDeclineOptionalTrigger();
 		scn.SkipToOtherPlayersTurn();
 
@@ -422,7 +422,7 @@ public class Card_V1_057_Tests
 		int firstPlayersShuffles = scn.GetFreepsDeckShuffleCount();
 		int twilight = scn.GetTwilight();
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(study));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
@@ -466,7 +466,7 @@ public class Card_V1_057_Tests
 
 		// The site is the Free Peoples player's own site 1, so his Hobbit Farmer has its game text: the move
 		// sets off the site's offer and the Farmer's.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(study));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(farmer));
 

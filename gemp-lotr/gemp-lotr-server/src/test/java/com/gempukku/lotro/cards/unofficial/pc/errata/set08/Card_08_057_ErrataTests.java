@@ -80,7 +80,7 @@ public class Card_08_057_ErrataTests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(blacksails1);
         scn.ShadowAcceptOptionalTrigger();
@@ -115,7 +115,7 @@ public class Card_08_057_ErrataTests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(blacksails1);
         scn.ShadowAcceptOptionalTrigger();
@@ -161,7 +161,7 @@ public class Card_08_057_ErrataTests
         scn.StartGame();
 
         scn.SetTwilight(10);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(2, scn.GetCultureTokensOn(boldmen));
         assertEquals(Zone.SUPPORT, cart.getZone());
@@ -194,7 +194,7 @@ public class Card_08_057_ErrataTests
         scn.StartGame();
 
         scn.SetTwilight(10);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(blacksails1);
         scn.ShadowAcceptOptionalTrigger();

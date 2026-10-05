@@ -70,7 +70,7 @@ public class Card_08_059_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(galley));
 		scn.ShadowPlayCard(galley);
@@ -96,7 +96,7 @@ public class Card_08_059_ErrataTests
 		scn.FreepsDrawCards(4);
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Neither 6 tokens nor a raider man: Freeps has initiative
 		assertEquals(0, scn.GetCultureTokensOn(galley));
@@ -141,7 +141,7 @@ public class Card_08_059_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 
@@ -151,7 +151,7 @@ public class Card_08_059_ErrataTests
 		assertEquals(3, scn.GetTwilight());
 		assertEquals(Zone.SUPPORT, galley.getZone());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(galley));
 		scn.ShadowUseCardAction(galley);
 		assertEquals(9, scn.GetTwilight());

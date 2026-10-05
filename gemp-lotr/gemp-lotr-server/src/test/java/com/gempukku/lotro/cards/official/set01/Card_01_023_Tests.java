@@ -105,8 +105,8 @@ public class Card_01_023_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		//pump gimli to beat the uruk
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		var top1 = scn.GetFromTopOfShadowDeck(1);
 		var top2 = scn.GetFromTopOfShadowDeck(2);

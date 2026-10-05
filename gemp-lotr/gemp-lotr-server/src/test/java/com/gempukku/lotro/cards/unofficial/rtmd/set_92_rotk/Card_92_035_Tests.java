@@ -179,7 +179,7 @@ public class Card_92_035_Tests
 		assertEquals(1, scn.GetWoundsOn(frodo));
 
 		// Pass fellowship phase; auto-moves to site 4 (non-sanctuary)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToPhase(Phase.MANEUVER);
 

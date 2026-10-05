@@ -80,7 +80,7 @@ public class Card_03_069_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(saruman));
 		assertTrue(scn.CanBeAssignedViaAction(sam));
@@ -113,11 +113,11 @@ public class Card_03_069_Tests
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsUseCardAction(sam);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(saruman));
 		assertTrue(scn.CanBeAssignedViaAction(sam));
@@ -127,7 +127,7 @@ public class Card_03_069_Tests
 		scn.ShadowUseCardAction(saruman);
 		scn.ShadowChooseCard(savage);
 		scn.FreepsChooseNo();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.IsCharAssigned(sam));
 		assertTrue(scn.IsCharAssigned(savage));
 		assertFalse(scn.IsCharAssigned(shaman));

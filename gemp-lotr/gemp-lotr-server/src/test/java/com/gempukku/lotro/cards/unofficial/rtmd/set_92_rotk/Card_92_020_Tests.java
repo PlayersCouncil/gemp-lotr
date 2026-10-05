@@ -71,7 +71,7 @@ public class Card_92_020_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetShadowCard("mod");
@@ -95,7 +95,7 @@ public class Card_92_020_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetShadowCard("mod");
@@ -114,7 +114,7 @@ public class Card_92_020_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(0);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetShadowCard("mod");
@@ -132,7 +132,7 @@ public class Card_92_020_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetShadowCard("mod");
@@ -152,7 +152,7 @@ public class Card_92_020_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetFreepsCard("mod");

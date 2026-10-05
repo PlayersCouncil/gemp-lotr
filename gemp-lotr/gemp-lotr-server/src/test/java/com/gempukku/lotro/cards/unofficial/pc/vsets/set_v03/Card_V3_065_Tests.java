@@ -91,7 +91,7 @@ public class Card_V3_065_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No twilight conditions in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(gloom));
@@ -259,7 +259,7 @@ public class Card_V3_065_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertInZone(Zone.DECK, sky3);
@@ -283,7 +283,7 @@ public class Card_V3_065_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -292,21 +292,21 @@ public class Card_V3_065_Tests
 		scn.ShadowChooseCard(sky1);
 		assertEquals(twilightBefore + 1, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Second use - hinder sky2
 		scn.ShadowUseCardAction(gloom);
 		scn.ShadowChooseCard(sky2);
 		assertEquals(twilightBefore + 2, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Third use - hinder marshwight (twilight minion)
 		scn.ShadowUseCardAction(gloom);
 		scn.ShadowChooseCard(marshwight);
 		assertEquals(twilightBefore + 3, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(gloom);
 		//gloom auto-selected as only remaining unhindered twilight card

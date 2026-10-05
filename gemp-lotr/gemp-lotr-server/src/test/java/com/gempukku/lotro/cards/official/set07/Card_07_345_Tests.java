@@ -99,12 +99,12 @@ public class Card_07_345_Tests
 
 		scn.MoveMinionsToTable("runner");
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(flat, scn.GetCurrentSite());
 		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		var choices = scn.FreepsGetMultipleChoices();
@@ -160,12 +160,12 @@ public class Card_07_345_Tests
 
 		scn.MoveMinionsToTable("runner");
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(flat, scn.GetCurrentSite());
 		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		var choices = scn.FreepsGetMultipleChoices();

@@ -96,7 +96,7 @@ public class Card_V1_043_Tests
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, attea);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(3, scn.GetWoundsOn(frodo));
@@ -148,7 +148,7 @@ public class Card_V1_043_Tests
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, attea }, new PhysicalCardImpl[] { gimli, enquea });
 		scn.ShadowAssignToMinions(aragorn, rit, lemenya, lights, nazgulLights);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(12, scn.GetStrength(attea));
 		// 9 + 1 by its own text for the wound on the Ring-bearer
@@ -193,22 +193,22 @@ public class Card_V1_043_Tests
 		scn.AddWoundsToChar(frodo, 1);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		// 2 companions + 2 for the shadow number of site 2: the pool would pay for it
 		assertEquals(4, scn.GetTwilight());
 		assertFalse(scn.ShadowPlayAvailable(faces));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsAssignToMinions(aragorn, attea);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertTrue(scn.ShadowPlayAvailable(faces));
 
 		// Attea's 12 beats Aragorn's 8; Attea is not fierce, so the regroup phase follows.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		assertInZone(Zone.SHADOW_CHARACTERS, attea);
 		assertEquals(4, scn.GetTwilight());
@@ -237,7 +237,7 @@ public class Card_V1_043_Tests
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, wk }, new PhysicalCardImpl[] { gimli, lemenya });
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(14, scn.GetStrength(wk));
 		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
@@ -248,13 +248,13 @@ public class Card_V1_043_Tests
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 
 		// Both players have acted again and the skirmish is about to be resolved: both are still there.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(15, scn.GetStrength(wk));
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		// 15 against Aragorn's 8: he loses and takes 1 wound + 1 for damage +1.
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		// The Witch-king's own text: he may exert when he wins a skirmish.
@@ -289,7 +289,7 @@ public class Card_V1_043_Tests
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, wk);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(14, scn.GetStrength(wk));
@@ -333,7 +333,7 @@ public class Card_V1_043_Tests
 		scn.FreepsAssignToMinions(aragorn, attea);
 		scn.ShadowAssignToMinions(aragorn, wk, morgulKing);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(12, scn.GetStrength(attea));
 		assertEquals(14, scn.GetStrength(wk));
@@ -353,7 +353,7 @@ public class Card_V1_043_Tests
 		assertFalse(scn.HasKeyword(morgulKing, Keyword.DAMAGE));
 
 		// The second copy on one of the Witch-kings: he is damage +1, and the other Witch-king is not.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(faces2);
 		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, wk, morgulKing));
 		scn.ShadowChooseCard(morgulKing);
@@ -385,7 +385,7 @@ public class Card_V1_043_Tests
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, attea);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(12, scn.GetStrength(attea));
 		scn.ShadowPlayCard(faces);

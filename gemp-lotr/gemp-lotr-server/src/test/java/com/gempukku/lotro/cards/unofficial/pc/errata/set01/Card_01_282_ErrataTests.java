@@ -78,7 +78,7 @@ public class Card_01_282_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(legacy));
 		scn.ShadowPlayCard(orc);

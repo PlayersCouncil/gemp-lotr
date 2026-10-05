@@ -110,7 +110,7 @@ public class Card_V2_037_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(17);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.STACKED, runner.getZone());
 		assertEquals(evil, runner.getStackedOn());

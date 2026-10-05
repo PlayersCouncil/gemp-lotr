@@ -214,7 +214,7 @@ public class Card_V1_053_Tests
 		assertEquals(3, scn.GetStrength(merry));
 
 		// A second use asks for no more than the first did: tripled is still what it takes.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(pippin);
 		assertEquals(2, scn.GetWoundsOn(pippin));
 		assertEquals(3, scn.GetStrength(merry));

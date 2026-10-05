@@ -137,7 +137,7 @@ public class Card_13_137_Tests
 		// the normal StartGame call (since that skips starting fellowships)
 		//scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(theoden);
 		scn.ShadowChooseCardBPFromSelection(theodred);
 
@@ -165,7 +165,7 @@ public class Card_13_137_Tests
 		// the normal StartGame call (since that skips starting fellowships)
 		//scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowChooseCardBPFromSelection(eviltheoden);
 		scn.ShadowChooseCardBPFromSelection(eviltheodred);

@@ -92,7 +92,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
@@ -114,7 +114,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
@@ -146,7 +146,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
@@ -184,7 +184,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
@@ -211,7 +211,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
@@ -246,7 +246,7 @@ public class Card_01_234_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nertea);
 		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
@@ -273,7 +273,7 @@ public class Card_01_234_ErrataTests
 
 		scn.SkipToSite(6);
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(greatriver, scn.GetCurrentSite());
 

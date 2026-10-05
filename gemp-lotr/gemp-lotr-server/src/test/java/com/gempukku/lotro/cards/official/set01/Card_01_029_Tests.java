@@ -94,8 +94,8 @@ public class Card_01_029_Tests
 		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
 
 		assertEquals(3, scn.GetShadowHandCount());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(3, scn.GetShadowHandCount());
 	}
 
@@ -131,14 +131,14 @@ public class Card_01_029_Tests
 		scn.FreepsChooseCard(arwen);
 		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gwemegil);
 		assertEquals(6 + 2 + 1 + 1, scn.GetStrength(arwen));
 
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveActionOrder("Ancient Enmity");
 		assertEquals(1, scn.GetShadowHandCount());

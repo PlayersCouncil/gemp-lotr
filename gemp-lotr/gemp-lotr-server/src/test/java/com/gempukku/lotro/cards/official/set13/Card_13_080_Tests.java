@@ -88,7 +88,7 @@ public class Card_13_080_Tests
 		scn.StartGame();
 		scn.AddWoundsToChar(saruman, 1);
 		scn.AddWoundsToChar(gandalf, 3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetVitality(radagast));
 		assertEquals(0, scn.GetStrength(radagast));

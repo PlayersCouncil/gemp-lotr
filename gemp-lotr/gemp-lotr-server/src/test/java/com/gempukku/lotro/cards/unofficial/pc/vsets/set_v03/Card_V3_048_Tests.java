@@ -84,7 +84,7 @@ public class Card_V3_048_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -110,7 +110,7 @@ public class Card_V3_048_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.IsHindered(initiate));
 		assertFalse(scn.IsHindered(orc));
@@ -172,7 +172,7 @@ public class Card_V3_048_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(scout);
 		scn.ShadowChoose("Hinder");
@@ -199,7 +199,7 @@ public class Card_V3_048_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// First play the Initiate and hinder it (so we have a hindered raider to restore)
 		scn.ShadowPlayCard(initiate);

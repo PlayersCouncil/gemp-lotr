@@ -70,7 +70,7 @@ public class Card_02_079_Tests
 		scn.StartGame();
 		scn.AddWoundsToChar(frodo, 3);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(twigul));

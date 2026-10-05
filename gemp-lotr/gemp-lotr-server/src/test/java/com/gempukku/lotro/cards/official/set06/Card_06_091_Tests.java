@@ -91,8 +91,8 @@ public class Card_06_091_Tests
 		assertEquals(6, scn.GetStrength(eowyn));
 		assertEquals(16, scn.GetStrength(twk)); //14 + 2 enduring due to the horse
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(1, scn.GetWoundsOn(eowyn));
 		assertEquals(Zone.FREE_CHARACTERS, eowyn.getZone());
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());

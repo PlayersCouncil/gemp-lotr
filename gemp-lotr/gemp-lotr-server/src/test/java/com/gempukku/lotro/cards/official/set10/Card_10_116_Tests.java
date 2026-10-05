@@ -89,8 +89,8 @@ public class Card_10_116_Tests
 		assertEquals(3, scn.GetStrength(sam));
 		assertEquals(24, scn.GetStrength(sauron));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//Sam survived skirmish and now we're in the fierce assignment phase
 		assertEquals(Zone.FREE_CHARACTERS, sam.getZone());
@@ -164,13 +164,13 @@ public class Card_10_116_Tests
 		assertEquals(3, scn.GetStrength(sam));
 		assertEquals(24, scn.GetStrength(sauron));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(ring);
 		assertTrue(scn.ShadowPlayAvailable(spies));
 		scn.ShadowPlayCard(spies);
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//Sam got overwhelmed and now we're in the fierce assignment phase
 		assertEquals(Zone.DEAD, sam.getZone());
@@ -194,7 +194,7 @@ public class Card_10_116_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var site2 = scn.GetCurrentSite();
 		scn.AttachCardsTo(site2, frost1, frost2);
 
@@ -208,8 +208,8 @@ public class Card_10_116_Tests
 		assertEquals(0, scn.GetStrength(sam));
 		assertEquals(24, scn.GetStrength(sauron));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//Sam survived skirmish even with 0 strength and now we're in the fierce assignment phase
 		assertEquals(Zone.FREE_CHARACTERS, sam.getZone());

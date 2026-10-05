@@ -82,7 +82,7 @@ public class Card_V2_026_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(mithrandir);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(grunt));
 		assertTrue(scn.ShadowActionAvailable(grunt));

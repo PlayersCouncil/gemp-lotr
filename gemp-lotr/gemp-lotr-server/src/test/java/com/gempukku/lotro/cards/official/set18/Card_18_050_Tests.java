@@ -73,7 +73,7 @@ public class Card_18_050_Tests
 		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 		scn.ShadowPlayCard(uruk);
@@ -95,7 +95,7 @@ public class Card_18_050_Tests
 		scn.MoveMinionsToTable(dunlender);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 		scn.ShadowPlayCard(uruk);
@@ -115,7 +115,7 @@ public class Card_18_050_Tests
 		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 		scn.ShadowPlayCard(uruk);
@@ -135,7 +135,7 @@ public class Card_18_050_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 		scn.ShadowPlayCard(morc);
@@ -184,8 +184,8 @@ public class Card_18_050_Tests
 		assertEquals(0, scn.GetCultureTokensOn(stone));
 
 		// Maneuver actions
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		//Both pass Archery actions
 		scn.PassCurrentPhaseActions();
 		//Both pass Assignment actions

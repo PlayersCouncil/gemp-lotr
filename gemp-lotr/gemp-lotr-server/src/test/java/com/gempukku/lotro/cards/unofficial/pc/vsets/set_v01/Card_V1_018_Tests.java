@@ -236,7 +236,7 @@ public class Card_V1_018_Tests
 
 		scn.StartGame();
 		// The minions go down once the fellowship has moved, so that nothing of theirs answers the move.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(keeper, servant, traitor, master, keeperPC, fellVoice, rabble, instigator, mind, troop, savage);
 		scn.SkipToArcheryWounds();
 
@@ -314,7 +314,7 @@ public class Card_V1_018_Tests
 		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("albert"));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(keeper, servant, traitor, master, keeperPC, fellVoice, rabble, instigator, mind, troop, savage);
 		scn.SkipToArcheryWounds();
 
@@ -382,7 +382,7 @@ public class Card_V1_018_Tests
 		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(curunir, tracker1, tracker2, tracker3);
 		// The third Tracking Uruk is the only wounded [uruk-hai] minion.
 		scn.AddWoundsToChar(tracker3, 2);
@@ -531,7 +531,7 @@ public class Card_V1_018_Tests
 		assertEquals(2, scn.GetWoundsOn(gandalf));
 
 		// A second use, for Gandalf.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(council));
 		scn.FreepsUseCardAction(council);
 		scn.FreepsChooseCards(saelbeth, celeborn);
@@ -601,7 +601,7 @@ public class Card_V1_018_Tests
 		scn.FreepsChooseCard(gandalf);
 		assertEquals(2, scn.GetWoundsOn(gandalf));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(council));
 		scn.FreepsUseCardAction(council);
 		scn.FreepsChooseCards(golradir, celeborn);
@@ -610,7 +610,7 @@ public class Card_V1_018_Tests
 
 		// Twice is the limit.  Saelbeth and Celeborn, with 1 wound each on vitality 3, could pay a third
 		// time, and Gandalf and Aragorn are still wounded.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertEquals(2, scn.GetWoundsOn(golradir));
 		assertEquals(1, scn.GetWoundsOn(saelbeth));

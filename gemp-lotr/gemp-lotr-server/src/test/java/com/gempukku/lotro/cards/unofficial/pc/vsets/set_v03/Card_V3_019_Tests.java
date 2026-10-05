@@ -151,7 +151,7 @@ public class Card_V3_019_Tests
 		assertFalse(scn.IsHindered(boromir));
 
 		// Pass Fellowship phase to trigger movement
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Trigger should be offered
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
@@ -183,7 +183,7 @@ public class Card_V3_019_Tests
 		scn.AddBurdens(2);
 
 		// Pass Fellowship phase to trigger movement
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
@@ -213,7 +213,7 @@ public class Card_V3_019_Tests
 		scn.AddBurdens(2);
 
 		// Pass Fellowship phase to trigger movement
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsDeclineOptionalTrigger();
@@ -240,7 +240,7 @@ public class Card_V3_019_Tests
 		scn.AddBurdens(2);
 
 		// Pass Fellowship phase to trigger movement
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Trigger should NOT be offered - no other unbound Man to hinder
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
@@ -262,7 +262,7 @@ public class Card_V3_019_Tests
 		scn.AddThreats(1);
 
 		// Pass Fellowship phase to trigger movement
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();

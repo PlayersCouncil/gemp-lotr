@@ -109,7 +109,7 @@ public class Card_V1_064_Tests
 		scn.AddWoundsToChar(gandalf, 2);
 
 		// To site 8, and with no minion about straight to the regroup phase, where Pathfinder lays site 9.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPlayCard(pathfinder);
 		assertEquals(8, scn.GetCurrentSiteNumber());
@@ -163,7 +163,7 @@ public class Card_V1_064_Tests
 		scn.SkipToSite(8);
 		scn.MoveCompanionsToTable(gandalf, aragorn, legolas);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Amon Hen Ruins", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveMinionsToTable(troop, troopTwice);
 		scn.AddWoundsToChar(troopTwice, 2);

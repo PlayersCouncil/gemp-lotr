@@ -117,7 +117,7 @@ public class Card_03_033_Tests
 		scn.MoveCardsToHand(sauron);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SetTwilight(0);
 		scn.SkipToPhase(Phase.MANEUVER);
 

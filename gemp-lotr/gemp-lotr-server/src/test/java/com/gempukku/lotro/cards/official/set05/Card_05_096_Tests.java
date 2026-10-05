@@ -75,7 +75,7 @@ public class Card_05_096_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, orc);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(eye));
 	}

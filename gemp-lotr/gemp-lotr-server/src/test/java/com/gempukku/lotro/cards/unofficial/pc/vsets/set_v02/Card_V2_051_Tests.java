@@ -114,7 +114,7 @@ public class Card_V2_051_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
 		assertEquals(Zone.SUPPORT, deor.getZone());
 		assertEquals(Zone.SUPPORT, bounder.getZone());
@@ -171,7 +171,7 @@ public class Card_V2_051_Tests
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(eowyn, cantea);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
 		assertEquals(Zone.ATTACHED, javelin.getZone());

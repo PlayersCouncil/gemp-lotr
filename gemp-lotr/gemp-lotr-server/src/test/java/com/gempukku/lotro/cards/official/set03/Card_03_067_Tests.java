@@ -75,7 +75,7 @@ public class Card_03_067_Tests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(23, scn.GetTwilight());
 
@@ -103,7 +103,7 @@ public class Card_03_067_Tests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(23, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());

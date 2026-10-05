@@ -76,7 +76,7 @@ public class Card_V2_018_Tests
 		scn.FreepsAssignToMinions(frodo, uruk);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetStrength(uruk));
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
@@ -106,7 +106,7 @@ public class Card_V2_018_Tests
 		scn.FreepsAssignToMinions(frodo, orc);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(uruk));
 		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));

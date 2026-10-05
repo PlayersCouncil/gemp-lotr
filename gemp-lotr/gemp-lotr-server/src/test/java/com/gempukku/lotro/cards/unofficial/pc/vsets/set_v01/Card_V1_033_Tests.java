@@ -117,7 +117,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 3 set + 1 companion + 1 for Midgewater Marshes
@@ -144,7 +144,7 @@ public class Card_V1_033_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// 3 set + 1 companion + 2 for Ettenmoors
@@ -170,7 +170,7 @@ public class Card_V1_033_Tests
 		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing, troop);
 
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
@@ -203,7 +203,7 @@ public class Card_V1_033_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop, runner);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The tentacle would be discarded at Bag End, so it is played here, at the marsh.
 		scn.ShadowPlayCard(thrashing);
@@ -232,7 +232,7 @@ public class Card_V1_033_Tests
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing, thrashing2);
 		// Two lost skirmishes are two wounds, which is all the vitality it has.  One more keeps it alive to be read
 		// after the second.
@@ -278,7 +278,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing);
 
 		scn.SkipToAssignments();
@@ -305,7 +305,7 @@ public class Card_V1_033_Tests
 		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing);
 
 		scn.SkipToAssignments();
@@ -333,7 +333,7 @@ public class Card_V1_033_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing);
 		// One wound already, as it has in the fierce skirmish that follows a lost one.
 		scn.AddWoundsToChar(thrashing, 1);

@@ -78,7 +78,7 @@ public class Card_15_086_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(gats));
 		assertEquals(0, scn.GetWoundsOn(sam));
@@ -87,7 +87,7 @@ public class Card_15_086_Tests
 		assertEquals(2, scn.GetWoundsOn(gats));
 		assertEquals(2, scn.GetWoundsOn(sam));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(gats);
 		assertEquals(4, scn.GetWoundsOn(gats));

@@ -129,8 +129,8 @@ public class Card_V1_009_Tests
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(7, scn.GetStrength(legolas));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// Archery fire.  The Goblin Marksman's arrow goes to a companion, which is not a minion taking a wound.
 		assertEquals(0, scn.GetWoundsOn(arwen));

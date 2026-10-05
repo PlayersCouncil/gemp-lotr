@@ -268,8 +268,8 @@ public class Card_V1_019_Tests
 
 		// Aragorn's 10 beats the Raiding Party's 9, where his 8 would have lost to it.  With no damage bonus
 		// the Raiding Party takes 1 wound.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetWoundsOn(raiders));
 
@@ -326,8 +326,8 @@ public class Card_V1_019_Tests
 		assertEquals(8, scn.GetStrength(aragorn));
 
 		// Aragorn's 8 beats the Uruk Savage's 5: 1 wound for losing + 1 for damage +1.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetWoundsOn(savage));
 
 		// In the next skirmish of the turn the damage bonus is gone.

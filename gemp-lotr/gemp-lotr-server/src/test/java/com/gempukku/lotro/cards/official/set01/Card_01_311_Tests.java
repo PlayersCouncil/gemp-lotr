@@ -75,7 +75,7 @@ public class Card_01_311_Tests
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		scn.AddWoundsToChar(frodo, 4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();

@@ -434,7 +434,7 @@ public class Card_V1_002_Tests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertInZone(Zone.HAND, strike);
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Gimli is exhausted.  A card is still stacked here and Frodo could exert, but he is no Dwarf.
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());

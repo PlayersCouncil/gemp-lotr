@@ -100,7 +100,7 @@ public class Card_V1_041_Tests
 		// A Nazgul that is not twilight and a twilight minion that is not a Nazgul.
 		scn.MoveMinionsToTable(lemenya, lights);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -132,7 +132,7 @@ public class Card_V1_041_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, lights);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(13, scn.GetTwilight());
@@ -165,7 +165,7 @@ public class Card_V1_041_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(13, scn.GetTwilight());
@@ -201,7 +201,7 @@ public class Card_V1_041_Tests
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(12, scn.GetFreepsDeckCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// "You may": the draw is offered, and nothing is drawn until it is taken.
@@ -231,7 +231,7 @@ public class Card_V1_041_Tests
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(11, scn.GetShadowDeckCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
 		assertEquals(0, scn.GetShadowHandCount());
@@ -266,7 +266,7 @@ public class Card_V1_041_Tests
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(11, scn.GetShadowDeckCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
@@ -297,7 +297,7 @@ public class Card_V1_041_Tests
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(11, scn.GetShadowDeckCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));

@@ -110,7 +110,7 @@ public class Card_V2_004_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(9);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 9 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -180,7 +180,7 @@ public class Card_V2_004_Tests
 		// A [dunland] Man already in play, who is not "that minion"
 		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 4 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -232,7 +232,7 @@ public class Card_V2_004_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 set + 1 for Frodo + 2 for the shadow number of site 2: exactly what the event and the Brigand cost
@@ -266,7 +266,7 @@ public class Card_V2_004_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.ShadowHasInitiative());
@@ -302,7 +302,7 @@ public class Card_V2_004_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(9);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 9 set + 1 for Frodo + 2 for the shadow number of site 2: enough for the event and any of the minions
@@ -327,7 +327,7 @@ public class Card_V2_004_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 1 set + 1 for Frodo + 2 for the shadow number of site 2. The event is 1 and the Brigand 2 + 2 roaming:

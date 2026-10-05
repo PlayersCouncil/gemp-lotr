@@ -81,7 +81,7 @@ public class Card_V2_021_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		assertEquals(3, scn.GetCultureTokensOn(ladder));
@@ -120,7 +120,7 @@ public class Card_V2_021_Tests
 		scn.AddTokensToCard(ladder, 2);
 		scn.AddTokensToCard(ram, 2);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		assertEquals(2, scn.GetCultureTokensOn(ladder));
@@ -165,7 +165,7 @@ public class Card_V2_021_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 4);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		assertEquals(4, scn.GetCultureTokensOn(ladder));
@@ -206,7 +206,7 @@ public class Card_V2_021_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 2);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(shot));
 	}
@@ -231,7 +231,7 @@ public class Card_V2_021_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		assertEquals(3, scn.GetCultureTokensOn(ladder));

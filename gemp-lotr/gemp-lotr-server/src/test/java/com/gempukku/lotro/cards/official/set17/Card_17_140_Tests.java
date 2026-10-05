@@ -111,7 +111,7 @@ public class Card_17_140_Tests
 		scn.SetTwilight(10);
 
 		//moving
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(dt);
 		assertEquals(2, scn.GetBurdens());
@@ -150,7 +150,7 @@ public class Card_17_140_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable("Use Úlairë Enquëa, Duplicitous Lieutenant"));
 
@@ -164,7 +164,7 @@ public class Card_17_140_Tests
 		scn.RemoveWoundsFromChar(enquea, 2);
 		scn.MoveCardsToSupportArea(moria5);
 		scn.MoveCardsToSupportArea(moria6);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		//There should now be 4 - 1 + 2 = 5 freeps conditions in play.
 
 		scn.ShadowUseCardAction(enquea);
@@ -199,13 +199,13 @@ public class Card_17_140_Tests
 
 		scn.PassCurrentPhaseActions();
 		scn.FreepsAssignToMinions(aragorn, troop);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsResolveSkirmish(aragorn);
 
 		scn.FreepsPlayCard(endgame);
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveActionOrder("Required trigger from");
 		scn.FreepsChooseOption("Heal");

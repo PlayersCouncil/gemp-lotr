@@ -85,7 +85,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 
@@ -109,7 +109,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 		int cost = troll.getBlueprint().getTwilightCost() + 2; // roaming
@@ -131,7 +131,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 
@@ -157,7 +157,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 
@@ -183,7 +183,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 		// Uruk Savage costs 2 + 2 roaming = 4 twilight
@@ -204,7 +204,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(orc);
@@ -227,7 +227,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.ShadowActionAvailable(sky));
@@ -283,7 +283,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(orc);
 		// Ominous Sky's (now required) trigger adds (1)
 
@@ -302,7 +302,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertInZone(Zone.DISCARD, hollowing);
 		var twilight = scn.GetTwilight();
@@ -325,7 +325,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		var twilight = scn.GetTwilight();
 
 		scn.ShadowUseCardAction(sky);
@@ -349,7 +349,7 @@ public class Card_V3_097_Tests
 		scn.MoveCardsToDiscard(sky2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SetTwilight(10);
 
 		scn.ShadowUseCardAction(sky);
@@ -375,7 +375,7 @@ public class Card_V3_097_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(orc);
 		// Ominous Sky's (now required) trigger adds (1)
 

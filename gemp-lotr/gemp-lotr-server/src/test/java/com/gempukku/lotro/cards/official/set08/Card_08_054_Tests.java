@@ -81,7 +81,7 @@ public class Card_08_054_Tests
 		scn.AddTokensToCard(leaders, 3);
 		scn.AddTokensToCard(wargalley, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(freebooter));
 		assertEquals(3, scn.GetCultureTokensOn(leaders));

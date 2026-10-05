@@ -68,7 +68,7 @@ public class Card_06_063_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(artisan));
 		scn.ShadowUseCardAction(artisan);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());

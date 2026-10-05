@@ -124,7 +124,7 @@ public class Card_94_013_Tests {
 		int legolasBase = scn.GetStrength(legolas);
 
 		// Freeps passes their archery action first (back-and-forth), then Shadow can act.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(mod));
 		scn.ShadowUseCardAction(mod);
 

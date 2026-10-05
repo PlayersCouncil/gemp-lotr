@@ -75,7 +75,7 @@ public class Card_02_044_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SetTwilight(10);
 
 		assertTrue(scn.ShadowPlayAvailable(business));
@@ -93,7 +93,7 @@ public class Card_02_044_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SetTwilight(10);
 		scn.ShadowPlayCard(business);
 		assertEquals(10, scn.GetTwilight());
@@ -155,7 +155,7 @@ public class Card_02_044_ErrataTests
 		scn.FreepsChooseAny();
 
 		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Mirror's effect should now be blocked
 		assertTrue(scn.FreepsActionAvailable(mirror));

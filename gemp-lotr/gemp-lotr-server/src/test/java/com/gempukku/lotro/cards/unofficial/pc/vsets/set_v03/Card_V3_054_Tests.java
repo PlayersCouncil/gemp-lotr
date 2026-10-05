@@ -118,7 +118,7 @@ public class Card_V3_054_Tests
 
 		assertFalse(scn.HasKeyword(explorer, Keyword.MOUNTED));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Horn should not be playable - no mounted Southron
 		assertFalse(scn.ShadowPlayAvailable(horn));

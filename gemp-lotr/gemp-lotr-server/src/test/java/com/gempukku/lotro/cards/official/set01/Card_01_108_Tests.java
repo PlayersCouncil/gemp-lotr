@@ -95,7 +95,7 @@ public class Card_01_108_Tests
 
         scn.FreepsPlayCard(nostranger);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         // 2 for Frodo/Aragorn, 1 for the site, -1 for No Stranger
         assertEquals(2, scn.GetTwilight());

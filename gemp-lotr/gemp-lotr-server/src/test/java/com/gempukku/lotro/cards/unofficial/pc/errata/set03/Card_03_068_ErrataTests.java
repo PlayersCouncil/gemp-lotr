@@ -101,7 +101,7 @@ public class Card_03_068_ErrataTests
         assertFalse(scn.HasKeyword(uruk1, Keyword.FIERCE));
 
         //shadow has to skip archery actions
-        scn.ShadowPassCurrentPhaseAction();
+        scn.ShadowPass();
 
 
         assertEquals(0, scn.GetWoundsOn(uruk1));
@@ -131,7 +131,7 @@ public class Card_03_068_ErrataTests
         scn.StartGame();
 
         scn.SkipToPhase(Phase.MANEUVER);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable(saruman));
 

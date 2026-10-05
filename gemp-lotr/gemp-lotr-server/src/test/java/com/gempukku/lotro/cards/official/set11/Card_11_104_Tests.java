@@ -76,11 +76,11 @@ public class Card_11_104_Tests
 		scn.StartGame();
 
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, mouth);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(10, scn.GetTwilight());
@@ -114,11 +114,11 @@ public class Card_11_104_Tests
 		scn.StartGame();
 
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, mouth);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(10, scn.GetTwilight());
@@ -152,11 +152,11 @@ public class Card_11_104_Tests
 		scn.StartGame();
 
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, mouth);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(5, scn.GetTwilight());

@@ -101,7 +101,7 @@ public class Card_04_364_Tests
 		assertEquals(0, scn.GetWoundsOn(troop2));
 
 		// Passing the fellowship phase at site 1 forces the move to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -133,7 +133,7 @@ public class Card_04_364_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsDeclineOptionalTrigger();
 
@@ -166,7 +166,7 @@ public class Card_04_364_Tests
 		// The Ring-bearer stays Ring-bound regardless
 		assertTrue(scn.HasKeyword(scn.GetRingBearer(), Keyword.RING_BOUND));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -201,7 +201,7 @@ public class Card_04_364_Tests
 
 		assertTrue(scn.HasKeyword(frodo, Keyword.RING_BOUND));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 

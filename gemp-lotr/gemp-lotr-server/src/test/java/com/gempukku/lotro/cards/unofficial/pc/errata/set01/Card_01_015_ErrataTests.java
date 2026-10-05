@@ -109,8 +109,8 @@ public class Card_01_015_ErrataTests
 		scn.FreepsUseCardAction(helm);
 		assertInDiscard(helm);
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// Gimli takes 0 wounds despite losing/being overwhelmed
 		assertEquals(0, scn.GetWoundsOn(gimli));
@@ -145,8 +145,8 @@ public class Card_01_015_ErrataTests
 		scn.FreepsUseCardAction(helm);
 		assertInDiscard(helm);
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//The One Ring
 		scn.FreepsDeclineOptionalTrigger();

@@ -89,7 +89,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -166,7 +166,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage, troop);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// The weather is on the site the fellowship has left: it need only be somewhere to be spotted.
 		scn.AttachCardsTo(scn.GetSite(1), frost);
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -264,7 +264,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertFalse(scn.FreepsCanAssign(saruman));
@@ -312,7 +312,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage, flock, troop);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -353,7 +353,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage, flock);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -389,7 +389,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.AttachCardsTo(scn.GetCurrentSite(), snows);
 		scn.SkipToMovementDecision();
 
@@ -428,7 +428,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// The weather is on the site the fellowship has already left. The site it is at bears Spies of Saruman,
 		// which plays on a site as a weather does and is not one. (Nobody here is an archer, so the archery
 		// phase it skips is not missed.)
@@ -466,14 +466,14 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		// The first player's fellowship moves twice, to site 3, and his turn ends.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		scn.SkipToOtherPlayersTurn();
 
 		// The second player's fellowship moves from site 1 to site 2.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		scn.MoveMinionsToTable(saruman);
@@ -514,7 +514,7 @@ public class Card_V1_030_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(6, scn.GetStrength(saruman));

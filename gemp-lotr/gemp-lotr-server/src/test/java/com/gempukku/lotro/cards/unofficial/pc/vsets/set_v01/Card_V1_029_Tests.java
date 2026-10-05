@@ -96,7 +96,7 @@ public class Card_V1_029_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -137,7 +137,7 @@ public class Card_V1_029_Tests
 		assertInZone(Zone.SUPPORT, wisdom);
 		assertEquals(1, scn.GetTwilightCost(murder));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// Gandalf's Wisdom costs 0. 1 for Frodo + 2 for the shadow number of site 2
@@ -164,7 +164,7 @@ public class Card_V1_029_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -206,7 +206,7 @@ public class Card_V1_029_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(murder);
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 1 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -264,7 +264,7 @@ public class Card_V1_029_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(murder);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -311,7 +311,7 @@ public class Card_V1_029_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(murder);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -360,7 +360,7 @@ public class Card_V1_029_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(murder);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());

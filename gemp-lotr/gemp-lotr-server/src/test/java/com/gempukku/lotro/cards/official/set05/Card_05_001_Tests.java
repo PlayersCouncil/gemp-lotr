@@ -70,7 +70,7 @@ public class Card_05_001_Tests
 		scn.MoveCardsToHand(rampager);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(rampager));
 		scn.ShadowPlayCard(rampager);
 

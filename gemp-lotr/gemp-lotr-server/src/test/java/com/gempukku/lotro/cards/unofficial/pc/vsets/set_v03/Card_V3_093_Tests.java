@@ -89,7 +89,7 @@ public class Card_V3_093_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No twilight conditions in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(cover));
@@ -124,7 +124,7 @@ public class Card_V3_093_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(cover);
 
@@ -161,7 +161,7 @@ public class Card_V3_093_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, troll);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Cover is already hindered, can't use ability
 		assertFalse(scn.ShadowActionAvailable(cover));
@@ -190,7 +190,7 @@ public class Card_V3_093_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, troll);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int trollWoundsBefore = scn.GetWoundsOn(troll);
 		assertFalse(scn.IsHindered(cover));

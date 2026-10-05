@@ -77,7 +77,7 @@ public class Card_V2_025_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(foreman));
 		assertEquals(Zone.DISCARD, isenorc.getZone());
@@ -111,7 +111,7 @@ public class Card_V2_025_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 
 		scn.MoveMinionsToTable(foreman);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, foreman.getZone());

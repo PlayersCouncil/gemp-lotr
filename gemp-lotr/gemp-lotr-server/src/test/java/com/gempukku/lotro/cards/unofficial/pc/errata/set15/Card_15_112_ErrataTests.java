@@ -89,7 +89,7 @@ public class Card_15_112_ErrataTests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(troll);
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
@@ -113,7 +113,7 @@ public class Card_15_112_ErrataTests
 
 		scn.SetTwilight(17);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(20, scn.GetTwilight());
 		scn.ShadowPlayCard(troll);
 
@@ -164,7 +164,7 @@ public class Card_15_112_ErrataTests
 
 		scn.SetTwilight(17);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(20, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(troll));

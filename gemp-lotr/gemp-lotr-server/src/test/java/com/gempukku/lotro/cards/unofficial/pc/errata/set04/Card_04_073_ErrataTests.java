@@ -86,7 +86,7 @@ public class Card_04_073_ErrataTests
 		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(5, scn.GetTwilight());
 
@@ -118,7 +118,7 @@ public class Card_04_073_ErrataTests
 		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(6, scn.GetTwilight());
 
@@ -149,7 +149,7 @@ public class Card_04_073_ErrataTests
 		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetTwilight());
 
@@ -180,7 +180,7 @@ public class Card_04_073_ErrataTests
 		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SetTwilight(2);
 

@@ -127,7 +127,7 @@ public class Card_08_119_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowTakeControlOfSite();
 		scn.ShadowTakeControlOfSite();
@@ -156,7 +156,7 @@ public class Card_08_119_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Only 2 threat slots left
 		scn.AddThreats(2);
@@ -180,7 +180,7 @@ public class Card_08_119_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Only 2 threat slots left
 		scn.AddThreats(2);

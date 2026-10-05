@@ -89,7 +89,7 @@ public class Card_18_134_ErrataTests
 		scn.StartGame(site1);
 
 		//Start at East Road with player one
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//P1 then moves to P2 Ettenmoors
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
@@ -110,8 +110,8 @@ public class Card_18_134_ErrataTests
 
 		//P2 moves ahead
 		scn.SkipToPhaseInverted(Phase.REGROUP);
-		scn.ShadowPassCurrentPhaseAction(); //P2
-		scn.FreepsPassCurrentPhaseAction(); //P1
+		scn.ShadowPass(); //P2
+		scn.FreepsPass(); //P1
 		scn.FreepsDeclineReconciliation(); //P1
 		scn.ShadowChooseToMove(); //P2
 
@@ -121,8 +121,8 @@ public class Card_18_134_ErrataTests
 		assertEquals(scn.GetSite(3), doorway);
 
 		scn.SkipToPhaseInverted(Phase.REGROUP);
-		scn.ShadowPassCurrentPhaseAction(); //P2
-		scn.FreepsPassCurrentPhaseAction(); //P1
+		scn.ShadowPass(); //P2
+		scn.FreepsPass(); //P1
 		scn.FreepsDeclineReconciliation(); //P1
 		scn.ShadowDeclineReconciliation();
 
@@ -155,7 +155,7 @@ public class Card_18_134_ErrataTests
 		var doorway = scn.GetShadowSite("Doorway to Doom");
 
 		scn.StartGame(site1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowChooseCardBPFromSelection(doorway);
 		assertEquals(scn.GetCurrentSite(), doorway);

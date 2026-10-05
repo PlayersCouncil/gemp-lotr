@@ -89,7 +89,7 @@ public class Card_V1_044_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier, warden, runner, sentry);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		assertEquals(0, scn.GetBurdens());
@@ -132,7 +132,7 @@ public class Card_V1_044_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, sentry);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		// The pool would pay for it, and an Orc and a [sauron] minion are in play.
@@ -155,23 +155,23 @@ public class Card_V1_044_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		// 2 companions + 2 for the shadow number of site 2
 		assertEquals(4, scn.GetTwilight());
 		assertFalse(scn.ShadowPlayAvailable(fell));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsAssignToMinions(aragorn, warden);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertFalse(scn.ShadowPlayAvailable(fell));
 
 		// The Warden's 9 beats Aragorn's 8, and the regroup phase follows.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		assertInZone(Zone.SHADOW_CHARACTERS, warden);
 		assertEquals(4, scn.GetTwilight());
@@ -197,7 +197,7 @@ public class Card_V1_044_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(3, scn.GetTwilight());
@@ -248,7 +248,7 @@ public class Card_V1_044_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetBurdens());
 

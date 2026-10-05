@@ -92,7 +92,7 @@ public class Card_V1_031_Tests
 		// Two tentacles, and a third [moria] minion that is not one.
 		scn.MoveMinionsToTable(vile, reaching, troop);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 3 set + 1 companion + 2 for site 2
 		assertEquals(6, scn.GetTwilight());
@@ -133,7 +133,7 @@ public class Card_V1_031_Tests
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
 		// Exactly three tentacles, and a [moria] minion that is not one.
 		scn.MoveMinionsToTable(vile, reaching, strong, troop);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertEquals(3, scn.GetTwilight());
@@ -204,7 +204,7 @@ public class Card_V1_031_Tests
 		// Every tentacle there is is a [moria] card.  The Uruk Savage is made a third tentacle, so that the text's
 		// "tentacle" and its "[moria] card" can be told apart.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.TENTACLE));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.ShadowPlayAvailable(purpose));
@@ -246,7 +246,7 @@ public class Card_V1_031_Tests
 		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
 		scn.MoveMinionsToTable(vile, reaching, strong);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(1, scn.GetShadowDiscardCount());

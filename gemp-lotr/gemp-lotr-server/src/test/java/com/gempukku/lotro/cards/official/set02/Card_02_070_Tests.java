@@ -74,7 +74,7 @@ public class Card_02_070_Tests
 		scn.StartGame();
 		scn.SetTwilight(7);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Starting 7 + 1 companion + 2 from site = 10
 		assertEquals(10, scn.GetTwilight());

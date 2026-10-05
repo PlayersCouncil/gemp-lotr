@@ -130,7 +130,7 @@ public class Card_V1_061_Tests
 		scn.MoveMinionsToTable(savage);
 		// Gimli is wounded and stands by.
 		scn.AddWoundsToChar(gimli, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
@@ -177,7 +177,7 @@ public class Card_V1_061_Tests
 		scn.SkipToSite(5);
 
 		scn.MoveMinionsToTable(savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
@@ -193,7 +193,7 @@ public class Card_V1_061_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
 		// Declining is not using it: Aragorn's next exertion in the same maneuver phase is offered it again.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
@@ -222,7 +222,7 @@ public class Card_V1_061_Tests
 		scn.SkipToSite(5);
 
 		scn.MoveMinionsToTable(savage, savage2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
@@ -243,7 +243,7 @@ public class Card_V1_061_Tests
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 
 		// He exerts again in the same skirmish: nothing is offered, though Celeborn could exert again.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
@@ -282,7 +282,7 @@ public class Card_V1_061_Tests
 		scn.SkipToSite(5);
 
 		scn.MoveMinionsToTable(savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
@@ -298,7 +298,7 @@ public class Card_V1_061_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// On the same board, in the same skirmish, a companion's exertion is offered it.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
@@ -323,7 +323,7 @@ public class Card_V1_061_Tests
 		scn.MoveMinionsToTable(savage);
 		// Celeborn (vitality 3) is exhausted.  Arwen, an [elven] companion, and Grimir, a [dwarven] ally, are not.
 		scn.AddWoundsToChar(celeborn, 2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
@@ -338,7 +338,7 @@ public class Card_V1_061_Tests
 
 		// With one wound taken off Celeborn, the next exertion is offered it.
 		scn.RemoveWoundsFromChar(celeborn, 1);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
@@ -363,13 +363,13 @@ public class Card_V1_061_Tests
 
 		scn.MoveMinionsToTable(savage);
 		scn.MoveCardsToHand(oneOfYou);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var throneRoom = scn.GetCurrentSite();
 		assertEquals("Lorien Throne Room", throneRoom.getBlueprint().getTitle());
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// A Man and a Dwarf in the fellowship: the Free Peoples player exerts 2 companions, and chooses the
 		// Ring-bearer and Gimli.
@@ -418,7 +418,7 @@ public class Card_V1_061_Tests
 		assertEquals(scn.P1(), throneRoom.getOwner());
 
 		scn.MoveMinionsToTable(savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(7, scn.GetCurrentSiteNumber());
 
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -451,7 +451,7 @@ public class Card_V1_061_Tests
 		scn.MoveMinionsToTable(savage);
 		// Aragorn (vitality 4) starts with a wound, so that a second heal has something to take off.
 		scn.AddWoundsToChar(aragorn, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(throneRoom, scn.GetCurrentSite());
 		assertEquals(scn.P1(), throneRoom.getOwner());
 
@@ -487,7 +487,7 @@ public class Card_V1_061_Tests
 
 		// Once in the phase for the site and once for Uruviel, and no more: Aragorn's next exertion is offered
 		// nothing, though Celeborn (vitality 3) could exert again.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());

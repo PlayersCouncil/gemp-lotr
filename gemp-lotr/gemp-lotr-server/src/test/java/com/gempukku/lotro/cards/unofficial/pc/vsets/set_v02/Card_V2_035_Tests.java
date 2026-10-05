@@ -90,7 +90,7 @@ public class Card_V2_035_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(evil);
 		assertEquals(3, scn.GetWoundsOn(uruk));
@@ -194,8 +194,8 @@ public class Card_V2_035_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsUseCardAction(lindenroot);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsAssignToMinions(lindenroot, uruk);
 		scn.FreepsResolveSkirmish(lindenroot);
 

@@ -91,7 +91,7 @@ public class Card_V1_038_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -135,7 +135,7 @@ public class Card_V1_038_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(40);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());
@@ -222,7 +222,7 @@ public class Card_V1_038_Tests
 		assertEquals(8, scn.GetStrength(elrond));
 		assertTrue(scn.FreepsCanAssign(elrond));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertTrue(scn.ShadowActionAvailable(harry));
 		assertFalse(scn.IsCharAssigned(harry));
@@ -262,21 +262,21 @@ public class Card_V1_038_Tests
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(5, scn.GetStrength(farin));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(harry));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertTrue(scn.ShadowActionAvailable(harry));
 
 		// Harry is left out of the assignments, so he is still unassigned when Farin's skirmish is fought.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsAssignToMinions(farin, lemenya);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(farin);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertFalse(scn.IsCharAssigned(harry));

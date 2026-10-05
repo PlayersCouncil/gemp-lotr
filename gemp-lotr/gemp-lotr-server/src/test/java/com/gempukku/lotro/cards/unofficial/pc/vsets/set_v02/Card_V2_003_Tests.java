@@ -84,7 +84,7 @@ public class Card_V2_003_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// 4 set + 1 companion + 2 for the site

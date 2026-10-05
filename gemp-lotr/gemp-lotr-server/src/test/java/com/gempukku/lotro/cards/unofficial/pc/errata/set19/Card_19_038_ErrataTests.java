@@ -82,7 +82,7 @@ public class Card_19_038_ErrataTests
         scn.SetTwilight(10);
         scn.RemoveBurdens(1); //To compensate for the bid
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(nertea);
         scn.ShadowChoose("14"); // Man

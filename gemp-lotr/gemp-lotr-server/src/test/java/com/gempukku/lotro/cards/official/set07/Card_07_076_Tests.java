@@ -131,8 +131,8 @@ public class Card_07_076_Tests
         assertEquals(1, scn.GetFreepsDiscardCount()); //Only the smeagol we need
         scn.FreepsPlayCard(friends);
         //scn.FreepsChooseAnyCard();
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertTrue(scn.FreepsDecisionAvailable("Do you want to make another move?"));
         scn.FreepsChooseToMove();
@@ -160,8 +160,8 @@ public class Card_07_076_Tests
         assertEquals(1, scn.GetFreepsDiscardCount()); //Only the smeagol we need
         scn.FreepsPlayCard(friends);
         //scn.FreepsChooseAnyCard();
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertTrue(scn.FreepsDecisionAvailable("Do you want to make another move?"));
         scn.FreepsChooseToStay();

@@ -124,7 +124,7 @@ public class Card_V1_006_Tests
 		assertFalse(scn.HasKeyword(grimir, Keyword.DEFENDER));
 
 		// Passing ends the fellowship phase, and the fellowship moves to site 2.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bold));
 		scn.FreepsAcceptOptionalTrigger();
@@ -164,7 +164,7 @@ public class Card_V1_006_Tests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertFalse(scn.HasKeyword(gimli, Keyword.DEFENDER));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bold));
 		scn.FreepsDeclineOptionalTrigger();
@@ -194,7 +194,7 @@ public class Card_V1_006_Tests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetKeywordCount(gimli, Keyword.DEFENDER));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// One Elf and one Dwarf, so neither is asked for.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bold));
@@ -249,7 +249,7 @@ public class Card_V1_006_Tests
 
 		assertEquals(0, scn.GetWoundsOn(lorienElf));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Vitality 2: the Lorien Elf can exert once.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bold));
@@ -284,7 +284,7 @@ public class Card_V1_006_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(scn.P1(), scn.GetCurrentPlayer());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bold));
 		scn.FreepsDeclineOptionalTrigger();
@@ -299,7 +299,7 @@ public class Card_V1_006_Tests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 
 		// The other player's fellowship moves: this is not "the fellowship" to a card that is not active.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

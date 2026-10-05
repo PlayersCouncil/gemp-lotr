@@ -84,7 +84,7 @@ public class Card_V3_043_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetStackedCards(rearguard).size());
 
@@ -102,7 +102,7 @@ public class Card_V3_043_Tests
 		assertInZone(Zone.STACKED, southron1);
 
 		// Can stack again (not once per phase)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(rearguard));
 		scn.ShadowUseCardAction(rearguard);
 
@@ -120,7 +120,7 @@ public class Card_V3_043_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Southron Men in play - action not available
 		assertFalse(scn.ShadowActionAvailable(rearguard));
@@ -145,7 +145,7 @@ public class Card_V3_043_Tests
 
 		scn.SetTwilight(4); // Not enough
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(rearguard));
 	}
@@ -167,7 +167,7 @@ public class Card_V3_043_Tests
 		scn.StartGame();
 		scn.SetTwilight(5);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 		assertTrue(scn.ShadowActionAvailable(rearguard));
@@ -207,7 +207,7 @@ public class Card_V3_043_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(rearguard);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, rearguard);

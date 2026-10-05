@@ -136,8 +136,8 @@ public class Card_V1_052_Tests
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(shelob));
 
@@ -184,8 +184,8 @@ public class Card_V1_052_Tests
 		assertTrue(scn.ShadowCanAssign(shelob));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(shelob));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
 
@@ -234,8 +234,8 @@ public class Card_V1_052_Tests
 		scn.FreepsUseCardAction(merry);
 		scn.FreepsChooseCard(shelob);
 		scn.ShadowChooseNo();
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(shelob));
 
 		scn.FreepsAssignToMinions(aragorn, runner);
@@ -307,8 +307,8 @@ public class Card_V1_052_Tests
 		assertFalse(scn.FreepsCanAssign(slaughterer));
 		assertFalse(scn.ShadowCanAssign(slaughterer));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(slaughterer));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));

@@ -154,7 +154,7 @@ public class Card_V1_005_Tests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Gimli is still wounded and still bears two cards, but only one of them is an item.  Aragorn's two items
 		// do not make a Dwarf of him.

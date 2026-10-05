@@ -85,7 +85,7 @@ public class Card_02_028_Tests
         scn.MoveMinionsToTable(runner);
 
         scn.StartGame();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.SkipToPhase(Phase.MANEUVER);
 

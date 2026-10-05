@@ -76,7 +76,7 @@ public class Card_18_132_Tests
         scn.StartGame();
 
         scn.SetTwilight(10);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertFalse(scn.ShadowPlayAvailable(flees));
         scn.ShadowPlayCard(nazgul);
@@ -104,7 +104,7 @@ public class Card_18_132_Tests
         scn.StartGame();
 
         scn.SetTwilight(10);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(Zone.SUPPORT, follower2.getZone());
         assertEquals(12, scn.GetTwilight()); // 10 initial, +2 from moving
@@ -139,7 +139,7 @@ public class Card_18_132_Tests
         scn.StartGame();
 
         scn.SetTwilight(10);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(Zone.SUPPORT, follower0.getZone());
         assertEquals(12, scn.GetTwilight()); // 10 initial, +2 from moving
@@ -169,7 +169,7 @@ public class Card_18_132_Tests
         scn.StartGame();
 
         scn.SetTwilight(20);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         assertEquals(22, scn.GetTwilight()); // 20 initial, +2 from moving
         scn.ShadowPlayCard(flees);
 

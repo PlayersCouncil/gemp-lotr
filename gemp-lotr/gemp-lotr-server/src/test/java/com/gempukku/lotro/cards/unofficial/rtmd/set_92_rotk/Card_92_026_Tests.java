@@ -67,7 +67,7 @@ public class Card_92_026_Tests
 		scn.StartGame();
 
 		// Move to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightAfterMove = scn.GetTwilight();
 		int site2Shadow = scn.GetCurrentSite().getBlueprint().getTwilightCost();
@@ -82,7 +82,7 @@ public class Card_92_026_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightAfterMove = scn.GetTwilight();
 		int site2Shadow = scn.GetCurrentSite().getBlueprint().getTwilightCost();
@@ -103,7 +103,7 @@ public class Card_92_026_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightAfterMove = scn.GetTwilight();
 		int site2Shadow = scn.GetCurrentSite().getBlueprint().getTwilightCost();

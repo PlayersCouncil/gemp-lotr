@@ -85,7 +85,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play first Ringwraith Orc -- should NOT trigger Morgul Legions
 		scn.ShadowPlayCard(squealer1);
@@ -112,7 +112,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(squealer);
 
 		assertFalse(scn.IsHindered(mount));
@@ -140,7 +140,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(runner);
 
@@ -168,7 +168,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(squealer);
 		scn.ShadowPlayCard(squealer2);
@@ -201,7 +201,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Nazgul - ability should not be available
 		assertFalse(scn.ShadowActionAvailable(legions));
@@ -226,7 +226,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(legions);
 
@@ -268,7 +268,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(legions);
 

@@ -98,7 +98,7 @@ public class Card_11_243_Tests
 		scn.StartGame(harrowdale);
 
 		// Move during fellowship
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
 
 		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
@@ -149,7 +149,7 @@ public class Card_11_243_Tests
 		scn.StartGame(freepsSite1);
 
 		// Move during fellowship
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(harrowdale);
 
 		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));

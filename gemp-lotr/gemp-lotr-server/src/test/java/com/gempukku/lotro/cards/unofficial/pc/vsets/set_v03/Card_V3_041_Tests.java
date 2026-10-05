@@ -83,7 +83,7 @@ public class Card_V3_041_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(charger));
 		scn.ShadowUseCardAction(charger);
@@ -107,7 +107,7 @@ public class Card_V3_041_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform by stacking 2 Southrons
 		scn.ShadowUseCardAction(charger);
@@ -143,7 +143,7 @@ public class Card_V3_041_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform with 1 Southron
 		scn.ShadowUseCardAction(charger);
@@ -178,7 +178,7 @@ public class Card_V3_041_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform with 4 Southrons
 		scn.ShadowUseCardAction(charger);
@@ -212,7 +212,7 @@ public class Card_V3_041_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(charger);
 
@@ -247,7 +247,7 @@ public class Card_V3_041_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		// Freeps passes first to let Shadow transform
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(charger);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, charger);

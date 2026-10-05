@@ -143,10 +143,10 @@ public class Card_01_009_Tests
 
 		scn.FreepsResolveSkirmish(gimli);
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//Should only have "resolve skirmish wounds" and one instance of "dwarven axe required trigger".
 		// If there are two axe-triggers, then the card is violating the latest Decipher "clarification":
@@ -219,8 +219,8 @@ public class Card_01_009_Tests
 		scn.FreepsChooseCard(orc3);
 		assertEquals(Zone.DISCARD, orc3.getZone());
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//There should not be any axe trigger here; we should go straight to regroup
 

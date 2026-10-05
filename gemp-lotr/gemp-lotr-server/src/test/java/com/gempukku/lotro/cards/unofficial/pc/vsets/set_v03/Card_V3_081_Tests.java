@@ -91,7 +91,7 @@ public class Card_V3_081_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Use nazgul1's ability, bouncing nazgul2
 		scn.ShadowUseCardAction(nazgul1);
@@ -132,7 +132,7 @@ public class Card_V3_081_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Can't use ability - no "another Winged Nazgul" to return
 		assertFalse(scn.ShadowActionAvailable(nazgul1));
@@ -155,7 +155,7 @@ public class Card_V3_081_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(nazgul1);
 		//No companion to select since there's no unbound companions

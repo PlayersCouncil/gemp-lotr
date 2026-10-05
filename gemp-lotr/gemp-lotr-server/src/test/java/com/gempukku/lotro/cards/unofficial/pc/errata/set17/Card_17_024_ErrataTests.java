@@ -146,7 +146,7 @@ public class Card_17_024_ErrataTests
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 

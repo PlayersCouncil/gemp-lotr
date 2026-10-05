@@ -72,7 +72,7 @@ public class Card_18_082_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(grond));
 		scn.ShadowPlayCard(goblin);
@@ -88,7 +88,7 @@ public class Card_18_082_ErrataTests
 		scn.MoveCardsToSupportArea(grond);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		scn.SkipToPhase(Phase.REGROUP);
@@ -115,7 +115,7 @@ public class Card_18_082_ErrataTests
 		scn.MoveCardsToSupportArea(grond);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();

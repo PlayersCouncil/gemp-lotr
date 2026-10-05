@@ -101,7 +101,7 @@ public class Card_92_028_Tests
 		// Leave library in draw deck
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		assertTrue(scn.ShadowActionAvailable(mod));

@@ -90,7 +90,7 @@ public class Card_10_068_ErrataTests
 		scn.FreepsResolveSkirmish(rider);
 		// Freeps cards can exert Enquea fine
 		assertEquals(2, scn.GetWoundsOn(enquea));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// Shadow cards cannot exert Enquea
 		assertFalse(scn.ShadowPlayAvailable(darkness));
 	}
@@ -112,7 +112,7 @@ public class Card_10_068_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, enquea);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetWoundsOn(enquea));
 		assertEquals(3, scn.GetTwilight());

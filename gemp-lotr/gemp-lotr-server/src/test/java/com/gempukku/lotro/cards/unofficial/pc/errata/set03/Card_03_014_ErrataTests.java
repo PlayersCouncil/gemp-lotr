@@ -101,7 +101,7 @@ public class Card_03_014_ErrataTests
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));
@@ -165,7 +165,7 @@ public class Card_03_014_ErrataTests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));

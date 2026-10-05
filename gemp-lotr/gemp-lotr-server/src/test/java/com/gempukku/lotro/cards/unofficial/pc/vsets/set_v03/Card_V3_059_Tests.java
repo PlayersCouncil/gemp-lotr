@@ -79,7 +79,7 @@ public class Card_V3_059_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Only 1 Raider card in play — does not meet spot 2 requirement
 		assertFalse(scn.ShadowPlayAvailable(strength));
@@ -102,7 +102,7 @@ public class Card_V3_059_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(southron1));
 		assertTrue(scn.IsHindered(southron2));
@@ -134,7 +134,7 @@ public class Card_V3_059_Tests
 		scn.AddBurdens(5);
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(strength);
 
@@ -165,7 +165,7 @@ public class Card_V3_059_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetShadowHandCount());
 

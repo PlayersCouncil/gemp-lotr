@@ -83,7 +83,7 @@ public class Card_V3_050_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier);
 		scn.SetTwilight(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 8 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -122,7 +122,7 @@ public class Card_V3_050_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 8 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(11, scn.GetTwilight());
@@ -155,7 +155,7 @@ public class Card_V3_050_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier);
 		scn.SetTwilight(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetStrength(soldier));
 
@@ -182,7 +182,7 @@ public class Card_V3_050_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(10, scn.GetTwilight());
@@ -209,7 +209,7 @@ public class Card_V3_050_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(whisper);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(10, scn.GetTwilight());

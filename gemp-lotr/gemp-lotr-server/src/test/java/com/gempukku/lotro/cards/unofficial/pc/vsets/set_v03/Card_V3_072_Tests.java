@@ -91,7 +91,7 @@ public class Card_V3_072_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(attea));
 
@@ -131,7 +131,7 @@ public class Card_V3_072_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play Host of Thousands (event that plays Moria Orc from discard)
 		scn.ShadowPlayCard(host);
@@ -160,7 +160,7 @@ public class Card_V3_072_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(savage);
 
@@ -187,7 +187,7 @@ public class Card_V3_072_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(savage);
 
@@ -220,14 +220,14 @@ public class Card_V3_072_Tests
 		int atteaStrength = scn.GetStrength(attea);
 
 		// First use - hinder savage
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(attea);
 		scn.ShadowChooseCard(savage);
 
 		assertEquals(atteaStrength + 1, scn.GetStrength(attea));
 
 		// Second use - hinder soldier
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(attea);
 		// Soldier is only remaining unhindere minion, auto-selected
 
@@ -254,7 +254,7 @@ public class Card_V3_072_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No other minions to hinder - ability not available
 		assertFalse(scn.ShadowActionAvailable(attea));

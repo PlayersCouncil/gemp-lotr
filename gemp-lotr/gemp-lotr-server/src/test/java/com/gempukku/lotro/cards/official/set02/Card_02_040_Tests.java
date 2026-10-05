@@ -70,7 +70,7 @@ public class Card_02_040_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(demands));
 		scn.ShadowPlayCard(savage);

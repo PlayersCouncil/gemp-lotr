@@ -78,7 +78,7 @@ public class Card_V2_034_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.MoveMinionsToTable(occupier);
 		assertEquals(8, scn.GetStrength(occupier));
@@ -111,7 +111,7 @@ public class Card_V2_034_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(occupier));
 		scn.ShadowTakeControlOfSite();

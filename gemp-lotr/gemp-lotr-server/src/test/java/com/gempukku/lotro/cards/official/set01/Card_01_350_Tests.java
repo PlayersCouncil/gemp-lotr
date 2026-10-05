@@ -83,7 +83,7 @@ public class Card_01_350_Tests
 		scn.SkipToSite(5);
 
 		scn.SetTwilight(11);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(dale, scn.GetCurrentSite());
 

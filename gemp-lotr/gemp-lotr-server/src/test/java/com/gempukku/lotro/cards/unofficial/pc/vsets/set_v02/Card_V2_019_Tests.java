@@ -117,7 +117,7 @@ public class Card_V2_019_Tests
 
 		scn.AddWoundsToChar(deathseeker, 1);
 
-		scn.FreepsPassCurrentPhaseAction(); //to get the game to realize he's died
+		scn.FreepsPass(); //to get the game to realize he's died
 
 		assertEquals(3, scn.GetCultureTokensOn(machine));
 		assertEquals(Zone.DISCARD, deathseeker.getZone());

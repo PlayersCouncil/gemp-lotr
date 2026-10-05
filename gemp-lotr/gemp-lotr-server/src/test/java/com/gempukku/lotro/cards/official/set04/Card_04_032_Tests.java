@@ -93,8 +93,8 @@ public class Card_04_032_Tests
 		assertEquals(Zone.ATTACHED, weary.getZone());
 		assertEquals(frodo, weary.getAttachedTo());
 
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		scn.FreepsDeclineOptionalTrigger(); //One Ring converting wound on frodo
 		assertTrue(scn.ShadowPlayAvailable(ravage));

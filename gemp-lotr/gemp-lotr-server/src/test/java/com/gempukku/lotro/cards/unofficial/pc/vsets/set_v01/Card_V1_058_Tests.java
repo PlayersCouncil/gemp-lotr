@@ -110,7 +110,7 @@ public class Card_V1_058_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals("Prancing Pony Spare Room", scn.GetCurrentSite().getBlueprint().getTitle());
 		// 20 set + 1 companion + 2 for the Spare Room
@@ -165,7 +165,7 @@ public class Card_V1_058_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(6, scn.GetStrength(soldier));
@@ -197,14 +197,14 @@ public class Card_V1_058_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(backstabber1);
 		scn.ShadowPlayCard(savage);
 		assertEquals(8, scn.GetStrength(backstabber1));
 		assertEquals(8, scn.GetStrength(savage));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertEquals(8, scn.GetStrength(backstabber1));
 		assertEquals(8, scn.GetStrength(savage));
@@ -250,7 +250,7 @@ public class Card_V1_058_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.FREE_CHARACTERS, gandalf);
@@ -282,7 +282,7 @@ public class Card_V1_058_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertInZone(Zone.SUPPORT, cart);
 		scn.ShadowPlayCard(backstabber1);
@@ -328,7 +328,7 @@ public class Card_V1_058_Tests
 		// A Wizard who is no [gandalf] card.
 		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, guard, null, Race.WIZARD));
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.DEAD, gandalf);
@@ -379,7 +379,7 @@ public class Card_V1_058_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 		assertInHand(backstabber1);
 		scn.SetTwilight(20);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertEquals("Prancing Pony Spare Room", scn.GetCurrentSite().getBlueprint().getTitle());
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));

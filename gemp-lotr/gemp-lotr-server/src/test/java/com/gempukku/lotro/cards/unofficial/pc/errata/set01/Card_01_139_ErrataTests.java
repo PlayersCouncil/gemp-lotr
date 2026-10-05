@@ -85,7 +85,7 @@ public class Card_01_139_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, uruk2}, new PhysicalCardImpl[]{aragorn,uruk});
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(savagery));
 		assertEquals(5, scn.GetStrength(uruk));
@@ -118,7 +118,7 @@ public class Card_01_139_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, uruk2}, new PhysicalCardImpl[]{aragorn,uruk});
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(savagery));
 		assertEquals(5, scn.GetStrength(uruk));

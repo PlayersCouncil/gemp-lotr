@@ -126,7 +126,7 @@ public class Card_01_067_Tests
 		assertEquals(Zone.ADVENTURE_PATH, freepsWoods.getZone());
 		assertEquals(8, scn.GetStrength(uruviel));
 
-		scn.FreepsPassCurrentPhaseAction();          // move 5 -> 6 onto the Free Peoples player's Woods
+		scn.FreepsPass();          // move 5 -> 6 onto the Free Peoples player's Woods
 		assertEquals(6, scn.GetCurrentSiteNumber());
 		assertEquals(freepsWoods, scn.GetCurrentSite());
 		scn.SetTwilight(10);

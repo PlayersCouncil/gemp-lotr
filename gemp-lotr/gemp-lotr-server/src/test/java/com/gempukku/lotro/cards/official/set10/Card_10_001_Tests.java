@@ -74,7 +74,7 @@ public class Card_10_001_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(troll);
 
@@ -104,7 +104,7 @@ public class Card_10_001_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(assassin);
 
@@ -136,7 +136,7 @@ public class Card_10_001_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(Zone.HAND, assassin.getZone());

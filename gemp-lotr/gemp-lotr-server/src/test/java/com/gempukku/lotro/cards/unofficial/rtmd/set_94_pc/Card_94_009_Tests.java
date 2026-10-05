@@ -66,7 +66,7 @@ public class Card_94_009_Tests {
 		scn.MoveMinionsToTable(troop, butcher, backstabber);
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction(); // Freeps acts first in the back-and-forth regroup actions
+		scn.FreepsPass(); // Freeps acts first in the back-and-forth regroup actions
 
 		int b = scn.GetBurdens();
 		assertTrue(scn.ShadowActionAvailable(mod));
@@ -82,7 +82,7 @@ public class Card_94_009_Tests {
 		assertEquals(b + 1, scn.GetBurdens());
 
 		// Control alternates to Freeps (who has nothing to do) and back to Shadow
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
@@ -95,7 +95,7 @@ public class Card_94_009_Tests {
 		scn.MoveMinionsToTable(backstabber);
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(mod));
 	}

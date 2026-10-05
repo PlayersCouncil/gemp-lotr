@@ -81,7 +81,7 @@ public class Card_03_070_ErrataTests
 		assertEquals(6, scn.GetStrength(goblinman));
 
 		// Freeps passes, Shadow plays event
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(servants);
 		// Goblin Man auto-selected as only Isengard Orc
 		assertEquals(10, scn.GetStrength(goblinman));
@@ -107,7 +107,7 @@ public class Card_03_070_ErrataTests
 		assertEquals(8, scn.GetStrength(smith));
 
 		// Freeps passes, Shadow plays event
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(servants);
 		// Warrior auto-selected as only Isengard Orc
 		assertEquals(10, scn.GetStrength(smith));

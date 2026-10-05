@@ -115,7 +115,7 @@ public class Card_V3_122_Tests
 		scn.MoveMinionsToTable(runner);
 
 		// Freeps passes Fellowship at site 7 → forced move to site 8
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertEquals(9, scn.GetTwilight());
 
@@ -125,7 +125,7 @@ public class Card_V3_122_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		assertInZone(Zone.HAND, saruman);
 		assertEquals(8, scn.GetTwilight());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// === MANEUVER PHASE ===
 		// Only Hate (Maneuver event) should be a valid target

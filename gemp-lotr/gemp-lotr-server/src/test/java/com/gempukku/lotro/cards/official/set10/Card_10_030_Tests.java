@@ -83,8 +83,8 @@ public class Card_10_030_Tests
         scn.FreepsPlayCard(endgame);
         assertEquals(8, scn.GetStrength(aragorn));
         //Passing skirmish actions
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
         //no other decisions occur from the event
         assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
     }
@@ -145,8 +145,8 @@ public class Card_10_030_Tests
         assertEquals(8, scn.GetStrength(aragorn));
         scn.FreepsPlayCard(endgame);
         assertEquals(10, scn.GetStrength(aragorn));
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertTrue(scn.FreepsActionAvailable("Required trigger from"));
         scn.FreepsResolveActionOrder("Required trigger from");
@@ -182,8 +182,8 @@ public class Card_10_030_Tests
         assertEquals(8, scn.GetStrength(aragorn));
         scn.FreepsPlayCard(endgame);
         assertEquals(10, scn.GetStrength(aragorn));
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         assertTrue(scn.FreepsActionAvailable("Required trigger from"));
         scn.FreepsResolveActionOrder("Required trigger from");

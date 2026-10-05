@@ -82,7 +82,7 @@ public class Card_V3_015_Tests
 		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		assertTrue(scn.IsHindered(pass));
@@ -171,7 +171,7 @@ public class Card_V3_015_Tests
 		// pass is NOT hindered
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.AddThreats(1);
 
@@ -201,7 +201,7 @@ public class Card_V3_015_Tests
 		// No threats
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		assertEquals(0, scn.GetThreats());
@@ -229,7 +229,7 @@ public class Card_V3_015_Tests
 		scn.MoveMinionsToTable(gollum1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		scn.AddThreats(1);
@@ -258,7 +258,7 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToDiscard(gollum2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		scn.AddThreats(1);
@@ -299,7 +299,7 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToDiscard(gollum2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		scn.AddThreats(1);
@@ -332,7 +332,7 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToDiscard(gollum2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.AddWoundsToChar(gollum1, 2);
 		scn.HinderCard(pass);
@@ -456,7 +456,7 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToDiscard(gollum2, shelob2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.HinderCard(pass);
 		scn.AddThreats(1);

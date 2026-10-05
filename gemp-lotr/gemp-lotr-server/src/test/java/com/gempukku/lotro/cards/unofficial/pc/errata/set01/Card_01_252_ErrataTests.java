@@ -70,7 +70,7 @@ public class Card_01_252_ErrataTests
 		scn.StartGame();
 		scn.AddWoundsToChar(orc, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
 		assertFalse(scn.ShadowPlayAvailable(shadow));
@@ -88,7 +88,7 @@ public class Card_01_252_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(orc));
 		assertTrue(scn.ShadowPlayAvailable(shadow));

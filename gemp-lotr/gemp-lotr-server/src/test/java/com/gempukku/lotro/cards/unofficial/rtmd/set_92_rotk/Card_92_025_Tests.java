@@ -60,7 +60,7 @@ public class Card_92_025_Tests
 		scn.AddBurdens(4);
 
 		// Pass fellowship phase to trigger the move to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// After the move, twilight should include site 2's shadow number + 4 burdens worth
 		int twilightAfterMove = scn.GetTwilight();
@@ -83,7 +83,7 @@ public class Card_92_025_Tests
 
 		int twilightBeforeMove = scn.GetTwilight();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightAfterMove = scn.GetTwilight();
 		int site2Shadow = scn.GetCurrentSite().getBlueprint().getTwilightCost();
@@ -100,7 +100,7 @@ public class Card_92_025_Tests
 		scn.StartGame();
 
 		scn.AddBurdens(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightAfterMove = scn.GetTwilight();
 		int site2Shadow = scn.GetCurrentSite().getBlueprint().getTwilightCost();

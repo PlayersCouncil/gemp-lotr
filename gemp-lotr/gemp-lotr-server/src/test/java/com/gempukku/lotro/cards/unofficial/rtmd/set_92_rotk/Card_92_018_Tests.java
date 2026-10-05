@@ -121,7 +121,7 @@ public class Card_92_018_Tests
 
 		// Now cheat aragorn in and move from site 5→6
 		scn.MoveCompanionsToTable(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// Move triggers, site 5 < 7 so discard 1
 		assertInZone(Zone.DISCARD, aragorn);
 	}
@@ -140,7 +140,7 @@ public class Card_92_018_Tests
 
 		// Now cheat in 2 non-hobbit companions and move from site 7→8
 		scn.MoveCompanionsToTable(aragorn, gimli);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Move triggers, site 7 >= 7 so discard 2
 

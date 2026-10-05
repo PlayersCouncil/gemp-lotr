@@ -113,7 +113,7 @@ public class Card_V3_001_Tests
 
 		// Add 4th companion (5 total with Frodo)
 		scn.MoveCompanionsToTable("companion4");
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Now 5 total companions, Phial should auto-discard
 		assertEquals(Zone.DISCARD, phial.getZone());

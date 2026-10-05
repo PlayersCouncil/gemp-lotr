@@ -189,8 +189,8 @@ public class Card_02_032_ErrataTests
         assertEquals(11, scn.GetStrength(aragorn));
         assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
 
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
+        scn.ShadowPass();
+        scn.FreepsPass();
 
         //assignment for fierce skirmish
         scn.PassCurrentPhaseActions();

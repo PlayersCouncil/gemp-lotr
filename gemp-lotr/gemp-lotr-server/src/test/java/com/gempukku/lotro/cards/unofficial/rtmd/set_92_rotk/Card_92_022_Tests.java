@@ -72,7 +72,7 @@ public class Card_92_022_Tests
 		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		int handBefore = scn.GetShadowHandCount();
@@ -100,7 +100,7 @@ public class Card_92_022_Tests
 		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		var mod = scn.GetFreepsCard("mod");

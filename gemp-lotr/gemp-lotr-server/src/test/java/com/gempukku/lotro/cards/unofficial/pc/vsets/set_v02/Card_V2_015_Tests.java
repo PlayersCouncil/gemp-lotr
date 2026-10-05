@@ -79,7 +79,7 @@ public class Card_V2_015_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(insurance));
 		scn.ShadowPlayCard(runner);
@@ -111,7 +111,7 @@ public class Card_V2_015_Tests
 		scn.AttachCardsTo(frodo, bill);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
@@ -128,7 +128,7 @@ public class Card_V2_015_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(insurance));
@@ -155,7 +155,7 @@ public class Card_V2_015_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(insurance));
@@ -179,7 +179,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(15);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(insurance));
@@ -204,7 +204,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(14);
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -227,7 +227,7 @@ public class Card_V2_015_Tests
 		scn.MoveCardsToHand(insurance);
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -249,7 +249,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(18);
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(25, scn.GetTwilight());
@@ -282,7 +282,7 @@ public class Card_V2_015_Tests
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -308,7 +308,7 @@ public class Card_V2_015_Tests
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -323,7 +323,7 @@ public class Card_V2_015_Tests
 		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());

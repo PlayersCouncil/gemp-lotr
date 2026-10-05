@@ -78,7 +78,7 @@ public class Card_03_085_ErrataTests
 		scn.MoveCardsToSupportArea(bounder);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(twigul));
 		assertEquals(0, scn.GetWoundsOn(lord));
@@ -137,7 +137,7 @@ public class Card_03_085_ErrataTests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(lord);
 
 		assertEquals(1, scn.GetWoundsOn(sam));

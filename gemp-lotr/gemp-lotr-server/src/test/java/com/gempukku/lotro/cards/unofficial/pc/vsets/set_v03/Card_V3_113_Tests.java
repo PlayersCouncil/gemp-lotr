@@ -149,7 +149,7 @@ public class Card_V3_113_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		// FP passes, Shadow plays Beauty Is Fading — exert Witch-King, discard a FP possession
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(beauty);
 		// Shadow chooses the pipeweed to discard
 		scn.ShadowChooseCard(toby);

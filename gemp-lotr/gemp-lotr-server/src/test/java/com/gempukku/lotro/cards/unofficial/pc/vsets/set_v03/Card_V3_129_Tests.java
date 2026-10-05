@@ -105,7 +105,7 @@ public class Card_V3_129_Tests
 		scn.ShadowChooseCard(sting);
 		assertTrue(scn.IsHindered(sting));
 		assertEquals(9, scn.GetTwilight());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// === MANEUVER PHASE ===
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());

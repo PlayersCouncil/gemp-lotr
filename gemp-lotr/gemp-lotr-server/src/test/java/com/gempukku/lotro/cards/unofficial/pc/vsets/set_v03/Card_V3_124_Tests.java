@@ -112,7 +112,7 @@ public class Card_V3_124_Tests
 		int twilightBefore = scn.GetTwilight();
 
 		// Move to site 8 — trigger fires on arrival
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
 
 		// FP chooses which of their companion-borne cards to discard

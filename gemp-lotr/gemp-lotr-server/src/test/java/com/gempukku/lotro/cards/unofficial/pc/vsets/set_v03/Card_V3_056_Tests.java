@@ -156,7 +156,7 @@ public class Card_V3_056_Tests
 
 		assertFalse(scn.HasKeyword(southron, Keyword.AMBUSH));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(trap);
 
 		// Nothing to restore, so no ambush bonus

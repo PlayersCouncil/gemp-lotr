@@ -73,7 +73,7 @@ public class Card_07_262_Tests
 		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
@@ -82,7 +82,7 @@ public class Card_07_262_Tests
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.IsSiteControlled(site1));
 		assertTrue(scn.ShadowControls(site1));
@@ -117,11 +117,11 @@ public class Card_07_262_Tests
 		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.HAND, pillager.getZone());
 		assertEquals(Zone.DISCARD, assassin.getZone());
@@ -151,7 +151,7 @@ public class Card_07_262_Tests
 		scn.AddBurdens(1);
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
@@ -160,7 +160,7 @@ public class Card_07_262_Tests
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.IsSiteControlled(site1));
 		assertTrue(scn.ShadowControls(site1));
@@ -193,11 +193,11 @@ public class Card_07_262_Tests
 		// No burdens added, and no besieger stacked on a controlled site: neither branch can actually be paid for.
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.HAND, pillager.getZone());
 		assertEquals(Zone.DISCARD, assassin.getZone());

@@ -84,7 +84,7 @@ public class Card_03_066_ErrataTests
 		scn.AddBurdens(3 - scn.GetBurdens());
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetBurdens());
 		assertFalse(scn.ShadowActionAvailable(berserker));
@@ -112,7 +112,7 @@ public class Card_03_066_ErrataTests
 		scn.AddBurdens(3 - scn.GetBurdens());
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetBurdens());
 		assertFalse(scn.ShadowActionAvailable(berserker));
@@ -134,7 +134,7 @@ public class Card_03_066_ErrataTests
 		scn.AddBurdens(4 - scn.GetBurdens());
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(berserker));

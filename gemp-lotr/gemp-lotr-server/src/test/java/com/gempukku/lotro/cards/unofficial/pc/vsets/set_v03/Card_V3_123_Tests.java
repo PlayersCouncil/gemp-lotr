@@ -98,7 +98,7 @@ public class Card_V3_123_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
 
 		// All characters — companion, minion, ally — should have enduring
@@ -134,7 +134,7 @@ public class Card_V3_123_Tests
 		scn.MoveMinionsToTable(runner);
 		scn.AttachCardsTo(runner, paleBlade, raiderBow, whip, hides);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
 
 		// Before maneuver: no weapons should be hindered yet

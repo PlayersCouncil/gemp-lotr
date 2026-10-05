@@ -200,9 +200,9 @@ public class Card_V3_031_Tests
 		scn.AddWoundsToChar(pippin, pippinVit - 1);
 		assertEquals(1, scn.GetVitality(pippin));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		// Pippin can't exert twice with only 1 vitality
 		assertFalse(scn.FreepsActionAvailable(pippin));

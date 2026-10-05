@@ -82,12 +82,12 @@ public class Card_04_141_Tests
 		scn.SetTwilight(20);
 
 		scn.FreepsPlayCard(gandalf);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(uruk);
 		scn.ShadowPlayCard(cantea);
 		scn.ShadowPlayCard(enquea);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
@@ -96,20 +96,20 @@ public class Card_04_141_Tests
 		scn.ShadowAssignToMinions(gandalf, cantea, enquea);
 
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveSkirmish(gandalf);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		assertTrue(scn.ShadowDecisionAvailable(
 				"Optional responses"));
 
 		// Act
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Assert
 		assertEquals(1, scn.GetBurdens());

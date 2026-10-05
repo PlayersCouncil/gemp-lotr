@@ -83,7 +83,7 @@ public class Card_V2_039_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetThreats());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
@@ -113,7 +113,7 @@ public class Card_V2_039_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetThreats());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowDeclineOptionalTrigger();
@@ -133,7 +133,7 @@ public class Card_V2_039_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetThreats());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 
@@ -158,7 +158,7 @@ public class Card_V2_039_Tests
 		scn.SetTwilight(39);
 		scn.AddThreats(9);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(9, scn.GetThreats());
 		assertEquals(50, scn.GetTwilight());
@@ -192,7 +192,7 @@ public class Card_V2_039_Tests
 		scn.SetTwilight(39);
 		scn.AddThreats(9);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(9, scn.GetThreats());
 		assertEquals(50, scn.GetTwilight());
@@ -226,7 +226,7 @@ public class Card_V2_039_Tests
 		scn.SetTwilight(39);
 		scn.AddThreats(9);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(9, scn.GetThreats());
 		assertEquals(50, scn.GetTwilight());
@@ -259,7 +259,7 @@ public class Card_V2_039_Tests
 
 		scn.AddThreats(9);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(9, scn.GetThreats());
 		assertEquals(11, scn.GetTwilight());
@@ -292,7 +292,7 @@ public class Card_V2_039_Tests
 
 		scn.AddThreats(4);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetThreats());
 		assertEquals(11, scn.GetTwilight());

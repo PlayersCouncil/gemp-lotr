@@ -74,7 +74,7 @@ public class Card_V2_057_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(8);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(insurance));
 		scn.ShadowPlayCard(runner);
@@ -105,7 +105,7 @@ public class Card_V2_057_Tests
 		scn.AttachCardsTo(frodo, scn.GetFreepsCard("bill"));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
@@ -128,7 +128,7 @@ public class Card_V2_057_Tests
 
 		scn.SetTwilight(15);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(18, scn.GetTwilight());
 
 		assertTrue(scn.ShadowPlayAvailable(insurance));
@@ -161,7 +161,7 @@ public class Card_V2_057_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(insurance));
@@ -185,7 +185,7 @@ public class Card_V2_057_Tests
 		scn.SetTwilight(15);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(insurance));
@@ -214,7 +214,7 @@ public class Card_V2_057_Tests
 
 		scn.SetTwilight(14);
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -239,7 +239,7 @@ public class Card_V2_057_Tests
 		scn.SetTwilight(11);
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
 		scn.MoveCardsToHand(insurance);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -264,7 +264,7 @@ public class Card_V2_057_Tests
 
 		scn.SetTwilight(18);
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(25, scn.GetTwilight());
@@ -306,7 +306,7 @@ public class Card_V2_057_Tests
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(18, scn.GetTwilight());
 
 		//It's an ability being activated and not a "play", which is only true for cards
@@ -331,7 +331,7 @@ public class Card_V2_057_Tests
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -345,7 +345,7 @@ public class Card_V2_057_Tests
 		scn.MoveCardsToTopOfDeck(lurtz, army, sauron, runner);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());

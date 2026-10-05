@@ -92,14 +92,14 @@ public class Card_08_103_ErrataTests
 
 		scn.AddTokensToCard(grond, 10);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
 		scn.FreepsDeclineAssignments();
 		scn.ShadowDeclineAssignments();
 
 		//Regroup, round 1
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
 		assertEquals(Zone.SUPPORT, grond.getZone());
@@ -111,7 +111,7 @@ public class Card_08_103_ErrataTests
 		assertEquals(Zone.DISCARD, bow.getZone());
 
 		//Regroup, round 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
 		assertEquals(Zone.SUPPORT, grond.getZone());
@@ -123,7 +123,7 @@ public class Card_08_103_ErrataTests
 		assertEquals(Zone.DISCARD, elrond.getZone());
 
 		//Regroup, round 3
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
 		assertEquals(Zone.SUPPORT, grond.getZone());

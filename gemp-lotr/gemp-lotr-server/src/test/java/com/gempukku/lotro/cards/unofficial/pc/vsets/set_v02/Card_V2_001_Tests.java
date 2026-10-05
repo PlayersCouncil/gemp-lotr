@@ -82,7 +82,7 @@ public class Card_V2_001_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(footman);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 7 set + 1 companion + 2 for the site
 		assertEquals(10, scn.GetTwilight());
@@ -114,7 +114,7 @@ public class Card_V2_001_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 7 set + 1 companion + 2 for the site
 		assertEquals(10, scn.GetTwilight());
@@ -215,7 +215,7 @@ public class Card_V2_001_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(brigand);
 		scn.SetTwilight(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// One copy in play: 4 + 1.
 		assertInZone(Zone.SUPPORT, driven);

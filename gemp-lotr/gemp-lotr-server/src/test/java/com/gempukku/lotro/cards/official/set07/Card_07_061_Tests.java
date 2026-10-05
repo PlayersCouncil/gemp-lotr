@@ -72,7 +72,7 @@ public class Card_07_061_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(frodo, gollum);
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.GetTwilight() > 1);
 		assertTrue(scn.ShadowHasInitiative());

@@ -79,7 +79,7 @@ public class Card_01_154_ErrataTests
 		scn.StartGame();
 
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(soldier);
 
@@ -103,7 +103,7 @@ public class Card_01_154_ErrataTests
 		scn.StartGame();
 
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(soldier);
 

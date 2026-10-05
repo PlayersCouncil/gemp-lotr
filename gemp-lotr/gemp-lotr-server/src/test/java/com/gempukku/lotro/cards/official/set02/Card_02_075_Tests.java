@@ -77,8 +77,8 @@ public class Card_02_075_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		assertEquals(1, scn.ShadowGetShadowAssignmentTargetCount());
 

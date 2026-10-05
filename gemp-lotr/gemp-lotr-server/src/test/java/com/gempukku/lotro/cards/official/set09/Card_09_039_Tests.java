@@ -75,7 +75,7 @@ public class Card_09_039_Tests
         scn.StartGame();
         scn.SetTwilight(20);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.ShadowPlayCard(library);
         assertTrue(scn.ShadowActionAvailable(library));
@@ -113,13 +113,13 @@ public class Card_09_039_Tests
         scn.StartGame();
         scn.SetTwilight(20);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
         scn.PassCurrentPhaseActions();
         scn.FreepsAssignToMinions(scn.GetRingBearer(), troop1);
         scn.FreepsResolveSkirmish(scn.GetRingBearer());
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable(library));
         // 20 initially, +2 from move, the rest were all cheated in
@@ -151,10 +151,10 @@ public class Card_09_039_Tests
         scn.StartGame();
         scn.SetTwilight(20);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         scn.SkipToPhase(Phase.REGROUP);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable(library));
         // 20 initially, +2 from move, the rest were all cheated in

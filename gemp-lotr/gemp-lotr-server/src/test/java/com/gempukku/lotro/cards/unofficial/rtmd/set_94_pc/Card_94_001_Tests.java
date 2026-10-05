@@ -81,7 +81,7 @@ public class Card_94_001_Tests {
 		assertTrue(scn.CanBeAssignedViaAction(celeborn));
 
 		// Control alternates to Shadow (who has nothing to do) and back to Freeps
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 
 		// At the start of regroup, the ally is killed

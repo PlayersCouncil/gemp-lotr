@@ -136,7 +136,7 @@ public class Card_92_014_Tests
 		assertFalse(scn.ShadowActionAvailable(mod));
 
 		// Move to next turn's shadow phase
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
 		scn.FreepsChooseToMove();

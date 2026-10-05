@@ -99,7 +99,7 @@ public class Card_V2_053_Tests
 		assertFalse(scn.FreepsActionAvailable(red));
 		scn.MoveCompanionsToTable(vrohan);
 		scn.FreepsPlayCard(valor);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertTrue(scn.FreepsActionAvailable(red));
 	}
@@ -282,7 +282,7 @@ public class Card_V2_053_Tests
 		assertEquals(0, scn.GetWoundsOn(velf));
 
 		scn.MoveCardsToHand(valor);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsDecisionAvailable("maneuver"));
 		assertFalse(scn.FreepsPlayAvailable(valor));
 		assertFalse(scn.FreepsPlayAvailable(valor));

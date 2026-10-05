@@ -76,7 +76,7 @@ public class Card_V3_063_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Ringwraith card in play - cannot play Watcher
 		assertFalse(scn.ShadowPlayAvailable(watcher1));
@@ -94,7 +94,7 @@ public class Card_V3_063_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.ShadowPlayAvailable(watcher1));
@@ -308,7 +308,7 @@ public class Card_V3_063_Tests
 		// Second exertion - neither Watcher should draw (both limits reached)
 		int shadowHandAfterFirst = scn.GetShadowHandCount();
 		scn.ShadowPass(); //Response action
-		scn.ShadowPassCurrentPhaseAction(); //Maneuver action
+		scn.ShadowPass(); //Maneuver action
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(shadowHandAfterFirst, scn.GetShadowHandCount());
 	}

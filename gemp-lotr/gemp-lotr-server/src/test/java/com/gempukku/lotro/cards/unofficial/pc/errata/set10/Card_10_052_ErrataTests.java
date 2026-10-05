@@ -79,7 +79,7 @@ public class Card_10_052_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(underfoot));
 		assertTrue(scn.ShadowHasInitiative());
@@ -119,7 +119,7 @@ public class Card_10_052_ErrataTests
 		scn.FreepsAssignToMinions(frodo, raider);
 		scn.ShadowDeclineOptionalTrigger(); //ambush
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(underfoot));
 		assertEquals(10, scn.GetStrength(raider));

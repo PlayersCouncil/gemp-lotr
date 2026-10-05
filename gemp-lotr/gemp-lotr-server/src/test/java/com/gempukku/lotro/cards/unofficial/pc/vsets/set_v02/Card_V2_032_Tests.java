@@ -72,7 +72,7 @@ public class Card_V2_032_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetStrength(uruk));
 		scn.ShadowPlayCard(alliance);
@@ -100,7 +100,7 @@ public class Card_V2_032_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.HAND, orc.getZone());
 		assertEquals(Zone.DISCARD, uruk.getZone());

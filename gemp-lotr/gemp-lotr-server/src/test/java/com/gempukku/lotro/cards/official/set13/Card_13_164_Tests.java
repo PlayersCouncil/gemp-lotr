@@ -107,7 +107,7 @@ public class Card_13_164_Tests
 		scn.AddTokensToCard(fearless2, 1);
 
 		// Move to site 2 so we reach a Shadow phase; site 1 (Slag Mounds) stays on the path
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseAnyCard();
 		scn.SetTwilight(10);
 
@@ -140,7 +140,7 @@ public class Card_13_164_Tests
 		scn.MoveCardsToSupportArea(fearless2);
 		scn.AddTokensToCard(fearless2, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseAnyCard();
 		scn.SetTwilight(10);
 
@@ -240,7 +240,7 @@ public class Card_13_164_Tests
 		scn.MoveCardsToSupportArea(fearless);
 
 		// Normal movement: the Shadow player plays the next site, which is not "the Free Peoples player plays"
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseAnyCard();
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

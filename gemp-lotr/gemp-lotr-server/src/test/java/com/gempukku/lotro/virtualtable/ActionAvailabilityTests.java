@@ -53,7 +53,7 @@ public class ActionAvailabilityTests
 		scn.AddWoundsToChar(exhausted, 2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// The two copies are described identically, and only one of them is on offer.
@@ -76,7 +76,7 @@ public class ActionAvailabilityTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.ShadowPlayAvailable(inHand));
@@ -125,7 +125,7 @@ public class ActionAvailabilityTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// The Free Peoples player's hand is empty, so the Shadow player has initiative.

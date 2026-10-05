@@ -80,7 +80,7 @@ public class Card_92_010_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(mod));
 		scn.ShadowUseCardAction(mod);
@@ -113,7 +113,7 @@ public class Card_92_010_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(scn.GetShadowCard("mod"));
 
@@ -141,7 +141,7 @@ public class Card_92_010_Tests
 
 		scn.StartGame();
 		// Don't add extra twilight — pool should be too low for a 10-cost troll
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The action shouldn't be available at all since the only minion in discard
 		// can't be afforded (and you can't take the action if the effect can't resolve).

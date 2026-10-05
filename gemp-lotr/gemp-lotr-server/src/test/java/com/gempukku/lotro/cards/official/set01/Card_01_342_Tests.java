@@ -90,7 +90,7 @@ public class Card_01_342_Tests
 		scn.StartGame();
 
 		assertEquals(2, scn.GetMoveLimit());
-		scn.FreepsPassCurrentPhaseAction();          // move 1 -> 2
+		scn.FreepsPass();          // move 1 -> 2
 		ShadowPlaysSiteIfAsked(scn);
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetMoveLimit());
@@ -121,7 +121,7 @@ public class Card_01_342_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();          // move 1 -> 2
+		scn.FreepsPass();          // move 1 -> 2
 		ShadowPlaysSiteIfAsked(scn);
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();                    // move 2 -> 3
@@ -143,7 +143,7 @@ public class Card_01_342_Tests
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();          // move 1 -> 2
+		scn.FreepsPass();          // move 1 -> 2
 		ShadowPlaysSiteIfAsked(scn);
 
 		var freepsWaterfall = scn.GetFreepsSite(3);
@@ -180,7 +180,7 @@ public class Card_01_342_Tests
 		scn.StartGame();
 
 		// P1 turn 1: 1 -> 2 -> 3 (Rivendell Waterfall is played onto the path)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		AnyoneChoosesSiteIfAsked(scn);
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
@@ -194,13 +194,13 @@ public class Card_01_342_Tests
 
 		// P2 turn 2 (roles inverted): P2 has a Ranger but is only at site 2; the Waterfall at site 3 is not its site
 		assertEquals(2, scn.GetMoveLimit());
-		scn.ShadowPassCurrentPhaseAction();          // P2: 1 -> 2
+		scn.ShadowPass();          // P2: 1 -> 2
 		AnyoneChoosesSiteIfAsked(scn);
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetMoveLimit());
 		scn.SkipToPhaseInverted(Phase.REGROUP);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
 		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
 		assertEquals(2, scn.GetMoveLimit());
@@ -214,8 +214,8 @@ public class Card_01_342_Tests
 
 		// finish P2's turn at the Waterfall
 		scn.SkipToPhaseInverted(Phase.REGROUP);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
 		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
 		if (scn.ShadowDecisionAvailable("another move")) scn.ShadowChooseToStay();
@@ -226,7 +226,7 @@ public class Card_01_342_Tests
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertEquals(3, scn.GetMoveLimit());
-		scn.FreepsPassCurrentPhaseAction();          // P1: 3 -> 4
+		scn.FreepsPass();          // P1: 3 -> 4
 		AnyoneChoosesSiteIfAsked(scn);
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(3, scn.GetMoveLimit());
@@ -264,7 +264,7 @@ public class Card_01_342_Tests
 		assertEquals(2, scn.GetMoveLimit());
 
 		// At the Waterfall both the site and Silinde's copy apply
-		scn.FreepsPassCurrentPhaseAction();          // move 2 -> 3
+		scn.FreepsPass();          // move 2 -> 3
 		assertEquals(freepsWaterfall, scn.GetCurrentSite());
 		// Two required triggers (the site's and Silinde's copy) are collected; order them
 		while (scn.FreepsDecisionAvailable("Required responses"))
@@ -283,8 +283,8 @@ public class Card_01_342_Tests
 		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
 
 		scn.SkipToPhaseInverted(Phase.REGROUP);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
 		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((com.gempukku.lotro.game.PhysicalCardImpl) scn.GetFreepsHand().getFirst());
 		if (scn.ShadowDecisionAvailable("another move")) scn.ShadowChooseToStay();
@@ -328,7 +328,7 @@ public class Card_01_342_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();          // P1: 2 -> 3
+		scn.FreepsPass();          // P1: 2 -> 3
 		AnyoneChoosesSiteIfAsked(scn);
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertEquals("Rivendell Waterfall", scn.GetCurrentSite().getBlueprint().getTitle());

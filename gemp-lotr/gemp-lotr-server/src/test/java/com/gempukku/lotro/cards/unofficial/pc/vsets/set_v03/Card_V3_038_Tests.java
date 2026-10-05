@@ -82,7 +82,7 @@ public class Card_V3_038_Tests
 		scn.MoveMinionsToTable(uruk1, uruk2);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(illturn));
 		scn.ShadowPlayCard(illturn);
@@ -101,7 +101,7 @@ public class Card_V3_038_Tests
 		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(illturn));
 		scn.ShadowPlayCard(illturn);
@@ -120,7 +120,7 @@ public class Card_V3_038_Tests
 		scn.MoveMinionsToTable(uruk1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(illturn));
 	}

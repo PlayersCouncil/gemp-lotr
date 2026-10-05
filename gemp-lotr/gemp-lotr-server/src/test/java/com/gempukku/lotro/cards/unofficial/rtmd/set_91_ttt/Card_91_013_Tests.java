@@ -97,7 +97,7 @@ public class Card_91_013_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow should still be able to use Saruman's maneuver action
 		assertTrue(scn.ShadowActionAvailable(saruman));
@@ -119,7 +119,7 @@ public class Card_91_013_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow should NOT be able to use Saruman's maneuver action
 		assertFalse(scn.ShadowActionAvailable(saruman));

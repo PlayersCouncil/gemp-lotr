@@ -161,7 +161,7 @@ public class Card_V1_023_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// A [gondor] event in the same skirmish, on Boromir, who is the only [gondor] companion and is not in it.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsPlayCard(swordarm);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gone));
 		scn.FreepsAcceptOptionalTrigger();
@@ -288,8 +288,8 @@ public class Card_V1_023_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// Gimli's 8 beats the Savage's 5.  Then Aragorn's own skirmish, on the same board.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsResolveSkirmish(aragorn);
 		assertTrue(scn.IsCharSkirmishing(aragorn));
 		assertEquals(8, scn.GetStrength(aragorn));
@@ -326,7 +326,7 @@ public class Card_V1_023_Tests
 		scn.FreepsAssignAndResolve(boromir, runner);
 
 		assertEquals(5, scn.GetStrength(runner));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The Shadow player's skirmish event, in the skirmish of a companion with the Aragorn signet.  I am
 		// asked only whether to respond with Strength of Kings.
@@ -437,7 +437,7 @@ public class Card_V1_023_Tests
 		assertEquals(5, scn.GetStackedCards(gone).size());
 
 		// Two more cards in the same skirmish phase: only 1 of the limit of +3 is left, and the rest is ignored.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gone);
 		scn.FreepsChooseCards(defiance, defiance2);
 		assertEquals(11, scn.GetStrength(aragorn));     // 8 + 3
@@ -445,8 +445,8 @@ public class Card_V1_023_Tests
 		assertInDiscard(swordarm, swordarm2, defiance, defiance2);
 
 		// Aragorn's 11 overwhelms the Savage's 5.  Merry's skirmish is a new skirmish phase.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsResolveSkirmish(merry);
 		assertEquals(3, scn.GetStrength(merry));
 		assertEquals(8, scn.GetStrength(aragorn));
@@ -507,8 +507,8 @@ public class Card_V1_023_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// Gimli's 6 beats the Savage's 5.  In Aragorn's own skirmish he is the one made stronger.
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsResolveSkirmish(aragorn);
 		assertTrue(scn.IsCharSkirmishing(aragorn));
 		assertEquals(8, scn.GetStrength(aragorn));
@@ -557,14 +557,14 @@ public class Card_V1_023_Tests
 		assertEquals(1, scn.GetStackedCards(gone).size());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(gone));
 		scn.FreepsUseCardAction(gone);
 		assertEquals(11, scn.GetStrength(aragorn));     // 8 + 2 from the event + 1 for the card discarded
 		assertEquals(0, scn.GetStackedCards(gone).size());
 		assertInDiscard(swordarm);
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(gone));
 		assertTrue(scn.GetStackedCards(delvings).contains(axe));

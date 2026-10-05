@@ -243,7 +243,7 @@ public class Card_V3_089_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		// Transform the Mumak
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(rearguard);
 
 		// Verify transformation

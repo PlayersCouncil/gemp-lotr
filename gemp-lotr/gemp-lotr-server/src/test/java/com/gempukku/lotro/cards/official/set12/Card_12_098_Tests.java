@@ -77,10 +77,10 @@ public class Card_12_098_Tests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(card);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToAssignments();
 		assertTrue(scn.FreepsCanAssign(card));
@@ -113,10 +113,10 @@ public class Card_12_098_Tests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(card);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToAssignments();
 		assertTrue(scn.FreepsCanAssign(card));

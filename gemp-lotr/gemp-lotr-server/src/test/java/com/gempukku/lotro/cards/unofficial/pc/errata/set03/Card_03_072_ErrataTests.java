@@ -81,7 +81,7 @@ public class Card_03_072_ErrataTests
 
 		// Warrior is in a skirmish with Aragorn, Smith is not in a skirmish
 		// Shadow uses Trapped and Alone ability during skirmish
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(trapped));
 		scn.ShadowUseCardAction(trapped);
 

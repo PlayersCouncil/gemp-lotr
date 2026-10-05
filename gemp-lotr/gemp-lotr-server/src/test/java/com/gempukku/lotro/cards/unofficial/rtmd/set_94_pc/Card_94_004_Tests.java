@@ -70,7 +70,7 @@ public class Card_94_004_Tests {
 		scn.AddWoundsToChar(aragorn, aragorn.getBlueprint().getVitality());
 		// pump the loop just once so the game stops at the offered optional trigger rather than
 		// blindly declining everything in transit
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(mod));
 		scn.FreepsAcceptOptionalTrigger();
@@ -95,7 +95,7 @@ public class Card_94_004_Tests {
 		scn.StartGame();
 
 		scn.AddWoundsToChar(aragorn, aragorn.getBlueprint().getVitality());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(mod));
 		scn.FreepsDeclineOptionalTrigger();
@@ -117,7 +117,7 @@ public class Card_94_004_Tests {
 		scn.StartGame();
 
 		scn.AddWoundsToChar(aragorn, aragorn.getBlueprint().getVitality());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The card's owner (Freeps) is offered the trigger; the Shadow player, who does not own this
 		// copy of the metasite, is not - even though "your" would otherwise resolve against whichever
@@ -139,7 +139,7 @@ public class Card_94_004_Tests {
 		scn.StartGame();
 
 		scn.AddWoundsToChar(aragorn, aragorn.getBlueprint().getVitality());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// "your,companion" combined with IsOwner: Shadow owns the mod, so Freeps' own companion
 		// dying does not trigger it.

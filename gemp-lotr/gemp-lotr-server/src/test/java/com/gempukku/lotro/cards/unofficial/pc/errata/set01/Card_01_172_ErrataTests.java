@@ -116,7 +116,7 @@ public class Card_01_172_ErrataTests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(archer));
 		assertEquals(0, scn.GetWoundsOn(archer));

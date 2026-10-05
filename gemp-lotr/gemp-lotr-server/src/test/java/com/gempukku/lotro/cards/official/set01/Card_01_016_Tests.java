@@ -102,7 +102,7 @@ public class Card_01_016_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var top1 = scn.GetFromTopOfShadowDeck(1);
 		var top2 = scn.GetFromTopOfShadowDeck(2);

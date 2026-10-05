@@ -89,7 +89,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
@@ -130,7 +130,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		scn.ShadowChooseCard(soldier1);
@@ -173,7 +173,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		scn.ShadowChooseCard(soldier1);
@@ -220,7 +220,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		scn.ShadowChooseCard(soldier1);
@@ -268,7 +268,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		scn.ShadowChooseCard(soldier1);
@@ -320,7 +320,7 @@ public class Card_03_091_ErrataTests
 		scn.ShadowDeclineAssignments();
 
 		//Regroup phase
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
 		scn.ShadowChooseCard(soldier1);

@@ -85,7 +85,7 @@ public class Card_V2_002_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(6);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetFreepsHandCount());
 		assertEquals(6, scn.GetShadowHandCount());
@@ -134,7 +134,7 @@ public class Card_V2_002_Tests
 		assertEquals(1, scn.GetTwilightCost(raider2));
 		assertEquals(2, scn.GetTwilightCost(brigand));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// 5 set + 1 for Pippin + 2 companions + 2 for the site
 		assertEquals(10, scn.GetTwilight());
@@ -179,7 +179,7 @@ public class Card_V2_002_Tests
 		assertTrue(scn.ShadowHasInitiative());
 		assertEquals(1, scn.GetTwilightCost(raider));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// 1 companion + 2 for the site
 		assertEquals(3, scn.GetTwilight());

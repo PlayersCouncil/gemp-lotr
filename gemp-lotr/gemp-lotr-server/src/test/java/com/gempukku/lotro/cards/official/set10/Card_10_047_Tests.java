@@ -69,7 +69,7 @@ public class Card_10_047_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(10, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());
@@ -97,7 +97,7 @@ public class Card_10_047_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());

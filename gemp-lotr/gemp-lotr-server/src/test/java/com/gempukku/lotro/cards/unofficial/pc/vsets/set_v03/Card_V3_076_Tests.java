@@ -90,7 +90,7 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, witchking);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(nelya);
 		scn.ShadowChooseCard(witchking);
@@ -119,7 +119,7 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, nelya);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(nelya);
 		// Nelya auto-selected as only Nazgul in skirmish
 
@@ -172,7 +172,7 @@ public class Card_V3_076_Tests
 		scn.FreepsAssignToMinions(aragorn, witchking);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(nelya));
 		assertEquals(witchkingBaseStrength, scn.GetStrength(witchking));
@@ -214,7 +214,7 @@ public class Card_V3_076_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(nelya));
 		assertEquals(witchkingBaseStrength, scn.GetStrength(witchking));

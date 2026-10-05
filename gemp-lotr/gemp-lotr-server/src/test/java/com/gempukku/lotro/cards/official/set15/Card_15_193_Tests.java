@@ -99,7 +99,7 @@ public class Card_15_193_Tests
 		scn.StartGame(site1);
 
 		//Start at East Road with player one
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//P1 then moves to P2 Ettenmoors
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
@@ -118,7 +118,7 @@ public class Card_15_193_Tests
 		assertEquals(scn.GetSite(3), mountdoom);
 		scn.FreepsChooseYes(); //take One Good Turn back into hand
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsPlayCard(onegoodturn);
 		//This ensures that we have skipped over choosing a site and instead OGT has moved on to its other clause.
 		assertTrue(scn.FreepsDecisionAvailable("Do you want to add a burden"));
@@ -129,7 +129,7 @@ public class Card_15_193_Tests
 		//There's Another Way: "Discard this condition to replace the fellowship's current site with one
 		// from your adventure deck."  This can be activated but the replacement should completely fail,
 		// since the current site (site 2) is in the same region as Mount Doom now.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(anotherway));
 		scn.FreepsUseCardAction(anotherway);
 		assertEquals(scn.GetCurrentSite(), shadowSite2);
@@ -148,7 +148,7 @@ public class Card_15_193_Tests
 		var mountdoom = scn.GetShadowSite("Mount Doom");
 
 		scn.StartGame(site1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowChooseCardBPFromSelection(mountdoom);
 		assertEquals(scn.GetCurrentSite(), mountdoom);

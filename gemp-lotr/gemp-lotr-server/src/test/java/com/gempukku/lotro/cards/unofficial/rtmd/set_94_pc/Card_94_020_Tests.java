@@ -111,7 +111,7 @@ public class Card_94_020_Tests {
 		assertEquals(0, scn.GetWoundsOn(twigul));
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(resistance));
 		scn.ShadowPlayCard(resistance);

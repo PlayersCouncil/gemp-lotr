@@ -110,7 +110,7 @@ public class Card_01_001_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Shadow wounds can convert to burdens
 		assertTrue(scn.RBWearingOneRing());
@@ -119,11 +119,11 @@ public class Card_01_001_Tests
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Maneuver wounds can convert to burdens
 		assertTrue(scn.RBWearingOneRing());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(picket);
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(5, scn.GetBurdens());
@@ -144,7 +144,7 @@ public class Card_01_001_Tests
 		scn.ShadowAssignToMinions(frodo, soldier);
 
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(soldier);
 
 		//We are now in a skirmish phase, so the burden should have gotten converted
@@ -194,7 +194,7 @@ public class Card_01_001_Tests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertFalse(scn.RBWearingOneRing());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(picket);
 		scn.FreepsDeclineOptionalTrigger(); //Declining the Picket's culture selection.
 

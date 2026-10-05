@@ -88,8 +88,8 @@ public class Card_V2_050_Tests
 		assertEquals(6, scn.GetStrength(eowyn));
 		assertTrue(scn.HasKeyword(eowyn, Keyword.DEFENDER));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsAssignToMinions(eowyn, runner1, runner2);
 

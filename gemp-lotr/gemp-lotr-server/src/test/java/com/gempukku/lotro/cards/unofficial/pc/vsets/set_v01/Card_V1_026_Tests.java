@@ -117,7 +117,7 @@ public class Card_V1_026_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 4 set + 3 companions + 2 for the shadow number of site 2
@@ -160,7 +160,7 @@ public class Card_V1_026_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 10 set + 3 companions + 2 for the shadow number of site 2
@@ -204,7 +204,7 @@ public class Card_V1_026_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows);
 		scn.SetTwilight(6);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 6 set + 2 companions + 2 for the shadow number of site 2
@@ -244,7 +244,7 @@ public class Card_V1_026_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows);
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(3, scn.GetAttachedCards(aragorn).size());
@@ -306,7 +306,7 @@ public class Card_V1_026_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows);
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 set + 2 companions + 2 for the shadow number of site 2
@@ -351,7 +351,7 @@ public class Card_V1_026_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 companions + 2 for the shadow number of site 2
@@ -407,7 +407,7 @@ public class Card_V1_026_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows, crows2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// One action for each copy.
@@ -469,7 +469,7 @@ public class Card_V1_026_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(crows);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());

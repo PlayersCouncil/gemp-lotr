@@ -75,7 +75,7 @@ public class Card_V2_024_Tests
 		scn.MoveCardsToHand(hound);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(hound));
 		scn.ShadowPlayCard(hound);
@@ -98,7 +98,7 @@ public class Card_V2_024_Tests
 		scn.MoveCardsToDiscard(voices, power);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.DISCARD, voices.getZone());
 		assertEquals(Zone.DISCARD, power.getZone());

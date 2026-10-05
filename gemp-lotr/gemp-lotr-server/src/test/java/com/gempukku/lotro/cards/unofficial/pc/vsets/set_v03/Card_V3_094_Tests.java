@@ -86,7 +86,7 @@ public class Card_V3_094_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No twilight conditions in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(dread));

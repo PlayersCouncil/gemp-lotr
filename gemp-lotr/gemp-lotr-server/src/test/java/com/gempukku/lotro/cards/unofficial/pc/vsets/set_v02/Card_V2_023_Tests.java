@@ -75,7 +75,7 @@ public class Card_V2_023_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.SHADOW_CHARACTERS, orc1.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, orc1.getZone());
@@ -100,7 +100,7 @@ public class Card_V2_023_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.SHADOW_CHARACTERS, saruman.getZone());
 		assertTrue(scn.ShadowPlayAvailable(fires));
@@ -124,7 +124,7 @@ public class Card_V2_023_Tests
 		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
 		assertTrue(scn.ShadowPlayAvailable(fires));

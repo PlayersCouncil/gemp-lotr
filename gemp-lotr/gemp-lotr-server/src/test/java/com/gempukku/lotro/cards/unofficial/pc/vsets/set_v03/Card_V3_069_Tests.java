@@ -81,7 +81,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(noman));
 	}
@@ -129,7 +129,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(witchking));
 		assertTrue(scn.IsHindered(rider1));
@@ -170,7 +170,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(witchking));
 		assertFalse(scn.IsHindered(mount));
@@ -210,7 +210,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(noman);
 
@@ -239,7 +239,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(noman);
 
@@ -269,7 +269,7 @@ public class Card_V3_069_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(noman);
 

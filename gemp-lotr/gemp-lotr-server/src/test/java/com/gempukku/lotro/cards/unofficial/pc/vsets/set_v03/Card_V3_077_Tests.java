@@ -90,7 +90,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(witchking));
 		assertInDiscard(sword);
@@ -128,7 +128,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(nertea));
 		assertEquals(0, scn.GetWoundsOn(witchking));
@@ -168,7 +168,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 		scn.ShadowAcceptOptionalTrigger();
@@ -203,7 +203,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 		scn.ShadowAcceptOptionalTrigger();
@@ -239,7 +239,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 		scn.ShadowAcceptOptionalTrigger();
@@ -268,7 +268,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -293,7 +293,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -321,7 +321,7 @@ public class Card_V3_077_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play Nertëa himself
 		scn.ShadowPlayCard(nertea);

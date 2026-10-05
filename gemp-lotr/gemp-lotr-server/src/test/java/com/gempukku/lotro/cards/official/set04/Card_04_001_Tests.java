@@ -137,7 +137,7 @@ public class Card_04_001_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Shadow wounds cannot convert to burdens
 		assertTrue(scn.RBWearingOneRing());
@@ -146,11 +146,11 @@ public class Card_04_001_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(frodo));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Maneuver wounds cannot convert to burdens
 		assertTrue(scn.RBWearingOneRing());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(picket);
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetBurdens());
@@ -171,7 +171,7 @@ public class Card_04_001_Tests
 		scn.ShadowAssignToMinions(frodo, soldier);
 
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(soldier);
 
 		//We are now in a skirmish phase, so the burden should have gotten converted
@@ -229,8 +229,8 @@ public class Card_04_001_Tests
 		assertEquals(2, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		//We are now in a skirmish phase, so the burden should have gotten converted
 		assertEquals(3, scn.GetBurdens());

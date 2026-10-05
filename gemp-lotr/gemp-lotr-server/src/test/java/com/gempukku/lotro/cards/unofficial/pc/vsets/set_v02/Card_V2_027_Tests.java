@@ -87,7 +87,7 @@ public class Card_V2_027_Tests
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.BATTLEGROUND));
 
 		scn.MoveMinionsToTable(legion);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
 		assertTrue(scn.HasKeyword(legion, Keyword.DAMAGE));

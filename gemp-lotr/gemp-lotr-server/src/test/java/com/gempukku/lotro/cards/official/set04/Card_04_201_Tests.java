@@ -78,12 +78,12 @@ public class Card_04_201_Tests
 
 		scn.MoveCardsToSupportArea(child);
 		scn.AddTokensToCard(child, 2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(child); //should take control of site
 
 		scn.MoveMinionsToTable(veteran);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var controlledSite = scn.GetFreepsSite(1);
 		assertTrue(scn.IsSiteControlled(controlledSite));
@@ -109,7 +109,7 @@ public class Card_04_201_Tests
 
 		scn.MoveCardsToSupportArea(child);
 		scn.AddTokensToCard(child, 2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(child); //should take control of site
 
 		scn.SkipToSite(4);
@@ -118,7 +118,7 @@ public class Card_04_201_Tests
 		scn.StackCardsOn(controlledSite, veteran);
 		scn.SetTwilight(3);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(controlledSite, veteran.getStackedOn());
 		assertEquals(Zone.STACKED, veteran.getZone());
 

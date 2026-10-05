@@ -71,7 +71,7 @@ public class Card_01_268_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(Zone.HAND, inquisitor.getZone());
@@ -97,7 +97,7 @@ public class Card_01_268_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(inquisitor);
 		scn.ShadowHasOptionalTriggerAvailable();

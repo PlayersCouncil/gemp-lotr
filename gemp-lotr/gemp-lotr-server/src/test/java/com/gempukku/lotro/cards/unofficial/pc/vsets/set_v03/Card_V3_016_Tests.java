@@ -449,8 +449,8 @@ public class Card_V3_016_Tests
 		assertInDiscard(noser);
 		assertEquals(2, scn.GetWoundsOn(slinker));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsDeclineOptionalTrigger(); //the one ring
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());

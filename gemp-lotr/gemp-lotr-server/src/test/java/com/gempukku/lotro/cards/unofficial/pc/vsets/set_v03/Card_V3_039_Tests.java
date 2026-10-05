@@ -78,7 +78,7 @@ public class Card_V3_039_Tests
 		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(fury1));
 		scn.ShadowPlayCard(fury1);

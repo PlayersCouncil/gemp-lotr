@@ -149,7 +149,7 @@ public class Card_V1_065_Tests
 		scn.MoveCardsToHand(dam);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		var bagEnd = scn.GetSite(1);
 		var breeGate = scn.GetCurrentSite();
@@ -341,20 +341,20 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(foul, watcher);
 
 		// The assignment phase is not the skirmish phase.
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(dam));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.FreepsAssignToMinions(aragorn, foul);
 		scn.ShadowAssignToMinions(frodo, watcher);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, foul));
@@ -399,14 +399,14 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(foul, watcher);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, foul);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Everything the action could want but the second burden.
 		assertEquals(1, scn.GetBurdens());
@@ -431,7 +431,7 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(creature, strong, foul);
 
 		scn.SkipToAssignments();
@@ -441,7 +441,7 @@ public class Card_V1_065_Tests
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, foul}, new PhysicalCardImpl[]{guard, strong});
 		scn.ShadowAssignToMinions(aragorn, creature);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, foul));
@@ -481,7 +481,7 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(creature, foul, reaching, strong);
 
 		scn.SkipToAssignments();
@@ -490,7 +490,7 @@ public class Card_V1_065_Tests
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, foul, reaching}, new PhysicalCardImpl[]{guard, strong});
 		scn.ShadowAssignToMinions(aragorn, creature);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, foul));
@@ -531,14 +531,14 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(foul, watcher);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, foul);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(sam);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishingAgainst(sam, foul));
@@ -568,7 +568,7 @@ public class Card_V1_065_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(foul, watcher);
 
 		scn.SkipToAssignments();
@@ -576,7 +576,7 @@ public class Card_V1_065_Tests
 		scn.FreepsAssignToMinions(bounder, foul);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(bounder);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishingAgainst(bounder, foul));

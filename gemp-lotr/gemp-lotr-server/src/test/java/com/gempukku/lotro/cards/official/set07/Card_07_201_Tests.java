@@ -79,11 +79,11 @@ public class Card_07_201_Tests
 
 		scn.SetTwilight(20);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(card);
 		scn.ShadowPlayCard(enquea);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToAssignments();
 

@@ -109,7 +109,7 @@ public class Card_V2_013_Tests
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(shotgun));
 
 		scn.ShadowUseCardAction(shotgun);
@@ -134,7 +134,7 @@ public class Card_V2_013_Tests
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(shotgun));
 
 		assertEquals(0, scn.GetWoundsOn(valiant1));
@@ -171,7 +171,7 @@ public class Card_V2_013_Tests
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(shotgun));
 
 		assertEquals(0, scn.GetWoundsOn(valiant1));
@@ -208,7 +208,7 @@ public class Card_V2_013_Tests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(grishnakh));
 
@@ -248,7 +248,7 @@ public class Card_V2_013_Tests
 		scn.FreepsAssignToMinions(valiant1, marauder);
 		scn.FreepsResolveSkirmish(valiant1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(marauder));
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));

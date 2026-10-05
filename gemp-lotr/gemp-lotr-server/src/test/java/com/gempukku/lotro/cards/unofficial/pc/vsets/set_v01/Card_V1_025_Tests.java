@@ -88,7 +88,7 @@ public class Card_V1_025_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 5 set + 3 companions + 2 for the shadow number of site 2
@@ -116,7 +116,7 @@ public class Card_V1_025_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 4 set + 4 companions + 2 for the shadow number of site 2
@@ -140,7 +140,7 @@ public class Card_V1_025_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 5 companions + 2 for the shadow number of site 2
@@ -164,7 +164,7 @@ public class Card_V1_025_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 2 set + 6 companions + 2 for the shadow number of site 2
@@ -205,7 +205,7 @@ public class Card_V1_025_Tests
 		scn.AddWoundsToChar(guard1, 1);
 		scn.AddWoundsToChar(thrarin, 1);
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 5 set + 3 companions + 2 for the shadow number of site 2
@@ -260,7 +260,7 @@ public class Card_V1_025_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(flock);
 		scn.SetTwilight(3);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -308,7 +308,7 @@ public class Card_V1_025_Tests
 		scn.MoveMinionsToTable(flock, flock2);
 		scn.AddWoundsToChar(guard1, 1);
 		scn.AddWoundsToChar(guard2, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
@@ -362,7 +362,7 @@ public class Card_V1_025_Tests
 		scn.MoveMinionsToTable(flock);
 		scn.AddWoundsToChar(guard1, 1);
 		scn.AddWoundsToChar(guard2, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.GetCurrentSiteNumber());

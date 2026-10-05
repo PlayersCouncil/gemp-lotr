@@ -73,7 +73,7 @@ public class Card_01_195_ErrataTests
 
         scn.StartGame();
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(3, scn.GetTwilight());
         assertEquals(Zone.DISCARD, scimitar.getZone());
@@ -98,7 +98,7 @@ public class Card_01_195_ErrataTests
 
         scn.StartGame();
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertEquals(Zone.DECK, scimitar.getZone());
         assertEquals(0, scn.GetShadowDiscardCount());

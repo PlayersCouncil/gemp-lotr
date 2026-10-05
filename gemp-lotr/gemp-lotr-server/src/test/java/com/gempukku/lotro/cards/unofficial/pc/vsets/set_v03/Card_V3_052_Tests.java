@@ -89,7 +89,7 @@ public class Card_V3_052_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(legion);
 
@@ -122,7 +122,7 @@ public class Card_V3_052_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play non-unique Explorer
 		scn.ShadowPlayCard(explorer);
@@ -150,7 +150,7 @@ public class Card_V3_052_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(legion);
 		scn.ShadowAcceptOptionalTrigger();
@@ -208,7 +208,7 @@ public class Card_V3_052_Tests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Transform Charger - becomes mounted Southron minion
 		scn.ShadowUseCardAction(charger);

@@ -72,7 +72,7 @@ public class Card_07_190_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowPlayAvailable(destroyer));
@@ -93,7 +93,7 @@ public class Card_07_190_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowPlayAvailable(destroyer));
@@ -123,7 +123,7 @@ public class Card_07_190_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowPlayAvailable(destroyer));
@@ -158,7 +158,7 @@ public class Card_07_190_ErrataTests
 		scn.FreepsAssignToMinions(frodo, destroyer);
 		scn.FreepsResolveSkirmish(frodo);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(destroyer));
 		assertEquals(2, scn.GetThreats());
 		assertEquals(6, scn.GetStrength(destroyer));

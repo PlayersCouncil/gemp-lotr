@@ -118,8 +118,8 @@ public class Card_11_170_Tests
 		assertFalse(scn.IsCharSkirmishing(gimli));
 		assertTrue(scn.IsCharSkirmishing(pippin));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveSkirmish(legolas);
 		//check that pippin didn't die lol

@@ -74,7 +74,7 @@ public class Card_01_138_ErrataTests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         assertFalse(scn.ShadowActionAvailable("Saruman's Snows"));
         scn.ShadowPlayCard(uruk);
         assertTrue(scn.ShadowActionAvailable("Saruman's Snows"));
@@ -103,14 +103,14 @@ public class Card_01_138_ErrataTests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowPlayCard(snows);
         scn.ShadowChoose(scn.ShadowGetCardChoices().get(1));
 
         scn.MoveCardsToDiscard(uruk);
         scn.SkipToPhase(Phase.REGROUP);
-        scn.FreepsPassCurrentPhaseAction();
-        scn.ShadowPassCurrentPhaseAction();
+        scn.FreepsPass();
+        scn.ShadowPass();
         scn.FreepsChooseToMove();
 
         //After moving, Snows should still be attached
@@ -146,7 +146,7 @@ public class Card_01_138_ErrataTests
 
         scn.SetTwilight(10);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         scn.ShadowPlayCard(snows);
         scn.ShadowChoose(String.valueOf(scn.GetCurrentSite().getCardId())); //Should be site 2
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Uruk Savage"), null, Keyword.FIERCE));

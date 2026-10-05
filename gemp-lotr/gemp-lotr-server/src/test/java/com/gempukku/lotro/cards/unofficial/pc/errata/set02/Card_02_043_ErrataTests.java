@@ -79,7 +79,7 @@ public class Card_02_043_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
 		assertEquals(Zone.HAND, sword.getZone());
@@ -105,7 +105,7 @@ public class Card_02_043_ErrataTests
 
 		scn.StartGame();
 		scn.AddWoundsToChar(aragorn, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, captain);
@@ -137,7 +137,7 @@ public class Card_02_043_ErrataTests
 		scn.AttachCardsTo(captain, sword);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, captain);
@@ -167,7 +167,7 @@ public class Card_02_043_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
 		assertTrue(scn.HasKeyword(lurtz, Keyword.DAMAGE));
@@ -188,7 +188,7 @@ public class Card_02_043_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
 		assertTrue(scn.HasKeyword(captain, Keyword.DAMAGE));

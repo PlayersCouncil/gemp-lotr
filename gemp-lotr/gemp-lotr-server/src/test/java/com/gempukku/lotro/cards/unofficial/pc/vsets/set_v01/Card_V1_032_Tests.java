@@ -72,7 +72,7 @@ public class Card_V1_032_Tests
 		scn.MoveCardsToHand(terror);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertEquals(3, scn.GetTwilight());
@@ -100,7 +100,7 @@ public class Card_V1_032_Tests
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetShadowHandCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// "When the fellowship moves" comes before the move's own twilight is added.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(terror));
@@ -128,7 +128,7 @@ public class Card_V1_032_Tests
 		scn.MoveCardsToHand(bane);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(terror));
 		scn.ShadowDeclineOptionalTrigger();
@@ -164,7 +164,7 @@ public class Card_V1_032_Tests
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 1 companion + 2 for site 2
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
@@ -185,7 +185,7 @@ public class Card_V1_032_Tests
 		scn.MoveCardsToHand(bane, flame, sword, troop);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(terror));
 		scn.ShadowAcceptOptionalTrigger();
@@ -218,7 +218,7 @@ public class Card_V1_032_Tests
 		scn.MoveCardsToDiscard(scn.GetShadowCard("flame"), scn.GetShadowCard("sword"), scn.GetShadowCard("troop"));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(terror));
 		scn.ShadowAcceptOptionalTrigger();
@@ -255,7 +255,7 @@ public class Card_V1_032_Tests
 		scn.MoveCardsToHand(bane);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(terror));
 		scn.ShadowDeclineOptionalTrigger();

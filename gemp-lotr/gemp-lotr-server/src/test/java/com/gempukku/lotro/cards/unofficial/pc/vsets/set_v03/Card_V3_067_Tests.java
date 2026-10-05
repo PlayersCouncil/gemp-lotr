@@ -78,7 +78,7 @@ public class Card_V3_067_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play first Nazgul -- should NOT trigger Ill Wind
 		scn.ShadowPlayCard(nazgul1);
@@ -101,7 +101,7 @@ public class Card_V3_067_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play first Nazgul
 		scn.ShadowPlayCard(nazgul1);
@@ -135,7 +135,7 @@ public class Card_V3_067_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(30);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play first Nazgul -- should NOT trigger Ill Wind
 		scn.ShadowPlayCard(nazgul1);
@@ -171,7 +171,7 @@ public class Card_V3_067_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nazgul1);
 		scn.ShadowPlayCard(nazgul2);
@@ -208,7 +208,7 @@ public class Card_V3_067_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(nazgul1);
 		scn.ShadowPlayCard(witchking);

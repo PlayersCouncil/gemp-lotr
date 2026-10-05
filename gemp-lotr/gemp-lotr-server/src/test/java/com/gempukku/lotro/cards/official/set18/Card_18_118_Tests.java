@@ -84,7 +84,7 @@ public class Card_18_118_Tests
         scn.FreepsChooseCard(frodo);
 
         //assignment phase
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         assertEquals(0, scn.GetWoundsOn(lurtz));
 
         scn.ShadowUseCardAction(lurtz);

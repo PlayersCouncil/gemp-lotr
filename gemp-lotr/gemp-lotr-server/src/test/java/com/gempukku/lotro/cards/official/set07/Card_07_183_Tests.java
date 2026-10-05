@@ -269,7 +269,7 @@ public class Card_07_183_Tests
         scn.AddWoundsToChar(sam, 3);
 
         scn.SkipToPhase(Phase.MANEUVER);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowActionAvailable(shotgun));
         assertEquals(Zone.FREE_CHARACTERS, sam.getZone());
@@ -306,7 +306,7 @@ public class Card_07_183_Tests
         scn.AddWoundsToChar(greenleaf, 2);
 
         scn.SkipToPhase(Phase.MANEUVER);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         assertTrue(scn.ShadowPlayAvailable(charge));
         assertEquals(Zone.FREE_CHARACTERS, greenleaf.getZone());

@@ -86,7 +86,7 @@ public class Card_17_148_Tests
 		scn.AddTokensToCard(insurance, 1);
 		scn.SkipToSite(2);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseAnyCard();
 
 		scn.ShadowChooseAction("control");
@@ -105,7 +105,7 @@ public class Card_17_148_Tests
 		// (Remember that freeps and shadow have swapped rolws, so the names are backwards)
 
 		scn.SetTwilight(10);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsPlayCard(hunter2);
 
 		//Base 10 strength, no bonus from opponent controlling Nurn

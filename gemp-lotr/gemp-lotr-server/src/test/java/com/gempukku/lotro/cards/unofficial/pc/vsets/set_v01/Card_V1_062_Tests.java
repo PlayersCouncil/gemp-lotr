@@ -101,7 +101,7 @@ public class Card_V1_062_Tests
 		scn.SkipToSite(6);
 		scn.MoveCompanionsToTable(gandalf, aragorn);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Valley of the Anduin", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveMinionsToTable(savage, troop, idle);
 
@@ -162,7 +162,7 @@ public class Card_V1_062_Tests
 		scn.MoveCompanionsToTable(gandalf);
 		scn.AddWoundsToChar(gandalf, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Valley of the Anduin", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveMinionsToTable(fresh, hurt, runner, idleRunner);
 		// Vitality 3 with 2 wounds: one more would kill it.
@@ -205,7 +205,7 @@ public class Card_V1_062_Tests
 		scn.MoveAlliesToTable(grimir, thrarin);
 		scn.MoveCardsToHand(follow);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Valley of the Anduin", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveMinionsToTable(savage);
 
@@ -239,7 +239,7 @@ public class Card_V1_062_Tests
 		scn.StartGame();
 		scn.SkipToSite(6);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Valley of the Anduin", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveMinionsToTable(savage);
 

@@ -43,7 +43,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         scn.ApplyAdHocModifier(new AddKeywordModifier(aragorn, aragorn, null, Keyword.CONCEALED));
 
         assertEquals(0, scn.GetTwilight());
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         //1 for the ring-bearer, 1 for aragorn, 1 for the site (King's Tent)
         assertEquals(3, scn.GetTwilight());
@@ -65,7 +65,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
 
         //4 from playing aragorn
         assertEquals(4, scn.GetTwilight());
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         //4 from playing aragorn, 1 for the ring-bearer, 1 for aragorn, 1 for the site (King's Tent), -1 for concealed
         assertEquals(6, scn.GetTwilight());
@@ -90,7 +90,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
 
         //4 from playing aragorn
         assertEquals(4, scn.GetTwilight());
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         //4 from playing aragorn, 1+1+1 for companions, 1 for the site (King's Tent), -2 for concealed
         assertEquals(6, scn.GetTwilight());
@@ -114,7 +114,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
 
         //4 from playing aragorn
         assertEquals(4, scn.GetTwilight());
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         //4 from playing aragorn, 1 for the ring-bearer, 1 for aragorn, 1 for the site (King's Tent), 0 for exposed concealed
         assertEquals(7, scn.GetTwilight());

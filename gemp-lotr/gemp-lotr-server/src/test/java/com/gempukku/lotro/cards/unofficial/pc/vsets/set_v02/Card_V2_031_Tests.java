@@ -79,7 +79,7 @@ public class Card_V2_031_Tests
 		scn.StartGame();
 
 		scn.SkipToSite(2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowTakeControlOfSite();
 
 		assertTrue(scn.ShadowControls(site1));
@@ -111,7 +111,7 @@ public class Card_V2_031_Tests
 		scn.FreepsAssignToMinions(sam, savage);
 		scn.FreepsResolveSkirmish(sam);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(1, scn.GetCultureTokensOn(ram));
 		assertEquals(1, scn.GetCultureTokensOn(ladder));
 		assertTrue(scn.IsCharSkirmishing(savage));

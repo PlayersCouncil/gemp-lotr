@@ -76,10 +76,10 @@ public class Card_V0_001_ErrataTests
 		scn.AddWoundsToChar(frodo, 5);
 
 		scn.StartGame(site1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(site2);
 		scn.SkipCurrentSite();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(rath);
 		scn.SkipCurrentSite();
 

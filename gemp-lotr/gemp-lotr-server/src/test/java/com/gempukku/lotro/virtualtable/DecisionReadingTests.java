@@ -78,7 +78,7 @@ public class DecisionReadingTests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(three));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		// The prompt does not name the card.
@@ -225,7 +225,7 @@ public class DecisionReadingTests
 		assertTrue(Refused(scn::FreepsResolveRuleFirst));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// An optional trigger is on offer.  It is not an ordering of required responses, and is not taken as one.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(three));
@@ -254,7 +254,7 @@ public class DecisionReadingTests
 		scn.StartGame();
 		// With a burden to spot, the tentacle adds one and not two.
 		scn.AddBurdens(1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.MoveMinionsToTable(thrashing);
 
 		scn.SkipToAssignments();

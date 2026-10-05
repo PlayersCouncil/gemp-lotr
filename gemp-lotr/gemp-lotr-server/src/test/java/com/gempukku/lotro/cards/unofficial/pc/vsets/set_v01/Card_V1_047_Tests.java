@@ -81,7 +81,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(5);
 		scn.MoveMinionsToTable(soldier, slayer, guard, troop);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetMoveLimit());
@@ -136,7 +136,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(5);
 		scn.MoveMinionsToTable(soldier, slayer);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetMoveLimit());
 		assertEquals(1, scn.GetMoveCount());
@@ -177,7 +177,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(5);
 		scn.MoveMinionsToTable(soldier, slayer);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetMoveLimit());
@@ -222,7 +222,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(5);
 		scn.MoveMinionsToTable(soldier, slayer);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetMoveLimit());
 		assertEquals(1, scn.GetMoveCount());
@@ -261,7 +261,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(4);
 		scn.MoveMinionsToTable(soldier, slayer);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetBurdens());
 		assertEquals(3, scn.GetTwilight());
@@ -285,7 +285,7 @@ public class Card_V1_047_Tests
 		// A [sauron] minion that is not an Orc and an Orc that is not [sauron] in play, and a [sauron] Orc in hand.
 		scn.MoveMinionsToTable(guard, troop);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(5, scn.GetBurdens());
 		assertEquals(3, scn.GetTwilight());
@@ -308,7 +308,7 @@ public class Card_V1_047_Tests
 		scn.AddBurdens(5);
 		scn.MoveMinionsToTable(soldier, slayer);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The first copy: the Free Peoples player is to move again, which the move limit of 2 allows.
 		scn.ShadowPlayCard(betrayed);
@@ -319,7 +319,7 @@ public class Card_V1_047_Tests
 
 		// The second copy takes the move limit down to the one move already made.  The Morgul Slayer is the
 		// only [sauron] Orc left and is discarded without a choice.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(betrayed2));
 		scn.ShadowPlayCard(betrayed2);
 		assertInZone(Zone.DISCARD, slayer);

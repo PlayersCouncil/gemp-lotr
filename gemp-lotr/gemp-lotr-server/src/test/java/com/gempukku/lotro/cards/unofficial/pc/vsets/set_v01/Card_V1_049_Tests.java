@@ -77,7 +77,7 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		// 4 set + 1 companion + 2 for the shadow number of site 2
@@ -209,7 +209,7 @@ public class Card_V1_049_Tests
 		scn.MoveMinionsToTable(warden, swordsman, trooper, troop, mouth);
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The fellowship phase has ended and the Shadow phase begun: nothing asked, nothing done.
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -218,7 +218,7 @@ public class Card_V1_049_Tests
 		assertEquals(0, scn.GetWoundsOn(trooper));
 		assertFalse(scn.IsHindered(shadow));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
@@ -264,14 +264,14 @@ public class Card_V1_049_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden, swordsman, trooper);
 		scn.AddBurdens(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertFalse(scn.IsHindered(shadow));
 		assertFalse(scn.IsHindered(summons));
 		assertEquals(1, scn.GetKeywordCount(warden, Keyword.DAMAGE));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 		scn.ShadowChooseOption("Hinder");
@@ -307,14 +307,14 @@ public class Card_V1_049_Tests
 		// exert and are not [sauron] Orcs.
 		scn.MoveMinionsToTable(warden, swordsman, troop, mouth);
 		scn.AddWoundsToChar(swordsman, 2);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.IsExhausted(swordsman));
 		assertFalse(scn.IsHindered(shadow));
 		assertFalse(scn.IsHindered(summons));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// A player may only choose what can be performed in full, so there is nothing to choose.
 		assertTrue(scn.IsHindered(shadow));
@@ -338,8 +338,8 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden, swordsman, trooper);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 		scn.ShadowChooseOption("Exert");
@@ -361,7 +361,7 @@ public class Card_V1_049_Tests
 		assertEquals(1, scn.GetWoundsOn(swordsman));
 		assertFalse(scn.IsHindered(shadow));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 		scn.ShadowChooseOption("Exert");

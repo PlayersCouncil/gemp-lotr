@@ -117,7 +117,7 @@ public class Card_03_017_ErrataTests
 
 		scn.StartGame();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//We have to specify which site here since we cheated and included a second site 2
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
@@ -143,7 +143,7 @@ public class Card_03_017_ErrataTests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//We have to specify which site here since we cheated and included a second site 2
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
@@ -172,7 +172,7 @@ public class Card_03_017_ErrataTests
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), null, Keyword.FOREST));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//We have to specify which site here since we cheated and included a second site 2
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
@@ -199,7 +199,7 @@ public class Card_03_017_ErrataTests
 
 		scn.FreepsChooseCardBPFromSelection(freepsSite2);
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowChooseCardBPFromSelection(shadowForest);
 		assertEquals(shadowForest, scn.GetCurrentSite());
@@ -221,7 +221,7 @@ public class Card_03_017_ErrataTests
 
 		scn.StartGame();
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//We have to specify which site here since we cheated and included a second site 2
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);

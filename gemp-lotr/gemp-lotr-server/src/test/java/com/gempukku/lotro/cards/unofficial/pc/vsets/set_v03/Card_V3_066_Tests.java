@@ -86,7 +86,7 @@ public class Card_V3_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(gollum));
 		assertEquals(0, scn.GetThreats());
@@ -115,7 +115,7 @@ public class Card_V3_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(witchking);
 
@@ -140,7 +140,7 @@ public class Card_V3_066_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(runner);
 

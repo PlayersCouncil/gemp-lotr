@@ -137,7 +137,7 @@ public class Card_V2_054_Tests
 		assertTrue(scn.HasKeyword(frodo, Keyword.VALIANT));
 		assertEquals(1, scn.GetWoundsOn(guard));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertFalse(scn.FreepsActionAvailable(guard)); // limit once per phase
 	}
 }

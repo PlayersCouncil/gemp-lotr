@@ -77,7 +77,7 @@ public class Card_02_059_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(things));
 		scn.ShadowPlayCard(things);
@@ -94,7 +94,7 @@ public class Card_02_059_ErrataTests
 		scn.MoveCardsToShadowDiscard("things2", "runner");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(things));
 		scn.ShadowPlayCard(things);
@@ -113,7 +113,7 @@ public class Card_02_059_ErrataTests
 
 		scn.StartGame();
 		//scn.SetTwilight(-1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// This bug makes no sense.  Failed in PlayCardFromDiscard, line 83, replays are p3hxkhpke89tfglf and caf19xis68ev71a1
 		// Relentless and 7 other moria cards, plus a bunch of freeps cards, with 0 twilight after playing Foul Things.

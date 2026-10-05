@@ -90,8 +90,8 @@ public class Card_01_029_ErrataTests
 		scn.FreepsChooseCard(arwen);
 		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetWoundsOn(arwen));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
@@ -131,12 +131,12 @@ public class Card_01_029_ErrataTests
 		scn.FreepsChooseCard(arwen);
 		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gwemegil);
 		assertEquals(6 + 2 + 1 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertEquals(1, scn.GetWoundsOn(arwen));
@@ -189,12 +189,12 @@ public class Card_01_029_ErrataTests
 		scn.FreepsChooseCard(arwen);
 		assertEquals(6 + 2 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gwemegil);
 		assertEquals(6 + 2 + 1 + 1, scn.GetStrength(arwen));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveActionOrder("Ancient Enmity");
 		assertTrue(scn.FreepsDecisionAvailable("Choose Elf to heal"));

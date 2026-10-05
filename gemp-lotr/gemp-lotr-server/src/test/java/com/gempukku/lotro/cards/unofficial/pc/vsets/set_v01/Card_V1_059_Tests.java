@@ -189,7 +189,7 @@ public class Card_V1_059_Tests
 		scn.MoveMinionsToTable(raiders);
 		scn.AddWoundsToChar(raiders, 2);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(4, scn.GetCurrentSiteNumber());
 
 		// At site 4, in a skirmish: 8 + 2 against 9.  At 8, or at 9, Aragorn would lose and take two wounds.

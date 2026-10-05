@@ -87,7 +87,7 @@ public class Card_V3_053_Tests
 		int explorerWoundsBefore = scn.GetWoundsOn(explorer);
 		assertFalse(scn.IsHindered(orc));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(honor);
 
 		// Southron is the only option, and Aragorn is the only unbound companion
@@ -126,7 +126,7 @@ public class Card_V3_053_Tests
 		assertFalse(scn.HasKeyword(explorer, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(explorer, Keyword.AMBUSH));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(honor);
 
 		// Freeps prevents

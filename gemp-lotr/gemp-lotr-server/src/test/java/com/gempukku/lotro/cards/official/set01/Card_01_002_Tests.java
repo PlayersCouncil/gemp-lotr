@@ -106,7 +106,7 @@ public class Card_01_002_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Shadow wounds cannot convert to burdens
 		assertTrue(scn.RBWearingOneRing());
@@ -115,11 +115,11 @@ public class Card_01_002_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(frodo));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Maneuver wounds cannot convert to burdens
 		assertTrue(scn.RBWearingOneRing());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(picket);
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetBurdens());
@@ -140,7 +140,7 @@ public class Card_01_002_Tests
 		scn.ShadowAssignToMinions(frodo, soldier);
 
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(soldier);
 
 		//We are now in a skirmish phase, so the burden should have gotten converted
@@ -192,7 +192,7 @@ public class Card_01_002_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//Shadow wounds cannot convert to burdens
 		assertFalse(scn.RBWearingOneRing());
@@ -203,11 +203,11 @@ public class Card_01_002_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(frodo));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Maneuver wounds cannot convert to burdens
 		assertFalse(scn.RBWearingOneRing());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(picket);
 		scn.FreepsDeclineOptionalTrigger(); //Picket's text
 
@@ -231,7 +231,7 @@ public class Card_01_002_Tests
 		scn.ShadowAssignToMinions(frodo, soldier);
 
 		scn.FreepsResolveSkirmish(frodo);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(soldier);
 
 		//We are now in a skirmish phase, so the response should now be active
@@ -250,7 +250,7 @@ public class Card_01_002_Tests
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		//Got taken off at the start of the regroup phase
 		assertFalse(scn.RBWearingOneRing());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		//We cheat because there's too many wounds
 		scn.RemoveWoundsFromChar(frodo, 4);

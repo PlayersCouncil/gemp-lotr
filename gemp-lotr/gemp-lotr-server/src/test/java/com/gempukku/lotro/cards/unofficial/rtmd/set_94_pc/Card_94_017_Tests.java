@@ -87,11 +87,11 @@ public class Card_94_017_Tests {
 		// Turn 2: roles rotate, Shadow/P2 is now Fellowship-active. Drive it manually by player ID
 		// (not by the Freeps/Shadow phase-role helpers, which name the physical player, not the
 		// current role).
-		scn.ShadowPassCurrentPhaseAction(); // Fellowship phase - P2 decides
-		scn.FreepsPassCurrentPhaseAction(); // Shadow phase - P1 decides
+		scn.ShadowPass(); // Fellowship phase - P2 decides
+		scn.FreepsPass(); // Shadow phase - P1 decides
 		// No minions anywhere, so maneuver/archery/assignment/skirmish auto-skip to regroup.
-		scn.ShadowPassCurrentPhaseAction(); // Regroup - P2 (current player) decides first
-		scn.FreepsPassCurrentPhaseAction(); // then P1
+		scn.ShadowPass(); // Regroup - P2 (current player) decides first
+		scn.FreepsPass(); // then P1
 		scn.ShadowChooseToStay(); // decline P2's own extra move
 		// "each of your turns" is gated by OwnerIsFreeps, which is false while P2 is Fellowship-active
 		// (the mod's owner P1 is Shadow-active this turn), so nothing fires here.
@@ -99,10 +99,10 @@ public class Card_94_017_Tests {
 		assertFalse(scn.FreepsDecisionAvailable("take control of a site"));
 
 		// Turn 3: back to P1 as Fellowship-active - the owner's turn again.
-		scn.FreepsPassCurrentPhaseAction(); // Fellowship phase - P1 decides
-		scn.ShadowPassCurrentPhaseAction(); // Shadow phase - P2 decides
-		scn.FreepsPassCurrentPhaseAction(); // Regroup - P1 decides first
-		scn.ShadowPassCurrentPhaseAction(); // then P2
+		scn.FreepsPass(); // Fellowship phase - P1 decides
+		scn.ShadowPass(); // Shadow phase - P2 decides
+		scn.FreepsPass(); // Regroup - P1 decides first
+		scn.ShadowPass(); // then P2
 		scn.FreepsChooseToStay(); // decline P1's own extra move
 
 		// Both players have now each had one Fellowship turn (P1 at site 3, P2 at site 2), so

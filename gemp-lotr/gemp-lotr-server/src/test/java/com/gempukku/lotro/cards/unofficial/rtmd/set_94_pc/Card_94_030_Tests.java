@@ -274,9 +274,9 @@ public class Card_94_030_Tests {
 		scn.StartGame();
 		scn.SetTwilight(5);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(library));
 		scn.ShadowUseCardAction(library);

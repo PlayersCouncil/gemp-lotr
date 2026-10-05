@@ -273,7 +273,7 @@ public class Card_V1_001_Tests
 
 		// The regroup phase has begun, and with it the limit is gone: each Morgul Slayer exerts to wound a
 		// companion, and both wounds land on Gimli in this one phase.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(slayer));
 		scn.ShadowUseCardAction(slayer);
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, farin));
@@ -281,7 +281,7 @@ public class Card_V1_001_Tests
 		// 1 from the skirmish + 1
 		assertEquals(2, scn.GetWoundsOn(gimli));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(slayer2);
 		// A Dwarf still limited to 1 wound this phase could not be chosen for the second.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, farin));
@@ -449,7 +449,7 @@ public class Card_V1_001_Tests
 
 		// The regroup phase has begun, and with it the limit is gone: each Morgul Slayer exerts to wound a
 		// companion, and both wounds land on Gimli in this one phase.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(slayer));
 		scn.ShadowUseCardAction(slayer);
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, farin));
@@ -457,7 +457,7 @@ public class Card_V1_001_Tests
 		// 1 from the skirmish + 1
 		assertEquals(2, scn.GetWoundsOn(gimli));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(slayer2);
 		// A Dwarf still limited to 1 wound this phase could not be chosen for the second.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, farin));
@@ -524,8 +524,8 @@ public class Card_V1_001_Tests
 
 		// A skirmish phase is a new phase, and the regroup phase has not come: he can take 1 wound again,
 		// and again no more than 1.
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 		scn.FreepsAssignAndResolve(gimli, raiders);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		scn.PassSkirmishActions();
@@ -562,7 +562,7 @@ public class Card_V1_001_Tests
 		assertFalse(scn.IsHindered(hosp2));
 
 		// Gimli still bears his 2 items, but the copy that was used is hindered and cannot be hindered again.
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(hosp));
 		assertTrue(scn.FreepsActionAvailable(hosp2));

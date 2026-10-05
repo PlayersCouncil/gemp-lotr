@@ -89,7 +89,7 @@ public class Card_V3_064_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No twilight conditions in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(fear));
@@ -144,7 +144,7 @@ public class Card_V3_064_Tests
 
 		// Add third [ringwraith] minion
 		scn.MoveMinionsToTable(witchking);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(fear));
 	}
@@ -171,7 +171,7 @@ public class Card_V3_064_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		assertEquals(0, scn.GetBurdens());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No burdens to remove - ability not available
 		assertFalse(scn.ShadowActionAvailable(fear));
@@ -196,7 +196,7 @@ public class Card_V3_064_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Frodo is ring-bound, Sam is ring-bound - no unbound companions
 		assertFalse(scn.ShadowActionAvailable(fear));
@@ -221,7 +221,7 @@ public class Card_V3_064_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Self already hindered - ability not available
 		assertFalse(scn.ShadowActionAvailable(fear));
@@ -258,7 +258,7 @@ public class Card_V3_064_Tests
 		assertFalse(scn.IsHindered(gimli));
 		assertFalse(scn.IsHindered(frodo));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(fear);
 
 		// Choose which [ringwraith] minion to spare
@@ -309,7 +309,7 @@ public class Card_V3_064_Tests
 
 		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
 		assertFalse(scn.FreepsActionAvailable(fear));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertFalse(scn.ShadowActionAvailable(fear));
 	}
 }

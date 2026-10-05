@@ -86,8 +86,8 @@ public class Card_10_019_Tests
 		assertEquals(8, scn.GetTwilight());
 
 		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 
 		assertEquals(1, scn.GetWoundsOn(gollum)); //lost skirmish

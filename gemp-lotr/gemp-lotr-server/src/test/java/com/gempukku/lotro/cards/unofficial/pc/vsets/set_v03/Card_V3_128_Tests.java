@@ -95,7 +95,7 @@ public class Card_V3_128_Tests
 		// Maneuver: Shadow uses Bandit's ability (exert to add 5 twilight)
 		// FP may add a threat to prevent the twilight gain
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(bandit);
 
 		// FP adds a threat to prevent the +5 twilight
@@ -138,7 +138,7 @@ public class Card_V3_128_Tests
 
 		// Maneuver: Shadow uses Bandit, FP adds threat to prevent
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(bandit);
 		scn.FreepsChooseYes();
 

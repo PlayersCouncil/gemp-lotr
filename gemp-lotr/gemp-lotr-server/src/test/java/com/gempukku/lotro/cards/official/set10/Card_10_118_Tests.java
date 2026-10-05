@@ -89,7 +89,7 @@ public class Card_10_118_Tests
 
 		scn.SkipToSite(3);
 		scn.MoveMinionsToTable(savage);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(prairie, scn.GetCurrentSite());
 		assertTrue(scn.ShadowActionAvailable(prairie));

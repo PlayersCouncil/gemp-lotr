@@ -69,7 +69,7 @@ public class Card_92_027_Tests
 		assertEquals(2, scn.GetFreepsHandCount());
 
 		// Move to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInZone(Zone.DISCARD, gimli);
@@ -89,7 +89,7 @@ public class Card_92_027_Tests
 
 		assertEquals(2, scn.GetFreepsHandCount());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow owns the modifier, Freeps hand should not be discarded
 		assertEquals(2, scn.GetFreepsHandCount());

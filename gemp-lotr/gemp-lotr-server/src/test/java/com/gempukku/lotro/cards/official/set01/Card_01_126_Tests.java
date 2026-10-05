@@ -68,7 +68,7 @@ public class Card_01_126_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(hunt));
 		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));

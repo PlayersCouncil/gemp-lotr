@@ -65,7 +65,7 @@ public class Card_93_003_Tests
 		scn.StartGame();
 
 		// Move from site 1 to site 2; trigger fires on move
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(2, scn.GetMoveLimit());
 
 		// Optional trigger — choose to kill a companion
@@ -94,7 +94,7 @@ public class Card_93_003_Tests
 		scn.StartGame();
 
 		// Move from site 1 to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Optional trigger — decline
 		scn.FreepsDeclineOptionalTrigger();
@@ -114,11 +114,11 @@ public class Card_93_003_Tests
 		scn.StartGame();
 
 		// Move from site 1 to site 2
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow owns the mod — trigger should not fire for Freeps
 		// Should proceed directly to shadow phase without offering to kill
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertFalse(scn.FreepsDecisionAvailable("Kill"));
 	}
 }

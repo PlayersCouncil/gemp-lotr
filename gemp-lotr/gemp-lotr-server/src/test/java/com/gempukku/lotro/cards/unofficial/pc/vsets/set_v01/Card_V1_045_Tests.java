@@ -95,7 +95,7 @@ public class Card_V1_045_Tests
 		scn.MoveCardsToHand(gaze);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 1 companion + 2 for the shadow number of site 2
@@ -300,7 +300,7 @@ public class Card_V1_045_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertInDiscard(scimitar);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// A [sauron] minion.
 		scn.FreepsPlayCard(stand2);
@@ -309,7 +309,7 @@ public class Card_V1_045_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertInDiscard(soldier);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// The same event on a [sauron] condition, with the burden still there: now it is offered.
 		assertEquals(1, scn.GetBurdens());
@@ -381,7 +381,7 @@ public class Card_V1_045_Tests
 		scn.AddBurdens(1);
 		scn.MoveMinionsToTable(soldier);
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(0, scn.GetShadowHandCount());
@@ -417,7 +417,7 @@ public class Card_V1_045_Tests
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, veteran);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertTrue(scn.ShadowActionAvailable(veteran));
@@ -435,7 +435,7 @@ public class Card_V1_045_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 
 		// The same ability with the response declined: the condition is discarded and Aragorn is strength -1.
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(veteran);
 		scn.ShadowChooseCard(summons);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gaze));

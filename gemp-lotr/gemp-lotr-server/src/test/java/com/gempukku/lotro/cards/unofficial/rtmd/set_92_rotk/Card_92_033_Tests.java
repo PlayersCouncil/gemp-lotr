@@ -71,7 +71,7 @@ public class Card_92_033_Tests
 		// Leave blacknum, gimli, and enquea in the draw deck (default location)
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		// Optional trigger fires at start of shadow phase
@@ -96,7 +96,7 @@ public class Card_92_033_Tests
 		var blacknum = scn.GetShadowCard("blacknum");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		int handBefore = scn.GetShadowHandCount();
@@ -113,7 +113,7 @@ public class Card_92_033_Tests
 		var scn = GetFreepsScenario();
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

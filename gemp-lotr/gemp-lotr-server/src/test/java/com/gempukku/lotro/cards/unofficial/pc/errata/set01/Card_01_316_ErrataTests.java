@@ -96,7 +96,7 @@ public class Card_01_316_ErrataTests
         scn.StartGame();
 
         scn.FreepsPlayCard(talent);
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
 
         // 2 for Frodo/Merry, 1 for the site, -1 for Talent
         assertEquals(2, scn.GetTwilight());

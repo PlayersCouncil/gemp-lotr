@@ -102,7 +102,7 @@ public class Card_08_003_ErrataTests
 		assertEquals(1, scn.GetKeywordCount(durin, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
 
-		scn.FreepsPassCurrentPhaseAction();          // the fellowship moves
+		scn.FreepsPass();          // the fellowship moves
 		ShadowPlaysSiteIfAsked(scn);
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
@@ -148,7 +148,7 @@ public class Card_08_003_ErrataTests
 		scn.StartGame();
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		ShadowPlaysSiteIfAsked(scn);
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());

@@ -219,7 +219,7 @@ public class Card_02_026_Tests
 		var site2 = scn.GetFreepsSite("site2");
 
 		scn.StartGame(site1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(site2);
 
 		scn.SkipToPhase(Phase.REGROUP);

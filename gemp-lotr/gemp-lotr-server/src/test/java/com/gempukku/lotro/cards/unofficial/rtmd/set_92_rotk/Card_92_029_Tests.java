@@ -65,7 +65,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction(); // fellowship phase pass → auto-move
+		scn.FreepsPass(); // fellowship phase pass → auto-move
 
 		// Now in shadow phase — action should be available
 		assertTrue(scn.ShadowActionAvailable(mod));
@@ -97,7 +97,7 @@ public class Card_92_029_Tests
 		var mod = scn.GetShadowCard("mod");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction(); // fellowship phase pass → auto-move
+		scn.FreepsPass(); // fellowship phase pass → auto-move
 
 		// Now in shadow phase — action should be available
 		assertTrue(scn.ShadowActionAvailable(mod));
@@ -119,7 +119,7 @@ public class Card_92_029_Tests
 		var mod = scn.GetShadowCard("mod");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction(); // fellowship phase pass → auto-move
+		scn.FreepsPass(); // fellowship phase pass → auto-move
 
 		// Now in shadow phase — action should be available
 		assertTrue(scn.ShadowActionAvailable(mod));
@@ -142,7 +142,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// First use
 		assertTrue(scn.ShadowActionAvailable(mod));
@@ -150,7 +150,7 @@ public class Card_92_029_Tests
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
 		scn.FreepsDismissRevealedCards();
 		// Decline to play any card
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Second use in same turn — should NOT be available
 		assertFalse(scn.ShadowActionAvailable(mod));
@@ -164,7 +164,7 @@ public class Card_92_029_Tests
 		var mod = scn.GetFreepsCard("mod");
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Shadow phase — the mod is owned by Freeps, so Shadow can't use it
 		assertFalse(scn.ShadowActionAvailable(mod));
@@ -178,14 +178,14 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
 		scn.FreepsDismissRevealedCards();
 
 		// Decline to play (empty response = select 0 cards)
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		// Should return to normal shadow phase actions
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -201,7 +201,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
@@ -228,7 +228,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
@@ -256,7 +256,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Verify twilight pool is low (only Frodo moved = 2 twilight from site)
 		assertTrue(scn.GetTwilight() < 10);
@@ -286,7 +286,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
@@ -309,7 +309,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
@@ -329,7 +329,7 @@ public class Card_92_029_Tests
 
 		scn.UseTestBoosters();
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(mod);
 		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());

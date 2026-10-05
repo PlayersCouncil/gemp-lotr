@@ -161,7 +161,7 @@ public class Card_04_034_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(folk, 2);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetCultureTokensOn(folk));
 		assertTrue(scn.ShadowActionAvailable(folk));

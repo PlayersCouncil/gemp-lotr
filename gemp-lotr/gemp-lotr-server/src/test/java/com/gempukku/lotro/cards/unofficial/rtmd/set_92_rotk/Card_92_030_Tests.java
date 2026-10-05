@@ -59,7 +59,7 @@ public class Card_92_030_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		int handBefore = scn.GetShadowHandCount();
@@ -78,7 +78,7 @@ public class Card_92_030_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		int handBefore = scn.GetShadowHandCount();
@@ -118,7 +118,7 @@ public class Card_92_030_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(5);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.SkipToPhase(Phase.SHADOW);
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

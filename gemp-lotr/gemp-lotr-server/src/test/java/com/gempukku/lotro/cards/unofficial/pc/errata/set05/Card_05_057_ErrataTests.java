@@ -73,7 +73,7 @@ public class Card_05_057_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable(ladder));
 		scn.ShadowPlayCard(troop);

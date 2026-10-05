@@ -86,7 +86,7 @@ public class Card_04_092_ErrataTests
 			scn.MoveCardsToSupportArea(scn.GetShadowCard("bowmen" + i));
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();          // fellowship-phase move 1 -> 2
+		scn.FreepsPass();          // fellowship-phase move 1 -> 2
 		ShadowPlaysSiteIfAsked(scn);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 

@@ -77,7 +77,7 @@ public class Card_02_044_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(business));
 		scn.ShadowPlayCard(uruk);
@@ -140,7 +140,7 @@ public class Card_02_044_Tests
 		scn.FreepsChooseAny();
 
 		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		//Mirror's effect should now be blocked
 		assertTrue(scn.FreepsActionAvailable(mirror));

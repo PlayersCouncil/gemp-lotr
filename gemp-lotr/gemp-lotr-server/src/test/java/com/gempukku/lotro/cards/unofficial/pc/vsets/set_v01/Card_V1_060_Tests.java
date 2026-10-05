@@ -123,7 +123,7 @@ public class Card_V1_060_Tests
 		scn.MoveMinionsToTable(runner, savage);
 		assertEquals(0, scn.GetTwilight());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Moria Crossroads", scn.GetCurrentSite().getBlueprint().getTitle());
 
 		// The unique [moria] minion is played from hand, and is a Troll: the site asks for a minion, not an Orc.
@@ -163,8 +163,8 @@ public class Card_V1_060_Tests
 		assertFalse(scn.IsCharSkirmishing(troll));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(0, scn.GetWoundsOn(pippin));
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(1, scn.GetWoundsOn(pippin));
 		assertEquals(0, scn.GetWoundsOn(runner));
 
@@ -175,8 +175,8 @@ public class Card_V1_060_Tests
 		assertTrue(scn.IsCharSkirmishingAgainst(sam, troll));
 		assertEquals(15, scn.GetStrength(troll));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertInZone(Zone.DEAD, sam);
 
 		// The Cave Troll is fierce and lives, so the skirmishes are followed by a second assignment.
@@ -209,7 +209,7 @@ public class Card_V1_060_Tests
 		// The Guard Commander (vitality 2) is one wound from death.
 		scn.AddWoundsToChar(commander, 1);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals("Moria Crossroads", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveCardsToSupportArea(longDark);
 
@@ -228,8 +228,8 @@ public class Card_V1_060_Tests
 		assertInDiscard(stealth1);
 		assertTrue(scn.IsCharSkirmishingAgainst(merry, runner));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertEquals(1, scn.GetWoundsOn(merry));
 
 		// Aragorn kills the Guard Commander.  8 against 7.

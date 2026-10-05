@@ -225,7 +225,7 @@ public class Card_V3_126_Tests
 		// Effect: FP must exert 2 companions OR put on Ring.
 		// With only Frodo, can't exert 2 — forced to put on Ring.
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(reach);
 
 		scn.PassManeuverActions();

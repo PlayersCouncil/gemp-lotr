@@ -77,7 +77,7 @@ public class Card_V2_041_Tests
 		scn.SkipPastAllAssignments();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
@@ -116,7 +116,7 @@ public class Card_V2_041_Tests
 		scn.SkipPastAllAssignments();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());

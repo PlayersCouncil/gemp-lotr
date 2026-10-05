@@ -72,7 +72,7 @@ public class Card_93_007_Tests
 		int shadowHandBefore = scn.GetShadowHandCount();
 
 		// Move — trigger fires
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Optional trigger — accept
 		scn.ShadowHasOptionalTriggerAvailable(mod);
@@ -100,7 +100,7 @@ public class Card_93_007_Tests
 		int shadowHandBefore = scn.GetShadowHandCount();
 
 		// Move — trigger should NOT fire (0 cards to draw)
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int shadowHandAfter = scn.GetShadowHandCount();
 
@@ -123,7 +123,7 @@ public class Card_93_007_Tests
 
 		int shadowHandBefore = scn.GetShadowHandCount();
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int shadowHandAfter = scn.GetShadowHandCount();
 

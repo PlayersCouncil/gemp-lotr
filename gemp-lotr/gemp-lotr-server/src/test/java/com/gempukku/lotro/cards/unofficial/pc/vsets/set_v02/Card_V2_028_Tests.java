@@ -69,7 +69,7 @@ public class Card_V2_028_Tests
 		scn.MoveCardsToHand(machinery);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(machinery));
 
@@ -89,7 +89,7 @@ public class Card_V2_028_Tests
 		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.SHADOW_CHARACTERS, saruman.getZone());
 		assertTrue(scn.ShadowPlayAvailable(machinery));
@@ -110,7 +110,7 @@ public class Card_V2_028_Tests
 		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
 		assertTrue(scn.ShadowPlayAvailable(machinery));
@@ -172,7 +172,7 @@ public class Card_V2_028_Tests
 		assertEquals(0, scn.GetWoundsOn(isenorc));
 		assertEquals(2, scn.GetCultureTokensOn(machinery));
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(machinery));
 		scn.ShadowUseCardAction(machinery);
 
@@ -206,7 +206,7 @@ public class Card_V2_028_Tests
 		assertEquals(1, scn.GetCultureTokensOn(machinery));
 		assertEquals(Zone.SUPPORT, machinery.getZone());
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(machinery));
 		scn.ShadowUseCardAction(machinery);
 

@@ -79,7 +79,7 @@ public class Card_01_245_ErrataTests
 		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(measures));
 	}
@@ -100,7 +100,7 @@ public class Card_01_245_ErrataTests
 		scn.RemoveBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowPlayAvailable(measures));
 	}
@@ -121,7 +121,7 @@ public class Card_01_245_ErrataTests
 		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
@@ -152,7 +152,7 @@ public class Card_01_245_ErrataTests
 		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
@@ -189,7 +189,7 @@ public class Card_01_245_ErrataTests
 		scn.AddBurdens(1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(2, scn.GetFreepsDiscardCount());
 		assertEquals(7, scn.GetFreepsDeckCount());

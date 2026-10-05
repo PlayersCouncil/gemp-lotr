@@ -93,8 +93,8 @@ public class Card_10_008_ErrataTests
 
 		assertEquals(1, scn.GetWoundsOn(cirdan));
 		assertEquals(3, scn.GetStrength(nazgul));
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		scn.FreepsResolveRuleFirst(); //Skirmish result first
 		assertEquals(Zone.DISCARD, nazgul.getZone());

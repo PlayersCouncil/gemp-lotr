@@ -84,7 +84,7 @@ public class Card_V2_070_Tests
 
 		scn.SkipToSite(3);
 		scn.SetTwilight(12);
-		scn.FreepsPassCurrentPhaseAction(); // we're now on 4, not quite Breached Wall
+		scn.FreepsPass(); // we're now on 4, not quite Breached Wall
 
 		//No opponent controls a site, so Haldir is strength +2
 		assertEquals(7, scn.GetStrength(haldir));

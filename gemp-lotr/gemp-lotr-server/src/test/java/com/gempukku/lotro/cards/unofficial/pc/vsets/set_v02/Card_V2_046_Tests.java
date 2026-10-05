@@ -113,8 +113,8 @@ public class Card_V2_046_Tests
 		assertEquals(9, scn.GetStrength(veowyn));
 		assertEquals(7, scn.GetStrength(veomer));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
@@ -200,8 +200,8 @@ public class Card_V2_046_Tests
 		assertEquals(7, scn.GetStrength(vgimli));
 		assertEquals(7, scn.GetStrength(veowyn));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());

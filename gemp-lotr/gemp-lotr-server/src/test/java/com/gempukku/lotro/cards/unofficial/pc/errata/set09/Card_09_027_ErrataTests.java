@@ -85,7 +85,7 @@ public class Card_09_027_ErrataTests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowUseCardAction(staff); // permit saruman to skirmish
 
 		scn.SkipToAssignments();

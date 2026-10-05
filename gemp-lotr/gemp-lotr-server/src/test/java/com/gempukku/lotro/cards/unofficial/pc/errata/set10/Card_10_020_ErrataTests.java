@@ -74,7 +74,7 @@ public class Card_10_020_ErrataTests
 		scn.SetTwilight(20);
 		scn.MoveCardsToSupportArea(strike);
 		scn.MoveCardsToDiscard(gollum);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 	}
@@ -140,7 +140,7 @@ public class Card_10_020_ErrataTests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertFalse(scn.ShadowActionAvailable(strike));
