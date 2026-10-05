@@ -129,7 +129,7 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nelya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for any card here
@@ -198,7 +198,7 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nelya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for any card here, the minion included
@@ -258,7 +258,7 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nelya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -312,7 +312,7 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nelya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -347,6 +347,118 @@ public class Card_V1_037_Tests
 	}
 
 	@Test
+	public void AnItemFoundInTheDrawDeckNeedNotBePlayedAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var fell = scn.GetShadowCard("fell");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nelya = scn.GetShadowCard("nelya");
+		var sword = scn.GetShadowCard("sword");
+		var crown = scn.GetShadowCard("crown");
+		var blade = scn.GetShadowCard("blade");
+		var ring = scn.GetShadowCard("ring");
+		// The Nazgul Sword and the Pale Crown stay in the draw deck; the discard pile has two items of its own.
+		scn.MoveCardsToHand(fell);
+		scn.MoveCardsToDiscard(blade, ring);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya, nelya);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 7 set + 1 for Frodo + 2 for the shadow number of site 2: enough for either item in the deck
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.DECK, sword, crown);
+		assertInZone(Zone.DISCARD, blade, ring);
+		assertInZone(Zone.HAND, fell);
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+
+		scn.ShadowPlayCard(fell);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		// Both items could be played, with the pool and a Nazgul to hand, and the player may still play neither:
+		// "There is no penalty if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, crown));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		// No item was played: both are still in the deck, and the game has not gone to the discard pile for one instead.
+		assertInZone(Zone.DECK, sword, crown);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, blade, ring);
+		// The event is spent all the same. It costs nothing, and nothing else was paid for.
+		assertInZone(Zone.DISCARD, fell);
+		assertEquals(10, scn.GetTwilight());
+		// The deck was looked through, so it is reshuffled though nothing came out of it.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoRingwraithItemInTheDiscardPileALoneItemInTheDrawDeckIsOfferedAndNeedNotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var fell = scn.GetShadowCard("fell");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nelya = scn.GetShadowCard("nelya");
+		var sword = scn.GetShadowCard("sword");
+		var crown = scn.GetShadowCard("crown");
+		var blade = scn.GetShadowCard("blade");
+		var ring = scn.GetShadowCard("ring");
+		var steed = scn.GetShadowCard("steed");
+		var tip = scn.GetShadowCard("tip");
+		var otsea = scn.GetShadowCard("otsea");
+		var hides = scn.GetShadowCard("hides");
+		// The Nazgul Sword is the one [ringwraith] item left in the draw deck: the other four are in hand.
+		// The discard pile has only cards that nearly qualify.
+		scn.MoveCardsToHand(fell, crown, blade, ring, steed);
+		scn.MoveCardsToDiscard(tip, hides, otsea);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya, nelya);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.DECK, sword);
+		assertInZone(Zone.HAND, fell, crown, blade, ring, steed);
+		assertInZone(Zone.DISCARD, tip, hides, otsea);
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		assertTrue(scn.ShadowPlayAvailable(fell));
+
+		scn.ShadowPlayCard(fell);
+		// Nothing in the discard pile can be played, so there is no pile to choose: the deck is shown at once.
+		assertFalse(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowDismissRevealedCards();
+
+		// The Sword is the only card that could be chosen, and it is still not played unasked: finding it
+		// does not oblige the player to play it.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sword));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(crown, blade, ring, steed));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		assertInZone(Zone.DECK, sword);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, fell, tip, hides, otsea);
+		// The event costs nothing, and nothing else was paid for.
+		assertEquals(10, scn.GetTwilight());
+		// The deck was looked through, so it is reshuffled though nothing came out of it.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
 	public void CannotBePlayedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -360,16 +472,16 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertInZone(Zone.DECK, sword);
 		assertInZone(Zone.DISCARD, ring);
 		assertTrue(scn.ShadowPlayAvailable(fell));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// The same piles, the same Nazgul, the same pool, and the phase after the one the card names
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
@@ -402,7 +514,7 @@ public class Card_V1_037_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nelya);
 		scn.SetTwilight(7);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
@@ -435,7 +547,7 @@ public class Card_V1_037_Tests
 		scn.MoveCardsToTopOfDeck(blade);
 		scn.MoveMinionsToTable(lemenya);
 		scn.SetTwilight(4);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals("The Great River", scn.GetCurrentSite().getBlueprint().getTitle());
 		assertTrue(scn.AwaitingShadowPhaseActions());
