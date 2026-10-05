@@ -1,7 +1,7 @@
 export const meta = {
   name: 'card-test-batch',
   description: 'Author, review, fix and re-check the unit tests of one batch of cards',
-  whenToUse: 'One batch of two to four cards of the card test campaign. args: {repo, cards: [ids], folder, notes}',
+  whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to skip straight to fix and re-check',
   phases: [
     { title: 'Author', detail: 'blind plan, then the tests, the conformance check and the mutation check' },
     { title: 'Review', detail: 'an independent review against the Card Test Standard' },
@@ -136,6 +136,25 @@ const FIXED = {
 
 const where = `Work in the repository at ${repo}. `
 const numbered = (items) => (items || []).map((t, i) => `${i + 1}. ${t}`).join('\n')
+
+// A batch that has been through review already and only needs a list worked through: args.fixes is that list.
+if (args.fixes) {
+  phase('Fix')
+  const fix = await agent(
+    where + `Read ${roles}fixer.md and do what it says.\n\n` +
+    `The cards and the list for each:\n\n${args.fixes}\n\nYour working folder name: ${folder}-f\n`,
+    { label: `fix ${folder}`, phase: 'Fix', schema: FIXED })
+  if (!fix) return { folder, cards, failed: 'fix' }
+  const account = (fix.cards || []).map(c =>
+    `${c.id}:\n` + (c.items || []).map(i => `${i.number}. ${i.outcome}${i.note ? ': ' + i.note : ''}`).join('\n')).join('\n\n')
+  phase('Re-check')
+  const recheck = await agent(
+    where + `Read ${roles}reviewer.md and do what it says. This is a re-check: see its section "Re-checking after a fix".\n\n` +
+    `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-c\n\n` +
+    `The list:\n\n${args.fixes}\n\nThe fixer's account of each item:\n\n${account}\n`,
+    { label: `re-check ${folder}`, phase: 'Re-check', schema: REVIEW })
+  return { folder, cards, fix, recheck }
+}
 
 phase('Author')
 const author = await agent(
