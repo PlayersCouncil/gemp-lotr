@@ -53,19 +53,33 @@ one round of fixing; what is still wrong after it comes back to the orchestrator
 An author or fixer works only on its own cards' test and ledger files. No role edits anything else, commits, or
 decides that the game is wrong: they report, and the orchestrator and Ketura decide.
 
-### Running a batch
+### Running the pipelines
 
-`workflows/card-batch.js` is the whole of one batch as a Workflow script: author, reviewer, and where the review
+`workflows/card-batch.js` is one card's whole passage as a Workflow script: author, reviewer, and where the review
 asks for changes, fixer and re-check. Run it with `args` of `{repo, cards, folder, notes}`: the repository's
-absolute path, two to four card ids (one culture where possible, so helper cards and context are shared), a short
-unique folder name (`v1-b03`), and anything the author should know that the documents do not say. It returns each
-stage's report as structured data. Several batches can run at once; each uses its own working folders. Do not run
-`cardtest.py suite` while batches are running: it recompiles the shared test classes under them.
+absolute path, the card id in a list, a short unique folder name (`v1-101_12`), and anything the author should
+know that the documents do not say. With `fixes` (a numbered list per card) it goes straight to fix and re-check.
+It returns each stage's report as structured data.
 
-When a batch returns, the orchestrator gives every finding, question and rig request its number (replacing the
+**One card to a pipeline, several pipelines at once.** An agent's cost grows with the square of how long it
+runs, because every step re-reads everything before it: three cards in one agent cost more than three agents
+with one card each, and a slow card holds up its neighbours. Six pipelines run comfortably on two cores. Do not
+run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite classes the agents'
+tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between waves.
+
+**Nothing reports back by itself reliably.** A finished workflow sends a notification, but the workspace can
+restart or go quiet and the notification is then lost; the results are still in each run's `journal.jsonl`.
+Keep a scheduled message a little way ahead at all times (the session's `send_later`) that says to check the
+pipelines, land what has finished, launch the next cards and schedule the next message. That message is what
+wakes a session that has gone quiet. `scripts/orchestrator/wf.py` (`track`, `status`, `show`, `landed`) reads the
+journals; its paths are the session's own and need changing for a new one.
+
+When a pipeline returns, the orchestrator gives every finding, question and rig request its number (replacing the
 `F-0000` and `Q-0000` placeholders in `@Ignore` lines) and records them, then runs `land.py <ids>`, which checks
 each card again and commits and marks the ones that clear. It sends the commits across and adds a row to
-`usage.tsv`.
+`usage.tsv`. What authors and reviewers report under "documentation issues" and "standard issues" is the
+campaign's main source of improvement: read every one, and change the standard, the briefs or the tools while
+no pipeline is running.
 
 ### One card, start to finish
 
@@ -173,6 +187,11 @@ touching her working tree:
 1. In the clone: `git bundle create <outputs>/card-tests/transport/cto.bundle <last sent>..feature/card-test-overhaul`
 2. Write that file into `Claude outputs/card-tests/transport/` in her folder.
 3. On her machine: `git fetch "Claude outputs/card-tests/transport/cto.bundle" feature/card-test-overhaul:feature/card-test-overhaul`
+
+`scripts/orchestrator/sync.sh` makes the bundle and `statefiles.py` lists what to carry across with it (the
+state files whose content has changed, by hash; the outputs folder's modification times cannot be trusted, and a
+file written there takes a few seconds to reach the store the carrying tool reads). Check the branch head on her
+machine after every fetch.
 
 That moves her local branch ref forward and nothing else. Never check anything out, pull, or push on her machine,
 and never run `git status` there: her working tree is large enough on that mount that it takes minutes.
