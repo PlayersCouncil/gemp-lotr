@@ -94,6 +94,7 @@
 		}
 	}
 
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date).
 	# 101_59: {
 	# 	cardInfo: {
 	# 		//id: 101_59
@@ -162,6 +163,7 @@
 	101_59: {
 		cardInfo: {
 			//id: 101_59
+			revision: 1
 			image: sets/vset1/LOTR-ENV1S059.0_card.jpg
 			collInfo: V1U59
 			rarity: U

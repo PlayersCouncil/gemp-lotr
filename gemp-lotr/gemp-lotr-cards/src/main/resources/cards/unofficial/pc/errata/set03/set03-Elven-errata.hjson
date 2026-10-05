@@ -312,13 +312,87 @@
 		}
 	}
 	
+	# History: revision 1 (errata sheet date 2021.03.28, batch "01: 2021 X-List"). Recovered from git, fac49bfff^ (e834d6a8e): gemp-lotr/gemp-lotr-async/src/main/web/cards/unofficial/pc/errata/set03/set03-Elven-errata.hjson. fac49bfff (2022-08-19) put revision 2 over this block without keeping it.
+	# 53_17: {
+	# 	cardInfo: {
+	# 		//Either a full URL, or a subpath for the PC image server
+	# 		imagePath: errata/53_17.jpg
+	# 		//If this is true, then all gameplay-related info outside this cardInfo definition
+	# 		// will be ignored and the java class loaded instead.
+	# 		javaClass: false
+	# 		//This instructs the blueprint generator to insert this card as an alt of the listed
+	# 		// parent blueprint. Can of course be ommitted if not an errata or promo.
+	# 		parent: 3_17
+	# 		//This is the tree path to use within the alts structure on the parent.
+	# 		// Can of course be ommitted if parent is null. 
+	# 		parentPath: errata/pc
+	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
+	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+	# 		//Top-level cards should always be version 0.
+	# 		version: 1?
+	# 		collInfo: 3R17
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 17
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Galadriel
+	# 	subtitle: Lady of the Golden Wood
+	# 	unique: true
+	# 	culture: elven
+	# 	twilight: 3
+	# 	type: ally
+	# 	allyHome: fellowship,6
+	# 	race: elf
+	# 	strength: 3
+	# 	vitality: 3
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: startOfTurn
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				filter: choose(another,elf)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: fellowship
+	# 			cost: {
+	# 				type: exert
+	# 				filter: self
+	# 				times: 2
+	# 			}
+	# 			effect: {
+	# 				type: playNextSite
+	# 				filter: forest
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: At the start of each of your turns, you may heal another Elf.<br><b>Fellowship:</b> Exert Galadriel twice to play the fellowship's next site if it is a forest (replacing opponent's site if necessary).
+	# 	lore: "'There is in her and in this land no evil, unless a man bring it hither himself. Then let him beware!'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_17: {
 		cardInfo: {
-			//id: 3_17.1
+			//id: 3_17.2
 			parent: 3_17
 			variant: ERRATA
 			variantPath: promos/pc
-			revision: 1
+			revision: 2
 			image: errata/53_17.jpg
 			collInfo: 3R17
 			rarity: R

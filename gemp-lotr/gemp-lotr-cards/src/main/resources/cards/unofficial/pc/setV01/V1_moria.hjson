@@ -1,5 +1,6 @@
 {
 
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date). Its game text, from the V1 sheet: Each time a tentacle wins a skirmish, you may stack it here.\Assignment: Spot 4 tentacles stacked here and discard this condition to assign a [moria] creature to the Ring-bearer. The Free Peoples player may exert the Ring-bearer twice to prevent this.
 	# 101_31: {
 	# 	title: Guided by One Purpose
 	# 	culture: moria
@@ -48,11 +49,12 @@
 	# 		}
 	# 	]
 	# }
+	# History: no revision 1 of 101_31 is known. The errata sheet and the card images go from revision 0 to revision 2 (errata sheet date 2024.12.06, batch "09: 2024 Yuletide"), and in git the card went from the block above to its present text in one commit (9bcbc39cb, 2024-11-01).
 	
 	101_31: {
 		cardInfo: {
-			//id: 101_31.1
-			revision: 1
+			//id: 101_31.2
+			revision: 2
 			image: sets/vset1/LOTR-ENV1E031.1_card.jpg
 			collInfo: V1U31
 			rarity: U
@@ -145,6 +147,7 @@
 	}
 
 
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date). Its game text, from the V1 sheet: Tentacle. This minion may not bear possessions and is discarded if not at a marsh.\Shadow: Spot 3 [moria] creatures to play this minion from your discard pile.
 	# 101_33: {
 	# 	title: Thrashing Tentacle
 	# 	culture: moria
@@ -194,11 +197,12 @@
 	# 		}
 	# 	]
 	# }
+	# History: no revision 1 of 101_33 is known. The errata sheet and the card images go from revision 0 to revision 2 (errata sheet date 2024.12.06, batch "09: 2024 Yuletide"), and in git the card went from the block above to its present text in one commit (9bcbc39cb, 2024-11-01).
 
 	101_33: {
 		cardInfo: {
-			//id: 101_33.1
-			revision: 1
+			//id: 101_33.2
+			revision: 2
 			image: sets/vset1/LOTR-ENV1E033.1_card.jpg
 			collInfo: V1C33
 			rarity: C
@@ -276,6 +280,7 @@
 
 
 
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date). Its game text, from the V1 sheet: Shadow: Remove (1) to stack a tentacle from hand here.\Shadow: Remove (1) to play a tentacle stacked here as if from hand.\Response: If this condition is about to be discarded, discard a tentacle stacked here to prevent that.
 	# 101_34: {
 	# 	title: Out of Dark Waters
 	# 	culture: moria
@@ -347,11 +352,12 @@
 	# 		}
 	# 	]
 	# }
+	# History: no revision 1 of 101_34 is known. The errata sheet and the card images go from revision 0 to revision 2 (errata sheet date 2024.12.06, batch "09: 2024 Yuletide"), and in git the card went from the block above to its present text in one commit (9bcbc39cb, 2024-11-01).
 	
 	101_34: {
 		cardInfo: {
-			//id: 101_34.1
-			revision: 1
+			//id: 101_34.2
+			revision: 2
 			image: sets/vset1/LOTR-ENV1E034.1_card.jpg
 			collInfo: V1R34
 			rarity: R
@@ -589,8 +595,7 @@
 	
 	101_65: {
 		cardInfo: {
-			//id: 101_65.1
-			revision: 1
+			//id: 101_65
 			image: sets/vset1/LOTR-ENV1S065.0_card.jpg
 			collInfo: V1_65
 			rarity: _

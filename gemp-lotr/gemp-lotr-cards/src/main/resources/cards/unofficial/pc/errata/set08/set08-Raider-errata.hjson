@@ -129,13 +129,83 @@
 			}
 		}
 	}
+	
+	# History: revision 1 (errata sheet date 2021.12.19, batch "02: 2021 Yuletide"). Recovered from git, fac49bfff^ (e834d6a8e): gemp-lotr/gemp-lotr-async/src/main/web/cards/unofficial/pc/errata/set08/set08-Raider-errata.hjson. fac49bfff (2022-08-19) put revision 2 over this block without keeping it.
+	# 58_57: {
+	# 	cardInfo: {
+	# 		//Either a full URL, or a subpath for the PC image server
+	# 		imagePath: errata/58_57.jpg
+	# 		//If this is true, then all gameplay-related info outside this cardInfo definition
+	# 		// will be ignored and the java class loaded instead.
+	# 		javaClass: false
+	# 		//This instructs the blueprint generator to insert this card as an alt of the listed
+	# 		// parent blueprint. Can of course be ommitted if not an errata or promo.
+	# 		parent: 8_57
+	# 		//This is the tree path to use within the alts structure on the parent.
+	# 		// Can of course be ommitted if parent is null. 
+	# 		parentPath: errata/pc
+	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
+	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+	# 		//Top-level cards should always be version 0.
+	# 		version: 1?
+	# 		collInfo: 8R57
+	# 		rarity: R
+	# 		setNum: "8"
+	# 		cardNum: 57
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Corsair Marauder
+	# 	culture: Raider
+	# 	twilight: 4
+	# 	type: minion
+	# 	race: Man
+	# 	strength: 9
+	# 	vitality: 2
+	# 	site: 4
+	# 	keyword: Corsair
+	# 	effects: {
+	# 		type: trigger
+	# 		optional: true
+	# 		trigger: {
+	# 			type: assignedToSkirmish
+	# 			filter: self
+	# 		}
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: not(self),corsair
+	# 		}
+	# 		cost: {
+	# 			type: discard
+	# 			filter: choose(possession)
+	# 		}
+	# 		effect: {
+	# 			type: addTokens
+	# 			culture: raider
+	# 			filter: choose(hasToken(raider))
+	# 			amount: 2
+	# 		}
+	# 	}
+	# 	gametext: <b>Corsair.</b><br> Each time this minion is assigned to a skirmish, if you can spot another corsair, you may discard a possession to add 2 [Raider] tokens to a card that already has a [Raider] token on it.
+	# 	lore: "Umbar remained at war with Gondor for many lives of men...."
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	58_57: {
 		cardInfo: {
-			//id: 8_57.1
+			//id: 8_57.2
 			parent: 8_57
 			variant: ERRATA
 			variantPath: promos/pc
-			revision: 1
+			revision: 2
 			image: errata/58_57.jpg
 			collInfo: 8R57
 			rarity: R

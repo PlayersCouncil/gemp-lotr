@@ -382,6 +382,7 @@
 		}
 	}
 	
+	# History: revision 0, the card as first released in V2 (not in the errata sheet, so no date).
 	# 102_51: {
 	# 	cardInfo: {
 	# 		//id: 102_51
@@ -468,6 +469,7 @@
 	102_51: {
 		cardInfo: {
 			//id: 102_51
+			revision: 1
 			image: sets/V2/LOTR-ENV2S051.0_card.jpg
 			collInfo: V2_51
 			rarity: _

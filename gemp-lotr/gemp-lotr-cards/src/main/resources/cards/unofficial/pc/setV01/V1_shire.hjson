@@ -115,6 +115,7 @@
 		}
 	}
 	
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date). Its game text, from the V1 sheet: Assignment: Exert Merry 3 times to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
 	# 101_52: {
 	# 	title: Merry
 	# 	subtitle: Of Buckland
@@ -164,8 +165,8 @@
 
 	101_52: {
 		cardInfo: {
-			//id: 101_52.2
-			revision: 2
+			//id: 101_52.1
+			revision: 1
 			image: sets/vset1/LOTR-ENV1E052.1_card.jpg
 			collInfo: V1R52
 			rarity: R

@@ -55,10 +55,90 @@
 		}
 	}
 
+	# History: revision 1 (errata sheet date 2021.04.30, batch "01: 2021 X-List"). Recovered from git, fac49bfff^ (e834d6a8e): gemp-lotr/gemp-lotr-async/src/main/web/cards/unofficial/pc/errata/set15/set15-Gondor-errata.hjson. fac49bfff (2022-08-19) put revision 2 over this block without keeping it.
+	# 65_64: {
+	# 	cardInfo: {
+	# 		//Either a full URL, or a subpath for the PC image server
+	# 		imagePath: errata/65_64.jpg
+	# 		//If this is true, then all gameplay-related info outside this cardInfo definition
+	# 		// will be ignored and the java class loaded instead.
+	# 		javaClass: false
+	# 		//This instructs the blueprint generator to insert this card as an alt of the listed
+	# 		// parent blueprint. Can of course be ommitted if not an errata or promo.
+	# 		parent: 15_64
+	# 		//This is the tree path to use within the alts structure on the parent.
+	# 		// Can of course be ommitted if parent is null. 
+	# 		parentPath: errata/pc
+	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
+	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+	# 		//Top-level cards should always be version 0.
+	# 		version: 1?
+	# 		collInfo: 15R64
+	# 		rarity: R
+	# 		setNum: "15"
+	# 		cardNum: 64
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Madril
+	# 	subtitle: Defender of Osgiliath
+	# 	unique: true
+	# 	culture: gondor
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: man
+	# 	strength: 5
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	keyword: [
+	# 		Ranger
+	# 		Hunter
+	# 	]
+	# 	effects: [
+	# 		{
+	# 			type: modifyOwnCost
+	# 			requires: {
+	# 				type: canSpot
+	# 				count: 2
+	# 				filter: culture(gondor),ranger
+	# 			}
+	# 			amount: -2
+	# 		}
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: startOfPhase
+	# 				phase: maneuver
+	# 			}
+	# 			requires: {
+	# 				type: canSpotThreats
+	# 			}
+	# 			effect: {
+	# 				type: modifySiteNumber
+	# 				filter: all(minion)
+	# 				amount: 1
+	# 				until: start(regroup)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: <b>Ranger. Hunter 1.</b><br>While you can spot 2 [gondor] rangers, Madril is twilight cost -2.<br>At the start of the maneuver phase, you may spot a threat to make each minion's site number +1 until the regroup phase.
+	# 	lore: "'For that is the ruin of Osgiliath...'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	65_64: {
 		cardInfo: {
-			//id: 5_64.1
-			revision: 1
+			//id: 5_64.2
+			revision: 2
 			image: errata/65_64.jpg
 			collInfo: 15R64
 			rarity: R

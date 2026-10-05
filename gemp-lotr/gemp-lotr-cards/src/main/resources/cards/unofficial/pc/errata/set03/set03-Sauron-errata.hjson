@@ -466,6 +466,7 @@
 		}
 	}
 	
+	# History: revision 1 (errata sheet date 2023.01.11, batch "04: 2022 Yuletide").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.1.jpg
@@ -568,6 +569,7 @@
 	# 	}
 	# }
 	
+	# History: revision 2 (errata sheet date 2024.04.21, batch "07: 2023 Yuletide").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.2_card.jpg
@@ -643,6 +645,7 @@
 	# 		}
 	# 	}
 	# }
+	# History: revision 3 (errata sheet date 2024.09.14, batch "08: 2024 Pre-WC").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.3_card.jpg
@@ -710,11 +713,11 @@
 	
 	53_103: {
 		cardInfo: {
-			//id: 3_103.3
+			//id: 3_103.4
 			parent: 3_103
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 3
+			revision: 4
 			image: errata/LOTR-EN03E103.4_card.jpg
 			collInfo: 3R103
 			rarity: R
