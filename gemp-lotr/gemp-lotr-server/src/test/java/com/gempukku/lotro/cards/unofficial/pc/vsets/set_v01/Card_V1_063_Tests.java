@@ -163,25 +163,25 @@ public class Card_V1_063_Tests
 	}
 
 	@Test
-	public void NothingIsDrawnForAFellowshipOfFourCompanionsAndAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NothingIsOfferedOrDrawnForAFellowshipOfFourCompanionsAndAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		scn.StartGame();
 		scn.SkipToSite(7);
-		// Frodo and three Guards.  Grimir would be the fifth if allies counted.
+		// Frodo and three Guards: no companion over 4, so there is nothing to draw and nothing to ask.
+		// Grimir would be the fifth if allies counted.  One more Guard is the fellowship that draws a card.
 		scn.MoveCompanionsToTable(scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"), scn.GetFreepsCard("guard3"));
 		scn.MoveAlliesToTable(scn.GetFreepsCard("grimir"));
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("guard1"), scn.GetShadowCard("guard2"), scn.GetShadowCard("guard3"));
 		int shadowHand = scn.GetShadowHandCount();
 		int shadowDeck = scn.GetShadowDeckCount();
+		assertTrue(shadowDeck >= 3);
 
 		scn.FreepsPass();
-		var nen = scn.GetCurrentSite();
-		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
-		// The game still asks, with nothing to draw; saying yes draws nothing.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nen));
-
-		scn.ShadowAcceptOptionalTrigger();
+		assertEquals("Nen Hithoel", scn.GetCurrentSite().getBlueprint().getTitle());
+		// The Shadow player is not asked about a draw of no cards: the game has gone straight on to his Shadow phase.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(shadowHand, scn.GetShadowHandCount());
 		assertEquals(shadowDeck, scn.GetShadowDeckCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -218,10 +218,9 @@ public class Card_V1_063_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(7);
-		// Frodo arrives at Nen Hithoel alone and the Shadow player says no to a draw of nothing.
+		// Frodo arrives at Nen Hithoel alone, which is nothing to draw for and so nothing to answer.
 		scn.FreepsPass();
 		assertEquals("Nen Hithoel", scn.GetCurrentSite().getBlueprint().getTitle());
-		scn.ShadowDeclineOptionalTrigger();
 
 		// With no minion to fight, the turn comes to the choice of a second move.  Four Guards join Frodo first.
 		scn.SkipToMovementDecision();
@@ -249,7 +248,6 @@ public class Card_V1_063_Tests
 		scn.FreepsPass();
 		var nen = scn.GetCurrentSite();
 		assertEquals("Nen Hithoel", nen.getBlueprint().getTitle());
-		scn.ShadowDeclineOptionalTrigger();
 		scn.SkipToOtherPlayersTurn();
 
 		// The second player's fellowship is still at site 7: his Frodo and four of his Guards.
