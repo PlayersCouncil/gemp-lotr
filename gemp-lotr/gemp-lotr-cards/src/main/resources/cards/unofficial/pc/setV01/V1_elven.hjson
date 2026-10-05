@@ -381,9 +381,8 @@
 						type: memorizenumber
 						memory: stackedCultures
 						amount:{
-							type: forEachCulture
-							over: 0
-							filter: cultureFromMemory(stackedCards)
+							type: forEachCultureInMemory
+							memory: stackedCards
 						}
 					}
 					{

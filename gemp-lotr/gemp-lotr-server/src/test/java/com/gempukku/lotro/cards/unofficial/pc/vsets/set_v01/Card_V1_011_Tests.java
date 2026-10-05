@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -573,7 +572,6 @@ public class Card_V1_011_Tests
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
-	@Ignore("F-0020: a culture on a card stacked here is only counted if a card of that culture is also in play")
 	@Test
 	public void CulturesStackedHereAreCountedWhetherOrNotACardOfThatCultureIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
