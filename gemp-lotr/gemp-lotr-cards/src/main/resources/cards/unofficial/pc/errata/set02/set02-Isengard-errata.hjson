@@ -282,11 +282,11 @@
 					player: freeps
 					cost: {
 						type: DiscardTopCardsFromDeck
-						count: 6
+						count: 5
 						forced: false
 						deck: freeps
 					}
-					text: Discard the top 6 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
+					text: Discard the top 5 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						select: memory(chosenCard)
@@ -297,7 +297,7 @@
 				}
 			]	
 		}
-		gametext: If the Ring-bearer puts on The One Ring, spot an [isengard] minion to take a minion into hand from your draw deck.  The Free Peoples player may discard the top 6 cards of their draw deck to prevent this.
+		gametext: If the Ring-bearer puts on The One Ring, spot an [isengard] minion to take a minion into hand from your draw deck.  The Free Peoples player may discard the top 5 cards of their draw deck to prevent this.
 		lore: "'A little more caution from you – that is not a trinket you carry.'"
 		promotext: ""
 		alts: {

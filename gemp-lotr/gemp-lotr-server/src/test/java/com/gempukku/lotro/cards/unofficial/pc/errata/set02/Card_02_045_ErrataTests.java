@@ -46,7 +46,7 @@ public class Card_02_045_ErrataTests
 		* Type: event
 		* Subtype: Response
 		* Game Text: If the Ring-bearer puts on The One Ring, spot an [isengard] minion to take a minion into hand
-		 * from your draw deck.  The Free Peoples player may discard the top 6 cards of their
+		 * from your draw deck.  The Free Peoples player may discard the top 5 cards of their
 		 * draw deck to prevent this.
 		*/
 
@@ -162,8 +162,8 @@ public class Card_02_045_ErrataTests
 		assertEquals(7, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetFreepsDeckCount());
-		assertEquals(6, scn.GetFreepsDiscardCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(5, scn.GetFreepsDiscardCount());
 		assertEquals(Zone.DISCARD,  attention.getZone());
 		assertEquals(Zone.DECK,  sauron.getZone());
 	}
