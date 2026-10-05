@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.VitalityModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -405,7 +404,6 @@ public class Card_V1_034_Tests
 	}
 
 	@Test
-	@Ignore("F-0036: the Shadow action is offered, and does nothing, when no tentacle stacked here can be played")
 	public void ShadowActionIsNotOfferedWhenNoTentacleHereCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

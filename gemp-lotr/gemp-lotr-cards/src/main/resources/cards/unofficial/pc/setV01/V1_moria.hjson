@@ -399,16 +399,9 @@
 				type: activated
 				phase: shadow
 				effect: {
-					type: If
-					check: {
-						type: canSpot
-						filter: self,hasStacked(tentacle)
-					}
-					true: {
-						type: playCardFromStacked
-						select: choose(tentacle)
-						on: self
-					}
+					type: playCardFromStacked
+					select: choose(tentacle)
+					on: self
 				}
 			}
 			{
