@@ -54,10 +54,11 @@ step where you can, and do not look at the same thing twice.
    parked test should fail against the card as it is and pass against the correction. Where the author kept an
    old reading active beside the parked one (a question), that active test is the one failure to expect against
    the correction; on a card with two questions each parked test also fails under the other's correction, so
-   look for the parked test's own name missing from the failing list. Where the wrong text is in another card's
-   definition, use a probe. For a question about how a sentence is to be parsed, look at how other cards with
-   the same shape of sentence are worded and built (`grep` the game texts). For a question parked with `Q-...`,
-   check that the rules and the rulings log really do not settle it.
+   look for the parked test's own name missing from the failing list. Report every active test that fails
+   against the correction, not only the one written for the question: those are what the correction breaks.
+   Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
+   to be parsed, look at how other cards with the same shape of sentence are worded and built (`grep` the game
+   texts). For a question parked with `Q-...`, check that the rules and the rulings log really do not settle it.
 
 5. **Check the existing tests were not lost.** If the card had behavioural tests before, compare with
    `git show HEAD:<path to the test file>`. Anything the old tests asserted that the new ones no longer do should

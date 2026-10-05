@@ -115,7 +115,9 @@ files are found at their usual paths and need no mention. For each card give:
 ## The mistake-maker on a busy machine
 
 One `mutate.py` run at a time for each `--out` name, and one card at a time: runs that share a name share a
-working folder. Run a card with many mistakes in the background and read its output file; meanwhile do work
-that does not need it, or wait with one long `sleep` (eight or nine minutes) before looking. Before calling a
-"narrowed to culture(...)" survivor on a name harmless, look for a card of that name in another culture
-(Aragorn, Defender of Rohan is a [rohan] Aragorn).
+working folder. `cardtest.py run` under the same name has a folder of its own and may go on meanwhile;
+`cardtest.py probe` shares one folder with every other agent unless given `--out <your folder name>`. Run a
+card with many mistakes in the background and read its output file; meanwhile do work that does not need it,
+or wait with one long `sleep` (eight or nine minutes) before looking. Before calling a "narrowed to
+culture(...)" survivor on a name or a race harmless, look for a card of that name or race in another culture
+(Aragorn, Defender of Rohan is a [rohan] Aragorn; Ulaire Attea, Khamul of the East 103_61 is a [raider] Nazgûl).

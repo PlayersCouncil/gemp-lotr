@@ -50,14 +50,18 @@ assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 ```
 
 The constructor builds two identical decks from the alias map, so both players own a copy of every card:
-`GetFreepsCard("x")` and `GetShadowCard("x")` are different physical cards. It also runs the bid (player 1 bids 1
-and goes first) and puts the opening hands back on the decks. `StartGame()` skips starting fellowships and
-mulligans and removes the bid burden, so a test starts with 0 burdens, an empty twilight pool, and only the cards
-it placed itself. Defaults when a constructor argument is left out: King-block sites, Frodo 10_121 as
-Ring-bearer, The Ruling Ring, the `multipath` format.
+`GetFreepsCard("x")` and `GetShadowCard("x")` are different physical cards. Each stays in its owner's draw deck
+until moved, so a helper added for one test is there to be found in every test of a card that searches a deck.
+The constructor also runs the bid (player 1 bids 1 and goes first) and puts the opening hands back on the decks.
+`StartGame()` skips starting fellowships and mulligans and removes the bid burden, so a test starts with 0
+burdens, an empty twilight pool, and only the cards it placed itself. Defaults when a constructor argument is
+left out: King-block sites, Frodo 10_121 as Ring-bearer, The Ruling Ring, the `multipath` format.
 
 "Freeps" methods act for player 1 and "Shadow" methods for player 2. On player 2's turn the roles are the other
 way round: player 2 is the one moving a fellowship, so the `Shadow…` methods are then the Free Peoples player's.
+`AwaitingFellowshipPhaseActions()` and `AwaitingShadowPhaseActions()` are fixed to their seats: on player 2's
+turn use `ShadowDecisionAvailable("Play Fellowship action or Pass")` and
+`FreepsDecisionAvailable("Play Shadow action or Pass")`.
 
 ### Cheating and legal play
 
@@ -110,11 +114,14 @@ means to inspect a choice has to supply one more valid candidate than the choice
 one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
 minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
+A choice between piles goes the same way: "from your draw deck or discard pile" is not asked when only one pile
+has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision.
 
 **Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its
 costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
 no burdens to remove. To test that an effect finds nothing to do, use the action, check the cost was paid, and
-check the game is back at the phase's actions.
+check the game is back at the phase's actions. An event is the same: with nothing for its effect to act on it
+is still offered, and playing it pays for it and discards it.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -142,7 +149,8 @@ other, so give the candidates in such a choice different blueprints.
 
 **A check on a player who is not being asked anything answers false.** The availability and card-choice checks
 return false, and the readers of a decision's parameters return null, when that player has no pending decision.
-The methods that *answer* a decision still fail, as they should.
+The methods that *answer* a decision still fail, as they should, the plain pass methods apart (see "Answers
+that are refused" below).
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
@@ -179,7 +187,13 @@ still the old one (an "each time the fellowship moves" trigger, offered before t
 answered by the skipper's next pass, which declines it. The test arrives in the new phase with nothing pending
 and nothing done. To test such a trigger, pass the phase yourself with `FreepsPassCurrentPhaseAction()` and
 answer the trigger; keep cards with optional triggers out of other tests' scenarios, or put them down after
-skipping.
+skipping. In the fellowship phase the skipper passes for the Free Peoples player alone, so a trigger offered
+to the Shadow player there is never answered and the skipper stops ("halted in phase FELLOWSHIP ... after 20
+attempts") without a word about the pending decision. From maneuver on it passes for both, and a trigger of
+the Shadow player's (Ringwraith in Twilight 101_40, at the start of maneuver) uses up a pass: the test arrives
+with the Free Peoples player's pass in the new phase already spent and the Shadow player holding the decision,
+and `FreepsAssignToMinions` then fails with a `NullPointerException`. A trigger at the start of the target
+phase itself is left pending, as a test of it needs.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
@@ -224,7 +238,9 @@ rule, whatever is being asked.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
-deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show.
+deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show. A card played from the
+deck onto a bearer, or an event played from it, reads two more where the definition shuffles as well: the play
+itself shuffles as the card leaves the deck. A card played from the deck to the table or support area reads one.
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
@@ -259,7 +275,8 @@ it enters play, and a modifier whose filter is a physical card holds the id it h
 `ApplyAdHocModifier(new VitalityModifier(null, vile, null, 1))` before `MoveMinionsToTable(vile)` does nothing
 and says nothing. A modifier with a general filter (a card type, a keyword) can go on at any time, and where the
 card has to be played legally afterwards, build the modifier on a filter and not on the card:
-`scn.GenerateShadowFilter("name(Goblin Armory)")`.
+`scn.GenerateShadowFilter("name(Goblin Armory)")`, which throws `InvalidCardDefinitionException`
+(`com.gempukku.lotro.cards.build`) for the test method to declare.
 
 **Answers that are refused when they do not fit what is asked.** `FreepsResolveRuleFirst()` and
 `FreepsResolveActionOrder(text)` fail the test unless the Free Peoples player is being asked to order required
@@ -268,7 +285,8 @@ optional is noticed. `FreepsDismissRevealedCards()` and `ShadowDismissRevealedCa
 being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown some and fails if nobody is.
 `FreepsGetTotalRevealedCardCount()` and its Shadow twin count the cards a player is being shown, 0 if none.
 `FreepsChooseOptionalTrigger(card)` fails unless that very card is offering. The plain pass methods are not like
-this: a pass with nothing pending does nothing and says nothing, so do not write one "to be safe"
+this: a pass with nothing pending does nothing and says nothing, and `FreepsPassCurrentPhaseAction()` and its
+Shadow twin answer whatever is pending with nothing, an optional trigger included. Do not write one "to be safe".
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
@@ -307,8 +325,12 @@ into a scenario; a name is not evidence of what a card does.
 | Wounds in the regroup phase | Morgul Slayer | 3_93 | Strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to read "until the regroup phase" at its boundary |
 | A Shadow card a companion bears | Spider Poison | 8_28 | Possession; its bearer must exert each time it is assigned to a skirmish, and nothing else |
 | An Aragorn who is not [gondor] | Aragorn, Defender of Rohan | 17_93 | The only Aragorn of another culture ([rohan]), and no signet; his text does nothing unless the Ring-bearer is assigned to a skirmish. Without him a `name(Aragorn)` filter narrowed to [gondor] passes every test. Aragorn signet: 1_365 (optional start-of-turn trigger, so put him down after `StartGame()`), 4_364. Gandalf signet: 1_89, 4_109. There is no Boromir outside [gondor] |
-| A tentacle that stays put | Vile Tentacle | 101_36 | The only tentacle not discarded away from a marsh. Reaching (19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh, make every site one with an ad hoc keyword |
+| A tentacle that stays put | Vile Tentacle | 101_36 | The only tentacle not discarded away from a marsh. Reaching (19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh, make every site one with an ad hoc keyword; for a marsh with a site after it that is not one, put Midgewater Marshes (1_332; each Hobbit exerts on moving there) in the site map as site 2 |
 | A way to discard a [moria] condition | Song of Durin | 3_5 | Free Peoples event: "discard up to 2 [moria] conditions" |
+| Other ways to discard Shadow cards | Sleep, Caradhras | 1_84 | Fellowship event: exert Gandalf to discard every condition. One [sauron] minion, condition or possession of the Free Peoples player's choosing: Stand Against Darkness 1_63 (maneuver; exert an Elf). Every Shadow card a minion bears, of whatever types, at once: Fall Back 5_34, with City Wall 5_33 cheated onto the minion. The Shadow player discarding his own [sauron] condition as a cost: Orc Veteran 3_100 |
+| A Ring-bound companion who is not the Ring-bearer | Sam, Son of Hamfast | 1_311 | Strength 3, vitality 4; Ring-bound by rule. A fellowship ability that is only ever used on purpose, and a response when Frodo dies. Without him "the Ring-bearer" written as `ring-bound` passes every test |
+| A Nazgûl who is not [ringwraith] | Ulaire Attea, Khamul of the East | 103_61 | [raider], strength 12, vitality 3; his text needs 3 burdens. Fierce, so keep him out of tests that run past the skirmishes |
+| A twilight Nazgûl | Úlairë Nelya, Ringwraith in Twilight | 2_84 | Strength 10, vitality 3; nothing else below 2 burdens and below 2 wounds on the Ring-bearer. Úlairë Attëa 2_82 is another, cheated in (when played, may wound an ally); 2_83, 2_85 and 3_86 have optional "wins a skirmish" triggers. A Nazgûl neither twilight nor fierce: Úlairë Lemenya 1_232. Twilight and no Nazgûl: Corpse Lights 6_99 |
 
 The sites of `FellowshipSites`, for tests that turn on terrain or on where the fellowship is:
 
