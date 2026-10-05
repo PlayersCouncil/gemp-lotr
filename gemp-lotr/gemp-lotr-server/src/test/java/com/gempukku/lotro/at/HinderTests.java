@@ -1494,7 +1494,7 @@ public class HinderTests
 
         scn.SkipToAssignments();
         assertEquals(1, scn.FreepsGetFreepsAssignmentTargetCount());
-        assertFalse(scn.FreepsGetFreepsAssignmentTargets().contains(aragorn.getCardId()));
+        assertFalse(scn.FreepsGetFreepsAssignmentTargets().contains(String.valueOf(aragorn.getCardId())));
     }
 
     //@Test
@@ -1540,7 +1540,7 @@ public class HinderTests
         scn.PassFierceSkirmishActions();
 
         assertEquals(1, scn.FreepsGetFreepsAssignmentTargetCount());
-        assertFalse(scn.FreepsGetFreepsAssignmentTargets().contains(aragorn.getCardId()));
+        assertFalse(scn.FreepsGetFreepsAssignmentTargets().contains(String.valueOf(aragorn.getCardId())));
     }
 
     @Test
