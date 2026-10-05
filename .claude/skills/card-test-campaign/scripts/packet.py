@@ -68,7 +68,9 @@ def main(argv):
         if test:
             text = test.read_text(encoding="utf-8", errors="replace")
             n = active_test_count(text)
-            print("- Test file: %s (%d active tests, the stat check included)" % (g.rel(test), n))
+            parked = len(re.findall(r"^\s*@Ignore\b", text, re.M))
+            print("- Test file: %s (%d active tests, the stat check included%s)"
+                  % (g.rel(test), n - parked, ", and %d parked" % parked if parked else ""))
         else:
             print("- Test file: none yet")
         ledger = g.ledger_path(card_id)

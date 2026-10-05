@@ -4,6 +4,10 @@
     mutate.py <id> [--out <name>]           makes its own mistakes and lists the survivors
     mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs
     mutate.py <id> --all                    lists every mistake and what noticed it
+    mutate.py <id> --replace <old> <new> --with-parked
+                                            runs the parked (@Ignore) tests too, and says which tests fail: with
+                                            the correction a finding proposes as the "mistake", a sound parked
+                                            test is one that passes here and fails against the card as it is
     mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
 
 Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off either way, a
@@ -32,7 +36,7 @@ NUMBER = re.compile(r"^(\s*)([A-Za-z]+)(\s*:\s*)(-?\d+)\s*$")
 RANGE = re.compile(r"^(\s*)([A-Za-z]+)(\s*:\s*)(\d+)-(\d+)\s*$")
 UNTIL = re.compile(r"^(\s*)(until)(\s*:\s*)(?:(start|end)\()?(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\)?\s*$", re.I)
 PHASES = ["fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"]
-FLAG = re.compile(r"^(\s*)(optional|forced|shuffle|showAll|player)(\s*:\s*)(true|false)\s*$", re.I)
+FLAG = re.compile(r"^(\s*)(optional|forced|shuffle|showAll|reveal)(\s*:\s*)(true|false)\s*$", re.I)
 PHASE = re.compile(r"^(\s*)(phase)(\s*:\s*)(fellowship|shadow|maneuver|archery|assignment|skirmish|regroup)\s*$", re.I)
 FILTER = re.compile(r"^(\s*)(filter|select|on|against|target|bearer|from|to|where)(\s*:\s*)(.+?)\s*$")
 DEFAULTED = re.compile(r"^(\s*)(on|where|fromZone|against)\s*:\s*\S")
@@ -154,7 +158,7 @@ def mistakes(lines: list, culture: str = "") -> list:
                 add(i, "until: %s becomes %s" % (line.split(":", 1)[1].strip(), other), new)
             # ...and then on to "until removed" below.
         m = FLAG.match(line)
-        if m and m.group(2).lower() in ("optional", "forced"):
+        if m and m.group(2).lower() in ("optional", "forced", "shuffle", "showall", "reveal"):
             flipped = "false" if m.group(4).lower() == "true" else "true"
             new = lines[:]
             new[i] = "%s%s%s%s" % (m.group(1), m.group(2), m.group(3), flipped)
@@ -265,6 +269,7 @@ def run_tests(cwd: Path, cp: str, test_class: str):
 
 def main(argv):
     skip = set()
+    with_parked = "--with-parked" in argv
     for flag, width in (("--out", 1), ("--replace", 2), ("--nth", 1)):
         if flag in argv:
             i = argv.index(flag)
@@ -314,15 +319,23 @@ def main(argv):
         shutil.rmtree(base)
     classes.mkdir(parents=True)
     cp = cardtest.classpath(classes)
-    javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(classes), "-cp", cp, str(test)],
+    source = test
+    if with_parked:
+        # A copy of the test file with its @Ignore lines taken off, so that the parked tests run too.
+        source = base / "src" / test.name
+        source.parent.mkdir(parents=True)
+        source.write_text(re.sub(r"(?m)^\s*@Ignore\b.*\n", "", test.read_text(encoding="utf-8")), encoding="utf-8")
+    javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(classes), "-cp", cp, str(source)],
                            cwd=g.SERVER, env=cardtest.env(), capture_output=True, text=True)
     if javac.returncode != 0:
         print(javac.stdout + javac.stderr)
         raise SystemExit("The test file does not compile.")
     test_class = g.test_class_name(test)
 
-    verdict, _ = run_tests(g.SERVER, cp, test_class)
-    if verdict != "survived":
+    verdict, failing = run_tests(g.SERVER, cp, test_class)
+    if with_parked:
+        print("With the parked tests switched on, against the card as it is: %s" % ("all pass" if verdict == "survived" else "failing: " + failing))
+    elif verdict != "survived":
         raise SystemExit("The tests do not pass against the card as it is; fix that first.")
 
     def one(n):
@@ -345,7 +358,7 @@ def main(argv):
         counts[verdict] += 1
         if verdict == "survived":
             print("  SURVIVED  line %d: %s" % (card.line + i, what))
-        elif "--all" in argv:
+        elif "--all" in argv or with_parked:
             print("  %-9s line %d: %s%s" % (verdict, card.line + i, what, "  (" + failed + ")" if failed else ""))
     print("%d noticed, %d survived, %d made the card unloadable" % (counts["noticed"], counts["survived"], counts["invalid"]))
     shutil.rmtree(base, ignore_errors=True)

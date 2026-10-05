@@ -41,7 +41,12 @@ its test file, and compare the ledger with yours. A
 4. **Try to knock down every finding and every parked test.** For a test parked with `@Ignore("F-...")`, the
    claim is that the game is wrong. Look for the rule or ruling that would make the game right:
    `rules.py card <id>`, `rules.py term <word>`, `rules.py grep <phrase>`. If you find one, the finding is a
-   misreading; say so and cite it. If you cannot, say that you tried and what you looked at. For a question
+   misreading; say so and cite it. If you cannot, say that you tried and what you looked at. Then check the parked
+   test is sound: `mutate.py <id> --replace "<the wrong text>" "<the correction>" --with-parked` runs the parked
+   tests too, and should report the parked test failing against the card as it is and every test passing
+   ("survived") against the correction. For a question about how a sentence is to be parsed, look at how other
+   cards with the same shape of sentence are worded and built (`grep` the game texts): it is often the best
+   evidence there is. For a question
    parked with `Q-...`, check that the rules really do not settle it.
 
 5. **Check the existing tests were not lost.** If the card had behavioural tests before, compare with

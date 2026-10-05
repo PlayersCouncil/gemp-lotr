@@ -205,6 +205,36 @@ asking the Free Peoples player which goes first, and the next action fails with 
 `GetCardActionId` that says nothing of why. Put the second such card down after `StartGame()`, or answer the
 ordering with `FreepsResolveActionOrder(text)`.
 
+**The by-card availability checks have the same blind spot, for now.** `FreepsActionAvailable(card)` looks for an
+action of that card worded "Use <card name>". An ability whose definition gives it its own `text:` (Library of
+Rivendell's "Stack your tale or artifact from play") is never seen, and `assertFalse` with it proves nothing (rig
+request G-0009). For such a card ask by wording, `FreepsActionAvailable("Stack your tale")`, and choose with
+`FreepsChooseAction(text)`.
+
+**The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
+fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
+
+**The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
+else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
+
+**An optional trigger at the start of the turn is the first thing asked.** A card with an optional
+start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`, leaves its offer pending when
+`StartGame()` returns. Answer it, or put the card down afterwards.
+
+**`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
+the way. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. And as
+the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
+until some legal action has been taken.
+
+**A card being shown is listed as not selectable.** A real reveal gives every player, the owner included, a
+"Revealed card(s)" decision to dismiss, in which `FreepsHasCardChoiceAvailable(card)` answers false:
+`FreepsHasCardChoiceAvailable(card, false)` is the reading for a card that is shown. A definition that only sets
+`reveal: true` on moving a card writes a line in the game log and shows nobody anything.
+
+**Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
+`IsAdditionalRaceModifier` gives a card a second culture or race, and filters see it. That is how to tell a
+filter written with a race from one written with a culture when every card of the race has the culture.
+
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
 skirmishes that are not about him.
@@ -225,6 +255,8 @@ into a scenario; a name is not evidence of what a card does.
 | A minion with damage +1 and nothing else | Uruk-hai Raiding Party | 1_158 | Strength 9, vitality 3, cost 4, site 5; Damage +1 is its whole text |
 | A Shadow archer and nothing else | Goblin Marksman | 1_176 | Strength 7, vitality 1, cost 3, site 4; Archer is its whole text |
 | An item that changes no number | Dwarven Armor | 1_8 | Possession, cost 0, bearer must be a Dwarf; bearer may not be overwhelmed unless strength is tripled |
+| A weak minion that survives a hit | Uruk Savage | 1_151 | Strength 5, vitality 3; Damage +1 is its whole text. An unboosted strength-6 companion beats it without killing it |
+| Wounds in the regroup phase | Morgul Slayer | 3_93 | Strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to read "until the regroup phase" at its boundary |
 | A Shadow card a companion bears | Spider Poison | 8_28 | Possession; its bearer must exert each time it is assigned to a skirmish, and nothing else |
 
 The sites of `FellowshipSites`, for tests that turn on terrain or on where the fellowship is:

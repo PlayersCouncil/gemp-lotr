@@ -18,7 +18,8 @@ Before anything else, read these three files in full. They are short and everyth
 
 For each card: its test file and its ledger file meet the standard, `lint.py <id>` reports no errors,
 `cardtest.py run <id>` passes (apart from tests parked on a finding or question), and you have reported back as
-described at the end. Or the card is parked, and your report says exactly what is holding it.
+described at the end. A card with a test or two parked on a finding or question is still `READY`: say what is
+parked. `PARKED` is for a card you could not finish, and your report then says exactly what is holding it.
 
 The ledger is a file of its own, at the path `packet.py <id>` prints as "Ledger file". Nothing of it goes into
 the test file: no ledger comment, no clause ids, no tags above tests. The test file is what Ketura reads, and she
@@ -85,6 +86,11 @@ definitions, not the engine, not the rig, not other cards' tests, not git, not t
 If a check cannot be written with the rig's existing methods, do not write a helper method and do not reach into
 the engine. Leave the check untested and report a rig request: what the test needed to do, the method signature
 you would propose, and which rig interface it belongs in.
+
+Keep your scratch files under `/tmp/<your folder name>/` whatever else you have been told about scratch space:
+the reviewer and the orchestrator look for probes there. `mutate.py` starts a Java process for every mistake and
+can take ten minutes on a busy machine: run it in the background with its output sent to a file, and read the
+file when it is done.
 
 ## Reporting back
 

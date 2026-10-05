@@ -161,7 +161,10 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   only claimant, because that check is not being exercised.
 - `Dropped:` is for a card that had behaviour tests before: anything they asserted that the new tests do not,
   and why, or `none`. A reviewer compares the old file with the new and should find nothing this line does not
-  account for.
+  account for. Name the kinds of card the old tests used and what stands in for each now (an archer who is not
+  unique, an item of the card's own culture). An old assertion on the game's own wording of a decision need not
+  be listed. A dropped assertion that belongs to the rules and not the card (the Rule of 4) is listed, so that a
+  mechanic test can pick it up.
 - `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
   (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
   all why a check the wording seems to call for was left off. Each may run onto following lines. Put `Sources:`
@@ -181,7 +184,7 @@ then claimed by a test.
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
-| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", a companion and an ally; for "each minion", minions of two cultures), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. Where the text picks cards out by title and a type word ("these characters: Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower named Saruman). Where a word is in one filter of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid candidates of the second vary in it. Where the text names two places a card is taken from ("from play or from hand"), the candidates are laid out in each. An "or" inside the noun phrase ("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. |
 | `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
 | `L` | A limit holds: it works up to the limit and is refused or capped beyond it. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
@@ -202,6 +205,10 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "for each", "X" → `S` (and for an X, the zero case)
 - "each time" → `R`
 - "or", "choose one" → `B`
+- "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
+  (some effects affect only what was there when they were used): a test that a card which becomes one of them
+  afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
+  card's to show. (The rule speaks of events; reading it across to abilities awaits Ketura, Q-0011.)
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
@@ -329,7 +336,10 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`. Where the existing
   test's reading goes against the plain text, do both: the existing reading stays active and a test of the
   text's reading is written and parked, ready to go live on a ruling. The parked test may claim a check an active
-  test already claims.
+  test already claims. **Parking is for a test the game fails.** A test of the likelier reading that the game
+  already passes stays active, with the question on the ledger's `Findings:` line: switched off, it would take
+  away the one thing that notices a mistake there. A doubt that no reachable board can raise (two cards of one
+  title, possible only with sets outside the campaign) is a line in Notes and not a question.
 - **The card turns on a PC mechanic that neither rules document covers.** What the card's own text says happens
   can be asserted. What the mechanic then *does* is a question for Ketura: park any assertion that depends on it
   with a `Q-`. (Hinder, restore, relentless and items are covered: `rules.py term hinder`.)
