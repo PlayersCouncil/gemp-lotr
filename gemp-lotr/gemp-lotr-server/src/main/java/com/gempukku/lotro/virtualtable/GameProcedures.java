@@ -3,6 +3,8 @@ package com.gempukku.lotro.virtualtable;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 /**
  * These functions are for progressing through the game itself.  For instance, if your test is really about battle
@@ -400,11 +402,40 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 
 
-	default void FreepsDismissRevealedCards() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDismissRevealedCards() { ShadowPassCurrentPhaseAction(); }
+	/**
+	 * Dismisses the cards the Free Peoples player is being shown.  It is an error to call this when that player
+	 * is not being shown cards.
+	 */
+	default void FreepsDismissRevealedCards() { DismissRevealedCards(P1()); }
+
+	/**
+	 * Dismisses the cards the Shadow player is being shown.  It is an error to call this when that player is not
+	 * being shown cards.
+	 */
+	default void ShadowDismissRevealedCards() { DismissRevealedCards(P2()); }
+
+	default void DismissRevealedCards(String playerID) {
+		Verify(BeingShownCards(playerID), playerID + " is not being shown any cards to dismiss.");
+		PlayerDecided(playerID, "");
+	}
+
+	default boolean BeingShownCards(String playerID) {
+		AwaitingDecision decision = userFeedback().getAwaitingDecision(playerID);
+		return decision != null && decision.getDecisionType() == AwaitingDecisionType.ARBITRARY_CARDS;
+	}
+
+	/**
+	 * Dismisses the cards being shown to whichever players are being shown some, the Free Peoples player first.
+	 * It is an error to call this when neither player is being shown cards.
+	 */
 	default void DismissRevealedCards() {
-		FreepsDismissRevealedCards();
-		ShadowDismissRevealedCards();
+		boolean freeps = BeingShownCards(P1());
+		if(freeps)
+			PlayerDecided(P1(), "");
+		boolean shadow = BeingShownCards(P2());
+		if(shadow)
+			PlayerDecided(P2(), "");
+		Verify(freeps || shadow, "Neither player is being shown any cards to dismiss.");
 	}
 
 }

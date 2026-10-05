@@ -135,7 +135,6 @@ public class Card_01_055_Tests
 		scn.FreepsUseCardAction(mirror);
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		scn.FreepsChooseAny();
 		assertEquals(1, scn.GetWoundsOn(galadriel));

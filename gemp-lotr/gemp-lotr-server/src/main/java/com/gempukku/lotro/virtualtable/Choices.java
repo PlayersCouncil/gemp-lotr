@@ -1,7 +1,9 @@
 package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,14 +134,27 @@ public interface Choices extends Decisions {
 	 * pick a specific one.
 	 * @param card Which of the triggering cards to pick
 	 */
-	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P1(), "cardId", String.valueOf(card.getCardId())); }
+	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card) { ChooseOptionalTrigger(P1(), card); }
 
 	/**
 	 * Used in situations where there are simultaneous triggers from cards with the same title and we need to
 	 * pick a specific one.
 	 * @param card Which of the triggering cards to pick
 	 */
-	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseAction(P2(), "cardId", String.valueOf(card.getCardId())); }
+	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card) { ChooseOptionalTrigger(P2(), card); }
+
+	/**
+	 * Takes the trigger or response that the given card is offering the given player.  The card is matched exactly:
+	 * with cards 4 and 40 both offering, asking for 4 takes 4.
+	 * @param playerID The player being offered the actions.
+	 * @param card Which of the offering cards to pick.
+	 */
+	default void ChooseOptionalTrigger(String playerID, PhysicalCardImpl card) {
+		String[] cardIds = GetAwaitingDecisionParam(playerID, "cardId");
+		int index = cardIds == null ? -1 : Arrays.asList(cardIds).indexOf(String.valueOf(card.getCardId()));
+		Verify(index >= 0, GameUtils.getFullName(card) + " is not offering " + playerID + " a trigger or response to choose.");
+		PlayerDecided(playerID, String.valueOf(index));
+	}
 	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}
@@ -169,14 +184,29 @@ public interface Choices extends Decisions {
 			ChooseCardBPFromSelection(P1(), FreepsGetBPChoices().getFirst());
 		}
 		else {
-			FreepsResolveRuleFirst();
+			ChooseAction(P1(), "actionText", GetADParamAsList(P1(), "actionText").getFirst());
 		}
 	}
 
-    default void FreepsResolveRuleFirst() {
-		FreepsResolveActionOrder(GetADParamAsList(P1(), "actionText").getFirst());
+	/**
+	 * Where required actions happen at the same moment (the wound for losing a skirmish and a card's "each time
+	 * ... loses a skirmish", say), the Free Peoples player is asked which goes first.  This takes the first one
+	 * listed, which is the game's own rule where a rule is among them.  It is an error to call it when the Free
+	 * Peoples player is not being asked to order required responses: an optional trigger on offer is not that.
+	 */
+	default void FreepsResolveRuleFirst() {
+		Verify(FreepsAwaitingRequiredResponseOrder(),
+				"FreepsResolveRuleFirst: the Free Peoples player is not being asked to order required responses.");
+		ChooseAction(P1(), "actionText", GetADParamAsList(P1(), "actionText").getFirst());
 	}
-    default void FreepsResolveActionOrder(String option) {
+
+	/**
+	 * As FreepsResolveRuleFirst, but takes the required action whose description contains the given text.
+	 * @param option Text to look for in the description of the action to resolve first.
+	 */
+	default void FreepsResolveActionOrder(String option) {
+		Verify(FreepsAwaitingRequiredResponseOrder(),
+				"FreepsResolveActionOrder: the Free Peoples player is not being asked to order required responses.");
 		ChooseAction(P1(), "actionText", option);
 	}
 
@@ -217,17 +247,21 @@ public interface Choices extends Decisions {
 	}
 
 	/**
-	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
+	 * @return How many cards the Free Peoples player is currently being shown, whether or not any may be chosen.
 	 */
-	default int FreepsGetTotalRevealedCardCount() {
-		return GetADParamEqualsCount(P1(), "selectable", "true");
-	}
+	default int FreepsGetTotalRevealedCardCount() { return GetTotalRevealedCardCount(P1()); }
 
 	/**
-	 * @return Gets how many of the currently displayed cards are selectable for a Shadow decision.
+	 * @return How many cards the Shadow player is currently being shown, whether or not any may be chosen.
 	 */
-	default int ShadowGetGetTotalRevealedCardCount() {
-		return GetADParamEqualsCount(P2(), "selectable", "true");
+	default int ShadowGetTotalRevealedCardCount() { return GetTotalRevealedCardCount(P2()); }
+
+	default int GetTotalRevealedCardCount(String playerID) {
+		AwaitingDecision decision = GetAwaitingDecision(playerID);
+		if(decision == null || decision.getDecisionType() != AwaitingDecisionType.ARBITRARY_CARDS)
+			return 0;
+		String[] cardIds = GetAwaitingDecisionParam(playerID, "cardId");
+		return cardIds == null ? 0 : cardIds.length;
 	}
 
 	default boolean FreepsHasBPChoice(PhysicalCardImpl card) { return FreepsGetBPChoices().contains(card.getBlueprintId()); }

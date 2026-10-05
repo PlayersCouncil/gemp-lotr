@@ -261,9 +261,14 @@ and says nothing. A modifier with a general filter (a card type, a keyword) can 
 card has to be played legally afterwards, build the modifier on a filter and not on the card:
 `scn.GenerateShadowFilter("name(Goblin Armory)")`.
 
-**`FreepsResolveRuleFirst()` takes the first action of whatever is pending.** That includes an optional-responses
-decision. A test that drives a required trigger through it does not notice the trigger being made optional:
-assert `FreepsDecisionAvailable("Required responses")` and no optional trigger first.
+**Answers that are refused when they do not fit what is asked.** `FreepsResolveRuleFirst()` and
+`FreepsResolveActionOrder(text)` fail the test unless the Free Peoples player is being asked to order required
+responses (`FreepsAwaitingRequiredResponseOrder()` reads that), so a required trigger that has wrongly become
+optional is noticed. `FreepsDismissRevealedCards()` and `ShadowDismissRevealedCards()` fail unless that player is
+being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown some and fails if nobody is.
+`FreepsGetTotalRevealedCardCount()` and its Shadow twin count the cards a player is being shown, 0 if none.
+`FreepsChooseOptionalTrigger(card)` fails unless that very card is offering. The plain pass methods are not like
+this: a pass with nothing pending does nothing and says nothing, so do not write one "to be safe"
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next

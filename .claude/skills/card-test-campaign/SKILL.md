@@ -228,8 +228,6 @@ running processes do not, so commit and send often.
 ## Reference
 
 - `roles/author.md`, `roles/review-and-fix.md`, `roles/fixer.md`: the briefs given to sub-agents.
-  (`roles/reviewer.md` is the review-only brief of the four-stage pipeline, kept until the last runs launched
-  under it have finished.)
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `references/rulings-log.md`: what Ketura has ruled.
 - `assets/tracker_template.html`: the tracker page; `tracker.py html` fills it.

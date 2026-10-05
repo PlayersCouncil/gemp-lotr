@@ -164,8 +164,7 @@ public class Card_V3_090_Tests
 		assertEquals(0, scn.GetBurdens());
 
 		scn.FreepsPlayCard(herb);
-		scn.DismissRevealedCards();  // First reveal - nothing there
-		scn.DismissRevealedCards();  // Second reveal - still nothing
+		scn.DismissRevealedCards();  // The deck is shown, with no pipe in it; with none played it is not shown again
 
 		assertEquals(0, scn.GetBurdens());
 		assertInDiscard(herb);
@@ -190,8 +189,6 @@ public class Card_V3_090_Tests
 
 		// Decline first pipe
 		scn.FreepsPass();
-
-		scn.DismissRevealedCards();
 
 		// Decline second pipe
 		scn.FreepsChoose("");

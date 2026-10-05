@@ -1,10 +1,13 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,7 +17,9 @@ import static org.junit.Assert.*;
 
 /**
  * Tests of the rig itself: the checks that read what a decision is offering by the card it concerns (an optional
- * trigger, an assignment, one of several actions of a card), and the count of how often a deck has been shuffled.
+ * trigger, an assignment, one of several actions of a card), the count of how often a deck has been shuffled, and
+ * the answers that are refused when what they answer is not what is being asked (the order of required responses,
+ * a showing of cards, an optional trigger of a card that is not offering one).
  */
 public class DecisionReadingTests
 {
@@ -42,6 +47,10 @@ public class DecisionReadingTests
 					put("deck3", "1_3");
 
 					put("runner", "1_178");         // Goblin Runner
+					// Thrashing Tentacle: fierce, vitality 2.  "Each time this minion loses a skirmish, add a burden",
+					// a required trigger that falls at the same moment as the wound for losing.  It is discarded when
+					// not at a marsh, so the test that uses it makes every site one.
+					put("thrashing", "101_33");
 				}},
 				// Site 1 is Bag End: "Fellowship: Exert a Hobbit to play The Gaffer from your draw deck."
 				VirtualTableScenario.FellowshipSites,
@@ -185,5 +194,112 @@ public class DecisionReadingTests
 		assertEquals(freeps + 1, scn.GetFreepsDeckShuffleCount());
 		// The other player's deck is untouched.
 		assertEquals(shadow, scn.GetShadowDeckShuffleCount());
+	}
+
+	// Runs the call and says whether the rig refused it.
+	private static boolean Refused(Runnable call) {
+		try {
+			call.run();
+		}
+		catch (AssertionError refusal) {
+			return true;
+		}
+		return false;
+	}
+
+	@Test
+	public void OrderingRequiredResponsesIsRefusedWhenAnOptionalTriggerIsWhatIsOnOffer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var three = scn.GetFreepsCard("three");
+		var elrond = scn.GetFreepsCard("elrond");
+		var vilya = scn.GetFreepsCard("vilya");
+		scn.MoveCardsToSupportArea(three);
+		scn.MoveAlliesToTable(elrond);
+		scn.AttachCardsTo(elrond, vilya);
+		scn.MoveCardsToHand(scn.GetFreepsCard("aragorn"));
+
+		scn.StartGame();
+		// Nothing of the kind is being asked in the fellowship phase.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(Refused(scn::FreepsResolveRuleFirst));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		// An optional trigger is on offer.  It is not an ordering of required responses, and is not taken as one.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(three));
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(Refused(scn::FreepsResolveRuleFirst));
+		assertTrue(Refused(() -> scn.FreepsResolveActionOrder("Three")));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(three));
+
+		// Nor is the trigger taken by naming a card that is not offering one.
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(vilya)));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(three));
+
+		scn.FreepsChooseOptionalTrigger(three);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(three));
+	}
+
+	@Test
+	public void RequiredResponsesAtTheSameMomentAreOrderedByTheFreePeoplesPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var thrashing = scn.GetShadowCard("thrashing");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
+
+		scn.StartGame();
+		// With a burden to spot, the tentacle adds one and not two.
+		scn.AddBurdens(1);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.MoveMinionsToTable(thrashing);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, thrashing);
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.PassSkirmishActions();
+
+		// The wound for losing and the tentacle's burden fall together, and the Free Peoples player says which is first.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(0, scn.GetWoundsOn(thrashing));
+		assertEquals(1, scn.GetBurdens());
+
+		scn.FreepsResolveRuleFirst();
+
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(1, scn.GetWoundsOn(thrashing));
+		assertEquals(2, scn.GetBurdens());
+	}
+
+	@Test
+	public void ShownCardsAreCountedAndDismissedOnlyByThePlayerBeingShownThem() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gaffer = scn.GetFreepsCard("gaffer");
+
+		scn.StartGame();
+
+		// Nobody is being shown anything in the fellowship phase.
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(0, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(Refused(scn::FreepsDismissRevealedCards));
+		assertTrue(Refused(scn::ShadowDismissRevealedCards));
+		assertTrue(Refused(scn::DismissRevealedCards));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Bag End looks through the Free Peoples player's draw deck, which that player alone is shown.
+		int deck = scn.GetFreepsDeckCount();
+		scn.FreepsUseCardAction(scn.GetCurrentSite());
+		assertEquals(deck, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(0, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(Refused(scn::ShadowDismissRevealedCards));
+		assertEquals(deck, scn.FreepsGetTotalRevealedCardCount());
+
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(gaffer);
+		assertInZone(Zone.SUPPORT, gaffer);
 	}
 }

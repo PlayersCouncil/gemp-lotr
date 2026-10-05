@@ -167,8 +167,10 @@ These functions are for progressing through the game itself.  For instance, if y
 - `void SkipToPhaseInverted(Phase target)`
 - `void SkipToSite(int siteNum)`
 - `void SkipCurrentSite()`
-- `void FreepsDismissRevealedCards()  ·  ShadowDismissRevealedCards`
-- `void DismissRevealedCards()`
+- `void FreepsDismissRevealedCards()  ·  ShadowDismissRevealedCards` — Dismisses the cards that player is being shown.
+- `void DismissRevealedCards(String playerID)`
+- `boolean BeingShownCards(String playerID)`
+- `void DismissRevealedCards()` — Dismisses the cards being shown to whichever players are being shown some, the Free Peoples player first.
 
 ## Playing and using cards
 
@@ -232,6 +234,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean FreepsHasOptionalTriggerAvailable()  ·  ShadowHasOptionalTriggerAvailable`
 - `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable`
 - `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card)` — Checks by the physical card each offered action belongs to, so a trigger whose definition words its own prompt is found, and another copy of the same card does not answer for this one.
+- `boolean FreepsAwaitingRequiredResponseOrder()`
 - `boolean FreepsHasOptionalTriggerAvailable(String text)  ·  ShadowHasOptionalTriggerAvailable`
 - `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger`
 - `void FreepsDeclineOptionalTrigger()  ·  ShadowDeclineOptionalTrigger`
@@ -260,18 +263,19 @@ Decisions will always come with at least one choice, even if that single choice 
 - `void FreepsChooseNo()  ·  ShadowChooseNo` — Causes that player to return a canned "No" response to a Yes or No question.
 - `void FreepsChooseOption(String option)  ·  ShadowChooseOption`
 - `void FreepsChooseOptionalTrigger(PhysicalCardImpl card)  ·  ShadowChooseOptionalTrigger` — Used in situations where there are simultaneous triggers from cards with the same title and we need to pick a specific one.
+- `void ChooseOptionalTrigger(String playerID, PhysicalCardImpl card)` — Takes the trigger or response that the given card is offering the given player.
 - `void ChooseOption(String playerID, String option)`
 - `void FreepsChooseAction(String paramName, String option)  ·  ShadowChooseAction`
 - `void FreepsChooseAction(String option)  ·  ShadowChooseAction`
 - `void ChooseAction(String playerID, String paramName, String option)`
 - `void FreepsChooseAny()`
-- `void FreepsResolveRuleFirst()`
-- `void FreepsResolveActionOrder(String option)`
+- `void FreepsResolveRuleFirst()` — Where required actions happen at the same moment (the wound for losing a skirmish and a card's "each time ...
+- `void FreepsResolveActionOrder(String option)` — As FreepsResolveRuleFirst, but takes the required action whose description contains the given text.
 - `int FreepsGetChoiceMin()  ·  ShadowGetChoiceMin`
 - `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax`
 - `int FreepsGetSelectableCount()  ·  ShadowGetSelectableCount`
-- `int FreepsGetTotalRevealedCardCount()`
-- `int ShadowGetGetTotalRevealedCardCount()`
+- `int FreepsGetTotalRevealedCardCount()  ·  ShadowGetTotalRevealedCardCount`
+- `int GetTotalRevealedCardCount(String playerID)`
 - `boolean FreepsHasBPChoice(PhysicalCardImpl card)  ·  ShadowHasBPChoice`
 - `List<String> FreepsGetBPChoices()  ·  ShadowGetBPChoices`
 - `int FreepsGetBPChoiceCount()  ·  ShadowGetBPChoiceCount`
@@ -489,4 +493,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-381 entries, 257 of them with no description in the source.
+385 entries, 256 of them with no description in the source.

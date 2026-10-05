@@ -101,7 +101,6 @@ public class Card_17_015_Tests
 
 		assertTrue(scn.FreepsDecisionAvailable("hand"));
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		assertTrue(scn.FreepsDecisionAvailable("choose cards from hand"));
 		assertEquals(3, scn.GetShadowHandCount());

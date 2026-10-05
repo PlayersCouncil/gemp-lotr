@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -76,9 +77,6 @@ public class Card_92_029_Tests
 		// Step 1: Choose a booster pack
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
 
-		// Step 2: Opponent dismisses the revealed cards
-		scn.FreepsDismissRevealedCards();
-
 		// Step 3: Shadow player picks a shadow card to play — pick Goblin Backstabber (1_174)
 		scn.ChooseCardBPFromSelection(scn.P2, "1_174");
 
@@ -106,9 +104,6 @@ public class Card_92_029_Tests
 		// Step 1: Choose a booster pack
 		scn.ShadowChooseCardBPFromSelection("FotR - Booster");
 
-		// Step 2: Opponent dismisses the revealed cards
-		scn.FreepsDismissRevealedCards();
-
 		assertEquals(11, scn.ShadowGetBPChoiceCount());
 	}
 
@@ -128,9 +123,6 @@ public class Card_92_029_Tests
 		// Step 1: Choose a booster pack
 		scn.ShadowChooseCardBPFromSelection("REF - Booster");
 
-		// Step 2: Opponent dismisses the revealed cards
-		scn.FreepsDismissRevealedCards();
-
 		assertEquals(18, scn.ShadowGetBPChoiceCount());
 	}
 
@@ -148,7 +140,6 @@ public class Card_92_029_Tests
 		assertTrue(scn.ShadowActionAvailable(mod));
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
 		// Decline to play any card
 		scn.ShadowPassCurrentPhaseAction();
 
@@ -182,8 +173,6 @@ public class Card_92_029_Tests
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
-
 		// Decline to play (empty response = select 0 cards)
 		scn.ShadowPassCurrentPhaseAction();
 
@@ -206,8 +195,6 @@ public class Card_92_029_Tests
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
-
 		// Cave Troll requires a Moria Orc — none on the table, but should still be selectable
 		scn.ChooseCardBPFromSelection(scn.P2, "1_165");
 
@@ -233,8 +220,6 @@ public class Card_92_029_Tests
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
-
 		// Alive and Unspoiled requires exerting an Uruk-hai — none present, but should still work
 		scn.ChooseCardBPFromSelection(scn.P2, "1_120");
 
@@ -264,7 +249,6 @@ public class Card_92_029_Tests
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
 		scn.ChooseCardBPFromSelection(scn.P2, "1_165");
 
 		var caveTroll = scn.GetLastCreatedCard();
@@ -290,8 +274,6 @@ public class Card_92_029_Tests
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
-
 		// Cantea (1_230) should be visible but NOT selectable since it's already in play.
 		// The selectable shadow cards should be: 1_174 (Backstabber), 1_165 (Cave Troll), 1_120 (Alive and Unspoiled)
 		// but NOT 1_230 (Cantea, unique duplicate) and NOT 1_286 (Bounder, FP card).
@@ -313,11 +295,31 @@ public class Card_92_029_Tests
 
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
-		scn.FreepsDismissRevealedCards();
-
 		// Bounder (1_286) is FP — should not be selectable
 		assertFalse(scn.ShadowHasBPChoiceAvailable("1_286"));
 		// But shadow cards should be
 		assertTrue(scn.ShadowHasBPChoiceAvailable("1_174"));
+	}
+
+	@Test
+	@Ignore("F-0039: the opened pack is not shown to the other player, though the text says 'Open and reveal'")
+	public void TheOpenedPackIsShownToTheOtherPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowUseCardAction(mod);
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+
+		// A revealed card is shown to all players.  The tests above each had the Free Peoples player dismiss the
+		// pack at this point; nothing was being shown, and the dismissal did nothing.
+		assertTrue(scn.FreepsGetTotalRevealedCardCount() > 0);
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.ShadowGetTotalRevealedCardCount() > 0);
 	}
 }

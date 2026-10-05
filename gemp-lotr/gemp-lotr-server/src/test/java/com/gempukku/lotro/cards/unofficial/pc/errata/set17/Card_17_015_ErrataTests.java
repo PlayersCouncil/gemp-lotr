@@ -101,7 +101,6 @@ public class Card_17_015_ErrataTests
 
 		assertTrue(scn.FreepsDecisionAvailable("hand"));
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		assertTrue(scn.FreepsDecisionAvailable("choose cards from hand"));
 		assertEquals(4, scn.GetShadowHandCount());

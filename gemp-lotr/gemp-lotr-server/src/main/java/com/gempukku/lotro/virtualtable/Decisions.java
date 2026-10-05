@@ -276,6 +276,13 @@ public interface Decisions extends TableBase {
 		return Arrays.stream(texts).anyMatch(x -> x.toLowerCase().contains(name));
 	}
 
+	/**
+	 * @return True if the Free Peoples player is being asked in which order required actions that happen at the
+	 * same moment are to be resolved.  By rule it is always the Free Peoples player who is asked, whoever's the
+	 * actions are.
+	 */
+	default boolean FreepsAwaitingRequiredResponseOrder() { return FreepsDecisionAvailable("Required responses"); }
+
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))
 			return false;
