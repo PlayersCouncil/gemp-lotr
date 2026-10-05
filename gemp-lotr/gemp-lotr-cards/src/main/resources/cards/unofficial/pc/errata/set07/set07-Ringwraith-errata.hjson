@@ -65,7 +65,7 @@
 				}
 			}
 		]
-		gametext: When you play this minion, you may spot a Nazgûl to add a threat. The<br>Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +4.
+		gametext: When you play this minion, you may spot a Nazgûl to add a threat. The<br>Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +3.
 		lore: ""
 		promotext: ""
 		alts: {

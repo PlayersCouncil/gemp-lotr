@@ -43,7 +43,7 @@ public class Card_07_190_ErrataTests
 		* Vitality: 2
 		* Site Number: 4
 		* Game Text: When you play this minion, you may spot a Nazgûl to add a threat. The
-		* 	Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +4.
+		* 	Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +3.
 		*/
 
 		//Pre-game setup
