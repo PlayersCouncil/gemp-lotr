@@ -205,10 +205,10 @@
 
 	101_9: {
 		cardInfo: {
-			//id: 101_10
+			//id: 101_9
 			image: sets/vset1/LOTR-ENV1S009.1_card.jpg
 			revision: 1
-			collInfo: V1R10
+			collInfo: V1R9
 			rarity: R
 		}
 		title: Legolas
