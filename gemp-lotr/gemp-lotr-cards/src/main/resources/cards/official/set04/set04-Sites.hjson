@@ -1665,6 +1665,12 @@
 					type: movesTo
 					filter: self
 				}
+				# Not offered when there is nothing to draw for (Q-0033).
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 5
+				}
 				effect: {
 					type: drawCards
 					count: {

@@ -1758,10 +1758,17 @@
 				type: movesTo
 				filter: self
 			}
-			requires: {
-				type: isSide
-				side: shadow
-			}
+			requires: [
+				{
+					type: isSide
+					side: shadow
+				}
+				# Not offered when there is nothing to draw for (Q-0033).
+				{
+					type: canSpotBurdens
+					amount: 1
+				}
+			]
 			effect: {
 				type: drawCards
 				count: {
