@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -374,7 +373,6 @@ public class Card_V1_014_Tests
 	}
 
 	@Test
-	@Ignore("F-0023: a follower titled Saruman is counted as one of 'these characters', and Gandalf is strength 8")
 	public void ASarumanWhoIsAFollowerIsNotOneOfTheseCharacters() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

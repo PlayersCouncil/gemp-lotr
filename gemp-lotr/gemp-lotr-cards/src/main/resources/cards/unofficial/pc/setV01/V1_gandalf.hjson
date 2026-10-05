@@ -178,7 +178,7 @@
 					filter: self
 					amount: {
 						type: ForEachYouCanSpot
-						filter: or(name(Elrond),name(Galadriel),name(Celeborn),name(Saruman))
+						filter: character,or(name(Elrond),name(Galadriel),name(Celeborn),name(Saruman))
 					}
 				}
 			}
