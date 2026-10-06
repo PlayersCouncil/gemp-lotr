@@ -185,18 +185,13 @@
 		timewords: Assignment
 		effects: {
 			type: event
-			requires: [
-				{
-					type: CanSpotCultureTokens
-					culture: isengard
-					filter: machine
-					memorize: tokenCount
-				}
-				{
-					type: CanSpot
-					filter: uruk-hai,MaxTwilight(memory(tokenCount))
-				}
-			]
+			# An event is offered whenever its cost can be paid, whatever its effect will do (Q-0034): it used
+			# to be withheld while no Uruk-hai cost as little as the tokens on machines.
+			requires: {
+				type: CanSpotCultureTokens
+				culture: isengard
+				filter: machine
+			}
 			cost: [
 				{
 					type: ChooseANumber
