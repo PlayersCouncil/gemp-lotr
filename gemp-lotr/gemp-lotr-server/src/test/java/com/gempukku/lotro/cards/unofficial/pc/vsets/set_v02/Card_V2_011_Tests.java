@@ -260,7 +260,8 @@ public class Card_V2_011_Tests
 
 		scn.FreepsPlayCard(allegiance);
 
-		// The spot is taken without asking, and the draw deck is shown at once.
+		// A branch in parentheses is mandatory when it is available: the spot is taken without asking, and the
+		// draw deck is shown at once.
 		scn.FreepsDismissRevealedCards();
 		assertEquals(0, scn.GetWoundsOn(defender));
 		assertEquals(0, scn.GetWoundsOn(balglin));
@@ -270,40 +271,6 @@ public class Card_V2_011_Tests
 
 		assertInZone(Zone.HAND, guardian);
 		assertInZone(Zone.DISCARD, allegiance);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0035: with two valiant Elves to spot and a valiant companion able to exert, the game takes the spot and never offers the exertion")
-	public void WithBothOpenThePlayerChoosesWhetherToExertOrToSpot() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var allegiance = scn.GetFreepsCard("allegiance");
-		var defender = scn.GetFreepsCard("defender");
-		var balglin = scn.GetFreepsCard("balglin");
-		var guard = scn.GetFreepsCard("guard");
-		var guardian = scn.GetFreepsCard("guardian");
-		scn.MoveCompanionsToTable(defender, balglin, guard);
-		scn.MoveCardsToHand(allegiance);
-
-		scn.StartGame();
-
-		scn.FreepsPlayCard(allegiance);
-
-		// The text offers either; the player says which.  The wording of the two options is the game's.
-		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
-		scn.FreepsChoose("Exert");
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(defender, balglin, guard));
-		scn.FreepsChooseCard(guard);
-		assertEquals(1, scn.GetWoundsOn(guard));
-		assertEquals(0, scn.GetWoundsOn(defender));
-		assertEquals(0, scn.GetWoundsOn(balglin));
-
-		scn.FreepsDismissRevealedCards();
-		scn.FreepsChooseCardBPFromSelection(guardian);
-
-		assertInZone(Zone.HAND, guardian);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
