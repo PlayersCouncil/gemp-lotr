@@ -7,7 +7,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -317,31 +316,21 @@ public class Card_V2_072_Tests
 	}
 
 	@Test
-	@Ignore("F-0093: the Shadow player is offered a site he controls himself when it came from the other player's adventure deck")
-	public void TheShadowPlayerIsNotOfferedASiteHeControls() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NeitherPlayerIsOfferedASiteTheShadowPlayerControls() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var stairs = scn.GetFreepsCard("stairs");
 		var toby = scn.GetFreepsCard("toby");
 		var pinned = scn.GetShadowCard("pinned");
 		var scaffolding = scn.GetShadowCard("scaffolding");
-		var troop = scn.GetShadowCard("troop");
-		var spear = scn.GetShadowCard("spear");
-		var poison = scn.GetShadowCard("poison");
 		// Site 1 on the path is from the Free Peoples player's adventure deck, site 2 from the Shadow player's.
 		var bagEnd = scn.GetFreepsSite(1);
 		var ettenmoors = scn.GetShadowSite(2);
 
 		scn.StartGame();
-		scn.SkipToSite(6);
+		scn.SkipToSite(7);
 
 		scn.MoveCardsToSupportArea(stairs, toby, pinned, scaffolding);
-		// The rig takes a site for the Shadow player during his Shadow phase, and only while he has nothing he
-		// could play: the rest of his Shadow cards are put out of his hand.
-		scn.MoveCardsToDiscard(troop, spear, poison);
-		scn.FreepsPass();
-		assertEquals(7, scn.GetCurrentSiteNumber());
-
 		// A controlled site lies in the support area of the player who controls it, whoever's card it is.
 		scn.ShadowTakeControlOfSite();
 		scn.ShadowTakeControlOfSite();
@@ -349,27 +338,112 @@ public class Card_V2_072_Tests
 		assertTrue(scn.ShadowControls(ettenmoors));
 		assertInZone(Zone.SUPPORT, bagEnd, ettenmoors);
 
-		// No minions, so no skirmishes; the fellowship moves a second time, from site 7 to the Desolation.
-		scn.SkipToMovementDecision();
-		scn.FreepsChooseToMove();
+		scn.FreepsPass();
 		assertEquals("Desolation of Saruman", scn.GetCurrentSite().getBlueprint().getTitle());
 
+		// Both sites are in the Shadow player's support area, and the Free Peoples player is offered neither:
+		// not the Shadow player's own card, and not the one from his own adventure deck.
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
-		scn.FreepsChooseNo();
+		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, scaffolding));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bagEnd, ettenmoors, stairs, toby));
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCard(pinned);
 
-		// The Shadow player's opponent controls no site.  Both sites are in the Shadow player's own support area,
-		// and he is offered neither: only the Free Peoples player's condition and possession.
+		assertInDiscard(pinned);
+
+		// The Shadow player's opponent controls no site, and he is not offered the ones he controls himself:
+		// only the Free Peoples player's condition and possession.
 		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard"));
 		scn.ShadowChooseYes();
 		assertTrue(scn.ShadowHasCardChoiceAvailable(stairs, toby));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bagEnd, ettenmoors, pinned, scaffolding));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bagEnd, ettenmoors, scaffolding));
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(toby);
 
 		assertInDiscard(toby);
-		assertInZone(Zone.SUPPORT, stairs, pinned, scaffolding, bagEnd, ettenmoors);
+		assertInZone(Zone.SUPPORT, stairs, scaffolding, bagEnd, ettenmoors);
 		assertTrue(scn.ShadowControls(bagEnd));
 		assertTrue(scn.ShadowControls(ettenmoors));
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheFreePeoplesPlayerIsNotAskedWhenTheShadowPlayersSupportAreaHoldsOnlySitesHeControls() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var stairs = scn.GetFreepsCard("stairs");
+		var toby = scn.GetFreepsCard("toby");
+		// Site 1 on the path is from the Free Peoples player's adventure deck, site 2 from the Shadow player's.
+		var bagEnd = scn.GetFreepsSite(1);
+		var ettenmoors = scn.GetShadowSite(2);
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+
+		// The Shadow player's support area holds two sites he controls and nothing else.
+		scn.MoveCardsToSupportArea(stairs, toby);
+		scn.ShadowTakeControlOfSite(ettenmoors);
+		scn.ShadowTakeControlOfSite(bagEnd);
+		assertInZone(Zone.SUPPORT, bagEnd, ettenmoors);
+
+		scn.FreepsPass();
+		assertEquals("Desolation of Saruman", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		// There is nothing the Free Peoples player could discard, so he is not asked.  The Shadow player is.
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to discard"));
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard"));
+		scn.ShadowChooseYes();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(stairs, toby));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bagEnd, ettenmoors));
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(stairs);
+
+		assertInDiscard(stairs);
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to discard"));
+		assertInZone(Zone.SUPPORT, toby, bagEnd, ettenmoors);
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheShadowPlayerIsNotAskedWhenTheFreePeoplesPlayersSupportAreaHoldsOnlySitesHeControls() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pinned = scn.GetShadowCard("pinned");
+		var scaffolding = scn.GetShadowCard("scaffolding");
+		// Site 1 on the path is from the Free Peoples player's adventure deck, site 2 from the Shadow player's.
+		var bagEnd = scn.GetFreepsSite(1);
+		var ettenmoors = scn.GetShadowSite(2);
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+
+		// The first player controls two sites, as he would had he taken them on the other player's turns, and has
+		// nothing else in his support area.
+		scn.MoveCardsToSupportArea(pinned, scaffolding);
+		scn.FreepsTakeControlOfSite(ettenmoors);
+		scn.FreepsTakeControlOfSite(bagEnd);
+		assertTrue(scn.FreepsControls(bagEnd));
+		assertTrue(scn.FreepsControls(ettenmoors));
+		assertInZone(Zone.SUPPORT, bagEnd, ettenmoors);
+
+		scn.FreepsPass();
+		assertEquals("Desolation of Saruman", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
+		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, scaffolding));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bagEnd, ettenmoors));
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCard(scaffolding);
+
+		assertInDiscard(scaffolding);
+		// There is nothing the Shadow player could discard, so he is not asked.
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to discard"));
+		assertInZone(Zone.SUPPORT, pinned, bagEnd, ettenmoors);
+		assertEquals(2, scn.GetFreepsControlledSiteCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

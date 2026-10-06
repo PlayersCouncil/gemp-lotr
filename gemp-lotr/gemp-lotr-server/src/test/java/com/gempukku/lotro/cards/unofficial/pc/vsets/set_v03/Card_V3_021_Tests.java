@@ -442,10 +442,10 @@ public class Card_V3_021_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertInZone(Zone.DISCARD, runner);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		assertAttachedTo(banner, king);
 		assertEquals(3, scn.GetThreats());
-		scn.FreepsChooseAction("wound 2 minions");
+		scn.FreepsChooseOptionalTrigger(banner, "wound 2 minions");
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage1, savage2, troop));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(king, deadman, boromir));
@@ -499,8 +499,8 @@ public class Card_V3_021_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(1, scn.GetWoundsOn(savage1));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Exert a Wraith"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertAttachedTo(banner, king);
@@ -532,8 +532,8 @@ public class Card_V3_021_Tests
 
 		assertInZone(Zone.DISCARD, runner);
 		// The first sentence is offered for the win; the response is not.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Exert a Wraith"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertAttachedTo(banner, king);

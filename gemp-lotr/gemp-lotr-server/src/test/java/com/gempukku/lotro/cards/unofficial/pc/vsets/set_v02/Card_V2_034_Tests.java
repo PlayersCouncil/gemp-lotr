@@ -196,7 +196,6 @@ public class Card_V2_034_Tests
 	public void BattlegroundsTheOtherPlayerControlsCountForNeitherText() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var lastChild = scn.GetShadowCard("lastchild");
 		var theirOccupier = scn.GetFreepsCard("occupier");
 		var theirOccupier2 = scn.GetFreepsCard("occupier2");
 		var theirAxeStrike = scn.GetFreepsCard("axestrike");
@@ -207,16 +206,12 @@ public class Card_V2_034_Tests
 		var site2 = scn.GetSite(2);
 		var site4 = scn.GetSite(4);
 		var site5 = scn.GetSite(5);
-		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 10);
-		scn.FreepsPass();
-
-		// Player 2, the Shadow player this turn, takes control of sites 1 to 5: three battlegrounds.
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
+		// Player 2, the Shadow player this turn, controls sites 1 to 5: three battlegrounds.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.ShadowControls(site2));
 		assertTrue(scn.ShadowControls(site4));
 		assertTrue(scn.ShadowControls(site5));
@@ -268,20 +263,22 @@ public class Card_V2_034_Tests
 		// Every card of the Shadow player's is put where it is wanted: the turns skipped have filled his hand.
 		scn.MoveCardsToDiscard(occupier, occupier2);
 		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 10);
+		// Enough to take control of one site by legal play, which makes the game look again at what is on offer.
+		scn.AddTokensToCard(lastChild, 2);
 		// A Shadow card and a Free Peoples card in hand.
 		scn.MoveCardsToHand(savage, axeStrike);
 		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("trail"), scn.GetShadowCard("authority"));
+		// Sites 1 to 4 are his before the Shadow phase begins.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
 
 		// 1 for Frodo + 6 for Helm's Tower
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(2, scn.GetShadowHandCount());
 
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
 		// Four sites controlled, two of them battlegrounds.
 		assertEquals(4, scn.GetShadowControlledSiteCount());
 		assertTrue(scn.ShadowControls(site4));
@@ -324,24 +321,21 @@ public class Card_V2_034_Tests
 
 		var occupier = scn.GetShadowCard("occupier");
 		var savage = scn.GetShadowCard("savage");
-		var lastChild = scn.GetShadowCard("lastchild");
 
 		scn.StartGame();
 		scn.SkipToSite(6);
 
 		scn.MoveCardsToDiscard(occupier);
-		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 10);
 		scn.MoveCardsToHand(savage);
 		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("occupier2"), scn.GetShadowCard("axestrike"),
-				scn.GetShadowCard("trail"), scn.GetShadowCard("authority"));
+				scn.GetShadowCard("trail"), scn.GetShadowCard("authority"), scn.GetShadowCard("lastchild"));
+		// Sites 1 to 5: three battlegrounds.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
-
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
 
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(1, scn.GetShadowHandCount());
@@ -372,16 +366,19 @@ public class Card_V2_034_Tests
 
 		scn.MoveCardsToDiscard(occupier);
 		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 10);
+		// Enough to take control of one site by legal play, which costs nothing from the pool and makes the
+		// game look again at what is on offer.
+		scn.AddTokensToCard(lastChild, 2);
 		scn.MoveCardsToHand(savage, axeStrike);
 		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("occupier2"), scn.GetShadowCard("trail"), scn.GetShadowCard("authority"));
+		// Sites 1 to 4 are his before the Shadow phase begins.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
 
 		scn.SetTwilight(2);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
 		scn.ShadowUseCardAction(lastChild);
 
 		// Three battlegrounds and two cards in hand, and a pool of 2 where the Occupier costs 3.
@@ -412,41 +409,36 @@ public class Card_V2_034_Tests
 
 		var occupier = scn.GetShadowCard("occupier");
 		var savage = scn.GetShadowCard("savage");
-		var lastChild = scn.GetShadowCard("lastchild");
 		var axeStrike = scn.GetShadowCard("axestrike");
 
 		scn.StartGame();
-		// Helm's Tower, the fourth battleground, is site 7: it can be taken once both markers are beyond it,
-		// which is with the fellowship moved on from site 8.
+		// Helm's Tower, the fourth battleground, is site 7: it can be controlled once both markers are beyond
+		// it, which is with both fellowships at site 8.
 		scn.SkipToSite(8);
 
 		var site5 = scn.GetSite(5);
 		var site7 = scn.GetSite(7);
 		scn.MoveCardsToDiscard(occupier);
-		scn.MoveCardsToSupportArea(lastChild);
-		// Enough to take control of seven sites.
-		scn.AddTokensToCard(lastChild, 14);
 		scn.MoveCardsToHand(savage, axeStrike);
-		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("occupier2"), scn.GetShadowCard("trail"), scn.GetShadowCard("authority"));
+		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("occupier2"), scn.GetShadowCard("trail"), scn.GetShadowCard("authority"),
+				scn.GetShadowCard("lastchild"));
+		// Sites 1 to 5: three battlegrounds.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.ShadowControls(site5));
+		assertFalse(scn.IsSiteControlled(site7));
+		// Sites 6 and 7 as well: four battlegrounds, and who controls 4 controls 3.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
 
 		// 1 for Frodo + 9 for Palantir Chamber
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertEquals(10, scn.GetTwilight());
 
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		// Sites 1 to 5: three battlegrounds.
-		assertTrue(scn.ShadowControls(site5));
-		assertFalse(scn.IsSiteControlled(site7));
-		assertTrue(scn.ShadowActionAvailable(occupier));
-
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		// Sites 6 and 7 as well: four battlegrounds, and who controls 4 controls 3.
 		assertTrue(scn.ShadowControls(site7));
 		assertTrue(scn.HasKeyword(site7, Keyword.BATTLEGROUND));
 		assertEquals(7, scn.GetShadowControlledSiteCount());
@@ -481,17 +473,20 @@ public class Card_V2_034_Tests
 		scn.MoveCardsToSupportArea(authority);
 		scn.MoveCardsToDiscard(occupier);
 		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 10);
+		// Enough to take control of one site by its own ability, which is a special ability and not a minion's.
+		scn.AddTokensToCard(lastChild, 2);
 		scn.MoveCardsToHand(savage, axeStrike);
 		scn.MoveCardsToBottomOfDeck(scn.GetShadowCard("occupier2"), scn.GetShadowCard("trail"), scn.GetShadowCard("authority"));
+		// Sites 1 to 4 are his before the Shadow phase begins, and the fifth is taken by Down to the Last Child.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
 
+		assertEquals(5, scn.GetShadowControlledSiteCount());
 		assertEquals(7, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(occupier));
 		// Taking control of a site is a condition's ability and was not answered.

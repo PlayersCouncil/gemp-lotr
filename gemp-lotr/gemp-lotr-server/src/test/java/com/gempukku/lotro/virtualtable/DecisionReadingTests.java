@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.framework.Assertions.*;
@@ -17,7 +18,8 @@ import static org.junit.Assert.*;
 
 /**
  * Tests of the rig itself: the checks that read what a decision is offering by the card it concerns (an optional
- * trigger, an assignment, one of several actions of a card), the count of how often a deck has been shuffled, and
+ * trigger, an assignment, one of several actions of a card, one of two optional actions that a card offers at the
+ * same moment), the count of how often a deck has been shuffled, and
  * the answers that are refused when what they answer is not what is being asked (the order of required responses,
  * a showing of cards, an optional trigger of a card that is not offering one).
  */
@@ -173,10 +175,11 @@ public class DecisionReadingTests
 		var elrond = scn.GetFreepsCard("elrond");
 		var gaffer = scn.GetFreepsCard("gaffer");
 		scn.MoveAlliesToTable(elrond);
-		// Elrond draws the top card; The Gaffer must not be it (the deck's order is random, and he was 1 time in 12).
-		scn.MoveCardsToBottomOfDeck(gaffer);
 
 		scn.StartGame();
+		// Elrond draws the top card; The Gaffer must not be it (the deck's order is random, and he was 1 time in 12).
+		// He is put at the bottom once the game has started: the decks are shuffled as it starts.
+		scn.MoveCardsToBottomOfDeck(gaffer);
 
 		int freeps = scn.GetFreepsDeckShuffleCount();
 		int shadow = scn.GetShadowDeckShuffleCount();
@@ -320,12 +323,283 @@ public class DecisionReadingTests
 		assertTrue(scn.FreepsDecisionAvailable("is about to"));
 		assertEquals(0, scn.GetWoundsOn(savage));
 
+		// Neither is the game's own rule, so there is no rule to resolve first: one of the two is named.
+		assertTrue(Refused(scn::FreepsResolveRuleFirst));
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(0, scn.GetWoundsOn(savage));
+
 		scn.FreepsResolveActionOrder("Uruk Shield Wall");
 
 		// The first copy prevented the wound and exerted him; nothing is left for the second to answer.
 		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	protected VirtualTableScenario GetDeathScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// King of the Dead, Dead Keeper: "Each time King of the Dead is killed, heal every Wraith."  A
+					// required trigger of the Free Peoples player's own, which the game lists before the rule.
+					put("king", "103_27");
+					put("deadman", "10_27");        // Dead Man of Dunharrow: a Wraith, vitality 3
+					// Ferocious Haradrim: strength 12.  "Each time a Free Peoples character is killed, each of your
+					// [men] minions is strength +3 until the regroup phase."  A required trigger of the Shadow
+					// player's, which the game lists after the rule.  An archer, so he is put down in the regroup phase.
+					put("haradrim", "11_80");
+					put("guard", "1_7");            // Dwarf Guard: vitality 2
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: vitality 4
+					// Morgul Slayer: "Regroup: Exert this minion to wound a companion (except the Ring-bearer)."
+					put("slayer", "3_93");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void TheRuleIsResolvedFirstThoughACardsTriggerIsListedBeforeIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeathScenario();
+
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(king, deadman);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer);
+		// Vitality 4 with 3 wounds
+		scn.AddWoundsToChar(king, 3);
+		scn.AddWoundsToChar(deadman, 1);
+		scn.AddThreats(1);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(king);
+
+		// A companion's death turns the threat into a wound, by rule, and sets off the King's own text.  The
+		// King's trigger is listed first; the rule is second, and the game gives it no wording.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(Arrays.asList("103_27", "rules"), scn.FreepsGetADParamAsList("blueprintId"));
+		assertNull(scn.FreepsGetADParamAsList("actionText").get(1));
+		assertEquals(1, scn.GetWoundsOn(deadman));
+
+		scn.FreepsResolveRuleFirst();
+
+		// The rule and not the first thing listed: the threat's wound is being placed, and nobody is healed yet.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertInZone(Zone.DEAD, king);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman));
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		scn.FreepsChooseCard(deadman);
+
+		// 1 + 1 for the threat, and then the King's healing: 1.
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACardsTriggerIsNamedPastARuleThatHasNoWording() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeathScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var haradrim = scn.GetShadowCard("haradrim");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(guard, aragorn);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(haradrim, slayer);
+		// Vitality 2 with 1 wound
+		scn.AddWoundsToChar(guard, 1);
+		scn.AddThreats(1);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(guard);
+
+		// Here the rule is listed first, with no wording, and the card's trigger second.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(Arrays.asList("rules", "11_80"), scn.FreepsGetADParamAsList("blueprintId"));
+		assertNull(scn.FreepsGetADParamAsList("actionText").get(0));
+		assertEquals(12, scn.GetStrength(haradrim));
+
+		scn.FreepsResolveActionOrder("Ferocious Haradrim");
+
+		// The card's trigger went first: the threat's wound is still to be placed and the Haradrim is already +3.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertInZone(Zone.DEAD, guard);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(15, scn.GetStrength(haradrim));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheRuleWithNoWordingIsResolvedFirstWhereItIsListedFirst() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeathScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var haradrim = scn.GetShadowCard("haradrim");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(guard, aragorn);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(haradrim, slayer);
+		// Vitality 2 with 1 wound
+		scn.AddWoundsToChar(guard, 1);
+		scn.AddThreats(1);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(guard);
+
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(Arrays.asList("rules", "11_80"), scn.FreepsGetADParamAsList("blueprintId"));
+		assertEquals(12, scn.GetStrength(haradrim));
+
+		scn.FreepsResolveRuleFirst();
+
+		// The rule went first: the threat's wound is being placed and the Haradrim is not yet stronger.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertInZone(Zone.DEAD, guard);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertEquals(12, scn.GetStrength(haradrim));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(15, scn.GetStrength(haradrim));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	protected VirtualTableScenario GetTwoOffersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Ethereal Banner: "Each time bearer wins a skirmish, you may exert a Wraith and a minion it is
+					// assigned to skirmish.  Response: If bearer overwhelms a minion, discard this possession and
+					// remove 2 threats to wound 2 minions."  A win that is an overwhelm sets off both, and both are
+					// this one card's: the game words them "Exert a Wraith and a minion it is assigned to" and
+					// "Discard this and remove 2 threats to wound 2 minions".
+					put("banner", "103_21");
+					// King of the Dead, Oathbreaker: a [gondor] Wraith, strength 7, vitality 4, enduring.  With two
+					// wounds he is 11, more than double a Goblin Runner's 5.
+					put("king", "8_38");
+					put("runner", "1_178");         // Goblin Runner: strength 5, vitality 1
+					put("savage1", "1_151");        // Uruk Savage: vitality 3, and nothing to say about any of this
+					put("savage2", "1_151");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void OneOfTwoOptionalActionsOfACardIsFoundAndTakenByItsWording() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoOffersScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var runner = scn.GetShadowCard("runner");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+		scn.MoveCompanionsToTable(king);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(king, 2);
+		scn.AddThreats(3);
+		scn.MoveMinionsToTable(runner, savage1, savage2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(king, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		// The King has overwhelmed the Runner.  The Banner offers its trigger and its response in one decision,
+		// and the card alone does not say which is meant.
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		// Not words that neither has, not another card with the right words, and not the player who is not asked.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "heal"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(king, "wound 2 minions"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "heal")));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(king, "wound 2 minions")));
+		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "wound 2 minions")));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		assertEquals(3, scn.GetThreats());
+		assertEquals(2, scn.GetWoundsOn(king));
+
+		scn.FreepsChooseOptionalTrigger(banner, "wound 2 minions");
+
+		// The response, and not the trigger: the Banner and two threats are spent, the two minions left are
+		// wounded, and the King has not exerted.
+		assertInZone(Zone.DISCARD, banner);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(savage2));
+		assertEquals(2, scn.GetWoundsOn(king));
+	}
+
+	@Test
+	public void OnTheSecondPlayersTurnTheShadowMethodsFindAndTakeOneOfTwoOptionalActionsOfACard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoOffersScenario();
+
+		// Player 2's own Banner and King on his own turn, against player 1's minions.
+		var banner = scn.GetShadowCard("banner");
+		var king = scn.GetShadowCard("king");
+		var runner = scn.GetFreepsCard("runner");
+		var savage1 = scn.GetFreepsCard("savage1");
+		var savage2 = scn.GetFreepsCard("savage2");
+
+		scn.StartGame();
+		scn.SkipToOtherPlayersTurn();
+
+		scn.MoveCompanionsToTable(king);
+		scn.AttachCardsTo(king, banner);
+		scn.AddWoundsToChar(king, 2);
+		scn.AddThreats(3);
+		scn.MoveMinionsToTable(runner, savage1, savage2);
+		scn.SkipToPhaseInverted(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.ShadowAssignToMinions(king, runner);
+		scn.FreepsDeclineAssignments();
+		scn.ShadowResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "heal"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(king, "Exert a Wraith"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "heal")));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "Exert a Wraith")));
+		assertEquals(2, scn.GetWoundsOn(king));
+
+		scn.ShadowChooseOptionalTrigger(banner, "Exert a Wraith");
+
+		// The trigger, and not the response: the King, the one Wraith there is, has exerted, and nothing was spent.
+		assertEquals(3, scn.GetWoundsOn(king));
+		assertAttachedTo(banner, king);
+		assertEquals(3, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(savage1));
+		// The response is still his to take for the same win, and the trigger is not offered a second time.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
 	}
 
 	@Test

@@ -18,7 +18,6 @@ public class Card_04_199_Tests
 				new HashMap<>()
 				{{
 					put("trooper", "4_199");
-					put("child", "4_148"); // source of easy site control
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -71,17 +70,14 @@ public class Card_04_199_Tests
 		var scn = GetScenario();
 
 		var trooper = scn.GetShadowCard("trooper");
-		var child = scn.GetShadowCard("child");
-		scn.MoveCardsToHand(child, trooper);
+		scn.MoveCardsToHand(trooper);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
-		scn.MoveCardsToSupportArea(child);
-		scn.AddTokensToCard(child, 2);
 		scn.FreepsPass();
-		scn.ShadowUseCardAction(child); //should take control of site
+		scn.ShadowTakeControlOfSite();
 
 		scn.MoveMinionsToTable(trooper);
 		scn.SkipToPhase(Phase.REGROUP);
@@ -102,17 +98,14 @@ public class Card_04_199_Tests
 		var scn = GetScenario();
 
 		var trooper = scn.GetShadowCard("trooper");
-		var child = scn.GetShadowCard("child");
-		scn.MoveCardsToHand(child, trooper);
+		scn.MoveCardsToHand(trooper);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
-		scn.MoveCardsToSupportArea(child);
-		scn.AddTokensToCard(child, 2);
 		scn.FreepsPass();
-		scn.ShadowUseCardAction(child); //should take control of site
+		scn.ShadowTakeControlOfSite();
 
 		scn.SkipToSite(4);
 		var controlledSite = scn.GetFreepsSite(1);

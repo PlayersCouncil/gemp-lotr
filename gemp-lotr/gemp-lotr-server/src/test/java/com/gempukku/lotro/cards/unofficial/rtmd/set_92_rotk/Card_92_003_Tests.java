@@ -18,11 +18,6 @@ public class Card_92_003_Tests
 		put("aragorn", "1_89");
 		// Pathfinder: Fellowship/Regroup event, spot ranger, play next site from adventure deck
 		put("pathfinder", "1_110");
-		// Ritual Oath of Enmity: Shadow Dunland artifact, support area
-		// Shadow ability: spot Dunland token here to take control of 2 sites, discard this
-		put("oath", "102_5");
-		// Runner needed so shadow phase doesn't skip
-		put("runner", "1_178");
 	}};
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -154,27 +149,17 @@ public class Card_92_003_Tests
 
 		var scn = GetFreepsScenario();
 
-		var oath = scn.GetShadowCard("oath");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToSupportArea(oath);
-		scn.AddTokensToCard(oath, 1);
-
 		scn.StartGame();
 
 		// Need to get past site 1 with both players so it can be controlled.
 		scn.SkipToSite(3);
 
-		// Now at site 3, fellowship phase.
-		scn.MoveMinionsToTable(runner);
-		scn.FreepsPass(); // move to site 4
-
-		// Shadow phase: use Oath's ability to take control of 2 sites
-		scn.ShadowUseCardAction(oath);
+		scn.ShadowTakeControlOfSite();
 
 		// Site 1 should now be controlled and still have underground
 		var site1 = scn.GetSite(1);
 		assertNotNull(site1);
+		assertTrue(scn.ShadowControls(site1));
 		assertTrue(scn.HasKeyword(site1, Keyword.UNDERGROUND));
 	}
 }

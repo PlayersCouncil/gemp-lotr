@@ -155,6 +155,32 @@ public interface Choices extends Decisions {
 		Verify(index >= 0, GameUtils.getFullName(card) + " is not offering " + playerID + " a trigger or response to choose.");
 		PlayerDecided(playerID, String.valueOf(index));
 	}
+	/**
+	 * Takes one particular optional trigger or response of a card that is offering more than one at the same
+	 * moment.  Fails if that card is not offering the Free Peoples player an optional action so described.
+	 * @param card The card the trigger or response belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 */
+	default void FreepsChooseOptionalTrigger(PhysicalCardImpl card, String text) { ChooseOptionalTrigger(P1(), card, text); }
+	/**
+	 * Takes one particular optional trigger or response of a card that is offering more than one at the same
+	 * moment.  Fails if that card is not offering the Shadow player an optional action so described.
+	 * @param card The card the trigger or response belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 */
+	default void ShadowChooseOptionalTrigger(PhysicalCardImpl card, String text) { ChooseOptionalTrigger(P2(), card, text); }
+	/**
+	 * Takes the optional trigger or response of the given card whose description contains the given words.
+	 * @param playerID The player being offered the actions.
+	 * @param card The card the trigger or response belongs to.
+	 * @param text Words from the action's description.  Case is ignored.
+	 */
+	default void ChooseOptionalTrigger(String playerID, PhysicalCardImpl card, String text) {
+		String actionId = FindOptionalTrigger(playerID, card, text);
+		Verify(actionId != null, GameUtils.getFullName(card) + " is not offering " + playerID
+				+ " a trigger or response described as '" + text + "'.");
+		PlayerDecided(playerID, actionId);
+	}
 	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}
@@ -165,13 +191,19 @@ public interface Choices extends Decisions {
 	default void ShadowChooseAction(String option) { ChooseAction(P2(), "actionText", option); }
 	default void ChooseAction(String playerID, String paramName, String option) {
 		List<String> choices = GetADParamAsList(playerID, paramName);
-		for(String choice : choices){
-			if(option == null && choice == null // This only happens when a rule is the source of an action
-					|| choice.toLowerCase().contains(option.toLowerCase())) {
-				PlayerDecided(playerID, String.valueOf(choices.indexOf(choice)));
+		for (int i = 0; i < choices.size(); i++) {
+			String choice = choices.get(i);
+			// A choice has no text only when a rule and not a card is the source of an action.  Such a choice
+			// matches no words, and words match no such choice.
+			boolean matches = option == null || choice == null
+					? option == null && choice == null
+					: choice.toLowerCase().contains(option.toLowerCase());
+			if(matches) {
+				PlayerDecided(playerID, String.valueOf(i));
 				return;
 			}
 		}
+		Verify(option != null, "ChooseAction: " + playerID + " is being offered no choice without text.");
 		//couldn't find an exact match, so maybe it's a direct index:
 		PlayerDecided(playerID, option);
 	}
@@ -190,18 +222,29 @@ public interface Choices extends Decisions {
 
 	/**
 	 * Where required actions happen at the same moment (the wound for losing a skirmish and a card's "each time
-	 * ... loses a skirmish", say), the Free Peoples player is asked which goes first.  This takes the first one
-	 * listed, which is the game's own rule where a rule is among them.  It is an error to call it when the Free
-	 * Peoples player is not being asked to order required responses: an optional trigger on offer is not that.
+	 * ... loses a skirmish", say), the Free Peoples player is asked which goes first.  This takes the game's own
+	 * rule, the action that belongs to no card, wherever it stands in the list and whether or not the game gives
+	 * it any wording (the rule that follows a death has none).  It is an error to call it when the Free Peoples
+	 * player is not being asked to order required responses (an optional trigger on offer is not that), and an
+	 * error when no rule is among the actions to be ordered: two triggers of cards are ordered by naming one,
+	 * with FreepsResolveActionOrder.
 	 */
 	default void FreepsResolveRuleFirst() {
 		Verify(FreepsAwaitingRequiredResponseOrder(),
 				"FreepsResolveRuleFirst: the Free Peoples player is not being asked to order required responses.");
-		ChooseAction(P1(), "actionText", GetADParamAsList(P1(), "actionText").getFirst());
+		String[] sources = GetAwaitingDecisionParam(P1(), "blueprintId");
+		String[] actionIds = GetAwaitingDecisionParam(P1(), "actionId");
+		int rule = sources == null ? -1 : Arrays.asList(sources).indexOf("rules");
+		Verify(rule >= 0 && actionIds != null && rule < actionIds.length,
+				"FreepsResolveRuleFirst: no rule is among the required responses to be ordered, which are "
+						+ GetADParamAsList(P1(), "actionText") + ".  Name the one to resolve first with FreepsResolveActionOrder.");
+		PlayerDecided(P1(), actionIds[rule]);
 	}
 
 	/**
-	 * As FreepsResolveRuleFirst, but takes the required action whose description contains the given text.
+	 * As FreepsResolveRuleFirst, but takes the required action whose description contains the given text: a
+	 * card's trigger, by the card's name.  A rule among the actions, which may have no description at all, is
+	 * passed over.
 	 * @param option Text to look for in the description of the action to resolve first.
 	 */
 	default void FreepsResolveActionOrder(String option) {

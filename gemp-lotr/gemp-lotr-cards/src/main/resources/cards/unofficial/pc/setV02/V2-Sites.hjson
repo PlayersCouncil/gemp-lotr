@@ -238,11 +238,11 @@
 						text: Would you like to discard a card in your opponent's support area?
 						requires: {
 							type: CanSpot
-							filter: not(your),zone(SUPPORT)
+							filter: not(your),not(site),zone(SUPPORT)
 						}
 						effect: {
 							type: Discard
-							select: choose(not(your),zone(SUPPORT))
+							select: choose(not(your),not(site),zone(SUPPORT))
 						}
 					}
 				}

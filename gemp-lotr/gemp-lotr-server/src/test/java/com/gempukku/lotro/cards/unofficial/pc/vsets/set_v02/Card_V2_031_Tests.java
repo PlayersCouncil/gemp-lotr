@@ -10,7 +10,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -106,10 +105,6 @@ public class Card_V2_031_Tests
 		var trail = scn.GetShadowCard("trail");
 		var child = scn.GetShadowCard("child");
 
-		// The Free Peoples player's deck is emptied, so that he draws nothing on the way to site 4 and never
-		// has a card to play: the cheat that gives him a site works only when he has no action to take.
-		scn.MoveCardsToFreepsDiscard("trail", "child", "devilry", "attack", "raiders", "savage", "sentry", "worker", "aragorn", "gimli");
-
 		scn.StartGame();
 		// Both fellowships are at site 4, so sites 1 to 3 may be taken.
 		scn.SkipToSite(4);
@@ -165,14 +160,14 @@ public class Card_V2_031_Tests
 		// the owner of this card.
 		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-		scn.FreepsExecuteAdHocEffect(new TakeControlOfASiteEffect(null, VirtualTableScenario.P1)); // lint-ok: the rig's own cheat for taking a site is the Shadow player's only
+		scn.FreepsTakeControlOfSite();
 		assertTrue(scn.FreepsControls(site3));
 		assertFalse(scn.HasKeyword(site3, Keyword.BATTLEGROUND));
 		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
 		assertTrue(scn.HasKeyword(site2, Keyword.BATTLEGROUND));
 		assertFalse(scn.HasKeyword(site4, Keyword.BATTLEGROUND));
 		assertFalse(scn.HasKeyword(site5, Keyword.BATTLEGROUND));
-		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test

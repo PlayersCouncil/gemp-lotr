@@ -277,6 +277,60 @@ public interface Decisions extends TableBase {
 	}
 
 	/**
+	 * For a card that offers more than one optional action at the same moment (a trigger and a response to the
+	 * same win, say), where the card alone does not say which is meant.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return True if the Free Peoples player is being asked about optional actions and one of them is that
+	 * particular card's and is so described.
+	 */
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card, String text) { return HasOptionalTriggerAvailable(P1(), card, text); }
+	/**
+	 * For a card that offers more than one optional action at the same moment (a trigger and a response to the
+	 * same win, say), where the card alone does not say which is meant.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return True if the Shadow player is being asked about optional actions and one of them is that particular
+	 * card's and is so described.
+	 */
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card, String text) { return HasOptionalTriggerAvailable(P2(), card, text); }
+	/**
+	 * @param player The player being asked about optional actions.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return True if one of the optional actions on offer is that card's and is so described.
+	 */
+	default boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card, String text) {
+		return FindOptionalTrigger(player, card, text) != null;
+	}
+	/**
+	 * Finds the optional trigger or response of one particular card whose description contains the given words,
+	 * among the optional actions the given player is being offered.  Card and words are matched as
+	 * {@link Actions#FindCardAction} matches them for the actions of a phase.
+	 * @param player The player being asked about optional actions.
+	 * @param card The card the action must belong to.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return The id of the action, which answers the decision, or null if there is none, or the player is not
+	 * being asked about optional actions.
+	 */
+	default String FindOptionalTrigger(String player, PhysicalCardImpl card, String text) {
+		if(!DecisionAvailable(player, "Optional"))
+			return null;
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] actionIds = GetAwaitingDecisionParam(player, "actionId");
+		if(texts == null || cardIds == null || actionIds == null)
+			return null;
+		String id = String.valueOf(card.getCardId());
+		String wanted = text.toLowerCase();
+		for (int i = 0; i < texts.length && i < cardIds.length && i < actionIds.length; i++) {
+			if(cardIds[i].equals(id) && texts[i] != null && texts[i].toLowerCase().contains(wanted))
+				return actionIds[i];
+		}
+		return null;
+	}
+
+	/**
 	 * @return True if the Free Peoples player is being asked in which order required actions that happen at the
 	 * same moment are to be resolved.  By rule it is always the Free Peoples player who is asked, whoever's the
 	 * actions are.  The game words the question in two ways: "Required responses" for actions that answer

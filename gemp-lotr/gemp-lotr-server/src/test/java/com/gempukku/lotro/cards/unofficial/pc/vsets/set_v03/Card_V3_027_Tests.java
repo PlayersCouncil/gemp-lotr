@@ -219,6 +219,51 @@ public class Card_V3_027_Tests
 	}
 
 	@Test
+	public void KilledWithThreatsOnTheDeadPileTheirWoundsMayBePlacedBeforeHisHealing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var king = scn.GetFreepsCard("king");
+		var deadman1 = scn.GetFreepsCard("deadman1");
+		var oathbreaker = scn.GetFreepsCard("oathbreaker");
+		var slayer1 = scn.GetShadowCard("slayer1");
+		scn.MoveCompanionsToTable(king, deadman1, oathbreaker);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer1);
+		// Vitality 4 with 3 wounds
+		scn.AddWoundsToChar(king, 3);
+		scn.AddWoundsToChar(deadman1, 1);
+		// The two threats the King adds when he is played.
+		scn.AddThreats(2);
+		scn.FreepsPass();
+
+		scn.ShadowUseCardAction(slayer1);
+		scn.ShadowChooseCard(king);
+
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(1, scn.GetWoundsOn(deadman1));
+		assertEquals(0, scn.GetWoundsOn(oathbreaker));
+		// The rule first: the threats become wounds before anybody is healed.
+		scn.FreepsResolveRuleFirst();
+
+		assertInZone(Zone.DEAD, king);
+		assertEquals(1, scn.GetWoundsOn(deadman1));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman1, oathbreaker));
+		scn.FreepsChooseCard(oathbreaker);
+		// One threat wound placed, and the Dead Man is still as he was.
+		assertEquals(1, scn.GetWoundsOn(oathbreaker));
+		assertEquals(1, scn.GetWoundsOn(deadman1));
+		scn.FreepsChooseCard(oathbreaker);
+
+		// Both wounds went on the Oathbreaker, 0 to 2; then the King's healing took one off each Wraith.
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetWoundsOn(oathbreaker));
+		assertEquals(0, scn.GetWoundsOn(deadman1));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
 	public void AnotherWraithBeingKilledHealsNobody() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

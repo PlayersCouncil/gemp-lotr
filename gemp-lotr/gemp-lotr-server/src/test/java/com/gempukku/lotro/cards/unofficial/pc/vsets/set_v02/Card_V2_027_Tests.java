@@ -174,22 +174,17 @@ public class Card_V2_027_Tests
 	public void ABattlegroundTheOtherPlayerControlsGivesNoDamageBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var lastChild = scn.GetShadowCard("lastchild");
 		var theirLegion = scn.GetFreepsCard("legion");
 
 		scn.StartGame();
 		scn.SkipToSite(5);
 
 		var site4 = scn.GetSite(4);
-		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 8);
-		scn.FreepsPass();
-
-		// Player 2, the Shadow player this turn, takes control of sites 1 to 4.
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
+		// Player 2, the Shadow player this turn, controls sites 1 to 4, lowest first.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.ShadowControls(site4));
 		assertTrue(scn.HasKeyword(site4, Keyword.BATTLEGROUND));
 
@@ -317,7 +312,6 @@ public class Card_V2_027_Tests
 
 		var legion = scn.GetShadowCard("legion");
 		var grunt = scn.GetShadowCard("grunt");
-		var lastChild = scn.GetShadowCard("lastchild");
 		var gimli = scn.GetFreepsCard("gimli");
 		var bounder = scn.GetFreepsCard("bounder");
 		scn.MoveCompanionsToTable(gimli);
@@ -328,14 +322,13 @@ public class Card_V2_027_Tests
 
 		var site4 = scn.GetSite(4);
 		scn.MoveMinionsToTable(legion, grunt);
-		scn.MoveCardsToSupportArea(lastChild);
-		scn.AddTokensToCard(lastChild, 8);
+		// Sites 1 to 4, lowest first.
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
 		scn.FreepsPass();
 
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
-		scn.ShadowUseCardAction(lastChild);
 		// The Shadow player controls White Rocks, a battleground, and the fellowship is at Caves of Aglarond,
 		// which is none.
 		assertTrue(scn.ShadowControls(site4));

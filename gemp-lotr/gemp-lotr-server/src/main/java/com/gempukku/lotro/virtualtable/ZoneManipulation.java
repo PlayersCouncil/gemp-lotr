@@ -159,6 +159,89 @@ public interface ZoneManipulation extends TableBase {
 	}
 
 
+	/**
+	 * Gives the Free Peoples player (player 1) control of the first site that can be controlled, without any card
+	 * taking it.  Nothing in the rules keeps the first player from controlling a site; on his own turn he is only
+	 * out of step with when he would have taken it.
+	 * See {@link #TakeControlOfSite(String)}.
+	 */
+	default void FreepsTakeControlOfSite() { TakeControlOfSite(P1()); }
+	/**
+	 * Gives the Shadow player (player 2) control of the first site that can be controlled, without any card
+	 * taking it.
+	 * See {@link #TakeControlOfSite(String)}.
+	 */
+	default void ShadowTakeControlOfSite() { TakeControlOfSite(P2()); }
+	/**
+	 * Gives the Free Peoples player (player 1) control of the given site, without any card taking it.
+	 * See {@link #TakeControlOfSite(String, PhysicalCardImpl)}.
+	 * @param site The site to take, which need not be the first that can be controlled.
+	 */
+	default void FreepsTakeControlOfSite(PhysicalCardImpl site) { TakeControlOfSite(P1(), site); }
+	/**
+	 * Gives the Shadow player (player 2) control of the given site, without any card taking it.
+	 * See {@link #TakeControlOfSite(String, PhysicalCardImpl)}.
+	 * @param site The site to take, which need not be the first that can be controlled.
+	 */
+	default void ShadowTakeControlOfSite(PhysicalCardImpl site) { TakeControlOfSite(P2(), site); }
+
+	/**
+	 * Gives the given player control of the first site that can be controlled: the lowest-numbered site on the
+	 * adventure path that nobody controls and that every player's marker has moved beyond, which is the site an
+	 * effect that takes control of a site would take.  This is a cheat like the rest of this interface: it answers
+	 * no decision, so it can be called at any time, whoever is being asked what; no "take control of a site"
+	 * effect is played, so nothing that responds to one is set off; and a decision already pending does not
+	 * change what it offers.
+	 * Fails if no site can be controlled.
+	 * @param player The player who is to control the site.
+	 */
+	default void TakeControlOfSite(String player) {
+		PhysicalCardImpl first = null;
+		for (int i = 1; i < LowestPlayerPosition() && first == null; i++) {
+			var site = (PhysicalCardImpl) gameState().getSite(i);
+			if (site != null && site.getCardController() == null)
+				first = site;
+		}
+		Verify(first != null, "No site can be controlled by " + player + ": there is no site nobody controls "
+				+ "that every player's marker has moved beyond (the lowest marker is at site " + LowestPlayerPosition() + ").");
+		TakeControlOfSite(player, first);
+	}
+
+	/**
+	 * Gives the given player control of the given site, which is put in that player's support area as the rules
+	 * have it.  The site need not be the lowest-numbered one that can be controlled, so that a board can hold a
+	 * site of one player's between sites of the other's.  A cheat: see {@link #TakeControlOfSite(String)}.
+	 * Fails if the card is not a site on the adventure path, if somebody already controls it, or if some player's
+	 * marker is at that site or has yet to reach it.
+	 * @param player The player who is to control the site.
+	 * @param site The site to take.
+	 */
+	default void TakeControlOfSite(String player, PhysicalCardImpl site) {
+		Verify(site != null && site.getBlueprint().getCardType() == CardType.SITE,
+				(site == null ? "Nothing" : GameUtils.getFullName(site)) + " is not a site, so " + player + " cannot take control of it.");
+		Verify(site.getCardController() == null,
+				GameUtils.getFullName(site) + " is already controlled by " + site.getCardController() + ", so " + player + " cannot take control of it.");
+		Verify(site.getZone() == Zone.ADVENTURE_PATH,
+				GameUtils.getFullName(site) + " is not on the adventure path, so " + player + " cannot take control of it.");
+		Verify(site.getSiteNumber() < LowestPlayerPosition(),
+				GameUtils.getFullName(site) + " is site " + site.getSiteNumber() + " and a player's marker is at site "
+						+ LowestPlayerPosition() + ": a site can be controlled only once every marker has moved beyond it.");
+
+		gameState().takeControlOfCard(player, game(), site, Zone.SUPPORT);
+
+		Verify(player.equals(site.getCardController()) && site.getZone() == Zone.SUPPORT,
+				player + " did not take control of " + GameUtils.getFullName(site) + ".");
+	}
+
+	// The site number of the marker furthest back on the adventure path: the sites below it can be controlled.
+	private int LowestPlayerPosition() {
+		int lowest = Integer.MAX_VALUE;
+		for (String player : gameState().getPlayerOrder().getAllPlayers())
+			lowest = Math.min(lowest, gameState().getPlayerPosition(player));
+		return lowest;
+	}
+
+
 
 
 

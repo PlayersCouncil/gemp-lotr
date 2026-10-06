@@ -18,7 +18,6 @@ public class Card_17_148_Tests
 				new HashMap<>()
 				{{
 					put("hunter", "15_157");
-					put("insurance", "102_5");
 				}},
 				new HashMap<>() {{
 					put("site1", "11_239");
@@ -71,11 +70,9 @@ public class Card_17_148_Tests
 		var scn = GetScenario();
 
 		var hunter1 = scn.GetShadowCard("hunter");
-		var insurance = scn.GetShadowCard("insurance");
 		var hunter2 = scn.GetFreepsCard("hunter");
 		scn.MoveCardsToHand(hunter2);
 		scn.MoveCardsToHand(hunter1);
-		scn.MoveCardsToSupportArea(insurance);
 
 		var nurn = scn.GetFreepsSite("Nurn");
 		var nurn2 = scn.GetShadowSite("Nurn");
@@ -83,13 +80,12 @@ public class Card_17_148_Tests
 
 		scn.StartGame(nurn);
 
-		scn.AddTokensToCard(insurance, 1);
 		scn.SkipToSite(2);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 		scn.ShadowChooseAnyCard();
 
-		scn.ShadowChooseAction("control");
+		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(nurn));
 		scn.ShadowPlayCard(hunter1);
 

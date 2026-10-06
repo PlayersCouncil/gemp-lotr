@@ -44,9 +44,6 @@ public class Card_V2_070_Tests
 					put("chief", "4_20");
 					// Uruk Occupier: [isengard], strength 8; strength +1 "for each battleground you control"
 					put("occupier", "102_34");
-					// Down to the Last Child: "Shadow: Remove 2 [isengard] tokens from this card to take control of a
-					// site."  It is how the Shadow player comes to control one.
-					put("lastchild", "4_148");
 					// Uruk Besieger and Uruk Trooper: [isengard] Uruk-hai with one and the same sentence, "Regroup:
 					// Stack this minion on a site you control."  Neither has any other text for the regroup phase.
 					put("besieger", "4_180");
@@ -182,15 +179,11 @@ public class Card_V2_070_Tests
 		var horde = scn.GetShadowCard("horde");
 		var elder = scn.GetShadowCard("elder");
 		var occupier = scn.GetShadowCard("occupier");
-		var lastChild = scn.GetShadowCard("lastchild");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
 
 		scn.MoveMinionsToTable(band, horde, elder, occupier);
-		scn.MoveCardsToSupportArea(lastChild);
-		// Enough to take control of one site.
-		scn.AddTokensToCard(lastChild, 2);
 		scn.FreepsPass();
 
 		var site1 = scn.GetSite(1);
@@ -203,7 +196,7 @@ public class Card_V2_070_Tests
 		assertEquals(0, scn.GetKeywordCount(elder, Keyword.DAMAGE));
 		assertEquals(8, scn.GetStrength(occupier));
 
-		scn.ShadowUseCardAction(lastChild);
+		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.ShadowControls(site1));
 		assertEquals(1, scn.GetShadowControlledSiteCount());
 		assertFalse(scn.HasKeyword(site1, Keyword.BATTLEGROUND));

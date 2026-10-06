@@ -13,7 +13,6 @@ import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
-import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -69,10 +68,6 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
     {
         game().getActionsEnvironment().addAlwaysOnActionProxy(action);
     }
-
-	default void ShadowTakeControlOfSite() {
-		ShadowExecuteAdHocEffect(new TakeControlOfASiteEffect(null, P2));
-	}
 
 	/**
 	 * Causes the Free Peoples player to execute an arbitrary effect.  Note that there are nuances to how and whether this
