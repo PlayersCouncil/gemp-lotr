@@ -1338,18 +1338,15 @@
 					type: Killed
 					filter: culture(raider),minion
 				}
+				cost: {
+					type: Exert
+					select: choose(culture(raider), minion)
+				}
 				effect: [
 					{
-						type: CostToEffect
-						cost: {
-							type: Exert
-							select: choose(culture(raider), minion)
-						}
-						effect: {
-							type: Exert
-							select: choose(unbound,companion)
-							memorize: exertedCompanion
-						}
+						type: Exert
+						select: choose(unbound,companion)
+						memorize: exertedCompanion
 					}
 					{
 						type: Optional
@@ -1484,13 +1481,14 @@
 						ignoreCostCheckFailure: true
 						select: all(minion,not(memory(chosenSouthron)))
 					}
-					{
-						type: Spot
-						select: choose(unbound, companion)
-						memorize: chosenCompanion
-					}
 				]
 				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(unbound, companion)
+						memorize: chosenCompanion
+						text: Choose an unbound companion to assign {chosenSouthron} to
+					}
 					{
 						type: Preventable
 						text: Would you like to make {chosenSouthron} strength +3, ambush (4), and fierce until the regroup phase to prevent assigning it to {chosenCompanion}?
