@@ -388,8 +388,7 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: true
+				type: Response
 				limitPerTurn: 1
 				trigger: {
 					type: Exerted

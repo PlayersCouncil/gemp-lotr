@@ -11,6 +11,7 @@ import com.gempukku.lotro.cards.build.field.effect.trigger.TriggerChecker;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
+import com.gempukku.lotro.logic.effects.IncrementTurnLimitEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import org.json.simple.JSONObject;
@@ -18,7 +19,7 @@ import org.json.simple.JSONObject;
 public class ResponseEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "trigger", "requires", "cost", "effect", "text", "limitPerPhase", "phase", "fromDiscard");
+        FieldUtils.validateAllowedFields(value, "trigger", "requires", "cost", "effect", "text", "limitPerPhase", "limitPerTurn", "phase", "fromDiscard");
 
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
 
@@ -29,6 +30,7 @@ public class ResponseEffectProcessor implements EffectProcessor {
 
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
         final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
+        final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
 
         final boolean fromDiscard = FieldUtils.getBoolean(value.get("fromDiscard"), "fromDiscard", false);
 
@@ -50,6 +52,17 @@ public class ResponseEffectProcessor implements EffectProcessor {
                             @Override
                             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                                 return new IncrementPhaseLimitEffect(actionContext.getSource(), phase, limitPerPhase);
+                            }
+                        });
+            }
+            if (limitPerTurn > 0) {
+                triggerActionSource.addPlayRequirement(
+                        (actionContext) -> PlayConditions.checkTurnLimit(actionContext.getGame(), actionContext.getSource(), limitPerTurn));
+                triggerActionSource.addCost(
+                        new AbstractEffectAppender() {
+                            @Override
+                            protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                                return new IncrementTurnLimitEffect(actionContext.getSource(), limitPerTurn);
                             }
                         });
             }
