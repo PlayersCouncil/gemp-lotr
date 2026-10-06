@@ -94,6 +94,9 @@ public class Card_02_059_ErrataTests
 		scn.MoveCardsToShadowDiscard("things2", "runner");
 
 		scn.StartGame();
+		// The pool has to cover the event and the card it plays: 2 for Foul Things + 1 for the Runner + 2 roaming.
+		// 2 set + 1 for Frodo + 2 for the shadow number of site 2.
+		scn.SetTwilight(2);
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(things));

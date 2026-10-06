@@ -65,12 +65,19 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            // This filter is the one asked BEFORE the action is paid for, so whatever the action
+                            // will take from the pool first is counted as gone: the twilight an ability removes as
+                            // its own cost (which its definition states) and the twilight cost of an event that is
+                            // about to be played (which the context knows).  Playing from the discard pile as an
+                            // effect is to be treated as a cost: both have to be payable.  The filter above is the
+                            // one used when the effect is carried out; by then the pool is what is left.
+                            final int twilightGoneFirst = removedTwilight + actionContext.getUnpaidTwilightCost();
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, twilightGoneFirst, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
                             }
 
-                            return Filters.playable(maxDiscountModifier, removedTwilight, false, false, true);
+                            return Filters.playable(maxDiscountModifier, twilightGoneFirst, false, false, true);
                         },
                         actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
         result.addEffectAppender(

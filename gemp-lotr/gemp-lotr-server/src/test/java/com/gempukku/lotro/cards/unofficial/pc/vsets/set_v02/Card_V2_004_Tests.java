@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -326,7 +325,6 @@ public class Card_V2_004_Tests
 	}
 
 	@Test
-	@Ignore("F-0046: with the pool one short of the event and the minion together the event is offered, takes its (1) and plays nothing")
 	public void CannotBePlayedWhenThePoolIsOneShortOfTheEventAndTheMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

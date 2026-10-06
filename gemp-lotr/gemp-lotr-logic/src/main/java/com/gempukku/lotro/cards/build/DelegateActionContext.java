@@ -88,4 +88,9 @@ public class DelegateActionContext implements ActionContext {
     public Effect getEffect() {
         return effect;
     }
+
+    @Override
+    public int getUnpaidTwilightCost() {
+        return delegate.getUnpaidTwilightCost();
+    }
 }

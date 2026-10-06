@@ -791,7 +791,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                     return false;
             }
 
-        if (playEventAction != null && !playEventAction.isValid(dummy))
+        if (playEventAction != null && !playEventAction.isValid(new EventPlayabilityContext(dummy)))
             return false;
 
         return true;
@@ -1193,7 +1193,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandBeforeAction.getPlayer().getPlayer(actionContext), game, self, null, effect);
             }
 
-            if (optionalInHandBeforeAction.isValid(actionContext)) {
+            if (optionalInHandBeforeAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandBeforeAction.createAction(action, actionContext);
                 result.add(action);
@@ -1216,7 +1216,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandAfterAction.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
             }
 
-            if (optionalInHandAfterAction.isValid(actionContext)) {
+            if (optionalInHandAfterAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandAfterAction.createAction(action, actionContext);
                 result.add(action);
