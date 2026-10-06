@@ -1,30 +1,38 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_020_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("domain", "103_20");
-					put("kingdead", "8_38"); // Gondor Wraith, vitality 4
-					put("aragorn", "1_89");
-					put("boromir", "1_97"); // Companion to kill for threat wounds
+					put("shards", "3_44");      // The Shards of Narsil: another [gondor] artifact for the support area; fellowship abilities never used here
+					put("king", "8_38");        // King of the Dead, Oathbreaker: a [gondor] Wraith, unique, vitality 4; his response is about Aragorn
+					put("deadman1", "10_27");   // Dead Man of Dunharrow: a [gondor] Wraith, vitality 3; his text is about being played
+					put("deadman2", "10_27");
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man, vitality 3; a skirmish ability never used here
+					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, vitality 3, made a Wraith where a test says so
+					put("guard", "1_7");        // Dwarf Guard: vitality 2, no text in play; the companion who is killed
 
-					put("slayer", "3_93"); // Morgul Slayer - wounds companion in Regroup
-					put("runner", "1_178");
+					put("slayer1", "3_93");     // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
+					put("slayer2", "3_93");
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion, vitality 3, no text
+					put("savage", "1_151");     // Uruk Savage: an [isengard] minion, vitality 3; damage +1 is its whole text
+					put("marksman1", "1_176");  // Goblin Marksman: archer and nothing else
+					put("marksman2", "1_176");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,11 +51,11 @@ public class Card_V3_020_Tests
 		 * Culture: Gondor
 		 * Twilight Cost: 3
 		 * Type: Artifact
-		 * Subtype: Support area
+		 * Subtype: Support Area
 		 * Game Text: When you play this, spot a [gondor] Wraith to remove a threat.
-		* 	Each time a [gondor] Wraith takes a threat wound, wound a minion.
-		* 	Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
-		*/
+		 * 	Each time a [gondor] Wraith takes a threat wound, wound a minion.
+		 * 	Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
+		 */
 
 		var scn = GetScenario();
 
@@ -63,246 +71,438 @@ public class Card_V3_020_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-
 	@Test
-	public void DomainRemovesThreatWhenPlayedWithGondorWraith() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForThreeToTheSupportAreaSpottingAGondorWraithToRemoveOneThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-
-		scn.MoveCompanionsToTable(kingdead);
-		scn.MoveCardsToHand(domain);
+		var shards = scn.GetFreepsCard("shards");
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(king, boromir);
+		scn.MoveCardsToHand(domain, shards);
 
 		scn.StartGame();
-
 		scn.AddThreats(2);
+
+		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetThreats());
-
-		scn.FreepsPlayCard(domain);
-
-		// Trigger should remove 1 threat
-		assertEquals(1, scn.GetThreats());
-		assertInZone(Zone.SUPPORT, domain);
-	}
-
-	@Test
-	public void DomainCanBePlayedWithoutGondorWraith() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var domain = scn.GetFreepsCard("domain");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		// No Gondor Wraith
-
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(domain);
-
-		scn.StartGame();
-
-		scn.AddThreats(2);
-
-		// Should still be playable
 		assertTrue(scn.FreepsPlayAvailable(domain));
 		scn.FreepsPlayCard(domain);
 
-		// Trigger fizzles, threats unchanged
-		assertEquals(2, scn.GetThreats());
+		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, domain);
-	}
-
-	@Test
-	public void DomainWoundsMinionWhenGondorWraithTakesThreatWound() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var boromir = scn.GetFreepsCard("boromir");
-		var slayer = scn.GetShadowCard("slayer");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCompanionsToTable(kingdead, boromir);
-		scn.MoveCardsToSupportArea(domain);
-
-		scn.StartGame();
-
-		scn.AddThreats(1);
-		// Pre-wound Boromir to 1 vitality (vitality 3, so 2 wounds)
-		scn.AddWoundsToChar(boromir, 2);
-		assertEquals(1, scn.GetVitality(boromir));
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		scn.MoveMinionsToTable(slayer, runner);
-
-		assertEquals(0, scn.GetWoundsOn(runner));
-		assertEquals(0, scn.GetWoundsOn(kingdead));
-
-		scn.FreepsPass();
-
-		// Use Slayer to kill Boromir
-		scn.ShadowUseCardAction(slayer);
-		scn.ShadowChooseCard(boromir);
-
-		// Boromir dies, 1 threat becomes wound assigned to companion
-		// Assign threat wound to King of the Dead
-		scn.FreepsChooseCard(kingdead);
-
-		// King takes threat wound
-		assertEquals(1, scn.GetWoundsOn(kingdead));
-
-		// Domain triggers - choose minion to wound
-		scn.FreepsChooseCard(runner);
-	}
-
-	@Test
-	public void DomainResponseHindersExhaustedWraithAboutToTakeWound() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var slayer = scn.GetShadowCard("slayer");
-
-		scn.MoveCompanionsToTable(kingdead);
-		scn.MoveCardsToSupportArea(domain);
-
-		scn.StartGame();
-
-		// Exhaust King of the Dead (vitality 4, so 3 wounds)
-		scn.AddWoundsToChar(kingdead, 3);
-		assertEquals(1, scn.GetVitality(kingdead));
-
-		scn.SkipToPhase(Phase.REGROUP);
-
-		scn.MoveMinionsToTable(slayer);
-
-		assertEquals(0, scn.GetThreats());
-		assertFalse(scn.IsHindered(domain));
-		assertFalse(scn.IsHindered(kingdead));
-
-		scn.FreepsPass();
-
-		// Use Slayer to wound King of the Dead
-		scn.ShadowUseCardAction(slayer);
-		// King auto-selected as only valid target
-
-		// Response should be offered
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		// Domain hindered, threat added, King hindered
-		assertTrue(scn.IsHindered(domain));
+		assertNotAttachedTo(domain, king);
 		assertEquals(1, scn.GetThreats());
-		assertTrue(scn.IsHindered(kingdead));
 
-		// King should not have taken the wound (hindered prevents it)
-		assertEquals(3, scn.GetWoundsOn(kingdead));
+		// Another artifact played beside it is not "this".
+		scn.FreepsPlayCard(shards);
+
+		assertInZone(Zone.SUPPORT, shards);
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void DomainResponseNotOfferedForNonExhaustedWraith() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedWithOnlyAGondorManAndAWraithOfAnotherCultureToSpotNoThreatIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var slayer = scn.GetShadowCard("slayer");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(boromir, gimli);
+		// No Free Peoples Wraith is of another culture, so a [dwarven] companion is made one.
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.MoveCardsToHand(domain);
 
-		scn.MoveCompanionsToTable(kingdead);
+		scn.StartGame();
+		scn.AddThreats(2);
+
+		assertTrue(scn.IsRace(gimli, Race.WRAITH));
+		assertTrue(scn.FreepsPlayAvailable(domain));
+		scn.FreepsPlayCard(domain);
+
+		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, domain);
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void EachThreatWoundOnAGondorWraithWoundsAMinionOfTheFreePeoplesPlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var deadman = scn.GetFreepsCard("deadman1");
+		var boromir = scn.GetFreepsCard("boromir");
+		var guard = scn.GetFreepsCard("guard");
+		var frodo = scn.GetRingBearer();
+		var slayer = scn.GetShadowCard("slayer1");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(deadman, boromir, guard);
 		scn.MoveCardsToSupportArea(domain);
 
 		scn.StartGame();
-
-		// King is NOT exhausted (no wounds)
-		assertEquals(0, scn.GetWoundsOn(kingdead));
-
+		// Vitality 2 with 1 wound: the Slayer's wound kills him.
+		scn.AddWoundsToChar(guard, 1);
+		scn.AddThreats(3);
 		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer, troop, savage);
 
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(guard);
+
+		// The Guard is dead, and the 3 threats have become 3 wounds for the Free Peoples player to place.
+		assertInZone(Zone.DEAD, guard);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		// The first goes to the Dead Man.
+		scn.FreepsChooseCard(deadman);
+		assertEquals(1, scn.GetWoundsOn(deadman));
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(slayer, troop, savage));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deadman, boromir, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(savage);
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		// The second goes to the same Dead Man, and wounds a minion again.
+		scn.FreepsChooseCard(deadman);
+		assertEquals(2, scn.GetWoundsOn(deadman));
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(slayer, troop, savage));
+		scn.FreepsChooseCard(savage);
+		assertEquals(2, scn.GetWoundsOn(savage));
+
+		// The third goes to Boromir, a [gondor] Man: nothing more.
+		scn.FreepsChooseCard(boromir);
+		assertEquals(1, scn.GetWoundsOn(boromir));
+
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		// The Slayer's own exertion.
+		assertEquals(1, scn.GetWoundsOn(slayer));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void OnlyAThreatWoundAndOnlyOnAGondorWraithWoundsAMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var deadman = scn.GetFreepsCard("deadman1");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var slayer1 = scn.GetShadowCard("slayer1");
+		var slayer2 = scn.GetShadowCard("slayer2");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(deadman, boromir, gimli, guard);
+		// A Wraith who is not [gondor].
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.MoveCardsToSupportArea(domain);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(guard, 1);
+		scn.AddThreats(2);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer1, slayer2, troop);
+		assertTrue(scn.IsRace(gimli, Race.WRAITH));
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer1);
+		scn.ShadowChooseCard(guard);
+
+		assertInZone(Zone.DEAD, guard);
+
+		// One threat wound for the [gondor] Man: the next thing asked is where the second goes.
+		scn.FreepsChooseCard(boromir);
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, deadman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troop, slayer2));
+
+		// And one for the [dwarven] Wraith.
+		scn.FreepsChooseCard(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(slayer2));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		// A wound on a [gondor] Wraith that is no threat wound.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer2);
+		scn.ShadowChooseCard(deadman);
+
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(1, scn.GetWoundsOn(slayer1));
+		assertEquals(1, scn.GetWoundsOn(slayer2));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnExhaustedGondorWraithAboutToBeWoundedIsHinderedForAThreatAndTheArtifactAndTakesNoWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var shards = scn.GetFreepsCard("shards");
+		var deadman1 = scn.GetFreepsCard("deadman1");
+		var deadman2 = scn.GetFreepsCard("deadman2");
+		var boromir = scn.GetFreepsCard("boromir");
+		var slayer = scn.GetShadowCard("slayer1");
+		scn.MoveCompanionsToTable(deadman1, deadman2, boromir);
+		scn.MoveCardsToSupportArea(domain, shards);
+
+		scn.StartGame();
+		// Vitality 3 with 2 wounds: exhausted, both of them.
+		scn.AddWoundsToChar(deadman1, 2);
+		scn.AddWoundsToChar(deadman2, 2);
+		// Frodo and three more: there is room for exactly one more threat.
+		scn.AddThreats(3);
+		assertEquals(4, scn.GetThreatLimit());
+		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer);
 
 		scn.FreepsPass();
-
-		// Use Slayer to wound King of the Dead
 		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(deadman1);
 
-		// Response should NOT be offered (King is not exhausted)
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(domain));
+		assertEquals(3, scn.GetThreats());
+		assertFalse(scn.IsHindered(domain));
+		assertFalse(scn.IsHindered(deadman1));
+		assertEquals(2, scn.GetWoundsOn(deadman1));
+
+		scn.FreepsChooseOptionalTrigger(domain);
+
+		assertEquals(4, scn.GetThreats());
+		assertTrue(scn.IsHindered(domain));
+		assertTrue(scn.IsHindered(deadman1));
+		// A hindered character cannot be wounded: the wound is not placed.
+		assertEquals(2, scn.GetWoundsOn(deadman1));
+		assertInZone(Zone.FREE_CHARACTERS, deadman1);
+		// The other exhausted Wraith and the other artifact are untouched.
+		assertFalse(scn.IsHindered(deadman2));
+		assertFalse(scn.IsHindered(shards));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AWraithWithVitalityToSpareTakesItsWoundAndTheResponseComesOnlyWithTheNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var deadman = scn.GetFreepsCard("deadman1");
+		var marksman1 = scn.GetShadowCard("marksman1");
+		var marksman2 = scn.GetShadowCard("marksman2");
+		scn.MoveCompanionsToTable(deadman);
+		scn.MoveCardsToSupportArea(domain);
+
+		scn.StartGame();
+		// Vitality 3 with 1 wound: one short of exhausted.
+		scn.AddWoundsToChar(deadman, 1);
+		scn.MoveMinionsToTable(marksman1, marksman2);
+		scn.SkipToArcheryWounds();
+
+		assertEquals(2, scn.GetShadowArcheryTotal());
+
+		// The first archery wound lands with no response.
+		scn.FreepsChooseCard(deadman);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(2, scn.GetWoundsOn(deadman));
+		assertFalse(scn.IsHindered(deadman));
+		assertEquals(0, scn.GetThreats());
 
-		// King takes the wound normally
-		assertEquals(1, scn.GetWoundsOn(kingdead));
+		// He is now exhausted, and the second is answered.
+		scn.FreepsChooseCard(deadman);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(domain));
+		scn.FreepsChooseOptionalTrigger(domain);
+
+		assertTrue(scn.IsHindered(deadman));
+		assertTrue(scn.IsHindered(domain));
+		assertEquals(2, scn.GetWoundsOn(deadman));
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void DomainResponseCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsNotOfferedForAnExhaustedGondorManNorForAnExhaustedWraithOfAnotherCulture() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var slayer = scn.GetShadowCard("slayer");
-
-		scn.MoveCompanionsToTable(kingdead);
+		var deadman = scn.GetFreepsCard("deadman1");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var marksman1 = scn.GetShadowCard("marksman1");
+		var marksman2 = scn.GetShadowCard("marksman2");
+		scn.MoveCompanionsToTable(deadman, boromir, gimli);
+		// A Wraith who is not [gondor].
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
 		scn.MoveCardsToSupportArea(domain);
 
 		scn.StartGame();
+		// Vitality 3 with 2 wounds: exhausted, each of them.
+		scn.AddWoundsToChar(boromir, 2);
+		scn.AddWoundsToChar(gimli, 2);
+		scn.MoveMinionsToTable(marksman1, marksman2);
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.IsRace(gimli, Race.WRAITH));
 
-		// Exhaust King of the Dead
-		scn.AddWoundsToChar(kingdead, 3);
+		scn.FreepsChooseCard(boromir);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, boromir);
 
+		scn.FreepsChooseCard(gimli);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, gimli);
+
+		assertFalse(scn.IsHindered(domain));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenNoThreatCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var deadman = scn.GetFreepsCard("deadman1");
+		var boromir = scn.GetFreepsCard("boromir");
+		var frodo = scn.GetRingBearer();
+		var slayer = scn.GetShadowCard("slayer1");
+		scn.MoveCompanionsToTable(deadman, boromir);
+		scn.MoveCardsToSupportArea(domain);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(deadman, 2);
+		// Three companions and three threats: no more can be added.
+		scn.AddThreats(3);
+		assertEquals(3, scn.GetThreatLimit());
 		scn.SkipToPhase(Phase.REGROUP);
-
 		scn.MoveMinionsToTable(slayer);
 
 		scn.FreepsPass();
-
-		// Use Slayer to wound King of the Dead
 		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(deadman);
 
-		// Decline response
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		// No response: he takes the wound and dies, and the threats come down as wounds on the others.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, deadman);
+		assertFalse(scn.IsHindered(domain));
+		assertEquals(0, scn.GetThreats());
+
+		scn.FreepsChooseCard(frodo);
+		scn.FreepsChooseCard(frodo);
+		scn.FreepsChooseCard(boromir);
+
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void DecliningTheResponseLeavesTheWraithToTakeTheWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+		var slayer = scn.GetShadowCard("slayer1");
+		scn.MoveCompanionsToTable(king, boromir);
+		scn.MoveCardsToSupportArea(domain);
+
+		scn.StartGame();
+		// Vitality 4 with 3 wounds: exhausted.
+		scn.AddWoundsToChar(king, 3);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(king);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(domain));
 		scn.FreepsDeclineOptionalTrigger();
 
-		// Domain not hindered, no threat added, King not hindered
 		assertFalse(scn.IsHindered(domain));
 		assertEquals(0, scn.GetThreats());
-		assertFalse(scn.IsHindered(kingdead));
-
-		// King dies from the wound (was at 1 vitality)
-		assertInZone(Zone.DEAD, kingdead);
+		assertInZone(Zone.DEAD, king);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void DomainResponseNotOfferedWhenAlreadyHindered() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WhileTheArtifactIsHinderedNoResponseIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var slayer = scn.GetShadowCard("slayer");
-
-		scn.MoveCompanionsToTable(kingdead);
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+		var slayer = scn.GetShadowCard("slayer1");
+		scn.MoveCompanionsToTable(king, boromir);
 		scn.MoveCardsToSupportArea(domain);
 
 		scn.StartGame();
-
-		// Exhaust King, pre-hinder Domain
-		scn.AddWoundsToChar(kingdead, 3);
-		scn.HinderCard(domain);
-		assertTrue(scn.IsHindered(domain));
-
+		scn.AddWoundsToChar(king, 3);
 		scn.SkipToPhase(Phase.REGROUP);
-
 		scn.MoveMinionsToTable(slayer);
+		scn.HinderCard(domain);
 
 		scn.FreepsPass();
-
-		// Use Slayer to wound King of the Dead
 		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(king);
 
-		// Response should NOT be offered (Domain already hindered, can't pay cost)
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, king);
+		assertTrue(scn.IsHindered(domain));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AThreatWoundOnAnExhaustedGondorWraithMayBeTurnedAsideAndThenWoundsNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var domain = scn.GetFreepsCard("domain");
+		var deadman = scn.GetFreepsCard("deadman1");
+		var boromir = scn.GetFreepsCard("boromir");
+		var guard = scn.GetFreepsCard("guard");
+		var slayer = scn.GetShadowCard("slayer1");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(deadman, boromir, guard);
+		scn.MoveCardsToSupportArea(domain);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(guard, 1);
+		scn.AddWoundsToChar(deadman, 2);
+		scn.AddThreats(1);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(slayer, troop);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(guard);
+
+		assertInZone(Zone.DEAD, guard);
+		assertEquals(0, scn.GetThreats());
+
+		// The one threat wound is put on the exhausted Dead Man.
+		scn.FreepsChooseCard(deadman);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(domain));
+		scn.FreepsChooseOptionalTrigger(domain);
+
+		assertTrue(scn.IsHindered(deadman));
+		assertTrue(scn.IsHindered(domain));
+		assertEquals(2, scn.GetWoundsOn(deadman));
+		assertInZone(Zone.FREE_CHARACTERS, deadman);
+		assertEquals(1, scn.GetThreats());
+		// He took no threat wound (and the artifact is hindered besides): no minion is wounded.
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(1, scn.GetWoundsOn(slayer));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
