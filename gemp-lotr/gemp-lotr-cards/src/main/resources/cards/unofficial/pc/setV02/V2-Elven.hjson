@@ -148,19 +148,28 @@
 							type: CanSpot
 							filter: name(Legolas)
 						}
-					]
-					true: [
+						# Not asked when there is no token of either culture to reinforce (Q-0034).
 						{
-							type: ReinforceTokens
-							culture: elven
-							select: choose(HasCultureToken(elven))
-						}
-						{
-							type: ReinforceTokens
-							culture: dwarven
-							select: choose(HasCultureToken(dwarven))
+							type: CanSpot
+							filter: or(HasCultureToken(elven),HasCultureToken(dwarven))
 						}
 					]
+					true: {
+						type: optional
+						text: Would you like to reinforce both an [elven] and a [dwarven] token an additional time?
+						effect: [
+							{
+								type: ReinforceTokens
+								culture: elven
+								select: choose(HasCultureToken(elven))
+							}
+							{
+								type: ReinforceTokens
+								culture: dwarven
+								select: choose(HasCultureToken(dwarven))
+							}
+						]
+					}
 				}
 			]
 		}

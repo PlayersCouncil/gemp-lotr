@@ -257,7 +257,8 @@ public class Card_V2_007_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(count, arms));
 		scn.FreepsChooseCard(notched);
 
-		// Legolas without Gimli: no additional reinforcement.
+		// Legolas without Gimli: no additional reinforcement, and the player is not asked about one.
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
 		assertEquals(2, scn.GetCultureTokensOn(notched));
 		assertEquals(1, scn.GetCultureTokensOn(stout));
 		assertEquals(1, scn.GetCultureTokensOn(count));
@@ -295,7 +296,8 @@ public class Card_V2_007_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(notched, stout));
 		scn.FreepsChooseCard(count);
 
-		// Gimli without Legolas: no additional reinforcement.
+		// Gimli without Legolas: no additional reinforcement, and the player is not asked about one.
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
 		assertEquals(2, scn.GetCultureTokensOn(count));
 		assertEquals(1, scn.GetCultureTokensOn(arms));
 		assertEquals(1, scn.GetCultureTokensOn(notched));
@@ -332,6 +334,10 @@ public class Card_V2_007_Tests
 		scn.FreepsChooseOption("Spot an");
 		scn.FreepsChooseCard(notched);
 		assertEquals(2, scn.GetCultureTokensOn(notched));
+
+		// With Legolas and Gimli to spot, the player is asked whether to reinforce both an additional time.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
+		scn.FreepsChooseYes();
 
 		// The additional [elven] token.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(count, arms));
@@ -381,6 +387,8 @@ public class Card_V2_007_Tests
 		scn.FreepsChooseCard(count);
 		assertEquals(2, scn.GetCultureTokensOn(count));
 
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
+		scn.FreepsChooseYes();
 		scn.FreepsChooseCard(arms);
 		scn.FreepsChooseCard(stout);
 
@@ -423,7 +431,9 @@ public class Card_V2_007_Tests
 		assertEquals(2, scn.GetCultureTokensOn(count));
 		assertEquals(1, scn.GetCultureTokensOn(notched));
 
-		// Legolas and Gimli are both spotted: one more of each.
+		// Legolas and Gimli are both spotted: the player is asked, and takes one more of each.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
+		scn.FreepsChooseYes();
 		scn.FreepsChooseCard(count);
 		scn.FreepsChooseCard(notched);
 
@@ -494,7 +504,10 @@ public class Card_V2_007_Tests
 		scn.FreepsChooseCard(count);
 		assertEquals(2, scn.GetCultureTokensOn(count));
 
-		// Of the additional pair only the [elven] one can be done.
+		// Of the additional pair only the [elven] one can be done.  The player is asked all the same, and
+		// saying yes reinforces the one token there is to reinforce.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
+		scn.FreepsChooseYes();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(count, arms));
 		scn.FreepsChooseCard(count);
 
@@ -669,7 +682,6 @@ public class Card_V2_007_Tests
 	}
 
 	@Test
-	@Ignore("Q-0037: \"you may reinforce both\" is not asked: the additional tokens are placed without the player being able to decline")
 	public void TheAdditionalReinforcementMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -696,12 +708,44 @@ public class Card_V2_007_Tests
 		assertEquals(2, scn.GetCultureTokensOn(notched));
 
 		// Asked whether to reinforce both an additional time, the player says no.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
 		scn.FreepsChooseNo();
 
 		assertEquals(2, scn.GetCultureTokensOn(notched));
 		assertEquals(1, scn.GetCultureTokensOn(stout));
 		assertEquals(1, scn.GetCultureTokensOn(count));
 		assertEquals(1, scn.GetCultureTokensOn(arms));
+		assertInDiscard(contest);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithLegolasAndGimliAndNoTokenOfEitherCultureTheAdditionalReinforcementIsNotAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var contest = scn.GetFreepsCard("contest");
+		var shake = scn.GetFreepsCard("shake");
+		var kinfolk = scn.GetFreepsCard("kinfolk");
+		scn.MoveCardsToHand(contest);
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("legolas"), scn.GetFreepsCard("gimli"));
+		// A card that could hold a token of each culture, and no token on either.
+		scn.MoveCardsToSupportArea(shake, kinfolk);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// An event may be played though it will do nothing.
+		assertTrue(scn.FreepsPlayAvailable(contest));
+		scn.FreepsPlayCard(contest);
+		// The game asks which half to attempt, though neither has anything to reinforce.
+		scn.FreepsChooseOption("Spot an");
+
+		// An additional reinforcement would do nothing either, and a "may" that costs nothing and can do nothing
+		// is not put to the player.
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to reinforce both"));
+		assertEquals(0, scn.GetCultureTokensOn(shake));
+		assertEquals(0, scn.GetCultureTokensOn(kinfolk));
 		assertInDiscard(contest);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
