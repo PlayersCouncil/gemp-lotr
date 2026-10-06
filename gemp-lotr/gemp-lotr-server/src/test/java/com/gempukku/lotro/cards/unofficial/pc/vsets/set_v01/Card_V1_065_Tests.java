@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -465,7 +464,6 @@ public class Card_V1_065_Tests
 	}
 
 	@Test
-	@Ignore("F-0044: with two tentacles skirmishing an unbound companion the Shadow player is not asked which one Watcher replaces")
 	public void OnlyATentacleInTheSkirmishIsOfferedAndTheOneNotChosenFightsOn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
