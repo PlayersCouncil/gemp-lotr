@@ -435,7 +435,7 @@ public class Card_V2_010_Tests
 	}
 
 	@Test
-	public void IsNotOfferedWhileNoOtherValiantElfHasAWoundToHeal() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsOfferedWhileNoOtherValiantElfHasAWoundAndAcceptedExertsBearerAndHealsNobody() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var armaments = scn.GetFreepsCard("armaments");
@@ -453,19 +453,46 @@ public class Card_V2_010_Tests
 		scn.AddWoundsToChar(lorienelf, 1);
 		scn.AddWoundsToChar(elvenMan, 1);
 
-		var runner = scn.GetShadowCard("runner1");
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
+		scn.MoveMinionsToTable(savage);
+		// A minion the bearer beats without killing, made fierce so that he wins twice on the one board: the
+		// offer is declined the first time and accepted the second.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.FIERCE));
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(defender, runner);
+
+		// 7 against 5
+		scn.FreepsAssignAndResolve(defender, savage);
 		scn.PassSkirmishActions();
 
-		// The bearer won and could exert, but the exertion would heal nobody.
-		assertInZone(Zone.DISCARD, runner);
+		// The bearer won and can exert.  The exertion would heal nobody, and the offer is made all the same:
+		// the text asks only that the cost can be paid.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(balglin));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
+
+		scn.FreepsDeclineOptionalTrigger();
+
 		assertEquals(1, scn.GetWoundsOn(defender));
+		assertEquals(0, scn.GetWoundsOn(balglin));
+		assertEquals(1, scn.GetWoundsOn(lorienelf));
+		assertEquals(1, scn.GetWoundsOn(elvenMan));
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(defender, savage);
+		scn.PassFierceSkirmishActions();
+
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		// The cost is paid.  A character with no wound cannot be healed, so there is nobody to choose and
+		// nothing is asked: not the unwounded valiant Elf, not the Elf who is not valiant, not the valiant Man,
+		// and not the bearer, who is not "another".
+		assertEquals(2, scn.GetWoundsOn(defender));
+		assertEquals(0, scn.GetWoundsOn(balglin));
 		assertEquals(1, scn.GetWoundsOn(lorienelf));
 		assertEquals(1, scn.GetWoundsOn(elvenMan));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

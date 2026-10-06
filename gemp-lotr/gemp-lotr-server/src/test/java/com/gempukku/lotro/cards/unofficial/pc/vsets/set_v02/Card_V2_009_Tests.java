@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -242,57 +241,7 @@ public class Card_V2_009_Tests
 	}
 
 	@Test
-	public void WithThreeValiantElvesThePlayerChoosesTheTwoToSpotAndTheTwoWithRangedWeaponsWoundTwice() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var leithio = scn.GetFreepsCard("leithio");
-		var defender = scn.GetFreepsCard("defender");
-		var balglin = scn.GetFreepsCard("balglin");
-		var guardian = scn.GetFreepsCard("guardian");
-		var lorienelf = scn.GetFreepsCard("lorienelf");
-		var guard = scn.GetFreepsCard("guard");
-		var elvenbow = scn.GetFreepsCard("elvenbow");
-		var gondorbow = scn.GetFreepsCard("gondorbow");
-		scn.MoveCompanionsToTable(defender, balglin, guardian, lorienelf, guard);
-		scn.AttachCardsTo(defender, elvenbow);
-		scn.AttachCardsTo(balglin, gondorbow);
-		scn.MoveCardsToHand(leithio);
-
-		// A valiant Man of the [elven] culture, as in the test of the event not being offered.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, guard, null, Culture.ELVEN));
-
-		var troop = scn.GetShadowCard("troop");
-		var savage = scn.GetShadowCard("savage");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(troop, savage);
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertEquals(0, scn.GetWoundsOn(savage));
-		assertTrue(scn.FreepsPlayAvailable(leithio));
-
-		scn.FreepsPlayCard(leithio);
-
-		// A player need not spot every card that meets a requirement, so with three valiant Elves in play he
-		// is asked which two.  The Elf who is not valiant and the valiant Man are not among them.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(defender, balglin, guardian));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, guard));
-		assertEquals(2, scn.FreepsGetChoiceMin());
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		// The two with ranged weapons; the Lorien Guardian, who has none, is left out of it.
-		scn.FreepsChooseCards(defender, balglin);
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
-		scn.FreepsChooseCard(savage);
-
-		assertEquals(2, scn.GetWoundsOn(savage));
-		assertEquals(0, scn.GetWoundsOn(troop));
-		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
-	}
-
-	@Test
-	@Ignore("F-0047: the Elves chosen for the spot are not the ones whose ranged weapons are counted; spotting one without a ranged weapon still wounds twice")
-	public void SpottingAValiantElfWithNoRangedWeaponWoundsOnlyOnce() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithThreeValiantElvesNobodyIsAskedWhichToSpotAndTheTwoWithRangedWeaponsWoundTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var leithio = scn.GetFreepsCard("leithio");
@@ -302,6 +251,7 @@ public class Card_V2_009_Tests
 		var elvenbow = scn.GetFreepsCard("elvenbow");
 		var gondorbow = scn.GetFreepsCard("gondorbow");
 		scn.MoveCompanionsToTable(defender, balglin, guardian);
+		// Three valiant Elves: two bear a ranged weapon and the Lorien Guardian bears none.
 		scn.AttachCardsTo(defender, elvenbow);
 		scn.AttachCardsTo(balglin, gondorbow);
 		scn.MoveCardsToHand(leithio);
@@ -313,19 +263,25 @@ public class Card_V2_009_Tests
 		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.ARCHERY);
 
+		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsPlayAvailable(leithio));
 
 		scn.FreepsPlayCard(leithio);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(defender, balglin, guardian));
-		// "Those Elves" are the two spotted.  One of these two bears a ranged weapon and the other does not,
-		// whatever the Elf who was not spotted is carrying.
-		scn.FreepsChooseCards(defender, guardian);
 
+		// A branch in parentheses is mandatory when it is available: two valiant Elves bearing ranged weapons
+		// can be spotted, so those are the two.  Nobody is asked which Elves to spot, and the first and only
+		// thing asked is which minion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(defender, balglin, guardian));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(savage);
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Twice, although one valiant Elf in play has no ranged weapon.
+		assertEquals(2, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
+		assertInZone(Zone.DISCARD, leithio);
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 

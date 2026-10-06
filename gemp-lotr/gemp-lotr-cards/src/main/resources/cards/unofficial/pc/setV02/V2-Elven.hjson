@@ -264,8 +264,7 @@
 			cost: {
 				type: Spot
 				count: 2
-				select: choose(elf, valiant)
-				memorize: spottedElves
+				filter: elf, valiant
 			},
 			effect: [
 				{
@@ -322,10 +321,6 @@
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
-				}
-				requires: {
-					type: CanSpot
-					filter: not(bearer), wounded, valiant, elf
 				}
 				cost: {
 					type: Exert
