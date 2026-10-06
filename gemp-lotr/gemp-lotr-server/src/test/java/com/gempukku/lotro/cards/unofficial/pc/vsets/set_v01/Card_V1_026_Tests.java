@@ -491,4 +491,66 @@ public class Card_V1_026_Tests
 		assertTrue(scn.ShadowActionAvailable(crows));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
+
+	@Test
+	public void AnItemFoundInTheDrawDeckNeedNotBeTakenAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var crows = scn.GetShadowCard("crows");
+		var crows2 = scn.GetShadowCard("crows2");
+		var sword = scn.GetShadowCard("sword");
+		var broadsword = scn.GetShadowCard("broadsword");
+		var palantir = scn.GetShadowCard("palantir");
+		var staff = scn.GetShadowCard("staff");
+		var spear = scn.GetShadowCard("spear");
+		var ambition = scn.GetShadowCard("ambition");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var gimli = scn.GetFreepsCard("gimli");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(thrarin);
+		scn.AttachCardsTo(gimli, scn.GetFreepsCard("armor1"));
+		scn.AttachCardsTo(thrarin, scn.GetFreepsCard("armor2"));
+		// The Uruk-hai Sword is the one [isengard] item left in the draw deck; the discard pile has four of its own.
+		scn.MoveCardsToDiscard(broadsword, palantir, staff, spear);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(crows);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowActionAvailable(crows));
+		assertInZone(Zone.DECK, sword, ambition, scimitar, crows2);
+		assertInZone(Zone.DISCARD, broadsword, palantir, staff, spear);
+		assertEquals(0, scn.GetShadowHandCount());
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		int opponentShuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.ShadowUseCardAction(crows);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		// The Sword is the only card that could be chosen, and it is still not taken unasked: "There is no penalty
+		// if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sword));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(broadsword, palantir, staff, spear, ambition, scimitar, crows2));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		// Nothing was taken: the Sword is still in the deck, and the game has not gone to the discard pile for one instead.
+		assertInZone(Zone.DECK, sword);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, broadsword, palantir, staff, spear);
+		assertEquals(0, scn.GetShadowHandCount());
+		// The deck was looked through, so it is reshuffled though nothing came out of it: once, and only that deck.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetFreepsDeckShuffleCount());
+		// The ability has been used all the same, and that was its once for this phase.
+		assertFalse(scn.ShadowActionAvailable(crows));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }
