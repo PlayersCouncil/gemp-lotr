@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -93,6 +94,16 @@ public class Optional implements EffectAppenderProducer {
                         return true;
                 }
                 return false;
+            }
+
+            // What the player would be saying yes to.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String choosingPlayer = playerSource.getPlayer(actionContext);
+                ActionContext delegate = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect());
+                return EffectForecast.together(delegate, effectAppenders);
             }
 
             private boolean checkRequirements(ActionContext actionContext) {

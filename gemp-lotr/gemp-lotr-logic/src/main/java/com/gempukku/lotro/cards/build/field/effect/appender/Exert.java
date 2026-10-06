@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -33,15 +34,21 @@ public class Exert implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        EffectAppender cardResolver = CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                 SpotOverride.NONE,
                 (actionContext) -> Filters.canExert(actionContext.getSource(), 1),
                 (actionContext) -> Filters.canExert(actionContext.getSource(), timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
                 valueSource, memory, player, "Choose cards to exert", environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, valueSource, timesSource, cardResolver);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With nobody who can exert it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+        };
 
         result.addEffectAppender(
                 cardResolver);

@@ -42,6 +42,24 @@ public class ActionAvailabilityTests
 		);
 	}
 
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4
+					// Armored Easterling: three skirmish abilities, each "Remove (2) to make a lurker ...":
+					// strength +1, fierce until the regroup phase, damage +1.
+					put("easterling", "11_68");
+					// Emboldened Orc: a lurker, strength 11, vitality 2, stronger for each companion who is not
+					// assigned to a skirmish.  It has no ability to use.
+					put("emboldened", "11_119");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void UseAvailabilityAnswersForTheCardAskedAboutAndNotForAnotherCopy() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -168,6 +186,46 @@ public class ActionAvailabilityTests
 		assertFalse(scn.FreepsActionAvailable(staff));
 		assertFalse(scn.FreepsPlayAvailable(library));
 		assertFalse(scn.ShadowActionAvailable(library));
+	}
+
+	@Test
+	public void TheNoEffectFlagIsReadForOneActionOfOneCardAndTheReadingFailsOtherwise() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var easterling = scn.GetShadowCard("easterling");
+		var emboldened = scn.GetShadowCard("emboldened");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(easterling, emboldened);
+		scn.SetTwilight(10);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, emboldened);
+
+		// The Free Peoples player is asked first, and nothing of the Easterling's is his to use.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertThrows(AssertionError.class, () -> scn.FreepsActionNoEffect(easterling));
+		// The Shadow player is not being asked anything yet.
+		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(easterling, "fierce"));
+
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		// The Easterling's three and the site's (Ettenmoors: "Skirmish: Exert your companion or minion ...").
+		assertEquals(4, scn.ShadowGetAvailableActions().size());
+		// Three actions of the one card: which is meant has to be said.
+		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(easterling));
+		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(easterling, "lurker"));
+		// The lurker is the minion fighting, so each of the three does something.
+		assertEquals("false", scn.ShadowActionNoEffect(easterling, "strength"));
+		assertEquals("false", scn.ShadowActionNoEffect(easterling, "FIERCE"));
+		assertEquals("false", scn.ShadowActionNoEffect(easterling, "damage"));
+		// A card that is offering nothing, and words that none of the card's actions has.
+		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(emboldened));
+		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(easterling, "archer"));
+		// Reading changes nothing: the same four are still on offer.
+		assertEquals(4, scn.ShadowGetAvailableActions().size());
 	}
 
 	@Test

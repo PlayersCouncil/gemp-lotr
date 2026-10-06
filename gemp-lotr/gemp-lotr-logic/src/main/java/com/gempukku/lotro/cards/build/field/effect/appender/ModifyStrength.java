@@ -1,5 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -39,10 +41,33 @@ public class ModifyStrength implements EffectAppenderProducer {
         if (limit > -1 && effectObject.get("until") != null)
             throw new InvalidCardDefinitionException("ModifyStrength: If limitPerCardThisPhase is defined, the until should not be, as it can only be applied until current phase");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to modify strength of", environment);
+        // Strength given for the current phase by a skirmish action is gone when the skirmish is.
+        final boolean endsWithSkirmish = time.endsWithCurrentPhase(Phase.SKIRMISH);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to modify strength of", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final EffectForecast given = EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+                if (limit == -1 || given.getVerdict() != EffectForecast.Verdict.UNKNOWN || given.getReach() == null)
+                    return given;
+
+                // A bonus with a limit for each card reaches only those whose limit is not yet spent, and with
+                // none of those it does nothing.  The counter is read and not counted on.
+                final LotroGame game = actionContext.getGame();
+                final List<PhysicalCard> open = new LinkedList<>();
+                for (PhysicalCard card : given.getReach()) {
+                    final int used = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(actionContext.getSource(), card.getCardId() + "-", game.getGameState().getCurrentPhase()).getUsedLimit();
+                    if (used < limit)
+                        open.add(card);
+                }
+                if (open.isEmpty())
+                    return EffectForecast.AT_LIMIT;
+                return EffectForecast.givenTo(open, endsWithSkirmish);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

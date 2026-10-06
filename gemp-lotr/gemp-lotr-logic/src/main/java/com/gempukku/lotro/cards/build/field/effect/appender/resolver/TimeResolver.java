@@ -66,6 +66,16 @@ public class TimeResolver {
 
         public boolean isPermanent() { return permanent; }
 
+        /**
+         * @return Whether something lasting until this time, begun in a phase of the given kind, is gone when
+         * that phase ends: the time is the end of the current phase, or the end of a phase of that kind.
+         */
+        public boolean endsWithCurrentPhase(Phase current) {
+            if (endOfTurn || permanent || start)
+                return false;
+            return phase == null || phase == current;
+        }
+
         public String getHumanReadable() {
             if (endOfTurn) {
                 return "the end of the turn";

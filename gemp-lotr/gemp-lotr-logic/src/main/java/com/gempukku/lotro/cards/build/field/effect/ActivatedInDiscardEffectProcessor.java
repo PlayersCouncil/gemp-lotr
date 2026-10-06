@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 public class ActivatedInDiscardEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "phase", "requires", "cost", "effect", "limitPerPhase", "limitPerTurn", "text", "specialAbility");
+        FieldUtils.validateAllowedFields(value, "phase", "requires", "noEffectUnless", "cost", "effect", "limitPerPhase", "limitPerTurn", "text", "specialAbility");
 
         final String text = FieldUtils.getString(value.get("text"), "text");
         final String[] phaseArray = FieldUtils.getStringArray(value.get("phase"), "phase");
@@ -38,6 +38,7 @@ public class ActivatedInDiscardEffectProcessor implements EffectProcessor {
 
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
+            actionSource.setSkirmishAbility(phase == Phase.SKIRMISH);
             actionSource.setSpecialAbility(specialAbility);
             if (limitPerPhase > 0) {
                 actionSource.addPlayRequirement(

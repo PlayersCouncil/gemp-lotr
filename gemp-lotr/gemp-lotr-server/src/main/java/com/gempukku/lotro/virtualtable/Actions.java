@@ -243,6 +243,68 @@ public interface Actions extends Decisions, Choices {
 		return null;
 	}
 
+	/**
+	 * @param card The card whose action is meant, which must be offering the Free Peoples player exactly one.
+	 * @return What the pending decision says of that action's having no effect: "false" if it is not flagged, or
+	 * the reason it is: "effect" (its effect will do nothing), "limit" (the ability or its bonus has reached its
+	 * limit) or "skirmish" (a skirmish action that reaches nobody in the skirmish being fought).
+	 */
+	default String FreepsActionNoEffect(PhysicalCardImpl card) { return CardActionNoEffect(P1(), card, null); }
+	/**
+	 * @param card The card whose action is meant, which must be offering the Shadow player exactly one.
+	 * @return What the pending decision says of that action's having no effect: "false" if it is not flagged, or
+	 * the reason it is: "effect", "limit" or "skirmish".
+	 */
+	default String ShadowActionNoEffect(PhysicalCardImpl card) { return CardActionNoEffect(P2(), card, null); }
+	/**
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return What the pending decision says of that action's having no effect: "false", "effect", "limit" or
+	 * "skirmish".
+	 */
+	default String FreepsActionNoEffect(PhysicalCardImpl card, String text) { return CardActionNoEffect(P1(), card, text); }
+	/**
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return What the pending decision says of that action's having no effect: "false", "effect", "limit" or
+	 * "skirmish".
+	 */
+	default String ShadowActionNoEffect(PhysicalCardImpl card, String text) { return CardActionNoEffect(P2(), card, text); }
+	/**
+	 * Reads the no-effect flag of one action of one particular card in the choice of actions the given player is
+	 * facing.  The game flags an action it can tell beforehand will do nothing; the action is offered all the same
+	 * and may be taken.  Fails the test if the card is offering that player no such action, or more than one.
+	 * @param player The player facing a choice of actions.
+	 * @param card The card the action belongs to.
+	 * @param text Words the action's description must contain, or null if the card offers only one action.  Case
+	 * is ignored.
+	 * @return "false" if the action is not flagged; otherwise the reason it is: "effect" (its effect will do
+	 * nothing), "limit" (the ability or its bonus has reached its limit) or "skirmish" (a skirmish action that
+	 * reaches nobody in the skirmish being fought).
+	 */
+	default String CardActionNoEffect(String player, PhysicalCardImpl card, String text) {
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] noEffects = GetAwaitingDecisionParam(player, "noEffect");
+		String name = GameUtils.getFullName(card);
+		String described = text == null ? "an action" : "an action described as '" + text + "'";
+		Verify(texts != null && cardIds != null, player + " is not being offered a choice of actions, so " + name + " is not offering " + described + ".");
+		Verify(noEffects != null && noEffects.length == texts.length, "The decision " + player + " is facing does not say, action by action, which of them have no effect.");
+		String id = String.valueOf(card.getCardId());
+		String wanted = text == null ? "" : text.toLowerCase();
+		String found = null;
+		int count = 0;
+		for (int i = 0; i < texts.length && i < cardIds.length; i++) {
+			if(cardIds[i].equals(id) && texts[i].toLowerCase().contains(wanted)) {
+				found = noEffects[i];
+				count++;
+			}
+		}
+		Verify(count > 0, name + " is not offering " + player + " " + described + ".");
+		Verify(count == 1, name + " is offering " + player + " " + count + " actions that fit; say which is meant by words of its description.");
+		return found;
+	}
+
 	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Transfer")); }
 	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Transfer ")); }
 

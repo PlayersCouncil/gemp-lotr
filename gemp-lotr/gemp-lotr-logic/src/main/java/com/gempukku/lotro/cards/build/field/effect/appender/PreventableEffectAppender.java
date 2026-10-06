@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DelegateActionContext;
 import com.gempukku.lotro.cards.build.PlayerSource;
@@ -86,6 +87,15 @@ public class PreventableEffectAppender extends DelayedAppender {
                 effectAppender.appendEffect(false, subAction, actionContext);
             return new StackActionEffect(subAction);
         }
+    }
+
+    // What would happen if it were not prevented.  Where preventing it puts something else in its place,
+    // nothing is said: that is the other player's to bring about.
+    @Override
+    public EffectForecast forecast(ActionContext actionContext) {
+        if (insteadAppenders != null && insteadAppenders.length > 0)
+            return EffectForecast.UNKNOWN;
+        return EffectForecast.together(actionContext, effectAppenders);
     }
 
     private boolean areCostsPlayable(ActionContext actionContext) {

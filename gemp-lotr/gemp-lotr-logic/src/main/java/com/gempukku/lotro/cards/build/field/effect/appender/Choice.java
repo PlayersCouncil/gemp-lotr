@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -105,6 +106,16 @@ public class Choice implements EffectAppenderProducer {
                                     }
                                 }));
                 return new StackActionEffect(subAction);
+            }
+
+            // Whichever option is taken: nothing only if no option would do anything.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String choosingPlayer = playerSource.getPlayer(actionContext);
+                ActionContext delegate = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect());
+                return EffectForecast.together(delegate, possibleEffectAppenders);
             }
 
             @Override

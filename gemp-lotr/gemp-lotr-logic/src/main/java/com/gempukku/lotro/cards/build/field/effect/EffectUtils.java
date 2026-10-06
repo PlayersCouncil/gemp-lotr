@@ -80,6 +80,13 @@ public class EffectUtils {
             actionSource.addPlayRequirement(conditionRequirement);
         }
 
+        // "noEffectUnless" is written like "requires" and checked like it, but an action that fails it is still
+        // offered: it is flagged as having no effect.  It is where a guard goes that kept an event, or an
+        // ability with a cost, from being used to no purpose (Ketura on Q-0034: such an action is offered).
+        final JSONObject[] noEffectUnlessArray = FieldUtils.getObjectArray(value.get("noEffectUnless"), "noEffectUnless");
+        for (JSONObject requirement : noEffectUnlessArray)
+            actionSource.addNoEffectUnless(environment.getRequirementFactory().getRequirement(requirement, environment));
+
         processCostsAndEffects(value, environment, actionSource);
     }
 
@@ -89,6 +96,10 @@ public class EffectUtils {
 
         if (costArray.length == 0 && effectArray.length == 0)
             throw new InvalidCardDefinitionException("Action does not contain a cost, nor effect");
+
+        // Whether the action may be judged, before it is taken, to do nothing: only where none of its costs
+        // could make what its effects need.
+        actionSource.setJudgeable(NoEffectForesight.canForesee(costArray, effectArray));
 
         final EffectAppenderFactory effectAppenderFactory = environment.getEffectAppenderFactory();
         final CardGenerationEnvironment costEnvironment = costEnvironmentOfTriggeredAction(environment, value.get("trigger"), costArray);

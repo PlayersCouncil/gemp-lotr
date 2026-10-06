@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -56,6 +57,12 @@ public class Repeat implements EffectAppenderProducer {
             @Override
             public boolean isPlayabilityCheckedForEffect() {
                 return Arrays.stream(effectAppenders).anyMatch(EffectAppender::isPlayabilityCheckedForEffect);
+            }
+
+            // However many times: nothing done once is nothing done each time.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.together(actionContext, effectAppenders);
             }
         };
     }

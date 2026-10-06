@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -32,14 +33,21 @@ public class Wound implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        result.addEffectAppender(
-                CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                         SpotOverride.NONE,
                         (actionContext) -> Filters.canTakeWounds(actionContext.getSource(), 1),
                         (actionContext) -> Filters.canTakeWounds(actionContext.getSource(), times.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
-                        valueSource, memory, player, "Choose cards to wound", environment));
+                        valueSource, memory, player, "Choose cards to wound", environment);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With nobody who can take a wound it does nothing; a wound is never a matter of one skirmish only.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

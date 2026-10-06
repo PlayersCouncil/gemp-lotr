@@ -192,6 +192,20 @@
 				culture: isengard
 				filter: machine
 			}
+			# It is offered then, and flagged as having no effect: no number of tokens the player could
+			# remove reaches any Uruk-hai in play.
+			noEffectUnless: [
+				{
+					type: CanSpotCultureTokens
+					culture: isengard
+					filter: machine
+					memorize: tokenCount
+				}
+				{
+					type: CanSpot
+					filter: uruk-hai,MaxTwilight(memory(tokenCount))
+				}
+			]
 			cost: [
 				{
 					type: ChooseANumber

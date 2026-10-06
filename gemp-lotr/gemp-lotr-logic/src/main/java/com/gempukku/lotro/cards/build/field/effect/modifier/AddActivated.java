@@ -24,7 +24,7 @@ import java.util.List;
 public class AddActivated implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter", "phase", "player", "requires", "cost", "effect", "limitPerPhase", "limitPerTurn", "text");
+        FieldUtils.validateAllowedFields(object, "filter", "phase", "player", "requires", "noEffectUnless", "cost", "effect", "limitPerPhase", "limitPerTurn", "text");
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final String text = FieldUtils.getString(object.get("text"), "text");
@@ -45,6 +45,7 @@ public class AddActivated implements ModifierSourceProducer {
 
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
+            actionSource.setSkirmishAbility(phase == Phase.SKIRMISH);
             if (limitPerPhase > 0) {
                 actionSource.addPlayRequirement(
                         (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limitPerPhase));

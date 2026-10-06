@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -41,6 +42,12 @@ public class CostToEffect implements EffectAppenderProducer {
                     effectAppender.appendEffect(false, subAction, actionContext);
 
                 return new StackActionEffect(subAction);
+            }
+
+            // What its own cost buys: with that doing nothing, so does this, whether or not the cost is paid.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.together(actionContext, effectAppenders);
             }
 
             private boolean checkConditions(ActionContext actionContext) {

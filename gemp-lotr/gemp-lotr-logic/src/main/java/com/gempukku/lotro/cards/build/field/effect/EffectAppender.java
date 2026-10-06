@@ -24,4 +24,14 @@ public interface EffectAppender extends PreEvaluateAble {
     default boolean canPreEvaluate() {
         return true;
     }
+
+    /**
+     * What can be told of this effect before the action it belongs to is taken, for judging whether the action
+     * will do nothing (the no-effect flag).  Asked while the action is only on offer: no cost has been paid and
+     * nothing has been chosen.  It must change nothing, and in particular must never work out an amount, since
+     * an amount with a limit spends the limit as it is worked out.  An effect that cannot tell says UNKNOWN.
+     */
+    default EffectForecast forecast(ActionContext actionContext) {
+        return EffectForecast.UNKNOWN;
+    }
 }

@@ -324,6 +324,9 @@ public class Card_V2_021_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(shot));
+		// Three tokens reach the cheaper Uruk-hai, so the event is not marked as one that will do nothing,
+		// though the player may still remove too few.
+		assertEquals("false", scn.ShadowActionNoEffect(shot));
 		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
@@ -364,6 +367,8 @@ public class Card_V2_021_Tests
 		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertTrue(scn.ShadowPlayAvailable(shot));
+		// Offered, and marked as an action whose effect will do nothing.
+		assertEquals("effect", scn.ShadowActionNoEffect(shot));
 		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
@@ -404,6 +409,8 @@ public class Card_V2_021_Tests
 		assertEquals(2, worker.getBlueprint().getTwilightCost());
 		// There are tokens to remove, and that is all the event asks for.
 		assertTrue(scn.ShadowPlayAvailable(shot));
+		// Offered, and marked as an action whose effect will do nothing.
+		assertEquals("effect", scn.ShadowActionNoEffect(shot));
 		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);

@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 public class ResponseEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "trigger", "requires", "cost", "effect", "text", "limitPerPhase", "limitPerTurn", "phase", "fromDiscard");
+        FieldUtils.validateAllowedFields(value, "trigger", "requires", "noEffectUnless", "cost", "effect", "text", "limitPerPhase", "limitPerTurn", "phase", "fromDiscard");
 
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
 

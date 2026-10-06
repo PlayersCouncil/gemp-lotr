@@ -1,5 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -41,6 +43,9 @@ public class AddKeyword implements EffectAppenderProducer {
 
         Function<ActionContext, Keyword> keywordFunction;
         ValueSource amount;
+        // Damage given for the current phase by a skirmish action is gone when the skirmish is.  No other
+        // keyword is taken to matter only to the skirmish being fought.
+        boolean damageForTheSkirmish = false;
         if (keywordString.startsWith("fromMemory(") && keywordString.endsWith(")")) {
             String keywordMemory = keywordString.substring(keywordString.indexOf("(") + 1, keywordString.lastIndexOf(")"));
             keywordFunction = actionContext -> Keyword.valueOf(actionContext.getValueFromMemory(keywordMemory));
@@ -49,6 +54,7 @@ public class AddKeyword implements EffectAppenderProducer {
             final String[] keywordSplit = keywordString.split("\\+");
             Keyword keyword = FieldUtils.getEnum(Keyword.class, keywordSplit[0], "keyword");
             keywordFunction = (actionContext) -> keyword;
+            damageForTheSkirmish = keyword == Keyword.DAMAGE && until.endsWithCurrentPhase(Phase.SKIRMISH);
             int value = 1;
             if (keywordSplit.length == 2)
                 value = Integer.parseInt(keywordSplit[1]);
@@ -56,10 +62,17 @@ public class AddKeyword implements EffectAppenderProducer {
             amount = ValueResolver.resolveEvaluator(effectObject.get("amount"), value, environment);
         }
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to add keyword to", environment);
+        final boolean endsWithSkirmish = damageForTheSkirmish;
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to add keyword to", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

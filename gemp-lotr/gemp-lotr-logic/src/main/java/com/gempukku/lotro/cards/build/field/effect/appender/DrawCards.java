@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -29,6 +30,14 @@ public class DrawCards implements EffectAppenderProducer {
                 final Evaluator evaluator = count.getEvaluator(null);
                 final int cardCount = evaluator.evaluateExpression(actionContext.getGame(), null);
                 return actionContext.getGame().getGameState().getDeck(drawPlayer).size() >= cardCount;
+            }
+
+            // From an empty draw deck nothing is drawn.  How many cards it would draw is not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String drawPlayer = playerSource.getPlayer(actionContext);
+                return actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty()
+                        ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
             }
 
             @Override

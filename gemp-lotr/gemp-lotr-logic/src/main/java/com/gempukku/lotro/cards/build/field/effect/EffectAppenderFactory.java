@@ -274,6 +274,11 @@ public class EffectAppenderFactory {
                 public boolean isPlayabilityCheckedForEffect() {
                     return effectAppender.isPlayabilityCheckedForEffect();
                 }
+
+                @Override
+                public EffectForecast forecast(ActionContext actionContext) {
+                    return effectAppender.forecast(actionContext);
+                }
             };
         } else {
             return effectAppender;

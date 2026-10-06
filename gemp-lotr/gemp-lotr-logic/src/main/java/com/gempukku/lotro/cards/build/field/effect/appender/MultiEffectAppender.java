@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
 import java.util.LinkedList;
@@ -47,5 +48,13 @@ public class MultiEffectAppender implements EffectAppender {
     @Override
     public boolean isPlayabilityCheckedForEffect() {
         return playabilityCheckedForEffect;
+    }
+
+    // All of the parts happen, one after another.  An effect that is built of a card resolver and what is then
+    // done with the cards says something better of itself (see EffectForecast.givenTo); left to this, it says
+    // UNKNOWN, since its second part does.
+    @Override
+    public EffectForecast forecast(ActionContext actionContext) {
+        return EffectForecast.together(actionContext, effectAppenders.toArray(new EffectAppender[0]));
     }
 }

@@ -19,7 +19,7 @@ public class IncrementPerTurnLimit implements EffectAppenderProducer {
 
         final int limit = FieldUtils.getInteger(effectObject.get("limit"), "limit", 1);
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new IncrementTurnLimitEffect(actionContext.getSource(), limit);

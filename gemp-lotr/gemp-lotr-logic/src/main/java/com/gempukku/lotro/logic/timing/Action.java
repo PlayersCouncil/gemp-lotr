@@ -30,4 +30,13 @@ public interface Action {
     public String getText(LotroGame game);
 
     public Effect nextEffect(LotroGame game);
+
+    /**
+     * Whether this action has been judged, before being taken, to do nothing.  The judgement is made once, the
+     * first time it is asked for, which is when the action is put in front of a player.
+     * @return Why it will do nothing, or null if it is not known to.
+     */
+    default NoEffect getNoEffect() {
+        return null;
+    }
 }

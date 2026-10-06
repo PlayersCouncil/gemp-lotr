@@ -210,6 +210,8 @@ public class Card_V2_031_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, savage));
 		assertTrue(scn.ShadowActionAvailable(trail));
+		// An Uruk-hai is in the skirmish: the ability is not marked as one that will do nothing.
+		assertEquals("false", scn.ShadowActionNoEffect(trail));
 		assertEquals(2, scn.GetCultureTokensOn(devilry));
 		assertEquals(2, scn.GetCultureTokensOn(attack));
 		assertEquals(3, scn.GetCultureTokensOn(raiders));
@@ -328,6 +330,8 @@ public class Card_V2_031_Tests
 		assertEquals(2, scn.GetCultureTokensOn(devilry));
 		// An ability with a cost is offered whenever the cost can be paid.
 		assertTrue(scn.ShadowActionAvailable(trail));
+		// It is marked as one whose effect will do nothing: no Uruk-hai is in the skirmish being fought.
+		assertEquals("effect", scn.ShadowActionNoEffect(trail));
 
 		scn.ShadowUseCardAction(trail);
 		assertEquals(0, scn.GetCultureTokensOn(devilry));
@@ -362,6 +366,8 @@ public class Card_V2_031_Tests
 
 		assertTrue(scn.IsCharSkirmishingAgainst(frodo, savage));
 		assertTrue(scn.ShadowActionAvailable(trail));
+		// In this format the Ring-bearer's skirmish may be cancelled, and the ability is not marked.
+		assertEquals("false", scn.ShadowActionNoEffect(trail));
 		assertEquals(2, scn.GetCultureTokensOn(devilry));
 
 		scn.ShadowUseCardAction(trail);
@@ -394,6 +400,8 @@ public class Card_V2_031_Tests
 		assertTrue(scn.IsCharSkirmishingAgainst(frodo, savage));
 		// The ability has a cost that can be paid, so it is offered; its cancel is what the format refuses.
 		assertTrue(scn.ShadowActionAvailable(trail));
+		// And so it is marked as one whose effect will do nothing.
+		assertEquals("effect", scn.ShadowActionNoEffect(trail));
 		assertEquals(2, scn.GetCultureTokensOn(devilry));
 
 		scn.ShadowUseCardAction(trail);

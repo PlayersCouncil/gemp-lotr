@@ -25,7 +25,7 @@ public class IncrementPerPhaseLimit implements EffectAppenderProducer {
         final ValueSource limitSource = ValueResolver.resolveEvaluator(effectObject.get("limit"), 1, environment);
         final boolean perPlayer = FieldUtils.getBoolean(effectObject.get("perPlayer"), "perPlayer", false);
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final Evaluator evaluator = limitSource.getEvaluator(actionContext);
