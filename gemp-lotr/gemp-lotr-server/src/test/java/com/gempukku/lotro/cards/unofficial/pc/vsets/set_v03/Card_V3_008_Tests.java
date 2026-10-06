@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -423,7 +422,6 @@ public class Card_V3_008_Tests
 	}
 
 	@Test
-	@Ignore("Q-0059: CR 5.0 has a reconcile restore hindered cards before any card is discarded from hand; the game restores them once the hand has been discarded and drawn")
 	public void YourHinderedCardsAreRestoredBeforeTheDiscardThatBeginsTheReconciling() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

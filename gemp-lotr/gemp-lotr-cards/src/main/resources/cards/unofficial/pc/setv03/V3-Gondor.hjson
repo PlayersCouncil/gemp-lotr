@@ -356,12 +356,12 @@
 				}
 				requires: {
 					type: CanSpot
-					filter: your,Wraith,canExert
+					filter: Wraith,canExert
 				}
 				effect: [
 					{
 						type: Exert
-						select: choose(your,Wraith)
+						select: choose(Wraith)
 						memorize: exertedWraith
 					}
 					{

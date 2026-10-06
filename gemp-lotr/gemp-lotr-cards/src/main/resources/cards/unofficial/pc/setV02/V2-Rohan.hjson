@@ -473,6 +473,98 @@
 	# 	}
 	# }
 	
+	# History: revision 1 as it stood from the errata sheet's 2025.04.18 to 2026-10-06. Its first sentence had no "your" (though the triggers already counted only their owner's cards), and a third Discarded trigger counted the draw deck. Ketura, 2026-10-06 (Q-0047, Q-0048): "from play or from hand" is an exact list, so the draw deck trigger went, and the text gained "your". The block below it is still labelled revision 1 and still carries revision 0's image name: the revision number and the image are Ketura's to move on.
+	# 102_51: {
+	# 	cardInfo: {
+	# 		//id: 102_51
+	# 		revision: 1
+	# 		image: sets/V2/LOTR-ENV2S051.0_card.jpg
+	# 		collInfo: V2_51
+	# 		rarity: _
+	# 	}
+	# 	title: Now for Wrath
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Rohan
+	# 	twilight: 1
+	# 	type: Condition
+	# 	keywords: Support Area
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			requires: {
+	# 				type: Not
+	# 				requires: {
+	# 					type: Phase
+	# 					phase: fellowship
+	# 				}
+	# 			}
+	# 			trigger: [
+	# 				{
+	# 					type: Discarded
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Discarded
+	# 					fromZone: hand
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Discarded
+	# 					fromZone: deck
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Killed
+	# 					filter: your, culture(rohan), ally
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: AddCultureTokens
+	# 				culture: rohan
+	# 				count: 1
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: Exerted
+	# 				filter: minion
+	# 				source: side(freeps)
+	# 				memorize: hurtMinion
+	# 			}
+	# 			cost: [
+	# 				{
+	# 					type: RemoveCultureTokens
+	# 					count: 2
+	# 					select: self
+	# 				}
+	# 				{
+	# 					type: Exert
+	# 					select: choose(valiant, companion)
+	# 					times: 1
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: Wound
+	# 				select: memory(hurtMinion)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	102_51: {
 		cardInfo: {
 			//id: 102_51
@@ -507,11 +599,6 @@
 					{
 						type: Discarded
 						fromZone: hand
-						filter: your, culture(rohan), or(item, ally)
-					}
-					{
-						type: Discarded
-						fromZone: deck
 						filter: your, culture(rohan), or(item, ally)
 					}
 					{
@@ -553,7 +640,7 @@
 				}
 			}
 		]
-		gametext: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
+		gametext: Each time your [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
 		lore: ""
 		promotext: ""
 		alts: {

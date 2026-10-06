@@ -194,6 +194,88 @@ public class Card_V2_026_Tests
 	}
 
 	@Test
+	public void AGruntProtectingItselfBesideAnUrukHaiIsOverwhelmedWithItAtDoubleTheirTotalAndTripleItsOwnStrength() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grunt = scn.GetShadowCard("grunt1");
+		var savage = scn.GetShadowCard("savage");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(grunt, savage);
+		// 8 + 12 = 20: exactly double the 5 + 5 of the Grunt and the Savage, and more than three times the
+		// Grunt's own 5.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 12));
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, grunt);
+		scn.ShadowAssignToMinions(aragorn, savage);
+
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(20, scn.GetStrength(aragorn));
+		assertEquals(5, scn.GetStrength(grunt));
+		assertEquals(5, scn.GetStrength(savage));
+		scn.FreepsPass();
+		assertEquals(0, scn.GetWoundsOn(grunt));
+
+		// The Grunt is the one [isengard] Orc in the skirmish, so it is the Orc protected.
+		scn.ShadowUseCardAction(grunt);
+		assertEquals(1, scn.GetWoundsOn(grunt));
+		assertEquals(3, scn.GetOverwhelmMultiplier(grunt));
+		assertEquals(2, scn.GetOverwhelmMultiplier(savage));
+		assertInZone(Zone.SHADOW_CHARACTERS, grunt, savage);
+
+		scn.PassCurrentPhaseActions();
+		// The Savage is overwhelmed at double as ever.  The Grunt, on 1 wound of its 3 vitality, could not have
+		// died of the wound for losing: it is overwhelmed too.
+		assertInZone(Zone.DISCARD, grunt, savage);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AGruntProtectingItselfBesideAnUrukHaiIsSparedUnderTripleItsOwnStrengthAndTheUrukHaiIsOverwhelmed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grunt = scn.GetShadowCard("grunt1");
+		var savage = scn.GetShadowCard("savage");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(grunt, savage);
+		// The Grunt made 13, so that double the side's 13 + 5 is under three times the Grunt's own strength.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, grunt, null, 8));
+		// 8 + 30 = 38: more than double the side's 18, and one short of three times the Grunt's 13.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 30));
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, grunt);
+		scn.ShadowAssignToMinions(aragorn, savage);
+
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(38, scn.GetStrength(aragorn));
+		assertEquals(13, scn.GetStrength(grunt));
+		assertEquals(5, scn.GetStrength(savage));
+		scn.FreepsPass();
+		assertEquals(0, scn.GetWoundsOn(grunt));
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		scn.ShadowUseCardAction(grunt);
+		assertEquals(1, scn.GetWoundsOn(grunt));
+		assertEquals(3, scn.GetOverwhelmMultiplier(grunt));
+		assertEquals(2, scn.GetOverwhelmMultiplier(savage));
+
+		scn.PassCurrentPhaseActions();
+		// The protection is the Orc's alone: the Uruk-hai beside it, with 3 vitality and no wound, is overwhelmed.
+		assertInZone(Zone.DISCARD, savage);
+		// The Grunt has lost the skirmish and no more: 1 wound for exerting and 1 for losing.
+		assertInZone(Zone.SHADOW_CHARACTERS, grunt);
+		assertEquals(2, scn.GetWoundsOn(grunt));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
 	public void IsNotOfferedToAnExhaustedGruntNorInTheAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

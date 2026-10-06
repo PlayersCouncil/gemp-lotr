@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.actions;
 
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -22,6 +23,7 @@ public class PlayerReconcilesAction implements Action {
     private final LotroGame _game;
     private final String _playerId;
 
+    private boolean _restored;
     private Queue<Effect> _effectQueue;
 
     public PlayerReconcilesAction(LotroGame game, String playerId) {
@@ -78,6 +80,18 @@ public class PlayerReconcilesAction implements Action {
 
     @Override
     public Effect nextEffect(LotroGame game) {
+        if (!_restored) {
+            _restored = true;
+            // CR 5.0 "reconcile": "When any player reconciles (before they discard any cards from hand), restore all
+            // cards owned by that player which would be active upon restoration."  This is the reconcile's first
+            // step, carried out (with anything that answers it) before the hand is counted and the discard is asked.
+            return new RestoreCardsInPlayEffect(_playerId, null,
+                    //For now, we are only restoring cards owned by the reconciling player; this may
+                    // be re-evaluated in the future depending.
+                    Filters.owner(_playerId),
+                    Filters.hindered);
+        }
+
         if (_effectQueue == null) {
 
             _effectQueue = new LinkedList<>();

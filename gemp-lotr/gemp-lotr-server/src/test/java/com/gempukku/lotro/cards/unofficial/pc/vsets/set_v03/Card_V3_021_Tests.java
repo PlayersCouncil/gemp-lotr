@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -349,7 +348,6 @@ public class Card_V3_021_Tests
 	}
 
 	@Test
-	@Ignore("Q-0068: 'exert a Wraith' names no side, so a Shadow minion who is a Wraith should be a Wraith that may be exerted; the game offers only the Free Peoples player's own Wraiths")
 	public void AShadowMinionWhoIsAWraithMayBeTheWraithExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

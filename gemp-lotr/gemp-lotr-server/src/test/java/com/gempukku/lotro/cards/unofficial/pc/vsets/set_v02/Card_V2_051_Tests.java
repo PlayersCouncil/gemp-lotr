@@ -7,8 +7,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.VitalityModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -90,7 +88,7 @@ public class Card_V2_051_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand
+		 * Game Text: Each time your [rohan] item or [rohan] ally is killed or discarded from play or from hand
 		 * (except during the fellowship phase), add a [rohan] token here.
 		 * Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a
 		 * valiant companion to wound that minion.
@@ -445,8 +443,7 @@ public class Card_V2_051_Tests
 		assertTrue(scn.ShadowDecisionAvailable("reconcile"));
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
 
-		// The text does not say whose [rohan] ally.  The game counts only its owner's, and was made to
-		// on purpose; this test holds what the game does while the two are being reconciled.
+		// "Your [rohan] item or [rohan] ally": the other player's own Deor is not this card's owner's.
 		scn.ShadowChooseCard(theirDeor);
 		assertInZone(Zone.DISCARD, theirDeor);
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
@@ -460,32 +457,6 @@ public class Card_V2_051_Tests
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
 		// The turn is over; the other player's has begun.
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-	}
-
-	@Test
-	@Ignore("Q-0048: the text has no \"your\", but the game was changed on purpose to count only its owner's [rohan] items and allies")
-	public void TheOtherPlayersRohanAllyDiscardedFromHisHandAddsAToken() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wrath = scn.GetFreepsCard("wrath");
-		// The Shadow player's own copy of Deor, in his hand.  The text says "a [rohan] ally", not "your".
-		var theirDeor = scn.GetShadowCard("deor");
-		scn.MoveCardsToSupportArea(wrath);
-		scn.MoveCardsToHand(theirDeor);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassRegroupActions();
-
-		// The Shadow player reconciles before the Free Peoples player decides whether to move again.
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertTrue(scn.ShadowDecisionAvailable("reconcile"));
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-
-		scn.ShadowChooseCard(theirDeor);
-		assertInZone(Zone.DISCARD, theirDeor);
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.FreepsDecisionAvailable("another move"));
 	}
 
 	@Test
@@ -539,68 +510,6 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void ARohanItemOrAllyDiscardedFromTheDrawDeckAddsATokenAndOtherCardsAddNone() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wrath = scn.GetFreepsCard("wrath");
-		var haldir = scn.GetFreepsCard("haldir");
-		var longbow = scn.GetFreepsCard("longbow");
-		var athelas = scn.GetFreepsCard("athelas1");
-		var castout = scn.GetFreepsCard("castout1");
-		var javelin = scn.GetFreepsCard("javelin");
-		var deor = scn.GetFreepsCard("deor");
-		var troop = scn.GetShadowCard("troop");
-		scn.MoveCardsToSupportArea(wrath);
-		scn.MoveCompanionsToTable(haldir);
-		scn.AttachCardsTo(haldir, longbow);
-
-		scn.StartGame();
-		// The Naith Longbow exerts its bearer for each card it discards: vitality 3 + 2, for four uses.
-		scn.ApplyAdHocModifier(new VitalityModifier(null, haldir, null, 2));
-		scn.MoveMinionsToTable(troop);
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertEquals(0, scn.GetWoundsOn(haldir));
-
-		// The text names play and hand.  The game counts the draw deck as well, and was made to on
-		// purpose; this test holds what the game does while the two are being reconciled.
-		// A [gondor] possession discarded from the top of the draw deck: nothing.
-		scn.MoveCardsToTopOfDeck(athelas);
-		assertEquals(athelas, scn.GetFreepsTopOfDeck());
-		scn.FreepsUseCardAction(longbow);
-		assertEquals(1, scn.GetWoundsOn(haldir));
-		assertInZone(Zone.DISCARD, athelas);
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		scn.ShadowPass();
-
-		// A [rohan] condition: nothing.
-		scn.MoveCardsToTopOfDeck(castout);
-		assertEquals(castout, scn.GetFreepsTopOfDeck());
-		scn.FreepsUseCardAction(longbow);
-		assertInZone(Zone.DISCARD, castout);
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		scn.ShadowPass();
-
-		// A [rohan] possession, and then a [rohan] ally.
-		scn.MoveCardsToTopOfDeck(javelin);
-		assertEquals(javelin, scn.GetFreepsTopOfDeck());
-		scn.FreepsUseCardAction(longbow);
-		assertInZone(Zone.DISCARD, javelin);
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		scn.ShadowPass();
-
-		scn.MoveCardsToTopOfDeck(deor);
-		assertEquals(deor, scn.GetFreepsTopOfDeck());
-		scn.FreepsUseCardAction(longbow);
-		assertInZone(Zone.DISCARD, deor);
-		assertEquals(2, scn.GetCultureTokensOn(wrath));
-		assertEquals(4, scn.GetWoundsOn(haldir));
-		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0047: the text says \"from play or from hand\", but the game was changed on purpose to count the draw deck too")
 	public void ARohanItemDiscardedFromTheDrawDeckAddsNoToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -93,13 +93,16 @@ public class RestoreTests {
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 					put("fodder", "1_90");
+					put("armory", "1_173"); //Goblin Armory: a Shadow condition in the support area
 				}}
 		);
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var armory = scn.GetShadowCard("armory");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.HinderCard(aragorn);
+		scn.MoveCardsToSupportArea(armory);
+		scn.HinderCard(aragorn, armory);
 
 		//So that there's something to reconcile
 		scn.ShadowDrawCard();
@@ -108,17 +111,20 @@ public class RestoreTests {
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.IsHindered(armory));
 		scn.PassRegroupActions();
 
-		//Shadow reconcile doesn't affect freeps
+		//Shadow reconcile restores the Shadow player's own card before the discard is asked, and doesn't affect freeps
 		assertTrue(scn.ShadowDecisionAvailable("reconcile"));
+		assertFalse(scn.IsHindered(armory));
 		assertTrue(scn.IsHindered(aragorn));
 		scn.ShadowDeclineReconciliation();
 		assertTrue(scn.IsHindered(aragorn));
 
 		scn.FreepsChooseToStay();
+		//CR 5.0 "reconcile": the restoring comes before any card is discarded from hand (Ketura on Q-0059)
 		assertTrue(scn.FreepsDecisionAvailable("reconcile"));
-		assertTrue(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(aragorn));
 		scn.FreepsDeclineReconciliation();
 		assertFalse(scn.IsHindered(aragorn));
 	}
@@ -148,10 +154,12 @@ public class RestoreTests {
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.IsHindered(aragorn));
 		scn.FreepsUseCardAction(lembas);
 
+		//Restored as the reconcile begins, with the discard still to be asked (CR 5.0 "reconcile"; Ketura on Q-0059)
 		assertTrue(scn.FreepsDecisionAvailable("reconcile"));
-		assertTrue(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(aragorn));
 		scn.FreepsDeclineReconciliation(); //Actually declining the "discard a card from hand" part of reconcile
 		assertFalse(scn.IsHindered(aragorn));
 

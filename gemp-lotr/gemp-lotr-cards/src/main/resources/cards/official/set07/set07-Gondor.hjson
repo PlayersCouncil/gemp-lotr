@@ -882,8 +882,7 @@
 					phase: regroup
 				}
 				requires: {
-					type: cantSpot
-					filter: site,controlledByOtherPlayer
+					type: opponentDoesNotControlSite
 				}
 				effect: {
 					type: wound
@@ -2535,8 +2534,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: cantSpot
-						filter: site,controlledByOtherPlayer
+						type: opponentDoesNotControlSite
 					}
 					filter: self
 					amount: 2

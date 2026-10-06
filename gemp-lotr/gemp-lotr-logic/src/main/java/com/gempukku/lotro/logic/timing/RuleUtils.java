@@ -8,9 +8,12 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.modifiers.CantBeOverwhelmedModifier;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -114,21 +117,59 @@ public class RuleUtils {
             return 0;
 
         int total = 0;
-        final Evaluator overrideEvaluator = skirmish.getShadowStrengthOverrideEvaluator();
         for (PhysicalCard minion : skirmish.getShadowCharacters()) {
-            final Evaluator modifierOverrideEvaluator = game.getModifiersQuerying().getShadowStrengthOverrideEvaluator(game, minion);
-            if(modifierOverrideEvaluator != null) {
-                total += modifierOverrideEvaluator.evaluateExpression(game, minion);
-            }
-            else if(overrideEvaluator != null) {
-                total += overrideEvaluator.evaluateExpression(game, minion);
-            }
-            else {
-                total += game.getModifiersQuerying().getStrength(game, minion);
-            }
+            total += getShadowSkirmishStrength(game, minion);
         }
 
         return total;
+    }
+
+    /**
+     * What one minion adds to the Shadow side's total in the current skirmish.
+     */
+    public static int getShadowSkirmishStrength(LotroGame game, PhysicalCard minion) {
+        final Skirmish skirmish = game.getGameState().getSkirmish();
+        if (skirmish == null)
+            return 0;
+
+        final Evaluator modifierOverrideEvaluator = game.getModifiersQuerying().getShadowStrengthOverrideEvaluator(game, minion);
+        if (modifierOverrideEvaluator != null)
+            return modifierOverrideEvaluator.evaluateExpression(game, minion);
+
+        final Evaluator overrideEvaluator = skirmish.getShadowStrengthOverrideEvaluator();
+        if (overrideEvaluator != null)
+            return overrideEvaluator.evaluateExpression(game, minion);
+
+        return game.getModifiersQuerying().getStrength(game, minion);
+    }
+
+    /**
+     * The minions who would be overwhelmed if the current skirmish were resolved as it stands.  Overwhelm is decided
+     * minion by minion (Ketura on Q-0044).  Nobody is overwhelmed unless the Shadow side loses to at least double its
+     * total strength.  When it does, every minion with no protection is overwhelmed, and a minion who cannot be
+     * overwhelmed "unless its strength is tripled" is overwhelmed only if the winning strength is at least that
+     * multiple of its own strength; otherwise it has merely lost the skirmish.  With one minion on the side its
+     * strength is the side's total, and this is the plain rule.
+     */
+    public static Set<PhysicalCard> getMinionsFacingOverwhelm(LotroGame game) {
+        final Skirmish skirmish = game.getGameState().getSkirmish();
+        if (skirmish == null || skirmish.getFellowshipCharacter() == null || skirmish.getShadowCharacters().isEmpty())
+            return Collections.emptySet();
+
+        int fpStrength = getFellowshipSkirmishStrength(game);
+        int shadowStrength = getShadowSkirmishStrength(game);
+        if (fpStrength <= shadowStrength || fpStrength < 2L * shadowStrength)
+            return Collections.emptySet();
+
+        Set<PhysicalCard> overwhelmed = new HashSet<>();
+        for (PhysicalCard minion : skirmish.getShadowCharacters()) {
+            int multiplier = game.getModifiersQuerying().getOverwhelmMultiplier(game, minion);
+            if (multiplier <= 2
+                    || (multiplier < CantBeOverwhelmedModifier.ImmuneToOverwhelmThreshold
+                    && fpStrength >= (long) multiplier * getShadowSkirmishStrength(game, minion)))
+                overwhelmed.add(minion);
+        }
+        return overwhelmed;
     }
 
     public static int getFellowshipSkirmishDamageBonus(LotroGame game) {

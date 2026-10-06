@@ -524,8 +524,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: cantSpot
-						filter: site,controlledByOtherPlayer
+						type: opponentDoesNotControlSite
 					}
 					filter: self
 					amount: 2
@@ -1035,8 +1034,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: cantSpot
-						filter: site,controlledByOtherPlayer
+						type: opponentDoesNotControlSite
 					}
 					filter: bearer
 					amount: 1

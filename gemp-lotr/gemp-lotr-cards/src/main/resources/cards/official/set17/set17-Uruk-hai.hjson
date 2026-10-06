@@ -754,8 +754,10 @@
 					filter: self
 				}
 				requires: {
-					type: cantSpot
-					filter: siteYouControl
+					type: not
+					requires: {
+						type: controlsSite
+					}
 				}
 				effect: {
 					type: takeControlOfSite

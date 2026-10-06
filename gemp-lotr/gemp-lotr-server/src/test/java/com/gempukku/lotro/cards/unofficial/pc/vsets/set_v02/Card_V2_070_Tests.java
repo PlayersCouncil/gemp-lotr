@@ -9,7 +9,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -52,6 +51,18 @@ public class Card_V2_070_Tests
 					// Stack this minion on a site you control."  Neither has any other text for the regroup phase.
 					put("besieger", "4_180");
 					put("trooper", "4_199");
+					// Sturdy Shield: borne by a [rohan] Man; "While no opponent controls a site, bearer is strength +1."
+					put("shield", "15_141");
+					// Household Guard: a [rohan] Man, strength 6, vitality 3; valiant and nothing else
+					put("guard", "5_83");
+					// Gondor Still Stands: "While no opponent controls a site, wound a minion at the start of each
+					// regroup phase."
+					put("stands", "7_95");
+					// White Hand Intruder: [uruk-hai], strength 9, damage +1; "Each time this minion wins a skirmish,
+					// if you do not control a site, you may take control of a site."
+					put("intruder", "17_127");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3
 				}},
 				new HashMap<>()
 				{{
@@ -233,7 +244,6 @@ public class Card_V2_070_Tests
 	}
 
 	@Test
-	@Ignore("F-0085: at the Wall with no site controlled, Haldir 4_71 loses his +2 and Vorondil 7_127 and Horseman of the North 15_130 keep theirs, on the same words")
 	public void EveryCompanionWhoIsStrongerWhileNoOpponentControlsASiteLosesThatAtTheWall() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -260,6 +270,98 @@ public class Card_V2_070_Tests
 		assertEquals(5, scn.GetStrength(vorondil));
 		assertEquals(5, scn.GetStrength(horseman));
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AShieldAndAConditionThatWorkWhileNoOpponentControlsASiteStopAtTheWall() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+		var shield = scn.GetFreepsCard("shield");
+		var stands = scn.GetFreepsCard("stands");
+		var band = scn.GetShadowCard("band");
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		scn.AttachCardsTo(guard, shield);
+		scn.MoveCardsToSupportArea(stands);
+		scn.MoveMinionsToTable(band);
+		scn.FreepsPass();
+
+		// Site 4, one short of the Wall: nobody controls a site.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(7, scn.GetStrength(guard));        // 6 + 1 for the Shield
+		assertEquals(0, scn.GetWoundsOn(band));
+
+		// The Band is assigned to nobody.  At the start of the regroup phase the condition wounds it.
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(1, scn.GetWoundsOn(band));
+
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		// At the Wall the Shadow player's count of sites is one, and still no site is controlled.
+		assertEquals("Breached Wall", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(6, scn.GetStrength(guard));
+
+		scn.SkipToPhase(Phase.REGROUP);
+		// No second wound: the Band has 3 vitality and is still there to take one.
+		assertInZone(Zone.SHADOW_CHARACTERS, band);
+		assertEquals(1, scn.GetWoundsOn(band));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AMinionThatTakesASiteIfItsOwnerControlsNoneIsNotOfferedThatAtTheWall() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var intruder = scn.GetShadowCard("intruder");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		scn.MoveMinionsToTable(intruder);
+		scn.FreepsPass();
+
+		// Site 4, one short of the Wall.  The Intruder (9) beats Aragorn (8), and with no site controlled its
+		// owner may take one.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, intruder);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));      // 1 for losing + 1 for damage +1
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(intruder));
+		// Declined, so that he still controls no site at the Wall.
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		assertEquals("Breached Wall", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(gimli, intruder);
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.PassCurrentPhaseActions();
+
+		// The Intruder (9) beats Gimli (6) and nothing is offered: at the Wall its owner's count of sites is one.
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(intruder));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
