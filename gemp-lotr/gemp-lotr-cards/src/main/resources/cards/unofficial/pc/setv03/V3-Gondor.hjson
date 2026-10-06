@@ -434,7 +434,7 @@
 					amount: 2
 					requires: {
 						type: CanSpot
-						filter: Wraith
+						filter: culture(gondor),Wraith
 						count: 2
 					}
 				}
