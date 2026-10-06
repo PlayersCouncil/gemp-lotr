@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -336,7 +335,6 @@ public class Card_V2_011_Tests
 	}
 
 	@Test
-	@Ignore("F-0049: the choice from the draw deck has a minimum of 1, where CR 4.2 'draw deck' lets a player not find the card")
 	public void ThePlayerMayTakeNothingAndTheExertionStands() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

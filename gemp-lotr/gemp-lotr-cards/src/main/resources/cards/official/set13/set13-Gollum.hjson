@@ -740,6 +740,8 @@
 				effect: {
 					type: discardCardsFromDrawDeck
 					select: choose(culture(gollum))
+					# A card looked for in the draw deck need not be found.
+					count: 0-1
 					showAll: true
 					shuffle: true
 					forced: false

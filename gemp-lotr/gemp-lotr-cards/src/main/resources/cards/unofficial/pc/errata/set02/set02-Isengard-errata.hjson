@@ -273,26 +273,34 @@
 				{
 					type: ChooseCardsFromDrawDeck
 					select: choose(minion)
-					count: 1
+					# A minion looked for in the draw deck need not be found.
+					count: 0-1
 					memorize: chosenCard
 					showAll: true
 				}
 				{
-					type: preventable
-					player: freeps
-					cost: {
-						type: DiscardTopCardsFromDeck
-						count: 5
-						forced: false
-						deck: freeps
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: chosenCard
 					}
-					text: Discard the top 5 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
-					effect: {
-						type: PutCardsFromDeckIntoHand
-						select: memory(chosenCard)
-						reveal: true
-						shuffle: false
-						showAll: false
+					true: {
+						type: preventable
+						player: freeps
+						cost: {
+							type: DiscardTopCardsFromDeck
+							count: 5
+							forced: false
+							deck: freeps
+						}
+						text: Discard the top 5 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
+						effect: {
+							type: PutCardsFromDeckIntoHand
+							select: memory(chosenCard)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
 					}
 				}
 				# The draw deck has been looked through, so it is reshuffled, whether or not the card was taken.
