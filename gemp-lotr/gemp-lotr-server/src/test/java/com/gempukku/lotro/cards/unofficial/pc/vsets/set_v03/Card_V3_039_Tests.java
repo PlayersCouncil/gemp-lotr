@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -337,7 +336,6 @@ public class Card_V3_039_Tests
 	}
 
 	@Test
-	@Ignore("F-0115: Free Peoples cards on an ally the minion beat are hindered, where the text says a companion it was skirmishing")
 	public void CardsOnAnAllyItBeatAreNotHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -549,8 +547,8 @@ public class Card_V3_039_Tests
 
 		scn.ShadowUseCardAction(fury1);
 		assertInZone(Zone.DISCARD, party);
-		// The game still asks which keyword, though no minion is left to be given either.
-		scn.ShadowChoose("Fierce");
+		// No minion is left to be given either keyword, so the Shadow player is not asked which (F-0116).
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertInZone(Zone.SUPPORT, fury1);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

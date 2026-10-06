@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -427,44 +426,5 @@ public class Card_V3_041_Tests
 		assertInDiscard(warrior1);
 		assertInZone(Zone.SUPPORT, charger2);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0077: may the Maneuver ability be used again while the Charger is a minion, to stack more Southron Men on it?")
-	public void ManeuverActionCanBeUsedAgainWhileItIsAMinionToStackMoreSouthronMen() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var charger = scn.GetShadowCard("charger");
-		var warrior1 = scn.GetShadowCard("warrior1");
-		var warrior2 = scn.GetShadowCard("warrior2");
-		var explorer = scn.GetShadowCard("explorer");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveCardsToSupportArea(charger);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(warrior1, warrior2, explorer);
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPass();
-
-		scn.ShadowUseCardAction(charger);
-		scn.ShadowChooseCards(warrior1);
-		assertEquals(8, scn.GetStrength(charger));
-		assertEquals(1, scn.GetKeywordCount(charger, Keyword.AMBUSH));
-
-		scn.FreepsPass();
-		assertTrue(scn.ShadowActionAvailable(charger));
-		scn.ShadowUseCardAction(charger);
-		scn.ShadowChooseCards(warrior2);
-
-		assertEquals(2, scn.GetStackedCards(charger).size());
-		assertTrue(scn.IsType(charger, CardType.MINION));
-		// 4 + 4 for each of the 2 Southrons now stacked on it, counted once
-		assertEquals(12, scn.GetStrength(charger));
-		assertEquals(4, scn.GetVitality(charger));
-		assertEquals(2, scn.GetKeywordCount(charger, Keyword.AMBUSH));
-		assertInZone(Zone.SHADOW_CHARACTERS, explorer);
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

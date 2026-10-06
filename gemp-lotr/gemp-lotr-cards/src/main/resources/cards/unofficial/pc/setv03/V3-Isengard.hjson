@@ -222,7 +222,7 @@
 				}
 				effect: {
 					type: Hinder
-					select: all(side(Free Peoples), AttachedTo(memory(loser)))
+					select: all(side(Free Peoples), AttachedTo(memory(loser), companion))
 				}
 			}
 			{
@@ -233,25 +233,33 @@
 					select: choose(minion)
 				}
 				effect: {
-					type: Choice
-					texts: [
-						Make your {Isengard} minion Fierce
-						Make your {Isengard} minion Relentless
-					]
-					effects: [
-						{
-							type: AddKeyword
-							select: choose(Isengard, minion)
-							keyword: fierce
-							until: start(regroup)
-						}
-						{
-							type: AddKeyword
-							select: choose(Isengard, minion)
-							keyword: relentless
-							until: start(regroup)
-						}
-					]
+					// The question is not put when the cost has left no [isengard] minion to gain either (F-0116).
+					type: If
+					check: {
+						type: CanSpot
+						filter: Isengard, minion
+					}
+					true: {
+						type: Choice
+						texts: [
+							Make your {Isengard} minion Fierce
+							Make your {Isengard} minion Relentless
+						]
+						effects: [
+							{
+								type: AddKeyword
+								select: choose(Isengard, minion)
+								keyword: fierce
+								until: start(regroup)
+							}
+							{
+								type: AddKeyword
+								select: choose(Isengard, minion)
+								keyword: relentless
+								until: start(regroup)
+							}
+						]
+					}
 				}
 			}
 		]
@@ -305,9 +313,9 @@
 						type: Optional
 						text: Would you like to exert or spot {Isengard} minions to hinder an unbound companion?
 						// Not asked where it could do nothing and nothing would be paid (Q-0034, F-0117).
-						// Without Saruman: offered when a minion can exert (a cost can be paid), or when a
-						// companion costs 0 (X of zero). With Saruman spotting pays nothing, so a companion
-						// must cost no more than the [isengard] minions there are to spot.
+						// Without Saruman: offered when a minion can exert (a cost can be paid; X is at least 1,
+						// Q-0076). With Saruman spotting pays nothing, so a companion must cost no more than
+						// the [isengard] minions there are to spot (X may be zero there).
 						requires: {
 							type: Or
 							requires: [
@@ -321,19 +329,6 @@
 										{
 											type: CanSpot
 											filter: culture(isengard),minion,canExert
-										}
-									]
-								}
-								{
-									type: And
-									requires: [
-										{
-											type: CantSpot
-											filter: title(Saruman)
-										}
-										{
-											type: CanSpot
-											filter: unbound,companion,MaxTwilight(0)
 										}
 									]
 								}
@@ -382,7 +377,8 @@
 							false: [
 								{
 									type: Exert
-									count: any
+									// At least one: "exert X minions" is an exertion cost and X is not zero (Q-0076).
+									count: anyNonZero
 									select: choose(Isengard, minion)
 									memorize: exertedMinions
 								}

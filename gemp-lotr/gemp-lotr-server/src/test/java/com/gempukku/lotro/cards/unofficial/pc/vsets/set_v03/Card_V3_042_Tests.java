@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -410,44 +409,5 @@ public class Card_V3_042_Tests
 		assertEquals(1, scn.GetKeywordCount(matriarch, Keyword.AMBUSH));
 		assertEquals(1, scn.GetShadowArcheryTotal());
 		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0077: may the Maneuver ability be used again while the Matriarch is a minion?")
-	public void ManeuverActionCanBeUsedAgainWhileSheIsAMinion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var matriarch = scn.GetShadowCard("matriarch");
-		var warrior1 = scn.GetShadowCard("warrior1");
-		var troop = scn.GetShadowCard("troop");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveCardsToSupportArea(matriarch);
-		scn.StackCardsOn(matriarch, warrior1);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(troop);
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.SetTwilight(12);
-		scn.FreepsPass();
-
-		scn.ShadowUseCardAction(matriarch);
-		assertEquals(6, scn.GetTwilight());
-		// 6 + 3 for the one Southron
-		assertEquals(9, scn.GetStrength(matriarch));
-
-		scn.FreepsPass();
-		assertTrue(scn.ShadowActionAvailable(matriarch));
-		scn.ShadowUseCardAction(matriarch);
-
-		// The cost is paid again, and she is the minion she already was.
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.IsType(matriarch, CardType.MINION));
-		assertEquals(9, scn.GetStrength(matriarch));
-		assertEquals(6, scn.GetVitality(matriarch));
-		assertEquals(1, scn.GetKeywordCount(matriarch, Keyword.AMBUSH));
-		assertEquals(1, scn.GetShadowArcheryTotal());
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

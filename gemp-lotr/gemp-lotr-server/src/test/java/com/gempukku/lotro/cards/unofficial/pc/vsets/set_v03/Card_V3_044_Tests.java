@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -210,7 +209,6 @@ public class Card_V3_044_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0113: every token goes on the one card chosen; the rules let them be divided between cards")
 	@Test
 	public void TokensReinforcedMayBeDividedBetweenCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

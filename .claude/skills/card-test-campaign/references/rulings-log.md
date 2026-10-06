@@ -565,3 +565,23 @@ on a strict reading of the twilight cost rule, transfers should not take self-di
 and asinine, but it's RAW." A Map reaching the support area after the bid is "just a detail about how it's
 presented in the client ... the information is there all the same".
 
+**Late on 2026-10-06 (Ketura, on Q-0075 to Q-0078 and F-0112 to F-0116).**
+- "Exert X <cards>" is an exertion cost and X is at least 1, as with "exert X times" (Q-0076, A Wizard Knows
+  Better 103_40: without Saruman no companion is hindered for no exertion). X of zero by SPOTTING is still
+  allowed. This narrows "X may be zero" of 2026-10-05: any X of exertions is at least 1.
+- A card that turns itself into a minion from the support area offers that ability from the support area only
+  (Q-0077, the Bladetusks 103_41, 103_42, 103_43): never again while it is that minion. The requirement in
+  their definitions is right and is not a convenience guard to convert.
+- A sentence after such an ability that calls the card by the minion's pronoun is part of the ability (Q-0078,
+  Bladetusk Matriarch: "She adds 1 to the Shadow archery total" holds only while she is the minion).
+- "Each time your condition is hindered or discarded" answers the card's own hindering or discard (Q-0075, One
+  Ill Turn Deserves Another 103_38).
+- Reinforcing more than one token: "Should let multiple tokens be selected one at a time" (F-0113). Write it as
+  a `Repeat` round a `ReinforceTokens` with no `times`; `times` on ReinforceTokens is only for "reinforce a
+  token twice" (the same card).
+- "Its skirmish" on a minion means the skirmish that minion is in: "While merely assigned to a skirmish, it is
+  not in an active skirmish and so that text should not be active" (F-0114, Corsair Quartermaster 103_45). A
+  modifier that counts over `InSkirmish` needs `self,InSkirmish` as its own filter.
+- A choice whose every branch has nothing left to act on is not put to the player: "the prompt should be
+  smarter" (F-0116, Savage Fury 103_39).
+- Repeated lines in deck validation errors are "fine as-is" (F-0112): not a finding.

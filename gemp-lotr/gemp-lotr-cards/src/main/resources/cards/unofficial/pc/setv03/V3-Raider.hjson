@@ -623,12 +623,16 @@
 				}
 				effect: [
 					{
-						type: ReinforceTokens
-						culture: Raider
-						select: choose(any)
+						// One token at a time, each on a card of the player's choice (CR 4.2 "reinforce"; F-0113).
+						type: Repeat
 						times: {
 							type: ForEachInMemory
 							memory: hinderedCards
+						}
+						effect: {
+							type: ReinforceTokens
+							culture: Raider
+							select: choose(any)
 						}
 					}
 					{
@@ -695,7 +699,8 @@
 				type: Modifier
 				modifier: {
 					type: AddKeyword
-					filter: self
+					// Only while the Quartermaster is itself in the skirmish being fought (F-0114).
+					filter: self,InSkirmish
 					keyword: damage
 					amount: {
 						type: ForEachYouCanSpot

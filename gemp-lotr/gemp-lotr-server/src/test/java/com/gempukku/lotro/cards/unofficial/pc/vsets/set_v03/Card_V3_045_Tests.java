@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -303,7 +302,6 @@ public class Card_V3_045_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Ignore("F-0114: the damage bonus counts items on the characters of whichever skirmish is being fought, its own or not")
 	@Test
 	public void HasNoDamageBonusDuringASkirmishItIsNotIn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

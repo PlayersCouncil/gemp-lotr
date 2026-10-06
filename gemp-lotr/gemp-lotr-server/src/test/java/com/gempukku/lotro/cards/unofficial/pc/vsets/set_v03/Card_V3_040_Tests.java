@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -513,12 +512,11 @@ public class Card_V3_040_Tests
 	}
 
 	@Test
-	public void WithoutSarumanNoMinionNeedBeExertedAndTheCompanionWhoCostsNothingIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithoutSarumanAndWithNoMinionAbleToExertTheCompanionWhoCostsNothingIsNotHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wizard = scn.GetShadowCard("wizard");
 		var uruk1 = scn.GetShadowCard("uruk1");
-		var uruk2 = scn.GetShadowCard("uruk2");
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var merry = scn.GetFreepsCard("merry");
 
@@ -526,26 +524,22 @@ public class Card_V3_040_Tests
 		scn.MoveCompanionsToTable(galadriel, merry);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(uruk1, uruk2);
+		scn.MoveMinionsToTable(uruk1);
+		// The only [isengard] minion is exhausted.
+		scn.AddWoundsToChar(uruk1, 2);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(2);
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(wizard);
-		scn.ShadowChooseYes();
 
-		// Both Uruk Savages could exert, and neither has to: X may be zero for anything but "exert X times".
-		assertTrue(scn.ShadowHasCardChoiceAvailable(uruk1, uruk2));
-		assertEquals(0, scn.ShadowGetChoiceMin());
+		// "Exert X minions" needs at least one minion to exert (Q-0076), so Galadriel, who costs 0, cannot be
+		// hindered for nothing: the event is paid for and spent, and the Shadow player is asked nothing.
+		assertEquals(0, scn.GetTwilight());
+		assertInDiscard(wizard);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertEquals(2, scn.GetWoundsOn(uruk1));
 		assertFalse(scn.IsHindered(galadriel));
-
-		// X = 0
-		scn.ShadowChooseCards();
-		assertEquals(0, scn.GetWoundsOn(uruk1));
-		assertEquals(0, scn.GetWoundsOn(uruk2));
-
-		// Galadriel is the only unbound companion in the game who costs 0, so there is nothing to choose between.
-		assertTrue(scn.IsHindered(galadriel));
 		assertFalse(scn.IsHindered(merry));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -619,7 +613,6 @@ public class Card_V3_040_Tests
 	}
 
 	@Test
-	@Ignore("Q-0076: without Saruman, may no minion at all be exerted, so that a companion who costs 0 is hindered for nothing?")
 	public void WithoutSarumanAtLeastOneMinionMustBeExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
