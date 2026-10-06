@@ -259,8 +259,11 @@ first. A test that needs cards in the draw deck afterwards puts them back with `
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
 until some legal action has been taken.
 
-**A card being shown is listed as not selectable.** A real reveal gives every player, the owner included, a
-"Revealed card(s)" decision to dismiss, in which `FreepsHasCardChoiceAvailable(card)` answers false:
+**A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
+the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
+random) gives the pop-up to the other players only: the hand's owner is shown nothing and has nothing to dismiss
+(Ketura on Q-0024 and Q-0036; the game log names the cards). In the decision
+`FreepsHasCardChoiceAvailable(card)` answers false:
 `FreepsHasCardChoiceAvailable(card, false)` is the reading for a card that is shown. A definition that only sets
 `reveal: true` on moving a card writes a line in the game log and shows nobody anything.
 

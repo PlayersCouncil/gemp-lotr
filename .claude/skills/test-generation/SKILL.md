@@ -226,7 +226,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   the snapshot, this is a rule tested card by card because the game writes it into each definition
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
-  dismiss (the dismiss methods fail the test when that player is being shown nothing)
+  dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is
+  shown to the other players only: assert once that the hand's owner is shown nothing
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
