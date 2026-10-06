@@ -102,7 +102,7 @@
 							filter: condition,HasCultureTokenCount(2,rohan)
 						}
 					}
-					select: choose(HasCultureTokenCount(2,rohan))
+					select: choose(culture(rohan),condition,HasCultureTokenCount(2,rohan))
 					memorize: chosenConditions
 				}			
 			]
