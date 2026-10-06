@@ -218,7 +218,7 @@ public class Card_V2_004_Tests
 	}
 
 	@Test
-	public void WithInitiativeAndOnePossessionInTheDiscardPileItIsPlayedWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithInitiativeALonePossessionInTheDiscardPileIsOfferedAndAcceptedIsPlayedOnThatMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horsemen = scn.GetShadowCard("horsemen");
@@ -243,16 +243,27 @@ public class Card_V2_004_Tests
 
 		scn.ShadowPlayCard(horsemen);
 
-		// 1 for the event + 2 for the Brigand + 2 for roaming at site 2 + 0 for the War Club
+		// 1 for the event + 2 for the Brigand + 2 for roaming at site 2
 		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+
+		// The War Club is the one possession the event could play, and "you may" still asks: it is offered, with
+		// leave to take none, and has not been played yet.
+		assertInZone(Zone.DISCARD, club);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(club));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hides, chief));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCardBPFromSelection(club);
+
 		assertAttachedTo(club, brigand);
+		// 0 for the War Club
+		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, horsemen, chief, hides);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0032: the text says \"you may play\" a possession; the game makes the Shadow player play one whenever one can be played")
 	public void ThePossessionMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
