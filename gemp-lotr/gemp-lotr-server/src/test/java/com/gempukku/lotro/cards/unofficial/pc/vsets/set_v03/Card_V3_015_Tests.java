@@ -1,15 +1,17 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_015_Tests
 {
@@ -19,17 +21,28 @@ public class Card_V3_015_Tests
 				new HashMap<>()
 				{{
 					put("twofaced", "103_15");
-					put("pass", "103_12"); // Gollum card to hinder/restore
-					put("gollum1", "9_28"); // Gollum, Dark as Darkness
-					put("gollum2", "5_24"); // Gollum, Nasty Treacherous Creature
-					put("gollummad", "10_21"); // Gollum, Mad Thing - has assignment trigger
-					put("shelob1", "8_26"); // Shelob, Last Child of Ungoliant
-					put("shelob2", "10_23"); // Shelob, Her Ladyship
-					put("letdeal", "7_63"); // Let Her Deal With Them - attaches to minion
-					put("runner", "1_178");
+					put("twofaced2", "103_15");
+					put("twofaced3", "103_15");
+					put("burden", "7_60");          // Heavy Burden: [gollum] Shadow condition in the support area; a regroup ability only
+					put("burden2", "7_60");
+					put("gollum", "5_24");          // Gollum, Nasty Treacherous Creature: strength 5, vitality 4; a regroup ability only
+					put("gollumcopy", "5_24");
+					put("vile", "7_59");            // Gollum, Vile Creature: a skirmish ability never used here
+					put("villain", "6_40");         // Gollum, Old Villain: a skirmish ability never used here
+					put("dark", "9_28");            // Gollum, Dark as Darkness: only ever in the other player's discard pile
+					put("mad", "10_21");            // Gollum, Mad Thing: to assign him the Free Peoples player makes him strength +3 until the regroup phase or adds a burden
+					put("wraithgollum", "103_66");  // Gollum, Half a Wraith Himself: a [wraith] minion of the same title
+					put("shelob", "8_26");          // Shelob, Last Child of Ungoliant: strength 8, vitality 8, enduring, fierce
+					put("shelobcopy", "8_26");
+					put("ladyship", "10_23");       // Shelob, Her Ladyship: enduring, fierce; "When you play Shelob, if you can spot Gollum, you may spot a companion..."
+					put("letdeal", "7_63");         // Let Her Deal With Them: [gollum] condition borne by a minion, who is damage +1
+					put("runner", "1_178");         // Goblin Runner: [moria], strength 5, vitality 1
+					put("runner2", "1_178");
 
-					put("aragorn", "1_89");
-					put("glorfindel", "9_16");
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used here
+					put("glorfindel", "9_16");      // Glorfindel, Revealed in Wrath: strength 9, vitality 3; a skirmish ability never used here
+					put("smeagol", "5_29");         // Smeagol, Slinker: the other player's [gollum] companion; a skirmish ability never used here
+					put("noser", "5_28");           // Smeagol, Old Noser: a Smeagol of another subtitle, only ever in a discard pile
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,9 +61,9 @@ public class Card_V3_015_Tests
 		 * Culture: Gollum
 		 * Twilight Cost: 2
 		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: <b>Shadow</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore a [gollum] card.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and borne cards).
-		*/
+		 * Subtype: Shadow, Maneuver or Skirmish
+		 * Game Text: Shadow or Maneuver or Skirmish: Restore a [gollum] card.  Then you may spot a [gollum] minion and remove a threat to replace it with another minion from your discard pile with the same title (keep all tokens and borne cards).
+		 */
 
 		var scn = GetScenario();
 
@@ -62,418 +75,564 @@ public class Card_V3_015_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-
-
 	@Test
-	public void TwofacedRestoresGollumCardInShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void RestoresOneHinderedGollumCardOfEitherPlayersAndNoOtherCard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
+		var burden = scn.GetShadowCard("burden");
+		var burden2 = scn.GetShadowCard("burden2");
+		var gollum = scn.GetShadowCard("gollum");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
 		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
 
+		scn.MoveCompanionsToTable(aragorn, smeagol);
+		scn.MoveCardsToSupportArea(burden, burden2);
 		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		// Two Gollums at once, which only cheating allows: one of each culture.
+		scn.MoveMinionsToTable(gollum, wraithgollum, runner);
+		scn.SetTwilight(5);
 		scn.FreepsPass();
 
-		scn.HinderCard(pass);
-		assertTrue(scn.IsHindered(pass));
-		scn.AddThreats(1);
-
+		scn.HinderCard(gollum, wraithgollum, runner, burden, aragorn, smeagol);
+		int twilight = scn.GetTwilight();
+		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowPlayAvailable(twofaced));
+
 		scn.ShadowPlayCard(twofaced);
+		assertEquals(twilight - 2, scn.GetTwilight());
 
-		// Pass is chosen automatically to restore as the only option
-		assertFalse(scn.IsHindered(pass));
+		// A hindered [gollum] minion, a hindered [gollum] condition, and the other player's hindered [gollum]
+		// companion: the text says "a [gollum] card" and no more.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, burden, smeagol));
+		// A hindered Gollum who is a [wraith] minion, a hindered [moria] minion, a hindered [gondor] companion,
+		// and a [gollum] condition that is not hindered.
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(wraithgollum, runner, aragorn, burden2));
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
 
-		// no Gollum minion in play
+		scn.ShadowChooseCard(smeagol);
+		assertFalse(scn.IsHindered(smeagol));
+		assertTrue(scn.IsHindered(gollum));
+		assertTrue(scn.IsHindered(burden));
+		assertTrue(scn.IsHindered(wraithgollum));
+		assertTrue(scn.IsHindered(runner));
+		assertTrue(scn.IsHindered(aragorn));
+
 		assertInZone(Zone.DISCARD, twofaced);
+		assertEquals(0, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void TwofacedWorksInManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayableAtTheShadowPlayersShadowManeuverAndSkirmishActionsAndAtNoOthers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(runner);
-
-		scn.StartGame();
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPass();
-
-		assertTrue(scn.ShadowPlayAvailable(twofaced));
-		scn.ShadowPlayCard(twofaced);
-
-		assertFalse(scn.IsHindered(pass));
-	}
-
-	@Test
-	public void TwofacedWorksInSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
+		var twofaced2 = scn.GetShadowCard("twofaced2");
+		var twofaced3 = scn.GetShadowCard("twofaced3");
+		var burden = scn.GetShadowCard("burden");
+		var burden2 = scn.GetShadowCard("burden2");
 		var runner = scn.GetShadowCard("runner");
 		var aragorn = scn.GetFreepsCard("aragorn");
 
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(runner);
 		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(burden, burden2);
+		scn.MoveCardsToHand(twofaced, twofaced2, twofaced3);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
+		scn.MoveMinionsToTable(runner);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
+		scn.HinderCard(burden, burden2);
+
+		// Shadow phase.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(twofaced));
+		scn.ShadowPass();
+
+		// Maneuver phase.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(twofaced));
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(twofaced);
+		scn.ShadowChooseCard(burden);
+		assertFalse(scn.IsHindered(burden));
+		assertTrue(scn.IsHindered(burden2));
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, twofaced);
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		// Archery phase.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(twofaced2));
+		scn.ShadowPass();
+
+		// Assignment phase.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(twofaced2));
+		scn.ShadowPass();
+
+		// A skirmish.
 		scn.FreepsAssignToMinions(aragorn, runner);
 		scn.FreepsResolveSkirmish(aragorn);
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
 		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(twofaced2));
+		scn.ShadowPlayCard(twofaced2);
+		// One hindered [gollum] card is left, and is restored without a choice.
+		assertFalse(scn.IsHindered(burden2));
+		assertEquals(twilight - 4, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, twofaced2);
+		scn.FreepsPass();
+		scn.ShadowPass();
 
-		assertTrue(scn.ShadowPlayAvailable(twofaced));
-		scn.ShadowPlayCard(twofaced);
-
-		assertFalse(scn.IsHindered(pass));
+		// Regroup phase.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(twofaced3));
 	}
 
 	@Test
-	public void TwofacedCanPlayWithNoHinderedGollumCards() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ReplacesTheSpottedGollumMinionWithAnotherOfItsTitleFromMyDiscardPileWhichKeepsItsWoundsAndWhatItBore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(runner);
-		// pass is NOT hindered
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.AddThreats(1);
-
-		// Can still play - restore effect fizzles but event is playable
-		assertTrue(scn.ShadowPlayAvailable(twofaced));
-		scn.ShadowPlayCard(twofaced);
-
-		// No hindered cards to restore, effect fizzles
-		assertFalse(scn.IsHindered(pass));
-		assertInZone(Zone.DISCARD, twofaced);
-	}
-
-	@Test
-	public void TwofacedReplacementNotOfferedWithoutThreats() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		var gollum2 = scn.GetShadowCard("gollum2");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1);
-		scn.MoveCardsToDiscard(gollum2);
-		// No threats
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.HinderCard(pass);
-		assertEquals(0, scn.GetThreats());
-
-		scn.ShadowPlayCard(twofaced);
-		scn.ShadowChooseCard(pass);
-
-		// Optional replacement NOT offered - no threats to remove
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum1);
-		assertInZone(Zone.DISCARD, twofaced);
-	}
-
-	@Test
-	public void TwofacedReplacementNotOfferedWithoutValidDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		// No other Gollum with different subtitle in discard
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		scn.ShadowPlayCard(twofaced);
-		scn.ShadowChooseCard(pass);
-
-		// Optional replacement NOT offered - no valid discard target
-		assertInZone(Zone.DISCARD, twofaced);
-	}
-
-	@Test
-	public void TwofacedReplacesGollumWithDifferentSubtitle() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		var gollum2 = scn.GetShadowCard("gollum2");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1, runner);
-		scn.MoveCardsToDiscard(gollum2);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum1);
-		assertInZone(Zone.DISCARD, gollum2);
-
-		scn.ShadowPlayCard(twofaced);
-
-		// Accept optional replacement
-		scn.ShadowChooseYes();
-
-		// Choose gollum1 to replace (auto-selected if only one)
-		// Choose gollum2 from discard (auto-selected if only one)
-
-		// Gollum1 should be in discard, gollum2 should be in play
-		assertInZone(Zone.DISCARD, gollum1);
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum2);
-		assertEquals(0, scn.GetThreats());
-	}
-
-	@Test
-	public void TwofacedReplacementKeepsBorneCards() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		var gollum2 = scn.GetShadowCard("gollum2");
+		var gollum = scn.GetShadowCard("gollum");
+		var gollumcopy = scn.GetShadowCard("gollumcopy");
+		var vile = scn.GetShadowCard("vile");
+		var villain = scn.GetShadowCard("villain");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var ladyship = scn.GetShadowCard("ladyship");
 		var letdeal = scn.GetShadowCard("letdeal");
 		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1, runner);
-		scn.AttachCardsTo(gollum1, letdeal);
-		scn.MoveCardsToDiscard(gollum2);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		assertAttachedTo(letdeal, gollum1);
-
-		scn.ShadowPlayCard(twofaced);
-		scn.ShadowAcceptOptionalTrigger();
-
-		// Let Her Deal With Them should now be attached to gollum2
-		assertInZone(Zone.DISCARD, gollum1);
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum2);
-		assertAttachedTo(letdeal, gollum2);
-	}
-
-	@Test
-	public void TwofacedReplacementKeepsWounds() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		var gollum2 = scn.GetShadowCard("gollum2");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1, runner);
-		scn.MoveCardsToDiscard(gollum2);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		scn.AddWoundsToChar(gollum1, 2);
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		assertEquals(2, scn.GetWoundsOn(gollum1));
-
-		scn.ShadowPlayCard(twofaced);
-		scn.ShadowAcceptOptionalTrigger();
-
-		// Gollum2 should have same wounds as gollum1 had
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum2);
-		assertEquals(2, scn.GetWoundsOn(gollum2));
-	}
-
-	@Test
-	public void TwofacedReplacementDuringSkirmishContinuesSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var shelob1 = scn.GetShadowCard("shelob1");
-		var shelob2 = scn.GetShadowCard("shelob2");
+		var runner2 = scn.GetShadowCard("runner2");
+		var othersGollum = scn.GetFreepsCard("dark");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
 
+		scn.MoveCompanionsToTable(aragorn, smeagol);
 		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(shelob1);
-		scn.MoveCardsToDiscard(shelob2);
-		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToDiscard(vile, villain, wraithgollum, ladyship, runner2, othersGollum, gollumcopy);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(gollum, shelob, runner);
+		scn.AttachCardsTo(gollum, letdeal);
+		scn.AddWoundsToChar(gollum, 2);
+		scn.AddThreats(2);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		int twilight = scn.GetTwilight();
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertInZone(Zone.DISCARD, vile);
+
+		// Nothing is hindered, so nothing is restored, and the event goes on to its second sentence.
+		scn.ShadowPlayCard(twofaced);
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+		assertEquals(1, scn.GetThreats());
+
+		// Both of my [gollum] minions; not my [moria] minion, and not the other player's [gollum] companion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, shelob));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(runner, smeagol));
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(gollum);
+
+		// Any minion titled Gollum in my discard pile, the [wraith] one included: the text asks for the title
+		// and no culture.  Not a Shelob, not a Goblin Runner, not a Gollum in the other player's discard pile;
+		// and, as the game has it, not a second copy of the very Gollum being replaced.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(vile, villain, wraithgollum));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(ladyship, runner2, othersGollum, gollumcopy));
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(vile);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, vile);
+		assertInZone(Zone.DISCARD, gollum);
+		assertEquals(2, scn.GetWoundsOn(vile));
+		assertAttachedTo(letdeal, vile);
+		assertInZone(Zone.SHADOW_CHARACTERS, shelob);
+		assertInZone(Zone.DISCARD, villain, wraithgollum, ladyship, gollumcopy);
+		// Only the event's own 2: the new Gollum is not played and is not paid for.
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.DISCARD, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheReplacementMayBeDeclinedAndNothingIsRemovedOrReplaced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var gollum = scn.GetShadowCard("gollum");
+		var vile = scn.GetShadowCard("vile");
+
+		scn.MoveCardsToHand(twofaced);
+		scn.MoveCardsToDiscard(vile);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddThreats(1);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(twofaced);
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseNo();
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertInZone(Zone.DISCARD, vile);
+		assertInZone(Zone.DISCARD, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoThreatToRemoveTheReplacementIsNotOfferedAndWithOneItIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var twofaced2 = scn.GetShadowCard("twofaced2");
+		var burden = scn.GetShadowCard("burden");
+		var gollum = scn.GetShadowCard("gollum");
+		var vile = scn.GetShadowCard("vile");
+
+		scn.MoveCardsToHand(twofaced, twofaced2);
+		scn.MoveCardsToSupportArea(burden);
+		scn.MoveCardsToDiscard(vile);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		scn.HinderCard(burden);
+		assertEquals(0, scn.GetThreats());
+
+		// The first sentence is carried out, and the second is not put to the Shadow player.
+		scn.ShadowPlayCard(twofaced);
+		assertFalse(scn.IsHindered(burden));
+		assertInZone(Zone.DISCARD, twofaced);
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The same board with a threat on it.
+		scn.AddThreats(1);
+		scn.ShadowPlayCard(twofaced2);
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, vile);
+		assertInZone(Zone.DISCARD, gollum);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoMinionOfTheGollumCultureInPlayTheReplacementIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+		var vile = scn.GetShadowCard("vile");
+
+		scn.MoveCardsToHand(twofaced);
+		// A Gollum and a Goblin Runner wait in the discard pile for the two minions in play.
+		scn.MoveCardsToDiscard(vile, runner2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(wraithgollum, runner);
+		scn.AddThreats(1);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(twofaced));
+		scn.ShadowPlayCard(twofaced);
+
+		// Nothing was hindered and nobody can be spotted: the event is paid for and does nothing.
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, wraithgollum, runner);
+		assertInZone(Zone.DISCARD, vile, runner2, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void RestoringTheOnlyGollumMinionComesFirstSoThatItCanThenBeSpottedAndReplaced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var gollum = scn.GetShadowCard("gollum");
+		var villain = scn.GetShadowCard("villain");
+
+		scn.MoveCardsToHand(twofaced);
+		scn.MoveCardsToDiscard(villain);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddThreats(1);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		// Hindered, Gollum cannot be spotted as a [gollum] minion.
+		scn.HinderCard(gollum);
+		assertTrue(scn.IsHindered(gollum));
+
+		scn.ShadowPlayCard(twofaced);
+		assertFalse(scn.IsHindered(gollum));
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, villain);
+		assertFalse(scn.IsHindered(villain));
+		assertInZone(Zone.DISCARD, gollum);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ReplacedInItsSkirmishTheNewMinionFightsOnInItsPlaceAndHasNotBeenPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var shelob = scn.GetShadowCard("shelob");
+		var ladyship = scn.GetShadowCard("ladyship");
+		var gollum = scn.GetShadowCard("gollum");
+		var vile = scn.GetShadowCard("vile");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var glorfindel = scn.GetFreepsCard("glorfindel");
+
+		scn.MoveCompanionsToTable(aragorn, glorfindel);
+		scn.MoveCardsToHand(twofaced);
+		// One minion of each title waits in the discard pile.
+		scn.MoveCardsToDiscard(ladyship, vile);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shelob, gollum);
+		scn.AddWoundsToChar(shelob, 1);
+		scn.AddThreats(1);
 		scn.SkipToAssignments();
 
-		scn.FreepsAssignToMinions(aragorn, shelob1);
+		scn.FreepsAssignToMinions(aragorn, shelob);
+		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
-
-		// Aragorn is skirmishing shelob1
-		assertTrue(scn.IsCharSkirmishing(shelob1));
 		scn.FreepsPass();
 
-		assertInZone(Zone.SHADOW_CHARACTERS, shelob1);
-		assertInZone(Zone.DISCARD, shelob2);
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, shelob));
+		assertTrue(scn.ShadowPlayAvailable(twofaced));
+
+		scn.ShadowPlayCard(twofaced);
+		scn.ShadowChooseYes();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shelob, gollum));
+		scn.ShadowChooseCard(shelob);
+
+		// The one Shelob in the discard pile comes in without a choice; the Gollum there stays.
+		assertInZone(Zone.SHADOW_CHARACTERS, ladyship);
+		assertInZone(Zone.DISCARD, shelob);
+		assertInZone(Zone.DISCARD, vile);
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, ladyship));
+		assertFalse(scn.IsCharSkirmishing(shelob));
+		assertEquals(1, scn.GetWoundsOn(ladyship));
+		assertEquals(0, scn.GetThreats());
+
+		// Her Ladyship says "When you play Shelob, if you can spot Gollum, you may spot a companion": Gollum is
+		// there, and nothing is offered, because she was not played.  Nor were her 6 and 2 for roaming paid.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// The skirmish goes on: 8 + 2 for an enduring Shelob's one wound, against Aragorn's 8.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(ladyship));
+		// On to the fierce assignment, where Her Ladyship is the one to be assigned.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TheNewMinionStandsWhereTheOldOneStoodAssignedToTheSameCompanionAndWithWhatHadBeenDoneToIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var mad = scn.GetShadowCard("mad");
+		var gollum = scn.GetShadowCard("gollum");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var glorfindel = scn.GetFreepsCard("glorfindel");
+
+		scn.MoveCompanionsToTable(aragorn, glorfindel);
+		scn.MoveCardsToHand(twofaced);
+		scn.MoveCardsToDiscard(gollum);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mad, runner);
+		scn.AddThreats(1);
+		scn.SkipToAssignments();
+
+		assertEquals(5, scn.GetStrength(mad));
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { aragorn, runner },
+				new PhysicalCardImpl[] { glorfindel, mad }
+		);
+		// Mad Thing's own text: to assign him, the Free Peoples player makes him strength +3 until the
+		// regroup phase.
+		scn.FreepsChoose("strength +3");
+		assertEquals(8, scn.GetStrength(mad));
+
+		// Aragorn's skirmish against the Runner; Gollum is assigned to Glorfindel and waiting.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharAssignedAgainst(glorfindel, mad));
+
 		scn.ShadowPlayCard(twofaced);
 		scn.ShadowChooseYes();
 
-		// Shelob2 should now be in skirmish
-		assertInZone(Zone.DISCARD, shelob1);
-		assertInZone(Zone.SHADOW_CHARACTERS, shelob2);
-		assertTrue(scn.IsCharSkirmishing(shelob2));
-
-		// Skirmish should still be resolvable
-		scn.PassCurrentPhaseActions();
-		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertInZone(Zone.DISCARD, mad);
+		assertTrue(scn.IsCharAssignedAgainst(glorfindel, gollum));
+		// 5 printed on the new Gollum + the 3 given to the old one
+		assertEquals(8, scn.GetStrength(gollum));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
-	public void TwofacedReplacementKeepsStrengthModifiers() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithNothingInMyDiscardPileThatCouldReplaceAGollumMinionInPlayTheReplacementIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollummad = scn.GetShadowCard("gollummad"); // Has +3 strength trigger on assignment
-		var gollum2 = scn.GetShadowCard("gollum2");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var twofaced2 = scn.GetShadowCard("twofaced2");
+		var shelob = scn.GetShadowCard("shelob");
+		var shelobcopy = scn.GetShadowCard("shelobcopy");
+		var ladyship = scn.GetShadowCard("ladyship");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
+		var vile = scn.GetShadowCard("vile");
+		var noser = scn.GetShadowCard("noser");
+		var smeagol = scn.GetFreepsCard("smeagol");
 
-		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollummad);
-		scn.MoveCardsToDiscard(gollum2);
-		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(twofaced, twofaced2);
+		// In my discard pile: a Gollum, whose title is in play only on a [wraith] minion; a Smeagol, whose
+		// title is in play only on a [gollum] companion; and a second copy of the very Shelob in play.
+		scn.MoveCardsToDiscard(vile, noser, shelobcopy);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
-
-		int gollumBaseStrength = scn.GetStrength(gollummad);
-
-		// Assign Aragorn to Gollum Mad Thing - triggers his +3 strength
-		scn.FreepsAssignToMinions(aragorn, gollummad);
-
-		// Freeps chose to give +3 rather than add burden
-		scn.FreepsChoose("strength +3");
-
-		assertEquals(gollumBaseStrength + 3, scn.GetStrength(gollummad));
-
-		scn.FreepsResolveSkirmish(aragorn);
-
-		scn.HinderCard(pass);
-		scn.AddThreats(1);
+		scn.MoveMinionsToTable(shelob, wraithgollum);
+		scn.AddThreats(2);
+		scn.SetTwilight(5);
 		scn.FreepsPass();
 
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(twofaced));
 		scn.ShadowPlayCard(twofaced);
-		scn.ShadowAcceptOptionalTrigger();
 
-		// Gollum2 should retain the +3 strength modifier
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum2);
-		int gollum2BaseStrength = 5; // Gollum, Nasty Treacherous Creature is strength 5
-		assertEquals(gollum2BaseStrength + 3, scn.GetStrength(gollum2));
+		// Shelob could be spotted and a threat removed, but nothing there could take her place: as the game
+		// has it, the Shadow player is not asked.
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, shelob, wraithgollum);
+		assertInZone(Zone.DISCARD, vile, noser, shelobcopy, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The same board with a Shelob of another subtitle in the discard pile: asked, and she is the one
+		// to come in.
+		scn.MoveCardsToDiscard(ladyship);
+		scn.ShadowPlayCard(twofaced2);
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, ladyship, wraithgollum);
+		assertInZone(Zone.DISCARD, shelob, shelobcopy, vile, noser);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void TwofacedWithMultipleGollumMinionsAllowsChoice() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Ignore("Q-0066: with a [gollum] minion to spot and a threat to remove, is the replacement offered when no minion in the discard pile could replace it? The ruling on Q-0034 says so; the game and the old test withhold it")
+	public void WithAThreatToRemoveTheReplacementIsOfferedThoughNothingInTheDiscardPileCouldReplaceTheMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
-		var pass = scn.GetShadowCard("pass");
-		var gollum1 = scn.GetShadowCard("gollum1");
-		var gollum2 = scn.GetShadowCard("gollum2");
-		var shelob1 = scn.GetShadowCard("shelob1");
-		var shelob2 = scn.GetShadowCard("shelob2");
+		var gollum = scn.GetShadowCard("gollum");
+		var ladyship = scn.GetShadowCard("ladyship");
 
 		scn.MoveCardsToHand(twofaced);
-		scn.MoveCardsToSupportArea(pass);
-		scn.MoveMinionsToTable(gollum1, shelob1);
-		scn.MoveCardsToDiscard(gollum2, shelob2);
+		// A Shelob, and no Gollum.
+		scn.MoveCardsToDiscard(ladyship);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddThreats(1);
+		scn.SetTwilight(5);
 		scn.FreepsPass();
 
-		scn.HinderCard(pass);
+		scn.ShadowPlayCard(twofaced);
+		// An optional action with a cost is offered whenever the cost can be paid.
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		assertInZone(Zone.DISCARD, ladyship);
+		assertInZone(Zone.DISCARD, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0100: spotting a [gollum] minion that nothing in the discard pile can replace, while another [gollum] minion has a replacement there, throws NoSuchElementException and the game stops")
+	public void SpottingAGollumMinionThatNothingCanReplaceCostsTheThreatAndReplacesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var ladyship = scn.GetShadowCard("ladyship");
+
+		scn.MoveCardsToHand(twofaced);
+		// A Shelob for the Shelob in play, and nobody for Gollum.
+		scn.MoveCardsToDiscard(ladyship);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum, shelob);
 		scn.AddThreats(1);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(twofaced);
-		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
+		scn.ShadowChooseYes();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, shelob));
+		scn.ShadowChooseCard(gollum);
 
-		// Should have choice between gollum1 and shelob1
-		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum1, shelob1));
-
-		// Choose Shelob to replace
-		scn.ShadowChooseCard(shelob1);
-
-		// Shelob2 should replace Shelob1
-		assertInZone(Zone.DISCARD, shelob1);
-		assertInZone(Zone.SHADOW_CHARACTERS, shelob2);
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum1); // Gollum unchanged
+		// The threat is paid, there is no minion titled Gollum to bring in, and the game goes on.
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum, shelob);
+		assertInZone(Zone.DISCARD, ladyship);
+		assertInZone(Zone.DISCARD, twofaced);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
