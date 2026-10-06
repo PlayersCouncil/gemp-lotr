@@ -2050,11 +2050,4 @@ public class HinderTests
 
         assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
     }
-
-    //@Test
-    public void HinderingACompanionMidAbilityAlsoCancelsTheAbility() throws DecisionResultInvalidException, CardNotFoundException {
-
-    }
-
-
 }

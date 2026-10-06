@@ -214,6 +214,9 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         if (effectResults != null) {
             for (ActionProxy actionProxy : _actionProxies) {
                 for (EffectResult effectResult : effectResults) {
+                    // A response is not offered to something that has already been cancelled.
+                    if (effectResult.isCancelled())
+                        continue;
                     List<? extends Action> actions = actionProxy.getOptionalAfterActions(playerId, _lotroGame, effectResult);
                     if (actions != null) {
                         for (Action action : actions) {

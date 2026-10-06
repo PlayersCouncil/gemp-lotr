@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -179,7 +178,6 @@ public class Card_V2_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0082: the minion that wins is exerted and the burden added without the Shadow player being asked; the text says \"you may\" (also waits on F-0083: an added optional trigger is offered to the Free Peoples player first)")
 	public void ThatMinionMayExertToAddABurdenWhenItWinsItsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -228,7 +226,6 @@ public class Card_V2_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0082: the minion that wins is exerted and the burden added without the Shadow player being asked; the text says \"you may\" (also waits on F-0083: an added optional trigger is offered to the Free Peoples player first)")
 	public void TheBurdenMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -343,7 +340,6 @@ public class Card_V2_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0084: a winner that cannot exert still sets the event off: the Free Peoples player is asked to order a required trigger that then does nothing")
 	public void AWinnerThatCannotExertIsNotOfferedTheBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

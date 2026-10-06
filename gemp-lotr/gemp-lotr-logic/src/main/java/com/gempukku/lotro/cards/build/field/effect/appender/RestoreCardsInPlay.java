@@ -40,7 +40,7 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
                 CardResolver.resolveCards(select,
                         SpotOverride.INCLUDE_HINDERED,
                         (actionContext) -> Filters.canBeRestored(actionContext.getSource()),
-                        count, memory, player, "Choose cards to hinder", environment));
+                        count, memory, player, "Choose cards to restore", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

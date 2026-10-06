@@ -17,4 +17,14 @@ public interface CardGenerationEnvironment {
 
     ModifierSourceFactory getModifierSourceFactory();
     void recordCardVariant(String parentId, BuiltLotroCardBlueprint card);
+
+    /**
+     * Whether the named memory is already filled when the costs now being built are checked for payability:
+     * filled by the trigger that sets the action off, or, for an added trigger, by the action that added it.
+     * A cost that selects from such a memory can be checked before it is paid; a cost that selects from a
+     * memory filled by an earlier cost of the same action cannot (see EffectUtils.validatePreEvaluate).
+     */
+    default boolean isMemoryFilledBeforeCosts(String memory) {
+        return false;
+    }
 }

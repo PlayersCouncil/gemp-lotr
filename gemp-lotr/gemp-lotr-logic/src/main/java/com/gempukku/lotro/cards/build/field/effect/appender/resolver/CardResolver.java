@@ -36,7 +36,7 @@ public class CardResolver {
                 Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
 
         if (select.startsWith("memory(") && select.endsWith(")")) {
-            return resolveMemoryCards(select, null, null, countSource, memory, stackSource);
+            return resolveMemoryCards(select, null, null, countSource, memory, stackSource, environment);
         }
         else if (select.startsWith("choose(") && select.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
@@ -85,7 +85,7 @@ public class CardResolver {
         };
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -155,7 +155,7 @@ public class CardResolver {
         } else if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -223,7 +223,7 @@ public class CardResolver {
         } else if (type.equals("self")) {
             return resolveSelf(additionalFilter, additionalFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         }
@@ -262,7 +262,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -300,7 +300,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -336,7 +336,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -374,7 +374,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, choiceFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, choiceFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, choiceFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -480,7 +480,7 @@ public class CardResolver {
                 }
             };
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, maxOverrideCardSource);
+            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, maxOverrideCardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -554,8 +554,13 @@ public class CardResolver {
 
     private static DelayedAppender resolveMemoryCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
                                                       ValueSource countSource, String memory,
-                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
+                                                      CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         String sourceMemory = extractMemoryLocation(type);
+        // As a cost, a selection from memory can be checked for payability only where that memory is filled
+        // before the costs are looked at: by the trigger that sets the action off, or by the action that added
+        // a trigger. Filled by an earlier cost of the same action, it is still empty when the action is offered.
+        final boolean filledBeforeCosts = environment != null && environment.isMemoryFilledBeforeCosts(sourceMemory);
 
         return new DelayedAppender() {
             @Override
@@ -593,6 +598,8 @@ public class CardResolver {
 
             private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
                 Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(sourceMemory);
+                if (cardsFromMemory == null)
+                    return Collections.emptyList();
                 Filterable additionalFilterable = Filters.any;
                 if (filter != null)
                     additionalFilterable = filter.getFilterable(actionContext);
@@ -601,7 +608,7 @@ public class CardResolver {
 
             @Override
             public boolean canPreEvaluate() {
-                return false;
+                return filledBeforeCosts;
             }
         };
     }

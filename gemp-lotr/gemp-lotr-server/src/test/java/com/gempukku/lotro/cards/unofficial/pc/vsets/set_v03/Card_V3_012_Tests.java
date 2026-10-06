@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -370,7 +369,6 @@ public class Card_V3_012_Tests
 	}
 
 	@Test
-	@Ignore("F-0099: an ability that names its condition's bearer does nothing once the condition has been hindered in answer to it")
 	public void AnAbilityThatNamesItsBearerIsStillCarriedOutWhenItsConditionIsHinderedInAnswer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

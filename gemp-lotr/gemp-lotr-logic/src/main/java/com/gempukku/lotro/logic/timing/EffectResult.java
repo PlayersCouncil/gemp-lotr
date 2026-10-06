@@ -73,6 +73,15 @@ public abstract class EffectResult {
         return _type;
     }
 
+    /**
+     * True once what this result reports has been cancelled by something answering it (the effect of a special
+     * ability that was used, an event that was played). Responses are no longer offered to such a result: a
+     * response stops reacting once what it reacts to has been cancelled by an earlier response or trigger.
+     */
+    public boolean isCancelled() {
+        return false;
+    }
+
     public void optionalTriggerUsed(OptionalTriggerAction action) {
         _optionalTriggersUsed.add(action.getTriggerIdentifier());
     }

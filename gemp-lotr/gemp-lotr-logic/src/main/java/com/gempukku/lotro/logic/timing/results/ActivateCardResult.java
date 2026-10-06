@@ -37,6 +37,11 @@ public class ActivateCardResult extends EffectResult {
         return _effectCancelled;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return _effectCancelled;
+    }
+
     public Zone getActivatedZone() {
         return _activatedZone;
     }

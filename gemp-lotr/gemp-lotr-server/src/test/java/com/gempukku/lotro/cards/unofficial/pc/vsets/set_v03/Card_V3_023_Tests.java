@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.VitalityModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -272,8 +271,8 @@ public class Card_V3_023_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(knight1, knight2, pippin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(knight3, oath));
 		assertEquals(0, scn.FreepsGetChoiceMin());
-		// Three knights could exert and there are two other copies.
-		assertEquals(2, scn.FreepsGetChoiceMax());
+		// X is the player's: three knights could exert, though there are only two other copies.
+		assertEquals(3, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(pippin);
 
 		assertEquals(1, scn.GetWoundsOn(pippin));
@@ -403,12 +402,14 @@ public class Card_V3_023_Tests
 		assertEquals(1, scn.GetWoundsOn(helmsman));
 		assertFalse(scn.IsHindered(ships1));
 
-		// The Gate's cost is paid and its "then" goes on. The card that was used is in play and not hindered, and it
-		// is still not one of the "other copies": there is one of those, for two knights who could exert.
+		// The Gate's cost is paid and its "then" goes on. Both knights could exert; one does.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(knight1, knight2));
-		assertEquals(1, scn.FreepsGetChoiceMax());
+		assertEquals(2, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(knight1);
 		assertEquals(1, scn.GetWoundsOn(knight1));
+
+		// The card that was used is in play and not hindered, and it is still not one of the "other copies": there
+		// is one of those, so it is hindered with no choice asked, and the Helmsman is asked about it at once.
 
 		// The Helmsman is exhausted and could still hinder himself to save the second copy; the Shadow player declines.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(helmsman));
@@ -528,7 +529,7 @@ public class Card_V3_023_Tests
 	}
 
 	@Test
-	public void AShadowPossessionInTheSupportAreaSetsItOffTooAndWithNoOtherCopyNoKnightIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AShadowPossessionInTheSupportAreaSetsItOffTooAndWithNoOtherCopyTheKnightIsStillAsked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gate = scn.GetFreepsCard("gate");
@@ -551,15 +552,22 @@ public class Card_V3_023_Tests
 
 		assertTrue(scn.IsHindered(gate));
 		assertTrue(scn.IsHindered(ships));
-		// The ability is carried out to the end on the card that has just been hindered.
-		assertEquals(1, scn.GetCultureTokensOn(ships));
-		// No other Ships of Great Draught is in play, and the knight is not asked to exert.
+
+		// No other Ships of Great Draught is in play, and the knight is asked all the same: the exertion is the
+		// player's to make, whatever it buys. He stays as he is.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(knight1));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsDeclineChoosing();
 		assertEquals(0, scn.GetWoundsOn(knight1));
+
+		// The ability is carried out on the card that has just been hindered, but a token cannot be added to a
+		// hindered card: the threat was paid for nothing.
+		assertEquals(0, scn.GetCultureTokensOn(ships));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	@Ignore("F-0105: built as a response, so it is offered again for the same use after it has been taken, as long as the Gate itself was not the fortification hindered")
 	public void IsOfferedOnlyOnceForOneUseWhenAnotherFortificationIsTheOneHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -592,7 +600,6 @@ public class Card_V3_023_Tests
 	}
 
 	@Test
-	@Ignore("F-0106: the exertion of knights is a cost, to be offered whenever a knight can exert; the game withholds it when there is no other copy and caps X at the number of other copies")
 	public void KnightsMayExertWhenThereIsNoOtherCopyToHinder() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -621,6 +628,44 @@ public class Card_V3_023_Tests
 
 		assertEquals(1, scn.GetWoundsOn(pippin));
 		assertEquals(0, scn.GetWoundsOn(knight1));
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void KnightsExertedBeyondTheOtherCopiesThereAreHinderNothingMore() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gate = scn.GetFreepsCard("gate");
+		var knight1 = scn.GetFreepsCard("knight1");
+		var knight2 = scn.GetFreepsCard("knight2");
+		var seeking1 = scn.GetShadowCard("seeking1");
+		var seeking2 = scn.GetShadowCard("seeking2");
+		var hollowing = scn.GetShadowCard("hollowing1");
+		var taskmaster = scn.GetShadowCard("taskmaster1");
+		scn.MoveCompanionsToTable(knight1, knight2);
+		scn.MoveCardsToSupportArea(gate, seeking1, seeking2, hollowing);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(taskmaster);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowUseCardAction(seeking1);
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.IsHindered(gate));
+		assertTrue(scn.IsHindered(seeking1));
+
+		// Two knights exert and there is one other copy.
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(knight1, knight2);
+		assertEquals(1, scn.GetWoundsOn(knight1));
+		assertEquals(1, scn.GetWoundsOn(knight2));
+
+		// The one other copy is hindered with no choice asked; the second exertion hinders nothing, and a Shadow
+		// support card of another title is left alone.
+		assertTrue(scn.IsHindered(seeking2));
+		assertFalse(scn.IsHindered(hollowing));
 		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

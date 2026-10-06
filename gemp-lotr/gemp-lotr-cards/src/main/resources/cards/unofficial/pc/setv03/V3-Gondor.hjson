@@ -521,7 +521,8 @@
 				}
 			}
 			{
-				type: Response
+				type: Trigger
+				optional: true
 				trigger: {
 					type: UsesSpecialAbility
 					filter: side(Shadow)
@@ -539,10 +540,6 @@
 					}
 					{
 						type: CostToEffect
-						requires: {
-							type: CanSpot
-							filter: NameFromMemory(activatedCard),not(memory(activatedCard))
-						}
 						cost: {
 							type: Exert
 							select: choose(knight)
@@ -550,15 +547,8 @@
 								type: Range
 								from: 0
 								to: {
-									type: Min
-									firstNumber: {
-										type: ForEachYouCanSpot
-										filter: knight,CanExert
-									}
-									secondNumber: {
-										type: ForEachYouCanSpot
-										filter: NameFromMemory(activatedCard),not(memory(activatedCard))
-									}
+									type: ForEachYouCanSpot
+									filter: knight,CanExert
 								}
 							}
 							memorize: exertedKnights

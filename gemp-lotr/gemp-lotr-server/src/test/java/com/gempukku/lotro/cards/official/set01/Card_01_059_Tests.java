@@ -205,8 +205,8 @@ public class Card_01_059_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
-		//Final Strike is a "Response:" action, so it can technically be repeated (for some reason)
-		scn.ShadowDeclineOptionalTrigger();
+		// Final Strike is a response, and a response is not offered again to an ability it has just cancelled.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(finalstrike));
 
 		assertTrue(scn.ShadowDecisionAvailable("Maneuver action"));
 

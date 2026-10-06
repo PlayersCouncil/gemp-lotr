@@ -27,6 +27,11 @@ public class PlayEventResult extends PlayCardResult {
         return _eventCancelled;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return _eventCancelled;
+    }
+
     public PlayEventAction getPlayEventAction() {
         return _action;
     }

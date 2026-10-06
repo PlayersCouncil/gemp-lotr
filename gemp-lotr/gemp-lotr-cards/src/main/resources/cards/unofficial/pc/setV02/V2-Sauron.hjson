@@ -640,6 +640,7 @@
 				}
 				{
 					type: AddTrigger
+					optional: true
 					trigger: {
 						type: WinsSkirmish
 						filter: memory(pumpedTwilight)
@@ -647,7 +648,6 @@
 					cost: {
 						type: Exert
 						select: memory(pumpedTwilight)
-						ignoreCostCheckFailure: true
 					}
 					effect: {
 						type: AddBurdens

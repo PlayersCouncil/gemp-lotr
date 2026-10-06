@@ -626,6 +626,19 @@ public class Filters {
         };
     }
 
+    /**
+     * The card that bears the given card, as that card's own text means it ("bearer"). This is hasAttached, but a
+     * hindered card still has its bearer: it is still attached, and CR 5.0 "hinder" has the text of a card that is
+     * hindered in the middle of its own special ability or trigger carried out until fulfilled. Nothing of a
+     * hindered card starts by this: its modifiers, triggers and abilities are stopped where the card is hindered.
+     */
+    public static Filter bearerOf(final PhysicalCard attachment) {
+        return (game, physicalCard) -> {
+            List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
+            return !Filters.filterActive(game, SpotOverride.INCLUDE_HINDERED, physicalCardList, attachment).isEmpty();
+        };
+    }
+
     public static Filter hasStacked(final Filterable... filter) {
         return hasStacked(1, filter);
     }

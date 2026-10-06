@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.TimeResolver;
 import com.gempukku.lotro.cards.build.field.effect.trigger.TriggerChecker;
 import com.gempukku.lotro.game.AbstractActionProxy;
@@ -37,7 +38,8 @@ public class AddTrigger implements EffectAppenderProducer {
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");
 
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(requirementArray, environment);
-        final EffectAppender[] costs = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
+        final EffectAppender[] costs = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray,
+                EffectUtils.costEnvironmentOfAddedTrigger(environment, costArray));
         final EffectAppender[] effects = environment.getEffectAppenderFactory().getEffectAppenders(false, effectArray, environment);
 
         return new DelayedAppender() {
@@ -74,6 +76,10 @@ public class AddTrigger implements EffectAppenderProducer {
                 return false;
             }
 
+            private boolean isOwnedBy(String playerId) {
+                return playerId != null && playerId.equals(actionContext.getPerformingPlayer());
+            }
+
             private void customizeTriggerAction(AbstractCostToEffectAction action, ActionContext actionContext) {
                 action.setVirtualCardAction(true);
                 for (EffectAppender cost : costs)
@@ -100,6 +106,9 @@ public class AddTrigger implements EffectAppenderProducer {
 
             @Override
             public List<? extends OptionalTriggerAction> getOptionalBeforeTriggers(String playerId, LotroGame lotroGame, Effect effect) {
+                // An added trigger belongs to the player who performed the action that added it.
+                if (!isOwnedBy(playerId))
+                    return null;
                 DelegateActionContext delegate = new DelegateActionContext(actionContext, actionContext.getPerformingPlayer(),
                         lotroGame, actionContext.getSource(), null, effect);
                 if (trigger.isBefore() && optional && trigger.accepts(delegate)) {
@@ -132,6 +141,8 @@ public class AddTrigger implements EffectAppenderProducer {
 
             @Override
             public List<? extends OptionalTriggerAction> getOptionalAfterTriggers(String playerId, LotroGame lotroGame, EffectResult effectResult) {
+                if (!isOwnedBy(playerId))
+                    return null;
                 DelegateActionContext delegate = new DelegateActionContext(actionContext, actionContext.getPerformingPlayer(),
                         lotroGame, actionContext.getSource(), effectResult, null);
                 if (!trigger.isBefore() && optional && trigger.accepts(delegate)) {
