@@ -1,14 +1,19 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.HasInitiativeModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
+import com.gempukku.lotro.logic.modifiers.VitalityModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_051_Tests
@@ -19,17 +24,53 @@ public class Card_V2_051_Tests
 				new HashMap<>()
 				{{
 					put("wrath", "102_51");
-					put("sam", "7_327");
-					put("eowyn", "5_122");
-					put("javelin", "7_248");
-					put("deor", "7_222");
-					put("bounder", "1_286");
-					put("castout", "12_108");
 
-					put("unspoiled", "7_327");
-					put("lord", "4_219");
-					put("cantea", "1_230");
-					put("terror", "1_226");
+					// Valiant companions of two cultures.
+					put("guard", "5_83");        // Household Guard: [rohan] Man, strength 6, vitality 3; "Valiant" is his whole text
+					put("haldir", "102_8");      // Haldir, Naith Commander: [elven] Elf; his own text needs an [elven] possession about to be discarded
+					// Rohirrim Guard: a [rohan] companion who is not valiant, strength 6, vitality 3.
+					// "Skirmish: Discard a card from hand to exert a minion skirmishing this companion."
+					put("rguard", "7_246");
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, for Athelas and The Red Arrow
+
+					// Deor: a unique [rohan] ally, vitality 2.  His ability needs initiative and is never used.
+					put("deor", "7_222");
+					put("deor2", "7_222");
+					put("bounder", "1_286");     // Bounder: a [shire] ally, vitality 2
+
+					// [rohan] possessions, all "Bearer must be a [rohan] Man" (Heavy Chain: a Man).
+					put("javelin", "7_248");     // Rohirrim Javelin: strength +1. "Archery: Discard this possession to make the fellowship archery total +1."
+					put("bow", "5_88");          // Rohirrim Bow: "Archery: Exert bearer and discard this possession to wound a minion."
+					put("shield", "5_91");       // Rohirrim Shield: minion archery total -1, and a regroup ability
+					put("chain", "4_278");       // Heavy Chain: bearer is harder to overwhelm
+					// Rider's Mount: "At the start of each skirmish involving bearer, each minion skirmishing bearer must exert."
+					put("mount", "4_287");
+					// The Red Arrow: the [rohan] artifact that needs no Theoden.  "Assignment: Exert a [gondor]
+					// Man to play a [rohan] Man. ... Discard this artifact."
+					put("arrow", "9_46");
+					// Athelas: a [gondor] possession.  "Fellowship: Discard this possession to heal a companion..."
+					put("athelas1", "1_94");
+					put("athelas2", "1_94");
+					// Naith Longbow: "Archery: Exert bearer to discard the top card of your draw deck."
+					put("longbow", "6_21");
+
+					// Cast Out: a [rohan] condition.  "Maneuver: Spot a [rohan] Man and discard this condition
+					// to exert a minion."  Its other ability needs a mounted Man.
+					put("castout1", "12_108");
+					put("castout2", "12_108");
+					put("doom", "8_86");         // Doom Drove Them: another [rohan] condition that holds [rohan] tokens
+					// For the Mark: a [rohan] regroup event. "Spot a [rohan] Man to discard a possession from play."
+					put("mark", "12_114");
+					put("mark2", "12_114");
+					put("villagers", "4_273");   // Fight for the Villagers: a [rohan] skirmish event
+
+					put("cantea", "1_230");      // Ulaire Cantea: "Skirmish: Exert Ulaire Cantea to discard a weapon borne by a character he is skirmishing."
+					put("terror", "1_226");      // Their Power Is in Terror: "Maneuver: Exert a Nazgul to wound every ally."
+					put("fear1", "1_212");       // Fear: "Maneuver: Exert your Nazgul to discard an ally."
+					put("fear2", "1_212");
+					put("troop", "1_177");       // Goblin Patrol Troop: [moria], strength 13, vitality 3, no text
+					put("savage", "1_151");      // Uruk Savage: [isengard], vitality 3
+					put("hunter", "1_256");      // Morgul Hunter: vitality 4; stronger for each companion, nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -49,9 +90,11 @@ public class Card_V2_051_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.
-		* 	Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
-		*/
+		 * Game Text: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand
+		 * (except during the fellowship phase), add a [rohan] token here.
+		 * Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a
+		 * valiant companion to wound that minion.
+		 */
 
 		var scn = GetScenario();
 
@@ -68,122 +111,298 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void NowforWrathDoesNotReactToFellowshipPhasePossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsPlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
-		var javelin = scn.GetFreepsCard("javelin");
-		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCardsToHand(javelin);
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(wrath);
-
-		//cheating to get around Sam's initiative requirement
-		scn.ApplyAdHocModifier(new HasInitiativeModifier(null, null, Side.FREE_PEOPLE));
+		scn.MoveCardsToHand(wrath);
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertEquals(Zone.HAND, javelin.getZone());
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(wrath));
 
-		scn.FreepsUseCardAction(sam);
-		assertEquals(Zone.DISCARD, javelin.getZone());
+		scn.FreepsPlayCard(wrath);
+		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, wrath);
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathReactsToManeuverPhaseRohanAllyKill() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ARohanAllyKilledAddsATokenAndSoDoesTheRohanItemHeBore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
+		var doom = scn.GetFreepsCard("doom");
 		var deor = scn.GetFreepsCard("deor");
 		var bounder = scn.GetFreepsCard("bounder");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionsToTable(eowyn);
-		scn.MoveCardsToSupportArea(wrath, deor, bounder);
-
+		var javelin = scn.GetFreepsCard("javelin");
+		var terror = scn.GetShadowCard("terror");
+		var cantea = scn.GetShadowCard("cantea");
+		scn.MoveCardsToSupportArea(wrath, doom);
+		scn.AddTokensToCard(doom, 1);
+		scn.MoveAlliesToTable(deor, bounder);
+		scn.AttachCardsTo(deor, javelin);
+		// Vitality 2 each: one more wound kills.
 		scn.AddWoundsToChar(deor, 1);
 		scn.AddWoundsToChar(bounder, 1);
-
-		var terror = scn.GetShadowCard("terror");
-		scn.MoveMinionsToTable("cantea");
 		scn.MoveCardsToHand(terror);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(cantea);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
+
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertEquals(Zone.SUPPORT, deor.getZone());
-		assertEquals(Zone.SUPPORT, bounder.getZone());
+		assertInZone(Zone.SUPPORT, deor, bounder);
+		assertAttachedTo(javelin, deor);
 
 		scn.ShadowPlayCard(terror);
+		// Both allies are dying at once: the Free Peoples player orders the deaths and the tokens.
 		scn.FreepsResolveRuleFirst();
-		assertEquals(Zone.DEAD, deor.getZone());
-		assertEquals(Zone.DEAD, bounder.getZone());
-		//Token from Deor, but not from Bounder
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
+
+		assertInZone(Zone.DEAD, deor, bounder);
+		assertInZone(Zone.DISCARD, javelin);
+		// One for Deor killed and one for the Javelin discarded with him; none for the [shire] ally.
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		// "Here": the other [rohan] condition that holds tokens gets none.
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathReactsToArcheryPhasePossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ARohanAllyDiscardedFromPlayAddsATokenAndAShireAllyOrARohanConditionAddsNone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
-		var javelin = scn.GetFreepsCard("javelin");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionsToTable(eowyn);
-		scn.AttachCardsTo(eowyn, javelin);
-		scn.MoveCardsToSupportArea(wrath);
-
-		scn.MoveMinionsToTable("cantea");
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.ARCHERY);
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertEquals(Zone.ATTACHED, javelin.getZone());
-
-		scn.FreepsUseCardAction(javelin);
-		assertEquals(Zone.DISCARD, javelin.getZone());
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-	}
-
-	@Test
-	public void NowforWrathReactsToSkirmishPhaseShadowPossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var wrath = scn.GetFreepsCard("wrath");
-		var javelin = scn.GetFreepsCard("javelin");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionsToTable(eowyn);
-		scn.AttachCardsTo(eowyn, javelin);
-		scn.MoveCardsToSupportArea(wrath);
-
+		var castout = scn.GetFreepsCard("castout1");
+		var guard = scn.GetFreepsCard("guard");
+		var deor = scn.GetFreepsCard("deor");
+		var bounder = scn.GetFreepsCard("bounder");
+		var fear1 = scn.GetShadowCard("fear1");
+		var fear2 = scn.GetShadowCard("fear2");
 		var cantea = scn.GetShadowCard("cantea");
-		scn.MoveMinionsToTable(cantea);
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath, castout);
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveAlliesToTable(deor, bounder);
+		scn.MoveCardsToHand(fear1, fear2);
 
 		scn.StartGame();
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(eowyn, cantea);
-		scn.FreepsPass();
+		scn.MoveMinionsToTable(cantea, troop);
+		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertEquals(Zone.ATTACHED, javelin.getZone());
 
-		scn.ShadowUseCardAction(cantea);
-		assertEquals(Zone.DISCARD, javelin.getZone());
+		// Cast Out discards itself as its cost: a [rohan] condition, neither an item nor an ally.
+		scn.FreepsUseCardAction(castout);
+		scn.FreepsChooseCard(troop);
+		assertInZone(Zone.DISCARD, castout);
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// Fear discards an ally: first the [shire] one.
+		scn.ShadowPlayCard(fear1);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(deor, bounder));
+		scn.ShadowChooseCard(bounder);
+		assertInZone(Zone.DISCARD, bounder);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// Then the [rohan] one.
+		scn.FreepsPass();
+		scn.ShadowPlayCard(fear2);
+		assertInZone(Zone.DISCARD, deor);
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathReactsToReconciledPossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ARohanPossessionOrArtifactDiscardedFromPlayAddsATokenAndAGondorPossessionAddsNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var doom = scn.GetFreepsCard("doom");
+		var arrow = scn.GetFreepsCard("arrow");
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var rguard = scn.GetFreepsCard("rguard");
+		var javelin = scn.GetFreepsCard("javelin");
+		var chain = scn.GetFreepsCard("chain");
+		var athelas = scn.GetFreepsCard("athelas1");
+		var mark = scn.GetFreepsCard("mark");
+		var mark2 = scn.GetFreepsCard("mark2");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath, doom, arrow);
+		scn.AddTokensToCard(doom, 1);
+		scn.MoveCompanionsToTable(guard, aragorn);
+		scn.AttachCardsTo(guard, javelin, chain);
+		scn.AttachCardsTo(aragorn, athelas);
+		scn.MoveCardsToHand(rguard, mark, mark2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// A [rohan] possession, discarded by its own ability.
+		scn.FreepsUseCardAction(javelin);
+		assertInZone(Zone.DISCARD, javelin);
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+
+		// A [rohan] artifact: The Red Arrow has Aragorn exert to play a [rohan] Man, and is then discarded.
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsUseCardAction(arrow);
+		// "You may exert that [rohan] Man to play a possession on him or her": no.
+		scn.FreepsChooseNo();
+		assertInZone(Zone.FREE_CHARACTERS, rguard);
+		assertInZone(Zone.DISCARD, arrow);
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+
+		scn.ShadowPass();
+		scn.FreepsPass();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		// For the Mark discards a possession from play: the [gondor] one adds nothing.
+		scn.FreepsPlayCard(mark);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(athelas, chain));
+		scn.FreepsChooseCard(athelas);
+		assertInZone(Zone.DISCARD, athelas);
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+
+		// And the [rohan] one, the only possession left, adds one.
+		scn.ShadowPass();
+		scn.FreepsPlayCard(mark2);
+		assertInZone(Zone.DISCARD, chain);
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ARohanCompanionKilledAddsNoTokenButEachRohanItemHeBoreAddsOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var rguard = scn.GetFreepsCard("rguard");
+		var javelin = scn.GetFreepsCard("javelin");
+		var shield = scn.GetFreepsCard("shield");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCompanionsToTable(rguard);
+		scn.AttachCardsTo(rguard, javelin, shield);
+		// Vitality 3 with 2 wounds: losing the skirmish kills him.
+		scn.AddWoundsToChar(rguard, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rguard, troop);
+
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		// 6 + 1 for the Javelin against 13: he loses, and is not overwhelmed.
+		assertEquals(7, scn.GetStrength(rguard));
+		scn.PassSkirmishActions();
+		// The rest of the skirmish's resolution and the two tokens come at once, and are put in order.
+		scn.FreepsResolveRuleFirst();
+
+		assertInZone(Zone.DEAD, rguard);
+		assertInZone(Zone.DISCARD, javelin, shield);
+		// One for each of the two possessions, none for the companion.
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void EachRohanItemOrAllyDiscardedFromHandAddsATokenAndOtherCardsAddNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var rguard = scn.GetFreepsCard("rguard");
+		var villagers = scn.GetFreepsCard("villagers");
+		var guard = scn.GetFreepsCard("guard");
+		var castout = scn.GetFreepsCard("castout1");
+		var athelas = scn.GetFreepsCard("athelas1");
+		var bounder = scn.GetFreepsCard("bounder");
+		var javelin = scn.GetFreepsCard("javelin");
+		var arrow = scn.GetFreepsCard("arrow");
+		var deor = scn.GetFreepsCard("deor");
+		var mark = scn.GetFreepsCard("mark");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath);
+		// The Rohirrim Guard discards a card from hand each time his ability is used.  He is not
+		// valiant, and nobody else is in play, so the minion he exerts brings no offer.
+		scn.MoveCompanionsToTable(rguard);
+		// For the Mark stays in hand throughout, so that every discard is a choice.
+		scn.MoveCardsToHand(villagers, guard, castout, athelas, bounder, javelin, arrow, deor, mark);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rguard, troop);
+
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// [rohan] cards that are neither items nor allies: an event, a companion, a condition.
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(villagers);
+		assertInZone(Zone.DISCARD, villagers);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(guard);
+		assertInZone(Zone.DISCARD, guard);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(castout);
+		assertInZone(Zone.DISCARD, castout);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		// An item and an ally of other cultures.
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(athelas);
+		assertInZone(Zone.DISCARD, athelas);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(bounder);
+		assertInZone(Zone.DISCARD, bounder);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		// A [rohan] possession, a [rohan] artifact and a [rohan] ally.
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(javelin);
+		assertInZone(Zone.DISCARD, javelin);
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(arrow);
+		assertInZone(Zone.DISCARD, arrow);
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.FreepsUseCardAction(rguard);
+		scn.FreepsChooseCard(deor);
+		assertInZone(Zone.DISCARD, deor);
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+
+		assertInZone(Zone.HAND, mark);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ARohanItemDiscardedFromHandWhenReconcilingAddsAToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
@@ -192,140 +411,537 @@ public class Card_V2_051_Tests
 		scn.MoveCardsToHand(javelin);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
+		scn.SkipToMovementDecision();
 		scn.FreepsChooseToStay();
 
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.FreepsDecisionAvailable("reconcile"));
+
 		scn.FreepsChooseCard(javelin);
-		assertEquals(Zone.DISCARD, javelin.getZone());
+		assertInZone(Zone.DISCARD, javelin);
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		// The turn is over; the other player's has begun.
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
 	@Test
-	public void NowforWrathReactsToReconciledAllyDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheOtherPlayersRohanAllyDiscardedFromHisHandAddsNoToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
 		var deor = scn.GetFreepsCard("deor");
+		// The Shadow player's own copy of Deor, in his hand.
+		var theirDeor = scn.GetShadowCard("deor");
 		scn.MoveCardsToSupportArea(wrath);
-		scn.MoveCardsToHand(deor);
+		scn.MoveCardsToHand(deor, theirDeor);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
+		scn.PassRegroupActions();
+
+		// The Shadow player reconciles before the Free Peoples player decides whether to move again.
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowDecisionAvailable("reconcile"));
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// The text does not say whose [rohan] ally.  The game counts only its owner's, and was made to
+		// on purpose; this test holds what the game does while the two are being reconciled.
+		scn.ShadowChooseCard(theirDeor);
+		assertInZone(Zone.DISCARD, theirDeor);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// The same card discarded the same way from the owner's own hand adds one.
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
 		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("reconcile"));
+		scn.FreepsChooseCard(deor);
+		assertInZone(Zone.DISCARD, deor);
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		// The turn is over; the other player's has begun.
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	@Ignore("Q-0048: the text has no \"your\", but the game was changed on purpose to count only its owner's [rohan] items and allies")
+	public void TheOtherPlayersRohanAllyDiscardedFromHisHandAddsAToken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		// The Shadow player's own copy of Deor, in his hand.  The text says "a [rohan] ally", not "your".
+		var theirDeor = scn.GetShadowCard("deor");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCardsToHand(theirDeor);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+
+		// The Shadow player reconciles before the Free Peoples player decides whether to move again.
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowDecisionAvailable("reconcile"));
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		scn.ShadowChooseCard(theirDeor);
+		assertInZone(Zone.DISCARD, theirDeor);
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+	}
+
+	@Test
+	public void NothingIsAddedDuringTheFellowshipPhase() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var deor = scn.GetFreepsCard("deor");
+		var deor2 = scn.GetFreepsCard("deor2");
+		var athelas1 = scn.GetFreepsCard("athelas1");
+		var athelas2 = scn.GetFreepsCard("athelas2");
+		var mark = scn.GetFreepsCard("mark");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCompanionsToTable(guard, aragorn);
+		scn.MoveAlliesToTable(deor);
+		scn.AddWoundsToChar(deor, 1);
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.MoveCardsToHand(deor2, mark);
+		// No [rohan] possession discards itself in the fellowship phase, so Athelas, which does, is
+		// made a [rohan] card as well.  Aragorn bears two: one goes in the fellowship phase and the
+		// other in the regroup phase.
+		scn.AttachCardsTo(aragorn, athelas1, athelas2);
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateFreepsFilter("name(Athelas)"), null, Culture.ROHAN));
+
+		scn.StartGame();
+
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// A [rohan] ally discarded from hand, to heal his copy in play.
+		scn.FreepsDiscardToHeal(deor2);
+		assertInZone(Zone.DISCARD, deor2);
+		assertEquals(0, scn.GetWoundsOn(deor));
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+
+		// A [rohan] item discarded from play.
+		scn.FreepsUseCardAction(athelas1);
+		assertInZone(Zone.DISCARD, athelas1);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The other Athelas, discarded by For the Mark in the regroup phase, adds a token.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPlayCard(mark);
+		assertInZone(Zone.DISCARD, athelas2);
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ARohanItemOrAllyDiscardedFromTheDrawDeckAddsATokenAndOtherCardsAddNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var haldir = scn.GetFreepsCard("haldir");
+		var longbow = scn.GetFreepsCard("longbow");
+		var athelas = scn.GetFreepsCard("athelas1");
+		var castout = scn.GetFreepsCard("castout1");
+		var javelin = scn.GetFreepsCard("javelin");
+		var deor = scn.GetFreepsCard("deor");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCompanionsToTable(haldir);
+		scn.AttachCardsTo(haldir, longbow);
+
+		scn.StartGame();
+		// The Naith Longbow exerts its bearer for each card it discards: vitality 3 + 2, for four uses.
+		scn.ApplyAdHocModifier(new VitalityModifier(null, haldir, null, 2));
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		scn.FreepsChooseCard(deor);
-		assertEquals(Zone.DISCARD, deor.getZone());
+		assertEquals(0, scn.GetWoundsOn(haldir));
+
+		// The text names play and hand.  The game counts the draw deck as well, and was made to on
+		// purpose; this test holds what the game does while the two are being reconciled.
+		// A [gondor] possession discarded from the top of the draw deck: nothing.
+		scn.MoveCardsToTopOfDeck(athelas);
+		assertEquals(athelas, scn.GetFreepsTopOfDeck());
+		scn.FreepsUseCardAction(longbow);
+		assertEquals(1, scn.GetWoundsOn(haldir));
+		assertInZone(Zone.DISCARD, athelas);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		// A [rohan] condition: nothing.
+		scn.MoveCardsToTopOfDeck(castout);
+		assertEquals(castout, scn.GetFreepsTopOfDeck());
+		scn.FreepsUseCardAction(longbow);
+		assertInZone(Zone.DISCARD, castout);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		// A [rohan] possession, and then a [rohan] ally.
+		scn.MoveCardsToTopOfDeck(javelin);
+		assertEquals(javelin, scn.GetFreepsTopOfDeck());
+		scn.FreepsUseCardAction(longbow);
+		assertInZone(Zone.DISCARD, javelin);
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		scn.ShadowPass();
+
+		scn.MoveCardsToTopOfDeck(deor);
+		assertEquals(deor, scn.GetFreepsTopOfDeck());
+		scn.FreepsUseCardAction(longbow);
+		assertInZone(Zone.DISCARD, deor);
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		assertEquals(4, scn.GetWoundsOn(haldir));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathDoesNotRespondToMinionExertedByFreepsCardIfLessThan2Tokens() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Ignore("Q-0047: the text says \"from play or from hand\", but the game was changed on purpose to count the draw deck too")
+	public void ARohanItemDiscardedFromTheDrawDeckAddsNoToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		var castout = scn.GetFreepsCard("castout");
-
-		scn.MoveCompanionsToTable(eowyn);
-		scn.MoveCardsToSupportArea(wrath, castout);
-		scn.AddTokensToCard(wrath, 1);
-
-		var cantea = scn.GetShadowCard("cantea");
-		scn.MoveMinionsToTable(cantea);
-		scn.AddWoundsToChar(cantea, 1);
+		var haldir = scn.GetFreepsCard("haldir");
+		var longbow = scn.GetFreepsCard("longbow");
+		var javelin = scn.GetFreepsCard("javelin");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCompanionsToTable(haldir);
+		scn.AttachCardsTo(haldir, longbow);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.MoveCardsToTopOfDeck(javelin);
 
-		scn.SkipToPhase(Phase.MANEUVER);
-		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.HasKeyword(eowyn, Keyword.VALIANT));
-		assertEquals(0, scn.GetWoundsOn(eowyn));
-		assertEquals(1, scn.GetWoundsOn(cantea));
+		assertEquals(javelin, scn.GetFreepsTopOfDeck());
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
 
-		scn.FreepsUseCardAction(castout);
-		assertTrue(scn.ShadowDecisionAvailable("Play Maneuver action or pass"));
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		assertEquals(0, scn.GetWoundsOn(eowyn));
-		assertEquals(2, scn.GetWoundsOn(cantea));
+		// The Naith Longbow discards the top card of the draw deck: neither from play nor from hand.
+		scn.FreepsUseCardAction(longbow);
+		assertEquals(1, scn.GetWoundsOn(haldir));
+		assertInZone(Zone.DISCARD, javelin);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathDoesNotRespondToMinionExertedByFreepsCardIfHas2TokensButNoValiantComp() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void RemovesTwoTokensAndExertsAValiantCompanionToWoundTheMinionAFreePeoplesCardExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var wrath = scn.GetFreepsCard("wrath");
+		var doom = scn.GetFreepsCard("doom");
+		var castout = scn.GetFreepsCard("castout1");
+		var guard = scn.GetFreepsCard("guard");
+		var haldir = scn.GetFreepsCard("haldir");
+		var rguard = scn.GetFreepsCard("rguard");
 		var deor = scn.GetFreepsCard("deor");
-		var castout = scn.GetFreepsCard("castout");
-
-		scn.MoveCardsToSupportArea(wrath, castout, deor);
-		scn.AddTokensToCard(wrath, 2);
-
-		var cantea = scn.GetShadowCard("cantea");
-		scn.MoveMinionsToTable(cantea);
-		scn.AddWoundsToChar(cantea, 1);
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToSupportArea(wrath, doom, castout);
+		scn.AddTokensToCard(wrath, 3);
+		scn.AddTokensToCard(doom, 2);
+		scn.MoveCompanionsToTable(guard, haldir, rguard);
+		// An ally, made valiant: valiant as the two are, and no companion.
+		scn.MoveAlliesToTable(deor);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.MANEUVER);
-		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
-		assertEquals(2, scn.GetCultureTokensOn(wrath));
-		assertFalse(scn.HasKeyword(deor, Keyword.VALIANT));
-		assertEquals(0, scn.GetWoundsOn(deor));
-		assertEquals(1, scn.GetWoundsOn(cantea));
 
+		assertTrue(scn.HasKeyword(deor, Keyword.VALIANT));
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		// Cast Out, a Free Peoples condition, exerts a minion: a [moria] Orc or an [isengard] Uruk-hai.
 		scn.FreepsUseCardAction(castout);
-		assertTrue(scn.ShadowDecisionAvailable("Play Maneuver action or pass"));
-		assertEquals(2, scn.GetCultureTokensOn(wrath));
-		assertEquals(0, scn.GetWoundsOn(deor));
-		assertEquals(2, scn.GetWoundsOn(cantea));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
+		scn.FreepsChooseCard(savage);
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rguard, deor, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(haldir);
+
+		// 2 of the 3 tokens here are removed, and none of the other condition's.
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		assertEquals(2, scn.GetCultureTokensOn(doom));
+		assertEquals(1, scn.GetWoundsOn(haldir));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		// The exertion and the wound, on the minion that was exerted and not the other.
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void NowforWrathRemoves2TokenAndExertsValiantCompToWoundMinionExertedByFreepsCard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void MayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		var castout = scn.GetFreepsCard("castout");
-
-		scn.MoveCompanionsToTable(eowyn);
+		var castout = scn.GetFreepsCard("castout1");
+		var guard = scn.GetFreepsCard("guard");
+		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(wrath, castout);
-		scn.AddTokensToCard(wrath, 3);
-
-		var cantea = scn.GetShadowCard("cantea");
-		scn.MoveMinionsToTable(cantea);
-		scn.AddWoundsToChar(cantea, 1);
+		scn.AddTokensToCard(wrath, 2);
+		scn.MoveCompanionsToTable(guard);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
-		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
-		assertEquals(3, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.HasKeyword(eowyn, Keyword.VALIANT));
-		assertEquals(0, scn.GetWoundsOn(eowyn));
-		assertEquals(1, scn.GetWoundsOn(cantea));
-		assertEquals(Zone.SHADOW_CHARACTERS, cantea.getZone());
 
 		scn.FreepsUseCardAction(castout);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsDeclineOptionalTrigger();
 
-		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		assertEquals(1, scn.GetWoundsOn(eowyn));
-		assertEquals(Zone.DISCARD, cantea.getZone());
-
-		assertTrue(scn.ShadowDecisionAvailable("Play Maneuver action or pass"));
-
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
+	@Test
+	public void IsOfferedAgainEachTimeTheSameMinionIsExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
+		var wrath = scn.GetFreepsCard("wrath");
+		var castout1 = scn.GetFreepsCard("castout1");
+		var castout2 = scn.GetFreepsCard("castout2");
+		var guard = scn.GetFreepsCard("guard");
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveCardsToSupportArea(wrath, castout1, castout2);
+		scn.AddTokensToCard(wrath, 4);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(hunter);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// The only minion is exerted, and the only valiant companion pays.
+		scn.FreepsUseCardAction(castout1);
+		assertEquals(1, scn.GetWoundsOn(hunter));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(2, scn.GetWoundsOn(hunter));
+
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(castout2);
+		assertEquals(3, scn.GetWoundsOn(hunter));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertEquals(2, scn.GetWoundsOn(guard));
+		// Vitality 4: two exertions and two wounds kill the Morgul Hunter.
+		assertInZone(Zone.DISCARD, hunter);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void EachOfTwoMinionsAMountExertsAtOnceBringsAnOfferOfItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var guard = scn.GetFreepsCard("guard");
+		var haldir = scn.GetFreepsCard("haldir");
+		var mount = scn.GetFreepsCard("mount");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.AddTokensToCard(wrath, 4);
+		scn.MoveCompanionsToTable(guard, haldir);
+		scn.AttachCardsTo(guard, mount);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, savage);
+		scn.SkipToAssignments();
+		// Two minions on the mounted Guard: one assigned by each player.
+		scn.FreepsAssignToMinions(guard, troop);
+		scn.ShadowAssignToMinions(guard, savage);
+		scn.FreepsResolveSkirmish(guard);
+
+		// The skirmish starts and the Mount, a Free Peoples possession, has made both minions exert.
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(4, scn.GetCultureTokensOn(wrath));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir));
+		scn.FreepsChooseCard(haldir);
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		// One of the two minions has its wound; which is offered first is the game's to say.
+		assertEquals(3, scn.GetWoundsOn(troop) + scn.GetWoundsOn(savage));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(guard);
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		assertEquals(1, scn.GetWoundsOn(haldir));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		// Each offer wounded the minion it was made for.
+		assertEquals(2, scn.GetWoundsOn(troop));
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWithOneTokenHereThoughAnotherRohanConditionHasTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var doom = scn.GetFreepsCard("doom");
+		var castout = scn.GetFreepsCard("castout1");
+		var guard = scn.GetFreepsCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath, doom, castout);
+		scn.AddTokensToCard(wrath, 1);
+		scn.AddTokensToCard(doom, 2);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetWoundsOn(guard));
+		scn.FreepsUseCardAction(castout);
+
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
+		assertEquals(2, scn.GetCultureTokensOn(doom));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenTheOnlyValiantCompanionIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var castout = scn.GetFreepsCard("castout1");
+		var guard = scn.GetFreepsCard("guard");
+		var rguard = scn.GetFreepsCard("rguard");
+		var deor = scn.GetFreepsCard("deor");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(wrath, castout);
+		scn.AddTokensToCard(wrath, 2);
+		scn.MoveCompanionsToTable(guard, rguard);
+		scn.MoveAlliesToTable(deor);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
+		// Vitality 3 with 2 wounds: the valiant companion cannot exert.  The companion who is not
+		// valiant and the valiant ally both can.
+		scn.AddWoundsToChar(guard, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.HasKeyword(deor, Keyword.VALIANT));
+		scn.FreepsUseCardAction(castout);
+
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(2, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(rguard));
+		assertEquals(0, scn.GetWoundsOn(deor));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenAFreePeoplesCardWoundsAMinionWithoutExertingIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var guard = scn.GetFreepsCard("guard");
+		var haldir = scn.GetFreepsCard("haldir");
+		var bow = scn.GetFreepsCard("bow");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.AddTokensToCard(wrath, 2);
+		scn.MoveCompanionsToTable(guard, haldir);
+		scn.AttachCardsTo(guard, bow);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, savage);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		// The Rohirrim Bow exerts its bearer and is discarded to wound a minion.
+		scn.FreepsUseCardAction(bow);
+		scn.FreepsChooseCard(troop);
+
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		// The Bow, a [rohan] item discarded from play, has added a token; none was spent.
+		assertInZone(Zone.DISCARD, bow);
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenAShadowCardOrASiteExertsAMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wrath = scn.GetFreepsCard("wrath");
+		var guard = scn.GetFreepsCard("guard");
+		var haldir = scn.GetFreepsCard("haldir");
+		var javelin = scn.GetFreepsCard("javelin");
+		var cantea = scn.GetShadowCard("cantea");
+		scn.MoveCardsToSupportArea(wrath);
+		scn.AddTokensToCard(wrath, 2);
+		scn.MoveCompanionsToTable(guard, haldir);
+		scn.AttachCardsTo(guard, javelin);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, cantea);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(cantea));
+		assertAttachedTo(javelin, guard);
+
+		// Ulaire Cantea exerts himself to discard the Javelin.
+		scn.ShadowUseCardAction(cantea);
+
+		assertEquals(1, scn.GetWoundsOn(cantea));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		// The Javelin, discarded from play by a Shadow card, has added a token; none was spent.
+		assertInZone(Zone.DISCARD, javelin);
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// Site 2, Ettenmoors: "Skirmish: Exert your companion or minion to make that character strength +2."
+		// A site is neither a Free Peoples card nor a Shadow card.  Cantea is the Shadow player's only minion.
+		scn.FreepsPass();
+		var ettenmoors = scn.GetCurrentSite();
+		assertTrue(scn.ShadowActionAvailable(ettenmoors));
+		scn.ShadowUseCardAction(ettenmoors);
+
+		assertEquals(2, scn.GetWoundsOn(cantea));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(3, scn.GetCultureTokensOn(wrath));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
 }
