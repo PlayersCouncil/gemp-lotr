@@ -922,7 +922,7 @@
 						filter: mounted,culture(isengard),orc
 						count: 2
 					}
-					filter: culture(isengard),mount
+					filter: your,culture(isengard),mount
 					amount: -1
 				}
 			}
@@ -964,10 +964,8 @@
 			{
 				type: Activated
 				phase: Skirmish
-				requires: {
-					type: CanSpot
-					filter: uruk-hai, inSkirmish
-				}
+				# No requirement: an ability with a cost is offered whenever the cost can be paid (Q-0034).  It
+				# used to be withheld unless an Uruk-hai was in the skirmish.
 				cost: {
 					type: RemoveTokensCumulative
 					culture: isengard
