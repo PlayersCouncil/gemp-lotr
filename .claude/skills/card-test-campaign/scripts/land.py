@@ -105,6 +105,8 @@ def land(card_id, note, force_parked, check_only, before):
             return "git: " + (done.stderr or done.stdout).strip()
         outcome = "committed " + git("rev-parse", "--short=9", "HEAD").stdout.strip()
     args = ["set", status, card_id]
+    if not parked and not force_parked:
+        args += ["--note", ""]  # a note left from an earlier landing ("1 test(s) parked on ...") no longer holds
     if parked:
         args += ["--note", "%d test(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
         for found in sorted(set(parked)):
