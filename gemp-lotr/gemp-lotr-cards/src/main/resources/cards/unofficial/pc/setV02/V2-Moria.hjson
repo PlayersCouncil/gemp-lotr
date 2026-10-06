@@ -328,7 +328,19 @@
 					firstNumber: memory(discardedMinions)
 					secondNumber: 0
 				}
+				# The prevention is only on offer when X companions can exert; otherwise the threats are added
+				# outright (a cost that cannot be paid in full is not paid in part).
 				true: {
+					type: If
+					check: {
+						type: IsGreaterThanOrEqual
+						firstNumber: {
+							type: ForEachYouCanSpot
+							filter: companion,canexert
+						}
+						secondNumber: memory(discardedMinions)
+					}
+					true: {
 					type: Preventable
 					text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
 					player: freeps
@@ -339,6 +351,11 @@
 						ignoreCostCheckFailure: true
 					}
 					effect: {
+						type: AddThreats
+						amount: memory(discardedMinions)
+					}
+				}
+					false: {
 						type: AddThreats
 						amount: memory(discardedMinions)
 					}
