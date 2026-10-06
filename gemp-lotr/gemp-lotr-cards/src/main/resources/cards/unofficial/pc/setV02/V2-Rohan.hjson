@@ -760,27 +760,17 @@
 				type: Activated
 				phase: Skirmish
 				limitPerPhase: 1
-				requires: [
-					{
-						type: CanSpot
-						filter: InSkirmish, Hobbit, companion
-					}
-				]
-				cost: [
-					{
-						type: Exert
-						select: self	
-					}
-					{
-						type: Spot
-						select: choose(InSkirmish, Hobbit, companion)
-						memorize: guardedHobbit
-					}
-				]
+				# The exertion is the only cost, so the action is offered whenever he can exert (Q-0034); the Hobbit is
+				# who the effect acts on, companion or ally (the text says "a skirmishing Hobbit").
+				cost: {
+					type: Exert
+					select: self
+				}
 				effect: [
 					{
 						type: ModifyStrength
-						select: memory(guardedHobbit)
+						select: choose(InSkirmish, Hobbit)
+						memorize: guardedHobbit
 						amount: {
 							type: forEachStrength
 							filter: self
@@ -790,6 +780,7 @@
 						type: AddKeyword
 						keyword: valiant
 						select: memory(guardedHobbit)
+						until: start(regroup)
 					}
 				]
 			}
