@@ -129,13 +129,15 @@
 					phase: skirmish
 					player: freeps
 				}
+				# "a companion it is skirmishing": an ally the Balrog fights is not wounded, and with no companion
+				# in the skirmish the offer, which has no cost, is not made (Q-0034).
 				requires: {
 					type: CanSpot
-					filter: InSkirmish,self
+					filter: companion,InSkirmishAgainst(self)
 				}
 				effect: {
 					type: Wound
-					select: choose(InSkirmishAgainst(self))
+					select: choose(companion,InSkirmishAgainst(self))
 					times: 1
 				}
 			}
