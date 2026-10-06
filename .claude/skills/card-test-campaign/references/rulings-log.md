@@ -398,3 +398,56 @@ needs to have its revision number updated." The earlier implementation "should b
 the HJSON, as should any of the other missing revisions, so that the file has a one-stop-shop for history." So
 an errata definition file carries every earlier revision of a card as a commented-out block above the live one,
 oldest first, and the live block's `revision:` is the number of the revision released.
+
+## Rulings of 2026-10-06
+
+**An optional action that would do nothing is not offered: now a rule, with two exceptions (Q-0034).** "Sure,
+start treating it as a rule, except in these cases: Events. People often want to play dud events to get them
+out of their hand. Situations with a cost. Oftentimes the cost may incidentally be beneficial even if the effect
+fizzles, such as exerting an enduring character." So: an optional trigger or action with no cost whose whole
+effect would do nothing (a draw of zero, an X of zero) is rightly withheld, and offering it is a finding. An
+event is offered whenever its own requirements and costs are met, whatever its effect will do. An optional
+action or trigger that has a cost ("you may exert X to ...") is offered whenever the cost can be paid, even if
+the effect will do nothing; a definition that adds a requirement to withhold it is a finding (Naith Armaments
+102_10 had one). Do not ask about these shapes again.
+
+**A branch in parentheses is mandatory when it is available (F-0047, Q-0035).** "When there are parenthesis like
+this, it's actually mandatory to use the parenthesis over the portion outside the parenthesis, so the player
+doesn't have a choice", and "Decipher ruled that a branch in parenthesis is mandatory to choose if it's
+available." "Exert a valiant companion (or spot 2 valiant Elves)": with two valiant Elves to spot the game spots
+and never offers the exertion, and is right. "Wound a minion (or wound a minion twice if each of those Elves
+bears a ranged weapon)": if two valiant Elves bearing ranged weapons can be spotted the minion is wounded twice;
+the player is not asked which Elves and cannot choose the lesser result.
+
+**Looking through a draw deck never forces a card to be taken (F-0049, F-0051).** "Those should all be an
+effective 0-N choice." Taking into hand, like playing (F-0042), has a minimum of 0 once the deck is being looked
+through.
+
+**Playing from the discard pile as an effect is a cost, the event's own twilight included (F-0046).** "It should
+block until both can be paid for; rules state that effects playing from discard pile have to essentially be
+treated like costs."
+
+**"Spot X to Y" does nothing without X, even as one branch of a choice (F-0053).** "When you're given a choice,
+you have to pick one that you're 'fully capable' of performing. But when an effect cannot be fully performed,
+you 'do what you can and ignore the rest'. That can lead to some unexpected edge cases. That said, 'spot X to Y'
+should clearly not resolve if X isn't around, even if it's one branch of a choice. This is clearly an engine bug."
+
+**What a special ability is (Q-0039).** "It would count, if it's got the bold text and a colon." A labelled
+ability ("Shadow: ...") used from the discard pile or while stacked is a minion's special ability and Gandalf,
+Lathspell answers it; the exertion of a minion that is not in play does nothing. A permission with no phase word
+("you may play this minion from your discard pile") is not a special ability and is not answered.
+
+**A random reveal from a hand gives its owner no pop-up either (Q-0036).** "Doesn't need the popup, just the
+event log."
+
+**Other answers.** Q-0030: Watcher in the Water replacing a tentacle "is being removed from its assignment, which
+may cancel it if it's the only minion in its skirmish". Q-0031: "[rivers] and [sites with no other terrain
+keywords] gain marsh". Q-0032 (102_4): the "you may play" possession "should be optional, an implementation
+oversight". Q-0037 (102_7): "The card probably shouldn't have had may on it ... Let's go ahead and fix it to
+match the bad wording": the additional reinforcement is asked. Q-0038 (102_8): preventing a discard that was a
+cost "is permitted, but it will cause the cost to no longer be considered paid". Q-0040 (102_77): continuous;
+"we ruled that with the Shadowfax, GOTM ruling and applied it to Anduril as well." F-0044: the Shadow player
+picks which tentacle Watcher replaces. F-0054: the Response type is to take a per-turn limit and the Staff is to
+be a Response. G-0016 declined: "There are no cards that put more than one kind of culture token on another,
+and no plans to in the PC."
+
