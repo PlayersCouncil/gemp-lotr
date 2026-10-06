@@ -1294,7 +1294,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
       required
 * Restore
   Causes `player` to `select count` cards to be flipped back right-side-up and restored, optionally storing the restored cards at the given `memorize` address.
-  Hindering a card temporarily disables it, and thus Restoring it causes it to resume activity on the board.  This action happens automatically during reconciliation, but can be invoked early using this entry. This mechanic was first added by the PC for set V3.
+  Hindering a card temporarily disables it, and thus Restoring it causes it to resume activity on the board.  This action happens automatically during reconciliation, but can be invoked early using this entry. This mechanic was first added by the PC for set V3.  The choice is worded "Choose cards to restore".
     * count
       default: 1
     * select

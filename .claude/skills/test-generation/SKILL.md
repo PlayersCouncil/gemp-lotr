@@ -227,7 +227,10 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
   dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is
-  shown to the other players only: assert once that the hand's owner is shown nothing
+  shown to the other players only: assert once that the hand's owner is shown nothing. A card taken from a draw
+  deck by its type, where the text does not say "reveal", is shown to nobody and named in the game log (Q-0025):
+  one test of the taking marks the log and reads that the cards taken are named and one left in the deck is not
+  (gemp-testing, "A card made known by the game log alone")
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
 - "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`

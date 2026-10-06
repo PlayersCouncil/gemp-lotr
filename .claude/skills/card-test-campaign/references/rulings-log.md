@@ -557,3 +557,11 @@ flag: abilities that play a card from a pile stay withheld when nothing can be p
 flagged for missing the skirmish only when it is a pump or a cancel that reaches nobody fighting ("If it actually
 results in something hitting the table, it's fine to leave noeffect off of it"); auto-pass is left alone for now.
 
+**On the details pass 4 settled (Ketura, 2026-10-06, Q-0074).** A minion spared from an overwhelm by its
+protection takes the ordinary wounds for losing and is not "overwhelmed" for other texts: "Very good." Winning by
+controlling five sites "is from the very obsolete 2nd edition; it's not worth considering in the future." Sticky
+Strands' timing as built: "good". A transfer does not take the card's own cost text into account either: "Based
+on a strict reading of the twilight cost rule, transfers should not take self-discounts into account. It's stupid
+and asinine, but it's RAW." A Map reaching the support area after the bid is "just a detail about how it's
+presented in the client ... the information is there all the same".
+

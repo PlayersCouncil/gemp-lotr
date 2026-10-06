@@ -80,7 +80,9 @@ Permanent cards use `Response`; event cards use `ResponseEvent`.
 ```
 "The twilight cost of this card is -1 for each Hobbit companion you can spot."
 ```
-Structure: `{ type: ModifyOwnCost, filter: self, amount: { type: forEachYouCanSpot, filter: hobbit,companion, multiplier: -1 } }`
+Structure: `{ type: ModifyOwnCost, amount: { type: forEachYouCanSpot, filter: hobbit,companion, multiplier: -1 } }`
+
+A discount prices the card when it is played. A transfer is not a play and costs the printed number, whatever the card's own text or another card's says (Q-0053, Q-0074).
 
 ---
 
@@ -106,6 +108,10 @@ cost: { type: exert, select: choose(culture(gondor),companion), memorize: chosen
 effect: { type: heal, select: memory(chosenComp) }
 ```
 
+"Spot X and <cost> to do something to that X": make the spot the first cost (`ChooseActiveCards` with `memorize`) and act on `memory(...)`, so that paying the rest of the cost cannot change who X is (Q-0065).
+
+An `AddThreats` that pays for playing a card goes at the top level of `cost`: there the engine counts it when it asks whether the card to be played has room for its own threat, which it cannot do inside an `If`, `Choice` or `Optional`.
+
 ### "Self" as Implicit Target
 
 When the card refers to itself ("this card", "this companion", the card's own name), use `self` or `bearer`:
@@ -121,7 +127,7 @@ When the card refers to itself ("this card", "this companion", the card's own na
 
 ## Step 3: Map English to Filters
 
-Filters are comma-separated AND chains. Read the English left-to-right.
+Filters are comma-separated AND chains. Read the English left-to-right. They are asked in that order, so an exclusion goes ahead of `Playable` (see hjson-reference, "Filters").
 
 | English | Filter |
 |---------|--------|
@@ -148,6 +154,19 @@ Filters are comma-separated AND chains. Read the English left-to-right.
 "For each X you can spot" in an amount context → `{ type: forEachYouCanSpot, filter: X }` as a value.
 
 These are different HJSON constructs despite similar English.
+
+### Controlling Sites
+
+Whether a player controls sites, and how many, is a count and not a spot (Q-0054):
+
+| English | HJSON |
+|---------|-------|
+| "you control a site", "spot a site you control", "while you control 2 sites" | `{ type: controlsSite, count: 2 }` (count defaults to 1) |
+| "no opponent controls a site" | `{ type: opponentDoesNotControlSite }` |
+| "you do not control a site" | `{ type: not, requires: { type: controlsSite } }` |
+| "for each site you control" | `{ type: forEachSiteYouControl }` as a value |
+
+Never write these as `canSpot`/`cantSpot` on `controlledSite`, `siteYouControl` or `site,controlledByOtherPlayer`: those filters find site cards and miss Breached Wall's +1. Keep the filters where the effect needs the site itself (stack on it, play on it, liberate it, a keyword or number of that site).
 
 ---
 
@@ -447,6 +466,7 @@ Both work. Use array when there are multiple, single object when there's genuine
 - "Each time X happens" on an event card → impossible (events can't have triggers)
 - "When you play this" → `Trigger` with trigger type `played` and `filter: self`
 - "Response: If X is about to" → `Response` (permanent) or `ResponseEvent` (event)
+- A printed "Response:" stays a `Response` even where its cost could be paid twice: the engine stops offering it once what it answers has been cancelled. Do not recast it as an optional Trigger to avoid a second offer
 
 ### Modifier vs Trigger for "comes into play"
 

@@ -123,6 +123,7 @@ Standard "**Phase:** Do X" text. Most common game text type.
   limitPerPhase: 1            // or limitPerTurn: 1 for "(limit once per turn)"
 }
 ```
+A Response is not offered to a special ability whose effect has been cancelled, or to an event that has been cancelled (Q-0043); an optional Trigger still is. Build a printed "Response:" as `type: Response` even where its cost could be paid twice: do not make it an optional Trigger to avoid a second offer.
 
 ### Event / ResponseEvent
 For event cards. `Event` for phase events, `ResponseEvent` for response events.
@@ -183,6 +184,8 @@ Used for targeted effects — narrow a filter down to specific cards.
 
 Comma-separated, case-insensitive. Commas act as AND. Example: `your,companion,elf,unwounded`
 
+The filters in a list are asked in order. Put exclusions ahead of `Playable`: asked of the card whose own text is doing the asking, `Playable` asks that card's requirements again and can recurse (`event, not(title(Show Them the Meaning of Haste)), Playable`).
+
 ### Simple Filters (no params)
 **Card types:** `Companion`, `Minion`, `Ally`, `Possession`, `Artifact`, `Condition`, `Event`, `Follower`, `Site`, `Character` (comp+minion+ally), `Item` (poss+artifact)
 **Races:** `Elf`, `Man`, `Dwarf`, `Hobbit`, `Wizard`, `Orc`, `Uruk-hai`, `Nazgul`, `Troll`, `Ent`, etc.
@@ -196,7 +199,7 @@ Comma-separated, case-insensitive. Commas act as AND. Example: `your,companion,e
 | `Another` / `Other` | Not self |
 | `Any` | Matches everything |
 | `Self` | This card |
-| `Bearer` | Card this is attached to |
+| `Bearer` | Card this is attached to, found even when this card is hindered |
 | `RingBearer` | The Ring-bearer |
 | `Unique` | Cards marked unique |
 | `Wounded` / `Unwounded` | Has/hasn't wounds |
@@ -230,7 +233,7 @@ Comma-separated, case-insensitive. Commas act as AND. Example: `your,companion,e
 | `SiteNumber(X)` | int/range | Site number matches |
 | `RegionNumber(X)` | int/range | Region number matches |
 | `AttachedTo(filter)` | filter | Attached to matching card |
-| `HasAttached(filter)` | filter | Bears matching card |
+| `HasAttached(filter)` | filter | Bears matching card (active attachments only: not a hindered one) |
 | `HasAttachedCount(N,filter)` | count,filter | Bears N+ matching cards |
 | `HasStacked(filter)` | filter | Has matching stacked card |
 | `InSkirmishAgainst(filter)` | filter | Skirmishing against match |
@@ -246,6 +249,7 @@ Comma-separated, case-insensitive. Commas act as AND. Example: `your,companion,e
 | `LowestStrength(filter)` | filter | Tied for lowest strength |
 | `SiteBlock(X)` | block | Site from block X |
 | `Timeword(X)` | phase | Event phase matches |
+| `ReplaceableFromDiscard(filter)` | filter | Performing player's discard pile holds a card matching `filter` with this card's title and another subtitle: what `ReplaceCardInPlayWithCardInDiscard` can act on. Use it in both the requirement and the choice of the card to replace |
 
 ---
 
@@ -338,6 +342,9 @@ Boolean checks. Used in `requires: []` arrays.
 | `FierceSkirmish` | — | In fierce assignment/skirmish |
 | `RingIsOn` | — | Ring-bearer wearing ring |
 | `ControlsSite` | player?, count? | Player controls N sites |
+| `OpponentDoesNotControlSite` | player? | No opponent of the player controls a site |
+
+Whether and how many sites a player controls is asked with these two and the `ForEachSiteYouControl` value, never by spotting a site card with `ControlledSite`, `SiteYouControl` or `ControlledByOtherPlayer`: the count includes sites that are no card (Breached Wall's +1; Q-0054).
 
 ### Cards in Zones
 | Requirement | Key Params | Meaning |
@@ -395,6 +402,8 @@ Used in `Modifier` effect types or via `AddModifier` subaction.
 ### Stat Modifiers
 `ModifyStrength(filter, amount, requires?)`, `ModifyVitality(filter, amount, requires?)`, `ModifyResistance(filter, amount, requires?)`, `ModifyCost(filter, amount, requires?)`, `ModifySiteNumber(filter, amount, requires?)`, `ModifyRoamingPenalty(filter, amount, requires?)`, `ModifyArcheryTotal(amount, side, requires?)`, `ModifyMoveLimit(amount, requires?)`, `ModifyPlayOnCost(filter, on, amount, requires?)`, `ModifySanctuaryHeal(amount, requires?)`, `ModifyInitiativeHandSize(amount)`
 
+`ModifyCost`, `ModifyPlayOnCost` and a card's own `ModifyOwnCost` price a card being played. A transfer by rule is not a play: it costs the printed twilight cost and none of these reach it (Q-0053, Q-0074).
+
 ### Keyword Modifiers
 `AddKeyword(filter, keyword, amount?, requires?)`, `RemoveKeyword(filter, keyword, requires?)`, `RemoveAllKeywords(filter, requires?)`, `AddKeywordFromCards(filter, from, requires?)`
 
@@ -403,6 +412,8 @@ Used in `Modifier` effect types or via `AddModifier` subaction.
 
 ### Prevention Modifiers
 `CantTakeWounds(filter, requires?)`, `CantTakeMoreWoundsThan(filter, amount?, phase?, requires?)`, `CantBeExerted(filter, by?, requires?)`, `CantHeal(filter, requires?)`, `CantBeDiscarded(filter, by?, player?, requires?)`, `CantBeOverwhelmed(filter, requires?)`, `CantBeOverwhelmedMultiplier(filter, multiplier?, requires?)`, `CantBeAssignedToSkirmish(filter, player?, requires?)`, `CantBeAssignedToSkirmishAgainst(fpCharacter, minion, side?, requires?)`, `CantBeTransferred(filter, requires?)`, `CantBear(filter, cardFilter?, requires?)`, `CantPlayCards(filter, requires?)`, `CantPlayPhaseEvents(phase, player?, requires?)`, `CantPlayPhaseEventsOrPhaseSpecialAbilities(phase, player?, requires?)`, `CantUseSpecialAbilities(filter?, phase?, player?, requires?)`, `CantMove(requires?)`, `CantCancelSkirmish(filter?, requires?)`, `CantPreventWounds(requires?)`, `CantRemoveBurdens(filter?, requires?)`, `CantRemoveThreats(filter?, requires?)`, `CantTakeArcheryWounds(filter, requires?)`, `CantPlaySite(player, requires?)`
+
+Overwhelm is decided character by character (Q-0044). On a minion, `CantBeOverwhelmedMultiplier` and the `AlterOverwhelmMultiplier` subaction protect that minion only, measured against its own strength; other minions in the skirmish are overwhelmed at double the side's total. The `AboutToBeOverwhelmed` trigger and `LosesSkirmish` with `overwhelm: true` match only the characters actually overwhelmed, not a minion spared beside them.
 
 ### Other Modifiers
 `AllyCanParticipateInArcheryFireAndSkirmishes(filter, requires?)`, `AllyCanParticipateInSkirmishes(filter, requires?)`, `DisableGameText(filter, requires?)`, `DoesNotAddToArcheryTotal(filter, requires?)`, `ExtraCostToPlay(filter, cost, requires?)`, `FPCultureCount(amount, requires?)`, `HasToMoveIfAble(requires?)`, `ShadowHasInitiative(requires?)`, `SkipPhase(phase, requires?)`, `CanPlayStackedCards(filter, on, requires?)`, `CanBearExtraItems(filter, itemclass, amount?, requires?)`, `ItemClassSpot(class, requires?)`, `ModifyRaceSpotCount(race, requires?)`
@@ -438,7 +449,7 @@ Used in `cost: []` and `effect: []` arrays.
 | `RemoveKeyword` | select, keyword, count?, until?, memorize? | Remove keyword temporarily |
 | `RemoveText` | select, count?, until?, memorize? | Disable game text |
 | `ModifyArcheryTotal` | side, amount, until? | Alter archery total |
-| `AddTrigger` | trigger, until?, optional?, requires?, cost?, effect? | Spawn temporary trigger |
+| `AddTrigger` | trigger, until?, optional?, requires?, cost?, effect? | Spawn temporary trigger. With `optional: true` it is offered only to the player who performed the action that added it |
 | `AlterOverwhelmMultiplier` | select, multiplier?, until?, memorize? | Change overwhelm threshold |
 | `DisableSkirmishAssignment` | select, until? | Can't be assigned |
 | `DisableWounds` | select, until?, memorize? | Can't take wounds |
@@ -450,12 +461,14 @@ Used in `cost: []` and `effect: []` arrays.
 
 **Tokens:**
 `AddBurdens(amount?, player?)`, `RemoveBurdens(amount?, player?)`, `AddThreats(amount?, player?)`, `RemoveThreats(amount?)`, `AddTwilight(amount?, memorize?)`, `RemoveTwilight(amount?, memorize?)`, `AddCultureTokens(select, culture, count?, memorize?)`, `RemoveCultureTokens(select, culture?, count?, memorize?)`, `ReinforceTokens(select?, culture?, player?, times?, memorize?)`
+`AddCultureTokens` and `ReinforceTokens` do nothing to a hindered card (Q-0070).
 
 **Card Movement:**
 `Discard(select, count?, player?, memorize?)`, `ReturnToHand(select, count?, player?)`, `Transfer(select, where, checkTarget?, memorize*)`, `StackCardsFromPlay/Hand/Deck/Discard(select, where, count?)`, `RemoveFromTheGame(select, count?, player?, memorize?)`
 
 **Playing Cards:**
 `PlayCardFromHand(select, on?, discount?, memorize?)`, `PlayCardFromDiscard(select, on?, discount?, player?, memorize?)`, `PlayCardFromDrawDeck(select, on?, discount?, shuffle, showAll, memorize?)`, `PlayCardFromDeadPile(select, discount?, memorize?)`, `PlayCardFromStacked(select, on, discount?, memorize?)`, `PlayNextSite(filter?, memorize?)`
+A top-level `AddThreats` cost is known to the action's requirements, to the advance check of `PlayCardFromDeadPile`, `PlayCardFromDiscard`, `PlayCardFromHand` and `PlayCardFromStacked`, and to the filter `PlayableFromDeadPile`: a card that must itself add a threat to be played is not counted as playable when the action's own threats leave it no room. An `AddThreats` inside an `If`, `Choice` or `Optional` is not counted.
 
 **Hand/Deck Manipulation:**
 `DrawCards(count?, player?)`, `DiscardFromHand(select?, count?, hand?, forced, player?, memorize?)`, `DiscardCardAtRandomFromHand(hand?, count?, forced)`, `DiscardTopCardsFromDeck(deck?, count?, forced, memorize?)`, `PutCardsFromDeckIntoHand(select?, count?, shuffle, reveal, showAll)`, `PutCardsFromDiscardIntoHand(select?, count?, player?, discard, memorize?)`, `RevealHand(hand?, memorize?)`, `RevealTopCardsOfDrawDeck(deck?, count?, memorize?)`, `RevealCardsFromHand(hand?, select?, count?, memorize?)`, `LookAtTopCardsOfDrawDeck(deck?, count?, memorize?)`, `ShuffleCardsFromDiscardIntoDrawDeck(select?, count?)`, `ShuffleDeck(deck?)`
@@ -506,6 +519,7 @@ For targeting inactive cards: `hindered`, `stacked`, `out_of_turn`, `attached_to
 - Retrieve memory in filters: `Memory(X)`, `NameFromMemory(X)`, `CultureFromMemory(X)`
 - Retrieve memory in values: `memory(X)`, `FromMemory(memory)`, `ForEachInMemory(memory)`
 - Retrieve memory in requirements: `HasCardInMemory(memory)`, `MemoryIs(memory, value)`
+- A cost that selects from `memory(X)` is really checked, and the action not offered when it cannot be paid, where X is filled before costs are checked: in the `cost` of a Trigger, Response or ResponseEvent, what its `trigger` memorizes; in the `cost` of an `AddTrigger`, any memory its own costs do not memorize (the adding action has filled it). A cost that selects from memory an earlier cost of the same action fills cannot be checked beforehand and still needs `ignoreCostCheckFailure: true` on it.
 
 ---
 

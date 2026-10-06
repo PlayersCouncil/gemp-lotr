@@ -27,7 +27,7 @@ scenario and tutorial system drives games the same way:
 | `VirtualTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/virtualtable/` | The table: holds the game, answers decisions, looks cards up by alias, walks the game through its opening. Abstract. |
 | `Actions`, `Choices`, `Decisions`, `GameProcedures`, `GameProperties`, `CardProperties`, `PileProperties`, `Skirmishes`, `ZoneManipulation` | same folder | Interfaces of default methods that `VirtualTable` implements: partial classes in all but name. `TableBase` holds the handful of accessors they are built on. |
 | `VirtualTableScenario` | `gemp-lotr-server/src/test/java/com/gempukku/lotro/framework/` | The unit-test table: two made-up players, every named card put in both decks, the shared card library, Race to Mount Doom set-up. This is the `scn` in every test. |
-| `TestConstants`, `Assertions`, `AdHocEffects` | same test folder | Canned sites, Ring-bearers, Rings and formats; zone assertions; ad hoc modifiers and effects. Test sources only. |
+| `TestConstants`, `Assertions`, `AdHocEffects` | same test folder | Canned sites, Ring-bearers, Rings, Maps and formats; zone assertions; ad hoc modifiers and effects. Test sources only. |
 | `ScenarioTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/scenario/` | The other subclass of `VirtualTable`: a table laid out from a scenario file, for tutorials and puzzles, with a person in one seat. |
 
 The consequence to keep in mind: **anything added under `virtualtable/` ships in the server and becomes a public
@@ -55,7 +55,8 @@ until moved, so a helper added for one test is there to be found in every test o
 The constructor also runs the bid (player 1 bids 1 and goes first) and puts the opening hands back on the decks.
 `StartGame()` skips starting fellowships and mulligans and removes the bid burden, so a test starts with 0
 burdens, an empty twilight pool, and only the cards it placed itself. Defaults when a constructor argument is
-left out: King-block sites, Frodo 10_121 as Ring-bearer, The Ruling Ring, the `multipath` format.
+left out: King-block sites, Frodo 10_121 as Ring-bearer, The Ruling Ring, the `multipath` format. Site 1 of the
+King-block sites is Edoras Hall 7_330: each [rohan] possession played there costs 1 less.
 
 "Freeps" methods act for player 1 and "Shadow" methods for player 2. On player 2's turn the roles are the other
 way round: player 2 is the one moving a fellowship, so the `Shadow…` methods are then the Free Peoples player's.
@@ -78,6 +79,13 @@ deck and discard pile, which is the way to make a card something it is not for t
 Cheating bypasses rules that legal play enforces. Uniqueness is one: a second copy of a unique card cannot be
 *played* while the first is in play, but can be cheated in. Item class is another: a character can be stuffed with
 two hand weapons by `AttachCardsTo`, and will then not be offered as a bearer for a third by legal play.
+
+A site is given to a player with `FreepsTakeControlOfSite()` or `ShadowTakeControlOfSite()`: the lowest-numbered
+site that nobody controls and every marker has passed. `FreepsTakeControlOfSite(site)` and its twin give a named
+site. Either player, at any time. They are cheats like the rest: no decision is answered, nothing that answers
+"take control of a site" is set off, and a decision already pending does not change what it offers. They fail the
+test when no site can be controlled, or when the card named is not a site on the adventure path, is already
+controlled, or is at or ahead of a player's marker.
 
 ## Running tests
 
@@ -115,7 +123,8 @@ one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
 minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
 A choice between piles goes the same way: "from your draw deck or discard pile" is not asked when only one pile
-has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision.
+has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision. So does a transfer:
+with one legal bearer it is made without asking.
 
 **Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its
 costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
@@ -203,8 +212,11 @@ Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a
 **When a wound kills and something answers the same wound.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (a Shadow card's "wins a skirmish" trigger
 beside "Resolve skirmish damage" is the same decision; it is not only for deaths). The rule's entry may have no action
-text at all (seen on a death: `[null, "Required trigger from ..."]`), so pick the rule with
-`FreepsResolveRuleFirst()` and a card's trigger with `FreepsResolveActionOrder(text)`.
+text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
+the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
+Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
+listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contains the text and passes over an
+entry with no wording.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
 
@@ -219,7 +231,10 @@ to the client.
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
 card: `FreepsHasOptionalTriggerAvailable(card)` goes by the card each offered action belongs to, whatever its
-prompt says.
+prompt says. Where one card offers two optional actions in the same decision (Ethereal Banner 103_21's trigger
+and its response, on an overwhelm), add words from the action's description:
+`FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
+`FreepsUseCardAction(card, text)` does for phase actions.
 
 **Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
@@ -259,6 +274,13 @@ first. A test that needs cards in the draw deck afterwards puts them back with `
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
 until some legal action has been taken.
 
+**A reconcile restores first.** By the time a reconcile's discard decision is pending, the reconciling player's
+hindered cards have been restored (CR 5.0 "reconcile"; Q-0059). That is so for both players' regroup reconciles
+and for "reconcile your hand" effects.
+
+**A deck's order is set after `StartGame()`.** The game shuffles each deck to deal the opening hands, so a card
+moved to the top or bottom of a draw deck before `StartGame()` does not stay there.
+
 **A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
 the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
 random) gives the pop-up to the other players only: the hand's owner is shown nothing and has nothing to dismiss
@@ -266,6 +288,16 @@ random) gives the pop-up to the other players only: the hand's owner is shown no
 `FreepsHasCardChoiceAvailable(card)` answers false:
 `FreepsHasCardChoiceAvailable(card, false)` is the reading for a card that is shown. A definition that only sets
 `reveal: true` on moving a card writes a line in the game log and shows nobody anything.
+
+**A card made known by the game log alone.** A card taken from a draw deck by its type (`reveal: true` on the
+taking), and a card revealed from a hand to a player who gets no pop-up, is told to the other player by a line in
+the game log and nothing else. `MarkGameLog()` just before the action starts the reading;
+`GameLogSinceMarkMentions(cards...)` is true when every card given is named in some message since the mark.
+Assert it for the cards taken or revealed and assert it false for a like card that was not, with
+`GetGameLogSinceMark().toString()` as the failure message. A card is matched by its link (blueprint id and full
+name): two copies cannot be told apart, and a card the log names for another reason is named too, so where a copy
+of the event being played is among the cards taken, set the mark after the play. Both readers fail the test if no
+mark was set.
 
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, and filters see it. That is how to tell a
@@ -286,18 +318,44 @@ card has to be played legally afterwards, build the modifier on a filter and not
 responses (`FreepsAwaitingRequiredResponseOrder()` reads that, for both of the game's wordings: "Required
 responses" after an event, and '<effect> - Required "is about to" responses' when two required triggers answer
 something about to happen, as two copies of one card do), so a required trigger that has wrongly become
-optional is noticed. `FreepsDismissRevealedCards()` and `ShadowDismissRevealedCards()` fail unless that player is
-being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown some and fails if nobody is.
-`FreepsGetTotalRevealedCardCount()` and its Shadow twin count the cards a player is being shown, 0 if none.
-`FreepsChooseOptionalTrigger(card)` fails unless that very card is offering. The plain pass methods are not like
-this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay harmless), and
-`FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger included. Do not
-write one "to be safe". (The older, wordier `FreepsPassCurrentPhaseAction()` and `ShadowPassCurrentPhaseAction()`
-were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in git history may still show them.)
+optional is noticed. `FreepsResolveRuleFirst()` also fails when no rule is among the responses to be ordered
+(two triggers of cards: name one with `FreepsResolveActionOrder`). `FreepsDismissRevealedCards()` and
+`ShadowDismissRevealedCards()` fail unless that player is being shown cards; `DismissRevealedCards()` dismisses
+for whoever is being shown some and fails if nobody is. `FreepsGetTotalRevealedCardCount()` and its Shadow twin
+count the cards a player is being shown, 0 if none. `FreepsChooseOptionalTrigger(card)` fails unless that very
+card is offering, and with `(card, text)` unless it is offering an action so worded. The plain pass methods are
+not like this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay
+harmless), and `FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger
+included. Do not write one "to be safe". (The older, wordier `FreepsPassCurrentPhaseAction()` and
+`ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
+git history may still show them.)
+
+**A response is offered once per use.** After a response cancels an ability or an event, no response to it is
+offered again (Q-0043), so a pass or decline written to answer a second offer answers the next decision instead.
+Optional triggers are still offered.
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
 site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
+
+**A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
+given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
+constructor ending `(..., format, freepsMapId, shadowMapId)` names each player's Map: use it to tell the two
+Maps apart, or where the sites are of a path that has no Map (Shadows, Hobbit, a mix), which otherwise throws
+`IllegalArgumentException`. Both decks still hold the same sites: deck validation holds a deck to its Map, a
+game does not. `GetFreepsMap()` and `GetShadowMap()` return each player's Map, or null in a format without Maps.
+A Map is in no pile and has no alias; from the first decision after the bid it is in its owner's support area
+(`assertInZone(Zone.SUPPORT, scn.GetFreepsMap())`). That it is laid there only after the bid is how the client
+presents it and no finding (Q-0074). With no companion in the decks the game does not stop for a starting
+fellowship and rests on the mulligan question.
+
+**Validating a deck.** `DeckValidationScenario` (test sources, not in `vts-api.md`) builds a deck round the
+cards a test names and validates it. Its filler is the card as the scenario's format plays it, so a deck that is
+otherwise legal validates with no errors at all: `assertEquals(List.of(), dvs.validate(deck))`. The Ring-bearer,
+Ring, Map and sites are the ones the test names, as named: the rig's `FellowshipSites` have Ettenmoors 1_331 as
+first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
+`getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
+named and the valid ones are not.
 
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
@@ -385,3 +443,7 @@ nothing else: no helper methods, no reaching into `scn.game()` or `scn.gameState
 a check cannot be written with the methods in `vts-api.md`, write down what was needed and stop work on that card
 (the card-test-campaign skill says where the request goes). A helper buried in one card's file is a capability
 the next card's author will not find and will write again differently.
+
+An author reports the need and does not edit the rig; the orchestrator has it built. An addition needs no
+approval from Ketura, only a real use for it in a test at hand, and is recorded afterwards in `rig-requests.md`
+for her information (rulings log, 2026-10-06 evening).

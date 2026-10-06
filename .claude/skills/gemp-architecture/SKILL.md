@@ -228,7 +228,8 @@ ModifiersLogic
   ├─ addUntilEndOfTurnModifier(modifier)     → cleared at turn end
   └─ Query methods:
       ├─ getStrength(game, card) → base + all applicable modifiers
-      ├─ getTwilightCost(game, card) → base + modifiers
+      ├─ getTwilightCostToPlay(game, card, target, ...) → printed cost + own cost text + other cards' modifiers
+      ├─ getTwilightCostToTransfer(game, card) → what a transfer pays (PayTwilightCostEffect.forTransfer)
       ├─ getKeywords(game, card) → base + added - removed
       ├─ canPlayCard(game, card) → check CantPlay modifiers
       └─ ... many more evaluation queries
@@ -274,6 +275,14 @@ Decision types:
 - `MultipleChoiceAwaitingDecision` — choose from text options
 - `IntegerAwaitingDecision` — pick a number
 - `YesNoDecision` — binary choice
+
+### Where Particular Rules Live
+
+- **Reconcile.** Every reconcile (both players' in regroup, and `ReconcileHand` effects) is a `PlayerReconcilesAction`. Its first effect restores the player's hindered cards, before the discard is asked. `RestoreRule` no longer exists.
+- **Overwhelm.** `RuleUtils.getMinionsFacingOverwhelm(game)` is the one place that decides which minions an overwhelm kills; `ResolveSkirmishEffect.getUpcomingOverwhelmed(game)` gives the characters about to be overwhelmed on either side.
+- **Replacing a character.** `GameState.replaceCharacterOnTable` puts the new card in play under the old card's id; borne and stacked cards are handed to it in place and keep their ids. The old card is left in the void under a new id, and the caller removes it from there (`removeCardsFromZone`) before adding it anywhere.
+- **Threats an action has still to add.** `ActionContext.getUnpaidThreatCost()` is the threats the action's own costs will add, non-zero only while the action is asked whether it can be used; pass it as `withThreatsAdded` to `Filters.playable`. `GameState.withThreatsToCome` is the scope that carries it and is zero outside a check.
+- **The message record.** `GameState.startMessageRecord()` begins a full record of every message sent to the players from then on, and `getMessageRecord()` returns it (null if never started); the virtual table's `MarkGameLog()` is its one caller.
 
 ---
 

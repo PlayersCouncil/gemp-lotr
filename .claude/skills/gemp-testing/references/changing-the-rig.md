@@ -51,9 +51,12 @@ scenario code, so more of those are no concern to it.
    `CardProperties`, reading the game in `GameProperties`, a decision's contents in `Choices` or `Decisions`,
    moving the game along in `GameProcedures`, cheating in `ZoneManipulation`, combat in `Skirmishes`. Something
    that only makes sense with two made-up players and no client belongs in the test sources instead.
-2. Propose the signature, with Javadoc. A Freeps method gets its Shadow twin and a player-neutral method that
+2. Settle the signature, with Javadoc. A Freeps method gets its Shadow twin and a player-neutral method that
    both call.
-3. Get it agreed before writing it. The rig is shared ground and the scenario work is going on at the same time.
+3. No agreement is needed beforehand, only a real use: add nothing that no test at hand calls for (Ketura,
+   2026-10-06 evening, in the rulings log). Record the addition afterwards in the campaign's `rig-requests.md`,
+   as information for her. A card's author does not make the change: the need is reported and the orchestrator
+   has it built.
 4. Add it with its Javadoc, add a test of the method itself if it is more than a one-line reading, run
    `cardtest.py setup` and then `suite all` (the scenario tests exercise the same classes). The rig's own tests
    are in `gemp-lotr-server/src/test/java/com/gempukku/lotro/virtualtable/`, the test-side mirror of the rig's

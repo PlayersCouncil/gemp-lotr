@@ -17,6 +17,7 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `new VirtualTableScenario(HashMap<String, String> cardIDs)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMapId, String shadowMapId)` — A table in a format that uses Maps (PCMovie), with each player's Map named.
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String freepsMetaSiteId, String shadowMetaSiteId)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
@@ -75,6 +76,9 @@ This interface holds various convenience constants frequently referenced elsewhe
 - `HashMap<String, String> TowersSites = sites 1 to 9` — A set of benign default sites from Towers Block.
 - `HashMap<String, String> KingSites = sites 1 to 9` — A set of benign default sites from King Block.
 - `HashMap<String, String> ShadowsSites = sites 1 to 9` — A set of benign default sites from Shadows Block.
+- `String FellowshipMap = "102_74"` — Path of the Fellowship: "Your adventure deck must only contain cards from the Fellowship site path."
+- `String TowersMap = "102_75"` — Road to the Towers: "Your adventure deck must only contain cards from the Towers site path."
+- `String KingMap = "102_76"` — Journey of the King: "Your adventure deck must only contain cards from the King site path."
 - `String FOTRFrodo = "1_290"` — Frodo, Son of Drogo.
 - `String MDFrodo = "10_121"`
 - `String GimliRB = "9_4"` — Gimli, Bearer of Grudges 6 strength 3 vitality 4 resistance Damage +1.
@@ -119,6 +123,10 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardToAdventurePath(PhysicalCardImpl card)`
 - `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
 - `void MoveCardsToDeadPile(PhysicalCardImpl...cards)`
+- `void FreepsTakeControlOfSite()  ·  ShadowTakeControlOfSite` — Gives that player (player 1) control of the first site that can be controlled, without any card taking it.
+- `void FreepsTakeControlOfSite(PhysicalCardImpl site)  ·  ShadowTakeControlOfSite` — Gives that player (player 1) control of the given site, without any card taking it.
+- `void TakeControlOfSite(String player)` — Gives the given player control of the first site that can be controlled: the lowest-numbered site on the adventure path that nobody controls and that every player's marker has moved beyond, which is the site an effect that takes control of a site would take.
+- `void TakeControlOfSite(String player, PhysicalCardImpl site)` — Gives the given player control of the given site, which is put in that player's support area as the rules have it.
 - `void MoveCardsToFreepsHand(String...names)`
 - `void MoveCardsToShadowHand(String...names)`
 - `void MoveCardsToHand(PhysicalCardImpl...cards)`
@@ -233,6 +241,9 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean FreepsHasOptionalTriggerAvailable()  ·  ShadowHasOptionalTriggerAvailable`
 - `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable`
 - `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card)` — Checks by the physical card each offered action belongs to, so a trigger whose definition words its own prompt is found, and another copy of the same card does not answer for this one.
+- `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card, String text)  ·  ShadowHasOptionalTriggerAvailable` — For a card that offers more than one optional action at the same moment (a trigger and a response to the same win, say), where the card alone does not say which is meant.
+- `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card, String text)`
+- `String FindOptionalTrigger(String player, PhysicalCardImpl card, String text)` — Finds the optional trigger or response of one particular card whose description contains the given words, among the optional actions the given player is being offered.
 - `boolean FreepsAwaitingRequiredResponseOrder()`
 - `boolean FreepsHasOptionalTriggerAvailable(String text)  ·  ShadowHasOptionalTriggerAvailable`
 - `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger`
@@ -263,13 +274,15 @@ Decisions will always come with at least one choice, even if that single choice 
 - `void FreepsChooseOption(String option)  ·  ShadowChooseOption`
 - `void FreepsChooseOptionalTrigger(PhysicalCardImpl card)  ·  ShadowChooseOptionalTrigger` — Used in situations where there are simultaneous triggers from cards with the same title and we need to pick a specific one.
 - `void ChooseOptionalTrigger(String playerID, PhysicalCardImpl card)` — Takes the trigger or response that the given card is offering the given player.
+- `void FreepsChooseOptionalTrigger(PhysicalCardImpl card, String text)  ·  ShadowChooseOptionalTrigger` — Takes one particular optional trigger or response of a card that is offering more than one at the same moment.
+- `void ChooseOptionalTrigger(String playerID, PhysicalCardImpl card, String text)` — Takes the optional trigger or response of the given card whose description contains the given words.
 - `void ChooseOption(String playerID, String option)`
 - `void FreepsChooseAction(String paramName, String option)  ·  ShadowChooseAction`
 - `void FreepsChooseAction(String option)  ·  ShadowChooseAction`
 - `void ChooseAction(String playerID, String paramName, String option)`
 - `void FreepsChooseAny()`
 - `void FreepsResolveRuleFirst()` — Where required actions happen at the same moment (the wound for losing a skirmish and a card's "each time ...
-- `void FreepsResolveActionOrder(String option)` — As FreepsResolveRuleFirst, but takes the required action whose description contains the given text.
+- `void FreepsResolveActionOrder(String option)` — As FreepsResolveRuleFirst, but takes the required action whose description contains the given text: a card's trigger, by the card's name.
 - `int FreepsGetChoiceMin()  ·  ShadowGetChoiceMin`
 - `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax`
 - `int FreepsGetSelectableCount()  ·  ShadowGetSelectableCount`
@@ -358,9 +371,14 @@ Decisions will always come with at least one choice, even if that single choice 
 - `String GetOffPlayer()`
 - `String GetDecidingPlayer()`
 - `String GetNextDecider()`
+- `void MarkGameLog()` — Starts reading the game log from here: the messages the game sends from now on are kept, and any kept before are dropped.
+- `List<String> GetGameLogSinceMark()`
+- `boolean GameLogSinceMarkMentions(PhysicalCardImpl... cards)` — Whether the game log has named each of the given cards since MarkGameLog() was last called.
 - `boolean RBWearingOneRing()`
 - `PhysicalCardImpl GetRing()`
 - `PhysicalCardImpl GetShadowRing()`
+- `PhysicalCardImpl GetFreepsMap()`
+- `PhysicalCardImpl GetShadowMap()`
 - `PhysicalCardImpl GetRingBearer()`
 - `PhysicalCardImpl GetShadowRingBearer()`
 - `int GetFreepsControlledSiteCount()`
@@ -464,7 +482,6 @@ Sometimes, there just isn't a card that has the precise action or effect that yo
 
 - `void ApplyAdHocModifier(Modifier mod)` — Staples a given modifier to the game state for the duration of the game.
 - `void ApplyAdHocAction(ActionProxy action)` — Causes the given action to be stapled to the game state for the duration of the game.
-- `void ShadowTakeControlOfSite()`
 - `void FreepsExecuteAdHocEffect(Effect effect)  ·  ShadowExecuteAdHocEffect` — Causes that player to execute an arbitrary effect.
 - `void ExecuteAdHocEffect(String playerId, Effect effect)` — Causes the given player to execute an arbitrary effect.
 - `Filterable GenerateFreepsFilter(String filter)` — Takes a filter string and produces the proper Java code that the filter represents.
@@ -492,4 +509,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-384 entries, 255 of them with no description in the source.
+401 entries, 258 of them with no description in the source.
