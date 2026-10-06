@@ -294,8 +294,64 @@
 						count: 2
 					}
 					{
+						type: MemorizeNumber
+						amount: {
+							type: ForEachYouCanSpot
+							filter: culture(isengard),minion
+						}
+						memory: isengardMinions
+					}
+					{
 						type: Optional
 						text: Would you like to exert or spot {Isengard} minions to hinder an unbound companion?
+						// Not asked where it could do nothing and nothing would be paid (Q-0034, F-0117).
+						// Without Saruman: offered when a minion can exert (a cost can be paid), or when a
+						// companion costs 0 (X of zero). With Saruman spotting pays nothing, so a companion
+						// must cost no more than the [isengard] minions there are to spot.
+						requires: {
+							type: Or
+							requires: [
+								{
+									type: And
+									requires: [
+										{
+											type: CantSpot
+											filter: title(Saruman)
+										}
+										{
+											type: CanSpot
+											filter: culture(isengard),minion,canExert
+										}
+									]
+								}
+								{
+									type: And
+									requires: [
+										{
+											type: CantSpot
+											filter: title(Saruman)
+										}
+										{
+											type: CanSpot
+											filter: unbound,companion,MaxTwilight(0)
+										}
+									]
+								}
+								{
+									type: And
+									requires: [
+										{
+											type: CanSpot
+											filter: title(Saruman)
+										}
+										{
+											type: CanSpot
+											filter: unbound,companion,MaxTwilight(memory(isengardMinions))
+										}
+									]
+								}
+							]
+						}
 						effect: {
 							type: If
 							check: {
