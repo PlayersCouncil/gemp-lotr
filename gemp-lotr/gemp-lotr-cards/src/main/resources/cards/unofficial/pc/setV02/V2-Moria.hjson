@@ -31,38 +31,20 @@
 			{
 				type: activated
 				phase: shadow
-				requires: [
-					{
-						type: HasCardStacked
-						filter: playable, unique, minion	
-						on: self
-					}
-				]
 				effect: [
 					{
-						type: ChooseCardsFromSingleStack
-						select: choose(playable, unique, minion)
-						count: 1
+						// The play is the action's first effect, so the action is offered and the minion may be
+						// chosen only when the pool covers its cost after the reduction.  "Each other card stacked
+						// here" is every card stacked here but the minion played: one fewer than are stacked.
+						type: PlayCardFromStacked
+						select: choose(unique, minion)
 						on: self
-						memorize: chosenMinion
-						text: Choose a minion to play.
-					}
-					{
-						type: MemorizeNumber
-						amount: {
+						discount: {
 							type: ForEachStacked
-							filter: not(memory(chosenMinion))
 							on: self
+							over: 1
 							multiplier: -1
 						}
-						memory: stackedDiscount
-					}
-					{
-						type: PlayCardFromStacked
-						select: memory(chosenMinion)
-						on: self
-						discount: memory(stackedDiscount)
-						assumePlayable: true
 					}
 					{
 						type: Discard

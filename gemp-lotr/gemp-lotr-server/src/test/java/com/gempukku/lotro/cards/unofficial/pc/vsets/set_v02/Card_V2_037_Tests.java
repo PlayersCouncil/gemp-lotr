@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -324,7 +323,7 @@ public class Card_V2_037_Tests
 		assertTrue(scn.ShadowHasCardChoiceAvailable(chieftain, balrog));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(longdark, runner, lurtz));
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCardBPFromSelection(balrog);
+		scn.ShadowChooseCard(balrog);
 
 		// The Balrog costs 12, less 3 for the three cards left beside it, plus 2 for roaming (its site number is
 		// 4 and the fellowship is at site 2).
@@ -418,7 +417,6 @@ public class Card_V2_037_Tests
 	}
 
 	@Test
-	@Ignore("F-0071: the action is offered only when the pool covers the minion's cost before the reduction for the other cards stacked here")
 	public void ShadowActionIsOfferedOnceThePoolCoversTheReducedCostAndNotOneShortOfIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
