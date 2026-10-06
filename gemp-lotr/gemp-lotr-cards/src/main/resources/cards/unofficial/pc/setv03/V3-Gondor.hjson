@@ -1842,6 +1842,7 @@
 						{
 							type: Discard
 							select: choose(side(Shadow), condition)
+							memorize: chosenForDiscard
 						}
 						{
 							type: Optional
@@ -1852,7 +1853,7 @@
 							}
 							effect: {
 								type: Hinder
-								select: choose(side(Shadow), condition)
+								select: choose(side(Shadow), condition, not(memory(chosenForDiscard)))
 							}
 						}
 					]
