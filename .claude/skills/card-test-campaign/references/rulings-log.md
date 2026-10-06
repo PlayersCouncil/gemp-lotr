@@ -539,3 +539,10 @@ Wolf Pit as built. Q-0046 Royal Guard: only the keyword lasts. Q-0048 Now for Wr
 the word. Q-0049 Now for Ruin as built. Q-0051 Trapped in its Gaze: this skirmish ("it should have been worded
 'to make a skirmishing twilight minion'"). Q-0052 Eastemnet Hills: from hand, Ketura updates the wording.
 Q-0063 Haste: the title restriction stays. Q-0064 Sticky Strands may be pulled from another companion.
+
+**Later the same evening (Ketura, 2026-10-06).** The reviewer's single mistakes and the `--with-parked` run stay
+"for now". Q-0051 Trapped in its Gaze 102_66: "go ahead and change the text + implementation" to "a skirmishing
+twilight minion". F-0067 From Deepest Dungeon 102_39: "X should only be permitted where it makes the Balrog
+playable, since we are playing from discard and thus must be able to play it." F-0087 Gorgoroth Keeper 10_86:
+"Do a requirement for now; I'm not certain an engine-level addition is warranted." F-0090 (the deck restriction's
+min read from its max field): "go ahead and fix."
