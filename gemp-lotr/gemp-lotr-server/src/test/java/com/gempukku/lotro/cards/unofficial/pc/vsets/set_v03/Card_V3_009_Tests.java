@@ -4,27 +4,36 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_009_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("enter", "103_9");
-					put("gandalf", "1_364");
-
-					// Shadow cards for targeting
-					put("runner", "1_178"); // Minion
-					put("ithilstone", "9_47"); // Artifact
-					put("ships", "8_65"); // Possession
-					put("armory", "1_173"); // Condition
+					put("enter2", "103_9");
+					put("gandalf", "1_364");    // Gandalf, The Grey Wizard: vitality 4; a fellowship ability never used here
+					put("radagast", "9_26");    // Radagast, The Brown: the other Free Peoples Wizard, vitality 4
+					put("quickbeam", "6_33");   // Quickbeam, Bregalad: a [gandalf] companion who is an Ent and no Wizard
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man; Maneuver: exert him to make him defender +1
+					put("whitesaruman", "32_24");   // Saruman, The White (a Hobbit-set card): a [gandalf] ally who is a Wizard, vitality 4; makes Gandalf defender +1, fellowship and skirmish abilities only
+					put("toby", "1_305");       // Old Toby: a Free Peoples possession in the support area
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc with no text
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, damage +1 and nothing else
+					put("saruman", "3_69");     // Saruman, Servant of the Eye: the opponent's Wizard, an [isengard] minion, vitality 4; an assignment ability only
+					put("armory", "1_173");     // Goblin Armory: Shadow condition in the support area
+					put("stone", "9_47");       // Ithil Stone: Shadow artifact in the support area; may draw at the start of the Shadow phase
+					put("ships", "8_65");       // Ships of Great Draught: Shadow possession in the support area; Shadow and regroup abilities
+					put("scimitar", "1_180");   // Goblin Scimitar: Shadow possession borne by a [moria] Orc
+					put("poison", "8_28");      // Spider Poison: Shadow possession a companion bears; does nothing until its bearer is assigned
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,8 +53,8 @@ public class Card_V3_009_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Maneuver
-		 * Game Text: Exert your Wizard to hinder a Shadow card.  Exhaust that Wizard if you chose a minion.
-		*/
+		 * Game Text: Exert your Wizard to hinder a Shadow card. Exhaust that Wizard if you chose a minion.
+		 */
 
 		var scn = GetScenario();
 
@@ -58,102 +67,280 @@ public class Card_V3_009_Tests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
+		assertFalse(scn.HasKeyword(card, Keyword.SPELL));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void YouCannotEnterHereCannotPlayWithExhaustedWizard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ExertsTheWizardToHinderAnyShadowCardAndOneThatIsNoMinionCostsHimNothingMore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var gandalf = scn.GetFreepsCard("gandalf");
 		var enter = scn.GetFreepsCard("enter");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCompanionsToTable(gandalf);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var toby = scn.GetFreepsCard("toby");
+		var frodo = scn.GetRingBearer();
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		var armory = scn.GetShadowCard("armory");
+		var stone = scn.GetShadowCard("stone");
+		var ships = scn.GetShadowCard("ships");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var poison = scn.GetShadowCard("poison");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+		scn.MoveCardsToSupportArea(toby);
 		scn.MoveCardsToHand(enter);
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
-
-		// Exhaust Gandalf (vitality 4, so 3 wounds = exhausted)
-		scn.AddWoundsToChar(gandalf, 3);
-		assertEquals(1, scn.GetVitality(gandalf));
-
+		scn.MoveMinionsToTable(troop, savage);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.AttachCardsTo(aragorn, poison);
+		scn.MoveCardsToSupportArea(armory, stone, ships);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		// Cannot play - exhausted wizard cannot exert
-		assertFalse(scn.FreepsPlayAvailable(enter));
+		int twilight = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertInZone(Zone.HAND, enter);
+		assertTrue(scn.FreepsPlayAvailable(enter));
+
+		scn.FreepsPlayCard(enter);
+
+		assertEquals(twilight + 2, scn.GetTwilight());
+		// The only Wizard exerts.
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		// Minions of two cultures; a condition, an artifact and a possession in the support area; a possession
+		// on a minion and one on a companion.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage, armory, stone, ships, scimitar, poison));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gandalf, aragorn, frodo, toby));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		// A possession that a minion bears is not a minion.
+		scn.FreepsChooseCard(scimitar);
+
+		assertTrue(scn.IsHindered(scimitar));
+		assertFalse(scn.IsHindered(troop));
+		assertFalse(scn.IsHindered(savage));
+		assertFalse(scn.IsHindered(armory));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertInZone(Zone.DISCARD, enter);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void YouCannotEnterHereHindersNonMinionWithoutExhaustingWizard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ChoosingAMinionHindersItAndExhaustsTheWizard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var gandalf = scn.GetFreepsCard("gandalf");
 		var enter = scn.GetFreepsCard("enter");
-		var runner = scn.GetShadowCard("runner");
-		var ithilstone = scn.GetShadowCard("ithilstone");
-		var ships = scn.GetShadowCard("ships");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
 		var armory = scn.GetShadowCard("armory");
-
 		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(enter);
-		scn.MoveMinionsToTable(runner);
-		scn.MoveCardsToSupportArea(ithilstone, ships, armory);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop, savage);
+		scn.MoveCardsToSupportArea(armory);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(troop));
 
-		assertTrue(scn.FreepsPlayAvailable(enter));
 		scn.FreepsPlayCard(enter);
 
-		// Should have 4 valid targets (all Shadow cards)
-		assertEquals(4, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, ithilstone, ships, armory));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage, armory));
 
-		// Choose non-minion (condition)
-		scn.FreepsChooseCard(armory);
+		scn.FreepsChooseCard(troop);
 
-		// Armory should be hindered
+		assertTrue(scn.IsHindered(troop));
+		assertFalse(scn.IsHindered(savage));
+		assertFalse(scn.IsHindered(armory));
+		// Vitality 4: the exertion that paid, then two more.
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.IsExhausted(gandalf));
+		assertInZone(Zone.DISCARD, enter);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void OnlyAWizardOfYourOwnCanExertAndTheOneWhoDidIsTheOneExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var enter = scn.GetFreepsCard("enter");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var radagast = scn.GetFreepsCard("radagast");
+		var quickbeam = scn.GetFreepsCard("quickbeam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var whitesaruman = scn.GetFreepsCard("whitesaruman");
+		var saruman = scn.GetShadowCard("saruman");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf, radagast, quickbeam, aragorn);
+		// A Wizard of yours who is an ally: the text does not say "companion".
+		scn.MoveAlliesToTable(whitesaruman);
+		scn.MoveCardsToHand(enter);
+		// Every Free Peoples Wizard there is belongs to the [gandalf] culture, so a [gondor] Man is made a Wizard
+		// to tell "your Wizard" from "your [gandalf] companion".
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.WIZARD));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsPlayCard(enter);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, aragorn, whitesaruman));
+		// Quickbeam is [gandalf] and no Wizard; the minion Saruman is a Wizard and not yours.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(quickbeam, saruman));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		scn.FreepsChooseCard(radagast);
+
+		assertEquals(1, scn.GetWoundsOn(radagast));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(saruman, troop));
+
+		// The minion chosen is itself a Wizard: it is hindered, and the Wizard exhausted is still Radagast.
+		scn.FreepsChooseCard(saruman);
+
+		assertTrue(scn.IsHindered(saruman));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(3, scn.GetWoundsOn(radagast));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(whitesaruman));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertInZone(Zone.DISCARD, enter);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void NotPlayableWhileTheOnlyWizardOfYoursIsExhaustedAndWithOneExertionLeftAMinionIsStillHindered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var enter = scn.GetFreepsCard("enter");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var quickbeam = scn.GetFreepsCard("quickbeam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var saruman = scn.GetShadowCard("saruman");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf, quickbeam, aragorn);
+		scn.MoveCardsToHand(enter);
+
+		scn.StartGame();
+		// A Wizard who could exert, but the opponent's.
+		scn.MoveMinionsToTable(saruman, troop);
+		// Vitality 4 with 3 wounds
+		scn.AddWoundsToChar(gandalf, 3);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.IsExhausted(gandalf));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(enter));
+
+		// One wound fewer, and another action taken so that the game asks afresh.
+		scn.RemoveWoundsFromChar(gandalf, 1);
+		scn.FreepsUseCardAction(aragorn);
+		scn.ShadowPass();
+
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsPlayAvailable(enter));
+
+		scn.FreepsPlayCard(enter);
+
+		// The exertion that pays leaves him exhausted, and a minion may be chosen all the same: exhausting him
+		// is something the event does afterwards, not something it needs.
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(saruman, troop));
+
+		scn.FreepsChooseCard(troop);
+
+		assertTrue(scn.IsHindered(troop));
+		assertFalse(scn.IsHindered(saruman));
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertInZone(Zone.DISCARD, enter);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AShadowCardAlreadyHinderedIsNotOfferedAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var enter = scn.GetFreepsCard("enter");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		var armory = scn.GetShadowCard("armory");
+		var ships = scn.GetShadowCard("ships");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(enter);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, savage);
+		scn.MoveCardsToSupportArea(armory, ships);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.HinderCard(savage, armory);
+
+		assertTrue(scn.IsHindered(savage));
 		assertTrue(scn.IsHindered(armory));
 
-		// Gandalf should only be exerted once, not exhausted
-		assertEquals(1, scn.GetWoundsOn(gandalf));
+		scn.FreepsPlayCard(enter);
 
-		// Event goes to discard
-		assertEquals(Zone.DISCARD, enter.getZone());
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, ships));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(savage, armory));
+
+		scn.FreepsChooseCard(ships);
+
+		assertTrue(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void YouCannotEnterHereHindersMinionAndExhaustsWizard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void StillPlayableForItsCostWhenNoShadowCardIsLeftToHinder() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var gandalf = scn.GetFreepsCard("gandalf");
 		var enter = scn.GetFreepsCard("enter");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCompanionsToTable(gandalf);
-		scn.MoveCardsToHand(enter);
-		scn.MoveMinionsToTable(runner);
+		var enter2 = scn.GetFreepsCard("enter2");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var radagast = scn.GetFreepsCard("radagast");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf, radagast);
+		scn.MoveCardsToHand(enter, enter2);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertFalse(scn.IsHindered(runner));
-
+		// The first copy hinders the only Shadow card in play and exhausts Gandalf.
 		scn.FreepsPlayCard(enter);
+		scn.FreepsChooseCard(gandalf);
 
-		// Runner should be hindered as the only option
-		assertTrue(scn.IsHindered(runner));
+		assertTrue(scn.IsHindered(troop));
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(radagast));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-		// Gandalf should be exhausted (vitality 1)
-		assertEquals(1, scn.GetVitality(gandalf));
+		scn.ShadowPass();
+
+		// An event is offered whenever its cost can be paid, whatever it will then do.
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.FreepsPlayAvailable(enter2));
+
+		scn.FreepsPlayCard(enter2);
+
+		// Radagast is the only Wizard who can still exert. Nothing is hindered and nobody is exhausted.
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(radagast));
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.IsHindered(troop));
+		assertInZone(Zone.DISCARD, enter, enter2);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
