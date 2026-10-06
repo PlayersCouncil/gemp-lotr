@@ -439,10 +439,27 @@ public class Card_V2_013_Tests
 		assertEquals(twilight, scn.GetTwilight());
 		assertInZone(Zone.REMOVED, deagol);
 		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// "Exert that minion" found no minion in play and did nothing, and the game goes on untroubled.  Nothing
+		// more is asked of the Free Peoples player, and the Shadow player is not offered Gollum's ability again:
+		// it is paid for with a Deagol in the discard pile, and the only one has been removed from the game.
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertFalse(scn.ShadowActionAvailable(sneak));
+
+		// The Shadow phase can be passed.  With no minion in play there is nothing to fight, and the regroup
+		// phase comes with everything as the prevention left it.
+		scn.ShadowPass();
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertInZone(Zone.DISCARD, sneak);
+		assertInZone(Zone.REMOVED, deagol);
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(twilight, scn.GetTwilight());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0039: Gollum, Plotting Deceiver's \"you may play this minion from your discard pile\" is answered as if it were a minion's special ability")
+	@Ignore("F-0055: Gollum, Plotting Deceiver's \"you may play this minion from your discard pile\" is answered as if it were a minion's special ability")
 	public void IsNotOfferedWhenAMinionIsPlayedFromTheDiscardPileByTextThatIsNoSpecialAbility() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
