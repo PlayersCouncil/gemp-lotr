@@ -283,7 +283,9 @@ card has to be played legally afterwards, build the modifier on a filter and not
 
 **Answers that are refused when they do not fit what is asked.** `FreepsResolveRuleFirst()` and
 `FreepsResolveActionOrder(text)` fail the test unless the Free Peoples player is being asked to order required
-responses (`FreepsAwaitingRequiredResponseOrder()` reads that), so a required trigger that has wrongly become
+responses (`FreepsAwaitingRequiredResponseOrder()` reads that, for both of the game's wordings: "Required
+responses" after an event, and '<effect> - Required "is about to" responses' when two required triggers answer
+something about to happen, as two copies of one card do), so a required trigger that has wrongly become
 optional is noticed. `FreepsDismissRevealedCards()` and `ShadowDismissRevealedCards()` fail unless that player is
 being shown cards; `DismissRevealedCards()` dismisses for whoever is being shown some and fails if nobody is.
 `FreepsGetTotalRevealedCardCount()` and its Shadow twin count the cards a player is being shown, 0 if none.
