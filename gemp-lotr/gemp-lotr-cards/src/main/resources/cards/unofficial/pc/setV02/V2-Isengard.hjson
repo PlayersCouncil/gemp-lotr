@@ -790,10 +790,8 @@
 			{
 				type: Activated
 				phase: Skirmish
-				requires: {
-					type: CanSpot
-					filter: culture(isengard), orc, InSkirmish
-				}
+				# No requirement: an ability with a cost is offered whenever the cost can be paid (Q-0034).  It
+				# used to be withheld unless an [isengard] Orc was in the skirmish.
 				cost: {
 					type: If
 					check: {
