@@ -84,6 +84,8 @@ Standard "**Phase:** Do X" text. Most common game text type.
 ```
 **Variants:** `ActivatedFromStacked` (+ `stackedOn` filter), `ActivatedInDiscard`, `ActivatedInDrawDeck` — same structure but activate from non-play zones.
 
+`ActivatedInDiscard` and `ActivatedInDrawDeck` take `specialAbility: false` for a card's permission to be played from that pile when its text has no bold phase word and colon ("If you have initiative ..., you may play this minion from your discard pile"). Such a play is not a special ability: nothing that answers, bans or counts special abilities sees it (Ketura, 2026-10-06: a special ability "would count, if it's got the bold text and a colon"). A labelled ability ("Shadow: ... to play this minion from your discard pile") leaves the flag off.
+
 ### Modifier (Passive/Continuous Effects)
 "While X, Y is Z" — always-on effects.
 ```hjson
@@ -118,7 +120,7 @@ Standard "**Phase:** Do X" text. Most common game text type.
   requires: [ ... ]
   cost: [ ... ]
   effect: [ ... ]
-  limitPerPhase: 1
+  limitPerPhase: 1            // or limitPerTurn: 1 for "(limit once per turn)"
 }
 ```
 
