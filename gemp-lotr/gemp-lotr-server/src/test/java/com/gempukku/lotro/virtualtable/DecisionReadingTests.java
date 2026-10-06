@@ -173,6 +173,8 @@ public class DecisionReadingTests
 		var elrond = scn.GetFreepsCard("elrond");
 		var gaffer = scn.GetFreepsCard("gaffer");
 		scn.MoveAlliesToTable(elrond);
+		// Elrond draws the top card; The Gaffer must not be it (the deck's order is random, and he was 1 time in 12).
+		scn.MoveCardsToBottomOfDeck(gaffer);
 
 		scn.StartGame();
 
