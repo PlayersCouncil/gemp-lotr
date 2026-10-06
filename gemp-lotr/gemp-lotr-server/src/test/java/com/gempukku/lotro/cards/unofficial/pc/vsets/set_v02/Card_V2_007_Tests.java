@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -615,7 +614,6 @@ public class Card_V2_007_Tests
 	}
 
 	@Test
-	@Ignore("F-0053: with only an [elven] companion and only [elven] tokens in play, the half that spots a [dwarven] companion may be chosen and reinforces an [elven] token")
 	public void AnElvenCompanionAloneCannotReinforceAnElvenToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -649,7 +647,6 @@ public class Card_V2_007_Tests
 	}
 
 	@Test
-	@Ignore("F-0053: with only a [dwarven] companion and only [dwarven] tokens in play, the half that spots an [elven] companion may be chosen and reinforces a [dwarven] token")
 	public void ADwarvenCompanionAloneCannotReinforceADwarvenToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
