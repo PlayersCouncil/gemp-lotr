@@ -200,6 +200,9 @@ Actions are top-level decisions that involve legal game operations available to 
 - `void UseCardAction(String player, PhysicalCardImpl card, String text)` — Causes the given player to take the action of the given card whose description contains the given words.
 - `Boolean FreepsActionAvailable(PhysicalCardImpl card, String text)  ·  ShadowActionAvailable`
 - `String FindCardAction(String player, PhysicalCardImpl card, String text)` — Finds the action of one particular card whose description contains the given words, among the actions the given player is being offered.
+- `String FreepsActionNoEffect(PhysicalCardImpl card)  ·  ShadowActionNoEffect`
+- `String FreepsActionNoEffect(PhysicalCardImpl card, String text)  ·  ShadowActionNoEffect`
+- `String CardActionNoEffect(String player, PhysicalCardImpl card, String text)` — Reads the no-effect flag of one action of one particular card in the choice of actions the given player is facing.
 - `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
 - `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
 - `boolean FreepsHasDiscardToHealAvailable()` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
@@ -509,4 +512,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-401 entries, 258 of them with no description in the source.
+404 entries, 260 of them with no description in the source.

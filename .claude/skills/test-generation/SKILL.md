@@ -351,6 +351,17 @@ not.
 
 A card whose text names sites of a particular block is tested on that block's path.
 
+The no-effect flag is not asserted for every card. It is tested as a mechanic (`mechanics/NoEffectFlagTests`, the
+common cases) and asserted in a card's own tests only where the definition declares `noEffectUnless` (a
+convenience guard that was converted: Breaching Shot 102_21) or the rulings log names the card for it (Trail of
+Savagery 102_31). Such a card gets an `R` clause of type `Ruling`, checks `+ -`, citing Ketura's ruling of
+2026-10-06 on the no-effect flag. `+` is the word (`"effect"`) read with `FreepsActionNoEffect` /
+`ShadowActionNoEffect` on each board the old guard shut, in the test that already takes the action there. `-` is
+`"false"` on the nearest board where the action does something. One assertion a test, one claim line each; no new
+test is needed. A card whose tests merely happen to offer a flagged action asserts nothing about it. An ability
+or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
+should be withheld, and offering it is a finding.
+
 ## When something is in the way
 
 Stop work on the card, record what is in the way, and move to the next. Do not find a way round.

@@ -123,6 +123,8 @@ Fellowship → Shadow → Maneuver → Archery → Assignment → Skirmish(s) �
 6. Resolve **effects** ("when you play" triggers, etc.)
 7. Events go to discard pile after resolution
 
+The twilight cost of a card in play is the number printed on it, whatever another card or its own text says (CR 4.2 "twilight cost"; F-0109, Q-0073). A site's Shadow number is not a twilight cost and is read as modified.
+
 Transferring a possession/artifact is NOT playing it — pay twilight cost again during Fellowship phase, but "when you play" does not trigger. Nor is the card "coming into play": a transfer costs the printed twilight cost, changed neither by another card nor by the card's own cost text (Q-0053, Q-0074).
 
 ---

@@ -357,6 +357,22 @@ first printed, which the PC formats refuse for its errata. `hasMapError(errors)`
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
 named and the valid ones are not.
 
+**The twilight cost of a card depends on where it is.** `GetTwilightCost(card)` answers for where the card is:
+for a card in play, the number printed on it (F-0109, Q-0073); for a card in a hand or pile, what it would cost
+to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
+hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
+
+**The no-effect flag.** Every action a player is offered carries a word saying whether the game expects it to do
+nothing. `FreepsActionNoEffect(card)` and `ShadowActionNoEffect(card)`, and the same with words of the action's
+text for a card that offers several (`ShadowActionNoEffect(easterling, "fierce")`), read it for that card's
+action in the player's pending choice of actions: `"false"`, or why the game expects it to do nothing:
+`"effect"`, `"limit"` or `"skirmish"`. They fail the test if the player is not being offered a choice of actions,
+if the card offers no such action, or if more than one fits. A flagged action is offered and may be taken like
+any other: read the flag, then take the action. The flag is worked out when the decision is sent, so after
+cheating the board get a new decision before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
+is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
+"Rulings, interactions and formats".
+
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
 nothing when used (F-0036, Out of Dark Waters). A definition written that way is a finding, not a quirk to test

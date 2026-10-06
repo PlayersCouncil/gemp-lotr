@@ -68,6 +68,14 @@ The full monolith is also available at `hjson-doc-export.md` if needed.
 
 Each entry in `effects: []` has a `type` field. The type determines the structure.
 
+### `noEffectUnless` (the no-effect flag)
+
+`noEffectUnless` (on Activated, ActivatedInDiscard, ActivatedFromStacked, ActivatedInDrawDeck, Event, ResponseEvent, Trigger, Response, and the AddActivated modifier): one requirement or a list, written exactly like `requires`. It never withholds the action: the action is offered as usual, and while any of these requirements fails the decision flags it `noEffect: effect`, so the client shows it differently and the player may still take it. It is where a guard goes that used to keep an event, or an ability with a cost, from being used to no purpose (Q-0034 forbids withholding those). The requirements are checked in order in the action's own context when it is put before a player, so one may `memorize` what the next reads (Breaching Shot 102_21).
+
+Do not declare what the game already sees. An action whose every effect is modifyStrength, addKeyword, alterOverwhelmMultiplier, wound, heal, exert, exhaust, discard, cancelSkirmish, removeBurdens, removeThreats or drawCards (alone or inside if, choice, costToEffect, multiple, optional, preventable, repeat) is flagged by itself when none has anything to act on. A skirmish ability or Skirmish event that only gives strength, damage or overwhelm protection for the current phase is flagged `skirmish` when it reaches nobody in the skirmish being fought. Nothing is judged where a cost could make what the effect needs (an exertion before a heal), where a select reads `memory(...)`, or where a cost is of a kind the judge does not know: a false flag is worse than a missing one.
+
+An ability or optional trigger with NO cost that would do nothing is not a flag matter: by Q-0034 it is withheld with a `requires`.
+
 ### Activated (Phase Special Abilities)
 Standard "**Phase:** Do X" text. Most common game text type.
 ```hjson
@@ -301,6 +309,7 @@ Common fields on most: `over` (subtract from result), `limit` (cap), `multiplier
 | `Sum` | source[] | Add values together |
 | `Min` / `Max` | firstNumber, secondNumber | Math |
 | `Range` | from, to | Dynamic range |
+| `LeastDiscountToPlay` | filter, fromZone (DISCARD only), max, player? | The least X from 0 to `max` at which some card matching `filter` in that player's discard pile can be played at twilight cost -X, by the same check a play makes (roaming, the card's own cost text and standing modifiers counted). Use it as the `from:` of the ChooseANumber in "Remove X ... to play ... from your discard pile; its twilight cost is -X" (102_39, 8_50; F-0067). Where no X up to `max` will do it answers `max`; the ability's `requires: Playable` with the full discount is what withholds it then |
 
 ---
 
