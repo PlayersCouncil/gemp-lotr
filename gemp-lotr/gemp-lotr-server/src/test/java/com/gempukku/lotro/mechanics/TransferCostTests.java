@@ -23,6 +23,10 @@ import static org.junit.Assert.*;
  * Ketura, 2026-10-06 (Q-0053): "transferring 'is not playing' and so specifically does not count as 'coming into
  * play' for the purposes of having the twilight cost altered."  So a transfer is paid for at the card's own
  * twilight cost, whatever other cards in play would add to or take from the cost of playing it.
+ *
+ * Ketura, 2026-10-06 (Q-0074), on a card whose own text changes its cost: "Based on a strict reading of the
+ * twilight cost rule, transfers should not take self-discounts into account."  So a transfer costs the number
+ * printed on the card and nothing else.
  */
 public class TransferCostTests
 {
@@ -38,6 +42,14 @@ public class TransferCostTests
 			// Asfaloth: [elven] possession, mount, cost 2.  "Bearer must be an Elf.  When played on Arwen,
 			// Asfaloth's twilight cost is -2."
 			put("asfaloth", "1_31");
+			// Heavy Axe: [dwarven] possession, hand weapon, cost 4.  "Bearer must be a Dwarf.  This is twilight
+			// cost -1 for each [dwarven] card that has a culture token on it."
+			put("axe1", "15_7");
+			put("axe2", "15_7");
+			put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf; a skirmish ability that is never used
+			put("guard", "1_7");        // Dwarf Guard: a Dwarf with no text once in play
+			// Chamber of Records: a [dwarven] condition for the support area that holds [dwarven] tokens.
+			put("chamber", "15_3");
 		}};
 	}
 
@@ -166,6 +178,40 @@ public class TransferCostTests
 		scn.FreepsTransferCard(asfaloth);
 		assertAttachedTo(asfaloth, arwen);
 		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACardWhoseOwnTextLowersItsCostIsPlayedAtTheLowerCostAndTransferredAtTheCostPrintedOnIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetEdorasHallScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var axe1 = scn.GetFreepsCard("axe1");
+		var axe2 = scn.GetFreepsCard("axe2");
+		var chamber = scn.GetFreepsCard("chamber");
+		scn.MoveCompanionsToTable(gimli, guard);
+		scn.AttachCardsTo(gimli, axe1);
+		scn.MoveCardsToSupportArea(chamber);
+		scn.MoveCardsToHand(axe2);
+
+		scn.StartGame();
+		// One [dwarven] card with a culture token on it: a Heavy Axe is twilight cost -1.
+		scn.AddTokensToCard(chamber, 1);
+		assertEquals(0, scn.GetTwilight());
+
+		// The transfer comes first, so that the play below is seen to be cheaper on the very same board.
+		assertTrue(scn.FreepsTransferAvailable(axe1));
+		scn.FreepsTransferCard(axe1);
+		assertAttachedTo(axe1, guard);
+		// The 4 printed on it: it is in play, and its own text about its cost does not reach a transfer.
+		assertEquals(4, scn.GetTwilight());
+
+		// The second Axe is played, and costs its 4 - 1.  The Guard already bears a hand weapon, so it can
+		// only go to Gimli.
+		scn.FreepsPlayCard(axe2);
+		assertAttachedTo(axe2, gimli);
+		assertEquals(4 + 3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

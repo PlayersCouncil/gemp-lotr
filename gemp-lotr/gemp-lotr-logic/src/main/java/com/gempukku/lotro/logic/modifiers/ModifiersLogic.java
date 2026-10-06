@@ -3,6 +3,7 @@ package com.gempukku.lotro.logic.modifiers;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.ExtraPlayCost;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -522,22 +523,26 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard) {
+        final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
+        // A site has a Shadow number and not a twilight cost.  What changes it ("Each site's Shadow number is -1")
+        // changes it where the site lies, so a site is read with everything that applies.
+        if (blueprint.getCardType() == CardType.SITE)
+            return getTwilightCostToPlay(game, physicalCard, null, 0, true);
+        // A card in play costs the number printed on it (CR 4.2 "twilight cost": "Cards already in play that
+        // affect another card's twilight cost have that effect only when the card to be modified is coming into
+        // play"; and by Ketura's ruling of 2026-10-06 the card's own text about its cost is read the same way).
+        final Zone zone = physicalCard.getZone();
+        if (zone != null && zone.isInPlay())
+            return Math.max(0, blueprint.getTwilightCost());
+        // Anywhere else the question is what the card would cost to play, the roaming penalty apart.
         return getTwilightCostToPlay(game, physicalCard, null, 0, true);
     }
 
     @Override
     public int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard) {
-        LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCostToTransfer");
-        try {
-            int result = physicalCard.getBlueprint().getTwilightCost();
-            // The card's own text about its cost.  It is asked with no target: a text that prices the card by what
-            // it is played on answers for a play, and a transfer is not one.
-            result += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, null);
-            // No TWILIGHT_COST_MODIFIER of another card: those have their effect only on a card coming into play.
-            return Math.max(0, result);
-        } finally {
-            LoggingThreadLocal.logMethodEnd();
-        }
+        // A card being transferred is in play, and is not coming into play: neither another card's text nor its
+        // own changes the number printed on it.
+        return Math.max(0, physicalCard.getBlueprint().getTwilightCost());
     }
 
     @Override

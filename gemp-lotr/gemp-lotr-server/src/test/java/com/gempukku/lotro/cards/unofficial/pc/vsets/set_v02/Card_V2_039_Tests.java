@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -423,7 +422,6 @@ public class Card_V2_039_Tests
 	}
 
 	@Test
-	@Ignore("F-0067: an X too small to pay for the Balrog may be named, 0 included: the threats are removed and nothing is played")
 	public void TheSmallestXThatMayBeNamedIsOneThatPaysForTheBalrog() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

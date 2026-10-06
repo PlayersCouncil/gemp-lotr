@@ -479,8 +479,9 @@ public class Card_V3_040_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var boromir = scn.GetFreepsCard("boromir");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var pippin = scn.GetFreepsCard("pippin");
 
-		scn.MoveCardsToHand(wizard);
+		scn.MoveCardsToHand(wizard, pippin);
 		scn.MoveCardsToSupportArea(journey);
 		// With Frodo, 5 companions
 		scn.MoveCompanionsToTable(merry, gimli, boromir, aragorn);
@@ -490,8 +491,10 @@ public class Card_V3_040_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(2);
 
-		// Journey Into Danger is in force: read with every modifier, Gimli costs 2 + 2.
-		assertEquals(4, scn.GetTwilightCost(gimli));
+		// Journey Into Danger is in force: Pippin, in hand, would cost 1 + 2 to play. Gimli, in play, costs
+		// the 2 printed on him (F-0109).
+		assertEquals(3, scn.GetTwilightCost(pippin));
+		assertEquals(2, scn.GetTwilightCost(gimli));
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(wizard);

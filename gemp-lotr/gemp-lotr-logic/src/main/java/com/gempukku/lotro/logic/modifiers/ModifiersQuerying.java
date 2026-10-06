@@ -60,13 +60,20 @@ public interface ModifiersQuerying {
 
     // Twilight cost
     int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty);
+    /**
+     * The twilight cost of a card that is not being played.  For a card in play that is the number printed on it:
+     * nothing another card does to a twilight cost reaches a card that is not coming into play (CR 4.2 "twilight
+     * cost"), and the card's own text about its cost is read the same way (Ketura, 2026-10-06, on Q-0073).  For a
+     * card anywhere else it is what the card would cost to play, the roaming penalty apart.  A site answers with
+     * its Shadow number as it stands, which is not a twilight cost and is changed where the site lies.
+     */
     int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard);
 
     /**
      * What it costs to transfer a card.  A transfer pays the card's twilight cost again and is not a play (CR 4.2
-     * "transfer"), so the card is not coming into play and nothing another card does to its twilight cost
-     * reaches it (CR 4.2 "twilight cost").  The card's own statement of its cost still holds, except where it
-     * prices the card by what it is played on ("When played on Arwen ..."), which is about playing.
+     * "transfer"), so the card is in play and not coming into play: it costs the number printed on it, whatever
+     * another card or its own text says about its twilight cost (CR 4.2 "twilight cost"; Ketura, 2026-10-06, on
+     * Q-0053 and Q-0074).
      */
     int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard);
 

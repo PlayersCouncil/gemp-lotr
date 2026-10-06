@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -317,7 +316,6 @@ public class Card_V3_032_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Ignore("F-0109: a minion in play is counted at the cost a site's text has lowered (2 - 1), where CR 4.2 'twilight cost' has another card's text change a cost only as the card comes into play")
 	@Test
 	public void AMinionWhoseCostASiteLowersCountsAtTheCostPrintedOnIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetAmonHenScenario();

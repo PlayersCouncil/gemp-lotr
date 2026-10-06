@@ -187,7 +187,6 @@
 				cost: {
 					type: exert
 					select: memory(winner)
-					ignoreCostCheckFailure: true
 				}
 				effect: {
 					type: drawCards

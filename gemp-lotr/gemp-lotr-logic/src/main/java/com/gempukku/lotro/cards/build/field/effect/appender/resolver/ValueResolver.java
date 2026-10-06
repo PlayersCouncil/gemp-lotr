@@ -7,6 +7,7 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.*;
+import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -549,6 +550,38 @@ public class ValueResolver {
                             }
                             return count;
                         });
+            } else if (type.equalsIgnoreCase("leastDiscountToPlay")) {
+                // The least X, from 0 up to "max", at which some card matching the filter can be played from the
+                // pile at twilight cost -X: the lower bound of an X that buys a play ("Remove X threats. Play
+                // The Balrog from your discard pile; its twilight cost is -X").  Playing from a pile as an effect
+                // is a cost, so an X that leaves the card out of reach is not one the player may name.  The
+                // question is put to the same check a play is, so roaming, the card's own cost text and every
+                // standing modifier are counted.  Where no X up to "max" will do the answer is "max": the
+                // ability's own Playable requirement is what withholds it then.
+                FieldUtils.validateAllowedFields(object, "filter", "fromZone", "max", "player");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                if (filter == null)
+                    throw new InvalidCardDefinitionException("LeastDiscountToPlay requires a filter.");
+                final Zone zone = FieldUtils.getEnum(Zone.class, object.get("fromZone"), "fromZone");
+                if (zone != Zone.DISCARD)
+                    throw new InvalidCardDefinitionException("fromZone must be DISCARD for LeastDiscountToPlay.");
+                final ValueSource maxSource = resolveEvaluator(object.get("max"), environment);
+                final PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(object.get("player"), "player", "you"));
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+
+                return actionContext -> {
+                    final String player = playerSource.getPlayer(actionContext);
+                    final Filterable filterable = filterableSource.getFilterable(actionContext);
+                    final Evaluator maxEvaluator = maxSource.getEvaluator(actionContext);
+                    return (game, cardAffected) -> {
+                        final int max = Math.max(0, maxEvaluator.evaluateExpression(game, cardAffected));
+                        for (int discount = 0; discount < max; discount++) {
+                            if (PlayConditions.canPlayFromDiscard(player, game, -discount, filterable))
+                                return discount;
+                        }
+                        return max;
+                    };
+                };
             } else if (type.equalsIgnoreCase("forEachThreat")) {
                 FieldUtils.validateAllowedFields(object, "over", "limit", "multiplier", "divider");
                 return new SmartValueSource(environment, object,

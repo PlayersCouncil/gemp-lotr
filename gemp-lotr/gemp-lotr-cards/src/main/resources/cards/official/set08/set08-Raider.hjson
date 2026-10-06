@@ -97,7 +97,16 @@
 						cost: {
 							type: chooseANumber
 							text: Choose how many {raider} tokens to remove
-							from: 0
+							from: {
+								type: LeastDiscountToPlay
+								fromZone: DISCARD
+								filter: corsair
+								max: {
+									type: ForEachCultureToken
+									culture: raider
+									filter: self
+								}
+							}
 							to: {
 								type: ForEachCultureToken
 								culture: raider

@@ -1084,7 +1084,6 @@
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(winner)
 				}
 				effect: [
@@ -1637,7 +1636,6 @@
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(playedMinion)
 				}
 				effect: [

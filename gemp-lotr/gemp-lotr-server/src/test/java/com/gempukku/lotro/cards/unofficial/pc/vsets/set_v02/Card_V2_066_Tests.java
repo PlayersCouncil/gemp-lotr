@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -62,8 +63,8 @@ public class Card_V2_066_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may
-		 * 	exert it to add a burden.
+		 * Game Text: Exert a Wraith to make a skirmishing twilight minion strength +2. If that minion wins its
+		 * 	skirmish you may exert it to add a burden.
 		 */
 
 		var scn = GetScenario();
@@ -81,22 +82,24 @@ public class Card_V2_066_Tests
 	}
 
 	@Test
-	public void ExertsAWraithToMakeATwilightMinionStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ExertsAWraithToMakeASkirmishingTwilightMinionStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gaze = scn.GetShadowCard("gaze1");
 		var lights = scn.GetShadowCard("lights");
+		var wisp = scn.GetShadowCard("wisp");
 		var nelya = scn.GetShadowCard("nelya");
 		var undead = scn.GetShadowCard("undead");
 		var cover = scn.GetShadowCard("cover");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
 		var deadman = scn.GetFreepsCard("deadman");
-		scn.MoveCompanionsToTable(aragorn, deadman);
+		scn.MoveCompanionsToTable(aragorn, gimli, deadman);
 		scn.MoveCardsToHand(gaze);
 		scn.MoveCardsToSupportArea(cover);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(lights, nelya, undead);
+		scn.MoveMinionsToTable(lights, wisp, nelya, undead);
 
 		// Not in the assignment phase, the last one before the skirmishes in which the Shadow player may act.
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -105,8 +108,10 @@ public class Card_V2_066_Tests
 		assertFalse(scn.ShadowPlayAvailable(gaze));
 		scn.ShadowPass();
 
-		scn.FreepsAssignToMinions(aragorn, lights);
-		scn.ShadowDeclineAssignments();
+		// Corpse Lights, the Wisp and the Undead all fight Aragorn.  Nelya is assigned to Gimli, whose skirmish
+		// has not begun.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, lights}, new PhysicalCardImpl[]{gimli, nelya});
+		scn.ShadowAssignToMinions(aragorn, wisp, undead);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
@@ -115,11 +120,13 @@ public class Card_V2_066_Tests
 		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(undead));
 		assertEquals(7, scn.GetStrength(lights));
+		assertEquals(8, scn.GetStrength(wisp));
 		assertEquals(10, scn.GetStrength(nelya));
 
 		scn.ShadowPlayCard(gaze);
-		// A Wraith: of either culture, twilight or not, a minion or the other player's companion.  Not a Nazgul.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(lights, undead, deadman));
+		// A Wraith: of either culture, twilight or not, a minion or the other player's companion, in the skirmish
+		// or out of it.  Not a Nazgul.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(lights, wisp, undead, deadman));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(nelya));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(undead);
@@ -127,13 +134,14 @@ public class Card_V2_066_Tests
 		assertEquals(0, scn.GetWoundsOn(lights));
 		assertEquals(0, scn.GetWoundsOn(deadman));
 
-		// A twilight minion: of either culture and race, in the skirmish or not.  Not a Wraith that is not
-		// twilight, not a twilight condition, not a companion.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(lights, nelya));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(undead, cover, deadman));
+		// A skirmishing twilight minion.  Not Nelya, a twilight minion waiting for a later skirmish; not the
+		// Undead, a minion in this skirmish that is not twilight; not a twilight condition; not a companion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(lights, wisp));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(nelya, undead, cover, deadman, aragorn));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(lights);
 		assertEquals(9, scn.GetStrength(lights));
+		assertEquals(8, scn.GetStrength(wisp));
 		assertEquals(10, scn.GetStrength(nelya));
 		// Enduring gives the Undead +2 for its wound; the event gives it nothing.
 		assertEquals(11, scn.GetStrength(undead));
@@ -170,9 +178,9 @@ public class Card_V2_066_Tests
 		scn.ShadowChooseCard(deadman);
 		assertEquals(1, scn.GetWoundsOn(deadman));
 		assertEquals(0, scn.GetWoundsOn(lights));
-		scn.ShadowChooseCard(nelya);
-		assertEquals(12, scn.GetStrength(nelya));
-		assertEquals(7, scn.GetStrength(lights));
+		// Corpse Lights is the only twilight minion in the skirmish and is made stronger without a choice.
+		assertEquals(9, scn.GetStrength(lights));
+		assertEquals(10, scn.GetStrength(nelya));
 		assertInDiscard(gaze);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
@@ -245,9 +253,9 @@ public class Card_V2_066_Tests
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(gaze);
-		// Corpse Lights is the only Wraith and exerts without a choice.
+		// Corpse Lights is the only Wraith and exerts without a choice; Nelya is the only twilight minion in the
+		// skirmish and is made stronger without one.
 		assertEquals(1, scn.GetWoundsOn(lights));
-		scn.ShadowChooseCard(nelya);
 		assertEquals(12, scn.GetStrength(nelya));
 
 		// 12 against Aragorn's 8.
@@ -285,8 +293,8 @@ public class Card_V2_066_Tests
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(gaze);
+		// The Undead pays.  Nelya is the only twilight minion in the skirmish and is not chosen.
 		scn.ShadowChooseCard(undead);
-		scn.ShadowChooseCard(nelya);
 		assertEquals(12, scn.GetStrength(nelya));
 		assertEquals(13, scn.GetStrength(aragorn));
 		assertEquals(0, scn.GetWoundsOn(nelya));
@@ -326,12 +334,12 @@ public class Card_V2_066_Tests
 		assertTrue(scn.ShadowPlayAvailable(gaze2));
 		assertEquals(0, scn.GetWoundsOn(lights));
 		scn.ShadowPlayCard(gaze1);
-		// The one Wraith pays without a choice, and may be the minion made stronger as well.
+		// The one Wraith pays without a choice, and is the minion made stronger as well: it is the only twilight
+		// minion in the skirmish.
 		assertEquals(1, scn.GetWoundsOn(lights));
 		assertEquals(0, scn.GetWoundsOn(nelya));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(lights, nelya));
-		scn.ShadowChooseCard(lights);
 		assertEquals(9, scn.GetStrength(lights));
+		assertEquals(10, scn.GetStrength(nelya));
 
 		// Vitality 2 with 1 wound: Corpse Lights can exert no more, so the second copy cannot be paid for.
 		scn.FreepsPass();
@@ -358,9 +366,9 @@ public class Card_V2_066_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
-		// Corpse Lights, vitality 2, exerts for the event and is the minion made stronger.
+		// Corpse Lights, vitality 2, is the only Wraith and the only twilight minion in the skirmish: it exerts
+		// for the event and is the minion made stronger.
 		scn.ShadowPlayCard(gaze);
-		scn.ShadowChooseCard(lights);
 		assertEquals(1, scn.GetWoundsOn(lights));
 		assertEquals(9, scn.GetStrength(lights));
 
@@ -376,11 +384,60 @@ public class Card_V2_066_Tests
 	}
 
 	@Test
-	public void TheBonusAndTheOfferLastOnlyForTheSkirmishTheEventIsPlayedIn() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheBonusAndTheOfferEndWithTheSkirmishTheEventIsPlayedIn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gaze = scn.GetShadowCard("gaze1");
-		var wisp = scn.GetShadowCard("wisp");
+		var nelya = scn.GetShadowCard("nelya");
+		var undead = scn.GetShadowCard("undead");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(gaze);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(nelya, undead);
+		// Nelya made fierce, so that she fights a second skirmish in the turn the event is played.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, nelya, null, Keyword.FIERCE));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, nelya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(gaze);
+		// The Undead is the only Wraith and Nelya the only twilight minion in the skirmish.
+		assertEquals(1, scn.GetWoundsOn(undead));
+		assertEquals(12, scn.GetStrength(nelya));
+
+		// 12 against Aragorn's 8: Nelya wins the skirmish the event was played in, and exerts for a burden.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		assertEquals(1, scn.GetBurdens());
+
+		// Her fierce skirmish is another skirmish: the bonus is gone.
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, nelya);
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(10, scn.GetStrength(nelya));
+		scn.FreepsPass();
+		scn.ShadowPass();
+		// 10 against 8: she wins again, with vitality 3 and 1 wound could exert again, and nothing is offered.
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoTwilightMinionInTheSkirmishTheEventIsStillPlayedAndTheWraithExertsForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gaze = scn.GetShadowCard("gaze1");
 		var nelya = scn.GetShadowCard("nelya");
 		var undead = scn.GetShadowCard("undead");
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -389,65 +446,23 @@ public class Card_V2_066_Tests
 		scn.MoveCardsToHand(gaze);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(wisp, nelya, undead);
+		// A Wraith to exert, and the only twilight minion waiting for a later skirmish.
+		scn.MoveMinionsToTable(undead, nelya);
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, wisp}, new PhysicalCardImpl[]{gimli, nelya});
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPass();
-
-		// Played in Aragorn's skirmish against the Wisp, on Nelya, who is waiting for hers.
-		scn.ShadowPlayCard(gaze);
-		scn.ShadowChooseCard(undead);
-		scn.ShadowChooseCard(nelya);
-		assertEquals(12, scn.GetStrength(nelya));
-		assertEquals(8, scn.GetStrength(wisp));
-
-		// The Wisp's 8 against Aragorn's 8: the Shadow wins a tie.  The Wisp is another twilight minion
-		// winning its skirmish, and brings no offer.
-		scn.FreepsPass();
-		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(0, scn.GetWoundsOn(wisp));
-
-		// The skirmish the event was played in is over, and so is the event.
-		scn.FreepsResolveSkirmish(gimli);
-		assertEquals(10, scn.GetStrength(nelya));
-		scn.FreepsPass();
-		scn.ShadowPass();
-		// 10 against Gimli's 6: Nelya wins her skirmish, and nothing is offered.
-		assertEquals(1, scn.GetWoundsOn(gimli));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(0, scn.GetWoundsOn(nelya));
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	public void WithNoTwilightMinionTheEventIsStillPlayedAndTheWraithExertsForNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gaze = scn.GetShadowCard("gaze1");
-		var undead = scn.GetShadowCard("undead");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(gaze);
-
-		scn.StartGame();
-		// A Wraith to exert, and no twilight minion anywhere.
-		scn.MoveMinionsToTable(undead);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(aragorn, undead);
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, undead}, new PhysicalCardImpl[]{gimli, nelya});
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(gaze));
 		assertEquals(9, scn.GetStrength(undead));
+		assertEquals(10, scn.GetStrength(nelya));
 		scn.ShadowPlayCard(gaze);
 		assertEquals(1, scn.GetWoundsOn(undead));
-		// Enduring: strength +2 for the wound it now has, and nothing from the event.
+		// Enduring: strength +2 for the wound it now has, and nothing from the event.  Nelya is not in this
+		// skirmish and gets nothing either.
 		assertEquals(11, scn.GetStrength(undead));
+		assertEquals(10, scn.GetStrength(nelya));
+		assertEquals(0, scn.GetWoundsOn(nelya));
 		assertInDiscard(gaze);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 
@@ -457,6 +472,15 @@ public class Card_V2_066_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetWoundsOn(undead));
+
+		// 10 against Gimli's 6: Nelya wins her own skirmish, and is not the minion of any event either.
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(10, scn.GetStrength(nelya));
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(nelya));
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

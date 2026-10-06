@@ -1410,7 +1410,6 @@
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(playedSouthron)
 				}
 				effect: [

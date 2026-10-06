@@ -340,7 +340,11 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Effective stats:</b>");
                 try {
                     PhysicalCard target = card.getAttachedTo();
-                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
+                    // A card in play costs the number printed on it (CR 4.2 "twilight cost"), and a site there
+                    // shows its Shadow number as it stands; a card anywhere else shows what it would cost to play.
+                    int twilightCost = card.getZone() != null && card.getZone().isInPlay()
+                            ? _lotroGame.getModifiersQuerying().getCurrentTwilightCost(_lotroGame, card)
+                            : _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
                     sb.append("<br><b>Twilight cost:</b> ")
                             .append(twilightCost);
                 } catch (UnsupportedOperationException ignored) {

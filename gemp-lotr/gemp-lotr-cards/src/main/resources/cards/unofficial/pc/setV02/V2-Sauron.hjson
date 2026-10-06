@@ -635,7 +635,7 @@
 				{
 					type: ModifyStrength
 					amount: 2
-					select: choose(twilight, minion)
+					select: choose(twilight, minion, inSkirmish)
 					memorize: pumpedTwilight
 				}
 				{
@@ -655,7 +655,7 @@
 				}
 			]
 		}
-		gametext: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
+		gametext: Exert a Wraith to make a skirmishing twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
 		lore: "Very soon it would nail him down, know just exactly where he was."
 		promotext: ""
 		alts: {

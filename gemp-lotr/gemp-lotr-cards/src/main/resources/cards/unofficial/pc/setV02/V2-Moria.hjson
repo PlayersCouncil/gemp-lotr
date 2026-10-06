@@ -184,7 +184,14 @@
 					cost: {
 						type: ChooseANumber
 						text: Choose how many threats to remove
-						from: 0
+						from: {
+							type: LeastDiscountToPlay
+							fromZone: DISCARD
+							filter: name(The Balrog)
+							max: {
+								type: ForEachThreat
+							}
+						}
 						to: {
 							type: ForEachThreat
 						}

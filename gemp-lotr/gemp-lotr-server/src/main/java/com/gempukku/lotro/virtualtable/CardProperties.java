@@ -73,7 +73,10 @@ public interface CardProperties extends TableBase {
 
 	/**
 	 * @param card The card to inspect.
-	 * @return The modified current twilight cost of the card, as altered by all current in-game effects.
+	 * @return The twilight cost of the card where it is.  For a card in play that is the number printed on it,
+	 * whatever another card or its own text says about its cost (CR 4.2 "twilight cost").  For a card in a hand
+	 * or a pile it is what the card would cost to play, as altered by all current in-game effects, the roaming
+	 * penalty apart.  For a site it is the Shadow number as it stands.
 	 */
 	default int GetTwilightCost(PhysicalCardImpl card)
 	{

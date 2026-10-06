@@ -68,7 +68,9 @@ public class Card_94_024_Tests {
 		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
 
-		scn.MoveCompanionsToTable(gimli, guard);
+		// In hand, where the question is what they would cost to play.  A companion in play costs the number
+		// printed on him whatever the region (CR 4.2 "twilight cost").
+		scn.MoveCardsToHand(gimli, guard);
 		scn.StartGame();
 
 		// Region 1 (sites 1-3): +1
@@ -77,11 +79,13 @@ public class Card_94_024_Tests {
 
 		// Region 2 (sites 4-6): +2
 		scn.SkipToSite(4);
+		scn.MoveCardsToHand(gimli, guard);
 		assertEquals(4, scn.GetTwilightCost(gimli));
 		assertEquals(3, scn.GetTwilightCost(guard));
 
 		// Region 3 (sites 7-9): +3
 		scn.SkipToSite(7);
+		scn.MoveCardsToHand(gimli, guard);
 		assertEquals(5, scn.GetTwilightCost(gimli));
 		assertEquals(4, scn.GetTwilightCost(guard));
 	}
@@ -132,7 +136,8 @@ public class Card_94_024_Tests {
 		var scn = GetShadowScenario();
 		var gimli = scn.GetFreepsCard("gimli");
 
-		scn.MoveCompanionsToTable(gimli);
+		// In hand: in play he would cost the 2 printed on him whoever owned the mod.
+		scn.MoveCardsToHand(gimli);
 		scn.StartGame();
 
 		// "your,companion" does not match Freeps's companion when Shadow owns the mod

@@ -25,7 +25,7 @@ public class DeckBuildingRestrictionGameTextProcessor implements EffectProcessor
         FieldUtils.validateAllowedFields(effectObj, "filter", "pile", "min", "max", "text");
 
         final int max = FieldUtils.getInteger(effectObj.get("max"), "max", 1000);
-        final int min = FieldUtils.getInteger(effectObj.get("max"), "min", 0);
+        final int min = FieldUtils.getInteger(effectObj.get("min"), "min", 0);
         final String pileStr = FieldUtils.getString(effectObj.get("pile"), "pile");
         final PileType pileType = PileType.Parse(pileStr);
         final String text = FieldUtils.getString(effectObj.get("text"), "text");
