@@ -7,7 +7,7 @@ For each card, in turn: the conformance check must find no errors, the card's te
 apart), no `F-0000` or `Q-0000` placeholder may be left in the test file, and the ledger file must exist.  A card
 that clears all four has its test file committed as `Card tests: <id> <name>`, and its status set to ready, with
 a note of any test parked on a finding or question (or to parked, with --parked, for a card that could not be
-finished).  A card that does not is reported and left alone; the
+finished; --parked also lets through coverage errors, a check no test can claim yet, and no other kind).  A card that does not is reported and left alone; the
 others still land.
 
 --check does everything except commit and set the status.
@@ -52,8 +52,14 @@ def land(card_id, note, force_parked, check_only, before):
     source = test.read_text(encoding="utf-8")
 
     lint = script("lint.py", card_id)
+    unclaimed = []
     if lint.returncode != 0:
-        return "conformance check:\n" + lint.stdout.strip()
+        # A card parked on a rig request has checks no test can claim yet.  With --parked those coverage errors,
+        # and only those, are let through and named in the commit body.
+        errors = re.findall(r"^\s*error\s+(\S+)\s+line \d+\s+(.*)$", lint.stdout, re.M)
+        if not (force_parked and errors and all(kind == "coverage" for kind, _ in errors)):
+            return "conformance check:\n" + lint.stdout.strip()
+        unclaimed = [text.strip() for _, text in errors]
     placeholder = re.search(r"\b[FQG]-0000\b", source)
     if placeholder:
         return "placeholder %s still in the test file" % placeholder.group(0)
@@ -75,6 +81,8 @@ def land(card_id, note, force_parked, check_only, before):
     body += "."
     if parked:
         body += " Parked on %s." % ", ".join(sorted(set(parked)))
+    if unclaimed:
+        body += " Not finished: %s." % "; ".join(unclaimed)
     if note:
         body += "\n\n" + note
     # A card with a test parked on a finding or question is still ready for review; the note says what is parked.
