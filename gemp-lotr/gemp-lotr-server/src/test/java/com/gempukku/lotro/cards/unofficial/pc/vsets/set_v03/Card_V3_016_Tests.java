@@ -5,6 +5,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -20,32 +21,43 @@ public class Card_V3_016_Tests
 				new HashMap<>()
 				{{
 					put("two", "103_16");
-					put("noser", "5_28");
-					put("noser2", "5_28");
-					put("slinker", "5_29");
-					put("arb", "9_30");
+					put("two2", "103_16");
+					put("noser", "5_28");       // Sméagol, Old Noser: [gollum], strength 3, vitality 4; a regroup ability only
+					put("noser2", "5_28");      // a second copy of him
+					put("slinker", "5_29");     // Sméagol, Slinker: [gollum], strength 3; a skirmish ability never used here
+					put("poor", "6_45");        // Sméagol, Poor Creature: a skirmish ability only
+					put("helps", "7_71");       // Sméagol, Always Helps: an assignment ability only
+					put("hurried", "7_72");     // Sméagol, Hurried Guide: a skirmish ability only
+					put("shire", "103_116");    // Smeagol, Once Like Us: the one Smeagol who is [shire], and costs 1; an assignment ability only
+					put("arb", "9_30");         // Sméagol, Bearer of Great Secrets: the Smeagol who can bear the Ring; his trigger needs the fellowship to move
+					put("arb2", "9_30");        // a second copy of him
+					put("sam", "1_311");        // Sam, Son of Hamfast: a companion who is not Smeagol
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					put("dont", "6_39");        // Don't Look at Them: a Free Peoples [gollum] condition in the support area
+					put("follow", "5_23");      // Follow Sméagol: a Free Peoples condition Smeagol bears; a regroup ability only
+					put("boat", "13_48");       // Fishing Boat: a Free Peoples possession Smeagol bears, vitality +1
+					put("breath", "1_207");     // Black Breath: a Shadow condition, here on Smeagol; wounds may not be removed from bearer
 
-					put("shelob", "10_23"); //Shelob, Her Ladyship
-					put("gollum", "9_28");
-
-					put("breath", "1_207"); //Black Breath
-					put("follow", "5_23"); //Follow Smeagol
+					put("gollum", "5_24");      // Gollum, Nasty Treacherous Creature: strength 5, vitality 4; a regroup ability only
+					put("shelob", "10_23");     // Shelob, Her Ladyship: fierce; played with Gollum in play, keeps a companion from being assigned this turn
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
-	
-	protected VirtualTableScenario GetARBScenario() throws CardNotFoundException, DecisionResultInvalidException {
+
+	protected VirtualTableScenario GetSmeagolRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("two", "103_16");
-					put("slinker", "5_29");
+					put("slinker", "5_29");     // Sméagol, Slinker
 				}},
 				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.SmeagolRB,
+				VirtualTableScenario.SmeagolRB,     // Sméagol, Bearer of Great Secrets, as the Ring-bearer
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -61,9 +73,9 @@ public class Card_V3_016_Tests
 		 * Culture: Gollum
 		 * Twilight Cost: 2
 		 * Type: Event
-		 * Subtype: Skirmish
+		 * Subtype: Fellowship or Maneuver or Skirmish
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Restore Smeagol.  Then you may spot Smeagol (if he is not the Ring-bearer) and add a threat to replace him with another Smeagol from your discard pile (keep all tokens and borne cards).
-		*/
+		 */
 
 		var scn = GetScenario();
 
@@ -75,491 +87,567 @@ public class Card_V3_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void TwoMindsofItRestoresHinderedSmeagolAndExchangesForADifferentOneInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void RestoresSmeagolAndNoOtherHinderedCardAndThenAThreatBuysHisReplacementFromTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
 		var noser = scn.GetFreepsCard("noser");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
-		scn.MoveCompanionsToTable(noser);
+		var sam = scn.GetFreepsCard("sam");
+		var dont = scn.GetFreepsCard("dont");
+		scn.MoveCompanionsToTable(noser, sam);
+		scn.MoveCardsToSupportArea(dont);
 		scn.MoveCardsToDiscard(slinker);
-
-		scn.HinderCard(noser);
+		scn.MoveCardsToHand(two);
+		scn.HinderCard(noser, sam, dont);
 
 		scn.StartGame();
 
 		assertTrue(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
+		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = noser.getCardId();
-		int newId = slinker.getCardId();
-
+		assertEquals(0, scn.GetBurdens());
+		assertInZone(Zone.HAND, two);
 		assertTrue(scn.FreepsPlayAvailable(two));
 
 		scn.FreepsPlayCard(two);
+
+		assertEquals(2, scn.GetTwilight());
 		assertFalse(scn.IsHindered(noser));
+		// A hindered companion who is not Smeagol and a hindered [gollum] card of mine stay as they were.
+		assertTrue(scn.IsHindered(sam));
+		assertTrue(scn.IsHindered(dont));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertInZone(Zone.DISCARD, slinker);
 
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
 		scn.FreepsChooseYes();
+
 		assertEquals(1, scn.GetThreats());
-
-		assertInPlay(slinker);
-		assertInDiscard(noser);
-
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, noser.getCardId());
-		assertNotEquals(newId, noser.getCardId());
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
+		assertFalse(scn.IsHindered(slinker));
+		// The new Smeagol is not played: nothing more is added to the pool, and his "To play, add a burden" is not paid.
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetBurdens());
+		assertInZone(Zone.DISCARD, two);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItExchangesUnhinderedSmeagolForADifferentOneInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void InTheManeuverPhaseSmeagolIsRestoredAndReplacedAndGollumTheMinionStaysHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
 		var noser = scn.GetFreepsCard("noser");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
+		var troop = scn.GetShadowCard("troop");
+		var gollum = scn.GetShadowCard("gollum");
 		scn.MoveCompanionsToTable(noser);
 		scn.MoveCardsToDiscard(slinker);
-
-		scn.StartGame();
-
-		assertFalse(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
-		assertEquals(0, scn.GetThreats());
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = noser.getCardId();
-		int newId = slinker.getCardId();
-
-		assertTrue(scn.FreepsPlayAvailable(two));
-
-		scn.FreepsPlayCard(two);
-		assertFalse(scn.IsHindered(noser));
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
-		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetThreats());
-
-		assertInPlay(slinker);
-		assertInDiscard(noser);
-
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, noser.getCardId());
-		assertNotEquals(newId, noser.getCardId());
-	}
-
-	@Test
-	public void TwoMindsofItExchangesDuringManeuver() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
-		var slinker = scn.GetFreepsCard("slinker");
 		scn.MoveCardsToHand(two);
-		scn.MoveCompanionsToTable(noser);
-		scn.MoveCardsToDiscard(slinker);
-
-		var shelob = scn.GetShadowCard("shelob");
-		scn.MoveMinionsToTable(shelob);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(troop, gollum);
+		// Gollum the minion is Smeagol's other self and no Smeagol.
+		scn.HinderCard(noser, gollum);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertFalse(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.IsHindered(noser));
+		assertTrue(scn.IsHindered(gollum));
 		assertEquals(0, scn.GetThreats());
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = noser.getCardId();
-		int newId = slinker.getCardId();
-
 		assertTrue(scn.FreepsPlayAvailable(two));
 
 		scn.FreepsPlayCard(two);
+
+		assertEquals(twilight + 2, scn.GetTwilight());
 		assertFalse(scn.IsHindered(noser));
+		assertTrue(scn.IsHindered(gollum));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
 		scn.FreepsChooseYes();
+
 		assertEquals(1, scn.GetThreats());
-
-		assertInPlay(slinker);
-		assertInDiscard(noser);
-
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, noser.getCardId());
-		assertNotEquals(newId, noser.getCardId());
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
+		assertTrue(scn.IsHindered(gollum));
+		assertInZone(Zone.DISCARD, two);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItExchangesDuringSkirmishWithoutCancelingSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void DecliningTheReplacementLeavesSmeagolRestoredAndNothingElseChanged() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
 		var noser = scn.GetFreepsCard("noser");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
 		scn.MoveCompanionsToTable(noser);
 		scn.MoveCardsToDiscard(slinker);
-
-		var shelob = scn.GetShadowCard("shelob");
-		scn.MoveMinionsToTable(shelob);
+		scn.MoveCardsToHand(two);
+		scn.HinderCard(noser);
 
 		scn.StartGame();
 
+		scn.FreepsPlayCard(two);
+		assertFalse(scn.IsHindered(noser));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+
+		scn.FreepsChooseNo();
+
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertFalse(scn.IsHindered(noser));
+		assertInZone(Zone.DISCARD, slinker);
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, two);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ReplacedInASkirmishTheNewSmeagolFightsItOnInHisPlace() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var noser = scn.GetFreepsCard("noser");
+		var slinker = scn.GetFreepsCard("slinker");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(noser);
+		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(noser, shelob);
+		scn.FreepsAssignAndResolve(noser, runner);
 
+		// Smeagol is not hindered: there is nothing to restore, and the offer follows all the same.
 		assertFalse(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
+		assertTrue(scn.IsCharSkirmishingAgainst(noser, runner));
 		assertEquals(0, scn.GetThreats());
-
-		assertTrue(scn.IsCharSkirmishing(noser));
-		assertTrue(scn.IsCharSkirmishing(shelob));
-		assertTrue(scn.IsCharSkirmishingAgainst(noser, shelob));
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = noser.getCardId();
-		int newId = slinker.getCardId();
-
 		assertTrue(scn.FreepsPlayAvailable(two));
 
 		scn.FreepsPlayCard(two);
-		assertFalse(scn.IsHindered(noser));
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		scn.FreepsChooseYes();
+
 		assertEquals(1, scn.GetThreats());
-
-		assertInPlay(slinker);
-		assertInDiscard(noser);
-
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, noser.getCardId());
-		assertNotEquals(newId, noser.getCardId());
-
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
 		assertFalse(scn.IsCharSkirmishing(noser));
-		assertTrue(scn.IsCharSkirmishing(slinker));
-		assertTrue(scn.IsCharSkirmishing(shelob));
-		assertTrue(scn.IsCharSkirmishingAgainst(slinker, shelob));
+		assertTrue(scn.IsCharSkirmishingAgainst(slinker, runner));
+		// The skirmish has not ended or begun again: the Shadow player is next to act in it.
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		scn.ShadowPass();
+		scn.FreepsPass();
+
+		// Strength 3 against the Runner's 5: the Smeagol who came in takes the wound for losing.
+		assertEquals(1, scn.GetWoundsOn(slinker));
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItExchangesDuringSkirmishWithoutCancelingAssignment() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ReplacedWhileAssignedToASkirmishNotYetBegunTheNewSmeagolIsAssignedInHisPlace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
 		var two = scn.GetFreepsCard("two");
 		var noser = scn.GetFreepsCard("noser");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
-		scn.MoveCompanionsToTable(noser);
-		scn.MoveCardsToDiscard(slinker);
-
-		var shelob = scn.GetShadowCard("shelob");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
 		var gollum = scn.GetShadowCard("gollum");
-		scn.MoveMinionsToTable(shelob, gollum);
+		scn.MoveCompanionsToTable(noser, aragorn);
+		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(runner, gollum);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[] { noser, shelob },
-				new PhysicalCardImpl[] { frodo, gollum }
+				new PhysicalCardImpl[] { aragorn, gollum },
+				new PhysicalCardImpl[] { noser, runner }
 		);
-		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsResolveSkirmish(aragorn);
 
-		assertFalse(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
-		assertEquals(0, scn.GetThreats());
-
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, gollum));
 		assertFalse(scn.IsCharSkirmishing(noser));
-		assertFalse(scn.IsCharSkirmishing(shelob));
-		assertTrue(scn.IsCharAssignedAgainst(noser, shelob));
-		assertTrue(scn.IsCharSkirmishingAgainst(frodo, gollum));
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = noser.getCardId();
-		int newId = slinker.getCardId();
-
+		assertTrue(scn.IsCharAssignedAgainst(noser, runner));
 		assertTrue(scn.FreepsPlayAvailable(two));
 
 		scn.FreepsPlayCard(two);
-		assertFalse(scn.IsHindered(noser));
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetThreats());
 
-		assertInPlay(slinker);
-		assertInDiscard(noser);
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
+		assertFalse(scn.IsCharAssigned(noser));
+		assertTrue(scn.IsCharAssignedAgainst(slinker, runner));
+		assertFalse(scn.IsCharSkirmishing(slinker));
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, gollum));
 
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, noser.getCardId());
-		assertNotEquals(newId, noser.getCardId());
+		// Aragorn's skirmish is finished, and the one left to fight is the new Smeagol's.
+		scn.ShadowPass();
+		scn.FreepsPass();
+		scn.FreepsResolveSkirmish(slinker);
 
-		assertFalse(scn.IsCharSkirmishing(noser));
-		assertFalse(scn.IsCharSkirmishing(shelob));
-		assertTrue(scn.IsCharAssignedAgainst(slinker, shelob));
-		assertTrue(scn.IsCharSkirmishingAgainst(frodo, gollum));
+		assertTrue(scn.IsCharSkirmishingAgainst(slinker, runner));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItDoesNotExchangeIfNoSmeagolOnTable() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheNewSmeagolKeepsTheWoundsAndTheCardsTheOldOneBore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
+		var shire = scn.GetFreepsCard("shire");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
-		scn.MoveCardsToDiscard(slinker, noser);
-
-
-		scn.StartGame();
-
-		assertInDiscard(slinker, noser);
-		assertEquals(0, scn.GetThreats());
-
-		assertTrue(scn.FreepsPlayAvailable(two));
-
-		scn.FreepsPlayCard(two);
-
-		assertFalse(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
-	}
-
-	@Test
-	public void TwoMindsofItDoesNotExchangeIfNoSmeagolInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
-		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two, slinker);
-		scn.MoveCompanionsToTable(noser);
-
-		scn.StartGame();
-		
-		assertInPlay(noser);
-		assertInHand(slinker);
-		assertEquals(0, scn.GetThreats());
-
-		assertTrue(scn.FreepsPlayAvailable(two));
-
-		scn.FreepsPlayCard(two);
-
-		assertFalse(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
-	}
-
-	@Test
-	public void TwoMindsofItDoesNotExchangeIfOnlyDuplicateSmeagolInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
-		var noser2 = scn.GetFreepsCard("noser2");
-		scn.MoveCardsToHand(two);
-		scn.MoveCompanionsToTable(noser);
-		scn.MoveCardsToDiscard(noser2);
-
-		scn.StartGame();
-
-		assertInPlay(noser);
-		assertInDiscard(noser2);
-		assertEquals(0, scn.GetThreats());
-
-		assertTrue(scn.FreepsPlayAvailable(two));
-
-		scn.FreepsPlayCard(two);
-
-		assertFalse(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
-	}
-
-	@Test
-	public void TwoMindsofItPreservesWoundsAndModifiers() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
-		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
-		scn.MoveCompanionsToTable(noser);
+		var follow = scn.GetFreepsCard("follow");
+		var boat = scn.GetFreepsCard("boat");
+		var breath = scn.GetShadowCard("breath");
+		scn.MoveCompanionsToTable(shire);
+		scn.AttachCardsTo(shire, follow, boat, breath);
+		scn.AddWoundsToChar(shire, 2);
 		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two);
+		// The Smeagol restored here is the [shire] one.
+		scn.HinderCard(shire);
 
-		scn.AddWoundsToChar(noser, 2);
+		scn.StartGame();
 
+		assertTrue(scn.IsHindered(shire));
+		assertEquals(2, scn.GetWoundsOn(shire));
+		assertAttachedTo(follow, shire);
+		assertAttachedTo(boat, shire);
+		assertAttachedTo(breath, shire);
+
+		scn.FreepsPlayCard(two);
+		assertFalse(scn.IsHindered(shire));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		scn.FreepsChooseYes();
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, shire);
+		assertEquals(2, scn.GetWoundsOn(slinker));
+		// A condition and a possession of mine and a condition of the Shadow player's.
+		assertAttachedTo(follow, slinker);
+		assertAttachedTo(boat, slinker);
+		assertAttachedTo(breath, slinker);
+		assertInZone(Zone.ATTACHED, follow, boat, breath);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnEffectInForceOnTheOldSmeagolHoldsForTheNewOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var noser = scn.GetFreepsCard("noser");
+		var slinker = scn.GetFreepsCard("slinker");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		var shelob = scn.GetShadowCard("shelob");
 		var gollum = scn.GetShadowCard("gollum");
-		scn.MoveCardsToHand(shelob);
-		scn.MoveMinionsToTable(gollum);
+		scn.MoveCompanionsToTable(noser, aragorn);
+		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(gollum);
+		scn.MoveCardsToHand(shelob);
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.SHADOW);
 
+		// Her Ladyship, played with Gollum in play: the companion spotted cannot be assigned until the end of the turn.
 		scn.ShadowPlayCard(shelob);
 		scn.ShadowAcceptOptionalTrigger();
 		scn.ShadowChooseCard(noser);
 
 		scn.SkipToAssignments();
-
-		assertFalse(scn.FreepsCanAssign(noser)); //Her Ladyship's sting
-		scn.FreepsAssignToMinions(frodo, gollum);
+		assertFalse(scn.FreepsCanAssign(noser));
+		assertTrue(scn.FreepsCanAssign(aragorn));
+		scn.FreepsAssignToMinions(aragorn, gollum);
 		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(frodo);
-
-		assertEquals(2, scn.GetWoundsOn(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
-		assertEquals(0, scn.GetThreats());
-
-		assertTrue(scn.FreepsPlayAvailable(two));
+		scn.FreepsResolveSkirmish(aragorn);
 
 		scn.FreepsPlayCard(two);
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
 
-		assertInPlay(slinker);
-		assertInDiscard(noser);
-		assertEquals(2, scn.GetWoundsOn(slinker));
-
+		// Aragorn's 8 beats Gollum's 5, and Shelob, who is fierce, brings a second assignment phase.
 		scn.ShadowPass();
 		scn.FreepsPass();
-		scn.FreepsDeclineOptionalTrigger(); //the one ring
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-
-		assertFalse(scn.FreepsCanAssign(slinker)); //Her Ladyship's sting transferred to Slinker
+		assertFalse(scn.FreepsCanAssign(slinker));
+		assertTrue(scn.FreepsCanAssign(aragorn));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItExchangesARBSmeagolWhoIsNotRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnotherSmeagolIsOneOfAnyCultureInMyOwnDiscardPileAndNotACopyOfTheOneInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
 		var arb = scn.GetFreepsCard("arb");
+		var arb2 = scn.GetFreepsCard("arb2");
 		var slinker = scn.GetFreepsCard("slinker");
-		scn.MoveCardsToHand(two);
+		var shire = scn.GetFreepsCard("shire");
+		var poor = scn.GetFreepsCard("poor");
+		var helps = scn.GetFreepsCard("helps");
+		var noser = scn.GetFreepsCard("noser");
+		var myGollum = scn.GetFreepsCard("gollum");
+		var theirHurried = scn.GetShadowCard("hurried");
+		// The Smeagol who can bear the Ring is in play as an ordinary companion: Frodo is the Ring-bearer.
 		scn.MoveCompanionsToTable(arb);
-		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToDiscard(slinker, shire, arb2, myGollum, theirHurried);
+		scn.MoveCardsToHand(two, poor);
+		scn.MoveCardsToDeadPile(helps);
 
 		scn.StartGame();
 
-		assertFalse(scn.IsHindered(arb));
-		assertInPlay(arb);
-		assertInDiscard(slinker);
-		assertEquals(0, scn.GetThreats());
-
-		//Replacement involves some trickery with IDs to preserve identity, so we will double-check
-		int oldId = arb.getCardId();
-		int newId = slinker.getCardId();
-
-		assertTrue(scn.FreepsPlayAvailable(two));
+		assertInZone(Zone.DECK, noser);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetBurdens());
 
 		scn.FreepsPlayCard(two);
-		assertFalse(scn.IsHindered(arb));
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		scn.FreepsChooseYes();
+
 		assertEquals(1, scn.GetThreats());
+		// A [gollum] Smeagol and the [shire] one, both in my discard pile.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(slinker, shire));
+		// Not a second copy of the Smeagol in play, nor Gollum the minion, in my discard pile; nor a Smeagol in my
+		// hand, my draw deck or my dead pile, or in the other player's discard pile.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(arb2, myGollum, poor, noser, helps, theirHurried));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 
-		assertInPlay(slinker);
-		assertInDiscard(arb);
+		scn.FreepsChooseCardBPFromSelection(shire);
 
-		assertEquals(oldId, slinker.getCardId());
-		assertNotEquals(oldId, arb.getCardId());
-		assertNotEquals(newId, arb.getCardId());
+		assertInZone(Zone.FREE_CHARACTERS, shire);
+		assertInZone(Zone.DISCARD, arb);
+		assertInZone(Zone.DISCARD, slinker);
+		// The [shire] Smeagol costs 1 and adds a burden when played: he is not played. Only the event's 2 are in the pool.
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItDoesNotExchangeARBSmeagolWhoIsRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetARBScenario(); //Smeagol is the Ring-bearer
+	public void WithOnlyACopyOfTheSmeagolInPlayInTheDiscardPileNoReplacementIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
-		var slinker = scn.GetFreepsCard("slinker");
+		var noser = scn.GetFreepsCard("noser");
+		var noser2 = scn.GetFreepsCard("noser2");
+		scn.MoveCompanionsToTable(noser);
+		scn.MoveCardsToDiscard(noser2);
 		scn.MoveCardsToHand(two);
-		scn.MoveCardsToDiscard(slinker);
 
 		scn.StartGame();
 
-		assertInDiscard(slinker);
-		assertEquals(0, scn.GetThreats());
-
 		assertTrue(scn.FreepsPlayAvailable(two));
-
 		scn.FreepsPlayCard(two);
 
-		assertFalse(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertInZone(Zone.DISCARD, noser2);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TwoMindsofItPreservesAttachedCardsWhenExchanging() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithNoSmeagolInTheDiscardPileNoReplacementIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var two = scn.GetFreepsCard("two");
 		var noser = scn.GetFreepsCard("noser");
 		var slinker = scn.GetFreepsCard("slinker");
-		var follow = scn.GetFreepsCard("follow");
-		scn.MoveCardsToHand(two);
+		var myGollum = scn.GetFreepsCard("gollum");
 		scn.MoveCompanionsToTable(noser);
-		scn.MoveCardsToDiscard(slinker);
-
-		var breath = scn.GetShadowCard("breath");
-
-		scn.AttachCardsTo(noser, follow, breath);
+		// A Smeagol in hand, and in the discard pile only Gollum the minion.
+		scn.MoveCardsToHand(two, slinker);
+		scn.MoveCardsToDiscard(myGollum);
 
 		scn.StartGame();
 
-		assertFalse(scn.IsHindered(noser));
-		assertInPlay(noser);
-		assertInDiscard(slinker);
+		assertTrue(scn.FreepsPlayAvailable(two));
+		scn.FreepsPlayCard(two);
+
+		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertInZone(Zone.HAND, slinker);
+		assertInZone(Zone.DISCARD, myGollum);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-		assertAttachedTo(follow, noser);
-		assertAttachedTo(breath, noser);
+	@Test
+	@Ignore("Q-0066: with no other Smeagol in the discard pile the offer to add a threat is withheld; it has a cost that can be paid, and replacing is not playing")
+	public void WithNoSmeagolInTheDiscardPileTheOfferIsStillMadeAndTheThreatBuysNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
+		var two = scn.GetFreepsCard("two");
+		var noser = scn.GetFreepsCard("noser");
+		var slinker = scn.GetFreepsCard("slinker");
+		var myGollum = scn.GetFreepsCard("gollum");
+		scn.MoveCompanionsToTable(noser);
+		scn.MoveCardsToHand(two, slinker);
+		scn.MoveCardsToDiscard(myGollum);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetThreats());
+		scn.FreepsPlayCard(two);
+
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		scn.FreepsChooseYes();
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertInZone(Zone.HAND, slinker);
+		assertInZone(Zone.DISCARD, myGollum);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void SmeagolTheRingBearerIsRestoredAndCannotBeReplaced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSmeagolRingBearerScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var slinker = scn.GetFreepsCard("slinker");
+		var smeagol = scn.GetRingBearer();
+		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two);
+		scn.HinderCard(smeagol);
+
+		scn.StartGame();
+
+		assertTrue(scn.IsHindered(smeagol));
+		// One companion and no threat: a threat could be added.
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetThreatLimit());
 		assertTrue(scn.FreepsPlayAvailable(two));
 
 		scn.FreepsPlayCard(two);
-		assertFalse(scn.IsHindered(noser));
 
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to add a threat to replace Smeagol with another in your discard pile?"));
+		assertFalse(scn.IsHindered(smeagol));
+		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, smeagol);
+		assertInZone(Zone.DISCARD, slinker);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoSmeagolInPlayTheEventIsStillPlayedAndOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var noser = scn.GetFreepsCard("noser");
+		var slinker = scn.GetFreepsCard("slinker");
+		scn.MoveCardsToDiscard(slinker, noser);
+		scn.MoveCardsToHand(two);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(two));
+
+		scn.FreepsPlayCard(two);
+
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, two);
+		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.DISCARD, slinker, noser);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoRoomForAThreatNoReplacementIsOfferedAndWithRoomForOneItIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var two2 = scn.GetFreepsCard("two2");
+		var noser = scn.GetFreepsCard("noser");
+		var slinker = scn.GetFreepsCard("slinker");
+		scn.MoveCompanionsToTable(noser);
+		scn.MoveCardsToDiscard(slinker);
+		scn.MoveCardsToHand(two, two2);
+
+		scn.StartGame();
+		// Frodo and Smeagol: two companions, so two threats are as many as there can be.
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreatLimit());
+
+		scn.FreepsPlayCard(two);
+
+		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, noser);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.RemoveThreats(1);
+		scn.FreepsPlayCard(two2);
+
+		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetThreats());
 
-		assertInPlay(slinker);
-		assertInDiscard(noser);
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.FREE_CHARACTERS, slinker);
+		assertInZone(Zone.DISCARD, noser);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-		assertAttachedTo(follow, slinker);
-		assertAttachedTo(breath, slinker);
+	@Test
+	public void NotPlayableInTheArcheryAssignmentOrRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var two = scn.GetFreepsCard("two");
+		var noser = scn.GetFreepsCard("noser");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(noser, aragorn);
+		scn.MoveCardsToHand(two);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.FreepsPlayAvailable(two));
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(two));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(two));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignAndResolve(aragorn, troop);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(two));
+
+		// Aragorn's 8 loses to the Troop's 13 and the turn goes on to the regroup phase.
+		scn.PassCurrentPhaseActions();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(two));
 	}
 }
