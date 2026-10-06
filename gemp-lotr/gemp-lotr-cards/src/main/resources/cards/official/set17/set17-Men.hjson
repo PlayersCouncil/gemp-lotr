@@ -43,6 +43,7 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: {
 					type: canSpotThreats
 					amount: 3

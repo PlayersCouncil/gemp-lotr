@@ -261,6 +261,7 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative
@@ -416,6 +417,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative
@@ -537,6 +539,7 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative

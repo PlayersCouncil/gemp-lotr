@@ -668,12 +668,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDiscardPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDiscardPhaseActions);
     }
 
     @Override
     public List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDrawDeckPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDrawDeckPhaseActions);
     }
 
 
@@ -1474,6 +1474,26 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             if (inPlayPhaseAction.isValid(actionContext)) {
                 ActivateCardAction action = new ActivateCardAction(self, playerId);
                 inPlayPhaseAction.createAction(action, actionContext);
+                result.add(action);
+            }
+        }
+        return result;
+    }
+
+    // The actions a card offers from the discard pile or draw deck.  Each is a special ability unless its definition
+    // says it is only a permission to play the card (see ActionSource.isSpecialAbility).
+    private List<CostToEffectAction> getActivatedOrPlayPermissionActions(String playerId, LotroGame game, PhysicalCard self, List<ActionSource> sources) {
+        if (sources == null)
+            return null;
+
+        List<CostToEffectAction> result = new LinkedList<>();
+        for (ActionSource source : sources) {
+            DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
+            if (source.isValid(actionContext)) {
+                CostToEffectAction action = source.isSpecialAbility()
+                        ? new ActivateCardAction(self, playerId)
+                        : new PlayPermissionAction(self, playerId);
+                source.createAction(action, actionContext);
                 result.add(action);
             }
         }

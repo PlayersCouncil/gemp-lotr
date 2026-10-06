@@ -398,6 +398,7 @@
 			{
 				type: ActivatedInDrawDeck
 				phase: Shadow
+				specialAbility: false
 				requires: [
 					{
 						type: Playable

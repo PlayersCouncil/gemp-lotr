@@ -6,6 +6,16 @@ public interface ActionSource {
     PlayerSource getPlayer();
     boolean requiresRanger();
 
+    /**
+     * A special ability is text with a bold phase word and a colon ("Shadow: ...", "Response: ..."), wherever the
+     * card is when it is used.  A card's own permission to be played from somewhere else, with no phase word ("you
+     * may play this minion from your discard pile"), is offered to the player in the same way but is not one.
+     * @return False if this action is such a permission to play the card; true otherwise.
+     */
+    default boolean isSpecialAbility() {
+        return true;
+    }
+
     boolean isValid(ActionContext actionContext);
 
     void createAction(CostToEffectAction action, ActionContext actionContext);

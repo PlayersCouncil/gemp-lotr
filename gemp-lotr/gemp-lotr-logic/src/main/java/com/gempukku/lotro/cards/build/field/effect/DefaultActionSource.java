@@ -19,6 +19,7 @@ public class DefaultActionSource implements ActionSource {
     private PlayerSource playingPlayer;
     private boolean requiresRanger;
     private String text;
+    private boolean specialAbility = true;
 
     public void setPlayingPlayer(PlayerSource playingPlayer) {
         this.playingPlayer = playingPlayer;
@@ -30,6 +31,10 @@ public class DefaultActionSource implements ActionSource {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setSpecialAbility(boolean specialAbility) {
+        this.specialAbility = specialAbility;
     }
 
     public void addPlayRequirement(Requirement requirement) {
@@ -52,6 +57,11 @@ public class DefaultActionSource implements ActionSource {
     @Override
     public boolean requiresRanger() {
         return requiresRanger;
+    }
+
+    @Override
+    public boolean isSpecialAbility() {
+        return specialAbility;
     }
 
     @Override

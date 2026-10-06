@@ -18,12 +18,17 @@ import org.json.simple.JSONObject;
 public class ActivatedInDiscardEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "phase", "requires", "cost", "effect", "limitPerPhase", "limitPerTurn", "text");
+        FieldUtils.validateAllowedFields(value, "phase", "requires", "cost", "effect", "limitPerPhase", "limitPerTurn", "text", "specialAbility");
 
         final String text = FieldUtils.getString(value.get("text"), "text");
         final String[] phaseArray = FieldUtils.getStringArray(value.get("phase"), "phase");
         final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
         final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
+        // "specialAbility: false" marks text that lets the card be played from here and has no phase word in front
+        // of it ("If you have initiative during the Shadow phase, you may play this minion from your discard
+        // pile").  That is a way of playing the card and not a special ability: nothing that answers, bans or
+        // counts special abilities sees it, and whatever bans playing the card does.
+        final boolean specialAbility = FieldUtils.getBoolean(value.get("specialAbility"), "specialAbility", true);
 
         if (phaseArray.length == 0)
             throw new InvalidCardDefinitionException("Unable to find phase for an activated effect");
@@ -33,6 +38,7 @@ public class ActivatedInDiscardEffectProcessor implements EffectProcessor {
 
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
+            actionSource.setSpecialAbility(specialAbility);
             if (limitPerPhase > 0) {
                 actionSource.addPlayRequirement(
                         (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limitPerPhase));

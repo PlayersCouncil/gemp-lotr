@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -459,7 +458,6 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	@Ignore("F-0055: Gollum, Plotting Deceiver's \"you may play this minion from your discard pile\" is answered as if it were a minion's special ability")
 	public void IsNotOfferedWhenAMinionIsPlayedFromTheDiscardPileByTextThatIsNoSpecialAbility() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
