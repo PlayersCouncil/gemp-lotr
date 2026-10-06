@@ -861,10 +861,8 @@
 					type: CanSpot 
 					filter: valiant, companion, not(AssignedToSkirmish(any))
 				}
-				{
-					type: CanSpot 
-					filter: unbound, companion, InSkirmish
-				}
+				# No requirement that someone be there to replace: that is the effect, and an event is offered
+				# whenever its requirements and costs are met (Q-0034).
 			]
 			cost: {
 				type: Spot
