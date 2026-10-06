@@ -1288,6 +1288,20 @@
 					type: Played
 					filter: self
 				}
+				// The stacking has no cost, so it is not offered when there is nothing it could stack.
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: HasCardInDiscard
+							filter: culture(isengard),mount
+						}
+						{
+							type: HasCardInDrawDeck
+							filter: culture(isengard),mount
+						}
+					]
+				}
 				effect: [
 					{
 						type: Choice
@@ -1313,12 +1327,28 @@
 						]
 					}
 					{
+						// The second mount: only if the first was stacked, and only if there is another to stack.
 						type: If
-						check: {
-							type: HasCardStacked
-							filter: any
-							on: self
-						}
+						check: [
+							{
+								type: HasCardStacked
+								filter: any
+								on: self
+							}
+							{
+								type: Or
+								requires: [
+									{
+										type: HasCardInDiscard
+										filter: culture(isengard),mount
+									}
+									{
+										type: HasCardInDrawDeck
+										filter: culture(isengard),mount
+									}
+								]
+							}
+						]
 						true: {
 							type: Choice
 							texts: [

@@ -12,6 +12,8 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolv
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.StackCardFromDiscardEffect;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
+import com.gempukku.lotro.logic.modifiers.evaluator.RangeEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -31,6 +33,23 @@ public class StackCardsFromDiscard implements EffectAppenderProducer {
         if (where == null)
             throw new InvalidCardDefinitionException("Where needs to be defined for 'stackCardsFromDiscard'");
 
+        // A count that may be none ("0-1", "up to 2") leaves the choice itself always answerable, but the effect
+        // cannot be carried out with nothing in the discard pile to stack: a card that stacks "from your draw deck
+        // or discard pile" does not offer a discard pile that holds nothing it could stack.  So whether the effect
+        // can be carried out is judged by there being at least one card to choose, where the count allows one.
+        // This appender is only ever asked whether it could be carried out; it is never added to the result.
+        final boolean choosesFromDiscard = select.startsWith("choose(") && !select.startsWith("choose(memory(");
+        final EffectAppender existenceCheck = !choosesFromDiscard ? null :
+                CardResolver.resolveCardsInDiscard(select,
+                        actionContext -> {
+                            final Evaluator count = valueSource.getEvaluator(actionContext);
+                            return new RangeEvaluator(
+                                    (game, cardAffected) -> Math.max(count.getMinimum(game, cardAffected),
+                                            Math.min(1, count.getMaximum(game, cardAffected))),
+                                    count::getMaximum);
+                        },
+                        "_temp2", "you", "Choose cards to stack", environment);
+
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
@@ -39,6 +58,11 @@ public class StackCardsFromDiscard implements EffectAppenderProducer {
                 CardResolver.resolveCardsInDiscard(select, valueSource, "_temp2", "you", "Choose cards to stack", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
+                    @Override
+                    public boolean isPlayableInFull(ActionContext actionContext) {
+                        return existenceCheck == null || existenceCheck.isPlayableInFull(actionContext);
+                    }
+
                     @Override
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final PhysicalCard card = actionContext.getCardFromMemory("_temp1");

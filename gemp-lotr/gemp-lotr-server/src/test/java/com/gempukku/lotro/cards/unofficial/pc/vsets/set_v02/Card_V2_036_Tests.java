@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -305,7 +304,6 @@ public class Card_V2_036_Tests
 	}
 
 	@Test
-	@Ignore("F-0068: once the draw deck is being looked through a mount must be taken (the choice has a minimum of 1)")
 	public void LookingThroughTheDrawDeckDoesNotForceAMountToBeStacked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -349,7 +347,6 @@ public class Card_V2_036_Tests
 	}
 
 	@Test
-	@Ignore("F-0069: the stacking is offered with no [isengard] mount in the draw deck or the discard pile, and accepting does nothing")
 	public void IsNotOfferedWithNoIsengardMountInTheDrawDeckOrTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -378,7 +375,6 @@ public class Card_V2_036_Tests
 	}
 
 	@Test
-	@Ignore("F-0070: with [isengard] mounts in the draw deck only, the discard pile is offered as a choice, and choosing it ends the stacking with nothing stacked")
 	public void WithMountsInTheDrawDeckOnlyTheDeckIsLookedThroughWithNoPileToChoose() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
