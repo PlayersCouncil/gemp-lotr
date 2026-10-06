@@ -89,6 +89,18 @@ public class PlayUtils {
         }
     }
 
+    /**
+     * As below, for a card that would be played after the given number of threats had been added: they take up
+     * room under the threat limit, so a card that must itself add a threat to be played may have none left.
+     */
+    public static boolean checkPlayRequirements(LotroGame game, PhysicalCard card, Filterable additionalAttachmentFilter, int withTwilightRemoved, int withThreatsAdded, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, boolean ignoreResponseEvents) {
+        if (withThreatsAdded <= 0)
+            return checkPlayRequirements(game, card, additionalAttachmentFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+
+        return game.getGameState().withThreatsToCome(withThreatsAdded,
+                () -> checkPlayRequirements(game, card, additionalAttachmentFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents));
+    }
+
     public static boolean checkPlayRequirements(LotroGame game, PhysicalCard card, Filterable additionalAttachmentFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, boolean ignoreResponseEvents) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
 

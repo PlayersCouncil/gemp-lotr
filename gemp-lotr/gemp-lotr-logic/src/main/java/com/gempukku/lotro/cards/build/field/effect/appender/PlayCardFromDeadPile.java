@@ -46,7 +46,11 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
 
-                            return Filters.playable(costModifier, 0, false, true, true);
+                            // This filter is the one asked BEFORE the action is paid for: the threats the action
+                            // will add as its own cost are counted as added, so that a card which must itself add a
+                            // threat to be played is not taken for playable when they leave it no room.  The filter
+                            // above is the one used when the effect is carried out; by then they are on the table.
+                            return Filters.playable(costModifier, 0, actionContext.getUnpaidThreatCost(), false, true, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "Choose card to play", environment));
         result.addEffectAppender(

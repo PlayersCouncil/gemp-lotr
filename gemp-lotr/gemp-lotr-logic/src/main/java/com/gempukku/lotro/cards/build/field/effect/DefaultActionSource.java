@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.ActionSource;
 import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.Requirement;
+import com.gempukku.lotro.cards.build.UnpaidCostsContext;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
@@ -69,11 +70,23 @@ public class DefaultActionSource implements ActionSource {
         if (playingPlayer != null && !playingPlayer.getPlayer(actionContext).equals(actionContext.getPerformingPlayer()))
             return false;
 
+        // The action is being asked whether it can be used, and none of its costs has been paid: what they
+        // will have done to the board by the time its effects are carried out is there for a requirement to ask.
+        final ActionContext checkContext = costs.isEmpty() ? actionContext
+                : new UnpaidCostsContext(actionContext, this::getThreatsAddedByCosts);
+
         for (Requirement requirement : requirements) {
-            if (!requirement.accepts(actionContext))
+            if (!requirement.accepts(checkContext))
                 return false;
         }
         return true;
+    }
+
+    private int getThreatsAddedByCosts(ActionContext actionContext) {
+        int result = 0;
+        for (EffectAppender cost : costs)
+            result += cost.getThreatsAddedAsCost(actionContext);
+        return result;
     }
 
     @Override

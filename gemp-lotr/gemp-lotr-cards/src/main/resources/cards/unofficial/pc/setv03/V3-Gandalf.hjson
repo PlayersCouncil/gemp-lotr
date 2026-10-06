@@ -302,6 +302,13 @@
 		effects: [
 			{
 				type: event
+				// A card played from hand by an effect has to be in hand, and playable, before the event
+				// can be played.  Only the first of the three plays is confirmed.  The title is ruled out
+				// ahead of Playable: asked of this card itself, Playable would ask this requirement again.
+				requires: {
+					type: HasCardInHand
+					filter: side(Free Peoples), event, not(title(Show Them the Meaning of Haste)), Playable
+				}
 				cost: {
 					type: Exert
 					select: choose(title(Gandalf))
@@ -318,7 +325,7 @@
 				effect: [
 					{
 						type: RevealCardsFromHand
-						select: choose(side(Free Peoples), event, Playable, not(self), not(title(Show Them the Meaning of Haste)))
+						select: choose(side(Free Peoples), event, not(self), not(title(Show Them the Meaning of Haste)), Playable)
 						memorize: revealedEvent
 					}
 					{

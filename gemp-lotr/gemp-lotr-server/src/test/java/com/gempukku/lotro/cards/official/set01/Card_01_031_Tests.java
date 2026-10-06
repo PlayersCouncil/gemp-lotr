@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_031_Tests
@@ -219,6 +220,28 @@ public class Card_01_031_Tests
 		scn.FreepsTransferCard(asfaloth);
 		scn.FreepsChooseCard(legolas);
 		assertEquals(2, scn.GetTwilight());
+	}
+
+	@Test
+	public void TransferredToArwenItCostsItsPrintedTwoAndNotTwoLess() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCompanionsToTable(arwen, legolas);
+		scn.AttachCardsTo(legolas, asfaloth);
+
+		scn.StartGame();
+
+		// "When played on Arwen, Asfaloth's twilight cost is -2": a transfer pays the twilight cost again and is
+		// not a play (CR 4.2 "transfer"), so moving it to Arwen costs the printed 2.  She is the only other Elf.
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsTransferAvailable(asfaloth));
+		scn.FreepsTransferCard(asfaloth);
+		assertAttachedTo(asfaloth, arwen);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

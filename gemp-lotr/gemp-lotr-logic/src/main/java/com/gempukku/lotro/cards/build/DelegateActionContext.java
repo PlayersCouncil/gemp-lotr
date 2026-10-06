@@ -93,4 +93,9 @@ public class DelegateActionContext implements ActionContext {
     public int getUnpaidTwilightCost() {
         return delegate.getUnpaidTwilightCost();
     }
+
+    @Override
+    public int getUnpaidThreatCost() {
+        return delegate.getUnpaidThreatCost();
+    }
 }

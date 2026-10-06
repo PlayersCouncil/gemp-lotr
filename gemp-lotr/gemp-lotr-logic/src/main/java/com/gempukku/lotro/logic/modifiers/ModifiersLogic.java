@@ -526,6 +526,21 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard) {
+        LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCostToTransfer");
+        try {
+            int result = physicalCard.getBlueprint().getTwilightCost();
+            // The card's own text about its cost.  It is asked with no target: a text that prices the card by what
+            // it is played on answers for a play, and a transfer is not one.
+            result += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, null);
+            // No TWILIGHT_COST_MODIFIER of another card: those have their effect only on a card coming into play.
+            return Math.max(0, result);
+        } finally {
+            LoggingThreadLocal.logMethodEnd();
+        }
+    }
+
+    @Override
     public int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
         LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCost");
         try {

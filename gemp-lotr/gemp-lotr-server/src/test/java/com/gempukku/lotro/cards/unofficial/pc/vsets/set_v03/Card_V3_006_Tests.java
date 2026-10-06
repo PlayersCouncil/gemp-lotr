@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -154,11 +153,13 @@ public class Card_V3_006_Tests
 		var scn = GetScenario();
 
 		var haste = scn.GetFreepsCard("haste");
+		var haste2 = scn.GetFreepsCard("haste2");
 		var wielder = scn.GetFreepsCard("wielder");
+		var valor = scn.GetFreepsCard("valor");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, scn.GetFreepsCard("swiftest"));
-		scn.MoveCardsToHand(haste, wielder);
+		scn.MoveCardsToHand(haste, haste2, wielder, valor);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(scn.GetShadowCard("runner"));
@@ -168,11 +169,16 @@ public class Card_V3_006_Tests
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetKeywordCount(gandalf, Keyword.DEFENDER));
 		assertTrue(scn.FreepsPlayAvailable(haste));
+		assertTrue(scn.FreepsPlayAvailable(haste2));
 
 		scn.FreepsPlayCard(haste);
-		// One exertion, and no question put to the player about it: Wielder of the Flame, the only other event,
-		// is already being shown to the other player.
+		// One exertion, and no question put to the player about it: the next thing asked is which event.
 		assertEquals(1, scn.GetWoundsOn(gandalf));
+		// The second copy could itself be played (Gandalf can exert again), and is not another event to
+		// reveal: a card of this title is never offered.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(wielder, valor));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(haste2));
+		scn.FreepsChooseCard(wielder);
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(wielder, false));
 		scn.ShadowDismissRevealedCards();
@@ -192,6 +198,7 @@ public class Card_V3_006_Tests
 		assertEquals(twilight + 3 + 3, scn.GetTwilight());
 		assertInZone(Zone.REMOVED, wielder);
 		assertInZone(Zone.DISCARD, haste);
+		assertInZone(Zone.HAND, haste2, valor);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
@@ -403,7 +410,6 @@ public class Card_V3_006_Tests
 	}
 
 	@Test
-	@Ignore("F-0098: with no other Free Peoples event in hand that can be played, the event is still offered; played, it exerts Gandalf and reveals nothing")
 	public void CannotBePlayedWithNoOtherFreePeoplesEventInHandThatCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -429,37 +435,5 @@ public class Card_V3_006_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(swordarm));
 		assertTrue(scn.FreepsPlayAvailable(haste));
-	}
-
-	@Test
-	@Ignore("Q-0063: is a second copy of this event \"another Free Peoples event\"? The game never offers one to be revealed")
-	public void ASecondCopyInHandIsAnotherFreePeoplesEventAndMayBeRevealed() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var haste = scn.GetFreepsCard("haste");
-		var haste2 = scn.GetFreepsCard("haste2");
-		var valor = scn.GetFreepsCard("valor");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(gandalf, aragorn);
-		scn.AttachCardsTo(gandalf, scn.GetFreepsCard("swiftest"));
-		scn.MoveCardsToHand(haste, haste2, valor, scn.GetFreepsCard("wielder"));
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsPlayAvailable(haste2));
-
-		scn.FreepsPlayCard(haste);
-		// With Shadowfax spotted Gandalf has exerted once and can exert again, so the second copy can be played.
-		assertEquals(1, scn.GetWoundsOn(gandalf));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(haste2, valor));
-
-		scn.FreepsChooseCard(valor);
-		scn.ShadowDismissRevealedCards();
-		assertEquals(3, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
-		assertInZone(Zone.HAND, haste2);
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

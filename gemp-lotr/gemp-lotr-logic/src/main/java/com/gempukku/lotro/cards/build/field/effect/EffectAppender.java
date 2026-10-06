@@ -13,6 +13,14 @@ public interface EffectAppender extends PreEvaluateAble {
         return false;
     }
 
+    /**
+     * The threats this appender will add when it is carried out as a cost, as far as can be told beforehand;
+     * zero for everything that adds none, and for anything that only adds them under a condition or by choice.
+     */
+    default int getThreatsAddedAsCost(ActionContext actionContext) {
+        return 0;
+    }
+
     default boolean canPreEvaluate() {
         return true;
     }

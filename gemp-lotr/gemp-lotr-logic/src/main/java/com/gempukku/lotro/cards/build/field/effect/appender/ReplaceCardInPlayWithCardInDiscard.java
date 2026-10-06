@@ -16,6 +16,8 @@ import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
+import java.util.Collections;
+
 public class ReplaceCardInPlayWithCardInDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -41,12 +43,20 @@ public class ReplaceCardInPlayWithCardInDiscard implements EffectAppenderProduce
                         return new AbstractEffect() {
                             @Override
                             protected FullEffectResult playEffectReturningResult(LotroGame game) {
+                                // Nothing chosen to replace, nothing chosen to replace it with, or either of them
+                                // gone from where it was chosen: the effect does nothing.
+                                if (!isPlayableInFull(game)) {
+                                    return new FullEffectResult(false);
+                                }
+
                                 var gameState = game.getGameState();
                                 var oldCharacter = playMemory.get();
                                 var newCharacter = discardMemory.get();
                                 var oldZone = oldCharacter.getZone();
 
                                 gameState.replaceCharacterOnTable(game, oldCharacter, newCharacter);
+                                // The old card waits in the void; it leaves there for the discard pile.
+                                gameState.removeCardsFromZone(performingPlayer, Collections.singleton(oldCharacter));
                                 gameState.addCardToZone(game, oldCharacter, Zone.DISCARD);
                                 gameState.sendMessage(performingPlayer + " replaces " + GameUtils.getCardLink(oldCharacter) + " with " + GameUtils.getCardLink(newCharacter));
 
@@ -61,7 +71,8 @@ public class ReplaceCardInPlayWithCardInDiscard implements EffectAppenderProduce
                                     return false;
                                 }
 
-                                return playMemory.get().getZone().isInPlay();
+                                var oldZone = playMemory.get().getZone();
+                                return oldZone != null && oldZone.isInPlay() && discardMemory.get().getZone() == Zone.DISCARD;
                             }
                         };
                     }

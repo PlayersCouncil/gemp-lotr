@@ -37,6 +37,14 @@ public class MultiEffectAppender implements EffectAppender {
     }
 
     @Override
+    public int getThreatsAddedAsCost(ActionContext actionContext) {
+        int result = 0;
+        for (EffectAppender effectAppender : effectAppenders)
+            result += effectAppender.getThreatsAddedAsCost(actionContext);
+        return result;
+    }
+
+    @Override
     public boolean isPlayabilityCheckedForEffect() {
         return playabilityCheckedForEffect;
     }

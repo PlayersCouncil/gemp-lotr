@@ -470,7 +470,7 @@ public class Card_V3_014_Tests
 	}
 
 	@Test
-	public void PaidForByHinderingTheVeryMinionInTheSkirmishItIsNotTransferred() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PaidForByHinderingTheVeryMinionInTheSkirmishItStillGoesToTheCompanionWhoWasSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var strands = scn.GetShadowCard("strands");
@@ -488,19 +488,60 @@ public class Card_V3_014_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
+		assertTrue(scn.IsCharSkirmishing(aragorn));
+		assertEquals(8, scn.GetStrength(aragorn));
 		assertTrue(scn.ShadowActionAvailable(strands));
 		scn.ShadowUseCardAction(strands);
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, strands));
 		scn.ShadowChooseCard(gollum);
 
-		// Hindered, Gollum leaves the skirmish, which ends: Aragorn is no longer a companion skirmishing a
-		// [gollum] minion, and a card is transferred only to a character it may then be transferred to.
+		// Aragorn was spotted before Gollum was hindered, and is still "that companion".  Hindered, Gollum
+		// leaves the skirmish, which is over; the Strands go to Aragorn all the same.
 		assertTrue(scn.IsHindered(gollum));
 		assertFalse(scn.IsCharSkirmishing(aragorn));
-		assertInZone(Zone.SUPPORT, strands);
-		assertNotAttachedTo(strands, aragorn);
-		assertEquals(8, scn.GetStrength(aragorn));
+		assertAttachedTo(strands, aragorn);
+		// 8 - 1 printed - 1 for his skirmish, which has ended with the Strands on him
+		assertEquals(6, scn.GetStrength(aragorn));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void PaidForByHinderingTheVeryMinionInTheSkirmishNoSecondCopyGoesToACompanionWhoBearsOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var strands = scn.GetShadowCard("strands");
+		var strands2 = scn.GetShadowCard("strands2");
+		var gollum = scn.GetShadowCard("gollum");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, strands);
+		scn.MoveCardsToSupportArea(strands2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(aragorn, gollum);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// 8 - 1 printed
+		assertEquals(7, scn.GetStrength(aragorn));
+		assertTrue(scn.ShadowActionAvailable(strands2));
+		scn.ShadowUseCardAction(strands2);
+		scn.ShadowChooseCard(gollum);
+
+		// The companion who was spotted is still the one it would go to, and the limit is still his: he
+		// bears a copy and was fighting Gollum, so the cost is paid and the second copy stays where it was.
+		assertTrue(scn.IsHindered(gollum));
+		assertFalse(scn.IsCharSkirmishing(aragorn));
+		assertInZone(Zone.SUPPORT, strands2);
+		assertNotAttachedTo(strands2, aragorn);
+		assertAttachedTo(strands, aragorn);
+		// 8 - 1 printed - 1 for the skirmish that has ended: one copy's worth
+		assertEquals(6, scn.GetStrength(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

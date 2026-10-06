@@ -62,9 +62,9 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, actionContext.getUnpaidThreatCost(), ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
                             }
-                            return Filters.playable(maxDiscountModifier, removedTwilight, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(maxDiscountModifier, removedTwilight, actionContext.getUnpaidThreatCost(), ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(

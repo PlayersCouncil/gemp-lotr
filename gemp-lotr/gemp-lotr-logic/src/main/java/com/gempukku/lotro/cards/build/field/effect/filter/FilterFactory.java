@@ -165,7 +165,7 @@ public class FilterFactory {
         simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
         simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
         simpleFilters.put("playable", (actionContext) -> Filters.playable(0));
-        simpleFilters.put("playablefromdeadpile", (actionContext) -> Filters.playable(0, 0, false, true, false));
+        simpleFilters.put("playablefromdeadpile", (actionContext) -> Filters.playable(0, 0, actionContext.getUnpaidThreatCost(), false, true, false));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",
@@ -732,6 +732,26 @@ public class FilterFactory {
                     }
                     throw new InvalidCardDefinitionException("Unknown race definition in filter: " + parameter
                             + ".  Do not use race() for races; instead just list the race by itself.");
+                });
+        // A card that ReplaceCardInPlayWithCardInDiscard can replace: the performing player's discard pile holds a
+        // card that matches the given filter and has this card's title and another subtitle.
+        parameterFilters.put("replaceablefromdiscard",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable replacementFilter = filterableSource.getFilterable(actionContext);
+                        final String playerId = actionContext.getPerformingPlayer();
+                        return (Filter) (game, physicalCard) -> {
+                            var blueprint = physicalCard.getBlueprint();
+                            for (PhysicalCard inDiscard : Filters.filter(game, game.getGameState().getDiscard(playerId), replacementFilter)) {
+                                var other = inDiscard.getBlueprint();
+                                if (Objects.equals(other.getSanitizedTitle(), blueprint.getSanitizedTitle())
+                                        && !Objects.equals(other.getSanitizedSubtitle(), blueprint.getSanitizedSubtitle()))
+                                    return true;
+                            }
+                            return false;
+                        };
+                    };
                 });
         parameterFilters.put("regionnumber",
                 (parameter, environment) -> {

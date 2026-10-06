@@ -476,13 +476,21 @@ public class Filters {
     }
 
     public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
+        return playable(twilightModifier, withTwilightRemoved, 0, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+    }
+
+    /**
+     * @param withTwilightRemoved twilight that will have left the pool before the card is played
+     * @param withThreatsAdded threats that will have been added before the card is played
+     */
+    public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final int withThreatsAdded, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
         return (game, physicalCard) -> {
             Side expectedSide = (physicalCard.getOwner().equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
             final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
             if (blueprint.getSide() != expectedSide)
                 return false;
 
-            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, withThreatsAdded, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
         };
     }
 

@@ -5,7 +5,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,6 +38,8 @@ public class Card_V3_015_Tests
 					put("letdeal", "7_63");         // Let Her Deal With Them: [gollum] condition borne by a minion, who is damage +1
 					put("runner", "1_178");         // Goblin Runner: [moria], strength 5, vitality 1
 					put("runner2", "1_178");
+					put("lemenya", "1_232");        // Ulaire Lemenya, Lieutenant of Morgul: a [wraith] Nazgul; weakens only bearers of [wraith] conditions
+					put("hunter", "6_86");          // Ulaire Lemenya, Winged Hunter: a Lemenya of another subtitle, only ever in a discard pile
 
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used here
 					put("glorfindel", "9_16");      // Glorfindel, Revealed in Wrath: strength 9, vitality 3; a skirmish ability never used here
@@ -572,67 +574,117 @@ public class Card_V3_015_Tests
 	}
 
 	@Test
-	@Ignore("Q-0066: with a [gollum] minion to spot and a threat to remove, is the replacement offered when no minion in the discard pile could replace it? The ruling on Q-0034 says so; the game and the old test withhold it")
-	public void WithAThreatToRemoveTheReplacementIsOfferedThoughNothingInTheDiscardPileCouldReplaceTheMinion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AGollumMinionThatNothingInMyDiscardPileCouldReplaceIsNotOfferedToBeSpottedAndOnesThatCouldBeAre() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
 		var gollum = scn.GetShadowCard("gollum");
+		var gollumcopy = scn.GetShadowCard("gollumcopy");
+		var shelob = scn.GetShadowCard("shelob");
 		var ladyship = scn.GetShadowCard("ladyship");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var hunter = scn.GetShadowCard("hunter");
 
 		scn.MoveCardsToHand(twofaced);
-		// A Shelob, and no Gollum.
-		scn.MoveCardsToDiscard(ladyship);
+		// A Shelob of another subtitle for the Shelob in play, and a Lemenya of another subtitle for the
+		// Lemenya in play.  For Gollum there is only a second copy of himself, which is not another Gollum.
+		scn.MoveCardsToDiscard(ladyship, hunter, gollumcopy);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(gollum);
+		scn.MoveMinionsToTable(gollum, shelob, lemenya);
+		// Every [gollum] minion is a Gollum or a Shelob.  The Nazgul is made a [gollum] minion so that two
+		// minions can be replaced and the Shadow player is asked which, beside one who cannot be.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, lemenya, null, Culture.GOLLUM));
+		scn.AddWoundsToChar(shelob, 1);
 		scn.AddThreats(1);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(twofaced);
-		// An optional action with a cost is offered whenever the cost can be paid.
 		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
 		scn.ShadowChooseYes();
-
 		assertEquals(0, scn.GetThreats());
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
-		assertInZone(Zone.DISCARD, ladyship);
+
+		// Replacing from the discard pile is treated as playing from it: a minion that nothing there could
+		// replace is not offered to be spotted.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shelob, lemenya));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gollum));
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(shelob);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, ladyship, gollum, lemenya);
+		assertInZone(Zone.DISCARD, shelob, hunter, gollumcopy);
+		assertEquals(1, scn.GetWoundsOn(ladyship));
 		assertInZone(Zone.DISCARD, twofaced);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	@Ignore("F-0100: spotting a [gollum] minion that nothing in the discard pile can replace, while another [gollum] minion has a replacement there, throws NoSuchElementException and the game stops")
-	public void SpottingAGollumMinionThatNothingCanReplaceCostsTheThreatAndReplacesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheCardTheOldMinionBoreGivesTheNewMinionItsBonusOnce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
 		var gollum = scn.GetShadowCard("gollum");
-		var shelob = scn.GetShadowCard("shelob");
-		var ladyship = scn.GetShadowCard("ladyship");
+		var vile = scn.GetShadowCard("vile");
+		var letdeal = scn.GetShadowCard("letdeal");
 
 		scn.MoveCardsToHand(twofaced);
-		// A Shelob for the Shelob in play, and nobody for Gollum.
-		scn.MoveCardsToDiscard(ladyship);
+		scn.MoveCardsToDiscard(vile);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(gollum, shelob);
+		scn.MoveMinionsToTable(gollum);
+		scn.AttachCardsTo(gollum, letdeal);
 		scn.AddThreats(1);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 
-		scn.ShadowPlayCard(twofaced);
-		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
-		scn.ShadowChooseYes();
-		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, shelob));
-		scn.ShadowChooseCard(gollum);
+		// Let Her Deal With Them: bearer is damage +1.  Neither Gollum has damage of his own.
+		assertEquals(1, scn.GetKeywordCount(gollum, Keyword.DAMAGE));
 
-		// The threat is paid, there is no minion titled Gollum to bring in, and the game goes on.
-		assertEquals(0, scn.GetThreats());
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum, shelob);
-		assertInZone(Zone.DISCARD, ladyship);
-		assertInZone(Zone.DISCARD, twofaced);
+		scn.ShadowPlayCard(twofaced);
+		scn.ShadowChooseYes();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, vile);
+		assertInZone(Zone.DISCARD, gollum);
+		assertAttachedTo(letdeal, vile);
+		assertEquals(1, scn.GetKeywordCount(vile, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void OnceTheNewMinionHasLeftPlayThereIsNoGollumMinionLeftToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var twofaced = scn.GetShadowCard("twofaced");
+		var twofaced2 = scn.GetShadowCard("twofaced2");
+		var gollum = scn.GetShadowCard("gollum");
+		var vile = scn.GetShadowCard("vile");
+		var villain = scn.GetShadowCard("villain");
+
+		scn.MoveCardsToHand(twofaced, twofaced2);
+		scn.MoveCardsToDiscard(vile, villain);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddThreats(2);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(twofaced);
+		scn.ShadowChooseYes();
+		scn.ShadowChooseCard(vile);
+		assertInZone(Zone.SHADOW_CHARACTERS, vile);
+		assertInZone(Zone.DISCARD, gollum);
+		assertEquals(1, scn.GetThreats());
+
+		// The new Gollum leaves play.  My discard pile now holds three Gollums, any of which could replace
+		// another, and a threat is there to remove; but no Gollum is in play to be spotted.
+		scn.MoveCardsToDiscard(vile);
+		assertInZone(Zone.DISCARD, vile, gollum, villain);
+
+		scn.ShadowPlayCard(twofaced2);
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.DISCARD, twofaced2);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

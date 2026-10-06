@@ -8,7 +8,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -199,7 +198,6 @@ public class Card_V2_069_Tests
 	}
 
 	@Test
-	@Ignore("Q-0053: a mount transferred at the Plains costs 1 less; by CR 4.2 'twilight cost' a card in play changes a cost only when the card is coming into play")
 	public void AMountTransferredAtThePlainsCostsItsPrintedNumber() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

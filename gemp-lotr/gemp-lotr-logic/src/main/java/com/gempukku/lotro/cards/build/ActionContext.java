@@ -43,4 +43,16 @@ public interface ActionContext {
     default int getUnpaidTwilightCost() {
         return 0;
     }
+
+    /**
+     * The threats that the action this context belongs to has still to add as its own cost, before any of its
+     * effects is carried out: "add X threats to play a Wraith from your dead pile", while the action is being
+     * asked whether it can be used.  Zero in every other context, the one in which the action's effects are then
+     * carried out included, since by then the threats are on the table.  An effect that will play a card counts
+     * these as added when it is asked beforehand whether a card can be played, so that a card which must itself
+     * add a threat to be played is not counted as playable when the action's own threats leave no room for it.
+     */
+    default int getUnpaidThreatCost() {
+        return 0;
+    }
 }

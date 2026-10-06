@@ -63,6 +63,11 @@ public class AddThreats implements EffectAppenderProducer {
                         final int amount = valueSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                         return PlayConditions.canAddThreat(actionContext.getGame(), actionContext.getSource(), amount);
                     }
+
+                    @Override
+                    public int getThreatsAddedAsCost(ActionContext actionContext) {
+                        return Math.max(0, valueSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null));
+                    }
                 });
         result.addEffectAppender(
                 new DelayedAppender() {

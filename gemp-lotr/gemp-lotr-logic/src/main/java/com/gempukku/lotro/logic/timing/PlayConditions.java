@@ -65,7 +65,7 @@ public class PlayConditions {
 
     public static int getMaxAddThreatCount(LotroGame game) {
         int threatLimit = getThreatLimit(game);
-        return threatLimit - game.getGameState().getThreats();
+        return threatLimit - game.getGameState().getThreats() - game.getGameState().getThreatsToCome();
     }
 
     public static int getThreatLimit(LotroGame game) {

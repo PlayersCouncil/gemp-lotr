@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -336,7 +335,6 @@ public class Card_V3_024_Tests
 	}
 
 	@Test
-	@Ignore("F-0107: offered when its own threat leaves no room for the threat the Wraith must add to be played; Aragorn exerts, the threat is added and no Wraith is played")
 	public void CannotBePlayedWhenItsOwnThreatsLeaveNoRoomForTheThreatTheWraithAddsToBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

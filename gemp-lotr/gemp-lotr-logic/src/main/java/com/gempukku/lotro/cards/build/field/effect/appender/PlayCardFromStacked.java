@@ -46,7 +46,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                         assumePlayable ? null : actionContext -> {
                             LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
-                            return Filters.playable(costModifier, removedTwilight, false, false, true);
+                            return Filters.playable(costModifier, removedTwilight, actionContext.getUnpaidThreatCost(), false, false, true);
                         },
                         actionContext -> new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
         result.addEffectAppender(

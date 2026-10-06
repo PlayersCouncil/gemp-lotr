@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -491,34 +490,6 @@ public class Card_V3_016_Tests
 		assertEquals(2, scn.GetTwilight());
 		assertFalse(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
 		assertEquals(0, scn.GetThreats());
-		assertInZone(Zone.FREE_CHARACTERS, noser);
-		assertInZone(Zone.HAND, slinker);
-		assertInZone(Zone.DISCARD, myGollum);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0066: with no other Smeagol in the discard pile the offer to add a threat is withheld; it has a cost that can be paid, and replacing is not playing")
-	public void WithNoSmeagolInTheDiscardPileTheOfferIsStillMadeAndTheThreatBuysNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var two = scn.GetFreepsCard("two");
-		var noser = scn.GetFreepsCard("noser");
-		var slinker = scn.GetFreepsCard("slinker");
-		var myGollum = scn.GetFreepsCard("gollum");
-		scn.MoveCompanionsToTable(noser);
-		scn.MoveCardsToHand(two, slinker);
-		scn.MoveCardsToDiscard(myGollum);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetThreats());
-		scn.FreepsPlayCard(two);
-
-		assertTrue(scn.FreepsDecisionAvailable("add a threat to replace Smeagol"));
-		scn.FreepsChooseYes();
-
-		assertEquals(1, scn.GetThreats());
 		assertInZone(Zone.FREE_CHARACTERS, noser);
 		assertInZone(Zone.HAND, slinker);
 		assertInZone(Zone.DISCARD, myGollum);

@@ -62,6 +62,14 @@ public interface ModifiersQuerying {
     int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty);
     int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard);
 
+    /**
+     * What it costs to transfer a card.  A transfer pays the card's twilight cost again and is not a play (CR 4.2
+     * "transfer"), so the card is not coming into play and nothing another card does to its twilight cost
+     * reaches it (CR 4.2 "twilight cost").  The card's own statement of its cost still holds, except where it
+     * prices the card by what it is played on ("When played on Arwen ..."), which is about playing.
+     */
+    int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard);
+
     int getRoamingPenalty(LotroGame game, PhysicalCard physicalCard);
 
     // Stats

@@ -72,12 +72,14 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             // effect is to be treated as a cost: both have to be payable.  The filter above is the
                             // one used when the effect is carried out; by then the pool is what is left.
                             final int twilightGoneFirst = removedTwilight + actionContext.getUnpaidTwilightCost();
+                            // Likewise the threats the action will add as its own cost.
+                            final int threatsAddedFirst = actionContext.getUnpaidThreatCost();
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(maxDiscountModifier, twilightGoneFirst, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, twilightGoneFirst, threatsAddedFirst, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
                             }
 
-                            return Filters.playable(maxDiscountModifier, twilightGoneFirst, false, false, true);
+                            return Filters.playable(maxDiscountModifier, twilightGoneFirst, threatsAddedFirst, false, false, true);
                         },
                         actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
         result.addEffectAppender(

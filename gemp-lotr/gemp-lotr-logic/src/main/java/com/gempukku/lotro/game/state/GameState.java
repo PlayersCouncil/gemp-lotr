@@ -79,6 +79,7 @@ public class GameState {
     private LotroGame _lotroGame;
 
     private final List<Assignment> _assignments = new LinkedList<>();
+    private int _threatsToCome;
     private Skirmish _skirmish = null;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
@@ -676,6 +677,14 @@ public class GameState {
     }
 
     private void addCardToZone(LotroGame game, PhysicalCard card, Zone zone, boolean end) {
+        addCardToZone(game, card, zone, end, null);
+    }
+
+    /**
+     * @param cardIdInPlay the id the card is to have once in play, where it takes the place of another card and
+     *                     so its id; null for a card coming into play in its own right, which is given a new one.
+     */
+    private void addCardToZone(LotroGame game, PhysicalCard card, Zone zone, boolean end, Integer cardIdInPlay) {
         if (zone == Zone.DISCARD && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD))
             zone = Zone.REMOVED;
 
@@ -685,7 +694,13 @@ public class GameState {
         }
 
         if (zone.isInPlay()) {
-            assignNewCardId(card);
+            if (cardIdInPlay != null) {
+                _allCards.remove(card.getCardId());
+                reassignCardId(card, cardIdInPlay);
+            }
+            else {
+                assignNewCardId(card);
+            }
         }
 
         List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), zone);
@@ -754,39 +769,41 @@ public class GameState {
     }
 
     /**
-     * Replaces a character on table with another character.  The calling function should handle discarding the old one.
+     * Replaces a character on table with another character.  The new card takes the old card's place entire: its
+     * zone, its card id (so that whatever was tracking the old character goes on tracking the new one), its tokens,
+     * its assignment, its skirmish, and the cards it bore or had stacked on it, which stay in play as they are and
+     * are simply handed over.  The old card is left in the void under a new id; the calling function takes it out
+     * of there (removeCardsFromZone) and puts it wherever it is to go.
      * @param oldCard the old card
      * @param newCard the new card
      */
     public void replaceCharacterOnTable(LotroGame game,  PhysicalCard oldCard, PhysicalCard newCard) {
         int oldCardId = oldCard.getCardId();
 
-        // Remove new card from zone
-        removeCardsFromZone(null, Collections.singleton(newCard));
-
-        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first.
+        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first,
+        // along with everything else that removing the old card would lose track of.
         var assignment = findAssignment(oldCard);
         var skirmish = findSkirmish(oldCard);
         var tokens = new HashMap<>(getTokens(oldCard));
         var zone = oldCard.getZone();
+        var attachedTo = oldCard.getAttachedTo();
+        var attachedCardList = getAttachedCards(oldCard);
+        var stackedCardList = getStackedCards(oldCard);
 
-        // Put the card where the old card was
+        // Remove new card from zone
+        removeCardsFromZone(null, Collections.singleton(newCard));
         newCard.copyCardStats(oldCard);
-        if(oldCard.getAttachedTo() != null) {
-            attachCard(game, newCard, oldCard.getAttachedTo());
-        }
 
         // Remove old card from zone
         removeCardsFromZone(null, Collections.singleton(oldCard), true);
-        addCardToZone(game, oldCard, Zone.VOID);
         assignNewCardId(oldCard);
+        addCardToZone(game, oldCard, Zone.VOID);
 
-        addCardToZone(game, newCard, zone);
-        // Give new card the card ID of the replaced card
-        reassignCardId(newCard, oldCardId);
-
-        // Add new card to zone
-        getZoneCards(newCard.getOwner(), zone).add((PhysicalCardImpl) newCard);
+        // Put the new card where the old card was, once, under the card ID of the replaced card
+        if (attachedTo != null) {
+            ((PhysicalCardImpl) newCard).attachTo((PhysicalCardImpl) attachedTo);
+        }
+        addCardToZone(game, newCard, zone, true, oldCardId);
 
         for(var pair : tokens.entrySet()) {
             addTokens(newCard, pair.getKey(), pair.getValue());
@@ -801,26 +818,18 @@ public class GameState {
             restartSkirmish(_skirmish);
         }
 
-
-        var attachedCardList = getAttachedCards(oldCard);
-        var stackedCardList = getStackedCards(oldCard);
-
-        for (GameStateListener listener : getAllGameStateListeners())
-            listener.cardCreated(newCard);
-
-        // Transfer attached cards to the new card
+        // Hand attached cards to the new card.  They never leave play: they keep their card IDs and their own
+        // tokens, and their modifiers are stopped and started once so that they answer for the new bearer.
         for (PhysicalCard attachedCard : attachedCardList) {
-            attachCard(game, attachedCard, newCard);
-        }
-
-        // Transfer stacked cards to the new card
-        for (PhysicalCard stackedCard : stackedCardList) {
-            stackCard(game, stackedCard, newCard);
-        }
-
-        startAffecting(game, newCard);
-        for (PhysicalCard attachedCard : getAttachedCards(newCard)) {
+            transferCard(attachedCard, newCard);
             reapplyAffectingForCard(game, attachedCard);
+        }
+
+        // Hand stacked cards to the new card
+        for (PhysicalCard stackedCard : stackedCardList) {
+            ((PhysicalCardImpl) stackedCard).stackOn((PhysicalCardImpl) newCard);
+            for (GameStateListener listener : getAllGameStateListeners())
+                listener.cardMoved(stackedCard);
         }
     }
 
@@ -1313,6 +1322,29 @@ public class GameState {
 
     public int getThreats() {
         return _playerThreats.get(getCurrentPlayerId());
+    }
+
+    /**
+     * Threats that are not on the table yet and are counted as if they were while a question is being answered:
+     * the threats an action will add as its own cost, while a card that action would then play is asked whether
+     * it could be played.  They take up room under the threat limit (PlayConditions.getMaxAddThreatCount) and
+     * change nothing else.  Zero except inside withThreatsToCome.
+     */
+    public int getThreatsToCome() {
+        return _threatsToCome;
+    }
+
+    /**
+     * Answers a question as it would be answered once the given number of threats had been added.
+     */
+    public <T> T withThreatsToCome(int threats, java.util.function.Supplier<T> question) {
+        final int before = _threatsToCome;
+        _threatsToCome = before + Math.max(0, threats);
+        try {
+            return question.get();
+        } finally {
+            _threatsToCome = before;
+        }
     }
 
     public void removeBurdens(int burdens) {
