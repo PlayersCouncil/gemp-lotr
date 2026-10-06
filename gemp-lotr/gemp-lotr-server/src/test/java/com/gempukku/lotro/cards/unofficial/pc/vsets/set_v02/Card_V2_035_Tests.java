@@ -494,8 +494,8 @@ public class Card_V2_035_Tests
 		assertEquals(0, scn.GetWoundsOn(savage));
 		scn.FreepsUseCardAction(legolas);
 		scn.FreepsChooseCard(savage);
-		assertTrue(scn.FreepsDecisionAvailable("Required"));
-		scn.FreepsChooseAction("Uruk Shield Wall");
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveActionOrder("Uruk Shield Wall");
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 		scn.ShadowPass();

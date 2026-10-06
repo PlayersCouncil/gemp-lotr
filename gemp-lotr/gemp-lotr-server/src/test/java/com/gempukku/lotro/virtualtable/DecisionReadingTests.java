@@ -274,6 +274,58 @@ public class DecisionReadingTests
 		assertEquals(2, scn.GetBurdens());
 	}
 
+	protected VirtualTableScenario GetIsAboutToScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Uruk Shield Wall: "Each time an Uruk-hai costing X is about to take a wound (except during a
+					// skirmish), prevent that and exert it.  X is the number of [isengard] tokens you can spot here."
+					// Two copies with the same tokens each have a required trigger on the one wound.
+					put("wall1", "102_35");
+					put("wall2", "102_35");
+					put("savage", "1_151");         // Uruk Savage: an Uruk-hai costing 2, vitality 3
+					put("legolas", "1_50");         // Legolas, Greenleaf: "Archery: Exert Legolas to wound a minion..."
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void RequiredIsAboutToResponsesAtTheSameMomentAreOrderedByTheFreePeoplesPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetIsAboutToScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var wall1 = scn.GetShadowCard("wall1");
+		var wall2 = scn.GetShadowCard("wall2");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveCardsToSupportArea(wall1, wall2);
+		scn.AddTokensToCard(wall1, 2);
+		scn.AddTokensToCard(wall2, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+
+		scn.FreepsUseCardAction(legolas);
+
+		// Both copies answer the wound that is about to fall.  The game words this ordering differently from the
+		// one for things that have happened ('... - Required "is about to" responses'), and it is the same question.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsDecisionAvailable("is about to"));
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		scn.FreepsResolveActionOrder("Uruk Shield Wall");
+
+		// The first copy prevented the wound and exerted him; nothing is left for the second to answer.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
 	@Test
 	public void ShownCardsAreCountedAndDismissedOnlyByThePlayerBeingShownThem() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

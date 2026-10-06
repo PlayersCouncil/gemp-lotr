@@ -279,9 +279,17 @@ public interface Decisions extends TableBase {
 	/**
 	 * @return True if the Free Peoples player is being asked in which order required actions that happen at the
 	 * same moment are to be resolved.  By rule it is always the Free Peoples player who is asked, whoever's the
-	 * actions are.
+	 * actions are.  The game words the question in two ways: "Required responses" for actions that answer
+	 * something that has happened, and '&lt;effect&gt; - Required "is about to" responses' for those that answer
+	 * something about to happen.  Either is such a question, and nothing else is.
 	 */
-	default boolean FreepsAwaitingRequiredResponseOrder() { return FreepsDecisionAvailable("Required responses"); }
+	default boolean FreepsAwaitingRequiredResponseOrder() {
+		AwaitingDecision ad = GetAwaitingDecision(P1());
+		if(ad == null)
+			return false;
+		String text = ad.getText();
+		return text.equals("Required responses") || text.endsWith(" - Required \"is about to\" responses");
+	}
 
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))
