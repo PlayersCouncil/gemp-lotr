@@ -2,6 +2,7 @@
 """The orchestrator's gate: checks finished cards and commits each one on its own.
 
     land.py <id...> [--note "<a line for every commit's body>"] [--parked] [--check]
+    land.py <id...> --batch <label> [--with <path>]... [--note ...]   one commit for the whole batch
 
 For each card, in turn: the conformance check must find no errors, the card's tests must pass (parked tests
 apart), no `F-0000` or `Q-0000` placeholder may be left in the test file, and the ledger file must exist.  A card
@@ -12,7 +13,12 @@ others still land.
 
 --check does everything except commit and set the status.
 
-Only the test file is committed.  The ledger is campaign bookkeeping and stays out of git.  The lines ending
+With --batch the cards that clear the gate are committed together in ONE commit, "Card tests: <label>: <ids>",
+with a line for each card in its body; each --with <path> (a card definition corrected for one of these cards,
+say) goes into the same commit.  This is the campaign's way since 2026-10-06: one commit for each batch, after
+its review.  A card that does not clear the gate is reported and left out; the others still land.
+
+Only the test file is committed (and, with --batch, the --with paths).  The ledger is campaign bookkeeping and stays out of git.  The lines ending
 every commit message are read from the file named by $GEMP_COMMIT_TRAILER, if set.
 """
 import csv
@@ -43,7 +49,7 @@ def baseline_counts():
         return {r["id"]: r.get("tests", "") for r in csv.DictReader(f, delimiter="\t")}
 
 
-def land(card_id, note, force_parked, check_only, before):
+def land(card_id, note, force_parked, check_only, before, batch=None):
     card = g.card_index().get(card_id)
     test = g.test_index().get(card_id)
     if card is None or test is None:
@@ -92,6 +98,11 @@ def land(card_id, note, force_parked, check_only, before):
         return "would land as %s: %s" % (status, body.split("\n")[0])
 
     rel = g.rel(test)
+    if batch is not None:
+        # The commit and the status are the caller's, once every card of the batch has been through the gate.
+        batch.append({"id": card_id, "name": name, "rel": rel, "body": body, "status": status, "parked": parked,
+                      "force_parked": force_parked})
+        return "would land as %s: %s" % (status, body.split("\n")[0])
     git("add", "--", rel)
     if not git("diff", "--cached", "--quiet", "--", rel).returncode:
         outcome = "test file unchanged, nothing to commit"
@@ -117,6 +128,46 @@ def land(card_id, note, force_parked, check_only, before):
     return "%s, %s: %s" % (outcome, status, body.split("\n")[0])
 
 
+def set_status(entry):
+    args = ["set", entry["status"], entry["id"]]
+    parked = entry["parked"]
+    if not parked and not entry["force_parked"]:
+        args += ["--note", ""]
+    if parked:
+        args += ["--note", "%d test(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
+        for found in sorted(set(parked)):
+            if found.startswith("F-"):
+                args += ["--finding", found]
+                break
+    script("tracker.py", *args)
+
+
+def commit_batch(label, entries, extra, note):
+    """One commit for every card of the batch that cleared the gate, with the extra paths."""
+    paths = [e["rel"] for e in entries] + extra
+    git("add", "--", *paths)
+    if not git("diff", "--cached", "--quiet", "--", *paths).returncode:
+        outcome = "nothing to commit"
+    else:
+        message = "Card tests: %s: %s\n\n" % (label, ", ".join(e["id"] for e in entries))
+        for e in entries:
+            message += "%s %s: %s\n" % (e["id"], e["name"], e["body"].split("\n")[0])
+        if extra:
+            message += "\nWith: " + ", ".join(os.path.basename(x) for x in extra) + "\n"
+        if note:
+            message += "\n" + note + "\n"
+        trailer = os.environ.get("GEMP_COMMIT_TRAILER")
+        if trailer and os.path.isfile(trailer):
+            message += "\n" + open(trailer, encoding="utf-8").read().strip() + "\n"
+        done = git("commit", "-q", "-m", message, "--", *paths)
+        if done.returncode != 0:
+            return "git: " + (done.stderr or done.stdout).strip()
+        outcome = "committed " + git("rev-parse", "--short=9", "HEAD").stdout.strip()
+    for e in entries:
+        set_status(e)
+    return outcome
+
+
 def main(argv):
     if len(argv) < 2 or argv[1] in ("-h", "--help"):
         print(__doc__)
@@ -127,16 +178,30 @@ def main(argv):
         i = args.index("--note")
         note = args[i + 1]
         args = args[:i] + args[i + 2:]
+    label = None
+    if "--batch" in args:
+        i = args.index("--batch")
+        label = args[i + 1]
+        args = args[:i] + args[i + 2:]
+    extra = []
+    while "--with" in args:
+        i = args.index("--with")
+        extra.append(args[i + 1])
+        args = args[:i] + args[i + 2:]
     force_parked = "--parked" in args
     check_only = "--check" in args
     ids = [a for a in args if not a.startswith("--")]
     before = baseline_counts()
     failed = 0
+    entries = [] if (label and not check_only) else None
     for card_id in ids:
-        result = land(card_id, note, force_parked, check_only, before)
+        result = land(card_id, None if entries is not None else note, force_parked, check_only, before, entries)
         held = not result.startswith(("committed", "test file unchanged", "would land"))
         failed += held
-        print("%s %s: %s" % ("HELD  " if held else "LANDED" if not check_only else "CHECK ", card_id, result))
+        word = "HELD  " if held else "CHECK " if check_only else "GATE  " if entries is not None else "LANDED"
+        print("%s %s: %s" % (word, card_id, result))
+    if entries:
+        print("BATCH  %s: %s" % (label, commit_batch(label, entries, extra, note)))
     return 1 if failed else 0
 
 

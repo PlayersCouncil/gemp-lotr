@@ -51,12 +51,14 @@ file the line for each test under each clause it claims checks of, and run
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
 
-until both are clean. Then run `mutate.py <id> --out <your folder name>`: it makes deliberate mistakes in a copy
-of the definition and lists the ones your tests did not notice. A survivor is a gap to close or a mistake that
-makes no difference to play; say which for each in your report, with the reason. This is the only time the whole
-set of stock mistakes is run on the card: the reviewer works from your account of the survivors and does not run
-it again. So run it once the tests are otherwise finished, close the gaps, and check each gap closed with that
-one mistake (`mutate.py <id> --replace "<old>" "<new>"`) and not with the whole set again.
+until both are clean. Do **not** run `mutate.py <id>` on its own: the run of stock mistakes was cut from the
+campaign on 2026-10-06 (it cost about a sixth of every agent's steps and found no fault in the game). What shows
+that a test would fail if the card were wrong is now your own reading of it: for each filter imagine it one word
+wider and one word narrower, for each number one off, for each trigger the neighbouring event, and make sure a
+valid and an invalid candidate on the table tell them apart. `mutate.py` has one use left for you: where you
+park a test on a finding whose correction is a change to the definition, show that the parked test fails
+against the card as it is and passes against the correction, with one run of
+`mutate.py <id> --replace "<the wrong text>" "<the correction>" --with-parked --out <your folder name>`.
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
@@ -95,9 +97,7 @@ the engine. Leave the check untested and report a rig request: what the test nee
 you would propose, and which rig interface it belongs in.
 
 Keep your scratch files under `/tmp/<your folder name>/` whatever else you have been told about scratch space:
-the reviewer and the orchestrator look for probes there. `mutate.py` starts a Java process for every mistake and
-can take ten minutes on a busy machine: run it in the background with its output sent to a file, and read the
-file when it is done.
+the reviewer and the orchestrator look for probes there.
 
 ## Reporting back
 
@@ -112,12 +112,10 @@ files are found at their usual paths and need no mention. For each card give:
 - anything in the standard or the rig documentation that was wrong, unclear or missing: this is early in the
   campaign and the documents are still being corrected by what authors run into
 
-## The mistake-maker on a busy machine
+## Working beside other batches
 
-One `mutate.py` run at a time for each `--out` name, and one card at a time: runs that share a name share a
-working folder. `cardtest.py run` under the same name has a folder of its own and may go on meanwhile;
-`cardtest.py probe` shares one folder with every other agent unless given `--out <your folder name>`. Run a
-card with many mistakes in the background and read its output file; meanwhile do work that does not need it,
-or wait with one long `sleep` (eight or nine minutes) before looking. Before calling a "narrowed to
-culture(...)" survivor on a name or a race harmless, look for a card of that name or race in another culture
-(Aragorn, Defender of Rohan is a [rohan] Aragorn; Ulaire Attea, Khamul of the East 103_61 is a [raider] Nazgûl).
+`cardtest.py run` under your folder name has a folder of its own; `cardtest.py probe` shares one folder with
+every other agent unless given `--out <your folder name>`. Before calling a filter word harmless because "every
+card of that name or race is of that culture", look for one that is not (Aragorn, Defender of Rohan is a [rohan]
+Aragorn; Ulaire Attea, Khamul of the East 103_61 is a [raider] Nazgûl; Radagast 31_17 and Saruman 32_24 are
+Wizard allies; Bilbo 12_119 is a Ring-bound Hobbit companion).

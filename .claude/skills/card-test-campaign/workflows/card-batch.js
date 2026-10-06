@@ -35,7 +35,6 @@ const AUTHOR = {
           lint: { type: 'string', description: 'Last line or two of lint.py output' },
           run: { type: 'string', description: 'Last line of cardtest.py run output' },
           existing_tests: { type: 'string', description: 'What happened to each test that existed before' },
-          mutation_survivors: { type: 'string', description: 'Each survivor: gap closed, or why it makes no difference to play' },
           findings: {
             type: 'array',
             items: {
@@ -176,8 +175,7 @@ const reported = (author.cards || []).map(c =>
   `${c.id} (${c.state})` +
   (c.findings && c.findings.length ? `\n  findings:\n` + c.findings.map(f => `  - ${f.summary} [${f.kind}]${f.parked_test ? ' parked test: ' + f.parked_test : ''}`).join('\n') : '') +
   (c.questions && c.questions.length ? `\n  questions:\n` + c.questions.map(q => `  - ${q.question}${q.readings ? ' Readings: ' + q.readings : ''}${q.parked_test ? ' parked test: ' + q.parked_test : ''}`).join('\n') : '') +
-  (c.rig_requests && c.rig_requests.length ? `\n  rig requests:\n` + c.rig_requests.map(r => `  - ${r}`).join('\n') : '') +
-  `\n  stock mistakes that survived, by the author's account:\n  ${c.mutation_survivors || '(none reported)'}`
+  (c.rig_requests && c.rig_requests.length ? `\n  rig requests:\n` + c.rig_requests.map(r => `  - ${r}`).join('\n') : '')
 ).join('\n')
 
 phase('Review')

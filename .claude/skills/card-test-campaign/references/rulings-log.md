@@ -451,3 +451,91 @@ picks which tentacle Watcher replaces. F-0054: the Response type is to take a pe
 be a Response. G-0016 declined: "There are no cards that put more than one kind of culture token on another,
 and no plans to in the PC."
 
+
+## Rulings of 2026-10-06, evening
+
+**How the campaign is run from here (Ketura, 2026-10-06, replacing the earlier rules they touch).**
+- *Rig additions need no approval.* "If you're adding a feature to the test rig ... you can add it. The only
+  consideration I want you to do is to only do so in a case where there is actual use; no adding features if you
+  don't have an existing practical use case for them. Also inform me after the fact in rig-requests, but they no
+  longer need to be proposals, just informationals." An author still does not edit the rig: a rig need is
+  reported and the orchestrator has it built.
+- *The stock mutation run is cut.* "Let's go ahead and cut the remaining mutation step." Authors no longer run
+  `mutate.py <id>`. What stays: one `mutate.py --replace ... --with-parked` to show that a parked test passes
+  under the correction its finding proposes.
+- *One commit for each batch, after its review.* "Let's reduce the frequency of commits to once per agent per
+  batch, happening after the reviews have completed."
+- *Reports to Ketura are short:* the Q-, F- and G- items that need her for the work to go on, and lists of the
+  cards finished and in progress.
+
+**The no-effect flag (new engine feature).** "On decisions sent to a player, let's add a flag of 'no effect',
+meaning the action is determined to have no effect ahead of time. In addition, for skirmish actions only I want
+that flag to be able to detect that it will have no effect on a currently-skirmishing character, for the
+extremely common case of 'I used my hobbit pump on a gondor skirmisher'. ... such actions highlight with a
+different color, which will permit players to make such actions should they deem it strategically necessary."
+The campaign then checks the flag "in cases like Breaching Shot and Trail of Savagery, where we had for the
+player's convenience disallowed the card use in some legal-but-pointless situations. I don't want us to test
+literally every card for this flag, just some mechanic tests on common use cases and the occasional conversion
+of convenience guards." It does not replace the Q-0034 rule: an optional action with no cost that would do
+nothing is still withheld; an event, or an action with a cost, that would do nothing is offered and flagged.
+
+**An ability at its limit is offered, flagged no-effect (Q-0041).** "Technically speaking it should be offered,
+and some cards (Beneath the Mountains) are famous for using the cost over and over in spite of the effect limit
+being reached." The definitions that withhold an ability at its limit are converted when the flag exists.
+
+**A transfer is not "coming into play" (Q-0053).** "Transferring 'is not playing' and so specifically does not
+count as 'coming into play' for the purposes of having the twilight cost altered." Other cards' twilight cost
+modifiers do not reach a transfer. "We're going to have to alter Asfaloth as well."
+
+**"Control(s) a site" goes by the count of controlled sites (Q-0054).** "All the cards you mention and those
+using the same language should be retrieving the count of controlled sites, going from 0 -> 1 and
+enabling/disabling their text accordingly." A card that needs the site itself (stack on it, liberate it) still
+needs a real one.
+
+**Maps are information only (Q-0055).** PC-Movie runs under Multipath rules: any legal site path, cards of that
+path only. "All the Map does is announce which path the player is using, and it is revealed in the player's
+support area before the game begins, so it is information available during bidding. Maps therefore have no
+ongoing in-game effect."
+
+**Controlled sites are not discardable (Q-0056).** A card that discards "a card" from a support area does not
+reach a controlled site.
+
+**Hinder and restore.** A card hindered in the middle of its own ability still carries the ability out, and an
+effect that names its bearer still finds him (F-0099: "the -1 strength should still apply"; the old stub
+HinderingACompanionMidAbilityAlsoCancelsTheAbility "was the old design but it was altered"). But a token is not
+added to a card hindered before the token arrives (Q-0070: "can't > can; tokens cannot be added > continue to
+execute"; "the same logic is what makes Anduril, Legend Remade successfully block a wound"). A reconcile
+restores the player's hindered cards before the discard (Q-0059, CR 5.0; the engine is to be changed). Cards
+already hindered stay out of hinder choices (Q-0060: "for QOL purposes let's continue to leave hindered cards
+out of the filter"). Shadowfax 103_5: "Minions skirmishing bearer gain no strength or keyword bonuses from
+Shadow cards borne by minions skirmishing bearer" (Q-0061).
+
+**Playing a card as an effect, from any pile, is a cost (Q-0062, Q-0066).** From hand: "it should enforce a card
+being there and playable before playing"; where an effect plays a card several times, "we should at least
+confirm that the first play is possible". The dead pile is "covered for the same reasons that the discard pile
+is", and I Call on You "should properly withhold itself if the threat cost of the wraith to be played cannot be
+paid". Replacing a character from the discard pile: "treat this as if playing from discard for rules purposes;
+if it's not in the discard don't offer it." The replaced minion "simply 'becomes' another persona, without
+skipping a beat or interrupting any prior tracked effects"; "another" means another subtitle (Q-0067).
+
+**Responses and triggers.** "Each time ..., you may" is a trigger, not a response (Q-0069 on Great Gate: "it
+should be a trigger as the text uses"). A response stops being offered once what it answers has been cancelled
+or prevented (Q-0043: "normally when responses react to a trigger, they should stop reacting if that trigger is
+prevented by a prior trigger"). An optional trigger added by an event belongs to the player who played it
+(F-0083).
+
+**Reading card text.** A race word with no "your" names no side: "Wraith is Wraith" (Q-0068), "Bearer must be a
+Wizard" lets the opponent's Saruman bear Wizard's Stash (Q-0058). A sentence of costs with no "to" is still
+costs where the next sentence is what they buy (Q-0058). An X of exertions is the player's, up to those able to
+exert, whatever it can buy (Q-0069). A companion spotted as part of a cost is still "that companion" when the
+effect is carried out, though paying the cost ended the skirmish (Q-0065). "Play this" on a card in play is a
+transfer, from the discard pile a play (Q-0057). An exact list of sources ("from play or from hand") leaves the
+others out (Q-0047). A required trigger's spot is made whenever it can be (Q-0050). "Prevent X from being
+overwhelmed unless its strength is tripled" on a minion spares only that minion, by its own strength; overwhelm
+is resolved minion by minion (Q-0044).
+
+**Card by card.** Q-0042 Breaching Shot may reach an ally away from home ("they are breaching the wall"). Q-0045
+Wolf Pit as built. Q-0046 Royal Guard: only the keyword lasts. Q-0048 Now for Wrath: "your", and the text gains
+the word. Q-0049 Now for Ruin as built. Q-0051 Trapped in its Gaze: this skirmish ("it should have been worded
+'to make a skirmishing twilight minion'"). Q-0052 Eastemnet Hills: from hand, Ketura updates the wording.
+Q-0063 Haste: the title restriction stays. Q-0064 Sticky Strands may be pulled from another companion.

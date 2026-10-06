@@ -30,10 +30,8 @@ step where you can, and do not look at the same thing twice.
        python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
        python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
 
-   Do **not** run `mutate.py <id>` on its own: the author has run the whole set of stock mistakes once, and
-   running it again is the most expensive thing in the campaign for the least return. The author's account of
-   the survivors is given to you below. Read each "makes no difference" claim against the definition; where you
-   doubt one, test that one mistake (next step).
+   Do **not** run `mutate.py <id>` on its own: the run of stock mistakes was cut from the campaign on
+   2026-10-06, and the author no longer runs it either, so there is no account of survivors to read.
 
 3. **Read each test against the checks the ledger says it claims.** The test file itself carries no ledger and
    no clause ids, by design; if you find any, that is a fix. Does it really show that check? The usual failures:
@@ -41,9 +39,11 @@ step where you can, and do not look at the same thing twice.
    at only one side of the boundary; an assertion after an action with no reading before it; an expected value
    that could only have come from running the game; a helper card whose own text is doing part of the work.
 
-   Where you suspect a gap, name the wrong definition that would pass, and prove it with that one mistake:
-   `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`. One mistake takes seconds. A
-   mistake that survives is a gap; one that is noticed is not. Settle what the game really does with a throwaway
+   Where you suspect a gap, name the wrong definition that would pass. If reading the test settles it (no
+   candidate on the table tells the two apart), fix it without more ado. Only where you cannot tell by reading,
+   prove it with that one mistake: `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`
+   (at most two such runs a card: each is a step, and steps are what cost). A mistake that survives is a gap;
+   one that is noticed is not. Settle what the game really does with a throwaway
    test: `cardtest.py probe /tmp/<your folder name>/Probe.java`.
 
 4. **Try to knock down every finding and every parked test.** For a test parked with `@Ignore("F-...")`, the

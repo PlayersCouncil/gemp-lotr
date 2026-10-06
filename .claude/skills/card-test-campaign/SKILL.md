@@ -68,6 +68,11 @@ campaign's state; `scripts/orchestrator/cost.py` produces it):
 - An agent carries 54K tokens before it has read a word and about 100K once it has read its brief's documents,
   and re-reads all of it on every step. Steps are what cost: about 57 a card over four agents, 9M cache-read
   tokens a card.
+- 2026-10-06: the stock mistakes are no longer run at all (Ketura: "cut the remaining mutation step"). Over the
+  last 42 cards before the cut, 17% of authors' and of reviewers' steps ran `mutate.py`; the author's stock run
+  led to a closed test gap on 9 cards, reviewers' single mistakes proved 16 more, and none of the 35 findings
+  came from it. What is left: `--with-parked` to show a parked test against its correction, and at most two
+  single mistakes a card for a reviewer who cannot settle a suspected gap by reading. History:
 - The stock mistakes (`mutate.py <id>` on its own) took 54% of all agent time and were run three times a card.
   They found no fault in the game; they led authors to close 14 test gaps in 34 cards, and the two re-runs found
   about 3 more. So they are run once, by the author, and the kinds of mistake that only ever made no difference
@@ -109,12 +114,13 @@ standard, the briefs or the tools then.
 2. Author, sighted: `packet.py <id> --with-test`. For an existing test file, account for every existing test: it
    claims a check, or it is redundant, or it knows something the ledger missed (then the ledger is what changes),
    or it contradicts the ledger (then it is a question; existing PC tests often encode a ruling).
-3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`; then `mutate.py <id>` to see
-   what the tests would miss. A test that fails is looked at three ways before anything else: is the test wrong,
+3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`. (The run of stock mistakes,
+   `mutate.py <id>` on its own, was cut on 2026-10-06: see below.) A test that fails is looked at three ways before anything else: is the test wrong,
    is the expectation wrong, or is the game wrong.
 4. Reviewer: `lint.py`, `cardtest.py run`, then the checklist at the end of the test-generation skill, with
    single mistakes (`mutate.py <id> --replace`) to prove a suspected gap. The reviewer fixes what it finds.
-5. Orchestrator: commit the card on its own, send the commit across, mark the card `ready` or `parked`.
+5. Orchestrator: once the review is done, one commit for the batch (`land.py <ids> --batch <folder>`: test
+   files and any definition fixes of those cards together), send it across, mark each card `ready` or `parked`.
 6. At the end of the chunk: `cardtest.py suite all`, rebuild the tracker, and give Ketura the chunk to review.
    While pipelines are in flight, do not run the suite (or `mvn`) in the main clone: it compiles every test file,
    the half-written ones included, and rewrites the classes the agents are running against. Run
