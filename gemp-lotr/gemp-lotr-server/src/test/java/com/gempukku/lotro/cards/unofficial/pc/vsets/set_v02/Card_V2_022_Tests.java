@@ -249,9 +249,15 @@ public class Card_V2_022_Tests
 		// Five could be taken, and four may be.
 		assertEquals(4, scn.ShadowGetChoiceMax());
 
+		// The other player is shown nothing: the game log is what tells him which cards were taken.
+		scn.MarkGameLog();
 		scn.ShadowChooseCardBPFromSelection(sword, palantir, scimitar, stone);
 		assertInZone(Zone.HAND, sword, palantir, scimitar, stone);
 		assertInZone(Zone.DECK, steed, asfaloth, nenya, business, threatening, troop, savage, fell2);
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(sword, palantir, scimitar, stone));
+		// The Shadow item left in the deck is not named.
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(steed));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertEquals(4, scn.GetShadowHandCount());
 		assertEquals(12 - 4, scn.GetShadowDeckCount());
 		assertInZone(Zone.DISCARD, fell1);

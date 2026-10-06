@@ -7,10 +7,16 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Helper for testing deck validation rules without a full game scenario.
  * Provides deck building utilities with auto-filler to meet minimum deck sizes.
+ *
+ * The filler is as the scenario's format plays it: where the format has errata for a filler card (the PC formats
+ * have, for a few), the errata'd card goes into the deck, so the filler itself is never what a format objects to.
+ * A deck that is otherwise legal therefore validates with no errors at all.  The Ring-bearer, the Ring, the Map and
+ * the sites are the ones the test names, as it names them.
  */
 public class DeckValidationScenario implements TestConstants {
 
@@ -135,9 +141,32 @@ public class DeckValidationScenario implements TestConstants {
     }
 
     public boolean hasMapError(List<String> errors) {
-        return errors.stream().anyMatch(e ->
-                e.contains("Adventure Deck must only contain") ||
-                e.contains("Adventure deck must only contain"));
+        return errors.stream().anyMatch(DeckValidationScenario::isMapError);
+    }
+
+    // The one wording the Maps give their objection, as the deck builder prints it: a sentence with one full stop.
+    private static final Pattern MAP_ERROR =
+            Pattern.compile("Adventure deck must only contain sites from the (Fellowship|Towers|King) site path\\.(?!\\.)");
+
+    private static boolean isMapError(String error) {
+        return MAP_ERROR.matcher(error).find();
+    }
+
+    /**
+     * The sites that a Map's objection names: the cards of the adventure deck that are not of the Map's site path.
+     * Use it to read which sites a Map turned away, where hasMapError only says that it turned some away.
+     * @param errors What validate() returned.
+     * @return The names of the sites the Map objects to, in the order the objection lists them; empty if the Map
+     * has no objection.
+     */
+    public List<String> getMapErrorSites(List<String> errors) {
+        final String listStart = " issues: ";
+        for (String error : errors) {
+            if (isMapError(error) && error.contains(listStart)) {
+                return List.of(error.substring(error.indexOf(listStart) + listStart.length()).split(", "));
+            }
+        }
+        return List.of();
     }
 
     /**
@@ -178,7 +207,7 @@ public class DeckValidationScenario implements TestConstants {
         int copiesOfCurrent = 0;
 
         for (int i = 0; i < count; i++) {
-            deck.addCard(prefix + currentId);
+            deck.addCard(_format.applyErrata(prefix + currentId));
             copiesOfCurrent++;
 
             if (copiesOfCurrent >= 4) {

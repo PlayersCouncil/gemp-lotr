@@ -546,3 +546,14 @@ twilight minion". F-0067 From Deepest Dungeon 102_39: "X should only be permitte
 playable, since we are playing from discard and thus must be able to play it." F-0087 Gorgoroth Keeper 10_86:
 "Do a requirement for now; I'm not certain an engine-level addition is warranted." F-0090 (the deck restriction's
 min read from its max field): "go ahead and fix."
+
+**Later still (Ketura, 2026-10-06).** Q-0071 Pippin, Trollslayer 103_31: "race *is* an unloaded keyword ... treat it
+as if the text says '(except Race)' at the appropriate spot, updating the text as well." Q-0072 Tormented Revenant
+103_32: "spot or add 2 threats" is the player's choice when both can be done. F-0109 and Q-0073, the twilight cost
+of a card in play: it is the number printed on the card; neither another card's text nor its own changes it once
+it is in play ("For now, we will follow the rules as written, but I'm intending to change that written rule"; "I'll
+put it on the docket for us to remove that rule in PC formats, but don't take that into account"). The no-effect
+flag: abilities that play a card from a pile stay withheld when nothing can be played; a skirmish action is
+flagged for missing the skirmish only when it is a pump or a cancel that reaches nobody fighting ("If it actually
+results in something hitting the table, it's fine to leave noeffect off of it"); auto-pass is left alone for now.
+

@@ -787,7 +787,7 @@ public class DefaultLotroFormat implements LotroFormat {
             for (String site : sites) {
                 var valid = validateSite(site);
                 if (valid != null) {
-                    result += valid;
+                    result += valid + "\n";
                 }
             }
             if (_siteBlock == SitesBlock.MULTIPATH) {

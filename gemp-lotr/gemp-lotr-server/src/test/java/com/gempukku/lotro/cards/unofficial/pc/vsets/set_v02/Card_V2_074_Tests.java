@@ -1,13 +1,17 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_074_Tests
@@ -22,6 +26,42 @@ public class Card_V2_074_Tests
 	// Multipath has PC Movie's rule that an adventure deck is all of one path, and does not use Maps.
 	protected DeckValidationScenario GetMultipathScenario() {
 		return new DeckValidationScenario(DeckValidationScenario.Multipath);
+	}
+
+	// A PC Movie table.  Player 1's deck brings this Map and player 2's brings Road to the Towers, so that it
+	// can be told whose Map lies where.  Both decks hold the Fellowship sites: a game does not hold a deck to
+	// its Map, deck validation does.
+	protected VirtualTableScenario GetTableScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Aragorn, Ranger of the North: a companion in each draw deck, so that the game stops to
+					// ask for a starting fellowship before any hand is drawn.
+					put("aragorn", "1_89");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.PCMovie,
+				VirtualTableScenario.FellowshipMap,
+				VirtualTableScenario.TowersMap
+		);
+	}
+
+	// The same two decks, Maps and all, at a Multipath table.
+	protected VirtualTableScenario GetMultipathTableScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath,
+				VirtualTableScenario.FellowshipMap,
+				VirtualTableScenario.TowersMap
+		);
 	}
 
 	@Test
@@ -54,9 +94,44 @@ public class Card_V2_074_Tests
 	}
 
 	@Test
+	public void BeforeTheGameBeginsEachPlayersMapIsInItsOwnersSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTableScenario();
+
+		var map = scn.GetFreepsMap();
+		var theirMap = scn.GetShadowMap();
+
+		// The players have bid and been seated, and no more: no fellowship has been chosen and no hand drawn.
+		// Each player's Map is already in that player's support area.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertEquals("102_74", map.getBlueprintId());
+		assertEquals(scn.P1(), map.getOwner());
+		assertInZone(Zone.SUPPORT, map);
+		assertEquals("102_75", theirMap.getBlueprintId());
+		assertEquals(scn.P2(), theirMap.getOwner());
+		assertInZone(Zone.SUPPORT, theirMap);
+
+		// And there they stay once the game is under way.
+		scn.StartGame();
+		assertInZone(Zone.SUPPORT, map, theirMap);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipMapIsNotInTheGameInAFormatThatDoesNotUseMaps() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMultipathTableScenario();
+
+		// The decks that put a Map in each support area at a PC Movie table: here neither player has one.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertNull(scn.GetFreepsMap());
+		assertNull(scn.GetShadowMap());
+	}
+
+	@Test
 	public void FellowshipSitesPassWithFellowshipMap() {
 		var dvs = GetScenario();
 
+		// The rig's Fellowship sites have Ettenmoors as it was first printed, which PC Movie turns away for its
+		// errata; the Map has nothing to say against any of the nine.
 		var deck = dvs.buildDeckWithMap("102_74", DeckValidationScenario.FellowshipSites);
 		assertFalse(dvs.hasMapError(dvs.validate(deck)));
 
@@ -74,7 +149,8 @@ public class Card_V2_074_Tests
 			put("site9", "53_120");    // Wastes of Emyn Muil, as errata'd (set 53)
 		}};
 		deck = dvs.buildDeckWithMap("102_74", sitesOfEverySet);
-		assertFalse(dvs.hasMapError(dvs.validate(deck)));
+		// This deck is legal in PC Movie: nothing at all is said against it, by the Map or on any other ground.
+		assertEquals(List.of(), dvs.validate(deck));
 	}
 
 	@Test
@@ -116,15 +192,16 @@ public class Card_V2_074_Tests
 		var sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
 		sites.put("site9", "4_363");     // Palantír Chamber, the Towers path's site 9
 		deck = dvs.buildDeckWithMap("102_74", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		// The Map names the stray site, and none of the eight that are of its own path.
+		assertEquals(List.of("Palantír Chamber"), dvs.getMapErrorSites(dvs.validate(deck)));
 
 		sites.put("site9", "7_360");     // Dagorlad, the King path's site 9
 		deck = dvs.buildDeckWithMap("102_74", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of("Dagorlad"), dvs.getMapErrorSites(dvs.validate(deck)));
 
 		sites.put("site9", "17_146");    // Falls of Rauros, a Shadows site: those have no number
 		deck = dvs.buildDeckWithMap("102_74", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of("Falls of Rauros"), dvs.getMapErrorSites(dvs.validate(deck)));
 	}
 
 	@Test

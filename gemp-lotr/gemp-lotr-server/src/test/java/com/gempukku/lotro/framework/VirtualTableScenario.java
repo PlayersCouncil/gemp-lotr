@@ -2,6 +2,7 @@ package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DefaultActionContext;
+import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -87,6 +88,21 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, null);
     }
 
+    /**
+     * A table in a format that uses Maps (PCMovie), with each player's Map named.  Both decks still hold the same
+     * sites, whatever the Maps say: the game does not hold a deck to its Map, deck validation does.  In a format
+     * that does not use Maps the Maps named are in the decks and the game leaves them out.
+     * @param freepsMapId Blueprint ID of the Map in player 1's deck, or null for the Map of the sites' path.
+     * @param shadowMapId Blueprint ID of the Map in player 2's deck, or null for the Map of the sites' path.
+     */
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMapId, String shadowMapId) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, freepsMapId, shadowMapId, null, null, null, null);
+    }
+
     public VirtualTableScenario(HashMap<String, String> cardIDs,
             HashMap<String, String> siteIDs,
             String ringBearerID, String ringID,
@@ -119,6 +135,23 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             HashMap<String, String> siteIDs,
             String ringBearerID, String ringID,
             String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements);
+    }
+
+    /**
+     * The constructor every other one comes to.
+     * @param freepsMapId Blueprint ID of the Map in player 1's deck, or null.  See the constructor that names Maps.
+     * @param shadowMapId Blueprint ID of the Map in player 2's deck, or null.
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null.
+     */
+    private VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMapId, String shadowMapId,
             String freepsMetaSiteId, String shadowMetaSiteId,
             Consumer<VirtualTableScenario> bidHandler,
             Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
@@ -162,6 +195,24 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
 
         decks.get(P1).setRing(ringID);
         decks.get(P2).setRing(ringID);
+
+        // A format that uses Maps cannot seat a deck that has none.  A Map only announces its deck's site path, so
+        // where the tester names none each deck gets the Map of the path its sites are on.
+        if(freepsMapId == null && shadowMapId == null) {
+            if(_formatLibrary.getFormat(format).usesMaps()) {
+                freepsMapId = shadowMapId = MapOfSitePath(siteIDs);
+            }
+        }
+        else {
+            if(freepsMapId == null) {
+                freepsMapId = MapOfSitePath(siteIDs);
+            }
+            if(shadowMapId == null) {
+                shadowMapId = MapOfSitePath(siteIDs);
+            }
+        }
+        decks.get(P1).setMap(freepsMapId);
+        decks.get(P2).setMap(shadowMapId);
 
         InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId, playerPlacements);
 
@@ -270,6 +321,30 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         }
     }
 
+
+    /**
+     * The Map of the site path that a set of sites is on, for a deck whose Map the tester did not name.
+     * @param siteIDs The sites going into the deck.
+     * @return The blueprint ID of that path's Map.
+     */
+    private static String MapOfSitePath(HashMap<String, String> siteIDs) throws CardNotFoundException {
+        var paths = new java.util.HashSet<SitesBlock>();
+        for(String id : siteIDs.values()) {
+            paths.add(_cardLibrary.getLotroCardBlueprint(id).getSiteBlock());
+        }
+
+        if(paths.size() == 1) {
+            switch (paths.iterator().next()) {
+                case FELLOWSHIP: return FellowshipMap;
+                case TWO_TOWERS: return TowersMap;
+                case KING: return KingMap;
+                default: break;
+            }
+        }
+
+        throw new IllegalArgumentException("This table's decks need a Map and no Map goes with their sites (" + paths
+                + "): there is one for each of the Fellowship, Towers and King paths.  Name each player's Map in the constructor.");
+    }
 
     /**
      * Starts up a game of LOTR-TCG with the given decks and format.  This is used internally but may have use in certain

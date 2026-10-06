@@ -1,13 +1,17 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_075_Tests
@@ -22,6 +26,42 @@ public class Card_V2_075_Tests
 	// Multipath has PC Movie's rule that an adventure deck is all of one path, and does not use Maps.
 	protected DeckValidationScenario GetMultipathScenario() {
 		return new DeckValidationScenario(DeckValidationScenario.Multipath);
+	}
+
+	// A PC Movie table.  Player 1's deck brings this Map and player 2's brings Journey of the King, so that it
+	// can be told whose Map lies where.  Both decks hold the Towers sites: a game does not hold a deck to
+	// its Map, deck validation does.
+	protected VirtualTableScenario GetTableScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Aragorn, Ranger of the North: a companion in each draw deck, so that the game stops to
+					// ask for a starting fellowship before any hand is drawn.
+					put("aragorn", "1_89");
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.PCMovie,
+				VirtualTableScenario.TowersMap,
+				VirtualTableScenario.KingMap
+		);
+	}
+
+	// The same two decks, Maps and all, at a Multipath table.
+	protected VirtualTableScenario GetMultipathTableScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath,
+				VirtualTableScenario.TowersMap,
+				VirtualTableScenario.KingMap
+		);
 	}
 
 	@Test
@@ -54,11 +94,45 @@ public class Card_V2_075_Tests
 	}
 
 	@Test
+	public void BeforeTheGameBeginsEachPlayersMapIsInItsOwnersSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTableScenario();
+
+		var map = scn.GetFreepsMap();
+		var theirMap = scn.GetShadowMap();
+
+		// The players have bid and been seated, and no more: no fellowship has been chosen and no hand drawn.
+		// Each player's Map is already in that player's support area.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertEquals("102_75", map.getBlueprintId());
+		assertEquals(scn.P1(), map.getOwner());
+		assertInZone(Zone.SUPPORT, map);
+		assertEquals("102_76", theirMap.getBlueprintId());
+		assertEquals(scn.P2(), theirMap.getOwner());
+		assertInZone(Zone.SUPPORT, theirMap);
+
+		// And there they stay once the game is under way.
+		scn.StartGame();
+		assertInZone(Zone.SUPPORT, map, theirMap);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TowersMapIsNotInTheGameInAFormatThatDoesNotUseMaps() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMultipathTableScenario();
+
+		// The decks that put a Map in each support area at a PC Movie table: here neither player has one.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertNull(scn.GetFreepsMap());
+		assertNull(scn.GetShadowMap());
+	}
+
+	@Test
 	public void TowersSitesPassWithTowersMap() {
 		var dvs = GetScenario();
 
+		// Nothing at all is said against the deck: not by the Map, and not by the format on any other ground.
 		var deck = dvs.buildDeckWithMap("102_75", DeckValidationScenario.TowersSites);
-		assertFalse(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of(), dvs.validate(deck));
 
 		// One site of each number, from every set that has Towers sites: sets 4, 5 and 6, V2, and the errata
 		// set 54.  A site as the PC errata'd it is a card of its own, and is the one PC Movie plays.
@@ -74,7 +148,7 @@ public class Card_V2_075_Tests
 			put("site9", "102_73");    // Isengard Clefts (V2)
 		}};
 		deck = dvs.buildDeckWithMap("102_75", sitesOfEverySet);
-		assertFalse(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of(), dvs.validate(deck));
 	}
 
 	@Test
@@ -116,15 +190,16 @@ public class Card_V2_075_Tests
 		var sites = new HashMap<>(DeckValidationScenario.TowersSites);
 		sites.put("site9", "1_360");     // Emyn Muil, the Fellowship path's site 9
 		deck = dvs.buildDeckWithMap("102_75", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		// The Map names the stray site, and none of the eight that are of its own path.
+		assertEquals(List.of("Emyn Muil"), dvs.getMapErrorSites(dvs.validate(deck)));
 
 		sites.put("site9", "7_360");     // Dagorlad, the King path's site 9
 		deck = dvs.buildDeckWithMap("102_75", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of("Dagorlad"), dvs.getMapErrorSites(dvs.validate(deck)));
 
 		sites.put("site9", "17_146");    // Falls of Rauros, a Shadows site: those have no number
 		deck = dvs.buildDeckWithMap("102_75", sites);
-		assertTrue(dvs.hasMapError(dvs.validate(deck)));
+		assertEquals(List.of("Falls of Rauros"), dvs.getMapErrorSites(dvs.validate(deck)));
 	}
 
 	@Test

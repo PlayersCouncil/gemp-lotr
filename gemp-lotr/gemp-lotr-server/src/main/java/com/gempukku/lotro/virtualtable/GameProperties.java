@@ -100,11 +100,56 @@ public interface GameProperties extends TableBase {
 
 
 
+	/**
+	 * Starts reading the game log from here: the messages the game sends from now on are kept, and any kept before
+	 * are dropped.  Call it just before the action whose log lines a test means to read.
+	 */
+	default void MarkGameLog() { gameState().startMessageRecord(); }
+
+	/**
+	 * @return Every message the game has sent to the players since MarkGameLog() was last called, oldest first, as
+	 * the client is sent them (a card is named by a link, HTML that holds its blueprint id and its full name).  For
+	 * a failure message; to ask whether a card was named, use GameLogSinceMarkMentions.
+	 */
+	default List<String> GetGameLogSinceMark() {
+		var record = gameState().getMessageRecord();
+		Verify(record != null, "The game log is not being read: call MarkGameLog() before the action whose messages are wanted.");
+		return record == null ? List.of() : List.copyOf(record);
+	}
+
+	/**
+	 * Whether the game log has named each of the given cards since MarkGameLog() was last called.  This is the
+	 * reading for a card that is made known by the log alone: one taken from a draw deck by its type, or revealed
+	 * from a hand to a player who is shown no pop-up.  A card is named by its link (blueprint id and full name),
+	 * as every line of the log names a card, so two copies of one card cannot be told apart, and a card the log
+	 * names for another reason (the event that was just played) is named too: set the mark after that.
+	 * @param cards The cards to look for.
+	 * @return True if every one of the cards is named in some message sent since the mark.
+	 */
+	default boolean GameLogSinceMarkMentions(PhysicalCardImpl... cards) {
+		var log = GetGameLogSinceMark();
+		for (var card : cards) {
+			var link = GameUtils.getCardLink(card);
+			if (log.stream().noneMatch(message -> message.contains(link)))
+				return false;
+		}
+		return true;
+	}
+
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {
 		return (PhysicalCardImpl)gameState().getRing(P1());
 	}
 	default PhysicalCardImpl GetShadowRing() { return (PhysicalCardImpl)gameState().getRing(P2()); }
+	/**
+	 * @return The Map the first player's deck brought to the table, or null in a format that does not use Maps
+	 * (there the Map is not in the game at all).  A Map is in no pile and has no alias: this is the way to it.
+	 */
+	default PhysicalCardImpl GetFreepsMap() { return (PhysicalCardImpl)gameState().getMap(P1()); }
+	/**
+	 * @return The Map the second player's deck brought to the table, or null in a format that does not use Maps.
+	 */
+	default PhysicalCardImpl GetShadowMap() { return (PhysicalCardImpl)gameState().getMap(P2()); }
 	default PhysicalCardImpl GetRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P1()); }
 	default PhysicalCardImpl GetShadowRingBearer() { return (PhysicalCardImpl)gameState().getRingBearer(P2()); }
 

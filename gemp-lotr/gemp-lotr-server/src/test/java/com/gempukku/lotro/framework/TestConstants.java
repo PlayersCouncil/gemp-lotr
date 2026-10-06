@@ -91,6 +91,26 @@ public interface TestConstants {
 	}};
 
 	/*
+	 * The Maps of the three Movie-block site paths (PC, set V2).  A Map announces which site path its deck uses and
+	 * does nothing else: it lies in its owner's support area from before the game begins.  A format that uses Maps
+	 * (PCMovie) wants one in every deck; a table in such a format gives each deck the Map of its sites' path unless
+	 * the constructor names one.
+	 */
+
+	/**
+	 * Path of the Fellowship: "Your adventure deck must only contain cards from the Fellowship site path."
+	 */
+	String FellowshipMap = "102_74";
+	/**
+	 * Road to the Towers: "Your adventure deck must only contain cards from the Towers site path."
+	 */
+	String TowersMap = "102_75";
+	/**
+	 * Journey of the King: "Your adventure deck must only contain cards from the King site path."
+	 */
+	String KingMap = "102_76";
+
+	/*
 	 * Some useful Ring-bearer and One Ring references.  This list can be expanded as needed.
 	 */
 

@@ -83,6 +83,8 @@ public class GameState {
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
     private final LinkedList<String> _lastMessages = new LinkedList<>();
+    // Every message sent since startMessageRecord() was last called; null until somebody asks for a record
+    private List<String> _messageRecord;
 
     private PreGameInfo _preGameInfo;
 
@@ -443,10 +445,28 @@ public class GameState {
         _lastMessages.clear();
     }
 
+    /**
+     * Starts a full record of the messages sent to the players from now on, dropping any record kept before.  The
+     * last few messages are always kept for players who connect later; this is for a reader that needs every one
+     * (the virtual table's reading of the game log).  Nothing is recorded until this is first called.
+     */
+    public void startMessageRecord() {
+        _messageRecord = new ArrayList<>();
+    }
+
+    /**
+     * @return Every message sent since startMessageRecord() was last called, oldest first, or null if it never was.
+     */
+    public List<String> getMessageRecord() {
+        return _messageRecord == null ? null : Collections.unmodifiableList(_messageRecord);
+    }
+
     public void sendMessage(String message) {
         _lastMessages.add(message);
         if (_lastMessages.size() > LAST_MESSAGE_STORED_COUNT)
             _lastMessages.removeFirst();
+        if (_messageRecord != null)
+            _messageRecord.add(message);
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendMessage(message);
     }

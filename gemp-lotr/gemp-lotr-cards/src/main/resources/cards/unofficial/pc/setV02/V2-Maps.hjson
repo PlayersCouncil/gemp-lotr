@@ -21,7 +21,7 @@
 				# making the user figure out which one isn't listed.
 				filter: or(siteblock(towers),siteblock(king),siteblock(shadows),siteblock(hobbit))
 				max: 0
-				text: Adventure Deck must only contain sites from the Fellowship block path.
+				text: Adventure deck must only contain sites from the Fellowship site path
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Fellowship site path.
@@ -56,7 +56,7 @@
 				# making the user figure out which one isn't listed.
 				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows),siteblock(hobbit))
 				max: 0
-				text: Adventure deck must only contain sites from the Towers block site path.
+				text: Adventure deck must only contain sites from the Towers site path
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Towers site path.
@@ -92,7 +92,7 @@
 				# making the user figure out which one isn't listed.
 				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows),siteblock(hobbit))
 				max: 0
-				text: Adventure Deck must only contain sites from the King block site path.
+				text: Adventure deck must only contain sites from the King site path
 			}
 		]
 		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the King site path.

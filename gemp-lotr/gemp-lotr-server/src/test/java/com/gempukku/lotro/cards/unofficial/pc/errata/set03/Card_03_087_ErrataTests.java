@@ -578,12 +578,17 @@ public class Card_03_087_ErrataTests
 		scn.SetTwilight(2);
 		scn.FreepsPass();
 
+		scn.MarkGameLog();
 		scn.ShadowPlayCard(advances);
 
 		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, false));
 		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		// The owner of the hand is told which card it was by the game log, which names it; Legolas, in his
+		// draw deck, it does not name.
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(gimli));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(scn.GetFreepsCard("legolas")));
 
 		scn.ShadowDismissRevealedCards();
 		// What he is shown next is his own draw deck.
