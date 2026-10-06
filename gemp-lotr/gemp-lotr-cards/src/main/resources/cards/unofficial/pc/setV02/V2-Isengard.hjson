@@ -549,6 +549,11 @@
 					type: Played
 					filter: self
 				}
+				# Not offered with nothing to take: it has no cost (Q-0034).
+				requires: {
+					type: HasCardInDiscard
+					filter: timeword(skirmish),event,culture(isengard)
+				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
 					select: choose(timeword(skirmish),event,culture(isengard))
@@ -621,7 +626,7 @@
 				}
 			}
 		]
-		gametext: When you play this minion, you may play an [isengard] orc from your discard pile; it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
+		gametext: When you play this minion, you may play an [isengard] Orc from your discard pile; it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
 		lore: "'He has taken up with foul folk, with the Orcs.'"
 		promotext: ""
 		alts: {
