@@ -386,4 +386,66 @@ public class Card_V1_025_Tests
 		assertTrue(scn.ShadowActionAvailable(flock));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
+
+	@Test
+	public void AWeatherFoundInTheDrawDeckNeedNotBeTakenAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		var snows = scn.GetShadowCard("snows");
+		var chill = scn.GetShadowCard("chill");
+		var frost = scn.GetShadowCard("frost");
+		var storm = scn.GetShadowCard("storm");
+		var saruman = scn.GetShadowCard("saruman");
+		var troop = scn.GetShadowCard("troop");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		// Snows is the one [isengard] weather left in the draw deck; the discard pile has three of its own.
+		scn.MoveCardsToDiscard(chill, frost, storm);
+		// A weather card that is not [isengard]
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.WEATHER));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.AddWoundsToChar(guard1, 1);
+		scn.AddWoundsToChar(guard2, 1);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
+		assertInZone(Zone.DECK, snows, saruman, troop);
+		assertInZone(Zone.DISCARD, chill, frost, storm);
+		assertEquals(0, scn.GetShadowHandCount());
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		int opponentShuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.ShadowUseCardAction(flock);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		// Snows is the only card that could be chosen, and it is still not taken unasked: "There is no penalty
+		// if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.ShadowHasCardChoiceAvailable(snows));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(chill, frost, storm, saruman, troop));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		// Nothing was taken: Snows is still in the deck, and the game has not gone to the discard pile for one instead.
+		assertInZone(Zone.DECK, snows);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, chill, frost, storm);
+		assertEquals(0, scn.GetShadowHandCount());
+		// The deck was looked through, so it is reshuffled though nothing came out of it: once, and only that deck.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetFreepsDeckShuffleCount());
+		// The ability has been used all the same, and that was its once for this phase.
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }
