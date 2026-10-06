@@ -54,7 +54,7 @@
 					}
 					{
 						type: Hinder
-						select: all(NameFromMemory(chosenCard))
+						select: all(side(Shadow),support,NameFromMemory(chosenCard))
 					}
 				]
 			}
@@ -62,6 +62,10 @@
 				type: Response
 				trigger: {
 					type: NewRingBearer
+				}
+				requires: {
+					type: CantSpot
+					filter: self,AttachedTo(Ring-bearer)
 				}
 				effect: {
 					type: Transfer

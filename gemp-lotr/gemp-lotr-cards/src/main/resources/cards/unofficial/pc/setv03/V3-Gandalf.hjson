@@ -29,6 +29,10 @@
 					type: Played
 					filter: self
 				}
+				requires: {
+					type: CanSpot
+					filter: side(Shadow),AttachedTo(HasAttached(self))
+				}
 				effect: {
 					type: Discard
 					select: choose(side(Shadow), AttachedTo(bearer))
