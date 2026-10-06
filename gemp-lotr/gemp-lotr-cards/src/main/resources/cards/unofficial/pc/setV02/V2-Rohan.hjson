@@ -168,7 +168,7 @@
 				}
 				effect: {
 					type: RemoveCardsInDeadPileFromGame
-					count: 3
+					count: 0-3
 					select: choose(culture(Rohan), companion, not(unique))
 				}
 			}
@@ -308,10 +308,17 @@
 					type: WinsSkirmish
 					filter: bearer
 				}
-				requires: {
-					type: CanSpot
-					filter: bearer, name(Eomer)
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: bearer, name(Eomer)
+					}
+					# Not offered with no [rohan] token to reinforce: it has no cost (Q-0034).
+					{
+						type: CanSpot
+						filter: HasCultureToken(rohan)
+					}
+				]
 				effect: {
 					type: ReinforceTokens
 					culture: rohan
