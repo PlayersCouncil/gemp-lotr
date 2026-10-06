@@ -5,29 +5,34 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_021_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("banner", "103_21");
-					put("kingdead", "8_38"); // Gondor Wraith, strength 7, enduring
-					put("deadman", "10_27"); // Gondor Wraith, strength 6, enduring
-					put("aragorn", "1_89"); // Non-Wraith for negative test
+					put("king", "8_38");        // King of the Dead, Oathbreaker: a [gondor] Wraith, strength 7, vitality 4, enduring; his response is about Aragorn
+					put("deadman", "10_27");    // Dead Man of Dunharrow: a [gondor] Wraith, strength 6, vitality 3, enduring; his text is about being played
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man, strength 7; a skirmish ability never used here
+					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, strength 6, made a Wraith where a test says so
 
-					put("savage1", "1_151"); // Strength 5
+					put("savage1", "1_151");    // Uruk Savage: an [isengard] minion, strength 5, vitality 3; damage +1 is its whole text
 					put("savage2", "1_151");
 					put("savage3", "1_151");
+					put("runner", "1_178");     // Goblin Runner: a [moria] minion, strength 5, vitality 1
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion, strength 13, vitality 3, no text
+					put("corpse", "6_99");      // Corpse Lights: a [sauron] minion who is a Wraith, vitality 2; a skirmish ability the Shadow player never uses here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,11 +52,11 @@ public class Card_V3_021_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Hand weapon
-		 * Vitality: 1
+		 * Vitality: +1
 		 * Game Text: Bearer must be a [gondor] Wraith.
-		* 	Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.
-		* 	Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
-		*/
+		 * 	Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.
+		 * 	Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
+		 */
 
 		var scn = GetScenario();
 
@@ -68,239 +73,474 @@ public class Card_V3_021_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
-
-
 	@Test
-	public void EtherealBannerAttachesToGondorWraithAndGivesVitality() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForOneOnOneOfTheGondorWraithsWhoGainsAVitality() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveCompanionsToTable(kingdead, aragorn);
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(king, deadman, boromir, gimli);
+		// No Free Peoples Wraith is of another culture, so a [dwarven] companion is made one.
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
 		scn.MoveCardsToHand(banner);
 
 		scn.StartGame();
 
-		int kingVitalityBefore = scn.GetVitality(kingdead);
-
-		// Should auto-attach to King (only valid Gondor Wraith target)
+		assertTrue(scn.IsRace(gimli, Race.WRAITH));
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetVitality(deadman));
+		assertEquals(4, scn.GetVitality(king));
 		assertTrue(scn.FreepsPlayAvailable(banner));
 		scn.FreepsPlayCard(banner);
 
-		assertAttachedTo(banner, kingdead);
-		assertEquals(kingVitalityBefore + 1, scn.GetVitality(kingdead));
-	}
-
-	@Test
-	public void EtherealBannerWinTriggerExertsWraithAndAssignedMinion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
-		var deadman = scn.GetFreepsCard("deadman");
-		var savage1 = scn.GetShadowCard("savage1");
-		var savage2 = scn.GetShadowCard("savage2");
-
-		scn.MoveCompanionsToTable(kingdead, deadman);
-		scn.AttachCardsTo(kingdead, banner);
-		scn.MoveMinionsToTable(savage1, savage2);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		assertEquals(0, scn.GetWoundsOn(deadman));
-		assertEquals(0, scn.GetWoundsOn(savage2));
-
-		// King (strength 7) vs savage1 (strength 5) - King wins
-		// Dead Man vs savage2
-		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[] { kingdead, savage1 },
-				new PhysicalCardImpl[] { deadman, savage2 }
-		);
-		scn.ShadowDeclineAssignments();
-
-		// Resolve King's skirmish first
-		scn.FreepsResolveSkirmish(kingdead);
-		scn.PassCurrentPhaseActions();
-
-		// King wins, trigger should fire
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		// Choose Wraith to exert (Dead Man, since he's assigned to savage2)
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, gimli, frodo));
 		scn.FreepsChooseCard(deadman);
 
-		// Dead Man exerted
-		assertEquals(1, scn.GetWoundsOn(deadman));
-
-		// savage2 (minion assigned to Dead Man) should be exerted
-		assertEquals(1, scn.GetWoundsOn(savage2));
+		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(banner, deadman);
+		assertEquals(4, scn.GetVitality(deadman));
+		assertEquals(4, scn.GetVitality(king));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void EtherealBannerWinTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WhenBearerWinsAWraithAndOneOfTheMinionsAssignedToItMayBeExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
+		var king = scn.GetFreepsCard("king");
 		var deadman = scn.GetFreepsCard("deadman");
-		var savage1 = scn.GetShadowCard("savage1");
-		var savage2 = scn.GetShadowCard("savage2");
-
-		scn.MoveCompanionsToTable(kingdead, deadman);
-		scn.AttachCardsTo(kingdead, banner);
-		scn.MoveMinionsToTable(savage1, savage2);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[] { kingdead, savage1 },
-				new PhysicalCardImpl[] { deadman, savage2 }
-		);
-		scn.ShadowDeclineAssignments();
-
-		scn.FreepsResolveSkirmish(kingdead);
-		scn.PassCurrentPhaseActions();
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsDeclineOptionalTrigger();
-
-		// Nothing exerted
-		assertEquals(0, scn.GetWoundsOn(deadman));
-		assertEquals(0, scn.GetWoundsOn(savage2));
-	}
-
-	@Test
-	public void EtherealBannerOverwhelmResponseWounds2Minions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var frodo = scn.GetRingBearer();
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
 		var savage3 = scn.GetShadowCard("savage3");
-
-		scn.MoveCompanionsToTable(kingdead);
-		scn.AttachCardsTo(kingdead, banner);
-		scn.MoveMinionsToTable(savage1, savage2, savage3);
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(king, deadman, boromir, gimli);
+		// A Wraith who is not [gondor].
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.AttachCardsTo(king, banner);
 
 		scn.StartGame();
-
-		// Add 2 wounds to King - enduring makes him 7 + 4 = 11 strength
-		scn.AddWoundsToChar(kingdead, 2);
-		assertEquals(11, scn.GetStrength(kingdead));
-
-		// Add 2 threats for the cost
-		scn.AddThreats(2);
-
+		scn.MoveMinionsToTable(savage1, savage2, savage3, troop, runner);
 		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { deadman, savage2 },
+				new PhysicalCardImpl[] { gimli, savage3 },
+				new PhysicalCardImpl[] { boromir, runner }
+		);
+		// The Shadow player puts the minion left over on the Dead Man as well: he has an [isengard] minion and a [moria] one.
+		scn.ShadowAssignToMinions(deadman, troop);
+		scn.FreepsResolveSkirmish(king);
 
-		// King (11 strength) vs savage1 (5 strength) - King overwhelms (11 > 10 = 2x5)
-		scn.FreepsAssignToMinions(kingdead, savage1);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(kingdead);
+		// The King's 7 beats the Savage's 5 without overwhelming it.
 		scn.PassCurrentPhaseActions();
 
-		// savage1 should be overwhelmed (killed)
-		assertInZone(Zone.DISCARD, savage1);
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		scn.FreepsChooseOptionalTrigger(banner);
 
-		// Win trigger offered first (decline it)
-		if (scn.FreepsHasOptionalTriggerAvailable("Discard this and remove 2 threats to wound 2 minions")) {
-			scn.FreepsChooseAction("Discard this and remove 2 threats to wound 2 minions");
-		}
+		// A Wraith: the bearer, the other [gondor] Wraith and the [dwarven] one; not the Man, not Frodo.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(deadman);
 
-		// Banner discarded, 2 threats removed
-		assertInZone(Zone.DISCARD, banner);
-		assertEquals(0, scn.GetThreats());
+		// A minion the Dead Man is assigned to skirmish: either of his two, and no other Wraith's or companion's.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage2, troop));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(savage1, savage3, runner));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(troop);
 
-		assertEquals(1, scn.GetWoundsOn(savage2));
-		assertEquals(1, scn.GetWoundsOn(savage3));
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(savage2));
+		assertEquals(0, scn.GetWoundsOn(savage3));
+		assertEquals(0, scn.GetWoundsOn(runner));
+		assertEquals(0, scn.GetWoundsOn(king));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		// Only the wound for losing the skirmish.
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test
-	public void EtherealBannerOverwhelmResponseNotOfferedWithoutEnoughThreats() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void DecliningExertsNoOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
-
-		scn.MoveCompanionsToTable(kingdead);
-		scn.AttachCardsTo(kingdead, banner);
-		scn.MoveMinionsToTable(savage1, savage2);
+		scn.MoveCompanionsToTable(king, deadman);
+		scn.AttachCardsTo(king, banner);
 
 		scn.StartGame();
-
-		// Add 2 wounds for overwhelm strength
-		scn.AddWoundsToChar(kingdead, 2);
-
-		// Only 1 threat (need 2 for cost)
-		scn.AddThreats(1);
-
+		scn.MoveMinionsToTable(savage1, savage2);
 		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(kingdead, savage1);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(kingdead);
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { deadman, savage2 }
+		);
+		scn.FreepsResolveSkirmish(king);
 		scn.PassCurrentPhaseActions();
 
-		// savage1 overwhelmed
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(king));
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(savage2));
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void AnotherWraithWinningAndBearerLosingBringNoOffer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(king, deadman);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, troop },
+				new PhysicalCardImpl[] { deadman, runner }
+		);
+
+		// The Dead Man, who does not bear the Banner, beats the Runner 6 to 5, while the King is still assigned to the Troop.
+		scn.FreepsResolveSkirmish(deadman);
+		scn.PassCurrentPhaseActions();
+
+		assertInZone(Zone.DISCARD, runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+
+		// The King's 7 loses to the Troop's 13.
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(1, scn.GetWoundsOn(king));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void EachSkirmishBearerWinsOffersItAgainAndBearerWithTheMinionHeHasBeatenMayBeTheOnesExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+		scn.MoveCompanionsToTable(king, deadman);
+		scn.AttachCardsTo(king, banner);
+		// Every minion is made fierce, so that the King fights twice in one turn.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.MINION, null, Keyword.FIERCE));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage1, savage2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { deadman, savage2 }
+		);
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		// The King has won, and is still assigned to the Savage he beat until this skirmish phase is over.
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		scn.FreepsChooseOptionalTrigger(banner);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman));
+		scn.FreepsChooseCard(king);
+
+		// The Savage he beat is the only minion he is assigned to.
+		assertEquals(1, scn.GetWoundsOn(king));
+		assertEquals(2, scn.GetWoundsOn(savage1));
+		assertEquals(0, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(savage2));
+
+		// The Dead Man beats his Savage 6 to 5: he does not bear the Banner and nothing is offered.
+		scn.FreepsResolveSkirmish(deadman);
+		scn.PassCurrentPhaseActions();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(savage2));
+
+		// The fierce skirmishes. The King, 7 + 2 for his wound, beats the first Savage again and kills it.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.BothPass();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { deadman, savage2 }
+		);
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
 		assertInZone(Zone.DISCARD, savage1);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		scn.FreepsChooseOptionalTrigger(banner);
+		scn.FreepsChooseCard(deadman);
 
-		// Win trigger first (decline)
-		if (scn.FreepsHasOptionalTriggerAvailable()) {
-			scn.FreepsDeclineOptionalTrigger();
-		}
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		assertEquals(2, scn.GetWoundsOn(savage2));
+		assertEquals(1, scn.GetWoundsOn(king));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
 
-		// Response should NOT be offered (not enough threats)
+	@Test
+	public void AWraithAssignedToNoMinionMayBeExertedAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var boromir = scn.GetFreepsCard("boromir");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+		scn.MoveCompanionsToTable(king, deadman, boromir);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage1, savage2);
+		scn.SkipToAssignments();
+		// The Dead Man is assigned to no one.
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { boromir, savage2 }
+		);
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		scn.FreepsChooseOptionalTrigger(banner);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman));
+		scn.FreepsChooseCard(deadman);
+
+		// He exerts, and there is no minion he is assigned to: the rest is ignored.
+		assertEquals(1, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(savage2));
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertEquals(0, scn.GetWoundsOn(king));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	@Ignore("Q-0068: 'exert a Wraith' names no side, so a Shadow minion who is a Wraith should be a Wraith that may be exerted; the game offers only the Free Peoples player's own Wraiths")
+	public void AShadowMinionWhoIsAWraithMayBeTheWraithExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+		var savage1 = scn.GetShadowCard("savage1");
+		var corpse = scn.GetShadowCard("corpse");
+		scn.MoveCompanionsToTable(king, boromir);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage1, corpse);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { boromir, corpse }
+		);
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
+		scn.FreepsChooseOptionalTrigger(banner);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, corpse));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, savage1));
+		scn.FreepsChooseCard(corpse);
+
+		// Corpse Lights are assigned to a companion and to no minion: they exert alone.
+		assertEquals(1, scn.GetWoundsOn(corpse));
+		assertEquals(0, scn.GetWoundsOn(king));
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void WithNoWraithAbleToExertAndNoMinionLeftAssignedItIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(king);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		// Vitality 4 + 1 for the Banner, with 4 wounds: exhausted, and at strength 7 + 8.
+		scn.AddWoundsToChar(king, 4);
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(king, runner);
+		scn.FreepsResolveSkirmish(king);
+
+		assertEquals(15, scn.GetStrength(king));
+		scn.PassCurrentPhaseActions();
+
+		// The Runner is dead, the only Wraith cannot exert, and there are no threats for the response.
+		assertInZone(Zone.DISCARD, runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(4, scn.GetWoundsOn(king));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WhenBearerOverwhelmsAMinionTheBannerAndTwoThreatsMayBeSpentToWoundTwoMinions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(king, deadman, boromir);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		// Enduring: 7 + 4 for two wounds is 11, more than double the Runner's 5.
+		scn.AddWoundsToChar(king, 2);
+		scn.AddThreats(3);
+		scn.MoveMinionsToTable(runner, savage1, savage2, troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(king, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(king);
+
+		assertEquals(11, scn.GetStrength(king));
+		// Vitality 4 + 1 for the Banner, less 2 wounds
+		assertEquals(3, scn.GetVitality(king));
+		scn.PassCurrentPhaseActions();
+
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		assertAttachedTo(banner, king);
+		assertEquals(3, scn.GetThreats());
+		scn.FreepsChooseAction("wound 2 minions");
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage1, savage2, troop));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(king, deadman, boromir));
+		assertEquals(2, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(savage1, troop);
+
+		assertInZone(Zone.DISCARD, banner);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(savage2));
+		// The Banner's vitality went with it.
+		assertEquals(2, scn.GetVitality(king));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnOverwhelmByAnotherWraithAndAWinByBearerThatIsNoOverwhelmBringNoResponse() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var king = scn.GetFreepsCard("king");
+		var deadman = scn.GetFreepsCard("deadman");
+		var runner = scn.GetShadowCard("runner");
+		var savage1 = scn.GetShadowCard("savage1");
+		scn.MoveCompanionsToTable(king, deadman);
+		scn.AttachCardsTo(king, banner);
+
+		scn.StartGame();
+		// Enduring: the Dead Man's 6 + 4 for two wounds is 10, double the Runner's 5.
+		scn.AddWoundsToChar(deadman, 2);
+		scn.AddThreats(2);
+		scn.MoveMinionsToTable(runner, savage1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { king, savage1 },
+				new PhysicalCardImpl[] { deadman, runner }
+		);
+
+		// The Dead Man, who does not bear the Banner, overwhelms the Runner.
+		scn.FreepsResolveSkirmish(deadman);
+		assertEquals(10, scn.GetStrength(deadman));
+		scn.PassCurrentPhaseActions();
+
+		assertInZone(Zone.DISCARD, runner);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		// Banner should still be attached
-		assertAttachedTo(banner, kingdead);
-		assertEquals(1, scn.GetThreats());
+		// The King's 7 beats the Savage's 5, which is no overwhelm: the first sentence is offered, the response is not.
+		scn.FreepsResolveSkirmish(king);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Exert a Wraith"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertAttachedTo(banner, king);
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void EtherealBannerOverwhelmResponseNotOfferedForNormalWin() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithOnlyOneThreatToRemoveAnOverwhelmBringsNoResponse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var banner = scn.GetFreepsCard("banner");
-		var kingdead = scn.GetFreepsCard("kingdead");
+		var king = scn.GetFreepsCard("king");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
 		var savage1 = scn.GetShadowCard("savage1");
-		var savage2 = scn.GetShadowCard("savage2");
-
-		scn.MoveCompanionsToTable(kingdead);
-		scn.AttachCardsTo(kingdead, banner);
-		scn.MoveMinionsToTable(savage1, savage2);
+		scn.MoveCompanionsToTable(king, boromir);
+		scn.AttachCardsTo(king, banner);
 
 		scn.StartGame();
-
-		// No extra wounds - King is strength 7 vs savage strength 5
-		// 7 is NOT double 5 (would need 10+), so no overwhelm
-		scn.AddThreats(2);
-
+		scn.AddWoundsToChar(king, 2);
+		scn.AddThreats(1);
+		scn.MoveMinionsToTable(runner, savage1);
 		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(kingdead, savage1);
+		scn.FreepsAssignToMinions(king, runner);
 		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(kingdead);
+		scn.FreepsResolveSkirmish(king);
 		scn.PassCurrentPhaseActions();
 
-		// savage1 loses but is NOT overwhelmed
-		assertEquals(1, scn.GetWoundsOn(savage1));
+		assertInZone(Zone.DISCARD, runner);
+		// The first sentence is offered for the win; the response is not.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Exert a Wraith"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable("wound 2 minions"));
+		scn.FreepsDeclineOptionalTrigger();
 
-		// Win trigger offered (decline it)
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Exert a Wraith and a minion it is assigned to"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable("Discard this and remove 2 threats to wound 2 minions"));
+		assertAttachedTo(banner, king);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(savage1));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

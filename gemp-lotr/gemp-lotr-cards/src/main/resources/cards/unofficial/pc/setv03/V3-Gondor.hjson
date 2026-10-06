@@ -354,6 +354,10 @@
 					type: WinsSkirmish
 					filter: bearer
 				}
+				requires: {
+					type: CanSpot
+					filter: your,Wraith,canExert
+				}
 				effect: [
 					{
 						type: Exert
