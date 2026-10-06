@@ -472,7 +472,7 @@
 				type: Modifier
 				modifier: {
 					type: CantTakeWounds
-					filter: culture(sauron),minion,siteNumber(0-1)
+					filter: culture(sauron),orc,siteNumber(0-1)
 					requires: {
 						type: Not 
 						requires: {
@@ -516,15 +516,21 @@
 			{
 				type: Modifier
 				modifier: {
-					type: CantTakeWounds
-					filter: culture(sauron),minion,siteNumber(0-1)
-					requires: {
-						type: Not 
-						requires: {
-							type: Phase
-							phase: Skirmish
-						}
-					}
+					type: ModifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Discard
+					select: self
+				}
+				effect: {
+					type: CancelSkirmish
+					filter: culture(isengard),tracker
 				}
 			}
 		]
