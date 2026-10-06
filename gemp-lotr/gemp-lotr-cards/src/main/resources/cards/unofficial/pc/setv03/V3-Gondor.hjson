@@ -1195,6 +1195,11 @@
 			{
 				type: Activated
 				phase: Archery
+				requires: {
+					type: CanSpot
+					filter: or(and(hinderable,beacon),and(or(Gondor,Rohan),or(condition,possession)))
+					count: 2
+				}
 				cost: [
 					{
 						type: Hinder
@@ -1203,8 +1208,16 @@
 							type: Range
 							from: 1
 							to: {
-								type: ForEachYouCanSpot
-								filter: hinderable, beacon
+								type: Min
+								firstNumber: {
+									type: ForEachYouCanSpot
+									filter: hinderable, beacon
+								}
+								secondNumber: {
+									type: ForEachYouCanSpot
+									filter: or(and(hinderable,beacon),and(or(Gondor,Rohan),or(condition,possession)))
+									divider: 2
+								}
 							}
 						}
 						memorize: hinderedBeacons
