@@ -25,6 +25,7 @@
 					type: chooseCardsFromDrawDeck
 					select: choose(culture(elven),ally)
 					memorize: chosenAlly
+					count: 0-1
 					text: Choose an [Elven] ally to reveal from your draw deck.
 					showAll: true
 				}

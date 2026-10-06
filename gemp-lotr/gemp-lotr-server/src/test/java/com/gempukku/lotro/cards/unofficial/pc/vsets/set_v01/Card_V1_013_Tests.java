@@ -357,6 +357,57 @@ public class Card_V1_013_Tests
 	}
 
 	@Test
+	public void AnAllyFoundInTheDrawDeckNeedNotBeRevealedAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var counsel = scn.GetFreepsCard("counsel");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var barliman = scn.GetFreepsCard("barliman");
+		var lorienelf = scn.GetFreepsCard("lorienelf");
+		var elrond = scn.GetFreepsCard("elrond");
+		var orophin = scn.GetFreepsCard("orophin");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+		// Elrond is the one [elven] ally left in the draw deck.
+		scn.MoveCardsToDiscard(orophin, silinde);
+
+		scn.StartGame();
+
+		assertInZone(Zone.DECK, elrond, lorienelf, barliman);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+		int deck = scn.GetFreepsDeckCount();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int opponentShuffles = scn.GetShadowDeckShuffleCount();
+
+		scn.FreepsPlayCard(counsel);
+		scn.FreepsDismissRevealedCards();
+
+		// Elrond is the only card that could be chosen, and he is still not revealed unasked: "There is no
+		// penalty if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(orophin, silinde, lorienelf, barliman));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsDeclineChoosing();
+
+		// No ally was found, so nothing is revealed to anybody and nobody is asked about twilight.
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to pay"));
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, elrond);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsHandCount());
+		// The event is spent all the same.
+		assertInZone(Zone.DISCARD, counsel);
+		// The deck was looked through, so it is reshuffled though nothing came out of it: once, and only that deck.
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
 	public void AtEredNimraisXIsStillTheAllysPrintedCost() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetEredNimraisScenario();
 
