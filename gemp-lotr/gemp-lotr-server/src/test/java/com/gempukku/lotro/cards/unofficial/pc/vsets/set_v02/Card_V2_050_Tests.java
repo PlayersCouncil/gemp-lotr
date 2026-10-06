@@ -1,13 +1,16 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_050_Tests
@@ -18,11 +21,24 @@ public class Card_V2_050_Tests
 				new HashMap<>()
 				{{
 					put("hour", "102_50");
-					put("eowyn", "4_270");
 
-					put("runner1", "1_178");
+					// Valiant companions of two cultures and two races.
+					put("guard", "5_83");        // Household Guard: [rohan] Man, strength 6, vitality 3; "Valiant" is his whole text
+					put("haldir", "102_8");      // Haldir, Naith Commander: [elven] Elf, strength 6; his text needs a ranged weapon or an [elven] possession
+					// Aragorn, Defender of Rohan: valiant, strength 8, vitality 4, so he can exert and lose two
+					// skirmishes.  His text does nothing unless the Ring-bearer is assigned to a skirmish.
+					put("aragorn", "17_93");
+					// Rider of Rohan: a [rohan] companion who is not valiant, strength 5.  His ability needs a mount.
+					put("rider", "4_286");
+					// Guma, Plains Farmer: a [rohan] ally, vitality 2.  No ally is valiant in print, so the tests
+					// make him valiant to have a valiant character who is not a companion.
+					put("guma", "4_277");
+
+					put("runner1", "1_178");     // Goblin Runner: [moria], strength 5, vitality 1
 					put("runner2", "1_178");
-
+					put("savage", "1_151");      // Uruk Savage: [isengard], strength 5, vitality 3, damage +1
+					// Ulaire Cantea: fierce, strength 10, vitality 3.  His ability discards a weapon, and nobody bears one.
+					put("cantea", "1_230");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,8 +58,9 @@ public class Card_V2_050_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Assignment
-		 * Game Text: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
-		*/
+		 * Game Text: Exert a valiant companion to make that companion defender +1. That companion is strength +1
+		 * for each minion skirmishing them until the regroup phase.
+		 */
 
 		var scn = GetScenario();
 
@@ -60,49 +77,179 @@ public class Card_V2_050_Tests
 	}
 
 	@Test
-	public void LetThisBetheHourAppliesDefenderAndMultiOpponentStrengthBonus() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ExertsAValiantCompanionWhoBecomesDefenderPlusOneAndIsStrongerForEachMinionSkirmishingThem() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var hour = scn.GetFreepsCard("hour");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCardsToHand(hour);
-		scn.MoveCompanionsToTable(eowyn);
-
+		var guard = scn.GetFreepsCard("guard");
+		var haldir = scn.GetFreepsCard("haldir");
+		var rider = scn.GetFreepsCard("rider");
+		var guma = scn.GetFreepsCard("guma");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.MoveMinionsToTable(runner1, runner2);
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(hour);
+		scn.MoveCompanionsToTable(guard, haldir, rider);
+		// An ally, made valiant: valiant as the two are, and no companion.
+		scn.MoveAlliesToTable(guma);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(runner1, runner2, savage);
+
+		// An assignment event: not to be played in the phase before.
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(hour));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(hour));
-		assertEquals(3, scn.GetVitality(eowyn));
-		assertEquals(6, scn.GetStrength(eowyn));
-		assertFalse(scn.HasKeyword(eowyn, Keyword.DEFENDER));
+		var pool = scn.GetTwilight();
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertFalse(scn.HasKeyword(guard, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(haldir, Keyword.DEFENDER));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(6, scn.GetStrength(haldir));
 
 		scn.FreepsPlayCard(hour);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider, guma, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(guard);
 
-		assertEquals(2, scn.GetVitality(eowyn));
-		assertEquals(6, scn.GetStrength(eowyn));
-		assertTrue(scn.HasKeyword(eowyn, Keyword.DEFENDER));
+		assertInZone(Zone.DISCARD, hour);
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.HasKeyword(guard, Keyword.DEFENDER));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DEFENDER));
+		// Nobody is skirmishing him yet.
+		assertEquals(6, scn.GetStrength(guard));
+		// The valiant companion who was not chosen.
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertFalse(scn.HasKeyword(haldir, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 
 		scn.ShadowPass();
 		scn.FreepsPass();
+		// Defender +1: one companion takes two minions, a [moria] Orc and an [isengard] Uruk-hai.
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { guard, runner1, savage },
+				new PhysicalCardImpl[] { haldir, runner2 });
+		assertTrue(scn.IsCharAssignedAgainst(guard, runner1));
+		assertTrue(scn.IsCharAssignedAgainst(guard, savage));
 
-		scn.FreepsAssignToMinions(eowyn, runner1, runner2);
+		// Haldir's skirmish first.  The minions assigned to the Guard are not skirmishing him yet, and
+		// the minion skirmishing Haldir does nothing for Haldir.
+		scn.FreepsResolveSkirmish(haldir);
+		assertTrue(scn.IsCharSkirmishingAgainst(haldir, runner2));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(6, scn.GetStrength(haldir));
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, runner2);
 
-		scn.FreepsResolveSkirmish(eowyn);
+		scn.FreepsResolveSkirmish(guard);
+		assertTrue(scn.IsCharSkirmishingAgainst(guard, runner1));
+		assertTrue(scn.IsCharSkirmishingAgainst(guard, savage));
+		// 6 + 1 for each of the two minions skirmishing him.
+		assertEquals(8, scn.GetStrength(guard));
+		assertEquals(6, scn.GetStrength(haldir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
 
-		assertEquals(8, scn.GetStrength(eowyn));
+	@Test
+	public void DefenderLastsForTheAssignmentPhaseAndTheStrengthBonusUntilTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineOptionalTrigger();
+		var hour = scn.GetFreepsCard("hour");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var cantea = scn.GetShadowCard("cantea");
+		scn.MoveCardsToHand(hour);
+		scn.MoveCompanionsToTable(aragorn);
 
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertEquals(6, scn.GetStrength(eowyn));
-		assertFalse(scn.HasKeyword(eowyn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(8, scn.GetStrength(aragorn));
+		// The only valiant companion: he is the one exerted.
+		scn.FreepsPlayCard(hour);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+
+		// Still defender +1 when the assignments are made, at the end of the assignment phase.
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+		scn.FreepsAssignToMinions(aragorn, cantea);
+
+		// The first sentence names no duration, so the defender bonus ends with the assignment phase.
+		// The strength bonus goes on: 8 + 1 for the minion skirmishing him.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(9, scn.GetStrength(aragorn));
+		// 9 against 10: he loses and takes a wound.
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+
+		// Cantea is fierce.  In the second skirmish, after one already resolved, the bonus is still there.
+		scn.PassFierceAssignmentActions();
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+		scn.FreepsAssignToMinions(aragorn, cantea);
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, cantea));
+		assertEquals(9, scn.GetStrength(aragorn));
+		scn.PassFierceSkirmishActions();
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		// The regroup phase has begun and the bonus is over: the fellowship moves again, Cantea is
+		// still there, and with him skirmishing Aragorn once more Aragorn is strength 8.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, cantea);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, cantea));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWhenTheOnlyValiantCompanionIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hour = scn.GetFreepsCard("hour");
+		var guard = scn.GetFreepsCard("guard");
+		var rider = scn.GetFreepsCard("rider");
+		var guma = scn.GetFreepsCard("guma");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(hour);
+		scn.MoveCompanionsToTable(guard, rider);
+		scn.MoveAlliesToTable(guma);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
+		// Vitality 3 with 2 wounds: the valiant companion cannot exert.  The companion who is not
+		// valiant and the valiant ally both can.
+		scn.AddWoundsToChar(guard, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertEquals(0, scn.GetWoundsOn(rider));
+		assertEquals(0, scn.GetWoundsOn(guma));
+		assertFalse(scn.FreepsPlayAvailable(hour));
 	}
 }
