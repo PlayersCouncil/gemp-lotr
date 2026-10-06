@@ -525,7 +525,6 @@ public class Card_03_087_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0051: \"you may take a minion\" is not optional: the Shadow player must choose one")
 	public void TheShadowPlayerMayDeclineToTakeAMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -564,7 +563,7 @@ public class Card_03_087_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0036: the owner of the hand is given a pop-up of the card revealed from it at random, where Q-0024 ruled none")
+	@Ignore("F-0056: the owner of the hand is given a pop-up of the card revealed from it at random, where Q-0024 ruled none")
 	public void TheRevealedCardIsShownToTheShadowPlayerAndNotToTheOwnerOfTheHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
