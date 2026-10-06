@@ -1301,7 +1301,7 @@
 				]
 			}
 		]
-		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
+		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords (except race) until the regroup phase.
 		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I'll smite some of this beastly brood before the end.'"
 		promotext: ""
 		alts: {
@@ -1338,19 +1338,28 @@
 			{
 				type: extraCost
 				cost: {
-					type: If
-					check: {
-						type: CanSpotThreats
-						amount: 2
-					}
-					true: {
-						type: Spot
-						filter: any
-					}
-					false: {
-						type: addThreats
-						amount: 2
-					}
+					type: Choice
+					texts: [
+						Spot 2 threats
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: CanSpotThreats
+								amount: 2
+							}
+							true: {
+								type: Spot
+								filter: any
+							}
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
 				}
 			}
 			{

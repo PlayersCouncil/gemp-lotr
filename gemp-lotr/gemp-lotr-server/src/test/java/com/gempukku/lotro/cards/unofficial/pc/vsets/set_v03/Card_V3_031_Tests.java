@@ -60,7 +60,7 @@ public class Card_V3_031_Tests
 		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: Knight. Enduring. To play, spot a [gondor] companion.
-		 * 	Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
+		 * 	Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords (except race) until the regroup phase.
 		 */
 
 		var scn = GetScenario();

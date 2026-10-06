@@ -192,43 +192,6 @@ public class Card_V3_032_Tests
 	}
 
 	@Test
-	public void WithTwoThreatsAndRoomForTwoMoreTheyAreSpottedAndNoneAdded() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var revenant1 = scn.GetFreepsCard("revenant1");
-		var revenant2 = scn.GetFreepsCard("revenant2");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var knight1 = scn.GetFreepsCard("knight1");
-		var knight2 = scn.GetFreepsCard("knight2");
-		scn.MoveCompanionsToTable(aragorn, knight1, knight2);
-		scn.MoveCardsToHand(revenant1, revenant2);
-		scn.AddThreats(2);
-
-		scn.StartGame();
-
-		// Four companions: two more threats would fit.
-		assertEquals(2, scn.GetThreats());
-		assertEquals(4, scn.GetThreatLimit());
-
-		scn.FreepsPlayCard(revenant1);
-
-		// Nothing is asked and nothing is added.
-		assertEquals(2, scn.GetThreats());
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, revenant1);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-
-		// The same two threats are there for a second copy to spot.
-		scn.FreepsPlayCard(revenant2);
-
-		assertEquals(2, scn.GetThreats());
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, revenant2);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Ignore("Q-0072: 'spot or add 2 threats' with 2 threats to spot and room for 2 more: the game spots without asking and the player cannot add")
-	@Test
 	public void WithTwoThreatsAndRoomForTwoMoreThePlayerMayAddTwoInsteadOfSpotting() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
