@@ -19,7 +19,7 @@
 				# so that the error message shows all sites that don't 
 				# match, instead of listing all the ones that do and
 				# making the user figure out which one isn't listed.
-				filter: or(siteblock(towers),siteblock(king),siteblock(shadows))
+				filter: or(siteblock(towers),siteblock(king),siteblock(shadows),siteblock(hobbit))
 				max: 0
 				text: Adventure Deck must only contain sites from the Fellowship block path.
 			}
@@ -54,7 +54,7 @@
 				# so that the error message shows all sites that don't 
 				# match, instead of listing all the ones that do and
 				# making the user figure out which one isn't listed.
-				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows))
+				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows),siteblock(hobbit))
 				max: 0
 				text: Adventure deck must only contain sites from the Towers block site path.
 			}
@@ -90,7 +90,7 @@
 				# so that the error message shows all sites that don't 
 				# match, instead of listing all the ones that do and
 				# making the user figure out which one isn't listed.
-				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows))
+				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows),siteblock(hobbit))
 				max: 0
 				text: Adventure Deck must only contain sites from the King block site path.
 			}
