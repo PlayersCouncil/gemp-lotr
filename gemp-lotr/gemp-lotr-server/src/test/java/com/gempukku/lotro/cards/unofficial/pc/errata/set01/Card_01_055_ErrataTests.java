@@ -112,7 +112,6 @@ public class Card_01_055_ErrataTests
 		scn.FreepsUseCardAction(mirror);
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(card1);
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 		assertEquals(2, scn.GetShadowHandCount());
@@ -149,7 +148,6 @@ public class Card_01_055_ErrataTests
 		scn.FreepsUseCardAction(mirror);
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 	}
 
 }

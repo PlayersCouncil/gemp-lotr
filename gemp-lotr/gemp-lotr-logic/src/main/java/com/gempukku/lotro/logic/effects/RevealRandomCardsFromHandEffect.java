@@ -46,6 +46,9 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
 
                 String nextPlayer;
                 while ((nextPlayer = playerOrder.getNextPlayer()) != null) {
+                    // The owner of the hand knows his own cards and has the game log: he is shown nothing.
+                    if (nextPlayer.equals(_playerHand))
+                        continue;
                     game.getUserFeedback().sendAwaitingDecision(nextPlayer,
                             new ArbitraryCardsSelectionDecision(1, _playerHand+" revealed card(s) from hand at random", randomCards, Collections.emptySet(), 0, 0) {
                                 @Override

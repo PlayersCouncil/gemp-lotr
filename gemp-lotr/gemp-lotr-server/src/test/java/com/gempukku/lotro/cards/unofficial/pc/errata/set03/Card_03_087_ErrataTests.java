@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -563,7 +562,6 @@ public class Card_03_087_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0056: the owner of the hand is given a pop-up of the card revealed from it at random, where Q-0024 ruled none")
 	public void TheRevealedCardIsShownToTheShadowPlayerAndNotToTheOwnerOfTheHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

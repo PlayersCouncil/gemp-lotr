@@ -106,7 +106,6 @@ public class Card_01_036_ErrataTests
 		scn.FreepsPlayCard(feet);
 
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		scn.ShadowChooseNo();
 
@@ -130,7 +129,6 @@ public class Card_01_036_ErrataTests
 		scn.FreepsPlayCard(feet);
 
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		assertEquals(0, scn.GetFreepsArcheryTotal());
 	}
@@ -152,7 +150,6 @@ public class Card_01_036_ErrataTests
 		scn.FreepsPlayCard(feet);
 
 		scn.FreepsDismissRevealedCards();
-		scn.ShadowDismissRevealedCards();
 
 		assertEquals(4, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());

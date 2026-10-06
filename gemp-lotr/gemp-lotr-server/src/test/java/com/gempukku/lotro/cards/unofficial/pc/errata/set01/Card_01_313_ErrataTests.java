@@ -148,22 +148,19 @@ public class Card_01_313_ErrataTests
         scn.SetTwilight(10);
 
         scn.FreepsUseCardAction(sting);
-        //Both players need to dismiss the card reveal dialog.
+        //The Free Peoples player dismisses the card reveal dialog; the Shadow player, whose hand it is, is shown none.
         scn.FreepsDismissRevealedCards();
-        scn.ShadowDismissRevealedCards();
 
         // 10 twilight - 1 orc in the hand = 9 twilight
         assertEquals(9, scn.GetTwilight());
 
         scn.FreepsUseCardAction(sting);
         scn.FreepsDismissRevealedCards();
-        scn.ShadowDismissRevealedCards();
         // 9 twilight - 1 orc in the hand = 8 twilight
         assertEquals(8, scn.GetTwilight());
 
         scn.FreepsUseCardAction(sting);
         scn.FreepsDismissRevealedCards();
-        scn.ShadowDismissRevealedCards();
         // limit of 2 should have been hit, so no twilight should be removed
         assertEquals(8, scn.GetTwilight());
 
