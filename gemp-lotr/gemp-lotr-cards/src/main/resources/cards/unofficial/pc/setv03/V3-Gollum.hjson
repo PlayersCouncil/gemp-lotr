@@ -324,7 +324,7 @@
 							{
 								type: HasCardInDiscard
 								ignoreCostCheckFailure: true
-								filter: TitleFromMemory(gollumMinionsInPlay), not(SubtitleFromMemory(gollumMinionsInPlay))
+								filter: minion, TitleFromMemory(gollumMinionsInPlay), not(SubtitleFromMemory(gollumMinionsInPlay))
 							}
 						]
 						cost: [
@@ -343,7 +343,7 @@
 							{
 								type: ReplaceCardInPlayWithCardInDiscard
 								selectInPlay: memory(chosenMinion)
-								selectInDiscard: choose(TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
+								selectInDiscard: choose(minion, TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
 							}
 						]
 					}
