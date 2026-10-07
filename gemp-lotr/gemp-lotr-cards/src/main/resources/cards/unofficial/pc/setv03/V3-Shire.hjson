@@ -370,7 +370,7 @@
 				effect: [
 					{
 						type: Memorize
-						filter: Hobbit, InSkirmish
+						filter: Hobbit, InSkirmishAgainst(minion)
 						memory: skirmisher
 					}
 					{
