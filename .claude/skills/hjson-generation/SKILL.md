@@ -185,6 +185,8 @@ Never write these as `canSpot`/`cantSpot` on `controlledSite`, `siteYouControl` 
 
 ### Limits
 
+"Limit once per site" → `limitPerSite: 1` on the ability or trigger. Do not build it from per-phase limits and `MoveCountMinimum` (that construction of 2026-10-06 is gone).
+
 "(limit +X)" on strength bonuses → cap the total bonus, not per-invocation. Use `CardAffectedLimitPerPhase` value type when the limit applies per affected card per phase.
 
 "Limit once per phase" on an ability → `limitPerPhase: 1` on the effect wrapper. "Limit once per turn" → `limitPerTurn: 1`. These are limits on uses: at the limit the ability is not offered, whatever it costs.

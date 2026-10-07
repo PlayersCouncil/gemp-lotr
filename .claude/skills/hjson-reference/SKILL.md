@@ -485,6 +485,18 @@ A play in a `cost` (`PlayCardFromHand`, `PlayCardFromDiscard`, `PlayCardFromDraw
 
 `PlayedCardThisPhase` counts a permanent from the moment its play is announced, so a `Played` trigger that requires `PlayedCardThisPhase` with `min: 2, max: 2` sees the play it is answering (Ill Wind 103_67). The play is taken out of the count when it is complete if the card is no longer in play, and a card that was never announced is never counted. Events are always counted.
 
+`limitPerSite: 1` is "(limit once per site)": a limit on uses, counted by the engine for the site the fellowship is at, cleared when the fellowship moves to another site and at the end of the turn, so it is once for each site in a turn (Q-0084, F-0146). Anything that happens as the fellowship arrives belongs to the site arrived at. As a requirement and an effect: `PerSiteLimit(limit?)` and `IncrementPerSiteLimit(limit?)`; prefer the field. Do not build it from per-phase limits and `MoveCountMinimum`.
+
+A required Trigger with a limit on uses (`limitPerPhase`, `limitPerTurn`, `limitPerSite`, or a `PerPhaseLimit` / `PerTurnLimit` / `PerSiteLimit` written directly in `requires`) is carried out no more often than the limit even when one event raises it several times at once (two companions exerting together): the later ones are dropped (F-0145). A limit requirement nested inside `Not` / `Or` is not seen by that check: write the limit with the field.
+
+`AddKeywordFromCards` takes `snapshot: true`: the keywords, with their numbers, are taken once, when the modifier is made, and given exactly so until the modifier ends, whatever becomes of the `from` cards (killed, hindered, changed). Use it inside an `AddModifier` for a text that copies keywords for a time ("until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man", Q-0096). Leave it off a standing `Modifier`, which is read as the cards stand.
+
+`LeastDiscountToPlay` takes `fromZone` as `DISCARD`, `HAND`, or both as a list (`[HAND, DISCARD]`) where the text plays the card "from hand or from your discard pile": the least X that brings a matching card within the pool from any of them (Endless Night 103_96). Use it as the `from` of the X that buys the discount, whether X is a number named (`ChooseANumber`) or a count of cards chosen as a cost. For "play X ... from your discard pile on ...", bound X with a `range` whose `to` is `ForEachInDiscard` over `<kind>,PlayableOn(<bearers>)` (Gondor Calls For Aid! 103_83, Q-0094).
+
+Side-only choices and hindered cards, as written in a definition (Q-0098): `override: hindered` on a Discard, `hindered: true` on ChooseActiveCards, CanSpot and ForEachYouCanSpot, and the same word on the requirement that gates the offer. A place beside the side ("on bearer", "borne by a companion") is not "more specific". Not where the effect is itself a hinder (Q-0060), not where the text names a card type, culture, keyword, race or title, and not for tokens. A restore, and a card in a hand, deck, discard pile or stack, need nothing.
+
+What a card's effect is forbidden ("burdens cannot be added", "threats cannot be removed by Free Peoples cards") binds the card whether or not it is hindered when the effect is carried out: a card that hinders itself as a cost still carries its ability out (CR 5.0) and still cannot do what it could not (F-0151). What applies TO a hindered card (its text, keywords, bonuses) is still nothing.
+
 ### Ongoing (Spawn Modifiers)
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
