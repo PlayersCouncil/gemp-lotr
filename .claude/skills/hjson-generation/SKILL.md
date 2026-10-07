@@ -467,6 +467,8 @@ Both work. Use array when there are multiple, single object when there's genuine
 - "When you play this" → `Trigger` with trigger type `played` and `filter: self`
 - "Response: If X is about to" → `Response` (permanent) or `ResponseEvent` (event)
 - A printed "Response:" stays a `Response` even where its cost could be paid twice: the engine stops offering it once what it answers has been cancelled. Do not recast it as an optional Trigger to avoid a second offer
+- "Each time this card is hindered" and "When this card is discarded (from play)" are built on `SelfRemovedFromPlayTrigger` (`method: hinder`, `method: discarded`, or no `method` for "hindered or discarded"), which answers after the card has been hindered or discarded: Ethereal March 103_22, Desert Wind Scout 103_48. Never build them on `AboutToHinder` or `AboutToDiscard` with `filter: self`. Those are for text that says "is about to be": they run before the removal, are offered beside a response that prevents it, are carried out even when it is then prevented, and let two copies answer each other without end (F-0120). A plain `Trigger` on `Hindered` with `filter: self` does not serve either: a hindered card's ordinary triggers are not collected
+- Costs, and effects, are carried out in the order printed (Q-0080). The engine checks each cost against the board as it stands, so where an earlier cost puts out of reach what a later one needs (hinder a card, then remove tokens some of which are on it: Raiding Schooner 103_55), add a `requires` that says what must be left after the earlier cost
 
 ### Modifier vs Trigger for "comes into play"
 

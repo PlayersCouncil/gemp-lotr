@@ -171,6 +171,8 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
 | `AidCost` | Follower aid cost |
 | `DisplayableInformation` | Log output text |
 
+`SelfRemovedFromPlayTrigger` (fields `method`, `optional`, `source`, `requires`, `cost`, `effect`) is a card's own trigger for having been discarded from play (`method: discarded`), hindered (`method: hinder`), or either (no `method`). It answers after the fact, when the card is already in the discard pile or already hindered. Its requirements, costs and effects are carried out as the removed card and its owner: "you" and `your` are the owner, an optional one is offered to the owner, and `self` and `another` are counted from the removed card, whoever removed it and with whatever card (F-0121). `source:` is a card filter that the card which did the removing must match (`source: side(Free Peoples)`, `source: pipe`); it defaults to `any`. A card removed by no card at all (the end-of-turn discard of minions, a card lost with its bearer) does not set the trigger off. Do not name a player on the effect to steer it (`player: shadow`): that was a workaround and is not needed.
+
 ---
 
 ## Selectors
