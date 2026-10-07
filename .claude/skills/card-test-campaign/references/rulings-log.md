@@ -733,3 +733,13 @@ presented in the client ... the information is there all the same".
 - **Driven By Her Own Cruel Will 103_105 with no Hobbit strengthened hinders no minion** (Q-0100): A. "That
   skirmish" is the strengthened Hobbit's.
 
+## 2026-10-07, evening (Ketura, on engine pass 8's doubts)
+
+- **Sixth Level 8_44 "(limit 1)" is built as a limit on uses**: "Let's code Sixth Level as 'once' just for UX
+  sake, but I agree that it's likely a +1 situation." It is withheld at its limit. Scaling Ladder 55_57 and The
+  White Council 101_18 "(limit 2 per phase)" stay limits on what the effect gives.
+- **War Howdah 103_62 keeps the stacked Man's game text and keywords** "even if the Man is later lost": a
+  snapshot of both, like Q-0096.
+- **"All Shadow cards borne by ..." and "each Free Peoples card borne by ..." reach hindered cards**, as "a
+  Shadow card" does (Q-0098): "Good call on all/each."
+
