@@ -1066,6 +1066,12 @@
 					type: AboutToHinder
 					filter: self
 				}
+				// Not offered with no other [raider] minion to hinder or restore (Q-0034, F-0122).
+				requires: {
+					type: CanSpot
+					filter: another,culture(raider),minion
+					hindered: true
+				}
 				effect: {
 					type: Choice
 					texts: [
