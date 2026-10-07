@@ -1118,7 +1118,7 @@
 						}
 						effect: {
 							type: Wound
-							select: memory(loser)
+							select: all(memory(loser),companion)
 						}
 					}
 				]
@@ -1174,7 +1174,7 @@
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: choose(minion, PrintedTwilightCostFromMemory(playedMinion))
+					select: choose(minion, PrintedTwilightCostFromMemory(playedMinion), not(memory(playedMinion)))
 				}
 			}
 			{
