@@ -1838,6 +1838,8 @@
 				effect: {
 					type: PlayCardFromDiscard
 					select: choose(side(shadow),condition)
+					// The (1) this trigger's cost removes is not there to pay for the condition (F-0046, F-0141).
+					removedTwilight: 1
 					memorize: chosenCondition
 					extraEffects: {
 						type: If
@@ -2054,21 +2056,38 @@
 					select: self
 				}
 				effect: {
-					type: Choice
-					texts: [
-						Exert that companion
-						Add a threat
-					]
-					effects: [
-						{
-							type: Exert
-							select: memory(comp)
-						}
-						{
-							type: AddThreats
-							amount: 1
-						}
-					]
+					// The question is not put when neither branch can do anything (F-0116, F-0142).
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpot
+								filter: memory(comp),not(exhausted)
+							}
+							{
+								type: ThreatsRemaining
+								amount: 1
+							}
+						]
+					}
+					true: {
+						type: Choice
+						texts: [
+							Exert that companion
+							Add a threat
+						]
+						effects: [
+							{
+								type: Exert
+								select: memory(comp)
+							}
+							{
+								type: AddThreats
+								amount: 1
+							}
+						]
+					}
 				}
 			}
 		]
