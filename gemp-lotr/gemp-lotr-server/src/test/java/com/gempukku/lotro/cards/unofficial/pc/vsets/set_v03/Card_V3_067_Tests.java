@@ -4,26 +4,35 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_067_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("illwind", "103_67");
-					put("nazgul1", "1_232");   // Ulaire Enquea
-					put("nazgul2", "1_234");   // Ulaire Nertea
-					put("witchking", "1_237"); // The Witch-king, Lord of Angmar
-					put("guard", "1_7");       // Dwarf Guard (VIT 2)
-					put("gimli", "1_12");      // Gimli, Son of Gloin (VIT 3)
+					put("lemenya", "1_232");    // Ulaire Lemenya: [wraith] Nazgul, cost 4; weakens bearers of [wraith] conditions
+					put("nelya", "2_84");       // Ulaire Nelya, Ringwraith in Twilight: [wraith] Nazgul, cost 5; nothing else below 2 burdens or 2 wounds on the Ring-bearer
+					put("khamul", "103_61");    // Ulaire Attea, Khamul of the East: the [raider] Nazgul, cost 6; fierce
+					put("witchking", "1_237");  // The Witch-king, Lord of Angmar: cost 8; fierce
+					put("beast", "12_184");     // The Witch-king's Beast: a mount for any Nazgul; its text needs The Witch-king as bearer
+					put("lackey", "7_193");     // Morgul Lackey: [wraith] Orc, cost 2; a skirmish ability
+					put("lackey2", "7_193");
+					put("fell", "15_182");      // A Shadow Fell Over Them: Assignment: Spot a Nazgul and remove (4) to play a Nazgul from your discard pile
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: vitality 4
+					put("sam", "1_311");        // Sam, Son of Hamfast: vitality 4
+					put("merry", "1_302");      // Merry, Friend to Sam: vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Gloin: vitality 3
+					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: an ally, vitality 2
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,13 +48,13 @@ public class Card_V3_067_Tests
 		 * Name: Ill Wind
 		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Wraith
+		 * Culture: Ringwraith
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: Support area
+		 * Subtype: Support Area
 		 * Game Text: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion.
-		 *   The Free Peoples player may make you exert another companion to prevent this
-		 *   (or wound if you can spot The Witch-king).
+		 * 	The Free Peoples player may make you exert another companion to prevent this (or wound if you
+		 * 	can spot The Witch-king).
 		 */
 
 		var scn = GetScenario();
@@ -63,168 +72,427 @@ public class Card_V3_067_Tests
 	}
 
 	@Test
-	public void IllWindDoesNotTriggerOnFirstNazgulPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForOneAndAnswersTheSecondNazgulOfTheShadowPhaseButNotTheFirstOrThird() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var illwind = scn.GetShadowCard("illwind");
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
-		scn.MoveCardsToSupportArea(illwind);
-		scn.MoveCardsToHand(nazgul1, nazgul2);
+		var lemenya = scn.GetShadowCard("lemenya");
+		var lackey = scn.GetShadowCard("lackey");
+		var lackey2 = scn.GetShadowCard("lackey2");
+		var khamul = scn.GetShadowCard("khamul");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.MoveCardsToHand(illwind, lemenya, lackey, lackey2, khamul, nelya);
 
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(guard);
-		scn.AddWoundsToChar(guard, 1);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
-		scn.SetTwilight(20);
+		scn.SetTwilight(40);
 		scn.FreepsPass();
 
-		// Play first Nazgul -- should NOT trigger Ill Wind
-		scn.ShadowPlayCard(nazgul1);
+		// The first Nazgul of the phase, before Ill Wind is even in play.
+		scn.ShadowPlayCard(lemenya);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(illwind);
+		assertEquals(twilight - 1, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, illwind);
+
+		// The second minion of the phase, but a [wraith] Orc and no Nazgul.
+		scn.ShadowPlayCard(lackey);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-	}
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-	@Test
-	public void IllWindTriggersOnSecondNazgulPlayedAndHindersWoundedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var illwind = scn.GetShadowCard("illwind");
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
-		scn.MoveCardsToSupportArea(illwind);
-		scn.MoveCardsToHand(nazgul1, nazgul2);
-
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(guard);
-		scn.AddWoundsToChar(guard, 1);
-
-		scn.StartGame();
-		scn.SetTwilight(20);
-		scn.FreepsPass();
-
-		// Play first Nazgul
-		scn.ShadowPlayCard(nazgul1);
-
-		// Play second Nazgul -- SHOULD trigger Ill Wind
-		scn.ShadowPlayCard(nazgul2);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		// The second Nazgul of the phase; this one is the [raider] Nazgul.
+		scn.ShadowPlayCard(khamul);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
+		assertFalse(scn.IsHindered(aragorn));
 		scn.ShadowAcceptOptionalTrigger();
 
-		// FP declines prevention
+		// Aragorn is the only wounded companion and is chosen without asking. The Free Peoples player
+		// lets it happen.
 		scn.FreepsChooseNo();
-		assertTrue(scn.IsHindered(guard));
+		assertTrue(scn.IsHindered(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertFalse(scn.IsHindered(sam));
+		assertFalse(scn.IsHindered(frodo));
 
+		// Another [wraith] Orc, played once the second Nazgul has been: it is not answered in his place.
+		scn.ShadowPlayCard(lackey2);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The third.
+		scn.ShadowPlayCard(nelya);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void IllWindDoesNotTriggerOnThirdNazgulPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheFreePeoplesPlayerMayHaveAnotherCompanionExertedToPreventTheHinder() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var illwind = scn.GetShadowCard("illwind");
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
-		var nazgul3 = scn.GetShadowCard("witchking");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		var nelya = scn.GetShadowCard("nelya");
+		var beast = scn.GetShadowCard("beast");
 		scn.MoveCardsToSupportArea(illwind);
-		scn.MoveCardsToHand(nazgul1, nazgul2, nazgul3);
+		scn.MoveCardsToHand(lemenya, khamul);
 
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(guard);
-		scn.AddWoundsToChar(guard, 1);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var gimli = scn.GetFreepsCard("gimli");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(aragorn, sam, merry, gimli);
+		scn.MoveAlliesToTable(silinde);
+		scn.AddWoundsToChar(frodo, 1);
+		// Vitality 4 with 3 wounds: wounded, and exhausted.
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.AddWoundsToChar(gimli, 1);
+		scn.AddWoundsToChar(silinde, 1);
 
 		scn.StartGame();
-		scn.SetTwilight(30);
+		scn.HinderCard(gimli);
+		// A Nazgul who is not The Witch-king, on The Witch-king's Beast: nothing here spots The Witch-king.
+		scn.MoveMinionsToTable(nelya);
+		scn.AttachCardsTo(nelya, beast);
+		scn.SetTwilight(40);
 		scn.FreepsPass();
 
-		// Play first Nazgul -- should NOT trigger Ill Wind
-		scn.ShadowPlayCard(nazgul1);
+		scn.ShadowPlayCard(lemenya);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowPlayCard(khamul);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
+		scn.ShadowAcceptOptionalTrigger();
 
-		// Play second Nazgul -- SHOULD trigger Ill Wind
-		scn.ShadowPlayCard(nazgul2);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		// Wounded companions, the Ring-bearer among them. Not an unwounded companion, not a wounded ally,
+		// not a wounded companion who is already hindered.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sam, merry, gimli, silinde));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(frodo);
+
+		assertFalse(scn.IsHindered(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("exert another companion to prevent"));
+		scn.FreepsChooseYes();
+
+		// Another companion who can exert: not Frodo himself, not the exhausted Aragorn, not the
+		// hindered Gimli, not an ally.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, aragorn, gimli, silinde));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.FreepsChooseCard(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertFalse(scn.IsHindered(frodo));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0088: 'make you exert another companion': the text has the Shadow player exert the other companion, the game gives the choice of companion to the Free Peoples player")
+	public void TheShadowPlayerChoosesWhichOtherCompanionIsExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(lemenya, khamul);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(aragorn, sam, merry);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddWoundsToChar(aragorn, 3);
+
+		scn.StartGame();
+		scn.SetTwilight(40);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(lemenya);
+		scn.ShadowPlayCard(khamul);
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCard(frodo);
+		scn.FreepsChooseYes();
+
+		// "Make you exert": the Shadow player exerts, and so chooses whom.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, merry));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, aragorn));
+		scn.ShadowChooseCard(merry);
+
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertFalse(scn.IsHindered(frodo));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheHinderMayBeDeclinedAndThenNobodyIsAskedAnything() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(lemenya, khamul);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.AddWoundsToChar(aragorn, 1);
+
+		scn.StartGame();
+		scn.SetTwilight(40);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(lemenya);
+		scn.ShadowPlayCard(khamul);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
 		scn.ShadowDeclineOptionalTrigger();
 
-		// Play third Nazgul -- should NOT trigger Ill Wind
-		scn.ShadowPlayCard(nazgul3);
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-	}
-
-	@Test
-	public void IllWindPreventionExertsAnotherCompanionWithoutWitchKing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var illwind = scn.GetShadowCard("illwind");
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
-		scn.MoveCardsToSupportArea(illwind);
-		scn.MoveCardsToHand(nazgul1, nazgul2);
-
-		var frodo = scn.GetRingBearer();
-		var gimli = scn.GetFreepsCard("gimli");
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(gimli, guard);
-		scn.AddWoundsToChar(frodo, 1);
-		scn.AddWoundsToChar(gimli, 1);
-		scn.AddWoundsToChar(guard, 1);
-
-		scn.StartGame();
-		scn.SetTwilight(20);
-		scn.FreepsPass();
-
-		scn.ShadowPlayCard(nazgul1);
-		scn.ShadowPlayCard(nazgul2);
-		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseCard(gimli);
-
-		// FP accepts prevention
-		scn.FreepsChooseYes();
-		//Guard is already exhausted and so can't be targeted, Gimli can't be targeted as the hinder target, so
-		// Frodo is auto-targeted as the only remaining choice.
-		assertEquals(2, scn.GetWoundsOn(frodo));
-		assertFalse(scn.IsHindered(gimli));
-
+		assertFalse(scn.IsHindered(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void IllWindPreventionWoundsAnotherCompanionWithWitchKing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNoOtherCompanionAbleToExertTheHinderCannotBePrevented() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var illwind = scn.GetShadowCard("illwind");
-		var nazgul1 = scn.GetShadowCard("nazgul1");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(lemenya, khamul);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(silinde);
+		scn.AddWoundsToChar(frodo, 1);
+		// The only other companion is exhausted; the ally could exert but is no companion.
+		scn.AddWoundsToChar(aragorn, 3);
+
+		scn.StartGame();
+		scn.SetTwilight(40);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(lemenya);
+		scn.ShadowPlayCard(khamul);
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		scn.ShadowChooseCard(frodo);
+
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.IsHindered(frodo));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(silinde));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithTheWitchKingThePreventionIsAWoundWhichAnExhaustedCompanionMayTake() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var lemenya = scn.GetShadowCard("lemenya");
 		var witchking = scn.GetShadowCard("witchking");
 		scn.MoveCardsToSupportArea(illwind);
-		scn.MoveCardsToHand(nazgul1, witchking);
+		scn.MoveCardsToHand(lemenya, witchking);
 
 		var frodo = scn.GetRingBearer();
-		var gimli = scn.GetFreepsCard("gimli");
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(gimli, guard);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveAlliesToTable(silinde);
 		scn.AddWoundsToChar(frodo, 1);
-		scn.AddWoundsToChar(gimli, 1);
-		scn.AddWoundsToChar(guard, 1);
+		scn.AddWoundsToChar(sam, 1);
+		// Exhausted: he cannot exert, but he can be wounded.
+		scn.AddWoundsToChar(aragorn, 3);
 
 		scn.StartGame();
-		scn.SetTwilight(20);
+		scn.SetTwilight(40);
 		scn.FreepsPass();
 
-		scn.ShadowPlayCard(nazgul1);
+		scn.ShadowPlayCard(lemenya);
 		scn.ShadowPlayCard(witchking);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
 		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseCard(gimli);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn, sam));
+		scn.ShadowChooseCard(sam);
 
-		// FP accepts prevention
+		assertTrue(scn.FreepsDecisionAvailable("wound another companion to prevent"));
 		scn.FreepsChooseYes();
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, guard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
+		// Any other companion, the Ring-bearer and the exhausted Aragorn among them; not Sam himself,
+		// not an ally.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, silinde));
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		scn.FreepsChooseCard(aragorn);
 
-		scn.FreepsChooseCard(guard);
-		assertInZone(Zone.DEAD, guard);
-		assertFalse(scn.IsHindered(gimli));
-
+		// A wound and no exertion: it is his fourth, and kills him.
+		assertInZone(Zone.DEAD, aragorn);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertFalse(scn.IsHindered(sam));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
+	@Test
+	public void EachShadowPhaseCountsItsOwnNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nelya = scn.GetShadowCard("nelya");
+		var khamul = scn.GetShadowCard("khamul");
+		var witchking = scn.GetShadowCard("witchking");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(lemenya, nelya, khamul, witchking);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.AddWoundsToChar(sam, 1);
+
+		scn.StartGame();
+		scn.SetTwilight(40);
+		scn.FreepsPass();
+
+		// The first Shadow phase of the turn: its second Nazgul is answered.
+		scn.ShadowPlayCard(lemenya);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowPlayCard(nelya);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCard(aragorn);
+		scn.FreepsChooseYes();
+		// The other companion who exerts may be the Ring-bearer.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsChooseCard(frodo);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertFalse(scn.IsHindered(aragorn));
+
+		scn.SkipToMovementDecision();
+		scn.SetTwilight(40);
+		scn.FreepsChooseToMove();
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+
+		// The third Nazgul of the turn, but the first of this Shadow phase.
+		scn.ShadowPlayCard(khamul);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The second of this Shadow phase: answered again, as the second of the first phase was.
+		scn.ShadowPlayCard(witchking);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(illwind));
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn, sam));
+		scn.ShadowChooseCard(sam);
+		// The Witch-king is in play now, so what the Free Peoples player is asked for is a wound. It is
+		// refused, and the hinder happens.
+		assertTrue(scn.FreepsDecisionAvailable("wound another companion to prevent"));
+		scn.FreepsChooseNo();
+
+		assertTrue(scn.IsHindered(sam));
+		assertFalse(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0130: the second Nazgul played in a phase other than the Shadow phase is answered too: the definition counts plays in the current phase and never asks which phase it is")
+	public void TheSecondNazgulPlayedInAnAssignmentPhaseIsNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var fell = scn.GetShadowCard("fell");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.MoveCardsToSupportArea(illwind, fell);
+		scn.MoveCardsToDiscard(khamul, nelya);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AddWoundsToChar(aragorn, 1);
+
+		scn.StartGame();
+		// A Nazgul for A Shadow Fell Over Them to spot.
+		scn.MoveMinionsToTable(lemenya);
+		scn.SetTwilight(40);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(fell);
+		scn.ShadowChooseCardBPFromSelection(khamul);
+		assertInZone(Zone.SHADOW_CHARACTERS, khamul);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		// The second Nazgul played in this assignment phase: no Shadow phase, so no offer.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(fell);
+		assertInZone(Zone.SHADOW_CHARACTERS, nelya);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(aragorn));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenThereIsNoWoundedCompanionToHinder() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illwind = scn.GetShadowCard("illwind");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		scn.MoveCardsToSupportArea(illwind);
+		scn.MoveCardsToHand(lemenya, khamul);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(silinde);
+		// A wounded ally, and a wounded companion who is already hindered: neither can be chosen.
+		scn.AddWoundsToChar(silinde, 1);
+		scn.AddWoundsToChar(gimli, 1);
+
+		scn.StartGame();
+		scn.HinderCard(gimli);
+		scn.SetTwilight(40);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(lemenya);
+		scn.ShadowPlayCard(khamul);
+
+		// No cost and nothing it could do: not offered.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }

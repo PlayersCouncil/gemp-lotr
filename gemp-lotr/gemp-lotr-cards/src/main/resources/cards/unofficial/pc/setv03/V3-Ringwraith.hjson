@@ -661,12 +661,19 @@
 					filter: Nazgul
 					player: you
 				}
-				requires: {
-					type: playedCardThisPhase
-					filter: Nazgul
-					min: 2
-					max: 2
-				}
+				requires: [
+					{
+						type: playedCardThisPhase
+						filter: Nazgul
+						min: 2
+						max: 2
+					}
+					// No cost, so not offered with nobody to hinder (Q-0034, F-0134).
+					{
+						type: CanSpot
+						filter: wounded,companion
+					}
+				]
 				effect: [
 					{
 						type: ChooseActiveCards
