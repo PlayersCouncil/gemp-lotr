@@ -840,11 +840,19 @@
 						memorize: exertedComps
 					}
 					{
-						type: DiscardStackedCards
-						select: choose(side(Shadow))
-						count: {
-							type: ForEachInMemory
+						// Nothing is asked when nobody exerted (F-0149).
+						type: If
+						check: {
+							type: HasCardInMemory
 							memory: exertedComps
+						}
+						true: {
+							type: DiscardStackedCards
+							select: choose(side(Shadow))
+							count: {
+								type: ForEachInMemory
+								memory: exertedComps
+							}
 						}
 					}
 				]
