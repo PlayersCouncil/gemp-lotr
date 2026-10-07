@@ -329,7 +329,7 @@
 			cost: [
 				{
 					type: spot
-					select: choose(culture(men),possession)
+					select: choose(culture(men),possession,support(you))
 					memorize: spottedPossession
 				}
 				{

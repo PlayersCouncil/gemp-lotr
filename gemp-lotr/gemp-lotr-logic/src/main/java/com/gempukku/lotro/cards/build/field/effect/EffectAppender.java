@@ -2,7 +2,10 @@ package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.PreEvaluateAble;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+
+import java.util.Map;
 
 public interface EffectAppender extends PreEvaluateAble {
     void appendEffect(boolean cost, CostToEffectAction action, ActionContext actionContext);
@@ -19,6 +22,17 @@ public interface EffectAppender extends PreEvaluateAble {
      */
     default int getThreatsAddedAsCost(ActionContext actionContext) {
         return 0;
+    }
+
+    /**
+     * The wounds this appender will place when it is carried out as a cost, as far as can be told before the
+     * action is taken: exertions and wounds on cards it names outright (the card itself, its bearer, a memory
+     * that is already filled) or cannot avoid (a choice with exactly as many candidates as must be chosen).
+     * They are added to the tally, card by card.  Nothing is added where the player has a real choice of whom
+     * to exert, or where the wounds depend on a condition.  The action's later costs, and any card it would then
+     * play, are judged with these wounds in place (DefaultActionSource.isValid).
+     */
+    default void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
     }
 
     default boolean canPreEvaluate() {

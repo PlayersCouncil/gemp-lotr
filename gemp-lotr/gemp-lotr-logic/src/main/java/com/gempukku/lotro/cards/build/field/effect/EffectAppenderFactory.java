@@ -277,6 +277,11 @@ public class EffectAppenderFactory {
                 }
 
                 @Override
+                public void tallyWoundsPlacedAsCost(ActionContext actionContext, java.util.Map<com.gempukku.lotro.game.PhysicalCard, Integer> tally) {
+                    effectAppender.tallyWoundsPlacedAsCost(actionContext, tally);
+                }
+
+                @Override
                 public EffectForecast forecast(ActionContext actionContext) {
                     return effectAppender.forecast(actionContext);
                 }

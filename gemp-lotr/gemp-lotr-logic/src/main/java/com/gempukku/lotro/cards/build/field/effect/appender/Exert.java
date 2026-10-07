@@ -24,6 +24,7 @@ import org.json.simple.JSONObject;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Exert implements EffectAppenderProducer {
     @Override
@@ -73,6 +74,19 @@ public class Exert implements EffectAppenderProducer {
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
                 return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+
+            // As a cost: each character who is certain to exert takes a wound for each time.
+            @Override
+            public void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+                final int times = timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                if (times <= 0)
+                    return;
+                // A choice made by another player is not forecast: the filter is his to read.
+                final FilterableSource certainFrom = "you".equalsIgnoreCase(player) ? chosenFrom : null;
+                for (PhysicalCard exerted : EffectUtils.getCardsCertainToBeReached(select, certainFrom, valueSource,
+                        Filters.canExert(actionContext.getSource(), times), actionContext))
+                    tally.merge(exerted, times, Integer::sum);
             }
         };
 

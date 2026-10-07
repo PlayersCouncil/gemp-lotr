@@ -316,4 +316,77 @@
 		}
 		gametext: <b>Maneuver:</b> Remove (1) to hinder a card.
 	}
+	# ResponseEventsAreNotPlayedByEffectsTests: "play an event" from the discard pile and from a stack with no
+	# phase word and no culture in the filter, usable in two phases.  The real cards that play an event from a
+	# discard pile name its phase or except response events in their own filters (Now for Ruin 102_52 apart, a
+	# condition that plays one when its third token arrives, on a minion's death), and no real card plays an
+	# event from a stack by an effect.
+	0_8011: {
+		title: Test Archive
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				shadow
+				skirmish
+			]
+			effect: {
+				type: PlayCardFromDiscard
+				select: choose(event)
+			}
+		}
+		gametext: <b>Shadow</b> <i>or</i> <b>Skirmish:</b> Play an event from your discard pile.
+	}
+	0_8012: {
+		title: Test Lectern
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				shadow
+				skirmish
+			]
+			effect: {
+				type: PlayCardFromStacked
+				select: choose(event)
+				on: self
+			}
+		}
+		gametext: <b>Shadow</b> <i>or</i> <b>Skirmish:</b> Play an event stacked here.
+	}
+	# CostsAreJudgedInTheOrderPrintedTests: an exertion of a character the player chooses, and then a play from
+	# the discard pile of a card that may itself need an exertion.  The real cards that exert a chosen character
+	# to play from a discard pile play possessions, minions and conditions, which ask nothing more of him.
+	0_8013: {
+		title: Test Whetstone
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: choose(dwarf)
+			}
+			effect: {
+				type: PlayCardFromDiscard
+				select: choose(culture(dwarven),event)
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert a Dwarf to play a [dwarven] event from your discard pile.
+	}
 }

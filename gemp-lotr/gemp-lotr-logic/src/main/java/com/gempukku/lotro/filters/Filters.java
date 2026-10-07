@@ -471,8 +471,15 @@ public class Filters {
         };
     }
 
+    /**
+     * A card that could be played now by a card's effect ("play a ... from your discard pile", "... stacked
+     * here", the definition word Playable) or as a phase action.  A response event is not such a card: it is
+     * played in answer to its own trigger and to nothing else, so it is refused here unless it is also an event
+     * of the current phase (Eye of Barad-dur, Skirmish and Response).  Only the rule that offers response events
+     * in answer to their triggers asks with ignoreResponseEvents false.
+     */
     public static Filter playable(final int twilightModifier) {
-        return playable(twilightModifier, 0, false, false, false);
+        return playable(twilightModifier, 0, false, false, true);
     }
 
     public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {

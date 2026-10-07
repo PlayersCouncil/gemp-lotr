@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -115,9 +114,9 @@ public class Card_01_017_ErrataTests
 		// Aragorn is here so that Swordarm of the White Tower has someone to be played for.
 		scn.MoveCompanionsToTable(gimli, aragorn);
 		scn.MoveAlliesToTable(grimir);
-		// Two [dwarven] events that are not skirmish events lie beside the two that are.  The game refuses a
-		// maneuver event in a skirmish phase whoever plays it; a response event it would let through, so that
-		// one is kept out by this card's words alone.
+		// Two [dwarven] events that are not skirmish events lie beside the two that are: a maneuver event and a
+		// response event.  The game refuses both whoever plays them, a maneuver event in a skirmish phase and
+		// a response event played by any card's effect.
 		scn.MoveCardsToDiscard(blow, strike, balin, nobody, swordarm, armor);
 		// [dwarven] skirmish events that are not in this player's discard pile: one in hand, one in the other
 		// player's pile.
@@ -188,7 +187,6 @@ public class Card_01_017_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0184: offered when the only event in the discard pile cannot be played once Grimir has exerted twice; he exerts and nothing is played")
 	public void IsNotOfferedWhenGrimirsOwnExertionsWouldLeaveTheOnlyEventUnplayable() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

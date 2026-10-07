@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_096_Tests
@@ -18,8 +19,11 @@ public class Card_03_096_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_96");
-					// put other cards in here as needed for the test case
+					put("pillager", "3_96");
+
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf, strength 6; a skirmish ability never used here
+					put("armor1", "1_8");       // Dwarven Armor: Free Peoples possession; about being overwhelmed only, changes no number
+					put("armor2", "1_8");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_03_096_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pillager");
 
 		assertEquals("Orc Pillager", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,35 @@ public class Card_03_096_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcPillagerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AHinderedFreePeoplesCardBorneByTheCharacterItSkirmishesIsCounted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pillager = scn.GetShadowCard("pillager");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor1 = scn.GetFreepsCard("armor1");
+		var armor2 = scn.GetFreepsCard("armor2");
+		scn.MoveCompanionsToTable(gimli);
+		// Two Free Peoples cards on one character; the second copy is put there by the rig.
+		scn.AttachCardsTo(gimli, armor1, armor2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(pillager);
+		scn.SkipToAssignments();
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(6, scn.GetStrength(gimli));
+		scn.FreepsAssignAndResolve(gimli, pillager);
+
+		// 6 - 2
+		assertEquals(4, scn.GetStrength(gimli));
+
+		// A card that is hindered is still borne, and "a Free Peoples card" with nothing more said of it
+		// reaches a hindered card.
+		scn.HinderCard(armor2);
+		assertTrue(scn.IsHindered(armor2));
+		assertAttachedTo(armor2, gimli);
+		// 6 - 2
+		assertEquals(4, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

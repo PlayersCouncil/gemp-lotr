@@ -12,6 +12,7 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
@@ -27,9 +28,12 @@ import com.gempukku.lotro.logic.timing.NoEffect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class DefaultActionSource implements ActionSource {
     private final List<Requirement> requirements = new LinkedList<>();
@@ -40,7 +44,7 @@ public class DefaultActionSource implements ActionSource {
     // requirement these do not withhold the action: it is offered, and flagged as having no effect.
     private final List<Requirement> noEffectUnless = new LinkedList<>();
 
-    private final List<EffectAppender> costs = new LinkedList<>();
+    private final List<EffectAppender> costs = new ArrayList<>();
     private final List<EffectAppender> effects = new LinkedList<>();
     // The limits that do not withhold the action ("effectLimitPerPhase", "effectLimitPerTurn" on an ability that
     // has a cost and is the player's to use or not: a limit on what the effect gives, "limit +3"): at its limit
@@ -217,6 +221,44 @@ public class DefaultActionSource implements ActionSource {
         costs.add(effectAppender);
     }
 
+    /**
+     * Adds a cost the action is not offered without: one of the costs written in its definition.  Whether it
+     * can be paid is asked on the board as the costs before it will leave it (see isValid).
+     */
+    public void addCheckedCost(EffectAppender effectAppender) {
+        addPlayRequirement(new OrderedCheck(effectAppender::isPlayableInFull, costs.size()));
+        costs.add(effectAppender);
+    }
+
+    /**
+     * Has the action withheld unless the given one of its effects can be carried out: a play from a pile, which
+     * is to be treated as a cost (F-0046).  It is asked on the board as all of the action's costs will leave it.
+     */
+    public void addEffectCheck(EffectAppender effectAppender) {
+        addPlayRequirement(new OrderedCheck(effectAppender::isPlayableInFull, OrderedCheck.ALL_COSTS));
+    }
+
+    // A requirement that asks whether one of the action's own costs can be paid, or whether an effect it is
+    // withheld without can be carried out.  Costs are judged in the order printed (Ketura on Q-0080), so each
+    // is asked on the board as the costs before it will leave it, as far as those can tell beforehand what
+    // they will do (EffectAppender.tallyWoundsPlacedAsCost).
+    private static final class OrderedCheck implements Requirement {
+        private static final int ALL_COSTS = -1;
+
+        private final Requirement check;
+        private final int costsBefore;
+
+        private OrderedCheck(Requirement check, int costsBefore) {
+            this.check = check;
+            this.costsBefore = costsBefore;
+        }
+
+        @Override
+        public boolean accepts(ActionContext actionContext) {
+            return check.accepts(actionContext);
+        }
+    }
+
     public void addEffect(EffectAppender effectAppender) {
         effects.add(effectAppender);
     }
@@ -242,10 +284,33 @@ public class DefaultActionSource implements ActionSource {
             return false;
 
         final ActionContext checkContext = getUnpaidCostsContext(actionContext);
+        final GameState gameState = actionContext.getGame().getGameState();
+
+        // The wounds the costs gone through so far will place for certain: exertions of the action's own card,
+        // say.  A requirement of the definition is asked on the board as it stands; each cost, and each effect
+        // that must be able to happen, is asked with the wounds of the costs before it in place (F-0184).  The
+        // checks of the costs come in the order of the costs, so one pass through them does it.
+        final Map<PhysicalCard, Integer> woundsToCome = new HashMap<>();
+        int talliedCosts = 0;
 
         for (Requirement requirement : requirements) {
-            if (!requirement.accepts(checkContext))
+            if (requirement instanceof OrderedCheck ordered) {
+                final int costsBefore = ordered.costsBefore == OrderedCheck.ALL_COSTS ? costs.size() : ordered.costsBefore;
+                while (talliedCosts < costsBefore) {
+                    final EffectAppender cost = costs.get(talliedCosts++);
+                    final Map<PhysicalCard, Integer> placed = new HashMap<>();
+                    gameState.withWoundsToCome(woundsToCome, () -> {
+                        cost.tallyWoundsPlacedAsCost(checkContext, placed);
+                        return null;
+                    });
+                    for (Map.Entry<PhysicalCard, Integer> entry : placed.entrySet())
+                        woundsToCome.merge(entry.getKey(), entry.getValue(), Integer::sum);
+                }
+                if (!gameState.withWoundsToCome(woundsToCome, () -> ordered.accepts(checkContext)))
+                    return false;
+            } else if (!requirement.accepts(checkContext)) {
                 return false;
+            }
         }
         return true;
     }

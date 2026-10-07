@@ -191,6 +191,43 @@ public class Card_V1_026_Tests
 	}
 
 	@Test
+	public void AHinderedFreePeoplesCardBorneByTheSpottedCompanionIsCounted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var crows = scn.GetShadowCard("crows");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var coat = scn.GetFreepsCard("coat");
+		var shield = scn.GetFreepsCard("shield");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, coat, shield);
+		scn.MoveCardsToHand(crows);
+
+		scn.StartGame();
+		scn.HinderCard(shield);
+		scn.SetTwilight(4);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 4 set + 2 companions + 2 for the shadow number of site 2
+		assertEquals(8, scn.GetTwilight());
+		assertTrue(scn.IsHindered(shield));
+		assertFalse(scn.IsHindered(coat));
+		assertAttachedTo(shield, aragorn);
+
+		scn.ShadowPlayCard(crows);
+		// 8 - 3 to play - 2 roaming
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, frodo));
+		scn.ShadowChooseCard(aragorn);
+
+		// 3 + 2: the Coat of Mail and the hindered Great Shield.  A hindered card is still borne, and "each
+		// Free Peoples card" with nothing more said of it reaches a hindered card.
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
 	public void AnotherMinionPlayedWithCrowsInPlayAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

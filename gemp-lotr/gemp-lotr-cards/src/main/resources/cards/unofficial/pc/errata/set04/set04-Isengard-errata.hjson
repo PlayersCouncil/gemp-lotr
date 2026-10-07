@@ -174,13 +174,13 @@
 					type: If
 					check: {
 						type: canSpot
-						filter: unbound,companion,hasAttachedCount(3,any)
+						filter: unbound,companion,hasAttachedCount(3,any,override(hindered))
 					}
 					true: [
 						{
 							type: chooseActiveCards
 							text: Choose unbound companion to hinder cards on
-							select: choose(unbound,companion,hasAttachedCount(3,any))
+							select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
 							memorize: chosenCompanion
 						}
 						{

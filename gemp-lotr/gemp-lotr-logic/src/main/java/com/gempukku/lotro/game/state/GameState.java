@@ -81,6 +81,7 @@ public class GameState {
 
     private final List<Assignment> _assignments = new LinkedList<>();
     private int _threatsToCome;
+    private Map<PhysicalCard, Integer> _woundsToCome = Collections.emptyMap();
     private Skirmish _skirmish = null;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
@@ -1307,7 +1308,33 @@ public class GameState {
     }
 
     public int getWounds(PhysicalCard physicalCard) {
-        return getTokenCount(physicalCard, Token.WOUND);
+        final int wounds = getTokenCount(physicalCard, Token.WOUND);
+        if (_woundsToCome.isEmpty())
+            return wounds;
+        return wounds + _woundsToCome.getOrDefault(physicalCard, 0);
+    }
+
+    /**
+     * Answers a question as it would be answered once the given wounds had been placed: the wounds an action
+     * will place as its own costs (exerting its own card twice), while a later cost of that action, or a card
+     * the action would then play, is asked whether it can be paid or played.  They are counted by getWounds,
+     * and so by vitality and by everything that asks whether a character can exert or is wounded, and change
+     * nothing else: no token is placed and nobody is told.  Nothing is to come except inside this call.
+     */
+    public <T> T withWoundsToCome(Map<PhysicalCard, Integer> wounds, java.util.function.Supplier<T> question) {
+        if (wounds == null || wounds.isEmpty())
+            return question.get();
+
+        final Map<PhysicalCard, Integer> before = _woundsToCome;
+        final Map<PhysicalCard, Integer> together = new HashMap<>(before);
+        for (Map.Entry<PhysicalCard, Integer> entry : wounds.entrySet())
+            together.merge(entry.getKey(), Math.max(0, entry.getValue()), Integer::sum);
+        _woundsToCome = together;
+        try {
+            return question.get();
+        } finally {
+            _woundsToCome = before;
+        }
     }
 
     public void addBurdens(int burdens) {

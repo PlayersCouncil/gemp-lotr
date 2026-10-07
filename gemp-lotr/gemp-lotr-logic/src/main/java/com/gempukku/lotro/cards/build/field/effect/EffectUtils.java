@@ -1,14 +1,25 @@
 package com.gempukku.lotro.cards.build.field.effect;
 
+import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
+import com.gempukku.lotro.cards.build.FilterableSource;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.MemoryScopedEnvironment;
 import com.gempukku.lotro.cards.build.PreEvaluateAble;
 import com.gempukku.lotro.cards.build.Requirement;
+import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.filters.Filter;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -157,16 +168,50 @@ public class EffectUtils {
         final CardGenerationEnvironment costEnvironment = costEnvironmentOfTriggeredAction(environment, value.get("trigger"), costArray);
         for (JSONObject cost : costArray) {
             final EffectAppender effectAppender = effectAppenderFactory.getEffectAppender(true, cost, costEnvironment);
-            actionSource.addPlayRequirement(
-                    effectAppender::isPlayableInFull);
-            actionSource.addCost(effectAppender);
+            actionSource.addCheckedCost(effectAppender);
         }
 
         for (JSONObject effect : effectArray) {
             final EffectAppender effectAppender = effectAppenderFactory.getEffectAppender(false, effect, environment);
             if (effectAppender.isPlayabilityCheckedForEffect())
-                actionSource.addPlayRequirement(effectAppender::isPlayableInFull);
+                actionSource.addEffectCheck(effectAppender);
             actionSource.addEffect(effectAppender);
         }
+    }
+
+    /**
+     * The cards in play that a selector of an exertion or a wound is certain to reach, as far as can be told
+     * before the action it belongs to is taken: the card itself ("self"), the card it is on ("bearer"), the
+     * cards of a memory that is already filled, and, where somebody chooses ("choose(...)"), the candidates
+     * when there are exactly as many of them as must be chosen.  Empty where nothing is certain: a real choice,
+     * "all(...)", a memory not yet filled.
+     * @param chosenFrom The filter inside "choose(...)", or null for any other selector.
+     * @param able What a candidate of the choice must also be (able to exert so many times, say).
+     */
+    public static Collection<PhysicalCard> getCardsCertainToBeReached(String select, FilterableSource chosenFrom,
+            ValueSource countSource, Filter able, ActionContext actionContext) {
+        final PhysicalCard source = actionContext.getSource();
+        if (select == null)
+            return Collections.emptyList();
+        if (select.equals("self"))
+            return source == null ? Collections.emptyList() : Collections.singletonList(source);
+        if (select.equals("bearer"))
+            return source == null || source.getAttachedTo() == null
+                    ? Collections.emptyList() : Collections.singletonList(source.getAttachedTo());
+        if (select.startsWith("memory(") && select.endsWith(")")) {
+            final Collection<? extends PhysicalCard> remembered =
+                    actionContext.getCardsFromMemory(select.substring(select.indexOf("(") + 1, select.lastIndexOf(")")));
+            return remembered == null ? Collections.emptyList() : new ArrayList<>(remembered);
+        }
+        if (chosenFrom == null)
+            return Collections.emptyList();
+
+        final LotroGame game = actionContext.getGame();
+        final Evaluator count = countSource.getEvaluator(actionContext);
+        final int needed = count.getMinimum(game, null);
+        if (needed <= 0 || needed != count.getMaximum(game, null))
+            return Collections.emptyList();
+        final Collection<PhysicalCard> candidates = Filters.filterActive(game, chosenFrom.getFilterable(actionContext), able);
+        return candidates.size() == needed ? candidates : Collections.emptyList();
     }
 }

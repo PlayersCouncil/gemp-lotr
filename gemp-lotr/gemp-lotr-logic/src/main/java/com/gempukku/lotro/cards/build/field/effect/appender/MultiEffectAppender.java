@@ -3,10 +3,12 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class MultiEffectAppender implements EffectAppender {
     private boolean playabilityCheckedForEffect;
@@ -43,6 +45,12 @@ public class MultiEffectAppender implements EffectAppender {
         for (EffectAppender effectAppender : effectAppenders)
             result += effectAppender.getThreatsAddedAsCost(actionContext);
         return result;
+    }
+
+    @Override
+    public void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+        for (EffectAppender effectAppender : effectAppenders)
+            effectAppender.tallyWoundsPlacedAsCost(actionContext, tally);
     }
 
     @Override

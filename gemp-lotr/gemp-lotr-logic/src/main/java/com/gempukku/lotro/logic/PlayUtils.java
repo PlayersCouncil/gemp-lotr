@@ -169,7 +169,17 @@ public class PlayUtils {
                 && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
             return false;
 
-        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty, event timeword check
+        // A response event is played in answer to its own trigger and never by another card's effect, whatever
+        // that effect ignores: it has no play action to be given (F-0186).  One that is also an event of the
+        // current phase is played as that.
+        if (blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(Timeword.RESPONSE)) {
+            final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
+            if (timeword == null || !blueprint.hasTimeword(timeword))
+                return false;
+        }
+
+        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty, the timeword check of an
+        // event that is not a response
         return true;
     }
 
