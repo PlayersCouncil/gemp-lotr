@@ -1185,8 +1185,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 return initiative;
         }
 
+        // A card being played from hand is still counted while it is in the void and, once placed, until its play
+        // is announced: the loss of initiative is answered together with the play (CR 4.2 "playing a card").
         int freePeopleInitiativeHandSize = game.getGameState().getHand(game.getGameState().getCurrentPlayerId()).size()
-                + game.getGameState().getVoidFromHand(game.getGameState().getCurrentPlayerId()).size();
+                + game.getGameState().getVoidFromHand(game.getGameState().getCurrentPlayerId()).size()
+                + game.getActionsEnvironment().countCardsEnteringPlayFromHand(game.getGameState().getCurrentPlayerId());
 
         int initiativeHandSize = 4;
         for (Modifier modifier : getModifiers(game, ModifierEffect.INITIATIVE_MODIFIER))

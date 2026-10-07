@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.official.set07;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -19,6 +20,7 @@ public class Card_07_359_Tests
 				{{
 					put("gollum", "9_28");
 					put("watcher", "2_73");
+					put("fens", "5_22");
 
 					put("companion1", "1_7");
 					put("companion2", "1_11");
@@ -68,17 +70,54 @@ public class Card_07_359_Tests
 		assertEquals(8, card.getBlueprint().getSiteNumber());
 	}
 
-	//@Test
-	public void NorthernIthilienCannotBeUsedWithWatcherTo() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NorthernIthilienCannotBeUsedWithWatcherToTurnThreatsIntoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gollum = scn.GetShadowCard("gollum");
+		var watcher = scn.GetShadowCard("watcher");
+		var fens = scn.GetShadowCard("fens");
+		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(7);
+		//Evil-smelling Fens makes every site a marsh, which keeps the Watcher in play.
+		scn.MoveCardsToSupportArea(fens);
+		scn.MoveMinionsToTable(watcher);
+		scn.MoveCardsToDiscard(gollum);
+		scn.AddThreats(4);
+		scn.SetTwilight(0);
+		scn.FreepsPass();
 
+		var site = scn.GetCurrentSite();
+		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
+		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		//4 companions + 8 for the site
+		assertEquals(12, scn.GetTwilight());
+		assertEquals(4, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		//Pointless as it is, the ability is still offered.
+		assertTrue(scn.ShadowActionAvailable(site));
+
+		scn.ShadowUseCardAction(site);
+
+		//The threats are removed and Gollum is paid for, but the Watcher discards him as he comes into play:
+		// he was not played, so the cost is not fulfilled and no burden is added.
+		assertEquals(2, scn.GetThreats());
+		assertEquals(10, scn.GetTwilight());
+		assertEquals(Zone.DISCARD, gollum.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		assertEquals(0, scn.GetBurdens());
+
+		//Gollum is back in the discard pile, so it can be done again, with the same result.
+		assertTrue(scn.ShadowActionAvailable(site));
+		scn.ShadowUseCardAction(site);
+
+		assertEquals(0, scn.GetThreats());
 		assertEquals(8, scn.GetTwilight());
+		assertEquals(Zone.DISCARD, gollum.getZone());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

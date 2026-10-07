@@ -485,7 +485,7 @@ public class Card_V1_066_Tests
 	}
 
 	@Test
-	public void PlayedFromAStackAwayFromAMarshItIsDiscardedAndTwoTentaclesAreStackedAllTheSame() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedFromAStackAwayFromAMarshItIsDiscardedAndNoTentacleIsStacked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var writhing = scn.GetShadowCard("writhing");
@@ -505,23 +505,18 @@ public class Card_V1_066_Tests
 		// 1 set + 1 companion + 2 for Ettenmoors
 		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.STACKED, writhing);
+		assertEquals(1, scn.GetStackedCards(waters).size());
 		assertTrue(scn.ShadowActionAvailable(writhing));
 
 		scn.ShadowUseCardAction(writhing);
 
-		// Playing it was the cost, and it was paid: 2 to play + 2 roaming.
+		// What was paid to play it stays paid: 2 to play + 2 roaming.
 		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(foul, huge, reaching));
-		// It is not one of the tentacles it stacks, wherever it is by now.
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(writhing));
-
-		scn.ShadowChooseCards(foul, reaching);
-
-		assertEquals(2, scn.GetStackedCards(waters).size());
-		assertTrue(scn.GetStackedCards(waters).contains(foul));
-		assertTrue(scn.GetStackedCards(waters).contains(reaching));
-		// Ettenmoors is no marsh, so the tentacle itself is in the discard pile beside the one not chosen.
-		assertInZone(Zone.DISCARD, writhing, huge);
+		// Ettenmoors is no marsh, so the tentacle is discarded as it comes into play.  Playing it was the cost of
+		// the ability, and a card that has left play before its play is complete was not played: no tentacle is
+		// chosen and none is stacked.
+		assertInZone(Zone.DISCARD, writhing, foul, huge, reaching);
+		assertEquals(0, scn.GetStackedCards(waters).size());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

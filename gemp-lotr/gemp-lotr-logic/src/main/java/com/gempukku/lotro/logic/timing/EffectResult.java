@@ -40,7 +40,7 @@ public abstract class EffectResult {
 
         ZERO_VITALITY,
 
-        PLAY, ACTIVATE,
+        ENTERS_PLAY, PLAY, ACTIVATE,
 
         DRAW_CARD_OR_PUT_INTO_HAND,
 

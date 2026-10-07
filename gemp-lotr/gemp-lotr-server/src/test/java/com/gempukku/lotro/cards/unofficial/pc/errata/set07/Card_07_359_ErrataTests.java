@@ -36,6 +36,8 @@ public class Card_07_359_ErrataTests
 				{{
 					put("gollum", "5_24");      // Gollum, Nasty Treacherous Creature: cost 2, site 3
 					put("runner", "1_178");     // Goblin Runner: cost 1
+					put("watcher", "2_73");     // Watcher in the Water: discards all other minions (except tentacles)
+					put("fens", "5_22");        // Evil-smelling Fens: every site is a marsh, which keeps the Watcher in play
 					put("aragorn", "1_89");     // three companions beside Frodo: room for four threats
 					put("gimli", "1_13");
 					put("sam", "1_311");
@@ -150,5 +152,47 @@ public class Card_07_359_ErrataTests
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
 		assertEquals(burdens + 2, scn.GetBurdens());
+	}
+
+	@Test
+	public void ShadowAbilityCannotBeUsedWithWatcherToTurnThreatsIntoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		VirtualTableScenario scn = GetSiteScenario();
+
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("aragorn"), scn.GetFreepsCard("gimli"), scn.GetFreepsCard("sam"));
+		PhysicalCardImpl gollum = scn.GetShadowCard("gollum");
+		PhysicalCardImpl watcher = scn.GetShadowCard("watcher");
+		PhysicalCardImpl fens = scn.GetShadowCard("fens");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCardsToSupportArea(fens);
+		scn.MoveMinionsToTable(watcher);
+		scn.MoveCardsToDiscard(gollum);
+		scn.AddThreats(4);
+		scn.SetTwilight(0);
+		scn.FreepsPass();
+
+		PhysicalCardImpl site = scn.GetCurrentSite();
+		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
+		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		// 4 companions + 8 for the site
+		assertEquals(12, scn.GetTwilight());
+		assertEquals(4, scn.GetThreats());
+		int burdens = scn.GetBurdens();
+		// Pointless as it is, the ability is still offered.
+		assertTrue(scn.ShadowActionAvailable(site));
+
+		scn.ShadowUseCardAction(site);
+
+		// The threats are removed and Gollum is paid for, but the Watcher discards him as he comes into play:
+		// he was not played, so the cost is not fulfilled and no burden is added.
+		assertEquals(2, scn.GetThreats());
+		// Gollum, Nasty Treacherous Creature costs 2
+		assertEquals(10, scn.GetTwilight());
+		assertEquals(Zone.DISCARD, gollum.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		assertEquals(burdens, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -19,8 +19,12 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
     private final ChooseActiveCardEffect _chooseTargetEffect;
     private boolean _targetChosen;
 
-    private Effect _playCardEffect;
+    private PlayCardEffect _playCardEffect;
     private boolean _cardPlayed;
+    private boolean _playPublished;
+
+    private boolean _playCompleted;
+    private boolean _cardStayedInPlay;
 
     private boolean _cardDiscarded;
 
@@ -118,6 +122,13 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
             insertCost(new PayPlayOnTwilightCostEffect(_cardToAttach, _target, _twilightModifier));
         }
 
+        // The card has been placed and everything that answered its entering play has finished: its play is
+        // announced now, whatever else has happened meanwhile.
+        if (_cardPlayed && !_playPublished) {
+            _playPublished = true;
+            return _playCardEffect.getPublishEffect();
+        }
+
         if (_target != null) {
             if (!isCostFailed()) {
                 Effect cost = getNextCost();
@@ -134,6 +145,8 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
                 Effect effect = getNextEffect();
                 if (effect != null)
                     return effect;
+
+                completePlay(game);
             } else {
                 if (!_cardDiscarded) {
                     _cardDiscarded = true;
@@ -150,5 +163,29 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
         }
 
         return null;
+    }
+
+    /**
+     * The last step of playing a card (CR 4.2 "playing a card": "The card is played. ... other cards are in play").
+     * It is reached once every response to the play has finished, and is where the play is judged: a card that has
+     * left play by now, by whatever means, was not played (and its play was never announced if the card had
+     * already gone when it came to be).
+     */
+    private void completePlay(LotroGame game) {
+        if (!_playCompleted) {
+            _playCompleted = true;
+            _cardStayedInPlay = _playCardEffect.completePlay(game);
+        }
+    }
+
+    /**
+     * Whether this play happened, for whatever depends on it: an ability whose cost was to play the card, an "if
+     * you do".  It did only if the card is still in play when its play is complete, that is after every response
+     * to it has finished.  A play that found nothing to put the card on, or whose costs could not be paid, did not
+     * happen either.  The twilight and whatever else was paid to play the card stay paid either way.
+     */
+    @Override
+    public boolean wasCarriedOut() {
+        return _playCompleted && _cardStayedInPlay;
     }
 }

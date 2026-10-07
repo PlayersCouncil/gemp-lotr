@@ -2,8 +2,10 @@ package com.gempukku.lotro.game.state.actions;
 
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.ActionProxy;
 import com.gempukku.lotro.game.ActionsEnvironment;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -30,6 +32,9 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
     private final List<EffectResult> turnEffectResults = new LinkedList<>();
     private final List<EffectResult> phaseEffectResults = new LinkedList<>();
 
+    // Cards played from hand that are in play with their play not yet announced.
+    private final Set<PhysicalCard> _enteringPlayFromHand = new HashSet<>();
+
     public DefaultActionsEnvironment(LotroGame lotroGame, ActionStack actionStack) {
         _lotroGame = lotroGame;
         _actionStack = actionStack;
@@ -44,6 +49,33 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         _effectResults.add(effectResult);
         turnEffectResults.add(effectResult);
         phaseEffectResults.add(effectResult);
+    }
+
+    @Override
+    public void retractEffectResult(EffectResult effectResult) {
+        turnEffectResults.remove(effectResult);
+        phaseEffectResults.remove(effectResult);
+    }
+
+    @Override
+    public void noteCardEnteringPlay(PhysicalCard card, Zone playedFrom) {
+        if (playedFrom == Zone.HAND)
+            _enteringPlayFromHand.add(card);
+    }
+
+    @Override
+    public void noteCardEnteredPlay(PhysicalCard card) {
+        _enteringPlayFromHand.remove(card);
+    }
+
+    @Override
+    public int countCardsEnteringPlayFromHand(String playerId) {
+        int count = 0;
+        for (PhysicalCard card : _enteringPlayFromHand) {
+            if (card.getOwner().equals(playerId))
+                count++;
+        }
+        return count;
     }
 
     public Set<EffectResult> consumeEffectResults() {
@@ -78,6 +110,7 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         _actionProxies.removeAll(_untilEndOfTurnActionProxies);
         _untilEndOfTurnActionProxies.clear();
         turnEffectResults.clear();
+        _enteringPlayFromHand.clear();
     }
 
     @Override

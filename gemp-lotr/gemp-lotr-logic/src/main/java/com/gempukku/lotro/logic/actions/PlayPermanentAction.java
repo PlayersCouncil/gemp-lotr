@@ -19,8 +19,12 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
     private boolean _cardRemoved;
 
-    private Effect _playCardEffect;
+    private PlayCardEffect _playCardEffect;
     private boolean _cardPlayed;
+    private boolean _playPublished;
+
+    private boolean _playCompleted;
+    private boolean _cardStayedInPlay;
 
     private boolean _cardDiscarded;
 
@@ -97,6 +101,13 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             insertCost(new PayTwilightCostEffect(_permanentPlayed, _twilightModifier, _ignoreRoamingPenalty));
         }
 
+        // The card has been placed and everything that answered its entering play has finished: its play is
+        // announced now, whatever else has happened meanwhile.
+        if (_cardPlayed && !_playPublished) {
+            _playPublished = true;
+            return _playCardEffect.getPublishEffect();
+        }
+
         if (!isCostFailed()) {
             Effect cost = getNextCost();
             if (cost != null)
@@ -111,6 +122,8 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             Effect effect = getNextEffect();
             if (effect != null)
                 return effect;
+
+            completePlay(game);
         } else {
             if (!_cardDiscarded) {
                 _cardDiscarded = true;
@@ -122,7 +135,26 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
         return null;
     }
 
+    /**
+     * The last step of playing a card (CR 4.2 "playing a card": "The card is played. ... other cards are in play").
+     * It is reached once every response to the play has finished, and is where the play is judged: a card that has
+     * left play by now, by whatever means, was not played (and its play was never announced if the card had
+     * already gone when it came to be).
+     */
+    private void completePlay(LotroGame game) {
+        if (!_playCompleted) {
+            _playCompleted = true;
+            _cardStayedInPlay = _playCardEffect.completePlay(game);
+        }
+    }
+
+    /**
+     * Whether this play happened, for whatever depends on it: an ability whose cost was to play the card, an "if
+     * you do".  It did only if the card is still in play when its play is complete, that is after every response
+     * to it has finished.  The twilight and whatever else was paid to play the card stay paid either way.
+     */
+    @Override
     public boolean wasCarriedOut() {
-        return _cardPlayed && _playCardEffect != null && _playCardEffect.wasCarriedOut();
+        return _playCompleted && _cardStayedInPlay;
     }
 }
