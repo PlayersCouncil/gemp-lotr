@@ -1,10 +1,13 @@
 package com.gempukku.lotro.mechanics;
 
+import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.VitalityModifier;
 import org.junit.Test;
 
@@ -52,6 +55,15 @@ import static org.junit.Assert.*;
  *
  * On the Watcher played away from a marsh beside another minion: "it would have to evaluate the effects on
  * Watcher in the order in which they are printed, which would first discard the others and then discard itself".
+ *
+ * A card's own "When you play this ..., <do or pay something> or discard it" (Dunlending Rampager, Dunlending
+ * Renegade, Wild Men of the Hills, Stampeding Chief) belongs to the card's entering play as well.  Ketura,
+ * 2026-10-07, on a Rampager his own text had discarded and Ulaire Attea's "each time you play a minion": "a
+ * self-discarding card should not trigger Attea or other 'each time you play' or 'when you play', that's pretty
+ * straightforwardly the same situation as Runner, the only difference being where the reaction text is."  So the
+ * choice in such a text is made before the play is announced, after the texts that watch the table have had
+ * their turn.  If the card is discarded there, it was not played: nothing answers its play, a cost of playing it
+ * is unpaid, and it is not a card played this phase.  If it stays, its play is announced and answered as usual.
  */
 public class DiscardedOnEntryTests
 {
@@ -229,6 +241,16 @@ public class DiscardedOnEntryTests
 					put("runner", "1_178");     // Goblin Runner: When you play this minion, you may add (2)
 					put("guard1", "1_7");       // Dwarf Guard: cards for the Free Peoples player to hold
 					put("guard2", "1_7");
+					put("guard3", "1_7");
+					// Dunlending Rampager: cost 1, site 3. When you play this minion, the Free Peoples player
+					// may discard 2 cards from hand to discard him
+					put("rampager", "5_1");
+					// Stampeding Chief: unique, cost 8, site 4. If you play Stampeding Chief from your hand,
+					// remove (3) and spot another [men] minion or discard Stampeding Chief
+					put("chief1", "17_49");
+					put("chief2", "17_49");
+					// Swarthy Hillman: [men] minion, site 4; an archer only while you control a site
+					put("hillman", "15_93");
 				}},
 				new HashMap<>()
 				{{
@@ -260,6 +282,13 @@ public class DiscardedOnEntryTests
 					put("runner2", "1_178");
 					put("reaching", "19_19");   // Reaching Tentacle: cost 2; discarded if not at a marsh
 					put("soldier", "1_271");    // Orc Soldier: cost 2
+					// Dunlending Rampager: cost 1, site 3. When you play this minion, the Free Peoples player
+					// may discard 2 cards from hand to discard him
+					put("rampager1", "5_1");
+					put("rampager2", "5_1");
+					put("guard1", "1_7");       // Dwarf Guard: cards for the Free Peoples player to discard
+					put("guard2", "1_7");
+					put("guard3", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -307,6 +336,15 @@ public class DiscardedOnEntryTests
 					put("unheeded", "8_115");
 					put("merry", "1_302");
 					put("pippin", "1_306");
+					// Dunlending Renegade: cost 2, site 3. When you play this minion, the Free Peoples player
+					// may discard 2 cards from hand to discard him
+					put("renegade1", "5_2");
+					put("renegade2", "5_2");
+					put("renegade3", "5_2");
+					put("guard1", "1_7");       // Dwarf Guard: cards for the Free Peoples player to discard
+					put("guard2", "1_7");
+					put("guard3", "1_7");
+					put("guard4", "1_7");
 				}},
 				new HashMap<>()
 				{{
@@ -524,7 +562,7 @@ public class DiscardedOnEntryTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// The Free Peoples player discards 2 cards to discard the Renegade: his own text took him out of play
-		// before his play was complete, so he was not played and no card is drawn.
+		// as he came into it, so he was not played and no card is drawn.
 		scn.ShadowUseCardAction(site);
 		assertTrue(scn.FreepsDecisionAvailable("discard 2 cards from hand"));
 		scn.FreepsChooseYes();
@@ -1035,5 +1073,186 @@ public class DiscardedOnEntryTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		// That one stayed, and is the first Uruk-hai played: the third costs what is printed on him.
 		assertEquals(3, scn.GetTwilightCost(crossbowman3));
+	}
+
+	@Test
+	public void ACardItsOwnWhenPlayedTextDiscardsIsNotOfferedToItsOwnersEachTimeYouPlayAMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAtteaScenario();
+
+		var attea = scn.GetShadowCard("attea");
+		var rampager1 = scn.GetShadowCard("rampager1");
+		var rampager2 = scn.GetShadowCard("rampager2");
+		var runner = scn.GetShadowCard("runner1");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var guard3 = scn.GetFreepsCard("guard3");
+		scn.MoveCardsToHand(rampager1, rampager2);
+		// a minion of the Rampager's cost for Attea to play
+		scn.MoveCardsToDiscard(runner);
+
+		scn.StartGame();
+		scn.MoveCardsToHand(guard1, guard2, guard3);
+		scn.MoveMinionsToTable(attea);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// The Free Peoples player is asked before anything answers the play, and lets the first Rampager be: he
+		// was played, and only now is Attea offered.
+		scn.ShadowPlayCard(rampager1);
+		assertTrue(scn.FreepsDecisionAvailable("discard 2 cards from hand"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(attea));
+		scn.FreepsChooseNo();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, rampager1);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(attea));
+		scn.ShadowDeclineOptionalTrigger();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int twilight = scn.GetTwilight();
+
+		// The Free Peoples player discards 2 cards to discard the second: his own text discarded him as he came
+		// into play, so he was not played, and Attea is not offered though the Runner is still there to play.
+		scn.ShadowPlayCard(rampager2);
+		assertTrue(scn.FreepsDecisionAvailable("discard 2 cards from hand"));
+		scn.FreepsChooseYes();
+		scn.FreepsChooseCards(guard1, guard2);
+
+		assertInZone(Zone.DISCARD, rampager2, runner, guard1, guard2);
+		assertInZone(Zone.HAND, guard3);
+		// what he cost stays paid: 1 to play + 2 roaming
+		assertEquals(twilight - 3, scn.GetTwilight());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(attea));
+		assertEquals(0, scn.GetWoundsOn(attea));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardItsOwnWhenPlayedTextDiscardsSetsOffNoRequiredEachTimeAMinionIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMidgewaterMoorsScenario();
+
+		var chief1 = scn.GetShadowCard("chief1");
+		var chief2 = scn.GetShadowCard("chief2");
+		var hillman = scn.GetShadowCard("hillman");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var guard3 = scn.GetFreepsCard("guard3");
+		scn.MoveCardsToHand(chief1, chief2);
+
+		scn.StartGame();
+		scn.MoveCardsToHand(guard1, guard2, guard3);
+		scn.MoveMinionsToTable(hillman);
+		scn.SetTwilight(30);
+		scn.FreepsPass();
+
+		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
+		// 30 set + 1 companion + 1 for Midgewater Moors
+		assertEquals(32, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+
+		// The Shadow player has the Chief's choice before anything answers the play, and discards him: he was
+		// not played, and the site does not make the Free Peoples player discard a card.
+		scn.ShadowPlayCard(chief1);
+		assertTrue(scn.ShadowChoiceAvailable("Remove (3)"));
+		assertTrue(scn.ShadowChoiceAvailable("Discard Stampeding Chief"));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		scn.ShadowChoose("Discard Stampeding Chief");
+
+		assertInZone(Zone.DISCARD, chief1);
+		// 8 to play + 2 roaming, and no (3)
+		assertEquals(22, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The second Chief's price is paid and he stays: his play is announced, and the site answers it.
+		scn.ShadowPlayCard(chief2);
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		scn.ShadowChoose("Remove (3)");
+
+		assertInZone(Zone.SHADOW_CHARACTERS, chief2);
+		// 8 to play + 2 roaming + (3)
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1));
+		scn.FreepsChooseCard(guard1);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardDiscardedAsItEntersIsNotAskedTheChoiceInItsOwnWhenPlayedText() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMidgewaterMoorsScenario();
+
+		var watcher = scn.GetShadowCard("watcher");
+		var fens = scn.GetShadowCard("fens");
+		var rampager = scn.GetShadowCard("rampager");
+		scn.MoveCardsToHand(rampager);
+
+		scn.StartGame();
+		// two cards the Free Peoples player could discard to discard the Rampager, were he asked
+		scn.MoveCardsToHand(scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"));
+		scn.MoveCardsToSupportArea(fens);
+		scn.MoveMinionsToTable(watcher);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// 10 set + 1 companion + 1 for Midgewater Moors
+		assertEquals(12, scn.GetTwilight());
+
+		scn.ShadowPlayCard(rampager);
+
+		// The Watcher discards the Rampager first, as it does any minion; his own text has nothing left to ask
+		// about, and the site has no play to answer.
+		assertInZone(Zone.DISCARD, rampager);
+		// 1 to play + 2 roaming
+		assertEquals(9, scn.GetTwilight());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardItsOwnWhenPlayedTextDiscardsIsNotACardPlayedThisPhase() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+		var scn = GetDeepOfHelmScenario();
+
+		var renegade1 = scn.GetShadowCard("renegade1");
+		var renegade2 = scn.GetShadowCard("renegade2");
+		var renegade3 = scn.GetShadowCard("renegade3");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveCardsToHand(renegade1, renegade2, renegade3);
+		scn.MoveCardsToHand(guard1, guard2, scn.GetFreepsCard("guard3"), scn.GetFreepsCard("guard4"));
+		// No card that discards itself on being played is an Uruk-hai, and Deep of Helm counts Uruk-hai.
+		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Dunlending Renegade)"), null, Race.URUK_HAI));
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals("Deep of Helm", scn.GetCurrentSite().getBlueprint().getTitle());
+		int twilight = scn.GetTwilight();
+		// 2 - 3 for the first Uruk-hai played here
+		assertEquals(0, scn.GetTwilightCost(renegade1));
+		assertEquals(0, scn.GetTwilightCost(renegade2));
+
+		// The Free Peoples player discards 2 cards to discard the first Renegade.
+		scn.ShadowPlayCard(renegade1);
+		scn.FreepsChooseYes();
+		scn.FreepsChooseCards(guard1, guard2);
+
+		assertInZone(Zone.DISCARD, renegade1);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// His own text discarded him as he came into play, so no Uruk-hai has been played yet: the next is
+		// still the first.
+		assertEquals(0, scn.GetTwilightCost(renegade2));
+
+		// The second is let be.
+		scn.ShadowPlayCard(renegade2);
+		scn.FreepsChooseNo();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, renegade2);
+		assertEquals(twilight, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// That one stayed, and is the first Uruk-hai played: the third costs what is printed on him.
+		assertEquals(2, scn.GetTwilightCost(renegade3));
 	}
 }

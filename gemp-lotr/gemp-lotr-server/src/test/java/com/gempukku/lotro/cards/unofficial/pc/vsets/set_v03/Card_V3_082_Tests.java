@@ -36,6 +36,10 @@ public class Card_V3_082_Tests
 					put("dread", "103_94");       // Cover of Darkness, Omen of Dread: [sauron] condition, cost 2, two dots; answers a burden or a threat being added
 					put("poison", "8_28");        // Spider Poison: Shadow possession, cost 1, that goes from the support area onto a companion; idle until its bearer is assigned
 					put("poison2", "8_28");
+					// Weary: [isengard] condition, cost 1. Plays on a companion or ally; answers its bearer being
+					// assigned to an [isengard] tracker and nothing else
+					put("weary1", "4_212");
+					put("weary2", "4_212");
 					put("runner1", "1_178");      // Goblin Runners, to be stacked
 					put("runner2", "1_178");
 					put("runner3", "1_178");
@@ -389,6 +393,53 @@ public class Card_V3_082_Tests
 		// 5 + 1 for the twilight cost + 0 stacked + 0 tokens + 2 Spider Poisons that can be spotted, wherever they are
 		assertEquals(8, scn.GetStrength(rider));
 		assertEquals(6, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AShadowCardAnAllyBearsIsASupportCardForBothPlayersChoicesAndOneACompanionBearsIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var death = scn.GetFreepsCard("death");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var aldor = scn.GetFreepsCard("aldor");
+		var swarms1 = scn.GetShadowCard("swarms1");
+		var weary1 = scn.GetShadowCard("weary1");
+		var weary2 = scn.GetShadowCard("weary2");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(rider, guard);
+		scn.MoveAlliesToTable(aldor);
+		scn.MoveCardsToHand(death);
+		scn.MoveCardsToSupportArea(swarms1);
+		// The same Shadow condition on an ally, who is in a support area himself, and on a companion.
+		scn.AttachCardsTo(aldor, weary1);
+		scn.AttachCardsTo(guard, weary2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignAndResolve(rider, savage);
+
+		assertEquals(5, scn.GetStrength(rider));
+		scn.FreepsPlayCard(death);
+
+		// What a card in a support area bears is in that support area: the Weary on the ally is one of the
+		// Shadow player's support cards, and the one on the Household Guard is not.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(swarms1, weary1));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(weary2, aldor));
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(swarms1, weary1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(weary2, aldor));
+		scn.FreepsChooseCard(weary1);
+		scn.FreepsChooseCard(rider);
+
+		// 5 + 1 for Weary's twilight cost + 2 Wearies that can be spotted; nothing is stacked on it and it has no
+		// tokens.
+		assertEquals(8, scn.GetStrength(rider));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 

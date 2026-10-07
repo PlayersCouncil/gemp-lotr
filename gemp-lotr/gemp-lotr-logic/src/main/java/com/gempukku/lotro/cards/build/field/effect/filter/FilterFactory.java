@@ -29,7 +29,9 @@ public class FilterFactory {
         for (Keyword value : Keyword.values())
             appendFilter(value);
 
-        appendFilter("support", "support", Filters.zone(Zone.SUPPORT));
+        // A "support card": in a support area, which a card borne by a card in one is too (Q-0099).  The zone alone
+        // is zone(support).
+        appendFilter("support", "support", Filters.inSupportArea);
 
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);

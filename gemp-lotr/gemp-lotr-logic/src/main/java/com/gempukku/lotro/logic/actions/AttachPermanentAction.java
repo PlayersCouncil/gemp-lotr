@@ -21,7 +21,6 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
 
     private PlayCardEffect _playCardEffect;
     private boolean _cardPlayed;
-    private boolean _playPublished;
 
     private boolean _playCompleted;
     private boolean _cardStayedInPlay;
@@ -122,11 +121,13 @@ public class AttachPermanentAction extends AbstractCostToEffectAction {
             insertCost(new PayPlayOnTwilightCostEffect(_cardToAttach, _target, _twilightModifier));
         }
 
-        // The card has been placed and everything that answered its entering play has finished: its play is
-        // announced now, whatever else has happened meanwhile.
-        if (_cardPlayed && !_playPublished) {
-            _playPublished = true;
-            return _playCardEffect.getPublishEffect();
+        // The card has been placed: its own text on entering play is given its turn, and then its play is
+        // announced, each once everything that answered the step before has finished and whatever else has
+        // happened meanwhile.
+        if (_cardPlayed) {
+            Effect step = _playCardEffect.nextStep();
+            if (step != null)
+                return step;
         }
 
         if (_target != null) {

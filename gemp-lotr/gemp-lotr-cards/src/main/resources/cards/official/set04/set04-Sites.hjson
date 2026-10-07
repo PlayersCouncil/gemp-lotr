@@ -1046,8 +1046,9 @@
 					requires: {
 						type: not
 						requires: {
-							type: playedCardThisPhase
+							type: playedCardThisTurn
 							filter: urukHai
+							atCurrentSite: true
 						}
 					}
 					amount: -3

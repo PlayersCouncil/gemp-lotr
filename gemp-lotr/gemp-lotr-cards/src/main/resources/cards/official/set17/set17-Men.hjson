@@ -535,8 +535,7 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: EntersPlay
 					fromZone: hand
 				}
 				effect: {

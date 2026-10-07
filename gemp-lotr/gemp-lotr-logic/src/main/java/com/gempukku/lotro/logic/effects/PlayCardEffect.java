@@ -15,16 +15,23 @@ import java.util.Collections;
 /**
  * Puts a card that is being played into play, in two steps (CR 4.2 "playing a card").
  *
- * Carrying this effect out is the entering step: the card is placed and "is now in play", and an EnteredPlayResult
- * is published.  That gives the texts that watch the table all the time their turn first: a card the Watcher in
- * the Water discards, or one that is discarded for not being at a marsh, goes now.
+ * Carrying this effect out begins the entering step: the card is placed and "is now in play", and an
+ * EnteredPlayResult is published.  That gives the texts that watch the table all the time their turn first: a card
+ * the Watcher in the Water discards, or one that is discarded for not being at a marsh, goes now.
  *
- * The effect that getPublishEffect() returns is the next step, which the play action takes once everything
- * answering the first has finished: the play is announced with a PlayCardResult, and it is that result which a
- * card's own "When you play ...", other cards' "Each time ... is played" and responses to the play answer.  The
- * loss of initiative that the card's leaving the hand causes is published in the same batch.  A card that is no
- * longer in play by then, whatever took it out, is not announced at all (CR 4.2 "discard": "If a card is
- * discarded when it comes into play, ignore any effects triggered when it comes into play").
+ * The play action then takes the effects that nextStep() hands it, one at a time, each once everything answering
+ * the one before has finished.
+ *
+ * The first ends the entering step: if the card is still in play, a second EnteredPlayResult (isOwnText) is
+ * published, which the card's own EntersPlay trigger answers: its "When you play this ..., <do or pay something>
+ * or discard it".  The choices in that text are made here, and a card that its own text discards here goes the
+ * same way as one the Watcher discarded.
+ *
+ * The second announces the play with a PlayCardResult, and it is that result which a card's own "When you play
+ * ...", other cards' "Each time ... is played" and responses to the play answer.  The loss of initiative that the
+ * card's leaving the hand causes is published in the same batch.  A card that is no longer in play by then,
+ * whatever took it out, is not announced at all (CR 4.2 "discard": "If a card is discarded when it comes into
+ * play, ignore any effects triggered when it comes into play").
  *
  * completePlay() is the last step, "The card is played", taken by the play action when everything answering the
  * play has finished.  A play whose card is not in play then did not happen: it pays no cost, and it is taken
@@ -39,6 +46,8 @@ public class PlayCardEffect extends AbstractEffect {
     private final PhysicalCard _attachedOrStackedPlayedFrom;
     private final boolean _paidToil;
 
+    private boolean _ownTextStepTaken;
+    private boolean _publishStepTaken;
     private PlayCardResult _playResult;
 
     public PlayCardEffect(String performingPlayerId, Zone playedFrom, PhysicalCard cardPlayed, Zone playedTo, PhysicalCard attachedOrStackedPlayedFrom, boolean paidToil) {
@@ -93,16 +102,46 @@ public class PlayCardEffect extends AbstractEffect {
         }
 
         game.getActionsEnvironment().noteCardEnteringPlay(_cardPlayed, _playedFrom);
-        game.getActionsEnvironment().emitEffectResult(new EnteredPlayResult(_cardPlayed));
+        game.getActionsEnvironment().emitEffectResult(new EnteredPlayResult(_cardPlayed, _playedFrom, false));
 
         return new FullEffectResult(true);
     }
 
     /**
-     * The step after the card has entered play: its play is announced, unless the card has left play meanwhile.
-     * To be carried out by the play action once everything that answered the card's entering play has finished.
+     * The steps that follow the card's being placed, in order: the one for the card's own text on entering play,
+     * then the one that announces its play.  The play action carries each out once everything that answered the
+     * step before has finished, and goes on with its own effects when this returns null.
      */
-    public Effect getPublishEffect() {
+    public Effect nextStep() {
+        if (!_ownTextStepTaken) {
+            _ownTextStepTaken = true;
+            return getOwnTextEffect();
+        }
+        if (!_publishStepTaken) {
+            _publishStepTaken = true;
+            return getPublishEffect();
+        }
+        return null;
+    }
+
+    /**
+     * The second half of the entering step: the card's own EntersPlay trigger is given its turn, if the texts
+     * that watch the table have left the card in play.
+     */
+    private Effect getOwnTextEffect() {
+        return new UnrespondableEffect() {
+            @Override
+            protected void doPlayEffect(LotroGame game) {
+                if (isCardInPlay())
+                    game.getActionsEnvironment().emitEffectResult(new EnteredPlayResult(_cardPlayed, _playedFrom, true));
+            }
+        };
+    }
+
+    /**
+     * The step after the card has entered play: its play is announced, unless the card has left play meanwhile.
+     */
+    private Effect getPublishEffect() {
         return new UnrespondableEffect() {
             @Override
             protected void doPlayEffect(LotroGame game) {

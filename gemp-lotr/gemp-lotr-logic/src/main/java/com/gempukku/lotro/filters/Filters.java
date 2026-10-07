@@ -672,6 +672,32 @@ public class Filters {
         return (game, physicalCard) -> physicalCard.getZone() == zone;
     }
 
+    /**
+     * Whether the card is in a support area: lying in one, or borne, at any depth, by a card that is.  A card
+     * that a companion or a minion bears is not.  Ketura, 2026-10-07 (Q-0099): "'Support' is meant to be shorthand
+     * for 'in the support area'.  A card attached to another is on Gemp in the 'attached zone', but ultimately
+     * that's an implementation detail; it is still 'in the support area'."  An ally and a site that a player
+     * controls lie in a support area, so what they bear is in it too.
+     */
+    public static boolean isInSupportArea(PhysicalCard card) {
+        PhysicalCard at = card;
+        // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
+        for (int depth = 0; at != null && depth < 50; depth++) {
+            if (at.getZone() == Zone.SUPPORT)
+                return true;
+            if (at.getZone() != Zone.ATTACHED)
+                return false;
+            at = at.getAttachedTo();
+        }
+        return false;
+    }
+
+    /**
+     * A "support card": a card in a support area (see isInSupportArea).  Filters.zone(Zone.SUPPORT) is the card
+     * lying in the support area itself, which is what "transfer this from your support area" means.
+     */
+    public static final Filter inSupportArea = (game, physicalCard) -> isInSupportArea(physicalCard);
+
     public static Filter hasWounds(final int wounds) {
         return (game, physicalCard) -> game.getGameState().getWounds(physicalCard) >= wounds;
     }

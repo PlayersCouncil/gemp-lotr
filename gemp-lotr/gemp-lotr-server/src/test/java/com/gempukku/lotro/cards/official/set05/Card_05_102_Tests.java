@@ -8,10 +8,27 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_05_102_Tests
 {
+
+	// The Towers-block path: its site 4 is White Rocks.
+	protected VirtualTableScenario GetTowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("morannon", "5_102");
+					// Morgul Hunter: [sauron] Orc, cost 5, site 6; stronger for each companion and nothing else
+					put("hunter1", "1_256");
+					put("hunter2", "1_256");
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
@@ -53,6 +70,45 @@ public class Card_05_102_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	@Test
+	public void OnlyTheFirstSauronOrcPlayedAtSite4CostsThreeLessWhateverThePhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
+
+		var morannon = scn.GetShadowCard("morannon");
+		var hunter1 = scn.GetShadowCard("hunter1");
+		var hunter2 = scn.GetShadowCard("hunter2");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveCardsToSupportArea(morannon);
+		scn.MoveCardsToHand(hunter1, hunter2);
+		scn.SetTwilight(20);
+		// Site 3 of the Towers block: nothing is discounted there.
+		assertEquals(5, scn.GetTwilightCost(hunter1));
+		scn.FreepsPass();
+
+		assertEquals(4, (int) scn.GetCurrentSite().getSiteNumber());
+		int twilight = scn.GetTwilight();
+		// 5 - 3 for the first [sauron] Orc played at site 4
+		assertEquals(2, scn.GetTwilightCost(hunter1));
+		assertEquals(2, scn.GetTwilightCost(hunter2));
+
+		scn.ShadowPlayCard(hunter1);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, hunter1);
+		// 2 to play + 2 roaming
+		assertEquals(twilight - 4, scn.GetTwilight());
+		// The second [sauron] Orc costs what is printed on it,
+		assertEquals(5, scn.GetTwilightCost(hunter2));
+
+		// and still does in the later phases of the turn: it is not the first played at site 4.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(5, scn.GetTwilightCost(hunter2));
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(5, scn.GetTwilightCost(hunter2));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

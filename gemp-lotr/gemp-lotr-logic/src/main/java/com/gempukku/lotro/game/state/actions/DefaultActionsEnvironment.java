@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.ActionStack;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.PlayCardResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +47,10 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
 
     @Override
     public void emitEffectResult(EffectResult effectResult) {
+        // Every play is recorded with the site the fellowship is at, for PlayedCardThisTurn's atCurrentSite.
+        if (effectResult instanceof PlayCardResult playResult)
+            playResult.setPlayedAtSite(_lotroGame.getGameState().getCurrentSite());
+
         _effectResults.add(effectResult);
         turnEffectResults.add(effectResult);
         phaseEffectResults.add(effectResult);

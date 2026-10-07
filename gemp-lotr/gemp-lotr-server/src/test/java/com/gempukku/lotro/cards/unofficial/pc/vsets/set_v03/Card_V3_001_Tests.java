@@ -269,6 +269,48 @@ public class Card_V3_001_Tests
 	}
 
 	@Test
+	public void ManeuverAbilityReachesAShadowCardAnAllyBearsAndNotOneACompanionBears() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		var breath1 = scn.GetShadowCard("breath1");
+		var breath2 = scn.GetShadowCard("breath2");
+		var palantir = scn.GetShadowCard("palantir");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bounder);
+		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToSupportArea(palantir);
+		// Two Black Breaths that have left the Shadow player's support area for a character, as their own ability
+		// moves them: one to an ally, who is in a support area himself, and one to a companion.
+		scn.AttachCardsTo(bounder, breath1);
+		scn.AttachCardsTo(aragorn, breath2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsUseCardAction(phial);
+		assertEquals(2, scn.GetBurdens());
+
+		// What a card in a support area bears is in that support area: the Black Breath on the ally is a Shadow
+		// support card. The one on Aragorn is not, and the ally is no Shadow card.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(palantir, breath1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(breath2, bounder, troop));
+		scn.FreepsChooseCard(breath1);
+
+		assertTrue(scn.IsHindered(breath1));
+		assertFalse(scn.IsHindered(breath2));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(bounder));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
 	public void ManeuverAbilityWithNoShadowSupportCardStillAddsItsTwoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

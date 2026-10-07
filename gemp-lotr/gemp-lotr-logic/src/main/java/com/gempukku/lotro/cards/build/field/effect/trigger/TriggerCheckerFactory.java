@@ -49,6 +49,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("cancelledskirmish", new CancelledSkirmish());
         triggerCheckers.put("constantlycheck", new ConstantlyCheckTrigger());
         triggerCheckers.put("discarded", new Discarded());
+        triggerCheckers.put("entersplay", new EntersPlay());
         triggerCheckers.put("exerted", new Exerted());
         triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
         triggerCheckers.put("exertstoplay", new ExertsToPlay());

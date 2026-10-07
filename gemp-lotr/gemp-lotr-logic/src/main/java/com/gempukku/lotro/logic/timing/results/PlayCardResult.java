@@ -11,6 +11,7 @@ public class PlayCardResult extends EffectResult {
     private final PhysicalCard _attachedTo;
     private final PhysicalCard _attachedOrStackedPlayedFrom;
     private final boolean _paidToil;
+    private PhysicalCard _playedAtSite;
 
     public PlayCardResult(String performingPlayerId, Zone playedFrom, PhysicalCard playedCard, PhysicalCard attachedTo, PhysicalCard attachedOrStackedPlayedFrom, boolean paidToil) {
         super(EffectResult.Type.PLAY);
@@ -44,5 +45,18 @@ public class PlayCardResult extends EffectResult {
 
     public String getPerformingPlayerId() {
         return performingPlayerId;
+    }
+
+    /**
+     * The site the fellowship was at when the card was played, as the game recorded it when this result was
+     * published; null if there was none.  For texts that count the cards played at a site ("the first Uruk-hai
+     * played at Deep of Helm each turn").
+     */
+    public PhysicalCard getPlayedAtSite() {
+        return _playedAtSite;
+    }
+
+    public void setPlayedAtSite(PhysicalCard site) {
+        _playedAtSite = site;
     }
 }

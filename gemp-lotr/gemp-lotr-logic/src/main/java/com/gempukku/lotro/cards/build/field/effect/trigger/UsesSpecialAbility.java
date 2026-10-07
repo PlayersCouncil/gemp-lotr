@@ -45,7 +45,13 @@ public class UsesSpecialAbility implements TriggerCheckerProducer {
                             return false;
                     }
 
-                    if(zone != null) {
+                    if(zone == Zone.SUPPORT) {
+                        // "The special ability of a support card": a card in a support area, which a card borne
+                        // by a card in one is too (Q-0099).
+                        if(!activateCardResult.wasActivatedInSupportArea())
+                            return false;
+                    }
+                    else if(zone != null) {
                         if(!zone.equals(activateCardResult.getActivatedZone()))
                             return false;
                     }

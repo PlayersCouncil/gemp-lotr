@@ -412,8 +412,9 @@
 						{
 							type: not
 							requires: {
-								type: playedCardThisPhase
+								type: playedCardThisTurn
 								filter: culture(sauron),orc
+								atCurrentSite: true
 							}
 						}
 					]

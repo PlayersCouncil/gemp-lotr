@@ -1470,12 +1470,12 @@
 				effect: [
 					{
 						type: Hinder
-						select: all(side(Free Peoples), or(support,AttachedTo(support)))
+						select: all(side(Free Peoples), support)
 						memorize: hinderedCards
 					}
 					{
 						type: Hinder
-						select: choose(side(Shadow), or(support,AttachedTo(support)))
+						select: choose(side(Shadow), support)
 						count: {
 							type: ForEachInMemory
 							memory: hinderedCards

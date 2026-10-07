@@ -77,6 +77,7 @@ public class RequirementFactory {
         requirementProducers.put("playerleagueplacement", new PlayerLeaguePlacement());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
+        requirementProducers.put("playedcardthisturn", new PlayedCardThisTurn());
         requirementProducers.put("ringisactive", new RingIsActive());
         requirementProducers.put("ringison", new RingIsOn());
         requirementProducers.put("sarumanfirstsentenceactive", new SarumanFirstSentenceActive());

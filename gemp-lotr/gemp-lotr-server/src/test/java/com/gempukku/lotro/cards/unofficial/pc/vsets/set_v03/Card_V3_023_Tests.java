@@ -54,6 +54,10 @@ public class Card_V3_023_Tests
 					put("breath2", "1_207");
 					put("breath3", "1_207");
 					put("lemenya", "1_232");       // Ulaire Lemenya, Lieutenant of Morgul: Nazgul; bearers of [wraith] conditions are strength -2
+					// Wolves of Isengard: [isengard] condition, "Plays on a plains site you control. Regroup: Exert an
+					// [isengard] Orc to make the Free Peoples player wound a companion."
+					put("wolves", "5_69");
+					put("forger", "3_56");         // Isengard Forger: [isengard] Orc, vitality 2; a Shadow-phase ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -526,6 +530,51 @@ public class Card_V3_023_Tests
 		scn.FreepsDeclineOptionalTrigger();
 		assertFalse(scn.IsHindered(gate));
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AShadowCardBorneByASiteTheShadowPlayerControlsIsASupportCardWhoseAbilitySetsItOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gate = scn.GetFreepsCard("gate");
+		var aragorn = scn.GetFreepsCard("rohanAragorn");
+		var wolves = scn.GetShadowCard("wolves");
+		var forger = scn.GetShadowCard("forger");
+
+		scn.StartGame();
+		// Both players have passed Ettenmoors, site 2 and a plains site, so it can be controlled.
+		scn.SkipToSite(3);
+		var ettenmoors = scn.GetSite(2);
+		scn.ShadowTakeControlOfSite(ettenmoors);
+		// A controlled site lies in its controller's support area (CR 4.2 "control"), and so does what it bears.
+		assertInZone(Zone.SUPPORT, ettenmoors);
+		scn.AttachCardsTo(ettenmoors, wolves);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(gate);
+		scn.MoveMinionsToTable(forger);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(forger));
+		assertTrue(scn.ShadowActionAvailable(wolves));
+
+		// Wolves of Isengard: exert an [isengard] Orc to make the Free Peoples player wound a companion.
+		scn.ShadowUseCardAction(wolves);
+		assertEquals(1, scn.GetWoundsOn(forger));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gate));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// The Gate is the one fortification and no knight is in play: nothing more is asked about the hinder.
+		assertTrue(scn.IsHindered(gate));
+		assertTrue(scn.IsHindered(wolves));
+		assertAttachedTo(wolves, ettenmoors);
+
+		// The ability is carried out all the same.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test

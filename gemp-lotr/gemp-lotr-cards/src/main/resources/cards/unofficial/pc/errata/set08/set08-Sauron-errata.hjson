@@ -74,7 +74,7 @@
 							{
 								type: MemoryMatches
 								memory: chosenCard
-								filter: not(or(zone(SUPPORT),and(zone(ATTACHED),attachedTo(zone(SUPPORT)))))
+								filter: not(support)
 							}
 						]
 						true: {
