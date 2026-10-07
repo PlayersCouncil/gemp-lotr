@@ -35,25 +35,35 @@
 					effect: [
 						{
 							type: chooseActiveCards
-							count: 1
+							// "You may heal an Elf": naming no Elf declines (F-0191). A memory of its own: chosenElf is
+							// what the trigger's `against` reads.
+							count: 0-1
 							select: choose(wounded,Elf)
-							memorize: chosenElf
+							memorize: healedElf
 							text: Choose Elf to heal
 						}
 						{
-							type: preventable
-							player: ownerFromMemory(losingMinion)
-							cost: {
-								type: DiscardFromHand
-								player: ownerFromMemory(losingMinion)
-								hand: ownerFromMemory(losingMinion)
-								count: 1
-								forced: false
+							// With no Elf named there is nothing to prevent (F-0192).
+							type: If
+							check: {
+								type: HasCardInMemory
+								memory: healedElf
 							}
-							text: Discard 1 card from hand to prevent healing {chosenElf}
-							effect: {
-								type: heal
-								select: memory(chosenElf)
+							true: {
+								type: preventable
+								player: ownerFromMemory(losingMinion)
+								cost: {
+									type: DiscardFromHand
+									player: ownerFromMemory(losingMinion)
+									hand: ownerFromMemory(losingMinion)
+									count: 1
+									forced: false
+								}
+								text: Discard 1 card from hand to prevent healing {healedElf}
+								effect: {
+									type: heal
+									select: memory(healedElf)
+								}
 							}
 						}
 					]
