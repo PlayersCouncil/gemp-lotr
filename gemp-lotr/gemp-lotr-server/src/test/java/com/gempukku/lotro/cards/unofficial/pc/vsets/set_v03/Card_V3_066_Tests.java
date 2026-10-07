@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -363,7 +362,7 @@ public class Card_V3_066_Tests
 	}
 
 	@Test
-	public void XIsOfferedNoHigherThanTheDearestCompanionCosts() throws DecisionResultInvalidException, CardNotFoundException {
+	public void XMayBeMoreThanTheDearestCompanionCosts() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gollum = scn.GetShadowCard("gollum");
@@ -379,18 +378,18 @@ public class Card_V3_066_Tests
 		assertEquals(5, scn.GetThreats());
 		scn.ShadowUseCardAction(gollum);
 
-		// Five threats, but nobody costs more than Sam's 2: the game offers 2 at most.
-		assertEquals(2, scn.ShadowGetChoiceMax());
-		scn.ShadowChoose("2");
+		// Five threats, and nobody costs more than Sam's 2: X may still be anything up to 5.
+		assertEquals(5, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("3");
 
-		// Sam is the only companion within reach and is chosen without asking.
-		assertEquals(3, scn.GetThreats());
+		// Three threats go, one more than Sam costs. He is the only companion within reach and is chosen
+		// without asking.
+		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.IsCharAssignedAgainst(sam, gollum));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0087: is X capped at what the dearest companion costs? The text says only 'Remove X threats'; the game offers no more than the sum of the costs of the companions tied for dearest (4 here)")
 	public void XMayBeAnyNumberOfTheThreatsThereAre() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -421,7 +420,6 @@ public class Card_V3_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0132: with no threats and no companion costing 0 but the Ring-bearer, the ability is offered and asks for a number from 0 to 0; it does nothing and can be taken without end")
 	public void NotOfferedWithNoThreatsAndNoCompanionCostingNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -442,7 +440,6 @@ public class Card_V3_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0132: once Gollum is assigned and no threats are left the ability is still offered; X can only be 0, nobody can be assigned, and it can be taken without end")
 	public void NotOfferedAgainForNothingOnceGollumIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -471,7 +468,6 @@ public class Card_V3_066_Tests
 	}
 
 	@Test
-	@Ignore("F-0132: X may be named 0 with no companion costing 0 but the Ring-bearer; that removes nothing, assigns nobody and can be repeated without end")
 	public void XStartsAtOneWhenNoCompanionButTheRingBearerCostsNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -496,6 +492,36 @@ public class Card_V3_066_Tests
 		// Merry is the only companion costing 1 or less who is not the Ring-bearer.
 		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.IsCharAssignedAgainst(merry, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithThreatsAndNobodyWithinReachTheThreatsAreRemovedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var frodo = scn.GetRingBearer();
+
+		scn.StartGame();
+		scn.AddThreats(1);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		// Frodo is the only companion: there is a threat to pay with and nobody Gollum may be assigned to.
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+
+		// X is at least 1, since nobody but the Ring-bearer costs 0, and at most the one threat.
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("1");
+
+		// The threat is paid, and there is nobody to assign.
+		assertEquals(0, scn.GetThreats());
+		assertFalse(scn.IsCharAssigned(gollum));
+		assertFalse(scn.IsCharAssigned(frodo));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

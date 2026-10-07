@@ -29,6 +29,7 @@ public class Card_V3_103_Tests
 					put("sam", "1_311");          // Ring-bound companion
 					put("bilbo", "1_284");        // Ally
 					put("gimli", "1_13");         // Dwarf for Halls
+					put("kingdom", "1_16");       // Greatest Kingdom of My People - opponent discards top card of deck when playing an Orc
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -343,4 +344,66 @@ public class Card_V3_103_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 
+	@Test
+	public void AccountedUsedInFellowshipPhaseDoesNotUseUpNextSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var accounted = scn.GetShadowCard("accounted");
+		var halls = scn.GetFreepsCard("halls");
+		var kingdom = scn.GetFreepsCard("kingdom");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		//an Orc for player 2 to play
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.MoveCardsToSupportArea(accounted, kingdom);
+		scn.MoveCardsToHand(halls);
+		scn.MoveCardsToHand(slayer);
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		int shadowHand = scn.GetShadowHandCount();
+
+		// Site 1, Fellowship phase: Halls reveals top 3 cards
+		scn.FreepsPlayCard(halls);
+		// Gimli auto-selected as only Dwarf to exert
+		scn.FreepsChoose("your deck");
+		scn.DismissRevealedCards();
+
+		// Accounted trigger fires on reveal
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(shadowHand + 1, scn.GetShadowHandCount());
+
+		// No discard; the revealed cards go back in any order
+		scn.FreepsChooseNo();
+		scn.FreepsChooseAny();
+		scn.FreepsChooseAny();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Fellowship moves to site 2
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// Playing an Orc makes Greatest Kingdom discard the top card of player 2's deck
+		int shadowDeck = scn.GetShadowDeckCount();
+		scn.ShadowPlayCard(slayer);
+		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
+
+		// Site 2 is a new site - trigger available again
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCard(aragorn);
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// 1 drawn at site 1, Slayer played from hand, 1 drawn at site 2
+		assertEquals(shadowHand + 1, scn.GetShadowHandCount());
+		assertEquals(shadowDeck - 2, scn.GetShadowDeckCount());
+	}
 }

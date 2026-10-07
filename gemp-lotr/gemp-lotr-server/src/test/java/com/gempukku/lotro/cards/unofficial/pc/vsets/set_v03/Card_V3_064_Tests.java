@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -353,35 +352,6 @@ public class Card_V3_064_Tests
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 
-	@Test
-	public void AssignmentActionIsNotOfferedWithNoUnboundCompanionToSpot() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var fear = scn.GetShadowCard("fear");
-		var squealer1 = scn.GetShadowCard("squealer1");
-		var squealer2 = scn.GetShadowCard("squealer2");
-		var witchking = scn.GetShadowCard("witchking");
-		var sam = scn.GetFreepsCard("sam");
-		var elrond = scn.GetFreepsCard("elrond");
-
-		scn.MoveCardsToSupportArea(fear);
-		// Frodo and Sam are Ring-bound; Elrond is an ally.
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveAlliesToTable(elrond);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(squealer1, squealer2, witchking);
-		scn.AddBurdens(1);
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPass();
-
-		assertEquals(1, scn.GetBurdens());
-		assertFalse(scn.IsHindered(fear));
-		assertFalse(scn.ShadowActionAvailable(fear));
-		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
-	}
-
-	@Ignore("Q-0085: with no unbound companion to spot, is the ability still offered, and does it then hinder every character but the minion?")
 	@Test
 	public void WithNoUnboundCompanionToSpotEveryCharacterButTheMinionIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

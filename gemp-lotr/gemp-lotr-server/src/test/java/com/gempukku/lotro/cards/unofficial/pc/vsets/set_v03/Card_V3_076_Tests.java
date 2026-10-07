@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -448,7 +447,6 @@ public class Card_V3_076_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Ignore("F-0135: the limit caps each use and not the skirmish phase: a second use at limit +2 adds 2 more")
 	@Test
 	public void WithNoOtherNazgulASecondUseInTheSameSkirmishExertsHerAndAddsNothingBeyondTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -486,7 +484,6 @@ public class Card_V3_076_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Ignore("F-0135: the limit caps each use and not the skirmish phase: a second use at limit +5 adds 3 more, for 6 in all")
 	@Test
 	public void WithAnotherNazgulTwoUsesInOneSkirmishGiveNoMoreThanFiveBetweenThem() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,6 +31,35 @@ public class Card_V3_063_Tests
 					put("friends", "2_98");     // Dear Friends: Fellowship event, cost 0: exert a companion to place a Free Peoples card from the discard pile beneath the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The same path with Midgewater Marshes as site 2, where a Hobbit exerts as the fellowship arrives.
+	protected VirtualTableScenario GetMidgewaterScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("watcher1", "103_63");
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: no Hobbit; Maneuver: exert Aragorn to make him defender +1
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf to bear Dwarven Heart; no Hobbit
+					put("heart", "1_10");       // Dwarven Heart: "At the start of each of your turns, exert bearer."
+					put("friends", "2_98");     // Dear Friends: Fellowship event, cost 0: exert a companion to place a Free Peoples card from the discard pile beneath the draw deck
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					put("site2", "1_332");      // Midgewater Marshes: "Each time a Hobbit moves to Midgewater Marshes, that Hobbit must exert."
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -179,7 +207,6 @@ public class Card_V3_063_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	@Ignore("F-0127: the draw taken in the fellowship phase uses up the draw of the site the fellowship then moves to")
 	@Test
 	public void AnExertionBeforeTheMoveDoesNotUseUpTheDrawOfTheSiteMovedTo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -212,9 +239,8 @@ public class Card_V3_063_Tests
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
-	@Ignore("Q-0084: is the draw taken at a site renewed by the next turn, while the fellowship is still at that site?")
 	@Test
-	public void TheDrawTakenAtASiteIsNotRenewedByTheNextTurnAtThatSite() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheDrawTakenAtASiteIsThereToTakeAgainOnTheNextTurnAtThatSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var watcher = scn.GetShadowCard("watcher1");
@@ -246,12 +272,83 @@ public class Card_V3_063_Tests
 		// The reconciles on the way may have emptied the draw deck.
 		scn.MoveCardsToTopOfDeck(lemenya, khamul);
 
+		// Once for each site in a turn: on a new turn the site's draw is there again.
 		hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
 		scn.FreepsUseCardAction(sam);
 
 		assertEquals(1, scn.GetWoundsOn(sam));
-		assertEquals(hand, scn.GetShadowHandCount());
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+
+		// And once only.
+		scn.FreepsUseCardAction(sam);
+
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ASitesDrawRunsFromTheStartOfTheTurnOrTheArrivalThereUntilTheFellowshipLeaves() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMidgewaterScenario();
+
+		var frodo = scn.GetRingBearer();
+		var watcher = scn.GetShadowCard("watcher1");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var heart = scn.GetFreepsCard("heart");
+		var friends = scn.GetFreepsCard("friends");
+
+		scn.MoveCardsToSupportArea(watcher);
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.AttachCardsTo(gimli, heart);
+		scn.MoveCardsToHand(friends);
+
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+
+		// The start of the turn, at site 1: Dwarven Heart exerts Gimli.
+		scn.StartGame();
+
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+
+		// The minion leaves the draw deck or the hand, so the counts are read afresh.
+		scn.MoveMinionsToTable(runner);
+		hand = scn.GetShadowHandCount();
+		deck = scn.GetShadowDeckCount();
+
+		// The fellowship phase is spent at the same site: its draw has been taken.
+		scn.FreepsPlayCard(friends);
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(hand, scn.GetShadowHandCount());
+		assertEquals(deck, scn.GetShadowDeckCount());
+
+		// The move to Midgewater Marshes exerts Frodo as he arrives: that is site 2's draw,
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsPass();
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+
+		// and there is no second one for an exertion later at that site.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(aragorn);
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test

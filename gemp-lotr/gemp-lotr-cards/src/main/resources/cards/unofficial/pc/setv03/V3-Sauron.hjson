@@ -126,11 +126,53 @@
 					type: Exerted
 					filter: companion
 				}
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
+				// "Limit once per site" is once for each site in a turn (Q-0084). Until the fellowship has moved
+				// it is at the site the turn began on: counted to the end of the fellowship phase.
+				requires: [
+					{
+						type: Not
+						requires: {
+							type: MoveCountMinimum
+							amount: 1
+						}
+					}
+					{
+						type: perPhaseLimit
+						phase: fellowship
+						limit: 1
+					}
+				]
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						phase: fellowship
+						limit: 1
+					}
+					{
+						type: DrawCards
+						count: 1
+					}
+				]
+			}
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					filter: companion
 				}
+				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
+				requires: [
+					{
+						type: MoveCountMinimum
+						amount: 1
+					}
+					{
+						type: perPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+				]
 				effect: [
 					{
 						type: incrementPerPhaseLimit
@@ -1604,11 +1646,23 @@
 						fromZone: DECK
 					}
 				]
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
-				}
+				// "Limit once per site" is once for each site in a turn (Q-0084), and a limit on the number of times
+				// this can be used at all (Q-0082): at its limit it is not offered. Until the fellowship has moved it is
+				// at the site the turn began on: counted to the end of the fellowship phase.
+				requires: [
+					{
+						type: Not
+						requires: {
+							type: MoveCountMinimum
+							amount: 1
+						}
+					}
+					{
+						type: perPhaseLimit
+						phase: fellowship
+						limit: 1
+					}
+				]
 				cost: {
 					type: Exert
 					select: choose(or(ally, and(unbound,companion)))
@@ -1619,7 +1673,48 @@
 						count: 1
 					}
 					{
-						type: IncrementPerPhaseLimit 
+						type: IncrementPerPhaseLimit
+						phase: fellowship
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: [
+					{
+						type: RevealsCardFromDrawDeck
+						source: side(Free Peoples)
+					}
+					{
+						type: Discarded
+						source: side(Free Peoples)
+						fromZone: DECK
+					}
+				]
+				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
+				requires: [
+					{
+						type: MoveCountMinimum
+						amount: 1
+					}
+					{
+						type: perPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+				]
+				cost: {
+					type: Exert
+					select: choose(or(ally, and(unbound,companion)))
+				}
+				effect: [
+					{
+						type: DrawCards
+						count: 1
+					}
+					{
+						type: IncrementPerPhaseLimit
 						phase: regroup
 					}
 				]

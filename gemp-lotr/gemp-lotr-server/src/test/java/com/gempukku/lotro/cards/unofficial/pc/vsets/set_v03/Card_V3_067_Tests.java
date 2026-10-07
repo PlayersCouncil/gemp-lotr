@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -185,12 +184,14 @@ public class Card_V3_067_Tests
 		assertTrue(scn.FreepsDecisionAvailable("exert another companion to prevent"));
 		scn.FreepsChooseYes();
 
+		// The Free Peoples player has decided; which companion exerts is the Shadow player's to choose.
 		// Another companion who can exert: not Frodo himself, not the exhausted Aragorn, not the
 		// hindered Gimli, not an ally.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, merry));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, aragorn, gimli, silinde));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, merry));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, aragorn, gimli, silinde));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertEquals(0, scn.GetWoundsOn(sam));
-		scn.FreepsChooseCard(sam);
+		scn.ShadowChooseCard(sam);
 
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(merry));
@@ -201,7 +202,6 @@ public class Card_V3_067_Tests
 	}
 
 	@Test
-	@Ignore("Q-0088: 'make you exert another companion': the text has the Shadow player exert the other companion, the game gives the choice of companion to the Free Peoples player")
 	public void TheShadowPlayerChoosesWhichOtherCompanionIsExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -341,12 +341,12 @@ public class Card_V3_067_Tests
 
 		assertTrue(scn.FreepsDecisionAvailable("wound another companion to prevent"));
 		scn.FreepsChooseYes();
-		// Any other companion, the Ring-bearer and the exhausted Aragorn among them; not Sam himself,
-		// not an ally.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, silinde));
+		// Whom to wound is the Shadow player's choice, as whom to exert is. Any other companion, the
+		// Ring-bearer and the exhausted Aragorn among them; not Sam himself, not an ally.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sam, silinde));
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		scn.FreepsChooseCard(aragorn);
+		scn.ShadowChooseCard(aragorn);
 
 		// A wound and no exertion: it is his fourth, and kills him.
 		assertInZone(Zone.DEAD, aragorn);
@@ -387,11 +387,11 @@ public class Card_V3_067_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		scn.ShadowChooseCard(aragorn);
 		scn.FreepsChooseYes();
-		// The other companion who exerts may be the Ring-bearer.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		// The other companion who exerts, chosen by the Shadow player, may be the Ring-bearer.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, sam));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.FreepsChooseCard(frodo);
+		scn.ShadowChooseCard(frodo);
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertFalse(scn.IsHindered(aragorn));
 
@@ -426,7 +426,6 @@ public class Card_V3_067_Tests
 	}
 
 	@Test
-	@Ignore("F-0130: the second Nazgul played in a phase other than the Shadow phase is answered too: the definition counts plays in the current phase and never asks which phase it is")
 	public void TheSecondNazgulPlayedInAnAssignmentPhaseIsNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -27,6 +27,7 @@ public class Card_V3_092_Tests
 					put("boromir", "1_97");       // Another companion for threat limit tests
 					put("gandalf", "1_364");       // Another companion for threat limit tests
 					put("runner", "1_178");       // Cheap minion for phase progression
+					put("sam", "1_311");          // Has Fellowship exert ability
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -188,6 +189,43 @@ public class Card_V3_092_Tests
 		// Second exertion same site - should NOT draw (limit once per site)
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(shadowHand + 1, scn.GetShadowHandCount());
+	}
+
+	@Test
+	public void WatcherDrawInFellowshipPhaseDoesNotUseUpDrawOfNextSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var watcher = scn.GetShadowCard("watcher1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.MoveCardsToSupportArea(watcher);
+		scn.MoveCompanionsToTable(aragorn, sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		int shadowHand = scn.GetShadowHandCount();
+
+		// Site 1, Fellowship phase: Sam exerts via his Fellowship ability - should draw
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(shadowHand + 1, scn.GetShadowHandCount());
+
+		// Second exertion same site - should NOT draw (limit once per site)
+		scn.FreepsUseCardAction(sam);
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(shadowHand + 1, scn.GetShadowHandCount());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// Site 2 is a new site - should draw again
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(shadowHand + 2, scn.GetShadowHandCount());
 	}
 
 // Response tests

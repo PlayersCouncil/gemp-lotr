@@ -126,11 +126,53 @@
 					type: Exerted
 					filter: companion
 				}
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
+				// "Limit once per site" is once for each site in a turn (Q-0084). Until the fellowship has moved
+				// it is at the site the turn began on: counted to the end of the fellowship phase.
+				requires: [
+					{
+						type: Not
+						requires: {
+							type: MoveCountMinimum
+							amount: 1
+						}
+					}
+					{
+						type: perPhaseLimit
+						phase: fellowship
+						limit: 1
+					}
+				]
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						phase: fellowship
+						limit: 1
+					}
+					{
+						type: DrawCards
+						count: 1
+					}
+				]
+			}
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					filter: companion
 				}
+				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
+				requires: [
+					{
+						type: MoveCountMinimum
+						amount: 1
+					}
+					{
+						type: perPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+				]
 				effect: [
 					{
 						type: incrementPerPhaseLimit
@@ -225,6 +267,14 @@
 						amount: 1
 					}
 					{
+						type: Hinder
+						select: self
+					}
+				]
+				// What follows "to" is effect, the two spots included: with no unbound companion to spot the ability is
+				// still offered, and hinders every character but the minion (Q-0085).
+				effect: [
+					{
 						type: Spot
 						select: choose(culture(Ringwraith), minion)
 						memorize: chosenMinion
@@ -236,13 +286,9 @@
 					}
 					{
 						type: Hinder
-						select: self
+						select: all(character,not(or(memory(chosenMinion),memory(chosenComp) )))
 					}
 				]
-				effect: {
-					type: Hinder
-					select: all(character,not(or(memory(chosenMinion),memory(chosenComp) )))
-				}
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Assignment: Spot 3 [ringwraith] minions, remove a burden, and hinder this condition to spot a [ringwraith] minion and an unbound companion.  Hinder all other characters.
@@ -524,19 +570,35 @@
 			{
 				type: Activated
 				phase: Assignment
+				// X is the player's, up to the threats there are (Q-0087). X of zero is on offer only where it does
+				// something: where a companion costing 0 who is not the Ring-bearer can be assigned to Gollum (F-0132).
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpotThreats
+							amount: 1
+						}
+						{
+							type: CanSpot
+							filter: companion, MaxTwilight(0), not(ring-bearer), AssignableToSkirmishAgainst(self)
+						}
+					]
+				}
 				cost: {
 					type: ChooseANumber
 					text: Choose how many threats to remove
-					from: 0
+					from: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							filter: companion, MaxTwilight(0), not(ring-bearer), AssignableToSkirmishAgainst(self)
+						}
+						true: 0
+						false: 1
+					}
 					to: {
-						type: Min
-						firstNumber: {
-							type: ForEachThreat
-						}
-						secondNumber: {
-							type: ForEachTwilightCost
-							filter: HighestTwilight(companion)
-						}
+						type: ForEachThreat
 					}
 					memorize: removedThreats
 				}
@@ -662,6 +724,11 @@
 					player: you
 				}
 				requires: [
+					// "Each Shadow phase": a second Nazgul played in another phase is not answered (F-0130).
+					{
+						type: Phase
+						phase: Shadow
+					}
 					{
 						type: playedCardThisPhase
 						filter: Nazgul
@@ -691,9 +758,10 @@
 							type: preventable
 							text: Would you like to wound another companion to prevent hindering {chosenComp}?
 							player: freeps
+							// "Make you wound": the Free Peoples player decides whether, and you choose whom (Q-0088).
 							cost: {
 								type: Wound
-								player: freeps
+								player: owner
 								select: choose(not(memory(chosenComp)),companion)
 							}
 							effect: {
@@ -705,9 +773,10 @@
 							type: preventable
 							text: Would you like to exert another companion to prevent hindering {chosenComp}?
 							player: freeps
+							// "Make you exert": the Free Peoples player decides whether, and you choose whom (Q-0088).
 							cost: {
 								type: Exert
-								player: freeps
+								player: owner
 								select: choose(not(memory(chosenComp)),companion)
 							}
 							effect: {
@@ -1580,21 +1649,21 @@
 				effect: {
 					type: ModifyStrength
 					select: choose(Nazgul)
+					// The limit is the card's for the whole skirmish phase, over all its uses and whichever Nazgul is chosen (F-0135).
 					amount: {
-						type: Conditional
-						requires: {
-							type: CanSpot
-							filter: another,Nazgul
+						type: CardPhaseLimit
+						limit: {
+							type: Conditional
+							requires: {
+								type: CanSpot
+								filter: another,Nazgul
+							}
+							true: 5
+							false: 2
 						}
-						true: {
+						amount: {
 							type: ForEachYouCanSpot
 							filter: your,site,Zone(ADVENTURE PATH)
-							limit: 5
-						}
-						false: {
-							type: ForEachYouCanSpot
-							filter: your,site,Zone(ADVENTURE PATH)
-							limit: 2
 						}
 					}
 				}
