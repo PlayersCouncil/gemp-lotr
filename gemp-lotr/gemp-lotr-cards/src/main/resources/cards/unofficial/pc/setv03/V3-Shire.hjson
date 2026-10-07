@@ -625,7 +625,6 @@
 				trigger: {
 					type: Discarded
 					filter: pipeweed
-					source: any
 					memorize: discardedPipeweed
 				}
 				cost: {

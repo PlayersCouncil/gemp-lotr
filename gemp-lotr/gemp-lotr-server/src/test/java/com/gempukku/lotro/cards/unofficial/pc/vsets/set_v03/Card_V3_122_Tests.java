@@ -9,7 +9,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -439,9 +438,10 @@ public class Card_V3_122_Tests
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
 
+	// Ketura, 2026-10-07, on Q-0107: this card keeps its guard. Where nothing could be taken the Shadow
+	// player is not asked, though the price could be paid: the site would otherwise ask at every phase.
 	@Test
-	@Ignore("F-0173: with no Shadow event for the phase in the discard pile the offer is withheld (a requirement), though (1) can be removed (Q-0034)")
-	public void WithNoShadowEventForThatPhaseInTheDiscardPileTheOfferIsStillMadeAndRemovingOneTakesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNoShadowEventForThatPhaseInTheDiscardPileNoOfferIsMadeThoughOneCouldBeRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var savagery = scn.GetShadowCard("savagery");
@@ -458,22 +458,11 @@ public class Card_V3_122_Tests
 		scn.MoveCardsToDiscard(savagery, blades, sentinels);
 
 		scn.FreepsPass();
-		var site = scn.GetCurrentSite();
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		// 2 companions + 8 for the site
 		assertEquals(10, scn.GetTwilight());
-		int shadowHand = scn.GetShadowHandCount();
-		int shadowDiscard = scn.GetShadowDiscardCount();
-
-		// The price can be paid, so the offer is made; the game marks it as doing nothing.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(site));
-		assertEquals("effect", scn.ShadowActionNoEffect(site));
-
-		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(9, scn.GetTwilight());
-		assertEquals(shadowHand, scn.GetShadowHandCount());
-		assertEquals(shadowDiscard, scn.GetShadowDiscardCount());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertInDiscard(savagery, blades, sentinels);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

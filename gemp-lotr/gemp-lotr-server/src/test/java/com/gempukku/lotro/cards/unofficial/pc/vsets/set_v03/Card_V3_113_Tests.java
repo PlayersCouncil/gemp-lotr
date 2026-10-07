@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -553,7 +552,6 @@ public class Card_V3_113_Tests
 	}
 
 	@Test
-	@Ignore("F-0170: a pipeweed discarded with its bearer when he is killed draws no offer; the trigger asks for a discarding card")
 	public void APipeweedDiscardedWhenItsBearerIsKilledIsAnswered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

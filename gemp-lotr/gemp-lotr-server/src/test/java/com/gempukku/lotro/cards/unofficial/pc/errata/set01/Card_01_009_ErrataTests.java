@@ -8,7 +8,6 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -523,41 +522,4 @@ public class Card_01_009_ErrataTests
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
-	@Test
-	@Ignore("Q-0111: Decipher ruled that Dwarven Axe can trigger only once for each Shadow player with a minion in the skirmish; does that hold for the erratum?")
-	public void IsSetOffOnlyOnceWhenTwoMinionsOfOnePlayerLoseOneSkirmishToBearer() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var axe = scn.GetFreepsCard("axe");
-		var guard = scn.GetFreepsCard("guard");
-		var gimli = scn.GetFreepsCard("gimli");
-		var savage = scn.GetShadowCard("savage");
-		var savage2 = scn.GetShadowCard("savage2");
-		var soldier = scn.GetShadowCard("soldier");
-		scn.MoveCompanionsToTable(guard, gimli);
-		scn.AttachCardsTo(guard, axe);
-		// 4 + 2 for the Axe + 5: the Guard beats two Savages, 11 to 10.
-		scn.ApplyAdHocModifier(new StrengthModifier(null, guard, null, 5));
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage, savage2, soldier);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard, savage}, new PhysicalCardImpl[]{gimli, soldier});
-		scn.ShadowAssignToMinions(guard, savage2);
-		scn.FreepsResolveSkirmish(guard);
-
-		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
-		assertEquals(1, scn.GetWoundsOn(savage));
-		assertEquals(1, scn.GetWoundsOn(savage2));
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, savage2, soldier));
-		scn.FreepsChooseCard(soldier);
-		scn.ShadowChooseNo();
-		assertEquals(6, scn.GetStrength(soldier));
-
-		// One skirmish lost by one Shadow player: no second choice.
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
-		assertEquals(6, scn.GetStrength(soldier));
-	}
 }

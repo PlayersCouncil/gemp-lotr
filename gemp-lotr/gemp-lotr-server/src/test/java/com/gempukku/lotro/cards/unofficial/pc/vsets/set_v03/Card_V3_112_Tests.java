@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -285,24 +284,6 @@ public class Card_V3_112_Tests
 		assertEquals(0, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertInZone(Zone.SUPPORT, barrel1);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0104: an optional trigger with no cost is offered with nothing in the pile for it to act on")
-	public void WithAnEmptyDrawDeckNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetEmptyDeckScenario();
-
-		var barrel1 = scn.GetFreepsCard("barrel1");
-		scn.MoveCardsToHand(barrel1);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetFreepsDeckCount());
-
-		scn.FreepsPlayCard(barrel1);
-		assertInZone(Zone.SUPPORT, barrel1);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(barrel1));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

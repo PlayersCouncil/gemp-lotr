@@ -7,7 +7,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -327,38 +326,6 @@ public class Card_V3_124_Tests
 	}
 
 	@Test
-	public void ACardBorneByAHinderedCompanionIsAskedAboutLikeAnyOtherAsTheGameHasIt() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var gimli = scn.GetFreepsCard("gimli");
-		var sting = scn.GetFreepsCard("sting");
-		var armor = scn.GetFreepsCard("armor");
-
-		scn.StartGame();
-		scn.SkipToSite(7);
-		scn.MoveCompanionsToTable(gimli);
-		scn.AttachCardsTo(frodo, sting);
-		scn.AttachCardsTo(gimli, armor);
-		scn.HinderCard(gimli);
-
-		scn.FreepsPass();
-		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, armor));
-		assertEquals(2, scn.FreepsGetCardChoiceCount());
-
-		scn.FreepsDeclineChoosing();
-		assertAttachedTo(sting, frodo);
-		assertAttachedTo(armor, gimli);
-		assertTrue(scn.IsHindered(gimli));
-		// 1 for Frodo (a hindered companion adds nothing to a move) + 5 for the site + 1 each for Sting and
-		// the armor
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0108: a Free Peoples card borne by a HINDERED companion is counted; by CR 5.0 its bearer is no companion while hindered (a rider to Q-0103)")
 	public void ACardBorneByAHinderedCompanionIsNotCounted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
