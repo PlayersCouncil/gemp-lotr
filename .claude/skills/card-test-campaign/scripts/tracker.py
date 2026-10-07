@@ -10,7 +10,9 @@
     tracker.py finding add <card> <kind> <status> "<summary>" [--found "..."] [--outcome "..."]
     tracker.py finding set <F-0000> <status> [--outcome "..."] [--kind <kind>]
                                     kinds: hjson-typo hjson-logic gametext engine rig test sheet ruling data
-                                    statuses: candidate question confirmed fixed not-a-bug
+                                    statuses: candidate question confirmed fixed fixed-approved not-a-bug
+                                    (fixed: mended without waiting for Ketura's word on it; fixed-approved: she has
+                                    said it is a fault, before or after the fix)
 
 The campaign's state lives in one folder (--state <dir>, or $GEMP_CAMPAIGN_STATE, or "Claude outputs/card-tests"
 under the repository): baseline.tsv, status.tsv, findings.tsv, focus.txt.  It is kept out of git on purpose: it is
@@ -144,7 +146,7 @@ def set_status(state: Path, argv):
 
 FINDING_FIELDS = ["id", "date", "card", "name", "kind", "status", "summary", "found", "outcome"]
 FINDING_KINDS = ["hjson-typo", "hjson-logic", "gametext", "engine", "rig", "test", "sheet", "ruling", "data"]
-FINDING_STATUSES = ["candidate", "question", "confirmed", "fixed", "not-a-bug"]
+FINDING_STATUSES = ["candidate", "question", "confirmed", "fixed", "fixed-approved", "not-a-bug"]
 
 
 def write_findings(state: Path, rows: list):

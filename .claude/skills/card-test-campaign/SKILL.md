@@ -200,11 +200,26 @@ of mistake it was:
 | `ruling` | Whether it is an error at all depends on a ruling |
 | `data` | Anything else in the data files (formats, mappings) |
 
-and a status: `candidate` (believed wrong, not yet confirmed by Ketura), `question`, `confirmed`, `fixed`,
-`not-a-bug`. For now a candidate is parked and never fixed on the spot: Ketura rules on it first, because a
-correct implementation of an obscure ruling looks exactly like a bug. When she changes that, this paragraph
-changes. Of the first ten findings about cards and rules, she ruled five real errors, two deliberate departures
-for the sake of play, and three accounted for by a ruling or a convention; that is the rate to expect.
+and a status:
+
+| Status | Meaning |
+|---|---|
+| `candidate` | Believed wrong and NOT fixed: waiting on Ketura. Only for the two cases below |
+| `question` | Hangs on an open question |
+| `confirmed` | Known to be a fault (by her word, or plainly by the text) and not yet fixed: waiting for an engine or rulings pass |
+| `fixed` | Mended without waiting for her word on it. She has not yet looked |
+| `fixed-approved` | Mended, and she has said it is a fault (before the fix or after) |
+| `not-a-bug` | She ruled it right as it is |
+
+**The rule since 2026-10-07 (Ketura):** "you don't need to wait for my approval to fix cards; the text should do
+what it says it does, and I think you only need to ask if you find an obvious intentional break from the text
+rather than what appears to be an error or typo. Or if you are uncertain, of course." Of the first 150 findings
+nearly all were real faults. So a definition that does not do what its text says is fixed where it is found (at
+landing for a definition, in the next engine pass for the engine), recorded as `fixed`, and listed for her in the
+report of that turn so that she can step in; it becomes `fixed-approved` when she says so. A finding stays a
+`candidate`, unfixed, only where the departure from the text looks deliberate (a workaround for play, a comment
+in the definition, a ruling that might explain it) or where you are not sure what the text means: then ask.
+A question of what the text MEANS is still a question (`Q-`), asked as before.
 
 ### Questions and rulings
 

@@ -702,3 +702,28 @@ presented in the client ... the information is there all the same".
 - **"Wound X twice" is two wounds** (F-0148, Take it Down! 103_89): "that's a bug in the implementation, go
   ahead and fix." An exertion in the definition where the text wounds is a definition fault, fixable at
   landing.
+
+## 2026-10-07, later afternoon (Ketura: the new rule on findings; F-0152, Q-0099, F-0139 follow-ups)
+
+- **Findings are fixed without waiting.** "Each of the F- issues that have been brought up have overwhelmingly
+  been actual issues. Continue to give me a breakdown of fixes being made so I can intervene, but you don't need
+  to wait for my approval to fix cards; the text should do what it says it does, and I think you only need to
+  ask if you find an obvious intentional break from the text rather than what appears to be an error or typo.
+  Or if you are uncertain, of course." Findings are tracked as `fixed` (not yet looked at by her) and
+  `fixed-approved` (she has said so).
+- **"Choose X ... (or you may play it ...)" plays the card chosen** (F-0152, Ominous Sky 103_97): "That's a bug,
+  yeah, fix it."
+- **A "support card" is a card in the support area, and a card borne by one is in the support area** (Q-0099):
+  "'Support' is meant to be shorthand for 'in the support area'. A card attached to another is on Gemp in the
+  'attached zone', but ultimately that's an implementation detail; it is still 'in the support area'."
+- **A play's extra effects are carried out though the card has gone** (F-0139; Ulaire Otsea 103_78's threat):
+  "the threat can stay, given that it is an additional effect, which puts it under 'do what you can'."
+- **A card discarded by its own "when you play this ..., or discard it" was not played for other cards either**
+  (F-0139; Dunlending Rampager and Ulaire Attea): "a self-discarding card should not trigger Attea or other
+  'each time you play' or 'when you play', that's pretty straightforwardly the same situation as Runner, the
+  only difference being where the reaction text is." This reverses item (g) of the F-0139 build.
+- **Writhing Tentacle 101_66 played from a stack away from a marsh stacks no tentacles**: "that's how I'd
+  expect it to play."
+- **Northern Ithilien's errata 57_359** existed only to work around the engine fault now fixed and will be
+  reverted once F-0139 is deployed: its limit is not a concern.
+

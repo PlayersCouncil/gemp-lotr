@@ -72,8 +72,14 @@ td.note { color: var(--muted); min-width: 180px }
   border: 1px solid currentColor; white-space: nowrap }
 .pill.todo { color: var(--muted) } .pill.in-progress { color: var(--prog) } .pill.ready { color: var(--ready) }
 .pill.parked { color: var(--parked) } .pill.approved { color: var(--ok) }
-.pill.candidate { color: var(--ready) } .pill.confirmed, .pill.fixed { color: var(--ok) } .pill.question { color: var(--prog) }
-.pill.not-a-bug { color: var(--muted) }
+.pill.candidate { color: var(--parked) } .pill.question, .pill.confirmed { color: var(--prog) } .pill.fixed { color: var(--ready) }
+.pill.fixed-approved { color: var(--ok) } .pill.not-a-bug { color: var(--muted) }
+.fbar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center }
+.fbar input { font: 400 13px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: 5px 10px;
+  min-width: 0; flex: 1 1 220px; max-width: 340px }
+.fbar input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.chip .n { color: var(--muted); font: 400 12px var(--mono); margin-left: 6px }
+#flist { min-width: 860px } #flist td.when { font: 400 12.5px var(--mono); white-space: nowrap; color: var(--muted) }
 .empty { color: var(--muted); padding: 10px 12px 10px 50px; border-top: 1px solid var(--line); font-size: 13px }
 h2 { font: 600 16px var(--cond); letter-spacing: .02em; margin: 8px 0 0 }
 .plain { border: 1px solid var(--line); background: var(--surface); overflow-x: auto }
@@ -107,10 +113,16 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
   </section>
 
   <section id="findings" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
-    <p class="lead">Everything the campaign has turned up, by what kind of mistake it was. A candidate is something the
-      text and the game disagree on that has not been ruled on yet.</p>
-    <div class="plain"><table id="tally"></table></div>
+    <p class="lead">Everything the campaign has turned up. "Fixed" was mended without waiting for a ruling and has not been
+      looked at by Ketura; "fixed with approval" has her word on it, given before the fix or after.</p>
+    <div class="fbar">
+      <div class="chips" id="ffilters"></div>
+      <input type="search" id="fsearch" placeholder="Card id, name or word" aria-label="Search the findings">
+    </div>
     <div class="plain"><table id="flist"></table></div>
+    <div class="stamp" id="fcount"></div>
+    <h2>By kind</h2>
+    <div class="plain"><table id="tally"></table></div>
   </section>
 </div>
 
@@ -193,17 +205,43 @@ function start() {
 
   // Findings.
   const F = DATA.findings || [];
-  const tally = document.getElementById("tally"); const fs = ["candidate", "question", "confirmed", "fixed", "not-a-bug"];
-  tally.append(el("tr", null, el("th", { text: "Kind" }), ...fs.map(s => el("th", { text: s.replace(/-/g, " ") })), el("th", { text: "All" })));
+  const FS = ["candidate", "question", "confirmed", "fixed", "fixed-approved", "not-a-bug"];
+  const FLABEL = { "candidate": "Waiting on Ketura", "question": "Question open", "confirmed": "Fix pending", "fixed": "Fixed",
+    "fixed-approved": "Fixed with approval", "not-a-bug": "Not a bug" };
+  const tally = document.getElementById("tally");
+  tally.append(el("tr", null, el("th", { text: "Kind" }), ...FS.map(s => el("th", { text: FLABEL[s] })), el("th", { text: "All" })));
   const kinds = [...new Set(F.map(f => f.kind))];
   for (const k of kinds) { const of = F.filter(f => f.kind === k);
-    tally.append(el("tr", null, el("td", { text: KINDS[k] || k }), ...fs.map(s => el("td", { class: "num", text: String(of.filter(f => f.status === s).length || "") })), el("td", { class: "num", text: String(of.length) }))); }
-  if (!F.length) tally.append(el("tr", null, el("td", { text: "Nothing yet.", colspan: "7" })));
-  const flist = document.getElementById("flist");
-  flist.append(el("tr", null, ...["Id", "Card", "Kind", "Status", "What", "How it was found", "Outcome"].map(h => el("th", { text: h }))));
-  for (const f of F) flist.append(el("tr", null, el("td", { class: "id", text: f.id }), el("td", null, el("span", { class: "id", text: f.card + " " }), f.name || ""),
-    el("td", { text: KINDS[f.kind] || f.kind }), el("td", null, el("span", { class: "pill " + f.status, text: (f.status || "").replace(/-/g, " ") })),
-    el("td", { text: f.summary || "" }), el("td", { class: "note", text: f.found || "" }), el("td", { class: "note", text: f.outcome || "" })));
+    tally.append(el("tr", null, el("td", { text: KINDS[k] || k }), ...FS.map(s => el("td", { class: "num", text: String(of.filter(f => f.status === s).length || "") })), el("td", { class: "num", text: String(of.length) }))); }
+  if (!F.length) tally.append(el("tr", null, el("td", { text: "Nothing yet.", colspan: "8" })));
+
+  // The filter: one status group at a time, newest first unless turned round, and a search over every column.
+  const FGROUPS = [["all", "All", null], ["waiting", "Waiting on Ketura", ["candidate", "question"]], ["pending", "Fix pending", ["confirmed"]],
+    ["fixed", "Fixed, not yet approved", ["fixed"]], ["approved", "Fixed with approval", ["fixed-approved"]], ["not", "Not a bug", ["not-a-bug"]]];
+  let fgroup = store.get("fgroup", "all"); if (!FGROUPS.some(g => g[0] === fgroup)) fgroup = "all";
+  let newestFirst = store.get("fnewest", true); let ftext = "";
+  const ffilters = document.getElementById("ffilters"), flist = document.getElementById("flist"), fcount = document.getElementById("fcount");
+  function drawFindingFilters() { ffilters.replaceChildren();
+    for (const [key, label, sts] of FGROUPS) { const n = sts ? F.filter(f => sts.includes(f.status)).length : F.length;
+      const b = el("button", { class: "chip", "aria-pressed": String(fgroup === key), id: "ffilter-" + key }, label, el("span", { class: "n", text: String(n) }));
+      b.onclick = () => { fgroup = key; store.set("fgroup", key); drawFindingFilters(); drawFindings(); }; ffilters.append(b); }
+    const o = el("button", { class: "chip", "aria-pressed": String(newestFirst), id: "ffilter-newest", text: "Newest first" });
+    o.onclick = () => { newestFirst = !newestFirst; store.set("fnewest", newestFirst); drawFindingFilters(); drawFindings(); }; ffilters.append(o); }
+  function drawFindings() { flist.replaceChildren();
+    flist.append(el("tr", null, ...["Id", "Found", "Card", "Kind", "Status", "What", "How it was found", "Outcome"].map(h => el("th", { text: h }))));
+    const sts = FGROUPS.find(g => g[0] === fgroup)[2]; const words = ftext.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = F.filter(f => !sts || sts.includes(f.status));
+    if (words.length) shown = shown.filter(f => { const hay = [f.id, f.card, f.name, KINDS[f.kind] || f.kind, FLABEL[f.status] || f.status, f.summary, f.found, f.outcome].join(" ").toLowerCase();
+      return words.every(w => hay.includes(w)); });
+    if (newestFirst) shown = shown.slice().reverse();
+    for (const f of shown) flist.append(el("tr", null, el("td", { class: "id", text: f.id }), el("td", { class: "when", text: f.date || "" }),
+      el("td", null, el("span", { class: "id", text: f.card + " " }), f.name || ""),
+      el("td", { text: KINDS[f.kind] || f.kind }), el("td", null, el("span", { class: "pill " + f.status, text: FLABEL[f.status] || f.status })),
+      el("td", { text: f.summary || "" }), el("td", { class: "note", text: f.found || "" }), el("td", { class: "note", text: f.outcome || "" })));
+    if (!shown.length) flist.append(el("tr", null, el("td", { class: "note", text: "Nothing here matches the filter.", colspan: "8" })));
+    fcount.textContent = shown.length + " of " + F.length + " findings shown"; }
+  document.getElementById("fsearch").oninput = e => { ftext = e.target.value; drawFindings(); };
+  drawFindingFilters(); drawFindings();
 
   // Tabs.
   const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings") };
