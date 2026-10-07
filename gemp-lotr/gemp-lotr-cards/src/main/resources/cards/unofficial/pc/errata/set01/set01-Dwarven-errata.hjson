@@ -440,10 +440,19 @@
 					filter: orc
 					memorize: playedOrc
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				// "The first time ... each turn": only the first Orc played in the turn, whether or not the
+				// offer was taken (F-0181); not offered with no [dwarven] card to take (F-0182).
+				requires: [
+					{
+						type: playedCardThisTurn
+						filter: orc
+						max: 1
+					}
+					{
+						type: HasCardInDiscard
+						filter: culture(dwarven)
+					}
+				]
 				effect: [
 					{
 						type: chooseCardsFromDiscard
@@ -453,23 +462,27 @@
 						text: Choose a Dwarven card from your discard pile to take into hand
 					}
 					{
-						type: preventable
-						player: shadow
-						text: Would you like to discard the bottom 2 cards of your draw deck to prevent the Free Peoples player taking {chosenCard} into hand from their discard pile?
-						cost: {
-							type: discardBottomCardsFromDeck
-							count: 2
-							forced: false
-							deck: ownerFromMemory(playedOrc)
+						// With no card named there is nothing to prevent (F-0183).
+						type: If
+						check: {
+							type: HasCardInMemory
+							memory: chosenCard
 						}
-						effect: {
-							type: putCardsFromDiscardIntoHand
-							select: memory(chosenCard)
+						true: {
+							type: preventable
+							player: shadow
+							text: Would you like to discard the bottom 2 cards of your draw deck to prevent the Free Peoples player taking {chosenCard} into hand from their discard pile?
+							cost: {
+								type: discardBottomCardsFromDeck
+								count: 2
+								forced: false
+								deck: ownerFromMemory(playedOrc)
+							}
+							effect: {
+								type: putCardsFromDiscardIntoHand
+								select: memory(chosenCard)
+							}
 						}
-					}
-					{
-						type: IncrementPerTurnLimit
-						limit: 1
 					}
 				]
 			}
@@ -687,19 +700,27 @@
 					text: Choose a Shadow card to discard
 				}
 				{
-					type: preventable
-					player: shadow
-					text: Would you like to discard the bottom 3 cards of your deck to prevent {chosenCard} from being discarded?
-					cost: {
-						type: discardBottomCardsFromDeck
-						deck: shadow
-						count: 3
-						forced: false
+					// With no Shadow card chosen there is no owner and nothing to prevent (F-0185).
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: chosenCard
 					}
-					effect: {
-						type: discard
-						select: memory(chosenCard)
-						override: hindered
+					true: {
+						type: preventable
+						player: shadow
+						text: Would you like to discard the bottom 3 cards of your deck to prevent {chosenCard} from being discarded?
+						cost: {
+							type: discardBottomCardsFromDeck
+							deck: shadow
+							count: 3
+							forced: false
+						}
+						effect: {
+							type: discard
+							select: memory(chosenCard)
+							override: hindered
+						}
 					}
 				}
 			]
