@@ -714,26 +714,17 @@
 			{
 				type: activated
 				phase: fellowship
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				limitPerTurn: 1
 				cost: {
 					type: exert
 					select: choose(culture(rohan),man)
 				}
-				effect: [
-					{
-						type: incrementPerTurnLimit
-						limit: 1
-					}
-					{
-						type: playCardFromDrawDeck
-						select: choose(culture(rohan),mount)
-						showAll: true
-						shuffle: true
-					}
-				]
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),mount)
+					showAll: true
+					shuffle: true
+				}
 			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [rohan] Man to play a [rohan] mount from your draw deck (limit once per turn).

@@ -1,19 +1,12 @@
 package com.gempukku.lotro.cards.build.field.effect;
 
-import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.BuiltLotroCardBlueprint;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.cards.build.field.effect.appender.AbstractEffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.trigger.TriggerChecker;
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.logic.actions.CostToEffectAction;
-import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
-import com.gempukku.lotro.logic.effects.IncrementTurnLimitEffect;
-import com.gempukku.lotro.logic.timing.Effect;
-import com.gempukku.lotro.logic.timing.PlayConditions;
 import org.json.simple.JSONObject;
 
 public class ResponseEffectProcessor implements EffectProcessor {
@@ -31,6 +24,9 @@ public class ResponseEffectProcessor implements EffectProcessor {
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
         final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
         final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
+        // An ability with a cost stays on offer at its limit: the cost may be worth paying for its own sake
+        // (Ketura on Q-0041).  With no cost it is withheld there, as before (Q-0034).
+        final boolean offeredAtLimit = FieldUtils.getObjectArray(value.get("cost"), "cost").length > 0;
 
         final boolean fromDiscard = FieldUtils.getBoolean(value.get("fromDiscard"), "fromDiscard", false);
 
@@ -44,28 +40,10 @@ public class ResponseEffectProcessor implements EffectProcessor {
             }
 
             triggerActionSource.addPlayRequirement(triggerChecker);
-            if (limitPerPhase > 0) {
-                triggerActionSource.addPlayRequirement(
-                        (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limitPerPhase));
-                triggerActionSource.addCost(
-                        new AbstractEffectAppender() {
-                            @Override
-                            protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                                return new IncrementPhaseLimitEffect(actionContext.getSource(), phase, limitPerPhase);
-                            }
-                        });
-            }
-            if (limitPerTurn > 0) {
-                triggerActionSource.addPlayRequirement(
-                        (actionContext) -> PlayConditions.checkTurnLimit(actionContext.getGame(), actionContext.getSource(), limitPerTurn));
-                triggerActionSource.addCost(
-                        new AbstractEffectAppender() {
-                            @Override
-                            protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                                return new IncrementTurnLimitEffect(actionContext.getSource(), limitPerTurn);
-                            }
-                        });
-            }
+            if (limitPerPhase > 0)
+                triggerActionSource.addLimitPerPhase(phase, limitPerPhase, offeredAtLimit);
+            if (limitPerTurn > 0)
+                triggerActionSource.addLimitPerTurn(limitPerTurn, offeredAtLimit);
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
             if(fromDiscard) {

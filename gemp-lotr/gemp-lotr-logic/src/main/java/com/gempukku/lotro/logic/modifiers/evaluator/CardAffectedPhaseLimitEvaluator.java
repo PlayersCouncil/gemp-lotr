@@ -41,4 +41,12 @@ public class CardAffectedPhaseLimitEvaluator implements Evaluator {
         }
         return value;
     }
+
+    @Override
+    public boolean isSpent(LotroGame game, PhysicalCard cardAffected) {
+        // An amount already worked out by this evaluator has had its share of the limit.
+        if (cardAffected == null || _evaluatedForCard.containsKey(cardAffected.getCardId()))
+            return false;
+        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(source, prefix + cardAffected.getCardId() + "_", phase).getUsedLimit() >= limit;
+    }
 }

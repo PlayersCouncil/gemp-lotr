@@ -19,6 +19,8 @@ public class Card_07_082_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "57_82");
+					put("beacon", "103_35");    // War-beacon: a beacon, cost 1; to play, spot an unbound Man
+					put("beacon2", "103_35");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -86,5 +88,34 @@ public class Card_07_082_ErrataTests
 		scn.StartGame();
 		
 		assertFalse(true);
+	}
+
+	@Test
+	public void FellowshipAbilityAtItsLimitStillExertsCirionAndPlaysNoBeacon() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCompanionsToTable(card);
+
+		scn.StartGame();
+
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsUseCardAction(card);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("beacon"));
+		assertEquals(1, scn.GetWoundsOn(card));
+		assertEquals(1, scn.GetTwilight());
+
+		// Limit once per turn: Cirion can still exert, so the ability is still offered, flagged as doing
+		// nothing (Ketura on Q-0041).
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+
+		// Used anyway: Cirion exerts, and the draw deck (which still holds a beacon) is not looked through.
+		scn.FreepsUseCardAction(card);
+		assertEquals(2, scn.GetWoundsOn(card));
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

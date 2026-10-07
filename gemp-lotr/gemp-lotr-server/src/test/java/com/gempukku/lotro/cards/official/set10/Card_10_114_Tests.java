@@ -18,6 +18,9 @@ public class Card_10_114_Tests
 				new HashMap<>()
 				{{
 					put("card", "10_114");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, vitality 4
+					put("troop", "1_177");      // Goblin Patrol Troop: vitality 3, cost 6, no text
+					put("troop2", "1_177");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -68,5 +71,43 @@ public class Card_10_114_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void TriggerAtItsLimitIsStillOfferedAndPaidForAndExertsNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCompanionsToTable(sam);
+
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCardsToHand(troop, troop2);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(troop);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(card));
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsChooseOptionalTrigger(card);
+		scn.FreepsChooseCard(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(troop));
+
+		// Limit once per turn: a Hobbit can still exert, so the trigger is still offered when the next
+		// minion is played, flagged as doing nothing (Ketura on Q-0041).
+		scn.ShadowPlayCard(troop2);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+		scn.FreepsChooseOptionalTrigger(card);
+		scn.FreepsChooseCard(sam);
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(troop2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

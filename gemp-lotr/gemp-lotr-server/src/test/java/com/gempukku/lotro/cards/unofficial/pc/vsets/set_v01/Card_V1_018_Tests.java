@@ -577,7 +577,7 @@ public class Card_V1_018_Tests
 	}
 
 	@Test
-	public void RegroupActionCanBeUsedTwiceInARegroupPhaseAndAgainInTheNextRegroupPhaseOfTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RegroupActionHealsTwiceInARegroupPhaseAndAgainInTheNextRegroupPhaseOfTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var council = scn.GetFreepsCard("council");
@@ -596,6 +596,7 @@ public class Card_V1_018_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertTrue(scn.FreepsActionAvailable(council));
+		assertEquals("false", scn.FreepsActionNoEffect(council));
 		scn.FreepsUseCardAction(council);
 		scn.FreepsChooseCards(golradir, saelbeth);
 		scn.FreepsChooseCard(gandalf);
@@ -608,24 +609,39 @@ public class Card_V1_018_Tests
 		scn.FreepsChooseCard(gandalf);
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 
-		// Twice is the limit.  Saelbeth and Celeborn, with 1 wound each on vitality 3, could pay a third
-		// time, and Gandalf and Aragorn are still wounded.
+		// Twice is the limit.  Saelbeth and Celeborn, with 1 wound each on vitality 3, can pay a third
+		// time, and Gandalf and Aragorn are still wounded: the action is still on offer for the sake of its
+		// cost, and the game marks it as at its limit.
 		scn.ShadowPass();
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertEquals(2, scn.GetWoundsOn(golradir));
 		assertEquals(1, scn.GetWoundsOn(saelbeth));
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 		assertEquals(3, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.FreepsActionAvailable(council));
+		assertTrue(scn.FreepsActionAvailable(council));
+		assertEquals("limit", scn.FreepsActionNoEffect(council));
+
+		// Used a third time: the two allies who can exert do, and nobody is healed or asked about.
+		scn.FreepsUseCardAction(council);
+		assertEquals(2, scn.GetWoundsOn(saelbeth));
+		assertEquals(2, scn.GetWoundsOn(celeborn));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 
 		// The fellowship moves again.  With no minion in play the second regroup phase of the turn follows,
-		// and the limit is that phase's own.
-		scn.PassRegroupActions();
+		// and the limit is that phase's own.  The rig takes a wound off each of the two allies so that they
+		// can pay there.
+		scn.RemoveWoundsFromChar(saelbeth, 1);
+		scn.RemoveWoundsFromChar(celeborn, 1);
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsChooseToMove();
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertTrue(scn.FreepsActionAvailable(council));
+		assertEquals("false", scn.FreepsActionNoEffect(council));
 		scn.FreepsUseCardAction(council);
 		// Saelbeth and Celeborn are the only two who can exert.
 		assertEquals(2, scn.GetWoundsOn(saelbeth));

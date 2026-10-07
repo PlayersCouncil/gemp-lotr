@@ -72,7 +72,7 @@ Each entry in `effects: []` has a `type` field. The type determines the structur
 
 `noEffectUnless` (on Activated, ActivatedInDiscard, ActivatedFromStacked, ActivatedInDrawDeck, Event, ResponseEvent, Trigger, Response, and the AddActivated modifier): one requirement or a list, written exactly like `requires`. It never withholds the action: the action is offered as usual, and while any of these requirements fails the decision flags it `noEffect: effect`, so the client shows it differently and the player may still take it. It is where a guard goes that used to keep an event, or an ability with a cost, from being used to no purpose (Q-0034 forbids withholding those). The requirements are checked in order in the action's own context when it is put before a player, so one may `memorize` what the next reads (Breaching Shot 102_21).
 
-Do not declare what the game already sees. An action whose every effect is modifyStrength, addKeyword, alterOverwhelmMultiplier, wound, heal, exert, exhaust, discard, cancelSkirmish, removeBurdens, removeThreats or drawCards (alone or inside if, choice, costToEffect, multiple, optional, preventable, repeat) is flagged by itself when none has anything to act on. A skirmish ability or Skirmish event that only gives strength, damage or overwhelm protection for the current phase is flagged `skirmish` when it reaches nobody in the skirmish being fought. Nothing is judged where a cost could make what the effect needs (an exertion before a heal), where a select reads `memory(...)`, or where a cost is of a kind the judge does not know: a false flag is worse than a missing one.
+Do not declare what the game already sees. An action whose every effect is modifyStrength, addKeyword, alterOverwhelmMultiplier, wound, heal, exert, exhaust, discard, cancelSkirmish, removeBurdens, removeThreats or drawCards (alone or inside if, choice, costToEffect, multiple, optional, preventable, repeat) is flagged by itself when none has anything to act on. An ability that has reached its limit, or whose capped bonus is spent, is flagged `limit` by itself (see "Limits" under Activated). A skirmish ability or Skirmish event that only gives strength, damage or overwhelm protection for the current phase is flagged `skirmish` when it reaches nobody in the skirmish being fought. Nothing is judged where a cost could make what the effect needs (an exertion before a heal), where a select reads `memory(...)`, or where a cost is of a kind the judge does not know: a false flag is worse than a missing one.
 
 An ability or optional trigger with NO cost that would do nothing is not a flag matter: by Q-0034 it is withheld with a `requires`.
 
@@ -91,6 +91,15 @@ Standard "**Phase:** Do X" text. Most common game text type.
 }
 ```
 **Variants:** `ActivatedFromStacked` (+ `stackedOn` filter), `ActivatedInDiscard`, `ActivatedInDrawDeck` — same structure but activate from non-play zones.
+
+**Limits.** `limitPerPhase` and `limitPerTurn` (on Activated and its variants, Trigger, Response and the AddActivated modifier) count uses of the card, not of the ability: two limited abilities of one card share a counter. What happens at the limit depends on whether the block has a `cost`:
+
+- **With a cost**, on an ability that is the player's to use or not (Activated, an optional Trigger, a Response), the action stays on offer at its limit (Ketura on Q-0041: "Technically speaking it should be offered"). Its costs are paid as written; a use is counted once they are paid, so a use whose cost fails spends nothing and one that is cancelled after its costs is spent; at the limit the log says the card has reached its limit and none of its effects is carried out. The decision flags the action `noEffect: limit`.
+- **With no cost**, and on a required Trigger, the limit withholds the action, as a requirement would (Q-0034).
+
+Write a limit with the field. A hand-written `PerPhaseLimit` / `PerTurnLimit` requirement with an `IncrementPer...Limit` withholds the action at its limit whatever it costs. That is right for a required trigger, a modifier, or an ability with no cost, and where the field cannot say what is meant (`perPlayer`); on an ability with a cost it is a finding. Read what the cost is before converting one: at its limit the cost can be paid any number of times, which is the rule, and is not what a card means whose cost is something done to the opponent (They Are Not All Accounted For 103_103 exerts the other player's companion to draw a card, once per site; it is left as it was until Ketura has ruled on it). An effect that plays a card still withholds the action while nothing can be played, at its limit or not.
+
+A cap on what the effect gives, as opposed to on uses, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
 
 `ActivatedInDiscard` and `ActivatedInDrawDeck` take `specialAbility: false` for a card's permission to be played from that pile when its text has no bold phase word and colon ("If you have initiative ..., you may play this minion from your discard pile"). Such a play is not a special ability: nothing that answers, bans or counts special abilities sees it (Ketura, 2026-10-06: a special ability "would count, if it's got the bold text and a colon"). A labelled ability ("Shadow: ... to play this minion from your discard pile") leaves the flag off.
 
@@ -119,6 +128,7 @@ Standard "**Phase:** Do X" text. Most common game text type.
   player: freeps              // optional: who performs the action
 }
 ```
+The limit fields are as under Activated, "Limits": an optional Trigger with a cost is still offered at its limit, flagged; a required one, or one with no cost, is not. The limit is counted in the phase the trigger goes off in unless `phase` names one.
 
 ### Response (Response: If X is about to happen)
 ```hjson
@@ -131,7 +141,7 @@ Standard "**Phase:** Do X" text. Most common game text type.
   limitPerPhase: 1            // or limitPerTurn: 1 for "(limit once per turn)"
 }
 ```
-A Response is not offered to a special ability whose effect has been cancelled, or to an event that has been cancelled (Q-0043); an optional Trigger still is. Build a printed "Response:" as `type: Response` even where its cost could be paid twice: do not make it an optional Trigger to avoid a second offer.
+The limit fields are as under Activated, "Limits". A Response is not offered to a special ability whose effect has been cancelled, or to an event that has been cancelled (Q-0043); an optional Trigger still is. Build a printed "Response:" as `type: Response` even where its cost could be paid twice: do not make it an optional Trigger to avoid a second offer.
 
 ### Event / ResponseEvent
 For event cards. `Event` for phase events, `ResponseEvent` for response events.
@@ -304,8 +314,8 @@ Common fields on most: `over` (subtract from result), `limit` (cap), `multiplier
 | `CurrentSiteNumber` | — | 1-9 |
 | `RegionNumber` | — | 1-3 |
 | `Conditional` | requires, true, false | If/else value |
-| `CardAffectedLimitPerPhase` | limit, source | "Strength +1 (limit +3)" pattern |
-| `CardPhaseLimit` | limit, amount | Cumulative phase cap |
+| `CardAffectedLimitPerPhase` | limit, source, prefix?, multiplier? | "Strength +1 (limit +3)" pattern: caps what the effect gives in a phase and leaves the ability on offer (see Activated, "Limits") |
+| `CardPhaseLimit` | limit, amount | Cumulative phase cap, counted on the card's own phase counter; leaves the ability on offer likewise |
 | `FromMemory` | memory | Integer from memory |
 | `Subtract` | firstNumber, secondNumber | Math |
 | `Sum` | source[] | Add values together |
@@ -376,8 +386,8 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 | `MemoryIs` | memory, value | String comparison |
 | `MemoryLike` | memory, value | Substring match |
 | `MemoryMatches` | memory, filter, count? | Cards in memory match filter |
-| `PerPhaseLimit` | limit? | Action invoked fewer than N times |
-| `PerTurnLimit` | limit? | Per-turn limit check |
+| `PerPhaseLimit` | limit?, phase?, perPlayer? | Action invoked fewer than N times. Withholds at the limit: for an ability with a cost use the `limitPerPhase` field instead (see Activated, "Limits") |
+| `PerTurnLimit` | limit? | Per-turn limit check; likewise, `limitPerTurn` |
 
 ### Comparison
 `IsEqual`, `IsNotEqual`, `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`, `IsLessThanOrEqual` — all take `firstNumber`, `secondNumber`

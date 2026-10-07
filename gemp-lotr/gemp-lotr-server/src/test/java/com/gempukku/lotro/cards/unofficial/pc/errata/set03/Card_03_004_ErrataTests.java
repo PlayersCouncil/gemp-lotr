@@ -145,4 +145,42 @@ public class Card_03_004_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(grimir)); // Grimir exerted
 		assertEquals(0, scn.GetWoundsOn(gimli));  // Gimli healed
 	}
+
+	@Test
+	public void SkirmishAbilityAtItsLimitStillExertsAnAllyAndAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var welcome = scn.GetFreepsCard("welcome");
+		var guard = scn.GetFreepsCard("guard");
+		var grimir = scn.GetFreepsCard("grimir");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.MoveCardsToSupportArea(welcome);
+		scn.MoveCardsToSupportArea(grimir);
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveMinionsToTable(runner);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, runner);
+
+		assertEquals("false", scn.FreepsActionNoEffect(welcome));
+		scn.FreepsUseCardAction(welcome);
+		scn.FreepsChoose("Add strength bonus");
+		// Guard STR 4 + Grimir's 3 = 7
+		assertEquals(7, scn.GetStrength(guard));
+		assertEquals(1, scn.GetWoundsOn(grimir));
+		scn.ShadowPass();
+
+		// Limit once per phase: Grimir (VIT 3) can still exert, so the ability is still offered,
+		// flagged as doing nothing (Ketura on Q-0041)
+		assertTrue(scn.FreepsActionAvailable(welcome));
+		assertEquals("limit", scn.FreepsActionNoEffect(welcome));
+
+		// Used anyway: Grimir exerts, nothing is asked and nothing is added
+		scn.FreepsUseCardAction(welcome);
+		assertEquals(2, scn.GetWoundsOn(grimir));
+		assertEquals(7, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
 }

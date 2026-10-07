@@ -130,7 +130,9 @@ with one legal bearer it is made without asking.
 costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
 no burdens to remove. To test that an effect finds nothing to do, use the action, check the cost was paid, and
 check the game is back at the phase's actions. An event is the same: with nothing for its effect to act on it
-is still offered, and playing it pays for it and discards it.
+is still offered, and playing it pays for it and discards it. So is an ability with a cost that has reached its
+limit (Q-0041): it is offered, the cost is paid, and nothing else happens. With no cost it is not offered at its
+limit.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -368,8 +370,11 @@ text for a card that offers several (`ShadowActionNoEffect(easterling, "fierce")
 action in the player's pending choice of actions: `"false"`, or why the game expects it to do nothing:
 `"effect"`, `"limit"` or `"skirmish"`. They fail the test if the player is not being offered a choice of actions,
 if the card offers no such action, or if more than one fits. A flagged action is offered and may be taken like
-any other: read the flag, then take the action. The flag is worked out when the decision is sent, so after
-cheating the board get a new decision before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
+any other: read the flag, then take the action. An optional trigger is read the same way while its offer is
+pending (`FreepsActionNoEffect(card)`, then `FreepsChooseOptionalTrigger(card)`). An ability or optional trigger
+with a cost reads `"limit"` once it has been used as often as its limit allows, and one whose capped bonus is
+spent likewise. The flag is worked out when the decision is sent, so after cheating the board get a new decision
+before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
 is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".
 

@@ -226,7 +226,7 @@ public class Card_V1_059_Tests
 	}
 
 	@Test
-	public void GivesSixInOneTurnHoweverItIsSharedOutAndIsOfferedAgainInTheOtherPlayersTurn() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GivesSixInOneTurnHoweverItIsSharedOutAndGivesAgainInTheOtherPlayersTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -247,6 +247,8 @@ public class Card_V1_059_Tests
 		assertEquals("Rivendell Gateway", gateway.getBlueprint().getTitle());
 		assertEquals(6, scn.GetStrength(arwen));
 		assertEquals(6, scn.GetStrength(gimli));
+
+		assertEquals("false", scn.FreepsActionNoEffect(gateway));
 
 		// Aragorn exerts three times for Arwen: +3.
 		for (int i = 1; i <= 3; i++) {
@@ -282,8 +284,20 @@ public class Card_V1_059_Tests
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 
-		// Arwen and Gimli could both still exert, for each other or for Aragorn and Boromir.
-		assertFalse(scn.FreepsActionAvailable(gateway));
+		// Arwen and Gimli can both still exert, so the action is still on offer for the sake of its cost,
+		// and the game marks it as at its limit.
+		assertTrue(scn.FreepsActionAvailable(gateway));
+		assertEquals("limit", scn.FreepsActionNoEffect(gateway));
+
+		// Used a seventh time: Arwen exerts, nobody is chosen to be strengthened and nobody is.
+		scn.FreepsUseCardAction(gateway);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, gimli));
+		scn.FreepsChooseCard(arwen);
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertEquals(10, scn.GetStrength(arwen));
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(7, scn.GetStrength(boromir));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// The other player's fellowship phase at the same site: the limit is new.
@@ -292,6 +306,7 @@ public class Card_V1_059_Tests
 		assertEquals(gateway, scn.GetCurrentSite());
 		assertEquals(8, scn.GetStrength(theirAragorn));
 		assertTrue(scn.ShadowActionAvailable(gateway));
+		assertEquals("false", scn.ShadowActionNoEffect(gateway));
 
 		scn.ShadowUseCardAction(gateway);
 		scn.ShadowChooseCard(theirGimli);

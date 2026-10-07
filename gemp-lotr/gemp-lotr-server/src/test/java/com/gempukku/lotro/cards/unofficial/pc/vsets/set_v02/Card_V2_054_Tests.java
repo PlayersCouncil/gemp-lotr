@@ -145,7 +145,7 @@ public class Card_V2_054_Tests
 	}
 
 	@Test
-	public void ExertsOnceInEachSkirmishToAddHisStrengthToTheSkirmishingHobbitAndMakeThatHobbitValiant() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AddsHisStrengthOnceInEachSkirmishToTheSkirmishingHobbitAndMakesThatHobbitValiant() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guard = scn.GetFreepsCard("guard");
@@ -177,6 +177,7 @@ public class Card_V2_054_Tests
 		assertEquals(3, scn.GetStrength(merry));
 		assertFalse(scn.HasKeyword(merry, Keyword.VALIANT));
 		assertTrue(scn.FreepsActionAvailable(guard));
+		assertEquals("false", scn.FreepsActionNoEffect(guard));
 
 		scn.FreepsUseCardAction(guard);
 
@@ -192,21 +193,33 @@ public class Card_V2_054_Tests
 		assertFalse(scn.HasKeyword(sam, Keyword.VALIANT));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
-		// Once per phase: with one wound on a vitality of 3 the Guard could exert again.
+		// Once per phase: with one wound on a vitality of 3 the Guard can exert again, so the action is still
+		// on offer, and the game marks it as at its limit.
 		scn.ShadowPass();
 		assertFalse(scn.IsExhausted(guard));
-		assertFalse(scn.FreepsActionAvailable(guard));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(guard));
+		assertEquals("limit", scn.FreepsActionNoEffect(guard));
+
+		// Used again: the Guard exerts, and Merry is no stronger.
+		scn.FreepsUseCardAction(guard);
+		assertEquals(2, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(herdsman));
+		assertEquals(6, scn.GetStrength(merry));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// Merry at 6 beats the Goblin Runner's 5.
+		scn.ShadowPass();
 		scn.FreepsPass();
 		assertInDiscard(runner1);
 		assertEquals(0, scn.GetWoundsOn(merry));
 
-		// The next skirmish is another phase: the limit is new, and what was added to Merry lasted for his skirmish.
+		// The next skirmish is another phase: the limit is new, and what was added to Merry lasted for his
+		// skirmish.  The rig takes a wound off the Guard so that he can exert in it.
+		scn.RemoveWoundsFromChar(guard, 1);
 		scn.FreepsResolveSkirmish(pippin);
 		assertEquals(3, scn.GetStrength(merry));
 		assertTrue(scn.FreepsActionAvailable(guard));
+		assertEquals("false", scn.FreepsActionNoEffect(guard));
 
 		scn.FreepsUseCardAction(guard);
 

@@ -81,6 +81,7 @@ public class Card_05_057_ErrataTests
 		assertEquals(0, scn.GetCultureTokensOn(ladder));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.ShadowActionAvailable(ladder));
+		assertEquals("false", scn.ShadowActionNoEffect(ladder));
 
 		scn.ShadowUseCardAction(ladder);
 		assertEquals(1, scn.GetCultureTokensOn(ladder));
@@ -91,6 +92,17 @@ public class Card_05_057_ErrataTests
 		assertEquals(2, scn.GetCultureTokensOn(ladder));
 		assertEquals(2, scn.GetWoundsOn(troop));
 
+		// At its limit the ability is still offered, as the Uruk-hai can still exert, and is flagged as
+		// doing nothing (Ketura on Q-0041).
+		assertTrue(scn.ShadowActionAvailable(ladder));
+		assertEquals("limit", scn.ShadowActionNoEffect(ladder));
+
+		scn.ShadowUseCardAction(ladder);
+		// The Uruk-hai exerts and no token is placed.
+		assertEquals(3, scn.GetWoundsOn(troop));
+		assertEquals(2, scn.GetCultureTokensOn(ladder));
+
+		// Vitality 4 with 3 wounds: the Uruk-hai cannot pay again.
 		assertFalse(scn.ShadowActionAvailable(ladder));
 	}
 }

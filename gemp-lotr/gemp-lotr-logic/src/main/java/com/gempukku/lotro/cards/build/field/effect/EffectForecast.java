@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.ActionContext;
+import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.game.PhysicalCard;
 
 import java.util.Arrays;
@@ -102,6 +103,19 @@ public final class EffectForecast {
         if (cards.isEmpty())
             return NOTHING;
         return new EffectForecast(Verdict.UNKNOWN, skirmishBound, Collections.unmodifiableSet(new LinkedHashSet<>(cards)), false);
+    }
+
+    /**
+     * Whether an amount is capped and its cap is spent for the given card (see Evaluator.isSpent).  The amount
+     * is not worked out.  An amount that cannot be asked, for want of something not yet chosen or remembered,
+     * is not known to be spent.
+     */
+    public static boolean isSpent(ValueSource amount, ActionContext actionContext, PhysicalCard cardAffected) {
+        try {
+            return amount.getEvaluator(actionContext).isSpent(actionContext.getGame(), cardAffected);
+        } catch (RuntimeException exp) {
+            return false;
+        }
     }
 
     /**

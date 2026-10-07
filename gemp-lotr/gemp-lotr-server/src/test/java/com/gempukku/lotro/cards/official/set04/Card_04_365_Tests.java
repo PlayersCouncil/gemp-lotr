@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -19,6 +20,8 @@ public class Card_04_365_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_365");
+					put("spear", "4_288");      // Rider's Spear: a [rohan] possession, cost 1; bearer must be a [rohan] Man
+					put("mount", "4_287");      // Rider's Mount: a [rohan] possession, cost 1; bearer must be a [rohan] Man
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -77,5 +80,41 @@ public class Card_04_365_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(2, scn.GetTwilight());
+	}
+
+	@Test
+	public void FellowshipAbilityAtItsLimitStillPlaysAPossessionAndHealsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var spear = scn.GetFreepsCard("spear");
+		var mount = scn.GetFreepsCard("mount");
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToHand(spear, mount);
+		scn.AddWoundsToChar(card, 1);
+
+		scn.StartGame();
+
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsUseCardAction(card);
+		// Theoden is the only [rohan] companion, so he is the bearer and the one healed.
+		scn.FreepsChooseCard(spear);
+		assertEquals(Zone.ATTACHED, spear.getZone());
+		assertEquals(0, scn.GetWoundsOn(card));
+		assertEquals(1, scn.GetTwilight());
+
+		// A wound put back by the rig, for the second use to leave alone.
+		scn.AddWoundsToChar(card, 1);
+
+		// Limit once per turn: a possession can still be played, so the ability is still offered, flagged
+		// as doing nothing (Ketura on Q-0041).
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+
+		scn.FreepsUseCardAction(card);
+		assertEquals(Zone.ATTACHED, mount.getZone());
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(card));
 	}
 }

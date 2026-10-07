@@ -32,12 +32,16 @@ public class DrawCards implements EffectAppenderProducer {
                 return actionContext.getGame().getGameState().getDeck(drawPlayer).size() >= cardCount;
             }
 
-            // From an empty draw deck nothing is drawn.  How many cards it would draw is not worked out.
+            // From an empty draw deck nothing is drawn.  How many cards it would draw is not worked out, beyond
+            // whether a cap on the number is spent.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
-                return actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty()
-                        ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+                if (actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty())
+                    return EffectForecast.NOTHING;
+                // A capped number of cards whose cap is spent is no cards.
+                return EffectForecast.isSpent(count, actionContext, null)
+                        ? EffectForecast.AT_LIMIT : EffectForecast.UNKNOWN;
             }
 
             @Override

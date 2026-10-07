@@ -34,4 +34,12 @@ public class CardPhaseLimitEvaluator implements Evaluator {
             _evaluated = evaluateOnce(game, cardAffected);
         return _evaluated;
     }
+
+    @Override
+    public boolean isSpent(LotroGame game, PhysicalCard cardAffected) {
+        // Only a limit that is a plain number is read: working out any other amount could change the game.
+        if (_evaluated != null || !(_limit instanceof ConstantEvaluator))
+            return false;
+        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase).getUsedLimit() >= _limit.evaluateExpression(game, cardAffected);
+    }
 }

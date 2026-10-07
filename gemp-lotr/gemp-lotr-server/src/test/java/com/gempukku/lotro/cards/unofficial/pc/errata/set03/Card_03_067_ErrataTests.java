@@ -19,6 +19,10 @@ public class Card_03_067_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "53_67");
+					put("troop", "1_143");      // Troop of Uruk-hai: an [isengard] minion, strength 9, vitality 4
+					put("aragorn", "1_89");     // Free Peoples cards for the Free Peoples player's hand
+					put("sam", "1_311");
+					put("runner", "1_178");     // and a Shadow card beside them
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -81,5 +85,41 @@ public class Card_03_067_ErrataTests
 		scn.StartGame();
 		
 		assertFalse(true);
+	}
+
+	@Test
+	public void ShadowAbilityAtItsLimitStillExertsAMinionAndDoesNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(card);
+		// Two Free Peoples cards and a Shadow card in the Free Peoples player's hand.
+		scn.MoveCardsToHand(scn.GetFreepsCard("aragorn"), scn.GetFreepsCard("sam"), scn.GetFreepsCard("runner"));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.FreepsPass();
+
+		assertEquals(9, scn.GetStrength(troop));
+		assertEquals("false", scn.ShadowActionNoEffect(card));
+		scn.ShadowUseCardAction(card);
+		scn.FreepsChooseNo();
+		scn.ShadowDismissRevealedCards();
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(11, scn.GetStrength(troop));
+
+		// Limit once per phase: the minion can still exert, so the ability is still offered, flagged as
+		// doing nothing (Ketura on Q-0041).
+		assertTrue(scn.ShadowActionAvailable(card));
+		assertEquals("limit", scn.ShadowActionNoEffect(card));
+
+		// Used anyway: the minion exerts, the Free Peoples player is asked nothing and shows no hand.
+		scn.ShadowUseCardAction(card);
+		assertEquals(2, scn.GetWoundsOn(troop));
+		assertEquals(11, scn.GetStrength(troop));
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

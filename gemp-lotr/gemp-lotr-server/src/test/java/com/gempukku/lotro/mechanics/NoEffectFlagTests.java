@@ -218,6 +218,53 @@ public class NoEffectFlagTests
 		);
 	}
 
+	protected HashMap<String, String> LimitCards() {
+		return new HashMap<>()
+		{{
+			// Dark Tidings: a [raider] condition.  "Regroup: Spot 2 [raider] Men and remove (3) to add a
+			// threat (limit 1)."
+			put("tidings", "7_130");
+			// Easterling Axeman: a [raider] Man, strength 6, vitality 2; stronger and fierce at 2 burdens.
+			put("axeman", "4_224");
+			put("axeman2", "4_224");
+			// More to My Liking: a [dwarven] condition.  "Maneuver: Stack the top card from your draw deck
+			// here (limit once per phase)."  Its other ability needs a Dwarf to spot.
+			put("liking", "5_9");
+			// Uruk Slayer: strength 9, vitality 2.  "Skirmish: Remove (1) to make this minion strength +1
+			// (limit +3)."
+			put("slayer", "1_153");
+			// Realm of Dwarrowdelf: a [dwarven] condition.  "Skirmish: Discard the top 3 cards from your
+			// draw deck to make a Dwarf strength +1 (limit +3) and, if underground, damage +1 (limit +3)."
+			put("realm", "2_12");
+			put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf, strength 6, vitality 3
+			put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+			// Anduril, King's Blade, as the Players' Council has it: "Bearer must be Aragorn. ...
+			// Assignment: Add a threat to make Aragorn defender +1 (limit +1)."
+			put("anduril", "57_80");
+			// Shadowplay: a [shire] condition.  "Each time a minion is played, you may exert a Hobbit
+			// companion to exert that minion (limit once per turn)."
+			put("shadowplay", "10_114");
+			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, vitality 4
+
+			put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1, cost 1
+			put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, cost 6, no text
+			put("troop2", "1_177");
+			// Cards for the draw deck: Realm of Dwarrowdelf discards three of them at each use.
+			put("deck1", "1_178");
+			put("deck2", "1_178");
+			put("deck3", "1_178");
+			put("deck4", "1_178");
+		}};
+	}
+
+	protected VirtualTableScenario GetLimitScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(LimitCards(),
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void EveryOfferedActionCarriesTheFlagAndAUsefulOneIsNotFlagged() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -1089,5 +1136,229 @@ public class NoEffectFlagTests
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(6 + 2, scn.GetStrength(gimli));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AnAbilityAtItsLimitIsOfferedFlaggedPaidForAndDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		// Two companions with Frodo, so that a second threat could be added if the limit did not hold.
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var tidings = scn.GetShadowCard("tidings");
+		var axeman = scn.GetShadowCard("axeman");
+		var axeman2 = scn.GetShadowCard("axeman2");
+		scn.MoveCardsToSupportArea(tidings);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(axeman, axeman2);
+		scn.SkipToPhase(Phase.REGROUP);
+		// Enough for two uses and not for a third.
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		// Within its limit the ability is not marked.
+		assertTrue(scn.ShadowActionAvailable(tidings));
+		assertEquals("false", scn.ShadowActionNoEffect(tidings));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(2, scn.GetThreatLimit());
+
+		scn.ShadowUseCardAction(tidings);
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		scn.FreepsPass();
+
+		// At its limit it has a cost that can still be paid, so it is still offered, and is marked.
+		assertTrue(scn.ShadowActionAvailable(tidings));
+		assertEquals("limit", scn.ShadowActionNoEffect(tidings));
+
+		scn.ShadowUseCardAction(tidings);
+		// The cost is paid and no threat is added.
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		scn.FreepsPass();
+
+		// With (1) left the cost cannot be paid, and that withholds it as it always did.
+		assertFalse(scn.ShadowActionAvailable(tidings));
+		assertTrue(scn.ShadowDecisionAvailable("Play Regroup action or Pass"));
+	}
+
+	@Test
+	public void AnAbilityWithNoCostIsStillWithheldAtItsLimit() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		// No Dwarf is in play, so the condition's other ability is never on offer.
+		var liking = scn.GetFreepsCard("liking");
+		scn.MoveCardsToSupportArea(liking);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(liking));
+		assertEquals("false", scn.FreepsActionNoEffect(liking));
+		assertEquals(0, scn.GetStackedCards(liking).size());
+
+		scn.FreepsUseCardAction(liking);
+		assertEquals(1, scn.GetStackedCards(liking).size());
+		scn.ShadowPass();
+
+		// Nothing is paid to stack a card, so at its limit the ability is not offered at all.
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(liking));
+	}
+
+	@Test
+	public void AnOptionalTriggerAtItsLimitIsOfferedFlaggedPaidForAndDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var shadowplay = scn.GetFreepsCard("shadowplay");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(shadowplay);
+
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCardsToHand(troop, troop2);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(troop);
+		// Within its limit the trigger is not marked.  Sam and Frodo can both exert, so the Hobbit is chosen.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(shadowplay));
+		assertEquals("false", scn.FreepsActionNoEffect(shadowplay));
+		scn.FreepsChooseOptionalTrigger(shadowplay);
+		scn.FreepsChooseCard(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(troop));
+
+		scn.ShadowPlayCard(troop2);
+		// At its limit it is offered for the sake of its cost, and marked.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(shadowplay));
+		assertEquals("limit", scn.FreepsActionNoEffect(shadowplay));
+		scn.FreepsChooseOptionalTrigger(shadowplay);
+		scn.FreepsChooseCard(sam);
+		// The Hobbit exerts and the minion does not.
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(troop2));
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ABonusAtItsCapIsFlagged() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		scn.SetTwilight(10);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, slayer);
+		scn.FreepsPass();
+
+		assertEquals(9, scn.GetStrength(slayer));
+		// Three uses, each +1, none of them marked.
+		for (int used = 0; used < 3; used++) {
+			assertEquals("false", scn.ShadowActionNoEffect(slayer));
+			scn.ShadowUseCardAction(slayer);
+			assertEquals(9 + used + 1, scn.GetStrength(slayer));
+			scn.FreepsPass();
+		}
+
+		// At +3 the ability is still offered, and marked as at its limit.
+		var twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(slayer));
+		assertEquals("limit", scn.ShadowActionNoEffect(slayer));
+
+		scn.ShadowUseCardAction(slayer);
+		// (1) is removed and the minion is no stronger.
+		assertEquals(twilight - 1, scn.GetTwilight());
+		assertEquals(9 + 3, scn.GetStrength(slayer));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	// The cap is written into the amount of the bonus here, where Uruk Slayer's is written beside it.
+	@Test
+	public void ABonusWhoseAmountIsCappedIsFlaggedOnceTheCapIsSpent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var realm = scn.GetFreepsCard("realm");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(realm);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		// The skirmish is at site 2, Ettenmoors, which is not underground: strength is all the condition gives.
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, runner);
+
+		assertEquals(6, scn.GetStrength(gimli));
+		// Three uses, each +1, none of them marked.
+		for (int used = 0; used < 3; used++) {
+			assertEquals("false", scn.FreepsActionNoEffect(realm));
+			scn.FreepsUseCardAction(realm);
+			assertEquals(6 + used + 1, scn.GetStrength(gimli));
+			scn.ShadowPass();
+		}
+
+		// At +3 the ability is still offered, and marked as at its limit.
+		var deck = scn.GetFreepsDeckCount();
+		assertTrue(scn.FreepsActionAvailable(realm));
+		assertEquals("limit", scn.FreepsActionNoEffect(realm));
+
+		scn.FreepsUseCardAction(realm);
+		// Three more cards are discarded and the Dwarf is no stronger.
+		assertEquals(deck - 3, scn.GetFreepsDeckCount());
+		assertEquals(6 + 3, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AKeywordWhoseAmountIsCappedIsFlaggedOnceTheCapIsSpent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		// Two companions with Frodo: room for two threats.
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals("false", scn.FreepsActionNoEffect(anduril));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals(2, scn.GetThreatLimit());
+
+		scn.FreepsUseCardAction(anduril);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		scn.ShadowPass();
+
+		// At defender +1 the ability is still offered, and marked as at its limit.
+		assertTrue(scn.FreepsActionAvailable(anduril));
+		assertEquals("limit", scn.FreepsActionNoEffect(anduril));
+
+		scn.FreepsUseCardAction(anduril);
+		// A second threat is added and Aragorn is defender +1 still.
+		assertEquals(2, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.ShadowDecisionAvailable("Play Assignment action or Pass"));
 	}
 }

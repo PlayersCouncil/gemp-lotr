@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.ActionSource;
 import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.UnpaidCostsContext;
+import com.gempukku.lotro.cards.build.field.effect.appender.AbstractEffectAppender;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Timeword;
@@ -15,8 +16,13 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
+import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
+import com.gempukku.lotro.logic.effects.IncrementTurnLimitEffect;
+import com.gempukku.lotro.logic.modifiers.LimitCounter;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.NoEffect;
+import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +35,10 @@ public class DefaultActionSource implements ActionSource {
 
     private final List<EffectAppender> costs = new LinkedList<>();
     private final List<EffectAppender> effects = new LinkedList<>();
+    // The limits that do not withhold the action ("limitPerPhase", "limitPerTurn" on an ability that has a cost
+    // and is the player's to use or not): at its limit the action is still offered, its costs are paid, and the
+    // gate lets none of its effects through (Ketura on Q-0041).  See addLimitPerPhase.
+    private final List<Limit> limitGate = new LinkedList<>();
 
     private PlayerSource playingPlayer;
     private boolean requiresRanger;
@@ -71,6 +81,84 @@ public class DefaultActionSource implements ActionSource {
 
     public void addPlayRequirement(Requirement requirement) {
         this.requirements.add(requirement);
+    }
+
+    /**
+     * Limits the action to so many uses of its card in a phase.  The counter is the card's, not the ability's.
+     * @param phase The phase the uses are counted in, or null for whichever phase the action is used in.
+     * @param limit How many uses there may be.
+     * @param offeredAtLimit False withholds the action once the limit is reached: a requirement, and a use
+     *                       counted before any other cost.  True leaves it on offer (it has a cost the player may
+     *                       want to pay for its own sake): its costs are paid as written, a use is counted once
+     *                       they are, and at the limit nothing more is done.  It is then flagged as doing nothing.
+     */
+    public void addLimitPerPhase(Phase phase, int limit, boolean offeredAtLimit) {
+        if (offeredAtLimit) {
+            limitGate.add(new Limit(phase, false, limit));
+            return;
+        }
+        addPlayRequirement(
+                (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limit));
+        addCost(
+                new AbstractEffectAppender() {
+                    @Override
+                    protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                        return new IncrementPhaseLimitEffect(actionContext.getSource(), phase, limit);
+                    }
+                });
+    }
+
+    /**
+     * Limits the action to so many uses of its card in a turn.  See addLimitPerPhase.
+     */
+    public void addLimitPerTurn(int limit, boolean offeredAtLimit) {
+        if (offeredAtLimit) {
+            limitGate.add(new Limit(null, true, limit));
+            return;
+        }
+        addPlayRequirement(
+                (actionContext) -> PlayConditions.checkTurnLimit(actionContext.getGame(), actionContext.getSource(), limit));
+        addCost(
+                new AbstractEffectAppender() {
+                    @Override
+                    protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                        return new IncrementTurnLimitEffect(actionContext.getSource(), limit);
+                    }
+                });
+    }
+
+    // One limit of the gate: so many uses of the card in a phase, or in a turn.
+    private static final class Limit {
+        private final Phase phase;
+        private final boolean perTurn;
+        private final int max;
+
+        private Limit(Phase phase, boolean perTurn, int max) {
+            this.phase = phase;
+            this.perTurn = perTurn;
+            this.max = max;
+        }
+
+        private LimitCounter getCounter(ActionContext actionContext) {
+            final LotroGame game = actionContext.getGame();
+            if (perTurn)
+                return game.getModifiersQuerying().getUntilEndOfTurnLimitCounter(actionContext.getSource());
+            final Phase countedIn = (phase != null) ? phase : game.getGameState().getCurrentPhase();
+            return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(actionContext.getSource(), countedIn);
+        }
+
+        private boolean isReached(ActionContext actionContext) {
+            return getCounter(actionContext).getUsedLimit() >= max;
+        }
+    }
+
+    // Whether the action, used now, would get nothing past its gate.  The judge and the gate both ask this.
+    private boolean isAtLimit(ActionContext actionContext) {
+        for (Limit limit : limitGate) {
+            if (limit.isReached(actionContext))
+                return true;
+        }
+        return false;
     }
 
     public void addNoEffectUnless(Requirement requirement) {
@@ -136,11 +224,47 @@ public class DefaultActionSource implements ActionSource {
         for (EffectAppender cost : costs)
             cost.appendEffect(true, action, actionContext);
 
-        for (EffectAppender actionEffect : effects)
-            actionEffect.appendEffect(false, action, actionContext);
+        if (limitGate.isEmpty()) {
+            for (EffectAppender actionEffect : effects)
+                actionEffect.appendEffect(false, action, actionContext);
+        } else {
+            appendEffectsBehindLimitGate(action, actionContext);
+        }
 
         // Asked only if the action is put in front of a player, and then once.
         action.setNoEffectJudge(() -> judge(actionContext));
+    }
+
+    // An action that stays on offer at its limit.  Once its costs are paid a use is counted, if there is one left
+    // (the last of its costs, so a use that is cancelled after being paid for is spent all the same, and one
+    // whose costs fail is not).  Its effects wait behind the gate: within the limit they are appended when the
+    // gate is reached, and at the limit the log says so and nothing is appended.
+    private void appendEffectsBehindLimitGate(CostToEffectAction action, ActionContext actionContext) {
+        final boolean[] withinLimit = new boolean[1];
+        action.appendCost(
+                new UnrespondableEffect() {
+                    @Override
+                    protected void doPlayEffect(LotroGame game) {
+                        if (isAtLimit(actionContext))
+                            return;
+                        for (Limit limit : limitGate)
+                            limit.getCounter(actionContext).incrementToLimit(limit.max, 1);
+                        withinLimit[0] = true;
+                    }
+                });
+        action.appendEffect(
+                new UnrespondableEffect() {
+                    @Override
+                    protected void doPlayEffect(LotroGame game) {
+                        if (withinLimit[0]) {
+                            for (EffectAppender actionEffect : effects)
+                                actionEffect.appendEffect(false, action, actionContext);
+                        } else {
+                            game.getGameState().sendMessage(GameUtils.getCardLink(actionContext.getSource())
+                                    + " has reached its limit and does nothing");
+                        }
+                    }
+                });
     }
 
     /**
@@ -150,6 +274,11 @@ public class DefaultActionSource implements ActionSource {
      * @return Why the action will do nothing, or null if it is not known to.
      */
     private NoEffect judge(ActionContext actionContext) {
+        // The action is at its limit: the gate reads the same counter when the effects come up, and no cost
+        // lowers a counter.
+        if (isAtLimit(actionContext))
+            return NoEffect.LIMIT;
+
         // The definition's own word for it: something it names is missing, and without it nothing happens.
         if (!noEffectUnless.isEmpty()) {
             final ActionContext checkContext = getUnpaidCostsContext(actionContext);

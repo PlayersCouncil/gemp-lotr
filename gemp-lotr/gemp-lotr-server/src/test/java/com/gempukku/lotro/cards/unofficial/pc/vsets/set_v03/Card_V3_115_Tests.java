@@ -286,4 +286,41 @@ public class Card_V3_115_Tests
 		// 3 companions - should be available
 		assertTrue(scn.FreepsActionAvailable(sam));
 	}
+
+	@Test
+	public void SamAtHisLimitStillAddsABurdenAndHindersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var bladetip = scn.GetShadowCard("bladetip1");   // Cost 0 - even
+		var blackbreath = scn.GetShadowCard("blackbreath1"); // Cost 1 - odd
+		var southron = scn.GetShadowCard("southron");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(bladetip, blackbreath);
+		scn.MoveMinionsToTable(southron);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals("false", scn.FreepsActionNoEffect(sam));
+		scn.FreepsUseCardAction(sam);
+		scn.FreepsChoose("condition");
+		scn.FreepsChoose("even");
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.IsHindered(bladetip));
+		assertFalse(scn.IsHindered(blackbreath));
+		scn.ShadowPass();
+
+		// Limit once per turn: a burden can still be added, so the ability is still offered,
+		// flagged as doing nothing (Ketura on Q-0041)
+		assertTrue(scn.FreepsActionAvailable(sam));
+		assertEquals("limit", scn.FreepsActionNoEffect(sam));
+
+		// Used anyway: a burden is added, nothing is asked and nothing more is hindered
+		scn.FreepsUseCardAction(sam);
+		assertEquals(2, scn.GetBurdens());
+		assertFalse(scn.IsHindered(blackbreath));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
 }

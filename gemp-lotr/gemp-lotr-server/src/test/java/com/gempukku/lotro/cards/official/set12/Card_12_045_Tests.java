@@ -18,6 +18,7 @@ public class Card_12_045_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_45");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, unbound, strength 8
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -68,5 +69,33 @@ public class Card_12_045_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void FellowshipAbilityAtItsLimitIsStillOfferedAndPaidForAndMakesNobodyStronger() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsUseCardAction(card);
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(9, scn.GetStrength(aragorn));
+
+		// Limit +1: (2) can still be added, so the ability is still offered, flagged as doing nothing
+		// (Ketura on Q-0041).
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+
+		scn.FreepsUseCardAction(card);
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(9, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

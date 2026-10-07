@@ -49,7 +49,13 @@ public class ModifyStrength implements EffectAppenderProducer {
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
                 final EffectForecast given = EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
-                if (limit == -1 || given.getVerdict() != EffectForecast.Verdict.UNKNOWN || given.getReach() == null)
+                if (given.getVerdict() != EffectForecast.Verdict.UNKNOWN)
+                    return given;
+                // A capped amount whose cap is spent comes to nothing, whoever it is given to.  It is asked for
+                // the card it will be worked out for, which is this effect's source.
+                if (EffectForecast.isSpent(amountSource, actionContext, actionContext.getSource()))
+                    return EffectForecast.AT_LIMIT;
+                if (limit == -1 || given.getReach() == null)
                     return given;
 
                 // A bonus with a limit for each card reaches only those whose limit is not yet spent, and with

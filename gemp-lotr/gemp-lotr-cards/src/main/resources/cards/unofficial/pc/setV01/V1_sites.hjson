@@ -179,22 +179,13 @@
 		effects: {
 			type: activated
 			phase: fellowship
-			requires: [
-				{
-					type: perTurnLimit
-					limit: 6
-				}
-			]
+			limitPerTurn: 6
 			cost: {
 				type: exert
 				select: choose(unbound,companion)
 				memorize: exertedComp
 			}
 			effect: [
-				{
-					type: incrementPerTurnLimit
-					limit: 6
-				}
 				{
 					type: chooseActiveCards
 					text: Choose a companion of a different culture to make strength +1 until the end of the turn.
@@ -336,25 +327,16 @@
 					type: Location
 					filter: name(Lorien Throne Room)
 				}
-				{
-					type: PerPhaseLimit
-					limit: 1
-				}
 			]
+			limitPerPhase: 1
 			cost: {
 				type: exert
 				select: choose(culture(elven),ally)
 			}
-			effect: [
-				{
-					type: heal
-					select: memory(exertedComp)
-				}
-				{
-					type: IncrementPerPhaseLimit
-					limit: 1
-				}
-			]
+			effect: {
+				type: heal
+				select: memory(exertedComp)
+			}
 		}
 		gametext: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that companion (limit once per phase).
 		lore: ""

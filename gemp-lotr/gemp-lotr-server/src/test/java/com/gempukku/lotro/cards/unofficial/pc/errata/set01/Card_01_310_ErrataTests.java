@@ -19,6 +19,8 @@ public class Card_01_310_ErrataTests
 				new HashMap<>()
 				{{
 					put("card", "51_310");
+					put("sword", "1_299");      // Hobbit Sword: a [shire] possession
+					put("pipe", "1_285");       // Bilbo's Pipe: a [shire] possession
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -87,5 +89,36 @@ public class Card_01_310_ErrataTests
 		scn.StartGame();
 		
 		assertFalse(true);
+	}
+
+	@Test
+	public void FellowshipAbilityAtItsLimitStillExertsSamAndTakesNothingIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCompanionsToTable(card);
+
+		scn.StartGame();
+
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsUseCardAction(card);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(sword);
+		assertEquals(1, scn.GetWoundsOn(card));
+		assertEquals(Zone.HAND, sword.getZone());
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		// Limit once per turn: Sam can still exert, so the ability is still offered, flagged as doing
+		// nothing (Ketura on Q-0041).
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+
+		// Used anyway: Sam exerts, and the draw deck (which still holds a [shire] item) is not looked through.
+		scn.FreepsUseCardAction(card);
+		assertEquals(2, scn.GetWoundsOn(card));
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

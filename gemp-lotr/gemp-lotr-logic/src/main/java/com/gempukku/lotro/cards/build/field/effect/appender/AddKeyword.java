@@ -64,11 +64,25 @@ public class AddKeyword implements EffectAppenderProducer {
 
         final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to add keyword to", environment);
         final boolean endsWithSkirmish = damageForTheSkirmish;
+        final ValueSource amountSource = amount;
 
         MultiEffectAppender result = new MultiEffectAppender() {
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
-                return EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+                final EffectForecast given = EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+                if (given.getVerdict() != EffectForecast.Verdict.UNKNOWN || given.getReach() == null)
+                    return given;
+
+                // A capped amount is worked out for each card the keyword is given to, and reaches only those
+                // for whom its cap is not yet spent; with none of those it does nothing.
+                final List<PhysicalCard> open = new LinkedList<>();
+                for (PhysicalCard card : given.getReach()) {
+                    if (!EffectForecast.isSpent(amountSource, actionContext, card))
+                        open.add(card);
+                }
+                if (open.isEmpty())
+                    return EffectForecast.AT_LIMIT;
+                return EffectForecast.givenTo(open, endsWithSkirmish);
             }
         };
 
