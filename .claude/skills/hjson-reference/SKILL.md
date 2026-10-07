@@ -511,6 +511,8 @@ What a card's effect is forbidden ("burdens cannot be added", "threats cannot be
 
 "The twilight cost of the first X played each Shadow phase is -2" is a `modifyCost` that requires `{ type: phase, phase: shadow }` beside `not playedCardThisPhase`; without the phase a card played in a skirmish by another card's text takes the discount (Great Chasm 2_118, Breeding Pit of Isengard 15_188).
 
+`ShuffleCardsFromPlayIntoDrawDeck`: With `includeStacked: true` each card goes into its OWNER's draw deck, the cards stacked on the chosen card included, and each deck that receives a card is shuffled once; `player` says who chooses, not whose deck. (Without `includeStacked` the cards go into the deck of the player `player` names: use it only for that player's own cards.)
+
 ### Ongoing (Spawn Modifiers)
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
