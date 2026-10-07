@@ -435,6 +435,31 @@ A card discarded by its own "when you play this ..., or discard it" (the three D
 A player over the hand size at a reconcile on the way discards down to it from the front of his hand, however many cards that is (`PassReconcile(player)`, which every turn-skipper uses), so a test may put any number of cards in a hand before skipping. A test that reaches "Choose cards to discard down to 8" by its own passes answers it in one go: `scn.PassReconcile(scn.P1())`, or `FreepsChooseCards(...)` with exactly `FreepsGetChoiceMin()` cards.
 
 - `0_8006` Test Undertow ("Maneuver: Remove (1) to discard a Free Peoples card.") and `0_8007` Test Ebb-tide ("Maneuver: Remove (1) to return a Free Peoples card to its owner's hand."): Shadow conditions whose effects carry `override: hindered`, for reading what a discard or a return to hand by side alone may take (mechanics/HinderedRingBearerTests).
+- `0_8008` Test Riptide ("Maneuver: Remove (1) to discard a card.", reaching hindered cards) and `0_8009` Test Maelstrom ("Maneuver: Remove (1) to discard The One Ring."): mechanics/TheOneRingIsNeverDiscardedTests.
+- `0_8010` Test Fog ("Maneuver: Remove (1) to hinder a card."): mechanics/MapsAndMetaSitesCannotBeHinderedTests.
+
+**The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
+hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
+hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
+
+**Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
+Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
+`HinderCard` hinders whatever it is given and asks no rule.
+
+**Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
+(`mechanics/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
+condition from the Free Peoples support area" reaches it; "a Shadow condition from an opponent's support
+area", used by you, does not). For "your / an opponent's support area" the valid candidates are a card lying
+there and one borne by an ally or a controlled site there; the invalid ones are the same card on a companion
+and a card of the right owner borne by a card in the other player's area.
+
+**A shuffle from a discard pile into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from
+your discard pile into your draw deck" and choosing none, or with nothing there to choose, reads one more
+shuffle of that deck and its count unchanged; declining the offer reads none.
+
+**A hindered card is still borne.** "Bearing 3 or more cards" and "for each card he or she bears" count a
+hindered card; "for each possession" does not. Hinder one of the counted cards with `HinderCard` and read
+the count unchanged.
 
 ## Choosing helper cards
 

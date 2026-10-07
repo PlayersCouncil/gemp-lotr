@@ -362,6 +362,14 @@ Key client API methods and their server endpoints:
 
 ---
 
+`Filters.supportAreaOf(card)` answers with the player in whose support area a card is (the owner of the card
+at the bottom of its chain of bearers, or the controller if that card is a controlled site), or null;
+`isInSupportArea`, `inSupportAreaOf(player)` and `inSupportAreaOfAnOpponentOf(player)` are built on it.
+`RingBearerRule` holds the rules' protections of the Ring-bearer (no discard, no return to hand) and of The
+One Ring (no discard) as modifiers with no source card, which `ModifiersLogic.getModifiersProtectingCard`
+keeps in force for a hindered card. `GameState.canBeHindered` is where a site, a Map and a meta-site are
+refused to every hinder.
+
 ## Format System
 
 ### Format Definition
