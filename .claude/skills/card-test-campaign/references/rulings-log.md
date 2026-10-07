@@ -806,3 +806,9 @@ presented in the client ... the information is there all the same".
   events only." Of the events revealed, only Shadow-phase events may be chosen; a response event, or an event
   of another phase, is not offered (today any event is, and a response event played this way crashes the
   game). Other card types as now.
+- **Q-0114 (F-0194), prevention clauses in general:** "In general, prevention clauses should only trigger an
+  ask if the thing they are preventing actually occurred, so both lack of cards to draw, prevented draws, and
+  rule of 4 should prevent the asking of the prevention clause. So A, yeah." A "<player> may <pay> to prevent
+  this" is put to that player only when the effect it would prevent is going to happen: not for a draw from
+  an empty deck, a draw past the Rule of 4, or a draw something else already prevents. This is one rule for
+  every such clause, with the earlier "to prevent NONE" cases (F-0051, F-0183, F-0185, F-0192) under it.

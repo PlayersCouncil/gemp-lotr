@@ -221,7 +221,7 @@ public class Card_01_043_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0114: with an empty draw deck the Shadow player is still asked to discard a card to prevent a draw that cannot happen")
+	@Ignore("F-0194: with an empty draw deck the Shadow player is still asked to discard a card to prevent a draw that cannot happen")
 	public void WithNoCardToDrawTheShadowPlayerIsNotAskedToPreventIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
