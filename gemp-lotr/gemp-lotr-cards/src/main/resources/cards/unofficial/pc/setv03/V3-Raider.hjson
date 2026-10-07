@@ -1852,10 +1852,18 @@
 				trigger: {
 					type: Moves
 				}
-				requires: {
-					type: CanSpot
-					filter: self,Zone(ATTACHED)
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: self,Zone(ATTACHED)
+					}
+					// Nothing is asked when neither branch has anything to hinder (F-0116, F-0124): a
+					// hindered bearer or item is not spotted.
+					{
+						type: CanSpot
+						filter: or(bearer, and(item, side(freeps), AttachedTo(bearer)))
+					}
+				]
 				effect: {
 					type: Choice
 					player: Freeps
