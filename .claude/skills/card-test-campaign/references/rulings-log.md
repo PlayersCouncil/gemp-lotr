@@ -783,3 +783,13 @@ presented in the client ... the information is there all the same".
   to her, with the default taken.
 - **"Bearing 3 or more cards" counts hindered cards** (Lying Counsel 15_85).
 
+## Rulings of 2026-10-07, late (Ketura, on Q-0106)
+
+- **Q-0106, Worth Fighting For 103_120, "you may make the Shadow player shuffle one of their hindered cards":**
+  "Oh I forgot shadow makes the choice for WFF. Never mind then, ask freeps and make shadow choose as it
+  should." This withdraws the 0-to-1 choice she first asked for: the Free Peoples player gets a yes/no, and
+  the Shadow player then picks the card. The yes/no is asked only when the Shadow player has a hindered card
+  (no pester prompt, as with Q-0107). Built as F-0180.
+- **The general shape:** "you may make <the other player> do X" is asked of "you" as a yes/no, only when X
+  can be done; the choices the text gives the other player stay his. A definition that never asks is an
+  error to fix, not a question.
