@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -152,7 +151,7 @@ public class Card_V3_048_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(scoutA));
 		scn.ShadowChooseOptionalTrigger(scoutA);
 
-		// Nothing is hindered yet, so there is nothing to restore: a minion to hinder is chosen. A Southron,
+		// No other [raider] minion is hindered, so there is nothing to restore: a minion to hinder is chosen. A Southron,
 		// an Easterling and another Scout are [raider] minions; the Dunlending Southron and the Ships are not.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, axeman, scoutB));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(brigand, ships, scoutA));
@@ -356,7 +355,6 @@ public class Card_V3_048_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0120: the trigger is carried out when the Scout is about to be hindered, before it is: a Scout hindered by it finds the first Scout still unhindered, hinders it in turn, and the two answer each other without end")
 	@Test
 	public void AScoutHinderedByAnotherScoutsTriggerMayRestoreThatScout() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -389,7 +387,6 @@ public class Card_V3_048_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0120: the trigger is offered when the Scout is about to be hindered, beside the response that prevents the hindering, so it can be carried out for a Scout that is then never hindered")
 	@Test
 	public void ItsTriggerIsNotOnOfferUntilItIsHinderedAndNotAtAllWhenTheHinderingIsPrevented() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

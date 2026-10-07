@@ -1328,12 +1328,20 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
     }
 
+    // A card's own "discarded from play" or "hindered" trigger is that card's and its owner's: "you" in its
+    // text is the owner and "this card" and "another" are counted from the card itself, whoever removed it and
+    // with whatever card.  What did the removing stays in the result, where the trigger's "source" condition
+    // reads it (SelfRemovedFromPlayTriggerEffectProcessor).
+    private static DefaultActionContext ownRemovalContext(LotroGame game, PhysicalCard removedCard, EffectResult result) {
+        return new DefaultActionContext(removedCard.getOwner(), game, removedCard, result, null);
+    }
+
     @Override
     public RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result) {
         if (discardedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getDiscardedCard());
             discardedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1347,7 +1355,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (discardedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getDiscardedCard());
             discardedFromPlayOptionalTriggerAction.createAction(action, actionContext);
@@ -1362,7 +1370,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getHinderedCard());
             hinderedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1376,7 +1384,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getHinderedCard());
             hinderedFromPlayOptionalTriggerAction.createAction(action, actionContext);

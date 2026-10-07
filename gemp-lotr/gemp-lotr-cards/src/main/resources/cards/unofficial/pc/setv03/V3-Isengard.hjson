@@ -173,7 +173,6 @@
 				//method omitted since we want both hinder and discard
 				effect: {
 					type: Hinder
-					player: shadow
 					select: choose(side(Free Peoples), condition)
 				}
 			}

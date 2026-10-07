@@ -4,6 +4,10 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
+import com.gempukku.lotro.logic.timing.results.HinderedResult;
 import org.json.simple.JSONObject;
 
 public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcessor {
@@ -20,16 +24,20 @@ public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcesso
         DefaultActionSource triggerActionSource = new DefaultActionSource();
         EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
+        // The trigger is carried out as the removed card and its owner (BuiltLotroCardBlueprint), so the card
+        // that did the removing is read from the result and not from the context.  A card removed by no card at
+        // all (a rule's discard) does not set the trigger off.
         triggerActionSource.addPlayRequirement(
                 actionContext -> {
                     if(bySource == null)
                         return true;
 
-                    if(actionContext.getSource() == null)
+                    final PhysicalCard remover = getRemovingCard(actionContext.getEffectResult());
+                    if(remover == null)
                         return false;
 
-					return Filters.accepts(actionContext.getGame(), actionContext.getSource(), bySource.getFilterable(actionContext));
-				});
+                    return Filters.accepts(actionContext.getGame(), remover, bySource.getFilterable(actionContext));
+                });
 
         if(method.toLowerCase().contains("discard") || method.isEmpty()) {
             if (optional) {
@@ -48,8 +56,13 @@ public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcesso
                 blueprint.setHinderedFromPlayRequiredTriggerAction(triggerActionSource);
             }
         }
+    }
 
-
-
+    private static PhysicalCard getRemovingCard(EffectResult effectResult) {
+        if (effectResult instanceof DiscardCardsFromPlayResult discardResult)
+            return discardResult.getSource();
+        if (effectResult instanceof HinderedResult hinderedResult)
+            return hinderedResult.getSource();
+        return null;
     }
 }

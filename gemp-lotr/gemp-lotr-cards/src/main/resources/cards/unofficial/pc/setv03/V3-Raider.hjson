@@ -1060,12 +1060,10 @@
 				}
 			}
 			{
-				type: trigger
+				// "Each time this minion is hindered" is answered once it has been (F-0120).
+				type: SelfRemovedFromPlayTrigger
+				method: hinder
 				optional: true
-				trigger: {
-					type: AboutToHinder
-					filter: self
-				}
 				// Not offered with no other [raider] minion to hinder or restore (Q-0034, F-0122).
 				requires: {
 					type: CanSpot
