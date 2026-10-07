@@ -793,3 +793,11 @@ presented in the client ... the information is there all the same".
 - **The general shape:** "you may make <the other player> do X" is asked of "you" as a yes/no, only when X
   can be done; the choices the text gives the other player stay his. A definition that never asks is an
   error to fix, not a question.
+- **F-0181, Greatest Kingdom of My People 51_16, "the first time your opponent plays an Orc each turn":**
+  "You and the reviewer are correct on F-0181." Only the first Orc played in the turn brings the offer,
+  whatever was answered; a declined offer does not come again.
+- **F-0186, response events when a card plays "an event" from somewhere:** "Response events should not show
+  in such generic cases when asking for a phase event, yeah, and especially when playing an event from
+  discard. There is an existing bug on a RTMD card that causes a game crash if a response event is chosen
+  this way and played." A response event is never among the cards offered by "play a(n) ... event from
+  <discard pile / a stack / draw deck / hand>" unless it also has the current phase's timeword.
