@@ -128,13 +128,19 @@
 			type: modifier
 			modifier: {
 				type: modifyCost
-				requires: {
-					type: not
-					requires: {
-						type: playedCardThisPhase
-						filter: culture(moria),archer
+				requires: [
+					{
+						type: phase
+						phase: shadow
 					}
-				}
+					{
+						type: not
+						requires: {
+							type: playedCardThisPhase
+							filter: culture(moria),archer
+						}
+					}
+				]
 				filter: culture(moria),archer
 				amount: -2
 			}

@@ -37,6 +37,9 @@ public class Card_V3_062_Tests
 					put("fighter", "7_131");      // Desert Fighter: an optional trigger with a cost
 					put("traveler", "5_76");      // Southron Traveler: a response
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a Man, strength 8, vitality 4; Maneuver: exert Aragorn to make him defender +1
+					put("takeitdown", "103_89");  // Take it Down!: Skirmish event: exert Theoden or Eomer to wound a mounted minion twice, then may exert X [rohan] companions to discard X stacked Shadow cards
+					put("theoden", "7_255");      // Theoden, Rekindled King: strength 7, vitality 3; a fellowship ability never used here
+					put("guard", "5_83");         // Household Guard: a [rohan] companion, vitality 3; valiant and nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -642,5 +645,90 @@ public class Card_V3_062_Tests
 		assertEquals(0, scn.GetWoundsOn(walker));
 		assertInZone(Zone.SHADOW_CHARACTERS, walker);
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void KeepsTheMansResponseAndKeywordWithItsNumberWhenHeIsDiscardedFromTheStack() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var howdah = scn.GetShadowCard("howdah1");
+		var charger = scn.GetShadowCard("charger");
+		var traveler = scn.GetShadowCard("traveler");
+		var takeitdown = scn.GetFreepsCard("takeitdown");
+		var theoden = scn.GetFreepsCard("theoden");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.MoveCardsToSupportArea(howdah, charger);
+		scn.MoveCompanionsToTable(theoden, guard);
+		scn.MoveCardsToHand(takeitdown);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(traveler);
+		scn.SetTwilight(20);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// The Traveler is the one Southron Man in play, then the one Man stacked on the Charger.
+		scn.ShadowUseCardAction(charger);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(howdah);
+		assertAttachedTo(howdah, charger);
+		assertEquals(1, scn.GetWoundsOn(charger));
+
+		// The Traveler's text: "Southron. Ambush (2). Response: If a Southron is about to take a wound, remove (3)
+		// to prevent that wound."
+		// 1 of its own for the Southron stacked on it + 2
+		assertEquals(3, scn.GetKeywordCount(charger, Keyword.AMBUSH));
+
+		// The Charger's arrow goes to Frodo.
+		scn.SkipToArcheryWounds();
+		scn.FreepsChooseCard(frodo);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(theoden, charger);
+		// Its ambush
+		scn.ShadowDeclineOptionalTrigger();
+		scn.FreepsResolveSkirmish(theoden);
+
+		// Theoden exerts and the Charger, the one mounted minion, is wounded twice; the response it has from the
+		// Traveler is offered for each wound and declined.
+		scn.FreepsPlayCard(takeitdown);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(charger));
+		scn.ShadowDeclineOptionalTrigger();
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(charger));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(3, scn.GetWoundsOn(charger));
+
+		// The Guard exerts and the one stacked Shadow card is discarded: the Man is gone from the stack.
+		assertInZone(Zone.STACKED, traveler);
+		scn.FreepsChooseCards(guard);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertInZone(Zone.DISCARD, traveler);
+		assertEquals(0, scn.GetStackedCards(charger).size());
+
+		// The Charger has lost its own ambush (1), with no Southron stacked on it, and keeps the Traveler's (2).
+		assertEquals(2, scn.GetKeywordCount(charger, Keyword.AMBUSH));
+
+		// Theoden (7) beats the Charger (4, with no Southron stacked on it), which has 3 wounds and a vitality
+		// of 4. It still has the Traveler's response, and is a Southron about to take a wound.
+		int twilight = scn.GetTwilight();
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(charger));
+		scn.ShadowChooseOptionalTrigger(charger);
+
+		assertEquals(twilight - 3, scn.GetTwilight());
+		assertEquals(3, scn.GetWoundsOn(charger));
+		assertInZone(Zone.SHADOW_CHARACTERS, charger);
+
+		// The Charger is fierce: assigned again, it adds (2) for the ambush it has from the Traveler.
+		scn.PassCurrentPhaseActions();
+		twilight = scn.GetTwilight();
+		scn.FreepsAssignToMinions(theoden, charger);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

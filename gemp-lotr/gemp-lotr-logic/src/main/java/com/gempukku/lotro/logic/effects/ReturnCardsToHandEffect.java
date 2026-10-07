@@ -1,6 +1,8 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
@@ -15,20 +17,29 @@ import com.gempukku.lotro.logic.timing.results.ReturnCardsToHandResult;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ReturnCardsToHandEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final Filterable _filter;
+    // Which inactive cards the effect reaches beside the active ones: hindered cards, where the text names its
+    // cards by nothing but "card" or a side (Ketura on Q-0098).
+    private final Map<InactiveReason, Boolean> _spotOverrides;
 
     public ReturnCardsToHandEffect(PhysicalCard source, Filterable filter) {
+        this(source, SpotOverride.NONE, filter);
+    }
+
+    public ReturnCardsToHandEffect(PhysicalCard source, Map<InactiveReason, Boolean> spotOverrides, Filterable filter) {
         _source = source;
         _filter = filter;
+        _spotOverrides = spotOverrides;
     }
 
     @Override
     public String getText(LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filterActive(game, _filter);
+        Collection<PhysicalCard> cards = Filters.filterActive(game, _spotOverrides, _filter);
         return "Return " + getAppendedNames(cards) + " to hand";
     }
 
@@ -39,7 +50,7 @@ public class ReturnCardsToHandEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filterActive(game, _filter,
+        return Filters.filterActive(game, _spotOverrides, _filter,
                 new Filter() {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
@@ -51,7 +62,7 @@ public class ReturnCardsToHandEffect extends AbstractEffect {
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         GameState gameState = game.getGameState();
-        Collection<PhysicalCard> cardsToReturnToHand = Filters.filterActive(game, _filter);
+        Collection<PhysicalCard> cardsToReturnToHand = Filters.filterActive(game, _spotOverrides, _filter);
 
         // Preparation, figure out, what's going where...
         Set<PhysicalCard> discardedFromPlay = new HashSet<>();

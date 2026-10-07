@@ -2,7 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.logic.modifiers.CantRemoveBurdensModifier;
+import com.gempukku.lotro.logic.modifiers.CantAddBurdensModifier;
 import org.json.simple.JSONObject;
 
 public class CantAddBurdens implements ModifierSourceProducer {
@@ -16,7 +16,7 @@ public class CantAddBurdens implements ModifierSourceProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
-        return (actionContext) -> new CantRemoveBurdensModifier(actionContext.getSource(),
+        return (actionContext) -> new CantAddBurdensModifier(actionContext.getSource(),
                 RequirementCondition.createCondition(requirements, actionContext),
                 filterableSource.getFilterable(actionContext));
     }

@@ -762,10 +762,12 @@
 					effect: {
 						type: returnToHand
 						select: all(side(free people),attachedTo(memory(chosenCompanion)))
+						override: hindered
 					}
 					instead: {
 						type: discard
 						select: all(side(free people),attachedTo(memory(chosenCompanion)))
+						override: hindered
 					}
 				}
 			]

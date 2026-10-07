@@ -135,6 +135,7 @@
 				type: discard
 				player: shadow
 				select: choose(your,side(shadow))
+				override: hindered
 			}
 		}
 		gametext: Spot Gimli and exert a fellowship companion to have each Shadow player discard one of his or her Shadow cards from play.

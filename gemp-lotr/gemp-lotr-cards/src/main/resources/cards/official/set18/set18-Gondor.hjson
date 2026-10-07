@@ -417,6 +417,7 @@
 				effect: {
 					type: discard
 					select: all(side(shadow),attachedTo(bearer))
+					override: hindered
 				}
 			}
 			{

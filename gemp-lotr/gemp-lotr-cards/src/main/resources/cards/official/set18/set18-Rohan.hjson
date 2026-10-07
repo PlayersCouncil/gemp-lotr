@@ -434,6 +434,7 @@
 						{
 							type: discard
 							select: choose(side(shadow),attachedTo(ringBearer))
+							override: hindered
 						}
 					]
 				}

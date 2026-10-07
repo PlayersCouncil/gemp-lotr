@@ -361,6 +361,7 @@
 					{
 						type: Memorize
 						filter: side(Free Peoples), AttachedTo(companion)
+						hindered: true
 						memory: originallyAttached
 					}
 					{
@@ -371,6 +372,7 @@
 						type: Discard
 						player: Free Peoples
 						select: choose(side(Free Peoples), AttachedTo(companion))
+						override: hindered
 						count: any
 						memorize: discardedCards
 					}

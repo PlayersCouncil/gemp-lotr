@@ -116,4 +116,79 @@
 		}
 		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Add (1) to heal a companion (limit once per site).
 	}
+	# CantAddBurdensTests: the definition word cantAddBurdens, which no real card uses yet (F-0159: it used to
+	# build a "cannot remove burdens" modifier).  Its filter names the cards that cannot add burdens, any card
+	# when it is left out.
+	0_8004: {
+		title: Test Seal
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantAddBurdens
+			}
+		}
+		gametext: Burdens cannot be added.
+	}
+	# GameTextSnapshotTests: game text and keywords given for a time with "snapshot: true", by a card that stays
+	# in play past the time it names.  The one real card that copies game text (War Howdah 103_62) gives it until
+	# the end of the turn to a minion that is discarded before the turn ends, so the far side of its boundary
+	# cannot be read.
+	0_8005: {
+		title: Test Mirror
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			effect: [
+				{
+					type: ChooseActiveCards
+					select: choose(your,minion)
+					memorize: source
+					text: Choose the minion whose game text is given
+				}
+				{
+					type: ChooseActiveCards
+					select: choose(your,minion,not(memory(source)))
+					memorize: gainer
+					text: Choose the minion that gains it
+				}
+				{
+					type: AddModifier
+					until: start(Assignment)
+					modifier: {
+						type: DuplicateGameText
+						filter: memory(gainer)
+						from: memory(source)
+						snapshot: true
+					}
+				}
+				{
+					type: AddModifier
+					until: start(Assignment)
+					modifier: {
+						type: AddKeywordFromCards
+						filter: memory(gainer)
+						from: memory(source)
+						snapshot: true
+					}
+				}
+				{
+					type: RefreshCard
+					select: memory(gainer)
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Choose your minion and another of your minions. Until the assignment phase, the second gains the game text of the first.
+	}
 }
