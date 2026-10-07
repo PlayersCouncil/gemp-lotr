@@ -726,4 +726,10 @@ presented in the client ... the information is there all the same".
   expect it to play."
 - **Northern Ithilien's errata 57_359** existed only to work around the engine fault now fixed and will be
   reverted once F-0139 is deployed: its limit is not a concern.
+- **Beast of War 17_40 is played from the discard pile at 5 threats, as its text says** (F-0060): "clearly an
+  implementation error."
+- **Every fix through F-0155 is approved** (Ketura, 2026-10-07): the findings fixed under a like ruling or
+  under the new rule up to that number are `fixed-approved`.
+- **Driven By Her Own Cruel Will 103_105 with no Hobbit strengthened hinders no minion** (Q-0100): A. "That
+  skirmish" is the strengthened Hobbit's.
 
