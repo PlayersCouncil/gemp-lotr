@@ -294,6 +294,14 @@ A card played from hand counts toward its owner's hand for initiative until the 
 
 A rule class or trigger checker that answers effect results must test the result's type first: one that accepts any result also runs in the entering batch of every play.
 
+### The entering step is two batches; support area; plays by turn (engine pass 9, 2026-10-07)
+
+The entering step is two batches. `PlayCardEffect` places the card and publishes `EnteredPlayResult` (`ENTERS_PLAY`), which `ConstantlyCheck` triggers and the rules that act on their own account answer. The play action then takes `PlayCardEffect.nextStep()` until it returns null: first, if the card is still in play, a second `EnteredPlayResult` with `isOwnText()` true, which only the card's own `EntersPlay` trigger answers; then the announcing step, which publishes `PlayCardResult` (`PLAY`) for a card still in play and otherwise logs "<card> left play as it came into play". `EnteredPlayResult` carries the zone the card was played from.
+
+`Filters.isInSupportArea(card)` walks up a card's bearers and answers whether the card at the bottom lies in Zone.SUPPORT; `Filters.inSupportArea` is the filter, and the definition language's `support`. `Filters.zone(Zone.SUPPORT)` remains the zone test. `ActivateCardAction` records both the zone and whether the card was in a support area when the action was built, and `ActivateCardResult` carries them (`getActivatedZone()`, `wasActivatedInSupportArea()`).
+
+`DefaultActionsEnvironment.emitEffectResult` stamps every `PlayCardResult` (events and sites included) with the site the fellowship is at (`getPlayedAtSite()`), which `PlayedCardThisTurn` reads.
+
 ## HTTP API Layer
 
 ### Handler Architecture
