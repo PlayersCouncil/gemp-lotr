@@ -1,37 +1,57 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_086_Tests
 {
-
-	// Northern Signal-fire, Flame of Calenhad (103_86) Tests
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("calenhad", "103_86");
-					put("beacon1", "103_35");
-					put("beacon2", "103_35");
+					// Two dots: two copies may be in play.
+					put("calenhad1", "103_86");
+					put("calenhad2", "103_86");
+					// War-beacon: a [gondor] beacon, cost 1, to play spot an unbound Man; fellowship abilities never used here
+					put("war1", "103_35");
+					put("war2", "103_35");
+					put("war3", "103_35");
+					put("halifirien", "103_87"); // Northern Signal-fire, Flame of Halifirien: a [rohan] beacon; its text is about mounts
+					put("catapult", "8_32");     // Catapult: a [gondor] possession in the support area that is no beacon; a maneuver ability never used here
 
-					// Men with various keywords
-					put("ranger", "1_89"); // Ranger
-					put("heir2elendil", "4_109");  // Defender +1 (loaded)
-					put("knight", "8_39");        // Knight
-					put("eowyn", "5_122");        // Valiant
-					put("boromir", "1_97");       // Plain Man (no relevant keywords)
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, ranger, strength 8, vitality 4; a maneuver ability never used here
+					put("heir", "4_109");        // Aragorn, Heir of Elendil: defender +1 and nothing else
+					put("eomer", "15_123");      // Eomer, Horsemaster: a [rohan] Man, valiant and hunter 2; a skirmish ability never used here
+					put("boromir", "1_97");      // Boromir, Son of Denethor: a [gondor] Man with no keyword, strength 7; skirmish: exert him to make a Hobbit stronger
+					// Rider of Rohan: a [rohan] Man with no keyword, cost 2, nothing to play him; his skirmish ability needs a mount
+					put("rider", "4_286");
+					put("rider2", "4_286");
+					put("guard", "5_83");        // Household Guard: a [rohan] Man, valiant and nothing else, vitality 3
+					put("eowyn", "5_122");       // Eowyn, Daughter of Eomund: valiant; a maneuver ability never used here
+					put("merry", "103_85");      // Merry, Master Holbytla: a Hobbit, valiant and enduring, who is also a [rohan] Man beside Eowyn
+					put("ranger", "4_122");      // Gondorian Ranger: a Ring-bound Man (and a ranger); his text is about the site number of minions
+					put("haldir", "1_48");       // Haldir, Elf of the Golden Wood: an unbound companion who is no Man
+					put("barliman", "1_70");     // Barliman Butterbur: a Man who is an ally, no keyword; a fellowship ability never used here
+					// The Red Arrow: Assignment: exert a [gondor] Man to play a [rohan] Man (and, if wanted, a possession on him); then it is discarded
+					put("redarrow", "9_46");
 
-					put("explorer", "4_250");     // Shadow Man - should not receive keywords
+					put("explorer", "4_250");    // Southron Explorer: a Man who is a minion, strength 5, vitality 3; its regroup ability costs (5)
+					put("troop", "1_177");       // Goblin Patrol Troop: strength 13, no text
+					// Goblin Runner: strength 5, vitality 1; its text is about being played
+					put("runner1", "1_178");
+					put("runner2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,14 +70,14 @@ public class Card_V3_086_Tests
 		 * Culture: Rohan
 		 * Twilight Cost: 2
 		 * Type: Possession
-		 * Subtype: Support area
+		 * Subtype: Support Area
 		 * Game Text: Beacon. To play, hinder 2 beacons.
-		* 	<b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
-		*/
+		 * 	Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("calenhad");
+		var card = scn.GetFreepsCard("calenhad1");
 
 		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
 		assertEquals("Flame of Calenhad", card.getBlueprint().getSubtitle());
@@ -70,233 +90,441 @@ public class Card_V3_086_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-
-
-//
-// Extra Cost tests - requires hindering 2 beacons
-//
-
 	@Test
-	public void CalenhadCannotPlayWithoutTwoBeaconsToHinder() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotBePlayedUntilTwoBeaconsCanBeHinderedAndThenCostsTwoAndHindersBoth() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var beacon1 = scn.GetFreepsCard("beacon1");
-		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCardsToHand(calenhad);
-		scn.MoveCompanionsToTable(boromir);
-		scn.MoveCardsToSupportArea(beacon1);
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var war1 = scn.GetFreepsCard("war1");
+		var war2 = scn.GetFreepsCard("war2");
+		var halifirien = scn.GetFreepsCard("halifirien");
+		var catapult = scn.GetFreepsCard("catapult");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(war1, halifirien, catapult);
+		// A hindered beacon is no beacon while it is hindered, and the Catapult never was one.
+		scn.HinderCard(halifirien);
+		scn.MoveCardsToHand(calenhad, war2);
 
 		scn.StartGame();
 
+		// One beacon that can be hindered: one short.
 		assertFalse(scn.FreepsPlayAvailable(calenhad));
-	}
 
-	@Test
-	public void CalenhadCanPlayByHinderingTwoBeacons() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		scn.FreepsPlayCard(war2);
 
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var beacon1 = scn.GetFreepsCard("beacon1");
-		var beacon2 = scn.GetFreepsCard("beacon2");
-		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCardsToHand(calenhad);
-		scn.MoveCompanionsToTable(boromir);
-		scn.MoveCardsToSupportArea(beacon1, beacon2);
-
-		scn.StartGame();
-
+		// 1 for the War-beacon
+		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(calenhad));
+		assertFalse(scn.IsHindered(war1));
+		assertFalse(scn.IsHindered(war2));
 
 		scn.FreepsPlayCard(calenhad);
-		scn.FreepsChooseCards(beacon1, beacon2);
 
+		// 1 + 2 for the Signal-fire. With exactly two beacons to hinder nothing is asked.
+		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, calenhad);
-		assertTrue(scn.IsHindered(beacon1));
-		assertTrue(scn.IsHindered(beacon2));
+		assertTrue(scn.IsHindered(war1));
+		assertTrue(scn.IsHindered(war2));
+		assertTrue(scn.IsHindered(halifirien));
+		assertFalse(scn.IsHindered(catapult));
+		assertFalse(scn.IsHindered(calenhad));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-//
-// Maneuver ability tests - hinder self, exert Man, share keywords
-//
-
 	@Test
-	public void CalenhadManeuverAbilityHindersSelfAndExertsMan() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheTwoBeaconsHinderedToPlayAreChosenFromUnhinderedBeaconsOfAnyCulture() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var calenhad = scn.GetFreepsCard("calenhad");
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var war1 = scn.GetFreepsCard("war1");
+		var war2 = scn.GetFreepsCard("war2");
+		var war3 = scn.GetFreepsCard("war3");
+		var halifirien = scn.GetFreepsCard("halifirien");
+		var catapult = scn.GetFreepsCard("catapult");
+		scn.MoveCardsToSupportArea(war1, war2, war3, halifirien, catapult);
+		scn.HinderCard(war3);
+		scn.MoveCardsToHand(calenhad);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPlayCard(calenhad);
+
+		assertEquals(2, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		// Two [gondor] beacons and a [rohan] one
+		assertTrue(scn.FreepsHasCardChoiceAvailable(war1, war2, halifirien));
+		// A beacon already hindered, a [gondor] support possession that is no beacon, and the card being played
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(war3, catapult, calenhad));
+
+		scn.FreepsChooseCards(war2, halifirien);
+
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, calenhad);
+		assertTrue(scn.IsHindered(war2));
+		assertTrue(scn.IsHindered(halifirien));
+		assertFalse(scn.IsHindered(war1));
+		assertFalse(scn.IsHindered(catapult));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityHindersItsOwnCopyAndExertsAnUnboundManWhoseKeywordYourOtherMenGain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad1 = scn.GetFreepsCard("calenhad1");
+		var calenhad2 = scn.GetFreepsCard("calenhad2");
+		var war1 = scn.GetFreepsCard("war1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var ranger = scn.GetFreepsCard("ranger");
+		var haldir = scn.GetFreepsCard("haldir");
+		var barliman = scn.GetFreepsCard("barliman");
+		var frodo = scn.GetRingBearer();
+		var explorer = scn.GetShadowCard("explorer");
+		scn.MoveCompanionsToTable(aragorn, boromir, rider, guard, ranger, haldir);
+		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToSupportArea(calenhad1, calenhad2, war1);
+		// Vitality 3 with 2 wounds: an unbound Man who cannot exert.
+		scn.AddWoundsToChar(guard, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
+
+		assertFalse(scn.FreepsActionAvailable(calenhad1));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(calenhad1));
+		assertTrue(scn.FreepsActionAvailable(calenhad2));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(rider, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(guard, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(barliman, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(haldir, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(explorer, Keyword.RANGER));
+
+		scn.FreepsUseCardAction(calenhad1);
+
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		// Unbound Men of two cultures
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, boromir, rider));
+		// A Ring-bound Man, an unbound Elf, a Man who is an ally, a Man who is a minion, the Ring-bearer, and an
+		// unbound Man who is exhausted
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ranger, haldir, barliman, explorer, frodo, guard));
+
+		scn.FreepsChooseCard(aragorn);
+
+		assertTrue(scn.IsHindered(calenhad1));
+		assertFalse(scn.IsHindered(calenhad2));
+		assertFalse(scn.IsHindered(war1));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(rider));
+		// My other Men: of [gondor] and of [rohan], an exhausted one, and an ally
+		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(guard, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(barliman, Keyword.RANGER));
+		// Not an Elf of mine, and not the other player's Man
+		assertFalse(scn.HasKeyword(haldir, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(explorer, Keyword.RANGER));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		scn.ShadowPass();
+
+		// The copy that was hindered has no text; the other is still there to use.
+		assertFalse(scn.FreepsActionAvailable(calenhad1));
+		assertTrue(scn.FreepsActionAvailable(calenhad2));
+
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(calenhad2));
+	}
+
+	@Test
+	public void WithItsOnlyUnboundManExhaustedTheOtherCopyIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad1 = scn.GetFreepsCard("calenhad1");
+		var calenhad2 = scn.GetFreepsCard("calenhad2");
+		var guard = scn.GetFreepsCard("guard");
+		var ranger = scn.GetFreepsCard("ranger");
+		var haldir = scn.GetFreepsCard("haldir");
+		var barliman = scn.GetFreepsCard("barliman");
+		var explorer = scn.GetShadowCard("explorer");
+		scn.MoveCompanionsToTable(guard, ranger, haldir);
+		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToSupportArea(calenhad1, calenhad2);
+		// Vitality 3 with 1 wound: he can exert once more.
+		scn.AddWoundsToChar(guard, 1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(calenhad1));
+		assertTrue(scn.FreepsActionAvailable(calenhad2));
+		assertFalse(scn.HasKeyword(ranger, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(barliman, Keyword.VALIANT));
+
+		// The Household Guard is the only unbound Man, so nothing is asked.
+		scn.FreepsUseCardAction(calenhad1);
+
+		assertTrue(scn.IsHindered(calenhad1));
+		assertEquals(2, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(ranger));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertEquals(0, scn.GetWoundsOn(barliman));
+		// A Ring-bound Man and an ally are Men of mine all the same.
+		assertTrue(scn.HasKeyword(ranger, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(barliman, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(haldir, Keyword.VALIANT));
+
+		scn.ShadowPass();
+
+		// The Ring-bound Man, the Elf and the ally could all exert; the one unbound Man cannot.
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.IsHindered(calenhad2));
+		assertFalse(scn.FreepsActionAvailable(calenhad2));
+	}
+
+	@Test
+	public void EveryUnloadedKeywordOnTheManIsGainedAndNoLoadedOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad1 = scn.GetFreepsCard("calenhad1");
+		var calenhad2 = scn.GetFreepsCard("calenhad2");
+		var eomer = scn.GetFreepsCard("eomer");
+		var heir = scn.GetFreepsCard("heir");
 		var boromir = scn.GetFreepsCard("boromir");
 		var explorer = scn.GetShadowCard("explorer");
-		scn.MoveCompanionsToTable(boromir);
-		scn.MoveCardsToSupportArea(calenhad);
-		scn.MoveMinionsToTable(explorer);
+		scn.MoveCompanionsToTable(eomer, heir, boromir);
+		scn.MoveCardsToSupportArea(calenhad1, calenhad2);
 
 		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertFalse(scn.IsHindered(calenhad));
-		assertEquals(0, scn.GetWoundsOn(boromir));
-		assertTrue(scn.FreepsActionAvailable(calenhad));
-
-		scn.FreepsUseCardAction(calenhad);
-		// Only one unbound Man, auto-selected
-
-		assertTrue(scn.IsHindered(calenhad));
-		assertEquals(1, scn.GetWoundsOn(boromir));
-	}
-
-	@Test
-	public void CalenhadTransfersRangerKeywordToOtherMenButNotShadowMen() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var ranger = scn.GetFreepsCard("ranger");		  // Ranger
-		var boromir = scn.GetFreepsCard("boromir");         // No keywords
-		var explorer = scn.GetShadowCard("explorer");       // Shadow Man
-		scn.MoveCompanionsToTable(ranger, boromir);
-		scn.MoveCardsToSupportArea(calenhad);
+		// Eomer is valiant and hunter 2 in print; another effect makes him a knight as well.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, eomer, null, Keyword.KNIGHT));
 		scn.MoveMinionsToTable(explorer);
-
-		scn.StartGame();
-
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		// Verify initial state
-		assertTrue(scn.HasKeyword(ranger, Keyword.RANGER));
-		assertFalse(scn.HasKeyword(boromir, Keyword.RANGER));
-		assertFalse(scn.HasKeyword(explorer, Keyword.RANGER));
-
-		scn.FreepsUseCardAction(calenhad);
-		scn.FreepsChooseCard(ranger); // Exert Aragorn to share his keywords
-
-		// Boromir should now have Ranger
-		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
-		// Aragorn still has Ranger
-		assertTrue(scn.HasKeyword(ranger, Keyword.RANGER));
-		// Shadow Man should NOT have Ranger
-		assertFalse(scn.HasKeyword(explorer, Keyword.RANGER));
-	}
-
-	@Test
-	public void CalenhadTransfersKnightKeywordToOtherMenButNotShadowMen() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var knight = scn.GetFreepsCard("knight");   // Knight
-		var boromir = scn.GetFreepsCard("boromir"); // No keywords
-		var explorer = scn.GetShadowCard("explorer"); // Shadow Man
-		scn.MoveCompanionsToTable(knight, boromir);
-		scn.MoveCardsToSupportArea(calenhad);
-		scn.MoveMinionsToTable(explorer);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.HasKeyword(knight, Keyword.KNIGHT));
-		assertFalse(scn.HasKeyword(boromir, Keyword.KNIGHT));
-		assertFalse(scn.HasKeyword(explorer, Keyword.KNIGHT));
-
-		scn.FreepsUseCardAction(calenhad);
-		scn.FreepsChooseCard(knight);
-
-		assertTrue(scn.HasKeyword(boromir, Keyword.KNIGHT));
-		assertFalse(scn.HasKeyword(explorer, Keyword.KNIGHT));
-	}
-
-	@Test
-	public void CalenhadTransfersValiantKeywordToOtherMenButNotShadowMen() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var eowyn = scn.GetFreepsCard("eowyn");     // Valiant
-		var boromir = scn.GetFreepsCard("boromir"); // No keywords
-		var explorer = scn.GetShadowCard("explorer"); // Shadow Man
-		scn.MoveCompanionsToTable(eowyn, boromir);
-		scn.MoveCardsToSupportArea(calenhad);
-		scn.MoveMinionsToTable(explorer);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.HasKeyword(eowyn, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(eomer, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(eomer, Keyword.HUNTER));
 		assertFalse(scn.HasKeyword(boromir, Keyword.VALIANT));
-		assertFalse(scn.HasKeyword(explorer, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(boromir, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(boromir, Keyword.HUNTER));
+		assertFalse(scn.HasKeyword(heir, Keyword.VALIANT));
 
-		scn.FreepsUseCardAction(calenhad);
-		scn.FreepsChooseCard(eowyn);
+		scn.FreepsUseCardAction(calenhad1);
+		scn.FreepsChooseCard(eomer);
 
+		assertEquals(1, scn.GetWoundsOn(eomer));
 		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(boromir, Keyword.HUNTER));
+		assertTrue(scn.HasKeyword(heir, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(heir, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(heir, Keyword.HUNTER));
 		assertFalse(scn.HasKeyword(explorer, Keyword.VALIANT));
-	}
+		assertFalse(scn.HasKeyword(explorer, Keyword.KNIGHT));
 
-	@Test
-	public void CalenhadDoesNotTransferLoadedKeywords() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		scn.ShadowPass();
 
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var heir2elendil = scn.GetFreepsCard("heir2elendil"); // Defender +1 (loaded)
-		var boromir = scn.GetFreepsCard("boromir");         // No keywords
-		var explorer = scn.GetShadowCard("explorer");       // Shadow Man
-		scn.MoveCompanionsToTable(heir2elendil, boromir);
-		scn.MoveCardsToSupportArea(calenhad);
-		scn.MoveMinionsToTable(explorer);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		// Verify Aragorn has Defender
-		assertTrue(scn.HasKeyword(heir2elendil, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(heir, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(eomer, Keyword.DEFENDER));
 
-		scn.FreepsUseCardAction(calenhad);
-		scn.FreepsChooseCard(heir2elendil);
+		// Defender +1 is all this Aragorn has: he may be exerted all the same, and nobody gains anything.
+		scn.FreepsUseCardAction(calenhad2);
+		scn.FreepsChooseCard(heir);
 
-		// Boromir should NOT have Defender (loaded)
+		assertTrue(scn.IsHindered(calenhad2));
+		assertEquals(1, scn.GetWoundsOn(heir));
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		// Shadow Man shouldn't either
+		assertFalse(scn.HasKeyword(eomer, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(explorer, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void CalenhadKeywordTransferLastsUntilRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheKeywordsLastThroughTheSkirmishesAndAreGoneWhenTheRegroupPhaseBegins() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var calenhad = scn.GetFreepsCard("calenhad");
-		var ranger = scn.GetFreepsCard("ranger"); // Ranger
-		var boromir = scn.GetFreepsCard("boromir");         // No keywords
-		var explorer = scn.GetShadowCard("explorer");
-		scn.MoveCompanionsToTable(ranger, boromir);
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var rider = scn.GetFreepsCard("rider");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.MoveCompanionsToTable(aragorn, boromir, rider);
 		scn.MoveCardsToSupportArea(calenhad);
-		scn.MoveMinionsToTable(explorer);
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(runner1, runner2);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		scn.FreepsUseCardAction(calenhad);
-		scn.FreepsChooseCard(ranger);
+		scn.FreepsChooseCard(aragorn);
 
-		// Boromir has Ranger during Maneuver
 		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
 
-		// Still has it during Archery
-		scn.SkipToPhase(Phase.ARCHERY);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner1}, new PhysicalCardImpl[]{boromir, runner2});
+		// Aragorn's 8 beats a Runner's 5 and that skirmish is over.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveSkirmish(boromir);
+
+		// The last skirmish of the turn, after one has been resolved
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
 
-		// Still has it during Assignment
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		scn.FreepsPass();
+		scn.ShadowPass();
 
-		// Skip to Regroup - keyword should wear off
-		scn.BothPass();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowDeclineAssignments();
-
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertFalse(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(rider, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
+	}
+
+	@Test
+	public void AManWhoComesIntoPlayAfterTheAbilityWasUsedGainsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var redarrow = scn.GetFreepsCard("redarrow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var rider = scn.GetFreepsCard("rider");
+		var rider2 = scn.GetFreepsCard("rider2");
+		var explorer = scn.GetShadowCard("explorer");
+		scn.MoveCompanionsToTable(aragorn, boromir, rider);
+		scn.MoveCardsToSupportArea(calenhad, redarrow);
+		scn.MoveCardsToHand(rider2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsUseCardAction(calenhad);
+		scn.FreepsChooseCard(aragorn);
+
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		// The Red Arrow: exert a [gondor] Man to play a [rohan] Man, here the second Rider of Rohan from hand.
+		scn.FreepsUseCardAction(redarrow);
+		scn.FreepsChooseCard(boromir);
+		scn.FreepsChooseNo();
+
+		assertInZone(Zone.FREE_CHARACTERS, rider2);
+		assertTrue(scn.IsRace(rider2, Race.MAN));
+		// The Rider who was there when the ability was used is a ranger; the one played since is not.
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(rider2, Keyword.RANGER));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0096: do the other Men keep the keywords until the regroup phase when the Man who was exerted leaves play first? The game takes them away")
+	public void TheKeywordsStayWhenTheManExertedIsKilledBeforeTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var rider = scn.GetFreepsCard("rider");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner1");
+		scn.MoveCompanionsToTable(aragorn, boromir, rider);
+		scn.MoveCardsToSupportArea(calenhad);
+		// Vitality 4: the exertion will be his third wound, and the next wound kills him.
+		scn.AddWoundsToChar(aragorn, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsUseCardAction(calenhad);
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, troop}, new PhysicalCardImpl[]{boromir, runner});
+		// Aragorn's 8 loses to the Troop's 13.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		assertInZone(Zone.DEAD, aragorn);
+
+		scn.FreepsResolveSkirmish(boromir);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+	}
+
+	@Test
+	public void ExertingAHobbitWhoIsAlsoAManGivesHisUnloadedKeywordAndNotHisRace() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var merry = scn.GetFreepsCard("merry");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var rider = scn.GetFreepsCard("rider");
+		var boromir = scn.GetFreepsCard("boromir");
+		var haldir = scn.GetFreepsCard("haldir");
+		var explorer = scn.GetShadowCard("explorer");
+		scn.MoveCompanionsToTable(merry, eowyn, rider, boromir, haldir);
+		scn.MoveCardsToSupportArea(calenhad);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Beside Eowyn, Merry is a Man as well as a Hobbit.
+		assertTrue(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertTrue(scn.HasKeyword(merry, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(merry, Keyword.ENDURING));
+		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(boromir, Keyword.VALIANT));
+
+		scn.FreepsUseCardAction(calenhad);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry, eowyn, rider, boromir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(haldir));
+
+		scn.FreepsChooseCard(merry);
+
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertTrue(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(haldir, Keyword.VALIANT));
+		// Enduring is a loaded keyword.
+		assertFalse(scn.HasKeyword(rider, Keyword.ENDURING));
+		assertFalse(scn.HasKeyword(boromir, Keyword.ENDURING));
+		// The other Men are no Hobbits for it.
+		assertFalse(scn.IsRace(rider, Race.HOBBIT));
+		assertFalse(scn.IsRace(boromir, Race.HOBBIT));
+		assertFalse(scn.IsRace(eowyn, Race.HOBBIT));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

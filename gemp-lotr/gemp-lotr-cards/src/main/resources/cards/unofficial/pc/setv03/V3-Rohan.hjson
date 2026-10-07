@@ -589,16 +589,24 @@
 						memorize: exertedMan
 					}
 				]
-				effect: {
-					type: AddModifier
-					until: start(Regroup)
-					modifier: {
-						type: AddKeywordFromCards
-						filter: your, Man
-						from: memory(exertedMan)
-						unloaded: true
+				effect: [
+					// The Men in play when the ability is used, and no Man who comes later (Q-0011, F-0144).
+					{
+						type: MemorizeActive
+						filter: your, Man, not(memory(exertedMan))
+						memory: otherMen
 					}
-				}
+					{
+						type: AddModifier
+						until: start(Regroup)
+						modifier: {
+							type: AddKeywordFromCards
+							filter: memory(otherMen)
+							from: memory(exertedMan)
+							unloaded: true
+						}
+					}
+				]
 			}
 		]
 		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
