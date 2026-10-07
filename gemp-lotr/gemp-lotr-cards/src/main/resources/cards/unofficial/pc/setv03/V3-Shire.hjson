@@ -494,7 +494,7 @@
 					}
 					{
 						type: Optional
-						text: Would you like to add (3) to reconcile your hand and heal 2 {shire} companions?
+						text: Would you like to add (3) to reconcile your hand and heal up to 2 {shire} companions?
 						requires: {
 							type: CantSpot
 							filter: companion
@@ -564,6 +564,7 @@
 					showAll: true
 					shuffle: true
 					forced: false
+					count: 0-1
 				}
 			}
 			{
@@ -571,6 +572,10 @@
 				method: discarded
 				optional: true
 				source: pipe
+				requires: {
+					type: HasCardInDiscard
+					filter: side(Free Peoples), not(event), not(title(Hornblower Barrel))
+				}
 				cost: {
 					type: Spot
 					filter: another, title(Hornblower Barrel)
