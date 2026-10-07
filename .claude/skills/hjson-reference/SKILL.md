@@ -503,6 +503,14 @@ What a card's effect is forbidden ("burdens cannot be added", "threats cannot be
 
 `PlayedCardThisTurn` (`filter`, `min` default 1, `max` default 100, `atCurrentSite` default false) is `PlayedCardThisPhase` over the whole turn. With `atCurrentSite: true` it counts only the cards played while the fellowship was at the site it is at now. "The first X played at <this site> each turn is -N" is a `modifyCost` requiring `{type: not, requires: {type: playedCardThisTurn, filter: X, atCurrentSite: true}}` (Deep of Helm 4_347); "the first X played each Shadow phase" keeps `playedCardThisPhase` and wants a phase requirement beside it. Both count a permanent from the moment its play is announced and drop it again if the card has left play when the play is complete.
 
+`DuplicateGameText` takes `snapshot: true`: it remembers the `from` cards once, when the modifier is made, and gives their game text until the modifier ends, though they have since left play or their stack. Use it, with the same word on the `AddKeywordFromCards` beside it, for a text that gives another card's game text for a time: "until the end of the turn, that Southron gains the game text of that stacked Man" keeps text and keywords "even if the Man is later lost" (Ketura on F-0160, War Howdah 103_62). `filter` is still only `self` or a `memory(...)`.
+
+`cantAddBurdens` (modifier): burdens cannot be added by the cards `filter` names (default `any`); `requires` as usual. As an effect the burden is simply not added; as a cost it cannot be paid, so the action is not offered. (Until 2026-10-07 the word built `cantRemoveBurdens`: F-0159.)
+
+`Memorize` / `MemorizeActive` take `hindered: true` to take hindered cards into the memory (default false), as on `ChooseActiveCards`. `ReturnToHand` takes `override: hindered`, as `Discard` does. So for a text that names its cards by side alone (Q-0098): `override: hindered` on Discard and ReturnToHand, `hindered: true` on ChooseActiveCards, Memorize, CanSpot and ForEachYouCanSpot. "All ..." and "each ..." by side alone reach hindered cards as "a ..." does (Ketura, 2026-10-07: "Good call on all/each").
+
+"The twilight cost of the first X played each Shadow phase is -2" is a `modifyCost` that requires `{ type: phase, phase: shadow }` beside `not playedCardThisPhase`; without the phase a card played in a skirmish by another card's text takes the discount (Great Chasm 2_118, Breeding Pit of Isengard 15_188).
+
 ### Ongoing (Spawn Modifiers)
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|

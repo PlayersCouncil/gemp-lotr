@@ -797,6 +797,8 @@ public class Card_V3_103_Tests
 		scn.MoveCardsToHand(shadowsCard);
 
 		scn.StartGame();
+		// Gandalf is wanted in the draw deck further down: he must not be the card drawn here.
+		scn.MoveCardsToBottomOfDeck(gandalf);
 
 		int freepsDeck = scn.GetFreepsDeckCount();
 
