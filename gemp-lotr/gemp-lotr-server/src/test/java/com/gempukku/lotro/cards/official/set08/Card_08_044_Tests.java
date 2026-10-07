@@ -77,7 +77,7 @@ public class Card_08_044_Tests
 	}
 
 	@Test
-	public void RegroupAbilityAtItsLimitStillExertsAndPlaysNoFortification() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RegroupAbilityIsNotOfferedAgainInThePhaseItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -99,13 +99,11 @@ public class Card_08_044_Tests
 		assertEquals(Zone.SUPPORT, first.getZone());
 		scn.ShadowPass();
 
-		// Limit 1: Aragorn can still exert and a fortification is still in the discard pile, so the ability
-		// is still offered, flagged as doing nothing (Ketura on Q-0041).
-		assertTrue(scn.FreepsActionAvailable(card));
-		assertEquals("limit", scn.FreepsActionNoEffect(card));
-
-		scn.FreepsUseCardAction(card);
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Limit 1, built as a limit on uses (Ketura, 2026-10-07): Aragorn can still exert and a fortification
+		// is still in the discard pile, and the ability is not offered again this phase.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(Zone.DISCARD, third.getZone());
 	}
 }

@@ -733,7 +733,9 @@
 					type: playCardFromDiscard
 					select: choose(culture(gondor),fortification)
 				}
-				effectLimitPerPhase: 1
+				// "(limit 1)" most likely counts the fortifications played, but is built as a limit on uses so that the
+				// ability is not offered at its limit (Ketura, 2026-10-07: "code Sixth Level as once just for UX sake").
+				limitPerPhase: 1
 			}
 		]
 		gametext: <b>Fortification</b>.<br><b>Regroup:</b> Exert a [gondor] Man to play a [gondor] fortification from your discard pile (limit 1).
