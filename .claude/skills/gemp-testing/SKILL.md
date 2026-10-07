@@ -397,6 +397,14 @@ skirmishes that are not about him.
 - **A board changed under a pending decision.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice.
 - **Definitions of the tests' own.** `gemp-lotr-server/src/test/resources/testCards.hjson` holds card definitions known to every table by set-0 ids (`0_8001` on), read by `framework/TestCardLibrary`. They are for mechanic tests that need a shape no real card has. A card's own tests use real cards. The file is a test resource: after editing it, `target/test-classes` needs it (a `mvn test-compile`, or copy it there).
 
+### A card that leaves play as it is played (F-0139, 2026-10-07)
+
+**A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession played on a bearer of Shadowfax: the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
+
+**A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
+
+**The loss of initiative comes with the play.** When a Free Peoples card played from hand takes the hand below four, `FreepsHasInitiative()` is still true while the card's entering step is being answered and false once its play is announced; a required "lose initiative" trigger and a required "each time you play" trigger for that play come up in one "Required responses" decision.
+
 ## Choosing helper cards
 
 A helper card with text of its own can change the game under a test. Read the definition of every card that goes

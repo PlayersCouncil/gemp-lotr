@@ -286,6 +286,14 @@ Decision types:
 
 ---
 
+### Playing a permanent: two batches (F-0139, 2026-10-07)
+
+Playing a permanent takes two batches of effect results. `PlayCardEffect` places the card, which is in play from that moment with its own standing texts in force, and publishes `EnteredPlayResult` (`EffectResult.Type.ENTERS_PLAY`). Nothing answers that result by name: `ConstantlyCheck` triggers, which answer every batch, and the rules that run on their own account (the death of a character with no vitality) are what act in it. When that batch has finished, the play action (`PlayPermanentAction` or `AttachPermanentAction`) carries out `PlayCardEffect.getPublishEffect()`: if the card is still in play it publishes `PlayCardResult` (`PLAY`), the only thing `Played` triggers and responses to a play answer; if the card has gone, nothing is published and the game log says "<card> left play as it came into play". When the `PLAY` batch and the action's extra effects have finished, the action calls `PlayCardEffect.completePlay()`: a play whose card is not in play then answers `wasCarriedOut()` with false, and its `PlayCardResult` is taken out of `getPhaseEffectResults()` and `getTurnEffectResults()` with `ActionsEnvironment.retractEffectResult`. Events (`PlayEventEffect`) and sites are played in one step, as before.
+
+A card played from hand counts toward its owner's hand for initiative until the publish step (`ActionsEnvironment.noteCardEnteringPlay`, `noteCardEnteredPlay`, `countCardsEnteringPlayFromHand`, read by `ModifiersLogic.hasInitiative`), so the `InitiativeChangeResult` lands in the same batch as the `PlayCardResult`.
+
+A rule class or trigger checker that answers effect results must test the result's type first: one that accepts any result also runs in the entering batch of every play.
+
 ## HTTP API Layer
 
 ### Handler Architecture

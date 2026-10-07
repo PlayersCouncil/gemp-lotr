@@ -471,6 +471,14 @@ Inside a `preventable`, a cost is the preventing player's to choose unless it sa
 
 An effect whose text picks "a card", "a Shadow card" or "a Free Peoples card" and nothing more specific may pick a HINDERED card: give it `override: hindered` (Q-0098). Anything more specific cannot reach a hindered card, and hinder choices leave hindered cards out (Q-0060).
 
+A play in a `cost` (`PlayCardFromHand`, `PlayCardFromDiscard`, `PlayCardFromDrawDeck`, `PlayCardFromStacked`, `PlayCardFromDeadPile`) is paid only if the card is still in play when its play is complete, that is after everything that answered the play has finished. A card discarded, killed, returned to hand or stacked before then, by a standing text, by its own "when you play" or by a response, leaves the cost unpaid: the action's effect is not carried out, and the twilight and the other costs already paid stay paid. The same holds for a play as an effect that an "if you do" depends on. The action is still offered where the removal could be foreseen (Ketura on F-0139). `extraEffects` on a play are carried out after it whether the card stayed or not.
+
+`Played` answers a play that has been announced, and a play is announced only for a card that is still in play after the standing texts (`ConstantlyCheck` triggers) have acted on it. A card discarded or killed as it came into play sets off no `Played` trigger, required or optional, its own or another card's, and no `ResponseEvent` or response ability with a `Played` trigger. A card's own "when you play this ..., or discard it" stays a `Played` trigger: it answers the announced play, and other cards' `Played` triggers for that play are still gathered though the card may be gone when they resolve.
+
+`ConstantlyCheck` triggers are gathered for the entering step of every play, before the play is announced. A standing "discard ..." or "is discarded if ..." is written as one, never as a `Played` trigger.
+
+`PlayedCardThisPhase` counts a permanent from the moment its play is announced, so a `Played` trigger that requires `PlayedCardThisPhase` with `min: 2, max: 2` sees the play it is answering (Ill Wind 103_67). The play is taken out of the count when it is complete if the card is no longer in play, and a card that was never announced is never counted. Events are always counted.
+
 ### Ongoing (Spawn Modifiers)
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
