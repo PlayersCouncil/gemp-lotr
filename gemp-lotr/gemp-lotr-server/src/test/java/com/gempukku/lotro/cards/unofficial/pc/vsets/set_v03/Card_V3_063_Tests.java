@@ -4,27 +4,32 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_063_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("watcher1", "103_63");
 					put("watcher2", "103_63");
-					put("oosas", "7_204");  // Out of Sight and Shot - Ringwraith condition
-					put("aragorn", "1_89");
-					put("sam", "1_311");
-
-					put("runner", "1_178");
+					put("warden", "103_92");    // Cirith Ungol Watcher, Hideous Warden: the [sauron] card of the same title; it draws as this one does, and its own response adds 2 threats
+					put("servants", "1_219");   // The Nine Servants of Sauron: a [ringwraith] condition, cost 1; its only text answers the play of a Nazgul
+					put("oosas", "7_204");      // Out of Sight and Shot: a [ringwraith] condition: "Each time a companion is played, the Free Peoples player must exert a companion."
+					put("khamul", "103_61");    // Ulaire Attea, Khamul of the East: a Nazgul who is [raider], not [ringwraith]
+					put("lemenya", "1_232");    // Ulaire Lemenya: a [ringwraith] Nazgul; his text needs a [ringwraith] condition on a companion
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase and a skirmish
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: vitality 4; Maneuver: exert Aragorn to make him defender +1
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, vitality 4; Fellowship: exert Sam to remove a burden
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: an ally; Fellowship: exert Elrond to draw a card
+					put("friends", "2_98");     // Dear Friends: Fellowship event, cost 0: exert a companion to place a Free Peoples card from the discard pile beneath the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,15 +45,15 @@ public class Card_V3_063_Tests
 		 * Name: Cirith Ungol Watcher, Spirit of Vigilance
 		 * Unique: 2
 		 * Side: Shadow
-		 * Culture: Wraith
+		 * Culture: Ringwraith
 		 * Twilight Cost: 2
 		 * Type: Artifact
-		 * Subtype: Support area
+		 * Subtype: Support Area
 		 * Game Text: To play, spot a [ringwraith] card.
-		 * 		Each time a companion exerts, draw a card (limit once per site).
-		 * 		Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher
-		 * 		to add (4) and hinder that companion.
-		*/
+		 * 	Each time a companion exerts, draw a card (limit once per site).
+		 * 	Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher
+		 * 	to add (6) and hinder that companion.
+		 */
 
 		var scn = GetScenario();
 
@@ -56,6 +61,7 @@ public class Card_V3_063_Tests
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
 		assertEquals("Spirit of Vigilance", card.getBlueprint().getSubtitle());
+		// Two dots: no more than two copies in play
 		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
@@ -64,204 +70,285 @@ public class Card_V3_063_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// ======== EXTRA COST TESTS ========
-
 	@Test
-	public void WatcherRequiresSpottingRingwraithToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CannotBePlayedUntilARingwraithCardIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var watcher1 = scn.GetShadowCard("watcher1");
-		scn.MoveCardsToHand(watcher1);
+		var watcher = scn.GetShadowCard("watcher1");
+		var servants = scn.GetShadowCard("servants");
+		var khamul = scn.GetShadowCard("khamul");
+		scn.MoveCardsToHand(watcher, servants);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(khamul);
+		scn.SetTwilight(8);
 		scn.FreepsPass();
 
-		// No Ringwraith card in play - cannot play Watcher
-		assertFalse(scn.ShadowPlayAvailable(watcher1));
+		// 8 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(11, scn.GetTwilight());
+		// A Nazgul is in play, but he is a [raider] card.
+		assertFalse(scn.ShadowPlayAvailable(watcher));
+
+		scn.ShadowPlayCard(servants);
+		// 11 - 1 for the condition
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(watcher));
+		assertEquals(0, scn.GetBurdens());
+
+		scn.ShadowPlayCard(watcher);
+
+		// 10 - 2 to play
+		assertEquals(8, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, watcher);
+		// The card as first released added a burden when played; this revision does not.
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void WatcherCanPlayWhenSpottingRingwraithAndAddsBurden() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ARingwraithMinionIsEnoughToPlayIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var watcher1 = scn.GetShadowCard("watcher1");
-		var oosas = scn.GetShadowCard("oosas");
-		scn.MoveCardsToHand(watcher1);
-		scn.MoveCardsToSupportArea(oosas);
+		var watcher = scn.GetShadowCard("watcher1");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(watcher);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(lemenya);
+		scn.SetTwilight(8);
 		scn.FreepsPass();
 
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.ShadowPlayAvailable(watcher1));
+		assertTrue(scn.ShadowPlayAvailable(watcher));
+		scn.ShadowPlayCard(watcher);
 
-		scn.ShadowPlayCard(watcher1);
-
-		//Errata removed the burden-adding
-		assertEquals(0, scn.GetBurdens());
-		assertInZone(Zone.SUPPORT, watcher1);
+		// 8 set + 1 for Frodo + 2 for the site - 2 to play
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, watcher);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-// ======== DRAW TRIGGER TESTS ========
-
 	@Test
-	public void WatcherDrawsCardWhenCompanionExertsFromFreepsCard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ACompanionExertingDrawsACardOnceAtEachSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var watcher1 = scn.GetShadowCard("watcher1");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var watcher = scn.GetShadowCard("watcher1");
 		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
-		scn.MoveCardsToSupportArea(watcher1);
+		scn.MoveCardsToSupportArea(watcher);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int shadowHandBefore = scn.GetShadowHandCount();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		// Aragorn exerts (FP source)
 		scn.FreepsUseCardAction(aragorn);
 
-		// Watcher's required trigger should fire
-		assertEquals(shadowHandBefore + 1, scn.GetShadowHandCount());
-	}
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-	@Test
-	public void WatcherDrawsCardWhenCompanionExertsFromShadowCard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var watcher1 = scn.GetShadowCard("watcher1");
-		var oosas = scn.GetShadowCard("oosas");
-		var sam = scn.GetFreepsCard("sam");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveCardsToSupportArea(watcher1, oosas);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(sam);
-
-		scn.StartGame();
-
-		int shadowHandBefore = scn.GetShadowHandCount();
-
-		// Play Sam - Out of Sight and Shot triggers, forcing FP to exert a companion
-		scn.FreepsPlayCard(sam);
-		scn.FreepsChooseCard(aragorn);
-
-		// Draw trigger fires on ANY companion exertion, regardless of source
-		assertEquals(shadowHandBefore + 1, scn.GetShadowHandCount());
-	}
-
-
-	@Test
-	public void WatcherDrawTriggerLimitedOncePerSite() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var watcher1 = scn.GetShadowCard("watcher1");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToSupportArea(watcher1);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(runner);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		int shadowHandBefore = scn.GetShadowHandCount();
-
-		// First exertion - should draw
-		scn.FreepsUseCardAction(aragorn);
-		assertEquals(shadowHandBefore + 1, scn.GetShadowHandCount());
-
-		// Second exertion same site - should NOT draw (limit reached)
-		// Aragorn has 4 vitality, so can exert again without exhausting
-		int shadowHandAfterFirst = scn.GetShadowHandCount();
+		// A second exertion at the same site draws nothing.
 		scn.ShadowPass();
 		scn.FreepsUseCardAction(aragorn);
-		assertEquals(shadowHandAfterFirst, scn.GetShadowHandCount());
-	}
 
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
 
-// ======== RESPONSE TESTS ========
-
-	@Test
-	public void WatcherResponseNotAvailableWithOnlyOneCopy() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var watcher1 = scn.GetShadowCard("watcher1");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCardsToSupportArea(watcher1);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(runner);
-
-		scn.StartGame();
+		// The fellowship moves on (the Shadow player reconciles on the way, so the counts are read afresh).
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		// Aragorn exerts (FP source)
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		hand = scn.GetShadowHandCount();
+		deck = scn.GetShadowDeckCount();
+
 		scn.FreepsUseCardAction(aragorn);
 
-		// Response requires discarding ANOTHER Watcher - with only one, not available
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Ignore("F-0127: the draw taken in the fellowship phase uses up the draw of the site the fellowship then moves to")
+	@Test
+	public void AnExertionBeforeTheMoveDoesNotUseUpTheDrawOfTheSiteMovedTo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var watcher = scn.GetShadowCard("watcher1");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+
+		scn.MoveCardsToSupportArea(watcher);
+		scn.MoveCompanionsToTable(aragorn, sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		// Site 1, the fellowship phase
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		int hand = scn.GetShadowHandCount();
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+
+		// Site 2 is another site, with a draw of its own.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.FreepsUseCardAction(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Ignore("Q-0084: is the draw taken at a site renewed by the next turn, while the fellowship is still at that site?")
+	@Test
+	public void TheDrawTakenAtASiteIsNotRenewedByTheNextTurnAtThatSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var watcher = scn.GetShadowCard("watcher1");
+		var runner = scn.GetShadowCard("runner");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+
+		scn.MoveCardsToSupportArea(watcher);
+		scn.MoveCompanionsToTable(aragorn, sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Turn 1, site 2: the draw for this site.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		int hand = scn.GetShadowHandCount();
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+
+		// The turn ends at site 2; the other player's turn passes; the fellowship phase of the next turn finds
+		// the fellowship at site 2 still.
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SUPPORT, watcher);
+		// The reconciles on the way may have emptied the draw deck.
+		scn.MoveCardsToTopOfDeck(lemenya, khamul);
+
+		hand = scn.GetShadowHandCount();
+		scn.FreepsUseCardAction(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(hand, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void WatcherResponseAvailableWithTwoCopiesOnFPSourcedExertion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EachCopyDrawsItsOwnCardOnceAtASite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var watcher1 = scn.GetShadowCard("watcher1");
 		var watcher2 = scn.GetShadowCard("watcher2");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
 		scn.MoveCardsToSupportArea(watcher1, watcher2);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilightBefore = scn.GetTwilight();
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
 
-		// Aragorn exerts (FP source)
 		scn.FreepsUseCardAction(aragorn);
 
-		// Both Watchers' draw triggers fire (independent limits) - 2 cards drawn
+		// One card for each copy
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertEquals(deck - 2, scn.GetShadowDeckCount());
+		// Each offers its response as well, with the other to discard.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher2));
+		scn.ShadowDeclineOptionalTrigger();
+		scn.ShadowPass();
 
-		// Response should be available since FP card caused exertion
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
+		// Both have had their draw for this site.
+		scn.FreepsUseCardAction(aragorn);
 
-		// One Watcher discarded
-		assertEquals(1, scn.GetShadowDiscardCount());
-		// +6 twilight added
-		assertEquals(twilightBefore + 6, scn.GetTwilight());
-		// Aragorn hindered
-		assertTrue(scn.IsHindered(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertEquals(deck - 2, scn.GetShadowDeckCount());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
 	}
 
 	@Test
-	public void WatcherResponseNotAvailableOnShadowSourcedExertion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnAllyExertingIsNeitherDrawnForNorAnsweredAndAResponseDeclinedChangesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var watcher1 = scn.GetShadowCard("watcher1");
 		var watcher2 = scn.GetShadowCard("watcher2");
-		var oosas = scn.GetShadowCard("oosas");
+		var elrond = scn.GetFreepsCard("elrond");
 		var sam = scn.GetFreepsCard("sam");
+
+		scn.MoveCardsToSupportArea(watcher1, watcher2);
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+		assertEquals(0, scn.GetWoundsOn(elrond));
+
+		// An ally exerted by a Free Peoples card: his own ability.
+		scn.FreepsUseCardAction(elrond);
+
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertEquals(hand, scn.GetShadowHandCount());
+		assertEquals(deck, scn.GetShadowDeckCount());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// A companion doing the same on the same board is seen by both copies.
+		scn.FreepsUseCardAction(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher2));
+		int twilight = scn.GetTwilight();
+
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertInZone(Zone.SUPPORT, watcher1);
+		assertInZone(Zone.SUPPORT, watcher2);
+		assertEquals(twilight, scn.GetTwilight());
+		assertFalse(scn.IsHindered(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACompanionExertedByAShadowCardIsDrawnForAndNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var watcher1 = scn.GetShadowCard("watcher1");
+		var watcher2 = scn.GetShadowCard("watcher2");
+		var oosas = scn.GetShadowCard("oosas");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
 
 		scn.MoveCardsToSupportArea(watcher1, watcher2, oosas);
 		scn.MoveCompanionsToTable(aragorn);
@@ -269,47 +356,150 @@ public class Card_V3_063_Tests
 
 		scn.StartGame();
 
-		// Play Sam - Out of Sight and Shot triggers (Shadow source)
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+
+		// Playing a companion sets off the Shadow condition, and it is the Free Peoples player who chooses and
+		// exerts.
 		scn.FreepsPlayCard(sam);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, sam));
 		scn.FreepsChooseCard(aragorn);
 
-		// Response should NOT be available - exertion was Shadow-sourced
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertEquals(deck - 2, scn.GetShadowDeckCount());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		// Aragorn should not be hindered
 		assertFalse(scn.IsHindered(aragorn));
+		assertInZone(Zone.SUPPORT, watcher1);
+		assertInZone(Zone.SUPPORT, watcher2);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TwoWatchersEachDrawOncePerSite() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ACompanionExertedByASiteIsDrawnForAndNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var watcher1 = scn.GetShadowCard("watcher1");
 		var watcher2 = scn.GetShadowCard("watcher2");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
 		scn.MoveCardsToSupportArea(watcher1, watcher2);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Ettenmoors, site 2: "Skirmish: Exert your companion or minion to make that character strength +2."
+		// The Free Peoples player uses it, but a site is no Free Peoples card.
+		var ettenmoors = scn.GetCurrentSite();
+		int hand = scn.GetShadowHandCount();
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.FreepsActionAvailable(ettenmoors));
+
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(10, scn.GetStrength(aragorn));
+		assertEquals(hand + 2, scn.GetShadowHandCount());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertFalse(scn.IsHindered(aragorn));
+		assertInZone(Zone.SUPPORT, watcher1);
+		assertInZone(Zone.SUPPORT, watcher2);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ResponseDiscardsTheOtherWatcherAddsSixAndHindersTheCompanionThatExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var watcher1 = scn.GetShadowCard("watcher1");
+		var watcher2 = scn.GetShadowCard("watcher2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var friends = scn.GetFreepsCard("friends");
+
+		scn.MoveCardsToSupportArea(watcher1, watcher2);
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveCardsToHand(friends);
+
+		scn.StartGame();
+
+		// A Free Peoples event whose cost exerts a companion of the player's choice.
+		scn.FreepsPlayCard(friends);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, sam));
+		scn.FreepsChooseCard(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher2));
+		int twilight = scn.GetTwilight();
+		assertFalse(scn.IsHindered(sam));
+
+		scn.ShadowChooseOptionalTrigger(watcher2);
+
+		// The copy that answers stays; the other is the one discarded.
+		assertInZone(Zone.SUPPORT, watcher2);
+		assertInDiscard(watcher1);
+		assertEquals(twilight + 6, scn.GetTwilight());
+		// The companion that exerted, and no other.
+		assertTrue(scn.IsHindered(sam));
+		assertFalse(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ResponseNeedsAnotherWatcherToDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var watcher1 = scn.GetShadowCard("watcher1");
+		var warden = scn.GetShadowCard("warden");
+		var servants = scn.GetShadowCard("servants");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		// With the Watcher, a [ringwraith] card in the support area that is no Watcher.
+		scn.MoveCardsToSupportArea(watcher1, servants);
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int shadowHandBefore = scn.GetShadowHandCount();
-
-		// Aragorn exerts (FP source)
+		int hand = scn.GetShadowHandCount();
 		scn.FreepsUseCardAction(aragorn);
 
-		// Each Watcher has independent "once per site" limit
-		// So 2 Watchers = 2 draws from one exertion
-		assertEquals(shadowHandBefore + 2, scn.GetShadowHandCount());
+		// The Watcher saw the exertion, and has nothing to pay with.
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-		// Second exertion - neither Watcher should draw (both limits reached)
-		int shadowHandAfterFirst = scn.GetShadowHandCount();
-		scn.ShadowPass(); //Response action
-		scn.ShadowPass(); //Maneuver action
+		// Another Cirith Ungol Watcher arrives: the [sauron] card of that title, not a copy of this one.
+		scn.MoveCardsToSupportArea(warden);
+		scn.ShadowPass();
+		int twilight = scn.GetTwilight();
+		assertFalse(scn.IsHindered(aragorn));
+
+		// A companion exerted by a Free Peoples card: the cost of his own ability.
 		scn.FreepsUseCardAction(aragorn);
-		assertEquals(shadowHandAfterFirst, scn.GetShadowHandCount());
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
+
+		scn.ShadowChooseOptionalTrigger(watcher1);
+
+		assertInDiscard(warden);
+		assertInZone(Zone.SUPPORT, watcher1);
+		assertInZone(Zone.SUPPORT, servants);
+		assertEquals(twilight + 6, scn.GetTwilight());
+		assertTrue(scn.IsHindered(aragorn));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

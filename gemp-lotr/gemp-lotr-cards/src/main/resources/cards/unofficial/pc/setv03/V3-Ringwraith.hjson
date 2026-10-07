@@ -241,7 +241,7 @@
 				]
 				effect: {
 					type: Hinder
-					select: all(not(or(memory(chosenMinion),memory(chosenComp) )))
+					select: all(character,not(or(memory(chosenMinion),memory(chosenComp) )))
 				}
 			}
 		]
