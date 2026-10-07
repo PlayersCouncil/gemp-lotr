@@ -46,7 +46,7 @@
 				specialAbility: false
 				requires: {
 					type: canSpotThreats
-					amount: 3
+					amount: 5
 				}
 				effect: {
 					type: playCardFromDiscard
