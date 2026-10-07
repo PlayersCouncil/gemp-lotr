@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -248,7 +247,6 @@ public class Card_V3_097_Tests
 	}
 
 	@Test
-	@Ignore("F-0152: after the player says yes to playing the twilight condition chosen, the game asks again which Shadow condition to play, twilight or not, and leaves the one chosen first in the discard pile")
 	public void PlayingTheTwilightConditionChosenPlaysThatCardAndAsksForNoOther() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

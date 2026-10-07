@@ -1169,7 +1169,7 @@
 								text: Would you like to play {chosenCondition}?
 								effect: {
 									type: PlayCardFromDiscard
-									select: choose(side(Shadow), condition)
+									select: choose(memory(chosenCondition))
 									memorize: chosenCondition
 								}
 							}
