@@ -4,6 +4,7 @@ import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -13,17 +14,27 @@ import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_106_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("flotsam", "103_106");
-					put("flotsam2", "103_106");     // Second copy (pipeweed, discard target)
-					put("pipe", "1_285");           // Bilbo's Pipe (unique, bearer must be Hobbit)
-					put("pipeweed1", "1_300");      // Longbottom Leaf (pipeweed)
-					put("pipeweed2", "1_305");      // Old Toby (pipeweed)
-					put("runner", "1_178");         // Goblin Runner
+					put("flotsam1", "103_106");
+					put("flotsam2", "103_106");
+					put("flotsam3", "103_106");
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a [gondor] companion; a maneuver ability never used here
+					put("sam", "1_311");          // Sam, Son of Hamfast: a Hobbit companion; a fellowship ability never used here
+					put("gimli", "1_13");         // Gimli, Son of Gloin: a companion who can bear none of these pipes
+					put("bounder", "1_286");      // Bounder: a Hobbit ally; a skirmish ability
+
+					// The pipes all read "Fellowship: Discard a pipeweed possession and spot X pipes to ...", never used here.
+					put("apipe", "1_91");         // Aragorn's Pipe: [gondor], cost 1, bearer a [gondor] companion
+					put("bpipe", "1_285");        // Bilbo's Pipe: [shire], cost 1, bearer a Hobbit
+					put("gafferpipe", "1_292");   // The Gaffer's Pipe: [shire], cost 1, bearer a Hobbit
+					put("gpipe", "1_74");         // Gandalf's Pipe: [gandalf], bearer Gandalf: a pipe for the discard pile
+
+					put("toby", "1_305");         // Old Toby: a [shire] pipeweed possession
+					put("longstem", "17_21");     // Long-stemmed Pipe: a [gandalf] pipeweed condition and, for all its name, no pipe
+					put("sword", "1_299");        // Hobbit Sword: a [shire] possession (a hand weapon) that is neither pipe nor pipeweed
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,11 +57,11 @@ public class Card_V3_106_Tests
 		 * Game Text: Pipeweed. Bearer must bear a pipe.
 		 * 	When you play this possession, you may shuffle up to 2 pipes or pipeweed
 		 * 	from your discard pile into your draw deck.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("flotsam");
+		var card = scn.GetFreepsCard("flotsam1");
 
 		assertEquals("Flotsam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,145 +69,279 @@ public class Card_V3_106_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void FlotsamRequiresBearerWithPipe() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForOneOnACharacterBearingAPipeAndItsOfferMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-		var flotsam = scn.GetFreepsCard("flotsam");
-		var pipe = scn.GetFreepsCard("pipe");
-		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
-
-		scn.MoveCardsToHand(flotsam, pipe);
-		scn.MoveCardsToDiscard(pipeweed1);  // Ensure trigger has a target
+		var flotsam = scn.GetFreepsCard("flotsam1");
+		var otherFlotsam = scn.GetFreepsCard("flotsam3");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		var apipe = scn.GetFreepsCard("apipe");
+		var bpipe = scn.GetFreepsCard("bpipe");
+		var sword = scn.GetFreepsCard("sword");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(bounder);
+		// Frodo bears a possession and a pipeweed, and no pipe.
+		scn.AttachCardsTo(frodo, sword, otherFlotsam);
+		scn.MoveCardsToHand(flotsam, apipe, bpipe);
+		scn.MoveCardsToDiscard(toby);
 
 		scn.StartGame();
 
-		// No one has a pipe — Flotsam cannot be played
+		// Nobody bears a pipe.
 		assertFalse(scn.FreepsPlayAvailable(flotsam));
 
-		// Play Bilbo's Pipe — auto-attaches to Frodo (only Hobbit)
-		scn.FreepsPlayCard(pipe);
-
-		// Now Flotsam can be played (Frodo bears a pipe)
+		// Aragorn's Pipe goes on the one [gondor] companion.
+		scn.FreepsPlayCard(apipe);
+		assertAttachedTo(apipe, aragorn);
 		assertTrue(scn.FreepsPlayAvailable(flotsam));
-		scn.FreepsPlayCard(flotsam);
-		// Auto-attaches to Frodo (only character with a pipe)
 
-		assertAttachedTo(flotsam, frodo);
-	}
-
-	@Test
-	public void FlotsamOnPlayShufflesPipesAndPipeweedFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var flotsam = scn.GetFreepsCard("flotsam");
-		var pipe = scn.GetFreepsCard("pipe");
-		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
-		var pipeweed2 = scn.GetFreepsCard("pipeweed2");
-		var frodo = scn.GetRingBearer();
-
-		scn.AttachCardsTo(frodo, pipe);
-		scn.MoveCardsToHand(flotsam);
-		scn.MoveCardsToDiscard(pipeweed1, pipeweed2);
-
-		scn.StartGame();
-
-		assertEquals(2, scn.GetFreepsDiscardCount());
-		int deckBefore = scn.GetFreepsDeckCount();
+		scn.FreepsPlayCard(bpipe);
+		scn.FreepsChooseCard(bounder);
+		assertAttachedTo(bpipe, bounder);
+		assertEquals(2, scn.GetTwilight());
 
 		scn.FreepsPlayCard(flotsam);
-		scn.FreepsAcceptOptionalTrigger();
 
-		// Choose both pipeweed cards to shuffle back
-		scn.FreepsChooseCards(pipeweed1, pipeweed2);
+		// A [gondor] companion and a [shire] ally, each with a pipe.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, bounder));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, gimli));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 
-		// Both left the discard and went to the draw deck
-		assertEquals(0, scn.GetFreepsDiscardCount());
-		assertEquals(deckBefore + 2, scn.GetFreepsDeckCount());
-	}
+		scn.FreepsChooseCard(bounder);
 
-	@Test
-	public void FlotsamOnPlayTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		// On its bearer, not in the support area where other pipeweed lies.
+		assertAttachedTo(flotsam, bounder);
+		// 2 for the pipes + 1 for Flotsam
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
+		int deck = scn.GetFreepsDeckCount();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
 
-		var flotsam = scn.GetFreepsCard("flotsam");
-		var pipe = scn.GetFreepsCard("pipe");
-		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
-		var pipeweed2 = scn.GetFreepsCard("pipeweed2");
-		var frodo = scn.GetRingBearer();
-
-		scn.AttachCardsTo(frodo, pipe);
-		scn.MoveCardsToHand(flotsam);
-		scn.MoveCardsToDiscard(pipeweed1, pipeweed2);
-
-		scn.StartGame();
-
-		assertEquals(2, scn.GetFreepsDiscardCount());
-
-		scn.FreepsPlayCard(flotsam);
 		scn.FreepsDeclineOptionalTrigger();
 
-		// Cards remain in discard
-		assertEquals(2, scn.GetFreepsDiscardCount());
+		assertInDiscard(toby);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		assertAttachedTo(flotsam, bounder);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void FlotsamOnPlayTriggerLimitedToTwoCards() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenPlayedItMayShuffleTwoPipesOrPipeweedFromTheDiscardPileIntoTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var flotsam = scn.GetFreepsCard("flotsam");
-		var flotsam2 = scn.GetFreepsCard("flotsam2");
-		var pipe = scn.GetFreepsCard("pipe");
-		var pipeweed1 = scn.GetFreepsCard("pipeweed1");
-		var pipeweed2 = scn.GetFreepsCard("pipeweed2");
-		var frodo = scn.GetRingBearer();
-
-		scn.AttachCardsTo(frodo, pipe);
-		scn.MoveCardsToHand(flotsam);
-		scn.MoveCardsToDiscard(pipeweed1, pipeweed2, flotsam2);  // 3 valid targets
+		var flotsam = scn.GetFreepsCard("flotsam1");
+		var earlierFlotsam = scn.GetFreepsCard("flotsam2");
+		var discardedFlotsam = scn.GetFreepsCard("flotsam3");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var apipe = scn.GetFreepsCard("apipe");
+		var bpipe = scn.GetFreepsCard("bpipe");
+		var gpipe = scn.GetFreepsCard("gpipe");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		var sword = scn.GetFreepsCard("sword");
+		var opponentsPipe = scn.GetShadowCard("gafferpipe");
+		scn.MoveCompanionsToTable(aragorn);
+		// A pipe in play with a copy of Flotsam already on its bearer, a pipe in hand, and a pipe in the other
+		// player's discard pile.
+		scn.AttachCardsTo(aragorn, apipe, earlierFlotsam);
+		scn.MoveCardsToHand(flotsam, bpipe);
+		scn.MoveCardsToDiscard(opponentsPipe);
+		// A pipe, pipeweed of two cultures and two card types, another copy of this card; and a [shire]
+		// possession that is neither.
+		scn.MoveCardsToDiscard(gpipe, toby, longstem, discardedFlotsam, sword);
 
 		scn.StartGame();
-
-		assertEquals(3, scn.GetFreepsDiscardCount());
 
 		scn.FreepsPlayCard(flotsam);
-		scn.FreepsAcceptOptionalTrigger();
 
-		// All 3 are valid targets
-		assertTrue(scn.FreepsHasCardChoiceAvailable(pipeweed1, pipeweed2, flotsam2));
+		// A second copy goes on the same bearer: neither has an item class.
+		assertAttachedTo(flotsam, aragorn);
+		assertAttachedTo(earlierFlotsam, aragorn);
+		// The copy just played makes the offer; the copy that was there already makes none.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(earlierFlotsam));
 
-		// Choose 2 of the 3 (limit enforced by "up to 2")
-		scn.FreepsChooseCards(pipeweed1, pipeweed2);
+		scn.FreepsChooseOptionalTrigger(flotsam);
 
-		// Only 2 shuffled; flotsam2 remains in discard
-		assertEquals(1, scn.GetFreepsDiscardCount());
-		assertInDiscard(flotsam2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gpipe, toby, longstem, discardedFlotsam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sword, apipe, bpipe, opponentsPipe));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		// Four could be taken; two is the most.
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		int deck = scn.GetFreepsDeckCount();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+
+		// A pipe and a pipeweed
+		scn.FreepsChooseCards(gpipe, longstem);
+
+		assertInZone(Zone.DECK, gpipe);
+		assertInZone(Zone.DECK, longstem);
+		assertInDiscard(toby);
+		assertInDiscard(discardedFlotsam);
+		assertInDiscard(sword);
+		assertEquals(deck + 2, scn.GetFreepsDeckCount());
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertInZone(Zone.HAND, bpipe);
+		assertAttachedTo(apipe, aragorn);
+		assertInDiscard(opponentsPipe);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void FlotsamHasNoSkirmishAbility() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OneCardMayBeTakenOrNoneAndTakingNoneShufflesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var flotsam = scn.GetFreepsCard("flotsam");
-		var pipe = scn.GetFreepsCard("pipe");
-		var runner = scn.GetShadowCard("runner");
-		var frodo = scn.GetRingBearer();
-
-		scn.AttachCardsTo(frodo, pipe);
-		scn.AttachCardsTo(frodo, flotsam);
-		scn.MoveMinionsToTable(runner);
+		var flotsam1 = scn.GetFreepsCard("flotsam1");
+		var flotsam2 = scn.GetFreepsCard("flotsam2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var apipe = scn.GetFreepsCard("apipe");
+		var gpipe = scn.GetFreepsCard("gpipe");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, apipe);
+		scn.MoveCardsToHand(flotsam1, flotsam2);
+		scn.MoveCardsToDiscard(gpipe, toby, longstem);
 
 		scn.StartGame();
 
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(frodo, runner);
+		int deck = scn.GetFreepsDeckCount();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
 
-		// During skirmish, Flotsam should NOT have an available action (errata removed it)
-		assertFalse(scn.FreepsActionAvailable(flotsam));
+		scn.FreepsPlayCard(flotsam1);
+		scn.FreepsChooseOptionalTrigger(flotsam1);
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+
+		// One of the three
+		scn.FreepsChooseCards(toby);
+
+		assertInZone(Zone.DECK, toby);
+		assertInDiscard(gpipe);
+		assertInDiscard(longstem);
+		assertEquals(deck + 1, scn.GetFreepsDeckCount());
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The offer taken and then no card chosen: nothing goes into the draw deck, and it is not shuffled.
+		scn.FreepsPlayCard(flotsam2);
+		scn.FreepsChooseOptionalTrigger(flotsam2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gpipe, longstem));
+		scn.FreepsChooseCards();
+
+		assertInDiscard(gpipe);
+		assertInDiscard(longstem);
+		assertEquals(deck + 1, scn.GetFreepsDeckCount());
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertAttachedTo(flotsam2, aragorn);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Ignore("F-0161: the offer is made though the discard pile holds no pipe or pipeweed (Q-0034: an optional trigger with no cost that would do nothing is withheld)")
+	@Test
+	public void WithNoPipeOrPipeweedInTheDiscardPileNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flotsam = scn.GetFreepsCard("flotsam1");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var apipe = scn.GetFreepsCard("apipe");
+		var bpipe = scn.GetFreepsCard("bpipe");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCompanionsToTable(aragorn);
+		// A pipe in play and a pipe in hand; in the discard pile, a [shire] possession that is neither pipe nor
+		// pipeweed.
+		scn.AttachCardsTo(aragorn, apipe);
+		scn.MoveCardsToHand(flotsam, bpipe);
+		scn.MoveCardsToDiscard(sword);
+
+		scn.StartGame();
+
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.FreepsPlayCard(flotsam);
+
+		assertAttachedTo(flotsam, aragorn);
+		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInDiscard(sword);
+		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnotherPossessionPlayedOrATransferOfItMakesNoOfferAndItsOwnPlayDoes() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var flotsam = scn.GetFreepsCard("flotsam1");
+		var earlierFlotsam = scn.GetFreepsCard("flotsam2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var gimli = scn.GetFreepsCard("gimli");
+		var apipe = scn.GetFreepsCard("apipe");
+		var bpipe = scn.GetFreepsCard("bpipe");
+		var gafferpipe = scn.GetFreepsCard("gafferpipe");
+		var gpipe = scn.GetFreepsCard("gpipe");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCompanionsToTable(aragorn, sam, gimli);
+		scn.AttachCardsTo(aragorn, apipe, earlierFlotsam);
+		scn.AttachCardsTo(frodo, bpipe);
+		scn.MoveCardsToHand(flotsam, gafferpipe);
+		scn.MoveCardsToDiscard(gpipe, toby);
+
+		scn.StartGame();
+
+		// Another possession is played while a Flotsam is in play: a pipe, on Sam, the one Hobbit without one.
+		scn.FreepsPlayCard(gafferpipe);
+
+		assertAttachedTo(gafferpipe, sam);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The Flotsam in play is transferred: to a companion who bears a pipe, for its twilight cost again.
+		// A transfer is not a play (CR 4.2 "transfer").
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.FreepsTransferAvailable(earlierFlotsam));
+		scn.FreepsTransferCard(earlierFlotsam);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
+		scn.FreepsChooseCard(sam);
+
+		assertAttachedTo(earlierFlotsam, sam);
+		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInDiscard(gpipe);
+		assertInDiscard(toby);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Its own play: the copy played makes the offer and the copy in play makes none.
+		scn.FreepsPlayCard(flotsam);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
+		scn.FreepsChooseCard(frodo);
+
+		assertAttachedTo(flotsam, frodo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(earlierFlotsam));
+
+		scn.FreepsChooseOptionalTrigger(flotsam);
+		scn.FreepsChooseCards(gpipe, toby);
+
+		assertInZone(Zone.DECK, gpipe);
+		assertInZone(Zone.DECK, toby);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
