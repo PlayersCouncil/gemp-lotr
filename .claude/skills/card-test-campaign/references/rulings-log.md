@@ -801,3 +801,8 @@ presented in the client ... the information is there all the same".
   discard. There is an existing bug on a RTMD card that causes a game crash if a response event is chosen
   this way and played." A response event is never among the cards offered by "play a(n) ... event from
   <discard pile / a stack / draw deck / hand>" unless it also has the current phase's timeword.
+- **F-0193, Race Text 92_29 (RTMD), "Open and reveal a sealed booster pack ... You may play one shadow card
+  revealed, ignoring all costs":** "Given the specifics of that card, we'll say we restrict it to shadow-phase
+  events only." Of the events revealed, only Shadow-phase events may be chosen; a response event, or an event
+  of another phase, is not offered (today any event is, and a response event played this way crashes the
+  game). Other card types as now.
