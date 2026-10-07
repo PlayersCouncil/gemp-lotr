@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -213,8 +212,14 @@ public class Card_V3_120_Tests
 		assertFalse(scn.IsHindered(runner));
 		assertFalse(scn.IsHindered(longbottom));
 
-		// No more than 4 companions can be spotted. The Shadow player chooses one of his hindered cards: the
-		// three just hindered, and the two hindered before, one of them no support card
+		// No more than 4 companions can be spotted. "You may": the Free Peoples player is asked first, and
+		// the Shadow player has nothing to choose until he answers
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.FreepsAnyDecisionsAvailable());
+		scn.FreepsChooseYes();
+
+		// The Shadow player chooses one of his hindered cards: the three just hindered, and the two hindered
+		// before, one of them no support card
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(hides, wearyOnAlly, servants, hinderedArmory, hinderedWearyOnFrodo));
 		// Shadow cards that are not hindered, and a hindered Free Peoples card
@@ -367,6 +372,7 @@ public class Card_V3_120_Tests
 		// Hindering a card does nothing to what is stacked on it
 		assertInZone(Zone.STACKED, stackedRunner);
 
+		scn.FreepsChooseYes();
 		assertTrue(scn.ShadowHasCardChoiceAvailable(tales, armory, servants));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(stackedRunner));
 		scn.ShadowChooseCard(tales);
@@ -411,6 +417,7 @@ public class Card_V3_120_Tests
 		scn.ShadowChooseCard(merry);
 
 		// Twisted Tales is the only Shadow support card and then the only hindered card
+		scn.FreepsChooseYes();
 		assertInZone(Zone.DECK, tales, stackedRunner, stackedSword);
 		// The condition and the minion into the Shadow player's deck, the sword into the Free Peoples player's
 		assertEquals(shadowDeck + 2, scn.GetShadowDeckCount());
@@ -420,7 +427,6 @@ public class Card_V3_120_Tests
 	}
 
 	@Test
-	@Ignore("Q-0106: the text says \"you may make the Shadow player shuffle\"; the game does not ask the Free Peoples player")
 	public void TheShuffleIsTheFreePeoplesPlayersToDeclineAndDecliningLeavesTheHinderedCardsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

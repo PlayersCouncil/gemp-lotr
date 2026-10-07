@@ -1505,18 +1505,30 @@
 						}
 						true: [
 							{
-								type: ChooseActiveCards
-								player: Shadow
-								text: Choose a hindered Shadow card to shuffle into your draw deck
-								select: choose(side(Shadow), hindered)
-								hindered: true
-								memorize: chosenHindered
-							}
-							{
-								type: ShuffleCardsFromPlayIntoDrawDeck
-								player: Shadow
-								select: memory(chosenHindered)
-								includeStacked: true
+								type: Optional
+								text: Would you like to make the Shadow player shuffle one of their hindered cards into its owner's draw deck?
+								// Not asked when the Shadow player has no hindered card to shuffle.
+								requires: {
+									type: CanSpot
+									filter: side(Shadow), hindered
+									hindered: true
+								}
+								effect: [
+									{
+										type: ChooseActiveCards
+										player: Shadow
+										text: Choose a hindered Shadow card to shuffle into your draw deck
+										select: choose(side(Shadow), hindered)
+										hindered: true
+										memorize: chosenHindered
+									}
+									{
+										type: ShuffleCardsFromPlayIntoDrawDeck
+										player: Shadow
+										select: memory(chosenHindered)
+										includeStacked: true
+									}
+								]
 							}
 						]
 					}
