@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -377,7 +376,6 @@ public class Card_V3_093_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Ignore("Q-0098: may 'a Free Peoples card' be a hindered one? CR 5.0 says a hindered card is still targeted by its side; the game leaves it out of the choice")
 	@Test
 	public void HinderedFreePeoplesCardOnThatCompanionMayBeTheOneDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

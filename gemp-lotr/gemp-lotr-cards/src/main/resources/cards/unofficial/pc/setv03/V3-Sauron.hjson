@@ -271,6 +271,8 @@
 				effect: {
 					type: Discard
 					select: choose(side(Free Peoples), AttachedTo(companion,InSkirmishAgainst(memory(exertedTroll))))
+					// "A Free Peoples card" may be a hindered one (Q-0098, CR 5.0 "hinder").
+					override: hindered
 				}
 			}
 		]

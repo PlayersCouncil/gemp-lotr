@@ -828,10 +828,10 @@
 				}
 				effect: [
 					{
-						type: Exert
+						type: Wound
 						select: choose(mounted, minion)
 						times: 2
-						memorize: exertedMinion
+						memorize: woundedMinion
 					}
 					{
 						type: Exert

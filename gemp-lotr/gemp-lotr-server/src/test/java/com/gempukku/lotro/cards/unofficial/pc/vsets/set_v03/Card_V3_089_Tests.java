@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -565,7 +564,6 @@ public class Card_V3_089_Tests
 	}
 
 	@Test
-	@Ignore("F-0148: the text says \"wound a mounted minion twice\"; the game exerts it twice, so a minion of vitality 2 lives and an exhausted one cannot be chosen")
 	public void AMountedMinionOfVitalityTwoIsKilledAndAnExhaustedOneMayBeChosen() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
