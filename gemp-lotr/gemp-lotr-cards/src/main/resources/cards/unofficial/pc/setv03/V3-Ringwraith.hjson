@@ -824,12 +824,19 @@
 					player: you
 					filter: ringwraith,orc
 				}
-				requires: {
-					type: playedCardThisPhase
-					filter: ringwraith,orc
-					min: 2
-					max: 2
-				}
+				requires: [
+					{
+						type: playedCardThisPhase
+						filter: ringwraith,orc
+						min: 2
+						max: 2
+					}
+					// No cost, so not offered with nothing to hinder (Q-0034, F-0129).
+					{
+						type: CanSpot
+						filter: side(freeps),possession
+					}
+				]
 				effect: {
 					type: Hinder
 					select: choose(side(freeps),possession)
