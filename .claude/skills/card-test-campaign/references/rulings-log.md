@@ -601,3 +601,44 @@ presented in the client ... the information is there all the same".
   103_55: hinder another Schooner, then remove 3 tokens, some of them on that Schooner) makes the ability
   unpayable, and it is not offered (F-0123). The engine checks each cost against the board as it stands, so
   such a card needs a requirement saying what must be left after the earlier cost.
+
+**2026-10-07, later (Ketura, on Q-0081 to Q-0090 and the findings with them).**
+- **Any discard from play sets off "when this is discarded (from play)"** (Q-0081): "I would expect that
+  end-of-turn discard to produce a triggerable response."
+- **"Limit once" is not "limit +N"** (Q-0082, They Are Not All Accounted For 103_103): "this should be a limit
+  on *triggering* once per turn. I think there's a nuance between 'limit +3' and 'limit once', with the former
+  being a cumulative addition of multiple invocations, and the latter being a limit on the number of times the
+  ability can invoke at all." 103_103 stays withheld at its limit. Whether the other "limit once" abilities
+  that the no-effect work put on offer go back is asked as Q-0093; until answered they stay as built.
+- **A "+N" limit is the card's for the whole phase**: counted per source card, not per card affected (F-0125:
+  "supposed to be a limit on the source card, not per-target"), and cumulative over uses, not a cap on each
+  use (F-0135, Ulaire Nelya 103_76: "the limit should be cumulative").
+- **"Limit once per site" is once for each site in a turn** (Q-0084): "the intent is not that you have to
+  track it across turn boundaries." A use in the fellowship phase must not spend the next site's use (F-0127).
+- **A spot after "to" is an effect even when nothing can be spotted** (Q-0085, Cover of Darkness, Omen of Fear
+  103_64): "As written I think it is A ... I can clearly see why one would want to do it without an unbound
+  companion, to halt a ring-bound fellowship from moving. Let's say A."
+- **"Play any number of / up to N ... from your discard pile" is withheld when nothing there can be played**
+  (Q-0086): "more consistent with the play-from-discard rules."
+- **"Remove X threats to ... a companion costing X or less" has no cap but the threats** (Q-0087, Gollum
+  103_66): "if the player has a reason to remove more threats (against Gondor Wraiths or something), then I
+  think they may."
+- **"The <other> player may make you X ... to prevent this": "you" chooses** (Q-0088, Ill Wind 103_67): "it
+  was only supposed to change the exert to a wound, not alter who selects it."
+- **A parenthesis with its own price the player elects to pay is the player's choice** (Q-0089, Ulaire Nertea
+  103_77): the wording is mandatory as printed and will be changed; "keep A". Do not ask about this shape.
+- **Fewer questions** (Q-0090): where taking an offer leaves one thing to do, do it without asking again.
+- **"A" is one** (F-0136, This is My Hour 103_71): "'a' in English is a synonym for 'one'; it should be
+  restricted to a single companion and not every companion ... change it to 'choose' instead of 'all'."
+- **"The second time ... each Shadow phase" means the Shadow phase** (F-0130): a phase requirement.
+- **"Exert X twice"** should offer only those able to (F-0131): "It would be nice if [a vitality filter on
+  each card] wasn't necessary all the time." Fixed in the engine, not card by card.
+- **A copied keyword keeps its number** (F-0126). **Two offers of one response name what each is for**
+  (F-0137). **A play that fits nothing is not offered** (F-0140).
+- **A card discarded as it comes into play** (F-0139; CR 4.2 "discard"): "a persistent thorn in our side ...
+  one of the only interactions we've never been able to address in the engine": Northern Ithilien 7_359 with
+  Watcher in the Water and Evil-smelling Fens in play, playing Gollum again and again, "draining all the
+  threats and turning them into burdens; the rules dictate that the auto-discard should cause Gollum's play
+  to no longer count as fulfilling the cost of Northern Ithilien, but the engine doesn't have a way for
+  after-triggers like that to reach back in time and decide it so." She wants a proposal with a breakdown
+  before anything is built.
