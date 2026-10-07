@@ -163,6 +163,7 @@ These functions are for progressing through the game itself.  For instance, if y
 - `void FreepsChooseToMove()  ·  ShadowChooseToMove`
 - `void FreepsChooseToStay()  ·  ShadowChooseToStay`
 - `void FreepsDeclineReconciliation()  ·  ShadowDeclineReconciliation`
+- `void PassReconcile(String player)` — Gets the given player through a reconcile, if that player is at one, keeping as much of the hand as the game allows.
 - `void PassResponses()` — Causes both players to pass, first the player with a current decision and then the other.
 - `void PassResponses(String text)` — Causes both players to pass any decisions that contain the provided text.
 - `void PassCurrentPhaseActions()` — Causes both players to pass, first the player with a current decision and then the other.
@@ -193,9 +194,11 @@ Actions are top-level decisions that involve legal game operations available to 
 - `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable`
 - `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable`
 - `Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb)` — Checks whether the given player is currently being offered an action of the given kind on one particular card, and not on another copy of it.
+- `int FindCardActionIndex(String player, PhysicalCardImpl card, String verb)` — Finds the action that `CardActionAvailable` recognises, by the same reading.
 - `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
 - `Boolean ActionAvailable(String player, String action)` — Checks whether the given player has an action available containing the provided text.
-- `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction`
+- `void FreepsUseCardAction(PhysicalCardImpl card)  ·  ShadowUseCardAction` — Causes that player to use the given card's special ability: the action that `FreepsActionAvailable(PhysicalCardImpl)` recognises, whatever else the card offers (a possession that another companion could bear lists its transfer first).
+- `String GetCardUseActionId(String player, PhysicalCardImpl card)` — Finds the action the one-argument FreepsUseCardAction and ShadowUseCardAction take.
 - `void FreepsUseCardAction(PhysicalCardImpl card, String text)  ·  ShadowUseCardAction` — Causes that player to take one particular action of a card that offers several.
 - `void UseCardAction(String player, PhysicalCardImpl card, String text)` — Causes the given player to take the action of the given card whose description contains the given words.
 - `Boolean FreepsActionAvailable(PhysicalCardImpl card, String text)  ·  ShadowActionAvailable`
@@ -514,4 +517,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-406 entries, 260 of them with no description in the source.
+409 entries, 259 of them with no description in the source.

@@ -41,24 +41,14 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		if(GetCurrentPlayer().equals(P1())) {
 			SkipToPhase(Phase.REGROUP);
 			PassCurrentPhaseActions();
-			if(ShadowDecisionAvailable("reconcile")) {
-				ShadowDeclineReconciliation();
-			}
-			while(ShadowDecisionAvailable("discard down")) {
-				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-			}
+			PassReconcile(P2());
 		}
 		else {
 			SkipToPhaseInverted(Phase.REGROUP);
 			//Not BothPassInverted(): that passes player 1 first, but the Free Peoples player of the
 			//turn - player 2 here - is the one who acts first in the regroup phase.
 			PassCurrentPhaseActions();
-			if(FreepsDecisionAvailable("reconcile")) {
-				FreepsDeclineReconciliation();
-			}
-			while(FreepsDecisionAvailable("discard down")) {
-				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-			}
+			PassReconcile(P1());
 		}
 	}
 
@@ -75,23 +65,13 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 			if(FreepsDecisionAvailable("another move")) {
 				FreepsChooseToStay();
 			}
-			if(FreepsDecisionAvailable("reconcile")) {
-				FreepsDeclineReconciliation();
-			}
-			while(FreepsDecisionAvailable("discard down")) {
-				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-			}
+			PassReconcile(P1());
 		}
 		else {
 			if(ShadowDecisionAvailable("another move")) {
 				ShadowChooseToStay();
 			}
-			if(ShadowDecisionAvailable("reconcile")) {
-				ShadowDeclineReconciliation();
-			}
-			while(ShadowDecisionAvailable("discard down")) {
-				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-			}
+			PassReconcile(P2());
 		}
 	}
 
@@ -135,6 +115,29 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 	default void FreepsDeclineReconciliation() { FreepsPass(); }
 	default void ShadowDeclineReconciliation() { ShadowPass(); }
+
+	/**
+	 * Gets the given player through a reconcile, if that player is at one, keeping as much of the hand as the game
+	 * allows.  With a hand within the hand size the offer to discard a card is declined (and the hand is then drawn
+	 * up).  With a hand over it, "Choose cards to discard down to 8" wants every card to be discarded in one answer:
+	 * the first cards of the hand are given, as many as the decision asks for.  Every helper that plays a turn out
+	 * answers its reconciles with this.  Does nothing when the player is being asked something else, or nothing.
+	 * @param player The player who may be reconciling.
+	 */
+	default void PassReconcile(String player) {
+		if(DecisionAvailable(player, "reconcile")) {
+			PlayerDecided(player, "");
+		}
+		if(DecisionAvailable(player, "discard down")) {
+			int count = Integer.parseInt(GetAwaitingDecisionParam(player, "min")[0]);
+			var hand = GetHand(player);
+			PhysicalCardImpl[] cards = new PhysicalCardImpl[count];
+			for(int i = 0; i < count; i++) {
+				cards[i] = (PhysicalCardImpl) hand.get(i);
+			}
+			ChooseCards(player, cards);
+		}
+	}
 
 	/**
 	 * Causes both players to pass, first the player with a current decision and then the other.
@@ -337,51 +340,23 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		if(site.getSiteNumber() == 9)
 			return; // Game finished
 		PassCurrentPhaseActions();
-		if(ShadowDecisionAvailable("reconcile"))
-		{
-			ShadowDeclineReconciliation();
-		}
-		while(ShadowDecisionAvailable("discard down"))
-		{
-			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-		}
+		PassReconcile(P2());
 		if(FreepsDecisionAvailable("another move"))
 		{
 			FreepsChooseToStay();
 		}
-		if(FreepsDecisionAvailable("reconcile"))
-		{
-			FreepsDeclineReconciliation();
-		}
-		if(FreepsDecisionAvailable("discard down"))
-		{
-			FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-		}
+		PassReconcile(P1());
 
 		//Shadow player
 		SkipToPhaseInverted(Phase.REGROUP);
 		ShadowPass(); // actually freeps with the swap
 		FreepsPass(); // actually shadow with the swap
-		if(FreepsDecisionAvailable("reconcile"))
-		{
-			FreepsDeclineReconciliation();
-		}
-		if(FreepsDecisionAvailable("discard down"))
-		{
-			FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-		}
+		PassReconcile(P1());
 		if(ShadowDecisionAvailable("another move"))
 		{
 			ShadowChoose("1"); // Choose to stay
 		}
-		if(ShadowDecisionAvailable("reconcile"))
-		{
-			ShadowDeclineReconciliation();
-		}
-		if(ShadowDecisionAvailable("discard down"))
-		{
-			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-		}
+		PassReconcile(P2());
 
 		Verify(GetCurrentPhase() == Phase.BETWEEN_TURNS
 				|| GetCurrentPhase() == Phase.FELLOWSHIP,

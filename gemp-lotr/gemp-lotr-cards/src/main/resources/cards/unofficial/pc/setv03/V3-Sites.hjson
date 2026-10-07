@@ -587,9 +587,7 @@
 				}
 				effect: {
 					type: Discard
-					// The Ring-bearer cannot be discarded (CR 4.2); the engine does not yet protect him while he is
-					// hindered (F-0174), so he is left out here.
-					select: all(memory(hinderedCard),not(ring bearer))
+					select: memory(hinderedCard)
 					override: hindered
 				}
 			}

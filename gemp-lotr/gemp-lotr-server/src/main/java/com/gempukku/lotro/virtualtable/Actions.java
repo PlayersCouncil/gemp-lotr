@@ -118,9 +118,20 @@ public interface Actions extends Decisions, Choices {
 	 * @return True if such an action is on offer, false if it is not or the player has no pending decision.
 	 */
 	default Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb) {
+		return FindCardActionIndex(player, card, verb) >= 0;
+	}
+	/**
+	 * Finds the action that {@link #CardActionAvailable} recognises, by the same reading.
+	 * @param player The player who would be offered the action.
+	 * @param card The card the action must belong to.
+	 * @param verb How the action's description starts: "Use", "Play" or "Transfer".
+	 * @return The position of the first such action among those the pending decision lists, or -1 if there is none
+	 * or the player has no pending decision.
+	 */
+	default int FindCardActionIndex(String player, PhysicalCardImpl card, String verb) {
 		String[] texts = GetAwaitingDecisionParam(player, "actionText");
 		if(texts == null)
-			return false;
+			return -1;
 		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
 		String[] blueprintIds = GetAwaitingDecisionParam(player, "blueprintId");
 		String name = GameUtils.getFullName(card).toLowerCase();
@@ -138,21 +149,21 @@ public interface Actions extends Decisions, Choices {
 				if(!cardIds[i].equals(id))
 					continue;
 				if(described)
-					return true;
+					return i;
 				// An ability with wording of its own.
 				if(verb.equalsIgnoreCase("Use") && phaseActions
 						&& !text.contains("play " + name) && !text.contains("transfer " + name) && !text.startsWith("heal by discard"))
-					return true;
+					return i;
 			}
 			else if(blueprintIds != null && i < blueprintIds.length) {
 				if(described && blueprintIds[i].equals(card.getBlueprintId()))
-					return true;
+					return i;
 			}
 			else if(described) {
-				return true;
+				return i;
 			}
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 * Checks whether the Free Peoples player has an action available containing the provided text.
@@ -181,8 +192,38 @@ public interface Actions extends Decisions, Choices {
 	}
 
 
-	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card)); }
-	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card)); }
+	/**
+	 * Causes the Free Peoples player to use the given card's special ability: the action that
+	 * {@link #FreepsActionAvailable(PhysicalCardImpl)} recognises, whatever else the card offers (a possession that
+	 * another companion could bear lists its transfer first).  A card that offers no such action has the first
+	 * action listed for it taken, whatever it is: an optional trigger or a response is accepted this way.
+	 * @param card The card whose action is to be taken.
+	 */
+	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardUseActionId(P1(), card)); }
+	/**
+	 * Causes the Shadow player to use the given card's special ability: the action that
+	 * {@link #ShadowActionAvailable(PhysicalCardImpl)} recognises, whatever else the card offers.  A card that
+	 * offers no such action has the first action listed for it taken, whatever it is.
+	 * @param card The card whose action is to be taken.
+	 */
+	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardUseActionId(P2(), card)); }
+	/**
+	 * Finds the action the one-argument FreepsUseCardAction and ShadowUseCardAction take.
+	 * @param player The player facing a choice of actions.
+	 * @param card The card the action must belong to.
+	 * @return The id of that card's "Use" action as {@link #CardActionAvailable} recognises it; where the card
+	 * offers none, the id of the first action listed for the card, or null if it offers nothing.
+	 */
+	default String GetCardUseActionId(String player, PhysicalCardImpl card) {
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] actionIds = GetAwaitingDecisionParam(player, "actionId");
+		if(cardIds != null && actionIds != null) {
+			int index = FindCardActionIndex(player, card, "Use");
+			if(index >= 0 && index < actionIds.length)
+				return actionIds[index];
+		}
+		return GetCardActionId(player, card);
+	}
 
 	/**
 	 * Causes the Free Peoples player to take one particular action of a card that offers several.

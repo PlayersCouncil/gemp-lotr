@@ -169,6 +169,28 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return getKeywordModifiersAffectingCard(game, modifierEffect, null, source, true);
     }
 
+    /**
+     * The modifiers that keep a card from being taken out of play: "cannot be discarded", "cannot be returned to
+     * hand".  For a card that is not hindered these are all of them, as getModifiersAffectingCard gives them.  A
+     * hindered card gets nothing from other cards, their protections included (CR 5.0 "hinder"), but what the
+     * RULES forbid about it still holds: "The Ring-bearer cannot be discarded or returned to your hand" (CR 4.2
+     * "Ring-bearer") is no card's text, and a discard that reaches hindered cards must not take a hindered
+     * Ring-bearer and lose the game (F-0174).  A rule's modifier is one with no source card (RingBearerRule and
+     * the other rule classes add theirs so).  This is the counterpart of getModifiersAffectingSource: there, what
+     * a hindered source is forbidden to do; here, what may not be done to a hindered card by rule.
+     */
+    private List<Modifier> getModifiersProtectingCard(LotroGame game, ModifierEffect modifierEffect, PhysicalCard card) {
+        if (card == null || !game.getGameState().isHindered(card))
+            return getModifiersAffectingCard(game, modifierEffect, card);
+
+        List<Modifier> rules = new LinkedList<>();
+        for (Modifier modifier : getKeywordModifiersAffectingCard(game, modifierEffect, null, card, true)) {
+            if (modifier.getSource() == null)
+                rules.add(modifier);
+        }
+        return rules;
+    }
+
     private List<Modifier> getKeywordModifiersAffectingCard(LotroGame game, ModifierEffect modifierEffect, Keyword keyword, PhysicalCard card) {
         return getKeywordModifiersAffectingCard(game, modifierEffect, keyword, card, false);
     }
@@ -1048,7 +1070,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeDiscardedFromPlay(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source) {
         LoggingThreadLocal.logMethodStart(card, "canBeDiscardedFromPlay");
         try {
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER, card))
+            for (Modifier modifier : getModifiersProtectingCard(game, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER, card))
                 if (!modifier.canBeDiscardedFromPlay(game, performingPlayer, card, source))
                     return false;
             return true;
@@ -1076,7 +1098,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source) {
         LoggingThreadLocal.logMethodStart(card, "canBeReturnedToHand");
         try {
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.RETURN_TO_HAND_MODIFIER, card))
+            for (Modifier modifier : getModifiersProtectingCard(game, ModifierEffect.RETURN_TO_HAND_MODIFIER, card))
                 if (!modifier.canBeReturnedToHand(game, card, source))
                     return false;
             return true;

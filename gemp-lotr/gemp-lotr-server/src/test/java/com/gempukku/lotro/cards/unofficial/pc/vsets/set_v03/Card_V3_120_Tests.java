@@ -384,7 +384,6 @@ public class Card_V3_120_Tests
 	}
 
 	@Test
-	@Ignore("F-0172: a Free Peoples card stacked on the Shadow card shuffled in goes into the Shadow player's draw deck, not its owner's")
 	public void AFreePeoplesCardStackedOnTheCardShuffledInGoesIntoItsOwnersDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

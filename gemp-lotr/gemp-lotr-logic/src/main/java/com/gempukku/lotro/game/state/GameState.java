@@ -1088,6 +1088,8 @@ public class GameState {
             zoneCards.add((PhysicalCardImpl) card);
 
             ((PhysicalCardImpl) card).setZone(Zone.DECK);
+            //A hindered card moved to a draw deck does not remain hindered (as in addCardToZone)
+            card.setFlipped(false);
         }
 
         shuffleDeck(playerId);

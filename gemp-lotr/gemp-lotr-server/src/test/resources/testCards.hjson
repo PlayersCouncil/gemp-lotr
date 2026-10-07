@@ -191,4 +191,56 @@
 		}
 		gametext: <b>Maneuver:</b> Choose your minion and another of your minions. Until the assignment phase, the second gains the game text of the first.
 	}
+	# HinderedRingBearerTests: a discard and a return to hand that name their card by side alone and so reach
+	# hindered cards (Q-0098), a hindered Ring-bearer among them, each with a cost so that it stays on offer when
+	# nothing can be chosen.  No real card does either so plainly: the real discards with "override: hindered"
+	# pick out a Shadow card or what a character bears (Doom Causeway 103_127 apart, a site that discards
+	# whatever is hindered), and the one real return to hand that reaches hindered cards returns what a
+	# companion bears.
+	0_8006: {
+		title: Test Undertow
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: discard
+				select: choose(side(free people))
+				override: hindered
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (1) to discard a Free Peoples card.
+	}
+	0_8007: {
+		title: Test Ebb-tide
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: returnToHand
+				select: choose(side(free people))
+				override: hindered
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (1) to return a Free Peoples card to its owner's hand.
+	}
 }

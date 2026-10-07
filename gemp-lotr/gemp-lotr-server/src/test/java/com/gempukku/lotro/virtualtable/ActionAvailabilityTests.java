@@ -35,6 +35,12 @@ public class ActionAvailabilityTests
 					// "Use Library of Rivendell".
 					put("library", "101_11");
 					put("staff", "2_22");           // Gandalf's Staff: an artifact
+
+					// Athelas.  "Bearer must be a [gondor] Man.  Fellowship: Discard this possession to heal a
+					// companion or to remove a Shadow condition from a companion."  Cost 1.
+					put("athelas", "1_94");
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: a [gondor] Man; a maneuver ability only
+					put("boromir", "1_97");         // Boromir, Son of Denethor: a [gondor] Man; a skirmish ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -226,6 +232,82 @@ public class ActionAvailabilityTests
 		assertThrows(AssertionError.class, () -> scn.ShadowActionNoEffect(easterling, "archer"));
 		// Reading changes nothing: the same four are still on offer.
 		assertEquals(4, scn.ShadowGetAvailableActions().size());
+	}
+
+	@Test
+	public void UseCardActionTakesTheUseOfACardThatCouldAlsoBeTransferred() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var athelas = scn.GetFreepsCard("athelas");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, athelas);
+		// The only wounded companion, so the heal is his without a question
+		scn.AddWoundsToChar(boromir, 1);
+
+		scn.StartGame();
+
+		// Boromir could bear it too: the game lists the transfer of a card before its ability.
+		assertTrue(scn.FreepsTransferAvailable(athelas));
+		assertTrue(scn.FreepsActionAvailable(athelas));
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsUseCardAction(athelas);
+		// Used and not transferred: discarded for its cost, nothing paid for a transfer, Boromir healed
+		assertInZone(Zone.DISCARD, athelas);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ShadowUseCardActionTakesTheUseOfACardThatCouldAlsoBeTransferred() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		// Player 2's own fellowship: on his turn the Shadow methods are the Free Peoples player's
+		var aragorn = scn.GetShadowCard("aragorn");
+		var boromir = scn.GetShadowCard("boromir");
+		var athelas = scn.GetShadowCard("athelas");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, athelas);
+		scn.AddWoundsToChar(boromir, 1);
+
+		scn.StartGame();
+		scn.SkipToOtherPlayersTurn();
+
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		assertTrue(scn.ShadowTransferAvailable(athelas));
+		assertTrue(scn.ShadowActionAvailable(athelas));
+		assertEquals(0, scn.GetTwilight());
+
+		scn.ShadowUseCardAction(athelas);
+		assertInZone(Zone.DISCARD, athelas);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void UseCardActionTakesTheFirstActionListedForACardThatOffersNoUse() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var borne = scn.GetFreepsCard("sword1");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(frodo, borne);
+
+		scn.StartGame();
+
+		// A Hobbit Sword has no ability: the one action it offers is its transfer, and that is what is taken,
+		// as it was before the one-argument form learned to look for a "Use".
+		assertTrue(scn.FreepsTransferAvailable(borne));
+		assertFalse(scn.FreepsActionAvailable(borne));
+
+		scn.FreepsUseCardAction(borne);
+		assertAttachedTo(borne, sam);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

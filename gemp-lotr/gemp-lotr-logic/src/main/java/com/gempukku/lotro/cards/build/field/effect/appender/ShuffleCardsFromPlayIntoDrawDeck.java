@@ -50,7 +50,8 @@ public class ShuffleCardsFromPlayIntoDrawDeck implements EffectAppenderProducer 
                                 actionContext.setCardMemory(memorizeStackedCards, stackedCards);
                             }
 
-                            return new ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(actionContext.getSource(), playerSource.getPlayer(actionContext), cardsInPlay);
+                            // Each card goes into its owner's deck, the stacked cards included: "player" says who chooses
+                            return new ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(actionContext.getSource(), cardsInPlay);
                         }
                         else {
                             return new ShuffleCardsFromPlayIntoDeckEffect(actionContext.getSource(), playerSource.getPlayer(actionContext), cardsInPlay);
