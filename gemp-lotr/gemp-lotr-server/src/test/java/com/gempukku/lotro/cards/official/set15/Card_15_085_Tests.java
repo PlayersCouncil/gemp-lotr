@@ -29,6 +29,7 @@ public class Card_15_085_Tests
 					put("hillman2", "15_82");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
 					put("boromir", "1_97");     // Boromir, Son of Denethor: an unbound companion
+					put("gimli", "1_13");       // Gimli, Son of Gloin: an unbound companion
 					// Dwarven Armor: a Free Peoples possession that changes no number, put on the Men by the rig
 					put("armor1", "1_8");
 					put("armor2", "1_8");
@@ -155,6 +156,58 @@ public class Card_15_085_Tests
 		assertEquals(burdens + 1, scn.GetBurdens());
 		assertInZone(Zone.DISCARD, armor5, armor6, armor7, hindered2);
 		assertAttachedTo(poison2, boromir);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ACompanionBearingTwoCardsAndAHinderedThirdIsBearingThreeAndOneBearingTwoIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		var hillman = scn.GetShadowCard("hillman1");
+		scn.MoveCardsToHand(card);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor1 = scn.GetFreepsCard("armor1");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var hindered = scn.GetFreepsCard("armor3");
+		var armor4 = scn.GetFreepsCard("armor4");
+		var armor5 = scn.GetFreepsCard("armor5");
+		var armor6 = scn.GetFreepsCard("armor6");
+		var armor7 = scn.GetFreepsCard("armor7");
+		var armor8 = scn.GetFreepsCard("armor8");
+		scn.MoveCompanionsToTable(aragorn, boromir, gimli);
+		// Aragorn bears three cards, one of them hindered; Gimli three, none hindered; Boromir two.
+		scn.AttachCardsTo(aragorn, armor1, armor2, hindered);
+		scn.AttachCardsTo(gimli, armor4, armor5, armor6);
+		scn.AttachCardsTo(boromir, armor7, armor8);
+
+		scn.StartGame();
+		// A hindered card is a card still, and still borne
+		scn.HinderCard(hindered);
+		scn.MoveMinionsToTable(hillman);
+		scn.SetTwilight(5);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(hindered));
+		assertEquals(0, scn.GetWoundsOn(hillman));
+		assertTrue(scn.ShadowPlayAvailable(card));
+
+		scn.ShadowPlayCard(card);
+		// The one [men] Man exerts
+		assertEquals(1, scn.GetWoundsOn(hillman));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(boromir, frodo));
+		scn.ShadowChooseCard(aragorn);
+		scn.FreepsChooseNo();
+
+		assertInZone(Zone.HAND, armor1, armor2, hindered);
+		assertAttachedTo(armor4, gimli);
+		assertAttachedTo(armor7, boromir);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

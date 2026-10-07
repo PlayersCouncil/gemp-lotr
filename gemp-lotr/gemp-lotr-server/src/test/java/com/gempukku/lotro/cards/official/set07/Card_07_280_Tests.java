@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_280_Tests
@@ -18,7 +19,19 @@ public class Card_07_280_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_280");
-					// put other cards in here as needed for the test case
+					put("towers", "7_281");     // Great Siege-towers: an engine; a [sauron] condition in the support area
+					put("pinned", "1_192");     // Pinned Down: Shadow condition, support area; idle without a [moria] archer
+					// Weary: Shadow condition, plays on a companion or ally; answers its bearer being assigned to an
+					// [isengard] tracker and nothing else
+					put("weary", "4_212");
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase
+
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally; an archery ability
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion; stronger against a Nazgul
+					put("promise", "2_112");    // A Promise: Free Peoples condition, support area; needs Sam to do anything
+					// The Tale of Gil-galad: Free Peoples condition, bearer must be an Elf; a skirmish ability
+					put("tale1", "1_66");
+					put("tale2", "1_66");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -68,5 +81,49 @@ public class Card_07_280_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void ManeuverAbilityReachesAConditionOfEitherPlayersThatAnAllyBearsAndNotOneOnACompanionOrInTheShadowSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var peril = scn.GetShadowCard("card");
+		var towers = scn.GetShadowCard("towers");
+		var pinned = scn.GetShadowCard("pinned");
+		var weary = scn.GetShadowCard("weary");
+		var runner = scn.GetShadowCard("runner");
+		var orophin = scn.GetFreepsCard("orophin");
+		var arwen = scn.GetFreepsCard("arwen");
+		var promise = scn.GetFreepsCard("promise");
+		var tale1 = scn.GetFreepsCard("tale1");
+		var tale2 = scn.GetFreepsCard("tale2");
+
+		scn.MoveAlliesToTable(orophin);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToSupportArea(promise, peril, towers, pinned);
+		// In the Free Peoples support area: a condition lying there, and what an ally there bears, the Shadow
+		// player's own condition included.
+		scn.AttachCardsTo(orophin, tale1, weary);
+		// Not in it: a Free Peoples condition on a companion, and the conditions in the Shadow player's support
+		// area (Pinned Down, and this card and the engine themselves).
+		scn.AttachCardsTo(arwen, tale2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(peril));
+		scn.ShadowUseCardAction(peril);
+		assertInDiscard(towers);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(promise, tale1, weary));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(tale2, pinned, peril));
+		scn.ShadowChooseCard(tale1);
+
+		assertInDiscard(tale1);
+		assertInZone(Zone.SUPPORT, promise, pinned, peril);
+		assertAttachedTo(weary, orophin);
+		assertAttachedTo(tale2, arwen);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

@@ -678,7 +678,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: culture(orc),your,zone(support)
+					filter: culture(orc),support(you)
 				}
 			}
 			{

@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -201,7 +200,7 @@ public class Card_V3_106_Tests
 	}
 
 	@Test
-	public void OneCardMayBeTakenOrNoneAndTakingNoneShufflesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OneCardMayBeTakenOrNoneAndTakingNoneStillShufflesTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var flotsam1 = scn.GetFreepsCard("flotsam1");
@@ -236,7 +235,9 @@ public class Card_V3_106_Tests
 		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// The offer taken and then no card chosen: nothing goes into the draw deck, and it is not shuffled.
+		// The offer taken and then no card chosen: nothing goes into the draw deck, and the deck is shuffled
+		// all the same.
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 		scn.FreepsPlayCard(flotsam2);
 		scn.FreepsChooseOptionalTrigger(flotsam2);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gpipe, longstem));
@@ -245,14 +246,14 @@ public class Card_V3_106_Tests
 		assertInDiscard(gpipe);
 		assertInDiscard(longstem);
 		assertEquals(deck + 1, scn.GetFreepsDeckCount());
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
 		assertAttachedTo(flotsam2, aragorn);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	@Ignore("F-0161: the offer is made though the discard pile holds no pipe or pipeweed (Q-0034: an optional trigger with no cost that would do nothing is withheld)")
 	@Test
-	public void WithNoPipeOrPipeweedInTheDiscardPileNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNoPipeOrPipeweedInTheDiscardPileTheOfferIsStillMadeAndTakingItShufflesTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var flotsam = scn.GetFreepsCard("flotsam1");
@@ -269,15 +270,24 @@ public class Card_V3_106_Tests
 
 		scn.StartGame();
 
+		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 
 		scn.FreepsPlayCard(flotsam);
 
 		assertAttachedTo(flotsam, aragorn);
 		assertEquals(1, scn.GetTwilight());
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		// There is nothing to shuffle in, and the offer does something all the same: it shuffles the draw deck.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
+
+		scn.FreepsChooseOptionalTrigger(flotsam);
+
 		assertInDiscard(sword);
-		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		assertInZone(Zone.HAND, bpipe);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

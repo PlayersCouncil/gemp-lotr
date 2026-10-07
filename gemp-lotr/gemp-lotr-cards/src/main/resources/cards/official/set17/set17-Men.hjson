@@ -442,7 +442,7 @@
 				effect: {
 					type: StackCardsFromPlay
 					select: choose(culture(men),minion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]
@@ -609,7 +609,7 @@
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(chosenMinion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]
@@ -1230,7 +1230,7 @@
 				effect: {
 					type: stackCardsFromDiscard
 					select: choose(culture(men),minion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]

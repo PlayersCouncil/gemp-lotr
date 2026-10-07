@@ -620,9 +620,19 @@ public class Filters {
     }
 
     public static Filter hasAttached(int count, final Filterable... filters) {
+        return hasAttached(count, SpotOverride.NONE, filters);
+    }
+
+    /**
+     * Bearing at least that many cards that the filters accept, counted with the overrides given: with
+     * SpotOverride.INCLUDE_HINDERED a hindered card the bearer bears is counted, which is what "bearing 3 or more
+     * cards" means where the text says "cards" and nothing more (Ketura, 2026-10-07, on Lying Counsel 15_85; a
+     * hindered card is still a card, and still borne).
+     */
+    public static Filter hasAttached(int count, Map<InactiveReason, Boolean> spotOverrides, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filterActive(game, physicalCardList, filters).size() >= count);
+            return (Filters.filterActive(game, spotOverrides, physicalCardList, filters).size() >= count);
         };
     }
 
@@ -680,16 +690,45 @@ public class Filters {
      * controls lie in a support area, so what they bear is in it too.
      */
     public static boolean isInSupportArea(PhysicalCard card) {
+        return supportAreaOf(card) != null;
+    }
+
+    /**
+     * The player in whose support area the card is, or null if it is in nobody's.  Ketura, 2026-10-07 (Q-0101):
+     * "If my opponent's Black Breath is on my Elrond, it's in my support area, because that's where Elrond is."
+     * So the area is that of the card at the bottom of the chain of bearers, whoever owns the cards above it: an
+     * ally lies in its owner's support area, and a site a player controls in the support area of the player who
+     * controls it, whoever's adventure deck it came from.  A stacked card is in nobody's ("Stacked cards are
+     * definitely not seen"), and so is anything a companion or a minion bears.
+     */
+    public static String supportAreaOf(PhysicalCard card) {
         PhysicalCard at = card;
         // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
         for (int depth = 0; at != null && depth < 50; depth++) {
             if (at.getZone() == Zone.SUPPORT)
-                return true;
+                return at.getCardController() != null ? at.getCardController() : at.getOwner();
             if (at.getZone() != Zone.ATTACHED)
-                return false;
+                return null;
             at = at.getAttachedTo();
         }
-        return false;
+        return null;
+    }
+
+    /**
+     * "In <that player's> support area", borne cards included (see supportAreaOf).
+     */
+    public static Filter inSupportAreaOf(final String playerId) {
+        return (game, physicalCard) -> playerId != null && playerId.equals(supportAreaOf(physicalCard));
+    }
+
+    /**
+     * "In an opponent's support area", for the player given: in a support area that is not that player's.
+     */
+    public static Filter inSupportAreaOfAnOpponentOf(final String playerId) {
+        return (game, physicalCard) -> {
+            String area = supportAreaOf(physicalCard);
+            return area != null && !area.equals(playerId);
+        };
     }
 
     /**

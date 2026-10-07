@@ -560,8 +560,8 @@ public class Card_V3_129_Tests
 
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(9, scn.GetTwilight());
-		// The text excepts companions and The One Ring and says nothing of Maps. The game leaves a Map out of
-		// the choice all the same: it marks the path a deck is built for and is not a card to be hindered.
+		// The text excepts companions and The One Ring and says nothing of Maps. A Map is left out of the
+		// choice all the same: like a site, it cannot be hindered. It marks the path a deck is built for.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(bilbo, promise, pinned));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(freepsMap, shadowMap));
 		assertEquals(3, scn.ShadowGetCardChoiceCount());

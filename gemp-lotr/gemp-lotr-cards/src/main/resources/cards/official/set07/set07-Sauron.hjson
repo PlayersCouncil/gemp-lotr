@@ -972,7 +972,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(condition,side(free people),zone(support))
+					select: choose(condition,support(free people))
 				}
 			}
 		]

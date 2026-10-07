@@ -744,7 +744,7 @@
 				effect: {
 					type: Hinder
 					player: Shadow
-					select: choose(not(or(companion, The One Ring, Map, MetaSite)))
+					select: choose(not(or(companion, The One Ring)))
 				}
 			}
 		]

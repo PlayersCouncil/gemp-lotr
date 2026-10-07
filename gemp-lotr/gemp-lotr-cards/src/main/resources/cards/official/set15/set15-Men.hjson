@@ -747,7 +747,7 @@
 				}
 				{
 					type: spot
-					select: choose(unbound,companion,hasAttachedCount(3,any))
+					select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
 					memorize: chosenCompanion
 				}
 			]

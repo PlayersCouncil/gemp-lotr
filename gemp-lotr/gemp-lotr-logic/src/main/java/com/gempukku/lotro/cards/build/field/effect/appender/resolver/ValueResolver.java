@@ -453,11 +453,16 @@ public class ValueResolver {
                             };
                         });
             } else if (type.equalsIgnoreCase("forEachHasAttached")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                // "hindered: true", as on forEachYouCanSpot: the count takes in hindered cards.  For "each card
+                // he or she bears" and the like, which name nothing but a card (Ketura on Q-0098 and on Lying
+                // Counsel 15_85).
+                FieldUtils.validateAllowedFields(object, "filter", "hindered", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final boolean hindered = FieldUtils.getBoolean(object.get("hindered"), "hindered", false);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countActive(game, Filters.attachedTo(cardAffected), filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countActive(game, override, Filters.attachedTo(cardAffected), filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachInDeadPile")) {
                 FieldUtils.validateAllowedFields(object, "filter", "limit", "over", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

@@ -692,7 +692,7 @@
 				]
 				effect: {
 					type: discard
-					select: all(condition,zone(support))
+					select: all(condition,support)
 				}
 			}
 		]

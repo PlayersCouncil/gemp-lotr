@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_139_Tests
@@ -18,7 +19,10 @@ public class Card_17_139_Tests
 				new HashMap<>()
 				{{
 					put("card", "17_139");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion, resistance 6
+					// Dwarven Armor: a possession that changes no number, put on Aragorn by the rig
+					put("armor1", "1_8");
+					put("armor2", "1_8");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -75,5 +79,30 @@ public class Card_17_139_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(5, scn.GetTwilight());
+	}
+
+	@Test
+	public void AHinderedCardAnUnboundCompanionBearsLowersHisResistanceLikeTheOthers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cantea = scn.GetShadowCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor1 = scn.GetFreepsCard("armor1");
+		var armor2 = scn.GetFreepsCard("armor2");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea);
+
+		assertEquals(6, scn.GetResistance(aragorn));
+		scn.AttachCardsTo(aragorn, armor1, armor2);
+		// 6 - 1 for each of two cards
+		assertEquals(4, scn.GetResistance(aragorn));
+
+		// A hindered card is a card still, and still borne
+		scn.HinderCard(armor2);
+		assertTrue(scn.IsHindered(armor2));
+		assertEquals(4, scn.GetResistance(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

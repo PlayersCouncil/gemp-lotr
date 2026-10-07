@@ -400,7 +400,7 @@ public class Card_V3_127_Tests
 	}
 
 	@Test
-	public void TheOneRingHinderedHereIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheOneRingHinderedHereStaysOnItsBearerHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetBindingRingScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -427,13 +427,17 @@ public class Card_V3_127_Tests
 		// The Ring-bearer exerts, and each card he bears is hindered: The One Ring.
 		scn.FreepsChooseCard(frodo);
 
-		// The Ring is a card that was hindered here.
-		assertNotAttachedTo(ring, frodo);
-		assertInDiscard(ring);
+		// The Ring is a card that was hindered here, and The One Ring is never discarded: it is where it was,
+		// hindered.  The condition, which hindered itself, went as any other card does.
+		assertTrue(scn.IsHindered(ring));
+		assertAttachedTo(ring, frodo);
+		assertInZone(Zone.ATTACHED, ring);
+		assertEquals(frodo, scn.GetRingBearer());
 		assertInDiscard(sooner);
 		// His exertion and the site's wound.
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertInZone(Zone.FREE_CHARACTERS, frodo);
+		assertFalse(scn.GameIsFinished());
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 

@@ -41,6 +41,15 @@ public class Card_V2_072_Tests
 					put("spear", "1_182");      // Goblin Spear: a possession borne by a [moria] minion
 					// Spider Poison: a Shadow possession borne by a companion; it does nothing outside a skirmish
 					put("poison", "8_28");
+
+					// Cards borne by a card in a support area.
+					// Stone Trolls: a [shire] condition that plays on any character; its text is about Trolls and Uruk-hai
+					put("trolls", "1_314");
+					// Weary: a Shadow condition that plays on a companion or ally; it answers its bearer being assigned
+					// to an [isengard] tracker and nothing else
+					put("weary", "4_212");
+					// Pillage of Rohan: a Shadow condition that plays on a site you control; idle with no Uruk-hai stacked there
+					put("pillage", "4_167");
 				}},
 				new HashMap<>()
 				{{
@@ -146,6 +155,68 @@ public class Card_V2_072_Tests
 		assertAttachedTo(poison, gimli);
 		assertAttachedTo(spear, troop);
 
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardBorneByACardInTheOtherPlayersSupportAreaMayBeDiscardedWhoeverOwnsIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var trolls = scn.GetFreepsCard("trolls");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor = scn.GetFreepsCard("armor");
+		var pinned = scn.GetShadowCard("pinned");
+		var pillage = scn.GetShadowCard("pillage");
+		var weary = scn.GetShadowCard("weary");
+		var poison = scn.GetShadowCard("poison");
+		// Site 1 on the path is from the Free Peoples player's adventure deck.
+		var bagEnd = scn.GetFreepsSite(1);
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, armor, poison);
+		// In the Free Peoples player's support area: The Gaffer, and what he bears, the Shadow player's Weary
+		// included.
+		scn.MoveAlliesToTable(gaffer);
+		scn.AttachCardsTo(gaffer, trolls, weary);
+		// In the Shadow player's: Pinned Down, and what the site he controls bears.
+		scn.MoveCardsToSupportArea(pinned);
+		scn.ShadowTakeControlOfSite(bagEnd);
+		scn.AttachCardsTo(bagEnd, pillage);
+
+		scn.FreepsPass();
+		assertEquals("Desolation of Saruman", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		// The Free Peoples player: the condition lying in the Shadow player's support area and the one on the
+		// site he controls.  Not the Shadow player's Weary on The Gaffer, which is in his own support area, nor
+		// Spider Poison on a companion, nor the site.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
+		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, pillage));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(weary, poison, bagEnd, gaffer, trolls, gimli, armor));
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCard(pillage);
+
+		assertInDiscard(pillage);
+		assertTrue(scn.ShadowControls(bagEnd));
+
+		// The Shadow player: The Gaffer and both cards he bears, his own Weary among them.  Not what a companion
+		// bears, and nothing in his own support area.
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard"));
+		scn.ShadowChooseYes();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gaffer, trolls, weary));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli, armor, poison, pinned, bagEnd));
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(trolls);
+
+		assertInDiscard(trolls);
+		assertInZone(Zone.SUPPORT, gaffer, pinned);
+		assertAttachedTo(weary, gaffer);
+		assertAttachedTo(armor, gimli);
+		assertAttachedTo(poison, gimli);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

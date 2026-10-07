@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.filter;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filter;
@@ -357,12 +358,26 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.hasAttached(filterableSource.getFilterable(actionContext));
                 });
+        // hasAttachedCount(3,possession): bearing 3 or more possessions.  A last word override(hindered) has the
+        // count take in hindered cards, as "override: hindered" does on an effect: hasAttachedCount(3,any,
+        // override(hindered)) is "bearing 3 or more cards".  For a count that names nothing but "cards" or a side
+        // (Ketura on Q-0098 and on Lying Counsel 15_85); anything more specific does not see a hindered card.
         parameterFilters.put("hasattachedcount",
                 (parameter, environment) -> {
                     String[] parameterSplit = parameter.split(",", 2);
-                    int count = Integer.parseInt(parameterSplit[0]);
-                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameterSplit[1], environment);
-                    return (actionContext) -> Filters.hasAttached(count, filterableSource.getFilterable(actionContext));
+                    int count = Integer.parseInt(parameterSplit[0].trim());
+                    Map<InactiveReason, Boolean> override = SpotOverride.NONE;
+                    List<String> counted = new LinkedList<>();
+                    for (String part : splitIntoFilters(parameterSplit[1])) {
+                        if (part.startsWith("override(") && part.endsWith(")"))
+                            override = FieldUtils.getSpotOverride(part.substring("override(".length(), part.length() - 1).trim(), "override");
+                        else
+                            counted.add(part);
+                    }
+                    final Map<InactiveReason, Boolean> countOverride = override;
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(
+                            counted.isEmpty() ? "any" : String.join(",", counted), environment);
+                    return (actionContext) -> Filters.hasAttached(count, countOverride, filterableSource.getFilterable(actionContext));
                 });
         parameterFilters.put("hasanyculturetokens", (parameter, environment) -> {
             int count = Integer.parseInt(parameter != null ? parameter : "1");
@@ -874,6 +889,17 @@ public class FilterFactory {
 
             return (actionContext) -> timeword;
         });
+        // "In <a player's> support area", of a card other than the one whose text it is: lying in that player's
+        // support area or borne, at any depth, by a card that is (Ketura on Q-0101).  support(you),
+        // support(opponent), support(free people), support(shadow), support(owner).  The plain word `support` is
+        // "in a support area", anybody's; zone(support) is the card itself lying in the support zone.
+        parameterFilters.put("support",
+                (parameter, environment) -> {
+                    if (parameter.equals("opponent"))
+                        return actionContext -> Filters.inSupportAreaOfAnOpponentOf(actionContext.getPerformingPlayer());
+                    final PlayerSource whose = PlayerResolver.resolvePlayer(parameter.equals("your") ? "you" : parameter);
+                    return actionContext -> Filters.inSupportAreaOf(whose.getPlayer(actionContext));
+                });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");

@@ -54,6 +54,12 @@ public class ShuffleCardsFromHandIntoDeckEffect extends AbstractEffect {
             game.getGameState().shuffleCardsIntoDeck(toShuffleIn, _playerDeck);
 
             game.getGameState().sendMessage(getAppendedNames(toShuffleIn) + " shuffled cards from hand into " + _playerDeck + "'s deck");
+        } else {
+            // As from the discard pile (ShuffleCardsFromDiscardIntoDeckEffect; Ketura on Q-0102), and as a whole
+            // hand, which is shuffled in though it is empty: the deck is shuffled with nothing shuffled into it.
+            game.getGameState().shuffleDeck(_playerDeck);
+
+            game.getGameState().sendMessage(_playerDeck + " deck is shuffled with no card shuffled into it");
         }
 
         return new FullEffectResult(toShuffleIn.size() == _cards.size());

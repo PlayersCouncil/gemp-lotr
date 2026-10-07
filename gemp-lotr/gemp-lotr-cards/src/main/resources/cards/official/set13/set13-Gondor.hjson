@@ -495,7 +495,7 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					select: choose(culture(gondor),condition,zone(support))
+					select: choose(culture(gondor),condition,support(you))
 				}
 				effect: {
 					type: modifyStrength

@@ -846,7 +846,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: culture(men),zone(support)
+					filter: culture(men),support(you)
 				}
 			}
 			{

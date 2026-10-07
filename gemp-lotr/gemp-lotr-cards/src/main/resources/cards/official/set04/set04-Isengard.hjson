@@ -845,18 +845,19 @@
 				}
 				requires: {
 					type: canSpot
-					filter: unbound,companion,hasAttachedCount(3,any)
+					filter: unbound,companion,hasAttachedCount(3,any,override(hindered))
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose unbound companion to return attached Free Peoples cards to hand
-						select: choose(unbound,companion,hasAttachedCount(3,any))
+						select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
 						memorize: chosenCompanion
 					}
 					{
 						type: returnToHand
 						select: all(attachedTo(memory(chosenCompanion)),side(free))
+						override: hindered
 					}
 				]
 			}
@@ -3551,6 +3552,7 @@
 					amount: {
 						type: forEachYouCanSpot
 						filter: attachedTo(character,inSkirmishAgainst(memory(chosenTracker)))
+						hindered: true
 						multiplier: 2
 					}
 				}

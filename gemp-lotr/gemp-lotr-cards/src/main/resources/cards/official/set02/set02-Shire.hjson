@@ -32,7 +32,7 @@
 			]
 			effect: {
 				type: discard
-				select: choose(side(shadow),condition,zone(support))
+				select: choose(side(shadow),condition,support(opponent))
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Bilbo and discard a tale to discard a Shadow condition from an opponent's support area.

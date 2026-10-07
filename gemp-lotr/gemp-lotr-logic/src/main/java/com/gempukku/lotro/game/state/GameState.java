@@ -1417,7 +1417,9 @@ public class GameState {
 //        if(bp.getCardType() == CardType.EVENT)
 //            return zone == Zone.VOID_FROM_HAND;
 
-        if(bp.getCardType() == CardType.SITE)
+        //Sites cannot be hindered (CR 5.0 "hinder").  Neither can a Map or a Race to Mount Doom meta-site: they
+        // lie in a support area and do nothing there, and are not cards to be hindered (Ketura on Q-0110).
+        if(bp.getCardType() == CardType.SITE || bp.getCardType() == CardType.MAP || bp.getCardType() == CardType.METASITE)
             return false;
 
         //Finally, anything currently active on the table can be hindered

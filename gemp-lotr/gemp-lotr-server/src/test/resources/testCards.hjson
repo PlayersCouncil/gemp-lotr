@@ -243,4 +243,77 @@
 		}
 		gametext: <b>Maneuver:</b> Remove (1) to return a Free Peoples card to its owner's hand.
 	}
+	# TheOneRingIsNeverDiscardedTests: a discard of "a card" with no side or type named, reaching hindered cards,
+	# and a discard that names The One Ring.  The one real card that can discard the Ring is a site (Doom
+	# Causeway 103_127, which discards whatever is hindered); no real card discards "a card" from anywhere in
+	# play, and none names the Ring for a discard.
+	0_8008: {
+		title: Test Riptide
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: discard
+				select: choose(any)
+				override: hindered
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (1) to discard a card.
+	}
+	0_8009: {
+		title: Test Maelstrom
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: discard
+				select: choose(The One Ring)
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (1) to discard The One Ring.
+	}
+	# MapsAndMetaSitesCannotBeHinderedTests: a hinder of "a card" with nothing excepted.  The nearest real card,
+	# Pinnacle of Doom 103_129, is a site 9 and excepts companions and The One Ring.
+	0_8010: {
+		title: Test Fog
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: hinder
+				select: choose(any)
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (1) to hinder a card.
+	}
 }
