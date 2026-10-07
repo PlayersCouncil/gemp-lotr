@@ -743,3 +743,43 @@ presented in the client ... the information is there all the same".
 - **"All Shadow cards borne by ..." and "each Free Peoples card borne by ..." reach hindered cards**, as "a
   Shadow card" does (Q-0098): "Good call on all/each."
 
+## 2026-10-07, night (Ketura, on Q-0101 to Q-0111)
+
+- **Morannon 5_102 counts by the turn** (F-0157): "Per turn is the correct interpretation."
+- **"In / from a support area" takes in borne cards, on every card** (Q-0101): "The borne cards are physically
+  placed under the cards which bear them, and so by transitive property I would expect that if their bearer is
+  'in the support area' then they must, too." Stacked cards are not seen ("Stacked cards are definitely not
+  seen, but I think otherwise they should be fair game. Weary on an Ally and Pillage should both get hit").
+  Whose area: the one the bearer lies in ("If my opponent's Black Breath is on my Elrond, it's in my support
+  area, because that's where Elrond is").
+- **"Shuffle up to N ... into your draw deck" shuffles the deck even when nothing is shuffled in** (Q-0102):
+  "it's more consistent for the shuffle to always happen even if you're shuffling 'in' nothing." So such an
+  offer always does something and is always made (F-0161 is not a bug).
+- **Burdens are not "on Frodo" while Frodo is hindered** (Q-0103, For Frodo 103_107): "the burdens can still be
+  spotted by themselves, but ... while Frodo is hindered, he himself can't be."
+- **An optional look through an EMPTY draw deck is still offered** (Q-0104, Hornblower Barrel 103_112): "the draw
+  deck emptying entirely is a rare event, and having that underlined by the ask still happening and showing
+  nothing would help them realize it."
+- **A card discarded with its dying bearer IS "discarded" for a card that then plays it from the discard pile**
+  (Q-0105, Merry's Pipe 103_113), "but it has to be playable". The older rule against answering a discard on
+  bearer death (Q-0023) is about PREVENTING it: "where would the card go after being 'prevented' from
+  discarding? Its bearer is gone. However *replaying* can retarget and locate another eligible bearer, so
+  it's kosher."
+- **Worth Fighting For 103_120's "you may make the Shadow player shuffle" is to be asked** (Q-0106): "an oversight
+  in hindsight. A, but have it be a 0-1 choice instead of a 'do you want to' prompt." Whose choice the 0-to-1
+  is has been asked back; not built yet.
+- **Desolation of Ash 103_122 keeps its guard** (Q-0107, against the general rule of Q-0034): "Shadow almost never
+  wants to waste twilight like that and it would be a pester prompt showing 5 times or more per turn for no
+  reason." A guard of this kind on a card that would otherwise ask at every phase may stay; ask about others.
+- **A card borne by a hindered companion is not "borne by a companion"** (Q-0108, Gorgoroth Wastes 103_124): a
+  hindered bearer is not found by its card type.
+- **The Ring-bearer and The One Ring are never discarded, for any reason** (Q-0109).
+- **Maps and meta-sites cannot be hindered** (Q-0110): "they don't do anything and would be a distraction ... an
+  explicit entry should be added for Maps and Meta-sites."
+- **A Decipher ruling on the original card does not reach an erratum that rewrote the sentence, by default**
+  (Q-0111, Dwarven Axe 51_9): "our errata is our own set of rulings". But: "many errata happen to work around
+  the ruling made by Decipher, but not all. I concur with B being your default, but do bring it up when it
+  happens, because I sense that there are some where we agree with the ruling." So each such case is reported
+  to her, with the default taken.
+- **"Bearing 3 or more cards" counts hindered cards** (Lying Counsel 15_85).
+
