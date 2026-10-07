@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -540,7 +539,6 @@ public class Card_V3_085_Tests
 	}
 
 	@Test
-	@Ignore("F-0143: Merry's ability ends the actions of any skirmish, whether or not a [rohan] Man is in it")
 	public void InASkirmishOfAGondorManHinderingMerryResolvesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -574,7 +572,6 @@ public class Card_V3_085_Tests
 	}
 
 	@Test
-	@Ignore("F-0143: Merry's ability ends the actions of any skirmish, whether or not a [rohan] Man is in it")
 	public void InASkirmishOfARohanCompanionWhoIsNoManHinderingMerryResolvesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

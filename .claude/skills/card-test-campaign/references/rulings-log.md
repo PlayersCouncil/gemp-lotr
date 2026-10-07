@@ -642,3 +642,39 @@ presented in the client ... the information is there all the same".
   to no longer count as fulfilling the cost of Northern Ithilien, but the engine doesn't have a way for
   after-triggers like that to reach back in time and decide it so." She wants a proposal with a breakdown
   before anything is built.
+
+**2026-10-07, night (Ketura).**
+- **On a card that leaves play as it is played (F-0139; her answers to the proposal).** The frame is CR 4.2
+  "playing a card": "Step 5 is when Watcher would respond and discard the card, while it is not until Step 7
+  that 'The card is played', at which point we can interpret it to have fulfilled the cost in the case of
+  Northern Ithilien." Steps as she counts them: 4 the card is placed and is in play; 5 respond to the playing
+  of the card (and to losing initiative); 6 perform effects; 7 the card is played.
+  1. A play that is a cost is fulfilled only at step 7: "a natural reading of steps 5-7".
+  2. A card's own "when you play this ... or discard it" is step 5 too: "I would also expect it to cause step 7
+     to not manifest, and therefore not count as executed."
+  3. "If anything in step 5 (a Shadowplay/Unheeded combo is the classic example) causes it to exit play before
+     it has made it to step 7, I would count that as not fulfilling the cost." Any exit, by any card.
+  4. A play discarded on entry does not count as "played this phase": "now that one's thornier. I would think
+     it would not."
+  5. The pointless use (Northern Ithilien beside the Watcher) "should still be offered".
+  6. The Watcher played away from a marsh beside another minion: "it would have to evaluate the effects on
+     Watcher in the order in which they are printed, which would first discard the others and then discard
+     itself".
+  7. "Loss of initiative is step 5": it stays with the responses to the play.
+- **Limits, settled (Q-0093).** A limit that counts what the effect gives stays on offer at the limit, flagged
+  `limit`, its cost paid for nothing: "(limit +3)", and also "(limit 1)" where it counts things added ("Dark
+  Tidings is more like '+1' than 'once'; it is limiting the number of threats that can be added the way that
+  Scimitar limits the strength bonus"). A limit on invocations ("limit once per turn / per phase") is
+  withheld at the limit: "the second should halt being offered once the invocation limit is reached."
+- **"May X, and must Y for each X" is not a price** (Q-0091, The Witch-king 103_80): "worded carefully to
+  permit such a result, that's working as intended."
+- **"Copies of that card" counts the card itself and goes by title** (Q-0092, Death Take Us All 103_82).
+- **X is capped at what can be played** in "hinder X ... to play X items from your discard pile" (Q-0094,
+  Gondor Calls For Aid! 103_83): "B, yeah."
+- **"A minion" on a Skirmish event that only reaches the skirmish becomes "a skirmishing minion" in the text**
+  (Q-0095, I Am No Man 103_84), as Q-0051 did for 102_66.
+- **"Is considered a [culture] <race>" adds the race** (Merry 103_85): "an addition and not a rewrite".
+- **Keywords copied "until ..." are a snapshot taken when the ability is used** (Q-0096, Flame of Calenhad
+  103_86): "whatever keywords were on the target would get memorized and applied to everyone else."
+- **Race is excepted from "unloaded keywords"** on Flame of Calenhad too (Q-0097): text gains "(except race)".
+- **"Resolve a skirmish involving a [rohan] Man" resolves only such a skirmish** (F-0143, Merry 103_85).

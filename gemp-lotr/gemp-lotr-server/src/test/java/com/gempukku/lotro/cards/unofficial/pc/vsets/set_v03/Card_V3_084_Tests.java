@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -54,7 +53,7 @@ public class Card_V3_084_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered or wounded card you can spot.
+		 * Game Text: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a skirmishing minion strength -1 for each hindered or wounded card you can spot.
 		*/
 
 		var scn = GetScenario();
@@ -310,8 +309,7 @@ public class Card_V3_084_Tests
 	}
 
 	@Test
-	@Ignore("Q-0095: the text says \"a minion\"; the game offers only the minions in the skirmish")
-	public void AMinionThatIsNotInTheSkirmishMayBeChosen() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AMinionThatIsNotInTheSkirmishIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var iamnoman = scn.GetFreepsCard("iamnoman");
@@ -334,13 +332,11 @@ public class Card_V3_084_Tests
 
 		scn.FreepsPlayCard(iamnoman);
 
-		// The Orc Soldier is assigned to Aragorn, whose skirmish has not begun.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, soldier));
-		scn.FreepsChooseCard(soldier);
-
+		// The Orc Soldier is assigned to Aragorn, whose skirmish has not begun: it is not a skirmishing minion,
+		// so there is nothing to choose between and the Troop is the one weakened (Q-0095).
 		// One card: the hindered War-beacon.
-		assertEquals(7 - 1, scn.GetStrength(soldier));
-		assertEquals(13, scn.GetStrength(troop));
+		assertEquals(13 - 1, scn.GetStrength(troop));
+		assertEquals(7, scn.GetStrength(soldier));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

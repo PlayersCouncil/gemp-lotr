@@ -72,7 +72,7 @@ public class Card_V3_086_Tests
 		 * Type: Possession
 		 * Subtype: Support Area
 		 * Game Text: Beacon. To play, hinder 2 beacons.
-		 * 	Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
+		 * 	Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords (except race) on that Man.
 		 */
 
 		var scn = GetScenario();

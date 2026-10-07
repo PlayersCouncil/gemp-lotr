@@ -337,7 +337,7 @@
 				]
 			}
 		]
-		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered or wounded card you can spot.
+		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a skirmishing minion strength -1 for each hindered or wounded card you can spot.
 		lore: "'You look upon a woman. Éowyn I am, Éomund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
@@ -527,8 +527,17 @@
 					select: self
 				}
 				effect: {
+					// Only a skirmish involving a [rohan] Man is resolved (F-0143). The ability is still
+					// offered in any other skirmish: hindering Merry is a cost that can be paid.
+					type: If
+					check: {
+						type: CanSpot
+						filter: culture(rohan),Man,InSkirmish
+					}
+					true: {
 						type: EndPhase
 					}
+				}
 			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] Man exerts, you may exert Merry to heal that Man.<br>Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [rohan] Man.
@@ -609,7 +618,7 @@
 				]
 			}
 		]
-		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
+		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords (except race) on that Man.
 		lore: "'It is over-late to send for aid when you are already besieged,' answered Beregond. 'But I do not know the counsel of the Lord and his captains.'"
 		promotext: ""
 		alts: {
