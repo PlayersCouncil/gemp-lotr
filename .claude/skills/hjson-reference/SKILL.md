@@ -101,6 +101,8 @@ Write a limit with the field. A hand-written `PerPhaseLimit` / `PerTurnLimit` re
 
 A cap on what the effect gives, as opposed to on uses, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
 
+`limitPerCardThisPhase` on ModifyStrength and ModifyResistance is counted for the SOURCE card for the phase, whoever the bonus is given to (F-0125, CR 4.2 "limit"): a "(limit +3)" cannot be given in full to each companion in turn. A `CardPhaseLimit` may take a `Conditional` as its `limit` ("limit +3 unless you can spot ..."); the no-effect judge reads such a cap as it stands, so the ability is flagged `limit` once it is spent.
+
 `ActivatedInDiscard` and `ActivatedInDrawDeck` take `specialAbility: false` for a card's permission to be played from that pile when its text has no bold phase word and colon ("If you have initiative ..., you may play this minion from your discard pile"). Such a play is not a special ability: nothing that answers, bans or counts special abilities sees it (Ketura, 2026-10-06: a special ability "would count, if it's got the bold text and a colon"). A labelled ability ("Shadow: ... to play this minion from your discard pile") leaves the flag off.
 
 ### Modifier (Passive/Continuous Effects)
@@ -181,7 +183,7 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
 | `AidCost` | Follower aid cost |
 | `DisplayableInformation` | Log output text |
 
-`SelfRemovedFromPlayTrigger` (fields `method`, `optional`, `source`, `requires`, `cost`, `effect`) is a card's own trigger for having been discarded from play (`method: discarded`), hindered (`method: hinder`), or either (no `method`). It answers after the fact, when the card is already in the discard pile or already hindered. Its requirements, costs and effects are carried out as the removed card and its owner: "you" and `your` are the owner, an optional one is offered to the owner, and `self` and `another` are counted from the removed card, whoever removed it and with whatever card (F-0121). `source:` is a card filter that the card which did the removing must match (`source: side(Free Peoples)`, `source: pipe`); it defaults to `any`. A card removed by no card at all (the end-of-turn discard of minions, a card lost with its bearer) does not set the trigger off. Do not name a player on the effect to steer it (`player: shadow`): that was a workaround and is not needed.
+`SelfRemovedFromPlayTrigger` (fields `method`, `optional`, `source`, `requires`, `cost`, `effect`) is a card's own trigger for having been discarded from play (`method: discarded`), hindered (`method: hinder`), or either (no `method`). It answers after the fact, when the card is already in the discard pile or already hindered. Its requirements, costs and effects are carried out as the removed card and its owner: "you" and `your` are the owner, an optional one is offered to the owner, and `self` and `another` are counted from the removed card, whoever removed it and with whatever card (F-0121). `source:` is a card filter that the card which did the removing must match (`source: side(Free Peoples)`, `source: pipe`); with no `source:` the trigger answers ANY discard from play, the end-of-turn discard of minions and a card lost with its bearer included (Q-0081). A `source:` is a condition on the card that did the removing and is not met by a removal no card did. A killed character goes to the discard pile but was not discarded (CR 4.2 "killed"): the trigger stays unset. Do not name a player on the effect to steer it (`player: shadow`): that was a workaround and is not needed.
 
 ---
 
@@ -272,6 +274,8 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | `ReplaceableFromDiscard(filter)` | filter | Performing player's discard pile holds a card matching `filter` with this card's title and another subtitle: what `ReplaceCardInPlayWithCardInDiscard` can act on. Use it in both the requirement and the choice of the card to replace |
 
 ---
+
+`PlayableOn(<filter>)` (function filter, engine pass 7): a card in a hand or a pile that attaches and could be played NOW on a card the inner filter accepts. Use it wherever a text plays items "on" named bearers and the action should be withheld, or X capped, when nothing fits (F-0140, Q-0094): `HasCardInDiscard` with `filter: item,PlayableOn(memory(playedMinion))`.
 
 ## Value Resolution
 
@@ -458,6 +462,14 @@ Used in `cost: []` and `effect: []` arrays.
 | `DoWhile` | check, effect[] | Loop until check fails |
 | `ForEachPlayer` | effect[] | Once per player |
 | `SendMessage` | text | Log text (also "do nothing") |
+
+`Exert` with `times: N` and a `choose(...)` selection offers only characters able to exert N times: outright when it is a cost; as an effect while anyone can do it in full, falling back to anyone able to exert when nobody can (F-0131). Do not add a vitality filter to say so. "Wound X twice" is `type: Wound` with `times: 2`, never an Exert (F-0148).
+
+"Play any number of / up to N ... from your discard pile" as an optional trigger or ability needs a `HasCardInDiscard` requirement for what it plays (with `PlayableOn` where the bearers are named), so that it is not offered with nothing to play (Q-0086).
+
+Inside a `preventable`, a cost is the preventing player's to choose unless it says otherwise: for "the Free Peoples player may make you X to prevent this", give the cost `player: owner`. `ChooseANumber` takes a `Conditional` for `from`.
+
+An effect whose text picks "a card", "a Shadow card" or "a Free Peoples card" and nothing more specific may pick a HINDERED card: give it `override: hindered` (Q-0098). Anything more specific cannot reach a hindered card, and hinder choices leave hindered cards out (Q-0060).
 
 ### Ongoing (Spawn Modifiers)
 | Subaction | Key Params | Purpose |
