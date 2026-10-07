@@ -35,16 +35,22 @@
 						type: AddTrigger
 						trigger: {
 							type: SkirmishAboutToEnd
-							involving: memory(pumpedHobbit)
+							involving: any
 						}
-						requires: {
-							type: CantSpot
-							filter: companion
-							count: 5
-						}
+						requires: [
+							{
+								type: CantSpot
+								filter: companion
+								count: 5
+							}
+							{
+								type: HasCardInMemory
+								memory: pumpedHobbit
+							}
+						]
 						effect: {
 							type: Hinder
-							select: choose(minion, InSkirmishAgainst(memory(pumpedHobbit)))
+							select: choose(minion, InSkirmish)
 						}
 					}
 				]

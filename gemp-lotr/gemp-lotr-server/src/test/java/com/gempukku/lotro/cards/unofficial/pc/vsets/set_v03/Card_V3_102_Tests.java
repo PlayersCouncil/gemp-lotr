@@ -3,26 +3,30 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_102_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("mouth", "103_102");      // The Mouth of Sauron
-					put("runner", "1_178");       // Goblin Runner - weak minion
-					put("sauron", "9_48");        // Sauron - strong minion to beat companions
+					put("mouth", "103_102");
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text at all
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1; its only text is for when it is played
 
-					put("aragorn", "1_89");       // Strength 8
-					put("boromir", "1_97");       // Strength 7
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: unbound [gondor] Man, strength 8, vitality 4
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound Hobbit, strength 3, vitality 4
+					put("guard", "1_7");        // Dwarf Guard: strength 4, vitality 2, no text in play
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: ally, home site 3, strength 8, vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,9 +50,9 @@ public class Card_V3_102_Tests
 		 * Vitality: 3
 		 * Site Number: 5
 		 * Game Text: Lurker.
-		* 	Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.
-		* 	Skirmish: Exert this minion to make a wounded companion strength -1.
-		*/
+		 * 	Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.
+		 * 	Skirmish: Exert this minion to make a wounded companion strength -1.
+		 */
 
 		var scn = GetScenario();
 
@@ -68,142 +72,420 @@ public class Card_V3_102_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-
-
 	@Test
-	public void MouthTriggerLetsFPChooseThreatOrBurdenWhenCompanionLoses() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedFromHandForThreeAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var mouth = scn.GetShadowCard("mouth");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(mouth);
-		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(mouth);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(aragorn, mouth);
-		scn.FreepsResolveSkirmish(aragorn);
-
-		int threats = scn.GetThreats();
-		int burdens = scn.GetBurdens();
-
-		// Aragorn (8) loses to Mouth (9)
-		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
-
-		// FP must choose threat or burden
-		assertTrue(scn.FreepsChoiceAvailable("threat"));
-		assertTrue(scn.FreepsChoiceAvailable("burden"));
-
-		scn.FreepsChoose("threat");
-
-		assertEquals(threats + 1, scn.GetThreats());
-		assertEquals(burdens, scn.GetBurdens());
-	}
-
-	@Test
-	public void MouthTriggerAllowsBurdenChoice() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var mouth = scn.GetShadowCard("mouth");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(mouth);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(aragorn, mouth);
-		scn.FreepsResolveSkirmish(aragorn);
-
-		int threats = scn.GetThreats();
-		int burdens = scn.GetBurdens();
-
-		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
-
-		// FP must choose threat or burden
-		assertTrue(scn.FreepsChoiceAvailable("threat"));
-		assertTrue(scn.FreepsChoiceAvailable("burden"));
-
-		scn.FreepsChoose("burden");
-
-		assertEquals(threats, scn.GetThreats());
-		assertEquals(burdens + 1, scn.GetBurdens());
-	}
-
-	@Test
-	public void MouthTriggerFiresWhenCompanionLosesToOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var mouth = scn.GetShadowCard("mouth");
-		var sauron = scn.GetShadowCard("sauron");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		// Mouth is Lurker, but trigger still fires when companion loses to Sauron
-		scn.MoveMinionsToTable(mouth, sauron);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		// Assign Aragorn to Sauron, not Mouth
-		scn.FreepsAssignToMinions(aragorn, sauron);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(aragorn);
-
-		int burdens = scn.GetBurdens();
-
-		// Aragorn loses to Sauron (8 vs 24, overwhelmed and killed)
-		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
-
-		// Mouth's trigger still fires
-		assertTrue(scn.FreepsChoiceAvailable("threat"));
-		scn.FreepsChoose("burden");
-
-		assertEquals(burdens + 1, scn.GetBurdens());
-	}
-
-	@Test
-	public void MouthSkirmishAbilityDebuffsWoundedCompanionOnly() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var mouth = scn.GetShadowCard("mouth");
-		var frodo = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-
-		scn.MoveMinionsToTable(mouth);
-		scn.MoveCompanionsToTable(aragorn, boromir);
-		scn.AddWoundsToChar(frodo, 1);
-		scn.AddWoundsToChar(aragorn, 1);  // Aragorn wounded
-		// Boromir unwounded
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(boromir, mouth);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(boromir);
-
-		int aragornStr = scn.GetStrength(aragorn);
-		int boromirStr = scn.GetStrength(boromir);
-
+		scn.SetTwilight(8);
 		scn.FreepsPass();
 
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 8 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(11, scn.GetTwilight());
+		assertInZone(Zone.HAND, mouth);
+		assertTrue(scn.ShadowPlayAvailable(mouth));
+
+		scn.ShadowPlayCard(mouth);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, mouth);
+		// 11 - 3 to play - 2 roaming (a site 5 minion played at site 2)
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void EachSkirmishACompanionLosesMakesTheFreePeoplesPlayerAddAThreatOrABurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, troop);
+		// The Troop made fierce, so that Aragorn loses to it twice in the turn. The Mouth fights nobody.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.FIERCE));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// 8 against 13: Aragorn loses and is not overwhelmed.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveRuleFirst();
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// It is the Free Peoples player who chooses, between the two and nothing else.
+		assertTrue(scn.FreepsChoiceAvailable("Add a threat"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsChoose("Add a threat");
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveRuleFirst();
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsChoiceAvailable("Add a threat"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsChoose("Add a burden");
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void RingBoundCompanionOverwhelmedByTheMouthHimselfSetsItOffToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, mouth);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+
+		// 3 against 9: Sam is overwhelmed and killed, and has lost his skirmish all the same.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveRuleFirst();
+
+		assertInZone(Zone.DEAD, sam);
+		assertTrue(scn.FreepsChoiceAvailable("Add a threat"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+
+		scn.FreepsChoose("Add a burden");
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void CompanionWinningHisSkirmishAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// 8 against 5: it is the Runner who loses.
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		assertInZone(Zone.DISCARD, runner);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AllyLosingASkirmishAtHisHomeSiteAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var troop = scn.GetShadowCard("troop");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveAlliesToTable(elrond);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// The fellowship moves to site 3, Elrond's home, where he may be assigned to a skirmish.
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(mouth, troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(elrond, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(elrond);
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(elrond));
+
+		// 8 against 13: Elrond loses, and he is an ally.
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithThreatsAtTheirLimitTheBurdenIsAddedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, troop);
+		// Two companions, Frodo and Aragorn, so a third threat cannot be added.
+		scn.AddThreats(2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(2, scn.GetThreatLimit());
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveRuleFirst();
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetThreats());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithTheRingBearerHinderedTheThreatIsAddedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, troop);
+		// No burden can be added while the Ring-bearer is hindered.
+		scn.HinderCard(frodo);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertTrue(scn.IsHindered(frodo));
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveRuleFirst();
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNeitherAThreatNorABurdenPossibleNothingIsAskedOrAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, troop);
+		// A hindered companion still counts toward the limit on threats: two companions, two threats.
+		scn.AddThreats(2);
+		scn.HinderCard(frodo);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(2, scn.GetThreatLimit());
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsPass();
+		scn.ShadowPass();
+		// Whether the trigger is still listed beside the skirmish's wound depends on how the question comes to
+		// be withheld; either way no choice of a threat or a burden follows.
+		if (scn.FreepsAwaitingRequiredResponseOrder()) {
+			scn.FreepsResolveRuleFirst();
+		}
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.FreepsChoiceAvailable("Add a threat"));
+		assertFalse(scn.FreepsChoiceAvailable("Add a burden"));
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void SkirmishActionExertsTheMouthToWeakenAWoundedCompanionForThatSkirmishOnly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var runner = scn.GetShadowCard("runner");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var guard = scn.GetFreepsCard("guard");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCompanionsToTable(aragorn, sam, guard);
+		scn.MoveAlliesToTable(elrond);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, runner);
+		// Wounded: Aragorn, Sam, Frodo and the ally Elrond. Not wounded: the Dwarf Guard.
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.AddWoundsToChar(sam, 1);
+		scn.AddWoundsToChar(elrond, 1);
+		scn.SkipToAssignments();
+		// The Mouth is a lurker: his skirmish with Sam waits until Aragorn's is over.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner}, new PhysicalCardImpl[]{sam, mouth});
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertTrue(scn.IsCharSkirmishing(aragorn));
+		assertFalse(scn.IsCharSkirmishing(sam));
+		assertFalse(scn.IsCharSkirmishing(mouth));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(3, scn.GetStrength(sam));
+		int frodoStrength = scn.GetStrength(frodo);
+		assertEquals(0, scn.GetWoundsOn(mouth));
+
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(mouth));
 		scn.ShadowUseCardAction(mouth);
 
-		// Only wounded Aragorn is valid target
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(boromir));
-
-		scn.ShadowChooseCard(aragorn);
-
-		assertEquals(aragornStr - 1, scn.GetStrength(aragorn));
-		assertEquals(boromirStr, scn.GetStrength(boromir));
 		assertEquals(1, scn.GetWoundsOn(mouth));
+		// A wounded companion, in the skirmish or out of it; the Mouth has just become a wounded minion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam, frodo));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(guard, elrond, mouth));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(sam);
+
+		assertEquals(2, scn.GetStrength(sam));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(frodoStrength, scn.GetStrength(frodo));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// 8 against 5: Aragorn wins. Sam is weaker until this skirmish is over, and no longer.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetStrength(sam));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.IsCharSkirmishing(sam));
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(1, scn.GetWoundsOn(mouth));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void SkirmishActionAddsUpAndIsNotOfferedOnceTheMouthIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, runner);
+		// Aragorn is the only wounded companion, so he is chosen without a question.
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(0, scn.GetWoundsOn(mouth));
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(mouth);
+		assertEquals(1, scn.GetWoundsOn(mouth));
+		assertEquals(7, scn.GetStrength(aragorn));
+
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(mouth));
+		scn.ShadowUseCardAction(mouth);
+		// Vitality 3 with 2 wounds: exhausted, so he can no longer exert.
+		assertEquals(2, scn.GetWoundsOn(mouth));
+		assertEquals(6, scn.GetStrength(aragorn));
+
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(mouth));
+	}
+
+	@Test
+	public void SkirmishActionWithNoWoundedCompanionIsStillOfferedAndOnlyExertsTheMouth() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mouth = scn.GetShadowCard("mouth");
+		var runner = scn.GetShadowCard("runner");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mouth, runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		int frodoStrength = scn.GetStrength(frodo);
+		assertEquals(0, scn.GetWoundsOn(mouth));
+
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(mouth));
+		scn.ShadowUseCardAction(mouth);
+
+		assertEquals(1, scn.GetWoundsOn(mouth));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(frodoStrength, scn.GetStrength(frodo));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

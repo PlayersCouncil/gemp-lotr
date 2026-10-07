@@ -1563,6 +1563,20 @@
 					type: LosesSkirmish
 					filter: companion
 				}
+				// Nothing is asked when neither can be added (F-0154).
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: ThreatsRemaining
+							amount: 1
+						}
+						{
+							type: CanSpot
+							filter: ring bearer
+						}
+					]
+				}
 				effect: {
 					type: Choice
 					player: Free Peoples
