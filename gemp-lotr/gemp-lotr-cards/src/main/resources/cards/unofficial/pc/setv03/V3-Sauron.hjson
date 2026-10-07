@@ -1247,7 +1247,7 @@
 				}
 				effect: {
 					type: Hinder
-					select: choose(or(weapon, condition), AttachedTo(InSkirmishAgainst(self)))
+					select: choose(or(weapon, condition), AttachedTo(companion, InSkirmishAgainst(self)))
 				}
 			}
 		]
