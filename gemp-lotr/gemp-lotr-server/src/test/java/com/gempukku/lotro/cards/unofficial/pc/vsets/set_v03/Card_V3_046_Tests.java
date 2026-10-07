@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.CantHinderModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -441,9 +440,8 @@ public class Card_V3_046_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("Q-0079: 'by another card' is read here as a card other than the [raider] card itself; the game reads it as a card other than this Helmsman and offers the response when a [raider] minion hinders itself")
 	@Test
-	public void ARaiderMinionThatHindersItselfIsNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ARaiderMinionThatHindersItselfIsAnsweredAndComesIntoPlayUnhindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var helmsman = scn.GetShadowCard("helmsman1");
@@ -456,14 +454,21 @@ public class Card_V3_046_Tests
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(initiate);
+		int poolAfterPlay = scn.GetTwilight();
 		assertFalse(scn.IsHindered(initiate));
 		scn.ShadowChoose("Hinder");
 
-		// The Initiate is hindered by its own text and by no other card: there is nothing to answer.
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable(helmsman));
-		assertTrue(scn.IsHindered(initiate));
-		assertEquals(0, scn.GetWoundsOn(helmsman));
+		// "By another card" is a card other than this Helmsman (Q-0079): the Initiate hindering itself is answered.
+		assertFalse(scn.IsHindered(initiate));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(helmsman));
+		scn.ShadowChooseOptionalTrigger(helmsman);
+		scn.ShadowChoose("Exert");
+
+		// The Initiate is in play unhindered and its (3) was never removed.
+		assertFalse(scn.IsHindered(initiate));
+		assertEquals(1, scn.GetWoundsOn(helmsman));
 		assertFalse(scn.IsHindered(helmsman));
+		assertEquals(poolAfterPlay, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

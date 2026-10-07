@@ -585,3 +585,14 @@ presented in the client ... the information is there all the same".
 - A choice whose every branch has nothing left to act on is not put to the player: "the prompt should be
   smarter" (F-0116, Savage Fury 103_39).
 - Repeated lines in deck validation errors are "fine as-is" (F-0112): not a finding.
+
+**2026-10-07 (Ketura, on Q-0079, F-0120, F-0121).**
+- "By another card" in a card's own text is a card other than THAT card, as "another X" is everywhere else
+  (Q-0079, Corsair Helmsman 103_46: "The wording is meant to prevent Helmsmen from responding to itself
+  hindering itself"). A [raider] minion that hinders itself when played is answered by a Helmsman.
+- "Each time this <card> is hindered" is answered after the hindering, not when it is about to happen
+  (F-0120, Desert Wind Scout 103_48): "If the after-hinder works, I'm fine with switching to that; I think I
+  did it as a before-trigger because I was concerned that the after-trigger would fail to connect due to its
+  source being inactive due to the hinder."
+- A card's own hindered-from-play (and discarded-from-play) trigger is carried out as that card and its owner,
+  not as the card and player that removed it: "fix it in the engine" (F-0121).
