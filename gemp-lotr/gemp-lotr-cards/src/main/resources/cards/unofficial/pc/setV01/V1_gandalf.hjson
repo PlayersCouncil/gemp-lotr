@@ -428,7 +428,7 @@
 			{
 				type: activated
 				phase: regroup
-				limitPerPhase: 2
+				effectLimitPerPhase: 2
 				requires: [
 					{
 						type: canSpot

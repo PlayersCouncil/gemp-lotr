@@ -96,10 +96,8 @@ public class Card_94_010_Tests {
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(backstabber));
 		scn.ShadowChooseCard(urukFighter);
 
-		// X is bounded by the chosen minion's actual damage bonus
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		assertEquals(1, scn.ShadowGetChoiceMax());
-		scn.ShadowDecided(1);
+		// X is bounded by the chosen minion's actual damage bonus: damage +1, so X can only be 1 and
+		// the game takes it without asking.
 
 		// Effect target: any other minion (butcher or backstabber), not the damaged one
 		assertTrue(scn.ShadowHasCardChoiceAvailable(butcher));

@@ -348,13 +348,12 @@ public class Card_V3_006_Tests
 		// Terrible and Evil is the only other event, so it is revealed without a choice.
 		scn.ShadowDismissRevealedCards();
 
-		// First play: Gandalf exerts X = 1 time.
+		// First play: Gandalf, with one wound on a vitality of 4, could exert once or twice; X = 1.
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
 		scn.FreepsChoose("1");
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetWoundsOn(troop));
 
-		// Second play: X = 1 again, and Gandalf is exhausted.
-		scn.FreepsChoose("1");
+		// Second play: X can only be 1 now, so the game takes it without asking, and Gandalf is exhausted.
 		assertEquals(3, scn.GetWoundsOn(gandalf));
 		assertEquals(2, scn.GetWoundsOn(troop));
 

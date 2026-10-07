@@ -65,6 +65,36 @@ public class Card_V3_063_Tests
 		);
 	}
 
+	// The same path with Silverlode Banks as site 7, where every companion exerts as the fellowship arrives.
+	protected VirtualTableScenario GetSilverlodeScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("watcher1", "103_63");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: vitality 3, no ranger; a skirmish ability never used here
+					put("poison", "8_28");      // Spider Poison: a Shadow possession a companion bears: "Each time bearer is assigned to a skirmish, bearer must exert."
+					put("runner", "1_178");     // Goblin Runner: a minion to be assigned to
+					put("troop1", "1_177");     // Goblin Patrol Troop: cards for the Shadow player's draw deck
+					put("troop2", "1_177");
+					put("troop3", "1_177");
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					put("site2", "1_331");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_355");      // Silverlode Banks: "When the fellowship moves to Silverlode Banks without a ranger, every companion must exert."
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void CirithUngolWatcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -349,6 +379,93 @@ public class Card_V3_063_Tests
 		assertEquals(hand + 1, scn.GetShadowHandCount());
 		assertEquals(deck - 1, scn.GetShadowDeckCount());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AnExertionOnArrivingByTheRegroupMoveIsTheDrawOfTheSiteArrivedAt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSilverlodeScenario();
+
+		var frodo = scn.GetRingBearer();
+		var watcher = scn.GetShadowCard("watcher1");
+		var poison = scn.GetShadowCard("poison");
+		var runner = scn.GetShadowCard("runner");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		var troop3 = scn.GetShadowCard("troop3");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+		scn.MoveCardsToSupportArea(watcher);
+
+		// The first move of the turn, to site 6.  Nobody exerts there: no card is drawn at that site.
+		scn.FreepsPass();
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		scn.SkipToMovementDecision();
+		// The reconcile on the way has drawn from the Shadow player's deck.
+		scn.MoveCardsToTopOfDeck(troop1, troop2, troop3);
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+
+		// The regroup move, to Silverlode Banks: Frodo exerts as he arrives, and that is site 7's draw,
+		scn.FreepsChooseToMove();
+
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// so there is no second one for an exertion later at that site.
+		scn.AttachCardsTo(frodo, poison);
+		scn.MoveMinionsToTable(runner);
+		hand = scn.GetShadowHandCount();
+		deck = scn.GetShadowDeckCount();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, runner);
+
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertEquals(hand, scn.GetShadowHandCount());
+		assertEquals(deck, scn.GetShadowDeckCount());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void TwoCompanionsExertingAtOnceDrawOneCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSilverlodeScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var watcher = scn.GetShadowCard("watcher1");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		var troop3 = scn.GetShadowCard("troop3");
+
+		scn.MoveCompanionsToTable(gimli);
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+		scn.MoveCardsToSupportArea(watcher);
+		// The turns played on the way drew from the Shadow player's deck.
+		scn.MoveCardsToTopOfDeck(troop1, troop2, troop3);
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+
+		// The move to Silverlode Banks exerts Frodo and Gimli together: two exertions, and one draw for the site.
+		scn.FreepsPass();
+
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		// Nobody was asked to put the two triggers in order.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

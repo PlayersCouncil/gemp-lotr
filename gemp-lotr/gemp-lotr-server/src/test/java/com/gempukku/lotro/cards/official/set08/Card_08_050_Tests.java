@@ -332,10 +332,7 @@ public class Card_08_050_Tests
 
 		scn.ShadowUseCardAction(twoTokens);
 
-		// Both tokens are needed, so 2 is the only X there is.
-		assertEquals(2, scn.ShadowGetChoiceMin());
-		assertEquals(2, scn.ShadowGetChoiceMax());
-		scn.ShadowChoose("2");
+		// Both tokens are needed, so 2 is the only X there is, and the game takes it without asking.
 
 		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
 		assertEquals(0, scn.GetTwilight());

@@ -6,6 +6,7 @@ import com.gempukku.lotro.cards.build.MemoryScopedEnvironment;
 import com.gempukku.lotro.cards.build.PreEvaluateAble;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.common.Phase;
 import org.json.simple.JSONObject;
 
 import java.util.HashSet;
@@ -84,6 +85,44 @@ public class EffectUtils {
             if (String.valueOf(entry.getKey()).equalsIgnoreCase("memorize") && entry.getValue() instanceof String memory)
                 actionSource.setSetOffByMemory(memory);
         }
+    }
+
+    /**
+     * Reads the limit fields of an ability, a trigger or a response.  A card says one of two things with the
+     * word "limit", and the definition says which is meant by the field it uses (Ketura on Q-0082 and Q-0093):
+     * <ul>
+     * <li>"limitPerPhase", "limitPerTurn", "limitPerSite": a limit on how often the ability may be used at all
+     * ("limit once per turn", "limit once per phase", "limit once per site").  At its limit the action is
+     * withheld, whatever it costs.  The count per site is cleared when the fellowship moves to another site
+     * and at the end of the turn.</li>
+     * <li>"effectLimitPerPhase", "effectLimitPerTurn": a limit on what the effect gives over several uses
+     * ("limit +3", or "limit 1" of things added), written as the number of uses that still give something.
+     * Where the action has a cost and is the player's to use or not, it stays on offer at its limit: the cost
+     * is paid, nothing more is done, and the action is flagged as doing nothing (Q-0041).  With no cost, and on
+     * a required trigger, it is withheld there like the other kind (Q-0034).</li>
+     * </ul>
+     * @param phase The phase a per-phase limit is counted in, or null for whichever phase the action is used in.
+     * @param playersToUseOrNot False for a required trigger, which is nobody's to offer.
+     */
+    public static void processLimits(JSONObject value, DefaultActionSource actionSource, Phase phase, boolean playersToUseOrNot) throws InvalidCardDefinitionException {
+        final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
+        final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
+        final int limitPerSite = FieldUtils.getInteger(value.get("limitPerSite"), "limitPerSite", 0);
+        final int effectLimitPerPhase = FieldUtils.getInteger(value.get("effectLimitPerPhase"), "effectLimitPerPhase", 0);
+        final int effectLimitPerTurn = FieldUtils.getInteger(value.get("effectLimitPerTurn"), "effectLimitPerTurn", 0);
+        final boolean offeredAtEffectLimit = playersToUseOrNot
+                && FieldUtils.getObjectArray(value.get("cost"), "cost").length > 0;
+
+        if (limitPerPhase > 0)
+            actionSource.addLimitPerPhase(phase, limitPerPhase, false);
+        if (limitPerTurn > 0)
+            actionSource.addLimitPerTurn(limitPerTurn, false);
+        if (limitPerSite > 0)
+            actionSource.addLimitPerSite(limitPerSite);
+        if (effectLimitPerPhase > 0)
+            actionSource.addLimitPerPhase(phase, effectLimitPerPhase, offeredAtEffectLimit);
+        if (effectLimitPerTurn > 0)
+            actionSource.addLimitPerTurn(effectLimitPerTurn, offeredAtEffectLimit);
     }
 
     public static void processRequirementsCostsAndEffects(JSONObject value, CardGenerationEnvironment environment, DefaultActionSource actionSource) throws InvalidCardDefinitionException {

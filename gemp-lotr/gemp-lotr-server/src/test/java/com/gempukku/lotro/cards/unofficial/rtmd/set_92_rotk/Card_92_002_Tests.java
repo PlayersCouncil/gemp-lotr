@@ -109,9 +109,8 @@ public class Card_92_002_Tests
 	}
 
 	@Test
-	public void SecondUseInSameShadowPhaseExertsAndPlaysNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		// 92_2: "Once per turn" — a second use in the same shadow phase is still offered, as its cost can
-		// be paid, and is flagged as doing nothing (Ketura on Q-0041).
+	public void CannotUseTwiceInSameShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		// 92_2: "Once per turn" — cannot use twice in the same shadow phase.
 
 		var scn = GetShadowScenario();
 
@@ -125,29 +124,18 @@ public class Card_92_002_Tests
 
 		// First use: should succeed
 		assertTrue(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
-		assertEquals("false", scn.ShadowActionNoEffect(scn.GetShadowCard("mod")));
 		scn.ShadowUseCardAction(scn.GetShadowCard("mod"));
 		scn.ShadowDismissRevealedCards();
 		scn.ShadowChooseCard(condition1);
-		assertEquals(1, scn.GetWoundsOn(grima));
-		assertInZone(Zone.SUPPORT, condition1);
 
-		// Second use in same phase: offered and flagged
-		assertTrue(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
-		assertEquals("limit", scn.ShadowActionNoEffect(scn.GetShadowCard("mod")));
-
-		// Used anyway: Grima exerts, the draw deck is not looked through and the second condition stays in it
-		scn.ShadowUseCardAction(scn.GetShadowCard("mod"));
-		assertEquals(2, scn.GetWoundsOn(grima));
-		assertInZone(Zone.DECK, scn.GetShadowCard("condition2"));
-		assertTrue(scn.AwaitingShadowPhaseActions());
+		// Second use in same phase: should NOT be available
+		assertFalse(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
 	}
 
 	@Test
-	public void UseInDoubleMoveShadowPhaseIsFlaggedAsAtItsLimit() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotUseInDoubleMoveShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		// 92_2: "Once per turn" — after using in the first shadow phase,
-		// if FP moves again during regroup, the second shadow phase still counts against the limit:
-		// the ability is offered, as its cost can be paid, and flagged as doing nothing (Ketura on Q-0041).
+		// if FP moves again during regroup, the second shadow phase should NOT allow use.
 
 		var scn = GetShadowScenario();
 
@@ -170,10 +158,9 @@ public class Card_92_002_Tests
 		scn.PassCurrentPhaseActions();
 		scn.FreepsChooseToMove();
 
-		// Second shadow phase (after double move): offered, and flagged as at its limit
+		// Second shadow phase (after double move): should NOT be available
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		assertTrue(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
-		assertEquals("limit", scn.ShadowActionNoEffect(scn.GetShadowCard("mod")));
+		assertFalse(scn.ShadowActionAvailable(scn.GetShadowCard("mod")));
 	}
 
 	@Test

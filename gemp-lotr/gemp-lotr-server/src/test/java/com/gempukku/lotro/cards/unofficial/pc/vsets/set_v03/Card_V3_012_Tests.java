@@ -511,20 +511,19 @@ public class Card_V3_012_Tests
 	}
 
 	@Test
-	public void SkirmishAbilityWeakensOnceInEachSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishAbilityIsUsableOnceInEachSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var pass = scn.GetShadowCard("pass");
 		var shelob = scn.GetShadowCard("shelob");
 		var runner = scn.GetShadowCard("runner");
 		var savage = scn.GetShadowCard("savage");
-		var swordsman = scn.GetShadowCard("swordsman");
 		var glorfindel = scn.GetFreepsCard("glorfindel");
 		scn.MoveCompanionsToTable(glorfindel);
 		scn.MoveCardsToSupportArea(pass);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(shelob, runner, savage, swordsman);
+		scn.MoveMinionsToTable(shelob, runner, savage);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(glorfindel, shelob);
 		scn.ShadowDeclineAssignments();
@@ -532,32 +531,20 @@ public class Card_V3_012_Tests
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(pass));
-		assertEquals("false", scn.ShadowActionNoEffect(pass));
 		scn.ShadowUseCardAction(pass);
 		scn.ShadowChooseCard(runner);
 
 		assertEquals(7, scn.GetStrength(glorfindel));
 		assertEquals(1, scn.GetStackedCards(pass).size());
 
-		// Shelob is still skirmishing and another minion can still be stacked, so the ability is still on
-		// offer; the one use is spent, and the game marks it as at its limit.
+		// Shelob is still skirmishing and another minion is still in play, but the one use is spent.
 		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertTrue(scn.IsCharSkirmishing(shelob));
-		assertTrue(scn.ShadowActionAvailable(pass));
-		assertEquals("limit", scn.ShadowActionNoEffect(pass));
-
-		// Used again: a second minion is stacked and Glorfindel is no weaker.
-		scn.ShadowUseCardAction(pass);
-		scn.ShadowChooseCard(savage);
-		assertEquals(2, scn.GetStackedCards(pass).size());
-		assertInZone(Zone.STACKED, savage);
-		assertEquals(7, scn.GetStrength(glorfindel));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(pass));
 
 		// Shelob wins, 8 to 7, and fights Glorfindel again in her fierce skirmish: a new phase.
-		scn.FreepsPass();
 		scn.ShadowPass();
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignAndResolve(glorfindel, shelob);
@@ -565,13 +552,11 @@ public class Card_V3_012_Tests
 
 		assertEquals(9, scn.GetStrength(glorfindel));
 		assertTrue(scn.ShadowActionAvailable(pass));
-		assertEquals("false", scn.ShadowActionNoEffect(pass));
 
 		scn.ShadowUseCardAction(pass);
 
-		// The Orc Swordsman is the only other minion left in play.
-		assertEquals(3, scn.GetStackedCards(pass).size());
-		assertInZone(Zone.STACKED, swordsman);
+		assertEquals(2, scn.GetStackedCards(pass).size());
+		assertInZone(Zone.STACKED, savage);
 		assertEquals(7, scn.GetStrength(glorfindel));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}

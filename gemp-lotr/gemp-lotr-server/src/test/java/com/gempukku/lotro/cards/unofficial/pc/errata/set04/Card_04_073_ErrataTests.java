@@ -95,7 +95,6 @@ public class Card_04_073_ErrataTests
 		assertEquals(4, scn.GetTwilight()); // 0-cost event, but extra 1 from DH
 
 		scn.ShadowPlayCard(event1);
-		scn.ShadowChoose("0");
 		assertEquals(2, scn.GetTwilight()); // 1-cost event, but extra 1 from DH
 
 		scn.ShadowPlayCard(condition1);
@@ -127,7 +126,6 @@ public class Card_04_073_ErrataTests
 		scn.DismissRevealedCards();
 
 		scn.ShadowPlayCard(event1);
-		scn.ShadowChoose("0");
 		assertEquals(1, scn.GetTwilight()); // 1-cost event, but extra 2 from DH
 
 		scn.ShadowPlayCard(condition1);
@@ -158,7 +156,6 @@ public class Card_04_073_ErrataTests
 		scn.DismissRevealedCards();
 
 		scn.ShadowPlayCard(event1);
-		scn.ShadowChoose("0");
 		assertEquals(2, scn.GetTwilight()); // 1-cost event, but extra 2 from DH
 
 		scn.ShadowPlayCard(condition1);
@@ -185,7 +182,6 @@ public class Card_04_073_ErrataTests
 		scn.SetTwilight(2);
 
 		scn.ShadowPlayCard(event1);
-		scn.ShadowChoose("0");
 		assertEquals(0, scn.GetTwilight()); // 1-cost event, but extra 1 from DH
 
 		assertTrue(scn.ShadowPlayAvailable(event0));

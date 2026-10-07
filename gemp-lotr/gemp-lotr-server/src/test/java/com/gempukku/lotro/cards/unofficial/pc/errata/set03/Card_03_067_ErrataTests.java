@@ -88,7 +88,7 @@ public class Card_03_067_ErrataTests
 	}
 
 	@Test
-	public void ShadowAbilityAtItsLimitStillExertsAMinionAndDoesNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShadowAbilityIsNotOfferedAgainInThePhaseItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -103,23 +103,16 @@ public class Card_03_067_ErrataTests
 		scn.FreepsPass();
 
 		assertEquals(9, scn.GetStrength(troop));
-		assertEquals("false", scn.ShadowActionNoEffect(card));
 		scn.ShadowUseCardAction(card);
 		scn.FreepsChooseNo();
 		scn.ShadowDismissRevealedCards();
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertEquals(11, scn.GetStrength(troop));
 
-		// Limit once per phase: the minion can still exert, so the ability is still offered, flagged as
-		// doing nothing (Ketura on Q-0041).
-		assertTrue(scn.ShadowActionAvailable(card));
-		assertEquals("limit", scn.ShadowActionNoEffect(card));
-
-		// Used anyway: the minion exerts, the Free Peoples player is asked nothing and shows no hand.
-		scn.ShadowUseCardAction(card);
-		assertEquals(2, scn.GetWoundsOn(troop));
-		assertEquals(11, scn.GetStrength(troop));
-		assertEquals(3, scn.GetFreepsHandCount());
+		// Limit once per phase: a limit on uses, so the ability is not offered again, though the minion
+		// could still exert (Ketura on Q-0093).
+		assertFalse(scn.ShadowActionAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(troop));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

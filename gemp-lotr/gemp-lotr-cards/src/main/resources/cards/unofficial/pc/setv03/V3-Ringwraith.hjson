@@ -126,64 +126,14 @@
 					type: Exerted
 					filter: companion
 				}
-				// "Limit once per site" is once for each site in a turn (Q-0084). Until the fellowship has moved
-				// it is at the site the turn began on: counted to the end of the fellowship phase.
-				requires: [
-					{
-						type: Not
-						requires: {
-							type: MoveCountMinimum
-							amount: 1
-						}
-					}
-					{
-						type: perPhaseLimit
-						phase: fellowship
-						limit: 1
-					}
-				]
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: fellowship
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
-			}
-			{
-				type: trigger
-				optional: false
-				trigger: {
-					type: Exerted
-					filter: companion
+				// "Limit once per site" is once for each site in a turn (Q-0084): the engine's count, cleared when
+				// the fellowship moves and at the end of the turn (F-0146). Two companions exerting at once draw
+				// one card: the second trigger is dropped once the first has used the limit (F-0145).
+				limitPerSite: 1
+				effect: {
+					type: DrawCards
+					count: 1
 				}
-				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
-				requires: [
-					{
-						type: MoveCountMinimum
-						amount: 1
-					}
-					{
-						type: perPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-				]
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
 			}
 			{
 				type: Response

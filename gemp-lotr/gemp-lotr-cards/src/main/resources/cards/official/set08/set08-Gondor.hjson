@@ -733,7 +733,7 @@
 					type: playCardFromDiscard
 					select: choose(culture(gondor),fortification)
 				}
-				limitPerPhase: 1
+				effectLimitPerPhase: 1
 			}
 		]
 		gametext: <b>Fortification</b>.<br><b>Regroup:</b> Exert a [gondor] Man to play a [gondor] fortification from your discard pile (limit 1).

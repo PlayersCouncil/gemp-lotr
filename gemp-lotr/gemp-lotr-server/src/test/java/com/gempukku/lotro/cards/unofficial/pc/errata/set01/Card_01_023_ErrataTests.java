@@ -22,6 +22,7 @@ public class Card_01_023_ErrataTests
 
 					put("uruk", "1_154");
 					put("target", "1_125");
+					put("target2", "1_125");
 					put("deck1", "1_126");
 					put("deck2", "1_127");
 					put("deck3", "1_128");
@@ -164,5 +165,45 @@ public class Card_01_023_ErrataTests
 		assertEquals(Zone.DISCARD, bot2.getZone());
 		assertEquals(Zone.DISCARD, bot3.getZone());
 		assertEquals(Zone.DECK, bot4.getZone());
+	}
+
+	@Test
+	public void AHinderedShadowCardMayBeTheOneDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var nobody = scn.GetFreepsCard("nobody");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionsToTable(gimli);
+
+		var uruk = scn.GetShadowCard("uruk");
+		var hindered = scn.GetShadowCard("target");
+		var unhindered = scn.GetShadowCard("target2");
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(hindered, unhindered);
+		// A hindered card has no type or culture, and is a Shadow card still (CR 5.0 "hinder"; Ketura on Q-0098).
+		scn.HinderCard(hindered);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, uruk);
+		scn.FreepsResolveSkirmish(gimli);
+		//pump gimli to beat the uruk
+		scn.FreepsUseCardAction(gimli);
+		scn.ShadowPass();
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(hindered));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(hindered, unhindered));
+		scn.FreepsChooseCard(hindered);
+		scn.ShadowChooseNo();
+
+		assertEquals(Zone.DISCARD, hindered.getZone());
+		assertEquals(Zone.SUPPORT, unhindered.getZone());
 	}
 }

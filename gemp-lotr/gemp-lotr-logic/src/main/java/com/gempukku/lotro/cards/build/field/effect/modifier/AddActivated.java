@@ -19,18 +19,13 @@ import java.util.List;
 public class AddActivated implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter", "phase", "player", "requires", "noEffectUnless", "cost", "effect", "limitPerPhase", "limitPerTurn", "text");
+        FieldUtils.validateAllowedFields(object, "filter", "phase", "player", "requires", "noEffectUnless", "cost", "effect", "limitPerPhase", "limitPerTurn", "limitPerSite", "effectLimitPerPhase", "effectLimitPerTurn", "text");
 
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final String text = FieldUtils.getString(object.get("text"), "text");
         final String playerName = FieldUtils.getString(object.get("player"), "player");
         final PlayerSource playerSource = playerName != null ? PlayerResolver.resolvePlayer(playerName) : null;
         final String[] phaseArray = FieldUtils.getStringArray(object.get("phase"), "phase");
-        final int limitPerPhase = FieldUtils.getInteger(object.get("limitPerPhase"), "limitPerPhase", 0);
-        final int limitPerTurn = FieldUtils.getInteger(object.get("limitPerTurn"), "limitPerTurn", 0);
-        // An ability with a cost stays on offer at its limit: the cost may be worth paying for its own sake
-        // (Ketura on Q-0041).  With no cost it is withheld there, as before (Q-0034).
-        final boolean offeredAtLimit = FieldUtils.getObjectArray(object.get("cost"), "cost").length > 0;
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
         if (phaseArray.length == 0)
@@ -44,10 +39,7 @@ public class AddActivated implements ModifierSourceProducer {
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
             actionSource.setSkirmishAbility(phase == Phase.SKIRMISH);
-            if (limitPerPhase > 0)
-                actionSource.addLimitPerPhase(phase, limitPerPhase, offeredAtLimit);
-            if (limitPerTurn > 0)
-                actionSource.addLimitPerTurn(limitPerTurn, offeredAtLimit);
+            EffectUtils.processLimits(object, actionSource, phase, true);
             actionSource.addPlayRequirement(
                     (actionContext) -> PlayConditions.isPhase(actionContext.getGame(), phase));
             EffectUtils.processRequirementsCostsAndEffects(object, environment, actionSource);

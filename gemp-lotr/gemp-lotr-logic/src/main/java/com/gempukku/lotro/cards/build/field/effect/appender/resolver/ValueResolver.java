@@ -557,17 +557,26 @@ public class ValueResolver {
                 // The least X, from 0 up to "max", at which some card matching the filter can be played from the
                 // pile at twilight cost -X: the lower bound of an X that buys a play ("Remove X threats. Play
                 // The Balrog from your discard pile; its twilight cost is -X").  Playing from a pile as an effect
-                // is a cost, so an X that leaves the card out of reach is not one the player may name.  The
-                // question is put to the same check a play is, so roaming, the card's own cost text and every
-                // standing modifier are counted.  Where no X up to "max" will do the answer is "max": the
-                // ability's own Playable requirement is what withholds it then.
+                // is a cost, and so is playing from hand (Q-0062), so an X that leaves the card out of reach is
+                // not one the player may name.  The question is put to the same check a play is, so roaming, the
+                // card's own cost text and every standing modifier are counted.  "fromZone" is DISCARD, HAND, or
+                // both as a list where the card may be played from either ("play Sauron from hand or from your
+                // discard pile"): the least X that brings a card within reach in any of them.  Where no X up to
+                // "max" will do the answer is "max": the ability's own Playable requirement is what withholds
+                // it then.
                 FieldUtils.validateAllowedFields(object, "filter", "fromZone", "max", "player");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
                 if (filter == null)
                     throw new InvalidCardDefinitionException("LeastDiscountToPlay requires a filter.");
-                final Zone zone = FieldUtils.getEnum(Zone.class, object.get("fromZone"), "fromZone");
-                if (zone != Zone.DISCARD)
-                    throw new InvalidCardDefinitionException("fromZone must be DISCARD for LeastDiscountToPlay.");
+                final Set<Zone> zones = FieldUtils.getEnumArray(Zone.class, object.get("fromZone"), "fromZone");
+                if (zones.isEmpty())
+                    throw new InvalidCardDefinitionException("LeastDiscountToPlay requires a fromZone.");
+                for (Zone zone : zones) {
+                    if (zone != Zone.DISCARD && zone != Zone.HAND)
+                        throw new InvalidCardDefinitionException("fromZone must be DISCARD, HAND or both for LeastDiscountToPlay.");
+                }
+                final boolean fromDiscard = zones.contains(Zone.DISCARD);
+                final boolean fromHand = zones.contains(Zone.HAND);
                 final ValueSource maxSource = resolveEvaluator(object.get("max"), environment);
                 final PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(object.get("player"), "player", "you"));
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
@@ -579,7 +588,9 @@ public class ValueResolver {
                     return (game, cardAffected) -> {
                         final int max = Math.max(0, maxEvaluator.evaluateExpression(game, cardAffected));
                         for (int discount = 0; discount < max; discount++) {
-                            if (PlayConditions.canPlayFromDiscard(player, game, -discount, filterable))
+                            if (fromDiscard && PlayConditions.canPlayFromDiscard(player, game, -discount, filterable))
+                                return discount;
+                            if (fromHand && PlayConditions.canPlayFromHand(player, game, -discount, filterable))
                                 return discount;
                         }
                         return max;

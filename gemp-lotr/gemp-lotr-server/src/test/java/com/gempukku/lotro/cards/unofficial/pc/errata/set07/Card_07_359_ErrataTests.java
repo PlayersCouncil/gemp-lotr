@@ -113,7 +113,7 @@ public class Card_07_359_ErrataTests
 	}
 
 	@Test
-	public void ShadowAbilityAtItsLimitStillRemovesThreatsAndPlaysGollumAndAddsNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ShadowAbilityIsNotOfferedAgainInThePhaseItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		VirtualTableScenario scn = GetSiteScenario();
 
@@ -132,7 +132,6 @@ public class Card_07_359_ErrataTests
 		PhysicalCardImpl site = scn.GetCurrentSite();
 		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
 		int burdens = scn.GetBurdens();
-		assertEquals("false", scn.ShadowActionNoEffect(site));
 		scn.ShadowUseCardAction(site);
 		assertEquals(2, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
@@ -143,15 +142,12 @@ public class Card_07_359_ErrataTests
 		scn.MoveCardsToDiscard(gollum);
 		scn.ShadowPlayCard(runner);
 
-		// Limit once per phase: the threats can still be removed and Gollum played, so the ability is still
-		// offered, flagged as doing nothing (Ketura on Q-0041).
-		assertTrue(scn.ShadowActionAvailable(site));
-		assertEquals("limit", scn.ShadowActionNoEffect(site));
-
-		scn.ShadowUseCardAction(site);
-		assertEquals(0, scn.GetThreats());
-		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
-		assertEquals(burdens + 2, scn.GetBurdens());
+		// Limit once per phase: a limit on uses, so the ability is not offered again, though two threats
+		// could still be removed and Gollum played (Ketura on Q-0093).
+		assertFalse(scn.ShadowActionAvailable(site));
+		assertEquals(2, scn.GetThreats());
+		assertEquals(Zone.DISCARD, gollum.getZone());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

@@ -187,11 +187,11 @@ Never write these as `canSpot`/`cantSpot` on `controlledSite`, `siteYouControl` 
 
 "(limit +X)" on strength bonuses → cap the total bonus, not per-invocation. Use `CardAffectedLimitPerPhase` value type when the limit applies per affected card per phase.
 
-"Limit 1 per phase" on an ability → `limitPerPhase: 1` on the effect wrapper.
+"Limit once per phase" on an ability → `limitPerPhase: 1` on the effect wrapper. "Limit once per turn" → `limitPerTurn: 1`. These are limits on uses: at the limit the ability is not offered, whatever it costs.
 
-"Limit once per turn" → `limitPerTurn: 1` on the effect wrapper.
+"(limit +N)" on the ability as a whole, or a bare "(limit N)" of things the effect adds ("to add a threat (limit 1)") → `effectLimitPerPhase: N` / `effectLimitPerTurn: N` on the effect wrapper. With a cost the ability stays on offer at its limit, flagged, and its cost is paid for nothing.
 
-These are different mechanisms — don't confuse them.
+These are different mechanisms — don't confuse them (hjson-reference, Activated, "Limits"; Ketura on Q-0093).
 
 ---
 

@@ -103,6 +103,10 @@ public class PlayConditions {
         return game.getModifiersQuerying().getUntilEndOfTurnLimitCounter(card).getUsedLimit() < max;
     }
 
+    public static boolean checkSiteLimit(LotroGame game, PhysicalCard card, int max) {
+        return game.getModifiersQuerying().getSiteLimitCounter(card).getUsedLimit() < max;
+    }
+
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, int max) {
         return checkPhaseLimit(game, card, phase, "", max);
     }

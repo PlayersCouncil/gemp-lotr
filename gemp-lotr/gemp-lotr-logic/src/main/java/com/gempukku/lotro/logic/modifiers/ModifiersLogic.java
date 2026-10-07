@@ -24,6 +24,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private final Map<Phase, Map<String, LimitCounter>> _endOfPhaseLimitCounters = new HashMap<>();
     private final Map<Phase, Map<String, LimitCounter>> _startOfPhaseLimitCounters = new HashMap<>();
     private final Map<String, LimitCounter> _turnLimitCounters = new HashMap<>();
+    // "Limit once per site": cleared when the fellowship moves to another site, and with the turn.
+    private final Map<String, LimitCounter> _siteLimitCounters = new HashMap<>();
 
     private int _drawnThisPhaseCount = 0;
     private final Map<Integer, Integer> _woundsPerPhaseMap = new HashMap<>();
@@ -84,6 +86,29 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public LimitCounter getSiteLimitCounter(PhysicalCard card) {
+        return getSiteLimitCounter(card, "");
+    }
+
+    @Override
+    public LimitCounter getSiteLimitCounter(PhysicalCard card, String prefix) {
+        LimitCounter limitCounter = _siteLimitCounters.get(prefix + card.getCardId());
+        if (limitCounter == null) {
+            limitCounter = new DefaultLimitCounter();
+            _siteLimitCounters.put(prefix + card.getCardId(), limitCounter);
+        }
+        return limitCounter;
+    }
+
+    /**
+     * The fellowship has moved to another site: what was counted "per site" was counted at the site it left.
+     * An exertion on arriving, which comes after this, belongs to the site arrived at (F-0146).
+     */
+    public void signalFellowshipMoved() {
+        _siteLimitCounters.clear();
+    }
+
+    @Override
     public void addedWound(PhysicalCard card) {
         final int cardId = card.getCardId();
         final Integer previousWounds = _woundsPerPhaseMap.get(cardId);
@@ -131,13 +156,31 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return getKeywordModifiersAffectingCard(game, modifierEffect, null, card);
     }
 
+    /**
+     * The modifiers that say what the SOURCE of an effect may not do: "burdens cannot be added", "threats cannot
+     * be removed by Free Peoples cards", "Shadow cards may not discard cards from your hand".  They are asked
+     * about the card whose text is being carried out, and they hold whether or not that card is hindered: a card
+     * that hinders itself as a cost, or is hindered in answer to its ability, still carries the ability out
+     * (CR 5.0 "hinder"), and "cannot" binds what it then does (Ketura on Q-0070, "can't > can"; F-0151).
+     * getModifiersAffectingCard answers with nothing for a hindered card, which is right for what the card
+     * itself has (its text, its keywords, the bonuses on it) and wrong for what its effect is forbidden.
+     */
+    private List<Modifier> getModifiersAffectingSource(LotroGame game, ModifierEffect modifierEffect, PhysicalCard source) {
+        return getKeywordModifiersAffectingCard(game, modifierEffect, null, source, true);
+    }
+
     private List<Modifier> getKeywordModifiersAffectingCard(LotroGame game, ModifierEffect modifierEffect, Keyword keyword, PhysicalCard card) {
+        return getKeywordModifiersAffectingCard(game, modifierEffect, keyword, card, false);
+    }
+
+    private List<Modifier> getKeywordModifiersAffectingCard(LotroGame game, ModifierEffect modifierEffect, Keyword keyword, PhysicalCard card, boolean evenIfHindered) {
         List<Modifier> modifiers = _modifiers.get(modifierEffect);
         if (modifiers == null)
             return Collections.emptyList();
 
+        //A hindered card has no text and nothing applies to it.
         //If we are checking that the card has been hindered, we don't want to abort early
-        if(card != null && keyword != Keyword.HINDERED && game.getGameState().isHindered(card))
+        if(!evenIfHindered && card != null && keyword != Keyword.HINDERED && game.getGameState().isHindered(card))
             return Collections.emptyList();
 
         LinkedList<Modifier> liveModifiers = new LinkedList<>();
@@ -211,6 +254,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         _untilEndOfPhaseModifiers.clear();
 
         _turnLimitCounters.clear();
+        _siteLimitCounters.clear();
         _startOfPhaseLimitCounters.clear();
         _endOfPhaseLimitCounters.clear();
     }
@@ -1059,7 +1103,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.BURDEN_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.BURDEN_MODIFIER, source)) {
             if (!modifier.canAddBurden(game, performingPlayer, source))
                 return false;
         }
@@ -1068,7 +1112,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canRemoveBurden(LotroGame game, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.BURDEN_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.BURDEN_MODIFIER, source)) {
             if (!modifier.canRemoveBurden(game, source))
                 return false;
         }
@@ -1077,7 +1121,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canRemoveThreat(LotroGame game, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.THREAT_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.THREAT_MODIFIER, source)) {
             if (!modifier.canRemoveThreat(game, source))
                 return false;
         }
@@ -1145,7 +1189,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canDiscardCardsFromHand(LotroGame game, String playerId, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
             if (!modifier.canDiscardCardsFromHand(game, playerId, source))
                 return false;
         return true;
@@ -1153,7 +1197,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canDiscardCardsFromTopOfDeck(LotroGame game, String playerId, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
             if (!modifier.canDiscardCardsFromTopOfDeck(game, playerId, source))
                 return false;
         return true;

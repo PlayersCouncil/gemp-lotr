@@ -71,6 +71,7 @@ public class RequirementFactory {
         requirementProducers.put("ownerisshadow", new OwnerIsShadow());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
+        requirementProducers.put("persitelimit", new PerSiteLimit());
         requirementProducers.put("playable", new Playable());
         requirementProducers.put("playeris", new PlayerIs());
         requirementProducers.put("playerleagueplacement", new PlayerLeaguePlacement());

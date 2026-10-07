@@ -147,7 +147,7 @@ public class Card_03_004_ErrataTests
 	}
 
 	@Test
-	public void SkirmishAbilityAtItsLimitStillExertsAnAllyAndAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishAbilityIsNotOfferedAgainInThePhaseItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var welcome = scn.GetFreepsCard("welcome");
@@ -164,7 +164,6 @@ public class Card_03_004_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(guard, runner);
 
-		assertEquals("false", scn.FreepsActionNoEffect(welcome));
 		scn.FreepsUseCardAction(welcome);
 		scn.FreepsChoose("Add strength bonus");
 		// Guard STR 4 + Grimir's 3 = 7
@@ -172,15 +171,10 @@ public class Card_03_004_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(grimir));
 		scn.ShadowPass();
 
-		// Limit once per phase: Grimir (VIT 3) can still exert, so the ability is still offered,
-		// flagged as doing nothing (Ketura on Q-0041)
-		assertTrue(scn.FreepsActionAvailable(welcome));
-		assertEquals("limit", scn.FreepsActionNoEffect(welcome));
-
-		// Used anyway: Grimir exerts, nothing is asked and nothing is added
-		scn.FreepsUseCardAction(welcome);
-		assertEquals(2, scn.GetWoundsOn(grimir));
-		assertEquals(7, scn.GetStrength(guard));
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		// Limit once per phase: a limit on uses, so the ability is not offered again, though Grimir (VIT 3)
+		// could still exert (Ketura on Q-0093)
+		assertFalse(scn.FreepsActionAvailable(welcome));
+		assertEquals(1, scn.GetWoundsOn(grimir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

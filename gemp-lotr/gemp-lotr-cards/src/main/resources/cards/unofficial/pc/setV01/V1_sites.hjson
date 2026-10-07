@@ -179,7 +179,7 @@
 		effects: {
 			type: activated
 			phase: fellowship
-			limitPerTurn: 6
+			effectLimitPerTurn: 6
 			cost: {
 				type: exert
 				select: choose(unbound,companion)

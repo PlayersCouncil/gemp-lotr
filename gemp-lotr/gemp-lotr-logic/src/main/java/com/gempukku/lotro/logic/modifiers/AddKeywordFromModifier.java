@@ -8,13 +8,17 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class AddKeywordFromModifier extends AbstractModifier implements KeywordAffectingModifier {
     private final Filterable from;
     private final boolean terrainOnly;
     private final boolean unloadedOnly;
     private boolean counting;
+    // The keywords taken once, with their numbers, or null where they are read from the cards as they stand.
+    private Map<Keyword, Integer> snapshot;
 
     public AddKeywordFromModifier(PhysicalCard physicalCard, Filterable affectFilter, Condition condition, Filterable from, boolean terrainOnly, boolean unloadedOnly) {
         super(physicalCard, "Has added keywords from other cards", affectFilter, condition, ModifierEffect.GIVE_KEYWORD_MODIFIER);
@@ -23,13 +27,33 @@ public class AddKeywordFromModifier extends AbstractModifier implements KeywordA
         this.unloadedOnly = unloadedOnly;
     }
 
+    /**
+     * Takes the keywords now, numbers included, and gives those from here on, whatever becomes of the cards they
+     * were read from: "until the regroup phase, each of your other Men gain each of the unloaded keywords on
+     * that Man" memorizes what was on that Man when the ability was used (Ketura on Q-0096), so the others keep
+     * them when he is killed or hindered.  Without this the cards are read as they stand each time, which is what
+     * a standing "while ..., each site gains each terrain keyword from each site you control" wants.
+     */
+    public AddKeywordFromModifier takeSnapshot(LotroGame game) {
+        final Map<Keyword, Integer> taken = new EnumMap<>(Keyword.class);
+        for (Keyword keyword : Keyword.values()) {
+            if (hasKeyword(game, null, keyword))
+                taken.put(keyword, getKeywordCountModifier(game, null, keyword));
+        }
+        snapshot = taken;
+        return this;
+    }
+
     @Override
     public HashSet<Keyword> getKeywords() {
-        return null;
+        return snapshot != null ? new HashSet<>(snapshot.keySet()) : null;
     }
 
     @Override
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        if (snapshot != null)
+            return snapshot.containsKey(keyword);
+
         if (terrainOnly && !keyword.isTerrain())
             return false;
         if (unloadedOnly && !keyword.isUnloaded())
@@ -56,6 +80,9 @@ public class AddKeywordFromModifier extends AbstractModifier implements KeywordA
     // "Damage +1" counts 1 beside whatever the card has of its own.  A keyword without a number counts 1.
     @Override
     public int getKeywordCountModifier(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        if (snapshot != null)
+            return snapshot.getOrDefault(keyword, 0);
+
         if (!hasKeyword(game, physicalCard, keyword))
             return 0;
         // The second half of the test stops two cards that copy each other from asking each other for ever.

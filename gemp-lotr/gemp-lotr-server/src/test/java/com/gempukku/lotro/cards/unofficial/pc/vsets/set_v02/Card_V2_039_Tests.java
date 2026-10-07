@@ -298,10 +298,7 @@ public class Card_V2_039_Tests
 
 		scn.ShadowUseCardAction(dungeon);
 
-		// X can only be 0, and the game still asks.
-		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertEquals(0, scn.ShadowGetChoiceMax());
-		scn.ShadowChoose("0");
+		// X can only be 0, and the game takes it without asking.
 
 		assertInZone(Zone.SHADOW_CHARACTERS, balrog);
 		assertEquals(0, scn.GetTwilight());
@@ -412,8 +409,8 @@ public class Card_V2_039_Tests
 		assertEquals(14, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(dungeon));
 
+		// Both threats are needed, so 2 is the only X there is, and the game takes it without asking.
 		scn.ShadowUseCardAction(dungeon);
-		scn.ShadowChoose("2");
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetTwilight());

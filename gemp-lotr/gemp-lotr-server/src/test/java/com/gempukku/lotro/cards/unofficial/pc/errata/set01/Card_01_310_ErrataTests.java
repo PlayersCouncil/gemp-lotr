@@ -92,7 +92,7 @@ public class Card_01_310_ErrataTests
 	}
 
 	@Test
-	public void FellowshipAbilityAtItsLimitStillExertsSamAndTakesNothingIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -102,7 +102,6 @@ public class Card_01_310_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals("false", scn.FreepsActionNoEffect(card));
 		scn.FreepsUseCardAction(card);
 		scn.DismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(sword);
@@ -110,15 +109,10 @@ public class Card_01_310_ErrataTests
 		assertEquals(Zone.HAND, sword.getZone());
 		assertEquals(1, scn.GetFreepsHandCount());
 
-		// Limit once per turn: Sam can still exert, so the ability is still offered, flagged as doing
-		// nothing (Ketura on Q-0041).
-		assertTrue(scn.FreepsActionAvailable(card));
-		assertEquals("limit", scn.FreepsActionNoEffect(card));
-
-		// Used anyway: Sam exerts, and the draw deck (which still holds a [shire] item) is not looked through.
-		scn.FreepsUseCardAction(card);
-		assertEquals(2, scn.GetWoundsOn(card));
-		assertEquals(1, scn.GetFreepsHandCount());
+		// Limit once per turn: a limit on uses, so the ability is not offered again, though Sam could still
+		// exert and the draw deck still holds a [shire] item (Ketura on Q-0093).
+		assertFalse(scn.FreepsActionAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(card));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

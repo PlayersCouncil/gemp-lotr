@@ -99,7 +99,6 @@ public class Card_V3_121_Tests
 
 		// Action available with an unbound Hobbit on the table
 		assertTrue(scn.FreepsActionAvailable(site));
-		assertEquals("false", scn.FreepsActionNoEffect(site));
 		scn.FreepsUseCardAction(site);
 		scn.DismissRevealedCards();
 
@@ -121,14 +120,7 @@ public class Card_V3_121_Tests
 		assertAttachedTo(pipe, merry);
 		assertEquals(Zone.SUPPORT, pipeweed.getZone());
 
-		// Limit once per phase — Merry can still exert, so the action is still offered,
-		// flagged as doing nothing (Ketura on Q-0041)
-		assertTrue(scn.FreepsActionAvailable(site));
-		assertEquals("limit", scn.FreepsActionNoEffect(site));
-
-		// Used at its limit: Merry exerts and the draw deck is not looked through
-		scn.FreepsUseCardAction(site);
-		assertEquals(2, scn.GetWoundsOn(merry));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		// Limit once per phase — action no longer available
+		assertFalse(scn.FreepsActionAvailable(site));
 	}
 }

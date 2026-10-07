@@ -136,6 +136,8 @@
 					type: Discard
 					player: shadow
 					select: choose(side(shadow))
+					// "Shadow cards" names a side and nothing more: a hindered one may be among them (Q-0098).
+					override: hindered
 					count: {
 						type: forEachKeywordOnCardInMemory
 						memory: exertedDwarf

@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -439,7 +438,6 @@ public class Card_V3_086_Tests
 	}
 
 	@Test
-	@Ignore("Q-0096: do the other Men keep the keywords until the regroup phase when the Man who was exerted leaves play first? The game takes them away")
 	public void TheKeywordsStayWhenTheManExertedIsKilledBeforeTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -479,6 +477,49 @@ public class Card_V3_086_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
 		assertTrue(scn.HasKeyword(rider, Keyword.RANGER));
+	}
+
+	@Test
+	public void TheKeywordsStayWhenTheManExertedIsHinderedBeforeTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var calenhad = scn.GetFreepsCard("calenhad1");
+		var merry = scn.GetFreepsCard("merry");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var rider = scn.GetFreepsCard("rider");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner1");
+		scn.MoveCompanionsToTable(merry, eowyn, rider, boromir);
+		scn.MoveCardsToSupportArea(calenhad);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(boromir, Keyword.VALIANT));
+
+		// Beside Eowyn, Merry is an unbound Man, and valiant.
+		scn.FreepsUseCardAction(calenhad);
+		scn.FreepsChooseCard(merry);
+
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertTrue(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
+
+		// Boromir, a [gondor] Man, fights the Runner, and Merry hinders himself by his own skirmish ability:
+		// no [rohan] Man is in the skirmish, so nothing is resolved and the skirmish goes on.
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(boromir, runner);
+		assertFalse(scn.IsHindered(merry));
+
+		scn.FreepsUseCardAction(merry);
+
+		assertTrue(scn.IsHindered(merry));
+		assertTrue(scn.IsCharSkirmishing(boromir));
+		assertTrue(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test

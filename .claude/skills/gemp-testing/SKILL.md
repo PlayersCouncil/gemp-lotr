@@ -130,9 +130,10 @@ with one legal bearer it is made without asking.
 costs can be paid, whether or not its effect can do anything: Sam's "exert Sam to remove a burden" is offered with
 no burdens to remove. To test that an effect finds nothing to do, use the action, check the cost was paid, and
 check the game is back at the phase's actions. An event is the same: with nothing for its effect to act on it
-is still offered, and playing it pays for it and discards it. So is an ability with a cost that has reached its
-limit (Q-0041): it is offered, the cost is paid, and nothing else happens. With no cost it is not offered at its
-limit.
+is still offered, and playing it pays for it and discards it. An ability at its limit goes by the kind of
+limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no cost. A limit on what its effect
+gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
+and nothing else happens; with no cost it is not offered at that limit either.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -372,8 +373,9 @@ action in the player's pending choice of actions: `"false"`, or why the game exp
 if the card offers no such action, or if more than one fits. A flagged action is offered and may be taken like
 any other: read the flag, then take the action. An optional trigger is read the same way while its offer is
 pending (`FreepsActionNoEffect(card)`, then `FreepsChooseOptionalTrigger(card)`). An ability or optional trigger
-with a cost reads `"limit"` once it has been used as often as its limit allows, and one whose capped bonus is
-spent likewise. The flag is worked out when the decision is sent, so after cheating the board get a new decision
+with a cost whose limit is on what its effect gives (`effectLimitPerPhase` / `effectLimitPerTurn` in the
+definition) reads `"limit"` once it has given as much as the limit allows, and one whose capped bonus is spent
+likewise. One with a limit on uses is not offered at its limit, so there is no flag to read. The flag is worked out when the decision is sent, so after cheating the board get a new decision
 before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
 is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".

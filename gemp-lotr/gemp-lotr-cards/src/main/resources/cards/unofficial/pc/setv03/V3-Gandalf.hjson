@@ -29,13 +29,16 @@
 					type: Played
 					filter: self
 				}
+				// "A Shadow card" names a side and nothing more, so a hindered one may be the card (Q-0098).
 				requires: {
 					type: CanSpot
 					filter: side(Shadow),AttachedTo(HasAttached(self))
+					hindered: true
 				}
 				effect: {
 					type: Discard
 					select: choose(side(Shadow), AttachedTo(bearer))
+					override: hindered
 				}
 			}
 			

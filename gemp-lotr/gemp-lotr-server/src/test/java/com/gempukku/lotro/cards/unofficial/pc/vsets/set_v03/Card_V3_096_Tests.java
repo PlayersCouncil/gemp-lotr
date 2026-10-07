@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -564,8 +563,8 @@ public class Card_V3_096_Tests
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(night));
 
+		// Both must be hindered to bring Sauron within the pool, so there is nothing to choose.
 		scn.ShadowUseCardAction(night);
-		scn.ShadowChooseCards(sky1, armory);
 
 		assertTrue(scn.IsHindered(sky1));
 		assertTrue(scn.IsHindered(armory));
@@ -599,8 +598,8 @@ public class Card_V3_096_Tests
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(night));
 
+		// Both must be hindered to bring Sauron within the pool, so there is nothing to choose.
 		scn.ShadowUseCardAction(night);
-		scn.ShadowChooseCards(sky1, armory);
 
 		assertTrue(scn.IsHindered(sky1));
 		assertTrue(scn.IsHindered(armory));
@@ -610,7 +609,6 @@ public class Card_V3_096_Tests
 	}
 
 	@Test
-	@Ignore("F-0067: the fewest cards that may be hindered is 0 whatever the pool; fewer than Sauron needs hinders them and plays nothing")
 	public void TheFewestCardsThatMayBeHinderedAreAsManyAsBringSauronWithinThePool() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

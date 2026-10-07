@@ -213,6 +213,8 @@
 				{
 					type: discard
 					select: all(side(shadow),attachedTo(memory(chosenMinion)))
+					// "Shadow cards" names a side and nothing more: a hindered one is discarded too (Q-0098).
+					override: hindered
 				}
 			]
 		}

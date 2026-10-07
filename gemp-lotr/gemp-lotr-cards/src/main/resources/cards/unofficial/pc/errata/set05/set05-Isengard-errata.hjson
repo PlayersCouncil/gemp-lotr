@@ -150,7 +150,7 @@
 			{
 				type: activated
 				phase: shadow
-				limitPerPhase: 2
+				effectLimitPerPhase: 2
 				cost: {
 					type: exert
 					select: choose(Uruk-hai)

@@ -288,7 +288,7 @@ public class Card_V3_115_Tests
 	}
 
 	@Test
-	public void SamAtHisLimitStillAddsABurdenAndHindersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SamsAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
@@ -303,7 +303,6 @@ public class Card_V3_115_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(0, scn.GetBurdens());
-		assertEquals("false", scn.FreepsActionNoEffect(sam));
 		scn.FreepsUseCardAction(sam);
 		scn.FreepsChoose("condition");
 		scn.FreepsChoose("even");
@@ -312,15 +311,11 @@ public class Card_V3_115_Tests
 		assertFalse(scn.IsHindered(blackbreath));
 		scn.ShadowPass();
 
-		// Limit once per turn: a burden can still be added, so the ability is still offered,
-		// flagged as doing nothing (Ketura on Q-0041)
-		assertTrue(scn.FreepsActionAvailable(sam));
-		assertEquals("limit", scn.FreepsActionNoEffect(sam));
-
-		// Used anyway: a burden is added, nothing is asked and nothing more is hindered
-		scn.FreepsUseCardAction(sam);
-		assertEquals(2, scn.GetBurdens());
+		// Limit once per turn: a limit on uses, so the ability is not offered again, though a burden
+		// could still be added (Ketura on Q-0093)
+		assertFalse(scn.FreepsActionAvailable(sam));
+		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.IsHindered(blackbreath));
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

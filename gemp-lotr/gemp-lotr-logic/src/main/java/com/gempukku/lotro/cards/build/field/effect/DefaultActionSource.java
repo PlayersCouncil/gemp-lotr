@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.ActionSource;
+import com.gempukku.lotro.cards.build.LimitRequirement;
 import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.UnpaidCostsContext;
@@ -15,8 +16,10 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
 import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
+import com.gempukku.lotro.logic.effects.IncrementSiteLimitEffect;
 import com.gempukku.lotro.logic.effects.IncrementTurnLimitEffect;
 import com.gempukku.lotro.logic.modifiers.LimitCounter;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -30,15 +33,19 @@ import java.util.List;
 
 public class DefaultActionSource implements ActionSource {
     private final List<Requirement> requirements = new LinkedList<>();
+    // Those of the requirements that are limits on uses.  A required trigger asks them again when it comes to
+    // be carried out (see createAction).
+    private final List<LimitRequirement> limitRequirements = new LinkedList<>();
     // What the definition says must hold for the action to do anything at all ("noEffectUnless").  Unlike a
     // requirement these do not withhold the action: it is offered, and flagged as having no effect.
     private final List<Requirement> noEffectUnless = new LinkedList<>();
 
     private final List<EffectAppender> costs = new LinkedList<>();
     private final List<EffectAppender> effects = new LinkedList<>();
-    // The limits that do not withhold the action ("limitPerPhase", "limitPerTurn" on an ability that has a cost
-    // and is the player's to use or not): at its limit the action is still offered, its costs are paid, and the
-    // gate lets none of its effects through (Ketura on Q-0041).  See addLimitPerPhase.
+    // The limits that do not withhold the action ("effectLimitPerPhase", "effectLimitPerTurn" on an ability that
+    // has a cost and is the player's to use or not: a limit on what the effect gives, "limit +3"): at its limit
+    // the action is still offered, its costs are paid, and the gate lets none of its effects through (Ketura on
+    // Q-0041 and Q-0093).  A limit on uses ("limit once per turn") withholds the action.  See addLimitPerPhase.
     private final List<Limit> limitGate = new LinkedList<>();
 
     private PlayerSource playingPlayer;
@@ -92,6 +99,8 @@ public class DefaultActionSource implements ActionSource {
 
     public void addPlayRequirement(Requirement requirement) {
         this.requirements.add(requirement);
+        if (requirement instanceof LimitRequirement limitRequirement)
+            this.limitRequirements.add(limitRequirement);
     }
 
     /**
@@ -99,9 +108,11 @@ public class DefaultActionSource implements ActionSource {
      * @param phase The phase the uses are counted in, or null for whichever phase the action is used in.
      * @param limit How many uses there may be.
      * @param offeredAtLimit False withholds the action once the limit is reached: a requirement, and a use
-     *                       counted before any other cost.  True leaves it on offer (it has a cost the player may
-     *                       want to pay for its own sake): its costs are paid as written, a use is counted once
-     *                       they are, and at the limit nothing more is done.  It is then flagged as doing nothing.
+     *                       counted before any other cost.  That is a limit on uses, and any limit on an action
+     *                       with no cost.  True leaves it on offer (the limit is on what its effect gives, and it
+     *                       has a cost the player may want to pay for its own sake): its costs are paid as
+     *                       written, a use is counted once they are, and at the limit nothing more is done.  It
+     *                       is then flagged as doing nothing.  See EffectUtils.processLimits.
      */
     public void addLimitPerPhase(Phase phase, int limit, boolean offeredAtLimit) {
         if (offeredAtLimit) {
@@ -109,7 +120,7 @@ public class DefaultActionSource implements ActionSource {
             return;
         }
         addPlayRequirement(
-                (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limit));
+                (LimitRequirement) (actionContext) -> PlayConditions.checkPhaseLimit(actionContext.getGame(), actionContext.getSource(), phase, limit));
         addCost(
                 new AbstractEffectAppender() {
                     @Override
@@ -128,12 +139,29 @@ public class DefaultActionSource implements ActionSource {
             return;
         }
         addPlayRequirement(
-                (actionContext) -> PlayConditions.checkTurnLimit(actionContext.getGame(), actionContext.getSource(), limit));
+                (LimitRequirement) (actionContext) -> PlayConditions.checkTurnLimit(actionContext.getGame(), actionContext.getSource(), limit));
         addCost(
                 new AbstractEffectAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         return new IncrementTurnLimitEffect(actionContext.getSource(), limit);
+                    }
+                });
+    }
+
+    /**
+     * Limits the action to so many uses of its card at a site: "limit once per site".  The count is the card's,
+     * is cleared when the fellowship moves to another site and at the end of the turn, and at the limit the
+     * action is withheld: a limit on uses (Ketura on Q-0084, Q-0093 and F-0146).
+     */
+    public void addLimitPerSite(int limit) {
+        addPlayRequirement(
+                (LimitRequirement) (actionContext) -> PlayConditions.checkSiteLimit(actionContext.getGame(), actionContext.getSource(), limit));
+        addCost(
+                new AbstractEffectAppender() {
+                    @Override
+                    protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                        return new IncrementSiteLimitEffect(actionContext.getSource(), limit);
                     }
                 });
     }
@@ -161,6 +189,15 @@ public class DefaultActionSource implements ActionSource {
         private boolean isReached(ActionContext actionContext) {
             return getCounter(actionContext).getUsedLimit() >= max;
         }
+    }
+
+    // Whether a limit on the uses of the action has been reached.
+    private boolean isLimitReached(ActionContext actionContext) {
+        for (LimitRequirement limitRequirement : limitRequirements) {
+            if (!limitRequirement.accepts(actionContext))
+                return true;
+        }
+        return false;
     }
 
     // Whether the action, used now, would get nothing past its gate.  The judge and the gate both ask this.
@@ -237,6 +274,13 @@ public class DefaultActionSource implements ActionSource {
             if (setOffBy != null && !setOffBy.isEmpty())
                 action.setOfferedFor(GameUtils.getAppendedTextNames(setOffBy));
         }
+
+        // A required trigger is raised when its event happens and carried out later, after any other trigger
+        // the same event raised.  If one of those was this card's too (two companions exerting at once, and a
+        // card that answers each exertion once per site), the limit it passed when raised may be used up by
+        // the time its turn comes: it is then not carried out (F-0145).
+        if (action instanceof RequiredTriggerAction requiredTrigger && !limitRequirements.isEmpty())
+            requiredTrigger.setSpentCheck(() -> isLimitReached(actionContext));
 
         for (EffectAppender cost : costs)
             cost.appendEffect(true, action, actionContext);

@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.requirement;
 
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.LimitRequirement;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
@@ -19,7 +20,7 @@ public class PerPhaseLimit implements RequirementProducer {
         final ValueSource limitSource = ValueResolver.resolveEvaluator(object.get("limit"), 1, environment);
         final boolean perPlayer = FieldUtils.getBoolean(object.get("perPlayer"), "perPlayer", false);
 
-        return (actionContext) -> {
+        return (LimitRequirement) (actionContext) -> {
             final int limit = limitSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
             if (perPlayer)

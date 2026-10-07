@@ -40,4 +40,80 @@
 		}
 		gametext: <b>Fellowship:</b> Add (1) to make a companion strength +1 (limit +2, or +4 if you can spot a Dwarf).
 	}
+	# KeywordSnapshotTests: keywords copied with "snapshot: true" from a card whose keyword has a number.  The one
+	# real card that takes a snapshot (Northern Signal-fire, Flame of Calenhad 103_86) copies unloaded keywords
+	# only, and none of those has a number.
+	0_8002: {
+		title: Test War-horn
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: choose(your,minion)
+				memorize: exertedMinion
+			}
+			effect: [
+				{
+					type: MemorizeActive
+					filter: your,minion,not(memory(exertedMinion))
+					memory: otherMinions
+				}
+				{
+					type: AddModifier
+					until: start(Regroup)
+					modifier: {
+						type: AddKeywordFromCards
+						filter: memory(otherMinions)
+						from: memory(exertedMinion)
+						snapshot: true
+					}
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert your minion. Until the regroup phase, each of your other minions gains each keyword on that minion.
+	}
+	# SiteLimitTests: a limit per site written by hand, with the PerSiteLimit requirement and the
+	# IncrementPerSiteLimit effect.  The three real cards that are limited per site all use the limitPerSite field.
+	0_8003: {
+		title: Test Waystone
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				fellowship
+				regroup
+			]
+			requires: {
+				type: PerSiteLimit
+				limit: 1
+			}
+			cost: {
+				type: addTwilight
+				amount: 1
+			}
+			effect: [
+				{
+					type: IncrementPerSiteLimit
+					limit: 1
+				}
+				{
+					type: heal
+					select: choose(companion)
+				}
+			]
+		}
+		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Add (1) to heal a companion (limit once per site).
+	}
 }

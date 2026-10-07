@@ -197,6 +197,42 @@ public class Card_V3_002_Tests
 	}
 
 	@Test
+	public void AHinderedShadowCardOnBearerMayBeTheOneDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var jetsam = scn.GetFreepsCard("jetsam1");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gpipe = scn.GetFreepsCard("gpipe");
+		var breath = scn.GetShadowCard("breath1");
+		var poison = scn.GetShadowCard("poison");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, gpipe, breath, poison);
+		// Both Shadow cards on Gandalf are hindered: neither has a type or a culture, and each is a Shadow card still.
+		scn.HinderCard(breath, poison);
+		scn.MoveCardsToHand(jetsam);
+
+		scn.StartGame();
+
+		assertTrue(scn.IsHindered(breath));
+		assertTrue(scn.IsHindered(poison));
+
+		scn.FreepsPlayCard(jetsam);
+
+		assertAttachedTo(jetsam, gandalf);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(jetsam));
+
+		scn.FreepsChooseOptionalTrigger(jetsam);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(breath, poison));
+		scn.FreepsChooseCard(breath);
+
+		assertInZone(Zone.DISCARD, breath);
+		assertAttachedTo(poison, gandalf);
+		assertTrue(scn.IsHindered(poison));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
 	public void WhenPlayedOnABearerWithNoShadowCardNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

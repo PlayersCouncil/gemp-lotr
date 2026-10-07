@@ -91,7 +91,7 @@ public class Card_02_104_ErrataTests
 	}
 
 	@Test
-	public void FellowshipAbilityAtItsLimitStillExertsMerryAndTakesNothingIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -101,7 +101,6 @@ public class Card_02_104_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals("false", scn.FreepsActionNoEffect(card));
 		scn.FreepsUseCardAction(card);
 		scn.DismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(gaffer);
@@ -109,15 +108,10 @@ public class Card_02_104_ErrataTests
 		assertEquals(Zone.HAND, gaffer.getZone());
 		assertEquals(1, scn.GetFreepsHandCount());
 
-		// Limit once per turn: Merry can still exert, so the ability is still offered, flagged as doing
-		// nothing (Ketura on Q-0041).
-		assertTrue(scn.FreepsActionAvailable(card));
-		assertEquals("limit", scn.FreepsActionNoEffect(card));
-
-		// Used anyway: Merry exerts, and the draw deck (which still holds a Hobbit ally) is not looked through.
-		scn.FreepsUseCardAction(card);
-		assertEquals(2, scn.GetWoundsOn(card));
-		assertEquals(1, scn.GetFreepsHandCount());
+		// Limit once per turn: a limit on uses, so the ability is not offered again, though Merry could still
+		// exert and the draw deck still holds a Hobbit ally (Ketura on Q-0093).
+		assertFalse(scn.FreepsActionAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(card));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -1389,7 +1389,7 @@
 		effects: {
 			type: activated
 			phase: skirmish
-			limitPerPhase: 3
+			effectLimitPerPhase: 3
 			cost: {
 				type: removeTwilight
 			}

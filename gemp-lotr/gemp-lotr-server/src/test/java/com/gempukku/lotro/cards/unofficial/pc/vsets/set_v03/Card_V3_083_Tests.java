@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -528,46 +527,6 @@ public class Card_V3_083_Tests
 	}
 
 	@Test
-	public void XMayBeMoreThanTheItemsThatCanBePlayedAndTheBeaconsHinderedBeyondThemBuyNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gcfa = scn.GetFreepsCard("gcfa");
-		var war1 = scn.GetFreepsCard("war1");
-		var war2 = scn.GetFreepsCard("war2");
-		var war3 = scn.GetFreepsCard("war3");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var mount = scn.GetFreepsCard("mount1");
-		var saga = scn.GetFreepsCard("saga");
-		var sting = scn.GetFreepsCard("sting");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(gcfa, war1, war2, war3);
-		// One item a Man can bear, beside a condition and a possession for Frodo.
-		scn.MoveCardsToDiscard(mount, saga, sting);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		scn.FreepsUseCardAction(gcfa);
-
-		// The hindering is the cost and X is the player's: all three beacons may be hindered though only one
-		// item can be played.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(war1, war2, war3));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertEquals(3, scn.FreepsGetChoiceMax());
-		scn.FreepsChooseCards(war1, war2, war3);
-
-		assertTrue(scn.IsHindered(war1));
-		assertTrue(scn.IsHindered(war2));
-		assertTrue(scn.IsHindered(war3));
-		assertAttachedTo(mount, aragorn);
-		// 1 for the Rider's Mount, and nothing else was played.
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.DISCARD, saga, sting);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0094: may X be chosen beyond the number of items in the discard pile that can be played? The game says yes")
 	public void XIsNoMoreThanTheItemsInTheDiscardPileThatCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

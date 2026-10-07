@@ -238,39 +238,28 @@ public class Card_V1_061_Tests
 		scn.FreepsUseCardAction(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
-		assertEquals("false", scn.FreepsActionNoEffect(throneRoom));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 
-		// He exerts again in the same skirmish.  Celeborn can exert again, so the site still makes its offer,
-		// and the game marks it as at its limit.
+		// He exerts again in the same skirmish: nothing is offered, though Celeborn could exert again.
 		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertFalse(scn.IsExhausted(celeborn));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
-		assertEquals("limit", scn.FreepsActionNoEffect(throneRoom));
-
-		// Taken all the same: Celeborn exerts and Gimli is not healed.
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.GetWoundsOn(celeborn));
-		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// 6 + 2 + 2 against 5: the Savage is overwhelmed.
 		scn.PassSkirmishActions();
 		assertEquals(1, scn.GetWoundsOn(gimli));
 
-		// Aragorn's skirmish is another phase.  Gimli exerts in it, and is offered the heal again, unmarked.
-		// The rig takes a wound off Celeborn so that he can exert for it.
-		scn.RemoveWoundsFromChar(celeborn, 1);
+		// Aragorn's skirmish is another phase.  Gimli exerts in it, and is offered the heal again.
 		scn.FreepsResolveSkirmish(aragorn);
 		assertTrue(scn.IsCharSkirmishing(aragorn));
 		scn.FreepsUseCardAction(gimli);
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
-		assertEquals("false", scn.FreepsActionNoEffect(throneRoom));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(2, scn.GetWoundsOn(celeborn));
@@ -401,17 +390,8 @@ public class Card_V1_061_Tests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(celeborn));
-		// Once in a phase.  Celeborn can exert again, so the offer for Gimli is still there, and it is the
-		// only one left; the game marks it as at its limit.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable("Gimli, Son of Gl"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable("Frodo, Son of Drogo"));
-		assertEquals("limit", scn.FreepsActionNoEffect(throneRoom));
-
-		// Taken all the same: Celeborn exerts and Gimli is not healed.
-		scn.FreepsChooseAction("Gimli, Son of Gl");
-		assertEquals(2, scn.GetWoundsOn(celeborn));
-		assertEquals(1, scn.GetWoundsOn(gimli));
-		assertEquals(0, scn.GetWoundsOn(frodo));
+		// Once in a phase: the offer for Gimli is gone with it.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
@@ -505,25 +485,13 @@ public class Card_V1_061_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
-		// Once in the phase for the site and once for Uruviel, and no more.  At Aragorn's next exertion
-		// Celeborn (vitality 3) can exert again, so both still make their offers, and the game marks each as
-		// at its limit.
+		// Once in the phase for the site and once for Uruviel, and no more: Aragorn's next exertion is offered
+		// nothing, though Celeborn (vitality 3) could exert again.
 		scn.ShadowPass();
 		scn.FreepsUseCardAction(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertFalse(scn.IsExhausted(celeborn));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(uruviel));
-		assertEquals("limit", scn.FreepsActionNoEffect(throneRoom));
-		assertEquals("limit", scn.FreepsActionNoEffect(uruviel));
-
-		// The site's is taken: Celeborn, the only ally who can, exerts, and Aragorn is not healed.  With
-		// Celeborn exhausted too, nobody can pay for Uruviel's offer, and it is gone.
-		scn.FreepsChooseOptionalTrigger(throneRoom);
-		assertEquals(2, scn.GetWoundsOn(celeborn));
-		assertEquals(1, scn.GetWoundsOn(uruviel));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.IsExhausted(celeborn));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

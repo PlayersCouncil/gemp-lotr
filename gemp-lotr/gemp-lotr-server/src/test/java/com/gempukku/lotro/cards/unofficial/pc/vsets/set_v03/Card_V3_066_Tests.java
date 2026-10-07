@@ -314,10 +314,8 @@ public class Card_V3_066_Tests
 
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowActionAvailable(gollum));
+		// With no threats X can only be 0, and the game takes it without asking.
 		scn.ShadowUseCardAction(gollum);
-		assertEquals(0, scn.ShadowGetChoiceMin());
-		assertEquals(0, scn.ShadowGetChoiceMax());
-		scn.ShadowChoose("0");
 
 		// Frodo costs 0 as well, and Smeagol is Ring-bound: only the Ring-bearer is excepted.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(galadriel, smeagol));
@@ -455,7 +453,6 @@ public class Card_V3_066_Tests
 
 		assertTrue(scn.ShadowActionAvailable(gollum));
 		scn.ShadowUseCardAction(gollum);
-		scn.ShadowChoose("0");
 		scn.ShadowChooseCard(smeagol);
 		assertTrue(scn.IsCharAssignedAgainst(smeagol, gollum));
 
@@ -513,12 +510,8 @@ public class Card_V3_066_Tests
 		assertTrue(scn.ShadowActionAvailable(gollum));
 		scn.ShadowUseCardAction(gollum);
 
-		// X is at least 1, since nobody but the Ring-bearer costs 0, and at most the one threat.
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		assertEquals(1, scn.ShadowGetChoiceMax());
-		scn.ShadowChoose("1");
-
-		// The threat is paid, and there is nobody to assign.
+		// X is at least 1, since nobody but the Ring-bearer costs 0, and at most the one threat: the only
+		// number there is, so the game takes it without asking.  The threat is paid, and there is nobody to assign.
 		assertEquals(0, scn.GetThreats());
 		assertFalse(scn.IsCharAssigned(gollum));
 		assertFalse(scn.IsCharAssigned(frodo));

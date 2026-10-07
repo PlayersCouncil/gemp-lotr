@@ -126,64 +126,14 @@
 					type: Exerted
 					filter: companion
 				}
-				// "Limit once per site" is once for each site in a turn (Q-0084). Until the fellowship has moved
-				// it is at the site the turn began on: counted to the end of the fellowship phase.
-				requires: [
-					{
-						type: Not
-						requires: {
-							type: MoveCountMinimum
-							amount: 1
-						}
-					}
-					{
-						type: perPhaseLimit
-						phase: fellowship
-						limit: 1
-					}
-				]
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: fellowship
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
-			}
-			{
-				type: trigger
-				optional: false
-				trigger: {
-					type: Exerted
-					filter: companion
+				// "Limit once per site" is once for each site in a turn (Q-0084): the engine's count, cleared when
+				// the fellowship moves and at the end of the turn (F-0146). Two companions exerting at once draw
+				// one card: the second trigger is dropped once the first has used the limit (F-0145).
+				limitPerSite: 1
+				effect: {
+					type: DrawCards
+					count: 1
 				}
-				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
-				requires: [
-					{
-						type: MoveCountMinimum
-						amount: 1
-					}
-					{
-						type: perPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-				]
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
 			}
 			{
 				type: Response
@@ -805,9 +755,22 @@
 				cost: {
 					type: Hinder
 					select: choose(your, hinderable, side(Shadow), support)
+					// X is at least as many as bring Sauron within the pool, from hand or from the discard
+					// pile: playing him is a cost, and an X that plays nothing is not one to name (F-0067).
 					count: {
 						type: Range
-						from: 0
+						from: {
+							type: LeastDiscountToPlay
+							fromZone: [
+								HAND
+								DISCARD
+							]
+							filter: name(Sauron)
+							max: {
+								type: ForEachYouCanSpot
+								filter: your, hinderable, side(Shadow), support
+							}
+						}
 						to: {
 							type: ForEachYouCanSpot
 							filter: your, hinderable, side(Shadow), support
@@ -1662,78 +1625,18 @@
 						fromZone: DECK
 					}
 				]
-				// "Limit once per site" is once for each site in a turn (Q-0084), and a limit on the number of times
-				// this can be used at all (Q-0082): at its limit it is not offered. Until the fellowship has moved it is
-				// at the site the turn began on: counted to the end of the fellowship phase.
-				requires: [
-					{
-						type: Not
-						requires: {
-							type: MoveCountMinimum
-							amount: 1
-						}
-					}
-					{
-						type: perPhaseLimit
-						phase: fellowship
-						limit: 1
-					}
-				]
+				// "Limit once per site" is once for each site in a turn (Q-0084), counted by the engine (F-0146),
+				// and a limit on the number of times this can be used at all (Q-0082): at its limit it is not
+				// offered.
+				limitPerSite: 1
 				cost: {
 					type: Exert
 					select: choose(or(ally, and(unbound,companion)))
 				}
-				effect: [
-					{
-						type: DrawCards
-						count: 1
-					}
-					{
-						type: IncrementPerPhaseLimit
-						phase: fellowship
-					}
-				]
-			}
-			{
-				type: Trigger
-				optional: true
-				trigger: [
-					{
-						type: RevealsCardFromDrawDeck
-						source: side(Free Peoples)
-					}
-					{
-						type: Discarded
-						source: side(Free Peoples)
-						fromZone: DECK
-					}
-				]
-				// Once it has moved: counted to the end of the regroup phase, which is when the next move is made.
-				requires: [
-					{
-						type: MoveCountMinimum
-						amount: 1
-					}
-					{
-						type: perPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-				]
-				cost: {
-					type: Exert
-					select: choose(or(ally, and(unbound,companion)))
+				effect: {
+					type: DrawCards
+					count: 1
 				}
-				effect: [
-					{
-						type: DrawCards
-						count: 1
-					}
-					{
-						type: IncrementPerPhaseLimit
-						phase: regroup
-					}
-				]
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site).

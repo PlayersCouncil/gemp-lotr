@@ -83,7 +83,7 @@ public class Card_04_365_Tests
 	}
 
 	@Test
-	public void FellowshipAbilityAtItsLimitStillPlaysAPossessionAndHealsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -96,7 +96,6 @@ public class Card_04_365_Tests
 
 		scn.StartGame();
 
-		assertEquals("false", scn.FreepsActionNoEffect(card));
 		scn.FreepsUseCardAction(card);
 		// Theoden is the only [rohan] companion, so he is the bearer and the one healed.
 		scn.FreepsChooseCard(spear);
@@ -104,17 +103,13 @@ public class Card_04_365_Tests
 		assertEquals(0, scn.GetWoundsOn(card));
 		assertEquals(1, scn.GetTwilight());
 
-		// A wound put back by the rig, for the second use to leave alone.
+		// A wound put back by the rig, and a second possession in hand that could be played: everything a
+		// second use would need.
 		scn.AddWoundsToChar(card, 1);
 
-		// Limit once per turn: a possession can still be played, so the ability is still offered, flagged
-		// as doing nothing (Ketura on Q-0041).
-		assertTrue(scn.FreepsActionAvailable(card));
-		assertEquals("limit", scn.FreepsActionNoEffect(card));
-
-		scn.FreepsUseCardAction(card);
-		assertEquals(Zone.ATTACHED, mount.getZone());
-		assertEquals(2, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(card));
+		// Limit once per turn: a limit on uses, so the ability is not offered again (Ketura on Q-0093).
+		assertFalse(scn.FreepsActionAvailable(card));
+		assertEquals(Zone.HAND, mount.getZone());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

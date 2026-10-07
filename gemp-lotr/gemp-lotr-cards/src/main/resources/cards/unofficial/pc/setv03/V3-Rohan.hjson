@@ -248,7 +248,17 @@
 				cost: {
 					type: Hinder
 					select: choose(hinderable, beacon)
-					count: 1-5
+					// X is at least 1 and no more than the items in the discard pile that can be played on
+					// one of your Men (Q-0094); the beacons that can be hindered are the other bound.
+					count: {
+						type: range
+						from: 1
+						to: {
+							type: ForEachInDiscard
+							discard: you
+							filter: item,PlayableOn(your,Man)
+						}
+					}
 					memorize: hinderedBeacons
 				}
 				effect: {
@@ -613,6 +623,8 @@
 							filter: memory(otherMen)
 							from: memory(exertedMan)
 							unloaded: true
+							// The keywords on him when the ability is used, whatever becomes of him (Q-0096).
+							snapshot: true
 						}
 					}
 				]

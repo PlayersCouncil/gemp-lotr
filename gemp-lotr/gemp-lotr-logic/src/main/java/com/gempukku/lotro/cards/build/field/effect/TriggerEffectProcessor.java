@@ -16,19 +16,13 @@ import org.json.simple.JSONObject;
 public class TriggerEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "trigger", "optional", "requires", "noEffectUnless", "cost", "effect", "text", "player", "limitPerTurn", "limitPerPhase", "phase");
+        FieldUtils.validateAllowedFields(value, "trigger", "optional", "requires", "noEffectUnless", "cost", "effect", "text", "player", "limitPerTurn", "limitPerPhase", "limitPerSite", "effectLimitPerPhase", "effectLimitPerTurn", "phase");
 
         final String text = FieldUtils.getString(value.get("text"), "text");
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
         if (triggerArray.length == 0)
             throw new InvalidCardDefinitionException("Trigger effect without trigger definition");
         final boolean optional = FieldUtils.getBoolean(value.get("optional"), "optional");
-        final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
-        final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
-        // An optional trigger with a cost stays on offer at its limit: the cost may be worth paying for its own
-        // sake (Ketura on Q-0041).  With no cost it is withheld there (Q-0034), and a required trigger is nobody's
-        // to offer.
-        final boolean offeredAtLimit = optional && FieldUtils.getObjectArray(value.get("cost"), "cost").length > 0;
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
 
         final String player = FieldUtils.getString(value.get("player"), "player");
@@ -74,10 +68,7 @@ public class TriggerEffectProcessor implements EffectProcessor {
                         });
             }
 
-            if (limitPerPhase > 0)
-                triggerActionSource.addLimitPerPhase(phase, limitPerPhase, offeredAtLimit);
-            if (limitPerTurn > 0)
-                triggerActionSource.addLimitPerTurn(limitPerTurn, offeredAtLimit);
+            EffectUtils.processLimits(value, triggerActionSource, phase, optional);
 
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 

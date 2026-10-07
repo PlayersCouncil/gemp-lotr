@@ -25,6 +25,15 @@ public interface ModifiersQuerying {
 
     LimitCounter getUntilEndOfTurnLimitCounter(PhysicalCard card, String prefix);
 
+    /**
+     * Counts the uses of a card at the site the fellowship is at: "limit once per site".  The count is cleared
+     * when the fellowship moves to another site and at the end of the turn, so it is once for each site in a turn
+     * (Ketura on Q-0084 and F-0146).
+     */
+    LimitCounter getSiteLimitCounter(PhysicalCard card);
+
+    LimitCounter getSiteLimitCounter(PhysicalCard card, String prefix);
+
     Collection<Modifier> getModifiersAffecting(LotroGame game, PhysicalCard card);
 
     Evaluator getFPStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);

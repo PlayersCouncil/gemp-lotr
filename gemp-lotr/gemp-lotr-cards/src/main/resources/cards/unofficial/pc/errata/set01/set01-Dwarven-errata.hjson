@@ -681,6 +681,8 @@
 				{
 					type: chooseActiveCards
 					select: choose(side(shadow))
+					// "A Shadow card" names a side and nothing more: a hindered one may be the card (Q-0098).
+					hindered: true
 					memorize: chosenCard
 					text: Choose a Shadow card to discard
 				}
@@ -697,6 +699,7 @@
 					effect: {
 						type: discard
 						select: memory(chosenCard)
+						override: hindered
 					}
 				}
 			]

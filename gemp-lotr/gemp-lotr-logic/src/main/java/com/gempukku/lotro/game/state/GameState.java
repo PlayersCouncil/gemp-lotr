@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.logic.PlayerOrder;
+import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
@@ -1256,6 +1257,9 @@ public class GameState {
         stopAffecting(getCurrentSite());
         setPlayerPosition(currentPlayerId, oldPlayerPosition + 1);
         increaseMoveCount();
+        // What is limited "per site" starts afresh at the site moved to.
+        if (game.getModifiersEnvironment() instanceof ModifiersLogic modifiersLogic)
+            modifiersLogic.signalFellowshipMoved();
         startAffecting(game, getCurrentSite());
     }
 

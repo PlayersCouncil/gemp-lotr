@@ -32,8 +32,14 @@ import static org.junit.Assert.*;
  * skirmishing ... If it actually results in something hitting the table, it's fine to leave noeffect off of it."
  *
  * Each action in a choice of actions carries one word: "false", or why it will do nothing: "effect" (its effect
- * will do nothing), "limit" (the ability or its bonus has reached its limit) or "skirmish" (a skirmish action that
+ * will do nothing), "limit" (what the ability gives has reached its limit) or "skirmish" (a skirmish action that
  * reaches nobody in the skirmish being fought).  A flagged action is offered and may be taken all the same.
+ *
+ * Ketura, 2026-10-07, on Q-0082 and Q-0093: "there's a nuance between 'limit +3' and 'limit once', with the former
+ * being a cumulative addition of multiple invocations, and the latter being a limit on the number of times the
+ * ability can invoke at all"; "the first kind should be offered but effectless, while the second should halt being
+ * offered once the invocation limit is reached."  And: "Dark Tidings is more like '+1' than 'once'; it is limiting
+ * the number of threats that can be added the way that Scimitar limits the strength bonus."
  */
 public class NoEffectFlagTests
 {
@@ -245,6 +251,11 @@ public class NoEffectFlagTests
 			// companion to exert that minion (limit once per turn)."
 			put("shadowplay", "10_114");
 			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, vitality 4
+			// Sam, Son of Hamfast, as the Players' Council has him: vitality 4.  "Fellowship: Exert Sam to
+			// take a [shire] item into hand from your draw deck (limit once per turn)."
+			put("gardener", "51_310");
+			put("sword", "1_299");      // Hobbit Sword: a [shire] possession
+			put("pipe", "1_285");       // Bilbo's Pipe: a [shire] possession
 
 			put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1, cost 1
 			put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, cost 6, no text
@@ -1169,7 +1180,8 @@ public class NoEffectFlagTests
 		assertEquals(1, scn.GetThreats());
 		scn.FreepsPass();
 
-		// At its limit it has a cost that can still be paid, so it is still offered, and is marked.
+		// "Limit 1" counts the threats added, not the uses: at its limit the ability has a cost that can
+		// still be paid, so it is still offered, and is marked.
 		assertTrue(scn.ShadowActionAvailable(tidings));
 		assertEquals("limit", scn.ShadowActionNoEffect(tidings));
 
@@ -1212,7 +1224,35 @@ public class NoEffectFlagTests
 	}
 
 	@Test
-	public void AnOptionalTriggerAtItsLimitIsOfferedFlaggedPaidForAndDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnAbilityWithACostIsWithheldAtItsLimitOnUses() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		var gardener = scn.GetFreepsCard("gardener");
+		var sword = scn.GetFreepsCard("sword");
+		var pipe = scn.GetFreepsCard("pipe");
+		scn.MoveCompanionsToTable(gardener);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsActionAvailable(gardener));
+		assertEquals("false", scn.FreepsActionNoEffect(gardener));
+
+		scn.FreepsUseCardAction(gardener);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(sword);
+		assertEquals(1, scn.GetWoundsOn(gardener));
+		assertInZone(Zone.HAND, sword);
+
+		// "Limit once per turn" counts the uses.  Sam (vitality 4) could exert again and a [shire] item is
+		// still in the draw deck, but the ability is not offered: there is nothing to flag.
+		assertInZone(Zone.DECK, pipe);
+		assertFalse(scn.IsExhausted(gardener));
+		assertFalse(scn.FreepsActionAvailable(gardener));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnOptionalTriggerWithACostIsWithheldAtItsLimitOnUses() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetLimitScenario();
 
 		var sam = scn.GetFreepsCard("sam");
@@ -1229,7 +1269,8 @@ public class NoEffectFlagTests
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(troop);
-		// Within its limit the trigger is not marked.  Sam and Frodo can both exert, so the Hobbit is chosen.
+		// Within its limit the trigger is offered and not marked.  Sam and Frodo can both exert, so the
+		// Hobbit is chosen.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(shadowplay));
 		assertEquals("false", scn.FreepsActionNoEffect(shadowplay));
 		scn.FreepsChooseOptionalTrigger(shadowplay);
@@ -1237,16 +1278,12 @@ public class NoEffectFlagTests
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetWoundsOn(troop));
 
+		// "Limit once per turn" counts the uses: when the next minion is played nothing is offered, though
+		// a Hobbit could still exert.
 		scn.ShadowPlayCard(troop2);
-		// At its limit it is offered for the sake of its cost, and marked.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(shadowplay));
-		assertEquals("limit", scn.FreepsActionNoEffect(shadowplay));
-		scn.FreepsChooseOptionalTrigger(shadowplay);
-		scn.FreepsChooseCard(sam);
-		// The Hobbit exerts and the minion does not.
-		assertEquals(2, scn.GetWoundsOn(sam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(shadowplay));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(troop2));
-		assertEquals(1, scn.GetWoundsOn(troop));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

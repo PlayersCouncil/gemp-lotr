@@ -26,6 +26,15 @@ public abstract class IntegerAwaitingDecision extends AbstractAwaitingDecision {
             setParam("defaultValue", defaultValue.toString());
     }
 
+    /**
+     * The one number that can be named, where the lowest and the highest allowed are the same; otherwise null.
+     * A question with one answer is not put to the player (Ketura on Q-0090 and F-0147: "if we can reduce the
+     * questions that's good"): see PlayoutDecisionEffect.
+     */
+    public Integer getOnlyAnswer() {
+        return (_min != null && _min.equals(_max)) ? _min : null;
+    }
+
     protected int getValidatedResult(String result) throws DecisionResultInvalidException {
         try {
             int value = Integer.parseInt(result);

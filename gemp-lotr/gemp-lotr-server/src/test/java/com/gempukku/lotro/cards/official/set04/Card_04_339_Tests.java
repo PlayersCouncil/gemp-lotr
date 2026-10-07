@@ -99,7 +99,7 @@ public class Card_04_339_Tests
 	}
 
 	@Test
-	public void FellowshipAbilityAtItsLimitStillExertsAManAndPlaysNoMount() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetSiteScenario();
 
@@ -116,22 +116,16 @@ public class Card_04_339_Tests
 		var site = scn.GetCurrentSite();
 		assertEquals("Stables", site.getBlueprint().getTitle());
 
-		assertEquals("false", scn.FreepsActionNoEffect(site));
 		scn.FreepsUseCardAction(site);
 		scn.DismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(mount);
 		assertEquals(1, scn.GetWoundsOn(eomer));
 		assertEquals(1, scn.GetAttachedCards(eomer).size());
 
-		// Limit once per turn: Eomer can still exert, so the ability is still offered, flagged as doing
-		// nothing (Ketura on Q-0041).
-		assertTrue(scn.FreepsActionAvailable(site));
-		assertEquals("limit", scn.FreepsActionNoEffect(site));
-
-		// Used anyway: Eomer exerts, and the draw deck (which still holds a mount) is not looked through.
-		scn.FreepsUseCardAction(site);
-		assertEquals(2, scn.GetWoundsOn(eomer));
-		assertEquals(1, scn.GetAttachedCards(eomer).size());
+		// Limit once per turn: a limit on uses, so the ability is not offered again, though Eomer could still
+		// exert and the draw deck still holds a mount (Ketura on Q-0093).
+		assertFalse(scn.FreepsActionAvailable(site));
+		assertEquals(1, scn.GetWoundsOn(eomer));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

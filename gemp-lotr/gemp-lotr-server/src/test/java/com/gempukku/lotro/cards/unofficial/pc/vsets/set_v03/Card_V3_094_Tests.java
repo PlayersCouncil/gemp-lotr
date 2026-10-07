@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -553,7 +552,6 @@ public class Card_V3_094_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
-	@Ignore("F-0151: the burden is added though the Ring-bearer is hindered, because the condition adding it has hindered itself")
 	@Test
 	public void ThreatAnsweredWhileTheRingBearerIsHinderedAddsNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

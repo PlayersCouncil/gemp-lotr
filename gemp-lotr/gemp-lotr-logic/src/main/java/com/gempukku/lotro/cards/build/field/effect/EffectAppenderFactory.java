@@ -92,6 +92,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("hinder", new HinderCardsInPlay());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
+        effectAppenderProducers.put("incrementpersitelimit", new IncrementPerSiteLimit());
         effectAppenderProducers.put("incrementtoil", new IncrementToil());
         effectAppenderProducers.put("kill", new Kill());
         effectAppenderProducers.put("liberatesite", new LiberateSite());

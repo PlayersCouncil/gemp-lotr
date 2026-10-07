@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 public class ResponseEffectProcessor implements EffectProcessor {
     @Override
     public void processEffect(JSONObject value, BuiltLotroCardBlueprint blueprint, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "trigger", "requires", "noEffectUnless", "cost", "effect", "text", "limitPerPhase", "limitPerTurn", "phase", "fromDiscard");
+        FieldUtils.validateAllowedFields(value, "trigger", "requires", "noEffectUnless", "cost", "effect", "text", "limitPerPhase", "limitPerTurn", "limitPerSite", "effectLimitPerPhase", "effectLimitPerTurn", "phase", "fromDiscard");
 
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
 
@@ -22,11 +22,6 @@ public class ResponseEffectProcessor implements EffectProcessor {
         final String text = FieldUtils.getString(value.get("text"), "text");
 
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");
-        final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
-        final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
-        // An ability with a cost stays on offer at its limit: the cost may be worth paying for its own sake
-        // (Ketura on Q-0041).  With no cost it is withheld there, as before (Q-0034).
-        final boolean offeredAtLimit = FieldUtils.getObjectArray(value.get("cost"), "cost").length > 0;
 
         final boolean fromDiscard = FieldUtils.getBoolean(value.get("fromDiscard"), "fromDiscard", false);
 
@@ -41,10 +36,7 @@ public class ResponseEffectProcessor implements EffectProcessor {
 
             triggerActionSource.addPlayRequirement(triggerChecker);
             EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
-            if (limitPerPhase > 0)
-                triggerActionSource.addLimitPerPhase(phase, limitPerPhase, offeredAtLimit);
-            if (limitPerTurn > 0)
-                triggerActionSource.addLimitPerTurn(limitPerTurn, offeredAtLimit);
+            EffectUtils.processLimits(value, triggerActionSource, phase, true);
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
             if(fromDiscard) {

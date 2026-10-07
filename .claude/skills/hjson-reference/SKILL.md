@@ -85,21 +85,27 @@ Standard "**Phase:** Do X" text. Most common game text type.
   requires: [ ... ]           // optional conditions
   cost: [ ... ]               // subactions paid before effect
   effect: [ ... ]             // subactions performed after cost
-  limitPerPhase: 1            // 0 = unlimited
-  limitPerTurn: 1             // 0 = unlimited
+  limitPerPhase: 1            // "(limit once per phase)": uses; withheld at the limit. 0 = unlimited
+  limitPerTurn: 1             // "(limit once per turn)": uses; withheld at the limit. 0 = unlimited
+  effectLimitPerPhase: 3      // "(limit +3)": what the effect gives; with a cost, on offer at the limit, flagged
+  effectLimitPerTurn: 6       // "(limit +6)" counted over a turn
   text: "Log message"         // optional
 }
 ```
 **Variants:** `ActivatedFromStacked` (+ `stackedOn` filter), `ActivatedInDiscard`, `ActivatedInDrawDeck` — same structure but activate from non-play zones.
 
-**Limits.** `limitPerPhase` and `limitPerTurn` (on Activated and its variants, Trigger, Response and the AddActivated modifier) count uses of the card, not of the ability: two limited abilities of one card share a counter. What happens at the limit depends on whether the block has a `cost`:
+**Limits.** A card says one of two things with the word "limit", and the definition says which by the field it uses (Ketura on Q-0082 and Q-0093: "there's a nuance between 'limit +3' and 'limit once', with the former being a cumulative addition of multiple invocations, and the latter being a limit on the number of times the ability can invoke at all"; "the first kind should be offered but effectless, while the second should halt being offered once the invocation limit is reached"):
 
-- **With a cost**, on an ability that is the player's to use or not (Activated, an optional Trigger, a Response), the action stays on offer at its limit (Ketura on Q-0041: "Technically speaking it should be offered"). Its costs are paid as written; a use is counted once they are paid, so a use whose cost fails spends nothing and one that is cancelled after its costs is spent; at the limit the log says the card has reached its limit and none of its effects is carried out. The decision flags the action `noEffect: limit`.
-- **With no cost**, and on a required Trigger, the limit withholds the action, as a requirement would (Q-0034).
+- **A limit on uses**: "(limit once per turn)", "(limit once per phase)", "limit N times". Write `limitPerPhase` / `limitPerTurn`. At its limit the action is withheld, whatever it costs: the limit is a requirement, and a use is counted as the first of the action's costs. This is the default: a definition that says only `limitPer...` means a limit on uses, which is what most cards print.
+- **A limit on what the effect gives**: "(limit +3)", and a bare number of the things the effect adds or does ("to add a threat (limit 1)": Ketura, "Dark Tidings is more like '+1' than 'once'; it is limiting the number of threats that can be added the way that Scimitar limits the strength bonus"). Write `effectLimitPerPhase` / `effectLimitPerTurn`, as the number of uses that still give something (Orc Scimitar 1_269, "+1 (limit +3)", is `effectLimitPerPhase: 3`). On an ability that has a `cost` and is the player's to use or not (Activated, an optional Trigger, a Response) the action stays on offer at its limit (Ketura on Q-0041: "Technically speaking it should be offered"). Its costs are paid as written; a use is counted once they are paid, so a use whose cost fails spends nothing and one that is cancelled after its costs is spent; at the limit the log says the card has reached its limit and none of its effects is carried out. The decision flags the action `noEffect: limit`. With no cost, and on a required Trigger, this kind withholds the action as the other does (Q-0034).
 
-Write a limit with the field. A hand-written `PerPhaseLimit` / `PerTurnLimit` requirement with an `IncrementPer...Limit` withholds the action at its limit whatever it costs. That is right for a required trigger, a modifier, or an ability with no cost, and where the field cannot say what is meant (`perPlayer`); on an ability with a cost it is a finding. Read what the cost is before converting one: at its limit the cost can be paid any number of times, which is the rule, and is not what a card means whose cost is something done to the opponent (They Are Not All Accounted For 103_103 exerts the other player's companion to draw a card, once per site; it is left as it was until Ketura has ruled on it). An effect that plays a card still withholds the action while nothing can be played, at its limit or not.
+All four fields are on Activated and its variants, Trigger, Response and the AddActivated modifier, and count uses of the card, not of the ability: two limited abilities of one card share a counter.
 
-A cap on what the effect gives, as opposed to on uses, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
+Sorting a text: "once", "twice" and "N times" count uses; "+N" counts what is given; a bare "(limit N)" or "(limit N per phase)" counts the things the effect adds or does (threats, tokens, heals, cards played) and is the second kind. Where a text is hard to sort, ask.
+
+Write a limit with a field. A hand-written `PerPhaseLimit` / `PerTurnLimit` requirement with an `IncrementPer...Limit` withholds the action at its limit whatever it costs, as `limitPerPhase` / `limitPerTurn` do; it is for where a field cannot say what is meant (`perPlayer`, a modifier, a limit shared by two abilities in some other way). An effect that plays a card still withholds the action while nothing can be played, at its limit or not.
+
+A cap written inside the effect, as opposed to on the ability, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
 
 `limitPerCardThisPhase` on ModifyStrength and ModifyResistance is counted for the SOURCE card for the phase, whoever the bonus is given to (F-0125, CR 4.2 "limit"): a "(limit +3)" cannot be given in full to each companion in turn. A `CardPhaseLimit` may take a `Conditional` as its `limit` ("limit +3 unless you can spot ..."); the no-effect judge reads such a cap as it stands, so the ability is flagged `limit` once it is spent.
 
@@ -130,7 +136,7 @@ A cap on what the effect gives, as opposed to on uses, leaves the ability on off
   player: freeps              // optional: who performs the action
 }
 ```
-The limit fields are as under Activated, "Limits": an optional Trigger with a cost is still offered at its limit, flagged; a required one, or one with no cost, is not. The limit is counted in the phase the trigger goes off in unless `phase` names one.
+The limit fields are as under Activated, "Limits": `limitPerPhase` / `limitPerTurn` withhold a Trigger at its limit; under `effectLimitPerPhase` / `effectLimitPerTurn` an optional Trigger with a cost is still offered at its limit, flagged, and a required one, or one with no cost, is not. The limit is counted in the phase the trigger goes off in unless `phase` names one.
 
 ### Response (Response: If X is about to happen)
 ```hjson
@@ -140,7 +146,7 @@ The limit fields are as under Activated, "Limits": an optional Trigger with a co
   requires: [ ... ]
   cost: [ ... ]
   effect: [ ... ]
-  limitPerPhase: 1            // or limitPerTurn: 1 for "(limit once per turn)"
+  limitPerPhase: 1            // or limitPerTurn: 1 for "(limit once per turn)"; effectLimitPer... for "(limit +N)"
 }
 ```
 The limit fields are as under Activated, "Limits". A Response is not offered to a special ability whose effect has been cancelled, or to an event that has been cancelled (Q-0043); an optional Trigger still is. Build a printed "Response:" as `type: Response` even where its cost could be paid twice: do not make it an optional Trigger to avoid a second offer.
@@ -390,7 +396,7 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 | `MemoryIs` | memory, value | String comparison |
 | `MemoryLike` | memory, value | Substring match |
 | `MemoryMatches` | memory, filter, count? | Cards in memory match filter |
-| `PerPhaseLimit` | limit?, phase?, perPlayer? | Action invoked fewer than N times. Withholds at the limit: for an ability with a cost use the `limitPerPhase` field instead (see Activated, "Limits") |
+| `PerPhaseLimit` | limit?, phase?, perPlayer? | Action invoked fewer than N times. Withholds at the limit, as the `limitPerPhase` field does; prefer the field (see Activated, "Limits") |
 | `PerTurnLimit` | limit? | Per-turn limit check; likewise, `limitPerTurn` |
 
 ### Comparison

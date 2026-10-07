@@ -74,7 +74,7 @@ public class Card_10_114_Tests
 	}
 
 	@Test
-	public void TriggerAtItsLimitIsStillOfferedAndPaidForAndExertsNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TriggerIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -93,20 +93,16 @@ public class Card_10_114_Tests
 
 		scn.ShadowPlayCard(troop);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(card));
-		assertEquals("false", scn.FreepsActionNoEffect(card));
 		scn.FreepsChooseOptionalTrigger(card);
 		scn.FreepsChooseCard(sam);
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetWoundsOn(troop));
 
-		// Limit once per turn: a Hobbit can still exert, so the trigger is still offered when the next
-		// minion is played, flagged as doing nothing (Ketura on Q-0041).
+		// Limit once per turn: a limit on uses, so when the next minion is played the trigger is not offered
+		// again, though a Hobbit could still exert (Ketura on Q-0093).
 		scn.ShadowPlayCard(troop2);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(card));
-		assertEquals("limit", scn.FreepsActionNoEffect(card));
-		scn.FreepsChooseOptionalTrigger(card);
-		scn.FreepsChooseCard(sam);
-		assertEquals(2, scn.GetWoundsOn(sam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(card));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(troop2));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
