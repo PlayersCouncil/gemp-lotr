@@ -62,7 +62,9 @@ public class HinderedCardLeavingPlayTests
 		scn.FreepsPlayCard(wff);
 		scn.ShadowChooseCard(merry);
 
-		// Goblin Armory is the Shadow player's only hindered card: it is shuffled in without a question
+		// "You may make the Shadow player shuffle": the Free Peoples player says yes (Q-0106). Goblin Armory
+		// is the Shadow player's only hindered card, so he is asked nothing and it is shuffled in
+		scn.FreepsChooseYes();
 		assertInZone(Zone.DECK, armory);
 		assertFalse(scn.IsHindered(armory));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
