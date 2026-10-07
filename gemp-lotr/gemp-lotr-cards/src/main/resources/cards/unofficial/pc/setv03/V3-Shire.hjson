@@ -1105,8 +1105,11 @@
 					type: ModifyStrength
 					select: bearer
 					amount: {
-						type: ForEachThreat
+						type: CardPhaseLimit
 						limit: 6
+						amount: {
+							type: ForEachThreat
+						}
 					}
 				}
 			}
@@ -1114,6 +1117,10 @@
 				type: Response
 				trigger: {
 					type: NewRingBearer
+				}
+				requires: {
+					type: CanSpot
+					filter: Hobbit,Ring-bearer,not(HasAttached(self)),not(HasAttached(hand weapon))
 				}
 				effect: {
 					type: Transfer
