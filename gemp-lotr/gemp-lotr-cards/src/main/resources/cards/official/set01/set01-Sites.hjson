@@ -1804,6 +1804,12 @@
 		effects: {
 			type: activated
 			phase: shadow
+			// A play from the discard pile is treated as a cost: with nothing there that can be played the
+			// ability is not offered (Q-0086).
+			requires: {
+				type: HasCardInDiscard
+				filter: tracker,Playable
+			}
 			effect: [
 				{
 					type: repeat

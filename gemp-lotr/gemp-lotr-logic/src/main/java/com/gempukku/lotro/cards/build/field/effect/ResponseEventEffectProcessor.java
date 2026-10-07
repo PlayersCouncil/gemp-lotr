@@ -26,6 +26,7 @@ public class ResponseEventEffectProcessor implements EffectProcessor {
             DefaultActionSource triggerActionSource = new DefaultActionSource();
             triggerActionSource.setText(text);
             triggerActionSource.addPlayRequirement(triggerChecker);
+            EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
             if (before) {

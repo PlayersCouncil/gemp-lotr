@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -418,7 +417,6 @@ public class Card_V3_062_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
-	@Ignore("F-0126: a keyword of the stacked Man is gained without its number: the Southron Scout's ambush (2) arrives as ambush (1)")
 	@Test
 	public void GainsTheStackedMansKeywordWithItsNumber() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

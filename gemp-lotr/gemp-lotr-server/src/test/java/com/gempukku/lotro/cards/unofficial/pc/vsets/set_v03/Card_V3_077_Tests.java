@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -539,48 +538,6 @@ public class Card_V3_077_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("Q-0089: if a branch in parentheses is mandatory whenever it is available, here too, then with an artifact to play and Nertea able to exert a possession may not be taken; the game lets the player pick")
-	@Test
-	public void WithAnArtifactOnOfferTakingTheOfferExertsNerteaAndOnlyAnArtifactMayBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var nertea = scn.GetShadowCard("nertea");
-		var lemenya = scn.GetShadowCard("lemenya");
-		var rancor = scn.GetShadowCard("rancor");
-		var savagery = scn.GetShadowCard("savagery");
-		var steed = scn.GetShadowCard("steed");
-		var sword = scn.GetShadowCard("sword");
-		scn.MoveCardsToHand(lemenya);
-		scn.MoveCardsToDiscard(rancor, savagery, steed, sword);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(nertea);
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		scn.ShadowPlayCard(lemenya);
-
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
-		assertEquals(0, scn.GetWoundsOn(lemenya));
-		assertEquals(0, scn.GetWoundsOn(nertea));
-
-		scn.ShadowChooseOptionalTrigger(nertea);
-
-		// No picking between the two: an artifact is there to be played and Nertea can exert, so he does.
-		assertFalse(scn.ShadowChoiceAvailable("possession"));
-		assertEquals(1, scn.GetWoundsOn(lemenya));
-		assertEquals(1, scn.GetWoundsOn(nertea));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(rancor, savagery));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(steed, sword));
-		assertEquals(2, scn.ShadowGetCardChoiceCount());
-
-		scn.ShadowChooseCard(rancor);
-
-		assertAttachedTo(rancor, lemenya);
-		assertInZone(Zone.DISCARD, savagery, steed, sword);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
 	@Test
 	public void WithOnlyArtifactsInTheDiscardPileTheOfferIsToExertBothForAnArtifact()throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -600,15 +557,14 @@ public class Card_V3_077_Tests
 		scn.ShadowPlayCard(lemenya);
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		assertEquals(0, scn.GetWoundsOn(lemenya));
+		assertEquals(0, scn.GetWoundsOn(nertea));
 		scn.ShadowChooseOptionalTrigger(nertea);
 
+		// Taking the offer with only artifacts to play was the one "may": both exert, and the game goes
+		// straight to the choice of artifact without asking about Nertea's exertion.
+		assertFalse(scn.ShadowDecisionAvailable("play an artifact from discard?"));
 		assertEquals(1, scn.GetWoundsOn(lemenya));
-		assertEquals(0, scn.GetWoundsOn(nertea));
-		// The game asks once more before exerting Nertea.
-		assertTrue(scn.ShadowDecisionAvailable("play an artifact from discard?"));
-
-		scn.ShadowChooseYes();
-
 		assertEquals(1, scn.GetWoundsOn(nertea));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(rancor, savagery));
 		assertEquals(1, scn.ShadowGetChoiceMin());
@@ -622,7 +578,6 @@ public class Card_V3_077_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("Q-0090: with only artifacts to play, the game asks a second time before exerting Nertea, and No leaves the minion exerted for nothing")
 	@Test
 	public void WithOnlyArtifactsInTheDiscardPileTakingTheOfferExertsBothWithoutAskingAgain() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -693,7 +648,6 @@ public class Card_V3_077_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0140: offered with only an artifact to play and Nertea unable to exert; taken, the minion played exerts for nothing")
 	@Test
 	public void NotOfferedWhenOnlyAnArtifactCouldBePlayedAndNerteaIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -723,7 +677,31 @@ public class Card_V3_077_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0140: offered when the only possessions in the discard pile go on another minion in play; taken, the minion played exerts for nothing")
+	@Test
+	public void NotOfferedOnNerteasOwnPlayWithOnlyArtifactsInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var rancor = scn.GetShadowCard("rancor");
+		var savagery = scn.GetShadowCard("savagery");
+		scn.MoveCardsToHand(nertea);
+		scn.MoveCardsToDiscard(rancor, savagery);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(nertea);
+
+		// He is the minion played, so he would exert once for the offer; at vitality 2 he could not "also"
+		// exert for an artifact, and nothing else is there to play.
+		assertInZone(Zone.SHADOW_CHARACTERS, nertea);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(nertea));
+		assertInZone(Zone.DISCARD, rancor, savagery);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
 	@Test
 	public void NotOfferedWhenNoPossessionInTheDiscardPileCanGoOnTheMinionPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

@@ -21,7 +21,10 @@ public class Card_05_041_Tests
 				new HashMap<>()
 				{{
 					put("card", "5_41");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: Gandalf signet
+					put("boromir", "1_96");       // Boromir, Lord of Gondor: a Man with the Aragorn signet
+					put("armor", "1_92");         // Armor: possession, bearer must be a Man
+					put("hobbitsword", "1_299");  // Hobbit Sword: possession, bearer must be a Hobbit
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -71,5 +74,33 @@ public class Card_05_041_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(3, scn.GetTwilight());
+	}
+
+	@Test
+	public void IsNotPlayableUnlessAPossessionInTheDiscardPileCanBePlayedOnACompanionWithTheAragornSignet() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var armor = scn.GetFreepsCard("armor");
+		var hobbitsword = scn.GetFreepsCard("hobbitsword");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(card);
+		//A possession that could be played, but only on Frodo, who has the Frodo signet
+		scn.MoveCardsToDiscard(hobbitsword);
+
+		scn.StartGame();
+
+		//Playing from the discard pile is treated as a cost: with nothing to play, the event is withheld
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(card));
+
+		//Armor can go on Boromir, who has the Aragorn signet
+		scn.MoveCardsToDiscard(armor);
+		scn.FreepsRefreshDecision();
+
+		assertTrue(scn.FreepsPlayAvailable(card));
 	}
 }

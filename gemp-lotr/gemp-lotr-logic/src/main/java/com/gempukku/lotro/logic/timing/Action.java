@@ -39,4 +39,14 @@ public interface Action {
     default NoEffect getNoEffect() {
         return null;
     }
+
+    /**
+     * What set this action off, for a trigger or response whose definition remembers it ("memorize: winner"): the
+     * names of those cards.  It is not part of the action's text.  A decision adds it to the text only where one
+     * card offers the same action more than once, so that the offers can be told apart (see OfferedActionTexts).
+     * @return The names, or null if the action remembers nothing of the kind.
+     */
+    default String getOfferedFor() {
+        return null;
+    }
 }

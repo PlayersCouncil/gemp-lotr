@@ -901,6 +901,11 @@
 					filter: ringwraith,orc
 				}
 				requires: [
+					// "each Shadow phase": a second Orc played in another phase is not answered (F-0130).
+					{
+						type: Phase
+						phase: Shadow
+					}
 					{
 						type: playedCardThisPhase
 						filter: ringwraith,orc
@@ -921,6 +926,12 @@
 			{
 				type: Activated
 				phase: Shadow
+				// A play from the discard pile is treated as a cost: with nothing there that can be played on a
+				// [ringwraith] Orc the ability is not offered (Q-0086).
+				requires: {
+					type: HasCardInDiscard
+					filter: possession,PlayableOn(ringwraith,orc)
+				}
 				cost: {
 					type: Spot
 					filter: Nazgul
@@ -1713,9 +1724,40 @@
 					player: you
 					memorize: playedMinion
 				}
+				// A play from the discard pile is a cost (Q-0062), and the plays below sit inside an If where the
+				// engine does not gate the action: so the offer is made only when something there can be played
+				// on the minion that was played (F-0140).  An artifact counts only if this minion can exert
+				// once the minion played has: twice over when the minion played is this one.
 				requires: {
-					type: HasCardInDiscard
-					filter: side(shadow),item,Playable	
+					type: Or
+					requires: [
+						{
+							type: HasCardInDiscard
+							filter: side(shadow),possession,PlayableOn(memory(playedMinion))
+						}
+						{
+							type: And
+							requires: [
+								{
+									type: HasCardInDiscard
+									filter: side(shadow),artifact,PlayableOn(memory(playedMinion))
+								}
+								{
+									type: Or
+									requires: [
+										{
+											type: CanSpot
+											filter: self,not(memory(playedMinion)),CanExert
+										}
+										{
+											type: CanSpot
+											filter: self,memory(playedMinion),CanExert,MinVitality(3)
+										}
+									]
+								}
+							]
+						}
+					]
 				}
 				cost: {
 					type: Exert
@@ -1726,17 +1768,23 @@
 						type: If
 						check: {
 							type: HasCardInDiscard
-							filter: side(shadow),possession,Playable
+							filter: side(shadow),possession,PlayableOn(memory(playedMinion))
 						}
 						true: {
-							// Has possession - check if also has artifact
+							// A possession can be played: can an artifact as well?
 							type: If
-							check: {
-								type: HasCardInDiscard
-								filter: side(shadow),artifact,Playable
-							}
+							check: [
+								{
+									type: HasCardInDiscard
+									filter: side(shadow),artifact,PlayableOn(memory(playedMinion))
+								}
+								{
+									type: CanSpot
+									filter: self,CanExert
+								}
+							]
 							true: {
-								// Both available - real choice
+								// Both can: the player chooses (Ketura on Q-0089)
 								type: Choice
 								texts: [
 									Play a possession from discard on {playedMinion}
@@ -1763,16 +1811,15 @@
 								]
 							}
 							false: {
-								// Only possession - just play it
+								// Only a possession
 								type: PlayCardFromDiscard
 								select: choose(side(shadow),possession)
 								on: memory(playedMinion)
 							}
 						}
 						false: {
-							// No possession, only artifact (requires already verified an item exists)
-							type: Optional
-							text: Would you like to exert {self} to play an artifact from discard?
+							// Only an artifact: taking the offer was taking this, so nothing more is asked (Q-0090)
+							type: CostToEffect
 							cost: {
 								type: Exert
 								select: self

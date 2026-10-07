@@ -235,4 +235,33 @@ public class Card_01_363_Tests
 		assertEquals(Zone.DISCARD, tracker3.getZone());
 		assertTrue(scn.ShadowDecisionAvailable("Play Shadow action or pass"));
 	}
+
+	@Test
+	public void TolBrandirActionIsNotOfferedUnlessATrackerInTheDiscardPileCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		VirtualTableScenario scn = GetScenario();
+
+		var tolbrandir = scn.GetShadowSite(9);
+		var tracker1 = scn.GetShadowCard("tracker1");
+		//A minion that could be played, but is not a tracker
+		scn.MoveCardsToShadowDiscard("shelob");
+
+		scn.StartGame();
+
+		scn.SkipToSite(8);
+		//The trackers were drawn on the way: only Shelob is in the discard pile
+		scn.MoveCardsToTopOfDeck(tracker1, scn.GetShadowCard("tracker2"), scn.GetShadowCard("tracker3"));
+		scn.FreepsPass();
+
+		assertSame(tolbrandir, scn.GetCurrentSite());
+		assertEquals(10, scn.GetTwilight());
+		//Playing from the discard pile is treated as a cost: with nothing to play, the ability is withheld
+		assertTrue(scn.ShadowDecisionAvailable("Play Shadow action or pass"));
+		assertFalse(scn.ShadowActionAvailable(tolbrandir));
+
+		scn.MoveCardsToDiscard(tracker1);
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.ShadowActionAvailable(tolbrandir));
+	}
 }

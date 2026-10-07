@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filter;
+import com.gempukku.lotro.logic.PlayUtils;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -330,6 +331,25 @@ public class FilterFactory {
                 return gameText != null && gameText.toLowerCase().contains(searchText);
             };
         }));
+        // A card that attaches (a possession, an artifact, a condition borne by a character) and could be played
+        // now on some card the inner filter accepts: its own requirements and twilight cost as for "Playable",
+        // and a legal bearer among those cards.  For a card in a hand or a pile, in a requirement that goes
+        // with "PlayCardFromDiscard ... on: <filter>" and the like (F-0140).  What the action will take from the
+        // pool or add in threats before the play is counted as already gone, as PlayCardFromDiscard counts it.
+        parameterFilters.put("playableon",
+                (parameter, environment) -> {
+                    final FilterableSource onSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> {
+                        final Filterable on = onSource.getFilterable(actionContext);
+                        final int twilightGoneFirst = actionContext.getUnpaidTwilightCost();
+                        final int threatsAddedFirst = actionContext.getUnpaidThreatCost();
+                        final Filter playable = Filters.playable(0, twilightGoneFirst, threatsAddedFirst, false, false, true);
+                        return (Filter) (game, physicalCard) ->
+                                physicalCard.getBlueprint().getValidTargetFilter(physicalCard.getOwner(), game, physicalCard) != null
+                                        && playable.accepts(game, physicalCard)
+                                        && PlayUtils.checkPlayRequirements(game, physicalCard, on, twilightGoneFirst, threatsAddedFirst, 0, false, false, true);
+                    };
+                });
         parameterFilters.put("hasattached",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

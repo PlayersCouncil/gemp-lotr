@@ -224,6 +224,8 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `Boolean DecisionAvailable(String playerID, String text)` — Determines if the given player is currently presented with a decision which contains the given text.
 - `Boolean FreepsAnyDecisionsAvailable()  ·  ShadowAnyDecisionsAvailable`
 - `boolean AwaitingFellowshipPhaseActions()`
+- `void FreepsRefreshDecision()  ·  ShadowRefreshDecision` — Has that player's pending choice of phase actions worked out afresh and sent again, so that it offers what the board allows now.
+- `void RefreshDecision(String player)` — Has the given player's pending choice of phase actions worked out afresh and sent again.
 - `boolean AwaitingShadowPhaseActions()`
 - `boolean AwaitingFreepsManeuverPhaseActions()`
 - `boolean AwaitingShadowManeuverPhaseActions()`
@@ -512,4 +514,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-404 entries, 260 of them with no description in the source.
+406 entries, 260 of them with no description in the source.

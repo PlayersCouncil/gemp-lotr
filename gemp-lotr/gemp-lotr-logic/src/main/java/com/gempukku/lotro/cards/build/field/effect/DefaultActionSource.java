@@ -24,6 +24,7 @@ import com.gempukku.lotro.logic.timing.NoEffect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class DefaultActionSource implements ActionSource {
     private PlayerSource playingPlayer;
     private boolean requiresRanger;
     private String text;
+    private String setOffByMemory;
     private boolean specialAbility = true;
     // Whether what the effects will find can be told before the costs are paid (see NoEffectForesight).
     private boolean judgeable;
@@ -61,6 +63,15 @@ public class DefaultActionSource implements ActionSource {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    /**
+     * For an action that a trigger sets off: the memory in which the trigger remembers what set it off
+     * ("memorize: winner").  Each action made is told the names of those cards, so that two offers of it in one
+     * decision, for two winners of one skirmish, can be told apart (F-0137).
+     */
+    public void setSetOffByMemory(String setOffByMemory) {
+        this.setOffByMemory = setOffByMemory;
     }
 
     public void setSpecialAbility(boolean specialAbility) {
@@ -220,6 +231,12 @@ public class DefaultActionSource implements ActionSource {
     public void createAction(CostToEffectAction action, ActionContext actionContext) {
         if (text != null)
             action.setText(GameUtils.substituteText(text, actionContext));
+
+        if (setOffByMemory != null) {
+            final Collection<? extends PhysicalCard> setOffBy = actionContext.getCardsFromMemory(setOffByMemory);
+            if (setOffBy != null && !setOffBy.isEmpty())
+                action.setOfferedFor(GameUtils.getAppendedTextNames(setOffBy));
+        }
 
         for (EffectAppender cost : costs)
             cost.appendEffect(true, action, actionContext);

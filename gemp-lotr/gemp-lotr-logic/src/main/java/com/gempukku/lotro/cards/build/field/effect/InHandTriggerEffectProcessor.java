@@ -23,6 +23,7 @@ public class InHandTriggerEffectProcessor implements EffectProcessor {
 
             DefaultActionSource triggerActionSource = new DefaultActionSource();
             triggerActionSource.addPlayRequirement(triggerChecker);
+            EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
             blueprint.appendOptionalInHandAfterTrigger(triggerActionSource);

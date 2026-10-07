@@ -1,12 +1,14 @@
 package com.gempukku.lotro.mechanics;
 
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -35,6 +37,13 @@ import static org.junit.Assert.*;
  *
  * The game keeps four such triggers apart, required and optional, for a hindering and for a discard; each has
  * a test here.
+ *
+ * Ketura, 2026-10-07 (Q-0081): any discard from play sets off "when this is discarded", the ones no card did
+ * included: "I would expect that end-of-turn discard to produce a triggerable response."  So the discard of
+ * minions when a turn ends is answered, and so is the discard of a card with its bearer.  A condition on what
+ * did the discarding ("by a pipe") is not met by a discard that no card did.  And a minion that is killed was
+ * not discarded (CR 4.2 "killed": "cards that trigger when a character is killed will not trigger when a
+ * character is discarded, and vice-versa"), though it goes to the discard pile.
  */
 public class OwnRemovalTriggerTests
 {
@@ -59,6 +68,16 @@ public class OwnRemovalTriggerTests
 					// Narzug: [gundabad] Orc. When he is discarded, except in the regroup phase, his owner may
 					// remove (3) to wound an ally twice
 					put("narzug", "30_36");
+
+					// Mordor Guard: [sauron] Orc, strength 9, vitality 3. When this minion is discarded, remove 3
+					// threats (required)
+					put("guard", "7_287");
+					// Jetsam: possession borne by a character who bears a pipe. When this is discarded by a pipe, ...
+					// make your character lose unhasty until the end of the turn (required)
+					put("jetsam", "103_2");
+					put("apipe", "1_91");       // Aragorn's Pipe: bearer must be a [gondor] companion
+					put("guardian", "5_17");    // Forest Guardian: Ent companion, unhasty
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
 
 					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: Wizard, vitality 4
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: ranger, vitality 4
@@ -338,5 +357,146 @@ public class OwnRemovalTriggerTests
 		assertEquals(0, scn.GetWoundsOn(gaffer));
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void TheDiscardOfMinionsWhenTheTurnEndsSetsOffEachMinionsOwnDiscardTrigger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guardian = scn.GetFreepsCard("guardian");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(aragorn, guardian, gandalf);
+
+		var guard = scn.GetShadowCard("guard");
+		var footman1 = scn.GetShadowCard("footman1");
+		var footman2 = scn.GetShadowCard("footman2");
+		scn.MoveCardsToDiscard(footman2);
+
+		scn.StartGame();
+		// Frodo's resistance is 10 less the 6 burdens: a companion with resistance 4, as the Footman asks.
+		scn.AddBurdens(6);
+		// Four companions, so four threats.
+		scn.AddThreats(4);
+		scn.MoveMinionsToTable(guard, footman1);
+		scn.SkipToMovementDecision();
+
+		assertEquals(4, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, guard, footman1);
+		int shadowDeck = scn.GetShadowDeckCount();
+
+		// The fellowship stays, the turn ends, and the minions are discarded by the rules and by no card.
+		scn.FreepsChooseToStay();
+
+		assertInZone(Zone.DISCARD, guard, footman1);
+		// The Guard's trigger is required and has been carried out: 4 - 3.
+		assertEquals(1, scn.GetThreats());
+		// The Footman's is optional and is offered to its owner.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(footman1));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertInZone(Zone.DECK, footman1);
+		assertInZone(Zone.DISCARD, footman2, guard);
+		assertEquals(shadowDeck + 1, scn.GetShadowDeckCount());
+		// The other player's turn has begun.
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void ATriggerThatExceptsTheRegroupPhaseIsNotOfferedForTheDiscardWhenTheTurnEnds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var albert = scn.GetFreepsCard("albert");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		scn.MoveAlliesToTable(albert, gaffer);
+
+		var narzug = scn.GetShadowCard("narzug");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(narzug);
+		scn.SkipToMovementDecision();
+		// Enough to pay his (3), and two allies he could wound.
+		scn.SetTwilight(10);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, narzug);
+
+		scn.FreepsChooseToStay();
+
+		// The discard when the turn ends is a discard, and it is made in the regroup phase, which is the one
+		// phase his text excepts: nothing is offered and the turn goes on to its end.
+		assertInZone(Zone.DISCARD, narzug);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(albert));
+		assertEquals(0, scn.GetWoundsOn(gaffer));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void AMinionThatIsKilledWasNotDiscardedAndItsOwnDiscardTriggerIsNotSetOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+
+		var guard = scn.GetShadowCard("guard");
+
+		scn.StartGame();
+		// Three companions, so three threats.
+		scn.AddThreats(3);
+		scn.MoveMinionsToTable(guard);
+		// Vitality 3: the wound for losing a skirmish kills it.
+		scn.AddWoundsToChar(guard, 2);
+		// Aragorn at 10 beats the Guard's 9 without overwhelming it.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 2));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, guard);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(3, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, guard);
+
+		scn.PassSkirmishActions();
+
+		// Killed, and placed in the discard pile as a killed minion is: not discarded, so no threat is removed.
+		assertInZone(Zone.DISCARD, guard);
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACardDiscardedWithItsBearerByNoCardDoesNotMeetAConditionOnWhatDiscardedIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guardian = scn.GetFreepsCard("guardian");
+		var apipe = scn.GetFreepsCard("apipe");
+		var jetsam = scn.GetFreepsCard("jetsam");
+		scn.MoveCompanionsToTable(aragorn, guardian);
+		scn.AttachCardsTo(aragorn, apipe, jetsam);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		// Vitality 4: the wound for losing a skirmish kills him.
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertAttachedTo(jetsam, aragorn);
+		assertTrue(scn.HasKeyword(guardian, Keyword.UNHASTY));
+
+		scn.PassSkirmishActions();
+
+		// Aragorn is dead, and the Jetsam was discarded with him: by no card, so not "by a pipe".  Had its
+		// trigger been set off, the one unhasty character of its owner's would have lost unhasty.
+		assertInZone(Zone.DEAD, aragorn);
+		assertInZone(Zone.DISCARD, jetsam, apipe);
+		assertTrue(scn.HasKeyword(guardian, Keyword.UNHASTY));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

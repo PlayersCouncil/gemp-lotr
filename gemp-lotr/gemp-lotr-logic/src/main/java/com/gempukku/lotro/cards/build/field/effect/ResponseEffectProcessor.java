@@ -40,6 +40,7 @@ public class ResponseEffectProcessor implements EffectProcessor {
             }
 
             triggerActionSource.addPlayRequirement(triggerChecker);
+            EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
             if (limitPerPhase > 0)
                 triggerActionSource.addLimitPerPhase(phase, limitPerPhase, offeredAtLimit);
             if (limitPerTurn > 0)

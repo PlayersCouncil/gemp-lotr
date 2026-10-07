@@ -28,6 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ModifyStrength implements EffectAppenderProducer {
+    // The name of the source card's counter for a "(limit +N)" on strength.  It is the card's own for the phase
+    // and is kept apart from the counter of the card's uses (limitPerPhase).
+    private static final String LIMIT_COUNTER = "strengthLimit-";
+
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "count", "select", "until", "memorize", "limitPerCardThisPhase");
@@ -55,21 +59,17 @@ public class ModifyStrength implements EffectAppenderProducer {
                 // the card it will be worked out for, which is this effect's source.
                 if (EffectForecast.isSpent(amountSource, actionContext, actionContext.getSource()))
                     return EffectForecast.AT_LIMIT;
-                if (limit == -1 || given.getReach() == null)
+                if (limit == -1)
                     return given;
 
-                // A bonus with a limit for each card reaches only those whose limit is not yet spent, and with
-                // none of those it does nothing.  The counter is read and not counted on.
+                // A limited bonus is the source card's for the phase (CR 4.2 "limit"), whoever it is given to:
+                // once the card has given its limit it gives nothing more.  The counter is read and not
+                // counted on.
                 final LotroGame game = actionContext.getGame();
-                final List<PhysicalCard> open = new LinkedList<>();
-                for (PhysicalCard card : given.getReach()) {
-                    final int used = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(actionContext.getSource(), card.getCardId() + "-", game.getGameState().getCurrentPhase()).getUsedLimit();
-                    if (used < limit)
-                        open.add(card);
-                }
-                if (open.isEmpty())
+                final int used = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(actionContext.getSource(), LIMIT_COUNTER, game.getGameState().getCurrentPhase()).getUsedLimit();
+                if (used >= limit)
                     return EffectForecast.AT_LIMIT;
-                return EffectForecast.givenTo(open, endsWithSkirmish);
+                return given;
             }
         };
 
@@ -84,13 +84,16 @@ public class ModifyStrength implements EffectAppenderProducer {
                         final int amount = evaluator.evaluateExpression(game, actionContext.getSource());
 
                         if (limit != -1 && amount != 0) {
+                            // "(limit +N)" is the source card's for the whole phase (CR 4.2 "limit"; Ketura on
+                            // F-0125): one counter for the card, counted once for a use however many cards the
+                            // use reaches, and what a use would add beyond the limit is ignored.
                             int absAmount = Math.abs(amount);
                             int multiplier = absAmount / amount;
                             List<Modifier> modifiers = new LinkedList<>();
-                            for (PhysicalCard affectedCard : cardsFromMemory) {
-                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), affectedCard.getCardId() + "-", game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
+                            if (!cardsFromMemory.isEmpty()) {
+                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), LIMIT_COUNTER, game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
                                 if (incrementedBy > 0) {
-                                    modifiers.add(new StrengthModifier(actionContext.getSource(), affectedCard, null, multiplier * incrementedBy));
+                                    modifiers.add(new StrengthModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, multiplier * incrementedBy));
                                 }
                             }
                             return new AddUntilModifierEffect(modifiers, time);

@@ -283,7 +283,7 @@ public class Card_V3_071_Tests
 	}
 
 	@Test
-	public void WithTwoNazgulWinningOneSkirmishOneOfThemExertsAndNoOtherMinionDoes() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithTwoNazgulWinningOneSkirmishTheOneTheEventIsPlayedForExertsAndNoOtherMinionDoes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hour = scn.GetShadowCard("hour");
@@ -313,13 +313,17 @@ public class Card_V3_071_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(lemenya));
 		assertEquals(0, scn.GetWoundsOn(otsea));
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hour));
+		// The event is offered once for each Nazgul who won, and each offer names its Nazgul.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hour, "Lemenya"));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hour, "Ots"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(hour, "Nert"));
 
-		scn.ShadowChooseOptionalTrigger(hour);
+		scn.ShadowChooseOptionalTrigger(hour, "Lemenya");
 
-		// One exertion, on one of the two Nazgul who won: not on the Orc who won beside them, and not on
-		// the Nazgul who was not in the skirmish.
-		assertEquals(1, scn.GetWoundsOn(lemenya) + scn.GetWoundsOn(otsea));
+		// One exertion, on the Nazgul the event was played for: not on the other Nazgul who won, not on the
+		// Orc who won beside them, and not on the Nazgul who was not in the skirmish.
+		assertEquals(1, scn.GetWoundsOn(lemenya));
+		assertEquals(0, scn.GetWoundsOn(otsea));
 		assertEquals(0, scn.GetWoundsOn(cur));
 		assertEquals(0, scn.GetWoundsOn(nertea));
 

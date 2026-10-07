@@ -24,17 +24,26 @@ public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcesso
         DefaultActionSource triggerActionSource = new DefaultActionSource();
         EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
+        // Whether the definition says what must have done the removing.
+        final boolean anySource = value.get("source") == null;
+
         // The trigger is carried out as the removed card and its owner (BuiltLotroCardBlueprint), so the card
-        // that did the removing is read from the result and not from the context.  A card removed by no card at
-        // all (a rule's discard) does not set the trigger off.
+        // that did the removing is read from the result and not from the context.
+        //
+        // With no "source:", any discard from play sets the trigger off, the ones no card did included: the
+        // end-of-turn discard of minions, and a card discarded with its bearer (Ketura on Q-0081: "I would
+        // expect that end-of-turn discard to produce a triggerable response").  A "source:" is a condition on
+        // the card that did the discarding, and a discard by no card does not meet it.  A character that was
+        // killed was not discarded (CR 4.2 "killed"), though it is reported as having gone to the discard pile.
         triggerActionSource.addPlayRequirement(
                 actionContext -> {
-                    if(bySource == null)
-                        return true;
-
-                    final PhysicalCard remover = getRemovingCard(actionContext.getEffectResult());
-                    if(remover == null)
+                    final EffectResult effectResult = actionContext.getEffectResult();
+                    if (effectResult instanceof DiscardCardsFromPlayResult discardResult && discardResult.isKilled())
                         return false;
+
+                    final PhysicalCard remover = getRemovingCard(effectResult);
+                    if (remover == null)
+                        return anySource && effectResult instanceof DiscardCardsFromPlayResult;
 
                     return Filters.accepts(actionContext.getGame(), remover, bySource.getFilterable(actionContext));
                 });

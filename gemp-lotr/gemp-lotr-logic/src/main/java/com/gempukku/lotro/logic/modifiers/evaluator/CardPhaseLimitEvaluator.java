@@ -13,12 +13,23 @@ public class CardPhaseLimitEvaluator implements Evaluator {
     private final PhysicalCard _source;
     private final Phase _phase;
     private final Evaluator _limit;
+    private final boolean _limitCanBeRead;
 
     public CardPhaseLimitEvaluator(PhysicalCard source, Phase phase, Evaluator limit, Evaluator amount) {
+        this(source, phase, limit, amount, limit instanceof ConstantEvaluator);
+    }
+
+    /**
+     * @param limitCanBeRead Whether the limit can be worked out beforehand without changing the game: true for
+     * any limit that does not itself count on a limit (a number, or a value such as a Conditional that only reads
+     * the board).  Only then is the cap read when the no-effect flag is judged.
+     */
+    public CardPhaseLimitEvaluator(PhysicalCard source, Phase phase, Evaluator limit, Evaluator amount, boolean limitCanBeRead) {
         _source = source;
         _phase = phase;
         _limit = limit;
         _amount = amount;
+        _limitCanBeRead = limitCanBeRead;
     }
 
     private int evaluateOnce(LotroGame game, PhysicalCard cardAffected) {
@@ -37,8 +48,10 @@ public class CardPhaseLimitEvaluator implements Evaluator {
 
     @Override
     public boolean isSpent(LotroGame game, PhysicalCard cardAffected) {
-        // Only a limit that is a plain number is read: working out any other amount could change the game.
-        if (_evaluated != null || !(_limit instanceof ConstantEvaluator))
+        // The limit is read only where working it out cannot change the game: a plain number, or a value that
+        // only reads the board ("limit +3, or +6 if you can spot ...").  A limit that itself counts on a limit
+        // is not asked.
+        if (_evaluated != null || !_limitCanBeRead)
             return false;
         return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase).getUsedLimit() >= _limit.evaluateExpression(game, cardAffected);
     }

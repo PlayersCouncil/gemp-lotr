@@ -42,6 +42,13 @@ public interface CostToEffectAction extends Action {
 
     void setText(String text);
 
+    /**
+     * Says what set this action off (see Action.getOfferedFor).
+     * @param offeredFor The names of the cards the trigger remembered, or null.
+     */
+    default void setOfferedFor(String offeredFor) {
+    }
+
     void setPaidToil(boolean toilPaid);
 
     boolean wasCarriedOut();

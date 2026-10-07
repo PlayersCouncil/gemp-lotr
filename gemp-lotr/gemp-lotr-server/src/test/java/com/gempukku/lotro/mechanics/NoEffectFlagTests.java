@@ -1361,4 +1361,67 @@ public class NoEffectFlagTests
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 		assertTrue(scn.ShadowDecisionAvailable("Play Assignment action or Pass"));
 	}
+
+	protected VirtualTableScenario GetValueLimitScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// A definition of the tests' own (testCards.hjson): "Fellowship: Add (1) to make a companion
+					// strength +1 (limit +2, or +4 if you can spot a Dwarf)."  Its cap is a value, not a number.
+					put("banner", "0_8001");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void ABonusWhoseCapIsAValueIsFlaggedOnceTheCapAsItStandsIsSpent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetValueLimitScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(banner);
+
+		scn.StartGame();
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		// No Dwarf: the limit is +2.  Two uses, each +1, neither of them marked.
+		for (int used = 0; used < 2; used++) {
+			assertEquals("false", scn.FreepsActionNoEffect(banner));
+			scn.FreepsUseCardAction(banner);
+			scn.FreepsChooseCard(aragorn);
+			assertEquals(8 + used + 1, scn.GetStrength(aragorn));
+		}
+
+		// At +2 the ability is still offered, and marked as at its limit: used, it costs its (1) and adds nothing.
+		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+		assertEquals(2, scn.GetTwilight());
+		scn.FreepsUseCardAction(banner);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(aragorn));
+		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+
+		// With a Dwarf to spot the limit is +4, of which 2 are left: the mark goes.
+		scn.MoveCompanionsToTable(gimli);
+		scn.FreepsRefreshDecision();
+		assertEquals("false", scn.FreepsActionNoEffect(banner));
+		scn.FreepsUseCardAction(banner);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(11, scn.GetStrength(aragorn));
+		assertEquals("false", scn.FreepsActionNoEffect(banner));
+		scn.FreepsUseCardAction(banner);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(12, scn.GetStrength(aragorn));
+
+		// And at +4 it is marked again.
+		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }

@@ -73,6 +73,19 @@ public class EffectUtils {
         }
     }
 
+    /**
+     * Tells an action that a trigger sets off where the trigger remembers what set it off: the trigger's own
+     * "memorize".  The other things a trigger may remember ("memorizeLoser", "memorizeBearer") are not what
+     * set it off.
+     */
+    public static void nameWhatSetsOff(JSONObject trigger, DefaultActionSource actionSource) {
+        for (Object entryObject : trigger.entrySet()) {
+            Map.Entry<?, ?> entry = (Map.Entry<?, ?>) entryObject;
+            if (String.valueOf(entry.getKey()).equalsIgnoreCase("memorize") && entry.getValue() instanceof String memory)
+                actionSource.setSetOffByMemory(memory);
+        }
+    }
+
     public static void processRequirementsCostsAndEffects(JSONObject value, CardGenerationEnvironment environment, DefaultActionSource actionSource) throws InvalidCardDefinitionException {
         final JSONObject[] requirementArray = FieldUtils.getObjectArray(value.get("requires"), "requires");
         for (JSONObject requirement : requirementArray) {

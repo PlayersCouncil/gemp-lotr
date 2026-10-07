@@ -19,6 +19,7 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
     private final LinkedList<Effect> _processedEffects = new LinkedList<>();
 
     private String text;
+    private String offeredFor;
 
     private Timeword _actionTimeword;
     private String _performingPlayer;
@@ -101,6 +102,16 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
     @Override
     public String getText(LotroGame game) {
         return text;
+    }
+
+    @Override
+    public void setOfferedFor(String offeredFor) {
+        this.offeredFor = offeredFor;
+    }
+
+    @Override
+    public String getOfferedFor() {
+        return offeredFor;
     }
 
     protected boolean isCostFailed() {

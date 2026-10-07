@@ -332,12 +332,15 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "limit", "amount");
                 ValueSource limitSource = resolveEvaluator(object.get("limit"), 0, environment);
                 ValueSource valueSource = resolveEvaluator(object.get("amount"), 0, environment);
+                // A limit given by a value ("limit +3 unless you can spot another Nazgul") can be read when the
+                // no-effect flag is judged, as a plain number can, so long as it does not itself count on a limit.
+                final boolean limitCanBeRead = !countsOnALimit(object.get("limit"));
                 return new ValueSource() {
                     @Override
                     public Evaluator getEvaluator(ActionContext actionContext) {
                         return new CardPhaseLimitEvaluator(actionContext.getSource(),
                                 actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
-                                valueSource.getEvaluator(actionContext));
+                                valueSource.getEvaluator(actionContext), limitCanBeRead);
                     }
 
                     @Override
@@ -822,5 +825,30 @@ public class ValueResolver {
             return valueSource.canPreEvaluate() && overSource.canPreEvaluate() && limitSource.canPreEvaluate() && multiplierSource.canPreEvaluate()
                     && dividerSource.canPreEvaluate();
         }
+    }
+
+    // Whether a value's definition holds, at any depth, a value that counts on a limit as it is worked out.
+    private static boolean countsOnALimit(Object definition) {
+        if (definition instanceof JSONObject object) {
+            final Object type = object.get("type");
+            if (type instanceof String name
+                    && (name.equalsIgnoreCase("cardPhaseLimit") || name.equalsIgnoreCase("cardAffectedLimitPerPhase")))
+                return true;
+            for (Object value : object.values()) {
+                if (countsOnALimit(value))
+                    return true;
+            }
+        } else if (definition instanceof Iterable<?> iterable) {
+            for (Object element : iterable) {
+                if (countsOnALimit(element))
+                    return true;
+            }
+        } else if (definition instanceof Object[] array) {
+            for (Object element : array) {
+                if (countsOnALimit(element))
+                    return true;
+            }
+        }
+        return false;
     }
 }

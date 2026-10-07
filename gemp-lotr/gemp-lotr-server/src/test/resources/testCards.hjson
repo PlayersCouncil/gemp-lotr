@@ -1,0 +1,43 @@
+{
+	# Card definitions that belong to the tests: shapes of definition that no real card has yet and that a
+	# mechanic test needs.  VirtualTableScenario makes them known to every table by these ids (set 0).
+	# Say on each card which test uses it and why no real card would do.
+
+	# NoEffectFlagTests: a bonus whose cap is a value and not a plain number (a Conditional), as a text such as
+	# "(limit +2, or +4 if you can spot a Dwarf)" is written.  No merged card has a cardPhaseLimit of that shape.
+	0_8001: {
+		title: Test Banner
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: addTwilight
+				amount: 1
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(companion)
+				amount: {
+					type: cardPhaseLimit
+					limit: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: dwarf
+						}
+						true: 4
+						false: 2
+					}
+					amount: 1
+				}
+			}
+		}
+		gametext: <b>Fellowship:</b> Add (1) to make a companion strength +1 (limit +2, or +4 if you can spot a Dwarf).
+	}
+}

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -415,7 +414,6 @@ public class Card_V3_068_Tests
 	}
 
 	@Test
-	@Ignore("F-0130: the second [ringwraith] Orc played in a regroup phase brings the offer; the text says each Shadow phase")
 	public void TwoRingwraithOrcsPlayedInARegroupPhaseBringNoOffer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -448,9 +446,9 @@ public class Card_V3_068_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(legions));
 
 		scn.FreepsPass();
+		// The Witch-king has one exertion left and cannot exert twice: Enquea is the only Nazgul who can pay,
+		// and is taken without asking.  The Mongrel is the only minion left in hand.
 		scn.ShadowUseCardAction(spied);
-		scn.ShadowChooseCard(enquea);
-		// The Mongrel is the only minion left in hand.
 		assertInZone(Zone.SHADOW_CHARACTERS, mongrel);
 		assertEquals(2, scn.GetWoundsOn(enquea));
 
@@ -597,29 +595,36 @@ public class Card_V3_068_Tests
 	}
 
 	@Test
-	public void WithNothingInTheDiscardPileThatCouldBePlayedTheAbilityIsStillOfferedAndOnlyDiscardsTheCondition() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNothingInTheDiscardPileThatCouldBePlayedOnARingwraithOrcTheAbilityIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var legions = scn.GetShadowCard("legions");
 		var lemenya = scn.GetShadowCard("lemenya");
+		var soldier = scn.GetShadowCard("soldier");
 		var hound = scn.GetShadowCard("hound");
 		var nazgulsword = scn.GetShadowCard("nazgulsword");
+		var orcscimitar = scn.GetShadowCard("orcscimitar");
+		var axe = scn.GetShadowCard("axe");
 		scn.MoveCardsToSupportArea(legions);
-		// The one possession in the discard pile is one a [wraith] Orc cannot bear.
-		scn.MoveCardsToDiscard(nazgulsword);
+		scn.MoveCardsToHand(hound);
+		// Possessions that could each be played, but not on a [wraith] Orc: the Sword goes on the Nazgul, the
+		// Orc Scimitar on the [sauron] Orc, and the Axe on a [wraith] Orc, of which there is none yet.
+		scn.MoveCardsToDiscard(nazgulsword, orcscimitar, axe);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(lemenya, hound);
+		scn.MoveMinionsToTable(lemenya, soldier);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		var pool = scn.GetTwilight();
-		assertTrue(scn.ShadowActionAvailable(legions));
-		scn.ShadowUseCardAction(legions);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(legions));
 
-		assertInDiscard(legions);
-		assertInDiscard(nazgulsword);
-		assertEquals(pool, scn.GetTwilight());
+		// A [wraith] Orc is played, and the Axe can now be played on it.
+		scn.ShadowPlayCard(hound);
+
+		assertTrue(scn.ShadowActionAvailable(legions));
+		assertInZone(Zone.SUPPORT, legions);
+		assertInDiscard(nazgulsword, orcscimitar, axe);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

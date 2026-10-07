@@ -46,6 +46,7 @@ public class TriggerEffectProcessor implements EffectProcessor {
                 triggerActionSource.setText(text);
             }
             triggerActionSource.addPlayRequirement(triggerChecker);
+            EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
 
             if (triggerChecker.isConstantCheck()) {
                 // A "constantly check" trigger is collected afresh for every batch of effect results while its

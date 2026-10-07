@@ -19,7 +19,11 @@ public class Card_07_321_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_321");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North
+					put("rider", "4_286");        // Rider of Rohan: [rohan] Man
+					put("spear", "4_288");        // Rider's Spear: [rohan] possession, bearer must be a [rohan] Man
+					put("armor", "1_92");         // Armor: [gondor] possession, bearer must be a Man
+					put("troop", "1_177");        // Goblin Patrol Troop
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -77,5 +81,37 @@ public class Card_07_321_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void SkirmishActionIsNotOfferedUnlessARohanPossessionInTheDiscardPileCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var rider = scn.GetFreepsCard("rider");
+		var spear = scn.GetFreepsCard("spear");
+		var armor = scn.GetFreepsCard("armor");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(card, aragorn, rider);
+		//A possession that could be played, but is not a [rohan] one
+		scn.MoveCardsToDiscard(armor);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		//Playing from the discard pile is treated as a cost: with nothing to play, the ability is withheld
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(card));
+
+		//The Spear can go on the Rider
+		scn.MoveCardsToDiscard(spear);
+		scn.FreepsRefreshDecision();
+
+		assertTrue(scn.FreepsActionAvailable(card));
 	}
 }

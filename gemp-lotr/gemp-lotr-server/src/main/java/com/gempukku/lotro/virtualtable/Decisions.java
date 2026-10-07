@@ -3,6 +3,7 @@ package com.gempukku.lotro.virtualtable;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,6 +91,40 @@ public interface Decisions extends TableBase {
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Fellowship phase, or else false.
 	 */
 	default boolean AwaitingFellowshipPhaseActions() { return FreepsDecisionAvailable("Play Fellowship action or Pass"); }
+
+	/**
+	 * Has the Free Peoples player's pending choice of phase actions worked out afresh and sent again, so that it
+	 * offers what the board allows now.  The game works out what a decision offers when it sends it, so a card
+	 * the rig moved or changed while the choice was pending is otherwise not reflected in it.  Fails if the Free
+	 * Peoples player is not at a choice of phase actions ("Play ... action or Pass").
+	 */
+	default void FreepsRefreshDecision() { RefreshDecision(P1()); }
+	/**
+	 * Has the Shadow player's pending choice of phase actions worked out afresh and sent again, so that it offers
+	 * what the board allows now.  The game works out what a decision offers when it sends it, so a card the rig
+	 * moved or changed while the choice was pending is otherwise not reflected in it.  Fails if the Shadow player
+	 * is not at a choice of phase actions ("Play ... action or Pass").
+	 */
+	default void ShadowRefreshDecision() { RefreshDecision(P2()); }
+	/**
+	 * Has the given player's pending choice of phase actions worked out afresh and sent again.  It is the same
+	 * decision, asked again with the actions the board allows now: nothing is answered, nothing moves, and no
+	 * other decision (a trigger, a response, a choice of cards) can be refreshed this way.
+	 * @param player The player facing a choice of phase actions.  Fails if that player is facing anything else,
+	 * or nothing.
+	 */
+	default void RefreshDecision(String player) {
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		String asked = decision == null ? null : decision.getText();
+		boolean phaseActions = decision instanceof CardActionSelectionDecision && asked != null
+				&& asked.toLowerCase().contains("action") && asked.toLowerCase().contains("pass");
+		Verify(phaseActions, player + " is not at a choice of phase actions"
+				+ (decision == null ? " (nothing is being asked)" : " (the decision pending is '" + asked + "')")
+				+ ", so there is nothing to refresh.");
+		((CardActionSelectionDecision) decision).refreshActions(game().getActionsEnvironment().getPhaseActions(player));
+		userFeedback().sendAwaitingDecision(player, decision);
+		userFeedback().atRest();
+	}
 
 	/**
 	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Shadow phase, or else false.
