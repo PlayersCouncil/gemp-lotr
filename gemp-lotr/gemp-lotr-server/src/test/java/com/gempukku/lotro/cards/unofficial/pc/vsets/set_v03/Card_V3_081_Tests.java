@@ -1,29 +1,31 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_081_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("nazgul1", "103_81");
-					put("nazgul2", "103_81");
+					put("winged1", "103_81");
+					put("winged2", "103_81");
+					put("winged3", "103_81");
+					put("lemenya", "1_232");    // Ulaire Lemenya: a Nazgul of another title; weakens bearers of [ringwraith] conditions
 
-					put("aragorn", "1_89");
-					put("boromir", "1_96");
-					put("sam", "1_311");       // Ring-bound
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: unbound [gondor] Man
+					put("gimli", "1_13");       // Gimli, Son of Gloin: unbound [dwarven] Dwarf
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer
+					put("bounder", "1_286");    // Bounder: ally whose home is site 2, where these tests are fought
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,7 +41,7 @@ public class Card_V3_081_Tests
 		 * Name: Winged Nazgul
 		 * Unique: 2
 		 * Side: Shadow
-		 * Culture: Wraith
+		 * Culture: Ringwraith
 		 * Twilight Cost: 4
 		 * Type: Minion
 		 * Subtype: Nazgul
@@ -47,12 +49,12 @@ public class Card_V3_081_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: Enduring. Fierce.
-		* 	Assignment: Return another Winged Nazgul to hand to assign this minion to an unbound companion.
-		*/
+		 * 	Assignment: Return another Winged Nazgul to hand to assign this minion to an unbound companion.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("nazgul1");
+		var card = scn.GetFreepsCard("winged1");
 
 		assertEquals("Winged Nazgul", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -69,96 +71,187 @@ public class Card_V3_081_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-
-
-// ======== BASIC FUNCTIONALITY ========
-
 	@Test
-	public void WingedNazgulCanBounceAnotherToAssignSelf() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-		var sam = scn.GetFreepsCard("sam");
-		var frodo = scn.GetRingBearer();
-
-		scn.MoveMinionsToTable(nazgul1, nazgul2);
-		scn.MoveCompanionsToTable(aragorn, boromir, sam);
+		var winged1 = scn.GetShadowCard("winged1");
+		scn.MoveCardsToHand(winged1);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
+		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		// Use nazgul1's ability, bouncing nazgul2
-		scn.ShadowUseCardAction(nazgul1);
+		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(13, scn.GetTwilight());
+		assertInZone(Zone.HAND, winged1);
+		assertTrue(scn.ShadowPlayAvailable(winged1));
 
-		// Choose which Winged Nazgul to return (nazgul2 is only valid "another")
-		// Auto-selected since only one valid target
+		scn.ShadowPlayCard(winged1);
 
-		// Choose unbound companion to assign to
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(frodo, sam));
+		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		// 13 - 4 to play - 2 roaming (a site 4 minion played at site 2)
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ReturnsTheOtherWingedNazgulToHandAndAssignsThisOneToTheChosenUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var winged1 = scn.GetShadowCard("winged1");
+		var winged2 = scn.GetShadowCard("winged2");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(aragorn, gimli, sam);
+		scn.MoveAlliesToTable(bounder);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(winged1, winged2, lemenya);
+
+		// Not in the maneuver phase.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(winged1));
+		assertFalse(scn.ShadowActionAvailable(winged2));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		// Each copy can send the other home; the other Nazgul has no such ability.
+		assertTrue(scn.ShadowActionAvailable(winged1));
+		assertTrue(scn.ShadowActionAvailable(winged2));
+		assertFalse(scn.ShadowActionAvailable(lemenya));
+		assertInZone(Zone.SHADOW_CHARACTERS, winged2);
+		assertFalse(scn.IsCharAssigned(winged1));
+		assertFalse(scn.IsCharAssigned(gimli));
+
+		scn.ShadowUseCardAction(winged1);
+
+		// The other copy is the only card that can be returned (Ulaire Lemenya cannot), so it goes without
+		// a choice, and the next thing asked is the companion. The ally is at its home site.
+		assertInZone(Zone.HAND, winged2);
+		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, sam, bounder));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(gimli);
+
+		assertTrue(scn.IsCharAssignedAgainst(winged1, gimli));
+		assertFalse(scn.IsCharAssigned(aragorn));
+		assertFalse(scn.IsCharAssigned(lemenya));
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		// The assignment stands: with nobody else assigned, Gimli's skirmish is against the Winged Nazgul.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, winged1));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void WithTwoOtherCopiesInPlayTheOneReturnedIsChosenFromThem() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var winged1 = scn.GetShadowCard("winged1");
+		var winged2 = scn.GetShadowCard("winged2");
+		var winged3 = scn.GetShadowCard("winged3");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		// Three copies cannot be in play by legal play (two dots); it is the only board on which the choice
+		// of which copy to return is put to the player.
+		scn.MoveMinionsToTable(winged1, winged2, winged3, lemenya);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(winged2));
+		scn.ShadowUseCardAction(winged2);
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(winged1, winged3));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(winged2, lemenya));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(winged3);
+
+		assertInZone(Zone.HAND, winged3);
+		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		assertInZone(Zone.SHADOW_CHARACTERS, winged2);
+
 		scn.ShadowChooseCard(aragorn);
 
-		// Nazgul2 returned to hand
-		assertInHand(nazgul2);
-
-		assertTrue(scn.IsCharAssignedAgainst(nazgul1, aragorn));
-
-		// Nazgul1 assigned to Aragorn
-		// Skip to skirmish to verify assignment
-		scn.BothPass();
-		scn.FreepsResolveSkirmish(aragorn);
-
-		assertTrue(scn.IsCharSkirmishing(nazgul1));
-		assertTrue(scn.IsCharSkirmishing(aragorn));
+		// It is the copy whose ability was used that is assigned.
+		assertTrue(scn.IsCharAssignedAgainst(winged2, aragorn));
+		assertFalse(scn.IsCharAssigned(winged1));
+		assertFalse(scn.IsCharAssigned(gimli));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void WingedNazgulAbilityNotAvailableWithOnlyOneCopy() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void NotOfferedWithNoOtherWingedNazgulInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var nazgul1 = scn.GetShadowCard("nazgul1");
+		var winged1 = scn.GetShadowCard("winged1");
+		var winged2 = scn.GetShadowCard("winged2");
+		var winged3 = scn.GetShadowCard("winged3");
+		var lemenya = scn.GetShadowCard("lemenya");
 		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(nazgul1);  // Only one Winged Nazgul
 		scn.MoveCompanionsToTable(aragorn);
+		// Copies that are not in play, and a Nazgul of another title that is.
+		scn.MoveCardsToHand(winged2);
+		scn.MoveCardsToDiscard(winged3);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(winged1, lemenya);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-
 		scn.FreepsPass();
 
-		// Can't use ability - no "another Winged Nazgul" to return
-		assertFalse(scn.ShadowActionAvailable(nazgul1));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(winged1));
 	}
 
-
 	@Test
-	public void WingedNazgulAbilityFizzlesWithNoUnboundCompanions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithOnlyRingBoundCompanionsTheOtherCopyIsStillReturnedAndNobodyIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var nazgul1 = scn.GetShadowCard("nazgul1");
-		var nazgul2 = scn.GetShadowCard("nazgul2");
+		var winged1 = scn.GetShadowCard("winged1");
+		var winged2 = scn.GetShadowCard("winged2");
+		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		// Only Frodo (RB) and Sam (Ring-bound) as companions
-
-		scn.MoveMinionsToTable(nazgul1, nazgul2);
 		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(winged1, winged2);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-
 		scn.FreepsPass();
 
-		scn.ShadowUseCardAction(nazgul1);
-		//No companion to select since there's no unbound companions
+		// The cost can be paid, so the ability is on offer though it will assign nobody.
+		assertTrue(scn.ShadowActionAvailable(winged1));
+		assertInZone(Zone.SHADOW_CHARACTERS, winged2);
+
+		scn.ShadowUseCardAction(winged1);
+
+		assertInZone(Zone.HAND, winged2);
+		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		assertFalse(scn.IsCharAssigned(winged1));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertFalse(scn.IsCharAssigned(sam));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

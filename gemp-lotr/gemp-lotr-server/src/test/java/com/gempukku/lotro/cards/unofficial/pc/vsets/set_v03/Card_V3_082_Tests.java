@@ -1,35 +1,47 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_082_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("death", "103_82");
-					put("rider", "4_286");      // Rider of Rohan - Rohan companion
+					put("death2", "103_82");
+					put("rider", "4_286");        // Rider of Rohan: [rohan] companion, strength 5; his ability needs a mount
+					put("guard", "5_83");         // Household Guard: [rohan] companion, strength 6; valiant and no text
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: [gondor] companion, strength 8
+					put("aldor", "4_262");        // Aldor, Soldier of Edoras: [rohan] ally, strength 3; an archery ability that needs a villager
+					put("lordofmoria", "1_21");   // Lord of Moria: Free Peoples condition in the support area
 
-					put("hollowing", "3_54");   // Isengard condition, cost 4
-					put("swarms1", "1_183");    // Moria condition, cost 1, stackable
-					put("swarms2", "1_183");    // Second copy
-					put("ships", "8_65");       // Raider possession, cost 2, culture tokens
-					put("stone", "9_47");       // Sauron artifact, cost 0, unique
-					put("runner", "1_178");     // Goblin Runner, for stacking
-					put("savage", "1_151");
+					put("swarms1", "1_183");      // Goblin Swarms: [moria] condition, cost 1, support area
+					put("swarms2", "1_183");
+					put("swarms3", "1_183");
+					put("ships", "8_65");         // Ships of Great Draught: [raider] possession, cost 2, support area
+					put("hollowing", "3_54");     // Hollowing of Isengard: [isengard] condition, cost 4, support area
+					put("stone", "9_47");         // Ithil Stone: [sauron] artifact, cost 0, support area; may draw at the start of the Shadow phase
+					put("fear", "103_64");        // Cover of Darkness, Omen of Fear: [ringwraith] condition, cost 2, two dots; its ability needs 3 [ringwraith] minions
+					put("dread", "103_94");       // Cover of Darkness, Omen of Dread: [sauron] condition, cost 2, two dots; answers a burden or a threat being added
+					put("poison", "8_28");        // Spider Poison: Shadow possession, cost 1, that goes from the support area onto a companion; idle until its bearer is assigned
+					put("poison2", "8_28");
+					put("runner1", "1_178");      // Goblin Runners, to be stacked
+					put("runner2", "1_178");
+					put("runner3", "1_178");
+					put("runner4", "1_178");
+					put("savage", "1_151");       // Uruk Savage: strength 5, vitality 3
+					put("savage2", "1_151");      // a second one, for a second skirmish
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -50,8 +62,10 @@ public class Card_V3_082_Tests
 		 * Type: Event
 		 * Subtype: Skirmish
 		 * Game Text: The Shadow player may hinder any of their own support cards.
-		* 	Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
-		*/
+		 * 	Spot an unhindered Shadow support card.  Make a [rohan] companion strength +1 for each of the
+		 * 	following: that card's twilight cost, cards stacked on that card, culture tokens on that card,
+		 * 	copies of that card you can spot.
+		 */
 
 		var scn = GetScenario();
 
@@ -67,249 +81,346 @@ public class Card_V3_082_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-
-
-// ======== BASIC STRENGTH PUMP ========
-
 	@Test
-	public void DeathTakeUsAllPumpsByTwilightCost() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void MakesARohanCompanionStrongerByCostStackedCardsTokensAndCopiesOfTheSpottedCardForTheSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var death = scn.GetFreepsCard("death");
+		var death2 = scn.GetFreepsCard("death2");
+		var frodo = scn.GetRingBearer();
 		var rider = scn.GetFreepsCard("rider");
-		var hollowing = scn.GetShadowCard("hollowing");  // Cost 4
-		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
-		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(hollowing);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
-
-		int riderStrength = scn.GetStrength(rider);
-
-		scn.FreepsPlayCard(death);
-
-		// Shadow may hinder - decline
-		scn.ShadowDeclineChoosing();
-
-		// Choose Shadow support card - Hollowing auto-selected
-		// Choose Rohan companion - Rider auto-selected
-
-		// Pump = twilight cost 4 + 0 stacked + 0 tokens + 1 copy = 5
-		assertEquals(riderStrength + 5, scn.GetStrength(rider));
-	}
-
-	@Test
-	public void DeathTakeUsAllCountsStackedCards() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var death = scn.GetFreepsCard("death");
-		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var aldor = scn.GetFreepsCard("aldor");
+		var lordofmoria = scn.GetFreepsCard("lordofmoria");
 		var swarms1 = scn.GetShadowCard("swarms1");
-		var runner = scn.GetShadowCard("runner");
-		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
-		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(swarms1);
-		scn.StackCardsOn(swarms1, runner);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
-
-		int riderStrength = scn.GetStrength(rider);
-
-		scn.FreepsPlayCard(death);
-		scn.ShadowDeclineChoosing();
-
-		// Pump = twilight cost 1 + 1 stacked + 0 tokens + 1 copy = 3
-		assertEquals(riderStrength + 3, scn.GetStrength(rider));
-	}
-
-	@Test
-	public void DeathTakeUsAllCountsCultureTokens() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var death = scn.GetFreepsCard("death");
-		var rider = scn.GetFreepsCard("rider");
+		var swarms2 = scn.GetShadowCard("swarms2");
+		var swarms3 = scn.GetShadowCard("swarms3");
 		var ships = scn.GetShadowCard("ships");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var poison = scn.GetShadowCard("poison");
 		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
-		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(ships);
-		scn.AddTokensToCard(ships, 3);
+		var savage2 = scn.GetShadowCard("savage2");
+		scn.MoveCompanionsToTable(rider, guard, aragorn);
+		scn.MoveAlliesToTable(aldor);
+		scn.MoveCardsToSupportArea(lordofmoria);
+		scn.MoveCardsToHand(death, death2);
+		scn.MoveCardsToSupportArea(swarms1, swarms2, ships, hollowing);
+		// Every part of the sum is a different number, and the Ships have cards and tokens of their own.
+		// The three cards stacked on the Swarms are two minions and a condition, a third Goblin Swarms.
+		scn.StackCardsOn(swarms1, scn.GetShadowCard("runner1"), scn.GetShadowCard("runner2"), swarms3);
+		scn.StackCardsOn(ships, scn.GetShadowCard("runner4"));
+		scn.AddTokensToCard(swarms1, 5);
+		scn.AddTokensToCard(ships, 4);
+		// A Shadow card that is in no support area.
+		scn.AttachCardsTo(guard, poison);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
+		scn.MoveMinionsToTable(savage, savage2);
 
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
+		// A skirmish event: not in the assignment phase.
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(death));
+
+		scn.PassCurrentPhaseActions();
+		// Two skirmishes, the Rider's first.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{rider, savage}, new PhysicalCardImpl[]{aragorn, savage2});
 		scn.FreepsResolveSkirmish(rider);
 
-		int riderStrength = scn.GetStrength(rider);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(death));
+		assertEquals(5, scn.GetStrength(rider));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(3, scn.GetStrength(aldor));
+		int pool = scn.GetTwilight();
 
 		scn.FreepsPlayCard(death);
+
+		assertEquals(pool + 3, scn.GetTwilight());
+
+		// First the Shadow player may hinder support cards of his own: any number, or none.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(swarms1, swarms2, ships, hollowing));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(savage, poison, lordofmoria, swarms3));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(4, scn.ShadowGetChoiceMax());
+
 		scn.ShadowDeclineChoosing();
 
-		// Pump = twilight cost 2 + 0 stacked + 3 tokens + 1 copy = 6
-		assertEquals(riderStrength + 6, scn.GetStrength(rider));
-	}
+		assertFalse(scn.IsHindered(swarms1));
+		assertFalse(scn.IsHindered(swarms2));
+		assertFalse(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(hollowing));
 
-	@Test
-	public void DeathTakeUsAllCountsCopiesInPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+		// Then a Shadow support card is spotted.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(swarms1, swarms2, ships, hollowing));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(savage, poison, lordofmoria, swarms3));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 
-		var death = scn.GetFreepsCard("death");
-		var rider = scn.GetFreepsCard("rider");
-		var swarms1 = scn.GetShadowCard("swarms1");
-		var swarms2 = scn.GetShadowCard("swarms2");
-		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
-		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(swarms1, swarms2);
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
-
-		int riderStrength = scn.GetStrength(rider);
-
-		scn.FreepsPlayCard(death);
-		scn.ShadowDeclineChoosing();
-
-		// Choose which Goblin Swarms to reference
 		scn.FreepsChooseCard(swarms1);
 
-		// Pump = twilight cost 1 + 0 stacked + 0 tokens + 2 copies = 3
-		assertEquals(riderStrength + 3, scn.GetStrength(rider));
+		// Then a [rohan] companion, in the skirmish or out of it.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(rider, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, aldor, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(rider);
+
+		// 5 + 1 for the Swarms' twilight cost + 3 cards stacked on it + 5 tokens on it + 2 Goblin Swarms that can
+		// be spotted (the third is stacked, and a stacked card cannot be spotted)
+		assertEquals(16, scn.GetStrength(rider));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(3, scn.GetStrength(aldor));
+		assertInDiscard(death);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// The skirmish ends (16 against 5: the Savage is overwhelmed) and so does the bonus: in the next skirmish
+		// of the same turn, Aragorn's, the Rider is 5 again. A bonus that lasted until the regroup phase would
+		// still be on him here.
+		scn.ShadowPass();
+		scn.FreepsPass();
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(5, scn.GetStrength(rider));
+
+		// Aragorn wins at 8 against 5; the event cannot be played in the regroup phase either.
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(death2));
 	}
 
 	@Test
-	public void DeathTakeUsAllCombinesAllFactors() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CardsTheShadowPlayerHindersCannotBeSpottedAndAHinderedCopyIsNotCounted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var death = scn.GetFreepsCard("death");
 		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
 		var swarms1 = scn.GetShadowCard("swarms1");
 		var swarms2 = scn.GetShadowCard("swarms2");
-		var runner = scn.GetShadowCard("runner");
+		var swarms3 = scn.GetShadowCard("swarms3");
+		var ships = scn.GetShadowCard("ships");
+		var hollowing = scn.GetShadowCard("hollowing");
 		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
+		scn.MoveCompanionsToTable(rider, guard);
 		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(swarms1, swarms2);
-		scn.StackCardsOn(swarms1, runner);
-		scn.AddTokensToCard(swarms1, 2);
+		scn.MoveCardsToSupportArea(swarms1, swarms2, swarms3, ships, hollowing);
+		scn.StackCardsOn(swarms1, scn.GetShadowCard("runner1"), scn.GetShadowCard("runner2"), scn.GetShadowCard("runner3"));
+		scn.AddTokensToCard(swarms1, 5);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
-
-		int riderStrength = scn.GetStrength(rider);
-
-		scn.FreepsPlayCard(death);
-		scn.ShadowDeclineChoosing();
-		scn.FreepsChooseCard(swarms1);
-
-		// Pump = twilight cost 1 + 1 stacked + 2 tokens + 2 copies = 6
-		assertEquals(riderStrength + 6, scn.GetStrength(rider));
-	}
-
-// ======== SHADOW HINDER PROTECTION ========
-
-	@Test
-	public void ShadowCanHinderToProtectSupportCards() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var death = scn.GetFreepsCard("death");
-		var rider = scn.GetFreepsCard("rider");
-		var hollowing = scn.GetShadowCard("hollowing");  // Cost 4
-		var stone = scn.GetShadowCard("stone");          // Cost 0
-		var savage = scn.GetShadowCard("savage");
-
-		scn.MoveCompanionsToTable(rider);
-		scn.MoveCardsToHand(death);
+		// One copy is hindered before the event is played.
+		scn.HinderCard(swarms3);
 		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(hollowing, stone);
-
-		scn.StartGame();
 		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
 
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
-
-		int riderStrength = scn.GetStrength(rider);
+		assertEquals(6, scn.GetStrength(guard));
 
 		scn.FreepsPlayCard(death);
 
-		// Shadow hinders the high-cost Hollowing to protect it
-		scn.ShadowChooseCard(hollowing);
+		// A card already hindered is not offered for hindering again.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(swarms1, swarms2, ships, hollowing));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(swarms3));
+		assertEquals(4, scn.ShadowGetChoiceMax());
 
+		scn.ShadowChooseCards(swarms2, hollowing);
+
+		assertTrue(scn.IsHindered(swarms2));
 		assertTrue(scn.IsHindered(hollowing));
+		assertFalse(scn.IsHindered(swarms1));
+		assertFalse(scn.IsHindered(ships));
 
-		// Only Stone remains as valid target - auto-selected
-		// Pump = twilight cost 0 + 0 stacked + 0 tokens + 1 copy = 1
-		assertEquals(riderStrength + 1, scn.GetStrength(rider));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(swarms1, ships));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(swarms2, swarms3, hollowing));
+
+		scn.FreepsChooseCard(swarms1);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(rider, guard));
+		scn.FreepsChooseCard(guard);
+
+		// 6 + 1 for the twilight cost + 3 stacked + 5 tokens + 1 Goblin Swarms that can be spotted (the other two are hindered)
+		assertEquals(16, scn.GetStrength(guard));
+		assertEquals(5, scn.GetStrength(rider));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
-	public void DeathTakeUsAllWorksWithArtifacts() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithEverySupportCardHinderedByTheShadowPlayerNothingIsSpottedAndNobodyIsStronger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var death = scn.GetFreepsCard("death");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var ships = scn.GetShadowCard("ships");
+		var hollowing = scn.GetShadowCard("hollowing");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(rider, guard);
+		scn.MoveCardsToHand(death);
+		scn.MoveCardsToSupportArea(ships, hollowing);
+		scn.AddTokensToCard(ships, 4);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
+
+		int pool = scn.GetTwilight();
+		scn.FreepsPlayCard(death);
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(ships, hollowing));
+		scn.ShadowChooseCards(ships, hollowing);
+
+		assertTrue(scn.IsHindered(ships));
+		assertTrue(scn.IsHindered(hollowing));
+		// The event was paid for and is spent, and has nothing to spot.
+		assertEquals(pool + 3, scn.GetTwilight());
+		assertInDiscard(death);
+		assertEquals(5, scn.GetStrength(rider));
+		assertEquals(6, scn.GetStrength(guard));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void WithNoShadowSupportCardInPlayItCanStillBePlayedAndDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var death = scn.GetFreepsCard("death");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var lordofmoria = scn.GetFreepsCard("lordofmoria");
+		var poison = scn.GetShadowCard("poison");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(rider, guard);
+		scn.MoveCardsToHand(death);
+		// The nearest things to a Shadow support card: a Free Peoples card in a support area, a Shadow card
+		// borne by a companion, and a minion.
+		scn.MoveCardsToSupportArea(lordofmoria);
+		scn.AttachCardsTo(guard, poison);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
+
+		// Its spot comes after the Shadow player's hindering and is no requirement for playing it.
+		assertTrue(scn.FreepsPlayAvailable(death));
+		int pool = scn.GetTwilight();
+
+		scn.FreepsPlayCard(death);
+
+		assertEquals(pool + 3, scn.GetTwilight());
+		assertInDiscard(death);
+		assertFalse(scn.IsHindered(poison));
+		assertEquals(5, scn.GetStrength(rider));
+		assertEquals(6, scn.GetStrength(guard));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ACardThatCostsNothingAndHasNothingOnItStillCountsAsOneCopyOfItself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var death = scn.GetFreepsCard("death");
 		var rider = scn.GetFreepsCard("rider");
 		var stone = scn.GetShadowCard("stone");
 		var savage = scn.GetShadowCard("savage");
-
 		scn.MoveCompanionsToTable(rider);
 		scn.MoveCardsToHand(death);
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToSupportArea(stone);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
 		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
+		// Put down here, past the Shadow phase its own trigger answers: an artifact of cost 0.
+		scn.MoveCardsToSupportArea(stone);
 
-		scn.FreepsAssignToMinions(rider, savage);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider);
+		assertEquals(5, scn.GetStrength(rider));
 
-		int riderStrength = scn.GetStrength(rider);
+		scn.FreepsPlayCard(death);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(stone));
+		scn.ShadowDeclineChoosing();
+
+		// The Stone is the only card to spot and the Rider the only [rohan] companion: neither is asked.
+		// 5 + 0 for the twilight cost + 0 stacked + 0 tokens + 1 Ithil Stone that can be spotted
+		assertEquals(6, scn.GetStrength(rider));
+		assertInDiscard(death);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ACopyBorneByACompanionIsCountedThoughItIsInNoSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var death = scn.GetFreepsCard("death");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var poison = scn.GetShadowCard("poison");
+		var poison2 = scn.GetShadowCard("poison2");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(rider, guard);
+		scn.MoveCardsToHand(death);
+		// Two Spider Poisons: one still in the support area, one already on a companion.
+		scn.MoveCardsToSupportArea(poison);
+		scn.AttachCardsTo(guard, poison2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
+
+		assertEquals(5, scn.GetStrength(rider));
+
+		scn.FreepsPlayCard(death);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(poison));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(poison2));
+		scn.ShadowDeclineChoosing();
+
+		// The Poison in the support area is the only card that can be spotted, so the companion is asked next.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(rider, guard));
+		scn.FreepsChooseCard(rider);
+
+		// 5 + 1 for the twilight cost + 0 stacked + 0 tokens + 2 Spider Poisons that can be spotted, wherever they are
+		assertEquals(8, scn.GetStrength(rider));
+		assertEquals(6, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ACardOfTheSameTitleUnderAnotherSubtitleIsCountedAsACopy() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var death = scn.GetFreepsCard("death");
+		var rider = scn.GetFreepsCard("rider");
+		var fear = scn.GetShadowCard("fear");
+		var dread = scn.GetShadowCard("dread");
+		var ships = scn.GetShadowCard("ships");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(rider);
+		scn.MoveCardsToHand(death);
+		// Two Covers of Darkness, which two dots allow, with different subtitles.
+		scn.MoveCardsToSupportArea(fear, dread, ships);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(rider, savage);
+
+		assertEquals(5, scn.GetStrength(rider));
 
 		scn.FreepsPlayCard(death);
 		scn.ShadowDeclineChoosing();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(fear, dread, ships));
+		scn.FreepsChooseCard(fear);
 
-		// Pump = twilight cost 0 + 0 stacked + 0 tokens + 1 copy = 1
-		assertEquals(riderStrength + 1, scn.GetStrength(rider));
+		// 5 + 2 for the twilight cost + 0 stacked + 0 tokens + 2 Covers of Darkness that can be spotted
+		assertEquals(9, scn.GetStrength(rider));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }
