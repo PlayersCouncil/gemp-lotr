@@ -1,49 +1,62 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_124_Tests
 {
-
+	// The Ring-bearer is Frodo, Son of Drogo, who bears The Ruling Ring. Every card named here is in both
+	// players' decks.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					// FP cards to attach to Frodo
-					put("sting", "1_313");         // FP possession (hand weapon)
-					put("anduril", "7_79");        // FP artifact (hand weapon)
-					put("lastalliance", "1_49");   // FP condition
+					put("aragorn", "1_89");        // Aragorn, Ranger of the North: [gondor] Man
+					put("gimli", "1_13");          // Gimli, Son of Gloin: a Dwarf, to wear the armor
+					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: an ally
 
-					// Shadow card to attach to Frodo (should not be affected)
-					put("bladeTip", "1_209");      // Shadow condition
+					// Free Peoples cards that companions bear
+					put("sting", "1_313");         // Sting: possession; bearer must be Frodo
+					put("anduril", "7_80");        // Anduril, King's Blade: artifact; bearer must be Aragorn
+					put("athelas", "1_94");        // Athelas: possession; bearer must be a [gondor] Man
+					put("alliance", "1_49");       // The Last Alliance of Elves and Men: condition on a [gondor] Man
+					put("army", "18_47");          // Elendil's Army: a follower, put on a companion by the rig
+					put("armor", "1_8");           // Dwarven Armor: possession; bearer must be a Dwarf
+					put("flame", "7_79");          // Anduril, Flame of the West: artifact; Aragorn is vitality +1
 
-					// FP support area cards (should not be affected)
-					put("oldToby", "1_305");       // FP possession (pipeweed)
-					put("sapling", "9_35");        // FP artifact
-					put("promise", "2_112");       // FP condition
+					// Free Peoples cards that no companion bears
+					put("elvenBow", "1_41");       // Elven Bow: possession, put on the ally by the rig
+					put("oldToby", "1_305");       // Old Toby: possession in the support area
+					put("sapling", "9_35");        // Sapling of the White Tree: artifact in the support area
+					put("promise", "2_112");       // A Promise: condition in the support area
 
-					put("runner", "1_178");
+					// A Shadow card that a companion bears. It does nothing unless its bearer is assigned to a
+					// skirmish.
+					put("poison", "8_28");         // Spider Poison: possession
 				}},
 				new HashMap<>()
 				{{
-					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "1_341");
-					put("site4", "1_343");
-					put("site5", "1_349");
-					put("site6", "1_351");
-					put("site7", "1_353");
+					put("site1", "7_330");
+					put("site2", "7_335");
+					put("site3", "8_117");
+					put("site4", "7_342");
+					put("site5", "7_345");
+					put("site6", "7_350");
+					put("site7", "8_120");
 					put("site8", "103_124");       // Gorgoroth Wastes
-					put("site9", "1_360");
+					put("site9", "7_360");         // Dagorlad: Shadow number 9; adds 3 threats when the fellowship moves there
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -56,15 +69,14 @@ public class Card_V3_124_Tests
 		/**
 		 * Set: V3
 		 * Name: Gorgoroth Wastes
-		 * Unique: false
-		 * Side:
-		 * Culture:
-		 * Shadow Number: 5
+		 * Unique: False
 		 * Type: Site
-		 * Subtype: King
+		 * Block: King
 		 * Site Number: 8
-		 * Game Text: When moving here, for each Free Peoples card borne by companions,
-		 * 	the Free Peoples player must discard it or add (1).
+		 * Shadow Number: 5
+		 * Direction: Left
+		 * Game Text: When moving here, for each Free Peoples card borne by companions, the Free Peoples player must
+		 * 	discard it or add (1).
 		 */
 
 		var scn = GetScenario();
@@ -75,70 +87,305 @@ public class Card_V3_124_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
 	}
 
 	@Test
-	public void TriggerOnlyTargetsFPCardsOnCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OnMovingHereTheFreePeoplesPlayerDiscardsOrPaysOneForEachFreePeoplesCardHisCompanionsBear() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-
-		// FP cards on Frodo — should be subject to discard-or-tax
+		var ring = scn.GetRing();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bilbo = scn.GetFreepsCard("bilbo");
 		var sting = scn.GetFreepsCard("sting");
 		var anduril = scn.GetFreepsCard("anduril");
-		var lastalliance = scn.GetFreepsCard("lastalliance");
-
-		// Shadow condition on Frodo — should NOT be affected
-		var bladeTip = scn.GetShadowCard("bladeTip");
-
-		// FP cards in support area — should NOT be affected
+		var athelas = scn.GetFreepsCard("athelas");
+		var alliance = scn.GetFreepsCard("alliance");
+		var army = scn.GetFreepsCard("army");
+		var elvenBow = scn.GetFreepsCard("elvenBow");
 		var oldToby = scn.GetFreepsCard("oldToby");
 		var sapling = scn.GetFreepsCard("sapling");
 		var promise = scn.GetFreepsCard("promise");
-
-		var runner = scn.GetShadowCard("runner");
-
-		scn.AttachCardsTo(frodo, sting, anduril, lastalliance, bladeTip);
-		scn.MoveCardsToSupportArea(oldToby, sapling, promise);
+		var poison = scn.GetShadowCard("poison");
 
 		scn.StartGame();
-
 		scn.SkipToSite(7);
-		scn.MoveMinionsToTable(runner);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bilbo);
+		// Five Free Peoples cards on two companions: a possession on the Ring-bearer; an artifact, a
+		// possession (hindered), a condition and a follower on Aragorn.
+		scn.AttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(aragorn, anduril, athelas, alliance, army);
+		scn.HinderCard(athelas);
+		// Beside them: the Shadow player's possession on the Ring-bearer, a Free Peoples possession on an
+		// ally, and a Free Peoples possession, artifact and condition in the support area. The One Ring is
+		// on the Ring-bearer as always.
+		scn.AttachCardsTo(frodo, poison);
+		scn.AttachCardsTo(bilbo, elvenBow);
+		scn.MoveCardsToSupportArea(oldToby, sapling, promise);
+		assertEquals(0, scn.GetTwilight());
 
-		int twilightBefore = scn.GetTwilight();
-
-		// Move to site 8 — trigger fires on arrival
 		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, anduril, athelas, alliance, army));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ring, poison, elvenBow, oldToby, sapling, promise));
+		assertEquals(5, scn.FreepsGetCardChoiceCount());
+		// Any of them may be discarded, from none to all.
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(5, scn.FreepsGetChoiceMax());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsChooseCards(sting, army);
+		assertInDiscard(sting, army);
+		assertAttachedTo(anduril, aragorn);
+		assertAttachedTo(athelas, aragorn);
+		assertTrue(scn.IsHindered(athelas));
+		assertAttachedTo(alliance, aragorn);
+		// 2 companions + 5 for the site + 1 each for Anduril, the hindered Athelas and the Last Alliance
+		assertEquals(10, scn.GetTwilight());
+
+		assertAttachedTo(ring, frodo);
+		assertAttachedTo(poison, frodo);
+		assertAttachedTo(elvenBow, bilbo);
+		assertInZone(Zone.SUPPORT, oldToby, sapling, promise);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DiscardingEveryCardAHinderedOneIncludedAddsNothingBeyondTheMove() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sting = scn.GetFreepsCard("sting");
+		var athelas = scn.GetFreepsCard("athelas");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(aragorn, athelas);
+		scn.HinderCard(athelas);
+
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, athelas));
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+
+		scn.FreepsChooseCards(sting, athelas);
+		assertInDiscard(sting, athelas);
+		// 2 companions + 5 for the site
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WhoeverMovesHereIsTheOneAskedAndKeepingEveryCardAddsOneForEach() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var firstFrodo = scn.GetRingBearer();
+		var firstSting = scn.GetFreepsCard("sting");
+		var secondFrodo = scn.GetShadowRingBearer();
+		var secondAragorn = scn.GetShadowCard("aragorn");
+		var secondSting = scn.GetShadowCard("sting");
+		var secondAthelas = scn.GetShadowCard("athelas");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.AttachCardsTo(firstFrodo, firstSting);
+
+		// The first player's Frodo moves here alone, bearing Sting. The first player is asked, and keeps it.
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(firstSting));
+		assertEquals(1, scn.FreepsGetCardChoiceCount());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsDeclineChoosing();
+		assertAttachedTo(firstSting, firstFrodo);
+		// 1 companion + 5 for the site + 1 for Sting
+		assertEquals(7, scn.GetTwilight());
+		scn.SkipToOtherPlayersTurn();
+
+		// The second player's fellowship, still at site 7, moves here in its turn: his Frodo with his own
+		// Sting, his Aragorn with his own Athelas. He is the one asked, and about his own two cards only.
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		scn.MoveCompanionsToTable(secondAragorn);
+		scn.AttachCardsTo(secondFrodo, secondSting);
+		scn.AttachCardsTo(secondAragorn, secondAthelas);
+		assertEquals(0, scn.GetTwilight());
+
+		scn.ShadowPass();
 		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(secondSting, secondAthelas));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(firstSting));
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
-		// FP chooses which of their companion-borne cards to discard
-		// Blade Tip (Shadow) should not be offered
-		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, anduril, lastalliance));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bladeTip, oldToby, sapling, promise));
+		scn.ShadowDeclineChoosing();
+		assertAttachedTo(secondSting, secondFrodo);
+		assertAttachedTo(secondAthelas, secondAragorn);
+		assertAttachedTo(firstSting, firstFrodo);
+		// 2 companions + 5 for the site + 1 each for the two cards kept
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+	}
 
-		// Discard Sting, keep Anduril and Last Alliance
-		scn.FreepsChooseCards(sting);
+	@Test
+	public void MovingOnFromHereAsksNothingAndAddsNothingForTheCardsStillBorne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		// Sting was discarded
-		assertInDiscard(sting);
-		// Other two FP cards still on Frodo
-		assertAttachedTo(anduril, frodo);
-		assertAttachedTo(lastalliance, frodo);
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
 
-		// Blade Tip unaffected — still on Frodo
-		assertAttachedTo(bladeTip, frodo);
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.AttachCardsTo(frodo, sting);
 
-		// Support area cards completely unaffected
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting));
+		scn.FreepsDeclineChoosing();
+		// 1 companion + 5 for the site + 1 for Sting
+		assertEquals(7, scn.GetTwilight());
+
+		scn.SkipToMovementDecision();
+		assertEquals(7, scn.GetTwilight());
+		scn.FreepsChooseToMove();
+		assertEquals(9, scn.GetCurrentSiteNumber());
+		assertAttachedTo(sting, frodo);
+		// 7 from before + 1 companion + 9 for Dagorlad
+		assertEquals(17, scn.GetTwilight());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoFreePeoplesCardBorneByACompanionNothingIsAskedOrAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var elvenBow = scn.GetFreepsCard("elvenBow");
+		var oldToby = scn.GetFreepsCard("oldToby");
+		var poison = scn.GetShadowCard("poison");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		// The Ring-bearer bears The One Ring, which is of no side, and the Shadow player's possession; a
+		// Free Peoples possession is on an ally and another in the support area.
+		scn.MoveAlliesToTable(bilbo);
+		scn.AttachCardsTo(frodo, poison);
+		scn.AttachCardsTo(bilbo, elvenBow);
+		scn.MoveCardsToSupportArea(oldToby);
+
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// 1 companion + 5 for the site
+		assertEquals(6, scn.GetTwilight());
+		assertAttachedTo(ring, frodo);
+		assertAttachedTo(poison, frodo);
+		assertAttachedTo(elvenBow, bilbo);
 		assertInZone(Zone.SUPPORT, oldToby);
-		assertInZone(Zone.SUPPORT, sapling);
-		assertInZone(Zone.SUPPORT, promise);
+	}
 
-		// Twilight: site shadow number (5) + 1 per companion (Frodo = 1)
-		//         + 2 tax for kept cards (Anduril + Last Alliance)
-		assertEquals(twilightBefore + 5 + 1 + 2, scn.GetTwilight());
+	@Test
+	public void ACardThatLeavesPlayWithItsDyingBearerIsNotPaidFor() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var flame = scn.GetFreepsCard("flame");
+		var athelas = scn.GetFreepsCard("athelas");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, flame, athelas);
+		// Vitality 4 + 1 for Anduril, and 4 wounds: without Anduril he dies.
+		scn.AddWoundsToChar(aragorn, 4);
+		assertEquals(1, scn.GetVitality(aragorn));
+
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(flame, athelas));
+
+		// Only Anduril is chosen. Aragorn dies of losing it and his Athelas goes with him: it was not kept,
+		// so nothing is added for it.
+		scn.FreepsChooseCards(flame);
+		assertInDiscard(flame, athelas);
+		assertInZone(Zone.DEAD, aragorn);
+		// 1 companion (Aragorn is dead before the move's twilight is added) + 5 for the site
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardBorneByAHinderedCompanionIsAskedAboutLikeAnyOtherAsTheGameHasIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var sting = scn.GetFreepsCard("sting");
+		var armor = scn.GetFreepsCard("armor");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(gimli, armor);
+		scn.HinderCard(gimli);
+
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, armor));
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+
+		scn.FreepsDeclineChoosing();
+		assertAttachedTo(sting, frodo);
+		assertAttachedTo(armor, gimli);
+		assertTrue(scn.IsHindered(gimli));
+		// 1 for Frodo (a hindered companion adds nothing to a move) + 5 for the site + 1 each for Sting and
+		// the armor
+		assertEquals(8, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0108: a Free Peoples card borne by a HINDERED companion is counted; by CR 5.0 its bearer is no companion while hindered (a rider to Q-0103)")
+	public void ACardBorneByAHinderedCompanionIsNotCounted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var sting = scn.GetFreepsCard("sting");
+		var armor = scn.GetFreepsCard("armor");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(gimli, armor);
+		// A hindered card has no card type: Gimli is not "a companion" while he is hindered.
+		scn.HinderCard(gimli);
+
+		scn.FreepsPass();
+		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sting));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(armor));
+		assertEquals(1, scn.FreepsGetCardChoiceCount());
+
+		scn.FreepsDeclineChoosing();
+		assertAttachedTo(sting, frodo);
+		assertAttachedTo(armor, gimli);
+		// 1 for Frodo (a hindered companion adds nothing to a move) + 5 for the site + 1 for Sting
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
