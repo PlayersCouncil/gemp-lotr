@@ -461,6 +461,21 @@ shuffle of that deck and its count unchanged; declining the offer reads none.
 hindered card; "for each possession" does not. Hinder one of the counted cards with `HinderCard` and read
 the count unchanged.
 
+**A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
+stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
+is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase only
+(`mechanics/ResponseEventsAreNotPlayedByEffectsTests`). For "a [culture] event" a response event of that
+culture is the invalid candidate beside the phase events, and a phase word in the definition's filter beside
+it cannot be told from its absence: say so in Notes.
+
+**An action's own exertions count against what it then needs.** "Exert X twice to play ... from your discard
+pile" is not offered when X's exertions would leave the only candidate unplayable, and "exert A and B" is not
+offered when one character with one exertion left is the only A and the only B
+(`mechanics/CostsAreJudgedInTheOrderPrintedTests`). That is so where the cost names its card or only one
+character can pay; where the player chooses among several, the action is offered on the board as it stands.
+- `0_8011` Test Archive ("Shadow or Skirmish: Play an event from your discard pile.") and `0_8012` Test Lectern ("Shadow or Skirmish: Play an event stacked here."): Shadow conditions for mechanics/ResponseEventsAreNotPlayedByEffectsTests. The test booster pack (`product/Test-Booster.hjson`) holds a Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen. A choice from a stack is answered with `ShadowChooseCard`, not `ShadowChooseCardBPFromSelection`.
+- `0_8013` Test Whetstone ("Skirmish: Exert a Dwarf to play a [dwarven] event from your discard pile."): mechanics/CostsAreJudgedInTheOrderPrintedTests.
+
 ## Choosing helper cards
 
 A helper card with text of its own can change the game under a test. Read the definition of every card that goes

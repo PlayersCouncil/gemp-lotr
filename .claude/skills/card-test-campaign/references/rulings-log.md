@@ -812,3 +812,8 @@ presented in the client ... the information is there all the same".
   this" is put to that player only when the effect it would prevent is going to happen: not for a draw from
   an empty deck, a draw past the Rule of 4, or a draw something else already prevents. This is one rule for
   every such clause, with the earlier "to prevent NONE" cases (F-0051, F-0183, F-0185, F-0192) under it.
+- **Q-0080, as the engine now stands (engine pass 13, F-0184):** exertions and wounds that an action's earlier
+  costs are certain to place are judged in order by the engine, for later costs and for the card the action
+  then plays; a definition needs no requirement for those. A cost that puts something else out of a later
+  cost's reach (a hinder, tokens) still needs the requirement, and a real choice of who exerts is judged on
+  the board as it stands.
