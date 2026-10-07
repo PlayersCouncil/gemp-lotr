@@ -3,32 +3,62 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_085_Tests
 {
-
+	// Site 2 of this path is Ettenmoors: "Skirmish: Exert your companion or minion to make that character
+	// strength +2." The tests of the trigger use it to exert whichever companion they need.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("merry", "103_85");
-					put("eowyn", "5_122");
-					put("rider1", "4_286");
+					put("eowyn", "5_122");      // Éowyn, Daughter of Éomund: [rohan] Man, strength 6, vitality 3; a maneuver ability never used here
+					put("rider1", "4_286");     // Rider of Rohan: [rohan] Man companion, strength 5, vitality 3; his ability needs a mount
 					put("rider2", "4_286");
-					put("rider3", "4_286");
-					put("mount", "4_287");
-					put("aragorn", "1_89");
+					put("scout", "5_90");       // Rohirrim Scout: valiant [rohan] Man companion, vitality 3; a regroup ability never used here
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, strength 8
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, made [rohan] where a test needs a [rohan] companion who is no Man
+					put("hlafwine", "4_281");   // Hlafwine: [rohan] Man ally. Skirmish: exert Hlafwine to make a [rohan] Man strength +2
+					put("guma", "4_277");       // Guma: [rohan] Man ally, vitality 2. Fellowship: exert Guma to heal a [rohan] Man
+					put("leowyn", "7_239");     // Léowyn: [rohan] Man ally whose name is not Éowyn's; her ability needs initiative
+					put("shield", "8_88");      // Éowyn's Shield: a [rohan] possession that is not Éowyn either; bearer must be a [rohan] Man
+					put("mount1", "4_287");     // Rider's Mount: bearer must be a [rohan] Man
+					put("mount2", "4_287");
+					put("iamnoman", "103_84");  // I Am No Man: exert a skirmishing valiant companion twice to weaken a minion
 
-					put("runner", "1_178");
-					put("soldier", "1_271");
+					put("soldier1", "1_271");   // Orc Soldier: strength 7, vitality 2. Skirmish: exert this minion to wound a character he is skirmishing
+					put("soldier2", "1_271");
+					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The [rohan] allies are at home at site 4 of the Towers path, where they can skirmish.
+	protected VirtualTableScenario GetTowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "103_85");
+					put("hlafwine", "4_281");   // Hlafwine: [rohan] Man ally, strength 4, vitality 2, home site 4 of the Towers path
+					put("soldier", "1_271");    // Orc Soldier: strength 7, vitality 2. Skirmish: exert this minion to wound a character he is skirmishing
+				}},
+				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -52,8 +82,8 @@ public class Card_V3_085_Tests
 		 * Signet: Aragorn
 		 * Game Text: Valiant. Enduring.
 		 * 	While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.
-		 * 	Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
-		 * 	Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [Rohan] Man.
+		 * 	Each time another [rohan] Man exerts, you may exert Merry to heal that Man.
+		 * 	Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [rohan] Man.
 		 */
 
 		var scn = GetScenario();
@@ -76,326 +106,502 @@ public class Card_V3_085_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
-
-// ======== RACE MODIFIER TESTS ========
-
 	@Test
-	public void MerryIsNotManWithoutConditionMet() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		var rider1 = scn.GetFreepsCard("rider1");
-		// Merry + 1 Rider = 2 Rohan companions (not enough for 3)
-		scn.MoveCompanionsToTable(merry, rider1);
-
-		scn.StartGame();
-
-		// Merry should be Hobbit but NOT Man
-		assertTrue(scn.IsRace(merry, Race.HOBBIT));
-		assertFalse(scn.IsRace(merry, Race.MAN));
-	}
-
-	@Test
-	public void MerryIsManWhenSpottingEowyn() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionsToTable(merry, eowyn);
-
-		scn.StartGame();
-
-		// With Eowyn spotted, Merry should be both Hobbit AND Man
-		assertTrue(scn.IsRace(merry, Race.HOBBIT));
-		assertTrue(scn.IsRace(merry, Race.MAN));
-	}
-
-	@Test
-	public void MerryIsManWhenSpotting3RohanCompanions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForTwoAndIsHimselfOneOfTheThreeRohanCompanionsThatMakeHimAMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var rider1 = scn.GetFreepsCard("rider1");
 		var rider2 = scn.GetFreepsCard("rider2");
-		// Merry (Rohan Hobbit) + 2 Riders (Rohan Men) = 3 Rohan companions
-		scn.MoveCompanionsToTable(merry, rider1, rider2);
+		scn.MoveCompanionsToTable(rider1, rider2);
+		scn.MoveCardsToHand(merry);
 
 		scn.StartGame();
 
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(merry));
+
+		scn.FreepsPlayCard(merry);
+
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, merry);
+		// The two Riders and Merry himself are the three [rohan] companions.
 		assertTrue(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void MerryLosesManRaceWhenConditionNoLongerMet() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void BecomesAManWhenAThirdRohanCompanionIsPlayedAndNotForAnAllyOrACompanionOfAnotherCulture() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var rider1 = scn.GetFreepsCard("rider1");
+		var rider2 = scn.GetFreepsCard("rider2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var leowyn = scn.GetFreepsCard("leowyn");
+		var shield = scn.GetFreepsCard("shield");
+		var mount1 = scn.GetFreepsCard("mount1");
+		var mount2 = scn.GetFreepsCard("mount2");
+		// Two [rohan] companions, and beside them a [rohan] ally, a companion of another culture, and two cards
+		// with Éowyn's name in theirs that are not her.
+		scn.MoveCompanionsToTable(merry, rider1, aragorn);
+		scn.MoveAlliesToTable(leowyn);
+		scn.AttachCardsTo(rider1, shield);
+		scn.MoveCardsToHand(rider2, mount1, mount2);
+
+		scn.StartGame();
+
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+
+		// Rider's Mount must be borne by a [rohan] Man.
+		scn.FreepsPlayCard(mount1);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(rider1, leowyn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry, aragorn));
+		scn.FreepsChooseCard(leowyn);
+		assertAttachedTo(mount1, leowyn);
+
+		scn.FreepsPlayCard(rider2);
+
+		assertTrue(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+
+		scn.FreepsPlayCard(mount2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(rider1, rider2, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		scn.FreepsChooseCard(merry);
+		assertAttachedTo(mount2, merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void EowynAloneMakesHimAManAndHeIsNoLongerOneWhenSheDies() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionsToTable(merry, eowyn);
-
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, aragorn);
+		scn.MoveCardsToHand(eowyn);
 
 		scn.StartGame();
 
-		// With Eowyn, Merry is a Man
-		assertTrue(scn.IsRace(merry, Race.MAN));
+		assertFalse(scn.IsRace(merry, Race.MAN));
 
-		// Wound Eowyn to death (4 vitality)
-		scn.AddWoundsToChar(eowyn, 4);
+		scn.FreepsPlayCard(eowyn);
+
+		// Merry and Éowyn are only two [rohan] companions: it is her name that does it.
+		assertTrue(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+
+		// Vitality 3: three wounds kill her as the phase ends.
+		scn.AddWoundsToChar(eowyn, 3);
 		scn.FreepsPass();
 
-		// Without Eowyn (and < 3 Rohan companions), Merry is no longer a Man
+		assertInZone(Zone.DEAD, eowyn);
 		assertFalse(scn.IsRace(merry, Race.MAN));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-// ======== EXERTION TRIGGER TESTS ========
-
 	@Test
-	public void MerryTriggerFiresWhenAnotherRohanManExerts() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EachTimeAnotherRohanManExertsMerryMayExertToHealThatMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var rider1 = scn.GetFreepsCard("rider1");
 		var rider2 = scn.GetFreepsCard("rider2");
-		var mount = scn.GetFreepsCard("mount");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var hlafwine = scn.GetFreepsCard("hlafwine");
+		scn.MoveCompanionsToTable(merry, rider1, rider2, aragorn);
+		scn.MoveAlliesToTable(hlafwine);
+		// A second wounded [rohan] Man, who is not the one that exerts.
+		scn.AddWoundsToChar(rider2, 1);
 
-		// Rider1 is mounted, Rider2 will skirmish
-		scn.MoveCompanionsToTable(merry, rider1, rider2);
-		scn.AttachCardsTo(rider1, mount);
-
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, troop);
+		var ettenmoors = scn.GetCurrentSite();
 
-		// Assign Rider2 to Runner, leaving Rider1 unassigned
-		scn.FreepsAssignToMinions(rider2, runner);
-		scn.ShadowDeclineAssignments();
-
-		// Choose Rider2's skirmish to resolve
-		scn.FreepsResolveSkirmish(rider2);
-
-		// During skirmish, Rider1 (mounted, not in skirmish) can use ability
-		// Rider's ability: "If mounted, exert to exert a companion skirmishing an unbound companion"
-		// Rider2 is skirmishing and unbound, so valid target
-		assertTrue(scn.FreepsActionAvailable(rider1));
-
+		// A [rohan] Man companion exerts, and the offer is declined.
 		assertEquals(0, scn.GetWoundsOn(rider1));
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(rider1);
+		assertEquals(1, scn.GetWoundsOn(rider1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(1, scn.GetWoundsOn(rider1));
+		assertEquals(1, scn.GetWoundsOn(rider2));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
 
-		scn.FreepsUseCardAction(rider1);
-		// Cost: Rider1 exerts (becomes 1 wound)
-
-		// Merry's trigger should fire: "another Rohan Man exerted"
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		// Merry exerts (cost), Rider1 heals (effect)
-
+		// The same Man exerts again and the offer is made again.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(rider1);
+		assertEquals(2, scn.GetWoundsOn(rider1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
 		assertEquals(1, scn.GetWoundsOn(merry));
-		assertEquals(0, scn.GetWoundsOn(rider1));
+		assertEquals(1, scn.GetWoundsOn(rider1));
+		assertEquals(1, scn.GetWoundsOn(rider2));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// A [rohan] Man who is an ally exerts for his own ability.
+		assertEquals(0, scn.GetWoundsOn(hlafwine));
+		scn.FreepsUseCardAction(hlafwine);
+		assertEquals(1, scn.GetWoundsOn(hlafwine));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
+		assertEquals(2, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(hlafwine));
+		assertEquals(1, scn.GetWoundsOn(rider2));
+		// Hlafwine's own strength +2 goes to a [rohan] Man.
+		scn.FreepsChooseCard(rider1);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
-	public void MerryTriggerDoesNotFireForNonRohanMan() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void NotOfferedForAGondorManNorARohanCompanionWhoIsNoManNorAWoundNorMerrysOwnExertion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		// Eowyn makes Merry a Man, Aragorn is a Gondor Man (not Rohan)
-		scn.MoveCompanionsToTable(merry, eowyn, aragorn);
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(merry, eowyn, aragorn, sam);
+		// Merry is the only [rohan] companion there is who is no Man, so Sam is made one.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, sam, null, Culture.ROHAN));
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		// Need to cause Aragorn to exert here via game mechanics
-		// For now, this test documents the expected behavior:
-		// When Aragorn (Gondor Man, not Rohan) exerts, Merry's trigger should NOT fire
-
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(merry));
-		scn.FreepsUseCardAction(aragorn);
-
-		// Merry's trigger should NOT be available since Aragorn is not Rohan
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(merry));
-	}
-
-	@Test
-	public void MerryTriggerDoesNotFireWhenMerryHimselfExerts() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup - Merry must be a Man for this to be relevant
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		var rider1 = scn.GetFreepsCard("rider1");
-		var mount = scn.GetFreepsCard("mount");
-
-		scn.MoveCompanionsToTable(merry, eowyn, rider1);
-		scn.AttachCardsTo(rider1, mount);
-		scn.AddWoundsToChar(rider1, 1); // Pre-wound so Rider can be healed
-
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		var soldier = scn.GetShadowCard("soldier1");
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(eowyn, soldier);
+		var ettenmoors = scn.GetCurrentSite();
 
-		// Verify Merry is a Man (due to Eowyn)
+		// With Éowyn in play Merry is himself a [rohan] Man.
 		assertTrue(scn.IsRace(merry, Race.MAN));
 
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(rider1, runner);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider1);
-
-		// During Rider's skirmish, cause Rider to exert which triggers Merry
-		assertTrue(scn.FreepsActionAvailable(rider1));
-		scn.FreepsUseCardAction(rider1);
-
-		// First trigger: Rider1 exerted
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		// Now Merry has exerted - but Merry exerting should NOT trigger another prompt
-		// because the trigger says "another Rohan Man" - Merry is not "another" relative to himself
-		assertEquals(1, scn.GetWoundsOn(merry));
-
-		// There should be no second trigger from Merry's own exertion
+		// A [gondor] Man exerts.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// A minion exerts, and a [rohan] Man takes a wound that is no exertion.
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// A [rohan] Hobbit exerts.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// Merry, a [rohan] Man himself just now, exerts.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(merry);
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// On the same board another [rohan] Man's exertion does bring the offer; Merry's exertion to pay for
+		// it brings no second one.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(eowyn);
+		assertEquals(2, scn.GetWoundsOn(eowyn));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
+		assertEquals(2, scn.GetWoundsOn(merry));
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
-// ======== SKIRMISH ABILITY TESTS ========
-
 	@Test
-	public void MerrySkirmishAbilityNotAvailableWhenAssigned() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void NotOfferedOnceMerryIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		var runner = scn.GetShadowCard("runner");
-
+		var guma = scn.GetFreepsCard("guma");
 		scn.MoveCompanionsToTable(merry);
-		scn.MoveMinionsToTable(runner);
+		scn.MoveAlliesToTable(guma);
+		// Vitality 4: one exertion left.
+		scn.AddWoundsToChar(merry, 2);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
 
-		// Assign Merry to Runner
-		scn.FreepsAssignToMinions(merry, runner);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(merry);
+		scn.FreepsUseCardAction(guma);
+		assertEquals(1, scn.GetWoundsOn(guma));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
+		assertEquals(3, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(guma));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// Merry's skirmish ability requires "self,notAssignedToSkirmish"
-		// Since Merry IS assigned, ability should not be available
-		assertFalse(scn.FreepsActionAvailable(merry));
+		// Guma exerts again. Merry cannot exert, so nothing is offered; Guma's own ability then heals the only
+		// wounded [rohan] Man, himself.
+		scn.FreepsUseCardAction(guma);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(3, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(guma));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void MerrySkirmishAbilityAvailableWhenNotAssigned() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AManWhoExertsTwiceToPayOneCostIsOfferedTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		var rider1 = scn.GetFreepsCard("rider1");
-		var runner = scn.GetShadowCard("runner");
+		var scout = scn.GetFreepsCard("scout");
+		var iamnoman = scn.GetFreepsCard("iamnoman");
+		scn.MoveCompanionsToTable(merry, scout);
+		scn.MoveCardsToHand(iamnoman);
 
-		scn.MoveCompanionsToTable(merry, rider1);
-		scn.MoveMinionsToTable(runner);
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(scout, troop);
 
-		// Assign Rider (not Merry) to Runner
-		scn.FreepsAssignToMinions(rider1, runner);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(rider1);
+		assertEquals(0, scn.GetWoundsOn(scout));
+		assertEquals(0, scn.GetWoundsOn(merry));
 
-		// Merry is not assigned, so ability should be available
+		// I Am No Man exerts the skirmishing valiant companion twice.
+		scn.FreepsPlayCard(iamnoman);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsChooseOptionalTrigger(merry);
+
+		assertEquals(2, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(scout));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void HinderingMerryResolvesARohanMansSkirmishWithNoMoreActionsForEitherPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var rider = scn.GetFreepsCard("rider1");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var hlafwine = scn.GetFreepsCard("hlafwine");
+		scn.MoveCompanionsToTable(merry, rider, eowyn);
+		scn.MoveAlliesToTable(hlafwine);
+
+		var soldier1 = scn.GetShadowCard("soldier1");
+		var soldier2 = scn.GetShadowCard("soldier2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier1, soldier2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{rider, soldier1}, new PhysicalCardImpl[]{eowyn, soldier2});
+
+		// An ordinary skirmish first: when the Free Peoples player passes, the Orc Soldier may use his ability.
+		scn.FreepsResolveSkirmish(rider);
 		assertTrue(scn.FreepsActionAvailable(merry));
-	}
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(soldier1));
+		scn.ShadowPass();
+		// Strength 5 against 7.
+		assertEquals(1, scn.GetWoundsOn(rider));
 
-	@Test
-	public void MerrySkirmishAbilityHindersMerryAndEndsSkirmishWithRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		var rider1 = scn.GetFreepsCard("rider1");
-		var soldier = scn.GetShadowCard("soldier");
-
-		scn.MoveCompanionsToTable(merry, rider1);
-		scn.MoveMinionsToTable(soldier);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-
-		// Assign Rider (Rohan companion) to Runner
-		scn.FreepsAssignAndResolve(rider1, soldier);
-
+		scn.FreepsResolveSkirmish(eowyn);
 		assertFalse(scn.IsHindered(merry));
-		assertTrue(scn.IsCharSkirmishing(rider1));
+		assertTrue(scn.FreepsActionAvailable(merry));
+		assertTrue(scn.FreepsActionAvailable(hlafwine));
 
-		// Use Merry's ability
 		scn.FreepsUseCardAction(merry);
 
-		// Merry should be hindered (cost)
 		assertTrue(scn.IsHindered(merry));
-
-		// Skirmish should have ended (effect) because Rider is a Rohan companion
-		//assertFalse(scn.IsCharSkirmishing(rider1));
-		// However because Gemp is Gemp, the decisions are still presented, they've just been emptied
+		// The game still asks each player in turn, but there is nothing either can do: not the Orc Soldier's
+		// ability, not the site's, not Hlafwine's.
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		assertFalse(scn.ShadowActionAvailable(soldier)); //Normally
+		assertFalse(scn.ShadowActionAvailable(soldier2));
+		assertFalse(scn.ShadowActionAvailable(scn.GetCurrentSite()));
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(hlafwine));
+		assertFalse(scn.FreepsActionAvailable(scn.GetCurrentSite()));
+		scn.FreepsPass();
+
+		// Resolved on the strengths as they stood, 6 against 7: Éowyn loses and takes the wound.
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertEquals(0, scn.GetWoundsOn(soldier2));
+		assertFalse(scn.IsCharSkirmishing(eowyn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void MerrySkirmishAbilityHindersMerryButDoesNotEndSkirmishWithoutRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsOfferedOnlyWhileMerryIsNotAssignedAndAgainOnceHisOwnSkirmishIsOver() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var rider = scn.GetFreepsCard("rider1");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.MoveCompanionsToTable(merry, rider, eowyn);
+
+		var soldier = scn.GetShadowCard("soldier1");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, runner, savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[]{rider, soldier},
+				new PhysicalCardImpl[]{merry, runner},
+				new PhysicalCardImpl[]{eowyn, savage});
+
+		// A [rohan] Man's skirmish, with Merry assigned to one that has not begun.
+		scn.FreepsResolveSkirmish(rider);
+		assertTrue(scn.IsCharSkirmishing(rider));
+		assertTrue(scn.IsCharAssigned(merry));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(merry));
+		scn.PassSkirmishActions();
+
+		// His own skirmish. Strength 3 against the Goblin Runner's 5: he loses and takes a wound.
+		scn.FreepsResolveSkirmish(merry);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(merry));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(merry));
+
+		// Éowyn's skirmish: Merry's is over, so he is no longer assigned.
+		scn.FreepsResolveSkirmish(eowyn);
+		assertFalse(scn.IsCharAssigned(merry));
+		assertTrue(scn.FreepsActionAvailable(merry));
+
+		scn.FreepsUseCardAction(merry);
+
+		assertTrue(scn.IsHindered(merry));
+		assertFalse(scn.ShadowActionAvailable(scn.GetCurrentSite()));
+		scn.ShadowPass();
+		scn.FreepsPass();
+		// Strength 6 against the Uruk Savage's 5: this time the Man wins.
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ARohanManAllyFightingAtHisHomeSiteIsARohanManInASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var hlafwine = scn.GetFreepsCard("hlafwine");
+		scn.MoveCompanionsToTable(merry);
+		scn.MoveAlliesToTable(hlafwine);
+
+		var soldier = scn.GetShadowCard("soldier");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(soldier);
+		// The fellowship moves to site 4, Hlafwine's home.
+		scn.SkipToAssignments();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignAndResolve(hlafwine, soldier);
+
+		assertTrue(scn.IsCharSkirmishing(hlafwine));
+		assertTrue(scn.FreepsActionAvailable(merry));
+
+		scn.FreepsUseCardAction(merry);
+
+		assertTrue(scn.IsHindered(merry));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(soldier));
+		scn.ShadowPass();
+		scn.FreepsPass();
+		// Strength 4 against 7.
+		assertEquals(1, scn.GetWoundsOn(hlafwine));
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0143: Merry's ability ends the actions of any skirmish, whether or not a [rohan] Man is in it")
+	public void InASkirmishOfAGondorManHinderingMerryResolvesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var runner = scn.GetShadowCard("runner");
-
 		scn.MoveCompanionsToTable(merry, aragorn);
-		scn.MoveMinionsToTable(runner);
+
+		var soldier = scn.GetShadowCard("soldier1");
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, soldier);
 
-		// Assign Aragorn (Gondor, NOT Rohan) to Runner
-		scn.FreepsAssignToMinions(aragorn, runner);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(aragorn);
-
+		// Hindering Merry is all the ability costs, so it is on offer whatever the skirmish.
 		assertFalse(scn.IsHindered(merry));
-		assertTrue(scn.IsCharSkirmishing(aragorn));
+		assertTrue(scn.FreepsActionAvailable(merry));
 
-		// Use Merry's ability
 		scn.FreepsUseCardAction(merry);
 
-		// Merry should be hindered (cost paid)
 		assertTrue(scn.IsHindered(merry));
-
-		// Skirmish should NOT have ended (effect fizzles - no Rohan companion in skirmish)
+		// No [rohan] Man is fighting, so the skirmish goes on: the Orc Soldier uses his ability and the Free
+		// Peoples player is asked again.
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(soldier));
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.IsCharSkirmishing(aragorn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(scn.GetCurrentSite()));
+	}
+
+	@Test
+	@Ignore("F-0143: Merry's ability ends the actions of any skirmish, whether or not a [rohan] Man is in it")
+	public void InASkirmishOfARohanCompanionWhoIsNoManHinderingMerryResolvesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(merry, sam);
+		// Merry is the only [rohan] companion there is who is no Man, and he cannot be the one fighting.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, sam, null, Culture.ROHAN));
+
+		var soldier = scn.GetShadowCard("soldier1");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(sam, soldier);
+
+		assertTrue(scn.FreepsActionAvailable(merry));
+
+		scn.FreepsUseCardAction(merry);
+
+		assertTrue(scn.IsHindered(merry));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(soldier));
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.IsCharSkirmishing(sam));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(scn.GetCurrentSite()));
 	}
 }
