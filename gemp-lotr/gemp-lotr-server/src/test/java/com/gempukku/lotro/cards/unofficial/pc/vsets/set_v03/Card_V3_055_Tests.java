@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -527,7 +526,6 @@ public class Card_V3_055_Tests
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
-	@Ignore("F-0123: the Maneuver ability is offered when 3 tokens can only be found by counting those on the Schooner its own cost hinders; used, it hinders that Schooner, removes what it can reach and hinders no artifact")
 	@Test
 	public void ManeuverAbilityIsNotOfferedWhenTheTokensItNeedsAreOnTheSchoonerItMustHinder() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

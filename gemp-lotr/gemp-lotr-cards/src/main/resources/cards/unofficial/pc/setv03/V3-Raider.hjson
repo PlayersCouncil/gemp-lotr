@@ -1659,6 +1659,15 @@
 			{
 				type: Activated
 				phase: Maneuver
+				// Costs are paid in the order printed (Q-0080): the other Schooner is hindered first and its
+				// tokens are then out of reach, so the 3 must be found elsewhere (F-0123). Two dots: there
+				// is never more than one other Schooner of yours.
+				requires: {
+					type: CanSpotCultureTokens
+					culture: raider
+					amount: 3
+					filter: your,or(self,not(title(Raiding Schooner)))
+				}
 				cost: [
 					{
 						type: Spot

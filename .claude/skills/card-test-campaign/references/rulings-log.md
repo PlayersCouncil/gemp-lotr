@@ -596,3 +596,8 @@ presented in the client ... the information is there all the same".
   source being inactive due to the hinder."
 - A card's own hindered-from-play (and discarded-from-play) trigger is carried out as that card and its owner,
   not as the card and player that removed it: "fix it in the engine" (F-0121).
+- **Order of costs and effects (Q-0080).** "Costs (and effects for that matter) should always be evaluated in
+  the order in which they appear." So a cost that puts what a later cost needs out of reach (Raiding Schooner
+  103_55: hinder another Schooner, then remove 3 tokens, some of them on that Schooner) makes the ability
+  unpayable, and it is not offered (F-0123). The engine checks each cost against the board as it stands, so
+  such a card needs a requirement saying what must be left after the earlier cost.
