@@ -270,7 +270,7 @@
 				]
 				effect: {
 					type: Discard
-					select: choose(side(Free Peoples), AttachedTo(InSkirmishAgainst(memory(exertedTroll))))
+					select: choose(side(Free Peoples), AttachedTo(companion,InSkirmishAgainst(memory(exertedTroll))))
 				}
 			}
 		]
