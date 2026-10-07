@@ -690,3 +690,15 @@ presented in the client ... the information is there all the same".
 - **"Limit once per site" gets an engine counter** (F-0146): "it makes sense to add an engine-level handling of
   this instead of a hack. All the Decipher once-per-site limits are skirmish effects that have no issues
   around boundaries."
+
+## 2026-10-07, afternoon (Ketura, on Q-0098, F-0148)
+
+- **A choice by side alone may take a hindered card** (Q-0098, Cover of Darkness, Omen of Despair 103_93): "Yes,
+  as written that is valid. This should only apply to cards which target 'a card', 'a Shadow card', or 'a Free
+  Peoples card', since anything more specific is unable to pierce hinder's veil." So: where the text names
+  nothing but "a card" or a side, the definition's effect carries `override: hindered`; where it names a card
+  type, culture, keyword or anything else, hindered cards stay out. Hinder choices themselves still leave
+  hindered cards out (Q-0060). Fixable at landing.
+- **"Wound X twice" is two wounds** (F-0148, Take it Down! 103_89): "that's a bug in the implementation, go
+  ahead and fix." An exertion in the definition where the text wounds is a definition fault, fixable at
+  landing.
