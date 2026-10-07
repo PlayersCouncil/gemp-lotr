@@ -678,3 +678,15 @@ presented in the client ... the information is there all the same".
   103_86): "whatever keywords were on the target would get memorized and applied to everyone else."
 - **Race is excepted from "unloaded keywords"** on Flame of Calenhad too (Q-0097): text gains "(except race)".
 - **"Resolve a skirmish involving a [rohan] Man" resolves only such a skirmish** (F-0143, Merry 103_85).
+- **"Played this phase" is judged at step 7 as well** (F-0139, follow-up): "the 'played this phase' should also
+  hold its counting until step 7, for consistency's sake." A play whose card is gone before the play
+  completes, by the entering step or by a response, is not in the play history.
+
+## 2026-10-07, early morning (Ketura, on F-0145, F-0146)
+
+- **Two companions exerting at once draw one card** for a Cirith Ungol Watcher (F-0145, 103_63, 103_92): "if we
+  have to, we'll set it up as a 'limit once' and 'limit 1 drawn card' haha. But that can be internal, doesn't
+  need to alter the text. At any rate, CUW should only draw 1 card in that case."
+- **"Limit once per site" gets an engine counter** (F-0146): "it makes sense to add an engine-level handling of
+  this instead of a hack. All the Decipher once-per-site limits are skirmish effects that have no issues
+  around boundaries."
