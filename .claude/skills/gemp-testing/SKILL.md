@@ -476,6 +476,23 @@ character can pay; where the player chooses among several, the action is offered
 - `0_8011` Test Archive ("Shadow or Skirmish: Play an event from your discard pile.") and `0_8012` Test Lectern ("Shadow or Skirmish: Play an event stacked here."): Shadow conditions for mechanics/ResponseEventsAreNotPlayedByEffectsTests. The test booster pack (`product/Test-Booster.hjson`) holds a Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen. A choice from a stack is answered with `ShadowChooseCard`, not `ShadowChooseCardBPFromSelection`.
 - `0_8013` Test Whetstone ("Skirmish: Exert a Dwarf to play a [dwarven] event from your discard pile."): mechanics/CostsAreJudgedInTheOrderPrintedTests.
 
+**A prevention is asked only when its effect will happen** (Q-0114;
+`mechanics/PreventionIsAskedOnlyWhenItsEffectWillHappenTests`). "X may pay to prevent this" is not put to X
+when the effect cannot happen: a draw from an empty deck, the fifth draw of a fellowship phase, nobody chosen
+for the effect or the one chosen out of reach (a companion who cannot exert), threats at their limit, no site
+to take, a skirmish that will not be cancelled. An answer written for the question on such a board
+(`ShadowChooseNo()`) fails or goes to the next decision. Read it as
+`assertFalse(scn.ShadowDecisionAvailable("prevent"))` with the cost unpaid: in the phases both players act in,
+`ShadowAnyDecisionsAvailable()` is true anyway, because the Shadow player is being asked for his own action.
+An effect that will happen in part (draw 3 with one card left) is still asked. For a rider "X may Y to
+prevent this", the board on which the effect cannot happen is a `-` worth one test where the card can reach it.
+
+The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
+Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
+and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a
+[moria] minion from the discard pile at that minion's own cost). A card played from the pack is read with
+`StartCardCapture()` / `GetLastCreatedCard()`.
+
 ## Choosing helper cards
 
 A helper card with text of its own can change the game under a test. Read the definition of every card that goes
