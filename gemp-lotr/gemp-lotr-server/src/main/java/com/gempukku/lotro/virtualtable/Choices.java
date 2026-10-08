@@ -190,7 +190,8 @@ public interface Choices extends Decisions {
 	default void ShadowChooseAction(String paramName, String option) { ChooseAction(P2(), paramName, option); }
 	default void ShadowChooseAction(String option) { ChooseAction(P2(), "actionText", option); }
 	default void ChooseAction(String playerID, String paramName, String option) {
-		List<String> choices = GetADParamAsList(playerID, paramName);
+		List<String> choices = Arrays.asList(DecisionGuard.requiredParam(this, playerID, paramName,
+				playerID + " was to choose " + (option == null ? "the choice that has no text" : "\"" + option + "\"")));
 		for (int i = 0; i < choices.size(); i++) {
 			String choice = choices.get(i);
 			// A choice has no text only when a rule and not a card is the source of an action.  Such a choice
@@ -260,20 +261,32 @@ public interface Choices extends Decisions {
 	 */
 	default int FreepsGetChoiceMin() { return Integer.parseInt(FreepsGetFirstADParam("min")); }
 	/**
-	 * @return Gets the max parameter on the current choice for the Free Peoples player.  This may be a maximum
-	 * number of responses, or the largest acceptable numeric answer, depending on context.
+	 * The max parameter on the current choice for the Free Peoples player, or Integer.MAX_VALUE where that player is
+	 * choosing a number and the game sets no upper bound on it (no cap).  The parameter may be a maximum number
+	 * of responses, or the largest acceptable numeric answer, depending on context.  Fails, saying what is being
+	 * asked, where the decision is neither.
 	 */
-	default int FreepsGetChoiceMax() { return Integer.parseInt(FreepsGetFirstADParam("max")); }
+	default int FreepsGetChoiceMax() { return GetChoiceMax(P1()); }
 	/**
 	 * @return Gets the min parameter on the current choice for the Shadow player.  This may be a minimum
 	 * number of responses, or the smallest acceptable numeric answer, depending on context.
 	 */
 	default int ShadowGetChoiceMin() { return Integer.parseInt(ShadowGetFirstADParam("min")); }
 	/**
-	 * @return Gets the max parameter on the current choice for the Shadow player.  This may be a maximum
-	 * number of responses, or the largest acceptable numeric answer, depending on context.
+	 * The max parameter on the current choice for the Shadow player, or Integer.MAX_VALUE where that player is
+	 * choosing a number and the game sets no upper bound on it (no cap).  The parameter may be a maximum number
+	 * of responses, or the largest acceptable numeric answer, depending on context.  Fails, saying what is being
+	 * asked, where the decision is neither.
 	 */
-	default int ShadowGetChoiceMax() { return Integer.parseInt(ShadowGetFirstADParam("max")); }
+	default int ShadowGetChoiceMax() { return GetChoiceMax(P2()); }
+	// A choice of a number says nothing of a maximum when it has none, where every other choice names one.
+	private int GetChoiceMax(String player) {
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		if(decision != null && decision.getDecisionType() == AwaitingDecisionType.INTEGER
+				&& GetAwaitingDecisionParam(player, "max") == null)
+			return Integer.MAX_VALUE;
+		return Integer.parseInt(DecisionGuard.readParam(this, player, "max")[0]);
+	}
 
 	/**
 	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
@@ -427,7 +440,8 @@ public interface Choices extends Decisions {
 	 * IDs.
 	 */
 	default void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards) {
-		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId",
+				player + " was to choose " + DecisionGuard.names(cards) + " from a selection of cards");
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<PhysicalCardImpl> found = new ArrayList<>();
 
@@ -463,7 +477,8 @@ public interface Choices extends Decisions {
 	 * IDs.
 	 */
 	default void ChooseCardBPFromSelection(String player, String...bpids) {
-		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId",
+				player + " was to choose " + String.join(", ", bpids) + " from a selection of cards");
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<String> found = new ArrayList<>();
 
@@ -640,10 +655,8 @@ public interface Choices extends Decisions {
 	 * @param cards The cards to include in the decision response.
 	 */
 	default void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards) {
-		AwaitingDecision decision = userFeedback().getAwaitingDecision(player);
-		//PlayerDecided(player, "" + card.getCardId());
-
-		String[] choices = GetAwaitingDecisionParam(player,"cardId");
+		String[] choices = DecisionGuard.requiredParam(this, player, "cardId",
+				player + " was to choose " + DecisionGuard.names(cards));
 		ArrayList<String> ids = new ArrayList<>();
 		ArrayList<PhysicalCardImpl> found = new ArrayList<>();
 

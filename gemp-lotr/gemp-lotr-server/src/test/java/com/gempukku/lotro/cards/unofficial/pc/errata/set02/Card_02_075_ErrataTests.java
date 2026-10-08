@@ -157,8 +157,14 @@ public class Card_02_075_ErrataTests
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(bilbo));
 
-		// The game lists Bill among the minions and refuses any assignment of a character to him; reading that
-		// refusal waits on a rig method (G-0029).
+		// The Free Peoples player may assign no character to Bill: not the Hobbit, not a Man, not an ally at home.
+		assertFalse(scn.FreepsCanAssignAgainst(frodo, ferny));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		assertFalse(scn.FreepsCanAssignAgainst(bilbo, ferny));
+		// It is Bill who is barred and that player: the same character may face another minion, and the Shadow
+		// player may assign Bill.
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, troop));
+		assertTrue(scn.ShadowCanAssignAgainst(bilbo, ferny));
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);
@@ -193,6 +199,8 @@ public class Card_02_075_ErrataTests
 
 		scn.SkipToAssignments();
 		// Sam is the one Hobbit: Galadriel and Aragorn are not.
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		assertFalse(scn.FreepsCanAssignAgainst(galadriel, ferny));
 		scn.FreepsDeclineAssignments();
 		scn.ShadowAssignToMinions(sam, ferny);
 
@@ -201,7 +209,11 @@ public class Card_02_075_ErrataTests
 		// 9 against 3: overwhelmed.
 		assertInZone(Zone.DEAD, sam);
 
+		// The fierce round, with Bill still in play and no Hobbit left to spot.
+		assertTrue(scn.InFierceRound());
 		scn.PassFierceAssignmentActions();
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		assertTrue(scn.FreepsCanAssignAgainst(galadriel, ferny));
 		scn.FreepsAssignToMinions(aragorn, ferny);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, ferny));
 		assertTrue(scn.FreepsDecisionAvailable("skirmish"));
@@ -222,13 +234,19 @@ public class Card_02_075_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(ferny, troop);
 
+		// With no Hobbit to spot, nothing stands between a character and Bill.
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, ferny));
+
 		scn.FreepsPlayCard(bilbo);
 		assertInZone(Zone.SUPPORT, bilbo);
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
 
 		// At site 2 Bilbo, whose home is site 3, cannot skirmish, but he can be spotted.
 		scn.SkipToAssignments();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(bilbo));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		assertFalse(scn.FreepsCanAssignAgainst(galadriel, ferny));
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);

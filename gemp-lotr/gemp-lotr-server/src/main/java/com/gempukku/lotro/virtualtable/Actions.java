@@ -2,7 +2,6 @@ package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,25 +15,25 @@ public interface Actions extends Decisions, Choices {
 
 	/**
 	 * @return Gets the text descriptions of all current actions available to the Free Peoples player. Will return an empty
-	 * list if that player does not have a currently pending decision.
+	 * list if that player does not have a currently pending decision, or has one that is not a choice of actions.
 	 */
 	default List<String> FreepsGetAvailableActions() { return GetAvailableActions(P1()); }
 	/**
 	 * @return Gets the text descriptions of all current actions available to the Shadow player. Will return an empty
-	 * list if that player does not have a currently pending decision.
+	 * list if that player does not have a currently pending decision, or has one that is not a choice of actions.
 	 */
 	default List<String> ShadowGetAvailableActions() { return GetAvailableActions(P2()); }
 	/**
 	 * @param playerID The player with a current decision
 	 * @return Gets the text descriptions of all current actions available to the given player.  Will return an empty
-	 * list if that player does not have a currently pending decision.
+	 * list if that player does not have a currently pending decision, or has one that is not a choice of actions.
 	 */
 	default List<String> GetAvailableActions(String playerID) {
-		AwaitingDecision decision = GetAwaitingDecision(playerID);
-		if(decision == null) {
+		String[] actions = GetAwaitingDecisionParam(playerID, "actionText");
+		if(actions == null) {
 			return new ArrayList<>();
 		}
-		return Arrays.asList(decision.getDecisionParameters().get("actionText"));
+		return Arrays.asList(actions);
 	}
 
 	/**
@@ -199,14 +198,14 @@ public interface Actions extends Decisions, Choices {
 	 * action listed for it taken, whatever it is: an optional trigger or a response is accepted this way.
 	 * @param card The card whose action is to be taken.
 	 */
-	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardUseActionId(P1(), card)); }
+	default void FreepsUseCardAction(PhysicalCardImpl card) { TakeCardAction(P1(), card, GetCardUseActionId(P1(), card), "an action"); }
 	/**
 	 * Causes the Shadow player to use the given card's special ability: the action that
 	 * {@link #ShadowActionAvailable(PhysicalCardImpl)} recognises, whatever else the card offers.  A card that
 	 * offers no such action has the first action listed for it taken, whatever it is.
 	 * @param card The card whose action is to be taken.
 	 */
-	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardUseActionId(P2(), card)); }
+	default void ShadowUseCardAction(PhysicalCardImpl card) { TakeCardAction(P2(), card, GetCardUseActionId(P2(), card), "an action"); }
 	/**
 	 * Finds the action the one-argument FreepsUseCardAction and ShadowUseCardAction take.
 	 * @param player The player facing a choice of actions.
@@ -346,21 +345,29 @@ public interface Actions extends Decisions, Choices {
 		return found;
 	}
 
-	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Transfer")); }
-	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Transfer ")); }
+	default void FreepsTransferCard(PhysicalCardImpl card) { TakeCardAction(P1(), card, GetCardActionId(P1(), card, "Transfer"), "a transfer"); }
+	default void ShadowTransferCard(PhysicalCardImpl card) { TakeCardAction(P2(), card, GetCardActionId(P2(), card, "Transfer "), "a transfer"); }
+
+	// Answers with the action found for the card, or fails saying that the card offers none of that kind and
+	// what the player is being offered instead.
+	private void TakeCardAction(String player, PhysicalCardImpl card, String actionId, String kind) {
+		if(actionId == null)
+			Verify(false, DecisionGuard.notOffered(this, player, card, kind));
+		PlayerDecided(player, actionId);
+	}
 
 	/**
 	 * Causes the Free Peoples player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void FreepsPlayCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Play")); }
+	default void FreepsPlayCard(PhysicalCardImpl card) { TakeCardAction(P1(), card, GetCardActionId(P1(), card, "Play"), "a play"); }
 	/**
 	 * Causes the Shadow player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void ShadowPlayCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2(), card, "Play")); }
+	default void ShadowPlayCard(PhysicalCardImpl card) { TakeCardAction(P2(), card, GetCardActionId(P2(), card, "Play"), "a play"); }
 
 
 	/**
@@ -376,7 +383,7 @@ public interface Actions extends Decisions, Choices {
 	 * @param card The card to discard from hand.
 	 * legal to use (due to costs, requirements, or other rules).
 	 */
-	default void FreepsDiscardToHeal(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1(), card, "Heal by discard")); }
+	default void FreepsDiscardToHeal(PhysicalCardImpl card) { TakeCardAction(P1(), card, GetCardActionId(P1(), card, "Heal by discard"), "a heal by discard"); }
 	/**
 	 * Searches the currently available actions on the current decision for the given player and returns the ID of an
 	 * action which contains the provided text in its description.
@@ -404,12 +411,14 @@ public interface Actions extends Decisions, Choices {
 	 * @param card If provided, constrains the result to only actions which are source from this card.
 	 * @param text If provided, constrains the result to only actions whose description contains the provided text
 	 * @return The action ID of a matching action (which can be passed as a decision answer).  Returns null if no
-	 * actions matched.
+	 * actions matched, or the player is not being offered a choice of actions at all.
 	 */
 	default String GetCardActionId(String playerId, PhysicalCardImpl card, String text) {
 		String id = card != null ? String.valueOf(card.getCardId()) : null;
 		String[] cardIds = GetAwaitingDecisionParam(playerId, "cardId");
 		String[] actionTexts = GetAwaitingDecisionParam(playerId, "actionText");
+		if(cardIds == null || actionTexts == null)
+			return null;
 
 		for (int i = 0; i < cardIds.length; i++) {
 			if ((id == null || cardIds[i].equals(id)) && (text == null || actionTexts[i].contains(text))) {

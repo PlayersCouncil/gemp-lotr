@@ -30,12 +30,24 @@ after other skirmishes, call `FreepsResolveSkirmish(companion)`.
 
 **Who is offered for assignment.** `FreepsHasAssignmentTargetAvailable(card)` and its Shadow twin read the
 assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowCanAssign(card)` read the game's
-rule, whatever is being asked.
+rule, whatever is being asked. A restriction on a pair ("may not assign a character to skirmish this minion",
+`cantBeAssignedToSkirmishAgainst`) shows in neither: both cards stay listed, and the game refuses the pair only
+when the assignment is answered. `FreepsCanAssignAgainst(character, minion)` and `ShadowCanAssignAgainst` read
+that (G-0029); a refused assignment is never shown by the rig throwing.
 
 **A check on a player who is not being asked anything answers false.** The availability and card-choice checks
-return false, and the readers of a decision's parameters return null, when that player has no pending decision.
-The methods that *answer* a decision still fail, as they should, the plain pass methods apart (see "Answers
-that are refused" below).
+return false, `FreepsGetAvailableActions()` returns an empty list, and the raw readers of a decision's
+parameters return null, when that player has no pending decision. The methods that *answer* a decision still
+fail, as they should, the plain pass methods apart (see "Answers that are refused" below), and since G-0030 they
+say why: "Shadow Player was to answer "45 47", but is not being asked anything.  Free Peoples Player is being
+asked "Play Fellowship action or Pass", offering [...]", or "<card> is not offering <player> a play" with what is
+on offer. So do `FreepsGetChoiceMin()`, `FreepsGetChoiceMax()` and `FreepsGetSelectableCount()` on a decision
+that has no such thing. A refused answer leaves whatever was pending still pending. Read the message before
+anything else: it names the decision the test is really at.
+
+**A number with no upper bound.** `FreepsGetChoiceMax()` reads `Integer.MAX_VALUE` where a player is choosing a
+number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
+52_1). That is the reading for "no cap" (G-0027).
 
 **Answers that are refused when they do not fit what is asked.** `FreepsResolveRuleFirst()` and
 `FreepsResolveActionOrder(text)` fail the test unless the Free Peoples player is being asked to order required
@@ -207,14 +219,15 @@ to the Shadow player there is never answered and the skipper stops ("halted in p
 attempts") without a word about the pending decision. From maneuver on it passes for both, and a trigger of
 the Shadow player's (Ringwraith in Twilight 101_40, at the start of maneuver) uses up a pass: the test arrives
 with the Free Peoples player's pass in the new phase already spent and the Shadow player holding the decision,
-and `FreepsAssignToMinions` then fails with a `NullPointerException`. A trigger at the start of the target
-phase itself is left pending, as a test of it needs.
+and `FreepsAssignToMinions` then fails, saying that the Free Peoples player is not being asked anything and
+what the Shadow player is being asked. A trigger at the start of the target phase itself is left pending, as a
+test of it needs.
 
 **Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
-asking the Free Peoples player which goes first, and the next action fails with a `NullPointerException` in
-`GetCardActionId` that says nothing of why. Put the second such card down after `StartGame()`, or answer the
-ordering with `FreepsResolveActionOrder(text)`.
+asking the Free Peoples player which goes first, and the next action fails ("<card> is not offering Free
+Peoples Player a play.  Free Peoples Player is being asked "Required responses" ..."). Put the second such card
+down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(text)`.
 
 **An optional trigger at the start of the turn is the first thing asked.** A card with an optional
 start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`, leaves its offer pending when
@@ -262,6 +275,11 @@ player is asked "Do you want to make another move?".
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
 second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the
 deck's size where a discard or a draw must be possible.
+
+**The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
+`GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
+the first time. `InFierceRound()` tells them apart (G-0031): true from the game's "Fierce skirmishes" until the
+last fierce skirmish is over. A "this phase" effect from the first assignment phase has ended by then.
 
 **An unassigned minion beside an unassigned Ring-bearer.** With a minion left unassigned after the Free Peoples
 player's assignments and the Ring-bearer free, the Shadow player gets an assignment decision of his own:
@@ -315,6 +333,13 @@ and says nothing. A modifier with a general filter (a card type, a keyword) can 
 card has to be played legally afterwards, build the modifier on a filter and not on the card:
 `scn.GenerateShadowFilter("name(Goblin Armory)")`, which throws `InvalidCardDefinitionException`
 (`com.gempukku.lotro.cards.build`) for the test method to declare.
+
+**An ad hoc effect is run in place of a player's answer.** `FreepsExecuteAdHocEffect(effect)` and its Shadow
+twin run the effect as that player's answer to a choice of actions, whatever else the choice offers, and fail
+the test if the effect was not carried out. Where being stopped is what the test is about (a wound aimed at a
+character who is to be unable to take wounds), `FreepsExecuteAdHocEffectUnchecked(effect)` does not assert, and
+the test reads the board (G-0028; Long I Fell 54_97). A `WoundCharactersEffect` needs a source card, and either
+call needs its reason on the line (`// lint-ok: ...`).
 
 **A value modified below zero counts as zero** (CR 4.2 "modifier"): a site's Shadow number lowered past 0 reads
 0 (Rivendell Valley stays 0 under No Stranger to the Shadows 51_108). `rules.py term` has no entry for "Shadow

@@ -259,9 +259,9 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `String[] GetADParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the current awaiting decision as an array of strings.
 - `List<String> FreepsGetADParamAsList(String paramName)  ·  ShadowGetADParamAsList`
 - `List<String> GetADParamAsList(String playerID, String paramName)`
-- `int GetADParamEqualsCount(String playerID, String paramName, String value)`
+- `int GetADParamEqualsCount(String playerID, String paramName, String value)` — How many of the entries of the given parameter of the given player's decision equal the given value.
 - `String[] FreepsGetADParam(String paramName)  ·  ShadowGetADParam`
-- `String FreepsGetFirstADParam(String paramName)  ·  ShadowGetFirstADParam`
+- `String FreepsGetFirstADParam(String paramName)  ·  ShadowGetFirstADParam` — The first entry of the given parameter of that player's decision.
 - `String[] GetAwaitingDecisionParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the given player's current decision.
 - `Map<String, String[]> GetAwaitingDecisionParams(String playerID)`
 
@@ -292,7 +292,7 @@ Decisions will always come with at least one choice, even if that single choice 
 - `void FreepsResolveRuleFirst()` — Where required actions happen at the same moment (the wound for losing a skirmish and a card's "each time ...
 - `void FreepsResolveActionOrder(String option)` — As FreepsResolveRuleFirst, but takes the required action whose description contains the given text: a card's trigger, by the card's name.
 - `int FreepsGetChoiceMin()  ·  ShadowGetChoiceMin`
-- `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax`
+- `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax` — The max parameter on the current choice for that player, or Integer.MAX_VALUE where that player is choosing a number and the game sets no upper bound on it (no cap).
 - `int FreepsGetSelectableCount()  ·  ShadowGetSelectableCount`
 - `int FreepsGetTotalRevealedCardCount()  ·  ShadowGetTotalRevealedCardCount`
 - `int GetTotalRevealedCardCount(String playerID)`
@@ -343,6 +343,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign` — Asks the game's own rule for who may be assigned, not the decision in front of the player.
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)`
 - `Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)`
+- `Boolean FreepsCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl minion)  ·  ShadowCanAssignAgainst` — Asks the game's own rule whether one character may be assigned to one minion, which is what the game checks when an assignment is answered.
+- `Boolean CanBeAssignedAgainst(PhysicalCardImpl character, PhysicalCardImpl minion, Side side)` — Whether the player of the given side could assign the one character to the one minion in the ordinary assignment of the assignment phase: each of the two may be assigned by that side at all (as CanBeAssignedNormally reads it for the character), and no restriction on the pair forbids it.
 - `Skirmish GetActiveSkirmish()`
 - `int FreepsGetFreepsAssignmentTargetCount()  ·  ShadowGetFreepsAssignmentTargetCount`
 - `int FreepsGetShadowAssignmentTargetCount()  ·  ShadowGetShadowAssignmentTargetCount`
@@ -375,6 +377,7 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int GetMoveLimit()`
 - `boolean GameIsFinished()`
 - `Phase GetCurrentPhase()`
+- `boolean InFierceRound()` — Whether the game is in its fierce round: true from the game's "Fierce skirmishes" until the last fierce skirmish is over, and false in the first assignment and skirmish phases and in every other phase.
 - `String GetCurrentPlayer()`
 - `String GetOffPlayer()`
 - `String GetDecidingPlayer()`
@@ -492,13 +495,15 @@ Sometimes, there just isn't a card that has the precise action or effect that yo
 - `void ApplyAdHocAction(ActionProxy action)` — Causes the given action to be stapled to the game state for the duration of the game.
 - `void FreepsExecuteAdHocEffect(Effect effect)  ·  ShadowExecuteAdHocEffect` — Causes that player to execute an arbitrary effect.
 - `void ExecuteAdHocEffect(String playerId, Effect effect)` — Causes the given player to execute an arbitrary effect.
+- `void FreepsExecuteAdHocEffectUnchecked(Effect effect)  ·  ShadowExecuteAdHocEffectUnchecked` — Causes that player to execute an arbitrary effect whose outcome the test is about, without asserting that it was carried out: a wound aimed at a character who may turn out to be protected from it.
+- `void ExecuteAdHocEffectUnchecked(String playerId, Effect effect)` — Causes the given player to execute an arbitrary effect, as ExecuteAdHocEffect does, but without asserting that the effect was carried out.
 - `Filterable GenerateFreepsFilter(String filter)` — Takes a filter string and produces the proper Java code that the filter represents.
 - `Filterable GenerateShadowFilter(String filter)` — Takes a filter string and produces the proper Java code that the filter represents.
 - `void ApplyAdHocFreepsAutoDiscard(String filter)` — Adds a permanent effect that automatically discards cards that match the provided filter.
 - `void ApplyAdHocShadowAutoDiscard(String filter)` — Adds a permanent effect that automatically discards cards that match the provided filter.
 - `void ApplyAdHocAutoDiscard(Filterable...filterables)` — Adds a permanent effect that automatically discards cards that match the provided filterables.
 - `void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect)`
-- `void carryOutEffectInPhaseActionByPlayer(String playerId, Action action)`
+- `void carryOutEffectInPhaseActionByPlayer(String playerId, Action action)` — Has the given player take the given action in answer to the choice of actions that player is facing, as if it had been among the actions on offer.
 
 ## Underpinnings
 
@@ -517,4 +522,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-409 entries, 259 of them with no description in the source.
+414 entries, 255 of them with no description in the source.

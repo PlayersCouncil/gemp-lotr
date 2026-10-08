@@ -437,13 +437,26 @@ public interface Decisions extends TableBase {
 		return Arrays.asList(paramList);
 	}
 
+	/**
+	 * How many of the entries of the given parameter of the given player's decision equal the given value.  Fails,
+	 * saying what each player is being asked, if the player is not being asked anything or the decision has no
+	 * such parameter.
+	 */
 	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
-		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
+		return (int) Arrays.stream(DecisionGuard.readParam(this, playerID, paramName)).filter(s -> s.equals(value)).count();
 	}
 	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName); }
 	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName); }
-	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName)[0]; }
-	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName)[0]; }
+	/**
+	 * The first entry of the given parameter of the Free Peoples player's decision.  Fails, saying what each player
+	 * is being asked, if that player is not being asked anything or the decision has no such parameter.
+	 */
+	default String FreepsGetFirstADParam(String paramName) { return DecisionGuard.readParam(this, P1(), paramName)[0]; }
+	/**
+	 * The first entry of the given parameter of the Shadow player's decision.  Fails, saying what each player
+	 * is being asked, if that player is not being asked anything or the decision has no such parameter.
+	 */
+	default String ShadowGetFirstADParam(String paramName) { return DecisionGuard.readParam(this, P2(), paramName)[0]; }
 	/**
 	 * Gets all of the options for a particular parameter of the given player's current decision.
 	 * @param playerID The player making the current decision.

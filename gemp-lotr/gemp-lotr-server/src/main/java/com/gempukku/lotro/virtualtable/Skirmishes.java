@@ -1,12 +1,18 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.Skirmish;
+import com.gempukku.lotro.logic.GameUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 
@@ -111,6 +117,58 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 	default Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)
 	{
 		return Filters.assignableToSkirmish(side, side == Side.SHADOW, side == Side.SHADOW, false).accepts(game(), card);
+	}
+
+	/**
+	 * Asks the game's own rule whether one character may be assigned to one minion, which is what the game checks
+	 * when an assignment is answered.  A restriction on a pair ("may not assign a character to skirmish this
+	 * minion", "cannot be assigned to skirmish companions of strength less than 6") leaves both cards in the
+	 * assignment decision's lists, so neither FreepsCanAssign nor FreepsHasAssignmentTargetAvailable shows it.
+	 * @param character A companion or ally.
+	 * @param minion A minion.
+	 * @return True if the Free Peoples player could assign that character to that minion in the ordinary
+	 * assignment of the assignment phase, as the board stands.
+	 */
+	default Boolean FreepsCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl minion)
+	{
+		return CanBeAssignedAgainst(character, minion, Side.FREE_PEOPLE);
+	}
+
+	/**
+	 * Asks the game's own rule whether one character may be assigned to one minion, which is what the game checks
+	 * when an assignment is answered.
+	 * @param character A companion or ally.
+	 * @param minion A minion.
+	 * @return True if the Shadow player could assign that minion to that character in the ordinary assignment of
+	 * the assignment phase, as the board stands.  The Shadow player may add a minion to a character who already
+	 * has one; the minion itself must still be unassigned.
+	 */
+	default Boolean ShadowCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl minion)
+	{
+		return CanBeAssignedAgainst(character, minion, Side.SHADOW);
+	}
+
+	/**
+	 * Whether the player of the given side could assign the one character to the one minion in the ordinary
+	 * assignment of the assignment phase: each of the two may be assigned by that side at all (as
+	 * CanBeAssignedNormally reads it for the character), and no restriction on the pair forbids it.  Fails unless
+	 * the first card is a companion or ally and the second a minion.
+	 * @param character A companion or ally.
+	 * @param minion A minion.
+	 * @param side The side doing the assigning.
+	 */
+	default Boolean CanBeAssignedAgainst(PhysicalCardImpl character, PhysicalCardImpl minion, Side side)
+	{
+		Verify(Filters.or(CardType.COMPANION, CardType.ALLY).accepts(game(), character) && Filters.and(CardType.MINION).accepts(game(), minion),
+				"CanBeAssignedAgainst takes a companion or ally and then a minion; it was given "
+						+ GameUtils.getFullName(character) + " and " + GameUtils.getFullName(minion) + ".");
+		if(!CanBeAssignedNormally(character, side))
+			return false;
+		// A minion is listed for either player only while it is unassigned.
+		if(!Filters.assignableToSkirmish(side, false, false, false).accepts(game(), minion))
+			return false;
+		Map<PhysicalCard, Set<PhysicalCard>> pair = Collections.singletonMap(character, Collections.singleton(minion));
+		return game().getModifiersQuerying().isValidAssignments(game(), side, pair);
 	}
 
 	default Skirmish GetActiveSkirmish() { return gameState().getSkirmish(); }

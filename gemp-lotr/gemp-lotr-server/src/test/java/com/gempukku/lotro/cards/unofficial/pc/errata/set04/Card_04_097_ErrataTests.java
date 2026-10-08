@@ -5,6 +5,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.effects.WoundCharactersEffect;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -155,6 +156,44 @@ public class Card_04_097_ErrataTests
 		scn.PassSkirmishActions();
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void GandalfIsProtectedWhileHeStandsOutsideTheSkirmishItIsPlayedIn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var fell = scn.GetFreepsCard("fell");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var avenger = scn.GetFreepsCard("avenger");
+		var troop = scn.GetShadowCard("troop");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(gandalf, avenger);
+		scn.MoveCardsToHand(fell);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, slayer);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gandalf, troop}, new PhysicalCardImpl[]{avenger, slayer});
+		// The Ent Avenger's skirmish is the one being fought; Gandalf's has not begun.
+		scn.FreepsResolveSkirmish(avenger);
+		assertFalse(scn.IsCharSkirmishing(gandalf));
+
+		// Before the event, a wound from outside the skirmish reaches him.
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		scn.FreepsExecuteAdHocEffect(new WoundCharactersEffect(slayer, gandalf)); // lint-ok: no card under test wounds a companion who is not in the skirmish being fought
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		scn.ShadowPass();
+
+		scn.FreepsPlayCard(fell);
+		scn.ShadowChooseNo();
+		assertInDiscard(fell);
+
+		// The same wound again: "him" is Gandalf wherever he stands, and it comes to nothing.
+		assertFalse(scn.IsCharSkirmishing(gandalf));
+		scn.ShadowExecuteAdHocEffectUnchecked(new WoundCharactersEffect(slayer, gandalf)); // lint-ok: the same wound, which the event is to stop
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(avenger));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test

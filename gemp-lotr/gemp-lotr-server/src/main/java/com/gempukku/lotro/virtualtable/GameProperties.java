@@ -63,6 +63,15 @@ public interface GameProperties extends TableBase {
 	default Phase GetCurrentPhase() { return gameState().getCurrentPhase(); }
 
 	/**
+	 * Whether the game is in its fierce round: true from the game's "Fierce skirmishes" until the last fierce
+	 * skirmish is over, and false in the first assignment and skirmish phases and in every other phase.  After
+	 * the ordinary skirmishes, if a fierce minion is still in play, the game goes through an assignment phase and
+	 * skirmish phases again, and GetCurrentPhase() reads ASSIGNMENT and then SKIRMISH there exactly as it did the
+	 * first time: this is what tells the two apart.
+	 */
+	default boolean InFierceRound() { return gameState().isFierceSkirmishes(); }
+
+	/**
 	 * @return Gets the player who is currently playing their turn.
 	 */
 	default String GetCurrentPlayer() { return gameState().getCurrentPlayerId(); }

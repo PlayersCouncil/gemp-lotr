@@ -261,11 +261,17 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
     /**
      * Low-level function used by the rest of the virtual table to return a decision result back to the server.  This
      * is the beating heart of what is essentially a headless client.  You do not need to call this manually.
+     *
+     * Fails, saying what each player is in fact being asked, when the player is not being asked anything or there
+     * is no answer to give (the action or choice a caller looked for was not on offer).  Nothing is touched in
+     * either case: whatever is pending stays pending.
      * @param player The player making the decision
      * @param answer What decision is being returned to the server
      */
     public void PlayerDecided(String player, String answer) {
         var decision = userFeedback().getAwaitingDecision(player);
+        if(decision == null || answer == null)
+            Verify(false, DecisionGuard.cannotAnswer(this, player, answer));
         userFeedback().participantDecided(player);
         try {
             decision.decisionMade(answer);

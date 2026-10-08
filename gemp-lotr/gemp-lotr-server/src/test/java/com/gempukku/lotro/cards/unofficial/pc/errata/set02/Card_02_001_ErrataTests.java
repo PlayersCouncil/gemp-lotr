@@ -302,7 +302,9 @@ public class Card_02_001_ErrataTests
 
 		scn.FreepsUseCardAction(card, "no effect");
 		assertEquals(0, scn.FreepsGetChoiceMin());
-		// There is no cap: 5 times 3 is 15 cards, and the deck has 4.
+		// The number has no cap, whatever the deck holds.
+		assertEquals(Integer.MAX_VALUE, scn.FreepsGetChoiceMax());
+		// 5 times 3 is 15 cards, and the deck has 4.
 		scn.FreepsChoose("5");
 
 		assertEquals(0, scn.GetFreepsDeckCount());
