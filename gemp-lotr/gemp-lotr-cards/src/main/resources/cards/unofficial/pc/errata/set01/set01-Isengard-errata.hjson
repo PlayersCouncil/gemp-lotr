@@ -498,7 +498,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					select: choose(companion)
+					select: choose(companion,canExert)
 					memorize: chosenComp
 					text: Choose a companion to exert
 				}
