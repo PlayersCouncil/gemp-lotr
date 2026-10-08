@@ -133,10 +133,16 @@
 					player: you
 					filter: not(hobbit)
 				}
-				requires: {
-					type: perPhaseLimit
-					limit: 1
-				}
+				requires: [
+					{
+						type: perPhaseLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						filter: companion,wounded
+					}
+				]
 				effect: [
 					{
 						type: incrementPerPhaseLimit
