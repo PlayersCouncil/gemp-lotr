@@ -200,7 +200,7 @@
 				]
 			}
 		]
-		gametext: To play, spot 2 Hobbits.\Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
+		gametext: To play, spot 2 Hobbits. Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
 		lore: "'...our shapes cast shadows in their minds, which only the noon sun destroys....'"
 		promotext: ""
 		alts: {

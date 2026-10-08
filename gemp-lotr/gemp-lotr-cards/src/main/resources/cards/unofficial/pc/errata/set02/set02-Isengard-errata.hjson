@@ -232,7 +232,7 @@
 				}
 			}
 		]
-		gametext: While you can spot an [isengard] minion, this card is twilight cost -3.\The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
+		gametext: While you can spot an [isengard] minion, this card is twilight cost -3. The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
 		lore: "'Goblins? Cobblers! Far-off tales and children's stories, that's all that is!'"
 		promotext: ""
 		alts: {

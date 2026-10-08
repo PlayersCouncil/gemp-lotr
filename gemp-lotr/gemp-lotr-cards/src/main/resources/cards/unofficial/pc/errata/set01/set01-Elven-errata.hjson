@@ -73,7 +73,7 @@
 				}
 			]
 		}
-		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; any Shadow player may discard a card from hand to prevent this.
+		gametext: Make an Elf strength +1. If a minion loses this skirmish to that Elf, you may heal an Elf; any Shadow player may discard a card from hand to prevent this.
 		lore: Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery.
 		promotext: ""
 		alts: {

@@ -107,7 +107,7 @@
 				}
 			}
 		]
-		gametext: To play, spot Galadriel or Celeborn.\While Galadriel is the Ring-bearer, she is strength +1 and resistance +2.<br>Each time you play an [elven] skirmish event, you may exert Galadriel to reinforce an [elven] token.
+		gametext: To play, spot Galadriel or Celeborn. While Galadriel is the Ring-bearer, she is strength +1 and resistance +2.<br>Each time you play an [elven] skirmish event, you may exert Galadriel to reinforce an [elven] token.
 		lore: "'Will you look into the mirror?'"
 		promotext: ""
 		alts: {

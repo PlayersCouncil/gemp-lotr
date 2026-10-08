@@ -108,7 +108,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition.\Response: If a skirmish event or special ability is used during a skirmish involving Boromir, discard this to prevent that.
+		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition. Response: If a skirmish event or special ability is used during a skirmish involving Boromir, discard this to prevent that.
 		lore: He was cloaked and booted as if for a journey on horseback; and indeed though his garments were rich, and his cloak was lined with fur, they were stained with 'long travel.
 		promotext: ""
 		alts: {

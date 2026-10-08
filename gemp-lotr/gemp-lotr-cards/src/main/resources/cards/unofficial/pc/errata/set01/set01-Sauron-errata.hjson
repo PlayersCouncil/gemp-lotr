@@ -213,7 +213,7 @@
 				}
 			}
 		]
-		gametext: To play, exert a [sauron] Orc.<br>The Ring-bearer is strength +1 for each burden you can spot.\If you cannot spot another companion, the Ring-bearer is resistance -2 for each burden you can spot.
+		gametext: To play, exert a [sauron] Orc.<br>The Ring-bearer is strength +1 for each burden you can spot. If you cannot spot another companion, the Ring-bearer is resistance -2 for each burden you can spot.
 		lore: "Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before."
 		promotext: ""
 		alts: {

@@ -84,7 +84,7 @@
 				}
 			}
 		]
-		gametext: While wearing The One Ring, burdens may not be removed and each time bearer is about to take a wound, add a burden instead.<br> <b>Maneuver:</b> Wear The One Ring until the regroup phase.\<b>Skirmish:</b> If wearing the One Ring, add a burden to make bearer strength +3.
+		gametext: While wearing The One Ring, burdens may not be removed and each time bearer is about to take a wound, add a burden instead.<br> <b>Maneuver:</b> Wear The One Ring until the regroup phase. <b>Skirmish:</b> If wearing the One Ring, add a burden to make bearer strength +3.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -144,7 +144,7 @@
 				}
 			}
 		]
-		gametext: Plays on a [rohan] Man.\At the start of each skirmish you may transfer this condition to a [rohan] Man.\At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
+		gametext: Plays on a [rohan] Man. At the start of each skirmish you may transfer this condition to a [rohan] Man. At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
 		lore: "'Bring it down! Bring it down! Bring it down!'"
 		promotext: ""
 		alts: {

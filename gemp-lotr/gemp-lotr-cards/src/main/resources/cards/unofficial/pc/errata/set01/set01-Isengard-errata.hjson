@@ -281,7 +281,7 @@
 				}
 			]
 		}
-		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2. If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
 		promotext: ""
 		alts: {
@@ -353,7 +353,7 @@
 				}
 			}
 		]
-		gametext: <b>Search</b>. To play, spot an [isengard] minion.\<b>Regroup:</b> Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
+		gametext: <b>Search</b>. To play, spot an [isengard] minion. <b>Regroup:</b> Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
 		lore: "'In all the long wars with the Dark Tower treason has ever been our greatest foe.'"
 		promotext: ""
 		alts: {

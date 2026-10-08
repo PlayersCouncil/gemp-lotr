@@ -43,7 +43,7 @@
 			}
 		]
 		
-		gametext: Each Hobbit bearing a hand weapon takes no more than 1 wound per skirmish.\Each Hobbit bearing a follower is resistance +1.\Each unwounded Hobbit is strength +1.
+		gametext: Each Hobbit bearing a hand weapon takes no more than 1 wound per skirmish. Each Hobbit bearing a follower is resistance +1. Each unwounded Hobbit is strength +1.
 		lore: "'...she is very beautiful, and is going to be beautifuller still.'"
 		promotext: ""
 		alts: {

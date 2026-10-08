@@ -61,7 +61,7 @@
 			}
 		]
 		
-		gametext: <b>Spell.</b>\Spot a [gandalf] Wizard to search a Shadow player's discard pile and choose 2 minions, then return those minions to their owner's hand. If you do, reveal that hand and discard a revealed minion.
+		gametext: <b>Spell.</b> Spot a [gandalf] Wizard to search a Shadow player's discard pile and choose 2 minions, then return those minions to their owner's hand. If you do, reveal that hand and discard a revealed minion.
 		lore: "'I once knew every spell in all the tongues of Men or Elves or Orcs...'"
 		promotext: ""
 		alts: {

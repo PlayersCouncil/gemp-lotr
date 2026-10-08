@@ -1521,7 +1521,7 @@
 				}
 			}
 		]
-		gametext: You cannot have more than 5 companions in your fellowship.\Fellowship: Exert the Ring-bearer to discard another companion.
+		gametext: You cannot have more than 5 companions in your fellowship. Fellowship: Exert the Ring-bearer to discard another companion.
 		lore: ""
 		promotext: ""
 		helptext: ""

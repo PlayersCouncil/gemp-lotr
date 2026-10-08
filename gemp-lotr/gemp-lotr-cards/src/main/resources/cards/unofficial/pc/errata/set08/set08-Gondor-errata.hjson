@@ -136,7 +136,7 @@
 				}
 			}
 		]
-		gametext: Each time the fellowship moves, add a threat or discard this condition. <br>While you have initiative, exhausted [gondor] Wraiths cannot take wounds.\Response: If a Shadow card is about to discard this condition, discard 2 cards from hand to prevent that.
+		gametext: Each time the fellowship moves, add a threat or discard this condition. <br>While you have initiative, exhausted [gondor] Wraiths cannot take wounds. Response: If a Shadow card is about to discard this condition, discard 2 cards from hand to prevent that.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -63,7 +63,7 @@
 				]
 			}
 		]
-		gametext: Fellowship: Discard this and exert a Man to take a Free Peoples Man of a different culture into hand from your draw deck.\Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
+		gametext: Fellowship: Discard this and exert a Man to take a Free Peoples Man of a different culture into hand from your draw deck. Regroup: Exert 2 of your Men to discard a Man from your dead pile. Remove this artifact from the game.
 		lore: "'The Red Arrow has not been seen in the Mark in all my years! Has it indeed come to that?'"
 		promotext: ""
 		alts: {

@@ -707,7 +707,7 @@
 				}
 			}
 		]
-		gametext: Each time your fellowship moves, add (3) \(or (6) if you can spot 6 companions).
+		gametext: Each time your fellowship moves, add (3) (or (6) if you can spot 6 companions).
 		lore: ""
 		promotext: ""
 		helptext: ""

@@ -63,7 +63,7 @@
 				]
 			}
 		]
-		gametext: At the start of each turn, you may add (2) to heal a [shire] companion.\Maneuver: Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.  Any Shadow player may remove (2) to prevent this.
+		gametext: At the start of each turn, you may add (2) to heal a [shire] companion. Maneuver: Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.  Any Shadow player may remove (2) to prevent this.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -123,7 +123,7 @@
 				]
 			}
 		]
-		gametext: <b>Aid</b> - (2). <i>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</i>\Each time you attach this follower to a [shire] companion, you may discard up to 3 cards from hand to draw an equal amount.
+		gametext: <b>Aid</b> - (2). <i>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</i> Each time you attach this follower to a [shire] companion, you may discard up to 3 cards from hand to draw an equal amount.
 		lore: ""
 		promotext: ""
 		alts: {

@@ -233,7 +233,7 @@
 				}
 			}
 		]
-		gametext: Aragorn is strength +1 for each culture among other Men you can spot.\Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
+		gametext: Aragorn is strength +1 for each culture among other Men you can spot. Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
 		lore: "Out from the beleaguered hills knights of Gondor, Riders of Rohan, Dúnedain of the North, close-serried companies, drove against their wavering foes..."
 		promotext: ""
 		alts: {

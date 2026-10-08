@@ -319,7 +319,7 @@
 				}
 			}
 		]
-		gametext: <b>Tale</b>. To play, exert a Dwarf. \The twilight cost of each [moria] weapon is +1.\Fellowship: Discard this condition to hinder a Shadow condition (or discard up to 2 [moria] conditions).
+		gametext: <b>Tale</b>. To play, exert a Dwarf. The twilight cost of each [moria] weapon is +1. Fellowship: Discard this condition to hinder a Shadow condition (or discard up to 2 [moria] conditions).
 		lore: "No harp is wrung, no hammer falls: / The darkness dwells in Durin's halls...."
 		promotext: ""
 		alts: {

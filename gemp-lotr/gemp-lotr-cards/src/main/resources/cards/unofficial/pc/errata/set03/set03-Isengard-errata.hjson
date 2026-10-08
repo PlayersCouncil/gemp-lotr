@@ -324,7 +324,7 @@
 				}
 			}
 		]
-		gametext: To play, spot an [isengard] minion.\At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
+		gametext: To play, spot an [isengard] minion. At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
 		lore: "'Rip them all down!'"
 		promotext: ""
 		alts: {

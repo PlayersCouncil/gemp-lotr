@@ -365,7 +365,7 @@
 				}
 			}
 		]
-		gametext: Damage +1.\ While Gimli bears 2 items, he is damage +1.\While Gimli bears 3 items, he is strength +2. 
+		gametext: Damage +1. While Gimli bears 2 items, he is damage +1. While Gimli bears 3 items, he is strength +2. 
 		lore: "'...there is one dwarf in Moria who still draws breath!'"
 		promotext: ""
 		alts: {

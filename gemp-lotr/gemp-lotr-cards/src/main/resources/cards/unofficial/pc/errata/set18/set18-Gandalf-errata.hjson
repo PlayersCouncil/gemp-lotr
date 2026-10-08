@@ -43,7 +43,7 @@
 			
 		]
 
-		gametext: Bearer must be a [gandalf] Man.\While bearer is Grimbeorn, each time he wins a skirmish you may take a [gandalf] event into hand from your discard pile (limit once per turn).
+		gametext: Bearer must be a [gandalf] Man. While bearer is Grimbeorn, each time he wins a skirmish you may take a [gandalf] event into hand from your discard pile (limit once per turn).
 		lore: No Orc or wolf dared enter the land of the Beornings.
 		promotext: ""
 		alts: {

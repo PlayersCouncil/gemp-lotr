@@ -449,7 +449,7 @@
 				}
 			}
 		]
-		gametext: Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to heal that companion.\Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+		gametext: Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to heal that companion. Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
 		lore: "'Don't turn me into anything... unnatural.'" 
 		promotext: ""
 		alts: {

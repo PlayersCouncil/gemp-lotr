@@ -404,7 +404,7 @@
 				}
 			}
 		]
-		gametext: While you can spot 4 burdens, each [sauron] Orc is <b>damage +1</b>.\While you can spot 6 burdens, each [Sauron] Orc is <b>fierce</b>.\At the end of each Shadow phase, exert 2 [sauron] Orcs or hinder this condition.
+		gametext: While you can spot 4 burdens, each [sauron] Orc is <b>damage +1</b>. While you can spot 6 burdens, each [Sauron] Orc is <b>fierce</b>. At the end of each Shadow phase, exert 2 [sauron] Orcs or hinder this condition.
 		lore: "'He has indeed arisen again... and returned to his ancient fastness in the Dark Tower of Mordor.'"
 		promotext: ""
 		alts: {

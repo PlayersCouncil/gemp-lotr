@@ -146,7 +146,7 @@
 			}
 		]
 		
-		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3).\<b>Maneuver:</b> Discard this condition (or remove a token from here) and discard a card from hand to discard a condition.
+		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3). <b>Maneuver:</b> Discard this condition (or remove a token from here) and discard a card from hand to discard a condition.
 		lore: "'We shall not meet again, Elessar.'"
 		promotext: ""
 		alts: {
