@@ -19,7 +19,8 @@ in one step:
 
 Before you judge a test, a finding or a question against a ruling or a shape the index lists, read the entry
 itself: `python3 .claude/skills/card-test-campaign/scripts/lookup.py <number or words>` prints it (add
-`--in pitfalls` for the rig's behaviours). The index is for finding; the entry's words are what bind.
+`--in pitfalls` for the rig's behaviours; an entry must contain every term given, so search separate subjects
+separately). The index is for finding; the entry's words are what bind.
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can, and do not look at the same thing twice.

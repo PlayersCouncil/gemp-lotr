@@ -22,6 +22,9 @@ bears on their text, and every pitfall group their tests will touch, in as few s
     python3 .claude/skills/card-test-campaign/scripts/lookup.py "support area" hindered
     python3 .claude/skills/card-test-campaign/scripts/lookup.py prevent --in pitfalls
 
+An entry is printed only when it contains every term given, so look up separate subjects with separate
+commands (chained with `;` in one step), not with one command of many terms.
+
 An expectation rests on an entry's own words, never on its line in an index. A shape the index lists is settled:
 do not raise it as a question again, and where the game departs from it, that is a finding. When a test does
 something you cannot explain, read `.claude/skills/gemp-testing/references/pitfalls.md` through before deciding
