@@ -194,7 +194,7 @@
 					]
 					false: {
 						type: Hinder
-						select: choose(attachedTo(unbound,companion),weapon)
+						select: choose(attachedTo(unbound,companion,not(hindered)),weapon)
 					}
 				}
 			}
