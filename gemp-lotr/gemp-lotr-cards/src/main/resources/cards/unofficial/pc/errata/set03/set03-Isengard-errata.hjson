@@ -890,6 +890,11 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: culture(isengard),orc
+					count: 2
+				}
 				cost: {
 					type: Spot
 					select: choose(inSkirmish,Isengard,orc)
