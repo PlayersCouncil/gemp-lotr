@@ -262,8 +262,21 @@ def build(state: Path) -> dict:
             n = active_tests(p.read_text(encoding="utf-8", errors="replace"))
             if n:
                 legacy.append({"file": p.name, "tests": n})
+    try:
+        from zoneinfo import ZoneInfo
+        now = datetime.datetime.now(ZoneInfo("America/Chicago"))
+        stamp = now.strftime("%Y-%m-%d ") + now.strftime("%I:%M %p").lstrip("0") + " Central"
+    except Exception:
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    running = []
+    if (state / "running.json").is_file():
+        try:
+            running = json.loads((state / "running.json").read_text(encoding="utf-8"))
+        except ValueError:
+            running = []
     data = {
-        "generated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "generated": stamp,
+        "running": running,
         "phases": [{"key": k, "title": t} for k, t in PHASES],
         "focus": focus,
         "cards": cards_out,

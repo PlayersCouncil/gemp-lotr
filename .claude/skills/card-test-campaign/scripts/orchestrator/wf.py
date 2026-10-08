@@ -52,6 +52,23 @@ def state(run, lean=False):
         if s in stages and stages[s] is None: return "FAILED at " + s, stages
     return "running: " + (", ".join(running) or "?"), stages
 
+def progress(folder, t):
+    """(state, the stages finished, in order) for any tracked run.  An engine pass is a list of items, one agent
+    each; a card batch is author, review, land."""
+    stages, started = load(t["run"])
+    order = list(dict.fromkeys(started.values()))
+    done = [k for k in order if stages.get(k) is not None]
+    if folder.startswith("engine-pass"):
+        items = t.get("cards") or order
+        died = [k for k in order if k in stages and stages[k] is None]
+        running = [k for k in order if k not in stages]
+        if died: return "stopped at " + died[0], done
+        if running: return "running: " + running[0], done
+        if len(done) >= len(items): return "finished", done
+        return "between items (%d of %d done)" % (len(done), len(items)), done
+    return state(t["run"], t.get("lean"))[0], done
+
+
 cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
 if cmd == "track":
     tracked[sys.argv[2]] = {"run": sys.argv[3], "landed": False, "lean": True}   # everything tracked from 2026-10-05 18:40Z is the cut-down pipeline
@@ -63,7 +80,15 @@ elif cmd == "landed":
 elif cmd == "status":
     for folder, t in tracked.items():
         if t.get("landed"): continue
-        print(folder, t["run"], state(t["run"], t.get("lean"))[0])
+        print(folder, t["run"], progress(folder, t)[0])
+elif cmd == "running":
+    # For the tracker: every run not yet landed, as JSON.
+    out = []
+    for folder, t in tracked.items():
+        if t.get("landed"): continue
+        st, done = progress(folder, t)
+        out.append({"name": folder, "state": st, "done": done, "of": t.get("cards", [])})
+    print(json.dumps(out))
 elif cmd == "usage":
     folder = sys.argv[2]; run = tracked[folder]["run"]
     out = cw = cr = 0; first = last = None

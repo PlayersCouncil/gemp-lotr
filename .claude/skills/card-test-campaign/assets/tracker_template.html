@@ -99,6 +99,7 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
     <h1>Card Test Campaign</h1>
     <span class="stamp" id="stamp"></span>
   </header>
+  <p class="lead" id="running"></p>
   <div class="tabs" role="tablist">
     <button role="tab" id="tab-progress" aria-selected="true" aria-controls="progress">Progress</button>
     <button role="tab" id="tab-findings" aria-selected="false" aria-controls="findings">Findings</button>
@@ -160,6 +161,10 @@ function bar(c) { const b = el("div", { class: "bar", role: "img", "aria-label":
 function start() {
   if (!DATA) { document.getElementById("ledger").append(el("div", { class: "empty", text: "No data in this page." })); return; }
   document.getElementById("stamp").textContent = "As of " + DATA.generated;
+  // What the agents are doing, as of the moment this data was written (it does not move by itself).
+  const runs = DATA.running || [];
+  const runText = runs.length ? runs.map(r => r.name + ": " + r.state + (r.done && r.done.length ? " (done: " + r.done.join(", ") + (r.of && r.of.length ? "; " + r.done.length + " of " + r.of.length : "") + ")" : "")).join("  ·  ") : "nothing";
+  document.getElementById("running").textContent = "Running now: " + runText + "  ·  checked " + DATA.generated;
   const all = counts(DATA.cards);
   const totals = document.getElementById("totals");
   totals.append(el("div", null, el("b", { text: all.total.toLocaleString() }), el("span", { text: "Cards" })));
