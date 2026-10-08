@@ -181,7 +181,9 @@ Three places, each for one kind of thing.
 
 `todo` → `in-progress` → `ready` (committed, passes the conformance check and its tests, waiting for Ketura) →
 `approved`. `parked` at any point, with a note naming what holds it: a finding (`F-0000`), a question
-(`Q-0000`) or a rig request (`G-0000`).
+(`Q-0000`) or a rig request (`G-0000`). A card with ANY test parked (`@Ignore`) is `parked`, not `ready`, even when
+the rest of its tests are done (Ketura, 2026-10-08: the tracker must show it); land.py sets this itself. When the
+last parked test of a card goes live, the card goes back to `ready`.
 
 ### Findings
 
