@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_074_ErrataTests
@@ -18,9 +19,14 @@ public class Card_03_074_ErrataTests
 				new HashMap<>()
 				{{
 					put("raider", "53_74");
-					put("demands", "2_40");
+					put("raider2", "53_74");
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, damage +1 is its whole text
+					put("armory", "1_157");     // Uruk-hai Armory: [isengard] support condition, archery total -1 only
+					put("runner", "1_178");     // Goblin Runner: [moria] minion, so not an [isengard] card
 
-					put("rosie", "1_309");
+					put("rosie", "1_309");      // Rosie Cotton: [shire] ally, vitality 2, "Fellowship: Exert Rosie Cotton to heal Sam."
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: [elven] ally, vitality 4, "Fellowship: Exert Elrond to draw a card."
+					put("sam", "1_311");        // Sam, Son of Hamfast: companion, "Fellowship: Exert Sam to remove a burden."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,10 +49,10 @@ public class Card_03_074_ErrataTests
 		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: Tracker. 
-		* 	While an ally is in the dead pile, this minion is strength +3 and <b>damage +1</b>.
-		* 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
-		*/
+		 * Game Text: Tracker.
+		 * 	While an ally is in the dead pile, this minion is strength +3 and <b>damage +1</b>.
+		 * 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
+		 */
 
 		var scn = GetScenario();
 
@@ -60,6 +66,8 @@ public class Card_03_074_ErrataTests
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertFalse(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
@@ -67,106 +75,247 @@ public class Card_03_074_ErrataTests
 	}
 
 	@Test
-	public void UrukRaiderIsStrengthPlus3AndFierceWhileAllyIsInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void UrukRaiderIsPlayedFromHandForItsCostPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var raider = scn.GetShadowCard("raider");
+		scn.MoveCardsToHand(raider);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// 10 set + 1 companion + 2 for Ettenmoors
+		assertEquals(13, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(raider));
+
+		scn.ShadowPlayCard(raider);
+		// 2 to play + 2 roaming (site 5 minion at site 2)
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, raider);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void UrukRaiderIsStrengthPlus3AndDamagePlus1OnlyWhileAnAllyIsInTheDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
+		var elrond = scn.GetFreepsCard("elrond");
+		var sam = scn.GetFreepsCard("sam");
 		scn.MoveCardsToHand(rosie);
 
 		var raider = scn.GetShadowCard("raider");
-		scn.MoveMinionsToTable(raider);
+		var raider2 = scn.GetShadowCard("raider2");
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(raider, raider2, savage);
+		// A companion in the dead pile and an ally in the discard pile: neither is an ally in the dead pile.
+		scn.MoveCardsToDeadPile(sam);
+		scn.MoveCardsToDiscard(elrond);
 
-		assertEquals(Zone.HAND,  rosie.getZone());
+		assertInZone(Zone.DEAD, sam);
+		assertInZone(Zone.DISCARD, elrond);
 		assertEquals(6, scn.GetStrength(raider));
-		assertFalse(scn.HasKeyword(raider, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(raider, Keyword.DAMAGE));
+		assertEquals(6, scn.GetStrength(raider2));
 
 		scn.MoveCardsToDeadPile(rosie);
 
-		assertEquals(Zone.DEAD,  rosie.getZone());
+		assertInZone(Zone.DEAD, rosie);
 		assertEquals(9, scn.GetStrength(raider));
-		assertTrue(scn.HasKeyword(raider, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(raider, Keyword.DAMAGE));
+		// Each copy gets its own bonus once: two copies do not give one of them +6.
+		assertEquals(9, scn.GetStrength(raider2));
+		assertEquals(1, scn.GetKeywordCount(raider2, Keyword.DAMAGE));
+		// Another Uruk-hai is not "this minion".
+		assertEquals(5, scn.GetStrength(savage));
+		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void UrukRaiderCannotRespondToAllyExertionIfNoOtherIsengardCard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnAllyInTheShadowPlayersOwnDeadPileDoesNotCount() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var rosie = scn.GetFreepsCard("rosie");
-		scn.MoveCardsToSupportArea(rosie);
-
+		// The Shadow player's own ally, killed on one of his own turns.
+		var shadowRosie = scn.GetShadowCard("rosie");
 		var raider = scn.GetShadowCard("raider");
-		scn.MoveMinionsToTable(raider);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(raider);
 
-		assertEquals(0, scn.GetWoundsOn(raider));
-		assertEquals(0, scn.GetWoundsOn(rosie));
-		assertEquals(Zone.SUPPORT,  rosie.getZone());
+		assertEquals(6, scn.GetStrength(raider));
 
-		scn.FreepsUseCardAction(rosie);
+		scn.MoveCardsToDeadPile(shadowRosie);
+
+		assertInZone(Zone.DEAD, shadowRosie);
+		assertEquals(6, scn.GetStrength(raider));
+		assertEquals(0, scn.GetKeywordCount(raider, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void EachTimeAnAllyExertsShadowMayExertRaiderToWoundThatAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var elrond = scn.GetFreepsCard("elrond");
+		var rosie = scn.GetFreepsCard("rosie");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCardsToSupportArea(elrond, rosie);
+		scn.MoveCompanionsToTable(sam);
+
+		var raider = scn.GetShadowCard("raider");
+		var armory = scn.GetShadowCard("armory");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(armory);
+		scn.AddBurdens(1);
+
+		// A companion exerting does not set it off.
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		assertEquals(Zone.SUPPORT,  rosie.getZone());
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider));
+
+		// Declined: nothing more happens.
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertEquals(0, scn.GetWoundsOn(raider));
-		assertEquals(1, scn.GetWoundsOn(rosie));
-	}
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-	@Test
-	public void UrukRaiderCannotRespondToAllyExertionIfSpotsOtherIsengardCardButCannotExert() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var rosie = scn.GetFreepsCard("rosie");
-		scn.MoveCardsToSupportArea(rosie);
-
-		var raider = scn.GetShadowCard("raider");
-		var demands = scn.GetShadowCard("demands");
-		scn.MoveMinionsToTable(raider);
-		scn.MoveCardsToSupportArea(demands);
-		scn.AddWoundsToChar(raider, 1);
-
-		scn.StartGame();
-
-		assertEquals(1, scn.GetWoundsOn(raider));
-		assertEquals(0, scn.GetWoundsOn(rosie));
-		assertEquals(Zone.SUPPORT,  rosie.getZone());
-
-		scn.FreepsUseCardAction(rosie);
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-
-		assertEquals(Zone.SUPPORT,  rosie.getZone());
-		assertEquals(1, scn.GetWoundsOn(raider));
-		assertEquals(1, scn.GetWoundsOn(rosie));
-	}
-
-	@Test
-	public void UrukRaiderCanSpotAnotherIsengardCardAndExertToWoundExertingAlly() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var rosie = scn.GetFreepsCard("rosie");
-		scn.MoveCardsToSupportArea(rosie);
-
-		var raider = scn.GetShadowCard("raider");
-		var demands = scn.GetShadowCard("demands");
-		scn.MoveMinionsToTable(raider);
-		scn.MoveCardsToSupportArea(demands);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetWoundsOn(raider));
-		assertEquals(0, scn.GetWoundsOn(rosie));
-		assertEquals(Zone.SUPPORT,  rosie.getZone());
-
-		scn.FreepsUseCardAction(rosie);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		// Each time: the same ally exerting again is answered again.
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(2, scn.GetWoundsOn(elrond));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider));
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertEquals(Zone.DEAD,  rosie.getZone());
 		assertEquals(1, scn.GetWoundsOn(raider));
+		assertEquals(3, scn.GetWoundsOn(elrond));
+		// Only the ally that exerted is wounded.
+		assertEquals(0, scn.GetWoundsOn(rosie));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		// The wound is not an exertion, so nothing further is offered.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WoundingAnAllyToDeathSwitchesOnTheDeadPileBonus() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCardsToSupportArea(rosie, elrond);
+
+		var raider = scn.GetShadowCard("raider");
+		var armory = scn.GetShadowCard("armory");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(armory);
+
+		assertEquals(6, scn.GetStrength(raider));
+		assertEquals(0, scn.GetKeywordCount(raider, Keyword.DAMAGE));
+
+		scn.FreepsUseCardAction(rosie);
+		assertEquals(1, scn.GetWoundsOn(rosie));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(raider));
+		// Vitality 2: the exertion and the wound kill her.
+		assertInZone(Zone.DEAD, rosie);
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(9, scn.GetStrength(raider));
+		assertEquals(1, scn.GetKeywordCount(raider, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithoutAnotherIsengardCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.MoveCardsToSupportArea(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		// The Raider itself is the only [isengard] card; the other minion is [moria].
+		scn.MoveMinionsToTable(raider, runner);
+
+		scn.FreepsUseCardAction(rosie);
+		assertEquals(1, scn.GetWoundsOn(rosie));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		assertInZone(Zone.SUPPORT, rosie);
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenRaiderCannotExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.MoveCardsToSupportArea(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		var armory = scn.GetShadowCard("armory");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(armory);
+		// Vitality 2 with 1 wound: exhausted.
+		scn.AddWoundsToChar(raider, 1);
+
+		scn.FreepsUseCardAction(rosie);
+		assertEquals(1, scn.GetWoundsOn(rosie));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		assertInZone(Zone.SUPPORT, rosie);
+		assertEquals(1, scn.GetWoundsOn(raider));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TwoRaidersEachOfferAndOnlyTheChosenOneExerts() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCardsToSupportArea(elrond);
+
+		var raider = scn.GetShadowCard("raider");
+		var raider2 = scn.GetShadowCard("raider2");
+
+		scn.StartGame();
+		// No other [isengard] card: each Raider spots the other.
+		scn.MoveMinionsToTable(raider, raider2);
+
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider2));
+
+		scn.ShadowChooseOptionalTrigger(raider2);
+		assertEquals(1, scn.GetWoundsOn(raider2));
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertEquals(2, scn.GetWoundsOn(elrond));
+
+		// The other copy's own offer is still there.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(raider));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertEquals(2, scn.GetWoundsOn(elrond));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

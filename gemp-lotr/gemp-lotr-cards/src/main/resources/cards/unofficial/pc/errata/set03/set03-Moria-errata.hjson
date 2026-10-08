@@ -26,16 +26,22 @@
 					type: CanSpot
 					filter: culture(sauron),Orc
 				}
+				{
+					type: HasCardInDiscard
+					filter: item,or(culture(sauron),culture(moria)),Playable
+				}
 			]
 			effect: [
 				{
 					type: playCardFromDiscard
 					select: choose(item,or(culture(sauron),culture(moria)))
+					optional: true
 					memorize: item1
 				}
 				{
 					type: playCardFromDiscard
 					select: choose(item,or(culture(sauron),culture(moria)))
+					optional: true
 					memorize: item2
 				}
 				{
