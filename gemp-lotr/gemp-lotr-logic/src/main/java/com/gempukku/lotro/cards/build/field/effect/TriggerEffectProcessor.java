@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.field.EffectProcessor;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.AbstractEffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
+import com.gempukku.lotro.cards.build.field.effect.requirement.RequirementFactory;
 import com.gempukku.lotro.cards.build.field.effect.trigger.TriggerChecker;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -49,6 +50,14 @@ public class TriggerEffectProcessor implements EffectProcessor {
                 // including any per-turn limit the first copy uses up - are therefore re-checked when it resolves,
                 // and a copy whose condition no longer holds does nothing.
                 final DefaultActionSource source = triggerActionSource;
+                // A standing check on where the fellowship is ("discard this possession when at an underground
+                // site", "is discarded if not at a marsh") waits while a move is being finished: the fellowship
+                // has moved to the new site only when the twilight of the move has been added, so the card is
+                // still there, and its text still counts, when that twilight is worked out.
+                if (RequirementFactory.asksWhereTheFellowshipIs(trigger.get("requires"))
+                        || RequirementFactory.asksWhereTheFellowshipIs(value.get("requires")))
+                    triggerActionSource.addPlayRequirement(
+                            actionContext -> !actionContext.getGame().getGameState().isFellowshipArriving());
                 triggerActionSource.addCost(
                         new AbstractEffectAppender() {
                             @Override

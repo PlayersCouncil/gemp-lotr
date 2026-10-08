@@ -54,6 +54,7 @@ public class GameState {
     private int _twilightPool;
 
     private int _moveCount;
+    private boolean _fellowshipArriving;
     private int turnNumber;
     private boolean _fierceSkirmishes;
     private boolean _relentlessSkirmishes;
@@ -1266,6 +1267,23 @@ public class GameState {
         startAffecting(game, getCurrentSite());
     }
 
+    /**
+     * True while a move is being finished: from the moment the player marker has been put on the next site until
+     * the twilight of that move has been added.  The rules have the fellowship at the new site only then
+     * ("After you have completed any moving actions and have added twilight tokens to the twilight pool, the
+     * fellowship has moved to the new site"), so a card's standing check on where the fellowship is ("discard
+     * this possession when at an underground site") is not looked at in between.  Everything else reads the
+     * new site from the moment the marker moves, "when the fellowship moves to" triggers included.
+     */
+    public boolean isFellowshipArriving() {
+        return _fellowshipArriving;
+    }
+
+    /** For the move itself (MovementGameProcess): see isFellowshipArriving. */
+    public void setFellowshipArriving(boolean arriving) {
+        _fellowshipArriving = arriving;
+    }
+
     public int getPlayerPosition(String playerId) {
         return _playerPosition.getOrDefault(playerId, 0);
     }
@@ -1574,6 +1592,7 @@ public class GameState {
         }
         setTwilight(0);
         _moveCount = 0;
+        _fellowshipArriving = false;
         _fierceSkirmishes = false;
 
         for (var listener : getAllGameStateListeners()) {

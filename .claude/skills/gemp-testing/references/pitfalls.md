@@ -277,6 +277,14 @@ allows, both players passing in the regroup phase ends the turn at once and the 
 action or Pass" decision is pending; no "another move" question is asked. Below the limit the Free Peoples
 player is asked "Do you want to make another move?".
 
+**A card discarded for where the fellowship is goes when the move is finished.** "Discard ... when at an
+underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` with a `Location` requirement) is
+not looked at between the moving of the marker and the adding of the move's twilight. At a decision raised by a
+"when the fellowship moves to" text the card is still in play; its text counts in the twilight the move adds
+(Bill the Pony's -1 at the underground site that discards him); and it is in the discard pile before anyone is
+asked anything further. Outside a move the check acts at once (`mechanics/AtASiteWhenTheMoveIsFinishedTests`,
+F-0233).
+
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
 second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the

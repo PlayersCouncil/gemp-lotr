@@ -8,7 +8,6 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -164,7 +163,6 @@ public class Card_03_106_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0233: Bill is discarded before the underground site's Shadow number is counted; Decipher's ruling on 3_106 has the number reduced first")
 	public void TheUndergroundSitesShadowNumberIsReducedBeforeBillIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
