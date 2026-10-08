@@ -335,11 +335,10 @@
 				amount: {
 					type: ForEachYouCanSpot
 					filter: unbound,hobbit
-					limit: 2 
 				}
 			}
 		}
-		gametext: <b>Archer.</b><br>Each time a Shadow event or Shadow condition is played, remove (1) for each unbound Hobbit you can spot (limit (2)).
+		gametext: <b>Archer.</b><br>Each time a Shadow event or Shadow condition is played, remove (1) for each unbound Hobbit you can spot.
 		lore: "'They are far, far away.... I know in my heart that they have not rested this night.'"
 		promotext: ""
 		alts: {

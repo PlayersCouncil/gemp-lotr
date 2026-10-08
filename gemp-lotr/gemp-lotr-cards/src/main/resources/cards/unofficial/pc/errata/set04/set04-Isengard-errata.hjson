@@ -174,32 +174,32 @@
 					type: exert
 					select: self
 				}
-				effect: {
-					type: If
-					check: {
-						type: canSpot
-						filter: unbound,companion,hasAttachedCount(3,any,override(hindered))
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose an unbound companion to spot
+						select: choose(unbound,companion,not(hindered),or(hasAttached(weapon),and(hasAttachedCount(3,any,override(hindered)),hasAttached(side(free)))))
+						memorize: chosenCompanion
 					}
-					true: [
-						{
-							type: chooseActiveCards
-							text: Choose unbound companion to hinder cards on
-							select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
-							memorize: chosenCompanion
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: memory(chosenCompanion),hasAttachedCount(3,any,override(hindered))
 						}
-						{
+						true: {
 							type: Hinder
 							select: all(attachedTo(memory(chosenCompanion)),side(free))
 						}
-					]
-					false: {
-						type: Hinder
-						select: choose(attachedTo(unbound,companion,not(hindered)),weapon)
+						false: {
+							type: Hinder
+							select: choose(weapon,attachedTo(memory(chosenCompanion),not(hindered)))
+						}
 					}
-				}
+				]
 			}
 		]
-		gametext: Maneuver: Exert Grima to hinder a weapon borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more cards).
+		gametext: Maneuver: Exert Grima to spot an unbound companion. Hinder a weapon borne by that companion (or all Free Peoples cards borne by them if they bear 3 or more cards).
 		lore: "'I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'"
 		promotext: ""
 		alts: {

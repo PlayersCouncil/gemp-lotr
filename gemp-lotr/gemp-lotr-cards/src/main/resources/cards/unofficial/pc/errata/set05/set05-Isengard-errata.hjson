@@ -99,23 +99,36 @@
 					}
 					true: [
 						{
-							type: Hinder
-							select: choose(unbound,companion)
+							type: chooseActiveCards
+							text: Choose an unbound companion to spot
+							select: choose(unbound,companion,not(hindered))
 							memorize: chosenCompanion
+						}
+						{
+							type: Hinder
+							select: memory(chosenCompanion)
 						}
 						{
 							type: Hinder
 							select: all(attachedTo(memory(chosenCompanion)),side(free))
 						}
 					]
-					false: {
-						type: Hinder
-						select: choose(attachedTo(unbound,companion,not(hindered)),condition)
-					}
+					false: [
+						{
+							type: chooseActiveCards
+							text: Choose an unbound companion to spot
+							select: choose(unbound,companion,not(hindered),hasAttached(condition))
+							memorize: chosenCompanion
+						}
+						{
+							type: Hinder
+							select: choose(condition,attachedTo(memory(chosenCompanion),not(hindered)))
+						}
+					]
 				}
 			}
 		]
-		gametext: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder a companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
+		gametext: Maneuver: Exert Grima to spot an unbound companion. Hinder a condition borne by that companion (or hinder that companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
 		lore: "'I care for you and yours as best I may.... Let others deal with these irksome guests.'"
 		promotext: ""
 		alts: {

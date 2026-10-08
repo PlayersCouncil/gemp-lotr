@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -66,8 +65,7 @@ public class Card_04_073_ErrataTests
 		 * Resistance: 6
 		 * Signet: Aragorn
 		 * Game Text: Archer.
-		 * Each time a Shadow event or Shadow condition is played, remove (1) for each unbound Hobbit you can spot
-		 * (limit (2)).
+		 * Each time a Shadow event or Shadow condition is played, remove (1) for each unbound Hobbit you can spot.
 		 */
 
 		var scn = GetScenario();
@@ -188,7 +186,7 @@ public class Card_04_073_ErrataTests
 	}
 
 	@Test
-	public void ThreeUnboundHobbitsRemoveNoMoreThanTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThreeUnboundHobbitsRemoveThree() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		scn.MoveCompanionsToTable("legolas", "merry", "pippin", "fatty");
@@ -205,50 +203,8 @@ public class Card_04_073_ErrataTests
 		assertEquals(7, scn.GetTwilight());
 
 		scn.ShadowPlayCard(curse);
-		assertEquals(5, scn.GetTwilight()); // 0 to play + 3 Hobbits, limit 2
+		assertEquals(4, scn.GetTwilight()); // 0 to play + 3 for Merry, Pippin and Fredegar
 		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0134: whether (limit (2)) is Legolas's for the whole phase (CR 4.2 \"limit\", F-0135) or a cap on each trigger, as built and as the old tests assert")
-	public void NoMoreThanTwoIsRemovedInAPhaseAndTheLimitRenewsInTheNext() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var legolas = scn.GetFreepsCard("legolas");
-		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionsToTable(legolas, merry);
-
-		var swordsman = scn.GetShadowCard("swordsman");
-		var curse = scn.GetShadowCard("curse");
-		var enraged = scn.GetShadowCard("enraged");
-		var fear = scn.GetShadowCard("fear");
-		var hate = scn.GetShadowCard("hate");
-		scn.MoveCardsToHand(curse, enraged, fear, hate);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(swordsman);
-		scn.FreepsPass();
-
-		// 3 companions + 2 for Ettenmoors
-		assertEquals(5, scn.GetTwilight());
-
-		scn.ShadowPlayCard(curse);
-		assertEquals(4, scn.GetTwilight()); // 0 to play + 1 for Merry
-
-		scn.ShadowPlayCard(enraged);
-		assertEquals(3, scn.GetTwilight()); // 0 to play + 1 for Merry: 2 removed this phase
-
-		scn.ShadowPlayCard(fear);
-		assertEquals(2, scn.GetTwilight()); // 1 to play, and nothing more: the limit is reached
-		assertTrue(scn.AwaitingShadowPhaseActions());
-
-		scn.ShadowPass();
-		scn.FreepsPass();
-
-		scn.ShadowPlayCard(hate);
-		scn.ShadowChooseCard(legolas);
-		assertEquals(1, scn.GetTwilight()); // 0 to play + 1 for Merry: a new phase, a new limit
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
@@ -290,7 +246,7 @@ public class Card_04_073_ErrataTests
 		assertAttachedTo(scimitar, swordsman);
 		assertEquals(3, scn.GetTwilight()); // 1 to play, and nothing removed
 
-		// A Shadow condition then removes 1 for Merry: none of the cards before it counted towards the limit.
+		// A Shadow condition then removes 1 for Merry.
 		scn.ShadowPlayCard(fear);
 		assertEquals(1, scn.GetTwilight()); // 1 to play + 1 for Merry
 		assertTrue(scn.AwaitingShadowPhaseActions());

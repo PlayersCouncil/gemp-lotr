@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,6 +31,7 @@ public class Card_05_051_ErrataTests
 					put("endurance", "2_4");    // Endurance of Dwarves: [dwarven] condition on a Dwarf, vitality +1; skirmish ability used only on purpose
 					put("endurance2", "2_4");
 					put("armor", "1_8");        // Dwarven Armor: [dwarven] possession on a Dwarf, no number
+					put("armor2", "1_8");
 					put("evil", "1_283");       // You Bring Great Evil: [sauron] condition on a companion: at a sanctuary bearer cannot heal
 					put("evil2", "1_283");
 					put("weary", "4_212");      // Weary: [isengard] condition on a companion or ally; exerts bearer only when assigned to an [isengard] tracker
@@ -58,7 +58,8 @@ public class Card_05_051_ErrataTests
 		 * Strength: 4
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder a companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
+		 * Game Text: Maneuver: Exert Grima to spot an unbound companion. Hinder a condition borne by that companion
+		 * (or hinder that companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
 		 */
 
 		var scn = GetScenario();
@@ -106,27 +107,32 @@ public class Card_05_051_ErrataTests
 		var grima = scn.GetShadowCard("grima");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var guard = scn.GetFreepsCard("guard");
+		var gimli = scn.GetFreepsCard("gimli");
 		var sam = scn.GetFreepsCard("sam");
 		var elrond = scn.GetFreepsCard("elrond");
 		var frodo = scn.GetRingBearer();
 		var legacy = scn.GetShadowCard("legacy");
 		var saga = scn.GetFreepsCard("saga");
 		var endurance = scn.GetFreepsCard("endurance");
+		var endurance2 = scn.GetFreepsCard("endurance2");
 		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
 		var evil = scn.GetShadowCard("evil");
 		var evil2 = scn.GetShadowCard("evil2");
 		var armory = scn.GetShadowCard("armory");
-		scn.MoveCompanionsToTable(aragorn, guard, sam);
+		scn.MoveCompanionsToTable(aragorn, guard, gimli, sam);
 		scn.MoveAlliesToTable(elrond);
 		scn.AttachCardsTo(aragorn, legacy, saga);
 		scn.AttachCardsTo(guard, endurance, armor, evil);
+		// Gimli bears a possession and a condition that will be hindered.
+		scn.AttachCardsTo(gimli, armor2, endurance2);
 		scn.AttachCardsTo(sam, evil2);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(grima);
 		scn.MoveCardsToSupportArea(armory);
-		// Already hindered: Aragorn's tale, and Elrond, whose [elven] culture cannot then be spotted.
-		scn.HinderCard(saga, elrond);
+		// Already hindered: Aragorn's tale, Gimli's condition, and Elrond, whose [elven] culture cannot then be spotted.
+		scn.HinderCard(saga, endurance2, elrond);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
@@ -137,12 +143,17 @@ public class Card_05_051_ErrataTests
 
 		scn.ShadowUseCardAction(grima);
 		assertEquals(1, scn.GetWoundsOn(grima));
-		// Conditions of both sides on two unbound companions; not the condition on Sam (Ring-bound), nor a possession,
-		// nor a condition in a support area, nor one already hindered.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(legacy, endurance, evil));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(evil2, armor, armory, saga, aragorn, guard, sam, frodo));
+		// Unbound companions bearing a condition, of either side; not Gimli, whose only condition is hindered, nor
+		// Sam (Ring-bound) bearing a condition, nor the Ring-bearer.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli, sam, frodo, elrond));
 		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(guard);
 
+		// A condition of his, of either side; not his possession, nor a condition borne by another or in a support area.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(endurance, evil));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(armor, legacy, evil2, armory, saga, endurance2));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(endurance);
 		assertTrue(scn.IsHindered(endurance));
 		assertFalse(scn.IsHindered(legacy));
@@ -151,6 +162,7 @@ public class Card_05_051_ErrataTests
 		assertFalse(scn.IsHindered(guard));
 		assertFalse(scn.IsHindered(evil2));
 		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(armor2));
 
 		// Not in the archery phase, the next in which the Shadow player is asked for actions.
 		scn.FreepsPass();
@@ -187,9 +199,10 @@ public class Card_05_051_ErrataTests
 		assertEquals(3, scn.GetFreepsCultureCount());
 		scn.ShadowUseCardAction(grima);
 
-		assertTrue(scn.ShadowHasCardChoiceAvailable(legacy, endurance));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(endurance2));
-		scn.ShadowChooseCard(legacy);
+		// A hindered companion cannot be spotted, and a condition he bears is not borne by a companion (Q-0108).
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli));
+		scn.ShadowChooseCard(aragorn);
 		assertTrue(scn.IsHindered(legacy));
 		assertFalse(scn.IsHindered(endurance));
 		assertFalse(scn.IsHindered(endurance2));
@@ -203,14 +216,17 @@ public class Card_05_051_ErrataTests
 		var grima = scn.GetShadowCard("grima");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var guard = scn.GetFreepsCard("guard");
+		var gimli = scn.GetFreepsCard("gimli");
 		var sam = scn.GetFreepsCard("sam");
+		var frodo = scn.GetRingBearer();
 		var elrond = scn.GetFreepsCard("elrond");
 		var legacy = scn.GetShadowCard("legacy");
 		var endurance = scn.GetFreepsCard("endurance");
 		var armor = scn.GetFreepsCard("armor");
 		var evil = scn.GetShadowCard("evil");
 		var saga = scn.GetFreepsCard("saga");
-		scn.MoveCompanionsToTable(aragorn, guard, sam);
+		// Gimli bears nothing.
+		scn.MoveCompanionsToTable(aragorn, guard, gimli, sam);
 		scn.MoveAlliesToTable(elrond);
 		scn.AttachCardsTo(aragorn, legacy, saga);
 		scn.AttachCardsTo(guard, endurance, armor, evil);
@@ -225,9 +241,10 @@ public class Card_05_051_ErrataTests
 		scn.ShadowUseCardAction(grima);
 		assertEquals(1, scn.GetWoundsOn(grima));
 
-		// The bracket is taken when it can be: a companion is chosen, not a condition.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(elrond, grima, legacy, saga, endurance, evil));
+		// The bracket is taken when it can be: a companion is chosen, not a condition, and one who bears no condition
+		// may be.  Not the Ring-bound Sam, nor the Ring-bearer, nor an ally.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard, gimli));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sam, frodo, elrond, grima, legacy, saga, endurance, evil));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCard(guard);
@@ -241,42 +258,10 @@ public class Card_05_051_ErrataTests
 		assertFalse(scn.IsHindered(legacy));
 		assertFalse(scn.IsHindered(saga));
 		assertFalse(scn.IsHindered(sam));
+		assertFalse(scn.IsHindered(frodo));
+		assertFalse(scn.IsHindered(gimli));
 		assertFalse(scn.IsHindered(elrond));
 		assertInZone(Zone.ATTACHED, endurance, armor, evil, saga);
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
-	}
-
-	@Test
-	@Ignore("F-0239: the bracket's \"a companion\" is built as choose(unbound,companion)")
-	public void WithFourCulturesARingBoundCompanionAndTheRingBearerMayBeChosen() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grima = scn.GetShadowCard("grima");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var sam = scn.GetFreepsCard("sam");
-		var elrond = scn.GetFreepsCard("elrond");
-		var guard = scn.GetFreepsCard("guard");
-		var frodo = scn.GetRingBearer();
-		var evil = scn.GetShadowCard("evil");
-		scn.MoveCompanionsToTable(aragorn, guard, sam);
-		scn.MoveAlliesToTable(elrond);
-		scn.AttachCardsTo(sam, evil);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(grima);
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPass();
-		assertEquals(4, scn.GetFreepsCultureCount());
-		scn.ShadowUseCardAction(grima);
-
-		// "A companion": the Ring-bound Sam and the Ring-bearer as well as the unbound.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard, sam, frodo));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(elrond));
-		scn.ShadowChooseCard(sam);
-		assertTrue(scn.IsHindered(sam));
-		assertFalse(scn.IsHindered(evil));
-		assertFalse(scn.IsHindered(frodo));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
@@ -292,7 +277,8 @@ public class Card_05_051_ErrataTests
 		var weary = scn.GetShadowCard("weary");
 		scn.MoveCompanionsToTable(aragorn, sam);
 		scn.MoveAlliesToTable(elrond);
-		// Conditions on a Ring-bound companion and on an ally only, and three Free Peoples cultures.
+		// Conditions on a Ring-bound companion and on an ally only, none on Aragorn, and three Free Peoples cultures:
+		// nobody can be spotted.
 		scn.AttachCardsTo(sam, evil);
 		scn.AttachCardsTo(elrond, weary);
 

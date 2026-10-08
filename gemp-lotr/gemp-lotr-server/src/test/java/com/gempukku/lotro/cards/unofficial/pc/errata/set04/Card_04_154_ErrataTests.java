@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,10 +26,12 @@ public class Card_04_154_ErrataTests
 					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound companion
 					put("warrior", "4_165");    // Orthanc Warrior: [isengard] Uruk-hai minion, Damage +1 and nothing else
 					put("maggot", "1_288");     // Farmer Maggot: [shire] ally; a fellowship ability never used here
+					put("guard", "1_7");        // Dwarf Guard: unbound companion, no text but a requirement to play
 
 					// Weapons.
 					put("sword", "1_112");      // Ranger's Sword: hand weapon, bearer must be Aragorn
 					put("bow", "1_41");         // Elven Bow: ranged weapon, bearer must be an Elf
+					put("aragornsbow", "1_90"); // Aragorn's Bow: ranged weapon, bearer must be Aragorn; an archery ability never used here
 					put("axe", "1_14");         // Gimli's Battle Axe: hand weapon, bearer must be Gimli
 					put("gondorsword", "4_134");// Sword of Gondor: hand weapon, bearer must be a [gondor] Man
 					put("hobbitsword", "1_299");// Hobbit Sword: hand weapon, bearer must be a Hobbit
@@ -48,6 +49,9 @@ public class Card_04_154_ErrataTests
 
 					put("poison", "8_28");      // Spider Poison: Shadow possession borne by a companion
 					put("poison2", "8_28");
+					put("poison3", "8_28");
+					put("evil", "1_283");       // You Bring Great Evil: Shadow condition on a companion; at a sanctuary bearer cannot heal
+					put("evil2", "1_283");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -70,8 +74,8 @@ public class Card_04_154_ErrataTests
 		 * Strength: 4
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Maneuver: Exert Grima to hinder a weapon borne by an unbound companion (or all Free Peoples
-		 * cards borne by that companion if they are bearing 3 or more cards).
+		 * Game Text: Maneuver: Exert Grima to spot an unbound companion. Hinder a weapon borne by that companion (or
+		 * all Free Peoples cards borne by them if they bear 3 or more cards).
 		 */
 
 		var scn = GetScenario();
@@ -123,16 +127,17 @@ public class Card_04_154_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var sam = scn.GetFreepsCard("sam");
 		var warrior = scn.GetShadowCard("warrior");
+		var frodo = scn.GetRingBearer();
 		var sword = scn.GetFreepsCard("sword");
-		var saga = scn.GetFreepsCard("saga");
+		var aragornsbow = scn.GetFreepsCard("aragornsbow");
 		var bow = scn.GetFreepsCard("bow");
 		var armor = scn.GetFreepsCard("armor");
 		var hobbitsword = scn.GetFreepsCard("hobbitsword");
 		var broadsword = scn.GetShadowCard("broadsword");
 
 		scn.MoveCompanionsToTable(aragorn, legolas, gimli, sam);
-		// Aragorn bears two cards, a hand weapon and a condition: one short of three.
-		scn.AttachCardsTo(aragorn, sword, saga);
+		// Aragorn bears two cards, a hand weapon and a ranged weapon: one short of three.
+		scn.AttachCardsTo(aragorn, sword, aragornsbow);
 		// A ranged weapon.
 		scn.AttachCardsTo(legolas, bow);
 		// Armor is not a weapon.
@@ -152,14 +157,22 @@ public class Card_04_154_ErrataTests
 
 		scn.ShadowUseCardAction(grima);
 		assertEquals(1, scn.GetWoundsOn(grima));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, bow));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saga, armor, hobbitsword, broadsword));
+		// Unbound companions bearing a weapon; not Gimli, whose armor is no weapon, nor the Ring-bound Sam and Frodo,
+		// nor a minion bearing a weapon.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, legolas));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli, sam, frodo, warrior));
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(sword);
+		scn.ShadowChooseCard(aragorn);
 
-		assertTrue(scn.IsHindered(sword));
-		assertAttachedTo(sword, aragorn);
-		assertFalse(scn.IsHindered(saga));
+		// A weapon of his, of the Shadow player's choosing; no one else's.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, aragornsbow));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bow, armor, hobbitsword, broadsword));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(aragornsbow);
+
+		assertTrue(scn.IsHindered(aragornsbow));
+		assertAttachedTo(aragornsbow, aragorn);
+		assertFalse(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(bow));
 		assertFalse(scn.IsHindered(armor));
 		assertFalse(scn.IsHindered(hobbitsword));
@@ -219,10 +232,10 @@ public class Card_04_154_ErrataTests
 		assertAttachedTo(gondorsword, boromir);
 
 		scn.ShadowUseCardAction(grima);
-		// A card borne by a hindered companion is not borne by a companion (Q-0108).
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, bow));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gondorsword));
-		scn.ShadowChooseCard(sword);
+		// A hindered companion cannot be spotted, and a card he bears is not borne by a companion (Q-0108).
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, legolas));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(boromir));
+		scn.ShadowChooseCard(aragorn);
 
 		assertTrue(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(bow));
@@ -243,8 +256,8 @@ public class Card_04_154_ErrataTests
 		var saga = scn.GetFreepsCard("saga");
 
 		scn.MoveCompanionsToTable(aragorn, gimli);
-		// Exactly three cards, one of them a Shadow card.  The axe is the only weapon on the table, so it is
-		// chosen without asking.
+		// Exactly three cards, one of them a Shadow card.  Aragorn bears one card and no weapon, so Gimli is the
+		// only companion who can be spotted, and is spotted without asking.
 		scn.AttachCardsTo(gimli, axe, armor, poison);
 		scn.AttachCardsTo(aragorn, saga);
 
@@ -385,11 +398,11 @@ public class Card_04_154_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(grima));
 		scn.ShadowUseCardAction(grima);
 		assertEquals(1, scn.GetWoundsOn(grima));
-		// Nobody who can be reached bears three cards, so a weapon is what is chosen.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, bow));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hobbitsword, sam, maggot, armor, coat, shield, armor2, coat2));
+		// Sam is Ring-bound and Maggot no companion: neither can be spotted.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, legolas));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sam, maggot));
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(bow);
+		scn.ShadowChooseCard(legolas);
 
 		assertTrue(scn.IsHindered(bow));
 		assertFalse(scn.IsHindered(sword));
@@ -422,9 +435,8 @@ public class Card_04_154_ErrataTests
 
 		scn.MoveCompanionsToTable(gimli, sam);
 		scn.MoveAlliesToTable(maggot);
-		// Gimli is the one unbound companion bearing three cards, and his axe the one weapon on the table, so he
-		// is chosen without asking whichever way the card is read.  Sam and Maggot bear three Free Peoples cards
-		// each and no weapon.
+		// Gimli is the one unbound companion bearing three cards or a weapon, so he is spotted without asking.
+		// Sam and Maggot bear three Free Peoples cards each and no weapon.
 		scn.AttachCardsTo(gimli, axe, armor, poison);
 		scn.AttachCardsTo(sam, coat, shield, saga);
 		scn.AttachCardsTo(maggot, armor2, coat2, shield2);
@@ -451,7 +463,6 @@ public class Card_04_154_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0138: whether 'that companion' is only the bearer of the weapon chosen")
 	public void AWeaponOnACompanionBearingTwoCardsMayStillBeChosenBesideACompanionBearingThree() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -481,18 +492,85 @@ public class Card_04_154_ErrataTests
 
 		scn.ShadowUseCardAction(grima);
 		assertEquals(1, scn.GetWoundsOn(grima));
-		// The weapons are what is chosen.  Boromir is reached through no weapon.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, axe));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(boromir, coat, shield));
-		scn.ShadowChooseCard(sword);
+		// Each may be spotted: Aragorn and Gimli bear a weapon, Gimli and Boromir three cards.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli, boromir));
+		scn.ShadowChooseCard(aragorn);
 
-		// Aragorn bears two cards: the sword alone.
+		// Aragorn bears two cards: his one weapon is hindered, and not the condition beside it.
 		assertTrue(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(saga));
 		assertFalse(scn.IsHindered(axe));
 		assertFalse(scn.IsHindered(armor));
 		assertFalse(scn.IsHindered(coat));
 		assertFalse(scn.IsHindered(shield));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void OnlyACompanionBearingAWeaponOrThreeCardsWithAnUnhinderedFreePeoplesCardMayBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grima = scn.GetShadowCard("grima");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		var boromir = scn.GetFreepsCard("boromir");
+		var sam = scn.GetFreepsCard("sam");
+		var sword = scn.GetFreepsCard("sword");
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var endurance = scn.GetFreepsCard("endurance");
+		var bow = scn.GetFreepsCard("bow");
+		var coat = scn.GetFreepsCard("coat");
+		var shield = scn.GetFreepsCard("shield");
+		var hobbitsword = scn.GetFreepsCard("hobbitsword");
+		var poison = scn.GetShadowCard("poison");
+		var poison2 = scn.GetShadowCard("poison2");
+		var poison3 = scn.GetShadowCard("poison3");
+		var evil = scn.GetShadowCard("evil");
+		var evil2 = scn.GetShadowCard("evil2");
+
+		scn.MoveCompanionsToTable(aragorn, guard, gimli, legolas, boromir, sam);
+		// Aragorn bears one weapon; the Guard three cards, two of them Shadow cards.
+		scn.AttachCardsTo(aragorn, sword);
+		scn.AttachCardsTo(guard, armor2, poison3, evil2);
+		// Gimli bears two cards and no weapon.
+		scn.AttachCardsTo(gimli, armor, endurance);
+		// Legolas bears three cards, a weapon among them, all of which will be hindered.
+		scn.AttachCardsTo(legolas, bow, coat, shield);
+		// Boromir bears three Shadow cards.
+		scn.AttachCardsTo(boromir, poison, poison2, evil);
+		// Sam is Ring-bound.
+		scn.AttachCardsTo(sam, hobbitsword);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(grima);
+		scn.HinderCard(bow, coat, shield);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(bow));
+		assertAttachedTo(bow, legolas);
+		assertEquals(0, scn.GetWoundsOn(grima));
+		scn.ShadowUseCardAction(grima);
+		assertEquals(1, scn.GetWoundsOn(grima));
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, guard));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli, legolas, boromir, sam, frodo));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(guard);
+
+		// The Guard bears three: his one Free Peoples card is hindered, and neither Shadow card.
+		assertTrue(scn.IsHindered(armor2));
+		assertFalse(scn.IsHindered(poison3));
+		assertFalse(scn.IsHindered(evil2));
+		assertFalse(scn.IsHindered(guard));
+		assertFalse(scn.IsHindered(sword));
+		assertFalse(scn.IsHindered(armor));
+		assertFalse(scn.IsHindered(endurance));
+		assertFalse(scn.IsHindered(hobbitsword));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }
