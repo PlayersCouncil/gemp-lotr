@@ -339,7 +339,8 @@ def run_tests(cwd: Path, cp: str, test_class: str):
     if re.search(r"^OK \(\d+ tests?\)", out, re.M):
         return "survived", ""
     if "CardNotFoundException" in out or "Error while loading file" in out or "InvalidCardDefinitionException" in out:
-        return "invalid", ""
+        why = re.search(r"(InvalidCardDefinitionException|CardNotFoundException|Error while loading file)[:\s]*([^\n]{0,160})", out)
+        return "invalid", (why.group(1) + ": " + why.group(2).strip()) if why else ""
     failed = re.findall(r"^\d+\) (\w+)\(", out, re.M)
     # A definition that fails to load in some other way makes every test fail before it asserts anything: when
     # every test failed and no failure is an assertion, call the change unloadable rather than noticed.
