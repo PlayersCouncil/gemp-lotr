@@ -216,6 +216,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Passes stay harmless (G-0015). "Let's leave passes harmless for now." And the names: "we should really use FreepsPass and ShadowPass rather than the ...
 - No two cards of one unique title in play, whatever their types
 - A card test never relies on an exception; a check the rig cannot show parks the card [G-0000, G-0029, G-0028]
+- Rig methods ahead of their use (Ketura, 2026-10-08, night)
 
 ## Card by card
 
@@ -269,6 +270,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0144, revealing an empty hand: no pop-up, a line in the log
 - Q-0145, cardInfo is not a source of truth, and is kept true
 - Q-0146, Bill Ferny 52_75: A. "A sounds good." The erratum is built as the original 2_75 is (CantBeAssignedToSkirmish for the Free Peoples player), so ...
+- Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it bars them all. "Well, if we follow ... [F-0243]
 
 # Settled shapes (shapes.md)
 
@@ -334,6 +336,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136)
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
+- "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Make each ... until" on an ability or event is a snapshot (Q-0011, F-0144)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 

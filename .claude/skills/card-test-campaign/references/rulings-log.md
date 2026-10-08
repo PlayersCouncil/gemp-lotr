@@ -865,6 +865,12 @@ rather than moving on blithely." So: no `assertThrows` and no `try` in a card te
 is written in the ledger as `waits <check>: G-0000 ...`, a rig request is filed, and the card lands parked on it
 (G-0029 for 52_75, G-0028 for Long I Fell 54_97). *[2026-10-08, evening]*
 
+**Rig methods ahead of their use (Ketura, 2026-10-08, night).** On `FreepsCanAssignAgainst`, built for a card
+whose definition then changed: "I don't object to the function being there; there's plenty of functions which have
+obvious use which just haven't been used yet, and the occasional add is fine. I just don't want us to get
+distracted adding so much to the test rig before it's needed, because as we go through the entire code base we
+*will* encounter every kind of mechanic known to the game, so that will shake out as a matter of course."
+
 ## Card by card
 
 **2026-10-04. "A card stacked here" (F-0008).** On Deepest Delvings (101_2) the text is right and the
@@ -1090,3 +1096,12 @@ where it is met, as a `data` finding, and the tools check it. *[2026-10-08, nigh
 **Q-0146, Bill Ferny 52_75: A.** "A sounds good." The erratum is built as the original 2_75 is
 (`CantBeAssignedToSkirmish` for the Free Peoples player), so Bill is not on his list of minions to assign against,
 where the per-pair restriction listed him and refused the answer. *[2026-10-08, night]*
+
+**Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it
+bars them all.** "Well, if we follow can't > can, then Streets should I think disallow Come Down's effect from
+affecting [Rohan] allies. My intent with the ruling on Come Down was that "participation" is clearly made of a few
+sub-parts, such as "adding to archery totals" and "taking archery wounds when assigned", and Come Down is
+performing the second but not the first. However disallowing "participation" should disallow both sub-parts here,
+meaning Come Down is ineffectual." So an ally who "may not participate in archery fire" neither adds to the
+archery total nor takes archery wounds, whatever card would have him take them; the wounds go to an ally who can
+take them, or to companions (F-0243). *[2026-10-08, night]*
