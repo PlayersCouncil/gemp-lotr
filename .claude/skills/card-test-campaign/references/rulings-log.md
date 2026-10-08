@@ -817,3 +817,24 @@ presented in the client ... the information is there all the same".
   then plays; a definition needs no requirement for those. A cost that puts something else out of a later
   cost's reach (a hinder, tokens) still needs the requirement, and a real choice of who exerts is judged on
   the board as it stands.
+
+## Rulings of 2026-10-08 (Ketura, on Q-0112, Q-0113, Q-0115, Q-0116, and a code review)
+
+- **Q-0112 (F-0196), shuffling "any number" of cards from play with none chosen:** "Rest by Blind Night should
+  clearly be playable with no effect, but I can see the issue with Mumakil Commander. Let's say that on an engine
+  level, the shuffle can target 0 cards, but on a card level we'll set up Mumakil Commander to require there be a
+  mount in play first." The engine shuffles the deck with none shuffled in, as from a discard pile (Q-0102);
+  Mumakil Commander 18_71's ability is withheld until a mount of his can be spotted.
+- **Q-0113 (F-0197), Ancient Enmity 51_29 and the original 1_29, two minions losing one skirmish to the Elf:**
+  "Let's interpret the If as evaluated once as a one-time trigger as if it said 'At the end of this skirmish, if
+  at least 1 minion lost this skirmish to that Elf...', essentially the way that Decipher *wanted* Dwarven Axe to
+  work. So A for both errata and original." "If a <character> loses/wins this skirmish ..." is one effect, once,
+  however many lose.
+- **Q-0115, Galadriel 51_45:** "Decipher's ruling was on 'free', not Galadriel per se. Since the errata does not
+  say 'free' it's irrelevant. B." A Decipher ruling about a WORD does not reach an erratum that dropped the word.
+- **Q-0116, The Mirror of Galadriel 51_55:** "I approve."
+- **Code review:** "On RingBearerRule, the private filter is not the way to go. Instead add it to be a sibling of
+  Filters.ringBearer." Done: Filters.theOneRing (f7dfee394). Card-type filters a rule needs go in Filters, not in
+  the rule.
+- Every finding fixed without her word up to F-0195 is fixed with approval (2026-10-08), and every card whose
+  tests have nothing parked is approved.
