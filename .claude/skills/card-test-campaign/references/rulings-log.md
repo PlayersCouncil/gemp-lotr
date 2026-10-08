@@ -871,6 +871,12 @@ obvious use which just haven't been used yet, and the occasional add is fine. I 
 distracted adding so much to the test rig before it's needed, because as we go through the entire code base we
 *will* encounter every kind of mechanic known to the game, so that will shake out as a matter of course."
 
+**A card that must not be caught up in the rest of a board is put somewhere fixed at the start.** On a test that
+failed one run in eight because the card under test could be in the hand a random discard took from (F-0264,
+52_44): "the way I usually handle this is to put the card I care about somewhere else, like explicitly into the
+discard pile at the start of the scenario, then it is guaranteed to not interfere with the rest of it."
+*[2026-10-08, night]*
+
 ## Card by card
 
 **2026-10-04. "A card stacked here" (F-0008).** On Deepest Delvings (101_2) the text is right and the

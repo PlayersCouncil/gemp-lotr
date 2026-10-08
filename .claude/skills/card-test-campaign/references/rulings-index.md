@@ -217,6 +217,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - No two cards of one unique title in play, whatever their types
 - A card test never relies on an exception; a check the rig cannot show parks the card [G-0000, G-0029, G-0028]
 - Rig methods ahead of their use (Ketura, 2026-10-08, night)
+- A card that must not be caught up in the rest of a board is put somewhere fixed at the start [F-0264]
 
 ## Card by card
 

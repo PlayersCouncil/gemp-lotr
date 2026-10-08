@@ -176,9 +176,13 @@ def commit(argv):
         raise SystemExit("commit: name the paths to commit")
     if any(re.search(r"rulings-log\.md|shapes\.md|pitfalls\.md", p) for p in paths):
         script("lookup.py", "--index")
-        for made in (".claude/skills/card-test-campaign/references/rulings-index.md", ".claude/skills/gemp-testing/SKILL.md"):
-            if made not in paths:
-                paths.append(made)
+        # The rulings index is made from the rulings and the shapes; the pitfall index, which stands in the
+        # gemp-testing skill, from the pitfalls alone.  Each is committed only with what it is made from, so that
+        # another agent's unfinished changes to that skill are not swept into this commit.
+        made = [".claude/skills/card-test-campaign/references/rulings-index.md"] if any(re.search(r"rulings-log\.md|shapes\.md", p) for p in paths) else []
+        if any("pitfalls.md" in p for p in paths):
+            made.append(".claude/skills/gemp-testing/SKILL.md")
+        paths += [m for m in made if m not in paths]
     body = ("\n\n" + Path(body_file).read_text(encoding="utf-8").strip()) if body_file else ""
     added = git("add", "--", *paths)
     if added.returncode != 0:
