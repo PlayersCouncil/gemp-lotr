@@ -339,6 +339,7 @@ def lint_file(path: Path):
             if t.startswith("@Ignore") and not re.search(r"\b[FQ]-\d{4}\b", t):
                 add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000) or question (Q-0000) it is parked on" % name)
 
+    alias_bp = dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', raw))
     # Inside the tests.
     for name, start, end, above, ret in tests:
         body = code[start:end + 1]
@@ -364,6 +365,19 @@ def lint_file(path: Path):
                 add("error", "bookend", start, "%s: after its last play or answer, never checks what the game is waiting for" % name)
         if not is_stats and not re.search(r"\bassert\w+\s*\(", text):
             add("error", "assert", start, "%s: asserts nothing" % name)
+        # A choice from a pile goes by blueprint: with a second copy of that blueprint still in the pile the game may
+        # hand over either, and a test that then reads the named copy's zone fails at random.
+        rawtext = "\n".join(lines[start:end + 1])
+        var_alias = dict(re.findall(r'\bvar\s+(\w+)\s*=\s*scn\.Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', rawtext))
+        for chosen in re.findall(r'Choose\w*BPFromSelection\(\s*(\w+)\s*\)', text):
+            alias = var_alias.get(chosen)
+            bp = alias_bp.get(alias)
+            twins = sorted(a for a, b in alias_bp.items() if b == bp and a != alias) if bp else []
+            moved = [t for t in twins if re.search(r'GetFreepsCard\(\s*"%s"|GetShadowCard\(\s*"%s"|\b%s\b' % (t, t, t), rawtext)]
+            if twins and not moved:
+                add("warning", "same-blueprint", start, "%s: %s is chosen by blueprint, and %s %s the same blueprint (%s): unless "
+                    "the twin is out of that pile, either copy may be taken and a reading of %s's zone fails at random"
+                    % (name, chosen, ", ".join(twins), "has" if len(twins) == 1 else "have", bp, chosen))
 
     if card is not None and g.sheet_for(card_id)[0] is not None:
         import reconcile
