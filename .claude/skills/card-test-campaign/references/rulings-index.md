@@ -43,6 +43,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A Decipher ruling on the original card does not reach an erratum that rewrote the sentence, by default [Q-0111]
 - Q-0115, Galadriel 51_45: "Decipher's ruling was on 'free', not Galadriel per se. Since the errata does not say 'free' it's irrelevant. B." A Decipher ...
 - Northern Ithilien's errata 57_359 [F-0139]
+- A backslash in a title, lore or game text is no fault
 
 ## Formats
 
@@ -129,6 +130,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Limit once per site" gets an engine counter [F-0146]
 - Sixth Level 8_44 "(limit 1)" is built as a limit on uses
 - Morannon 5_102 counts by the turn [F-0157]
+- A discard the Free Peoples player chooses is not forced (F-0205)
 
 ## Costs, and playing cards from piles and hands
 
@@ -210,6 +212,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Rig requests agreed (2026-10-05) [G-0007, G-0008, G-0009, G-0010, G-0011]
 - Rig requests agreed. G-0012 (an optional trigger chosen by card is matched exactly), G-0013 (the methods about revealed cards: all three parts) and ... [G-0014]
 - Passes stay harmless (G-0015). "Let's leave passes harmless for now." And the names: "we should really use FreepsPass and ShadowPass rather than the ...
+- No two cards of one unique title in play, whatever their types
 
 ## Card by card
 
@@ -228,6 +231,22 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Driven By Her Own Cruel Will 103_105 with no Hobbit strengthened hinders no minion [Q-0100]
 - Q-0116, The Mirror of Galadriel 51_55
 - Repeated deck-validation lines are fine (F-0112)
+- Q-0130, Galadriel, Lady of the Golden Wood 53_17: A
+- F-0220, Song of Durin 53_5: fix
+- Q-0129, A Royal Welcome 53_4: A
+- Q-0127, Filibert Bolger 52_101: B
+- Q-0128, O Elbereth! Gilthoniel! 52_108
+- Q-0126, Foul Things 52_59: B. "The Foul Things errata is unique in that it plays from discard in a way that can target itself, which I don't think ...
+- Q-0125, Realm of Dwarrowdelf 52_12: A
+- Q-0124, Beneath the Mountains 52_1 (and Ever My Heart Rises 4_46 / 54_46): B
+- Q-0123, "killed by" (Orc Butchery 51_265)
+- Q-0122, The Number Must Be Few 51_260
+- Q-0121, Úlairë Nertëa 51_234: B
+- Q-0120, Savagery to Match Their Numbers 51_139: B
+- Q-0118, Armor 51_92, Coat of Mail 51_101, Great Shield 51_107: A
+- Q-0119 and F-0200, Boromir's Cloak 51_98: 1B, and the Shadow restriction kept
+- Q-0117, Sleep, Caradhras 51_84
+- Findings through F-0210 approved
 
 # Settled shapes (shapes.md)
 

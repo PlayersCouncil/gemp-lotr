@@ -168,6 +168,10 @@ say 'free' it's irrelevant. B." A Decipher ruling about a WORD does not reach an
 **Northern Ithilien's errata 57_359** existed only to work around the engine fault now fixed and will be
 reverted once F-0139 is deployed: its limit is not a concern. *[2026-10-07, later afternoon]*
 
+**A backslash in a title, lore or game text is no fault.** "This is due to that being the shorthand used in our
+nanDECK script for newlines. Anywhere that it's found in titles, lore, or game text, it can be replaced with a
+space; it doesn't need its own finding report." *[2026-10-08, afternoon]*
+
 ## Formats
 
 **2026-10-04. Formats and correctness.** Formats are by and large a table-validation concept: players may not
@@ -495,6 +499,14 @@ sake, but I agree that it's likely a +1 situation." It is withheld at its limit.
 White Council 101_18 "(limit 2 per phase)" stay limits on what the effect gives. *[2026-10-07, evening]*
 
 **Morannon 5_102 counts by the turn** (F-0157): "Per turn is the correct interpretation." *[2026-10-07, night]*
+
+**A discard the Free Peoples player chooses is not forced (F-0205).** "So this might need to have those "forced"
+fields scrutinized on the various topdeck discard effects. There is a ruling for Courteous Halfling in Section
+Three: "This card only prevents Shadow cards that make you discard from hand or draw deck. If a Shadow card gives
+you a choice, you may choose to discard", and then gives Dunlending Rampager as an example. Since Rager and many
+other errata offer a choice, the discard is not forced; Freeps could instead choose the other bad effect, and so
+CH doesn't help them in that case." So `forced: false` is right where the discard is one of the Free Peoples
+player's options, and a Shadow card that makes him discard from hand or deck with no choice is `forced: true`. *[2026-10-08, afternoon]*
 
 ## Costs, and playing cards from piles and hands
 
@@ -828,6 +840,13 @@ approved nonetheless"). *[2026-10-05, afternoon]*
 FreepsPass and ShadowPass rather than the (needlessly) wordier FreepsPassCurrentPhaseAction /
 ShadowPassCurrentPhaseAction." Tests are written with `FreepsPass()` and `ShadowPass()`. *[2026-10-05, night]*
 
+**No two cards of one unique title in play, whatever their types.** On a second Boromir cheated in beside the
+first to tell "the bearer" from "a Boromir": "Go ahead and remove that malformed board state. Also, Elrond being
+unique means you have to choose one type or the other, you still can't have both just because they both exist.
+The cheating functions are for us to short-circuit more-or-less legitimate setups, but putting 2 unique cards on
+the table is getting too far into the weeds." And on not building such boards only to tell apart two definitions
+that differ nowhere else: "This is good." *[2026-10-08, afternoon]*
+
 ## Card by card
 
 **2026-10-04. "A card stacked here" (F-0008).** On Deepest Delvings (101_2) the text is right and the
@@ -897,3 +916,73 @@ skirmish" is the strengthened Hobbit's. *[2026-10-07, later afternoon]*
 **Q-0116, The Mirror of Galadriel 51_55:** "I approve." *[2026-10-08]*
 
 **Repeated deck-validation lines are fine (F-0112).** Repeated lines in deck validation errors are "fine as-is" (F-0112): not a finding. *[late on 2026-10-06]*
+
+**Q-0130, Galadriel, Lady of the Golden Wood 53_17: A.** "A was intended, yes. This card was originally banned in
+Expanded due to her ability to easily play forests on that path, and so the errata specifically is keeping its
+FOTR/Movie usage while supressing its ability to spam the Shadows path (which uses unnumbered sites), which should
+answer that sub-question." *[2026-10-08, afternoon]*
+
+**F-0220, Song of Durin 53_5: fix.** "Yup, since parentheticals are required, the discard is mandatory (and you
+would always prefer to permanently remove 2 conditions over temporarily hindering 1, so it's not strategically
+limiting)." *[2026-10-08, afternoon]*
+
+**Q-0129, A Royal Welcome 53_4: A.** "If the ally has no damage, then that shouldn't be offered, for the reasons
+you point out. A." *[2026-10-08, afternoon]*
+
+**Q-0127, Filibert Bolger 52_101: B.** "So long as it's marking it as noeffect, we'll go with B." *[2026-10-08, afternoon]*
+
+**Q-0128, O Elbereth! Gilthoniel! 52_108:** "Correctly surmised; the errata is about making the ruling
+unnecessary." *[2026-10-08, afternoon]*
+
+**Q-0126, Foul Things 52_59: B.** "The Foul Things errata is unique in that it plays from discard in a way that can
+target itself, which I don't think applies to any other event. The infinite loop isn't common enough to guard
+against in the engine, and there's no strategic need to play the same card over and over like that, so we'll leave
+this exclusion on the card itself. B." *[2026-10-08, afternoon]*
+
+**Q-0125, Realm of Dwarrowdelf 52_12: A.** "Heh, I normally have ruled that it's useful to the player to inform them
+that their deck is empty, but Realm of Dwarrowdelf is only used in a particular self-mill deck that purposefully
+discards a hundred cards off the top, and so such players are very, very aware of how many cards they have left.
+In this case we can go with A." *[2026-10-08, afternoon]*
+
+**Q-0124, Beneath the Mountains 52_1 (and Ever My Heart Rises 4_46 / 54_46): B.** "Yeah, this "how many times" is an
+intentional QOL addition so that their opponent is not sitting there for 10 minutes while they discard their deck
+3 cards at a time, and what's worse, having to manually click pass in between every iteration. Definitely keep B.
+However, the reasoning behind it is unique to these three cards (ROD, BTM, EMHR), due to the deck that they are
+used in." *[2026-10-08, afternoon]*
+
+**Q-0123, "killed by" (Orc Butchery 51_265):** "Yeah, this one is tricky without an official definition of "killed
+by". I think the current loose interpretation is fine, so let's stick with B." The loose interpretation is the
+one as built (labelled A in the question); kept as built, letter to be confirmed. *[2026-10-08, afternoon]*
+
+**Q-0122, The Number Must Be Few 51_260:** "B. The intent here is to work around Decipher's dumbass ruling that move
+limit modifiers are permanent, even if the card is discarded (or heaven forbid, discarded and replayed multiple
+times in the same turn). So in effect, it should make this behave as if it were a less fraught effect, such as
+"men are strength +1", which obviously turns off and back on whenever the companion boundary is crossed." The
+behaviour described (off and back on) is the one as built (labelled A in the question); kept as built, letter to
+be confirmed. *[2026-10-08, afternoon]*
+
+**Q-0121, Úlairë Nertëa 51_234: B.** "This is a poor implementation, yeah; B is definitely an improvement." *[2026-10-08, afternoon]*
+
+**Q-0120, Savagery to Match Their Numbers 51_139: B.** "So Savagery set the high bar for power level in FOTR block:
+5 companions was a boundary almost no other cards had, and it won you not just *this* skirmish but the *next* one
+as well. The intent of the errata was to make it so it was not 2 automatic wins by intentionally only getting +4
+total the first skirmish and +2 on the second. B." *[2026-10-08, afternoon]*
+
+**Q-0118, Armor 51_92, Coat of Mail 51_101, Great Shield 51_107: A.** "Yup, Man Allies count. The original was down
+to Decipher's preferred templating which used race as a shorthand if the culture was mono-race--a decision that
+came back to bite them as soon as [Rohan] was released and suddenly a bunch of [Gondor] cards were able to go on
+that culture, most notably Flaming Brand. Our errata leans into this rather than away, permitting [Gondor] Wraiths
+to use them (since they're from the time period depicted on the card). A. As for the non-shadow restriction, yes,
+Strange-looking Men could move it to a Shadow Man." *[2026-10-08, afternoon]*
+
+**Q-0119 and F-0200, Boromir's Cloak 51_98: 1B, and the Shadow restriction kept.** "As the author of the errata, I
+*meant* "skirmish event or skirmish special ability". However what I *wrote* does permit for Response actions as
+well. Given that it requires an engine-level alteration, let's just go with 1B for now. Heh, for question 2, it
+was meant to go against Shadow abilities, and would be pointless to block one's own intentionally-used ability
+that presumably helps Boromir. Let's keep the Shadow restriction and I'll update the wording." *[2026-10-08, afternoon]*
+
+**Q-0117, Sleep, Caradhras 51_84:** "Yup, that's a more general ruling about activity in a nascent game that wasn't
+clear yet that this wouldn't discard your own inactive Shadow conditions. One of the only actual Decipher
+"clarifications" that were actually that instead of an errata in disguise." *[2026-10-08, afternoon]*
+
+**Findings through F-0210 approved.** "All pending Findings through F-0210 have my approval." *[2026-10-08, afternoon]*
