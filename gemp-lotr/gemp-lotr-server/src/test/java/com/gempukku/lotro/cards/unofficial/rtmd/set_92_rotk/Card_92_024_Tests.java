@@ -177,9 +177,8 @@ public class Card_92_024_Tests
 
 		// Play Nertëa — triggers the "play unique wraith minion from discard" effect
 		scn.ShadowPlayCard(nertea);
-		// Accept the optional trigger
+		// Accept the optional trigger (one offer: since Q-0121 the play is not asked a second time)
 		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseYes();
 		// Gothmog should auto-play as the only valid unique wraith minion in discard
 		assertInZone(Zone.SHADOW_CHARACTERS, gothmog);
 		// Enquëa should still be in discard — no longer unique
