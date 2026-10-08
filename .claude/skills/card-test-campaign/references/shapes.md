@@ -56,6 +56,8 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **A choice made ahead of a preventable exert loses the exert's own check (F-0206).** "Exert a companion. The Free Peoples player may ... to prevent this" built as a `chooseActiveCards` with `select: choose(companion)` followed by a preventable `exert` of the memory offers exhausted companions, and with every companion exhausted the choice is still put; the `exert` effect alone would have offered only those able to exert. Write `choose(companion,canExert)` in the choice (Uruk Soldier 51_154, fixed). A definition of that shape without it is a finding, fixable at landing: test an exhausted companion beside the valid ones, and a board on which none can exert (nothing chosen, the prevention not asked, Q-0114).
 
+**"Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219).** A spot pays nothing, so Q-0034's exception for "situations with a cost" does not cover it: where the effect would do nothing (nothing to heal, an empty draw deck, nobody to exhaust) the offer is withheld by a requirement, and a definition without one is a finding, fixable at landing. A spot that can never fail (Elrond spotting himself as an ally of home 3) gates nothing either. Events stay offered whatever they do (Q-0034).
+
 **An "or" between two cost-to-effect halves (Q-0034).** An "or" between two cost-to-effect halves ("exert a Dwarf to heal an Elf, or exert an Elf to heal a Dwarf") is not CR 4.2's "choose one of two actions you are fully capable of performing": either half may be used though it will do nothing while the other could be carried out in full (Q-0034). Assert that; not a question.
 
 ## Limits
