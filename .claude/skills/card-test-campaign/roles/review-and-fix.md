@@ -89,6 +89,12 @@ an author may touch, what to do when a test fails and how findings and questions
 to you.
 
 - **Change what is at fault and nothing else.** Do not restyle, rename or reorder what you did not fault.
+- **No board outside play** (Ketura, 2026-10-08). A gap that only a board the game never reaches could close is
+  no gap: say in Notes that the two definitions cannot differ in play. Never give a card a race, culture, type or
+  side no printed card of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made
+  [dunland]; a companion made a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), and never put two
+  cards of one unique title in play. Giving a card another culture for race against culture (F-0019) is ruled
+  and stays; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
 - **A gap** gets the candidate, reading or test that closes it. The one mistake that proved the gap must be
   noticed afterwards: run it again.
 - **A fix that changes what a test claims changes the ledger too.** Keep the claim lines, `Findings:`,
