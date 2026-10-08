@@ -40,26 +40,44 @@
 					memory: discardedCount
 				}
 				{
-					type: Choice
-					player: Shadow
-					texts: [
-						Discard {discardedCount} Shadow conditions
-						Make your opponent hinder {discardedCount} of your Shadow conditions
-					]
-					effects: [
+					// The question is not put when neither branch has anything to act on (F-0116).
+					type: If
+					check: [
 						{
-							type: Discard
-							player: Shadow
-							count: memory(discardedCount)
-							select: choose(side(Shadow),condition)
+							type: isGreaterThan
+							firstNumber: {
+								type: forEachInMemory
+								memory: discardedCards
+							}
+							secondNumber: 0
 						}
 						{
-							type: Hinder
-							player: Free Peoples
-							count: memory(discardedCount)
-							select: choose(side(Shadow),condition)
+							type: CanSpot
+							filter: side(Shadow),condition
 						}
 					]
+					true: {
+						type: Choice
+						player: Shadow
+						texts: [
+							Discard {discardedCount} Shadow conditions
+							Make your opponent hinder {discardedCount} of your Shadow conditions
+						]
+						effects: [
+							{
+								type: Discard
+								player: Shadow
+								count: memory(discardedCount)
+								select: choose(side(Shadow),condition)
+							}
+							{
+								type: Hinder
+								player: Free Peoples
+								count: memory(discardedCount)
+								select: choose(side(Shadow),condition)
+							}
+						]
+					}
 				}
 			]
 		}
