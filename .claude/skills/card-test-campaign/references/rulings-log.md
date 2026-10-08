@@ -995,3 +995,41 @@ and takes no wound. *[2026-10-08, later afternoon]*
 **Q-0133, Bill the Pony 53_106 (and Asfaloth 1_31, Black Steed 1_208, 3_106): A.** "But it is a continuous effect,
 same as the Watcher. A." And the official ruling on 3_106 (now on the wiki): "When the fellowship moves with Bill the
 Pony to an underground site, the Shadow number of that site is reduced before Bill the Pony is discarded." *[2026-10-08, later afternoon]*
+
+**Q-0138, Gríma, Wormtongue 54_154: new text.** "Ah, good point, it should read "Exert Grima to spot an unbound
+companion. Hinder a weapon borne by that companion (or all Free Peoples cards borne by them if they bear 3 or more
+cards)". I will update the wording. When spotting a companion, restrict the spotting to companions either bearing a
+weapon or 3+ cards and at least one unhindered Free Peoples card, just for QOL purposes." *[2026-10-08, evening]*
+
+**Reports that need no answer are findings, not questions (Q-0139).** "If no answer is needed, it should be an F not a
+Q. But I appreciate the report." A Decipher ruling not carried over (Q-0111 default B) and other report-only items are
+filed as findings (kind ruling, not-a-bug), not in questions.md. *[2026-10-08, evening]*
+
+**Q-0136, Come Down 54_146: A.** "Oh ho ho, very nice find. A is the RAW way to handle this." Archery wounds the allies
+cannot take go to companions (CR 4.2 "instead"). *[2026-10-08, evening]*
+
+**Q-0137, Come Down 54_146: A.** "Come Down doesn't say "participate in archery fire", it just says "take wounds from
+archery fire", that implies to me that they don't get to contribute, just be on the receiving end. The exiting
+modifiers may not cover this and may need an additional one added. A." *[2026-10-08, evening]*
+
+**Q-0134, "(limit (N))" on a count: the card's limit for the whole phase; Legolas 54_73 loses his.** "The intent with
+this one was to limit the per-invocation amount at (2), not a cumulative phase limit, but based on what we've
+established, this wording is far more like the cumulative +X limit than the invocation limit. Let's remove the limit
+altogether. I think the only reason for its adding was as a band-aid in Expanded, and our second iteration altered how
+this works and doesn't really need the limit anymore. Plus a limit of (2) twilight removed is materially different
+from a +2 cost increase, where a limit doesn't run afoul of the cumulative limit stuff. I will get a new errata
+revision issued." So "(limit (N))" and "(limit -N)" read as the card's limit for the whole phase (as "(limit +N)",
+F-0135), and Legolas, Dauntless Hunter has no limit. *[2026-10-08, evening]*
+
+**Q-0135, Legolas 54_73:** "good." *[2026-10-08, evening]*
+
+**F-0235, Ever My Heart Rises 54_46: keep.** "It doesn't need a formal window, no, because on the game board the 6
+cards are going to be stacked visually, where they can be inspected, and also seen in the log. The window would be a
+useless click, as you surmised." *[2026-10-08, evening]*
+
+**Q-0140, Cavern Entrance 54_355: A** (a site's "you" is each player). *[2026-10-08, evening]*
+
+**F-0239, Gríma, Chief Counselor 55_51: new text.** "I will issue a new text; change the text and evaluate it as:
+"Exert Gríma to spot an unbound companion. Hinder a condition borne by that companion (or hinder that companion and
+all Free Peoples cards they bear if you can spot 4 Free Peoples cultures)."" *[2026-10-08, evening]*
+

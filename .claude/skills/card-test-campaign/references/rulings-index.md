@@ -250,6 +250,15 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0131, Uruk Raider 53_74: A. ""The dead pile" refers to the current Free Peoples dead pile, same as how threats only count the current Free Peoples ...
 - Q-0132, Hand of Sauron 53_90: A
 - Q-0133, Bill the Pony 53_106 (and Asfaloth 1_31, Black Steed 1_208, 3_106): A
+- Q-0138, Gríma, Wormtongue 54_154: new text
+- Reports that need no answer are findings, not questions (Q-0139) [Q-0111]
+- Q-0136, Come Down 54_146: A. "Oh ho ho, very nice find. A is the RAW way to handle this." Archery wounds the allies cannot take go to companions (CR ...
+- Q-0137, Come Down 54_146: A. "Come Down doesn't say "participate in archery fire", it just says "take wounds from archery fire", that implies to me ...
+- Q-0134, "(limit (N))" on a count: the card's limit for the whole phase; Legolas 54_73 loses his [F-0135]
+- Q-0135, Legolas 54_73: "good." [2026-10-08, evening]
+- F-0235, Ever My Heart Rises 54_46: keep
+- Q-0140, Cavern Entrance 54_355: A
+- F-0239, Gríma, Chief Counselor 55_51: new text
 
 # Settled shapes (shapes.md)
 
