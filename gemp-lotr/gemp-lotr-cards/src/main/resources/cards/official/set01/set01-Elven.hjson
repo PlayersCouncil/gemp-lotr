@@ -30,6 +30,9 @@
 						against: memory(chosenElf)
 						memorize: losingMinion
 					}
+					// One effect however many minions lose this skirmish to that Elf: "as if it said 'At the end of
+					// this skirmish, if at least 1 minion lost this skirmish to that Elf...'" (Ketura on Q-0113, F-0197).
+					limitPerPhase: 1
 					effect: {
 						type: discardCardAtRandomFromHand
 						hand: ownerFromMemory(losingMinion)

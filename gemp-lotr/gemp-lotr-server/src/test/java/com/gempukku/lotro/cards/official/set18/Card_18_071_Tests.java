@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_18_071_Tests
@@ -18,8 +19,10 @@ public class Card_18_071_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_71");
-					// put other cards in here as needed for the test case
+					put("commander", "18_71");
+					put("beast", "17_40");      // Beast of War: [men] mount, bearer must be a [men] Man
+					put("lemenya", "1_232");    // Úlairë Lemenya: a Nazgûl with no text below 2 burdens
+					put("steed", "1_208");      // Black Steed: a [ringwraith] mount, bearer must be a Nazgûl
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_18_071_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("commander");
 
 		assertEquals("Mûmakil Commander", card.getBlueprint().getTitle());
 		assertEquals("Bold and Grim", card.getBlueprint().getSubtitle());
@@ -62,18 +65,72 @@ public class Card_18_071_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MumakilCommanderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityIsNotOfferedWithoutAMenMountOfHisInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var commander = scn.GetShadowCard("commander");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var steed = scn.GetShadowCard("steed");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(commander, lemenya);
+		// A mount of his, but not a [men] one.
+		scn.AttachCardsTo(lemenya, steed);
 
-		assertEquals(5, scn.GetTwilight());
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		// Ketura on Q-0112: the ability requires a mount in play, since with none it would only shuffle the deck.
+		assertFalse(scn.ShadowActionAvailable(commander));
+	}
+
+	@Test
+	public void RegroupAbilityShufflesAnyNumberOfHisMenMountsIntoHisDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var commander = scn.GetShadowCard("commander");
+		var beast = scn.GetShadowCard("beast");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var steed = scn.GetShadowCard("steed");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(commander, lemenya);
+		scn.AttachCardsTo(commander, beast);
+		scn.AttachCardsTo(lemenya, steed);
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(commander));
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowDeck = scn.GetShadowDeckCount();
+
+		// "Any number": none at all is a choice, and the deck is shuffled all the same (Ketura on Q-0112).
+		scn.ShadowUseCardAction(commander);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(beast));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(steed));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCards();
+
+		assertEquals(shadowShuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertEquals(commander, beast.getAttachedTo());
+		assertEquals(lemenya, steed.getAttachedTo());
+
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(commander));
+		scn.ShadowUseCardAction(commander);
+		scn.ShadowChooseCards(beast);
+
+		assertInZone(Zone.DECK, beast);
+		assertEquals(shadowDeck + 1, scn.GetShadowDeckCount());
+		assertEquals(shadowShuffles + 2, scn.GetShadowDeckShuffleCount());
+		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
+		assertEquals(lemenya, steed.getAttachedTo());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

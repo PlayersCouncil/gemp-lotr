@@ -3,14 +3,17 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_04_054_Tests
@@ -20,8 +23,7 @@ public class Card_04_054_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_54");
-					// put other cards in here as needed for the test case
+					put("rest", "4_54");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_04_054_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("rest");
 
 		assertEquals("Rest by Blind Night", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +60,31 @@ public class Card_04_054_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RestbyBlindNightTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CanBePlayedWithNoDwarvenConditionInPlayAndShufflesTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var rest = scn.GetFreepsCard("rest");
+		scn.MoveCardsToHand(rest);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// No minions: the game goes straight to regroup.
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(0, scn.GetTwilight());
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
+
+		// Ketura on Q-0112: "Rest by Blind Night should clearly be playable with no effect"; the shuffle of no
+		// cards still shuffles the deck, as from a discard pile (Q-0102).
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(rest));
+		scn.FreepsPlayCard(rest);
+
+		assertInZone(Zone.DISCARD, rest);
+		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

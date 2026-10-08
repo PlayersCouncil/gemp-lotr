@@ -32,7 +32,7 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **"Choose X ... (or you may play it ...)" plays the card chosen (F-0152).** RULED 2026-10-07 (F-0152, Ominous Sky 103_97, fixed): "choose X ... (or you may play it ...)" plays the card chosen; a definition that asks a second time which card is a finding, fixable at landing.
 
-**Ruled 2026-10-08 and being built by engine pass 15 (F-0197, F-0196, Q-0115).** RULED 2026-10-08, being built (engine pass 15), park on the number: F-0197 (Q-0113): "If a minion loses this skirmish to that <character>, <effect>" is ONE effect however many minions lose (read as "at the end of this skirmish, if at least 1 minion lost ..."); the game still makes it once per minion. F-0196 (Q-0112): a shuffle FROM PLAY of "any number" with none chosen will shuffle the deck all the same (the game does nothing today); Mumakil Commander 18_71 will require a mount of his to be spotted. Q-0115: a Decipher ruling about a WORD ("free") does not reach an erratum that dropped the word.
+**Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115).** F-0197 (Q-0113): "If a minion loses this skirmish to that <character>, <effect>" is ONE effect however many minions lose (read as "at the end of this skirmish, if at least 1 minion lost ..."); built with `limitPerPhase: 1` on the `addTrigger` (1_29, 51_29), and a definition of that shape without it is a finding. F-0196 (Q-0112): a shuffle FROM PLAY of "any number" with none chosen shuffles the deck all the same; Mumakil Commander 18_71 requires a [men] mount of his to be spotted. Assert both; park nothing on them. Q-0115: a Decipher ruling about a WORD ("free") does not reach an erratum that dropped the word.
 
 ## What is offered and what is asked
 

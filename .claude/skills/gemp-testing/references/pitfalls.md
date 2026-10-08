@@ -329,9 +329,10 @@ name): two copies cannot be told apart, and a card the log names for another rea
 of the event being played is among the cards taken, set the mark after the play. Both readers fail the test if no
 mark was set.
 
-**A shuffle from a discard pile into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from
-your discard pile into your draw deck" and choosing none, or with nothing there to choose, reads one more
-shuffle of that deck and its count unchanged; declining the offer reads none.
+**A shuffle into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from your discard pile
+into your draw deck", or "shuffle any number of ... in play into your draw deck", and choosing none, or with
+nothing there to choose, reads one more shuffle of that deck and its count unchanged; declining an offer reads
+none (Q-0102, Q-0112).
 
 ## Hinder, The One Ring and Maps
 

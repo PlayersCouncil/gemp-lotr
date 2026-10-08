@@ -73,6 +73,13 @@ public class ShuffleCardsFromPlayIntoDeckEffect extends AbstractEffect {
             game.getGameState().sendMessage(getAppendedNames(toShuffleIn) + " " + GameUtils.be(toShuffleIn) + " shuffled into " + _playerDeck + " deck");
 
             cardsShuffledCallback(toShuffleIn);
+        } else {
+            // The deck is shuffled though nothing is shuffled into it, as from a discard pile (Q-0102): "on an
+            // engine level, the shuffle can target 0 cards" (Ketura on Q-0112; F-0196).  A card that should not
+            // be used with nothing to shuffle in says so with a requirement of its own.
+            game.getGameState().shuffleDeck(_playerDeck);
+
+            game.getGameState().sendMessage(_playerDeck + " deck is shuffled with no card shuffled into it");
         }
 
         return new FullEffectResult(toShuffleIn.size() == _cards.size());

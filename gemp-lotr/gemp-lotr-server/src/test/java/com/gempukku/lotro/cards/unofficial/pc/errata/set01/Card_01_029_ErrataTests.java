@@ -8,7 +8,6 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -465,7 +464,6 @@ public class Card_01_029_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0113: two minions losing the one skirmish to that Elf bring two heals; \"if a minion loses\" read as one")
 	public void TwoMinionsLosingTheOneSkirmishToThatElfBringOneHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

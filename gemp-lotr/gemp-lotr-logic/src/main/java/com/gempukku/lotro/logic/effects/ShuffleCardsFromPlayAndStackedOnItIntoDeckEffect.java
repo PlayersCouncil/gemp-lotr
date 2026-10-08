@@ -16,14 +16,20 @@ import java.util.TreeMap;
 /**
  * Shuffles cards in play, and every card stacked on them, into draw decks: each card into its owner's, whoever
  * owns the card it was stacked on (a Free Peoples possession stacked on the Shadow player's Twisted Tales goes
- * back to the Free Peoples player's deck).  Each deck that receives a card is shuffled once.
+ * back to the Free Peoples player's deck).  Each deck that receives a card is shuffled once.  With no card to
+ * shuffle in, the deck of the player the effect is for is shuffled all the same (Ketura on Q-0112; F-0196).
  */
 public class ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect extends AbstractEffect {
     private final PhysicalCard _source;
+    private final String _playerDeck;
     private final Collection<? extends PhysicalCard> _cards;
 
-    public ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(PhysicalCard source, Collection<? extends PhysicalCard> cards) {
+    /**
+     * @param playerDeck the deck shuffled when no card is shuffled in: that of the player the effect is for
+     */
+    public ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(PhysicalCard source, String playerDeck, Collection<? extends PhysicalCard> cards) {
         _source = source;
+        _playerDeck = playerDeck;
         _cards = cards;
     }
 
@@ -76,6 +82,12 @@ public class ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect extends AbstractEf
             }
 
             cardsShuffledCallback(toShuffleIn);
+        } else {
+            // "On an engine level, the shuffle can target 0 cards" (Ketura on Q-0112; F-0196), as from a discard
+            // pile (Q-0102).
+            game.getGameState().shuffleDeck(_playerDeck);
+
+            game.getGameState().sendMessage(_playerDeck + " deck is shuffled with no card shuffled into it");
         }
 
         return new FullEffectResult(inPlay.size() == _cards.size());

@@ -247,7 +247,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095)
 - "Wound X twice" written as an exertion (F-0148)
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
-- Ruled 2026-10-08 and being built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
+- Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
 
 ## What is offered and what is asked
 
