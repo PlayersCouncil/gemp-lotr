@@ -206,9 +206,8 @@ public class Card_03_004_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(thrarin));
 		assertEquals(0, scn.GetWoundsOn(grimir));
 
-		assertTrue(scn.FreepsChoiceAvailable("strength"));
-		assertTrue(scn.FreepsChoiceAvailable("damage"));
-		scn.FreepsChoose("strength");
+		// Thrarin has no damage bonus, so his strength is added without asking (Q-0129)
+		assertFalse(scn.FreepsChoiceAvailable("damage"));
 
 		// Dwarf Guard is not in a skirmish; the Ring-bound Dwarf Guard, the Dwarf Aragorn and the allies are out
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard));
@@ -269,7 +268,6 @@ public class Card_03_004_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0129: an ally with no damage bonus leaves only the strength branch; the game still offers 'Add damage bonuses'")
 	public void SkirmishActionWithAnAllyThatHasNoDamageBonusAddsItsStrengthWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -322,7 +320,6 @@ public class Card_03_004_ErrataTests
 
 		scn.FreepsUseCardAction(welcome);
 		scn.FreepsChooseCard(thrarin);
-		scn.FreepsChoose("strength");
 		scn.FreepsChooseCard(gimli);
 		// 6 + Thrarin's 4
 		assertEquals(10, scn.GetStrength(gimli));
@@ -347,7 +344,6 @@ public class Card_03_004_ErrataTests
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.FreepsActionAvailable(welcome));
 		scn.FreepsUseCardAction(welcome);
-		scn.FreepsChoose("strength");
 		scn.FreepsChooseCard(guard);
 		// 4 + Grimir's 3
 		assertEquals(7, scn.GetStrength(guard));

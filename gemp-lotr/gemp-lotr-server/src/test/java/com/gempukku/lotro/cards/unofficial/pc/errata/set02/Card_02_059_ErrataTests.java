@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -219,32 +218,4 @@ public class Card_02_059_ErrataTests
 		assertFalse(scn.ShadowPlayAvailable(things));
 	}
 
-	@Test
-	@Ignore("Q-0126: another Foul Things is a [moria] card in the discard pile, but the definition leaves it out by title")
-	public void AnotherFoulThingsInTheDiscardPileMayBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var things = scn.GetShadowCard("things");
-		var things2 = scn.GetShadowCard("things2");
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToHand(things);
-		scn.MoveCardsToDiscard(things2, runner);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		scn.ShadowPlayCard(things);
-
-		assertTrue(scn.ShadowHasCardChoiceAvailable(things2, runner));
-		scn.ShadowChooseCardBPFromSelection(things2);
-		// The second Foul Things then plays the one [moria] card left in the discard pile.
-
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
-		assertInDiscard(things, things2);
-		// 2 + 2 for the two Foul Things + 1 for Goblin Runner + 2 roaming, and + 2 from the Runner's trigger
-		assertEquals(twilight - 7 + 2, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
 }

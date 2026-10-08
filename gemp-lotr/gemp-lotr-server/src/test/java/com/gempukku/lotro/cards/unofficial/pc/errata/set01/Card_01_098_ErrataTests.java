@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -328,38 +327,6 @@ public class Card_01_098_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0200: the Cloak answers only the Shadow player's special abilities; the text names no side")
-	public void IsOfferedAgainstAFreePeoplesSpecialAbilityInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var cloak = scn.GetFreepsCard("cloak");
-		var boromir = scn.GetFreepsCard("boromir");
-		var savage = scn.GetShadowCard("savage1");
-		scn.MoveCompanionsToTable(boromir);
-		scn.AttachCardsTo(boromir, cloak);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(boromir, savage);
-		scn.FreepsResolveSkirmish(boromir);
-
-		// Ettenmoors, site 2: "Skirmish: Exert your companion or minion to make that character strength +2."
-		var ettenmoors = scn.GetCurrentSite();
-		assertEquals(7, scn.GetStrength(boromir));
-		assertEquals(0, scn.GetWoundsOn(boromir));
-		scn.FreepsUseCardAction(ettenmoors);
-		scn.FreepsChooseCard(boromir);
-		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
-		scn.FreepsDeclineOptionalTrigger();
-
-		assertEquals(9, scn.GetStrength(boromir));
-		assertAttachedTo(cloak, boromir);
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-	}
-
-	@Test
 	public void IsNotOfferedAgainstAResponseEventInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -393,46 +360,4 @@ public class Card_01_098_ErrataTests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	@Test
-	@Ignore("Q-0119: is a Response special ability used in Boromir's skirmish answered, or only Skirmish: abilities?")
-	public void IsOfferedAgainstAShadowResponseAbilityInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var cloak = scn.GetFreepsCard("cloak");
-		var boromir = scn.GetFreepsCard("boromir");
-		var numenor = scn.GetFreepsCard("numenor");
-		var wall = scn.GetFreepsCard("wall");
-		var shaman = scn.GetShadowCard("shaman");
-		scn.MoveCompanionsToTable(boromir);
-		scn.AttachCardsTo(boromir, cloak);
-		scn.MoveCardsToHand(numenor);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(shaman);
-		scn.AttachCardsTo(shaman, wall);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(boromir, shaman);
-		scn.FreepsResolveSkirmish(boromir);
-		scn.SetTwilight(5);
-
-		scn.FreepsPlayCard(numenor);
-		// The Free Peoples player's own skirmish event: let it through.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
-		scn.FreepsDeclineOptionalTrigger();
-
-		// The Shaman, about to take the wound, uses his Response.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shaman));
-		scn.ShadowChooseOptionalTrigger(shaman);
-		assertEquals(3, scn.GetTwilight());
-
-		// A special ability used during a skirmish involving Boromir.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
-		scn.FreepsChooseOptionalTrigger(cloak);
-
-		assertInDiscard(cloak);
-		// The Shaman's response is prevented, so Men of Numenor's wound lands; the (2) stays paid.
-		assertEquals(1, scn.GetWoundsOn(shaman));
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-	}
 }

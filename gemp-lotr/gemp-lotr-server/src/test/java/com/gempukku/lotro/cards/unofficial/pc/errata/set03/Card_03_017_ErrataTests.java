@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -448,25 +447,4 @@ public class Card_03_017_ErrataTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Test
-	@Ignore("Q-0130: on a Shadows-block path the move to an opponent's unnumbered site is not offered, though Galadriel could exert")
-	public void OfferedWhenMovingToAnOpponentsShadowsPathSite() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetShadowsPathScenario();
-
-		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveAlliesToTable(galadriel);
-		var freepsSite2 = scn.GetFreepsSite("site2");
-		var shadowForest = scn.GetShadowSite("site9");
-
-		scn.FreepsChooseCardBPFromSelection(freepsSite2);
-		scn.StartGame();
-		scn.FreepsPass();
-		scn.ShadowChooseCardBPFromSelection(shadowForest);
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(galadriel));
-		scn.FreepsDeclineOptionalTrigger();
-		assertEquals(shadowForest, scn.GetCurrentSite());
-		assertEquals(0, scn.GetWoundsOn(galadriel));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
 }

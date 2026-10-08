@@ -202,6 +202,15 @@
 						Add strength bonus
 						Add damage bonuses
 					]
+					requires: [
+						{
+							type: AlwaysAvailable
+						}
+						{
+							type: CanSpot
+							filter: memory(exertedAlly),damage
+						}
+					]
 					effects: [
 						{
 							type: modifyStrength
@@ -299,22 +308,9 @@
 						filter: moria, condition
 					}
 					true: {
-						type: Choice
-						texts: [
-							Hinder a Shadow condition
-							Discard up to 2 {Moria} conditions
-						]
-						effects: [
-							{
-								type: Hinder
-								select: choose(side(Shadow), condition)
-							}
-							{
-								type: Discard
-								select: choose(Moria, condition)
-								count: 0-2
-							}
-						]
+						type: Discard
+						select: choose(Moria, condition)
+						count: 0-2
 					}
 					false: {
 						type: Hinder
