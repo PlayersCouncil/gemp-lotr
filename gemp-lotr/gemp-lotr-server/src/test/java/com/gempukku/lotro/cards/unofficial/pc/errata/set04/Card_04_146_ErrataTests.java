@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -292,6 +291,27 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
+	public void ArcheryIsNotOfferedWithNoAllyInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var comedown = scn.GetShadowCard("comedown");
+		var assassin = scn.GetShadowCard("assassin");
+		var crossbow = scn.GetShadowCard("crossbow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(comedown);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(assassin, crossbow);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
+
+		// Two [isengard] archers, and no ally to take a wound: the ability has no cost and would do nothing.
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(comedown));
+	}
+
+	@Test
 	public void TheAlliesTakeArcheryWoundsOnlyInTheArcheryPhaseItIsUsedIn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -333,7 +353,6 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0243: archery wounds the allies cannot take go to companions (CR 4.2 \"instead\"), or are lost")
 	public void ArcheryWoundsTheAlliesCannotTakeGoToCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -366,7 +385,6 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0244: an archer ally away from home counts for the fellowship archery total once Come Down is used")
 	public void AnArcherAllyAwayFromHomeDoesNotAddToTheFellowshipArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

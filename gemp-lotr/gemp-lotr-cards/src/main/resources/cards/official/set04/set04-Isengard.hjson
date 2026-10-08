@@ -479,11 +479,17 @@
 			{
 				type: activated
 				phase: archery
-				requires: {
-					type: canSpot
-					filter: culture(isengard),archer
-					count: 2
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(isengard),archer
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: ally
+					}
+				]
 				effect: [
 					{
 						type: addModifier

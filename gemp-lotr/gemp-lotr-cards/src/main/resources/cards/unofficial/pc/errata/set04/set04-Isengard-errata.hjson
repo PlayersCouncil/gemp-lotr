@@ -66,24 +66,22 @@
 			{
 				type: activated
 				phase: archery
-				requires: {
-					type: CanSpot
-					filter: culture(Isengard),archer
-					count: 2
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: culture(Isengard),archer
+						count: 2
+					}
+					{
+						type: CanSpot
+						filter: Ally
+					}
+				]
 				effect: [
 					{
 						type: AddModifier
 						modifier: {
-							type: AllyCanParticipateInArcheryFire
-							filter: Ally
-						}
-					}
-					{
-						type: AddModifier
-						modifier: {
-							type: CantTakeArcheryWounds
-							filter: Companion
+							type: AlliesTakeArcheryFireWoundsInsteadOfCompanions
 						}
 					}
 				]
