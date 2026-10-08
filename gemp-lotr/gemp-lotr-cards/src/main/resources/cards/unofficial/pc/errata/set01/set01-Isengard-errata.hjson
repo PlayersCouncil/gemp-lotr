@@ -243,55 +243,43 @@
 			collInfo: 1R139
 			rarity: R
 		}
-		title: Savagery To Match Their Numbers
+		title: Savagery to Match Their Numbers
 		culture: isengard
 		twilight: 1
 		type: event
 		timeword: skirmish
 		effects: {
 			type: event
-			effect: {
-				type: choice
-				texts: [
-					Make an Uruk-hai strength +2
-					Make an Uruk-hai strength +2 (and +2 more and fierce until the regroup phase)
-				]
-				effects: [
-					{
-						type: modifyStrength
-						select: choose(uruk-hai)
-						amount: 2
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(uruk-hai)
+					amount: 2
+					memorize: chosenUrukHai
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						count: 5
+						filter: companion
 					}
-					{
-						type: If
-						check: {
-							type: canSpot
-							count: 5
-							filter: companion
+					true: [
+						{
+							type: modifyStrength
+							select: memory(chosenUrukHai)
+							amount: 2
+							until: start(regroup)
 						}
-						true: [
-							{
-								type: modifyStrength
-								select: choose(uruk-hai)
-								amount: 2
-								memorize: chosenUrukHai
-							}
-							{
-								type: modifyStrength
-								select: memory(chosenUrukHai)
-								amount: 2
-								until: start(regroup)
-							}
-							{
-								type: addKeyword
-								select: memory(chosenUrukHai)
-								keyword: fierce
-								until: start(regroup)
-							}
-						]
-					}
-				]
-			}
+						{
+							type: addKeyword
+							select: memory(chosenUrukHai)
+							keyword: fierce
+							until: start(regroup)
+						}
+					]
+				}
+			]
 		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
@@ -334,52 +322,38 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: ConstantlyCheck
+				type: activated
+				phase: regroup
+				requires: {
+					type: or
 					requires: [
 						{
-							type: perTurnLimit
-							limit: 1
+							type: CanSpot
+							filter: Isengard, minion
+							count: 4
 						}
 						{
-							type: or
-							requires: [
-								{
-									type: CanSpot
-									filter: Isengard, minion
-									count: 4
-								}
-								{
-									type: canSpot
-									filter: exhausted,ring bearer
-								}
-								{
-									type: canSpotBurdens
-									amount: 5
-								}
-							]
+							type: canSpot
+							filter: exhausted,ring bearer
+						}
+						{
+							type: canSpotBurdens
+							amount: 5
 						}
 					]
 				}
-				effect: [
-					{
-						type: incrementPerTurnLimit
-						limit: 1
+				limitPerPhase: 1
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
 					}
-					{
-						type: addModifier
-						modifier: {
-							type: modifyMoveLimit
-							amount: -1
-						}
-						until: endOfTurn
-					}
-				]
+					until: endOfTurn
+				}
 			}
 		]
-		gametext: <b>Search</b>. To play, spot an [isengard] minion.\Regroup: Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
+		gametext: <b>Search</b>. To play, spot an [isengard] minion.\<b>Regroup:</b> Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
 		lore: "'In all the long wars with the Dark Tower treason has ever been our greatest foe.'"
 		promotext: ""
 		alts: {
