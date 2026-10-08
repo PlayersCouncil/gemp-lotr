@@ -60,6 +60,11 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **An "or" between two cost-to-effect halves (Q-0034).** An "or" between two cost-to-effect halves ("exert a Dwarf to heal an Elf, or exert an Elf to heal a Dwarf") is not CR 4.2's "choose one of two actions you are fully capable of performing": either half may be used though it will do nothing while the other could be carried out in full (Q-0034). Assert that; not a question.
 
+**A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259).** An event, ability or
+optional trigger whose every branch is "pay X to Y" ("Choose one: exert A to ..., or exert B to ...") is not
+offered when no branch's cost can be paid. A definition without a requirement for this (an Or of the branches'
+costs) is a finding, fixable at landing.
+
 ## Limits
 
 **Limits on uses and limits on what the effect gives, as built.** LIMITS, as built in this clone since 2026-10-07 (engine pass 8; Q-0041, Q-0082, Q-0093; hjson-reference "Limits" and test-generation's L check have the full text). A limit on USES ("limit once per turn", "limit once per phase", "limit N times": fields limitPerPhase / limitPerTurn / limitPerSite) WITHHOLDS the ability at its limit, cost or no cost: the test reads it not offered, with its cost still payable and something on the board the effect could still act on. A limit on WHAT THE EFFECT GIVES ("(limit +3)", "add a threat (limit 1)", "(limit 2 per phase)" where it counts things made: fields effectLimitPerPhase / effectLimitPerTurn) leaves an ability with a cost on offer at the limit, cost paid, nothing done, flagged `limit` with FreepsActionNoEffect / ShadowActionNoEffect, and that card gets the R clause for the flag. A cap written inside the effect (a CardPhaseLimit or CardAffectedLimitPerPhase value, limitPerCardThisPhase) also leaves the ability on offer, but the engine sets no `limit` word for it (Sting 51_313 reads "false" at its cap): the card asserts no flag and writes no R clause for it (test-generation, "Rulings, interactions and formats"); test the cap itself under L. A definition whose field does not match its text's kind of limit is a finding, fixable at landing. Park nothing on Q-0093.
@@ -68,7 +73,17 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **"(limit +N)" is the card's for the whole phase (F-0135, F-0125).** "(limit +N)" is the card's for the whole phase: cumulative over uses (F-0135, a per-use cap is a finding) and counted per source card, not per target (F-0125, FIXED in this clone). A cap built as `cardAffectedLimitPerPhase` counts for each card affected wherever it is used outside ModifyStrength (on AddKeyword it gave each Dwarf its own +3 damage, F-0213): a "(limit +N)" keyword bonus built so is a finding, fixable at landing with a `cardPhaseLimit` (limit N, amount 1).
 
+**A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134,
+Q-0141).** A printed limit on a count inside an effect reads like "(limit +N)" (F-0135): the card's limit for the
+whole phase. A cap built per use is a finding (a cardPhaseLimit wrapper fixes it where it reaches; a play's
+discount it does not reach, F-0245, engine). An event is one card played once, so the readings agree there. A
+"(limit X)" where X is what that use paid caps that use only (Merry's Sword 57_242).
+
 ## Costs, and playing cards from piles and hands
+
+**"<do> a companion for each <thing>" may be spread (F-0224).** The player may affect several cards, or one card
+several times (CR 4.2 "for each"). Built as `times` on one choice it is a finding; the right shape is a repeat
+round a single choice (12_99, 17_128). "For each <thing> you spot" spots them all without asking (Q-0141).
 
 **The twilight cost of a card in play (F-0109, built).** F-0109 is FIXED: a card in play costs the number printed on it, whatever another card or its own text says, and a transfer costs the printed number only. `GetTwilightCost(card)` on a card in play now answers the printed number; to show a cost modifier in force read a card in HAND (what it would cost to play) or play one and read the pool. A site's Shadow number is still read as modified. Do not park on F-0109 any more.
 

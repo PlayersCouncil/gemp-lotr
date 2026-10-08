@@ -296,15 +296,18 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219)
 - An "or" between two cost-to-effect halves (Q-0034)
+- A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 
 ## Limits
 
 - Limits on uses and limits on what the effect gives, as built [Q-0041, Q-0082, Q-0093]
 - "Limit once per site" (Q-0084, F-0146, F-0145)
 - "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213]
+- A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134, Q-0141). A printed limit on a count inside ... [F-0135, F-0245]
 
 ## Costs, and playing cards from piles and hands
 
+- "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
