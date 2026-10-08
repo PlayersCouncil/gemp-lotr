@@ -1,6 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -185,6 +187,8 @@ public class Card_02_075_ErrataTests
 		// assignment follows with no Hobbit left.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));
 		scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), null, 5));
+		// Aragorn is of the [shire] culture but no Hobbit: the text names a race (F-0019).
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(ferny);

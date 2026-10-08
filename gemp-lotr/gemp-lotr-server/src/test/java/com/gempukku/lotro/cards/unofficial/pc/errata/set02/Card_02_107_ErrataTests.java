@@ -1,6 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -76,10 +78,12 @@ public class Card_02_107_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(sunlight, bilbo);
+		// Aragorn is of the [shire] culture but no Hobbit: the text names a race (F-0019).
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.StartGame();
 
-		// Frodo is one Hobbit; Aragorn is a companion but no Hobbit.
+		// Frodo is one Hobbit; Aragorn is a [shire] companion but no Hobbit.
 		assertFalse(scn.FreepsPlayAvailable(sunlight));
 
 		scn.FreepsPlayCard(bilbo);

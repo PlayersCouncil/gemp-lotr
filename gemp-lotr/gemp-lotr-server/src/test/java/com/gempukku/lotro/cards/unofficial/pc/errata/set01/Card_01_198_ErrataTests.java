@@ -8,6 +8,7 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -260,7 +261,7 @@ public class Card_01_198_ErrataTests
 	}
 
 	@Test
-	public void DwarfAndElfAlliesAndTheShadowPlayersOwnDwarfDoNotCount() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DwarfAndElfAlliesTheShadowPlayersOwnDwarfAndADwarvenElvenHobbitDoNotCount() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		// Allies are not members of the fellowship (CR 4.2 "ally"); the Shadow player's Dwarf companion is in his own.
@@ -272,6 +273,11 @@ public class Card_01_198_ErrataTests
 
 		var ttmm = scn.GetShadowCard("ttmm");
 		scn.MoveCardsToSupportArea(ttmm);
+		// Frodo, the only companion in the fellowship, is of the [dwarven] and [elven] cultures but neither a Dwarf
+		// nor an Elf: the text names races, not cultures (F-0019).
+		var frodo = scn.GetRingBearer();
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, frodo, null, Culture.DWARVEN));
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, frodo, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.SkipToSite(2);
