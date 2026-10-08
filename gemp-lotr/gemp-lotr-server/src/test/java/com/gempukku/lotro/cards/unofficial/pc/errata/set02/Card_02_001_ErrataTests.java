@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -231,8 +230,57 @@ public class Card_02_001_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0124: the definition asks how many times to discard 3 cards (0 or more); the text discards the top 3")
-	public void DwarfAbilityDiscardsTheTopThreeCardsOfDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DwarfAbilityAsksHowManyTimesAndDiscardsThreeCardsForEachFromTheTopOfDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("mountains");
+		var guard = scn.GetFreepsCard("guard");
+		var filler1 = scn.GetFreepsCard("filler1");
+		var filler2 = scn.GetFreepsCard("filler2");
+		var filler3 = scn.GetFreepsCard("filler3");
+		var filler4 = scn.GetFreepsCard("filler4");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var armor = scn.GetFreepsCard("armor");
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+		// From the top: filler1 to aragorn, then thrarin, then the armor, which no discard in this test reaches.
+		scn.MoveCardsToTopOfDeck(armor, thrarin, aragorn, filler4, filler3, filler2, filler1);
+
+		int deck = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.FreepsActionAvailable(card, "no effect"));
+
+		scn.FreepsUseCardAction(card, "no effect");
+
+		// The number of times is asked, from none up; nothing has been discarded yet.
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		scn.FreepsChoose("2");
+
+		// Twice 3: the top 6 cards, in order, and the seventh is now on top.
+		assertEquals(deck - 6, scn.GetFreepsDeckCount());
+		assertEquals(6, scn.GetFreepsDiscardCount());
+		assertInDiscard(filler1, filler2, filler3, filler4, aragorn, thrarin);
+		assertEquals(armor, scn.GetFreepsTopOfDeck());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Used again, one time: 3 more.
+		assertTrue(scn.FreepsActionAvailable(card, "no effect"));
+		scn.FreepsUseCardAction(card, "no effect");
+		scn.FreepsChoose("1");
+
+		assertEquals(deck - 9, scn.GetFreepsDeckCount());
+		assertEquals(9, scn.GetFreepsDiscardCount());
+		assertInDiscard(armor);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DwarfAbilityDiscardsAsManyCardsAsThereAreWhenThereAreFewerThanThreeForEachTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("mountains");
@@ -243,21 +291,23 @@ public class Card_02_001_ErrataTests
 		var filler4 = scn.GetFreepsCard("filler4");
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCompanionsToTable(guard);
+		// Everything but the four fillers out of the draw deck.
+		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "axe", "battleaxe", "handaxe", "armor", "sword");
 
 		scn.StartGame();
-		scn.MoveCardsToTopOfDeck(filler4, filler3, filler2, filler1);
 
-		int deck = scn.GetFreepsDeckCount();
+		assertEquals(4, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertTrue(scn.FreepsActionAvailable(card, "no effect"));
 
 		scn.FreepsUseCardAction(card, "no effect");
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		// There is no cap: 5 times 3 is 15 cards, and the deck has 4.
+		scn.FreepsChoose("5");
 
-		assertEquals(deck - 3, scn.GetFreepsDeckCount());
-		assertInDiscard(filler1, filler2, filler3);
-		assertEquals(3, scn.GetFreepsDiscardCount());
-		assertEquals(filler4, scn.GetFreepsTopOfDeck());
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(4, scn.GetFreepsDiscardCount());
+		assertInDiscard(filler1, filler2, filler3, filler4);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

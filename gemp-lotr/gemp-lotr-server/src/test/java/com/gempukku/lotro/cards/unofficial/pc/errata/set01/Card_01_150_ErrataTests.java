@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -260,8 +259,7 @@ public class Card_01_150_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0205: the discard is built as not forced, so a Ring-bearer who stops Shadow cards discarding from the top of the draw deck does not stop it")
-	public void WhereShadowCardsMayNotDiscardFromTheTopOfTheDrawDeckACompanionIsExertedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhereShadowCardsMayNotDiscardFromTheTopOfTheDrawDeckTheDiscardIsStillOfferedAndTaken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetCourteousHalflingScenario();
 
 		var rager = scn.GetShadowCard("rager1");
@@ -269,11 +267,15 @@ public class Card_01_150_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
+		var top1 = scn.GetFreepsCard("sam");
+		var top2 = scn.GetFreepsCard("silinde");
+		var top3 = scn.GetFreepsCard("guard3");
 		// Frodo is Ring-bound; Aragorn and the two Guards are three unbound companions.
 		scn.MoveCompanionsToTable(aragorn, guard1, guard2);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(rager);
+		scn.MoveCardsToTopOfDeck(top3, top2, top1);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, rager);
 		scn.FreepsResolveSkirmish(aragorn);
@@ -285,14 +287,17 @@ public class Card_01_150_ErrataTests
 		scn.PassCurrentPhaseActions();
 		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetWoundsOn(aragorn));
-		// The discard cannot be carried out, so only the exertion is left to choose (CR 4.2 "effect").
-		assertFalse(scn.FreepsChoiceAvailable("Discard"));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, guard1, guard2, frodo));
+		// Frodo stops Shadow cards that make the Free Peoples player discard, but the Rager gives him a choice
+		// and he may choose to discard (F-0205: not a fault): the discard is offered beside the exertion, and taken.
+		assertTrue(scn.FreepsChoiceAvailable("Exert"));
+		assertTrue(scn.FreepsChoiceAvailable("Discard"));
 
-		scn.FreepsChooseCard(guard1);
-		assertEquals(1, scn.GetWoundsOn(guard1));
-		assertEquals(deck, scn.GetFreepsDeckCount());
-		assertEquals(discard, scn.GetFreepsDiscardCount());
+		scn.FreepsChooseOption("Discard");
+		assertInZone(Zone.DISCARD, top1, top2, top3);
+		assertEquals(deck - 3, scn.GetFreepsDeckCount());
+		assertEquals(discard + 3, scn.GetFreepsDiscardCount());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(guard1));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

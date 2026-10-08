@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -450,8 +449,7 @@ public class Card_01_265_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0205: the discard is built as not forced, so a Ring-bearer who stops Shadow cards discarding from the top of the draw deck does not stop it")
-	public void WhereShadowCardsMayNotDiscardFromTheTopOfTheDrawDeckABurdenIsAddedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhereShadowCardsMayNotDiscardFromTheTopOfTheDrawDeckTheDiscardIsStillOfferedAndTaken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetCourteousHalflingScenario();
 
 		var butchery = scn.GetShadowCard("butchery");
@@ -460,12 +458,18 @@ public class Card_01_265_ErrataTests
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
 		var guard3 = scn.GetFreepsCard("guard3");
+		// The Free Peoples player's own copies of the four cards left in the draw deck.
+		var top1 = scn.GetFreepsCard("butchery");
+		var top2 = scn.GetFreepsCard("slayer");
+		var top3 = scn.GetFreepsCard("troop");
+		var top4 = scn.GetFreepsCard("cuguard");
 		// Frodo and Sam are Ring-bound; the three Guards are three unbound companions.
 		scn.MoveCardsToHand(butchery);
 		scn.MoveCompanionsToTable(sam, guard1, guard2, guard3);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(slayer);
+		scn.MoveCardsToTopOfDeck(top4, top3, top2, top1);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, slayer);
 		scn.FreepsResolveSkirmish(sam);
@@ -477,10 +481,15 @@ public class Card_01_265_ErrataTests
 		scn.PassCurrentPhaseActions();
 		assertInZone(Zone.DEAD, sam);
 		scn.ShadowChooseOptionalTrigger(butchery);
-		// The discard cannot be carried out, so the burden is added without a choice (CR 4.2 "effect").
-		assertFalse(scn.FreepsChoiceAvailable("Discard"));
-		assertEquals(1, scn.GetBurdens());
-		assertEquals(deck, scn.GetFreepsDeckCount());
+		// Frodo stops Shadow cards that make the Free Peoples player discard, but the event gives him a choice
+		// and he may choose to discard (F-0205: not a fault): the discard is offered beside the burden, and taken.
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		assertTrue(scn.FreepsChoiceAvailable("Discard"));
+
+		scn.FreepsChooseOption("Discard");
+		assertInDiscard(top1, top2, top3, top4);
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

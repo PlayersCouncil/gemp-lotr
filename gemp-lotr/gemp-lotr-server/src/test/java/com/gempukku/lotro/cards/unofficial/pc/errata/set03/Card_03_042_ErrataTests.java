@@ -19,8 +19,6 @@ public class Card_03_042_ErrataTests
 				{{
 					put("horn", "53_42");
 					put("boromir", "1_96");     // Boromir, Lord of Gondor: no ability to use
-					// A second, different Boromir, cheated in beside the first (each is unique, so legal play never has both).
-					put("boromir2", "1_97");    // Boromir, Son of Denethor: his only text is a skirmish ability, never used here
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion who is not Boromir
 
 					// Allies whose homes (3 and 6 of the Fellowship path) are not site 2, where the tests are fought.
@@ -73,7 +71,6 @@ public class Card_03_042_ErrataTests
 
 		var horn = scn.GetFreepsCard("horn");
 		var boromir = scn.GetFreepsCard("boromir");
-		var boromir2 = scn.GetFreepsCard("boromir2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var frodo = scn.GetRingBearer();
 		scn.MoveCompanionsToTable(aragorn);
@@ -88,18 +85,14 @@ public class Card_03_042_ErrataTests
 		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(horn));
 
-		// With a second Boromir beside the first, either may bear the Horn and the others may not.
-		scn.MoveCompanionsToTable(boromir2);
+		// Boromir is the only valid bearer (a second Boromir can never be in play beside him), so the game chooses
+		// for us: the Horn goes on him and not on Aragorn or Frodo.
 		scn.FreepsPlayCard(horn);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, boromir2));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, frodo));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(boromir);
 
 		assertEquals(4, scn.GetTwilight());
 		assertAttachedTo(horn, boromir);
-		assertNotAttachedTo(horn, boromir2);
 		assertNotAttachedTo(horn, aragorn);
+		assertNotAttachedTo(horn, frodo);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -114,8 +107,7 @@ public class Card_03_042_ErrataTests
 		var dinendal = scn.GetFreepsCard("dinendal");
 		var grimir = scn.GetFreepsCard("grimir");
 		var savage = scn.GetShadowCard("savage");
-		var boromir2 = scn.GetFreepsCard("boromir2");
-		scn.MoveCompanionsToTable(boromir, boromir2, aragorn);
+		scn.MoveCompanionsToTable(boromir, aragorn);
 		scn.AttachCardsTo(boromir, horn);
 		scn.MoveAlliesToTable(dinendal, grimir);
 
@@ -124,20 +116,19 @@ public class Card_03_042_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(0, scn.GetWoundsOn(boromir));
-		assertEquals(0, scn.GetWoundsOn(boromir2));
 		assertEquals(3, scn.GetStrength(dinendal));
 		assertEquals(3, scn.GetStrength(grimir));
 		assertTrue(scn.FreepsActionAvailable(horn));
 
 		scn.FreepsUseCardAction(horn);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(dinendal, grimir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, boromir2, aragorn, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, aragorn, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(dinendal);
 
-		// The bearer paid the exertion: the other Boromir did not.
+		// The bearer paid the exertion, and no one else did.
 		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertEquals(0, scn.GetWoundsOn(boromir2));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertInDiscard(horn);
 		assertEquals(6, scn.GetStrength(dinendal));
 		assertEquals(3, scn.GetStrength(grimir));

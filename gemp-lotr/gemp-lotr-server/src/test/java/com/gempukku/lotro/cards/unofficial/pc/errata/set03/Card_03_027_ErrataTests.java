@@ -103,30 +103,24 @@ public class Card_03_027_ErrataTests
 
 		var vilya = scn.GetFreepsCard("vilya");
 		var elrond = scn.GetFreepsCard("elrond");
-		var elrondally = scn.GetFreepsCard("elrondally");
 		var arwen = scn.GetFreepsCard("arwen");
 		var silinde = scn.GetFreepsCard("silinde");
 		scn.MoveCardsToHand(vilya);
+		// Elrond the companion on a board of his own: he is unique, so Elrond the ally is not in play beside him.
 		scn.MoveCompanionsToTable(elrond, arwen);
-		// Both Elronds at once, which legal play would not allow (he is unique): two valid bearers.
-		scn.MoveAlliesToTable(elrondally, silinde);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
 
 		assertEquals(4, scn.GetVitality(elrond));
-		assertEquals(4, scn.GetVitality(elrondally));
+		assertTrue(scn.FreepsPlayAvailable(vilya));
 		scn.FreepsPlayCard(vilya);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, elrondally));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(arwen, silinde));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(elrond);
+		// Elrond is the only bearer there is, beside an Elf companion and an Elf ally.
 		assertAttachedTo(vilya, elrond);
-		assertNotAttachedTo(vilya, elrondally);
 		assertNotAttachedTo(vilya, arwen);
 		assertNotAttachedTo(vilya, silinde);
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(5, scn.GetVitality(elrond));
-		assertEquals(4, scn.GetVitality(elrondally));
 		assertEquals(3, scn.GetVitality(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
