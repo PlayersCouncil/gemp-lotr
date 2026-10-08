@@ -114,6 +114,16 @@
 		]
 		effects: {
 			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: culture(sauron)
+				}
+				{
+					type: canSpot
+					filter: nazgul
+				}
+			]
 			effect: {
 				type: If
 				check: [
@@ -124,6 +134,10 @@
 					{
 						type: canSpot
 						filter: nazgul
+					}
+					{
+						type: canSpotBurdens
+						amount: 1
 					}
 				]
 				true:	{
@@ -139,17 +153,20 @@
 					}
 					text: Make the move limit -1 to prevent exerting a companion for each burden
 					effect: {
-						type: exert
-						player: freeps
+						type: repeat
 						times: {
 							type: ForEachBurden
 						}
-						select: choose(companion)
+						effect: {
+							type: exert
+							player: freeps
+							select: choose(companion)
+						}
 					}
 				}
 			}
 		}
-		gametext: <b>Search.</b><b>Spot a [sauron] card and a Nazgul to make the Free Peoples player exert a companion for each burden you can spot.  The Free Peoples player may make the move limit -1 to prevent this.
+		gametext: <b>Search.</b><br>Spot a [sauron] card and a Nazgul to make the Free Peoples player exert a companion for each burden you can spot.  The Free Peoples player may make the move limit -1 to prevent this.
 		lore: "'The Morgul-lord and his Black Riders have come forth. War is preparing!'"
 		promotext: ""
 		alts: {

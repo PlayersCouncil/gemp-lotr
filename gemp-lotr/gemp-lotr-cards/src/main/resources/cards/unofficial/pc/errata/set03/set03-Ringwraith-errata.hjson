@@ -17,6 +17,19 @@
 		timeword: maneuver
 		effects: {
 			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: culture(isengard),minion,canExert
+					}
+					{
+						type: canSpot
+						filter: nazgul,canExert
+					}
+				]
+			}
 			effect: [
 				{
 					type: choice
