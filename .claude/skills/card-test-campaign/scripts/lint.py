@@ -43,6 +43,8 @@ CODES = {"+", "-", "C", "C-", "F", "D", "L", "O", "S", "R", "B", "Z", "K"}
 
 LEDGER_LINE = re.compile(r"^\s*([A-Z]\d+)\s+([A-Za-z]+)\s+\[([^\]]*)\]\s*(.*?)\s*$")
 WAIVER_LINE = re.compile(r"^\s+no\s+(C-|[+\-CFDLOSRBZK])\s*:\s*\S")
+# "waits + F: G-0031 <why>": checks the rig cannot yet show.  The card is parked on that rig request until it can.
+WAITS_LINE = re.compile(r"^\s+waits\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*:\s*(G-\d{4})\b")
 CLAIM_LINE = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s*$")
 TAG_LINE = re.compile(r"^\s*//\s*((?:[A-Z]\d+\s*:\s*[^;]+;?\s*)+)$")
 METHOD = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\(([^)]*)\)")
@@ -167,6 +169,18 @@ def baseline_tests() -> dict:
     return _baseline
 
 
+NO_EXCEPTIONS = ("a card test never relies on an exception (Ketura, 2026-10-08). Where only an exception shows a check, "
+                 "the rig lacks a reading: report a rig request, take the assertion out, and write the check in the ledger "
+                 "as 'waits <check>: G-0000 <what the rig lacks>', which parks the card until the rig can show it")
+
+
+class Waived(set):
+    """The checks a clause says it cannot have, with the ones that only wait on a rig request kept apart."""
+    def __init__(self):
+        super().__init__()
+        self.waits = {}  # check -> the rig request it waits on
+
+
 def parse_ledger(path: Path):
     """A card's ledger file as ({id: [type, checks, text, line]}, {id: {check: [test names]}}, cited ids), or
     (None, None, []) if there is no file."""
@@ -179,12 +193,16 @@ def parse_ledger(path: Path):
         m = LEDGER_LINE.match(line)
         c = CLAIM_LINE.match(line)
         if m:
-            clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i, set()]
+            clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i, Waived()]
             claims[m.group(1)] = {}
             last, in_header = m.group(1), False
         elif c and last is not None and not in_header:
             for check in c.group(1).split():
                 claims[last].setdefault(check, []).append(c.group(2))
+        elif WAITS_LINE.match(line) and last is not None and not in_header:
+            w = WAITS_LINE.match(line)
+            for check in w.group(1).split():
+                clauses[last][4].waits[check] = w.group(2)
         elif WAIVER_LINE.match(line) and last is not None and not in_header:
             # "no -: why": a check the clause's type asks for and this clause cannot have.
             clauses[last][4].add(WAIVER_LINE.match(line).group(1))
@@ -316,7 +334,13 @@ def lint_file(path: Path):
         for check, names in sorted(claims.get(cid, {}).items()):
             if names and all(n in parked_tests for n in names):
                 add("warning", "parked-only", None, "%s: %s is claimed only by a parked test, so nothing exercises it at present" % (cid, check))
-        missing = (codes & CODES) - set(claims.get(cid, {}))
+        for check, request in sorted(waived.waits.items()):
+            # A check may be shown in part by a test and wait in part (one candidate of an F the rig cannot place).
+            if request == "G-0000":
+                add("warning", "waiting", None, "%s: %s waits on a rig request not yet numbered (the lander numbers it)" % (cid, check))
+            else:
+                add("warning", "waiting", None, "%s: %s waits on %s: the card is parked until the rig can show it" % (cid, check, request))
+        missing = (codes & CODES) - set(claims.get(cid, {})) - set(waived.waits)
         if missing:
             add("error", "coverage", None, "%s: no test claims %s" % (cid, " ".join(sorted(missing))))
         extra = set(claims.get(cid, {})) - codes
@@ -336,8 +360,10 @@ def lint_file(path: Path):
         if clauses and name not in claimed_tests and name not in [x[0] for x in stats]:
             add("error", "claim", start, "%s: the ledger gives this test nothing to claim" % name)
         for _, t in above:
-            if t.startswith("@Ignore") and not re.search(r"\b[FQ]-\d{4}\b", t):
-                add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000) or question (Q-0000) it is parked on" % name)
+            if t.startswith("@Ignore") and not re.search(r"\b[FQG]-\d{4}\b", t):
+                add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000), question (Q-0000) or rig request (G-0000) it is parked on" % name)
+            if re.search(r"@Test\s*\(.*expected\s*=", t):
+                add("error", "exception", start, "%s: %s" % (name, NO_EXCEPTIONS))
 
     alias_bp = dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', raw))
     # Inside the tests.
@@ -355,6 +381,8 @@ def lint_file(path: Path):
             for pat, why in JUSTIFY:
                 if re.search(pat, line) and not let_off(i):
                     add("error", "adhoc", i, "%s: %s" % (name, why))
+            if re.search(r"\bassert(DoesNot)?Throws?\w*\s*\(|\btry\s*\{|\bcatch\s*\(", line):
+                add("error", "exception", i, "%s: %s" % (name, NO_EXCEPTIONS))
             if re.search(r"\.getZone\s*\(\s*\)", line) and not let_off(i):
                 add("warning", "style", i, "%s: compare zones with assertInZone and friends" % name)
             if re.search(r"assert(True|False)\s*\(.*(==|!=)", line) and not let_off(i):

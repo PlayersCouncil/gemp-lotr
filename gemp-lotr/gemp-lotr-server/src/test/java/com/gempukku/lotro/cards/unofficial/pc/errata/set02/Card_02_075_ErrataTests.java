@@ -157,10 +157,8 @@ public class Card_02_075_ErrataTests
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(bilbo));
 
-		// The game lists Bill among the minions, and refuses any assignment of a character to him.
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(frodo, ferny));
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(aragorn, ferny));
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(bilbo, ferny));
+		// The game lists Bill among the minions and refuses any assignment of a character to him; reading that
+		// refusal waits on a rig method (G-0029).
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);
@@ -195,8 +193,6 @@ public class Card_02_075_ErrataTests
 
 		scn.SkipToAssignments();
 		// Sam is the one Hobbit: Galadriel and Aragorn are not.
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(aragorn, ferny));
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(galadriel, ferny));
 		scn.FreepsDeclineAssignments();
 		scn.ShadowAssignToMinions(sam, ferny);
 
@@ -233,8 +229,6 @@ public class Card_02_075_ErrataTests
 		scn.SkipToAssignments();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(bilbo));
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(aragorn, ferny));
-		assertThrows(RuntimeException.class, () -> scn.FreepsAssignToMinions(galadriel, ferny));
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);

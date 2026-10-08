@@ -23,6 +23,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Every fix through F-0155 is approved
 - Approvals of 2026-10-08. Every finding fixed without her word up to F-0195 is fixed with approval (2026-10-08), and every card whose tests have ...
 - Code review: "On RingBearerRule, the private filter is not the way to go. Instead add it to be a sibling of Filters.ringBearer." Done: ...
+- Landing is a stage of the pipeline, and reports name numbers only (Ketura, 2026-10-08, evening)
 
 ## Sources, sheets, revisions and errata
 
@@ -151,6 +152,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - 2026-10-04. Exhausting the exhausted (F-0005)
 - A card discarded with its dying bearer IS "discarded" for a card that then plays it from the discard pile [Q-0105, Q-0023]
 - Preventing a discard that was a cost (Q-0038)
+- "Remove N [culture] tokens" may take them from more than one card
 
 ## Triggers, responses and the play of a card
 
@@ -213,6 +215,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Rig requests agreed. G-0012 (an optional trigger chosen by card is matched exactly), G-0013 (the methods about revealed cards: all three parts) and ... [G-0014]
 - Passes stay harmless (G-0015). "Let's leave passes harmless for now." And the names: "we should really use FreepsPass and ShadowPass rather than the ...
 - No two cards of one unique title in play, whatever their types
+- A card test never relies on an exception; a check the rig cannot show parks the card [G-0000, G-0029, G-0028]
 
 ## Card by card
 

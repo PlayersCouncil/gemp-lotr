@@ -272,6 +272,14 @@ C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally who
 The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
 be shown at all, not for one that is awkward to arrange.
 
+**A check the rig cannot show yet** is written the same way, as `waits <check>: <the rig request> <what the rig
+lacks>`. It is no waiver: the check is still owed, and the card is parked on the request until it is built.
+
+```
+C1 Modifier   [+ - F]    Bill the Pony cannot be assigned to a skirmish against a Nazgul.
+     waits F: G-0029 no reading of whether one character may be assigned to one minion
+```
+
 ### The stats test
 
 `<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
@@ -375,7 +383,10 @@ should be withheld, and offering it is a finding.
 Stop work on the card, record what is in the way, and move to the next. Do not find a way round.
 
 - **The rig cannot express a check.** Write a rig request (what the test needed, the signature proposed, the
-  interface it belongs in) and leave the check untested. No helper method, no reaching past the rig.
+  interface it belongs in) and leave the check untested. No helper method, no reaching past the rig, and no
+  assertion that the rig or the game throws: a card test never relies on an exception (`assertThrows`, a `try`;
+  Ketura, 2026-10-08). The check is written in the ledger as `waits <check>: G-0000 <what the rig lacks>`, and the
+  card is parked on the request until the rig can show it.
 - **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
   would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
   reading, keep that test active: it is the best evidence there is of what was meant. Otherwise, if one reading

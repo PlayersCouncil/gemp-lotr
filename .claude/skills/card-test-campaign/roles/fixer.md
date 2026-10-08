@@ -3,8 +3,8 @@
 Unit tests have been written and reviewed for a few cards of the Lord of the Rings TCG as implemented in Gemp,
 and something has changed since: Ketura has ruled on a question, a definition has been corrected, or the
 orchestrator has found something to put right. You make the changes on the list. The cards, the list and a name
-for your working folder are given at the end of this brief. Nobody checks your work after you except the
-orchestrator's gate (the conformance check and the card's own tests).
+for your working folder are given at the end of this brief. After you comes the lander, who files and commits;
+nothing checks your changes but the gate (the conformance check and the card's own tests).
 
 Read `roles/author.md` (beside this file) first, and the three files it tells an author to read. Everything it
 says about what a card's tests must be, what you may touch, what to do when a test fails and how findings and

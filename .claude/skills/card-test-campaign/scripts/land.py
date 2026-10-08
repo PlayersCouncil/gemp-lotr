@@ -72,14 +72,21 @@ def land(card_id, note, force_parked, check_only, before, batch=None):
     ledger = g.ledger_path(card_id)
     if not ledger.is_file():
         return "no ledger file at %s" % ledger
+    ledger_text = ledger.read_text(encoding="utf-8")
+    placeholder = re.search(r"\b[FQG]-0000\b", ledger_text)
+    if placeholder:
+        return "placeholder %s still in the ledger file" % placeholder.group(0)
     run = script("cardtest.py", "run", card_id, "--out", "land")
     ok = re.search(r"^OK \((\d+) tests?\)", run.stdout, re.M)
     if not ok:
         return "tests:\n" + "\n".join(run.stdout.strip().split("\n")[-25:])
 
     tests = len(re.findall(r"^\s*@Test\b", source, re.M))
-    parked = re.findall(r'@Ignore\("([FQ]-\d{4})', source)
-    clauses = len(re.findall(r"^[PCR]\d+\s", ledger.read_text(encoding="utf-8"), re.M))
+    parked = re.findall(r'@Ignore\("([FQG]-\d{4})', source)
+    # A check the rig cannot show yet ("waits <check>: G-0029 ...") parks the card as a parked test does (Ketura,
+    # 2026-10-08: a card held by a rig request does not move on as ready).
+    waiting = re.findall(r"^\s+waits\s+[^:\n]+:\s*(G-\d{4})", ledger_text, re.M)
+    clauses = len(re.findall(r"^[PCR]\d+\s", ledger_text, re.M))
     was = before.get(card_id, "")
     body = "%d tests over the %d clauses of its ledger" % (tests, clauses)
     if was not in ("", str(tests)):
@@ -87,13 +94,16 @@ def land(card_id, note, force_parked, check_only, before, batch=None):
     body += "."
     if parked:
         body += " Parked on %s." % ", ".join(sorted(set(parked)))
+    if waiting:
+        body += " Waiting on %s." % ", ".join(sorted(set(waiting)))
     if unclaimed:
         body += " Not finished: %s." % "; ".join(unclaimed)
     if note:
         body += "\n\n" + note
     # A card with a test parked on a finding or question lands as "parked" (Ketura, 2026-10-08: the tracker is to
     # show such cards as parked); the note says what is parked.  --parked also lands a card that could not be finished.
-    status = "parked" if (force_parked or parked) else "ready"
+    status = "parked" if (force_parked or parked or waiting) else "ready"
+    parked = parked + waiting
     if check_only:
         return "would land as %s: %s" % (status, body.split("\n")[0])
 
@@ -119,7 +129,7 @@ def land(card_id, note, force_parked, check_only, before, batch=None):
     if not parked and not force_parked:
         args += ["--note", ""]  # a note left from an earlier landing ("1 test(s) parked on ...") no longer holds
     if parked:
-        args += ["--note", "%d test(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
+        args += ["--note", "%d test(s) or check(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
         for found in sorted(set(parked)):
             if found.startswith("F-"):
                 args += ["--finding", found]
@@ -134,7 +144,7 @@ def set_status(entry):
     if not parked and not entry["force_parked"]:
         args += ["--note", ""]
     if parked:
-        args += ["--note", "%d test(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
+        args += ["--note", "%d test(s) or check(s) parked on %s" % (len(parked), ", ".join(sorted(set(parked))))]
         for found in sorted(set(parked)):
             if found.startswith("F-"):
                 args += ["--finding", found]
@@ -206,4 +216,6 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    with g.locked():
+        code = main(sys.argv)
+    sys.exit(code)

@@ -69,6 +69,13 @@ tests have nothing parked is approved. *[2026-10-08]*
 Filters.ringBearer." Done: Filters.theOneRing (f7dfee394). Card-type filters a rule needs go in Filters, not in
 the rule. *[2026-10-08]*
 
+**Landing is a stage of the pipeline, and reports name numbers only (Ketura, 2026-10-08, evening).** A lander
+agent follows the reviewer: it files and numbers what the batch found, applies the corrections, works the
+documentation and standard issues into the skills at once, and commits. "Ideally it's wrapping and handling all
+the updates itself, and then you only have a very few things to put in here so your context doesn't bloat.
+Ideally you don't transcribe things that are in files I can read; just listing the Q- or F- or G- id's for me to
+go look up is sufficient." The tracker is refreshed at every landing.
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -599,6 +606,10 @@ it's kosher." *[2026-10-07, night]*
 **Preventing a discard that was a cost (Q-0038).** Q-0038 (102_8): preventing a discard that was a
 cost "is permitted, but it will cause the cost to no longer be considered paid". *[2026-10-06]*
 
+**"Remove N [culture] tokens" may take them from more than one card.** Corsair Marauder 58_57, "remove 2 [raider]
+tokens", built with removeTokensCumulative: "58_57 is supposed to be able to take from multiple targets, yeah."
+*[2026-10-08, evening]*
+
 ## Triggers, responses and the play of a card
 
 **2026-10-05. Who orders simultaneous actions (G-0005).** "After all other procedures have been followed, the
@@ -846,6 +857,13 @@ unique means you have to choose one type or the other, you still can't have both
 The cheating functions are for us to short-circuit more-or-less legitimate setups, but putting 2 unique cards on
 the table is getting too far into the weeds." And on not building such boards only to tell apart two definitions
 that differ nowhere else: "This is good." *[2026-10-08, afternoon]*
+
+**A card test never relies on an exception; a check the rig cannot show parks the card.** On Bill Ferny 52_75,
+whose tests read the game refusing an assignment through `assertThrows`: "Standard card functionality tests should
+never rely on exceptions, and I'd like those sorts of requests to park the card while pending the engine upgrade,
+rather than moving on blithely." So: no `assertThrows` and no `try` in a card test (lint refuses them); the check
+is written in the ledger as `waits <check>: G-0000 ...`, a rig request is filed, and the card lands parked on it
+(G-0029 for 52_75, G-0028 for Long I Fell 54_97). *[2026-10-08, evening]*
 
 ## Card by card
 

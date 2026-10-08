@@ -117,9 +117,13 @@ does in some situation without adding a test, put a throwaway JUnit class there 
 `cardtest.py probe <file.java>`; use this to understand a failure, never to decide what a test should expect. Nothing else: not card
 definitions, not the engine, not the rig, not other cards' tests, not git, not the campaign's state files.
 
-If a check cannot be written with the rig's existing methods, do not write a helper method and do not reach into
-the engine. Leave the check untested and report a rig request: what the test needed to do, the method signature
-you would propose, and which rig interface it belongs in.
+If a check cannot be written with the rig's existing methods, do not write a helper method, do not reach into
+the engine, and do not show it by an exception: a card test never asserts that the rig or the game throws
+(`assertThrows`, a `try`; Ketura, 2026-10-08, and lint refuses it). Leave the check untested, write it in the
+ledger under its clause as `waits <check>: G-0000 <what the rig lacks>` in place of a claim line, and report a
+rig request: what the test needed to do, the method signature you would propose, and which rig interface it
+belongs in. Such a card lands parked on the request until the rig can show the check; report it as `READY` if
+everything else is done.
 
 Keep your scratch files under `/tmp/<your folder name>/` whatever else you have been told about scratch space:
 the reviewer and the orchestrator look for probes there.

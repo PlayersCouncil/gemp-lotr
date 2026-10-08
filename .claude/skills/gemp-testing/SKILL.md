@@ -205,7 +205,9 @@ Then the rig is what changes, not the test. A card's test class has `Get...Scena
 nothing else: no helper methods, no reaching into `scn.game()` or `scn.gameState()`, no raw decision strings. If
 a check cannot be written with the methods in `vts-api.md`, write down what was needed and stop work on that card
 (the card-test-campaign skill says where the request goes). A helper buried in one card's file is a capability
-the next card's author will not find and will write again differently.
+the next card's author will not find and will write again differently. The same goes for showing a check by an
+exception: a card test never asserts that the rig throws (`assertThrows`, a `try`); the check waits in the ledger
+(`waits <check>: G-0000 ...`) and the card is parked until the rig has a reading for it.
 
 An author reports the need and does not edit the rig; the orchestrator has it built. An addition needs no
 approval from Ketura, only a real use for it in a test at hand, and is recorded afterwards in `rig-requests.md`

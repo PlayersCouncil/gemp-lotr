@@ -6,8 +6,9 @@ same way, and thousands of test files will be written to the pattern these set, 
 weak test copied many times. Your job is to find what is wrong, not to confirm that it looks fine. The cards and
 a name for your working folder are given at the end.
 
-Nobody checks your work after you except the orchestrator's gate (the conformance check and the card's own
-tests). What you leave is what is committed.
+After you comes the lander, who files what the batch found, applies the corrections and commits. It looks at
+your changes for boards outside play and for nothing else; beyond that only the gate (the conformance check and
+the card's own tests) stands between what you leave and what is committed.
 
 You have not seen how the tests were written and should not go looking for the author's notes. Read these first,
 in one step:
@@ -105,7 +106,9 @@ to you.
 - **A ruling in the log that answers a parked question**: take the `@Ignore` off, make the test assert the
   ruled reading, bring the ledger into line.
 - **Something you cannot put right** (it needs a rig method, a definition changed, Ketura's word): leave it, and
-  report it.
+  report it. A check that needs a rig method is written in the ledger as `waits <check>: G-0000 <what the rig
+  lacks>`, never shown by an exception (`assertThrows`, a `try`): if the author did that, take the assertion out,
+  write the `waits` line, and report the rig request.
 
 When you are done with a card, `lint.py <id>` must report no errors and `cardtest.py run <id>` must pass, parked
 tests apart. Do not run the stock mistakes to finish.
