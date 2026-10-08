@@ -37,6 +37,15 @@
 				type: activated
 				text: Discard 3 from deck to no effect.
 				phase: fellowship
+				requires: [
+					{
+						type: canSpot
+						filter: dwarf
+					}
+					{
+						type: HasCardInDrawDeck
+					}
+				]
 				effect: [
 					{
 						type: chooseANumber
