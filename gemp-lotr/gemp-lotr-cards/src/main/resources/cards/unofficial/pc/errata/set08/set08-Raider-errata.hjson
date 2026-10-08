@@ -228,10 +228,26 @@
 				type: played
 				filter: self
 			}
-			requires: {
-				type: canSpot
-				filter: not(self),corsair
-			}
+			requires: [
+				{
+					type: canSpot
+					filter: not(self),corsair
+				}
+				{
+					type: Or
+					requires: [
+						{
+							type: canSpot
+							filter: possession,side(Shadow)
+						}
+						{
+							type: canSpotCultureTokens
+							culture: raider
+							amount: 2
+						}
+					]
+				}
+			]
 
 			effect: {
 				type: choice
