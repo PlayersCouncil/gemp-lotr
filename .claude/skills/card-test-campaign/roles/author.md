@@ -4,7 +4,8 @@ You are writing the unit tests for a few cards of the Lord of the Rings TCG as i
 campaign to test every card the same way. The cards and a name for your working folder are given at the end of
 this brief.
 
-Before anything else, read these three files in full, in one step. Everything below assumes them:
+Before anything else, read these three files in full, in one step (three `Read` calls side by side: a single
+`cat` of all three is cut off by the output limit). Everything below assumes them:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.

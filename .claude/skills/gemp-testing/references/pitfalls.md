@@ -115,6 +115,11 @@ Optional triggers are still offered.
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
+**A Response ability is never "used".** A Response special ability is built as an optional trigger, which
+does not report itself as an ability used, so no card that answers "a special ability is used" (5_59, 5_64,
+5_114, 13_76, 51_98) is offered against one (F-0201, an engine candidate). A test of such a card uses a phase
+ability of the right phase.
+
 ## Reading and answering an offer
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
@@ -152,6 +157,11 @@ listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contai
 entry with no wording.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
+
+**A response window can come before the target.** Where the Free Peoples player holds a response event that
+can answer an event being played, the game may put an "Optional responses" decision to him before the played
+event's target is chosen, and an answer written for the target choice then answers the response window, with no
+error; the test fails some lines later. Read what is pending before answering (seen on 51_115).
 
 ## Getting to the moment: set-up, the skippers and turns
 
@@ -234,7 +244,28 @@ skirmishes that are not about him.
 (`ShadowChooseCard` after `SkipToArcheryWounds()`), the minions' by the Free Peoples player on companions.
 
 **An ally in a skirmish.** An ally can be assigned at its home site (CR 4.2 "ally"). On `FellowshipSites`, Elrond
-(1_40, home site 3) can skirmish once the fellowship has moved to site 3: `SkipToSite(2)` and then a move.
+(1_40, home site 3) can skirmish once the fellowship has moved to site 3: `SkipToSite(2)` and then a move. An ally whose home is on another
+block's path needs that block's sites in the scenario (Gondorian Merchant 7_97, home 3T, on the Towers sites:
+`SkipToSite(2)` and then the move). `SkipToSite(n)` stops in the fellowship phase at site n, so a
+`SkipToAssignments` from there moves the fellowship on to n + 1 first.
+
+**Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
+is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
+player 1's site before his turn ends.
+
+**At the move limit, the regroup phase ends the turn.** When the fellowship has moved as often as the move limit
+allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
+action or Pass" decision is pending; no "another move" question is asked. Below the limit the Free Peoples
+player is asked "Do you want to make another move?".
+
+**A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
+sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
+second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the
+deck's size where a discard or a draw must be possible.
+
+**An unassigned minion beside an unassigned Ring-bearer.** With a minion left unassigned after the Free Peoples
+player's assignments and the Ring-bearer free, the Shadow player gets an assignment decision of his own:
+`ShadowDeclineAssignments()` passes it.
 
 ## Cards, owners and zones
 
@@ -284,6 +315,10 @@ and says nothing. A modifier with a general filter (a card type, a keyword) can 
 card has to be played legally afterwards, build the modifier on a filter and not on the card:
 `scn.GenerateShadowFilter("name(Goblin Armory)")`, which throws `InvalidCardDefinitionException`
 (`com.gempukku.lotro.cards.build`) for the test method to declare.
+
+**A value modified below zero counts as zero** (CR 4.2 "modifier"): a site's Shadow number lowered past 0 reads
+0 (Rivendell Valley stays 0 under No Stranger to the Shadows 51_108). `rules.py term` has no entry for "Shadow
+number"; the rule is under "modifier".
 
 ## A card that leaves play as it is played
 

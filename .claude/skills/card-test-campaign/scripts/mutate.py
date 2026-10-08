@@ -410,6 +410,7 @@ def main(argv):
     test_class = g.test_class_name(test)
 
     verdict, failing = run_tests(g.SERVER, cp, test_class)
+    parked = re.findall(r"(?m)^\s*@Ignore\b.*\n(?:\s*@\w+.*\n)*\s*public\s+void\s+(\w+)", test.read_text(encoding="utf-8")) if with_parked else []
     if with_parked:
         print("With the parked tests switched on, against the card as it is: %s" % ("all pass" if verdict == "survived" else "failing: " + failing))
     elif verdict != "survived":
@@ -438,6 +439,22 @@ def main(argv):
         elif "--all" in argv or with_parked:
             print("  %-9s line %d: %s%s" % (verdict, card.line + i, what, "  (" + failed + ")" if failed else ""))
     print("%d noticed, %d survived, %d made the card unloadable" % (counts["noticed"], counts["survived"], counts["invalid"]))
+    if with_parked:
+        # Read as a correction: what the parked tests do under it is the point.
+        for n, (i, what, _) in enumerate(todo):
+            verdict, failed = results[n]
+            failed_set = set(x.strip() for x in failed.split(",") if x.strip())
+            if verdict == "invalid":
+                print("As a correction (line %d): the card no longer loads." % (card.line + i))
+                continue
+            now_pass = [t for t in parked if t not in failed_set]
+            still = [t for t in parked if t in failed_set]
+            active = sorted(failed_set - set(parked))
+            if verdict == "survived":
+                print("As a correction (line %d): every test passes, the parked ones included." % (card.line + i))
+            else:
+                print("As a correction (line %d): parked tests passing: %s; parked tests still failing: %s; active tests failing: %s"
+                      % (card.line + i, ", ".join(now_pass) or "none", ", ".join(still) or "none", ", ".join(active) or "none"))
     shutil.rmtree(base, ignore_errors=True)
     return 0
 

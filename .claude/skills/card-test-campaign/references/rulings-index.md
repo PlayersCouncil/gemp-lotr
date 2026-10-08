@@ -260,6 +260,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191)
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
+- A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - An "or" between two cost-to-effect halves (Q-0034)
 
 ## Limits

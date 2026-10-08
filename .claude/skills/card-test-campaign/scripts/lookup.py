@@ -4,9 +4,11 @@
     lookup.py Q-0098                      every entry that names Q-0098
     lookup.py "support area" hindered     entries containing every term given (case does not matter)
     lookup.py prevent --in pitfalls       one file only: rulings, shapes, pitfalls, standard, rig, hjson, all
-    lookup.py --index                     rebuild card-test-campaign/references/rulings-index.md
+    lookup.py --index                     rebuild card-test-campaign/references/rulings-index.md, and the
+                                          pitfall index in the gemp-testing skill
 
-An entry is a paragraph (or a list that stands as one block) under a heading. By default the rulings log, the
+An entry is a paragraph (or a list that stands as one block) under a heading, and is printed only when it
+contains EVERY term given: look up separate subjects with separate commands. By default the rulings log, the
 settled shapes and the rig's pitfalls are searched. A term that looks like a finding, question or rig-request
 number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression.
 """
@@ -97,12 +99,45 @@ def build_index():
     print(f"wrote {INDEX} ({INDEX.stat().st_size} bytes)")
 
 
+RIG_SKILL = SKILLS / "gemp-testing" / "SKILL.md"
+
+
+def build_pitfall_index():
+    """The rig skill lists every pitfall by its first words, group by group: rebuild that list."""
+    groups, order = {}, []
+    first = FILES["pitfalls"].read_text(encoding="utf-8").split("\n", 1)[0].lstrip("# ").strip()
+    for heading, text in entries(FILES["pitfalls"]):
+        if heading == first:
+            continue
+        for item in (text.split("\n- ") if text.startswith("- ") else [text]):
+            item = item.lstrip("- ")
+            m = re.match(r"\*\*(.+?)\*\*", item)
+            if m:
+                name = m.group(1).strip().rstrip(".,")
+            else:
+                m = re.match(r"`(0_\d+)` (Test [A-Z][\w-]+)", item)
+                if not m:
+                    continue
+                name = m.group(2) + " " + m.group(1)
+            if heading not in groups:
+                groups[heading] = []
+                order.append(heading)
+            groups[heading].append(name)
+    lines = ["- **%s:** %s." % (h, " · ".join(groups[h])) for h in order]
+    skill = RIG_SKILL.read_text(encoding="utf-8")
+    start = skill.index("surprises in this campaign were one of these.\n\n") + len("surprises in this campaign were one of these.\n\n")
+    end = skill.index("\n## Choosing helper cards")
+    RIG_SKILL.write_text(skill[:start] + "\n".join(lines) + "\n" + skill[end:], encoding="utf-8")
+    print(f"rebuilt the pitfall index in {RIG_SKILL} ({sum(len(v) for v in groups.values())} entries)")
+
+
 def main(argv):
     if not argv or argv[0] in ("-h", "--help"):
         print(__doc__)
         return 0
     if argv[0] == "--index":
         build_index()
+        build_pitfall_index()
         return 0
     where, terms, limit = DEFAULT, [], 8
     i = 0

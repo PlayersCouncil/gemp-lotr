@@ -61,8 +61,11 @@ step where you can, and do not look at the same thing twice.
    parked test should fail against the card as it is and pass against the correction. Where the author kept an
    old reading active beside the parked one (a question), that active test is the one failure to expect against
    the correction; on a card with two questions each parked test also fails under the other's correction, so
-   look for the parked test's own name missing from the failing list. Report every active test that fails
-   against the correction, not only the one written for the question: those are what the correction breaks.
+   look for the parked test's own name in the "As a correction" line `mutate.py` prints (it names the parked
+   tests that pass and fail under the correction; "SURVIVED" above it only means no test failed, which is what
+   a correction wants). Report every active test that fails against the correction, not only the one written
+   for the question: those are what the correction breaks. Where the correction is an engine change and no
+   definition change can show it, say so, and say what the parked test would read once the engine does it.
    Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
    to be parsed, look at how other cards with the same shape of sentence are worded and built (`grep` the game
    texts). For a question parked with `Q-...`, check that the rules, the rulings and the settled shapes really do
@@ -74,7 +77,10 @@ step where you can, and do not look at the same thing twice.
 
 6. **A flag with a name of its own.** Where the definition sets a flag or a modifier with a name of its own
    (`sarumanFirstSentenceInactive`), `grep` the card definitions for everything that reads it. Any reader the
-   card's text does not name is an invalid candidate, and probably a finding.
+   card's text does not name is an invalid candidate, and probably a finding. The same goes for a field set against its
+   usual value (`forced: false`, an `until:` of its own): `grep` the engine for what reads the field
+   (`grep -rn "forced" gemp-lotr/gemp-lotr-logic/src/main/java`); Frodo's "Shadow cards may not discard ... from
+   the top of your draw deck" reads `forced`, and Uruk Rager 51_150's `forced: false` slipped past it.
 
 ## Putting it right
 

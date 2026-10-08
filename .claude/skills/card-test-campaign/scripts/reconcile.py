@@ -65,6 +65,11 @@ def compare(card_id: str) -> list:
 
     check("title", g.plain_text(row["title"]), g.plain_text(d.get("title")))
     check("subtitle", g.plain_text(row["subtitle"]), g.plain_text(d.get("subtitle")))
+    for field in ("title", "subtitle"):
+        sheet, definition = g.plain_text(row[field]), g.plain_text(d.get(field))
+        if sheet and definition and fold(sheet) == fold(definition) and sheet.strip() != definition.strip() \
+                and sheet.strip().lower() != sheet.strip() and sheet.strip().lower() == definition.strip().lower():
+            diffs.append((field + " (capitals only)", sheet.strip(), definition.strip()))
     # Uniqueness is a number of dots: none, one (unique), or the PC's two and three.
     sheet_dots = {"": 0, "T": 1, "1": 1, "2": 2, "3": 3}.get(row["unique"].strip(), row["unique"])
     defined = d.get("unique")
