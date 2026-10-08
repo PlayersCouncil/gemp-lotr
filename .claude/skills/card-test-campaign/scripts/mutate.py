@@ -341,6 +341,13 @@ def run_tests(cwd: Path, cp: str, test_class: str):
     if "CardNotFoundException" in out or "Error while loading file" in out or "InvalidCardDefinitionException" in out:
         return "invalid", ""
     failed = re.findall(r"^\d+\) (\w+)\(", out, re.M)
+    # A definition that fails to load in some other way makes every test fail before it asserts anything: when
+    # every test failed and no failure is an assertion, call the change unloadable rather than noticed.
+    run = re.search(r"^Tests run: (\d+),\s+Failures: (\d+)", out, re.M)
+    causes = re.findall(r"^\d+\) \w+\(.*\)\n([\w.$]+)", out, re.M)
+    if run and run.group(1) == run.group(2) and causes and not any(
+            c.endswith(("AssertionError", "ComparisonFailure", "AssertionFailedError")) for c in causes):
+        return "invalid", "every test failed without an assertion (" + causes[0] + ")"
     return "noticed", ", ".join(sorted(set(failed)))
 
 
@@ -445,7 +452,7 @@ def main(argv):
             verdict, failed = results[n]
             failed_set = set(x.strip() for x in failed.split(",") if x.strip())
             if verdict == "invalid":
-                print("As a correction (line %d): the card no longer loads." % (card.line + i))
+                print("As a correction (line %d): the card no longer loads%s." % (card.line + i, ": " + failed if failed else ""))
                 continue
             now_pass = [t for t in parked if t not in failed_set]
             still = [t for t in parked if t in failed_set]

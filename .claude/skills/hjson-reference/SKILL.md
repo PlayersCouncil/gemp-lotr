@@ -460,7 +460,7 @@ Used in `cost: []` and `effect: []` arrays.
 ### Control Flow
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
-| `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options |
+| `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options. `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse |
 | `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect |
 | `If` | check[], true[], false[] | Conditional execution |
 | `Optional` | player?, text, effect[], requires? | "You may" prompt |

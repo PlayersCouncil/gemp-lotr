@@ -27,7 +27,7 @@ Simple filters do not contain any parameters and are for the most part one-word 
  
 
 * All Card Types
-* All Keywords
+* All Keywords, as bare words (`damage`, `fierce`, `archer`), not `keyword(damage)`
 * All Item Classes
 * All Races
 * Another | Other
