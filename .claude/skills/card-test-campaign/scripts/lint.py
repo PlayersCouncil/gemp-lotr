@@ -379,6 +379,21 @@ def lint_file(path: Path):
                     "the twin is out of that pile, either copy may be taken and a reading of %s's zone fails at random"
                     % (name, chosen, ", ".join(twins), "has" if len(twins) == 1 else "have", bp, chosen))
 
+    # A race that shares its name with a culture (F-0019): unless the table holds a card of that culture outside the
+    # race, culture(elven) written for elf passes every test. The usual board is a Man given the culture ad hoc.
+    if card is not None:
+        races = set()
+        for line in card.raw.split("\n"):
+            m = re.match(r"\s*(\w+)\s*:\s*(.*)", line)
+            if m and re.search(r"(filter|select|target|^on$|bearer)", m.group(1), re.I):
+                races.update(r.lower() for r in re.findall(r"(?<![\w(])(elf|dwarf|hobbit)\b", m.group(2), re.I))
+        if races and not re.search(r"IsAdditional(Culture|Race)Modifier", raw):
+            pairs = {"elf": "[elven]", "dwarf": "[dwarven]", "hobbit": "[shire]"}
+            add("warning", "race-culture", None, "the definition chooses or counts by race (%s), and no test gives a card "
+                "an additional culture or race: unless some test's table already holds a %s card that is not of that "
+                "race, the culture written for the race passes every test (F-0019)"
+                % (", ".join(sorted(races)), " / ".join(pairs[r] for r in sorted(races))))
+
     if card is not None and g.sheet_for(card_id)[0] is not None:
         import reconcile
         diffs = reconcile.compare(card_id)
