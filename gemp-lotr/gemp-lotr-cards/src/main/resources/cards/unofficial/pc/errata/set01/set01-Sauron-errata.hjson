@@ -509,6 +509,10 @@
 				type: winsSkirmish
 				filter: self
 			}
+			requires: {
+				type: canSpot
+				filter: companion,not(exhausted),not(Ring-bearer)
+			}
 			effect: [
 				{
 					type: chooseActiveCards
