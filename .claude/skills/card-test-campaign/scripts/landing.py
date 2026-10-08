@@ -97,12 +97,14 @@ def rig_add(argv):
     body = body_file.read_text(encoding="utf-8").strip()
     path = g.state_dir() / "rig-requests.md"
     text = read(path)
-    if "\n## Done" not in text:
-        raise SystemExit("rig-requests.md has no '## Done' heading")
+    opened = re.search(r"^## Open\s*$", text, re.M)
+    following = re.search(r"^## ", text[opened.end():], re.M) if opened else None
+    if not opened or not following:
+        raise SystemExit("rig-requests.md has no '## Open' section followed by another")
+    cut = opened.end() + following.start()   # the end of the Open section, whatever heading comes next
     number = "G-%04d" % (1 + highest("G", text))
-    head, rest = text.split("\n## Done", 1)
-    entry = "\n### %s %s: open\n\n%s\n" % (number, title.strip().rstrip(":"), body)
-    path.write_text(head.rstrip("\n") + "\n" + entry + "\n## Done" + rest, encoding="utf-8")
+    entry = "### %s %s: open\n\n%s\n\n" % (number, title.strip().rstrip(":"), body)
+    path.write_text(text[:cut].rstrip("\n") + "\n\n" + entry + text[cut:], encoding="utf-8")
     print(number)
 
 

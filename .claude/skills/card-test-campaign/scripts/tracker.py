@@ -202,7 +202,7 @@ def open_entries(path: Path, start: str, stop: str) -> list:
     text = path.read_text(encoding="utf-8")
     if start not in text:
         return []
-    section = text.split(start, 1)[1].split(stop, 1)[0]
+    section = re.split(r"^## ", text.split(start, 1)[1], maxsplit=1, flags=re.M)[0]  # up to the next heading
     out = []
     for block in re.split(r"^### ", section, flags=re.M)[1:]:
         head, _, body = block.partition("\n")
