@@ -763,7 +763,7 @@
 				cost: {
 					type: Discard
 					player: freeps
-					select: choose(companion,not(ring-bearer),not(bearer))
+					select: choose(companion,not(ring-bearer),not(memory(target)))
 				}
 			}
 		}
@@ -808,7 +808,7 @@
 			}
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: moves
 				}
