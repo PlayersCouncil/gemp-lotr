@@ -4,6 +4,8 @@ import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -13,20 +15,23 @@ import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_08_003_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("brc", "58_3");
-					put("gimli", "1_13");      // Damage +1
-					put("axe", "1_14");        // Gimli's Battle Axe: bearer is damage +1
-					put("durin", "9_3");       // Durin III: Damage +1
-					put("guard", "1_7");       // Dwarf Guard: no damage bonus
-					put("troop1", "1_177");
-					put("troop2", "1_177");
-					put("troop3", "1_177");
-					put("watcher1", "103_92"); // Cirith Ungol Watcher: response hinders a companion exerted by a FP card
+
+					put("gimli", "1_13");      // Gimli, Son of Gloin: Dwarf companion, damage +1; a skirmish ability only
+					put("axe", "1_14");        // Gimli's Battle Axe: bearer must be Gimli, he is damage +1; an optional trigger on winning a skirmish
+					put("thrarin", "1_27");    // Thrarin, Dwarven Smith: Dwarf ally, no damage of his own; a maneuver ability only
+					put("guard", "1_7");       // Dwarf Guard: Dwarf companion, no damage bonus
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man; a maneuver ability used only on purpose
+
+					put("troop", "1_177");     // Goblin Patrol Troop: [moria] minion, no text
+					put("pinned", "1_192");    // Pinned Down: [moria] condition in the support area; nothing without a [moria] archer
+					put("pinned2", "1_192");
+					put("poison", "8_28");     // Spider Poison: Shadow possession; its bearer exerts when assigned, and a skirmish ability
+					put("watcher1", "103_92"); // Cirith Ungol Watcher: response to a companion exerted by a Free Peoples card, hinders him
 					put("watcher2", "103_92");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -37,18 +42,18 @@ public class Card_08_003_ErrataTests
 
 	@Test
 	public void BloodRunsChillStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-
 		/**
 		 * Set: 8
 		 * Name: Blood Runs Chill
-		 * Unique: false
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Dwarven
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Response
-		 * Game Text: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf to make an opponent hinder X Shadow cards.
-		*/
+		 * Game Text: If the fellowship moves, spot a Dwarf who is damage +X and exert that Dwarf to make an opponent
+		 * hinder X Shadow cards.
+		 */
 
 		var scn = GetScenario();
 
@@ -64,64 +69,157 @@ public class Card_08_003_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	private static void ShadowPlaysSiteIfAsked(VirtualTableScenario scn) throws DecisionResultInvalidException {
-		if (scn.ShadowDecisionAvailable("Choose site to play"))
-			scn.ShadowChooseAnyCard();
-	}
-
-	private static int CountHindered(VirtualTableScenario scn, com.gempukku.lotro.game.PhysicalCardImpl... cards) {
-		int n = 0;
-		for (var card : cards)
-			if (scn.IsHindered(card))
-				n++;
-		return n;
-	}
-
 	@Test
 	public void ExertsADamageDwarfToMakeShadowHinderThatManyCards() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var brc = scn.GetFreepsCard("brc");
 		var gimli = scn.GetFreepsCard("gimli");
 		var axe = scn.GetFreepsCard("axe");
-		var durin = scn.GetFreepsCard("durin");
+		var thrarin = scn.GetFreepsCard("thrarin");
 		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(gimli, durin, guard);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(gimli, guard, aragorn);
 		scn.AttachCardsTo(gimli, axe);
+		scn.MoveAlliesToTable(thrarin);
+		// Thrarin is a Dwarf ally who is damage +1.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, thrarin, null, Keyword.DAMAGE, 1));
+		// Aragorn is a [dwarven] Man who is damage +1, and no Dwarf.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.DAMAGE, 1));
 		scn.MoveCardsToHand(brc);
 
-		var troop1 = scn.GetShadowCard("troop1");
-		var troop2 = scn.GetShadowCard("troop2");
-		var troop3 = scn.GetShadowCard("troop3");
-		scn.MoveMinionsToTable(troop1, troop2, troop3);
+		var troop = scn.GetShadowCard("troop");
+		var pinned = scn.GetShadowCard("pinned");
+		var pinned2 = scn.GetShadowCard("pinned2");
+		var poison = scn.GetShadowCard("poison");
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.MoveCardsToSupportArea(pinned, pinned2);
+		scn.HinderCard(pinned2);
+		scn.AttachCardsTo(guard, poison);
+
+		// Gimli is damage +1 printed, +1 from his axe.
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(thrarin, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+		// Not a fellowship event: nothing to play before the fellowship moves.
+		assertFalse(scn.FreepsPlayAvailable(brc));
+
+		scn.FreepsPass();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(brc));
+		assertInHand(brc);
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsChooseOptionalTrigger(brc);
+
+		// Only Dwarves with a damage bonus can be chosen.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, thrarin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard, aragorn));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(gimli);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(thrarin));
+		assertEquals(2, scn.GetTwilight());
+
+		// Gimli is damage +2, so the Shadow player hinders 2 Shadow cards, of his choosing.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, pinned, poison));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(pinned2, axe, gimli));
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards(troop, poison);
+
+		assertTrue(scn.IsHindered(troop));
+		assertTrue(scn.IsHindered(poison));
+		assertFalse(scn.IsHindered(pinned));
+		assertFalse(scn.IsHindered(axe));
+		assertInDiscard(brc);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AtTheRegroupMoveAnAllyWhoIsDamagePlusOneMakesShadowHinderOneCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var brc = scn.GetFreepsCard("brc");
+		var gimli = scn.GetFreepsCard("gimli");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var axe = scn.GetFreepsCard("axe");
+		scn.MoveCompanionsToTable(gimli);
+		// Gimli is damage +2 with his axe, more than Thrarin, so X is shown to be the chosen Dwarf's and not the greatest.
+		scn.AttachCardsTo(gimli, axe);
+		scn.MoveAlliesToTable(thrarin);
+		// Thrarin is a Dwarf ally who is damage +1.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, thrarin, null, Keyword.DAMAGE, 1));
+
+		var troop = scn.GetShadowCard("troop");
+		var pinned = scn.GetShadowCard("pinned");
+
+		scn.StartGame();
+		scn.SkipToMovementDecision();
+		scn.MoveMinionsToTable(troop);
+		scn.MoveCardsToSupportArea(pinned);
+		scn.MoveCardsToHand(brc);
 
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(durin, Keyword.DAMAGE));
-		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(thrarin, Keyword.DAMAGE));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(thrarin));
 
-		scn.FreepsPass();          // the fellowship moves
-		ShadowPlaysSiteIfAsked(scn);
+		scn.FreepsChooseToMove();
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(brc));
+		scn.FreepsChooseOptionalTrigger(brc);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, thrarin));
+		scn.FreepsChooseCard(thrarin);
 
-		// Only Dwarves with a damage bonus can be chosen
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, durin));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard));
-		scn.FreepsChooseCard(gimli);
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(thrarin));
+		assertEquals(0, scn.GetWoundsOn(gimli));
 
-		// Gimli is damage +2, so the Shadow player must hinder 2 of the 3 minions
-		assertTrue(scn.ShadowHasCardChoiceAvailable(troop1, troop2, troop3));
-		scn.ShadowChooseCards(troop1, troop2);
+		// Thrarin is damage +1: one Shadow card.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, pinned));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCard(pinned);
 
-		assertTrue(scn.IsHindered(troop1));
-		assertTrue(scn.IsHindered(troop2));
-		assertFalse(scn.IsHindered(troop3));
-		assertEquals(Zone.DISCARD, brc.getZone());
+		assertTrue(scn.IsHindered(pinned));
+		assertFalse(scn.IsHindered(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithAnExhaustedDwarfAndADwarvenManWhoIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var brc = scn.GetFreepsCard("brc");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		// Aragorn is a [dwarven] Man who is damage +1, and no Dwarf.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.DAMAGE, 1));
+		scn.MoveCardsToHand(brc);
+
+		var pinned = scn.GetShadowCard("pinned");
+
+		scn.StartGame();
+		scn.MoveCardsToSupportArea(pinned);
+		// Vitality 3 with 2 wounds: Gimli is exhausted.
+		scn.AddWoundsToChar(gimli, 2);
+
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+
+		scn.FreepsPass();
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(brc));
+		assertInHand(brc);
+		assertFalse(scn.IsHindered(pinned));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -137,35 +235,41 @@ public class Card_08_003_ErrataTests
 		scn.AttachCardsTo(gimli, axe);
 		scn.MoveCardsToHand(brc);
 
-		var troop1 = scn.GetShadowCard("troop1");
-		var troop2 = scn.GetShadowCard("troop2");
-		var troop3 = scn.GetShadowCard("troop3");
+		var troop = scn.GetShadowCard("troop");
+		var pinned = scn.GetShadowCard("pinned");
+		var pinned2 = scn.GetShadowCard("pinned2");
 		var watcher1 = scn.GetShadowCard("watcher1");
 		var watcher2 = scn.GetShadowCard("watcher2");
-		scn.MoveMinionsToTable(troop1, troop2, troop3);
-		scn.MoveCardsToSupportArea(watcher1, watcher2);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.MoveCardsToSupportArea(pinned, pinned2, watcher1, watcher2);
+
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsPass();
-		ShadowPlaysSiteIfAsked(scn);
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();           // Gimli is the only eligible Dwarf: chosen and exerted
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(brc));
+		// Gimli is the only Dwarf: chosen and exerted without asking.
+		scn.FreepsChooseOptionalTrigger(brc);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 
-		// The Watcher responds to the exertion: discard the other Watcher, hinder Gimli
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
-		if (scn.ShadowHasCardChoiceAvailable(watcher2))
-			scn.ShadowChooseCard(watcher2);
+		// Watcher 1 answers the exertion: it discards the other Watcher and hinders Gimli.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(watcher1));
+		scn.ShadowChooseOptionalTrigger(watcher1);
+		assertInDiscard(watcher2);
 		assertTrue(scn.IsHindered(gimli));
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));   // the axe is inactive now
 
-		// ...but X was locked in at +2 when the cost was paid
-		assertTrue(scn.ShadowHasCardChoiceAvailable(troop1, troop2, troop3));
-		scn.ShadowChooseCards(troop1, troop2);
-		assertEquals(2, CountHindered(scn, troop1, troop2, troop3));
+		// X was fixed at +2 when the Dwarf was spotted.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, pinned, pinned2, watcher1));
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards(troop, pinned);
+
+		assertTrue(scn.IsHindered(troop));
+		assertTrue(scn.IsHindered(pinned));
+		assertFalse(scn.IsHindered(pinned2));
+		assertFalse(scn.IsHindered(watcher1));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
