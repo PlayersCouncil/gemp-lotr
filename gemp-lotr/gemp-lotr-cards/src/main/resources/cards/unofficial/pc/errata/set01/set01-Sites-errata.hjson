@@ -65,6 +65,19 @@
 		effects: {
 			type: Trigger
 			optional: false
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: CanSpot
+						filter: companion,CanExert
+					}
+					{
+						type: HasCardInHand
+						player: freeps
+					}
+				]
+			}
 			trigger: {
 				type: played
 				filter: minion
