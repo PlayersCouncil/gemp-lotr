@@ -1,169 +1,334 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_01_313_ErrataTests
 {
-    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new VirtualTableScenario(
-                new HashMap<>() {{
-                    put("sting", "51_313");
-                    put("sam", "1_311");
-                    put("merry", "1_302");
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sting", "51_313");
+					// Sam, Son of Hamfast: a Ring-bound Hobbit companion who is not Frodo; his abilities are never used
+					put("sam", "1_311");
 
-                    put("orc1", "1_178");
-                    put("orc2", "1_178");
-                    put("orc3", "1_178");
-                    put("scimitar1", "1_180");
-                    put("scimitar2", "1_180");
-                    put("scimitar3", "1_180");
-                }}
-        );
-    }
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, no text
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc
+					put("hunters", "1_267");    // Orc Hunters: [sauron] Orc
+					put("scout", "1_191");      // Moria Scout: [moria] Orc
+					put("savage", "1_151");     // Uruk Savage: an Uruk-hai, not an Orc
+					put("scimitar", "1_180");   // Goblin Scimitar: a [moria] possession
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,     // Frodo, Son of Drogo: strength 3, vitality 4
+				VirtualTableScenario.RulingRing     // strength +1 to its bearer
+		);
+	}
 
-    @Test
-    public void StingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	protected VirtualTableScenario GetGaladrielRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sting", "51_313");
+					put("frodo", "1_290");      // Frodo, Son of Drogo, here only a companion: strength 3
+					// Sam, Son of Hamfast: a Ring-bound Hobbit companion who is not Frodo; his abilities are never used
+					put("sam", "1_311");
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc
+				}},
+				VirtualTableScenario.FellowshipSites,
+				// Galadriel, Bearer of Wisdom: her only text changes her own resistance
+				VirtualTableScenario.GaladrielRB,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-        /**
-         * Set: 1E
-         * Title: *Sting
-         * Side: Free Peoples
-         * Culture: Shire
-         * Twilight Cost: 1
-         * Strength: +2
-         * Type: Possession
-         * Subtype: Hand Weapon
-         * Errata Game Text: Bearer must be Frodo.
-         * Fellowship or Regroup: Exert Frodo to reveal 4 cards at random from an opponent's hand.  Remove (1) for each Orc revealed (limit (2)).
-         */
+	@Test
+	public void StingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		/**
+		 * Set: 1
+		 * Name: Sting
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Possession
+		 * Subtype: Hand Weapon
+		 * Strength: +2
+		 * Game Text: Bearer must be Frodo.
+		 * Fellowship or Regroup: Exert Frodo to reveal 4 cards at random from an opponent's hand. Remove (1) for
+		 * each Orc revealed (limit (2)).
+		 */
 
-        var sting = scn.GetFreepsCard("sting");
+		var scn = GetScenario();
 
-        assertTrue(sting.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, sting.getBlueprint().getSide());
-        assertEquals(Culture.SHIRE, sting.getBlueprint().getCulture());
-        assertEquals(CardType.POSSESSION, sting.getBlueprint().getCardType());
-        assertTrue(sting.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
-        assertEquals(1, sting.getBlueprint().getTwilightCost());
-        assertEquals(2, sting.getBlueprint().getStrength());
-    }
+		var card = scn.GetFreepsCard("sting");
 
+		assertEquals("Sting", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
+	}
 
-    @Test
-    public void StingCanOnlyBeBorneByFrodo() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+	@Test
+	public void PlaysOnFrodoTheRingBearerAndNotOnSam() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        var frodo = scn.GetRingBearer();
-        var sam = scn.GetFreepsCard("sam");
-        var sting = scn.GetFreepsCard("sting");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var sting = scn.GetFreepsCard("sting");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToHand(sting);
 
-        scn.MoveCompanionsToTable(sam);
-        scn.MoveCardsToHand(sting);
+		scn.StartGame();
 
-        scn.StartGame();
+		assertEquals(0, scn.GetTwilight());
+		// 3 + 1 for the Ring
+		assertEquals(4, scn.GetStrength(frodo));
+		assertTrue(scn.FreepsPlayAvailable(sting));
 
-        scn.FreepsPlayCard(sting);
+		// Frodo is the only bearer it may have, so nobody is asked.
+		scn.FreepsPlayCard(sting);
+		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(sting, frodo);
+		// 3 + 1 for the Ring + 2
+		assertEquals(6, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-        //should have automatically gone to frodo as the only valid target
-        Assert.assertEquals(Zone.ATTACHED, sting.getZone());
-        Assert.assertEquals(frodo, sting.getAttachedTo());
-    }
+	@Test
+	public void PlaysOnAFrodoWhoIsNotTheRingBearerAndNotOnTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetGaladrielRingBearerScenario();
 
-    @Test
-    public void StingAbilityAvailableInBothFellowshipAndRegroup() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		var galadriel = scn.GetRingBearer();
+		var frodo = scn.GetFreepsCard("frodo");
+		var sam = scn.GetFreepsCard("sam");
+		var sting = scn.GetFreepsCard("sting");
+		scn.MoveCompanionsToTable(frodo, sam);
+		scn.MoveCardsToHand(sting);
 
-        var frodo = scn.GetRingBearer();
-        var sting = scn.GetFreepsCard("sting");
+		scn.StartGame();
 
-        scn.AttachCardsTo(frodo, sting);
+		assertEquals("Galadriel", galadriel.getBlueprint().getTitle());
+		assertTrue(scn.FreepsPlayAvailable(sting));
 
-        scn.StartGame();
+		scn.FreepsPlayCard(sting);
+		assertAttachedTo(sting, frodo);
+		assertEquals(5, scn.GetStrength(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-        assertTrue(scn.FreepsActionAvailable(sting));
+	@Test
+	public void AbilityExertsTheFrodoWhoBearsItAndNotTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetGaladrielRingBearerScenario();
 
-        scn.SkipToPhase(Phase.REGROUP);
+		var galadriel = scn.GetRingBearer();
+		var frodo = scn.GetFreepsCard("frodo");
+		var sting = scn.GetFreepsCard("sting");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(frodo);
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(runner);
 
-        assertTrue(scn.FreepsActionAvailable(sting));
-    }
+		scn.StartGame();
+		scn.SetTwilight(5);
 
-    @Test
-    public void StingAbilityExertsFrodoAndRevealsFourCards() throws DecisionResultInvalidException, CardNotFoundException {
-        VirtualTableScenario scn = GetScenario();
+		assertEquals("Galadriel", galadriel.getBlueprint().getTitle());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(galadriel));
 
-        var frodo = scn.GetRingBearer();
-        var sting = scn.GetFreepsCard("sting");
+		scn.FreepsUseCardAction(sting);
+		scn.FreepsDismissRevealedCards();
 
-        var orc1 = scn.GetShadowCard("orc1");
-        var orc2 = scn.GetShadowCard("orc2");
-        var orc3 = scn.GetShadowCard("orc3");
-        var scimitar1 = scn.GetShadowCard("scimitar1");
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(galadriel));
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-        scn.AttachCardsTo(frodo, sting);
+	@Test
+	public void FellowshipAbilityExertsFrodoToRevealTheShadowHandAndRemovesOneForEachOrc() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        scn.MoveCardsToHand(orc1, orc2, orc3, scimitar1);
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var mytroop = scn.GetFreepsCard("troop");
+		var runner = scn.GetShadowCard("runner");
+		var soldier = scn.GetShadowCard("soldier");
+		var savage = scn.GetShadowCard("savage");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.AttachCardsTo(frodo, sting);
+		// An Orc in the Free Peoples player's own hand, of a title the Shadow hand does not hold.
+		scn.MoveCardsToHand(mytroop);
+		scn.MoveCardsToHand(runner, soldier, savage, scimitar);
 
-        scn.StartGame();
+		scn.StartGame();
+		scn.SetTwilight(5);
 
-        scn.FreepsUseCardAction(sting);
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsUseCardAction(sting);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		// The Shadow hand has 4 cards: all are shown, and only to the Free Peoples player.
+		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(soldier, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(scimitar, false));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(mytroop, false));
+		assertEquals(0, scn.ShadowGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
 
-        //Reveals 2 cards
-        assertEquals(4, scn.FreepsGetADParamAsList("blueprintId").size());
-        assertEquals(1, scn.GetWoundsOn(frodo));
-    }
+		// Two Orcs of two cultures; the Uruk-hai, the possession and the Free Peoples player's own Orc do not count.
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(4, scn.GetShadowHandCount());
+		assertInZone(Zone.HAND, mytroop);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-    @Test
-    public void StingAbilityRemovesTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-        VirtualTableScenario scn = GetScenario();
+	@Test
+	public void OneOrcRevealedRemovesOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        var frodo = scn.GetRingBearer();
-        var sting = scn.GetFreepsCard("sting");
-        var sam = scn.GetFreepsCard("sam");
-        var merry = scn.GetFreepsCard("merry");
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(runner, savage, scimitar);
 
-        var orc1 = scn.GetShadowCard("orc1");
+		scn.StartGame();
+		scn.SetTwilight(5);
 
-        scn.MoveCompanionsToTable(sam, merry);
-        scn.AttachCardsTo(frodo, sting);
+		// One Orc beside an Uruk-hai and a [moria] possession: neither the race nor the culture counts for it.
+		scn.FreepsUseCardAction(sting);
+		assertEquals(3, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
 
-        scn.MoveCardsToHand(orc1);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-        scn.StartGame();
+	@Test
+	public void RevealsOnly4CardsAndRemovesNoMoreThan2() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        scn.SetTwilight(10);
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		var soldier = scn.GetShadowCard("soldier");
+		var hunters = scn.GetShadowCard("hunters");
+		var scout = scn.GetShadowCard("scout");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(runner, troop, soldier, hunters, scout);
 
-        scn.FreepsUseCardAction(sting);
-        //The Free Peoples player dismisses the card reveal dialog; the Shadow player, whose hand it is, is shown none.
-        scn.FreepsDismissRevealedCards();
+		scn.StartGame();
+		scn.SetTwilight(10);
 
-        // 10 twilight - 1 orc in the hand = 9 twilight
-        assertEquals(9, scn.GetTwilight());
+		scn.FreepsUseCardAction(sting);
+		// 5 Orcs in hand, 4 of them shown at random.
+		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(0, scn.ShadowGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
 
-        scn.FreepsUseCardAction(sting);
-        scn.FreepsDismissRevealedCards();
-        // 9 twilight - 1 orc in the hand = 8 twilight
-        assertEquals(8, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		// 4 Orcs revealed, but no more than (2) removed.
+		assertEquals(8, scn.GetTwilight());
+		assertEquals(5, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-        scn.FreepsUseCardAction(sting);
-        scn.FreepsDismissRevealedCards();
-        // limit of 2 should have been hit, so no twilight should be removed
-        assertEquals(8, scn.GetTwilight());
+	@Test
+	public void LimitOf2HoldsForTheWholePhaseAndRenewsInTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-    }
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var runner = scn.GetShadowCard("runner");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(runner);
 
+		scn.StartGame();
+		scn.SetTwilight(10);
+
+		scn.FreepsUseCardAction(sting);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(9, scn.GetTwilight());
+
+		scn.FreepsUseCardAction(sting);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(8, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(frodo));
+
+		// At the limit: still offered, Frodo still exerts and the hand is still revealed, but nothing more is removed.
+		assertTrue(scn.FreepsActionAvailable(sting));
+		scn.FreepsUseCardAction(sting);
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertEquals(8, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// No minions, so the turn goes straight on to the regroup phase, where the limit is fresh.
+		scn.RemoveWoundsFromChar(frodo, 3);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(10);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(sting));
+
+		scn.FreepsUseCardAction(sting);
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void AbilityIsNotOfferedWhenFrodoCannotExertNorInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+		scn.SetTwilight(5);
+		scn.AddWoundsToChar(frodo, 3);
+		scn.FreepsRefreshDecision();
+
+		// Vitality 4 with 3 wounds: exhausted.
+		assertFalse(scn.FreepsActionAvailable(sting));
+
+		scn.RemoveWoundsFromChar(frodo, 3);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(sting));
+
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertFalse(scn.FreepsActionAvailable(sting));
+	}
 }
