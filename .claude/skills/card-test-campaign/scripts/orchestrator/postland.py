@@ -92,9 +92,15 @@ def main(argv):
             if seen.get(rel) != d:
                 listed[rel] = d
                 z.write(p, rel)
-    (WORK / "last_listed.json").write_text(json.dumps(listed))
     print("state: %d changed file(s) in state-delta.zip" % len(listed))
     carry.append("state-delta.zip")
+    # The script that applies all this on her machine travels with it whenever it has changed.
+    applier = SCRIPTS / "orchestrator/apply-sync.py"
+    if seen.get("transport/apply-sync.py") != digest(applier):
+        (transport / "apply-sync.py").write_bytes(applier.read_bytes())
+        listed["transport/apply-sync.py"] = digest(applier)
+        carry.append("apply-sync.py")
+    (WORK / "last_listed.json").write_text(json.dumps(listed))
     print("carry (device_commit_files, force): " + json.dumps(
         [{"stagedPath": str(transport / name), "devicePath": DEVICE + name} for name in carry]))
     print("then on her machine: python3 \"$HOME/mnt/gemp-lotr/Claude outputs/card-tests/transport/apply-sync.py\" %s" % head[:9])
