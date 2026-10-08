@@ -117,6 +117,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign to Gandalf
+					requires: {
+						type: canSpot
+						filter: name(gandalf),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(gandalf))

@@ -1,31 +1,31 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.PossessionClass;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_080_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("anduril", "57_80");
-					put("aragorn", "1_89");
-					put("runner1", "1_178");
-					put("runner2", "1_178");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor], strength 8; a maneuver ability used only on purpose
+					put("rohan", "17_93");      // Aragorn, Defender of Rohan: the Aragorn who is not [gondor]
+					put("boromir", "1_97");     // Boromir, Son of Denethor: [gondor] companion of another title, strength 7
+
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc, strength 5; its text is on being played
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, strength 5, damage +1 only
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -38,16 +38,16 @@ public class Card_07_080_ErrataTests
 
 		/**
 		 * Set: 7
-		 * Name: Anduril, King's Blade
-		 * Unique: true
+		 * Name: Andúril, King's Blade
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3
 		 * Type: Artifact
 		 * Subtype: Hand weapon
 		 * Game Text: Bearer must be Aragorn. He is strength +2 for each minion he is skirmishing.
-		 * 	Assignment: Add a threat to make Aragorn <b>defender +1</b> (limit +1).
-		*/
+		 * Assignment: Add a threat to make Aragorn defender +1 (limit +1).
+		 */
 
 		var scn = GetScenario();
 
@@ -61,82 +61,243 @@ public class Card_07_080_ErrataTests
 		assertEquals(CardType.ARTIFACT, anduril.getBlueprint().getCardType());
 		assertTrue(anduril.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertEquals(3, anduril.getBlueprint().getTwilightCost());
-		// Errata removed the base +2 strength
+		// The erratum prints no strength bonus (the original was +2).
 		assertEquals(0, anduril.getBlueprint().getStrength());
 	}
 
 	@Test
-	public void StrengthBonusAppliesDuringSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAragornForThreeAndNotOnBoromir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var anduril = scn.GetFreepsCard("anduril");
-		var runner1 = scn.GetShadowCard("runner1");
-
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, anduril);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCardsToHand(anduril);
+		scn.MoveCompanionsToTable(boromir);
 
 		scn.StartGame();
 
-		// Aragorn base str 8, Anduril has no base str in errata
-		assertEquals(8, scn.GetStrength(aragorn));
+		assertFalse(scn.FreepsPlayAvailable(anduril));
 
-		scn.MoveMinionsToTable(runner1);
-		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsRefreshDecision();
 
-		// Outside skirmish: no bonus
-		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.FreepsPlayAvailable(anduril));
+		assertEquals(0, scn.GetTwilight());
 
-		scn.PassAssignmentActions();
-		scn.FreepsAssignAndResolve(aragorn, runner1);
+		scn.FreepsPlayCard(anduril);
 
-		// During skirmish with 1 minion: 8 + 2 = 10
-		assertEquals(10, scn.GetStrength(aragorn));
-
-		scn.PassSkirmishActions();
-		// Aragorn (str 10) beats Runner (str 5); no wounds on Aragorn
+		// Aragorn is the only bearer, so no choice of bearer is asked.
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(aragorn, anduril.getAttachedTo());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void AssignmentActionGrantsDefenderAndCostsThreat() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAnAragornWhoIsNotGondor() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var anduril = scn.GetFreepsCard("anduril");
-		var runner1 = scn.GetShadowCard("runner1");
-		var runner2 = scn.GetShadowCard("runner2");
-
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, anduril);
+		var rohan = scn.GetFreepsCard("rohan");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCardsToHand(anduril);
+		scn.MoveCompanionsToTable(rohan, boromir);
 
 		scn.StartGame();
 
-		scn.MoveMinionsToTable(runner1, runner2);
-		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertTrue(scn.FreepsPlayAvailable(anduril));
+		scn.FreepsPlayCard(anduril);
 
-		// Before action: no defender, no threats
-		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
-		assertEquals(0, scn.GetThreats());
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(rohan, anduril.getAttachedTo());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-		// Use Anduril's assignment action
-		assertTrue(scn.FreepsActionAvailable(anduril));
-		scn.FreepsUseCardAction(anduril);
+	@Test
+	public void StrengthPlus2ForTheMinionHeIsSkirmishingOnlyOnceHisSkirmishBegins() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		// After action: defender +1, threat +1
-		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
-		assertEquals(1, scn.GetThreats());
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, anduril);
 
-		// Action should no longer be available (limitPerPhase: 1)
-		assertFalse(scn.FreepsActionAvailable(anduril));
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
 
-		// Defender +1 means Aragorn can be assigned to 2 minions (1 base + 1 defender)
-		scn.PassAssignmentActions();
-		scn.FreepsAssignAndResolve(aragorn, runner1, runner2);
+		scn.SkipToAssignments();
+		assertEquals(8, scn.GetStrength(aragorn));
 
-		// During skirmish with 2 minions: 8 + 2*2 = 12
-		assertEquals(12, scn.GetStrength(aragorn));
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner}, new PhysicalCardImpl[]{boromir, troop});
+		scn.FreepsResolveSkirmish(boromir);
+
+		// Aragorn is assigned, but not yet skirmishing; the minion skirmishing Boromir is not his.
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(7, scn.GetStrength(boromir));
 
 		scn.PassSkirmishActions();
-		// Aragorn (str 12) beats both Runners (str 5 each)
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(10, scn.GetStrength(aragorn));
+		assertEquals(5, scn.GetStrength(runner));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AddsAThreatToMakeAragornDefenderPlus1ForTheAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, savage);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.FreepsActionAvailable(anduril));
+		assertEquals("false", scn.FreepsActionNoEffect(anduril));
+
+		scn.FreepsUseCardAction(anduril);
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+
+		scn.ShadowPass();
+		scn.FreepsPass();
+		// Defender +1 lets him take both minions.
+		scn.FreepsAssignToMinions(aragorn, runner, savage);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, savage));
+		scn.FreepsResolveSkirmish(aragorn);
+		// The skirmish phase: defender is gone, and he is skirmishing two minions: 8 + 2 + 2.
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals(12, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AtItsLimitTheAbilityIsStillOfferedAndAddsAThreatForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsUseCardAction(anduril);
+		scn.ShadowPass();
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		// Three companions: the threat limit is 3, so the cost can still be paid.
+		assertEquals(3, scn.GetThreatLimit());
+		assertTrue(scn.FreepsActionAvailable(anduril));
+		assertEquals("limit", scn.FreepsActionNoEffect(anduril));
+
+		scn.FreepsUseCardAction(anduril);
+
+		assertEquals(2, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TheLimitRenewsInTheNextAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsUseCardAction(anduril);
+		scn.ShadowPass();
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals("limit", scn.FreepsActionNoEffect(anduril));
+
+		// Aragorn (8 + 2) beats the Goblin Runner (5), who dies of the wound.
+		scn.FreepsPass();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+		assertInDiscard(runner);
+
+		// The fellowship moves again in the same turn, to a second assignment phase.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		scn.MoveMinionsToTable(savage);
+		scn.ShadowRefreshDecision();
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.FreepsActionAvailable(anduril));
+		assertEquals("false", scn.FreepsActionNoEffect(anduril));
+
+		scn.FreepsUseCardAction(anduril);
+
+		assertEquals(2, scn.GetThreats());
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithThreatsAtTheLimit() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.AddThreats(3);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(3, scn.GetThreatLimit());
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(anduril));
+
+		scn.RemoveThreats(1);
+		scn.FreepsRefreshDecision();
+
+		assertTrue(scn.FreepsActionAvailable(anduril));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 	}
 }
