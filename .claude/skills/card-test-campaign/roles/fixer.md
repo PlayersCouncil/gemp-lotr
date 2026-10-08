@@ -16,9 +16,10 @@ questions are parked applies to you unchanged. What differs:
   it and say why with the rule, ruling or card text that shows it. Whoever wrote the list is as fallible as an author; an item
   that asks for an expectation the card's text does not support is to be refused, not obeyed.
 - **A fix that changes what a test claims changes the ledger too.** Keep the ledger file's claim lines true.
-- **A ruling that arrived since is an item on the list.** Before starting, read the end of
-  `rulings-log.md`. If Ketura has since ruled on something a test of yours is parked on, or a question your card
-  raised, deal with it as if it were listed: take the `@Ignore` off, make the test assert the ruled
+- **A ruling that arrived since is an item on the list.** Before starting, look up each number your cards'
+  tests are parked on, and each card's id, in the rulings and settled shapes
+  (`python3 .claude/skills/card-test-campaign/scripts/lookup.py F-0123 51_29`). If Ketura has since ruled on
+  something a test of yours is parked on, or a question your card raised, deal with it as if it were listed: take the `@Ignore` off, make the test assert the ruled
   reading, and bring the ledger into line.
 - **An item that says the game is wrong** (a new finding, or a finding the author missed) is handled the
   way an author handles one: the test asserts what the text says and is parked with `@Ignore("F-0000: ...")`.

@@ -4,15 +4,28 @@ You are writing the unit tests for a few cards of the Lord of the Rings TCG as i
 campaign to test every card the same way. The cards and a name for your working folder are given at the end of
 this brief.
 
-Before anything else, read these three files in full. They are short and everything below assumes them:
+Before anything else, read these three files in full, in one step. Everything below assumes them:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.
-- `.claude/skills/gemp-testing/SKILL.md`: the test rig and the behaviours that catch people out.
+- `.claude/skills/gemp-testing/SKILL.md`: the test rig, and an index of the behaviours that catch people out.
   `.claude/skills/gemp-testing/references/vts-api.md` lists every rig method by interface. It is long: search it
   for what you need (`grep -n -i wound vts-api.md`) and do not read it through.
-- `.claude/skills/card-test-campaign/references/rulings-log.md`: what Ketura, who knows this game's rulings better
-  than any document, has already ruled.
+- `.claude/skills/card-test-campaign/references/rulings-index.md`: every ruling of Ketura's (she knows this game's
+  rulings better than any document) and every shape of card text the campaign has already settled, each listed
+  by its first words.
+
+The index is for finding, not for applying. Once you have the packets of your cards, look up every entry that
+bears on their text, and every pitfall group their tests will touch, in as few steps as you can:
+
+    python3 .claude/skills/card-test-campaign/scripts/lookup.py Q-0098
+    python3 .claude/skills/card-test-campaign/scripts/lookup.py "support area" hindered
+    python3 .claude/skills/card-test-campaign/scripts/lookup.py prevent --in pitfalls
+
+An expectation rests on an entry's own words, never on its line in an index. A shape the index lists is settled:
+do not raise it as a question again, and where the game departs from it, that is a finding. When a test does
+something you cannot explain, read `.claude/skills/gemp-testing/references/pitfalls.md` through before deciding
+the game is wrong.
 
 ## What done looks like
 
@@ -62,13 +75,16 @@ against the card as it is and passes against the correction, with one run of
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
-thing twice.
+thing twice. What you write is what takes time: write each file once and put it right with `Edit` (or `sed`),
+never by writing the whole file out again, and keep the plan to one line per check.
 
 Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name. Reading a helper
 card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.
 
 If an existing test asserts one reading of something you wrote down as a question, keep that test active, and
-report the question with a note that the existing test takes that reading.
+report the question with a note that the existing test takes that reading. A new question where no old test takes a reading gets the
+parked test of the likelier reading only; an active test of the game's present behaviour on that board is not
+wanted until she answers.
 
 ## When a test fails
 
@@ -81,6 +97,11 @@ Decide which of three things is wrong, in this order, and say which in your repo
    text says, park it with `@Ignore("F-0000: <one line>")` (the orchestrator assigns the real number), and report
    it as a finding with: what the text says, what you expected, what happened, and your best guess at the kind
    (typo in the definition, oversight in the implementation, wrong displayed text, engine bug, rig bug).
+   A definition that does not do what its text says is fixed at landing by the orchestrator without waiting for
+   Ketura (her rule since 2026-10-07), so for every finding show the correction (the `mutate.py` line that makes
+   your parked test pass with every active test) and say in one sentence whether the departure looks like an
+   error or typo (the usual case) or looks DELIBERATE (a comment in the definition, a workaround for play, a
+   ruling that might explain it). Only the deliberate-looking and the ones you are unsure of go to her first.
 
 Be slow to conclude the game is wrong. Most of the time it is, when you think so; but a correct implementation of
 an obscure ruling looks exactly like a bug, and a wrongly reported bug costs more than a question.

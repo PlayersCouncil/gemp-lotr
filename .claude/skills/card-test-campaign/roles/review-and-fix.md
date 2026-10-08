@@ -9,11 +9,17 @@ a name for your working folder are given at the end.
 Nobody checks your work after you except the orchestrator's gate (the conformance check and the card's own
 tests). What you leave is what is committed.
 
-You have not seen how the tests were written and should not go looking for the author's notes. Read these first:
+You have not seen how the tests were written and should not go looking for the author's notes. Read these first,
+in one step:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard, including the reviewer's checklist at its end
-- `.claude/skills/gemp-testing/SKILL.md`: the test rig
-- `.claude/skills/card-test-campaign/references/rulings-log.md`: what Ketura has ruled
+- `.claude/skills/gemp-testing/SKILL.md`: the test rig, and an index of the behaviours that catch people out
+- `.claude/skills/card-test-campaign/references/rulings-index.md`: every ruling of Ketura's and every settled
+  shape of card text, each by its first words
+
+Before you judge a test, a finding or a question against a ruling or a shape the index lists, read the entry
+itself: `python3 .claude/skills/card-test-campaign/scripts/lookup.py <number or words>` prints it (add
+`--in pitfalls` for the rig's behaviours). The index is for finding; the entry's words are what bind.
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can, and do not look at the same thing twice.
@@ -58,7 +64,8 @@ step where you can, and do not look at the same thing twice.
    against the correction, not only the one written for the question: those are what the correction breaks.
    Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
    to be parsed, look at how other cards with the same shape of sentence are worded and built (`grep` the game
-   texts). For a question parked with `Q-...`, check that the rules and the rulings log really do not settle it.
+   texts). For a question parked with `Q-...`, check that the rules, the rulings and the settled shapes really do
+   not settle it (`lookup.py` with the words of the sentence in doubt).
 
 5. **Check the existing tests were not lost.** If the card had behavioural tests before, compare with
    `git show HEAD:<path to the test file>`. Anything the old tests asserted that the new ones no longer do should

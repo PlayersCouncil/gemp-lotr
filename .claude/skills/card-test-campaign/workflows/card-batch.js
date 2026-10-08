@@ -3,8 +3,8 @@ export const meta = {
   description: 'Author the unit tests of one batch of cards, then review them and put right what the review finds',
   whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to run a fixer on that list and nothing else',
   phases: [
-    { title: 'Author', detail: 'blind plan, then the tests, the conformance check and the stock mistakes, once' },
-    { title: 'Review', detail: 'an independent review against the Card Test Standard; the reviewer fixes what it finds' },
+    { title: 'Author', detail: 'blind plan, then the tests and the conformance check (the session model unless args say otherwise)' },
+    { title: 'Review', detail: 'an independent review against the Card Test Standard; the reviewer fixes what it finds (Sonnet by default)' },
     { title: 'Fix', detail: 'only with args.fixes: a list from the orchestrator worked through' },
   ],
 }
@@ -12,6 +12,15 @@ export const meta = {
 const { repo, cards, folder } = args
 const notes = args.notes || ''
 const roles = repo + '/.claude/skills/card-test-campaign/roles/'
+// Models: the author runs on the session's model and the reviewer and fixer on Sonnet: the arrangement Ketura
+// chose on 2026-10-08 after the replay rounds, in which Opus authors found more of the known items than Sonnet
+// authors did; review is where the cheaper model is being tried.
+// args.model sets both roles; args.authorModel / args.reviewModel set one ('inherit' = the session's model).
+// args.authorEffort / args.reviewEffort set the reasoning effort ('low' ... 'max'); unset = the session's.
+const pick = (m) => (m === 'inherit' ? undefined : m)
+const authorModel = pick(args.authorModel || args.model)
+const reviewModel = pick(args.reviewModel || args.model || 'sonnet')
+const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {})
 
 const TEXT = { type: 'string' }
 const LIST = { type: 'array', items: TEXT }
@@ -87,7 +96,6 @@ const REVIEW = {
           parked_on: TEXT,
           ledger_differences: { type: 'string', description: 'Where your own reading of the card differed from the ledger file, and why' },
           findings_and_questions: { type: 'string', description: "Each of the author's findings and questions: stands, or refuted with the citation" },
-          survivor_claims: { type: 'string', description: "Only where you disagree with one of the author's no-difference claims: which, and what you found" },
           lost_tests: { type: 'string', description: 'Anything the old tests asserted that the new ones no longer do' },
           new_findings: LIST,
           new_questions: LIST,
@@ -146,7 +154,7 @@ if (args.fixes) {
   const fix = await agent(
     where + `Read ${roles}fixer.md and do what it says.\n\n` +
     `The cards and the list for each:\n\n${args.fixes}\n\nYour working folder name: ${folder}-f\n`,
-    { label: `fix ${folder}`, phase: 'Fix', schema: FIXED })
+    withModel({ label: `fix ${folder}`, phase: 'Fix', schema: FIXED }, reviewModel, args.reviewEffort))
   return { folder, cards, fix }
 }
 
@@ -157,8 +165,8 @@ if (args.reported) {
   const review = await agent(
     where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
     `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r2\n\n` +
-    `What the author reported as findings, questions and rig requests, and its account of the stock mistakes its tests did not notice (the rest of the author's report is kept from you on purpose):\n${args.reported}\n`,
-    { label: `review ${folder}`, phase: 'Review', schema: REVIEW })
+    `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${args.reported}\n`,
+    withModel({ label: `review ${folder}`, phase: 'Review', schema: REVIEW }, reviewModel, args.reviewEffort))
   if (!review) return { folder, cards, failed: 'review' }
   return { folder, cards, review }
 }
@@ -168,7 +176,7 @@ const author = await agent(
   where + `Read ${roles}author.md and do what it says.\n\n` +
   `Your cards: ${cards.join(', ')}\nYour working folder name: ${folder}-a\n` +
   (notes ? `\nFrom the orchestrator:\n${notes}\n` : ''),
-  { label: `author ${folder}`, phase: 'Author', schema: AUTHOR })
+  withModel({ label: `author ${folder}`, phase: 'Author', schema: AUTHOR }, authorModel, args.authorEffort))
 if (!author) return { folder, cards, failed: 'author' }
 
 const reported = (author.cards || []).map(c =>
@@ -182,8 +190,8 @@ phase('Review')
 const review = await agent(
   where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
   `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r\n\n` +
-  `What the author reported as findings, questions and rig requests, and its account of the stock mistakes its tests did not notice (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
-  { label: `review ${folder}`, phase: 'Review', schema: REVIEW })
+  `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
+  withModel({ label: `review ${folder}`, phase: 'Review', schema: REVIEW }, reviewModel, args.reviewEffort))
 if (!review) return { folder, cards, author, failed: 'review' }
 
 return { folder, cards, author, review }
