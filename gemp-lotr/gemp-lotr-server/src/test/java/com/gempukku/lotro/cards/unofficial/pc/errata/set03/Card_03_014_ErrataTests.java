@@ -1,31 +1,39 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_03_014_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("erestor", "53_14");
-					put("arwen", "3_7");
+					put("arwen", "3_7");        // Arwen, Elven Rider: Elf companion, strength 6; her response is only for the Ring-bearer
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, vitality 3
+					put("barliman", "1_70");    // Barliman Butterbur: [gandalf] Man ally, vitality 2
 
-					put("enquea", "1_231");
-					put("hate", "1_250");
-					put("orc", "1_271");
-
+					put("hate1", "1_250");      // Hate: [sauron] Maneuver event, exert a [sauron] Orc to wound a companion (except the Ring-bearer)
+					put("hate2", "1_250");
+					put("orc1", "1_271");       // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability used only on purpose
+					put("orc2", "1_271");
+					put("assassin", "2_93");    // Tower Assassin: [sauron] Orc, vitality 3; Maneuver: exert to wound an ally
+					put("enquea", "1_231");     // Ulaire Enquea: [ringwraith] Nazgul, strength 11; Maneuver: with 5 burdens, exert to wound a companion (except the Ring-bearer)
+					put("terror", "1_226");     // Their Power Is in Terror: [ringwraith] Maneuver event, exert a Nazgul to wound every ally
+					put("lemenya", "1_232");    // Ulaire Lemenya: [ringwraith] Nazgul whose text only weakens bearers of [ringwraith] conditions
+					put("hatred", "1_164");     // Bitter Hatred: [moria] Archery event, spot a [moria] archer to wound an Elf
+					put("marksman", "1_176");   // Goblin Marksman: [moria] archer with no other text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,9 +55,11 @@ public class Card_03_014_ErrataTests
 		 * Subtype: Elf
 		 * Strength: 5
 		 * Vitality: 2
-		 * Site Number: 3
-		 * Game Text: To play, spot an Elf.<br><b>Response:</b> If an Elf is about to take a wound from a [sauron] or [ringwraith] card, exert Erestor to prevent that wound.
-		*/
+		 * Home: 3
+		 * Game Text: To play, spot an Elf.
+		 * Response: If an Elf is about to take a wound from a [sauron] or [ringwraith] card, exert Erestor to
+		 * prevent that wound.
+		 */
 
 		var scn = GetScenario();
 
@@ -69,146 +79,313 @@ public class Card_03_014_ErrataTests
 	}
 
 	@Test
-	public void ErestorSpotsAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CannotBePlayedUntilAnElfIsSpottedThenPlaysForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var barliman = scn.GetFreepsCard("barliman");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(barliman);
 		scn.MoveCardsToHand(arwen, erestor);
+		// Aragorn is of the [elven] culture but no Elf.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
+		// An [elven] Man companion and a Man ally, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(erestor));
+
 		scn.FreepsPlayCard(arwen);
+		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(erestor));
+
+		scn.FreepsPlayCard(erestor);
+		// 2 for Arwen + 2 for Erestor
+		assertEquals(4, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, erestor);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void ErestorCanBlockEnquea() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnElfAllyIsEnoughToPlayErestor() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(orophin);
+		scn.MoveCardsToHand(erestor);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(erestor));
+		scn.FreepsPlayCard(erestor);
+		assertInZone(Zone.SUPPORT, erestor);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ExertsToPreventAWoundASauronEventGivesAnElfButNotAMan() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(arwen, aragorn);
+		scn.MoveAlliesToTable(erestor);
+		// Aragorn is of the [elven] culture but no Elf.
+		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+
+		var hate1 = scn.GetShadowCard("hate1");
+		var hate2 = scn.GetShadowCard("hate2");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.MoveCardsToHand(hate1, hate2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(orc1, orc2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(hate1);
+		scn.ShadowChooseCard(orc1);
+		scn.ShadowChooseCard(aragorn);
+		// Aragorn is a Man, [elven] or not: nothing is offered and he takes the wound.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		scn.FreepsPass();
+		scn.ShadowPlayCard(hate2);
+		scn.ShadowChooseCard(arwen);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(orc2));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ExertsToPreventAWoundARingwraithMinionGivesAnElf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveCompanionsToTable(arwen);
-		scn.MoveCardsToSupportArea(erestor);
+		scn.MoveAlliesToTable(erestor);
 
 		var enquea = scn.GetShadowCard("enquea");
-		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		// Enquea's ability needs 6 companions or 5 burdens.
 		scn.AddBurdens(5);
-
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(enquea));
-		scn.ShadowUseCardAction(enquea);
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
+		scn.ShadowUseCardAction(enquea);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
 		assertEquals(1, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(1, scn.GetWoundsOn(enquea));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
-	public void ErestorCanBlockEnqueaSkirmishWin() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ExertsToPreventAWoundASauronMinionGivesAnElfAllyButNotAManAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var erestor = scn.GetFreepsCard("erestor");
-		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionsToTable(arwen);
-		scn.MoveCardsToSupportArea(erestor);
+		var orophin = scn.GetFreepsCard("orophin");
+		var barliman = scn.GetFreepsCard("barliman");
+		scn.MoveAlliesToTable(erestor, orophin, barliman);
 
-		var enquea = scn.GetShadowCard("enquea");
-		scn.MoveMinionsToTable(enquea);
-
-		scn.StartGame();
-		scn.AddBurdens(5);
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(arwen, enquea);
-
-		assertEquals(0, scn.GetWoundsOn(erestor));
-		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(0, scn.GetWoundsOn(enquea));
-		scn.PassSkirmishActions();
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(erestor));
-		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(0, scn.GetWoundsOn(enquea));
-	}
-
-	@Test
-	public void ErestorCanBlockHate() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var erestor = scn.GetFreepsCard("erestor");
-		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionsToTable(arwen);
-		scn.MoveCardsToSupportArea(erestor);
-
-		var hate = scn.GetShadowCard("hate");
-		var orc = scn.GetShadowCard("orc");
-
-		scn.MoveMinionsToTable(orc);
-		scn.MoveCardsToHand(hate);
+		var assassin = scn.GetShadowCard("assassin");
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(assassin);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		assertEquals(0, scn.GetWoundsOn(erestor));
-		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(0, scn.GetWoundsOn(orc));
-		scn.ShadowPlayCard(hate);
+		scn.ShadowUseCardAction(assassin);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(erestor, orophin, barliman));
+		scn.ShadowChooseCard(barliman);
+		// Barliman is a Man: nothing is offered and he takes the wound.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		assertEquals(1, scn.GetWoundsOn(barliman));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(assassin);
+		scn.ShadowChooseCard(orophin);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
 		assertEquals(1, scn.GetWoundsOn(erestor));
-		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(1, scn.GetWoundsOn(orc));
+		assertEquals(0, scn.GetWoundsOn(orophin));
+		assertEquals(1, scn.GetWoundsOn(barliman));
+		assertEquals(2, scn.GetWoundsOn(assassin));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
-	public void ErestorCanBlockSauronOrcSkirmishWin() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ARingwraithEventWoundingEveryAllyLetsErestorPreventHisOwnWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var barliman = scn.GetFreepsCard("barliman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(erestor, barliman);
+
+		var terror = scn.GetShadowCard("terror");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(terror);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(terror);
+		// The allies are wounded one at a time, each wound offered on its own; only Erestor's is offered here.
+		assertTrue(scn.FreepsDecisionAvailable("Wound Erestor"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
+		// Erestor's one wound is the exertion: the wound Terror gave him was prevented.
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(1, scn.GetWoundsOn(barliman));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(lemenya));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ExertsToPreventTheSkirmishWoundOfAnElfWhoLosesToASauronMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveCompanionsToTable(arwen);
-		scn.MoveCardsToSupportArea(erestor);
+		scn.MoveAlliesToTable(erestor);
 
-		var orc = scn.GetShadowCard("orc");
-		scn.MoveMinionsToTable(orc);
+		var orc = scn.GetShadowCard("orc1");
 
 		scn.StartGame();
-		scn.AddBurdens(5);
-
+		scn.MoveMinionsToTable(orc);
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(arwen, orc);
 
 		assertEquals(0, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(0, scn.GetWoundsOn(orc));
-		scn.PassSkirmishActions();
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
+		// Arwen 6 against the Orc's 7.
+		scn.PassSkirmishActions();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
 		assertEquals(1, scn.GetWoundsOn(erestor));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(orc));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
+	@Test
+	public void ExertsToPreventTheSkirmishWoundOfAnElfWhoLosesToARingwraithMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(erestor);
+
+		var enquea = scn.GetShadowCard("enquea");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, enquea);
+
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+
+		// Arwen 6 against Enquea's 11: lost, but not overwhelmed.
+		scn.PassSkirmishActions();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		scn.FreepsChooseOptionalTrigger(erestor);
+
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		// Enquea is fierce.
+		assertTrue(scn.FreepsDecisionAvailable("assign"));
+	}
+
+	@Test
+	public void AWoundFromAMoriaCardIsNotPrevented() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(erestor);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCardsToHand(hatred);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(hatred);
+		scn.ShadowChooseCard(arwen);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+	}
+
+	@Test
+	public void AnExhaustedErestorCannotPreventAWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(erestor);
+		scn.AddWoundsToChar(erestor, 1);
+
+		var hate = scn.GetShadowCard("hate1");
+		var orc = scn.GetShadowCard("orc1");
+		scn.MoveCardsToHand(hate);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(orc);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(hate);
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erestor));
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
 }
