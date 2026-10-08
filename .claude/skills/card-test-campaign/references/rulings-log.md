@@ -951,15 +951,14 @@ However, the reasoning behind it is unique to these three cards (ROD, BTM, EMHR)
 used in." *[2026-10-08, afternoon]*
 
 **Q-0123, "killed by" (Orc Butchery 51_265):** "Yeah, this one is tricky without an official definition of "killed
-by". I think the current loose interpretation is fine, so let's stick with B." The loose interpretation is the
-one as built (labelled A in the question); kept as built, letter to be confirmed. *[2026-10-08, afternoon]*
+by". I think the current loose interpretation is fine, so let's stick with B." Then: "Ah, my mistake on Q-0123 and
+Q-0122. A for both." Kept as built. *[2026-10-08, afternoon]*
 
 **Q-0122, The Number Must Be Few 51_260:** "B. The intent here is to work around Decipher's dumbass ruling that move
 limit modifiers are permanent, even if the card is discarded (or heaven forbid, discarded and replayed multiple
 times in the same turn). So in effect, it should make this behave as if it were a less fraught effect, such as
-"men are strength +1", which obviously turns off and back on whenever the companion boundary is crossed." The
-behaviour described (off and back on) is the one as built (labelled A in the question); kept as built, letter to
-be confirmed. *[2026-10-08, afternoon]*
+"men are strength +1", which obviously turns off and back on whenever the companion boundary is crossed." Then: "Ah, my mistake on Q-0123 and
+Q-0122. A for both." Kept as built: the penalty comes back when a 7th companion does. *[2026-10-08, afternoon]*
 
 **Q-0121, Úlairë Nertëa 51_234: B.** "This is a poor implementation, yeah; B is definitely an improvement." *[2026-10-08, afternoon]*
 
@@ -986,3 +985,13 @@ clear yet that this wouldn't discard your own inactive Shadow conditions. One of
 "clarifications" that were actually that instead of an errata in disguise." *[2026-10-08, afternoon]*
 
 **Findings through F-0210 approved.** "All pending Findings through F-0210 have my approval." *[2026-10-08, afternoon]*
+
+**Q-0131, Uruk Raider 53_74: A.** ""The dead pile" refers to the current Free Peoples dead pile, same as how threats only
+count the current Free Peoples threats. A." So an unqualified "the dead pile" is the Free Peoples player's. *[2026-10-08, later afternoon]*
+
+**Q-0132, Hand of Sauron 53_90: A.** "A is fine." An exhausted companion who bears a possession is offered, loses it
+and takes no wound. *[2026-10-08, later afternoon]*
+
+**Q-0133, Bill the Pony 53_106 (and Asfaloth 1_31, Black Steed 1_208, 3_106): A.** "But it is a continuous effect,
+same as the Watcher. A." And the official ruling on 3_106 (now on the wiki): "When the fellowship moves with Bill the
+Pony to an underground site, the Shadow number of that site is reduced before Bill the Pony is discarded." *[2026-10-08, later afternoon]*

@@ -239,14 +239,17 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0126, Foul Things 52_59: B. "The Foul Things errata is unique in that it plays from discard in a way that can target itself, which I don't think ...
 - Q-0125, Realm of Dwarrowdelf 52_12: A
 - Q-0124, Beneath the Mountains 52_1 (and Ever My Heart Rises 4_46 / 54_46): B
-- Q-0123, "killed by" (Orc Butchery 51_265)
-- Q-0122, The Number Must Be Few 51_260
+- Q-0123, "killed by" (Orc Butchery 51_265) [Q-0122]
+- Q-0122, The Number Must Be Few 51_260 [Q-0123]
 - Q-0121, Úlairë Nertëa 51_234: B
 - Q-0120, Savagery to Match Their Numbers 51_139: B
 - Q-0118, Armor 51_92, Coat of Mail 51_101, Great Shield 51_107: A
 - Q-0119 and F-0200, Boromir's Cloak 51_98: 1B, and the Shadow restriction kept
 - Q-0117, Sleep, Caradhras 51_84
 - Findings through F-0210 approved
+- Q-0131, Uruk Raider 53_74: A. ""The dead pile" refers to the current Free Peoples dead pile, same as how threats only count the current Free Peoples ...
+- Q-0132, Hand of Sauron 53_90: A
+- Q-0133, Bill the Pony 53_106 (and Asfaloth 1_31, Black Steed 1_208, 3_106): A
 
 # Settled shapes (shapes.md)
 
