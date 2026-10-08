@@ -108,7 +108,7 @@ and file it:
 
     python3 .claude/skills/card-test-campaign/scripts/landing.py rig add "<what the rig cannot do>" /tmp/<folder>-l/g1.md
 
-In the card's ledger the check is written under its clause as `waits <check>: G-0031 <what the rig lacks>`, in
+In the card's ledger the check is written under its clause as `waits <check>: G-0000 <what the rig lacks>`, with the request's number, in
 place of a claim line. The gate lands such a card as **parked** (Ketura, 2026-10-08: a card held by a rig request
 does not move on as ready). You do not change the rig.
 

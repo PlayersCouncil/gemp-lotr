@@ -277,7 +277,7 @@ lacks>`. It is no waiver: the check is still owed, and the card is parked on the
 
 ```
 C1 Modifier   [+ - F]    Bill the Pony cannot be assigned to a skirmish against a Nazgul.
-     waits F: G-0029 no reading of whether one character may be assigned to one minion
+     waits F: G-0000 no reading of whether one character may be assigned to one minion
 ```
 
 ### The stats test

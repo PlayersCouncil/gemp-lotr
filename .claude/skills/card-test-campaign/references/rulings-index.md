@@ -264,6 +264,11 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - F-0239, Gríma, Chief Counselor 55_51: new text
 - Q-0141, Merry's Sword 57_242: "(limit X)" is per use; every [rohan] companion is counted [Q-0134]
 - Shadow Host 58_43: "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes that requirement as excessive)." ...
+- Q-0142, "wound each / every X": a fixed order, no prompt (B)
+- Q-0143, The Palantír of Orthanc 53_67: B
+- Q-0144, revealing an empty hand: no pop-up, a line in the log
+- Q-0145, cardInfo is not a source of truth, and is kept true
+- Q-0146, Bill Ferny 52_75: A. "A sounds good." The erratum is built as the original 2_75 is (CantBeAssignedToSkirmish for the Free Peoples player), so ...
 
 # Settled shapes (shapes.md)
 

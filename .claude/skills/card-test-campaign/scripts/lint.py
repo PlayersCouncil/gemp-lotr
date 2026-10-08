@@ -59,7 +59,7 @@ FORBIDDEN = [
     (r"\bsetAccessible\b|java\.lang\.reflect", "reflection is a way round the rig; ask for a rig method instead"),
 ]
 JUSTIFY = [
-    (r"\b(ApplyAdHocAction|\w*ExecuteAdHocEffect|ApplyAdHoc\w*AutoDiscard)\s*\(", "an ad hoc effect needs its reason on the same line (// lint-ok: ...)"),
+    (r"\b(ApplyAdHocAction|\w*ExecuteAdHocEffect\w*|ApplyAdHoc\w*AutoDiscard)\s*\(", "an ad hoc effect needs its reason on the same line (// lint-ok: ...)"),
 ]
 ACTS = re.compile(r"\b(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal|Choose\w*|Accept\w*|Decline\w*|"
                   r"Pass\w*|Assign\w*|Resolve\w*)\s*\(|\b(Pass\w+Actions|BothPass\w*|PassResponses|PassCurrentPhaseActions)\s*\(")

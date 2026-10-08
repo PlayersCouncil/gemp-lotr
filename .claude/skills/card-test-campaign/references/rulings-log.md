@@ -1061,3 +1061,32 @@ all without asking. *[2026-10-08, evening]*
 **Shadow Host 58_43:** "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes
 that requirement as excessive)." *[2026-10-08, evening]*
 
+**Q-0142, "wound each / every X": a fixed order, no prompt (B).** "In any situation where there is a timing tie
+of required actions, the Free Peoples player chooses the order, as you noted. However, I can see why these were
+coded that way, as the vast majority of the time, the order isn't going to matter, and so the game chooses for
+them. Let's go with B; I think the CardResolver should at some level be pulling the list of cards from GameState
+in a way that should be able to get them in ID order." So the characters an effect reaches at once are taken in
+the order of their card ids, the same in every run; no decision is added. *[2026-10-08, night]*
+
+**Q-0143, The Palantír of Orthanc 53_67: B.** A yes/no before a choice whose minimum is 0 goes: "The first no
+permits an opt-out, while giving leeway for the player to change their mind after....let's get rid of the pop-up
+and just make sure the message displayed to the user is sufficiently clear." The choice (0 to N) is asked alone,
+and its text says plainly that choosing none is allowed. *[2026-10-08, night]*
+
+**Q-0144, revealing an empty hand: no pop-up, a line in the log.** Foul Creation 51_44 / 1_44 against Curse Their
+Foul Feet! 51_36: "Both of these cards should behave the same....not sure which one is better UX. Let's go ahead
+and leave out the pop-up and just go to the log, but ensure that the log has some sort of message to the tune of
+"there were no cards in hand to reveal" or something so the user isn't confused." *[2026-10-08, night]*
+
+**Q-0145, cardInfo is not a source of truth, and is kept true.** On errata whose cardInfo names the original's id
+and `promos/pc`: "this is almost certainly a copy-paste error. The cardInfo sections are pre-emptive for a future
+rework of the HJSON spec to make certain other aspects of the system obsolete, so there hasn't been a need to keep
+them accurate everywhere (tho of course we would prefer them to be accurate so when that eventual rework occurs
+there's not much that has to be updated). Tests don't have to be written against them but I would still prefer the
+information be checked as this is doing. Don't treat them as a source of truth, just update them to match the rest
+of the card definition." So: no test reads cardInfo; a mismatch with the rest of the definition is corrected
+where it is met, as a `data` finding, and the tools check it. *[2026-10-08, night]*
+
+**Q-0146, Bill Ferny 52_75: A.** "A sounds good." The erratum is built as the original 2_75 is
+(`CantBeAssignedToSkirmish` for the Free Peoples player), so Bill is not on his list of minions to assign against,
+where the per-pair restriction listed him and refused the answer. *[2026-10-08, night]*
