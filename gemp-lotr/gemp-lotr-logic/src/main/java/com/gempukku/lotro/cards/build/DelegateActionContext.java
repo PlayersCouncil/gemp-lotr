@@ -98,4 +98,9 @@ public class DelegateActionContext implements ActionContext {
     public int getUnpaidThreatCost() {
         return delegate.getUnpaidThreatCost();
     }
+
+    @Override
+    public boolean isAtResolution() {
+        return delegate.isAtResolution();
+    }
 }

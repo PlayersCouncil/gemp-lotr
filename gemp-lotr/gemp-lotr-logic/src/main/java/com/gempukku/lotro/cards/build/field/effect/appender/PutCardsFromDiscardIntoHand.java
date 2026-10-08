@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -30,10 +31,19 @@ public class PutCardsFromDiscardIntoHand implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver =
+                CardResolver.resolveCardsInDiscard(select, valueSource, memorize, player, discard, "Choose cards from discard", environment);
 
-        result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(select, valueSource, memorize, player, discard, "Choose cards from discard", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card to take (none chosen, or the one chosen gone from the pile),
+            // it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

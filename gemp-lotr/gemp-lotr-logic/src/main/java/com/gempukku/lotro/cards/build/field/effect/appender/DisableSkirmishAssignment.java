@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -27,10 +28,18 @@ public class DisableSkirmishAssignment implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver =
+                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with nobody to keep from being assigned, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

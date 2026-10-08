@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -34,12 +35,20 @@ public class ReturnToHand implements EffectAppenderProducer {
         // nothing but "card" or a side ("return each Free Peoples card that companion bears"; Ketura on Q-0098).
         final Map<InactiveReason, Boolean> override = FieldUtils.getSpotOverride(effectObject.get("override"), "override", SpotOverride.NONE);
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        result.addEffectAppender(
+        final EffectAppender cardResolver =
                 CardResolver.resolveCards(select, override,
                         actionContext -> (Filter) (game, physicalCard) -> game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, actionContext.getSource()),
-                        valueSource, "_temp", player, "Choose cards to return to hand", environment));
+                        valueSource, "_temp", player, "Choose cards to return to hand", environment);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card that can be returned, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

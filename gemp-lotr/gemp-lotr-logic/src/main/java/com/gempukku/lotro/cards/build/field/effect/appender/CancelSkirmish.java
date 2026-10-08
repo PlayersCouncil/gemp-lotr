@@ -59,7 +59,7 @@ public class CancelSkirmish implements EffectAppenderProducer {
             // A cancelled skirmish is never a matter of that skirmish only, so there is no more to say.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
-                if (filtersReadMemory)
+                if (filtersReadMemory && !actionContext.isAtResolution())
                     return EffectForecast.UNKNOWN;
                 return isPlayableInFull(actionContext) ? EffectForecast.UNKNOWN : EffectForecast.NOTHING;
             }

@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -33,12 +34,20 @@ public class HinderCardsInPlay implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("The 'select' field is required on Hinder effect.");
         }
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        result.addEffectAppender(
+        final EffectAppender cardResolver =
                 CardResolver.resolveCards(select,
                         (actionContext) -> Filters.canBeHindered(actionContext.getSource()),
-                        count, memory, player, "Choose cards to hinder", environment));
+                        count, memory, player, "Choose cards to hinder", environment);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card that can be hindered, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

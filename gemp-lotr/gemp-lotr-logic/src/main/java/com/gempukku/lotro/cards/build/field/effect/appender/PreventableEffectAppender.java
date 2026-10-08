@@ -42,7 +42,11 @@ public class PreventableEffectAppender extends DelayedAppender {
 
         DelegateActionContext preventCostActionContext = new DelegateActionContext(actionContext, preventingPlayerId, actionContext.getGame(), actionContext.getSource(), actionContext.getEffectResult(), actionContext.getEffect());
 
-        if (preventingPredicate.test(actionContext) && areCostsPlayable(preventCostActionContext)) {
+        // A prevention is put to a player only when what it would prevent is going to happen (Ketura on
+        // Q-0114): with nothing to draw, a draw past the Rule of 4, nobody left to wound or discard, nobody is
+        // asked and nothing is paid.  The effects are still appended, and do the nothing they would have done.
+        if (preventingPredicate.test(actionContext) && areCostsPlayable(preventCostActionContext)
+                && !EffectForecast.isCertainToDoNothing(actionContext, effectAppenders)) {
             SubAction subAction = new SubAction(action);
             subAction.appendEffect(new PlayoutDecisionEffect(preventingPlayerId, new YesNoDecision(textToUse) {
                 @Override

@@ -27,6 +27,11 @@ import static org.junit.Assert.*;
  * event" from a discard pile and from a stack with nothing else in their filters.  Race Text 92_29 (Race to
  * Mount Doom), which plays a card from an opened booster pack "ignoring all costs", stopped the game the same
  * way.
+ *
+ * That card plays no event of another phase either.  Ketura, 2026-10-07, on F-0193: "Given the specifics of that
+ * card, we'll say we restrict it to shadow-phase events only."  The phase an event is played in is no cost, so
+ * "ignoring all costs" does not ignore it: of the events in the pack only those of the Shadow phase can be
+ * chosen, and the one chosen is played for nothing.
  */
 public class ResponseEventsAreNotPlayedByEffectsTests
 {
@@ -62,7 +67,8 @@ public class ResponseEventsAreNotPlayedByEffectsTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("troop", "1_177");      // Goblin Patrol Troop: so that the decks are not empty; never played
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, cost 6, site 4, no text
+					put("runner", "1_178");     // Goblin Runner: so that the decks are not empty; never played
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -252,6 +258,80 @@ public class ResponseEventsAreNotPlayedByEffectsTests
 
 		// Nothing is chosen.
 		scn.ShadowPass();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnEventOfAnotherPhaseRevealedFromABoosterPackIsShownAndCannotBeChosenAndAMinionIsPlayedAsBefore() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBoosterScenario();
+
+		var mod = scn.GetShadowCard("mod");
+
+		// The test pack holds Drums in the Deep 1_168, a Shadow event of the skirmish phase, Foul Things 2_59, a
+		// Shadow event of the Shadow phase, and Goblin Backstabber 1_174, a Shadow minion that costs 1.
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// 10 set + 1 companion + 2 for the site
+		assertEquals(13, scn.GetTwilight());
+
+		scn.StartCardCapture();
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+
+		// The skirmish event is shown with the rest of the pack and is not to be chosen in the Shadow phase;
+		// the Shadow event and the minion are.
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_168", false));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("2_59", true));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_174", true));
+
+		scn.ShadowChooseCardBPFromSelection("1_174");
+		var backstabber = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertEquals("Goblin Backstabber", backstabber.getBlueprint().getTitle());
+		assertInZone(Zone.SHADOW_CHARACTERS, backstabber);
+		// Neither its cost of 1 nor the 2 for roaming at site 2 was paid.
+		assertEquals(13, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AShadowEventRevealedFromABoosterPackIsChosenAndPlayedWithoutItsCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBoosterScenario();
+
+		var mod = scn.GetShadowCard("mod");
+		// Foul Things: "Shadow: Play a [moria] minion from your discard pile."  The Troop is the one there.
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToDiscard(troop);
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// 10 set + 1 companion + 2 for the site
+		assertEquals(13, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, troop);
+
+		scn.StartCardCapture();
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.ShadowHasBPChoiceAvailable("2_59", true));
+
+		scn.ShadowChooseCardBPFromSelection("2_59");
+		var foulThings = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertEquals("Foul Things", foulThings.getBlueprint().getTitle());
+		// The event was played: it did what it says and went to the discard pile.
+		assertInZone(Zone.DISCARD, foulThings);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		// 13 - 6 for the Troop - 2 for its roaming at site 2: the Troop is paid for as the event's effect has
+		// it, and the event's own cost of 2 is not paid.
+		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

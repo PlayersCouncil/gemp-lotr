@@ -55,4 +55,15 @@ public interface ActionContext {
     default int getUnpaidThreatCost() {
         return 0;
     }
+
+    /**
+     * Whether this context was made to ask an effect, at the moment it is about to be carried out, what it will
+     * do (EffectForecast.isCertainToDoNothing).  Everything before the effect in its action has then happened:
+     * the costs are paid and what the effect reads from memory has been chosen.  A forecast made in such a
+     * context may therefore read memory and look through any zone, which a forecast made while the action is only
+     * on offer may not.  False in every other context.
+     */
+    default boolean isAtResolution() {
+        return false;
+    }
 }

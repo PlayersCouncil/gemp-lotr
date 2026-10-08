@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -36,10 +37,18 @@ public class RemoveKeyword implements EffectAppenderProducer {
         if (keywords.isEmpty() && keywordFromMemory == null)
             throw new InvalidCardDefinitionException("Keyword or keywordFromMemory is required");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver =
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove keyword from", environment);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove keyword from", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card to take the keyword from, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

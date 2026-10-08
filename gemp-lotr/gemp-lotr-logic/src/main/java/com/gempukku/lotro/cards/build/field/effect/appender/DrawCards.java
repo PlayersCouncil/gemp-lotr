@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.DrawCardsEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
@@ -38,6 +39,13 @@ public class DrawCards implements EffectAppenderProducer {
             public EffectForecast forecast(ActionContext actionContext) {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
                 if (actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty())
+                    return EffectForecast.NOTHING;
+                // Nor is anything drawn past the Rule of 4.  That is said only of a draw that is about to be
+                // made (to a prevention, which then is not put to anybody): the no-effect flag of an action
+                // on offer is left as it was.
+                final LotroGame game = actionContext.getGame();
+                if (actionContext.isAtResolution() && game.getFormat().hasRuleOfFour()
+                        && !game.getModifiersQuerying().canDrawCardNoIncrement(game, drawPlayer))
                     return EffectForecast.NOTHING;
                 // A capped number of cards whose cap is spent is no cards.
                 return EffectForecast.isSpent(count, actionContext, null)

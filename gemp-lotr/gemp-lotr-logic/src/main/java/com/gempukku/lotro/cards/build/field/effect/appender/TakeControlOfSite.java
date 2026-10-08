@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -26,6 +27,14 @@ public class TakeControlOfSite implements EffectAppenderProducer {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 return GameUtils.anySiteAvailableToControl(actionContext.getGame());
+            }
+
+            // About to be carried out with no site that can be controlled, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (actionContext.isAtResolution() && !isPlayableInFull(actionContext))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
             }
 
             @Override

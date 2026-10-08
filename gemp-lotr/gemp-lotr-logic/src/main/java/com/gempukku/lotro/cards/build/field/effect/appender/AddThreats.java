@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -30,7 +31,16 @@ public class AddThreats implements EffectAppenderProducer {
 
         String memorize = "_temp";
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with as many threats on the table as there may be, it adds none.  How
+            // many it would add is not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (actionContext.isAtResolution() && PlayConditions.getMaxAddThreatCount(actionContext.getGame()) <= 0)
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
+            }
+        };
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

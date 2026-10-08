@@ -169,17 +169,18 @@ public class PlayUtils {
                 && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
             return false;
 
-        // A response event is played in answer to its own trigger and never by another card's effect, whatever
-        // that effect ignores: it has no play action to be given (F-0186).  One that is also an event of the
-        // current phase is played as that.
-        if (blueprint.getCardType() == CardType.EVENT && blueprint.hasTimeword(Timeword.RESPONSE)) {
+        // An event is played in its own phase, whatever costs are ignored: the phase is no cost.  So an event
+        // of another phase is not playable (Ketura on F-0193, Race Text 92_29: "restrict it to shadow-phase
+        // events only"), and neither is a response event, which is played in answer to its own trigger and
+        // never by another card's effect and has no play action to be given (F-0186).  A response event that
+        // is also an event of the current phase is played as that.
+        if (blueprint.getCardType() == CardType.EVENT) {
             final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
             if (timeword == null || !blueprint.hasTimeword(timeword))
                 return false;
         }
 
-        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty, the timeword check of an
-        // event that is not a response
+        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty
         return true;
     }
 
@@ -206,7 +207,8 @@ public class PlayUtils {
             }
         } else {
             final PlayEventAction action = blueprint.getPlayEventCardAction(card.getOwner(), game, card);
-            // Skip extra costs and discounts
+            // Skip extra costs and discounts, and the event's twilight cost
+            action.setTwilightCostIgnored();
             return action;
         }
     }

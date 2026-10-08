@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -49,10 +50,21 @@ public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
         final EffectAppender existenceCheck = !searchesDeck ? null :
                 CardResolver.resolveCardsInDeck(select, null, valueSource, "_temp", "you", "you", showAll, "Choose cards from deck to put into hand", environment);
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver =
+                CardResolver.resolveCardsInDeck(select, null, choiceSource, "_temp", "you", "you", showAll, "Choose cards from deck to put into hand", environment);
 
-        result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(select, null, choiceSource, "_temp", "you", "you", showAll, "Choose cards from deck to put into hand", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card to take (none chosen from the deck by an earlier effect), it
+            // does nothing, unless it shuffles the deck all the same.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (shuffle)
+                    return EffectForecast.UNKNOWN;
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

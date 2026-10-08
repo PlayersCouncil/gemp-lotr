@@ -530,7 +530,7 @@ public class CardResolver {
             // The card itself, if the effect could be given to it now.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
-                if (!inPlay)
+                if (!inPlay && !actionContext.isAtResolution())
                     return EffectForecast.UNKNOWN;
                 return EffectForecast.candidates(filterCards(actionContext, choiceFilter));
             }
@@ -620,6 +620,15 @@ public class CardResolver {
                 };
             }
 
+            // The cards remembered, as far as the effect could still be given to them.  That can be said only at
+            // resolution: while the action is on offer the memory is still to be filled.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (!actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                return EffectForecast.candidates(filterCards(actionContext, choiceFilter));
+            }
+
             private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
                 Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(sourceMemory);
                 if (cardsFromMemory == null)
@@ -678,10 +687,11 @@ public class CardResolver {
             }
 
             // The cards the choice would be made from if it were made now.  A filter that reads memory cannot
-            // be asked yet: what it reads is filled as the action is carried out.
+            // be asked yet: what it reads is filled as the action is carried out.  At resolution it is filled,
+            // and the cards of any zone are the ones the choice is about to be made from.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
-                if (!forecastable)
+                if (!forecastable && !actionContext.isAtResolution())
                     return EffectForecast.UNKNOWN;
                 var playerContext = actionContext;
                 if(choicePlayer != null) {
@@ -726,7 +736,7 @@ public class CardResolver {
             // Every card the effect would take if it were carried out now.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
-                if (!forecastable)
+                if (!forecastable && !actionContext.isAtResolution())
                     return EffectForecast.UNKNOWN;
                 return EffectForecast.candidates(filterCards(actionContext, additionalFilter));
             }

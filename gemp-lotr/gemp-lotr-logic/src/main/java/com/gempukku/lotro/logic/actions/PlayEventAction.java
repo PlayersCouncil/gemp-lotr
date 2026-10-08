@@ -28,6 +28,8 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
     private final Zone _playedFrom;
 
+    private boolean _twilightCostIgnored;
+
     public PlayEventAction(PhysicalCard card) {
         this(card, false);
     }
@@ -43,6 +45,14 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
     public PhysicalCard getEventPlayed() {
         return _eventPlayed;
+    }
+
+    /**
+     * For an event that another card plays "ignoring all costs": its twilight cost is neither taken from the
+     * pool nor added to it, and no discount on it is asked about.
+     */
+    public void setTwilightCostIgnored() {
+        _twilightCostIgnored = true;
     }
 
     @Override
@@ -85,6 +95,11 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             }
 
             game.getGameState().eventPlayed(_eventPlayed);
+        }
+
+        if (_twilightCostIgnored) {
+            _discountResolved = true;
+            _discountApplied = true;
         }
 
         if (!_discountResolved) {

@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,6 +29,31 @@ public class Card_01_043_ErrataTests
 					put("axe", "1_3");          // Axe Strike: a Free Peoples event
 					put("runner", "1_178");     // Goblin Runner: a Shadow minion
 					put("troop", "1_177");      // Goblin Patrol Troop: a Shadow minion with no text
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Five Elves to play in one fellowship phase, and a draw deck that outlasts the four draws the Rule of 4 allows.
+	protected VirtualTableScenario GetFiveElvesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eyes", "51_43");
+
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: [elven] Elf companion, cost 2
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: [elven] Elf ally, cost 2
+					put("elf1", "1_53");        // Lorien Elf: [elven] Elf companion, cost 1; to play, spot an Elf
+					put("elf2", "1_53");
+					put("elf3", "1_53");
+					put("card1", "1_3");        // Axe Strike: six cards for the Free Peoples player to draw,
+					put("card2", "1_3");        // and two of the Shadow player's copies for him to hold
+					put("card3", "1_3");
+					put("card4", "1_3");
+					put("card5", "1_3");
+					put("card6", "1_3");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -221,7 +245,6 @@ public class Card_01_043_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0194: with an empty draw deck the Shadow player is still asked to discard a card to prevent a draw that cannot happen")
 	public void WithNoCardToDrawTheShadowPlayerIsNotAskedToPreventIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -247,6 +270,65 @@ public class Card_01_043_ErrataTests
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AtTheFifthElfOfAFellowshipPhaseTheRuleOfFourStopsTheDrawAndHeIsNotAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFiveElvesScenario();
+
+		var eyes = scn.GetFreepsCard("eyes");
+		var arwen = scn.GetFreepsCard("arwen");
+		var orophin = scn.GetFreepsCard("orophin");
+		var elf1 = scn.GetFreepsCard("elf1");
+		var elf2 = scn.GetFreepsCard("elf2");
+		var elf3 = scn.GetFreepsCard("elf3");
+		scn.MoveCardsToSupportArea(eyes);
+		scn.MoveCardsToHand(arwen, orophin, elf1, elf2, elf3);
+		scn.MoveCardsToHand(scn.GetShadowCard("card1"), scn.GetShadowCard("card2"));
+
+		scn.StartGame();
+
+		// The six Axe Strikes
+		assertEquals(6, scn.GetFreepsDeckCount());
+		assertEquals(5, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetShadowHandCount());
+
+		// The first four Elves of the phase: he is asked each time, lets it be, and a card is drawn.
+		scn.FreepsPlayCard(arwen);
+		assertTrue(scn.ShadowDecisionAvailable("Discard a card from hand to prevent"));
+		scn.ShadowChooseNo();
+		// One Elf out of the hand and one card into it
+		assertEquals(5, scn.GetFreepsHandCount());
+		assertEquals(5, scn.GetFreepsDeckCount());
+
+		scn.FreepsPlayCard(orophin);
+		assertTrue(scn.ShadowDecisionAvailable("Discard a card from hand to prevent"));
+		scn.ShadowChooseNo();
+		assertEquals(4, scn.GetFreepsDeckCount());
+
+		scn.FreepsPlayCard(elf1);
+		assertTrue(scn.ShadowDecisionAvailable("Discard a card from hand to prevent"));
+		scn.ShadowChooseNo();
+		assertEquals(3, scn.GetFreepsDeckCount());
+
+		scn.FreepsPlayCard(elf2);
+		assertTrue(scn.ShadowDecisionAvailable("Discard a card from hand to prevent"));
+		scn.ShadowChooseNo();
+		assertEquals(5, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The fifth: four cards have been drawn this fellowship phase, so no card will be drawn for it, though
+		// two are left in the deck. He holds two cards and is asked nothing.
+		scn.FreepsPlayCard(elf3);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertInZone(Zone.FREE_CHARACTERS, elf3);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

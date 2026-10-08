@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.ActionContext;
+import com.gempukku.lotro.cards.build.DelegateActionContext;
 import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.game.PhysicalCard;
 
@@ -156,6 +157,52 @@ public final class EffectForecast {
 
     public static EffectForecast together(EffectForecast... parts) {
         return together(Arrays.asList(parts));
+    }
+
+    /**
+     * Whether the given effects, about to be carried out one after another, are certain to do nothing: nothing to
+     * draw, nobody to give it to, nothing left for it to act on.  Unlike a forecast made for the no-effect flag,
+     * this is asked at the moment the effects come up, so they are asked in a context that says so
+     * (ActionContext.isAtResolution) and may read what has been chosen and remembered.  It is what a prevention
+     * asks before it is put to a player (PreventableEffectAppender): nobody is asked to pay to prevent what is
+     * not going to happen.
+     *
+     * Each effect has to say for itself that it will do nothing.  An effect that cannot tell, and one that only
+     * remembers something for the next (whose forecast is then made before that memory is filled), leave the
+     * answer at false.  An effect that will happen in part (three cards to draw and one in the deck) is not
+     * doing nothing.
+     */
+    public static boolean isCertainToDoNothing(ActionContext actionContext, EffectAppender[] effectAppenders) {
+        if (effectAppenders == null || effectAppenders.length == 0)
+            return false;
+        final ActionContext atResolution = new DelegateActionContext(actionContext, actionContext.getPerformingPlayer()) {
+            @Override
+            public boolean isAtResolution() {
+                return true;
+            }
+        };
+        try {
+            for (EffectAppender effectAppender : effectAppenders) {
+                final EffectForecast forecast = effectAppender.forecast(atResolution);
+                if (forecast.verdict == Verdict.UNKNOWN || forecast.bookkeeping)
+                    return false;
+            }
+        } catch (RuntimeException exp) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * The forecast, made only at resolution (ActionContext.isAtResolution), of an effect that acts on the cards
+     * its card resolver finds and does nothing else: with none found it does nothing.  While the action is only
+     * on offer it says UNKNOWN, as such an effect did before it was asked at resolution: the no-effect flag is
+     * not judged from it.
+     */
+    public static EffectForecast foundAtResolution(ActionContext actionContext, EffectAppender cardResolver) {
+        if (!actionContext.isAtResolution())
+            return UNKNOWN;
+        return givenTo(cardResolver.forecast(actionContext), false);
     }
 
     /**

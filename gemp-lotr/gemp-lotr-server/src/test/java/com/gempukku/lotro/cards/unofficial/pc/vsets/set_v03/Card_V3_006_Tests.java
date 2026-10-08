@@ -38,6 +38,7 @@ public class Card_V3_006_Tests
 					put("forfrodo", "103_107");     // For Frodo: [shire] Skirmish event, cost 2: exert a unique [gondor] or [shire] companion (except Frodo) to make him strength +1 for each burden on Frodo. Remove this from the game.
 					put("hunt", "1_126");           // Hunt Them Down!: Shadow Maneuver event: make an Uruk-hai fierce
 					put("pipe", "1_91");            // Aragorn's Pipe: a Free Peoples possession
+					put("intimidate", "1_76");      // Intimidate: [gandalf] Response event, cost 2: if a companion is about to take a wound, spot Gandalf to prevent that wound
 
 					put("troop", "1_177");          // Goblin Patrol Troop: strength 13, vitality 3, site 4, no text
 					put("party", "1_158");          // Uruk-hai Raiding Party: an Uruk-hai, strength 9, site 5
@@ -434,5 +435,56 @@ public class Card_V3_006_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(swordarm));
 		assertTrue(scn.FreepsPlayAvailable(haste));
+	}
+
+	@Test
+	public void AResponseEventInHandIsNotAnotherEventToRevealAndDoesNotMakeThisOnePlayable() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var haste = scn.GetFreepsCard("haste");
+		var intimidate = scn.GetFreepsCard("intimidate");
+		var valor = scn.GetFreepsCard("valor");
+		var trails = scn.GetFreepsCard("trails");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+		// The only other Free Peoples event in hand is a response event of Gandalf's own culture, with the
+		// Gandalf it spots on the table: it is played when a companion is about to take a wound and at no
+		// other time, so it is not an event this one could play now.
+		scn.MoveCardsToHand(haste, intimidate);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertFalse(scn.FreepsPlayAvailable(haste));
+
+		// Two maneuver events beside it: now this one can be played.
+		scn.MoveCardsToHand(valor, trails);
+		scn.FreepsRefreshDecision();
+		var twilight = scn.GetTwilight();
+		assertTrue(scn.FreepsPlayAvailable(haste));
+
+		scn.FreepsPlayCard(haste);
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		// The maneuver events are there to be revealed and the response event is not.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(valor, trails));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(intimidate));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(valor);
+		scn.ShadowDismissRevealedCards();
+		// Elendil's Valor three times: Aragorn, the only [gondor] companion, is defender +1 three times over.
+		assertEquals(3, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		// 3 for this event; Elendil's Valor costs nothing
+		assertEquals(twilight + 3, scn.GetTwilight());
+		assertInZone(Zone.REMOVED, valor);
+		assertInZone(Zone.DISCARD, haste);
+		assertInZone(Zone.HAND, intimidate);
+		assertInZone(Zone.HAND, trails);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
