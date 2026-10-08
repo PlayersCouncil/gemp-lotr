@@ -27,23 +27,31 @@
 			}
 			effect: [
 				{
-					type: preventable
-					player: freeps
-					cost: {
-						type: DiscardFromHand
-						count: {
-							type: ForEachInHand
+					type: If
+					check: {
+						type: HasCardInHand
+						player: freeps
+						count: 1
+					}
+					true: {
+						type: preventable
+						player: freeps
+						cost: {
+							type: DiscardFromHand
+							count: {
+								type: ForEachInHand
+								hand: freeps
+							}
+							forced: false
 							hand: freeps
 						}
-						forced: false
-						hand: freeps
-					}
-					text: Discard your hand to prevent adding a burden for each card in your hand
-					effect: {
-						type: AddBurdens
-						amount: {
-							type: ForEachInHand
-							hand: freeps
+						text: Discard your hand to prevent adding a burden for each card in your hand
+						effect: {
+							type: AddBurdens
+							amount: {
+								type: ForEachInHand
+								hand: freeps
+							}
 						}
 					}
 				}
