@@ -167,16 +167,10 @@
 				select: choose(mounted,companion)
 				count: {
 					type: range
-					from: 0
+					from: 1
 					to: {
-						type: max
-						firstNumber: {
-							type: ForEachBurden
-						}
-						secondNumber: {
-							type: ForEachYouCanSpot
-							filter: minion
-						}
+						type: ForEachYouCanSpot
+						filter: mounted,companion,CanExert
 					}
 				}
 				memorize: exertedComps 
