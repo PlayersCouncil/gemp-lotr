@@ -157,6 +157,10 @@
 					type: winsSkirmish
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: another,or(dwarf,elf),companion,wounded
+				}
 				effect: {
 					type: heal
 					select: choose(another,or(dwarf,elf),companion)
