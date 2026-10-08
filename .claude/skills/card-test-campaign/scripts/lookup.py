@@ -62,7 +62,10 @@ def entries(path):
 def matcher(term):
     if re.fullmatch(r"[QFG]-\d{4}", term):
         return re.compile(r"\b" + re.escape(term) + r"\b")
-    return re.compile(term, re.IGNORECASE)
+    try:
+        return re.compile(term, re.IGNORECASE)
+    except re.error:  # card text is full of brackets: a term that is not a valid pattern is taken literally
+        return re.compile(re.escape(term), re.IGNORECASE)
 
 
 def lead(text, width=150):
@@ -170,4 +173,7 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except BrokenPipeError:  # output piped to head
+        sys.exit(0)
