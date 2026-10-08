@@ -8,24 +8,26 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_053_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hate", "53_53");
-					put("uruk", "1_151");      // Uruk Lieutenant (Uruk-hai)
-					put("goblinman", "2_42");  // Goblin Man (Isengard Orc)
-					put("runner", "1_178");    // Goblin Runner
 
-					put("chaff1", "1_180");
-					put("chaff2", "1_181");
-					put("chaff3", "1_182");
-					put("chaff4", "1_183");
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, damage +1 and no other text
+					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai, damage +1 and no other text
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, no text
+					put("forger", "3_56");      // Isengard Forger: [isengard] Orc; a Shadow ability used only on purpose
+					put("troll", "1_165");      // Cave Troll of Moria: [moria] Troll; its text is about playing it, and it is cheated in
+
+					put("filler1", "1_178");    // Goblin Runner: [moria] Orc, cost 1; when played, adds (2)
+					// Left in the Shadow player's draw deck, so that there is always more to draw than 3.
+					put("filler2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,7 +41,7 @@ public class Card_03_053_ErrataTests
 		/**
 		 * Set: 3
 		 * Name: Hate and Anger
-		 * Unique: false
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 2
@@ -63,50 +65,88 @@ public class Card_03_053_ErrataTests
 	}
 
 	@Test
-	public void HateAndAngerDrawsThreeCardsWithUrukHaiAndOrc() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SpottingAnUrukHaiAndAnOrcDrawsThreeCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hate = scn.GetShadowCard("hate");
-		var uruk = scn.GetShadowCard("uruk");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveMinionsToTable(uruk, runner);
-		scn.MoveCardsToHand(hate);
-		scn.MoveCardsToTopOfShadowDeck("chaff1", "chaff2", "chaff3", "chaff4");
+		var savage = scn.GetShadowCard("savage");
+		var runner = scn.GetShadowCard("filler1");
+		scn.MoveCardsToHand(hate, runner);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.MoveMinionsToTable(savage);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		int handBefore = scn.GetShadowHand().size();
+		// An Uruk-hai and no Orc.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(hate));
 
-		// Shadow plays Hate and Anger
+		// The Goblin Runner is an Orc (it adds its (2) without asking).
+		scn.ShadowPlayCard(runner);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(hate));
+
+		int twilight = scn.GetTwilight();
+		int deck = scn.GetShadowDeckCount();
+		assertEquals(1, scn.GetShadowHandCount());
+
 		scn.ShadowPlayCard(hate);
-
-		// Card played from hand (-1), 3 cards drawn (+3) = net +2
-		assertEquals(handBefore + 2, scn.GetShadowHand().size());
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertEquals(deck - 3, scn.GetShadowDeckCount());
+		assertEquals(3, scn.GetShadowHandCount());
+		assertInDiscard(hate);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void HateAndAngerDrawsThreeCardsWithUrukHaiAndIsenOrc() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnUrukHaiOrATrollIsNoOrcButAnIsengardOrcIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hate = scn.GetShadowCard("hate");
-		var uruk = scn.GetShadowCard("uruk");
-		var goblinman = scn.GetShadowCard("goblinman");
-
-		scn.MoveMinionsToTable(uruk, goblinman);
+		var savage = scn.GetShadowCard("savage");
+		var sentry = scn.GetShadowCard("sentry");
+		var troll = scn.GetShadowCard("troll");
+		var forger = scn.GetShadowCard("forger");
 		scn.MoveCardsToHand(hate);
-		scn.MoveCardsToTopOfShadowDeck("chaff1", "chaff2", "chaff3", "chaff4");
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.MoveMinionsToTable(savage, sentry, troll);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		int handBefore = scn.GetShadowHand().size();
+		// Two Uruk-hai and a [moria] Troll.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(hate));
 
-		// Shadow plays Hate and Anger
-		scn.ShadowPlayCard(hate);
+		scn.MoveMinionsToTable(forger);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(hate));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 
-		// Card played from hand (-1), 3 cards drawn (+3) = net +2
-		assertEquals(handBefore + 2, scn.GetShadowHand().size());
+	@Test
+	public void AnIsengardOrcIsNoUrukHaiButASauronUrukHaiIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hate = scn.GetShadowCard("hate");
+		var troop = scn.GetShadowCard("troop");
+		var forger = scn.GetShadowCard("forger");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToHand(hate);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, forger);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// Two Orcs, one of them [isengard], and no Uruk-hai.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(hate));
+
+		scn.MoveMinionsToTable(sentry);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(hate));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
