@@ -18,6 +18,7 @@
 		race: man
 		strength: 9
 		vitality: 3
+		resistance: 6
 		effects: [
 			{
 				type: toPlay
