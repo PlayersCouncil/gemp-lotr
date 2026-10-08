@@ -33,9 +33,14 @@ RULES_FILE = SKILLS / "game-mechanics" / "references" / "comprehensive-rules-4.2
 
 def state_dir() -> Path:
     """Where the campaign keeps its bookkeeping (statuses, findings, ledgers): $GEMP_CAMPAIGN_STATE, or
-    "Claude outputs/card-tests" under the repository, or the cloud workspace's outputs folder.  Not in git."""
+    the folder named in a file .campaign-state at the repository root, or "Claude outputs/card-tests" under the repository, or the cloud workspace's outputs folder.  Not in git."""
     if os.environ.get("GEMP_CAMPAIGN_STATE"):
         return Path(os.environ["GEMP_CAMPAIGN_STATE"])
+    # A clone may be pointed at a state folder of its own (a file .campaign-state at its root holding the
+    # path), so that two clones working the same cards do not write each other's ledgers.
+    marker = REPO / ".campaign-state"
+    if marker.is_file():
+        return Path(marker.read_text(encoding="utf-8").strip())
     local = REPO / "Claude outputs" / "card-tests"
     cloud = Path("/mnt/user-data/outputs/card-tests")
     if not local.is_dir() and cloud.is_dir():
