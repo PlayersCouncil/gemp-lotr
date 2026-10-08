@@ -129,6 +129,10 @@
 				trigger: {
 					type: StartOfTurn
 				},
+				requires: {
+					type: CanSpot
+					filter: ally,allyHome(fellowship,3),wounded
+				}
 				cost: {
 					type: ChooseActiveCards
 					count: 0-1
