@@ -24,17 +24,24 @@
 		effects: {
 			type: activated
 			phase: skirmish
+			// Q-0127 (Ketura, 2026-10-08): any Hobbit companion but the Ring-bearer may pay, in any skirmish, and
+			// the action is flagged when no such Hobbit able to exert twice is in the fierce skirmish being fought.
+			noEffectUnless: {
+				type: canSpot
+				filter: hobbit,companion,not(ring bearer),inFierceSkirmish,minVitality(3)
+			}
 			cost: [
 				{
 					type: exert
-					select: choose(hobbit,companion,not(ring bearer),infierceskirmish)
+					select: choose(hobbit,companion,not(ring bearer))
 					times: 2
 					memorize: exertedHobbit
 				}
 			]
 			effect: {
 				type: cancelSkirmish
-				filter: memory(exertedHobbit),infierceskirmish
+				fierceOnly: true
+				filter: memory(exertedHobbit)
 			}
 		}
 		gametext: <b>Skirmish:</b> Exert a Hobbit companion twice (except the Ring-bearer) to cancel a fierce skirmish involving that Hobbit.

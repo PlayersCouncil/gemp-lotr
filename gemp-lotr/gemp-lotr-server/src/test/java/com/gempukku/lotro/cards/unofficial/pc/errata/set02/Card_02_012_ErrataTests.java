@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -375,7 +374,6 @@ public class Card_02_012_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0125: with the draw deck emptied by the cost, the player is still asked whether to discard 3 more; F-0116 says a pointless prompt is not put, Q-0029 and Q-0104 keep the ask at an empty deck")
 	public void FurtherDiscardsAreNotOfferedOnceTheCostHasEmptiedTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShortDeckScenario();
 
@@ -403,7 +401,6 @@ public class Card_02_012_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0125: with the draw deck emptied by a further discard, the player is still asked whether to discard 3 more; F-0116 says a pointless prompt is not put, Q-0029 and Q-0104 keep the ask at an empty deck")
 	public void FurtherDiscardsAreNotOfferedOnceAFurtherDiscardHasEmptiedTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetSixCardDeckScenario();
 

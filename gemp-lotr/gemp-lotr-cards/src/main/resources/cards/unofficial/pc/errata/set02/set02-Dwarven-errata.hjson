@@ -125,10 +125,17 @@
 					}
 				}
 				{
-					type: chooseYesOrNo
-					player: you
-					text: Would you like to discard 3 cards from the top of your deck to no effect?
-					memorize: choice
+					// Q-0125 (Ketura, 2026-10-08): not asked once the draw deck is empty.
+					type: If
+					check: {
+						type: HasCardInDrawDeck
+					}
+					true: {
+						type: chooseYesOrNo
+						player: you
+						text: Would you like to discard 3 cards from the top of your deck to no effect?
+						memorize: choice
+					}
 				}
 				{
 					type: If
@@ -148,11 +155,16 @@
 					times: 9
 					effect: {
 						type: If
-						check: {
-							type: MemoryIs
-							memory: choice
-							value: yes
-						}
+						check: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDrawDeck
+							}
+						]
 						true: [
 							{
 								type: chooseYesOrNo

@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -112,9 +111,11 @@ public class Card_02_101_ErrataTests
 		scn.FreepsAssignToMinions(pippin, ambusher);
 		scn.FreepsResolveSkirmish(pippin);
 
-		// The regular skirmish against a fierce minion is not a fierce skirmish.
+		// The regular skirmish against a fierce minion is not a fierce skirmish: Pippin can pay, so the ability is
+		// offered, flagged as cancelling nothing.
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(filibert));
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
 		scn.PassSkirmishActions();
 		// Strength 3 against 5: Pippin loses and takes a wound.
 		assertEquals(1, scn.GetWoundsOn(pippin));
@@ -125,6 +126,7 @@ public class Card_02_101_ErrataTests
 
 		assertTrue(scn.IsCharSkirmishingAgainst(pippin, ambusher));
 		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("false", scn.FreepsActionNoEffect(filibert));
 
 		// Pippin is the one Hobbit companion who is not the Ring-bearer, so he is chosen without asking.
 		scn.FreepsUseCardAction(filibert);
@@ -142,15 +144,16 @@ public class Card_02_101_ErrataTests
 	}
 
 	@Test
-	public void NotOfferedInTheFierceSkirmishOfTheRingBearerAnAllyOrANonHobbit() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CancelsNothingInTheFierceSkirmishOfTheRingBearerAnAllyOrANonHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var filibert = scn.GetFreepsCard("filibert");
+		var pippin = scn.GetFreepsCard("pippin");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bilbo = scn.GetFreepsCard("bilbo");
 		scn.MoveCardsToSupportArea(filibert, bilbo);
-		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCompanionsToTable(pippin, aragorn);
 
 		var ambusher = scn.GetShadowCard("ambusher");
 		var troop = scn.GetShadowCard("troop");
@@ -175,32 +178,44 @@ public class Card_02_101_ErrataTests
 				new PhysicalCardImpl[]{aragorn, troop},
 				new PhysicalCardImpl[]{bilbo, troop2});
 
+		// Pippin, outside these skirmishes, can pay, so the ability is offered in each, flagged as cancelling nothing.
 		scn.FreepsResolveSkirmish(frodo);
 		assertTrue(scn.IsCharSkirmishingAgainst(frodo, ambusher));
-		assertFalse(scn.FreepsActionAvailable(filibert));
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
 		scn.PassSkirmishActions();
 		scn.FreepsDeclineOptionalTrigger(); // The Ruling Ring
 
 		scn.FreepsResolveSkirmish(aragorn);
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, troop));
-		assertFalse(scn.FreepsActionAvailable(filibert));
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
 		scn.PassSkirmishActions();
 
 		scn.FreepsResolveSkirmish(bilbo);
 		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, troop2));
-		assertFalse(scn.FreepsActionAvailable(filibert));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
+
+		// Taken, it exerts Pippin twice and Bilbo's skirmish goes on.
+		scn.FreepsUseCardAction(filibert);
+		assertEquals(2, scn.GetWoundsOn(pippin));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, troop2));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
-	public void NotOfferedWhenTheSkirmishingHobbitCannotExertTwice() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OfferedOnlyWhileAHobbitCompanionOtherThanTheRingBearerCanExertTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var filibert = scn.GetFreepsCard("filibert");
 		var pippin = scn.GetFreepsCard("pippin");
+		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(filibert);
-		scn.MoveCompanionsToTable(pippin, aragorn);
+		scn.MoveCompanionsToTable(pippin, sam, aragorn);
 
 		var ambusher = scn.GetShadowCard("ambusher");
 
@@ -219,7 +234,16 @@ public class Card_02_101_ErrataTests
 		scn.FreepsAssignToMinions(pippin, ambusher);
 		scn.FreepsResolveSkirmish(pippin);
 
+		// Sam can pay, so the ability is offered; Pippin, in the fierce skirmish, cannot, so it would cancel nothing.
 		assertTrue(scn.IsCharSkirmishingAgainst(pippin, ambusher));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
+
+		// Vitality 4 with 2 wounds: now no Hobbit companion but the Ring-bearer can exert twice.
+		scn.AddWoundsToChar(sam, 2);
+		scn.FreepsRefreshDecision();
 		assertFalse(scn.FreepsActionAvailable(filibert));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
@@ -249,7 +273,6 @@ public class Card_02_101_ErrataTests
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, ambusher);
 		scn.FreepsResolveSkirmish(aragorn);
-		assertFalse(scn.FreepsActionAvailable(filibert));
 		scn.PassSkirmishActions();
 		assertEquals(1, scn.GetWoundsOn(ambusher));
 
@@ -258,14 +281,23 @@ public class Card_02_101_ErrataTests
 		scn.FreepsAssignToMinions(pippin, ambusher);
 		scn.FreepsResolveSkirmish(pippin);
 
+		// Pippin can pay, so the ability is offered, flagged as cancelling nothing.
 		assertTrue(scn.IsCharSkirmishingAgainst(pippin, ambusher));
 		assertTrue(scn.HasKeyword(ambusher, Keyword.FIERCE));
-		assertFalse(scn.FreepsActionAvailable(filibert));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
+
+		scn.FreepsUseCardAction(filibert);
+		assertEquals(2, scn.GetWoundsOn(pippin));
+		assertTrue(scn.IsCharSkirmishingAgainst(pippin, ambusher));
+
+		// Not cancelled: Pippin (strength 3 against 5) loses and takes a third wound.
+		scn.PassSkirmishActions();
+		assertEquals(3, scn.GetWoundsOn(pippin));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0127: Q-0034 reading: the cost is any Hobbit companion but the Ring-bearer, offered in any skirmish; the effect cancels only a fierce skirmish of that Hobbit")
 	public void AnyHobbitCompanionButTheRingBearerMayPayAndOnlyAFierceSkirmishOfThatHobbitIsCancelled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -289,6 +321,7 @@ public class Card_02_101_ErrataTests
 
 		// The regular skirmish: the cost can be paid, so the ability is offered, though it will cancel nothing.
 		assertTrue(scn.FreepsActionAvailable(filibert));
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
 		scn.FreepsUseCardAction(filibert);
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(pippin));
@@ -309,6 +342,8 @@ public class Card_02_101_ErrataTests
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, ambusher);
 		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals("effect", scn.FreepsActionNoEffect(filibert));
+		// Pippin (3 wounds) cannot exert twice, so Sam is chosen without asking.
 		scn.FreepsUseCardAction(filibert);
 		assertEquals(2, scn.GetWoundsOn(sam));
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, ambusher));

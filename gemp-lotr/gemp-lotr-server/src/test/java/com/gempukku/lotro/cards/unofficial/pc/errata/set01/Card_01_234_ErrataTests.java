@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -145,10 +144,9 @@ public class Card_01_234_ErrataTests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
-		scn.ShadowChooseYes();
 
 		// The Witch-king would cost 8 + 2 roaming, one more than the pool holds.
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, gorbag));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(twk, otsea, rit, khamul, runner, stronghold, freepsEnquea));
 		scn.ShadowChooseCardBPFromSelection(attea);
@@ -157,7 +155,7 @@ public class Card_01_234_ErrataTests
 		assertEquals(1, scn.GetTwilight()); // 6 + 2 roaming
 		assertInDiscard(gorbag, twk, rit, khamul, runner, stronghold, freepsEnquea);
 		assertInHand(otsea);
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		// Five companions are one over four: no second play, though Gorbag could still be played.
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -184,23 +182,23 @@ public class Card_01_234_ErrataTests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
 		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseYes();
 		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, gorbag, twk));
 		scn.ShadowChooseCardBPFromSelection(gorbag);
 		assertInZone(Zone.SHADOW_CHARACTERS, gorbag);
 		assertInDiscard(attea, twk);
 		assertEquals(25, scn.GetTwilight()); // 5 + 2 roaming
 
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
-		scn.ShadowChooseYes();
+		// The second play is a "may" of its own: a choice of none or one.
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, twk));
 		scn.ShadowChooseCardBPFromSelection(attea);
 		assertInZone(Zone.SHADOW_CHARACTERS, attea);
 		assertInDiscard(twk);
 		assertEquals(17, scn.GetTwilight()); // 6 + 2 roaming
 
-		// Six companions are two over four: no third play.
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		// Six companions are two over four: no third play, though the Witch-king could still be played.
+		assertInDiscard(twk);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -226,14 +224,13 @@ public class Card_01_234_ErrataTests
 		scn.ShadowPlayCard(nertea);
 		assertEquals(32, scn.GetTwilight()); // 30 set + 6 companions + 2 for Bree Gate - 4 for Nertea - 2 roaming
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		// Attea is the one candidate, so he is chosen without asking.
 		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseYes();
 		assertInZone(Zone.SHADOW_CHARACTERS, attea);
 		assertEquals(24, scn.GetTwilight()); // 6 + 2 roaming
 
 		// Six companions allow a second play, but no unique [wraith] minion is left: the four cards that are not
-		// unique, not [wraith] or not a minion could all be played, and are not asked about.
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		// unique, not [wraith] or not a minion could all be played, and are not offered.
 		assertInDiscard(rit, khamul, runner, stronghold);
 		assertEquals(24, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -257,12 +254,10 @@ public class Card_01_234_ErrataTests
 
 		scn.ShadowPlayCard(nertea);
 		assertEquals(32, scn.GetTwilight()); // 30 set + 6 companions + 2 for Bree Gate - 6 for Nertea
+		// The first play is the trigger itself: declining it plays nothing and asks nothing more.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
-		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
-		scn.ShadowChooseNo();
+		scn.ShadowDeclineOptionalTrigger();
 
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		assertInDiscard(attea, gorbag);
 		assertEquals(32, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -286,18 +281,18 @@ public class Card_01_234_ErrataTests
 
 		scn.ShadowPlayCard(nertea);
 		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowChooseYes();
 		scn.ShadowChooseCardBPFromSelection(attea);
 		assertInZone(Zone.SHADOW_CHARACTERS, attea);
 		assertEquals(24, scn.GetTwilight()); // 32 after Nertea - 6 - 2 roaming
 
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
-		scn.ShadowChooseNo();
+		// Gorbag is the one candidate left, and the second play is still asked: a choice of none or one.
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gorbag));
+		scn.ShadowDeclineChoosing();
 
 		assertInDiscard(gorbag);
 		assertInZone(Zone.SHADOW_CHARACTERS, attea);
 		assertEquals(24, scn.GetTwilight());
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -358,7 +353,6 @@ public class Card_01_234_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0121: accepting the trigger asks a second yes/no before the first minion is chosen (Q-0090)")
 	public void AcceptingTheTriggerGoesStraightToTheChoiceOfMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -379,6 +373,7 @@ public class Card_01_234_ErrataTests
 		scn.ShadowAcceptOptionalTrigger();
 
 		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, gorbag));
 		scn.ShadowChooseCardBPFromSelection(gorbag);
 		assertInZone(Zone.SHADOW_CHARACTERS, gorbag);
