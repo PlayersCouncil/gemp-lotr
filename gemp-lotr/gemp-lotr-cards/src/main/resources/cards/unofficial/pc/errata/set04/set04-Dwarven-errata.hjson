@@ -63,6 +63,9 @@
 						type: canSpot
 						filter: dwarf
 					}
+					{
+						type: HasCardInDrawDeck
+					}
 				]
 				effect: [
 					{

@@ -8,6 +8,7 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -160,5 +161,29 @@ public class Card_03_106_ErrataTests
 		assertEquals(0, scn.GetAttachedCards(sam).size());
 		assertEquals(3, scn.GetTwilightCost(scn.GetCurrentSite()));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0233: Bill is discarded before the underground site's Shadow number is counted; Decipher's ruling on 3_106 has the number reduced first")
+	public void TheUndergroundSitesShadowNumberIsReducedBeforeBillIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bill = scn.GetFreepsCard("bill");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.AttachCardsTo(sam, bill);
+
+		// Decipher's ruling on 3_106 (Q-0133): "When the fellowship moves with Bill the Pony to an underground site,
+		// the Shadow number of that site is reduced before Bill the Pony is discarded."  To Balin's Tomb (3): the
+		// move adds 3 - 1 for the site and 2 for Frodo and Sam.
+		int pool = scn.GetTwilight();
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(pool + 2 + 2, scn.GetTwilight());
+		assertInDiscard(bill);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
