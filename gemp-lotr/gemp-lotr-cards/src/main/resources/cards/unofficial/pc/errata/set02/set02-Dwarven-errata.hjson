@@ -118,10 +118,9 @@
 						select: memory(chosenDwarf)
 						keyword: damage
 						amount: {
-							type: cardAffectedLimitPerPhase
-							prefix: dmg-
-							source: 1
+							type: cardPhaseLimit
 							limit: 3
+							amount: 1
 						}
 					}
 				}
@@ -328,7 +327,7 @@
 					check: {
 						type: MemoryMatches
 						memory: chosenCondition
-						filter: or(weather, AttachedTo(Dwarf))
+						filter: or(weather, AttachedTo(Dwarf,not(hindered)))
 					}
 					true: {
 						type: Discard
