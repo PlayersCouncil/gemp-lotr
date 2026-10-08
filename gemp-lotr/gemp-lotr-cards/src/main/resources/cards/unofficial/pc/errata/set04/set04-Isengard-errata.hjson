@@ -27,6 +27,10 @@
 						type: CanSpot
 						filter: fortification
 					}
+					{
+						type: CanSpot
+						filter: culture(isengard),minion
+					}
 				]
 				effect: [
 					{
