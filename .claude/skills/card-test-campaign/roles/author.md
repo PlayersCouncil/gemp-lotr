@@ -86,9 +86,9 @@ Choose helper cards by reading their definitions (`packet.py <helper id>`), neve
 card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.
 
 If an existing test asserts one reading of something you wrote down as a question, keep that test active, and
-report the question with a note that the existing test takes that reading. A new question where no old test takes a reading gets the
-parked test of the likelier reading only; an active test of the game's present behaviour on that board is not
-wanted until she answers.
+report the question with a note that the existing test takes that reading. A new question where no old test takes a reading gets one test,
+of the likelier reading: active if the game already passes it, parked on the question if it does not. No test of
+the other reading is written until she answers.
 
 ## When a test fails
 
