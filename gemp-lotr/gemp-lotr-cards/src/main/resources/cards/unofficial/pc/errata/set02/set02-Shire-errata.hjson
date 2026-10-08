@@ -182,15 +182,22 @@
 					type: discard
 					select: self
 				}
-				effect: {
-					type: addModifier
-					modifier: {
-						type: ModifyStrength
-						amount: -4
+				effect: [
+					{
+						type: MemorizeActive
 						filter: Nazgul
+						memory: nazgul
 					}
-					until: start(regroup)
-				}
+					{
+						type: addModifier
+						modifier: {
+							type: ModifyStrength
+							amount: -4
+							filter: memory(nazgul)
+						}
+						until: start(regroup)
+					}
+				]
 			}
 		]
 		gametext: To play, spot 2 Hobbits.\Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
@@ -238,31 +245,46 @@
 				}
 			]
 			effect: {
-				type: choice
-				texts: [
-					Make the Ring-bearer strength +4 if skirmishing a Nazgul
-					Take off The One Ring
-				]
-				effects: [
-					{ 
-						type: If
-						check: {
+				type: If
+				check: {
+					type: Or
+					requires: [
+						{
 							type: CanSpot
 							filter: memory(oldBearer),InSkirmishAgainst(Nazgul)
 						}
-						true: {
-							type: addmodifier
-							modifier: {
-								type: modifyStrength
-								filter: memory(oldBearer),inSkirmishAgainst(nazgul)
-								amount: 4
+						{
+							type: RingIsOn
+						}
+					]
+				}
+				true: {
+					type: choice
+					texts: [
+						Make the Ring-bearer strength +4 if skirmishing a Nazgul
+						Take off The One Ring
+					]
+					effects: [
+						{ 
+							type: If
+							check: {
+								type: CanSpot
+								filter: memory(oldBearer),InSkirmishAgainst(Nazgul)
+							}
+							true: {
+								type: addmodifier
+								modifier: {
+									type: modifyStrength
+									filter: memory(oldBearer),inSkirmishAgainst(nazgul)
+									amount: 4
+								}
 							}
 						}
-					}
-					{
-						type: takeOffRing
-					}
-				]
+						{
+							type: takeOffRing
+						}
+					]
+				}
 			}
 		}
 		gametext: <b>Tale.</b>  Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to make the Ring-bearer strength +4 if skirmishing a Nazgul or to take off The One Ring.
