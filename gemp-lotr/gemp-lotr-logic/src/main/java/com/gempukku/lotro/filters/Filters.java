@@ -357,6 +357,11 @@ public class Filters {
     public static final Filter character = Filters.or(CardType.ALLY, CardType.COMPANION, CardType.MINION);
 
     public static final Filter ringBearer = (game, physicalCard) -> game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()) == physicalCard;
+    /**
+     * The One Ring, by what is printed on it and not by what the game currently takes it for: a hindered card has
+     * no card type to be found by (CR 5.0 "hinder"), and the rules must still find a hindered Ring (Q-0109).
+     */
+    public static final Filter theOneRing = (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.THE_ONE_RING;
 
     public static final Filter inSkirmish = (game, physicalCard) -> {
         Skirmish skirmish = game.getGameState().getSkirmish();
