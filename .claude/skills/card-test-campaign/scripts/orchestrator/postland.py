@@ -102,6 +102,11 @@ def main(argv):
         listed["transport/apply-sync.py"] = digest(applier)
         carry.append("apply-sync.py")
     (WORK / "last_listed.json").write_text(json.dumps(listed))
+    # The outputs folder writes through to its store some seconds after a file is closed, and the tool that carries
+    # files to her machine reads the store: carried at once, the PREVIOUS zip or bundle goes across.  apply-sync.py
+    # notices (it says NOT UNPACKED, or EXPECTED): carry the files again.
+    import time
+    time.sleep(12)
     print("carry (device_commit_files, force): " + json.dumps(
         [{"stagedPath": str(transport / name), "devicePath": DEVICE + name} for name in carry]))
     print("then on her machine: python3 \"$HOME/mnt/gemp-lotr/Claude outputs/card-tests/transport/apply-sync.py\" %s" % head[:9])
