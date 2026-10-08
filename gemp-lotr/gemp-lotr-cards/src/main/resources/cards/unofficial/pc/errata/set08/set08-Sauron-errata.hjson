@@ -60,14 +60,14 @@
 						type: discard
 						select: choose(and(culture(sauron),minion))
 					}
+				]
+				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose a card for GROND to SMASH
 						select: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
 						memorize: chosenCard
 					}
-				]
-				effect: [
 					{
 						type: If
 						check: [

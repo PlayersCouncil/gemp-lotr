@@ -1,34 +1,43 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_08_103_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("grond", "58_103");
-					put("soldier1", "1_271");
-					put("soldier2", "1_271");
-					put("soldier3", "1_271");
 
-					put("arwen", "3_7");
-					put("elrond", "1_40");
-					put("gwemegil", "1_47");
-					put("bow", "1_41");
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability used only on purpose
+					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai, cost 2, site 6, damage +1
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, cost 2, damage +1: a minion of another culture
+					put("banner", "1_263");     // Orc Banner: [sauron] condition, cost 1, support area; acts only when a skirmish is lost
+					put("banner2", "1_263");
 
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, cost 4; a maneuver ability used only on purpose
+					put("shield", "1_107");     // Great Shield: [gondor] possession, cost 1, borne by a Man
+					put("lorienelf", "1_53");   // Lorien Elf: companion, cost 1, no text but a requirement to play
+					put("guard", "1_7");        // Dwarf Guard: companion, cost 1, no text but a requirement to play
+					put("toby", "1_305");       // Old Toby: [shire] pipeweed possession, cost 1, support area
+					put("songs", "1_61");       // Songs of the Blessed Realm: [elven] condition, cost 1, support area
+					put("mirror", "1_55");      // The Mirror of Galadriel: [elven] possession, cost 2, support area; its ability needs Galadriel
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: ally, cost 4
+					put("treebeard", "4_103");  // Treebeard, Earthborn: ally, cost 4; acts only when an unbound Hobbit is discarded
+					put("guardian", "12_50");   // Guardian: [gondor] condition, cost 4, support area; a skirmish ability that needs a [gondor] companion
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: Dwarf ally, cost 1; a maneuver ability used only on purpose
+					put("armor", "1_8");        // Dwarven Armor: [dwarven] possession, cost 0, borne by a Dwarf
+					put("armor2", "1_8");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,98 +49,383 @@ public class Card_08_103_ErrataTests
 	public void GrondStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: *Grond, Hammer of the Underworld
-		* Side: Free Peoples
-		* Culture: Sauron
-		* Twilight Cost: 3
-		* Type: possession
-		* Subtype: Support Area
-		* Game Text: <b>Engine.</b> <b>Shadow:</b> Play a [sauron] minion to add a [sauron] token here.
-		* 	 Regroup: Discard a [sauron] minion and remove X [sauron] tokens here to discard a Free Peoples grond (except a companion) with a twilight cost of X. If that grond is not in the support area, discard this possession.
-		*/
+		 * Set: 8
+		 * Name: Grond, Hammer of the Underworld
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 3
+		 * Type: Possession
+		 * Subtype: Support Area
+		 * Game Text: <b>Engine.</b> <b>Shadow:</b> Play a [sauron] minion to add a [sauron] token here.
+		 * 	Regroup: Discard a [sauron] minion and remove X [sauron] tokens here to discard a Free Peoples card (except a companion) with a twilight cost of X. If that card is not in the support area, discard this possession.
+		 */
 
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl grond = scn.GetFreepsCard("grond");
+		var card = scn.GetFreepsCard("grond");
 
-		assertTrue(grond.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, grond.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, grond.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, grond.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(grond, Keyword.SUPPORT_AREA));
-		assertEquals(3, grond.getBlueprint().getTwilightCost());
+		assertEquals("Grond", card.getBlueprint().getTitle());
+		assertEquals("Hammer of the Underworld", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.ENGINE));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
-	public void GrondAddsTokensWhenAbilityUsed() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void GrondIsPlayedFromHandForThreeToTheShadowSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl grond = scn.GetShadowCard("grond");
-		PhysicalCardImpl soldier1 = scn.GetShadowCard("soldier1");
-		PhysicalCardImpl soldier2 = scn.GetShadowCard("soldier2");
-		PhysicalCardImpl soldier3 = scn.GetShadowCard("soldier3");
-		scn.MoveCardsToSupportArea(grond);
-		scn.MoveMinionsToTable(soldier1, soldier2, soldier3);
-
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
-		PhysicalCardImpl bow = scn.GetFreepsCard("bow");
-
-		scn.MoveCardsToHand(arwen, elrond, gwemegil, bow);
+		var grond = scn.GetShadowCard("grond");
+		scn.MoveCardsToHand(grond);
 
 		scn.StartGame();
-
-		scn.MoveCompanionsToTable(arwen);
-		scn.MoveCardsToSupportArea(elrond);
-		scn.AttachCardsTo(arwen, gwemegil);
-		scn.AttachCardsTo(elrond, bow);
-
-		scn.AddTokensToCard(grond, 10);
-
+		scn.SetTwilight(10);
 		scn.FreepsPass();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowDeclineAssignments();
+		// 10 + 1 companion + 2 for Ettenmoors
+		assertEquals(13, scn.GetTwilight());
+		assertInZone(Zone.HAND, grond);
 
-		//Regroup, round 1
+		assertTrue(scn.ShadowPlayAvailable(grond));
+		scn.ShadowPlayCard(grond);
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, grond);
+		assertNull(grond.getAttachedTo());
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityPlaysASauronMinionFromHandToAddATokenToGrond() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		var savage = scn.GetShadowCard("savage");
+		var banner = scn.GetShadowCard("banner");
+		var banner2 = scn.GetShadowCard("banner2");
+		scn.MoveCardsToSupportArea(grond, banner2);
+		scn.MoveCardsToHand(soldier, sentry, savage, banner);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
 		scn.FreepsPass();
+		// 10 + 1 companion + 2 for Ettenmoors
+		assertEquals(13, scn.GetTwilight());
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertEquals(0, scn.GetCultureTokensOn(banner2));
+
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
-		assertEquals(Zone.SUPPORT, grond.getZone());
-		assertEquals(Zone.ATTACHED, bow.getZone());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, sentry));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(savage, banner));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(soldier);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier);
+		// Orc Soldier: 2 to play + 2 roaming (site 6 at site 2)
+		assertEquals(9, scn.GetTwilight());
+		assertEquals(1, scn.GetCultureTokensOn(grond));
+		assertEquals(0, scn.GetCultureTokensOn(banner2));
+		assertInZone(Zone.HAND, sentry, savage, banner);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToSupportArea(grond);
+		scn.MoveCardsToHand(soldier);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(savage);
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(grond));
+
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertInZone(Zone.HAND, soldier);
+		assertTrue(scn.GetTwilight() >= 4);
+		assertFalse(scn.ShadowActionAvailable(grond));
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedWithNoSauronMinionInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var savage = scn.GetShadowCard("savage");
+		var banner = scn.GetShadowCard("banner");
+		scn.MoveCardsToSupportArea(grond);
+		scn.MoveCardsToHand(savage, banner);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(savage));
+		assertTrue(scn.ShadowPlayAvailable(banner));
+		assertFalse(scn.ShadowActionAvailable(grond));
+	}
+
+	@Test
+	public void RegroupAbilityDiscardsASauronMinionAndRemovesXTokensToDiscardAFreePeoplesCardCostingX() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		var savage = scn.GetShadowCard("savage");
+		var banner = scn.GetShadowCard("banner");
+		scn.MoveCardsToSupportArea(grond, banner);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var shield = scn.GetFreepsCard("shield");
+		var lorienelf = scn.GetFreepsCard("lorienelf");
+		var toby = scn.GetFreepsCard("toby");
+		var songs = scn.GetFreepsCard("songs");
+		var mirror = scn.GetFreepsCard("mirror");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCompanionsToTable(aragorn, lorienelf);
+		scn.AttachCardsTo(aragorn, shield);
+		scn.MoveCardsToSupportArea(toby, songs, mirror);
+		scn.MoveAlliesToTable(elrond);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, sentry, savage);
+		scn.AddTokensToCard(grond, 2);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(2, scn.GetCultureTokensOn(grond));
+		assertTrue(scn.ShadowActionAvailable(grond));
+		scn.ShadowUseCardAction(grond);
+		// X is any number from none to every token on Grond
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
 		scn.ShadowChoose("1");
-		scn.ShadowChooseCard(soldier1);
-		//Only one possible card matches the above cost
-		assertEquals(Zone.SUPPORT, grond.getZone());
-		assertEquals(Zone.DISCARD, bow.getZone());
 
-		//Regroup, round 2
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, sentry));
+		// An [isengard] minion, and [sauron] cards in play that are no minion
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(savage, banner, grond));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(soldier);
+
+		// Each Free Peoples card costing 1 that is not a companion, wherever it lies
+		assertTrue(scn.ShadowHasCardChoiceAvailable(toby, songs, shield));
+		// A companion costing 1, a Shadow card costing 1, and Free Peoples cards costing 2 and 4
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(lorienelf, banner, mirror, elrond));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(toby);
+
+		assertEquals(1, scn.GetCultureTokensOn(grond));
+		assertInZone(Zone.DISCARD, soldier, toby);
+		assertInZone(Zone.SHADOW_CHARACTERS, sentry, savage);
+		assertInZone(Zone.SUPPORT, songs, mirror, elrond, banner);
+		assertAttachedTo(shield, aragorn);
+		// Old Toby lay in the support area, so Grond stays
+		assertInZone(Zone.SUPPORT, grond);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void DiscardingACardBorneByACompanionAlsoDiscardsGrond() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToSupportArea(grond);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var shield = scn.GetFreepsCard("shield");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, shield);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.AddTokensToCard(grond, 1);
+		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
+
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
-		assertEquals(Zone.SUPPORT, grond.getZone());
-		assertEquals(Zone.SUPPORT, elrond.getZone());
+		scn.ShadowChoose("1");
+		assertTrue(scn.ShadowHasCardChoiceAvailable(toby, shield));
+		scn.ShadowChooseCard(shield);
+
+		assertInZone(Zone.DISCARD, shield, soldier, grond);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertInZone(Zone.SUPPORT, toby);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACardBorneByAnAllyIsInTheSupportAreaSoGrondStaysAndXMayBeZero() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToSupportArea(grond);
+
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(thrarin, armor);
+		scn.AttachCardsTo(guard, armor2);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.AddTokensToCard(grond, 1);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(grond));
+		scn.ShadowUseCardAction(grond);
+		scn.ShadowChoose("0");
+		// Both suits of Dwarven Armor cost 0; Old Toby costs 1
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, armor2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(toby));
+		scn.ShadowChooseCard(armor);
+
+		assertInZone(Zone.DISCARD, armor, soldier);
+		assertEquals(1, scn.GetCultureTokensOn(grond));
+		assertAttachedTo(armor2, guard);
+		// The armor was borne by an ally, and so was in the support area: Grond stays
+		assertInZone(Zone.SUPPORT, grond, thrarin);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityIsNotOfferedWithoutASauronMinionToDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToSupportArea(grond);
+
+		var toby = scn.GetFreepsCard("toby");
+		var armor = scn.GetFreepsCard("armor");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.MoveAlliesToTable(thrarin);
+		scn.AttachCardsTo(thrarin, armor);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.AddTokensToCard(grond, 2);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertEquals(2, scn.GetCultureTokensOn(grond));
+		assertFalse(scn.ShadowActionAvailable(grond));
+	}
+
+	@Test
+	public void RegroupAbilityIsOfferedWithNoFreePeoplesCardToDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToSupportArea(grond);
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.AddTokensToCard(grond, 1);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		// The only Free Peoples cards are companions; the costs can still be paid
+		assertTrue(scn.ShadowActionAvailable(grond));
+		scn.ShadowUseCardAction(grond);
+		scn.ShadowChoose("1");
+
+		assertInZone(Zone.DISCARD, soldier);
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertInZone(Zone.SUPPORT, grond);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AHinderedElrondHasNoTwilightCostAndCannotBeDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToSupportArea(grond);
+
+		var elrond = scn.GetFreepsCard("elrond");
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var guard = scn.GetFreepsCard("guard");
+		var guardian = scn.GetFreepsCard("guardian");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		scn.MoveAlliesToTable(elrond, treebeard, thrarin);
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, armor);
+		scn.AttachCardsTo(thrarin, armor2);
+		scn.MoveCardsToSupportArea(guardian);
+
+		scn.StartGame();
+		scn.HinderCard(elrond);
+		scn.MoveMinionsToTable(soldier, sentry);
+		scn.AddTokensToCard(grond, 4);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(elrond));
+		scn.ShadowUseCardAction(grond);
 		scn.ShadowChoose("4");
-		scn.ShadowChooseCard(soldier2);
-		//Only one possible card matches the above cost
-		assertEquals(Zone.SUPPORT, grond.getZone());
-		assertEquals(Zone.DISCARD, elrond.getZone());
+		scn.ShadowChooseCard(soldier);
+		// Treebeard and Guardian cost 4; Elrond, hindered, costs nothing at all; the armor costs 0 and Thrarin 1
+		assertTrue(scn.ShadowHasCardChoiceAvailable(treebeard, guardian));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(elrond, armor, armor2, thrarin));
+		scn.ShadowChooseCard(treebeard);
 
-		//Regroup, round 3
+		assertInZone(Zone.DISCARD, treebeard);
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertInZone(Zone.SUPPORT, elrond, guardian, grond);
+
+		// Nor is he a card with a twilight cost of 0
 		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(grond));
 		scn.ShadowUseCardAction(grond);
-		assertEquals(Zone.SUPPORT, grond.getZone());
-		assertEquals(Zone.ATTACHED, gwemegil.getZone());
-		scn.ShadowChoose("2");
-		//scn.ShadowChooseCard(soldier3);
-		//Only one possible card matches the above cost
-		assertEquals(Zone.DISCARD, grond.getZone());
-		assertEquals(Zone.DISCARD, gwemegil.getZone());
+		// With no token left, X can only be 0 and is not asked
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, armor2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(elrond));
+		scn.ShadowChooseCard(armor);
+
+		assertInZone(Zone.DISCARD, armor, sentry);
+		assertInZone(Zone.SUPPORT, elrond);
+		assertTrue(scn.IsHindered(elrond));
+		// The armor was borne by a companion
+		assertInZone(Zone.DISCARD, grond);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
