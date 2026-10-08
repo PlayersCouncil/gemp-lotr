@@ -31,7 +31,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource costModifierSource = ValueResolver.resolveDiscount(effectObject.get("discount"), environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
@@ -49,7 +49,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
 
         final FilterableSource playableFilterSource = (actionContext) -> {
             final LotroGame game = actionContext.getGame();
-            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
             if (onFilterableSource != null) {
                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
                 return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));

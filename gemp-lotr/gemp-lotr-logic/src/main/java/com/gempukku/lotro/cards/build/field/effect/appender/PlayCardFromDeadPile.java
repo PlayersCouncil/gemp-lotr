@@ -28,7 +28,7 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "select", "discount", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource costModifierSource = ValueResolver.resolveDiscount(effectObject.get("discount"), environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
@@ -38,13 +38,13 @@ public class PlayCardFromDeadPile implements EffectAppenderProducer {
                 CardResolver.resolveCardsInDeadPile(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
 
                             return Filters.playable(costModifier, 0, false, true, true);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
 
                             // This filter is the one asked BEFORE the action is paid for: the threats the action
                             // will add as its own cost are counted as added, so that a card which must itself add a

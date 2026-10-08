@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.VitalityModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -246,42 +245,6 @@ public class Card_04_192_ErrataTests
 	}
 
 	@Test
-	public void UsedTwiceInOnePhaseTheSameCopyTakesTwoOffEachTime() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var regular = scn.GetShadowCard("regular");
-		var attacker = scn.GetShadowCard("attacker");
-		var warrior = scn.GetShadowCard("warrior");
-		var searcher = scn.GetShadowCard("searcher");
-		var warrior2 = scn.GetShadowCard("warrior2");
-
-		scn.MoveCardsToHand(searcher, warrior2);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(regular, attacker, warrior);
-		// Vitality 3, so that this Regular can exert twice.
-		scn.ApplyAdHocModifier(new VitalityModifier(null, regular, null, 1));
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertEquals(13, scn.GetTwilight());
-
-		scn.ShadowUseCardAction(regular);
-		scn.ShadowChooseCard(searcher);
-		// 4 to play + 2 roaming - 2
-		assertEquals(9, scn.GetTwilight());
-
-		assertTrue(scn.ShadowActionAvailable(regular));
-		scn.ShadowUseCardAction(regular);
-		// 2 to play + 2 roaming - 2: the limit is on each use, as built.
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, warrior2);
-		assertEquals(2, scn.GetWoundsOn(regular));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("F-0245: whether (limit -2) is the card's for the whole phase (CR 4.2 limit) or a cap on each use")
 	public void UsedTwiceInOnePhaseTheSameCopyTakesNoMoreThanTwoOffInAll() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -307,10 +270,13 @@ public class Card_04_192_ErrataTests
 		// 4 to play + 2 roaming - 2
 		assertEquals(9, scn.GetTwilight());
 
+		// Three other Uruk-hai now.  The ability is still there to be used, and takes nothing more off.
+		assertTrue(scn.ShadowActionAvailable(regular));
 		scn.ShadowUseCardAction(regular);
 		// 2 to play + 2 roaming: this copy's -2 is spent for the phase.
 		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, warrior2);
+		assertEquals(2, scn.GetWoundsOn(regular));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

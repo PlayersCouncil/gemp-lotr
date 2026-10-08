@@ -22,6 +22,27 @@ public class ValueResolver {
         return resolveEvaluator(value, null, environment);
     }
 
+    /**
+     * The discount on the twilight cost of a card that an effect plays, or that a requirement asks about.  A
+     * discount is read before the card is played, to say which cards can be played and whether the action can be
+     * used at all, and again when the card is played.  A value that counts on a limit spends that limit as it is
+     * worked out, so a discount may hold one only as a cardPhaseLimit that is the whole of the discount ("its
+     * twilight cost is -1 for each ... (limit -2)"): whoever reads it beforehand asks
+     * Evaluator.evaluateWithoutSpending, and the play that gives the discount asks evaluateExpression, once.
+     * Written anywhere else in a discount such a value would be spent by the asking, and the definition is
+     * refused.
+     */
+    public static ValueSource resolveDiscount(Object value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        final boolean wholeIsACardPhaseLimit = value instanceof JSONObject object
+                && object.get("type") instanceof String name && name.equalsIgnoreCase("cardPhaseLimit");
+        final boolean limitWhereItCannotWork = wholeIsACardPhaseLimit
+                ? countsOnALimit(((JSONObject) value).get("limit")) || countsOnALimit(((JSONObject) value).get("amount"))
+                : countsOnALimit(value);
+        if (limitWhereItCannotWork)
+            throw new InvalidCardDefinitionException("A discount can count on a limit only as a cardPhaseLimit that is the whole of the discount");
+        return resolveEvaluator(value, 0, environment);
+    }
+
     public static ValueSource resolveEvaluator(Object value, Integer defaultValue, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         if (value == null && defaultValue == null)
             throw new InvalidCardDefinitionException("Value not defined");

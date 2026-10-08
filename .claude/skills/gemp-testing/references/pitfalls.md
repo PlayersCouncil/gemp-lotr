@@ -132,6 +132,11 @@ does not report itself as an ability used, so no card that answers "a special ab
 5_114, 13_76, 51_98) is offered against one (F-0201, an engine candidate). A test of such a card uses a phase
 ability of the right phase.
 
+**A discount with a limit is spent when the card is played.** "Its twilight cost is -1 for each ... (limit -N)"
+on an ability is the card's for the phase (Q-0134): asking what is on offer spends none of it, each play takes
+what is left, and at the limit the ability stays on offer and plays at full cost, withheld only while the pool
+cannot pay for anything it could play (`mechanics/LimitOnADiscountTests`; Uruk Regular 54_192).
+
 ## Reading and answering an offer
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
@@ -470,6 +475,8 @@ named and the valid ones are not.
 - `0_8011` Test Archive ("Shadow or Skirmish: Play an event from your discard pile.") and `0_8012` Test Lectern ("Shadow or Skirmish: Play an event stacked here."): Shadow conditions for mechanics/ResponseEventsAreNotPlayedByEffectsTests. The test booster pack (`product/Test-Booster.hjson`) holds a Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen. A choice from a stack is answered with `ShadowChooseCard`, not `ShadowChooseCardBPFromSelection`.
 
 - `0_8013` Test Whetstone ("Skirmish: Exert a Dwarf to play a [dwarven] event from your discard pile."): mechanics/CostsAreJudgedInTheOrderPrintedTests.
+
+- `0_8014` Test Muster ("Shadow or Maneuver: Play a minion; its twilight cost is -1 for each minion you can spot (limit -2).") and `0_8015` Test Barrow (the same in the Shadow phase, from the discard pile): Shadow conditions with no cost, for mechanics/LimitOnADiscountTests.
 
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)

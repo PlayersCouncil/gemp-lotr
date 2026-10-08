@@ -77,9 +77,12 @@ costs) is a finding, fixable at landing.
 
 **A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134,
 Q-0141).** A printed limit on a count inside an effect reads like "(limit +N)" (F-0135): the card's limit for the
-whole phase. A cap built per use is a finding (a cardPhaseLimit wrapper fixes it where it reaches; a play's
-discount it does not reach, F-0245, engine). An event is one card played once, so the readings agree there. A
-"(limit X)" where X is what that use paid caps that use only (Merry's Sword 57_242).
+whole phase. A cap built per use is a finding, fixed with a cardPhaseLimit wrapper. Since engine pass 16 (F-0245)
+the wrapper reaches a play's `discount` too, where it must be the whole of the discount (Uruk Regular 54_192:
+`discount: { type: cardPhaseLimit, limit: 2, amount: { type: forEachYouCanSpot, ..., multiplier: -1 } }`; the
+limit is a size, the amount keeps its sign). At its limit such an ability stays on offer and plays the card at
+full cost; it is withheld only while nothing can be afforded. An event is one card played once, so the readings
+agree there. A "(limit X)" where X is what that use paid caps that use only (Merry's Sword 57_242).
 
 ## Costs, and playing cards from piles and hands
 

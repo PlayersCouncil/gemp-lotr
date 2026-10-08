@@ -107,7 +107,9 @@ Write a limit with a field. A hand-written `PerPhaseLimit` / `PerTurnLimit` requ
 
 A cap written inside the effect, as opposed to on the ability, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
 
-`limitPerCardThisPhase` on ModifyStrength and ModifyResistance is counted for the SOURCE card for the phase, whoever the bonus is given to (F-0125, CR 4.2 "limit"): a "(limit +3)" cannot be given in full to each companion in turn. A `CardPhaseLimit` may take a `Conditional` as its `limit` ("limit +3 unless you can spot ..."); the no-effect judge reads such a cap as it stands, so the ability is flagged `limit` once it is spent.
+`limitPerCardThisPhase` on ModifyStrength and ModifyResistance is counted for the SOURCE card for the phase, whoever the bonus is given to (F-0125, CR 4.2 "limit"): a "(limit +3)" cannot be given in full to each companion in turn. A `CardPhaseLimit` may take a `Conditional` as its `limit` ("limit +3 unless you can spot ..."); the no-effect judge reads such a cap as it stands, so the ability is flagged `limit` once it is spent. A limit that falls below what the card has already given leaves nothing to give and takes nothing back (F-0267).
+
+A `CardPhaseLimit` is also how a printed "(limit -N)" on a play's twilight cost is written, as the whole of the `discount` (or `maxDiscount`) of a `PlayCardFrom...` effect or of a `Playable` requirement: `discount: { type: CardPhaseLimit, limit: 2, amount: { type: ForEachYouCanSpot, filter: ..., multiplier: -1 } }` (Uruk Regular 54_192, F-0245). The limit is a size (2 and -2 read alike) and the amount keeps its sign. The discount is read without being spent while the engine works out what can be played, and is spent when the card is played; at the limit the card is played at full cost. A `CardPhaseLimit` inside another value of a discount (a `Sum`, another limit), or a `CardAffectedLimitPerPhase` anywhere in one, would be spent by the asking: the card is refused when it is loaded.
 
 `ActivatedInDiscard` and `ActivatedInDrawDeck` take `specialAbility: false` for a card's permission to be played from that pile when its text has no bold phase word and colon ("If you have initiative ..., you may play this minion from your discard pile"). Such a play is not a special ability: nothing that answers, bans or counts special abilities sees it (Ketura, 2026-10-06: a special ability "would count, if it's got the bold text and a colon"). A labelled ability ("Shadow: ... to play this minion from your discard pile") leaves the flag off.
 
@@ -327,7 +329,7 @@ Common fields on most: `over` (subtract from result), `limit` (cap), `multiplier
 | `RegionNumber` | — | 1-3 |
 | `Conditional` | requires, true, false | If/else value |
 | `CardAffectedLimitPerPhase` | limit, source, prefix?, multiplier? | "Strength +1 (limit +3)" pattern: caps what the effect gives in a phase and leaves the ability on offer (see Activated, "Limits") |
-| `CardPhaseLimit` | limit, amount | Cumulative phase cap, counted on the card's own phase counter; leaves the ability on offer likewise |
+| `CardPhaseLimit` | limit, amount | Cumulative phase cap, counted on the card's own phase counter; leaves the ability on offer likewise. The limit is a size and the amount keeps its sign ("(limit -2)" is `limit: 2` over a negative amount). In a play's `discount` it must be the whole value (see Activated, "Limits") |
 | `FromMemory` | memory | Integer from memory |
 | `Subtract` | firstNumber, secondNumber | Math |
 | `Sum` | source[] | Add values together |

@@ -32,10 +32,17 @@ public class CardPhaseLimitEvaluator implements Evaluator {
         _limitCanBeRead = limitCanBeRead;
     }
 
+    // The limit is how much, whichever way the amount goes: "(limit +3)" on a bonus and "(limit -2)" on a
+    // discount are limits of 3 and of 2, and the amount keeps its own sign.  (limitPerCardThisPhase on
+    // ModifyStrength is read the same way.)
     private int evaluateOnce(LotroGame game, PhysicalCard cardAffected) {
         LimitCounter limitCounter = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase);
         int amountResult = _amount.evaluateExpression(game, cardAffected);
-        int limitResult = _limit.evaluateExpression(game, cardAffected);
+        // A limit given by a value may fall below what the card has already given ("limit +2, or +5 if you can
+        // spot ...", and the thing spotted has gone).  Nothing is left to give then, and nothing is taken back.
+        int limitResult = Math.max(Math.abs(_limit.evaluateExpression(game, cardAffected)), limitCounter.getUsedLimit());
+        if (amountResult < 0)
+            return -limitCounter.incrementToLimit(limitResult, -amountResult);
         return limitCounter.incrementToLimit(limitResult, amountResult);
     }
 
@@ -47,12 +54,25 @@ public class CardPhaseLimitEvaluator implements Evaluator {
     }
 
     @Override
+    public int evaluateWithoutSpending(LotroGame game, PhysicalCard cardAffected) {
+        if (_evaluated != null)
+            return _evaluated;
+        // What evaluateOnce would give, with the counter read and not counted on.
+        final int used = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase).getUsedLimit();
+        final int amountResult = _amount.evaluateWithoutSpending(game, cardAffected);
+        final int left = Math.max(0, Math.abs(_limit.evaluateWithoutSpending(game, cardAffected)) - used);
+        if (amountResult < 0)
+            return -Math.min(left, -amountResult);
+        return Math.min(left, amountResult);
+    }
+
+    @Override
     public boolean isSpent(LotroGame game, PhysicalCard cardAffected) {
         // The limit is read only where working it out cannot change the game: a plain number, or a value that
         // only reads the board ("limit +3, or +6 if you can spot ...").  A limit that itself counts on a limit
         // is not asked.
         if (_evaluated != null || !_limitCanBeRead)
             return false;
-        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase).getUsedLimit() >= _limit.evaluateExpression(game, cardAffected);
+        return game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(_source, _phase).getUsedLimit() >= Math.abs(_limit.evaluateExpression(game, cardAffected));
     }
 }

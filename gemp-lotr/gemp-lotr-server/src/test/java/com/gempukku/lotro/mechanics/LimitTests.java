@@ -178,4 +178,65 @@ public class LimitTests
 		assertEquals(3, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
+
+	protected VirtualTableScenario GetValueLimitScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// A definition of the tests' own (testCards.hjson): "Fellowship: Add (1) to make a companion
+					// strength +1 (limit +2, or +4 if you can spot a Dwarf)."  Its limit is a value, not a number.
+					put("banner", "0_8001");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	/**
+	 * "Once the limit is reached, no more may be added": a limit that has fallen below what the card has already
+	 * given in the phase leaves nothing more to give.  What was given stays, and a further use takes none of it
+	 * back.
+	 */
+	@Test
+	public void ALimitThatFallsBelowWhatHasBeenGivenLeavesNothingToGiveAndTakesNothingBack() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetValueLimitScenario();
+
+		var banner = scn.GetFreepsCard("banner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToSupportArea(banner);
+
+		scn.StartGame();
+
+		// A Dwarf to spot: the limit is +4.  Three uses, each +1.
+		assertEquals(8, scn.GetStrength(aragorn));
+		for (int used = 0; used < 3; used++) {
+			scn.FreepsUseCardAction(banner);
+			scn.FreepsChooseCard(aragorn);
+		}
+		assertEquals(11, scn.GetStrength(aragorn));
+		assertEquals(3, scn.GetTwilight());
+
+		// The Dwarf goes: the limit is +2, and +3 has been given.
+		scn.MoveCardsToDiscard(gimli);
+		scn.FreepsRefreshDecision();
+		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+
+		scn.FreepsUseCardAction(banner);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(11, scn.GetStrength(aragorn));
+
+		// And again: the first of these two uses gave nothing back to the limit either.
+		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+		scn.FreepsUseCardAction(banner);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(5, scn.GetTwilight());
+		assertEquals(11, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }

@@ -28,8 +28,8 @@ public class PlayCardFromHand implements EffectAppenderProducer {
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
-        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveEvaluator(effectObject.get("maxDiscount"), 0, environment);
+        final ValueSource costModifierSource = ValueResolver.resolveDiscount(effectObject.get("discount"), environment);
+        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveDiscount(effectObject.get("maxDiscount"), environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
         final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
@@ -50,7 +50,7 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                 CardResolver.resolveCardsInHand(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
                                 return Filters.and(Filters.playable(costModifier, 0, ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, costModifier, onFilterable));
@@ -59,7 +59,7 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
                                 return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, actionContext.getUnpaidThreatCost(), ignoreRoamingPenalty, ignoreInDeadPile, true), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));

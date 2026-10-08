@@ -389,4 +389,66 @@
 		}
 		gametext: <b>Skirmish:</b> Exert a Dwarf to play a [dwarven] event from your discard pile.
 	}
+	# LimitOnADiscountTests: a discount with a printed limit on an ability that can be used more than once in a
+	# phase, from hand and from the discard pile.  The one real card of that shape is Uruk Regular's erratum
+	# 54_192, which exerts itself each time and so needs its vitality raised to be used twice; the Decipher cards
+	# with "(limit -N)" on a twilight cost are events and standing texts.  Test Barrow writes its limit as -2 and
+	# Test Muster as 2: a limit is a size, and either is read as "(limit -2)".
+	0_8014: {
+		title: Test Muster
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				shadow
+				maneuver
+			]
+			effect: {
+				type: PlayCardFromHand
+				select: choose(minion)
+				discount: {
+					type: cardPhaseLimit
+					limit: 2
+					amount: {
+						type: forEachYouCanSpot
+						filter: minion
+						multiplier: -1
+					}
+				}
+			}
+		}
+		gametext: <b>Shadow</b> <i>or</i> <b>Maneuver:</b> Play a minion; its twilight cost is -1 for each minion you can spot (limit -2).
+	}
+	0_8015: {
+		title: Test Barrow
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			effect: {
+				type: PlayCardFromDiscard
+				select: choose(minion)
+				discount: {
+					type: cardPhaseLimit
+					limit: -2
+					amount: {
+						type: forEachYouCanSpot
+						filter: minion
+						multiplier: -1
+					}
+				}
+			}
+		}
+		gametext: <b>Shadow:</b> Play a minion from your discard pile; its twilight cost is -1 for each minion you can spot (limit -2).
+	}
 }
