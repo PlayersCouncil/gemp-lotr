@@ -48,6 +48,32 @@ def state_dir() -> Path:
     return local
 
 
+class locked:
+    """One writer at a time for the campaign's registers and for git: two batches are landed by two agents at once,
+    and each numbers findings, writes status.tsv and commits.  `with g.locked():` waits its turn.  A script that
+    already holds the lock passes that on to the scripts it runs (GEMP_LOCK_HELD), so they do not wait on it."""
+
+    def __enter__(self):
+        self.handle = None
+        if os.environ.get("GEMP_LOCK_HELD"):
+            return self
+        import fcntl
+        folder = state_dir()
+        folder.mkdir(parents=True, exist_ok=True)
+        self.handle = open(folder / ".lock", "w")
+        fcntl.flock(self.handle, fcntl.LOCK_EX)
+        os.environ["GEMP_LOCK_HELD"] = "1"
+        return self
+
+    def __exit__(self, *exc):
+        if self.handle is not None:
+            import fcntl
+            os.environ.pop("GEMP_LOCK_HELD", None)
+            fcntl.flock(self.handle, fcntl.LOCK_UN)
+            self.handle.close()
+        return False
+
+
 def ledger_path(card_id: str) -> Path:
     """A card's ledger: its text cut into clauses, the checks each calls for, and the tests that claim them.
     Working material for authors and reviewers, kept beside the campaign's other bookkeeping and out of the tests."""

@@ -195,6 +195,38 @@ def finding(state: Path, argv):
         raise SystemExit(finding.__doc__)
 
 
+def open_entries(path: Path, start: str, stop: str) -> list:
+    """The entries ("### Q-0142 title" and what follows) between two headings of a register, as they stand."""
+    if not path.is_file():
+        return []
+    text = path.read_text(encoding="utf-8")
+    if start not in text:
+        return []
+    section = text.split(start, 1)[1].split(stop, 1)[0]
+    out = []
+    for block in re.split(r"^### ", section, flags=re.M)[1:]:
+        head, _, body = block.partition("\n")
+        m = re.match(r"([A-Z]-\d{4})\s*(.*)", head.strip())
+        if m:
+            # The registers are wrapped at a fixed width: join each paragraph's lines, keep list items and blank lines.
+            lines, para = [], []
+            for line in body.strip().split("\n"):
+                if not line.strip() or re.match(r"\s*(-|\d+\.)\s", line):
+                    if para:
+                        lines.append(" ".join(para))
+                        para = []
+                    if line.strip():
+                        para = [line.strip()]
+                    else:
+                        lines.append("")
+                else:
+                    para.append(line.strip())
+            if para:
+                lines.append(" ".join(para))
+            out.append({"id": m.group(1), "title": re.sub(r":\s*open\s*$", "", m.group(2)), "body": "\n".join(lines).strip()})
+    return out
+
+
 def build(state: Path) -> dict:
     base = read_tsv(state / "baseline.tsv")
     if not base:
@@ -238,6 +270,8 @@ def build(state: Path) -> dict:
         "legacy": legacy,
         "dormant": len(g.dormant_tests()),
         "findings": findings,
+        "questions": open_entries(state / "questions.md", "\n## Open", "\n## Answered"),
+        "rig": open_entries(state / "rig-requests.md", "\n## Open", "\n## Done"),
     }
     (state / "tracker.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     (state / "tracker.md").write_text(markdown(data), encoding="utf-8")
@@ -297,8 +331,14 @@ def html(state: Path, out: Path):
     data = build(state)
     template = (Path(__file__).resolve().parent.parent / "assets" / "tracker_template.html").read_text(encoding="utf-8")
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-    out.write_text(template.replace("/*__DATA__*/null", payload), encoding="utf-8")
-    print("wrote %s (%d cards, %d findings)" % (out, len(data["cards"]), len(data["findings"])))
+    # The page and its data are two files, so that a landing rewrites only the data: tracker-data.js beside the page
+    # (a script, because a page opened from a folder may not fetch a file beside it).  tracker.html is the page for
+    # opening from the folder; tracker-page.html is the same without the document's first line, for publishing.
+    (out.parent / "tracker-data.js").write_text("window.TRACKER_DATA = " + payload + ";\n", encoding="utf-8")
+    out.write_text('<!doctype html>\n<meta charset="utf-8">\n' + template, encoding="utf-8")
+    (out.parent / "tracker-page.html").write_text(template, encoding="utf-8")
+    print("wrote %s and tracker-data.js (%d cards, %d findings, %d open questions, %d open rig requests)"
+          % (out.name, len(data["cards"]), len(data["findings"]), len(data["questions"]), len(data["rig"])))
 
 
 def main(argv):
@@ -316,13 +356,15 @@ def main(argv):
     elif cmd == "html":
         html(state, Path(argv[2]))
     elif cmd == "set":
-        set_status(state, argv[2:])
+        with g.locked():
+            set_status(state, argv[2:])
     elif cmd == "finding":
         args = list(argv[2:])
         if "--state" in args:
             i = args.index("--state")
             del args[i:i + 2]
-        finding(state, args)
+        with g.locked():
+            finding(state, args)
     elif cmd == "focus":
         parts = [a for a in argv[2:] if not a.startswith("--") and a != str(state)]
         (state / "focus.txt").write_text("\t".join(parts[:2]), encoding="utf-8")

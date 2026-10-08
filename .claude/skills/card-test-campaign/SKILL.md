@@ -33,9 +33,10 @@ sitting. Nothing in a chunk is finished until she has approved it.
 
 ## Who does what
 
-**The orchestrator** (the main session) chooses the chunk, hands cards to authors, gates what comes back, makes
-every commit, sends each commit to Ketura's repository, records findings and questions, keeps the tracker, and
-talks to Ketura. Only the orchestrator touches git, the campaign's state, card definitions, the engine and the rig.
+**The orchestrator** (the main session) chooses the chunk, launches the batches, carries each landed batch to
+Ketura's repository, publishes the tracker, changes the engine, the rig and the tools between waves, and talks to
+Ketura. It does not read the agents' reports: its context is re-read on every step for the whole session, so
+whatever a batch puts into it is paid for until the session ends. A batch comes back to it as a few lines.
 
 **An author** takes a few cards and writes each one's test file, in two stages that must stay in order: first
 working out what the card should do from its text and the rules alone, then writing and running the tests. Brief:
@@ -48,20 +49,37 @@ that is really a misread ruling), and puts right what it finds. Brief: `roles/re
 **A fixer** is only for a list from the orchestrator after the review: a ruling to apply, a definition that
 changed. It works through the list, changing what it faults and nothing else. Brief: `roles/fixer.md`.
 
-An author, reviewer or fixer works only on its own cards' test and ledger files. No role edits anything else,
-commits, or decides that the game is wrong: they report, and the orchestrator and Ketura decide. Nobody checks a
-reviewer's or a fixer's changes but the orchestrator's gate (`land.py`: the conformance check and the card's
-tests).
+**A lander** is the last stage of every batch (Ketura, 2026-10-08). It looks at the reviewer's changes for
+boards outside play, applies the corrections the batch proved to the definitions, gives every finding, question
+and rig request its number in the registers, works what the author and reviewer learned into the documents, and
+commits. It returns the cards' statuses and the numbers it filed, and writes a report of the batch into the
+campaign's state. Brief: `roles/lander.md`.
+
+An author, reviewer or fixer works only on its own cards' test and ledger files, and reports; none of them edits
+anything else or decides that the game is wrong. The lander decides what Ketura's standing rules already decide
+(an error in a definition is fixed where it is found) and asks her the rest. Only the orchestrator changes the
+engine, the rig, the scripts and the briefs. Nothing checks a lander's work but the gate (`land.py`: the
+conformance check and the card's tests, and the tests of every card that uses a corrected card as a helper) and
+Ketura's reading of the registers and the commit.
 
 ### Running the pipelines
 
-`workflows/card-batch.js` is the whole passage of a few cards as a Workflow script: an author, then a reviewer
-who fixes what it finds. Run it with `args` of `{repo, cards, folder, notes}`: the repository's absolute path, the
-card ids, a short unique folder name (`v1-b07`), and anything the author should know that the documents do not
-say. With `fixes` (a numbered list per card) it runs a fixer on that list and nothing else. It returns each
-stage's report as structured data.
+`workflows/card-batch.js` is the whole passage of a few cards as a Workflow script: an author, a reviewer who
+fixes what it finds, and a lander. Run it with `args` of `{repo, cards, folder, notes}`: the repository's absolute
+path, the card ids, a short unique folder name (`err-b59_16`), and anything the agents should know that the
+documents do not say (for a phase of the campaign, a line pointing at its notes file, `references/notes-errata.txt`).
+With `fixes` (a numbered list per card) a fixer works that list in place of the author and reviewer, and the
+lander follows it too. It returns the lander's few lines and nothing else; every stage's whole report is in the
+run's `journal.jsonl` (`scripts/orchestrator/wf.py show <folder>`), for the day something has to be looked into.
 
-**Three cards to a pipeline, three pipelines at once.** This shape was cut down on 2026-10-05 from four stages
+**Two pipelines at once** (Ketura, 2026-10-07, after the usage limit cut runs off: the meter is not to be spent
+well before a window ends). No launch in the last 20 minutes of a five-hour usage window; after a usage-limit
+failure, do not relaunch: tell her. A run that was cut off is picked up with the Workflow tool's
+`resumeFromRunId` and the same script and args: the stages that finished come back from the journal at once and
+the rest run. Never launch from a turn that carries a message of hers (the harness passes her message to every
+agent as its instruction, over the script's): launch from a notification's turn, or schedule one a minute ahead.
+
+**Three cards to a pipeline.** This shape was cut down on 2026-10-05 from four stages
 (author, review, fix, re-check) run six at a time, after measuring 34 cards (`cost-breakdown.md` in the
 campaign's state; `scripts/orchestrator/cost.py` produces it):
 
@@ -97,15 +115,25 @@ restart or go quiet and the notification is then lost; the results are still in 
 Keep a scheduled message a little way ahead at all times (the session's `send_later`) that says to check the
 pipelines, land what has finished, launch the next cards and schedule the next message. That message is what
 wakes a session that has gone quiet. `scripts/orchestrator/wf.py` (`track`, `status`, `show`, `landed`) reads the
-journals; its paths are the session's own and need changing for a new one.
+journals, which it finds by itself in a new session.
 
-When a pipeline returns, the orchestrator gives every finding, question and rig request its number (replacing the
-`F-0000` and `Q-0000` placeholders in `@Ignore` lines) and records them, then runs `land.py <ids>`, which checks
-each card again and commits and marks the ones that clear. It sends the commits across and adds a row to
-`usage.tsv`. What authors and reviewers report under "documentation issues" and "standard issues" is the
-campaign's main source of improvement, but reading them costs the orchestrator its own context on every later
-step: collect them in a file as batches land and go through them together every ten cards or so, changing the
-standard, the briefs or the tools then.
+**When a pipeline returns**, the orchestrator does five small things and reads nothing:
+
+1. `scripts/orchestrator/postland.py <folder>`: the batch's usage row, the tracker's data, a bundle of the new
+   commits and one zip of the state files that changed.
+2. Carries the two files it names to `Claude outputs/card-tests/transport/` on her machine.
+3. There: `python3 ".../transport/apply-sync.py" <head>`, which unpacks the state and fetches the bundle into her
+   branch, and answers with the head.
+4. `postland.py --mark`, and publishes the tracker (the page and `tracker-data.js` from the working folder's
+   `publish/`, to the same artifact).
+5. Launches the next batch from the queue, and tells Ketura what landed in a line: the cards, and the numbers
+   filed. She reads the registers; nothing in them is repeated to her.
+
+What the lander could not settle comes back under `needs_orchestrator`, and is the only thing to look into. What
+authors and reviewers report under "documentation issues" and "standard issues" used to pile up in a file for the
+orchestrator to go through; the lander now deals with each at its own landing (`roles/lander.md`, step 6), and
+passes on only what is not its to change, as lines in `orchestrator/proposals.md` in the state. Go through that
+file between waves, with the tools and the briefs open.
 
 ### One card, start to finish
 
@@ -119,8 +147,9 @@ standard, the briefs or the tools then.
    is the expectation wrong, or is the game wrong.
 4. Reviewer: `lint.py`, `cardtest.py run`, then the checklist at the end of the test-generation skill, with
    single mistakes (`mutate.py <id> --replace`) to prove a suspected gap. The reviewer fixes what it finds.
-5. Orchestrator: once the review is done, one commit for the batch (`land.py <ids> --batch <folder>`: test
-   files and any definition fixes of those cards together), send it across, mark each card `ready` or `parked`.
+5. Lander: numbers and files what the batch found, applies the corrections, and makes one commit for the batch
+   (`landing.py finish`, which runs `land.py <ids> --batch <folder>`: test files and definition fixes together) and
+   one for the documents. The gate marks each card `ready` or `parked`. The orchestrator sends it across.
 6. At the end of the chunk: `cardtest.py suite all`, rebuild the tracker, and give Ketura the chunk to review.
    While pipelines are in flight, do not run the suite (or `mvn`) in the main clone: it compiles every test file,
    the half-written ones included, and rewrites the classes the agents are running against. Run
@@ -144,7 +173,8 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 | `lint.py` | The conformance check. |
 | `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |
 | `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. |
-| `land.py <ids>` | The orchestrator's gate: re-runs the conformance check and the tests on each card, and commits each card that clears them on its own. `--check` to look without committing. |
+| `land.py <ids>` | The gate: re-runs the conformance check and the tests on each card, and commits the cards that clear them (`--batch <folder>`: as one commit). `--check` to look without committing. |
+| `landing.py` | The lander's tools: `question add` and `rig add` number an entry into its register; `users <id>` lists the cards whose tests use a card as a helper; `finish` runs the gate and makes the batch's commits. |
 | `tracker.py` | The campaign's state: statuses, findings, the tracker. |
 | `gen_vts_api.py` | Rewrites the rig's API reference from source; `--check` says whether it has drifted. |
 
@@ -167,22 +197,29 @@ are flags for Ketura, not findings.
 Three places, each for one kind of thing.
 
 - **Git, on `feature/card-test-overhaul`:** the tests, the skills, the scripts, the rulings log. One commit per
-  card (`Card tests: 1_40 Elrond, Lord of Rivendell`), rig changes and tooling in commits of their own.
+  batch (`Card tests: err-b58_103: 58_103, 59_4, 59_14`, with the definitions corrected at that landing), the
+  lander's changes to the documents in a commit beside it, rig changes and tooling in commits of their own.
 - **`Claude outputs/card-tests/` in Ketura's folder (not in git):** `baseline.tsv` (what every card's tests looked
   like before the campaign), `status.tsv`, `findings.tsv`, `questions.md`, `rig-requests.md`, `usage.tsv` (tokens
   spent per batch of cards), `sheet-discrepancies.md`, `focus.txt`, `ledgers/<set>/<id>.txt` (each card's ledger:
-  Ketura wants these kept out of the test files), and the generated `tracker.md`, `tracker.json` and
-  `tracker.html`. In the cloud workspace the working copy is `/mnt/user-data/outputs/card-tests/`, which the
+  Ketura wants these kept out of the test files), the generated `tracker.md`, `tracker.html` and
+  `tracker-data.js`, and `orchestrator/`: the queue, each batch's report (`batches/<folder>.md`), what landers
+  passed up (`proposals.md`), and the suggestions from before there were landers (`doc-suggestions-pending.txt`).
+  Every script that writes a register takes the campaign's lock first (`.lock`), so two landers can work at once. In the cloud workspace the working copy is `/mnt/user-data/outputs/card-tests/`, which the
   scripts find by themselves; `GEMP_CAMPAIGN_STATE` points them anywhere else.
-- **The tracker artifact:** `tracker.html` published; republished from the same file after each chunk and whenever
-  statuses change.
+- **The tracker:** a page and its data in two files. `tracker.py html <state>/tracker.html` writes the page and
+  `tracker-data.js` beside it (statuses, findings, and the open questions and rig requests word for word), so a
+  landing changes only the data. In her folder the page opens from disk; the published artifact is the same page
+  (`tracker-page.html`) with the same data file, republished at every landing.
 
 ### Statuses
 
 `todo` → `in-progress` → `ready` (committed, passes the conformance check and its tests, waiting for Ketura) →
 `approved`. `parked` at any point, with a note naming what holds it: a finding (`F-0000`), a question
 (`Q-0000`) or a rig request (`G-0000`). A card with ANY test parked (`@Ignore`) is `parked`, not `ready`, even when
-the rest of its tests are done (Ketura, 2026-10-08: the tracker must show it); land.py sets this itself. When the
+the rest of its tests are done (Ketura, 2026-10-08: the tracker must show it), and so is a card with any check
+waiting on a rig request (a `waits <check>: G-0000` line in its ledger; a card test never shows a check by an
+exception, and a card held by the rig does not move on as ready). land.py sets this itself. When the
 last parked test of a card goes live, the card goes back to `ready`.
 
 ### Findings
@@ -243,25 +280,31 @@ touching her working tree:
 2. Write that file into `Claude outputs/card-tests/transport/` in her folder.
 3. On her machine: `git fetch "Claude outputs/card-tests/transport/cto.bundle" feature/card-test-overhaul:feature/card-test-overhaul`
 
-`scripts/orchestrator/sync.sh` makes the bundle and `statefiles.py` lists what to carry across with it (the
-state files whose content has changed, by hash; the outputs folder's modification times cannot be trusted, and a
-file written there takes a few seconds to reach the store the carrying tool reads). Check the branch head on her
-machine after every fetch.
+`scripts/orchestrator/postland.py` makes the bundle and, with it, one zip of the state files whose content has
+changed (by hash; the outputs folder's modification times cannot be trusted, and a file written there takes a
+few seconds to reach the store the carrying tool reads). `apply-sync.py`, kept in her `transport/` folder, does
+steps 2 and 3 for both files and prints the head: check it. (`sync.sh` and `statefiles.py` are the older way,
+file by file.)
 
 That moves her local branch ref forward and nothing else. Never check anything out, pull, or push on her machine,
 and never run `git status` there: her working tree is large enough on that mount that it takes minutes.
 
 ### Starting again in a fresh session
 
-The cloud clone does not outlive the session. To rebuild it: clone `PlayersCouncil/gemp-lotr`, bundle
-`origin/master..feature/card-test-overhaul` on her machine and fetch it into the clone, copy the state folder
-(ledgers included) and `generator_sheets/` across, run `cardtest.py setup`, then `cardtest.py suite cards` to
-confirm the starting point is green. The workspace can also restart in the middle of a session: files survive,
-running processes do not, so commit and send often.
+The cloud clone does not outlive the session. `scripts/orchestrator/bootstrap.sh` rebuilds it: its first lines
+say what to bundle and zip on her machine and stage here first. It clones `PlayersCouncil/gemp-lotr`, fetches
+the branch from the bundle, unpacks the state folder and `generator_sheets/`, records her branch head as the
+last one sent and the state files as already hers, and runs `cardtest.py setup`. Then `cardtest.py suite all`
+to confirm the starting point is green, before anything is launched. The workspace can also restart in the
+middle of a session: files survive, running processes do not, so the landers commit and the orchestrator sends
+at every landing. The scripts under `scripts/orchestrator/` take the working folder from `$GEMP_WORK`
+(`/home/claude/work`) and find the session's workflow journals by themselves.
 
 ## Reference
 
-- `roles/author.md`, `roles/review-and-fix.md`, `roles/fixer.md`: the briefs given to sub-agents.
+- `roles/author.md`, `roles/review-and-fix.md`, `roles/fixer.md`, `roles/lander.md`: the briefs given to sub-agents.
+- `scripts/orchestrator/`: `postland.py` and `apply-sync.py` (after a landing), `wf.py` (where each run stands, and
+  its reports), `bootstrap.sh` (a fresh session), `suite-run.sh` (the suite on the committed head, in a second clone).
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `references/rulings-log.md`: what Ketura has ruled, grouped by subject.
 - `references/shapes.md`: what the rulings and the engine's fixes mean for a definition and a test.

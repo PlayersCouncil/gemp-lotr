@@ -4,7 +4,15 @@
    wf.py track <folder> <run id>"""
 import json, sys
 from pathlib import Path
-BASE = Path("/root/.claude/projects/-home-claude/e27589f3-ce17-51da-bfdb-fb8ab2591f88/subagents/workflows")
+def _workflows_dir():
+    """The folder this session's workflow runs are journalled in: the newest one under ~/.claude/projects, or
+    $GEMP_WORKFLOWS.  (It is named after the session, so it differs in every session.)"""
+    import glob, os
+    if os.environ.get("GEMP_WORKFLOWS"):
+        return Path(os.environ["GEMP_WORKFLOWS"])
+    found = sorted(glob.glob("/root/.claude/projects/*/*/subagents/workflows"), key=os.path.getmtime)
+    return Path(found[-1]) if found else Path("/root/.claude/projects/none")
+BASE = _workflows_dir()
 TRACK = Path("/home/claude/work/workflows.json")
 tracked = json.loads(TRACK.read_text()) if TRACK.exists() else {}
 
@@ -23,8 +31,12 @@ def state(run, lean=False):
     stages, started = load(run)
     running = [s for s in started.values() if s not in stages]
     if lean:   # the cut-down pipeline: author, then a reviewer who fixes; or a fixer alone
-        for s in ("author", "review", "fix"):
+        for s in ("author", "review", "fix", "land"):
             if s in stages and stages[s] is None: return "FAILED at " + s, stages
+        if stages.get("land"):
+            v = [c.get("status") for c in stages["land"].get("cards", [])]
+            return "LANDED (%s) %s" % (", ".join("%d %s" % (v.count(k), k) for k in ("ready", "parked", "held") if v.count(k)), stages["land"].get("commit", "")), stages
+        if "land" in started.values(): return "running: land", stages
         if stages.get("review"):
             v = [c.get("verdict") for c in stages["review"].get("cards", [])]
             return "DONE (%s)" % ", ".join("%d %s" % (v.count(k), k) for k in ("PASS", "FIXED", "PARK") if v.count(k)), stages
@@ -77,7 +89,7 @@ elif cmd == "usage":
         mins = round((b - a).total_seconds() / 60)
     stages, _ = load(run)
     print("%s\t%s\t%s\t%s\t%d\tOutput tokens. Also %.1fM written to cache and %.1fM read from cache. %d minutes." % (
-        first[:10] if first else "", folder, "+".join(k for k in ("author", "review", "fix", "re-check") if k in stages),
+        first[:10] if first else "", folder, "+".join(k for k in ("author", "review", "fix", "re-check", "land") if k in stages),
         ",".join(tracked[folder].get("cards", [folder.split("-", 1)[1]])), out, cw / 1e6, cr / 1e6, mins))
 elif cmd == "brief":
     st, stages = state(tracked[sys.argv[2]]["run"], tracked[sys.argv[2]].get("lean"))
@@ -122,7 +134,7 @@ elif cmd == "lean":
 elif cmd == "show":
     st, stages = state(tracked[sys.argv[2]]["run"], tracked[sys.argv[2]].get("lean"))
     print("##", sys.argv[2], st)
-    for s in ("author", "review", "fix", "re-check"):
+    for s in ("author", "review", "fix", "re-check", "land"):
         if s in stages:
             print("\n=====", s.upper(), "=====")
             print(json.dumps(stages[s], indent=1, ensure_ascii=False))

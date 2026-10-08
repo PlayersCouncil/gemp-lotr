@@ -1,11 +1,12 @@
 export const meta = {
   name: 'card-test-batch',
-  description: 'Author the unit tests of one batch of cards, then review them and put right what the review finds',
-  whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to run a fixer on that list and nothing else',
+  description: 'Author the unit tests of one batch of cards, review them, then land them: file what was found, apply the corrections, commit',
+  whenToUse: 'One card, or a batch of up to four, of the card test campaign. args: {repo, cards: [ids], folder, notes}; add fixes (a numbered list per card) to run a fixer on that list in place of the author and reviewer. Returns only the lander\'s few lines; the full reports are in the run\'s journal',
   phases: [
     { title: 'Author', detail: 'blind plan, then the tests and the conformance check (the session model unless args say otherwise)' },
     { title: 'Review', detail: 'an independent review against the Card Test Standard; the reviewer fixes what it finds (Sonnet by default)' },
     { title: 'Fix', detail: 'only with args.fixes: a list from the orchestrator worked through' },
+    { title: 'Land', detail: 'findings, questions and rig requests numbered and filed, corrections applied, what was learned worked into the documents, one commit (the session model)' },
   ],
 }
 
@@ -20,6 +21,8 @@ const roles = repo + '/.claude/skills/card-test-campaign/roles/'
 const pick = (m) => (m === 'inherit' ? undefined : m)
 const authorModel = pick(args.authorModel || args.model)
 const reviewModel = pick(args.reviewModel || args.model || 'sonnet')
+// The lander edits definitions and writes what Ketura reads: the session's model unless args.landModel says otherwise.
+const landModel = pick(args.landModel || 'inherit')
 const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {})
 
 const TEXT = { type: 'string' }
@@ -145,7 +148,47 @@ const FIXED = {
   },
 }
 
+const LANDED = {
+  type: 'object',
+  required: ['cards', 'commit'],
+  properties: {
+    cards: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['id', 'status'],
+        properties: {
+          id: TEXT,
+          status: { type: 'string', enum: ['ready', 'parked', 'held'], description: 'held: not landed' },
+          on: { type: 'string', description: 'For parked: the numbers it is parked on. For held: one line why' },
+        },
+      },
+    },
+    fixed: { type: 'array', items: TEXT, description: 'Numbers only: findings fixed at this landing' },
+    open: { type: 'array', items: TEXT, description: 'Numbers only: findings filed as confirmed or candidate' },
+    reports: { type: 'array', items: TEXT, description: 'Numbers only: findings of kind ruling that need no answer' },
+    questions: { type: 'array', items: TEXT, description: 'Numbers only: questions filed for Ketura (Q- numbers, and F- numbers asked about)' },
+    rig: { type: 'array', items: TEXT, description: 'Numbers only: rig requests filed' },
+    needs_orchestrator: { type: 'array', items: TEXT, description: 'Only what somebody must act on and no register holds. One line each. Usually empty' },
+    commit: { type: 'string', description: 'The head as landing.py finish printed it' },
+  },
+}
+
 const where = `Work in the repository at ${repo}. `
+// The last stage of every passage: the lander is given both reports whole and returns a few lines.  What this
+// script returns is what lands in the orchestrator's context, so it returns the lander's lines and nothing else;
+// the reports themselves are in the run's journal (scripts/orchestrator/wf.py show <folder>).
+const land = async (reports) => {
+  phase('Land')
+  const landed = await agent(
+    where + `Read ${roles}lander.md and do what it says.\n\n` +
+    `The cards: ${cards.join(', ')}\nThe batch's folder name: ${folder}\nYour working folder name: ${folder}-l\n` +
+    (notes ? `\nFrom the orchestrator:\n${notes}\n` : '') +
+    `\nThe reports of the agents before you, whole:\n${JSON.stringify(reports, null, 1)}\n`,
+    withModel({ label: `land ${folder}`, phase: 'Land', schema: LANDED }, landModel, args.landEffort))
+  if (!landed) return { folder, cards, failed: 'land' }
+  return { folder, cards, landed }
+}
 const numbered = (items) => (items || []).map((t, i) => `${i + 1}. ${t}`).join('\n')
 
 // A list from the orchestrator (a ruling to apply, a definition that changed) worked through by a fixer.
@@ -155,11 +198,13 @@ if (args.fixes) {
     where + `Read ${roles}fixer.md and do what it says.\n\n` +
     `The cards and the list for each:\n\n${args.fixes}\n\nYour working folder name: ${folder}-f\n`,
     withModel({ label: `fix ${folder}`, phase: 'Fix', schema: FIXED }, reviewModel, args.reviewEffort))
-  return { folder, cards, fix }
+  if (!fix) return { folder, cards, failed: 'fix' }
+  return await land({ fix })
 }
 
 // A batch whose author finished and whose review did not (a run cut off): args.reported is the author's account,
-// built by the orchestrator from that run's journal.
+// built by the orchestrator from that run's journal.  (Since the Workflow tool can resume a run, relaunching with
+// resumeFromRunId and the same args is the simpler way: finished stages come back from the journal at once.)
 if (args.reported) {
   phase('Review')
   const review = await agent(
@@ -168,7 +213,7 @@ if (args.reported) {
     `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${args.reported}\n`,
     withModel({ label: `review ${folder}`, phase: 'Review', schema: REVIEW }, reviewModel, args.reviewEffort))
   if (!review) return { folder, cards, failed: 'review' }
-  return { folder, cards, review }
+  return await land({ author_reported: args.reported, review })
 }
 
 phase('Author')
@@ -192,6 +237,6 @@ const review = await agent(
   `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r\n\n` +
   `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
   withModel({ label: `review ${folder}`, phase: 'Review', schema: REVIEW }, reviewModel, args.reviewEffort))
-if (!review) return { folder, cards, author, failed: 'review' }
+if (!review) return { folder, cards, failed: 'review' }
 
-return { folder, cards, author, review }
+return await land({ author, review })

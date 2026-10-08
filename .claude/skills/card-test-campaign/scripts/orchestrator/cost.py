@@ -2,7 +2,15 @@
 """Per-role and per-activity token and time breakdown of the card-batch workflow runs."""
 import json, re, sys, datetime, collections
 from pathlib import Path
-BASE = Path("/root/.claude/projects/-home-claude/e27589f3-ce17-51da-bfdb-fb8ab2591f88/subagents/workflows")
+def _workflows_dir():
+    """The folder this session's workflow runs are journalled in: the newest one under ~/.claude/projects, or
+    $GEMP_WORKFLOWS.  (It is named after the session, so it differs in every session.)"""
+    import glob, os
+    if os.environ.get("GEMP_WORKFLOWS"):
+        return Path(os.environ["GEMP_WORKFLOWS"])
+    found = sorted(glob.glob("/root/.claude/projects/*/*/subagents/workflows"), key=os.path.getmtime)
+    return Path(found[-1]) if found else Path("/root/.claude/projects/none")
+BASE = _workflows_dir()
 tracked = json.load(open("/home/claude/work/workflows.json"))
 
 def ts(s): return datetime.datetime.fromisoformat(s.replace("Z", "+00:00"))

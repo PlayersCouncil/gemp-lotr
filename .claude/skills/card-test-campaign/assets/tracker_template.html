@@ -1,6 +1,7 @@
 <title>Card Test Campaign</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
 <style>
+[hidden] { display: none !important }
 /* Layout: a ledger. One row per part of the campaign, each with a bar split by status; a row opens into its sets,
    a set into its cultures, a culture into its cards.  Approved cards leave the lists. */
 :root {
@@ -101,6 +102,7 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
   <div class="tabs" role="tablist">
     <button role="tab" id="tab-progress" aria-selected="true" aria-controls="progress">Progress</button>
     <button role="tab" id="tab-findings" aria-selected="false" aria-controls="findings">Findings</button>
+    <button role="tab" id="tab-ask" aria-selected="false" aria-controls="ask">Waiting on Ketura</button>
   </div>
 
   <section id="progress" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
@@ -124,10 +126,20 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
     <h2>By kind</h2>
     <div class="plain"><table id="tally"></table></div>
   </section>
+
+  <section id="ask" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">Open questions, in full as they stand in questions.md, and open rig requests from rig-requests.md.
+      Findings that wait on a word from her are under Findings.</p>
+    <h2>Questions</h2>
+    <div class="plain"><table id="qlist"></table></div>
+    <h2>Rig requests</h2>
+    <div class="plain"><table id="glist"></table></div>
+  </section>
 </div>
 
+<script src="tracker-data.js"></script>
 <script>
-const DATA = /*__DATA__*/null;
+const DATA = window.TRACKER_DATA || /*__DATA__*/null;
 const STATUSES = ["approved", "ready", "parked", "in-progress", "todo"];
 const LABEL = { "approved": "Approved", "ready": "Ready for review", "parked": "Parked", "in-progress": "In progress", "todo": "To do" };
 const COLOR = { "approved": "var(--ok)", "ready": "var(--ready)", "parked": "var(--parked)", "in-progress": "var(--prog)", "todo": "var(--todo)" };
@@ -243,11 +255,26 @@ function start() {
   document.getElementById("fsearch").oninput = e => { ftext = e.target.value; drawFindings(); };
   drawFindingFilters(); drawFindings();
 
+  // What waits on Ketura: the open questions and rig requests, word for word.
+  function drawOpen(table, items, none) { table.replaceChildren();
+    for (const q of items) { const body = el("td"); body.style.whiteSpace = "pre-wrap";
+      for (const part of (q.body || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
+        if (/^\*\*/.test(part)) body.append(el("b", { text: part.slice(2, -2) }));
+        else if (/^`/.test(part)) body.append(el("code", { text: part.slice(1, -1) }));
+        else body.append(part); }
+      table.append(el("tr", null, el("td", { class: "id", text: q.id }), el("td", null, el("b", { text: q.title || "" })), body)); }
+    if (!items.length) table.append(el("tr", null, el("td", { class: "note", text: none }))); }
+  const Q = DATA.questions || [], G = DATA.rig || [];
+  drawOpen(document.getElementById("qlist"), Q, "No question is open.");
+  drawOpen(document.getElementById("glist"), G, "No rig request is open.");
+  document.getElementById("tab-ask").textContent = "Waiting on Ketura (" + (Q.length + G.length) + ")";
+
   // Tabs.
-  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings") };
+  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings"), ask: document.getElementById("tab-ask") };
   function show(name) { for (const k in tabs) { tabs[k].setAttribute("aria-selected", String(k === name)); document.getElementById(k).hidden = k !== name; } }
-  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings");
+  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings"); tabs.ask.onclick = () => show("ask");
   if (location.hash === "#findings") show("findings");
+  if (location.hash === "#ask") show("ask");
 }
 start();
 </script>
