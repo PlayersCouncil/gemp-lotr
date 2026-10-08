@@ -187,6 +187,9 @@ public class Card_01_310_ErrataTests
 		var sword = scn.GetFreepsCard("sword");
 		var mithril = scn.GetFreepsCard("mithril");
 		scn.MoveCompanionsToTable(sam);
+		// One Hobbit Sword in the deck: a choice from the deck goes by blueprint, so with both copies there the
+		// game may hand over the other one.
+		scn.MoveCardsToDiscard(scn.GetFreepsCard("sword2"));
 
 		scn.StartGame();
 
