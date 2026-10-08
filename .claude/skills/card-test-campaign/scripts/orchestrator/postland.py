@@ -84,6 +84,7 @@ def main(argv):
     seen = json.loads(seen_file.read_text()) if seen_file.exists() else {}
     listed = {}
     with zipfile.ZipFile(transport / "state-delta.zip", "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr(".sync-head", head)   # apply-sync.py waits for the zip that belongs to this head
         for p in sorted(STATE.rglob("*")):
             if not p.is_file() or "transport" in p.parts or p.name in SKIP:
                 continue
