@@ -4,12 +4,14 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.ArcheryTotalModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_172_ErrataTests
 {
@@ -19,16 +21,17 @@ public class Card_01_172_ErrataTests
 				new HashMap<>()
 				{{
 					put("archer", "51_172");
-					put("marksman", "1_176");
-					put("commander", "2_49");
-					put("bowman", "2_60");
-					put("troop", "2_67");
-					put("runner", "1_178");
-
+					put("archer2", "51_172");
+					put("marksman", "1_176");   // Goblin Marksman: [moria] Orc archer, no other text
+					put("assassin", "1_131");   // Orthanc Assassin: [isengard] Uruk-hai archer, damage +1
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc, not an archer; its (2) only when played
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, not an archer, no text
+					put("frenzy", "1_171");     // Frenzy: Assignment event, assigns an exhausted companion to skirmish a [moria] Orc
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.ATARRing
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,9 +51,9 @@ public class Card_01_172_ErrataTests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: <b>Archer</b>.
-		* 	The fellowship archery total is -1 for each [moria] archer you can spot.
-		* 	Assignment: Exert this minion to prevent [moria] archers from being assigned to skirmishes.
-		*/
+		 * 	The fellowship archery total is -1 for each [moria] archer you can spot.
+		 * 	Assignment: Exert this minion to prevent [moria] archers from being assigned to skirmishes.
+		 */
 
 		var scn = GetScenario();
 
@@ -71,62 +74,178 @@ public class Card_01_172_ErrataTests
 	}
 
 	@Test
-	public void GoblinArcherMakesFellowshipArcheryTotalMinus1PerMoriaArcher() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FellowshipArcheryTotalIsMinus1ForEachMoriaArcherSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var archer = scn.GetShadowCard("archer");
+		var archer2 = scn.GetShadowCard("archer2");
 		var marksman = scn.GetShadowCard("marksman");
-		var commander = scn.GetShadowCard("commander");
-		var bowman = scn.GetShadowCard("bowman");
-		var troop = scn.GetShadowCard("troop");
+		var assassin = scn.GetShadowCard("assassin");
 		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveMinionsToTable(marksman, commander, bowman, troop, runner);
-		scn.MoveCardsToHand(archer);
+		scn.MoveCardsToHand(archer, marksman);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 6));
-		scn.SkipToPhase(Phase.ARCHERY);
+		// A fellowship archery total high enough that no reading reaches zero.
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
+		// 10 set + 1 companion + 2 for the site
+		assertEquals(13, scn.GetTwilight());
+		assertEquals(7, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetShadowArcheryTotal());
+
+		scn.ShadowPlayCard(archer);
+		// 5 to play + 2 roaming
+		assertEquals(6, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, archer);
+		// Goblin Archer spots itself.
 		assertEquals(6, scn.GetFreepsArcheryTotal());
-		scn.MoveMinionsToTable(archer);
-		// -5 for the 5 archers, the runner doesn't count
+
+		scn.ShadowPlayCard(marksman);
+		assertEquals(5, scn.GetFreepsArcheryTotal());
+
+		// An archer of another culture and a [moria] Orc who is no archer are not counted.
+		scn.MoveMinionsToTable(assassin, runner);
+		assertEquals(5, scn.GetFreepsArcheryTotal());
+
+		// A second Goblin Archer: three [moria] archers, and each copy takes 3.
+		scn.MoveMinionsToTable(archer2);
 		assertEquals(1, scn.GetFreepsArcheryTotal());
+		// The minion archery total is untouched: one for each of the four archers.
+		assertEquals(4, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void GoblinArcherAssignmentAbilityPreventsMoriaArchersFromSkirmishing() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AssignmentAbilityExertsToPreventMoriaArchersFromBeingAssignedThisAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var archer = scn.GetShadowCard("archer");
+		var archer2 = scn.GetShadowCard("archer2");
+		var marksman = scn.GetShadowCard("marksman");
+		var assassin = scn.GetShadowCard("assassin");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// The archers go down after the archery phase, so that it fires no arrows.
+		scn.MoveMinionsToTable(archer, archer2, marksman, assassin);
+		// Goblin Marksman is made fierce, to be assigned again in the fierce assignment phase.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, marksman, null, Keyword.FIERCE));
+		scn.FreepsPass();
+
+		assertTrue(scn.FreepsCanAssign(archer));
+		assertTrue(scn.FreepsCanAssign(marksman));
+		assertEquals(0, scn.GetWoundsOn(archer));
+		assertEquals(0, scn.GetWoundsOn(archer2));
+		assertTrue(scn.ShadowActionAvailable(archer));
+		scn.ShadowUseCardAction(archer);
+		assertEquals(1, scn.GetWoundsOn(archer));
+		assertEquals(0, scn.GetWoundsOn(archer2));
+		scn.PassAssignmentActions();
+
+		// Every [moria] archer is out of reach of the Free Peoples player's assignments...
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(archer));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(archer2));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(marksman));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(assassin));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(runner));
+		scn.FreepsAssignToMinions(aragorn, runner);
+
+		// ...and of the Shadow player's.
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(archer));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(archer2));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(marksman));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(assassin));
+		scn.ShadowDeclineAssignments();
+		assertFalse(scn.IsCharAssigned(frodo));
+
+		// Aragorn, 8, kills Goblin Runner, 5.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, runner);
+
+		// The fierce assignment phase is another assignment phase: Goblin Marksman can be assigned again.
+		scn.PassFierceAssignmentActions();
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(marksman));
+		scn.FreepsAssignToMinions(aragorn, marksman);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, marksman));
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassFierceSkirmishActions();
+		assertInZone(Zone.DISCARD, marksman);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AMoriaArcherKeptFromBeingAssignedIsNotTheOneAnotherCardsEventAssigns() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var archer = scn.GetShadowCard("archer");
 		var marksman = scn.GetShadowCard("marksman");
-		var commander = scn.GetShadowCard("commander");
-		var bowman = scn.GetShadowCard("bowman");
-		var troop = scn.GetShadowCard("troop");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(archer, marksman, commander, bowman, troop, runner);
-
-		var frodo = scn.GetRingBearer();
-
-		//so frodo doesn't die to all the arrows
-		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.SHADOW, -6));
+		var troop = scn.GetShadowCard("troop");
+		var frenzy = scn.GetShadowCard("frenzy");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(frenzy);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-
+		// The archers go down after the archery phase, so that it fires no arrows.
+		scn.MoveMinionsToTable(archer, marksman);
+		// Vitality 4 with 3 wounds: the one exhausted companion who is not the Ring-bearer, for Frenzy.
+		scn.AddWoundsToChar(aragorn, 3);
 		scn.FreepsPass();
 
-		assertTrue(scn.ShadowActionAvailable(archer));
-		assertEquals(0, scn.GetWoundsOn(archer));
+		assertTrue(scn.FreepsCanAssign(archer));
+		assertTrue(scn.FreepsCanAssign(marksman));
 		scn.ShadowUseCardAction(archer);
+		assertFalse(scn.FreepsCanAssign(archer));
+		assertFalse(scn.FreepsCanAssign(marksman));
+		assertTrue(scn.FreepsCanAssign(runner));
+		scn.FreepsPass();
 
-		assertEquals(1, scn.GetWoundsOn(archer));
-		scn.PassAssignmentActions();
+		// Frenzy would assign Aragorn against any [moria] Orc.  The two archers are [moria] Orcs too, and are
+		// left out; the two who are no archers are offered.
+		assertTrue(scn.ShadowPlayAvailable(frenzy));
+		scn.ShadowPlayCard(frenzy);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, troop));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(archer, marksman));
+		scn.ShadowChooseCard(runner);
 
-		//Only the runner is now assignable
-		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, archer));
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, marksman));
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, troop));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 
+	@Test
+	public void AssignmentAbilityIsNotOfferedWhenThisMinionIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var archer = scn.GetShadowCard("archer");
+		var archer2 = scn.GetShadowCard("archer2");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.MoveMinionsToTable(archer, archer2);
+		// Vitality 3 with 2 wounds: exhausted.
+		scn.AddWoundsToChar(archer, 2);
+		scn.FreepsPass();
+
+		assertFalse(scn.ShadowActionAvailable(archer));
+		// The other copy, fresh, may still use its own.
+		assertTrue(scn.ShadowActionAvailable(archer2));
+		assertTrue(scn.FreepsCanAssign(archer));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }
