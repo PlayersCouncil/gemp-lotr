@@ -110,7 +110,7 @@
 					]
 					false: {
 						type: Hinder
-						select: choose(attachedTo(unbound,companion),condition)
+						select: choose(attachedTo(unbound,companion,not(hindered)),condition)
 					}
 				}
 			}
