@@ -208,6 +208,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Boromir)
+				}
 				cost: [
 					{
 						type: memorize
