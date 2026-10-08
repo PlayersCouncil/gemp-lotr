@@ -271,7 +271,7 @@
 			effect: [
 				{
 					type: ChooseActiveCards
-					select: choose(companion,not(ring-bearer))
+					select: choose(companion,not(ring-bearer),or(not(exhausted),hasAttached(possession)))
 					memorize: chosenComp
 					text: Choose a companion (except the Ring-bearer) to exert and have a borne possession discarded.
 				}
@@ -385,23 +385,6 @@
 						}
 					]
 				}
-				{
-					type: choice
-					texts: [
-						Exert {chosenMinion}
-						Discard {chosenMinion}
-					]
-					effects: [
-						{
-							type: exert
-							select: memory(chosenMinion)
-						}
-						{
-							type: discard
-							select: choose(culture(sauron),minion)
-						}
-					]
-				}
 				
 				
 			]
@@ -455,8 +438,12 @@
 					memorize: chosenMinions
 					text: Choose minions to return to hand
 					count: {
-						type: fromMemory
-						memory: raceCount
+						type: range
+						from: 0
+						to: {
+							type: fromMemory
+							memory: raceCount
+						}
 					}
 				}
 				{
