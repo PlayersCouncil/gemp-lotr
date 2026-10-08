@@ -1,116 +1,133 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Signet;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_02_121_ErrataTests
 {
-    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new VirtualTableScenario(
-                new HashMap<>() {{
-                    put("gimli", "52_121");
-                }}
-        );
-    }
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "52_121");
+					put("guard", "1_7");        // Dwarf Guard: a Dwarf companion with no text that matters, strength 4
+				}},
+				// Site 2 Ettenmoors (plains, Shadow number 2), 3 Rivendell Valley (0), 4 Balin's Tomb (underground, 3),
+				// 5 The Bridge of Khazad-dum (underground, 6), 6 Galadriel's Glade (3)
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-    @Test
-    public void GimliStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GimliStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 1E
-         * Title: *Gimli
-         * Subtitle: Dwarf of the Mountain-race
-         * Side: Free Peoples
-         * Culture: Dwarven
-         * Twilight Cost: 2
-         * Type: Companion
-         * Subtype: Dwarf
-         * Strength: 6
-         * Vitality: 3
-         * Signet: Frodo
-         * Errata Game Text: Damage +1.  Each underground site's Shadow number is -1.  While the fellowship is at an underground site, Gimli is strength +1.
-         */
+		/**
+		 * Set: 2
+		 * Name: Gimli, Dwarf of the Mountain-race
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Frodo
+		 * Game Text: Damage +1.
+		 * Each underground site's Shadow number is -1. While the fellowship is at an underground site, Gimli is strength +1.
+		 */
 
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+		var card = scn.GetFreepsCard("gimli");
 
-        assertTrue(gimli.getBlueprint().isUnique());
-        assertEquals(2, gimli.getBlueprint().getTwilightCost());
+		assertEquals("Gimli", card.getBlueprint().getTitle());
+		assertEquals("Dwarf of the Mountain-race", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet());
+	}
 
-        assertEquals(6, gimli.getBlueprint().getStrength());
-        assertEquals(3, gimli.getBlueprint().getVitality());
-        assertEquals(Signet.FRODO, gimli.getBlueprint().getSignet());
+	@Test
+	public void PlayedFor2HeLowersTheShadowNumberOfEachUndergroundSiteBy1AndOfNoOtherSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
-    }
+		var gimli = scn.GetFreepsCard("gimli");
 
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveCardsToHand(gimli);
+		scn.SetTwilight(0);
 
-    @Test
-    public void GimliRemovesTwilightWhenUnderground() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		var ettenmoors = scn.GetFreepsSite(2);
+		var balinsTomb = scn.GetFreepsSite(4);
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetTwilightCost(ettenmoors));
+		assertEquals(3, scn.GetTwilightCost(balinsTomb));
+		assertEquals(0, scn.GetTwilight());
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionsToTable(gimli);
+		scn.FreepsPlayCard(gimli);
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(2, scn.GetTwilight());
+		// Balin's Tomb is underground; Ettenmoors is not
+		assertEquals(2, scn.GetTwilightCost(balinsTomb));
+		assertEquals(2, scn.GetTwilightCost(ettenmoors));
 
-        scn.StartGame();
+		scn.FreepsPass();
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertEquals(5, scn.GetTwilightCost(scn.GetCurrentSite()));
+		// 2 for Gimli + 2 companions + 5 for the Bridge (6 - 1)
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
+	@Test
+	public void IsStrengthPlus1OnlyWhileTheFellowshipIsAtAnUndergroundSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        scn.FreepsPass();
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(gimli, guard);
 
-        // 2 for Frodo/Gimli, 1 for the site, -1 for Gimli's text
-        assertEquals(2, scn.GetTwilight());
-    }
+		scn.StartGame();
+		scn.SkipToSite(3);
 
-    @Test
-    public void GimliDoesNotRemoveTwilightWhenNotUnderground() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		// Rivendell Valley is not underground
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(guard));
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionsToTable(gimli);
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(guard));
 
-        scn.StartGame();
+		scn.SkipToSite(5);
+		assertEquals(7, scn.GetStrength(gimli));
 
-        scn.FreepsPass();
-
-        // 2 for Frodo/Gimli, 1 for the site
-        assertEquals(3, scn.GetTwilight());
-    }
-
-    @Test
-    public void GimliIsStrengthPlus1WhenUnderground() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
-
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionsToTable(gimli);
-
-        scn.StartGame();
-
-        assertEquals(6, scn.GetStrength(gimli));
-
-        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
-
-        scn.FreepsPass();
-
-        assertEquals(7, scn.GetStrength(gimli));
-    }
-
-
+		scn.SkipToSite(6);
+		// Galadriel's Glade is not underground
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }
