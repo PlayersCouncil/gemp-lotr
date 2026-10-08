@@ -94,7 +94,7 @@
 				{
 					type: Playable
 					fromZone: DISCARD
-					filter: minion
+					filter: unique,culture(wraith),minion
 				}
 			]
 			effect: [
