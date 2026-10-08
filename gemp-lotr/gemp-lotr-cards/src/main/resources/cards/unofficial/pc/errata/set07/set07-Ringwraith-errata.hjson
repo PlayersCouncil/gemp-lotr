@@ -26,10 +26,16 @@
 				type: Trigger
 				optional: true
 				text: Would you like to spot a Nazgul to add 1 threat?
-				requires: {
-					type: CanSpot
-					filter: nazgul
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: nazgul
+					}
+					{
+						type: ThreatsRemaining
+						amount: 1
+					}
+				]
 				trigger: {
 					type: played
 					filter: self

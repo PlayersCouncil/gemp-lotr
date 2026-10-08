@@ -117,8 +117,15 @@
 			effect: {
 				type: repeat
 				times: {
-					type: fromMemory
-					memory: exertCount
+					type: min
+					firstNumber: {
+						type: forEachYouCanSpot
+						filter: culture(rohan),companion
+					}
+					secondNumber: {
+						type: fromMemory
+						memory: exertCount
+					}
 				}
 				effect: {
 					type: exert
