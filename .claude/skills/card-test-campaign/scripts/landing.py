@@ -22,6 +22,11 @@
         --changed names every card whose DEFINITION was corrected: before anything is committed, the tests of
         every other card that uses one of them as a helper are run, and if any fails nothing is committed.
 
+    landing.py commit "<subject>" <path...> [--body-file <file>]
+        For work that is not a batch of cards (an engine or rig change with its tests and documents): commits
+        exactly the paths named, as one commit with the campaign's trailer, rebuilding the rulings and pitfall
+        indexes first if a file they are made from is among them.  Prints the head.
+
 Everything here holds the campaign's lock while it writes, so two landers can work at once.
 """
 import os
@@ -164,6 +169,32 @@ def finish(argv):
     return landed.returncode
 
 
+def commit(argv):
+    body_file = take(argv, "--body-file")
+    subject, paths = argv[0], argv[1:]
+    if not paths:
+        raise SystemExit("commit: name the paths to commit")
+    if any(re.search(r"rulings-log\.md|shapes\.md|pitfalls\.md", p) for p in paths):
+        script("lookup.py", "--index")
+        for made in (".claude/skills/card-test-campaign/references/rulings-index.md", ".claude/skills/gemp-testing/SKILL.md"):
+            if made not in paths:
+                paths.append(made)
+    body = ("\n\n" + Path(body_file).read_text(encoding="utf-8").strip()) if body_file else ""
+    added = git("add", "--", *paths)
+    if added.returncode != 0:
+        print("git add: " + added.stderr.strip())
+        return 1
+    if not git("diff", "--cached", "--quiet", "--", *paths).returncode:
+        print("nothing to commit in those paths")
+        return 1
+    done = git("commit", "-q", "-m", subject.strip() + body + "\n" + trailer(), "--", *paths)
+    if done.returncode != 0:
+        print("git: " + (done.stderr or done.stdout).strip())
+        return 1
+    print("committed %d path(s); head %s" % (len(paths), git("rev-parse", "--short=9", "HEAD").stdout.strip()))
+    return 0
+
+
 def main(argv):
     if len(argv) < 3 or argv[1] in ("-h", "--help"):
         print(__doc__)
@@ -176,6 +207,8 @@ def main(argv):
             rig_add(args)
         elif argv[1] == "finish":
             return finish(list(argv[2:]))
+        elif argv[1] == "commit":
+            return commit(list(argv[2:]))
         elif argv[1] == "users":
             print(" ".join(users(argv[2:])) or "(none)")
         else:
