@@ -333,7 +333,7 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0136: archery wounds the allies cannot take go to companions (CR 4.2 \"instead\"), or are lost")
+	@Ignore("F-0243: archery wounds the allies cannot take go to companions (CR 4.2 \"instead\"), or are lost")
 	public void ArcheryWoundsTheAlliesCannotTakeGoToCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -366,7 +366,7 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0137: an archer ally away from home counts for the fellowship archery total once Come Down is used")
+	@Ignore("F-0244: an archer ally away from home counts for the fellowship archery total once Come Down is used")
 	public void AnArcherAllyAwayFromHomeDoesNotAddToTheFellowshipArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

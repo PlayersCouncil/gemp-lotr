@@ -281,7 +281,7 @@ public class Card_04_192_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0134: whether (limit -2) is the card's for the whole phase (CR 4.2 limit) or a cap on each use")
+	@Ignore("F-0245: whether (limit -2) is the card's for the whole phase (CR 4.2 limit) or a cap on each use")
 	public void UsedTwiceInOnePhaseTheSameCopyTakesNoMoreThanTwoOffInAll() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

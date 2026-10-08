@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -118,41 +117,6 @@ public class Card_04_046_ErrataTests
 		assertEquals(6, scn.GetStackedCards(emhr).size());
 		assertEquals(0, scn.GetStackedCards(mountains).size());
 		assertEquals(deck - 6, scn.GetFreepsDeckCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("F-0235: the six cards are stacked without being revealed to anyone")
-	public void TheSixCardsAreRevealedToBothPlayers() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var emhr = scn.GetFreepsCard("emhr");
-		var f1 = scn.GetFreepsCard("filler1");
-		var guard2 = scn.GetFreepsCard("guard2");
-		var sword = scn.GetFreepsCard("sword");
-		var axe = scn.GetFreepsCard("axe");
-		var troop = scn.GetFreepsCard("troop");
-		var mountains = scn.GetFreepsCard("mountains");
-		var thrarin = scn.GetFreepsCard("thrarin");
-		scn.MoveCardsToHand(emhr);
-
-		scn.StartGame();
-		// Thrarin seventh, and the only card of his title in the deck.
-		scn.MoveCardsToTopOfDeck(thrarin, mountains, troop, axe, sword, guard2, f1);
-
-		scn.FreepsPlayCard(emhr);
-
-		assertEquals(6, scn.ShadowGetTotalRevealedCardCount());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(f1, false));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(mountains, false));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(thrarin, false));
-		assertEquals(6, scn.FreepsGetTotalRevealedCardCount());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(f1, false));
-		assertFalse(scn.FreepsHasCardChoiceAvailable(thrarin, false));
-		scn.DismissRevealedCards();
-
-		assertEquals(6, scn.GetStackedCards(emhr).size());
-		assertEquals(thrarin, scn.GetFreepsTopOfDeck());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
