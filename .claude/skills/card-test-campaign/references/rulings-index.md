@@ -259,6 +259,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - F-0235, Ever My Heart Rises 54_46: keep
 - Q-0140, Cavern Entrance 54_355: A
 - F-0239, Gríma, Chief Counselor 55_51: new text
+- Q-0141, Merry's Sword 57_242: "(limit X)" is per use; every [rohan] companion is counted [Q-0134]
+- Shadow Host 58_43: "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes that requirement as excessive)." ...
 
 # Settled shapes (shapes.md)
 

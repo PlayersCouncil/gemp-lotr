@@ -1033,3 +1033,13 @@ useless click, as you surmised." *[2026-10-08, evening]*
 "Exert Gríma to spot an unbound companion. Hinder a condition borne by that companion (or hinder that companion and
 all Free Peoples cards they bear if you can spot 4 Free Peoples cultures)."" *[2026-10-08, evening]*
 
+**Q-0141, Merry's Sword 57_242: "(limit X)" is per use; every [rohan] companion is counted.** "1. Yeah, the per-use limit
+was intended, given that the player can increase X to get more. It prevented a 6-companion setup exerting Merry
+twice to get 6 exertions. 2. Yeah I can't imagine why one would want some exertions but not the max. If it's an
+enduring minion, they're just not going to use the ability on them." So a "(limit X)" where X is the use's own
+paid amount caps that use only (unlike Q-0134's printed "(limit (N))"), and a "for each X you spot" count spots
+all without asking. *[2026-10-08, evening]*
+
+**Shadow Host 58_43:** "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes
+that requirement as excessive)." *[2026-10-08, evening]*
+
