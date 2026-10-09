@@ -101,7 +101,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 ## What is offered and what is asked
 
-- X of zero that would do nothing is not offered (Q-0015)
+- X of zero that would do nothing is not offered (Q-0015) [Q-0034, F-0067]
 - No "may", no asking (Q-0017). Boromir, Redeemed's defender +1 "should definitely be an automatic required trigger; the optional bit is indeed a ...
 - "You may" is asked (Q-0021). Their Eyes Fell Upon Him (101_41) drawing without asking "wasn't intentional, that's an oversight." Changed to an ... [F-0041]
 - "May draw a card for each" is one offer (Q-0029) [Q-0033]
@@ -316,10 +316,13 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Limit once per site" (Q-0084, F-0146, F-0145)
 - "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213]
 - A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134, Q-0141). A printed limit on a count inside ... [F-0135, F-0245]
+- "Limit 1 per bearer" is a Restriction that lists `L`
 
 ## Costs, and playing cards from piles and hands
 
 - "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141]
+- A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
+- What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)
 - Costs, and effects, in the order printed (Q-0080) [F-0123]

@@ -81,14 +81,42 @@ whole phase. A cap built per use is a finding, fixed with a cardPhaseLimit wrapp
 the wrapper reaches a play's `discount` too, where it must be the whole of the discount (Uruk Regular 54_192:
 `discount: { type: cardPhaseLimit, limit: 2, amount: { type: forEachYouCanSpot, ..., multiplier: -1 } }`; the
 limit is a size, the amount keeps its sign). At its limit such an ability stays on offer and plays the card at
-full cost; it is withheld only while nothing can be afforded. An event is one card played once, so the readings
-agree there. A "(limit X)" where X is what that use paid caps that use only (Merry's Sword 57_242).
+full cost; it is withheld only while nothing can be afforded. An event is one card played once, and an ability
+that discards its own card is used once by each copy (Strength of Arms 4_82, Fortress Never Fallen 54_276), so
+the readings agree there: nothing is parked and a line in Notes says so. A "(limit X)" where X is what that use
+paid caps that use only (Merry's Sword 57_242).
+
+**"Limit 1 per bearer" is a Restriction that lists `L`.** Typed `Restriction [+ - L]`, as on Frostbite 101_27
+and The Weight of a Legacy 51_282. One test can claim all three: a bearer who has a copy is not
+offered for the next copy; a bearer of a DIFFERENT card of the same kind (another condition of that culture,
+which does not count against the limit) and a bearer of nothing are; and with every legal bearer bearing one the
+card cannot be played though its other requirements are met (Card_01_282_ErrataTests).
 
 ## Costs, and playing cards from piles and hands
 
 **"<do> a companion for each <thing>" may be spread (F-0224).** The player may affect several cards, or one card
 several times (CR 4.2 "for each"). Built as `times` on one choice it is a finding; the right shape is a repeat
 round a single choice (12_99, 17_128). "For each <thing> you spot" spots them all without asking (Q-0141).
+
+**A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249).** "Reveal the top card
+of your draw deck to <effect>" has the reveal as its cost, since everything before "to" is one (F-0022): it is
+written in the definition's `cost`, and the event or ability is not offered with an empty draw deck. Built as an
+effect, the card can be played for nothing with no deck: a finding, fixable at landing (Forearmed 56_16, F-0249;
+the original 6_16 has it as the cost). The `C-` is the card not playable with the deck emptied. This is not the
+optional look or draw of Q-0104 and Q-0029, which is an effect and is offered with an empty deck.
+
+**What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067,
+F-0111).** The rulings on X look two ways and are one rule. X is NOT capped by what the effect could do with
+it: an X of exertions is free up to those able to exert, whatever it buys (Q-0069, Great Gate 103_23: extra
+exertions hinder nothing); "remove X threats to <do something to> a card costing X or less" has no cap but the
+threats (Q-0087); a "(limit +3)" caps the bonus and not the X (the L check). X IS held to what the rest of the
+action's COSTS can pay, a play from a pile or hand being a cost (Q-0062): "hinder X ... to play X cards from
+your discard pile" stops at the cards that can be played (Q-0094); "remove X ... to play ...; its twilight cost
+is -X" starts where the card becomes affordable (F-0067, `LeastDiscountToPlay`); "hinder X beacons and discard X
+conditions to ..." stops at what both halves before the "to" can find (F-0111, Northern Signal-fire 103_30). So
+ask of the thing X is matched against: is it before the "to", or a play? Then it bounds X, and a definition
+that lets X run past it is a finding; otherwise X runs as far as its own cost can be paid. X of zero: Q-0015
+and Q-0034, under "What is offered and what is asked" in the rulings log.
 
 **The twilight cost of a card in play (F-0109, built).** F-0109 is FIXED: a card in play costs the number printed on it, whatever another card or its own text says, and a transfer costs the printed number only. `GetTwilightCost(card)` on a card in play now answers the printed number; to show a cost modifier in force read a card in HAND (what it would cost to play) or play one and read the pool. A site's Shadow number is still read as modified. Do not park on F-0109 any more.
 

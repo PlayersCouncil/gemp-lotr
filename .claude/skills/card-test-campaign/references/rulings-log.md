@@ -387,6 +387,10 @@ kicked on the decision timer." So I Would Have Gone With You to the End (101_23)
 Northern Signal-fire (103_30) are right to start X at 1. X may still be zero where the action does something
 without it (One Dwarf in Moria, 101_5, heals whatever X is). A definition that offers a do-nothing X of zero is
 not thereby wrong; one that withholds it is not a finding. *[2026-10-05, afternoon]*
+Since Q-0034 (2026-10-06, below: "An optional action that would do nothing is not offered: now a rule") that
+last sentence holds only for an event's X. On a special ability or optional trigger with nothing else to pay, an
+X of zero that would do nothing is to be withheld, and a definition that offers it is a finding (F-0067, From
+Deepest Dungeon 102_39). Read that entry before resting anything on this one.
 
 **No "may", no asking (Q-0017).** Boromir, Redeemed's defender +1 "should definitely be an automatic required
 trigger; the optional bit is indeed a holdover from the prior version." Changed to `optional: false`. *[2026-10-05, afternoon]*

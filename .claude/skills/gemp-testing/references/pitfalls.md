@@ -22,7 +22,14 @@ with one legal bearer it is made without asking.
 
 **A board changed under a pending decision.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice.
 
-**A number that can only be one number is not asked for** (F-0147). Where an effect asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
+**A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
+
+**"Wound each" and "wound every" wound one card at a time.** Each of the wounds has its own "is about to"
+window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
+a wound to an Elf") is offered one card at a time and never a choice among the cards the effect reaches: the F
+check's invalid candidate "among them" cannot be shown against such an effect, which is a line in Notes. Nobody
+is asked the order (Q-0142), so a test does not turn on which card comes first: give the response one card to
+answer for.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -34,6 +41,13 @@ rule, whatever is being asked. A restriction on a pair ("may not assign a charac
 `cantBeAssignedToSkirmishAgainst`) shows in neither: both cards stay listed, and the game refuses the pair only
 when the assignment is answered. `FreepsCanAssignAgainst(character, minion)` and `ShadowCanAssignAgainst` read
 that (G-0029); a refused assignment is never shown by the rig throwing.
+
+**One minion to a companion, and the minions left over.** The Free Peoples player may assign one minion to each
+companion (more takes defender): `FreepsAssignToMinions` with two minions in one group is refused by the game
+with a bare `DecisionResultInvalidException`. A minion he leaves unassigned gives the Shadow player an
+assignment decision of his own, whoever else is assigned, the Ring-bearer included, and that is how a companion
+comes to face two: `ShadowAssignToMinions(companion, secondMinion)` after the Free Peoples player's assignment.
+`ShadowDeclineAssignments()` passes that decision; with no minion left over he is not asked.
 
 **A check on a player who is not being asked anything answers false.** The availability and card-choice checks
 return false, `FreepsGetAvailableActions()` returns an empty list, and the raw readers of a decision's
@@ -62,7 +76,10 @@ count the cards a player is being shown, 0 if none. `FreepsChooseOptionalTrigger
 card is offering, and with `(card, text)` unless it is offering an action so worded. The plain pass methods are
 not like this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay
 harmless), and `FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger
-included. Do not write one "to be safe". (The older, wordier `FreepsPassCurrentPhaseAction()` and
+included. Do not write one "to be safe". Nor is `FreepsChooseCard(card)` like this: it answers with the card's id,
+and at a choice of actions the game reads a number as the place of an action in its list, so a card choice
+written for a choice the game made by itself (one candidate) takes whatever action has that number, or fails
+only if there is none. (The older, wordier `FreepsPassCurrentPhaseAction()` and
 `ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
 git history may still show them.)
 
@@ -112,6 +129,9 @@ to take, a skirmish that will not be cancelled. An answer written for the questi
 (`ShadowChooseNo()`) fails or goes to the next decision. Read it as
 `assertFalse(scn.ShadowDecisionAvailable("prevent"))` with the cost unpaid: in the phases both players act in,
 `ShadowAnyDecisionsAvailable()` is true anyway, because the Shadow player is being asked for his own action.
+`ShadowDecisionAvailable(text)` reads the decision's own wording: where a prevention is put as a choice of
+options the word may be in an option only, and the reading is `ShadowChoiceAvailable("<the option's words>")`,
+or the assertion holds whatever the game does.
 An effect that will happen in part (draw 3 with one card left) is still asked. For a rider "X may Y to
 prevent this", the board on which the effect cannot happen is a `-` worth one test where the card can reach it.
 
@@ -151,7 +171,8 @@ and its response, on an overwhelm), add words from the action's description:
 **An ability with wording of its own, and a card with several.** `FreepsActionAvailable(card)` sees an ability
 whose definition gives it its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as
 well as one the game words "Use <card name>". Where a card offers several actions, name the one meant:
-`FreepsActionAvailable(card, "from hand")` and `FreepsUseCardAction(card, "from hand")`.
+`FreepsActionAvailable(card, "from hand")` and `FreepsUseCardAction(card, "from hand")`. Both read a use: a
+card in hand that can be played, an event included, is read with `FreepsPlayAvailable(card)`.
 
 **Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer.
 
@@ -159,9 +180,14 @@ well as one the game words "Use <card name>". Where a card offers several action
 `FreepsTransferAvailable(card)` and their Shadow twins answer for the physical card they are given: with two
 copies in play, each is asked about separately, and a per-copy limit is tested by asking about each copy. The
 overloads that take text (`FreepsActionAvailable("Use Orc Taskmaster")`) still match any action so described.
-The card-choice checks are different: when a decision lists its cards by blueprint, as a search of a deck or
-discard pile does, `FreepsHasCardChoiceAvailable(card)` matches by blueprint and either copy answers for the
-other, so give the candidates in such a choice different blueprints.
+The card-choice checks are different where the cards are in a pile or are only shown: see the next entry.
+
+**A choice from a pile, and a showing, are read by blueprint.** Where a decision lists cards that are not in
+play (a search of a deck, a play from a discard pile, a reveal), `FreepsHasCardChoiceAvailable(card)`,
+`FreepsHasCardChoiceNotAvailable(card)` and the `(card, false)` reading of a showing match by blueprint: any
+copy answers for any other, the other player's copy in his own pile or hand included. An invalid candidate
+there, and a card left out of a reveal, needs a blueprint no valid or shown card has (another title, or another
+version of the title); a test that reads where the chosen card went keeps one copy in the pile.
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -191,7 +217,10 @@ exact pool adds those in: `// 10 set + 1 companion + 2 for the site`.
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
 Shadow player, until both pass in a row. A test of a Shadow action in those phases passes for the Free Peoples
-player first. `SkipToPhase` leaves the Free Peoples player with the decision.
+player first. `SkipToPhase` leaves the Free Peoples player with the decision. After a player's action the other
+is asked next: following a Free Peoples skirmish action `FreepsPass()` does nothing (he is not being asked), and
+it is `ShadowPass()` and then `FreepsPass()` that end the skirmish, so the last reading inside a skirmish is
+taken before that pair. `PassSkirmishActions()` and its kin pass for whoever holds the decision first.
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
 A test that needs a maneuver phase needs a minion on the table.
@@ -253,11 +282,24 @@ hindered cards have been restored (CR 5.0 "reconcile"; Q-0059). That is so for b
 and for "reconcile your hand" effects.
 
 **A deck's order is set after `StartGame()`.** The game shuffles each deck to deal the opening hands, so a card
-moved to the top or bottom of a draw deck before `StartGame()` does not stay there.
+moved to the top or bottom of a draw deck before `StartGame()` does not stay there. `MoveCardsToTopOfDeck(a, b,
+c)` puts each on top in turn, so the last one named is the top card.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
 skirmishes that are not about him.
+
+**A companion beaten by double his strength is killed, not wounded.** A helper minion chosen only to win
+overwhelms: Goblin Patrol Troop (13) kills any companion of strength 6 or less, and a minion of 8 kills Dwarf
+Guard (4). The companion is then in the dead pile and `GetWoundsOn` reads 0, which looks like a wound that never
+came. For a loss the loser survives keep the winner under double: Dunlending Brigand 4_10 (8) against a
+companion of 5 to 7, Goblin Runner 1_178 (5) against one of 3 or 4, the Troop against Aragorn 1_89 (8).
+The same the other way: a companion of twice a minion's strength kills it whatever its vitality.
+
+**A second assignment or skirmish phase in one turn takes a second move.** To show something renew or end at the
+next phase of the same name: after the skirmishes, `SkipToMovementDecision()`, `FreepsChooseToMove()`, put a
+minion down (`MoveMinionsToTable`), `ShadowRefreshDecision()`, then `SkipToPhase(...)` as usual
+(Card_07_080_ErrataTests). The fellowship is one site further on.
 
 **Who places archery wounds.** The fellowship's archery wounds are placed by the Shadow player on his minions
 (`ShadowChooseCard` after `SkipToArcheryWounds()`), the minions' by the Free Peoples player on companions.
@@ -276,7 +318,9 @@ block's path needs that block's sites in the scenario (Gondorian Merchant 7_97, 
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
 is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
-player 1's site before his turn ends.
+player 1's site before his turn ends. The card on the path is the copy of whoever laid it: from site 2 on, on
+player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
+`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint.
 
 **At the move limit, the regroup phase ends the turn.** When the fellowship has moved as often as the move limit
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
@@ -301,10 +345,6 @@ deck's size where a discard or a draw must be possible.
 the first time. `InFierceRound()` tells them apart (G-0031): true from the game's "Fierce skirmishes" until the
 last fierce skirmish is over. A "this phase" effect from the first assignment phase has ended by then.
 
-**An unassigned minion beside an unassigned Ring-bearer.** With a minion left unassigned after the Free Peoples
-player's assignments and the Ring-bearer free, the Shadow player gets an assignment decision of his own:
-`ShadowDeclineAssignments()` passes it.
-
 ## Cards, owners and zones
 
 **Exerting is not wounding.** A character with one vitality left cannot exert and so cannot pay an exertion cost,
@@ -317,7 +357,21 @@ does if handed anything but an ally.
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
 filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
-Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish.
+Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish. A second copy of a
+Free Peoples card is a second name for it in the scenario (`put("mail2", "1_101")`), never the Shadow player's
+copy: a count of what a companion bears passes that one over. The other half is as true: your own Shadow cards
+are not active on your turn, so a Shadow condition you own is no candidate for your Free Peoples ability.
+
+**An event is in the void while it is being played.** From its play until its last decision is answered an
+event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
+while a choice or a prevention of its effect is still pending fails.
+
+**`GetVitality` is the vitality left.** Printed vitality and what cards add, less wounds: a character of
+vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the stats test reads it.
+
+**Culture tokens are of the card's own culture.** `AddTokensToCard`, `RemoveTokensFromCard` and
+`GetCultureTokensOn` deal only in the token of the culture of the card they are given, so the invalid candidate
+for "an [elven] token" is a card of another culture carrying its own tokens.
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
@@ -380,7 +434,8 @@ number"; the rule is under "modifier".
 **Searching a deck shows the deck first.** An effect that looks through a hidden zone shows the cards before it
 asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choose with
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
-to the client.
+to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
+`FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
