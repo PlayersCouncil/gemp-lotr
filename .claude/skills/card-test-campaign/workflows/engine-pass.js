@@ -25,6 +25,23 @@ const RESULT = {
   },
 }
 
+// What this script returns lands in the orchestrator's context and is re-read on every step of its session
+// (pass 17 came back with a list of 171 card ids).  So every list in an item's result is cut to its first ten
+// entries, with "and N more" as an eleventh; the whole of it is in the item's report and in the run's journal.
+const KEEP = 10
+const cut = (value) => {
+  if (Array.isArray(value)) {
+    const kept = value.slice(0, KEEP).map(cut)
+    return value.length > KEEP ? kept.concat([`and ${value.length - KEEP} more`]) : kept
+  }
+  if (value && typeof value === 'object') {
+    const out = {}
+    for (const key of Object.keys(value)) out[key] = cut(value[key])
+    return out
+  }
+  return value
+}
+
 phase('Items')
 const results = []
 for (const item of items) {
@@ -40,6 +57,6 @@ for (const item of items) {
     log(`${item.key} did not finish; stopping here. Relaunch with resumeFromRunId once the tree has been looked at.`)
     break
   }
-  results.push(Object.assign({ item: item.key }, r))
+  results.push(Object.assign({ item: item.key }, cut(r)))
 }
 return { pass, results }

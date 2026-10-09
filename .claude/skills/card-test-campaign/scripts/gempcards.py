@@ -477,6 +477,29 @@ def test_index() -> dict:
     return index
 
 
+def new_test_path(card_id: str):
+    """Where the test file of a card that has none yet belongs, by the names and folders the files there are go
+    by: the folder its set's other test files are in, or the one their layout gives a set that has none.  None
+    for a set no test file's name can stand for (the Hobbit sets, set 90)."""
+    s, n = split_id(card_id)
+    seg = segment_of(card_id)
+    if seg == "errata":
+        name, folder = "Card_%02d_%03d_ErrataTests.java" % (s - 50, n), "unofficial/pc/errata/set%02d" % (s - 50)
+    elif seg == "vset":
+        # The cards of V0 are errata of promotional cards, and their files are named as errata.
+        name, folder = "Card_V%d_%03d_%sTests.java" % (s - 100, n, "Errata" if s == 100 else ""), "unofficial/pc/vsets/set_v%02d" % (s - 100)
+    elif seg == "decipher":
+        name, folder = "Card_%02d_%03d_Tests.java" % (s, n), "official/set%02d" % s
+    elif seg == "rtmd" and s != 90:
+        name, folder = "Card_%02d_%03d_Tests.java" % (s, n), None
+    else:
+        return None
+    beside = sorted(p.parent for c, p in test_index().items() if split_id(c)[0] == s)
+    if beside:
+        return beside[0] / name
+    return CARD_TESTS / folder / name if folder else None
+
+
 def dormant_tests() -> list:
     """Test files kept for a card's earlier iterations: not compiled, but kept in step with the live ones."""
     return sorted(p for p in CARD_TESTS.rglob("Card_*") if not p.name.endswith(".java"))

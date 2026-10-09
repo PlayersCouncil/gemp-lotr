@@ -177,9 +177,10 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 
 | Script | For |
 |---|---|
-| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file. |
+| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file and ledger and, for an erratum, the original's definition. |
 | `rules.py` | Looking things up in Comprehensive Rules 4.2: `term`, `card`, `terms-for`, `grep`, `interactions`. |
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
+| `cardinfo.py <ids>` | A definition's cardInfo block against the rest of the definition and the other cards of its kind (Q-0145: no test reads it, and it is kept true); `--all`, `--survey`. `packet.py` and `lint.py` print what it finds for a card. |
 | `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds; `suite` for everything. |
 | `lint.py` | The conformance check. |
 | `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |

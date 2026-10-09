@@ -74,6 +74,48 @@ BOOKEND = re.compile(r"\bAwaiting\w+PhaseActions\s*\(|\bGameIsFinished\s*\(|\b\w
 ITSELF = re.compile(r"\bthis (?:companion|minion|ally|follower|condition|possession|artifact|weapon|card)\b|\bhere\b", re.I)
 
 
+# "... discard this condition to ...", with nothing beside it to pay: a cost no board can make unpayable while the
+# card is in play to be used, so a `no C-` line under it tells the reviewer nothing.
+SELF_DISCARD = re.compile(r"(?:^|(?P<lead>[:,.])\s+|\bmay\s+)discard this(?:\s+[a-z]+)?(?:\s+from play)?\s+to\b", re.I)
+
+
+def only_cost_is_discarding_itself(text: str) -> bool:
+    plain = g.plain_text(text)
+    m = SELF_DISCARD.search(plain)
+    if not m:
+        return False
+    if m.group("lead") == ",":
+        # "If bearer is Boromir, discard this to ...": before the comma stands a condition, not another cost.
+        before = re.split(r"[:.]\s+", plain[:m.start()])[-1].strip()
+        return bool(re.match(r"(?:if|while|when|each time|at the|during)\b", before, re.I))
+    return True
+
+
+def same_title(text: str) -> str:
+    """A title as a filter compares it: no accents, no capitals."""
+    import unicodedata
+    return unicodedata.normalize("NFKD", g.plain_text(text or "")).encode("ascii", "ignore").decode().strip().lower()
+
+
+_title_kinds = None
+
+
+def title_kinds() -> dict:
+    """For each title that cards of more than one culture or type carry, those cards by (culture, type).  The
+    Hobbit sets are left out (their turn comes last, and nothing tests them yet), as are cards that are only a
+    picture (set 90)."""
+    global _title_kinds
+    if _title_kinds is None:
+        every = {}
+        for cid, c in g.card_index().items():
+            if g.segment_of(cid) in ("hobbit", "other") or g.split_id(cid)[0] == 90:
+                continue
+            kind = ((c.field("culture", "") or "").strip().lower(), (c.field("type", "") or "").strip().lower())
+            every.setdefault(same_title(c.field("title", "")), {}).setdefault(kind, []).append(cid)
+        _title_kinds = {t: kinds for t, kinds in every.items() if t and len(kinds) > 1}
+    return _title_kinds
+
+
 class Finding:
     def __init__(self, level, rule, line, message):
         self.level, self.rule, self.line, self.message = level, rule, line, message
@@ -363,6 +405,8 @@ def lint_file(path: Path):
             for check in sorted(waived):
                 if check in codes:
                     add("error", "ledger", None, "%s: lists %s and also says it has none" % (cid, check))
+                elif check == "C-" and only_cost_is_discarding_itself(text):
+                    pass  # always payable: the line needs no reading (and the Standard no longer asks for it)
                 else:
                     add("warning", "waived", None, "%s: no %s, with a reason given in the ledger (for the reviewer to read)" % (cid, check))
             missing = CORE[ctype] - codes - waived
@@ -497,6 +541,29 @@ def lint_file(path: Path):
                 "an additional culture or race: unless some test's table already holds a %s card that is not of that "
                 "race, the culture written for the race passes every test (F-0019)"
                 % (", ".join(sorted(races)), " / ".join(pairs[r] for r in sorted(races))))
+
+    # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
+    # and a follower): with one kind of it on every table, a culture or type written beside the name in the
+    # definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not
+    # which of them a test puts in play.  A card that names its own title is left alone ("limit 1 per bearer",
+    # "another Elf"): the other kind is then its own original or erratum.
+    if card is not None:
+        in_file = set(re.findall(r'"(\d+_\d+)"', raw)) | {card_id}
+        own = same_title(card.field("title", ""))
+        for title in sorted({same_title(t) for t in re.findall(r"\b(?:name|title)\(([^()]+)\)", card.raw, re.I)} - {own}):
+            kinds = title_kinds().get(title)
+            if not kinds:
+                continue
+            have = sorted(k for k, ids in kinds.items() if in_file & set(ids))
+            if len(have) == 1:
+                def words(kind):
+                    return ("[%s] %s" % kind) if kind[0] else kind[1]
+                others = ", ".join("%s (%s)" % (words(k), " ".join(sorted(ids, key=g.id_sort_key)[:3]) + (" ..." if len(ids) > 3 else ""))
+                                   for k, ids in sorted(kinds.items()) if k != have[0])
+                add("warning", "title-kinds", None, "the definition names %s, and every card of that title in this file is "
+                    "%s; there is also %s: where the text names the title with no culture or type word, each kind "
+                    "is a valid candidate in a test of its own (the Standard's F), or a culture or type written beside "
+                    "the name passes every test" % (g.plain_text(g.card_index()[kinds[have[0]][0]].field("title", title)), words(have[0]), others))
 
     if card is not None:
         import cardinfo

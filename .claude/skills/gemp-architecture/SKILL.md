@@ -282,6 +282,7 @@ Decision types:
 - **Overwhelm.** `RuleUtils.getMinionsFacingOverwhelm(game)` is the one place that decides which minions an overwhelm kills; `ResolveSkirmishEffect.getUpcomingOverwhelmed(game)` gives the characters about to be overwhelmed on either side.
 - **Replacing a character.** `GameState.replaceCharacterOnTable` puts the new card in play under the old card's id; borne and stacked cards are handed to it in place and keep their ids. The old card is left in the void under a new id, and the caller removes it from there (`removeCardsFromZone`) before adding it anywhere.
 - **Threats an action has still to add.** `ActionContext.getUnpaidThreatCost()` is the threats the action's own costs will add, non-zero only while the action is asked whether it can be used; pass it as `withThreatsAdded` to `Filters.playable`. `GameState.withThreatsToCome` is the scope that carries it and is zero outside a check.
+- **The order of cards.** `Filters.filterActive` returns cards in the order of their card ids, and an action's card memory (`DefaultActionContext`) keeps the order it was given (F-0268). Cards an effect will take one after another never pass through a `HashSet` or a `HashMultimap`: their order differs from run to run.
 - **The message record.** `GameState.startMessageRecord()` begins a full record of every message sent to the players from then on, and `getMessageRecord()` returns it (null if never started); the virtual table's `MarkGameLog()` is its one caller.
 
 ---

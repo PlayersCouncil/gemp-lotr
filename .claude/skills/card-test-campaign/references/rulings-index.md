@@ -389,4 +389,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Facts earlier authors got wrong
 - Rig methods newer than the generated list
 - lint's `second-copy` and `ruled` warnings
+- lint's `title-kinds` warning, and a `no C-` it passes over
 - lint's `cardinfo` warning (Q-0145)

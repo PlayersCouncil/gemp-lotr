@@ -3,7 +3,8 @@
 
     packet.py <id>                  the full packet
     packet.py <id> --blind          the analyst's packet: what the card says, without how it was implemented
-    packet.py <id> --with-test      also prints the card's current test file and ledger
+    packet.py <id> --with-test      also prints the card's current test file and ledger, and for an erratum the
+                                    definition of the card it is a version of
     packet.py <id> --terms          also prints the text of each glossary entry the game text touches
 
 A packet is: where the card lives, what the reviewed spreadsheet says it is (Decipher cards), its definition, where
@@ -96,7 +97,8 @@ def main(argv):
             print("- Test file: %s (%d active tests, the stat check included%s)"
                   % (g.rel(test), n - parked, ", and %d parked" % parked if parked else ""))
         else:
-            print("- Test file: none yet")
+            wanted = g.new_test_path(card_id)
+            print("- Test file: none yet" + ("; a new one is %s (class %s)" % (g.rel(wanted), g.test_class_name(wanted)) if wanted else ""))
         ledger = g.ledger_path(card_id)
         print("- Ledger file: %s (%s)" % (ledger, "exists" if ledger.is_file() else "not written yet"))
         revision = re.search(r"^\s*revision\s*:\s*(\d+)", card.raw, re.M)
@@ -191,6 +193,17 @@ def main(argv):
                 print("- " + h)
             print()
 
+        if "--with-test" in argv:
+            # An erratum is usually its original with a few words changed, and its definition a copy with the
+            # change made: the original's definition is read beside it in stage 2 (never in a blind packet).
+            for relation, other in errata_family(card_id):
+                original = cards.get(other)
+                if relation == "this is a version of" and original is not None:
+                    print("## The original as defined: %s  %s (%s line %d)" % (other, g.full_name(original), original.rel_file, original.line))
+                    print("```hjson")
+                    print(original.raw)
+                    print("```")
+                    print()
         if "--with-test" in argv and ledger.is_file():
             print("## Current ledger")
             print("```")

@@ -61,7 +61,8 @@ does.
 A `grep` of a `.hjson` file prints whatever lines match, those of your other cards and their originals among
 them: to look for a helper or a printed text in stage 1, print game texts and nothing else
 (`grep -h 'gametext:' <files>`). You may read another card's finished test file of the same shape, so long as
-that card is neither one of your batch nor the Decipher original of one.
+that card is neither one of your batch nor the Decipher original of one. Only those are shut: another card that
+shares a title with one of yours (a second Denethor) may be read as a helper like any other.
 
 **Stage 2, with everything.** Run `packet.py <id> --with-test`, which prints the definition and the test file and
 so ends stage 1 for that card: its plan is saved first. If the card already has behavioural tests, go
@@ -109,6 +110,9 @@ Decide which of three things is wrong, in this order, and say which in your repo
    it as a finding with: what the text says, what you expected, what happened, and your best guess at the kind
    (typo in the definition, oversight in the implementation, wrong displayed text, engine bug, rig bug).
    A finding with two causes gets a parked test for each, or half a correction passes the one.
+   Where the correction changes how every positive test is driven (a "you may" built as a required trigger,
+   correction `optional: true`), every test that takes or declines the offer asserts the offer and is parked;
+   lint's `parked-only` warnings on `+`, `O` and `R` are then expected until landing.
    A definition that does not do what its text says is fixed at landing by the orchestrator without waiting for
    Ketura (her rule since 2026-10-07), so for every finding show the correction (the `mutate.py` line that makes
    your parked test pass with every active test) and say in one sentence whether the departure looks like an

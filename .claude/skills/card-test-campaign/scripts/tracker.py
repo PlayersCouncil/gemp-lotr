@@ -160,6 +160,24 @@ def option(argv, flag, default=""):
     return argv[argv.index(flag) + 1] if flag in argv else default
 
 
+FINDING_USAGE = """    tracker.py finding add <card> <kind> <status> "<summary>" [--found "..."] [--outcome "..."]
+    tracker.py finding set <F-0000> <status> [--outcome "..."] [--kind <kind>]
+        kinds: %s
+        statuses: %s""" % (" ".join(FINDING_KINDS), " ".join(FINDING_STATUSES))
+
+
+def finding_usage(argv):
+    """The usage, if that is what the arguments ask for (-h, --help) or all they are good for (too few of them, or
+    an option where the card, kind, status, summary or number should stand); else None.  Asked before the
+    register is read or locked, so that a look at the help files nothing."""
+    if any(a in ("-h", "--help") for a in argv):
+        return FINDING_USAGE
+    need = {"add": 5, "set": 3}.get(argv[0] if argv else "")
+    if need is None or len(argv) < need or any(a.startswith("--") for a in argv[:need]):
+        return FINDING_USAGE
+    return None
+
+
 def finding(state: Path, argv):
     """finding add <card> <kind> <status> "<summary>" [--found "..."] [--outcome "..."]
        finding set <F-0000> <status> [--outcome "..."] [--kind <kind>]"""
@@ -389,6 +407,10 @@ def main(argv):
         if "--state" in args:
             i = args.index("--state")
             del args[i:i + 2]
+        usage = finding_usage(args)
+        if usage:
+            print(usage)
+            return 0 if any(a in ("-h", "--help") for a in args) else 1
         with g.locked():
             finding(state, args)
     elif cmd == "focus":

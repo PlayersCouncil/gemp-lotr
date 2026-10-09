@@ -593,7 +593,7 @@ named and the valid ones are not.
 
 - **Test cards.** `0_8002` Test War-horn copies every keyword of an exerted minion to your other minions until the regroup phase, as a snapshot (mechanics/KeywordSnapshotTests); `0_8003` Test Waystone is the per-site limit's test card (see the comment above it in testCards.hjson).
 
-- `0_8004` Test Seal: "Burdens cannot be added.", the test card for the definition word `cantAddBurdens` (mechanics/CantAddBurdensTests).
+- `0_8004` Test Seal: "Burdens cannot be added.", the test card for the definition word `cantAddBurdens` (mechanics/CantAddBurdensTests). A card's own test of a burden that cannot be added hinders the Ring-bearer instead (`HinderCard`): while he is hindered the rules put the same modifier on (`HinderedRule`; test-generation, "anything before "to"").
 
 - `0_8005` Test Mirror gives one minion's game text and keywords to another until the assignment phase, as a snapshot (mechanics/GameTextSnapshotTests): the test card for `DuplicateGameText`'s `snapshot: true`.
 

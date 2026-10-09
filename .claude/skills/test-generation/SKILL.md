@@ -202,7 +202,13 @@ then claimed by a test.
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
 
-- anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable
+- anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A card
+  discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
+  line. An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
+  (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
+  itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
+  board in play is left: a `no C-:` line. Test Seal 0_8004 is the mechanics' card; three earlier files use it
+  for this (51_240, 54_304, 59_30) and stand until Ketura answers Q-0166
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`
 - "until", "this phase", "this turn" → `D`. A phase ability that changes something and names no duration has
   one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. So has a trigger's effect:
@@ -371,6 +377,11 @@ skirmishes is tested with the Ring-bearer in the skirmish under a format that al
 not.
 
 A card whose text names sites of a particular block is tested on that block's path.
+
+Which formats carry an erratum is deck validation, not play, and no card owes a test of it. Where a card's file
+already has one (Final Strike 60_20, the only errata file that does), it stays there: an `R` clause of type
+`FormatRule`, `+ -`, citing the format definitions, with one `Get...Scenario()` method per format that returns a
+`DeckValidationScenario`.
 
 The no-effect flag is not asserted for every card. It is tested as a mechanic (`mechanics/NoEffectFlagTests`, the
 common cases) and asserted in a card's own tests only in three cases: the definition declares `noEffectUnless` (a
