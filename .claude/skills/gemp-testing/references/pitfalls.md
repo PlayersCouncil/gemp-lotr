@@ -570,7 +570,10 @@ ShadowPass();` and player 1, the Shadow player of that turn, then acts with the 
 (Card_93_001_Tests). The skirmish decision reads "Choose action to play or Pass" for both seats on every turn,
 so the bookend there is the seat's own `AwaitingFreepsSkirmishPhaseActions()` or
 `AwaitingShadowSkirmishPhaseActions()`: the "Play <phase> action or Pass" reading that the fellowship and
-Shadow phases need on player 2's turn matches nothing in a skirmish.
+Shadow phases need on player 2's turn matches nothing in a skirmish. Any later phase of player 2's turn is reached
+the same way, `SkipToPhaseInverted(Phase.REGROUP)` and the like (`SkipToPhase` is for player 1's turns); the
+bookend in the regroup phase there is `AwaitingShadowRegroupPhaseActions()`, player 2 being asked first
+(Card_93_010_Tests, Card_92_012_Tests).
 
 ## Cards, owners and zones
 
