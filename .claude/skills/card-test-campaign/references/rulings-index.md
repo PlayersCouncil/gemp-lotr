@@ -318,6 +318,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
+- "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 
 ## Limits
 
@@ -386,6 +387,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A correction of several lines for mutate.py
+- "Use vitality to resolve that skirmish instead of strength" is two overrides, one for each side (Final Triumph 68_115 and 18_115)
 - A site can be controlled only once every marker has passed it
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after

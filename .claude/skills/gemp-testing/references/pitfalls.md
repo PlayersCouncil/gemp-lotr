@@ -278,6 +278,11 @@ taken before that pair. `PassSkirmishActions()` and its kin pass for whoever hol
 holds in the other shared phases: a test that ends on a Free Peoples maneuver ability rests on
 `AwaitingShadowManeuverPhaseActions()`, and a second use by the Free Peoples player needs `ShadowPass()` first
 (Elven Guardian 67_7's tests).
+`PassSkirmishActions()` is the wrong call once the Free Peoples player has already passed in that skirmish (a
+`FreepsPass()` made only to read what the Shadow player is offered): it passes for the Shadow player, the
+skirmish resolves, and its second pass goes to whatever the Free Peoples player is asked next, the choice of
+the next skirmish (DecisionResultInvalidException from a CardsSelectionDecision) or his regroup decision (the
+test then rests on the Shadow player's). There `ShadowPass()` alone ends the skirmish.
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
 A test that needs a maneuver phase needs a minion on the table.
@@ -646,7 +651,16 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 (`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`). `MoveCardToAdventurePath` makes the card the
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
-(`Card_13_188_ErrataTests`: sites 4 to 7). A Shadows-block site cannot stand as `site1` of such a path: the
+(`Card_13_188_ErrataTests`: sites 4 to 7).
+The key matters, though: the rig builds the adventure deck in the site map's HashMap order, and the path is
+ordered only while the FIRST card of that deck has a site number (`GameState.usesUnorderedSites`). A key that
+comes out ahead of every `siteN` (`homestead`, `redhornSite`, `redhornPass`, `anduin`, `path`; with `site9` taken
+out also `buckland`, `redhorn`, `banks`) makes the whole path unordered: `StartGame()` is left resting on "Choose
+site to play", and the next `FreepsPass()` throws DecisionResultInvalidException from an
+ArbitraryCardsSelectionDecision. If that is where a new scenario stops, rename the key (`parapet`,
+`bucklandSite` and `shadowsSite` are safe either way), and never put the card under the key `site9` itself, which
+comes out first (`Card_18_112_ErrataTests`: `bucklandSite` and `redhorn` in place of sites 7 and 8, `site9` kept).
+A Shadows-block site cannot stand as `site1` of such a path: the
 constructor throws a NullPointerException from `CheckForCorruptionGameProcess` (probed at landing, err-b65_17).
 Where its text is needed in the first fellowship phase, an ad hoc modifier that does what the site does stands in.
 

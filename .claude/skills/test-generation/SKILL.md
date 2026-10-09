@@ -204,7 +204,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 
 - anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A card
   discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
-  line. An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
+  line. An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
+  added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's helper table).
+  An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
   (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
   itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
   board in play is left: a `no C-:` line. Test Seal 0_8004 is the mechanics' card; three earlier files use it
@@ -256,7 +258,7 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | Type | The clause is | At least | Notes |
 |---|---|---|---|
 | `Play` | the card being played from hand (`P1`) | `+` | Twilight moves by the cost (plus roaming for a minion, and say so in the comment); the card ends in play, in the support area, or on its bearer. May share a test with a `ToPlay` or `PlayOn` clause. The sentence "Plays to your support area." is a `C` clause of this type, claimed by `P1`'s test, which reads the card in the support area and on no character. |
-| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. |
+| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. A follower's "Aid - (N)." is of this type, its reminder in brackets left out; the Aid's cost is an `aidCost` effect and no field or keyword the stats test can read, so `K` is claimed by the stats test for its header and by a test that takes the Aid and reads the pool N higher (Robin Smallburrow 68_111). |
 | `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. |
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable. |
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |

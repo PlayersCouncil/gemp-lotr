@@ -302,7 +302,7 @@ Numeric fields (`amount`, `count`, `times`, `value`) accept literals or evaluate
 
 ### Literals
 - Integer: `3`
-- Range: `"0-3"` (player chooses)
+- Range: `"0-3"` (player chooses); `any` is 0 or more and `anyNonZero` 1 or more ("discard X cards from hand to ..." as an optional trigger's only cost starts at 1: shapes.md, F-0300)
 - `Any` = 0 to MAX_INT
 - `AnyNonZero` = 1 to MAX_INT
 
