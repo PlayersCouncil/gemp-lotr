@@ -374,6 +374,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - Check D on "until the end of the turn" for a card the end of the turn removes
+- Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A correction of several lines for mutate.py
 - A site can be controlled only once every marker has passed it
@@ -381,7 +382,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites
 - cardtest.py run ends with a blank line
-- Grep before calling a property unique to a block (Aldor 4_262)
+- Grep before calling a property unique to a block (Aldor 4_262) [Q-0158]
 - Facts earlier authors got wrong
 - Rig methods newer than the generated list
 - lint's `second-copy` and `ruled` warnings
