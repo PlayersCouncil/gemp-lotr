@@ -702,6 +702,13 @@ played card's own optional trigger is pending (Old Toby 1_305, "when you play th
 card") the count is still the old one, and he draws off the deck as it was seen (F-0313, open, parked in the
 92_4 tests). Read the count after that trigger is answered, and as more than before, not as a number.
 
+**A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
+nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an
+artifact from your draw deck (limit once per turn)") is offered with no artifact in the deck and with the deck
+empty (Q-0019: no penalty for failing to play from the draw deck; Q-0104). Used with nothing to play, the deck
+is shown and shuffled and the turn's `limitPerTurn` is spent. The eight `mustExist: true` cards of Q-0019 are
+the exception, not this.
+
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
 
@@ -870,4 +877,10 @@ the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
 and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a
 [moria] minion from the discard pile at that minion's own cost). A card played from the pack is read with
-`StartCardCapture()` / `GetLastCreatedCard()`.
+`StartCardCapture()` / `GetLastCreatedCard()`. Opening it (92_29) is three decisions: the owner picks the product
+(`ShadowChooseCardBPFromSelection("Test - Booster")`, a choice of exactly 1), the other player is shown all eight
+and dismisses, and the owner's choice ("Booster pack contents", 0 to 1) is taken by blueprint id or left with
+`ShadowDeclineChoosing()`, not a pass. `ShadowHasBPChoiceAvailable(id, false)` is true only for a card shown and
+NOT selectable (false for a selectable one). An event played from the pack ends in its player's discard pile,
+where `GetLastCreatedCard()` still finds it. The pack has no Shadow-phase event with a cost in its own text
+(G-0038, open: a pack of named cards).

@@ -390,6 +390,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 ## Boards, readings and tools
 
+- An old test that is kept and put in form, and stands on a board outside play [Q-0178]
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - Check D on "until the end of the turn" for a card the end of the turn removes
