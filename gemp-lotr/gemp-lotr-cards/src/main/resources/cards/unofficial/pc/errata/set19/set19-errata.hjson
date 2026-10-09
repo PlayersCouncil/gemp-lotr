@@ -58,9 +58,17 @@
 			}
 			{
 				type: activated
-				requires: {
-					type: ringIsActive
-				}
+				requires: [
+					{
+						type: ringIsActive
+					}
+					{
+						type: not
+						requires: {
+							type: ringIsOn
+						}
+					}
+				]
 				phase: maneuver
 				effect: {
 					type: putOnRing
@@ -109,7 +117,7 @@
 			collInfo: 19P24
 			rarity: P
 		}
-		title: Brought Down From Inside
+		title: Brought Down from Inside
 		unique: true
 		culture: rohan
 		twilight: 2
@@ -123,6 +131,10 @@
 				trigger: {
 					type: startOfPhase
 					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man,not(hasAttached(self))
 				}
 				effect: {
 					type: transfer
