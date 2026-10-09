@@ -118,6 +118,9 @@ Decide which of three things is wrong, in this order, and say which in your repo
    your parked test pass with every active test) and say in one sentence whether the departure looks like an
    error or typo (the usual case) or looks DELIBERATE (a comment in the definition, a workaround for play, a
    ruling that might explain it). Only the deliberate-looking and the ones you are unsure of go to her first.
+   Where the right correction is a change to the ENGINE: show a definition-only correction that makes the parked
+   tests pass, if there is one (it is what can land), and name the engine change beside it; if there is none,
+   give the engine lines at fault and what they would have to do (Shrouded Elf 63_23, F-0287).
 
 Be slow to conclude the game is wrong. Most of the time it is, when you think so; but a correct implementation of
 an obscure ruling looks exactly like a bug, and a wrongly reported bug costs more than a question.
