@@ -135,7 +135,8 @@ can be done on any branch, nothing is asked (F-0116). *[2026-10-09]*
 approve fixing this." *[2026-10-09]*
 
 **Approved as found, to be fixed:** F-0041 (13_75: "Oversight, please fix"), F-0058, F-0201 (Response special
-abilities are special abilities to "a special ability is used": the engine change is no longer deferred), F-0313
+abilities are special abilities to "a special ability is used"; engine pass 20 then found they are already
+reported as used, so no engine change was made and F-0201 is closed not-a-bug: the tests hold it, Q-0203), F-0313
 ("PlayPermanentAction should be altered to shuffle at the appropriate time"), F-0315 (no unhindered companion, no
 move: "it will definitely need enforcing in the appropriate places"), F-0318 with F-0319 ("each character" at a
 sanctuary counts allies and minions: "Make sure to check minions too"), G-0037. *[2026-10-09]*

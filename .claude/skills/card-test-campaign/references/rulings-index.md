@@ -34,7 +34,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Úlairë Nertëa, Dark Horseman 69_38 (F-0307, F-0308)
 - A choice between two things to do (F-0310, Here Lies Balin 1_19) [F-0116]
 - "Ignoring all costs" waives the cost in an event's own text (F-0316, Race Text 92_29)
-- Approved as found, to be fixed [F-0041, F-0058, F-0201, F-0313, F-0315, F-0318, F-0319, G-0037]
+- Approved as found, to be fixed [F-0041, F-0058, F-0201, Q-0203, F-0313, F-0315, F-0318, F-0319, G-0037]
 - A limit on a discount is not a limit on a strength bonus (Q-0152: struck) [F-0245]
 - cardInfo (Q-0158). "The intent is that id is for the card's unique identifier, and parent is supposed to point to the original (in the case of an ...
 - No Frodo beside a Ring-bearer who is not Frodo (Q-0159: B)
