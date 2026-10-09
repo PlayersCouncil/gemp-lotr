@@ -931,11 +931,24 @@ public class Filters {
         }
     }
 
+    /**
+     * Gathers the cards a filter accepts, and hands them back in the order of their card ids: the same order in
+     * every run of the same game, whoever asks (Ketura on Q-0142).  A card is given a new id as it comes into play,
+     * so for cards in play this is the order they came into play, and a card that took another's place stands
+     * where that one stood.  Whatever takes "each" or "every" card matching a filter takes them in this order,
+     * and so does a decision that lists them.
+     */
     private static class GetCardsMatchingFilterVisitor extends CompletePhysicalCardVisitor {
         private final LotroGame game;
         private final Filter _filter;
 
-        private final Set<PhysicalCard> _physicalCards = new HashSet<>();
+        // Kept in the order visited.  A set whose order was the cards' hash codes stood here before, and those
+        // differ from one run to the next.
+        private final Set<PhysicalCard> _physicalCards = new LinkedHashSet<>();
+        // The cards in play are nearly always visited in the order of their ids already, so the sorting is only
+        // done when a card has been met out of turn.
+        private boolean _inIdOrder = true;
+        private int _lastCardId = Integer.MIN_VALUE;
 
         private GetCardsMatchingFilterVisitor(LotroGame game, Filter filter) {
             this.game = game;
@@ -944,8 +957,14 @@ public class Filters {
 
         @Override
         protected void doVisitPhysicalCard(PhysicalCard physicalCard) {
-            if (_filter.accepts(game, physicalCard))
-                _physicalCards.add(physicalCard);
+            if (_filter.accepts(game, physicalCard)) {
+                if (_physicalCards.add(physicalCard)) {
+                    final int cardId = physicalCard.getCardId();
+                    if (cardId < _lastCardId)
+                        _inIdOrder = false;
+                    _lastCardId = cardId;
+                }
+            }
         }
 
         public int getCounter() {
@@ -953,7 +972,12 @@ public class Filters {
         }
 
         public Set<PhysicalCard> getPhysicalCards() {
-            return _physicalCards;
+            if (_inIdOrder)
+                return _physicalCards;
+
+            List<PhysicalCard> sorted = new ArrayList<>(_physicalCards);
+            sorted.sort(Comparator.comparingInt(PhysicalCard::getCardId));
+            return new LinkedHashSet<>(sorted);
         }
     }
 }

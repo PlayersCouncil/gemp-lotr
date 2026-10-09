@@ -28,8 +28,12 @@ with one legal bearer it is made without asking.
 window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
 a wound to an Elf") is offered one card at a time and never a choice among the cards the effect reaches: the F
 check's invalid candidate "among them" cannot be shown against such an effect, which is a line in Notes. Nobody
-is asked the order (Q-0142), so a test does not turn on which card comes first: give the response one card to
-answer for.
+is asked the order: cards in play that an effect takes together are taken in the order of their card ids, the
+same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, so that is the
+order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a
+test may say whose window comes first. It holds for cards a player chose together too ("wound 2 Orcs"), whichever
+was named first, and one effect that takes several at once (exert every, heal, hinder, discard each) names them
+in that order in the game log. `mechanics/TakenTogetherInCardIdOrderTests` shows each.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
