@@ -18,8 +18,9 @@ import static org.junit.Assert.*;
  * answer for a player who is not being asked anything, an action of a card that is not on offer, and a reading of
  * a parameter the pending decision does not have each fail the test with a message that names the player, what was
  * attempted and what each player is in fact being asked, and leave whatever is pending as it was.  So does a choice
- * of cards given where the game is not asking for cards, or is asking for them the other way.  Also the one
- * reading that is no failure: the maximum of a number the game sets no upper bound on.
+ * of cards given where the game is not asking for cards, or is asking for them the other way, and so does
+ * declining to choose where the game is not asking for cards or will not take none.  Also the one reading that is
+ * no failure: the maximum of a number the game sets no upper bound on.
  */
 public class RigFailureTests
 {
@@ -39,6 +40,14 @@ public class RigFailureTests
 					put("barliman", "1_70");
 					put("sleep", "1_84");           // Sleep, Caradhras: a [gandalf] Fellowship event
 					put("intimidate", "1_76");      // Intimidate: a [gandalf] Response event
+					// Ottar, Man of Laketown.  "Fellowship: Exert Ottar to discard up to 3 cards from hand and
+					// draw an equal number of cards."  A choice among cards where they lie, of which none need
+					// be chosen.
+					put("ottar", "1_80");
+					// Fireworks.  "Fellowship: Spot Gandalf to shuffle up to 2 [gandalf] or up to 2 [shire] cards
+					// from your discard pile into your draw deck."  A choice among cards the game shows, of
+					// which none need be chosen.
+					put("fireworks", "3_32");
 
 					put("runner", "1_178");         // Goblin Runner: cost 1, strength 5
 					put("troop", "1_177");          // Goblin Patrol Troop: cost 6, strength 13, no text
@@ -46,6 +55,9 @@ public class RigFailureTests
 					put("slayer2", "3_93");
 					// Forces of Mordor.  "Shadow: Spot X [sauron] minions to add (X)."  X is bounded by the minions.
 					put("forces", "1_248");
+					// Goblin Scimitar.  "Bearer must be a [moria] Orc.  When you play this possession, you may
+					// draw a card."  An optional trigger.
+					put("scimitar", "1_180");
 				}},
 				// Site 1 is Bag End: "Fellowship: Exert a Hobbit to play The Gaffer from your draw deck."  With
 				// Frodo there it is an action on offer in every fellowship phase.
@@ -340,6 +352,154 @@ public class RigFailureTests
 		scn.FreepsChooseCard(aragorn);
 		assertTrue(scn.IsCharSkirmishing(aragorn));
 		assertFalse(scn.IsCharSkirmishing(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void DecliningToChooseWhereTheGameIsNotAskingForCardsIsRefusedSayingWhatIsAskedAndNothingIsAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var wind = scn.GetFreepsCard("wind");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.MoveCardsToHand(wind);
+		scn.MoveCardsToHand(scimitar);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		// A choice of actions, where the empty answer that chooses no card is a pass.  It is not given.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		String notCards = " was to decline choosing, but the decision in front of that player is not a choice of cards.";
+		String freepsAsked = "Free Peoples Player is being asked \"Play Fellowship action or Pass\", offering [Use Bag End].";
+		assertRefused(scn::FreepsDeclineChoosing, "Free Peoples Player" + notCards, freepsAsked,
+				"Shadow Player is not being asked anything.");
+		// And a player who is not being asked anything has nothing to decline.
+		assertRefused(scn::ShadowDeclineChoosing,
+				"Shadow Player was to decline choosing, but that player is not being asked anything.", freepsAsked);
+
+		// The fellowship phase has not been passed.
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// An optional trigger, where the same answer declines it.  The Goblin Runner is the only [moria] Orc, so
+		// the scimitar's bearer is not asked for and its "you may draw a card" is the next thing asked.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.ShadowPlayCard(scimitar);
+		assertAttachedTo(scimitar, runner);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		int hand = scn.GetShadowHandCount();
+		assertRefused(scn::ShadowDeclineChoosing, "Shadow Player" + notCards,
+				"Shadow Player is being asked \"Optional responses\", offering [",
+				"Free Peoples Player is not being asked anything.");
+
+		// The trigger has not been declined: it is still there to be taken, and draws its card.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(hand, scn.GetShadowHandCount());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// A choice of a number, which the game would not take the empty answer for either: now it is said why.
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(wind);
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		assertRefused(scn::FreepsDeclineChoosing, "Free Peoples Player" + notCards,
+				"Free Peoples Player is being asked \"Choose a minion cost\".", "Shadow Player is not being asked anything.");
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		scn.FreepsChoose("6");
+		assertEquals(11, scn.GetStrength(troop));
+
+		// An assignment, where the empty answer assigns nobody and ends the Free Peoples player's assigning.
+		scn.SkipToAssignments();
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertRefused(scn::FreepsDeclineChoosing, "Free Peoples Player" + notCards,
+				"Free Peoples Player is being asked \"Assign minions to companions or allies at home\".");
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsAssignToMinions(aragorn, runner);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	@Test
+	public void DecliningToChooseChoosesNoCardWhereNoneNeedBeChosenAndIsRefusedWhereOneMustBe() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var wind = scn.GetFreepsCard("wind");
+		var barliman = scn.GetFreepsCard("barliman");
+		var ottar = scn.GetFreepsCard("ottar");
+		var fireworks = scn.GetFreepsCard("fireworks");
+		var sleep = scn.GetFreepsCard("sleep");
+		var intimidate = scn.GetFreepsCard("intimidate");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.MoveAlliesToTable(barliman, ottar);
+		scn.MoveCardsToHand(wind, fireworks);
+		scn.MoveCardsToDiscard(sleep, intimidate);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+
+		// Cards where they lie, of which none need be chosen: "discard up to 3 cards from hand".  No card is
+		// discarded and none drawn; Ottar's exertion, the cost, is paid.
+		scn.FreepsUseCardAction(ottar);
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsDeclineChoosing();
+		assertEquals(1, scn.GetWoundsOn(ottar));
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertInZone(Zone.HAND, wind);
+		assertInZone(Zone.HAND, fireworks);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Cards the game shows, of which none need be chosen: "shuffle up to 2 [gandalf] ... cards from your
+		// discard pile into your draw deck".  Both stay in the discard pile.
+		scn.FreepsPlayCard(fireworks);
+		scn.FreepsChoose("GANDALF");
+		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sleep, intimidate));
+		scn.FreepsDeclineChoosing();
+		assertInZone(Zone.DISCARD, sleep);
+		assertInZone(Zone.DISCARD, intimidate);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Cards the game shows, of which one must be chosen: "take a [gandalf] event into hand from your discard
+		// pile".  The game would not take an answer of none; the refusal now says so, and what is being asked.
+		scn.FreepsUseCardAction(barliman);
+		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		String oneAtLeast = "Free Peoples Player was to decline choosing, but at least 1 card must be chosen there.";
+		assertRefused(scn::FreepsDeclineChoosing, oneAtLeast,
+				"Free Peoples Player is being asked \"Choose card from discard\".", "Shadow Player is not being asked anything.");
+		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
+		assertInZone(Zone.DISCARD, sleep);
+		scn.FreepsChooseCard(sleep);
+		assertInZone(Zone.HAND, sleep);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Cards where they lie, of which one must be chosen: which skirmish to resolve.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, runner },
+				new PhysicalCardImpl[] { gandalf, troop });
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertRefused(scn::FreepsDeclineChoosing, oneAtLeast,
+				"Free Peoples Player is being asked \"Choose next skirmish to resolve\".");
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertFalse(scn.IsCharSkirmishing(aragorn));
+		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.IsCharSkirmishing(aragorn));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 

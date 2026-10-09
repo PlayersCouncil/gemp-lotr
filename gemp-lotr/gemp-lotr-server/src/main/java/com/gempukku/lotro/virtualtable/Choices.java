@@ -17,25 +17,32 @@ import java.util.List;
 public interface Choices extends Decisions {
 
 	/**
-	 * Answers the Free Peoples player's pending decision with nothing: at a choice of cards whose minimum is 0 that
-	 * chooses no card, and it is the call to write for that, since FreepsChooseCardBPFromSelection() with no card
-	 * is ambiguous between its two overloads and does not compile.  It answers a showing of cards as readily.
-	 * The game refuses it where at least one card must be chosen.  It does not look at what is pending: at a choice
-	 * of actions the same empty answer is a pass (of a phase's actions, or of an optional trigger, which it
-	 * declines), so one call too many answers whatever comes next.  Unlike FreepsPass(), it fails when the
-	 * player is not being asked anything.
+	 * Causes the Free Peoples player to choose no card at a choice of cards whose minimum is 0, and fails, saying
+	 * what is being asked, at any other decision.  Either kind of choice will do: among cards where they lie, or
+	 * among cards the game shows (cards that are only shown are dismissed by it as well).  It is the call to write
+	 * for choosing none, since FreepsChooseCardBPFromSelection() with no card is ambiguous between its two overloads
+	 * and does not compile.  It fails at a choice of actions or an optional trigger, a number, an assignment, a
+	 * choice where at least one card must be chosen, and with nothing pending; and where it fails nothing is
+	 * answered.  That is where a test finds itself when it declines once too often: the same empty answer used to
+	 * pass the phase or decline the trigger in silence.
 	 */
-	default void FreepsDeclineChoosing() { PlayerDecided(P1(), ""); }
+	default void FreepsDeclineChoosing() { DeclineChoosing(P1()); }
 	/**
-	 * Answers the Shadow player's pending decision with nothing: at a choice of cards whose minimum is 0 that
-	 * chooses no card, and it is the call to write for that, since ShadowChooseCardBPFromSelection() with no card
-	 * is ambiguous between its two overloads and does not compile.  It answers a showing of cards as readily.
-	 * The game refuses it where at least one card must be chosen.  It does not look at what is pending: at a choice
-	 * of actions the same empty answer is a pass (of a phase's actions, or of an optional trigger, which it
-	 * declines), so one call too many answers whatever comes next.  Unlike ShadowPass(), it fails when the
-	 * player is not being asked anything.
+	 * Causes the Shadow player to choose no card at a choice of cards whose minimum is 0, and fails, saying
+	 * what is being asked, at any other decision.  Either kind of choice will do: among cards where they lie, or
+	 * among cards the game shows (cards that are only shown are dismissed by it as well).  It is the call to write
+	 * for choosing none, since ShadowChooseCardBPFromSelection() with no card is ambiguous between its two overloads
+	 * and does not compile.  It fails at a choice of actions or an optional trigger, a number, an assignment, a
+	 * choice where at least one card must be chosen, and with nothing pending; and where it fails nothing is
+	 * answered.  That is where a test finds itself when it declines once too often: the same empty answer used to
+	 * pass the phase or decline the trigger in silence.
 	 */
-	default void ShadowDeclineChoosing() { PlayerDecided(P2(), ""); }
+	default void ShadowDeclineChoosing() { DeclineChoosing(P2()); }
+	// The empty answer chooses none only where cards are asked for and none need be chosen.
+	private void DeclineChoosing(String player) {
+		DecisionGuard.requiredChoiceThatMayBeDeclined(this, player, player + " was to decline choosing");
+		PlayerDecided(player, "");
+	}
 
 	default void FreepsDeclineSanctuaryHealing() {
 		PlayerDecided(P1(), "");

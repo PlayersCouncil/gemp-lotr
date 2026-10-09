@@ -89,8 +89,10 @@ included. Do not write one "to be safe". A card choice is refused like the rest 
 with 'Free Peoples Player was to choose <card>, but the decision in front of that player is not a choice of
 cards.  Free Peoples Player is being asked "Play Fellowship action or Pass", offering [...]'. That is where a
 test is when the game chose the one candidate by itself: delete the line (it used to pass the phase in silence,
-decline a trigger, or give the card's id as a number). `FreepsDeclineChoosing()` is still not checked: it
-answers whatever is pending with nothing. (The older, wordier `FreepsPassCurrentPhaseAction()` and
+decline a trigger, or give the card's id as a number). `FreepsDeclineChoosing()` and its twin are checked the
+same way since G-0034: they fail unless that player is being asked to choose cards and may choose none ('... was
+to decline choosing, but the decision in front of that player is not a choice of cards', or 'but at least 1 card
+must be chosen there'). A pass is `FreepsPass()`, a trigger declined `FreepsDeclineOptionalTrigger()`. (The older, wordier `FreepsPassCurrentPhaseAction()` and
 `ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
 git history may still show them.)
 
@@ -502,8 +504,8 @@ to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineC
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
 Where nothing in the zone can be chosen, the showing is the only decision ("... while retrieving cards", nothing
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
-answers a showing as readily as a choice and never complains, so one too few leaves "Choose cards from deck" pending
-and one too many answers whatever comes next: at "Play Fellowship action or Pass" it passes the phase.
+answers a showing as readily as a choice, so one too few leaves "Choose cards from deck" pending. One too many
+fails the test, saying what is being asked instead (G-0034; it used to pass the phase in silence): delete the line.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw

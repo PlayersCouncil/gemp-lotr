@@ -271,7 +271,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 
 Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will let you inspect the choices available and offer shortcuts for e.g. selecting a physical card which you have previously stored.
 
-- `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing` — Answers that player's pending decision with nothing: at a choice of cards whose minimum is 0 that chooses no card, and it is the call to write for that, since FreepsChooseCardBPFromSelection() with no card is ambiguous between its two overloads and does not compile.
+- `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing` — Causes that player to choose no card at a choice of cards whose minimum is 0, and fails, saying what is being asked, at any other decision.
 - `void FreepsDeclineSanctuaryHealing()`
 - `Boolean FreepsChoiceAvailable(String choice)  ·  ShadowChoiceAvailable` — Determines whether that player has any choices on the current decision whose description matches the provided search text.
 - `Boolean ChoiceAvailable(String player, String choice)` — Determines whether the given player has any choices on the current decision whose description matches the provided search text.

@@ -13,7 +13,8 @@ import java.util.Arrays;
  * the pending decision does not have each used to die of a NullPointerException somewhere below the call.  Each is
  * now a failed {@link TableBase#Verify}, whose message names the player, what was attempted, and what each player
  * is in fact being asked.  So is a choice of cards given as the answer to a decision that is no choice of cards,
- * which the game used to take for whatever such an answer means there: a pass, a number, an assignment of nobody.
+ * which the game used to take for whatever such an answer means there: a pass, a number, an assignment of nobody;
+ * and so is declining to choose where the game is not asking for cards, or is asking for at least one.
  *
  * Package-private and not part of the table: nothing here becomes a method of VirtualTable or ScenarioTable.
  */
@@ -75,6 +76,24 @@ final class DecisionGuard {
 			table.Verify(false, attempted + ", but " + why + "  " + askedOf(table, player) + othersAsked(table, player));
 		}
 		return decision;
+	}
+
+	/**
+	 * Fails unless the given player is being asked to choose cards, in either way, and may choose none (the least
+	 * number the decision takes is 0), saying what each player is in fact being asked.  The empty answer that
+	 * chooses no card means something else at every other decision: a pass at a choice of actions, a trigger
+	 * declined, nobody assigned.  Cards that are only shown are a choice of none of them, and pass.
+	 * @param attempted What was being done, as a clause that names the player: "P1 was to decline choosing".
+	 */
+	static void requiredChoiceThatMayBeDeclined(TableBase table, String player, String attempted) {
+		AwaitingDecision decision = requiredCardChoice(table, player, attempted,
+				AwaitingDecisionType.CARD_SELECTION, AwaitingDecisionType.ARBITRARY_CARDS);
+		String[] min = decision.getDecisionParameters().get("min");
+		int least = min == null ? 0 : Integer.parseInt(min[0]);
+		if(least > 0) {
+			table.Verify(false, attempted + ", but at least " + least + (least == 1 ? " card" : " cards")
+					+ " must be chosen there.  " + askedOf(table, player) + othersAsked(table, player));
+		}
 	}
 
 	/** The full names of the given cards, for a failure message; "no card" if none is given. */
