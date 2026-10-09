@@ -283,6 +283,8 @@ C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally who
 
 The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
 be shown at all, not for one that is awkward to arrange. A `no` line's reason may run on to the lines below it.
+Where the reason, or a line in Notes, is that no printed card makes the board, it names the search of the
+`gametext:` lines that found none, made for the shape of words wanted ("wound a companion") and not for one card.
 The check is then left out of the clause's brackets: a clause that lists a check and also has a `no` line for it
 is refused.
 A claim line ends at the test's name, and only claim, `no` and `waits` lines stand below one: the conformance

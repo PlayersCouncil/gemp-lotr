@@ -56,6 +56,13 @@ assignment decision of his own, whoever else is assigned, the Ring-bearer includ
 comes to face two: `ShadowAssignToMinions(companion, secondMinion)` after the Free Peoples player's assignment.
 `ShadowDeclineAssignments()` passes that decision; with no minion left over he is not asked.
 
+**`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
+skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought
+(`IsCharSkirmishing` is true of them), while the definition word `assignedToSkirmish` counts them until the
+skirmish phase ends, which is after its win and lose triggers have been carried out (CR 4.2 "skirmish
+phase(s)"). A test of "assigned to a skirmish" at a win or lose trigger rests on that rule and reads the
+card's effect, not `IsCharAssigned` (Lorien Protector 63_20, with two Orkish Skirmishers 18_90).
+
 **A check on a player who is not being asked anything answers false.** The availability and card-choice checks
 return false, `FreepsGetAvailableActions()` returns an empty list, and the raw readers of a decision's
 parameters return null, when that player has no pending decision. The methods that *answer* a decision still
@@ -166,7 +173,11 @@ alone in hand the ability is not offered (Bilbo 59_49).
 
 **A response is offered once per use.** After a response cancels an ability or an event, no response to it is
 offered again (Q-0043), so a pass or decline written to answer a second offer answers the next decision instead.
-Optional triggers are still offered.
+Optional triggers are still offered. A Response special ability with a cost is the other way about: once used,
+it is offered again for the same play for as long as its cost can still be paid (CR 4.2 "response": "You may
+respond more than once to the same situation"; Q-0034), though a second use gains nothing. That second "Optional
+responses" decision stands in front of whatever comes next: decline it, or the played event stays in the void
+and a reading written for after the play reads VOID (Shrouded Elf 63_23).
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
@@ -189,6 +200,12 @@ prompt says. Where one card offers two optional actions in the same decision (Et
 and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
 `FreepsUseCardAction(card, text)` does for phase actions.
+
+**A yes/no in the middle of a trigger is not an optional trigger.** A definition's `Optional` effect for a named
+player ("the first Shadow player may discard 2 cards from hand to add a burden" inside a site's required trigger,
+Courtyard Parapet 63_188) asks that player a yes/no in the definition's own `text`. `ShadowHasOptionalTriggerAvailable()`
+is false there: read it with `ShadowDecisionAvailable("<words of the text>")` and answer it with `ShadowChooseYes()` /
+`ShadowChooseNo()` (and the Free Peoples twins). It is not asked when its cost cannot be paid.
 
 **An ability with wording of its own, and a card with several.** `FreepsActionAvailable(card)` sees an ability
 whose definition gives it its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as
@@ -225,7 +242,8 @@ listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contai
 entry with no wording.
 A trigger added for the skirmish ("if that minion is overwhelmed, ...") raises the decision even when its effect
 will come to nothing (Cirdan 60_8 with one [elven] event: half, rounded down, is none): `FreepsResolveRuleFirst()`
-is still needed, and nothing is asked after it.
+is still needed, and nothing is asked after it. So does a card's standing required "each time X wins a
+skirmish" with nothing to act on (Focus 65_15 with nobody to heal, before F-0289 made it optional).
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
@@ -235,7 +253,9 @@ text is carried out only once it is answered: as a helper to be killed in anothe
 **A response window can come before the target.** Where the Free Peoples player holds a response event that
 can answer an event being played, the game may put an "Optional responses" decision to him before the played
 event's target is chosen, and an answer written for the target choice then answers the response window, with no
-error; the test fails some lines later. Read what is pending before answering (seen on 51_115).
+error; the test fails some lines later. Read what is pending before answering (seen on 51_115). It is the order
+for every response to a play, not only a response event in hand: a Response ability on a card in play (Shrouded
+Elf 63_23) is asked before the played event's effect chooses anything (CR 4.2 "playing a card", steps 5 and 6).
 
 ## Getting to the moment: set-up, the skippers and turns
 
@@ -574,7 +594,10 @@ The turn-skippers cannot walk such a path. For a high site number or a later reg
 7-9 region 3), where the card's text names no block's sites, put the Shadows-block site on a Fellowship-block
 path instead: a site map of `FellowshipSites` with the card in place of site n, `SkipToSite(n - 1)`,
 `MoveCardToAdventurePath(scn.GetShadowSite("siten"))`, `FreepsPass()`, and the fellowship moves to it
-(`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`).
+(`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`). `MoveCardToAdventurePath` makes the card the
+site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
+test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
+(`Card_13_188_ErrataTests`: sites 4 to 7).
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The

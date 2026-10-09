@@ -311,7 +311,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034]
-- "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280]
+- "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041]
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009; Q-0165, open) [Q-0167]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
@@ -355,6 +355,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Make each ... until" on an ability or event is a snapshot (Q-0011, F-0144)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
+- "Place that event on top of (beneath) your draw deck" on a card that answers the play of an event (F-0287) [Q-0034]
 
 ## Hinder, the support area, sites, Maps and the Ring
 
