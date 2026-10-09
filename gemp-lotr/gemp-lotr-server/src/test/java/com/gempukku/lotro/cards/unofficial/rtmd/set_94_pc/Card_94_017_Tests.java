@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -52,7 +51,7 @@ public class Card_94_017_Tests
 	}
 
 	@Test
-	public void FiresAtEndOfTurnOneButFizzlesSinceNoSiteIsYetAvailable() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NothingIsAskedAtEndOfTurnOneSinceNoSiteIsYetAvailable() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
 		scn.StartGame();
@@ -62,11 +61,10 @@ public class Card_94_017_Tests
 		int shadowSites = scn.GetShadowControlledSiteCount();
 		scn.FreepsChooseToStay();
 
-		// The mandatory trigger still fires and chooses Shadow as the opponent, but there is no
-		// controllable site yet (Shadow hasn't had a Fellowship turn of its own) - cost/choice
-		// happens, effect fizzles (Effect Fizzle: Costs Gate, Effects Attempt).
-		assertTrue(scn.ShadowDecisionAvailable("take control of a site"));
-		scn.ShadowChooseYes();
+		// The owner's turn has ended, but there is no controllable site yet (Shadow hasn't had a
+		// Fellowship turn of its own): an offer that could do nothing is not made, to either player.
+		assertFalse(scn.ShadowDecisionAvailable("take control of a site"));
+		assertFalse(scn.FreepsDecisionAvailable("take control of a site"));
 
 		assertEquals(freepsSites, scn.GetFreepsControlledSiteCount());
 		assertEquals(shadowSites, scn.GetShadowControlledSiteCount());
@@ -81,11 +79,11 @@ public class Card_94_017_Tests
 		scn.StartGame();
 		int shadowSites = scn.GetShadowControlledSiteCount();
 
-		// Turn 1 (Freeps/P1 is Fellowship-active): decline the extra move, decline the fizzled offer.
+		// Turn 1 (Freeps/P1 is Fellowship-active): decline the extra move. No site can be controlled
+		// yet, so nothing is offered at its end.
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToStay();
-		assertTrue(scn.ShadowDecisionAvailable("take control of a site"));
-		scn.ShadowChooseNo();
+		assertFalse(scn.ShadowDecisionAvailable("take control of a site"));
 
 		// Turn 2: roles rotate, Shadow/P2 is now Fellowship-active. Drive it manually by player ID
 		// (not by the Freeps/Shadow phase-role helpers, which name the physical player, not the
@@ -119,7 +117,6 @@ public class Card_94_017_Tests
 	}
 
 	@Test
-	@Ignore("F-0327: with the modifier in player 2's seat, player 1 is asked to take control of a site before the first turn begins")
 	public void NothingFiresAtEndOfTheOwnersShadowTurnSinceThatIsNotOneOfTheirTurns() throws DecisionResultInvalidException, CardNotFoundException {
 		// "Each of your turns" - the mod is owned by the physical Shadow-labeled player here, so
 		// their own turn is the one where they are playing the Free Peoples role, not their Shadow
@@ -145,7 +142,6 @@ public class Card_94_017_Tests
 	}
 
 	@Test
-	@Ignore("Q-0195: is the opponent asked at all while no site can be controlled? As built, and as the first test above has it, he is asked and his yes does nothing")
 	public void TheOpponentIsNotAskedWhileNoSiteCanBeControlled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
@@ -165,11 +161,10 @@ public class Card_94_017_Tests
 
 		scn.StartGame();
 
-		// Turn 1, the owner's: player 2's marker is still on site 1 and there is no site to take.
-		// As the game stands he is asked all the same.
+		// Turn 1, the owner's: player 2's marker is still on site 1 and there is no site to take,
+		// so nothing is asked.
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToStay();
-		scn.ShadowChooseNo();
 
 		// Turn 2, player 2's.
 		scn.SkipToMovementDecision();
@@ -210,7 +205,6 @@ public class Card_94_017_Tests
 	}
 
 	@Test
-	@Ignore("F-0327: with the modifier in player 2's seat, player 1 is asked to take control of a site before the first turn begins")
 	public void AtTheEndOfEachTurnOfAnOwnerInPlayer2sSeatPlayer1MayTakeTheNextSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShadowScenario();
 

@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -238,26 +237,6 @@ public class Card_92_009_Tests
 
 		scn.FreepsPlayCard(eomer);
 		assertInZone(Zone.FREE_CHARACTERS, eomer);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0183: 'companions cannot be played' has no 'your': read literally, nobody plays a companion while the owner's fellowship is at site 6 or higher")
-	public void TheOtherPlayerCannotPlayCompanionsEither_WhileTheOwnersFellowshipIsAtSite6OrHigher() throws DecisionResultInvalidException, CardNotFoundException {
-		// The same board as OpponentNotAffected, read the other way: Shadow has the modifier and both
-		// fellowships stand at site 6.
-		var scn = GetShadowScenario();
-
-		var eomer = scn.GetFreepsCard("eomer");
-
-		scn.MoveCardsToHand(eomer);
-
-		scn.StartGame();
-		scn.SkipToSite(6);
-
-		assertEquals(6, scn.GetCurrentSiteNumber());
-		assertFalse(scn.FreepsPlayAvailable(eomer));
-		assertInZone(Zone.HAND, eomer);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

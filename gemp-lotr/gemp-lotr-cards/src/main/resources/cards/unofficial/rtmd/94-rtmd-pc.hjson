@@ -621,6 +621,9 @@
 		effects: {
 			type: Activated
 			phase: archery
+			requires: {
+				type: IsOwner
+			}
 			effect: [
 				{
 					type: ModifyStrength
@@ -827,9 +830,14 @@
 			trigger: {
 				type: EndOfTurn
 			}
-			requires: {
-				type: OwnerIsFreeps
-			}
+			requires: [
+				{
+					type: OwnerIsFreeps
+				}
+				{
+					type: SiteAvailableToControl
+				}
+			]
 			effect: [
 				{
 					type: ChooseOpponent

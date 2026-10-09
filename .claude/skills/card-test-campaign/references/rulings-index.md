@@ -337,7 +337,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Participates in archery fire and skirmishes" against "may not participate" (Q-0150, F-0281) [F-0283]
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
-- "While ..., the move limit is +1 (-1)" with no "for this turn" (Q-0179, open) [Q-0122, F-0317]
+- "While ..., the move limit is +1 (-1)" with no "for this turn" lasts the turn (Q-0179: B; F-0333, F-0334) [Q-0122, F-0317]
 - "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
 
 ## What is offered and what is asked
@@ -361,7 +361,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
-- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0188, Q-0194]
+- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0188, Q-0183]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
 
@@ -380,7 +380,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029, Q-0163]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
-- "Discard a <kind> from hand to take a <kind> into hand from the discard pile" and the card just discarded (Q-0192, open) [Q-0034]
+- "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
@@ -424,6 +424,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Reveals, draw decks and shuffles
 
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
+- A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025]
 - revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown
 - A search of another player's draw deck writes its own shuffle (F-0298, Grond 68_82 and 18_82) [Q-0172]

@@ -66,7 +66,7 @@
 					select: choose(your)
 					count: 1
 					shuffle: true
-					reveal: true
+					reveal: false
 					showAll: false
 				}
 			}
@@ -314,16 +314,36 @@
 		intensity: 3
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyMoveLimit
-					amount: -1
-					requires: {
-						type: CanSpot
-						filter: your,companion
-						count: 5
-					}
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: PerTurnLimit
+							limit: 1
+						}
+						{
+							type: CanSpot
+							filter: your,companion
+							count: 5
+						}
+					]
 				}
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyMoveLimit
+							amount: -1
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: While you can spot 5 or more companions, your move limit is -1.
@@ -488,11 +508,15 @@
 		intensity: -2
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyMoveLimit
-					amount: 1
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
 					requires: [
+						{
+							type: PerTurnLimit
+							limit: 1
+						}
 						{
 							type: OwnerIsFreeps
 						}
@@ -510,6 +534,20 @@
 						}
 					]
 				}
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyMoveLimit
+							amount: 1
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: While you can spot a Dwarf companion, an Elf companion, and Gandalf, your move limit is +1.

@@ -28,6 +28,7 @@ public class Card_91_008_Tests
 					put("slayer", "3_93");      // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
 					put("gandalf", "1_364");    // Gandalf, The Grey Wizard: a companion for Durin's Secret to spot; a fellowship ability used only on purpose
 					put("secret", "1_71");      // Durin's Secret: Fellowship event, spot Gandalf, a Dwarf and an Elf to make the move limit for this turn +1
+					put("saved", "8_20");       // Saved From the Fire: Fellowship event, spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards of his culture from the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -126,7 +127,7 @@ public class Card_91_008_Tests
 	}
 
 	@Test
-	public void WhenAFifthCompanionDiesTheMoveLimitIsTwoAgainAndTheFellowshipMayMoveAgain() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenAFifthCompanionDiesTheMoveLimitIsStillOneAndTheTurnEndsAfterOneMove() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
 		var guard = scn.GetFreepsCard("guard");
@@ -147,12 +148,66 @@ public class Card_91_008_Tests
 		scn.ShadowUseCardAction(slayer);
 		scn.ShadowChooseCard(guard);
 		assertInZone(Zone.DEAD, guard);
-		// Four companions are left: the "while" no longer holds
-		assertEquals(2, scn.GetMoveLimit());
+		// Four companions are left, and the limit is still 1: a change to the move limit holds for the whole turn
+		assertEquals(1, scn.GetMoveLimit());
 
 		scn.FreepsPass();
 		scn.ShadowPass();
+		// At the move limit the turn ends without the question of another move.
+		assertFalse(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		// The other player's turn: the penalty went with the turn it was given in
+		assertEquals(2, scn.GetMoveLimit());
+	}
+
+	@Test
+	public void ThePenaltyHoldsThroughASecondMoveAfterTheFifthCompanionHasGoneAndEndsWithTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+		var secret = scn.GetFreepsCard("secret");
+		var saved = scn.GetFreepsCard("saved");
+		// Frodo + 4 = 5 companions; Gandalf, Gimli and Legolas are the three Durin's Secret needs
+		scn.MoveCompanionsToTable("gimli", "legolas", "gandalf", "guard");
+		scn.MoveCardsToHand(secret, saved);
+
+		scn.StartGame();
+
+		assertEquals(1, scn.GetMoveLimit()); // 2 - 1
+		scn.FreepsPlayCard(secret);
+		assertEquals(2, scn.GetMoveLimit()); // 2 + 1 - 1
+
+		// The fifth companion is placed in the dead pile in the fellowship phase, the first of the turn
+		scn.FreepsPlayCard(saved);
+		scn.FreepsChooseCard(guard);
+		// The search of the deck: shown, and no [dwarven] card is in it to take.
+		scn.FreepsDismissRevealedCards();
+		assertInZone(Zone.DEAD, guard);
+		// Four companions are left, and the limit is still 2
+		assertEquals(2, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// One move made of two: the fellowship is asked about another, and makes it
+		scn.SkipToMovementDecision();
+		assertEquals(1, scn.GetMoveCount());
 		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		scn.FreepsChooseToMove();
+
+		// The Shadow phase after the second move: the penalty is still there
+		assertEquals(2, scn.GetMoveCount());
+		assertEquals(2, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Two moves of two: the turn ends without the question of a third
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+		scn.ShadowPass();
+		// The Shadow player drew at the reconcile before the second move, so he is asked to reconcile again
+		scn.ShadowDeclineReconciliation();
+		assertFalse(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		// The other player's turn: 2 again
+		assertEquals(2, scn.GetMoveLimit());
 	}
 
 	@Test
@@ -203,6 +258,27 @@ public class Card_91_008_Tests
 		scn.FreepsPlayCard(secret);
 		assertInDiscard(secret);
 		assertEquals(2, scn.GetMoveLimit()); // 2 + 1 - 1
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ThePenaltyIsGivenAgainOnTheOwnersNextTurnAndNotOnTheOtherPlayersTurnBetween() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		// Frodo + 4 = 5 companions
+		scn.MoveCompanionsToTable("gimli", "aragorn", "legolas", "boromir");
+
+		scn.StartGame();
+		assertEquals(1, scn.GetMoveLimit());
+
+		// Player 2's turn: the five are not his, and the penalty of the turn before has ended with it
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(2, scn.GetMoveLimit());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+
+		// The owner's next turn: the five are still there, and the limit is 1 again
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(1, scn.GetMoveLimit());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

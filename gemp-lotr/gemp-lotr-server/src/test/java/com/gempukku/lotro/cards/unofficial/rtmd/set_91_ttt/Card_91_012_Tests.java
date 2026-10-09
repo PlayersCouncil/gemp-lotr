@@ -31,6 +31,7 @@ public class Card_91_012_Tests
 					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is not Gandalf; stronger only beside 3 Ents
 					put("guard", "1_7");        // Dwarf Guard: a Dwarf companion of vitality 2; to play, spot a Dwarf
 					put("slayer", "3_93");      // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
+					put("saved", "8_20");       // Saved From the Fire: Fellowship event, spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards of his culture from the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -181,10 +182,16 @@ public class Card_91_012_Tests
 		assertInZone(Zone.FREE_CHARACTERS, gandalf);
 		assertEquals(3, scn.GetMoveLimit());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Given in the fellowship phase, it is the turn's and not that phase's: read again after the move
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(1, scn.GetMoveCount());
+		assertEquals(3, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void WhenTheDwarfDiesTheMoveLimitIsTwoAgain() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenTheDwarfDiesTheMoveLimitIsStillThreeAndTheFellowshipMayMoveAgain() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
 		var guard = scn.GetFreepsCard("guard");
@@ -205,9 +212,78 @@ public class Card_91_012_Tests
 		scn.ShadowUseCardAction(slayer);
 		scn.ShadowChooseCard(guard);
 		assertInZone(Zone.DEAD, guard);
-		// No Dwarf companion is left: the "while" no longer holds
+		// No Dwarf companion is left, and the limit is still 3: a change to the move limit holds for the whole turn
+		assertEquals(3, scn.GetMoveLimit());
+
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+	}
+
+	@Test
+	public void TheBonusHoldsThroughASecondMoveAfterTheDwarfHasGoneAndEndsWithTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var guard = scn.GetFreepsCard("guard");
+		var saved = scn.GetFreepsCard("saved");
+		// The Dwarf Guard is the only Dwarf companion
+		scn.MoveCompanionsToTable("guard", "legolas", "gandalf");
+		scn.MoveCardsToHand(saved);
+
+		scn.StartGame();
+
+		assertEquals(3, scn.GetMoveLimit());
+
+		// The Dwarf is placed in the dead pile in the fellowship phase, the first of the turn
+		scn.FreepsPlayCard(saved);
+		scn.FreepsChooseCard(guard);
+		// The search of the deck: shown first, and nothing taken.
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsDeclineChoosing();
+		assertInZone(Zone.DEAD, guard);
+		// No Dwarf companion is left, and the limit is still 3
+		assertEquals(3, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The second move
+		scn.SkipToMovementDecision();
+		assertEquals(1, scn.GetMoveCount());
+		scn.FreepsChooseToMove();
+
+		// The Shadow phase after it: the bonus is still there
+		assertEquals(2, scn.GetMoveCount());
+		assertEquals(3, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// So after two moves the fellowship is asked about a third
+		scn.SkipToMovementDecision();
+		assertEquals(3, scn.GetMoveLimit());
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		scn.FreepsChooseToStay();
+
+		// The other player's turn: 2 again
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 		assertEquals(2, scn.GetMoveLimit());
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheBonusIsGivenAgainOnTheOwnersNextTurnAndNotOnTheOtherPlayersTurnBetween() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		scn.MoveCompanionsToTable("gimli", "legolas", "gandalf");
+
+		scn.StartGame();
+		assertEquals(3, scn.GetMoveLimit());
+
+		// Player 2's turn: the three are not his, and the bonus of the turn before has ended with it
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(2, scn.GetMoveLimit());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+
+		// The owner's next turn: the three are still there, and the limit is 3 again and no more
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(3, scn.GetMoveLimit());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

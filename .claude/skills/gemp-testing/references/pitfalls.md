@@ -314,8 +314,10 @@ exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool tha
 **The engine sends an end of turn once before turn 1 (F-0327, open).** After the mulligans `MulliganProcess` hands on
 to `EndOfTurnGameProcess`, and at that moment the player who will go second counts as the Free Peoples player. A
 modifier in player 2's seat with an `EndOfTurn` trigger under `OwnerIsFreeps` goes off there: `StartGame()` returns
-with player 1 holding its question in BETWEEN_TURNS, and the next skipper fails on it (94_17). Read that nothing is
+with player 1 holding its question in BETWEEN_TURNS, and the next skipper fails on it. Read that nothing is
 asked straight after `StartGame()`; never answer it with an `if`, which is what hid the fault in the old test.
+Race Text 94_17, where it was found, no longer shows it: its trigger now also requires `SiteAvailableToControl`
+(Q-0195), and no site can be controlled before the first turn. The engine still sends that end of turn.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the

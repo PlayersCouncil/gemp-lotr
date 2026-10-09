@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -259,7 +258,6 @@ public class Card_91_002_Tests
 	}
 
 	@Test
-	@Ignore("Q-0176: 'any card', with no 'reveal': is the card taken named to the other player in the game log, as a card taken by its type is?")
 	public void TheCardTakenIsNotMadeKnownToTheOtherPlayer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 

@@ -8,7 +8,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -156,12 +155,11 @@ public class Card_94_013_Tests
 	}
 
 	@Test
-	public void ShadowsActivationOfTheSameMetaSiteAffectsOnlyShadowsOwnArchersNotFreepsSince() throws DecisionResultInvalidException, CardNotFoundException {
-		// A MetaSite Activated ability during a back-and-forth phase (archery) is offered to
-		// whichever player is currently acting, regardless of which physical player owns the mod -
-		// "your archers" scopes to the activator, exactly as with a real Site. This is the Shadow
-		// scenario for this "your" card: it must confirm the Shadow player's own activation cannot
-		// reach into the Free Peoples player's archers.
+	public void TheShadowPlayerIsNotOfferedTheFreepsOwnersActionAndTheOwnersArcherIsUntouched() throws DecisionResultInvalidException, CardNotFoundException {
+		// "Your archers": the action is the modifier's owner's alone.  A MetaSite's Activated ability
+		// in a back-and-forth phase (archery) would otherwise be offered to whichever player is acting.
+		// Here the Free Peoples player owns it, and the Shadow player, whose turn to act it is, is not
+		// offered it; the owner's archer is as he was.
 		var scn = GetFreepsScenario();
 		var mod = scn.GetFreepsCard("mod");
 		var legolas = scn.GetFreepsCard("legolas");
@@ -175,20 +173,17 @@ public class Card_94_013_Tests
 		int legolasBase = scn.GetStrength(legolas);
 		assertEquals(6, legolasBase);
 
-		// Freeps passes their archery action first (back-and-forth), then Shadow can act.
+		// Freeps passes their archery action first (back-and-forth), then Shadow is asked.
+		assertTrue(scn.FreepsActionAvailable(mod));
 		scn.FreepsPass();
-		assertTrue(scn.ShadowActionAvailable(mod));
-		scn.ShadowUseCardAction(mod);
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(mod));
 
-		// "Your archers" resolves to the activating player's own archers - Shadow has none (the
-		// troop is not an archer), so this fizzles, and Legolas (Freeps' archer) is unaffected.
 		assertEquals(legolasBase, scn.GetStrength(legolas));
 		assertEquals(1, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0194: is the Archery action of \"your archers\" the modifier's owner's alone? As built, and as the test above has it, either player may use it for his own archers")
 	public void TheOtherPlayerIsNotOfferedTheOwnersArcheryAction() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 		var mod = scn.GetFreepsCard("mod");

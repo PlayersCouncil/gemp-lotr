@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -138,43 +137,6 @@ public class Card_94_012_Tests
 		assertInHand(runner, fear, aragorn);
 		assertEquals(hand, scn.GetShadowHandCount());
 		assertEquals(discard, scn.GetShadowDiscardCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0192: the text has no \"another\" and plays nothing, so the minion just discarded for the cost may be the one taken back; the game withholds it (not(memory(discardedMinion))), by extension of the They Are Coming ruling")
-	public void TheMinionJustDiscardedForTheCostMayBeTheOneTakenBack() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetShadowScenario();
-		var mod = scn.GetShadowCard("mod");
-		var backstabber = scn.GetShadowCard("backstabber");
-		var runner = scn.GetShadowCard("runner");
-		var troop = scn.GetShadowCard("troop");
-		var runner2 = scn.GetShadowCard("runner2");
-
-		scn.MoveCardsToHand(backstabber, runner);
-		scn.MoveCardsToDiscard(troop, runner2);
-		scn.StartGame();
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(2, scn.GetShadowHandCount());
-		assertEquals(2, scn.GetShadowDiscardCount());
-
-		assertTrue(scn.ShadowActionAvailable(mod));
-		scn.ShadowUseCardAction(mod);
-		scn.ShadowChooseCard(backstabber);
-		assertInDiscard(backstabber);
-
-		// The Backstabber is in the discard pile when the effect is carried out, beside the Troop and the second Runner.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(troop));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(runner2));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(backstabber));
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(backstabber);
-
-		assertInHand(backstabber, runner);
-		assertInDiscard(troop, runner2);
-		assertEquals(2, scn.GetShadowHandCount());
-		assertEquals(2, scn.GetShadowDiscardCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
