@@ -46,6 +46,21 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Mordor Fiend 60_91 loses its "you may" (Q-0165)
 - Real cards and real mechanics before invented ones (Q-0166: A)
 - Kept as built: Q-0151, Q-0153, Q-0154, Q-0156, Q-0157 ("Keep both"), and Q-0155 ("I'm okay with keeping I think but the order really doesn't matter ... [F-0283]
+- Her third notes of 2026-10-09 (the whole of them: `orchestrator/answers/2026-10-09-c.md`)
+- A meta-site that says "you" or "your" anywhere binds its owner alone (Q-0183, Race Text 92_9; Q-0188)
+- A player with a choice is not forced (Q-0171, Deceit 68_29)
+- "Cannot be replaced" holds wherever the site lies (Q-0173, Doorway to Doom 68_134: B)
+- A card taken from a draw deck with no "reveal" in the text is not named (Q-0176, Race Text 91_2: A)
+- A change to the move limit lasts the turn (Q-0179, Race Text 91_8 and 91_12: B)
+- "The fellowship moves" is read at the site left (Q-0184, Race Text 92_18: A)
+- "Sites from any block" lifts the block rule and nothing else (Q-0185, Race Text 92_19: A)
+- Burdens are on the Ring-bearer whatever his state (Q-0186, Race Text 92_25: A) [Q-0103]
+- Counted by the turn, not across turns (Q-0187, Race Text 92_35: A)
+- A starting fellowship is Free Peoples cards (Q-0189, Race Text 94_3: A)
+- Who holds a title is data; the name check gets a mechanic test (Q-0190, Race Text 94_5: B)
+- A card discarded to pay for a retrieval is not the card retrieved (Q-0192, Race Text 94_12: A)
+- Card by card: Q-0167, Demoralized 61_114: B, asked each time ("I suspect it's a victim of the mass edit"). Q-0168, Mountain-troll 65_112: B, five ... [Q-0169, Q-0172, Q-0177, Q-0180, Q-0181, Q-0182, Q-0191, Q-0170, Q-0175]
+- Every finding below F-0308 that was fixed without her word is approved
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata

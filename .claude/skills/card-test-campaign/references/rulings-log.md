@@ -187,6 +187,71 @@ a burden" is shown with a hindered Ring-bearer; Test Seal is the mechanics' card
 think but the order really doesn't matter unless a specific counterexample is brought to my attention").
 **F-0283: A** (Dunlending Warrior 4_18 and Ravager 4_15 are withheld when they can assign the minion to nobody). *[2026-10-09]*
 
+**Her third notes of 2026-10-09 (the whole of them: `orchestrator/answers/2026-10-09-c.md`).** By number:
+
+**A meta-site that says "you" or "your" anywhere binds its owner alone (Q-0183, Race Text 92_9; Q-0188).** "The
+rule we've been following is that any meta-site with "you" or "your" anywhere in the text causes the entire card to
+only affect the owner (modulo context like "your opponent" etc)." A sentence of such a card with no "your" in it is
+still the owner's alone; it is not a question. *[2026-10-09, later]*
+
+**A player with a choice is not forced (Q-0171, Deceit 68_29).** "There are a couple official card rulings for Old
+Noakes and Courteous Halfling which are relevant: if the player has a choice, they're not forced and therefore don't
+get the benefit of protection." When a Free Peoples card has the Shadow player discard his own card, the Shadow
+player is the one discarding. *[2026-10-09, later]*
+
+**"Cannot be replaced" holds wherever the site lies (Q-0173, Doorway to Doom 68_134: B).** "The Mount Doom legacy
+ruling was meant to establish a precedent on site replacement, which this errata follows." *[2026-10-09, later]*
+
+**A card taken from a draw deck with no "reveal" in the text is not named (Q-0176, Race Text 91_2: A).** "Yeah
+there's a rule about this, A is the correct way." The log says a card was taken and no more. *[2026-10-09, later]*
+
+**A change to the move limit lasts the turn (Q-0179, Race Text 91_8 and 91_12: B).** "These ones should follow the
+basic rules around move limits, which is that they are permanent." "While ..., your move limit is -1" is given
+once and holds for the rest of the turn, as Decipher's cards are built (1_260). *[2026-10-09, later]*
+
+**"The fellowship moves" is read at the site left (Q-0184, Race Text 92_18: A).** "I think A is the correct reading
+as per that movement breakdown you cited. However, if the engine is doing that in the wrong order, that needs
+adjusting, rather than switching the trigger to "moves from"." The fix is in the order the engine raises the move,
+not in the card. *[2026-10-09, later]*
+
+**"Sites from any block" lifts the block rule and nothing else (Q-0185, Race Text 92_19: A).** "I think we can
+safely ignore the X-list issue, as nobody is going to run RTMD on anything but a common format, and none of those
+have banned sites. So I think the errata question is the only one that can crop up, as we do run PC-Movie RTMD. I
+think A is preferred. As for the hobbit sites, they don't need brought in I think." *[2026-10-09, later]*
+
+**Burdens are on the Ring-bearer whatever his state (Q-0186, Race Text 92_25: A).** "Burdens can't go on anything
+*but* the Ring-bearer, so I call this a case of redundant verbiage. A. The Frodo case was one where there could be
+someone else they are on, such as Sam or Galadriel or whoever, but there is no alternate here." So Q-0103 ("on
+Frodo") is about a NAMED bearer; "on the Ring-bearer" counts every burden. *[2026-10-09, later]*
+
+**Counted by the turn, not across turns (Q-0187, Race Text 92_35: A).** "I would do by the turn. Tracking stuff
+across multiple turns is a negative play experience that I try to avoid." *[2026-10-09, later]*
+
+**A starting fellowship is Free Peoples cards (Q-0189, Race Text 94_3: A).** "No playing minions during the
+starting fellowship :)" *[2026-10-09, later]*
+
+**Who holds a title is data; the name check gets a mechanic test (Q-0190, Race Text 94_5: B).** "What's more
+important is that the player-name-checking code has card-agnostic tests somewhere. Given that these will change
+over time if past world champions reveal their account names (or if someone *finally* beats basmelis so he doesn't
+win a fourth time in a row), let's do B, but with the mechanic test coverage." *[2026-10-09, later]*
+
+**A card discarded to pay for a retrieval is not the card retrieved (Q-0192, Race Text 94_12: A).** "The ruling
+for They Are Coming applies here: discarding a card from hand to retrieve a card is not allowed to pull the card
+just discarded." *[2026-10-09, later]*
+
+**Card by card:** Q-0167, Demoralized 61_114: B, asked each time ("I suspect it's a victim of the mass edit").
+Q-0168, Mountain-troll 65_112: B, five OTHER [orc] minions ("edit the text to add "other", I will adjust the
+errata"). Q-0169, A New Light 67_15: A, "If you do" wants both minions returned ("that's an oversight"). Q-0172,
+Grond 68_82: A, exactly 2 ("I concur with your reasoning"). Q-0177, Race Text 91_4: A ("hrrm. I think A").
+Q-0180, Deepest Delvings 101_2: the sheet's revision 1 was never released ("The current one is too braindead and
+probably should have been altered, but we didn't muster up the willpower to do it"). Q-0181, Rath Dínen 100_1: the
+arrow is Right ("let's make it match Tomb I suppose"). Q-0182, Race Text 92_1: A, the Ring-bearer is one of the six
+("the 3 is an illustrative demonstration and not a set point"). Q-0191, Race Text 94_10: A. Kept: Q-0170 ("I
+question how often this will come up, but I think it's fine to keep"), Q-0175. *[2026-10-09, later]*
+
+**Every finding below F-0308 that was fixed without her word is approved** ("go ahead and also approve all the F-
+entries lower than F-0308 which were marked as fixed without word"): 62 findings, now `fixed-approved`. *[2026-10-09, later]*
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.
