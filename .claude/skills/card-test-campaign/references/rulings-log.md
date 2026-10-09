@@ -1144,7 +1144,7 @@ Nazgûl he is skirmishing strength –X, where X is the twilight cost of the car
 "I would consider this either a requirement or a cost. Either way, it has to happen for the rest to occur, so an
 empty deck should disallow the ability." So where what follows reads the card revealed, the reveal must be able to
 happen for the ability to be offered or the event played, whether or not a "to" stands after it. This is not the
-optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. *[2026-10-08, night]*
+optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. Built in engine pass 18 as F-0284. *[2026-10-08, night]*
 
 **Q-0149, unordered card collections in other effects: left alone (B).** After Q-0142 put "each / every" in card
 id order, a dozen more effect classes were found to keep cards in sets with no order (kills, shuffles into a
@@ -1163,4 +1163,4 @@ wounds, assignment and skirmishes alike. *[2026-10-08, night]*
 **F-0278, Gwaihir 101_15, and the Palantír's prompt.** On the yes/no before Gwaihir's 0-to-2 choice: "yes, go
 ahead and skip the prompt and just do the 0-1 choices." On the wording written for The Palantír of Orthanc 53_67
 ("Choose any number of cards from your hand to place on top of your draw deck (you may choose none). Your hand will
-then be revealed."): "looks good". *[2026-10-08, night]*
+then be revealed."): "looks good". Gwaihir built in engine pass 18 (F-0278, with F-0285). *[2026-10-08, night]*

@@ -274,10 +274,10 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0145, cardInfo is not a source of truth, and is kept true
 - Q-0146, Bill Ferny 52_75: A. "A sounds good." The erratum is built as the original 2_75 is (CantBeAssignedToSkirmish for the Free Peoples player), so ... [F-0276]
 - Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it bars them all. "Well, if we follow ... [F-0243, F-0275]
-- Q-0148, Glorfindel, Revealed in Wrath 59_16 and 9_16: A. A reveal the rest of an ability hangs on is a requirement or a cost. "Skirmish: Reveal the ... [Q-0104, Q-0029]
+- Q-0148, Glorfindel, Revealed in Wrath 59_16 and 9_16: A. A reveal the rest of an ability hangs on is a requirement or a cost. "Skirmish: Reveal the ... [Q-0104, Q-0029, F-0284]
 - Q-0149, unordered card collections in other effects: left alone (B) [Q-0142, F-0268]
 - Q-0150, Streets of Edoras 4_340 against cards that have an ally take part: the bar wins (A) [Q-0011]
-- F-0278, Gwaihir 101_15, and the Palantír's prompt
+- F-0278, Gwaihir 101_15, and the Palantír's prompt [F-0285]
 
 # Settled shapes (shapes.md)
 
