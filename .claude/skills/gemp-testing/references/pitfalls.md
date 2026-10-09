@@ -325,6 +325,10 @@ test then rests on the Shadow player's). There `ShadowPass()` alone ends the ski
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
 A test that needs a maneuver phase needs a minion on the table.
+The maneuver, archery and assignment phases are each passed over when no active minion is in play
+(`ManeuverGameProcess`, `ArcheryGameProcess`, `AssignmentGameProcess`), so a trigger at the start of one of them
+that does something to "a minion" always has one: its `requires: CanSpot minion` cannot differ in play, and no
+`-` on a board with nothing to act on (Q-0034) is owed for it (Race Text 94_11).
 
 **Minions do not survive a turn.** `SkipToSite(n)` plays whole turns for both players and ends in player 1's
 fellowship phase at site n. Minions and anything attached to them are discarded on the way, so put Shadow cards
@@ -367,6 +371,10 @@ with the Free Peoples player's pass in the new phase already spent and the Shado
 and `FreepsAssignToMinions` then fails, saying that the Free Peoples player is not being asked anything and
 what the Shadow player is being asked. A trigger at the start of the target phase itself is left pending, as a
 test of it needs.
+The same pass is spent with no trigger at all where the test's own `FreepsPass()` inside a skirmish left the
+Shadow player holding the decision: `SkipToPhase(Phase.REGROUP)` then arrives with the Free Peoples player's
+first regroup decision already passed and the Shadow player asked "Play Regroup action or Pass", so the bookend
+is `AwaitingShadowRegroupPhaseActions()` (Race Text 94_11).
 `SkipToOtherPlayersTurn()` does not decline what it ends on: an OPTIONAL start-of-turn trigger of the incoming
 player is left pending when it returns (the phase reads BETWEEN_TURNS), for the test to take or decline
 (Prized Lagan 68_110, the R check of "at the start of each turn, you may").

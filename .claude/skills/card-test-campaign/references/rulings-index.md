@@ -362,7 +362,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029, Q-0163]
-- What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034]
+- What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
+- "Discard a <kind> from hand to take a <kind> into hand from the discard pile" and the card just discarded (Q-0192, open) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)
 - Costs, and effects, in the order printed (Q-0080) [F-0123]

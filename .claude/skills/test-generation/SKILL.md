@@ -350,7 +350,8 @@ carries more than the effect should change: one wound healed from two reads 1, w
 beside them (see "One candidate is chosen for you" in gemp-testing). Assert the offer with
 `FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. Where the text
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
-wrongly become optional looks the same otherwise.
+wrongly become optional looks the same otherwise. A text with two choices (one for its cost, another for its
+effect) has the minimum of each read, once.
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or

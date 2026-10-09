@@ -162,6 +162,11 @@ conditions to ..." stops at what both halves before the "to" can find (F-0111, N
 ask of the thing X is matched against: is it before the "to", or a play? Then it bounds X, and a definition
 that lets X run past it is a finding; otherwise X runs as far as its own cost can be paid. X of zero: Q-0015
 and Q-0034, under "What is offered and what is asked" in the rulings log.
+None of this speaks of an X that is a number taken off a value ("make your minion damage -X to ...", Race Text
+94_10): built, and asserted by its old tests, as held to the bonus the chosen minion has, with a minion that has
+none not offered; whether a value may be driven below what is there to pay such a price is asked (Q-0191, open).
+
+**"Discard a <kind> from hand to take a <kind> into hand from the discard pile" and the card just discarded (Q-0192, open).** Race Text 94_12 leaves the minion discarded for the cost out of the choice (`not(memory(<the discarded card>))`), and its old test asserts that, citing the They Are Coming ruling; CR 4.2 "effect" speaks there of a card PLAYED from a pile, and this text plays nothing and has no "another". The old reading is active and the text's reading is parked on Q-0192, as the Standard has it for an old test that goes against the plain words. With no other card of the kind in the discard pile the action is offered (it has a cost: Q-0034), the card goes and nothing comes back. No other card has the shape with the overlap possible; one that turns up is a rider to Q-0192.
 
 **The twilight cost of a card in play (F-0109, built).** F-0109 is FIXED: a card in play costs the number printed on it, whatever another card or its own text says, and a transfer costs the printed number only. `GetTwilightCost(card)` on a card in play now answers the printed number; to show a cost modifier in force read a card in HAND (what it would cost to play) or play one and read the pool. A site's Shadow number is still read as modified. Do not park on F-0109 any more.
 
