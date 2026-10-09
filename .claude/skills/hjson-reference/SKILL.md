@@ -245,6 +245,7 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | `CurrentSite` | Fellowship's current site |
 | `NextSite` | Next site on path |
 | `CanExert` / `CanBeDiscarded` | Rule-aware checks |
+| `BarredFromArcheryFire` | A character a card says may not participate in archery fire (Streets of Edoras 4_340); used as `Ally,not(BarredFromArcheryFire)` for an ally who can be sent archery wounds |
 | `Playable` | Could be legally played |
 | `InPlay` | In any play zone (NOT activity-aware) |
 | `SkirmishLoser` | Loser of current skirmish |
@@ -453,9 +454,9 @@ Used in `Modifier` effect types or via `AddModifier` subaction.
 Overwhelm is decided character by character (Q-0044). On a minion, `CantBeOverwhelmedMultiplier` and the `AlterOverwhelmMultiplier` subaction protect that minion only, measured against its own strength; other minions in the skirmish are overwhelmed at double the side's total. The `AboutToBeOverwhelmed` trigger and `LosesSkirmish` with `overwhelm: true` match only the characters actually overwhelmed, not a minion spared beside them.
 
 ### Other Modifiers
-`AllyCanParticipateInArcheryFireAndSkirmishes(filter, requires?)`, `AllyCanParticipateInArcheryFire(filter, requires?)`, `AllyCanParticipateInSkirmishes(filter, requires?)`, `AlliesTakeArcheryFireWoundsInsteadOfCompanions(requires?)`, `DisableGameText(filter, requires?)`, `DoesNotAddToArcheryTotal(filter, requires?)`, `ExtraCostToPlay(filter, cost, requires?)`, `FPCultureCount(amount, requires?)`, `HasToMoveIfAble(requires?)`, `ShadowHasInitiative(requires?)`, `SkipPhase(phase, requires?)`, `CanPlayStackedCards(filter, on, requires?)`, `CanBearExtraItems(filter, itemclass, amount?, requires?)`, `ItemClassSpot(class, requires?)`, `ModifyRaceSpotCount(race, requires?)`
+`AllyCanParticipateInArcheryFireAndSkirmishes(filter, requires?)`, `AllyCanParticipateInArcheryFire(filter, requires?)`, `AllyCanParticipateInSkirmishes(filter, requires?)`, `AllyMayNotParticipateInArcheryFireOrSkirmishes(filter, requires?)`, `AlliesTakeArcheryFireWoundsInsteadOfCompanions(requires?)`, `DisableGameText(filter, requires?)`, `DoesNotAddToArcheryTotal(filter, requires?)`, `ExtraCostToPlay(filter, cost, requires?)`, `FPCultureCount(amount, requires?)`, `HasToMoveIfAble(requires?)`, `ShadowHasInitiative(requires?)`, `SkipPhase(phase, requires?)`, `CanPlayStackedCards(filter, on, requires?)`, `CanBearExtraItems(filter, itemclass, amount?, requires?)`, `ItemClassSpot(class, requires?)`, `ModifyRaceSpotCount(race, requires?)`
 
-An ally who "participates in archery fire" is counted for the fellowship archery total if an archer and may be given archery wounds (`AllyCanParticipateInArcheryFire`, `...AndSkirmishes`). "Allies take wounds from archery fire instead of companions" is `AlliesTakeArcheryFireWoundsInsteadOfCompanions`, which takes no filter: every ally, at home or away, takes the minions' archery wounds while one can, a wound none can take goes to a companion as usual, and no ally is counted for the total who would not be anyway (Q-0136, Q-0137).
+An ally who "participates in archery fire" is counted for the fellowship archery total if an archer and may be given archery wounds (`AllyCanParticipateInArcheryFire`, `...AndSkirmishes`). "Allies take wounds from archery fire instead of companions" is `AlliesTakeArcheryFireWoundsInsteadOfCompanions`, which takes no filter: every ally, at home or away, takes the minions' archery wounds while one can, a wound none can take goes to a companion as usual, and no ally is counted for the total who would not be anyway (Q-0136, Q-0137). An ally under `AllyMayNotParticipateInArcheryFireOrSkirmishes` takes none of them (Q-0147): a definition that sends archery wounds to allies and has no cost requires `Ally,not(BarredFromArcheryFire)`.
 
 ---
 

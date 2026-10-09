@@ -560,6 +560,14 @@ public class Filters {
             CardType.ALLY,
             (Filter) (game, physicalCard) -> RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock()));
 
+    /**
+     * A character a card says "may not participate in archery fire" (Streets of Edoras). Participating has
+     * parts: counting for the archery total, and taking archery wounds. The bar is on both, so a card that sends
+     * archery wounds to allies sends none to this one.
+     */
+    public static final Filter barredFromArcheryFire =
+            (game, physicalCard) -> game.getModifiersQuerying().isAllyPreventedFromParticipatingInArcheryFire(game, physicalCard);
+
     public static Filter allyWithSameHome(final PhysicalCard card) {
         return Filters.and(
                 CardType.ALLY,

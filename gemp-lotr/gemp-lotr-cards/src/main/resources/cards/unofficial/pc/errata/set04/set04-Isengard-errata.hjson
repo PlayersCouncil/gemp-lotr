@@ -74,7 +74,7 @@
 					}
 					{
 						type: CanSpot
-						filter: Ally
+						filter: Ally,not(barredFromArcheryFire)
 					}
 				]
 				effect: [

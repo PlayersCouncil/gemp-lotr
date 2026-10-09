@@ -316,6 +316,9 @@ minion down (`MoveMinionsToTable`), `ShadowRefreshDecision()`, then `SkipToPhase
 to allies only, at home or away, for as long as an ally can take one. A wound no ally can take (none in play, or
 the last one killed) is placed as usual, on a companion or a participating ally (Q-0136, F-0243). The allies only
 take the wounds: an archer ally away from home adds nothing to the fellowship archery total (Q-0137, F-0244).
+An ally a card bars from archery fire (a [rohan] ally at Streets of Edoras 4_340) is passed over: the wound goes
+to another ally or, none being able to take it, as usual, and the ability is not offered while every ally in play
+is barred (Q-0147, F-0275).
 
 **An ally in a skirmish.** An ally can be assigned at its home site (CR 4.2 "ally"). On `FellowshipSites`, Elrond
 (1_40, home site 3) can skirmish once the fellowship has moved to site 3: `SkipToSite(2)` and then a move. An ally whose home is on another

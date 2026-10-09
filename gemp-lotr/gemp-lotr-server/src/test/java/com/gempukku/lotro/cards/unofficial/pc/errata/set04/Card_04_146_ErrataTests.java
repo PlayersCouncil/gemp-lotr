@@ -43,6 +43,33 @@ public class Card_04_146_ErrataTests
 		);
 	}
 
+	protected VirtualTableScenario GetStreetsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("comedown", "54_146");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, vitality 4; a maneuver ability used only on purpose
+					put("aldor", "4_262");      // Aldor: [rohan] Man ally, home sites 3T and 6T, vitality 2; an archery ability that needs a villager (none here)
+					put("assassin", "1_131");   // Orthanc Assassin: [isengard] Uruk-hai archer, damage +1 and nothing else
+					put("crossbow", "4_182");   // Uruk Crossbow Troop: [isengard] Uruk-hai archer; its when-played token does nothing when cheated in
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "4_325");      // Eastemnet Gullies: a fellowship ability used only on purpose
+					put("site2", "4_331");      // Eastfold: a Shadow ability that needs 3 [isengard] trackers
+					put("site3", "4_340");      // Streets of Edoras: each [rohan] ally may not participate in archery fire or skirmishes
+					put("site4", "4_346");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ComeDownStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 		/**
@@ -309,6 +336,58 @@ public class Card_04_146_ErrataTests
 		// Two [isengard] archers, and no ally to take a wound: the ability has no cost and would do nothing.
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(comedown));
+	}
+
+	@Test
+	public void ArcheryIsNotOfferedWhenTheOnlyAllyIsBarredFromArcheryFire() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStreetsScenario();
+
+		var comedown = scn.GetShadowCard("comedown");
+		var assassin = scn.GetShadowCard("assassin");
+		var crossbow = scn.GetShadowCard("crossbow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var aldor = scn.GetFreepsCard("aldor");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(aldor);
+		scn.MoveCardsToSupportArea(comedown);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(assassin, crossbow);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
+
+		// At site 2 nothing bars Aldor, the one ally: he could be made to take the wounds, and the ability is offered.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(comedown));
+		scn.ShadowPass();
+		// Not used: the wounds go as usual, to companions (Aldor is away from home).
+		scn.FreepsChooseCard(aragorn);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(0, scn.GetWoundsOn(aldor));
+
+		// No skirmishes; the fellowship moves on to site 3, Streets of Edoras, and there is an archery phase again.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals("Streets of Edoras", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.FreepsPass();
+
+		// The site bars Aldor from archery fire, so no wound can be sent to him: with no other ally in play the
+		// ability has no cost and would do nothing (Q-0147, Q-0034).
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(comedown));
+		scn.ShadowPass();
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aldor));
+		scn.FreepsChooseCard(frodo);
+		scn.FreepsChooseCard(frodo);
+		assertEquals(0, scn.GetWoundsOn(aldor));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test

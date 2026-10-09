@@ -64,6 +64,7 @@ public class FilterFactory {
                     final PhysicalCard attachedTo = actionContext.getSource().getAttachedTo();
                     return Filters.region(GameUtils.getRegion(attachedTo.getSiteNumber()));
                 });
+        simpleFilters.put("barredfromarcheryfire", (actionContext) -> Filters.barredFromArcheryFire);
         simpleFilters.put("bearer", (actionContext -> Filters.bearerOf(actionContext.getSource())));
         simpleFilters.put("canbediscarded", (actionContext -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource())));
         simpleFilters.put("canbereturnedtohand", (actionContext -> Filters.canBeReturnedToHand(actionContext.getSource())));

@@ -52,6 +52,10 @@ public class FellowshipPlayerAssignsArcheryDamageGameProcess implements GameProc
      * reason, then the original effect occurs"). Taking the wounds is all this lets an ally do: an archer ally
      * away from home is not counted for the fellowship archery total (RuleUtils.calculateFellowshipArcheryTotal
      * does not read the flag).
+     *
+     * An ally a card bars from archery fire (Streets of Edoras) is not an ally who can take the wound: taking
+     * archery wounds is part of participating in archery fire, and "can't" beats "can". The wound goes to
+     * another ally or, none being able to take it, as usual.
      */
     private static Filter getArcheryFireWoundableFilter() {
         final Filter canTakeArcheryWound = (game, physicalCard) -> game.getModifiersQuerying().canTakeArcheryWound(game, physicalCard);
@@ -72,7 +76,8 @@ public class FellowshipPlayerAssignsArcheryDamageGameProcess implements GameProc
         );
 
         // The same test of whether a wound can be placed that ChooseAndWoundCharactersEffect makes of each candidate.
-        final Filter allyWhoCanTakeTheWound = Filters.and(CardType.ALLY, canTakeArcheryWound, Filters.canTakeWounds(null, 1));
+        final Filter allyWhoCanTakeTheWound = Filters.and(CardType.ALLY, Filters.not(Filters.barredFromArcheryFire),
+                canTakeArcheryWound, Filters.canTakeWounds(null, 1));
 
         return (game, physicalCard) -> {
             if (!game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.ALLIES_TAKE_ARCHERY_FIRE_WOUNDS_INSTEAD_OF_COMPANIONS))
