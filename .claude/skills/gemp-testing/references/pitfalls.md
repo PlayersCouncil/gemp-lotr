@@ -483,6 +483,18 @@ for a card in play, the number printed on it (F-0109, Q-0073); for a card in a h
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
 hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
 
+**A twilight cost never reads below 0, so a discount as large as the card's cost hides a larger one.** Madril
+65_64 costs 2 and is "twilight cost -2": with `amount: -3` he reads 0 and is played for 0 all the same, and no
+test on a bare board notices. To show the size of a discount on a cheap card, raise the cost first: an ad hoc
+`TwilightCostModifier(null, CardType.COMPANION, null, new ConstantEvaluator(2))` does what East Road 11_236
+does ("Each companion is twilight cost +2"), and the card reads 4 without its discount and 2 with it
+(`Card_15_064_ErrataTests`).
+
+**Whether a minion is roaming is read as a keyword.** `scn.HasKeyword(minion, Keyword.ROAMING)` is true while
+the minion's site number is above the current site's, and it follows a site-number modifier: Úlairë Nelya 2_84
+(site number 2) reads false at site 2, and true once a card has raised her site number
+(`Card_15_062_ErrataTests`, `Card_15_064_ErrataTests`).
+
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, and filters see it. That is how to tell a
 filter written with a race from one written with a culture when every card of the race has the culture.
@@ -597,7 +609,16 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 (`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`). `MoveCardToAdventurePath` makes the card the
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
-(`Card_13_188_ErrataTests`: sites 4 to 7).
+(`Card_13_188_ErrataTests`: sites 4 to 7). A Shadows-block site cannot stand as `site1` of such a path: the
+constructor throws a NullPointerException from `CheckForCorruptionGameProcess` (probed at landing, err-b65_17).
+Where its text is needed in the first fellowship phase, an ad hoc modifier that does what the site does stands in.
+
+**A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
+(Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
+unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or site 3 (4_337, a sanctuary), so
+`putAll(TowersSites); put("site2", "4_335")` and the fellowship's own two moves (`FreepsPass()`, then
+`SkipToMovementDecision()` and `FreepsChooseToMove()`) show "while at a battleground site" off, on and off again
+(`Card_15_017_ErrataTests`). The Fellowship path has forests and no battleground.
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
