@@ -132,12 +132,25 @@ public interface ModifiersQuerying {
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether a card has this ally participate in archery fire (be counted for the fellowship archery total, be
+     * assigned archery wounds) where the rules alone would not: away from home.  A card that says he may not
+     * participate beats every card that says he may ("can't" beats "can"), so this is false of an ally of whom
+     * isAllyPreventedFromParticipatingInArcheryFire is true, whatever allows him.
+     */
     boolean isAllyAllowedToParticipateInArcheryFire(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether a card has this ally participate in skirmishes (be assigned to a minion by that side's player, and
+     * fight) where the rules alone would not: away from home.  False of an ally of whom
+     * isAllyPreventedFromParticipatingInSkirmishes is true, whatever allows him.
+     */
     boolean isAllyAllowedToParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);
 
+    /** Whether a card says this ally may not participate in skirmishes, at home or anywhere else. */
     boolean isAllyPreventedFromParticipatingInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);
 
+    /** Whether a card says this ally may not participate in archery fire, at home or anywhere else. */
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
     boolean isValidAssignments(LotroGame game, Side side, Map<PhysicalCard, Set<PhysicalCard>> assignments);

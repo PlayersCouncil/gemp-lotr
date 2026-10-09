@@ -276,14 +276,17 @@ public class Filters {
                 Filters.and(
                         CardType.ALLY,
                         (Filter) (game, physicalCard) -> {
+                            // A card that says the ally may not participate in skirmishes beats whatever would
+                            // have him skirmish: another card's "participates", or an assignment that takes an
+                            // ally wherever he is ("can't" beats "can").
+                            boolean preventedByCard = game.getModifiersQuerying().isAllyPreventedFromParticipatingInSkirmishes(game, assignedBySide, physicalCard);
+                            if (preventedByCard)
+                                return false;
                             if (allowAllyToSkirmish)
                                 return true;
                             boolean allowedToSkirmish = game.getModifiersQuerying().isAllyAllowedToParticipateInSkirmishes(game, assignedBySide, physicalCard);
                             if (allowedToSkirmish)
                                 return true;
-                            boolean preventedByCard = game.getModifiersQuerying().isAllyPreventedFromParticipatingInSkirmishes(game, assignedBySide, physicalCard);
-                            if (preventedByCard)
-                                return false;
                             return RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock());
                         }),
                 Filters.and(

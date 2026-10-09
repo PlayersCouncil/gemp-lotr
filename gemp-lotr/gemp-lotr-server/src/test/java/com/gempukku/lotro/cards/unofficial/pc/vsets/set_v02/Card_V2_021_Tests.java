@@ -52,6 +52,38 @@ public class Card_V2_021_Tests
 		);
 	}
 
+	/**
+	 * The Towers path with Streets of Edoras as its site 3: "Each [rohan] ally may not participate in archery fire
+	 * or skirmishes at Streets of Edoras."
+	 */
+	protected VirtualTableScenario GetStreetsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shot", "102_21");
+					put("ram", "5_44");          // Battering Ram: a machine; its skirmish ability needs 5 companions
+					put("savage", "1_151");      // Uruk Savage: an [isengard] Uruk-hai costing 2; Damage +1 is its whole text
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: an unbound companion with a maneuver ability
+					put("aldor", "4_262");       // Aldor: a [rohan] ally whose homes are sites 3 and 6 of this path; an archery ability that needs a villager
+					put("grimir", "1_17");       // Grimir, Dwarven Elder: an ally whose home is site 3 of the Fellowship path, so at home nowhere on this one
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "4_325");      // Eastemnet Gullies: a fellowship ability used only on purpose
+					put("site2", "4_331");      // Eastfold: a Shadow ability that needs 3 [isengard] trackers
+					put("site3", "4_340");      // Streets of Edoras
+					put("site4", "4_346");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void BreachingShotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -424,6 +456,50 @@ public class Card_V2_021_Tests
 		assertInZone(Zone.DISCARD, shot);
 		assertFalse(scn.IsCharAssigned(aragorn));
 		assertFalse(scn.IsCharAssigned(worker));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void AnAllyACardBarsFromSkirmishesIsNotOfferedThoughAnAllyAwayFromHomeIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStreetsScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var aldor = scn.GetFreepsCard("aldor");
+		var grimir = scn.GetFreepsCard("grimir");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(aldor, grimir);
+
+		var shot = scn.GetShadowCard("shot");
+		var ram = scn.GetShadowCard("ram");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ram);
+		scn.AddTokensToCard(ram, 3);
+		scn.MoveMinionsToTable(savage);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertEquals("Streets of Edoras", scn.GetCurrentSite().getBlueprint().getTitle());
+		// Left to the rules neither ally fights here: the site bars Aldor at his home, and Grimir is away from his.
+		assertFalse(scn.FreepsCanAssign(aldor));
+		assertFalse(scn.FreepsCanAssign(grimir));
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(shot);
+		scn.ShadowChoose("3");
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		// "An ally" reaches the one away from home (Q-0042) and not the one a card says may not skirmish (Q-0150).
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, grimir));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aldor));
+		scn.ShadowChooseCard(grimir);
+
+		// The Savage is the only Uruk-hai, and is taken without asking.
+		assertTrue(scn.IsCharAssignedAgainst(grimir, savage));
+		assertFalse(scn.IsCharAssigned(aldor));
+		assertFalse(scn.IsCharAssigned(aragorn));
+		assertInZone(Zone.DISCARD, shot);
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

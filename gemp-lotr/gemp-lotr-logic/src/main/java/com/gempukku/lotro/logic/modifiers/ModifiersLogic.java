@@ -818,6 +818,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean isAllyAllowedToParticipateInArcheryFire(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "isAllyAllowedToParticipateInArcheryFire");
         try {
+            // "May not participate" beats every "may participate", whatever card says it.
+            if (isAllyPreventedFromParticipatingInArcheryFire(game, card))
+                return false;
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PRESENCE_MODIFIER, card)) {
                 if (modifier.isAllyParticipateInArcheryFire(game, card))
                     return true;
@@ -832,6 +835,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean isAllyAllowedToParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "isAllyAllowedToParticipateInSkirmishes");
         try {
+            // "May not participate" beats every "may participate", whatever card says it.
+            if (isAllyPreventedFromParticipatingInSkirmishes(game, sidePlayer, card))
+                return false;
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PRESENCE_MODIFIER, card)) {
                 if (modifier.isAllyParticipateInSkirmishes(game, sidePlayer, card))
                     return true;

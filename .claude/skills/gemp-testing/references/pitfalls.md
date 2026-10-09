@@ -348,6 +348,10 @@ is barred (Q-0147, F-0275).
 block's path needs that block's sites in the scenario (Gondorian Merchant 7_97, home 3T, on the Towers sites:
 `SkipToSite(2)` and then the move). `SkipToSite(n)` stops in the fellowship phase at site n, so a
 `SkipToAssignments` from there moves the fellowship on to n + 1 first.
+An ally a card says may not participate (a [rohan] ally at Streets of Edoras 4_340) takes no part whatever
+other card has him participate or assigns a minion to him: he adds nothing to the archery total, is offered no
+archery wound, is on neither player's assignment list, and an effect that would assign a minion to him assigns
+nobody. The rest of that other card (a strength bonus) still reaches him (Q-0150, F-0281).
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
 is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read

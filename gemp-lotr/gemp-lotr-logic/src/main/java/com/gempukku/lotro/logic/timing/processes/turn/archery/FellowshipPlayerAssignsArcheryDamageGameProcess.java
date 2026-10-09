@@ -43,8 +43,8 @@ public class FellowshipPlayerAssignsArcheryDamageGameProcess implements GameProc
     /**
      * Who an archery wound may be assigned to. The filter is read afresh as each wound is assigned.
      *
-     * As usual: a companion, or an ally who participates in archery fire (at home and not barred from it, or
-     * allowed to by a card).
+     * As usual: a companion, or an ally who participates in archery fire (at home or allowed to by a card, and
+     * in neither case barred from it by a card: the querying answers that no card allows a barred ally).
      *
      * While allies take archery wounds instead of companions (Come Down): any ally, at home or not, for as long
      * as there is an ally who can take the wound. A wound that no ally can take, because there is none or the

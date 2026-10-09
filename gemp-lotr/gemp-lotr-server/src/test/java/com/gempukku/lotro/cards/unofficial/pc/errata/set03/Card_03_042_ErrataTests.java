@@ -35,6 +35,37 @@ public class Card_03_042_ErrataTests
 		);
 	}
 
+	/**
+	 * The Towers path with Streets of Edoras as its site 3: "Each [rohan] ally may not participate in archery fire
+	 * or skirmishes at Streets of Edoras."
+	 */
+	protected VirtualTableScenario GetStreetsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("horn", "53_42");
+					put("boromir", "1_96");     // Boromir, Lord of Gondor: no ability to use
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability used only on purpose
+					put("aldor", "4_262");      // Aldor: [rohan] Man ally, strength 3, vitality 2, homes sites 3 and 6 of this path; an archery ability that needs a villager (none here)
+					put("marksman", "1_176");   // Goblin Marksman: archer, strength 7, vitality 1, no other text
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "4_325");      // Eastemnet Gullies: a fellowship ability used only on purpose
+					put("site2", "4_331");      // Eastfold: a Shadow ability that needs 3 [isengard] trackers
+					put("site3", "4_340");      // Streets of Edoras
+					put("site4", "4_346");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void HornOfBoromirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -251,5 +282,50 @@ public class Card_03_042_ErrataTests
 		assertInDiscard(horn);
 		assertEquals(7, scn.GetStrength(boromir));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AnAllyACardBarsFromArcheryFireAndSkirmishesIsStrongerAndStillTakesNoPart() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStreetsScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		var aldor = scn.GetFreepsCard("aldor");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(boromir, aragorn);
+		scn.AttachCardsTo(boromir, horn);
+		scn.MoveAlliesToTable(aldor);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(marksman);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals("Streets of Edoras", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(3, scn.GetStrength(aldor));
+
+		// Aldor is the one ally, and is taken without asking.
+		scn.FreepsUseCardAction(horn);
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertInDiscard(horn);
+		// The strength reaches him.  The participating does not: the site says he may not (Q-0150).
+		assertEquals(6, scn.GetStrength(aldor));
+
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, aragorn, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aldor));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(0, scn.GetWoundsOn(aldor));
+
+		scn.PassAssignmentActions();
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(boromir));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(aldor));
+		scn.FreepsDeclineAssignments();
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(aragorn));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(aldor));
+		assertEquals(6, scn.GetStrength(aldor));
 	}
 }

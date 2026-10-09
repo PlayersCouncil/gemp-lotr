@@ -297,6 +297,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095)
 - "Wound X twice" written as an exertion (F-0148)
 - "Make allies take wounds from archery fire instead of companions" (Q-0136, Q-0137, Q-0147, F-0243, F-0244, F-0275) [Q-0034]
+- "Participates in archery fire and skirmishes" against "may not participate" (Q-0150, F-0281) [F-0283]
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
 
