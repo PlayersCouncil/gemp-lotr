@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResol
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
@@ -15,9 +16,11 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class ChooseArbitraryCards implements EffectAppenderProducer {
     @Override
@@ -45,6 +48,15 @@ public class ChooseArbitraryCards implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory(fromMemory);
+                // With no card to choose among there is nothing to show and nothing to ask: none is chosen.
+                if (cards.isEmpty())
+                    return new UnrespondableEffect() {
+                        @Override
+                        protected void doPlayEffect(LotroGame game) {
+                            actionContext.setCardMemory(memorize, Collections.emptyList());
+                        }
+                    };
+
                 Collection<PhysicalCard> selectableCards = Filters.filter(actionContext.getGame(), cards, filterableSource.getFilterable(actionContext));
 
                 Evaluator evaluator = valueSource.getEvaluator(actionContext);

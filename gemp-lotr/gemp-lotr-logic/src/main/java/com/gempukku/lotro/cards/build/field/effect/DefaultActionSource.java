@@ -63,6 +63,10 @@ public class DefaultActionSource implements ActionSource {
     private boolean specialAbility = true;
     // Whether what the effects will find can be told before the costs are paid (see NoEffectForesight).
     private boolean judgeable;
+    // Whether the action is a reveal from a draw deck and what is then done with the cards revealed, and nothing
+    // else (NoEffectForesight.isARevealAndWhatIsDoneWithTheCards), and whether its definition writes a cost.
+    private boolean revealAndNothingElse;
+    private boolean costWritten;
     // A special ability used in the skirmish phase, or the playing of an event: the two kinds of action that
     // may be a skirmish action, which is flagged when it reaches nobody in the skirmish being fought.
     private boolean skirmishAbility;
@@ -95,6 +99,10 @@ public class DefaultActionSource implements ActionSource {
 
     public void setJudgeable(boolean judgeable) {
         this.judgeable = judgeable;
+    }
+
+    public void setRevealAndNothingElse(boolean revealAndNothingElse) {
+        this.revealAndNothingElse = revealAndNothingElse;
     }
 
     public void setSkirmishAbility(boolean skirmishAbility) {
@@ -235,6 +243,7 @@ public class DefaultActionSource implements ActionSource {
     public void addCheckedCost(EffectAppender effectAppender, boolean canBePassedOver) {
         addPlayRequirement(new OrderedCheck(effectAppender::isPlayableInFull, costs.size()));
         costs.add(effectAppender);
+        costWritten = true;
         if (canBePassedOver)
             costsThatCanBePassedOver.add(effectAppender);
     }
@@ -429,6 +438,16 @@ public class DefaultActionSource implements ActionSource {
                     return NoEffect.EFFECT;
             }
         }
+
+        // A reveal that a cost buys, from a draw deck with nothing in it, in an action that does nothing else
+        // but deal with the cards revealed: it is offered, and does nothing (Ketura on Q-0163).  This is asked
+        // apart from the forecasts below.  Those say nothing of an effect that reads what the reveal remembers;
+        // and the one thing a cost could do to this action is put a card in that deck, which is narrower than
+        // what makes an action judgeable.  An ability or trigger with no cost is left as it was: whether that
+        // is offered at all with nothing to reveal is a question of its own (Q-0034, Q-0148).
+        if (revealAndNothingElse && (event || costWritten) && !hasCostsOfItsCardsPlay(actionContext)
+                && effects.get(0).forecast(actionContext).getVerdict() == EffectForecast.Verdict.NOTHING)
+            return NoEffect.EFFECT;
 
         // From here on the action is judged by what its effects forecast of themselves, which is only to be
         // trusted where no cost stands between the board as it is and the board they will find.

@@ -3,9 +3,11 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.framework.Assertions.*;
@@ -514,6 +516,47 @@ public class Card_V3_035_Tests
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithAnEmptyDrawDeckTheRevealIsOfferedFlaggedNoEffectAndPaidForAndRevealsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var beacon = scn.GetFreepsCard("beacon1");
+		var knight = scn.GetFreepsCard("knight1");
+		var athelas = scn.GetFreepsCard("athelas");
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveCardsToSupportArea(beacon);
+
+		scn.StartGame();
+		// One card is left in the draw deck, fewer than the 4 to be revealed: there is something to reveal.
+		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetFreepsDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.MoveCardsToTopOfDeck(athelas);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertTrue(scn.FreepsActionAvailable(beacon, "Reveal"));
+		assertEquals("false", scn.FreepsActionNoEffect(beacon, "Reveal"));
+
+		// That card gone, the costs can still be paid, so the ability is offered (Q-0163); it is marked as doing
+		// nothing.  The Shadow player's deck is not empty.
+		scn.MoveCardsToDiscard(athelas);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertTrue(scn.GetShadowDeckCount() > 0);
+		assertTrue(scn.FreepsActionAvailable(beacon, "Reveal"));
+		assertEquals("effect", scn.FreepsActionNoEffect(beacon, "Reveal"));
+
+		// Used all the same, the Man exerts and the beacon is hindered; nobody is shown anything, no choice of
+		// cards to take is put, and nothing comes into hand.
+		scn.FreepsUseCardAction(beacon, "Reveal");
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertTrue(scn.IsHindered(beacon));
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

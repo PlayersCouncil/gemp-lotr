@@ -151,10 +151,22 @@ without a "to" after the reveal, the ability is not offered (the event not playe
 no "to", write `requires: {type: HasCardInDrawDeck}` on the ability and leave the reveal its first effect
 (Glorfindel, Revealed in Wrath 59_16 and 9_16); without the requirement the card is a finding, already ruled. The
 `-` is the ability not offered with the deck emptied, and offered with one card left in it. This is not the
-optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. NOT ruled: a
-reveal that a cost buys ("<cost> to reveal the top N cards ... <what reads them>": War-beacon 103_35, His Cruelty
-and Malice 53_91; Q-0163, open: today offered with an empty deck and not flagged), and "you may reveal the top
-card ..." on an optional trigger. Do not read Q-0148 onto those; ask.
+optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. A reveal that a
+cost buys is the next entry. NOT ruled: "you may reveal the top card ..." on an optional trigger with no cost.
+Do not read Q-0148 onto that; ask.
+
+**A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass
+21).** "<cost> to reveal the top N cards of a draw deck. <What is done with the cards revealed.>" (War-beacon
+103_35, His Cruelty and Malice 53_91; The Dark Lord's Summons 1_242, Into the West 7_23), and an event of the
+shape (Wealth of Moria 1_28), gets no `HasCardInDrawDeck`: that is Q-0148's, for a reveal with no cost. With the
+deck the reveal names empty the action is offered and reads `"effect"`; taken, it pays its cost and does nothing.
+With one card there it reads `"false"`. The game flags it only where the reveal is the first effect and all that
+follows deals with the cards revealed and nothing else (taken, discarded or put back by a `select` of the reveal's
+memory, an `If` on `MemoryMatches`, a `Repeat` of `ForEachInMemory`); with anything else after it (a heal or a
+discard that reads the card, a shuffle, an offer with a cost of its own: Must Be a Dream 6_20, Catapult 8_32,
+Hidden Knowledge 7_104, Forewarned 6_17) it reads `"false"`, which is no finding. The mechanic is
+`mechanics/RevealFromAnEmptyDrawDeckTests`. The two cards the question was asked on assert it in an `R` clause;
+another card of the shape asserts nothing about the flag (shapes, "The no-effect flag: which cards assert it").
 
 **What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067,
 F-0111).** The rulings on X look two ways and are one rule. X is NOT capped by what the effect could do with

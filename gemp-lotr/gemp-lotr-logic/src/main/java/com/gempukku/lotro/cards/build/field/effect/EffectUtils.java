@@ -207,6 +207,7 @@ public class EffectUtils {
         // Whether the action may be judged, before it is taken, to do nothing: only where none of its costs
         // could make what its effects need.
         actionSource.setJudgeable(NoEffectForesight.canForesee(costArray, effectArray));
+        actionSource.setRevealAndNothingElse(NoEffectForesight.isARevealAndWhatIsDoneWithTheCards(costArray, effectArray));
 
         final EffectAppenderFactory effectAppenderFactory = environment.getEffectAppenderFactory();
         final CardGenerationEnvironment costEnvironment = costEnvironmentOfTriggeredAction(environment, value.get("trigger"), costArray);

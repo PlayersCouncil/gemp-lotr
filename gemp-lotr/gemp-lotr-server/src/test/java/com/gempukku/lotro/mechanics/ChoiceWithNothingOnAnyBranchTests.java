@@ -4,9 +4,11 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.framework.Assertions.*;
@@ -26,6 +28,9 @@ import static org.junit.Assert.*;
  * it is certain to do nothing: nobody to exert, heal or wound, no burden to remove, no site to liberate.  A
  * branch that cannot tell keeps the question, and so does a branch that is more than a single effect: the later
  * of several effects cannot be asked before the earlier have been carried out.
+ *
+ * A reveal from a draw deck with nothing in it is certain to do nothing as well (engine pass 21, Q-0163), so a
+ * choice of which deck to reveal from is not put while every such deck is empty.
  */
 public class ChoiceWithNothingOnAnyBranchTests
 {
@@ -41,6 +46,23 @@ public class ChoiceWithNothingOnAnyBranchTests
 					put("elf3", "1_53");
 					put("savage", "1_151");     // Uruk Savage: vitality 3; Damage +1 is its whole text
 					put("runner", "1_178");     // Goblin Runner: vitality 1, so it can never exert
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRevealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Halls of My Home: "Fellowship: Exert a Dwarf to reveal the top 3 cards of any draw deck.
+					// You may discard 1 Shadow card revealed.  Return the rest in any order."
+					put("halls", "1_18");
+					put("halls2", "1_18");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf, vitality 3
+					put("sword", "1_299");      // Hobbit Sword: a Free Peoples card
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -312,5 +334,44 @@ public class ChoiceWithNothingOnAnyBranchTests
 
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AChoiceOfWhichDrawDeckToRevealFromIsNotAskedWhileBothAreEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRevealScenario();
+
+		var halls = scn.GetFreepsCard("halls");
+		var halls2 = scn.GetFreepsCard("halls2");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sword = scn.GetShadowCard("sword");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(halls, halls2);
+
+		scn.StartGame();
+		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetFreepsDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetShadowDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.FreepsRefreshDecision();
+
+		// Neither deck has a card to reveal: the event is paid for and nobody is asked which deck.
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetShadowDeckCount());
+		scn.FreepsPlayCard(halls);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertInDiscard(halls);
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// One card in the Shadow player's deck, fewer than the 3 to be revealed.  Neither branch can be carried
+		// out in full, and one of them will show a card: the question is put, as it always was.
+		scn.MoveCardsToTopOfDeck(sword);
+		scn.FreepsPlayCard(halls2);
+
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+		scn.FreepsChoose("opponent's deck");
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sword, false));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, false));
 	}
 }

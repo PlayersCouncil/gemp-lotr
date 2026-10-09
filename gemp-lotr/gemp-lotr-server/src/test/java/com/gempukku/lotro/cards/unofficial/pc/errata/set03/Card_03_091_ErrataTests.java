@@ -3,10 +3,12 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.framework.Assertions.*;
@@ -398,5 +400,54 @@ public class Card_03_091_ErrataTests
 
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(cruelty));
+	}
+
+	@Test
+	public void WithTheOpponentsDrawDeckEmptyItIsOfferedFlaggedNoEffectAndTheMinionIsDiscardedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cruelty = scn.GetShadowCard("cruelty");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var tale = scn.GetFreepsCard("tale");
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(cruelty);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, sentry);
+		scn.SkipToPhase(Phase.REGROUP);
+		// One card is left in the Free Peoples player's draw deck, fewer than the 2 to be revealed: there is
+		// something to reveal.
+		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetFreepsDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.MoveCardsToTopOfDeck(tale);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertTrue(scn.ShadowActionAvailable(cruelty));
+		assertEquals("false", scn.ShadowActionNoEffect(cruelty));
+
+		// That card gone, the minion can still be discarded, so the ability is offered (Q-0163); it is marked as
+		// doing nothing.  It is the opponent's deck that is empty: the Shadow player's own is not.
+		scn.MoveCardsToDiscard(tale);
+		scn.ShadowRefreshDecision();
+
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertTrue(scn.GetShadowDeckCount() > 0);
+		assertTrue(scn.ShadowActionAvailable(cruelty));
+		assertEquals("effect", scn.ShadowActionNoEffect(cruelty));
+
+		// Used all the same, the minion chosen is discarded; nobody is shown anything, no companion is chosen
+		// or exerted and the opponent is asked nothing.
+		int freepsDiscard = scn.GetFreepsDiscardCount();
+		scn.ShadowUseCardAction(cruelty);
+		scn.ShadowChooseCard(soldier);
+		assertInDiscard(soldier);
+		assertInZone(Zone.SHADOW_CHARACTERS, sentry);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(freepsDiscard, scn.GetFreepsDiscardCount());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

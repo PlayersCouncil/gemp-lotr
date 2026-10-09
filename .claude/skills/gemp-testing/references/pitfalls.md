@@ -12,7 +12,8 @@ playable, complete the pending decision with a real action and look at the next 
 
 **One candidate is chosen for you; none is skipped.** When a choice has exactly as many valid candidates as it
 needs, the engine makes it without asking, and a `FreepsChooseCard` written for it fails, naming the decision
-the game has gone on to (G-0032). When it has none, that part of the effect is skipped. So a test that
+the game has gone on to (G-0032). When it has none, that part of the effect is skipped; so is a choice among
+cards an earlier effect set aside (`ChooseArbitraryCards`) when it set none aside (F-0338). So a test that
 means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
 one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
@@ -160,8 +161,10 @@ pending (`FreepsActionNoEffect(card)`, then `FreepsChooseOptionalTrigger(card)`)
 with a cost whose limit is on what its effect gives (`effectLimitPerPhase` / `effectLimitPerTurn` in the
 definition) reads `"limit"` once it has given as much as the limit allows. A cap written inside the effect
 reads `"limit"` once spent only where it is on a strength bonus, a keyword's amount or a number of cards drawn
-and the action does nothing else; a cap on anything else reads `"false"` (Sting 1_313, 51_313). One with a limit on uses is not offered at its limit, so there is no flag to read. The flag is worked out when the decision is sent, so after cheating the board get a new decision
-before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
+and the action does nothing else; a cap on anything else reads `"false"` (Sting 1_313, 51_313). One with a limit on uses is not offered at its limit, so there is no flag to read. An event, or an action with a cost, whose effects are a
+reveal from a draw deck and what is done with the cards revealed reads `"effect"` while that deck is empty
+(Q-0163; `mechanics/RevealFromAnEmptyDrawDeckTests`; shapes, "A reveal that a cost buys"). The flag is worked out when the decision is sent, so after cheating the board get a new decision
+before reading it (`FreepsRefreshDecision()`). At site 2 of `FellowshipSites` (Ettenmoors) each player
 is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".
 
@@ -173,7 +176,7 @@ character can pay; where the player chooses among several, the action is offered
 
 **A prevention is asked only when its effect will happen** (Q-0114;
 `mechanics/PreventionIsAskedOnlyWhenItsEffectWillHappenTests`). "X may pay to prevent this" is not put to X
-when the effect cannot happen: a draw from an empty deck, the fifth draw of a fellowship phase, nobody chosen
+when the effect cannot happen: a draw or a reveal from an empty deck, the fifth draw of a fellowship phase, nobody chosen
 for the effect or the one chosen out of reach (a companion who cannot exert), threats at their limit, no site
 to take, a skirmish that will not be cancelled. An answer written for the question on such a board
 (`ShadowChooseNo()`) fails or goes to the next decision. Read it as
