@@ -748,13 +748,15 @@ taken a blueprint no other card of that deck has (fillers of another kind), or a
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
-deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show. A card played from the
-deck onto a bearer, or an event played from it, reads two more where the definition shuffles as well: the play
-itself shuffles as the card leaves the deck. A card played from the deck to the table or support area reads one,
-and that one is the definition's own, carried out after the play and everything the play sets off: while the
-played card's own optional trigger is pending (Old Toby 1_305, "when you play this possession, you may draw a
-card") the count is still the old one, and he draws off the deck as it was seen (F-0313, open, parked in the
-92_4 tests). Read the count after that trigger is answered, and as more than before, not as a number.
+deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show. A card played out of a deck
+that was looked through (`showAll: true`) shuffles it as the card leaves, before it is paid for and before its
+own "when you play" text is asked (Old Toby 1_305: the count is already one more at his offer; F-0313, engine
+pass 20), and the definition's `shuffle: true` shuffles again after the play: two more, whatever kind of card.
+A look that plays nothing reads one, the definition's own, and is the test that notices a missing `shuffle:
+true`. A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
+a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
+starting fellowship). Read the count as more than before unless the number is the point
+(mechanics/DrawDeckShuffledWhenTheLookIsOverTests).
 
 **A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
 nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an

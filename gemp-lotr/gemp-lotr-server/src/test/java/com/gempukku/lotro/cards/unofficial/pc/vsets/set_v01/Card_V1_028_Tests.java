@@ -146,7 +146,7 @@ public class Card_V1_028_Tests
 		assertInZone(Zone.HAND, aragorn, runner, still);
 		assertEquals(3, scn.GetShadowHandCount());
 		// The draw deck was looked through for Saruman, so it is reshuffled once the looking is done.
-		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -252,7 +252,7 @@ public class Card_V1_028_Tests
 		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, wisp, promise, party);
 		// The draw deck was looked through for Saruman, so it is reshuffled once the looking is done.
-		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

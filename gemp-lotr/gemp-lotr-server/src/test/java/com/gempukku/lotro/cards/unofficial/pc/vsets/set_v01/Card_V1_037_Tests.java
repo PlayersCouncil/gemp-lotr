@@ -284,7 +284,7 @@ public class Card_V1_037_Tests
 		// 10 - 0 for the event - 1 for the Crown
 		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, fell);
-		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

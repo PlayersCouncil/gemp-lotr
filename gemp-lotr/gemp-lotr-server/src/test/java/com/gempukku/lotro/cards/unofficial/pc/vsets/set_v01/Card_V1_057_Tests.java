@@ -164,7 +164,7 @@ public class Card_V1_057_Tests
 		assertInHand(promise);
 		assertInDiscard(monstrous);
 		// The deck was looked through, so it is shuffled.
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 
 		// Then the move goes on.  1 for Nice Imitation + 4 companions + 2 for Ettenmoors
@@ -438,7 +438,7 @@ public class Card_V1_057_Tests
 		scn.ShadowChooseCardBPFromSelection(imitation);
 		assertInZone(Zone.SUPPORT, imitation);
 		assertInZone(Zone.DECK, tale);
-		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(firstPlayersShuffles, scn.GetFreepsDeckShuffleCount());
 
 		// 1 for Nice Imitation + 2 companions + 2 for Ettenmoors

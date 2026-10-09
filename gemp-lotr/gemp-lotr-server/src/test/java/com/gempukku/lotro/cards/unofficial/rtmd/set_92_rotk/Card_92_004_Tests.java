@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -358,7 +357,6 @@ public class Card_92_004_Tests
 	}
 
 	@Test
-	@Ignore("F-0313: a pipeweed played from the draw deck to the support area offers its own draw before the deck that was looked through is shuffled")
 	public void TheDeckIsShuffledBeforeAPipeweedPlayedFromItOffersItsDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		// "When you finish looking through it, reshuffle it": the look is over once Old Toby has been taken
 		// out and played, so the card he then draws should come off a shuffled deck.

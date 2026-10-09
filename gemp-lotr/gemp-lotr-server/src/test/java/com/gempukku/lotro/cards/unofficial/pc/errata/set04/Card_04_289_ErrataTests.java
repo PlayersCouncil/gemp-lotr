@@ -119,7 +119,7 @@ public class Card_04_289_ErrataTests
 		assertInDiscard(simbelmyne);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		// Looked through, so reshuffled: once, and only that deck.
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -188,7 +188,7 @@ public class Card_04_289_ErrataTests
 		assertInZone(Zone.SUPPORT, arrow);
 		assertInDiscard(simbelmyne);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -268,7 +268,7 @@ public class Card_04_289_ErrataTests
 		assertEquals(2, scn.GetTwilight()); // 1 for the event + 1 for Aldor
 		assertInZone(Zone.SUPPORT, aldor);
 		assertInDiscard(simbelmyne);
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

@@ -139,7 +139,7 @@ public class Card_V2_005_Tests
 		// It costs nothing.
 		assertEquals(18, scn.GetTwilight());
 		// The draw deck was looked through for it, so it is shuffled afterwards.
-		assertEquals(shadowShuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shadowShuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
 
 		// The card is not unique: with 18 still in the pool the second copy can follow the first.

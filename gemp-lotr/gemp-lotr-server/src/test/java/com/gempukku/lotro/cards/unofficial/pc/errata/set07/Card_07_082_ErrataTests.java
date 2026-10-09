@@ -203,7 +203,7 @@ public class Card_07_082_ErrataTests
 		assertInZone(Zone.DECK, signalfire, calls);
 		assertInDiscard(beacon4);
 		assertInHand(beacon5);
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

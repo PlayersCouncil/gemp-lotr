@@ -196,7 +196,7 @@ public class DecisionReadingTests
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(gaffer);
 		assertInZone(Zone.SUPPORT, gaffer);
-		assertEquals(freeps + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(freeps + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		// The other player's deck is untouched.
 		assertEquals(shadow, scn.GetShadowDeckShuffleCount());
 	}

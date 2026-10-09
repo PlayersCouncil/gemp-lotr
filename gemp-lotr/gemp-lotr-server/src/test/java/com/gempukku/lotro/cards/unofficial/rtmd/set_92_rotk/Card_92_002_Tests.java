@@ -136,7 +136,7 @@ public class Card_92_002_Tests
 		assertInZone(Zone.SUPPORT, condition1);
 		// The deck that was looked through is one card shorter and was shuffled once; the other player's was not
 		assertEquals(deck - 1, scn.GetShadowDeckCount());
-		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(otherShuffles, scn.GetFreepsDeckShuffleCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -430,7 +430,7 @@ public class Card_92_002_Tests
 		scn.FreepsChooseCardBPFromSelection(ambition);
 
 		assertInZone(Zone.SUPPORT, ambition);
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(otherShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}

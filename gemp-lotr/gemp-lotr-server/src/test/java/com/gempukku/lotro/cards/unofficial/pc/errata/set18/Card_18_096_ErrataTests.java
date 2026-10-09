@@ -173,7 +173,7 @@ public class Card_18_096_ErrataTests
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertInZone(Zone.DECK, worker, servant);
-		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(freepsShuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

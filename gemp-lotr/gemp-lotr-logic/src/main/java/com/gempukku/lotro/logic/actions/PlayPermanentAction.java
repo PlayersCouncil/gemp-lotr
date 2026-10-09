@@ -34,6 +34,8 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
     private final Zone _toZone;
     private PhysicalCard _playedFromCard;
 
+    private boolean _deckLookedThrough;
+
     public PlayPermanentAction(PhysicalCard card, Zone zone, int twilightModifier, boolean ignoreRoamingPenalty) {
         _permanentPlayed = card;
         setText("Play " + GameUtils.getFullName(_permanentPlayed));
@@ -48,6 +50,18 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
         _fromZone = card.getZone();
         _toZone = zone;
+    }
+
+    /**
+     * Says that the player has looked through the draw deck this card is being played from.  The look is over once
+     * the card has been taken out of the deck, and that is when the deck is reshuffled (CR 4.2 "draw deck": "When you
+     * finish looking through it, reshuffle it"): before the card is paid for, and so before the card's own text or
+     * anything else answers its play.  A card played from a deck that nobody has said was looked through leaves the
+     * rest of the deck in order: a card revealed from the top or the bottom of a deck and then played, and the cards
+     * of a starting fellowship, whose deck is shuffled once the last of them is down.
+     */
+    public void setDeckLookedThrough() {
+        _deckLookedThrough = true;
     }
 
     @Override
@@ -78,6 +92,10 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID_FROM_HAND);
             else
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID);
+            if (playedFromZone == Zone.DECK && _deckLookedThrough) {
+                game.getGameState().sendMessage(_permanentPlayed.getOwner() + " shuffles their deck");
+                game.getGameState().shuffleDeck(_permanentPlayed.getOwner());
+            }
         }
 
         if (!_discountResolved) {
