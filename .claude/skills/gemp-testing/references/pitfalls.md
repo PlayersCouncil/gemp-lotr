@@ -226,7 +226,9 @@ play (a search of a deck, a play from a discard pile, a reveal), `FreepsHasCardC
 `FreepsHasCardChoiceNotAvailable(card)` and the `(card, false)` reading of a showing match by blueprint: any
 copy answers for any other, the other player's copy in his own pile or hand included. An invalid candidate
 there, and a card left out of a reveal, needs a blueprint no valid or shown card has (another title, or another
-version of the title); a test that reads where the chosen card went keeps one copy in the pile.
+version of the title); a test that reads where the chosen card went keeps one copy in the pile. The ANSWER need
+not go by blueprint: `ShadowChooseCards(card)` takes that very card out of a discard pile (Mountain-troll
+65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls.
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -270,7 +272,10 @@ Shadow player, until both pass in a row. A test of a Shadow action in those phas
 player first. `SkipToPhase` leaves the Free Peoples player with the decision. After a player's action the other
 is asked next: following a Free Peoples skirmish action `FreepsPass()` does nothing (he is not being asked), and
 it is `ShadowPass()` and then `FreepsPass()` that end the skirmish, so the last reading inside a skirmish is
-taken before that pair. `PassSkirmishActions()` and its kin pass for whoever holds the decision first.
+taken before that pair. `PassSkirmishActions()` and its kin pass for whoever holds the decision first. The same
+holds in the other shared phases: a test that ends on a Free Peoples maneuver ability rests on
+`AwaitingShadowManeuverPhaseActions()`, and a second use by the Free Peoples player needs `ShadowPass()` first
+(Elven Guardian 67_7's tests).
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
 A test that needs a maneuver phase needs a minion on the table.
@@ -292,7 +297,9 @@ companion into it and player 2's choice is then pending. End the test there: goi
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
-was about. Leave archers out of a scenario unless they are the point, or put them down after skipping.
+was about. Leave archers out of a scenario unless they are the point, or put them down after skipping. A
+possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` it after `SkipToAssignments()`
+(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
@@ -395,7 +402,10 @@ allows, both players passing in the regroup phase ends the turn at once and the 
 action or Pass" decision is pending; no "another move" question is asked. Below the limit the Free Peoples
 player is asked "Do you want to make another move?". Either comes only after the Shadow player's reconciliation:
 with cards in his hand he is first asked "Reconcile - choose card to discard or press DONE"
-(`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests).
+(`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand
+does not stay empty over a second move: where his draw deck holds cards the Shadow player draws at the reconcile
+inside `SkipToMovementDecision()`, so the last regroup phase asks him to reconcile again before the turn ends
+and the minions are discarded (Mountain-troll 65_112's tests).
 
 **A card discarded for where the fellowship is goes when the move is finished.** "Discard ... when at an
 underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` with a `Location` requirement) is
@@ -470,6 +480,14 @@ else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
 pending. A count that is 0 before and 0 after shows nothing by itself.
 
 **What an ally bears is in the support area.** A "support card" is a card in a support area or borne by a card that is (`mechanics/SupportAreaTests`): a Shadow condition on an ally (Weary 4_212 plays on a companion or ally) or on a site the Shadow player controls (Pillage of Rohan 4_167, Wolves of Isengard 5_69, No Retreat 4_30; `ShadowTakeControlOfSite(scn.GetSite(n))` after `SkipToSite(n + 1)`, then `AttachCardsTo(site, card)`) is a valid candidate for "a Shadow support card", and the same card on a companion is the invalid one beside it.
+
+**A follower's Aid is an optional trigger at the start of the maneuver phase.** A follower lies in the support
+area until its Aid is paid. `SkipToPhase(Phase.MANEUVER)` leaves the offer pending:
+`FreepsHasOptionalTriggerAvailable(follower)` reads it, and `FreepsAcceptOptionalTrigger()` pays the Aid cost and
+then asks for the companion (`FreepsChooseCard`). Every Free Peoples Aid transfers "to a companion", so no ally
+bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
+bearer a printed strength or resistance; see the helper table for two that leave a reading alone (Little Golden
+Flower 65_148's tests).
 
 **Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
 (`mechanics/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
