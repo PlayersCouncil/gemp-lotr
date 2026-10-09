@@ -205,6 +205,9 @@ listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contai
 entry with no wording.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
+A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
+by a wound or by a card that places him in the dead pile (not when he is discarded or returned to hand), and his
+text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
 
 **A response window can come before the target.** Where the Free Peoples player holds a response event that
 can answer an event being played, the game may put an "Optional responses" decision to him before the played
@@ -329,7 +332,9 @@ player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` 
 **At the move limit, the regroup phase ends the turn.** When the fellowship has moved as often as the move limit
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
 action or Pass" decision is pending; no "another move" question is asked. Below the limit the Free Peoples
-player is asked "Do you want to make another move?".
+player is asked "Do you want to make another move?". Either comes only after the Shadow player's reconciliation:
+with cards in his hand he is first asked "Reconcile - choose card to discard or press DONE"
+(`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests).
 
 **A card discarded for where the fellowship is goes when the move is finished.** "Discard ... when at an
 underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` with a `Location` requirement) is
@@ -440,6 +445,10 @@ asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choo
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
 to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
+Where nothing in the zone can be chosen, the showing is the only decision ("... while retrieving cards", nothing
+selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
+answers a showing as readily as a choice and never complains, so one too few leaves "Choose cards from deck" pending
+and one too many answers whatever comes next: at "Play Fellowship action or Pass" it passes the phase.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw

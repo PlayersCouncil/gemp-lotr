@@ -342,6 +342,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
+- "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
 - "Make each ... until" on an ability or event is a snapshot (Q-0011, F-0144)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 
@@ -365,6 +366,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Boards, readings and tools
 
 - FreepsGetCardChoiceCount() at a choice of phase actions
+- Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A correction of several lines for mutate.py
