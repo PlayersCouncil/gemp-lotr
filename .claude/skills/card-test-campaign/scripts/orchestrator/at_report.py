@@ -36,10 +36,13 @@ def main():
         for r in rows:
             r = r + [""] * (8 - len(r))
             _, method, kind, covered, home, new_name, _cards, sentence = r[:8]
-            where = Path(home).stem if home and home != "-" else "?"
-            state = {"covered": "already covered by", "part": "partly covered; the rest goes to", "new": "goes to"}.get(covered, "goes to")
-            out.append("- **%s**: %s\n  [%s; %s %s%s]" % (method, sentence.strip() or "(no sentence written)", KIND.get(kind, kind), state, where,
-                                                      (" as " + new_name) if new_name and new_name != "-" and covered != "covered" else ""))
+            home = home.strip()
+            if home in ("", "-") or home.startswith("?"):
+                fate = "no replacement proposed" if home in ("", "-") else "its home is not settled"
+            else:
+                state = {"covered": "already covered by", "part": "partly covered; the rest goes to", "new": "goes to"}.get(covered, "goes to")
+                fate = "%s %s%s" % (state, Path(home).stem, (" as " + new_name) if new_name and new_name != "-" and covered != "covered" else "")
+            out.append("- **%s**: %s\n  [%s; %s]" % (method, sentence.strip() or "(no sentence written)", KIND.get(kind, kind), fate))
     head = ["# The old at/ tests: what each one checks",
             "",
             "One line for each of the %d test methods in the %d files of `at/`, written by the survey that comes before their conversion "

@@ -86,6 +86,10 @@ you are given:
   to the fellowship's own site"). It is read by her on a phone, apart from everything else you write: it must
   stand on its own. No tab and no line break inside it.
 
+A test that is COMMENTED OUT (it does not run) still gets its line, since the count is by `@Test`: begin its
+sentence "(Commented out: does not run.)", and where it only shows a word of the definition language on a card
+that no longer exists, with no rule behind it, give it the home `-` and say so; do not invent a replacement.
+
 Every `@Test` method of the file is on exactly one line of the `.tsv`: count them
 (`grep -c '@Test' <file>`) and count your lines before you finish.
 
