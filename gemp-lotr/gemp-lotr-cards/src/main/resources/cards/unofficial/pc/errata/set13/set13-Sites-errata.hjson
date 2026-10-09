@@ -20,7 +20,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self

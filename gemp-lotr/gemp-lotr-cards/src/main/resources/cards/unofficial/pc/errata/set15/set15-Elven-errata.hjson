@@ -74,10 +74,14 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: winsskirmish
 					filter: name(legolas)
+				}
+				requires: {
+					type: canSpot
+					filter: wounded,or(and(culture(dwarven),Dwarf,hunter),and(culture(gondor),man,hunter))
 				}
 				effect: {
 					type: heal
