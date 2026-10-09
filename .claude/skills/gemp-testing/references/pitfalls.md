@@ -347,7 +347,9 @@ A test that needs a maneuver phase needs a minion on the table.
 The maneuver, archery and assignment phases are each passed over when no active minion is in play
 (`ManeuverGameProcess`, `ArcheryGameProcess`, `AssignmentGameProcess`), so a trigger at the start of one of them
 that does something to "a minion" always has one: its `requires: CanSpot minion` cannot differ in play, and no
-`-` on a board with nothing to act on (Q-0034) is owed for it (Race Text 94_11).
+`-` on a board with nothing to act on (Q-0034) is owed for it (Race Text 94_11). That covers the minion only:
+where the trigger needs a second card as well ("assign a minion to skirmish the Ring-bearer", Race Text 94_26), a
+board on which it does nothing still arises (the Ring-bearer hindered) and the `-` is owed (F-0337).
 
 **Minions do not survive a turn.** `SkipToSite(n)` plays whole turns for both players and ends in player 1's
 fellowship phase at site n. Minions and anything attached to them are discarded on the way, so put Shadow cards

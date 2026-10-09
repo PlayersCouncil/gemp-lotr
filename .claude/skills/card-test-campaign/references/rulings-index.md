@@ -353,6 +353,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041]
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009; Q-0165, open) [Q-0167, F-0328]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
+- "<A player> may assign a minion to skirmish the Ring-bearer" on an optional trigger wants a minion that can be assigned to him (F-0337, Race Text 94_26) [Q-0034, Q-0114]
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
