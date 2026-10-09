@@ -34,6 +34,14 @@ public abstract class ChooseCardsFromDiscardEffect extends AbstractEffect {
         return "Choose card from discard";
     }
 
+    /**
+     * The words the player is asked the choice in.  They are the same for every choice from a discard pile, whatever
+     * getText() answers, unless a subclass has words of a definition's own to put in their place.
+     */
+    protected String getChoiceText(LotroGame game) {
+        return "Choose card from discard";
+    }
+
     @Override
     public Effect.Type getType() {
         return null;
@@ -59,7 +67,7 @@ public abstract class ChooseCardsFromDiscardEffect extends AbstractEffect {
             cardsSelected(game, cards);
         } else {
             game.getUserFeedback().sendAwaitingDecision(_playerId,
-                    new ArbitraryCardsSelectionDecision(1, "Choose card from discard", new LinkedList<>(cards), minimum, _maximum) {
+                    new ArbitraryCardsSelectionDecision(1, getChoiceText(game), new LinkedList<>(cards), minimum, _maximum) {
                         @Override
                         public void decisionMade(String result) throws DecisionResultInvalidException {
                             cardsSelected(game, getSelectedCardsByResponse(result));

@@ -48,7 +48,7 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **One thing left to do is done without a second question (Q-0090).** Where taking an offer leaves only one thing to do, it is done without a second question (Q-0090). A second yes/no there is a finding.
 
-**A yes/no before a choice whose minimum is 0 (Q-0143, F-0277).** "<Player> may <do X to> any number of / up to N cards" built as a yes/no (`Optional`) and then a choice of 0 to N lets the player say no twice, and is a finding: the choice is asked alone, and its text says plainly that none need be chosen (Ketura: "let's get rid of the pop-up and just make sure the message displayed to the user is sufficiently clear"). Read the choice's minimum of 0 and, where the definition gives the choice a `text` of its own, the words that say so (`FreepsDecisionAvailable("you may choose none")`, The Palantir of Orthanc 53_67); no other wording of the game's is an expectation. Taking the `Optional` away takes its context away too: what was inside it ran as the player it named, so check afterwards who is asked each further thing (53_67's order of the cards on the deck went to the wrong player until `PutCardsFromHandOnTopOfDeck` was mended).
+**A yes/no before a choice whose minimum is 0 (Q-0143, F-0277).** "<Player> may <do X to> any number of / up to N cards" built as a yes/no (`Optional`) and then a choice of 0 to N lets the player say no twice, and is a finding: the choice is asked alone, and its text says plainly that none need be chosen (Ketura: "let's get rid of the pop-up and just make sure the message displayed to the user is sufficiently clear"). Read the choice's minimum of 0 and, where the definition gives the choice a `text` of its own, the words that say so (`FreepsDecisionAvailable("you may choose none")`, The Palantir of Orthanc 53_67); no other wording of the game's is an expectation. Taking the `Optional` away takes its context away too: what was inside it ran as the player it named, so check afterwards who is asked each further thing (53_67's order of the cards on the deck went to the wrong player until `PutCardsFromHandOnTopOfDeck` was mended). Gwaihir 101_15 was the other such card (F-0278): `putCardsFromDiscardIntoHand` takes a `text` for it, and a choice from a discard pile is asked in a definition's own `text` only since engine pass 18 (F-0285; with none it reads "Choose card from discard"). With no card to choose from, a 0-to-N choice is not asked at all.
 
 **A number that can only be one number is not asked for (F-0147).** A number that can only be one number is not asked for (F-0147, in this clone): where X runs from 1 to 1, or "how many" has one answer, the game takes it. Do not answer such a question in a test (the answer would go to the NEXT decision); to read the bounds of an X, arrange a board where two numbers can be named.
 
@@ -108,6 +108,19 @@ written in the definition's `cost`, and the event or ability is not offered with
 effect, the card can be played for nothing with no deck: a finding, fixable at landing (Forearmed 56_16, F-0249;
 the original 6_16 has it as the cost). The `C-` is the card not playable with the deck emptied. This is not the
 optional look or draw of Q-0104 and Q-0029, which is an effect and is offered with an empty deck.
+
+**A reveal that what follows reads must be able to happen (Q-0148, F-0284).** "Reveal the top card of your draw
+deck. <Something that reads the card revealed: the card, its twilight cost, its type.>" has no "to", so by F-0022
+the reveal is an effect; but the rest hangs on it. Ketura: "I would consider this either a requirement or a cost.
+Either way, it has to happen for the rest to occur, so an empty deck should disallow the ability." So with or
+without a "to" after the reveal, the ability is not offered (the event not played) with an empty draw deck. With
+no "to", write `requires: {type: HasCardInDrawDeck}` on the ability and leave the reveal its first effect
+(Glorfindel, Revealed in Wrath 59_16 and 9_16); without the requirement the card is a finding, already ruled. The
+`-` is the ability not offered with the deck emptied, and offered with one card left in it. This is not the
+optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. NOT ruled: a
+reveal that a cost buys ("<cost> to reveal the top N cards ... <what reads them>": War-beacon 103_35, His Cruelty
+and Malice 53_91; Q-0163, open: today offered with an empty deck and not flagged), and "you may reveal the top
+card ..." on an optional trigger. Do not read Q-0148 onto those; ask.
 
 **What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067,
 F-0111).** The rulings on X look two ways and are one rule. X is NOT capped by what the effect could do with

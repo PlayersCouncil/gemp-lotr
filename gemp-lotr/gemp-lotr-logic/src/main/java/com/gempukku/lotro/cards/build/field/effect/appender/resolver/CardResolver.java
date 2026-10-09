@@ -252,6 +252,15 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetPlayerDiscard, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        return resolveCardsInDiscard(type, choiceFilter, playabilityFilter, countSource, memory, choicePlayer, targetPlayerDiscard, choiceText, null, environment);
+    }
+
+    /**
+     * @param askedText the words a definition gives for the choice in a "text" field of its own, which the player
+     *                  is then asked in; null where it gives none, and the choice is asked as every choice from a
+     *                  discard pile is ("Choose card from discard"), whatever choiceText says.
+     */
+    public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetPlayerDiscard, String choiceText, String askedText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
         final PlayerSource targetPlayerDiscardSource = PlayerResolver.resolvePlayer(targetPlayerDiscard);
 
@@ -274,12 +283,20 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
-                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
+                        //The player who was asked, who need not be the one performing the action.
+                        game.getGameState().sendMessage(GameUtils.substituteText(choicePlayerId + " chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
                         return GameUtils.substituteText(choiceText, actionContext);
+                    }
+
+                    @Override
+                    protected String getChoiceText(LotroGame game) {
+                        if (askedText == null)
+                            return super.getChoiceText(game);
+                        return GameUtils.substituteText(askedText, actionContext);
                     }
                 };
             };

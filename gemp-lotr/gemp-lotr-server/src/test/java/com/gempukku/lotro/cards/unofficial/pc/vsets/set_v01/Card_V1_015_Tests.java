@@ -291,9 +291,12 @@ public class Card_V1_015_Tests
 		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertEquals(3, scn.GetMoveLimit());
 
-		// The Shadow player takes nothing.
-		assertTrue(scn.ShadowDecisionAvailable("take up to 2 Shadow cards"));
-		scn.ShadowChooseNo();
+		// The Shadow player is asked for the cards at once, with no yes/no before it, in words that say none need
+		// be chosen (Q-0143), and takes nothing: the choice is answered with no cards.
+		assertTrue(scn.ShadowDecisionAvailable("you may choose none"));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, raiders));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		scn.ShadowDeclineChoosing();
 		assertInDiscard(runner, raiders);
 		assertEquals(2, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetShadowHandCount());
@@ -359,12 +362,10 @@ public class Card_V1_015_Tests
 		scn.FreepsUseCardAction(gwaihir);
 		// It is the Shadow player who is asked, and nobody else.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
-		assertTrue(scn.ShadowDecisionAvailable("take up to 2 Shadow cards"));
-
-		scn.ShadowChooseYes();
 		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, raiders, hate, breath));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(theirGuard, myTroop));
 		// Four to choose from, and no more than 2 may be taken.
+		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
 
 		scn.ShadowChooseCardBPFromSelection(raiders, breath);
@@ -397,9 +398,6 @@ public class Card_V1_015_Tests
 		assertEquals(0, scn.GetShadowHandCount());
 
 		scn.FreepsUseCardAction(gwaihir);
-		assertTrue(scn.ShadowDecisionAvailable("take up to 2 Shadow cards"));
-
-		scn.ShadowChooseYes();
 		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, raiders, hate));
 
 		// "Up to 2": one is enough.
@@ -408,6 +406,33 @@ public class Card_V1_015_Tests
 		assertEquals(1, scn.GetShadowHandCount());
 		assertInDiscard(runner, raiders);
 		assertEquals(2, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoShadowCardInTheirDiscardPileTheShadowPlayerIsAskedNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gwaihir = scn.GetFreepsCard("gwaihir");
+		scn.MoveAlliesToTable(gwaihir);
+
+		// The only card in the Shadow player's discard pile is a Free Peoples card.
+		var theirGuard = scn.GetShadowCard("guard");
+		scn.MoveCardsToDiscard(theirGuard);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertEquals(2, scn.GetMoveLimit());
+
+		scn.FreepsUseCardAction(gwaihir);
+		// The move limit is raised all the same, and the regroup phase goes on with nothing put to anyone.
+		assertInZone(Zone.DISCARD, gwaihir);
+		assertEquals(3, scn.GetMoveLimit());
+		assertInDiscard(theirGuard);
+		assertEquals(0, scn.GetShadowHandCount());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

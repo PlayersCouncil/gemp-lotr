@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -320,11 +319,11 @@ public class Card_09_016_ErrataTests
 	}
 
 	@Test
-	@Ignore("Q-0148: with an empty draw deck the ability is offered, reveals nothing and asks for the exertion")
 	public void IsNotOfferedWithAnEmptyDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var glorfindel = scn.GetFreepsCard("glorfindel");
+		var knight = scn.GetFreepsCard("knight");
 		scn.MoveCompanionsToTable(glorfindel);
 
 		var nelya = scn.GetShadowCard("nelya");
@@ -334,11 +333,25 @@ public class Card_09_016_ErrataTests
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(glorfindel, nelya);
+		// One card is left in his draw deck.
 		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetFreepsDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.MoveCardsToTopOfDeck(knight);
 		scn.FreepsResolveSkirmish(glorfindel);
 
-		// With no card to reveal there is no X: the ability costs nothing and would do nothing.
+		// With a last card to reveal the ability is offered: it is shown, and he does not exert.
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertTrue(scn.FreepsActionAvailable(glorfindel));
+		scn.FreepsUseCardAction(glorfindel);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(knight, false));
+		scn.DismissRevealedCards();
+		scn.FreepsChooseNo();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// That card gone, there is nothing to reveal and so no X for the rest to read: not offered (Q-0148).
+		scn.MoveCardsToDiscard(knight);
+		scn.ShadowPass();
 		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetWoundsOn(glorfindel));
 		assertEquals(10, scn.GetStrength(nelya));
 		assertFalse(scn.FreepsActionAvailable(glorfindel));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());

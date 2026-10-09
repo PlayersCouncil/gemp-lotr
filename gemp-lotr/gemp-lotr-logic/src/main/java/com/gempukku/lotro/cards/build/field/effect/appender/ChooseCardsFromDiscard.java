@@ -20,8 +20,9 @@ public class ChooseCardsFromDiscard implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         if (memorize == null)
             throw new InvalidCardDefinitionException("You need to define what memory to use to store chosen cards");
-        final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose cards from discard.");
+        //The words the player is asked the choice in, where the definition has words of its own for it.
+        final String text = FieldUtils.getString(effectObject.get("text"), "text");
 
-        return CardResolver.resolveCardsInDiscard(select, valueSource, memorize, "you", text, environment);
+        return CardResolver.resolveCardsInDiscard(select, null, null, valueSource, memorize, "you", "you", "Choose cards from discard.", text, environment);
     }
 }

@@ -268,15 +268,11 @@
 						until: endOfTurn
 					}
 					{
-						type: optional
+						type: putCardsFromDiscardIntoHand
 						player: shadowPlayer
-						text: Would you like to take up to 2 Shadow cards into hand from discard?
-						effect: {
-							type: putCardsFromDiscardIntoHand
-							select: choose(side(shadow))
-							count: 0-2
-						}
-
+						select: choose(side(shadow))
+						count: 0-2
+						text: Choose up to 2 Shadow cards from your discard pile to take into hand (you may choose none).
 					}
 				]
 			}

@@ -458,7 +458,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * memorize
       required
     * text
-      default: Choose cards from discard.
+      optional; the words the player is asked in.  Without it the choice is asked as every choice from a discard pile is, "Choose card from discard".  (Until engine pass 18 a `text` given here was never shown: F-0285.)
 * ChooseCardsFromDrawDeck
   The `player` is prompted with `text` to choose `count`* cards matching `filter` from the given `deck`.  If `showAll` is true, all cards in that deck are revealed to that player, which is what's supposed to happen RAW when searching the draw deck.  The chosen cards are stored to the given `memorize` location.
   See Counsel of the Wise).
@@ -1029,7 +1029,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * reveal
       required; boolean
 * PutCardsFromDiscardIntoHand
-  Causes `player` to `select count` cards from the given `discard` pile and place them in their owner's hand (this cannot be used to steal cards), optionally storing the chosen cards in the given `memorize`* location.
+  Causes `player` to `select count` cards from the given `discard` pile and place them in their owner's hand (this cannot be used to steal cards), optionally storing the chosen cards in the given `memorize`* location.  `text` is what `player` is asked when choosing; where `count` may be 0 ("may take up to N"), say there that none need be chosen instead of wrapping the effect in an `Optional` (Q-0143; Gwaihir 101_15).
   See A New Light).
     * count
       default: 1
@@ -1038,9 +1038,11 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * player
       default: you
     * discard
-      required; player
+      default: the same as `player`
     * memorize
       optional
+    * text
+      optional; default: the game's "Choose card from discard"
 * PutCardsFromDiscardOnBottomOfDeck
   Causes the current player to `select count` cards from their discard pile and place them on the bottom of their draw deck.
   See Goblin Sneak)`*.

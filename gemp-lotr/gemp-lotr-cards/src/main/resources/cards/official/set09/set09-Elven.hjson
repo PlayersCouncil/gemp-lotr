@@ -231,6 +231,11 @@
 			{
 				type: activated
 				phase: skirmish
+				// The X of the second sentence is read from the card revealed: with no card to reveal
+				// the ability is not offered (Q-0148).
+				requires: {
+					type: HasCardInDrawDeck
+				}
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck

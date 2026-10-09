@@ -307,7 +307,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A choice whose every branch has nothing to act on (F-0116)
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090)
-- A yes/no before a choice whose minimum is 0 (Q-0143, F-0277)
+- A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285]
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034]
@@ -330,6 +330,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
+- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029, Q-0163]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)

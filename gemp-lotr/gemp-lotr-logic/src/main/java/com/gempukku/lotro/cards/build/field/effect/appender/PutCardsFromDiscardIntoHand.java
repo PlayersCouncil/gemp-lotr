@@ -23,16 +23,20 @@ import java.util.List;
 public class PutCardsFromDiscardIntoHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player", "discard", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player", "discard", "memorize", "text");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String discard = FieldUtils.getString(effectObject.get("discard"), "discard", player);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+        //What the player choosing the cards is asked, where the definition has words of its own for it.  A
+        // definition whose count may be 0 says here that choosing none is allowed, in place of a yes/no asked
+        // beforehand.
+        final String text = FieldUtils.getString(effectObject.get("text"), "text");
 
         final EffectAppender cardResolver =
-                CardResolver.resolveCardsInDiscard(select, valueSource, memorize, player, discard, "Choose cards from discard", environment);
+                CardResolver.resolveCardsInDiscard(select, null, null, valueSource, memorize, player, discard, "Choose cards from discard", text, environment);
 
         MultiEffectAppender result = new MultiEffectAppender() {
             // About to be carried out with no card to take (none chosen, or the one chosen gone from the pile),
