@@ -252,6 +252,9 @@ def reports(state: Path) -> list:
     found = sorted(folder.glob("engine-pass-*/*.md"), key=lambda p: (-int(re.sub(r"\D", "", p.parent.name) or 0), p.name))
     batches = sorted(folder.glob("batches/*.md"), key=lambda p: p.name, reverse=True)
     out = []
+    survey = folder / "at-survey" / "REPORT.md"   # what each old at/ test checks: first, and whole
+    if survey.is_file():
+        out.append({"name": "at-survey/REPORT.md", "text": survey.read_text(encoding="utf-8", errors="replace")[:300000]})
     for p in batches + found:
         out.append({"name": str(p.relative_to(folder)).replace(os.sep, "/"), "text": p.read_text(encoding="utf-8", errors="replace")[:80000]})
     return out

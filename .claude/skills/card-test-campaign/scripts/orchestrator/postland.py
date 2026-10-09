@@ -57,6 +57,8 @@ def main(argv):
     # What is running now, for the tracker's first line (it is as true as the last time this was run).
     running = run(sys.executable, str(SCRIPTS / "orchestrator/wf.py"), "running").stdout.strip() or "[]"
     (STATE / "running.json").write_text(running + "\n", encoding="utf-8")
+    # Ketura's report on the old at/ tests, from whatever the survey has written so far.
+    run(sys.executable, str(Path(__file__).resolve().parent / "at_report.py"))
     built = run(sys.executable, str(SCRIPTS / "tracker.py"), "html", str(STATE / "tracker.html"))
     print((built.stdout.strip().split("\n") or [""])[-1] or built.stderr.strip()[-300:])
     # The published page is sent from the working folder: the page (unchanged between landings) and its data.

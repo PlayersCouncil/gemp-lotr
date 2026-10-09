@@ -75,7 +75,16 @@ you are given:
   how much of it is covered elsewhere), then one entry per directive, headed `### <home file>: <test name>`, with
   the five points above in that order, each a line or a short paragraph, and the old method names it replaces.
 - `<FileName>.tsv`: one line per OLD test method, tab-separated, no header:
-  `<at file>	<method>	<kind>	<covered|part|new>	<home file's path>	<new test name>	<ids of the cards it is about, comma-separated, or ->`
+  `<at file>	<method>	<kind>	<covered|part|new>	<home file's path>	<new test name>	<ids of the cards it is about, comma-separated, or ->	<one sentence for Ketura>`
+
+  The last column is what Ketura asked for by name (2026-10-09): "a report of what exactly all the at tests appear
+  to be testing, with just a brief one-sentence summary of what interaction, mechanic, or cards are being
+  checked. Many of those tests have very opaque names and use raw blueprint IDs that don't communicate what is
+  happening or why very well." So: ONE sentence in plain words that says what is checked, naming every card by
+  its NAME with the id after it in brackets ("Gimli, Dwarf of Erebor (1_13)"), never by id alone, and saying the
+  rule or interaction in the game's words ("a minion that is not roaming pays no roaming penalty when it is played
+  to the fellowship's own site"). It is read by her on a phone, apart from everything else you write: it must
+  stand on its own. No tab and no line break inside it.
 
 Every `@Test` method of the file is on exactly one line of the `.tsv`: count them
 (`grep -c '@Test' <file>`) and count your lines before you finish.
