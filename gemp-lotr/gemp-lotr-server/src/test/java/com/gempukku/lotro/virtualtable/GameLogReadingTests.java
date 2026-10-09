@@ -12,7 +12,8 @@ import static org.junit.Assert.*;
 /**
  * Tests of the rig itself: the reading of the game log, which is how a test sees a card that the game makes known
  * by a line in the log and by nothing else (a card taken from a draw deck by its type, a card revealed from a hand
- * to a player who is shown no pop-up).
+ * to a player who is shown no pop-up), and how it sees something the game says in words alone (a reveal from a
+ * hand that had no card to show).
  */
 public class GameLogReadingTests
 {
@@ -61,6 +62,36 @@ public class GameLogReadingTests
 	}
 
 	@Test
+	public void TheLogIsReadForWordsWhateverTheirCapitalsAndOnlySinceTheMark() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(aragorn, gimli);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		assertFalse(scn.GameLogSinceMarkSays("plays"));
+
+		// "<player> plays <Aragorn> from hand" and "<player> adds 4 to twilight pool".
+		scn.FreepsPlayCard(aragorn);
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("plays"));
+		assertTrue(scn.GameLogSinceMarkSays(scn.P1() + " PLAYS"));
+		assertTrue(scn.GameLogSinceMarkSays("adds 4 to twilight pool"));
+		assertFalse(scn.GameLogSinceMarkSays("adds 2 to twilight pool"));
+		// The words have to stand together in one message.
+		assertFalse(scn.GameLogSinceMarkSays("from hand adds 4"));
+
+		scn.MarkGameLog();
+		assertFalse(scn.GameLogSinceMarkSays("adds 4 to twilight pool"));
+
+		scn.FreepsPlayCard(gimli);
+		assertTrue(scn.GameLogSinceMarkSays("adds 2 to twilight pool"));
+		assertFalse(scn.GameLogSinceMarkSays("adds 4 to twilight pool"));
+	}
+
+	@Test
 	public void ANewMarkDropsWhatWasReadBefore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -96,5 +127,6 @@ public class GameLogReadingTests
 		// With no mark nothing was kept, and "not named" would be the answer whatever the game had said.
 		assertThrows(AssertionError.class, () -> scn.GameLogSinceMarkMentions(aragorn));
 		assertThrows(AssertionError.class, scn::GetGameLogSinceMark);
+		assertThrows(AssertionError.class, () -> scn.GameLogSinceMarkSays("plays"));
 	}
 }

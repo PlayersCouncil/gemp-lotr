@@ -1,0 +1,285 @@
+package com.gempukku.lotro.mechanics;
+
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
+
+/**
+ * A reveal from a hand that has no card to show: nobody is shown a list of no cards to dismiss, and the game log
+ * says that there was nothing to reveal.
+ *
+ * Ketura's ruling on Q-0144 (2026-10-08): "Both of these cards should behave the same....not sure which one is
+ * better UX.  Let's go ahead and leave out the pop-up and just go to the log, but ensure that the log has some sort
+ * of message to the tune of "there were no cards in hand to reveal" or something so the user isn't confused."
+ *
+ * Three definition words reveal from a hand, and each is here against an empty hand and against a hand of one
+ * card, where the showing is as it always was (the other player is shown the card, the owner of the hand is
+ * shown nothing: Q-0024, Q-0036):
+ * `revealHand` (the whole hand), `revealRandomCardsFromHand` (cards at random) and `revealCardsFromHand` (cards
+ * chosen, or taken at random by its `select`).  The last can also come to nothing in a hand that holds cards,
+ * when none of them is of the kind asked for: nobody is shown anything then either, and the log says that no
+ * cards were revealed without saying that the hand was empty.
+ */
+public class RevealingNoCardsFromAHandTests
+{
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Treachery Deeper Than You Know: "Fellowship: Spot Gandalf to reveal an opponent's hand."
+					put("treachery", "1_86");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: only a strength bonus of his own
+					// Troll's Keyward: "Shadow: Exert Troll's Keyward and reveal your hand to add (1) for each
+					// [orc] Troll revealed."  Vitality 3.
+					put("keyward", "12_105");
+					// Friends of Old: "Fellowship: Reveal a card at random from an opponent's hand.  Heal X
+					// [elven] allies, where X is the twilight cost of the card revealed."
+					put("friends", "3_16");
+					// Storm of Argument: "Fellowship: Reveal a card at random from an opponent's hand.  Shuffle
+					// up to X [dwarven] cards from your discard pile into your draw deck, where X is the twilight
+					// cost of the card revealed."  Its reveal is written revealCardsFromHand, select random(1).
+					put("storm", "3_6");
+					// Mallorn-trees: "Fellowship: Reveal an [elven] card from hand and place it beneath your draw
+					// deck."
+					put("mallorn", "1_54");
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] card
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a card that is not [elven]
+					put("runner", "1_178");     // Goblin Runner: a card for the Shadow player's hand
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void TheWholeOfAnEmptyHandIsShownToNobodyAndTheLogSaysThereWasNothingToReveal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treachery = scn.GetFreepsCard("treachery");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(treachery);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetShadowHandCount());
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(treachery);
+		// Nobody has anything to dismiss: the event is over and the phase goes on.
+		assertFalse(scn.FreepsDecisionAvailable("Hand of"));
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertInZone(Zone.DISCARD, treachery);
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("to reveal"));
+	}
+
+	@Test
+	public void AHandOfOneCardIsShownToTheOtherPlayerAsBefore() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treachery = scn.GetFreepsCard("treachery");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(treachery);
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(treachery);
+		assertTrue(scn.FreepsDecisionAvailable("Hand of"));
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, false));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(runner));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards"));
+
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.DISCARD, treachery);
+	}
+
+	@Test
+	public void APlayersOwnEmptyHandIsShownToNobodyEither() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var keyward = scn.GetShadowCard("keyward");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(keyward);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		assertEquals(0, scn.GetShadowHandCount());
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(keyward));
+
+		scn.MarkGameLog();
+		scn.ShadowUseCardAction(keyward);
+		// The Keyward exerts and reveals a hand of no cards: the Free Peoples player is shown nothing.
+		assertEquals(1, scn.GetWoundsOn(keyward));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(twilight, scn.GetTwilight());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
+	}
+
+	@Test
+	public void CardsAtRandomFromAnEmptyHandAreShownToNobodyAndTheLogSaysThereWasNothingToReveal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var friends = scn.GetFreepsCard("friends");
+		scn.MoveCardsToHand(friends);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetShadowHandCount());
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(friends);
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertInZone(Zone.DISCARD, friends);
+		// The same words as for the whole hand.
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("to reveal"));
+	}
+
+	@Test
+	public void ACardAtRandomFromAHandOfOneIsShownToTheOtherPlayerAsBefore() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var friends = scn.GetFreepsCard("friends");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToHand(friends);
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(friends);
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, false));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(runner));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards"));
+
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ARevealWrittenAsAChoiceOfCardsFromAnEmptyHandIsShownToNobodyAndTheLogNamesTheHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var storm = scn.GetFreepsCard("storm");
+		// A card in the hand of the player who plays the event: it is the other player's hand that is empty.
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(storm, aragorn);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetShadowHandCount());
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(storm);
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertInZone(Zone.DISCARD, storm);
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays(scn.P1() + "'s hand"));
+	}
+
+	@Test
+	public void ARevealWrittenAsAChoiceOfCardsFromAnotherPlayersHandIsShownToThePlayerWhoDoesNotOwnTheHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var storm = scn.GetFreepsCard("storm");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToHand(storm);
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		scn.FreepsPlayCard(storm);
+		// The player of the event is shown the card; the owner of the hand has the game log, which names his hand.
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, false));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(runner));
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("revealed " + scn.P2() + " cards in hand"));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards"));
+
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, runner);
+	}
+
+	@Test
+	public void WithNoCardOfTheKindInAHandThatHoldsCardsNobodyIsShownAnythingAndTheLogDoesNotCallTheHandEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(aragorn);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		scn.FreepsUseCardAction(mallorn);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, aragorn);
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("revealed no cards from " + scn.P1() + "'s hand"));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("There were no cards in"));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(aragorn));
+	}
+
+	@Test
+	public void AChosenCardFromAPlayersOwnHandIsShownToTheOtherPlayerAsBeforeAndFromAnEmptyHandNothingIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(arwen);
+
+		scn.StartGame();
+
+		scn.MarkGameLog();
+		scn.FreepsUseCardAction(mallorn);
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(arwen, false));
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(arwen));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards"));
+
+		scn.ShadowDismissRevealedCards();
+		assertInZone(Zone.DECK, arwen);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The hand is now empty.
+		scn.MarkGameLog();
+		scn.FreepsUseCardAction(mallorn);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P1() + "'s hand"));
+	}
+}

@@ -385,6 +385,7 @@ Decisions will always come with at least one choice, even if that single choice 
 - `void MarkGameLog()` — Starts reading the game log from here: the messages the game sends from now on are kept, and any kept before are dropped.
 - `List<String> GetGameLogSinceMark()`
 - `boolean GameLogSinceMarkMentions(PhysicalCardImpl... cards)` — Whether the game log has named each of the given cards since MarkGameLog() was last called.
+- `boolean GameLogSinceMarkSays(String text)` — Whether the game log has said the given words since MarkGameLog() was last called.
 - `boolean RBWearingOneRing()`
 - `PhysicalCardImpl GetRing()`
 - `PhysicalCardImpl GetShadowRing()`
@@ -522,4 +523,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-414 entries, 255 of them with no description in the source.
+415 entries, 255 of them with no description in the source.

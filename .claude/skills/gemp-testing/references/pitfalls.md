@@ -462,7 +462,10 @@ fellowship-phase draw that repeats has to stay within four, or its fifth reading
 **A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
 the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
 random) gives the pop-up to the other players only: the hand's owner is shown nothing and has nothing to dismiss
-(Ketura on Q-0024 and Q-0036; the game log names the cards). In the decision
+(Ketura on Q-0024 and Q-0036; the game log names the cards). A reveal from a hand that has no card to show (an
+empty hand, or no card of the kind asked for) gives nobody a pop-up: there is nothing to dismiss, and the game log
+says "There were no cards in <player>'s hand for <card> to reveal", or "<card> revealed no cards from <player>'s
+hand" when the hand holds cards (Q-0144). In the decision
 `FreepsHasCardChoiceAvailable(card)` answers false:
 `FreepsHasCardChoiceAvailable(card, false)` is the reading for a card that is shown. A definition that only sets
 `reveal: true` on moving a card writes a line in the game log and shows nobody anything.
@@ -474,8 +477,10 @@ the game log and nothing else. `MarkGameLog()` just before the action starts the
 Assert it for the cards taken or revealed and assert it false for a like card that was not, with
 `GetGameLogSinceMark().toString()` as the failure message. A card is matched by its link (blueprint id and full
 name): two copies cannot be told apart, and a card the log names for another reason is named too, so where a copy
-of the event being played is among the cards taken, set the mark after the play. Both readers fail the test if no
-mark was set.
+of the event being played is among the cards taken, set the mark after the play. For something the log says in
+words, with no card to name (a reveal from a hand that had nothing to show), `GameLogSinceMarkSays("no cards in")`
+is true when some one message since the mark contains the words, whatever their capitals: give the fewest words
+that tell the line from every other. All three readers fail the test if no mark was set.
 
 **A shuffle into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from your discard pile
 into your draw deck", or "shuffle any number of ... in play into your draw deck", and choosing none, or with

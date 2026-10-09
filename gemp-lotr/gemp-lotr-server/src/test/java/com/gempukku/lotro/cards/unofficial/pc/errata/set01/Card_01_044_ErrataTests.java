@@ -274,15 +274,15 @@ public class Card_01_044_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertTrue(scn.FreepsPlayAvailable(foul));
 
+		scn.MarkGameLog();
 		scn.FreepsPlayCard(foul);
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(1, scn.GetTwilight());
-		// The empty hand is shown as it is: a showing of no cards.
-		assertTrue(scn.FreepsDecisionAvailable("Hand of"));
-		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		// An empty hand is shown to nobody: there is nothing to dismiss, and the game log says so.
+		assertFalse(scn.FreepsDecisionAvailable("Hand of"));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
 
-		scn.FreepsDismissRevealedCards();
 		assertFalse(scn.FreepsDecisionAvailable("draw 2 cards"));
 		assertInZone(Zone.DISCARD, foul);
 		assertEquals(0, scn.GetFreepsHandCount());

@@ -145,6 +145,20 @@ public interface GameProperties extends TableBase {
 		return true;
 	}
 
+	/**
+	 * Whether the game log has said the given words since MarkGameLog() was last called.  This is the reading for
+	 * something the game tells the players by a line in the log and by nothing else, with no card to name: a reveal
+	 * from a hand that had no card to show ("no cards in").  Give the fewest words that tell the line from every
+	 * other; a card is asked after with GameLogSinceMarkMentions.
+	 * @param text Words to look for, in any mix of capitals and small letters.
+	 * @return True if some one message sent since the mark contains the words.
+	 */
+	default boolean GameLogSinceMarkSays(String text) {
+		Verify(text != null && !text.isBlank(), "GameLogSinceMarkSays was given no words to look for.");
+		var words = text == null ? "" : text.toLowerCase();
+		return GetGameLogSinceMark().stream().anyMatch(message -> message.toLowerCase().contains(words));
+	}
+
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {
 		return (PhysicalCardImpl)gameState().getRing(P1());

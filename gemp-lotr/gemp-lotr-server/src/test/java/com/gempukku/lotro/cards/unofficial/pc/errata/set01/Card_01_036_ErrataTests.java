@@ -414,12 +414,15 @@ public class Card_01_036_ErrataTests
 		assertEquals(0, scn.GetShadowHandCount());
 		assertTrue(scn.FreepsPlayAvailable(feet));
 
+		scn.MarkGameLog();
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, feet);
 		assertEquals(0, scn.GetFreepsArcheryTotal());
+		// Nobody is shown anything or asked anything, and the game log says that there was nothing to reveal.
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
 	}
 }

@@ -360,7 +360,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Reveals, draw decks and shuffles
 
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
-- revealHand of an empty hand. revealHand of an EMPTY hand still gives the card's player a "Hand of <player>" decision listing no cards, which must be ...
+- revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown
 
 ## Boards, readings and tools

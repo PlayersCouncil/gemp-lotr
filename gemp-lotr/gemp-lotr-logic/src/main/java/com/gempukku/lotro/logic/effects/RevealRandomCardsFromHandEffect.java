@@ -60,7 +60,8 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
                 game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed cards from " + _playerHand + " hand at random - " + getAppendedNames(randomCards));
             }
             else {
-                game.getGameState().sendMessage("No cards in " + _playerHand + " hand to reveal");
+                // Nobody is shown a list of no cards: the game log says there was nothing to reveal (Q-0144).
+                game.getGameState().sendMessage(GameUtils.getNoCardsRevealedFromHandMessage(game, _source, _playerHand));
             }
             cardsRevealed(randomCards);
             for (PhysicalCard randomCard : randomCards)

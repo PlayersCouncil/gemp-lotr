@@ -238,9 +238,9 @@ public class Card_03_067_ErrataTests
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(Set.of(aragorn, sam), Set.of(scn.GetFromTopOfFreepsDeck(1), scn.GetFromTopOfFreepsDeck(2)));
 
-		// An empty hand is revealed: the Shadow player is shown no cards.
+		// An empty hand is revealed: the Shadow player is shown nothing and has nothing to dismiss (Q-0144).
 		assertEquals(0, scn.ShadowGetTotalRevealedCardCount());
-		scn.ShadowDismissRevealedCards();
+		assertFalse(scn.ShadowDecisionAvailable("Hand of"));
 
 		assertEquals(7, scn.GetStrength(servant));
 		assertEquals(1, scn.GetWoundsOn(servant));
