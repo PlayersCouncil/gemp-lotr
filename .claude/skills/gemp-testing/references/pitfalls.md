@@ -397,7 +397,9 @@ ends player 1's early, never `FreepsChoose("")`) and then call
 pending it answers nothing and the game has not begun (Card_91_001_Tests). While the choice is pending the game
 keeps the running total of the costs played in the twilight pool: `GetTwilight()` reads it (2 after a cost-2
 companion, a card offered only while the total with its cost is 4 or less), and the pool is emptied as turn 1
-begins (Card_94_003_Tests).
+begins (Card_94_003_Tests). A starting fellowship is Free Peoples cards: where a card lets other card types in
+(Race Text 94_3), a Shadow card of those types in the draw deck is never offered, whatever the running total
+(Q-0189, F-0343; mechanics/StartingFellowshipIsFreePeoplesCardsTests).
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test

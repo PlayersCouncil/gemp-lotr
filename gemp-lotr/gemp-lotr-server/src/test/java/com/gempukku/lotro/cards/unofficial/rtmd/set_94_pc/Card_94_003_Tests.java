@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -344,7 +343,6 @@ public class Card_94_003_Tests
 	}
 
 	@Test
-	@Ignore("Q-0189: a Shadow condition is offered for the starting fellowship; the text names no side")
 	public void NoShadowCardIsOfferedForTheStartingFellowship() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
