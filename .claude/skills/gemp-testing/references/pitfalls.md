@@ -205,7 +205,11 @@ OwnerIsFreeps` is true for both: once the owner declines, the other player is of
 "you" (F-0311: he took a card from his own deck on 91_2, drew on 91_3, killed the owner's companion on 93_3). Only
 the decline shows it, and a test that accepts never does: every "you may" on a modifier has a test that declines
 and reads `assertFalse(scn.ShadowHasOptionalTriggerAvailable())` before its bookend. The correction is `player:
-owner` on the Trigger (shapes.md, F-0311).
+owner` on the Trigger (shapes.md, F-0311). A modifier's phase action (`Activated`) goes the same way: it is
+offered to whichever player may act in the phase, and with no owner requirement the other player takes it and
+pays from his own hand (F-0312, 91_10). Read him as not offered on a board where he CAN pay: with an empty hand
+he is not offered whoever owns the modifier, and the reading shows nothing (91_10's old test). Which actions are
+meant for both players is in shapes.md (F-0312).
 
 ## Reading and answering an offer
 
@@ -249,6 +253,8 @@ where the twin is never named in the test (it lies in the draw deck), the chosen
 deck, and the card's text takes nothing from a draw deck.
 It cuts both ways: a card read as NOT offered (one still in the hand, say) fails that reading as soon as a valid
 candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
+The other player's pile can be told apart all the same: the invalid candidate for "your discard pile" is a card
+in HIS pile of a title that is in none of the chooser's piles (91_11: his Orc Bowmen, the chooser's left in the deck).
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 

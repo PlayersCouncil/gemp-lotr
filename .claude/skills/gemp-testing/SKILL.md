@@ -230,7 +230,8 @@ new VirtualTableScenario(cards, sites, frodo, ring, "91_18", null,      // a mod
 A modifier that reads the same for both sides gets a `GetFreepsScenario()` and a `GetShadowScenario()` and is
 tested from each. A modifier's "you may" is declined in one test with the other player read as not offered: a
 meta-site's optional trigger goes to every player unless its definition names one (pitfalls, "A meta-site's
-optional trigger"). The game log calls a modifier by its picture card's title ("The Shire" for 91_2), never
+optional trigger"). A modifier's phase action goes to whoever may act in the phase: where its text says "your",
+read the other player as not offered on a board where he could pay its cost (shapes.md, F-0312). The game log calls a modifier by its picture card's title ("The Shire" for 91_2), never
 "Race Text 91_2": read the log for what was done, not for the modifier's name.
 
 ## When the rig cannot do what a test needs
