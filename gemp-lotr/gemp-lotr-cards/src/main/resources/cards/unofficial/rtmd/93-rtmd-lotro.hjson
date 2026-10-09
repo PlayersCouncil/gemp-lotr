@@ -108,7 +108,7 @@
 					type: ModifyMoveLimit
 					amount: 1
 				}
-				until: end(regroup)
+				until: endOfTurn
 			}
 		}
 		gametext: Each time your fellowship moves, you may kill a companion (except the Ring-bearer) to make the move limit +1.
