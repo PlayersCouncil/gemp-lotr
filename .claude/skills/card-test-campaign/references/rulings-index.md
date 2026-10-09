@@ -314,7 +314,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
-- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219)
+- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 
@@ -377,6 +377,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
+- Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A correction of several lines for mutate.py
 - A site can be controlled only once every marker has passed it

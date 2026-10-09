@@ -309,6 +309,12 @@ until some legal action has been taken.
 hindered cards have been restored (CR 5.0 "reconcile"; Q-0059). That is so for both players' regroup reconciles
 and for "reconcile your hand" effects.
 
+**A card's "reconcile your hand" asks what the regroup reconcile asks, in the middle of the phase.** With fewer
+than 8 cards in hand it is one card choice of 0 to 1 (`ShadowChooseCard(card)` or `ShadowDeclineReconciliation()`)
+and then the draw up to 8; with an empty hand nothing is asked; with more than 8 it is one choice of exactly
+hand minus 8 cards, minimum and maximum equal, with no optional discard first and no declining (`ShadowChooseCards`).
+Under Foot 60_52's tests read all three.
+
 **A deck's order is set after `StartGame()`.** The game shuffles each deck to deal the opening hands, so a card
 moved to the top or bottom of a draw deck before `StartGame()` does not stay there. `MoveCardsToTopOfDeck(a, b,
 c)` puts each on top in turn, so the last one named is the top card.
@@ -377,7 +383,9 @@ F-0233).
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
 second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the
-deck's size where a discard or a draw must be possible.
+deck's size where a discard or a draw must be possible. Both players' decks hold every alias, so an alias added
+to a shared `Get...Scenario()` moves every hand and deck count the file's other tests read by one (60_52: 15 and
+7 became 16 and 8); where the file reads such counts, give a filler alias the new card's id instead.
 
 **A random or whole-hand effect takes whatever is there.** Where a test sets off anything that acts on a hand or
 a deck by chance or as a whole (a random look, reveal or discard from a hand; a discard "for each X revealed"; a
