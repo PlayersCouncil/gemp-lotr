@@ -530,6 +530,11 @@ assign, the fierce assignment phase follows, which is the cheapest way to stand 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
 show as 2 before it and 1 after (Sméagol 59_30, who adds none when he starts as the Ring-bearer, reads 1 and 0).
+That holds while player 1's starting fellowship is pending, which takes a companion in the decks. `GetBurdens()`
+reads the player set-up has reached: with no companion in the decks the game has gone on to the mulligan question
+and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2 it reads 2, and 7 where a
+companion is in the decks). After `StartGame()` it is player 1's bid less 1 on every table (7 reads 6; 0 reads
+0): read a bid there (Race Text 91_18), and player 2's on his own turn, where nothing has been taken off.
 
 ## Cards, owners and zones
 
@@ -787,6 +792,15 @@ Ring, Map and sites are the ones the test names, as named: the rig's `Fellowship
 first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
 named and the valid ones are not.
+A Race to Mount Doom modifier of deck building is tied to validation by its own overrides:
+`dvs.validate(deck, VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides())`, which is what
+`LeagueService.buildDeckValidationContext` merges for the player who has it. A context built by hand with the
+number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)`) tests the format and not the
+card: a wrong number in the definition passes it (92_1's old tests; 92_19 and 94_22 are written that way too).
+The format has no Ring-bearer rule of its own: it counts the Ring-bearer, the Ring and the sites with the draw
+deck, by title, against the one copy limit (CR 4.2 "building your deck", the exception). Every deck the scenario
+builds has Frodo 1_290 as Ring-bearer, so `buildDeckWithCopies("1_290", n, true)` puts n Frodos beside him and
+the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
 
 ## Test cards and the test booster pack
 

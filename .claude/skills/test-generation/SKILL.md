@@ -207,7 +207,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 
 - anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A card
   discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
-  line. An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
+  line. An exert cost's `C-` board is the one who must exert, exhausted; where the cost names a kind ("exert
+  your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him. A board with
+  nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
   added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's helper table).
   An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
   (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must

@@ -224,8 +224,13 @@ are never cheated in. The modifier card is then `scn.GetFreepsCard("mod")` or `s
 new VirtualTableScenario(cards, sites, frodo, ring, "91_3", null);      // player 1 has the modifier
 new VirtualTableScenario(cards, sites, frodo, ring, null, "91_3");      // player 2 has it
 new VirtualTableScenario(cards, sites, frodo, ring, "91_18", null,      // a modifier that changes the bid
-    scn -> { scn.FreepsDecided("6"); scn.ShadowDecided("0"); scn.FreepsDecided("0"); });
+    scn -> { scn.FreepsChoose("6"); scn.ShadowChoose("0"); scn.FreepsChoose("Go first"); });
 ```
+
+The last answer is the higher bidder's seat ("Go first" / "Go second"); assertions made inside the handler count.
+A modifier of deck building (92_1, 92_19, 94_22: `DeckBuildingOverride`) drives no game: it is tested with
+`DeckValidationScenario`, validating with the card's own overrides and never a context built by hand (pitfalls,
+"Validating a deck"); its stats test takes the card from a table that has it.
 
 A modifier that reads the same for both sides gets a `GetFreepsScenario()` and a `GetShadowScenario()` and is
 tested from each. A modifier's "you may" is declined in one test with the other player read as not offered: a
