@@ -11,18 +11,21 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_94_020_Tests {
-
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("merry", "4_310"); // Merry: Skirmish action exerts the Ring-bearer as its own cost, no assignment needed
-		put("resistance", "2_79"); // Resistance Becomes Unbearable: Shadow event, exerts the Ring-bearer as its effect
-		put("twigul", "2_82"); // Ulaire Attea: pays Resistance Becomes Unbearable's exert cost
-		put("troop", "1_177"); // Goblin Patrol Troop: clean Shadow minion
-		put("aragorn", "1_89"); // Aragorn, Ranger of the North: keeps a skirmish active so Merry's own action stays available
-	}};
-
+public class Card_94_020_Tests
+{
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "4_310");     // Merry, Learned Guide: "Skirmish: Exert the Ring-bearer to discard Merry", whoever is skirmishing
+					put("resistance", "2_79"); // Resistance Becomes Unbearable: Shadow Maneuver event, exert a twilight Nazgul to exert the Ring-bearer
+					put("twigul", "2_82");     // Ulaire Attea, The Easterling: twilight Nazgul, vitality 3; pays for Resistance Becomes Unbearable
+					put("troop", "1_177");     // Goblin Patrol Troop: strength 13, no text
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: strength 8, vitality 4; fights the Troop so that there is a skirmish
+					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
+					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
+					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -31,7 +34,18 @@ public class Card_94_020_Tests {
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "4_310");     // Merry, Learned Guide: "Skirmish: Exert the Ring-bearer to discard Merry", whoever is skirmishing
+					put("resistance", "2_79"); // Resistance Becomes Unbearable: Shadow Maneuver event, exert a twilight Nazgul to exert the Ring-bearer
+					put("twigul", "2_82");     // Ulaire Attea, The Easterling: twilight Nazgul, vitality 3; pays for Resistance Becomes Unbearable
+					put("troop", "1_177");     // Goblin Patrol Troop: strength 13, no text
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: strength 8, vitality 4; fights the Troop so that there is a skirmish
+					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
+					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
+					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -39,8 +53,40 @@ public class Card_94_020_Tests {
 		);
 	}
 
+	// A Ring-bearer who is not Frodo: Galadriel, Bearer of Wisdom, whose own text is about her resistance alone.
+	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "4_310");     // Merry, Learned Guide: "Skirmish: Exert the Ring-bearer to discard Merry", whoever is skirmishing
+					put("resistance", "2_79"); // Resistance Becomes Unbearable: Shadow Maneuver event, exert a twilight Nazgul to exert the Ring-bearer
+					put("twigul", "2_82");     // Ulaire Attea, The Easterling: twilight Nazgul, vitality 3; pays for Resistance Becomes Unbearable
+					put("troop", "1_177");     // Goblin Patrol Troop: strength 13, no text
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: strength 8, vitality 4; fights the Troop so that there is a skirmish
+					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
+					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
+					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GaladrielRB,
+				VirtualTableScenario.RulingRing,
+				"94_20", null
+		);
+	}
+
 	protected VirtualTableScenario GetControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "4_310");     // Merry, Learned Guide: "Skirmish: Exert the Ring-bearer to discard Merry", whoever is skirmishing
+					put("resistance", "2_79"); // Resistance Becomes Unbearable: Shadow Maneuver event, exert a twilight Nazgul to exert the Ring-bearer
+					put("twigul", "2_82");     // Ulaire Attea, The Easterling: twilight Nazgul, vitality 3; pays for Resistance Becomes Unbearable
+					put("troop", "1_177");     // Goblin Patrol Troop: strength 13, no text
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: strength 8, vitality 4; fights the Troop so that there is a skirmish
+					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
+					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
+					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -78,6 +124,7 @@ public class Card_94_020_Tests {
 
 		// Merry's own "Skirmish: exert the Ring-bearer" action has no legal cost target
 		assertFalse(scn.FreepsActionAvailable(merry));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
@@ -94,6 +141,7 @@ public class Card_94_020_Tests {
 		scn.FreepsAssignAndResolve(aragorn, troop);
 
 		assertTrue(scn.FreepsActionAvailable(merry));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
@@ -120,6 +168,7 @@ public class Card_94_020_Tests {
 		// event, not a Free Peoples card -- goes through despite the modifier.
 		assertEquals(1, scn.GetWoundsOn(twigul));
 		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test
@@ -137,5 +186,120 @@ public class Card_94_020_Tests {
 
 		// requires: OwnerIsFreeps is false here, so the block is inactive
 		assertTrue(scn.FreepsActionAvailable(merry));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AnEventsExertionMayBePaidByAnyCompanionButTheRingBearerWhoIsNotFrodo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetGaladrielScenario();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var friends = scn.GetFreepsCard("friends");
+		var galadriel = scn.GetRingBearer();
+
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveCardsToHand(friends);
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(galadriel));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertTrue(scn.FreepsPlayAvailable(friends));
+		scn.FreepsPlayCard(friends);
+
+		// "Exert a companion": Sam is Ring-bound but bears no Ring, and may pay like Aragorn.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(galadriel));
+		scn.FreepsChooseCard(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(galadriel));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACompanionsTextThatExertsACompanionDoesNotOfferTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+		var isildur = scn.GetFreepsCard("isildur");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+
+		scn.MoveCompanionsToTable(isildur, aragorn);
+		scn.MoveMinionsToTable(troop);
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(isildur, troop);
+		scn.PassCurrentPhaseActions();
+		// The wound for losing and Isildur's own trigger come at once: the wound first.
+		scn.FreepsResolveRuleFirst();
+
+		// Isildur (7) loses to the Troop (13) and takes a wound; his own text then exerts a companion.
+		assertEquals(1, scn.GetWoundsOn(isildur));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(isildur, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(isildur));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ASitesTextMayStillExertTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveMinionsToTable(troop);
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, troop);
+
+		// Ettenmoors, site 2: "Skirmish: Exert your companion or minion to make that character strength +2."
+		// A site is no Free Peoples card.
+		var ettenmoors = scn.GetCurrentSite();
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsActionAvailable(ettenmoors));
+		scn.FreepsUseCardAction(ettenmoors);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		scn.FreepsChooseCard(frodo);
+
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheOwnerInPlayerTwosSeatCannotExertHisRingBearerWithHisOwnEventOnHisOwnTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+		var aragorn = scn.GetShadowCard("aragorn");
+		var sam = scn.GetShadowCard("sam");
+		var friends = scn.GetShadowCard("friends");
+		var frodo = scn.GetShadowRingBearer();
+
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveCardsToHand(friends);
+		scn.StartGame();
+
+		// Player 2's turn: he owns the modifier and is now the Free Peoples player.
+		scn.SkipToOtherPlayersTurn();
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowPlayAvailable(friends));
+		scn.ShadowPlayCard(friends);
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
+		scn.ShadowChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 }
