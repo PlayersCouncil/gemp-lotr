@@ -361,7 +361,10 @@ down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(
 
 **An optional trigger at the start of the turn is the first thing asked.** A card with an optional
 start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`, leaves its offer pending when
-`StartGame()` returns. Answer it, or put the card down afterwards.
+`StartGame()` returns. Answer it, or put the card down afterwards. A card with no trigger at the start of the turn,
+a minion included, may go down before `StartGame()` and is still on the table in the turn's later phases
+(Card_91_013_Tests; probed): "minions go down after StartGame" is the habit of new tests, and an old file's order
+is left as it is.
 
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
 the way. `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
@@ -409,7 +412,9 @@ The same the other way: a companion of twice a minion's strength kills it whatev
 **A second assignment or skirmish phase in one turn takes a second move.** To show something renew or end at the
 next phase of the same name: after the skirmishes, `SkipToMovementDecision()`, `FreepsChooseToMove()`, put a
 minion down (`MoveMinionsToTable`), `ShadowRefreshDecision()`, then `SkipToPhase(...)` as usual
-(Card_07_080_ErrataTests). The fellowship is one site further on.
+(Card_07_080_ErrataTests). The fellowship is one site further on. The Shadow player has reconciled inside
+`SkipToMovementDecision()`: with cards in his draw deck his hand is larger at the second phase than it was at the
+first, so a reading of his hand on each side of the move allows for the draw (Card_91_016_Tests reads 1, then 2).
 
 **Who places archery wounds.** The fellowship's archery wounds are placed by the Shadow player on his minions
 (`ShadowChooseCard` after `SkipToArcheryWounds()`), the minions' by the Free Peoples player on companions.
@@ -534,6 +539,13 @@ but can still be wounded.
 **Allies live in the support area.** `MoveAlliesToTable` puts allies there, where an ally played legally goes.
 `MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
 does if handed anything but an ally.
+
+**A play read as not offered for a card that is not in hand shows nothing.** `GetFreepsCard` and `GetShadowCard`
+leave the card in its owner's draw deck, and there `FreepsPlayAvailable(card)` answers false whatever the card
+under test does (probed: Barliman Butterbur 1_70 false from the deck and true from the hand, with nothing on the
+board against him). Move the card to hand before its refusal is read, and read the same card as offered on the
+control board. Race Text 91_15's old test read Barliman so; in an old file, look for the `MoveCardsToHand` that
+goes with each `assertFalse(...PlayAvailable(x))`.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
