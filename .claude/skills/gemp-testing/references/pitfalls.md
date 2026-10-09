@@ -98,6 +98,12 @@ limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no
 gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
 and nothing else happens; with no cost it is not offered at that limit either.
 
+**A "wound X twice" branch of a choice is not offered to a character with 1 vitality left.** In "add 2 burdens or
+wound him twice" (Boromir 59_31) only the first of the two wounds could be placed, so the game carries out the
+other branch and asks nothing (CR 4.2 "effect": a choice must be one the player is fully capable of performing;
+the glossary read together, not a ruling of Ketura's). With 2 vitality left the branch is offered and kills him,
+which is also what tells a wound from an exertion (F-0148).
+
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
 nothing when used (F-0036, Out of Dark Waters). A definition written that way is a finding, not a quirk to test
@@ -197,7 +203,9 @@ version of the title); a test that reads where the chosen card went keeps one co
 
 **When a wound kills and something answers the same wound.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (a Shadow card's "wins a skirmish" trigger
-beside "Resolve skirmish damage" is the same decision; it is not only for deaths). The rule's entry may have no action
+beside "Resolve skirmish damage" is the same decision, and so is a Free Peoples companion's own required "each
+time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
+after `PassSkirmishActions()`; it is not only for deaths). The rule's entry may have no action
 text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
 the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
@@ -294,7 +302,9 @@ c)` puts each on top in turn, so the last one named is the top card.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
-skirmishes that are not about him.
+skirmishes that are not about him. Where a card's own text wounds the Ring-bearer in a skirmish, give the table
+The Great Ring 19_1 (`VirtualTableScenario.GreatRing`): it adds no strength and, while it is not worn, answers no
+wound; its maneuver and skirmish abilities are used only on purpose (Card_09_031_ErrataTests).
 
 **A companion beaten by double his strength is killed, not wounded.** A helper minion chosen only to win
 overwhelms: Goblin Patrol Troop (13) kills any companion of strength 6 or less, and a minion of 8 kills Dwarf
@@ -356,6 +366,13 @@ deck's size where a discard or a draw must be possible.
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
 the first time. `InFierceRound()` tells them apart (G-0031): true from the game's "Fierce skirmishes" until the
 last fierce skirmish is over. A "this phase" effect from the first assignment phase has ended by then.
+The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
+time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
+bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
+
+**Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
+Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
+show as 2 before it and 1 after (Sméagol 59_30, who adds none when he starts as the Ring-bearer, reads 1 and 0).
 
 ## Cards, owners and zones
 
