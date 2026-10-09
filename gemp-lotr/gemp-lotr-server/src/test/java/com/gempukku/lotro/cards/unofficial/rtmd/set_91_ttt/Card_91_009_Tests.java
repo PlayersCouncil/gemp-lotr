@@ -1,6 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_91_ttt;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,19 +11,19 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_91_009_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>()
-	{{
-		// Gimli, Dwarf of Erebor: 6 str, 3 vit, twilight 2
-		put("gimli", "1_13");
-		// Aragorn, Ranger of the North: 8 str, 4 vit, twilight 4
-		put("aragorn", "1_89");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf companion, vitality 3, cost 2
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, vitality 4, cost 4
+					put("bounder", "1_286");    // Bounder: a Hobbit ally, vitality 2, cost 1; a skirmish ability used only on purpose
+					put("savage", "1_151");     // Uruk Savage: a minion, vitality 3, cost 2, site 5; Damage +1 is its whole text
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -30,7 +32,14 @@ public class Card_91_009_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf companion, vitality 3, cost 2
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, vitality 4, cost 4
+					put("bounder", "1_286");    // Bounder: a Hobbit ally, vitality 2, cost 1; a skirmish ability used only on purpose
+					put("savage", "1_151");     // Uruk Savage: a minion, vitality 3, cost 2, site 5; Damage +1 is its whole text
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -44,6 +53,7 @@ public class Card_91_009_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_9
 		 * Type: MetaSite
+		 * Intensity: 5
 		 * Game Text: Each time a companion is played, that companion comes into play exhausted (except at site 1).
 		 */
 
@@ -53,6 +63,7 @@ public class Card_91_009_Tests
 
 		assertEquals("Race Text 91_9", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(5, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -62,16 +73,37 @@ public class Card_91_009_Tests
 		var scn = GetFreepsScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToHand(gimli);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToHand(gimli, aragorn);
 
 		scn.StartGame();
 		scn.SkipToSite(2);
 
 		// Now at site 2, play Gimli
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		int pool = scn.GetTwilight();
 		scn.FreepsPlayCard(gimli);
 
 		// Gimli should be exhausted (wounds = vitality - 1)
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertTrue(scn.IsExhausted(gimli));
+		// Only the companion played: the one already in play is not touched
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// Each time: the next companion too, and by his own vitality of 4, not by a fixed two wounds
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsPlayCard(aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.IsExhausted(aragorn));
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -90,7 +122,10 @@ public class Card_91_009_Tests
 		scn.FreepsPlayCard(gimli);
 
 		// Gimli should NOT be exhausted at site 1
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertFalse(scn.IsExhausted(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -106,9 +141,44 @@ public class Card_91_009_Tests
 		scn.SkipToSite(2);
 
 		// Now at site 2, play Gimli
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		scn.FreepsPlayCard(gimli);
 
 		// Gimli should be exhausted (wounds = vitality - 1)
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertTrue(scn.IsExhausted(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnAllyAndAMinionPlayedAwayFromSite1AreNotExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(gimli, bounder);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(savage);
+
+		// A companion, an ally and a minion are played on one board away from site 1
+		scn.FreepsPlayCard(gimli);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+
+		scn.FreepsPlayCard(bounder);
+		assertInZone(Zone.SUPPORT, bounder);
+		assertEquals(0, scn.GetWoundsOn(bounder));
+
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		scn.ShadowPlayCard(savage);
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

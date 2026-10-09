@@ -401,6 +401,9 @@
 			{
 				type: Activated
 				phase: skirmish
+				requires: {
+					type: IsOwner
+				}
 				cost: {
 					type: DiscardFromHand
 					count: 3
