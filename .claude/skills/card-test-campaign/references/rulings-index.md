@@ -272,7 +272,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0144, revealing an empty hand: no pop-up, a line in the log
 - Q-0145, cardInfo is not a source of truth, and is kept true
 - Q-0146, Bill Ferny 52_75: A. "A sounds good." The erratum is built as the original 2_75 is (CantBeAssignedToSkirmish for the Free Peoples player), so ...
-- Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it bars them all. "Well, if we follow ... [F-0243]
+- Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it bars them all. "Well, if we follow ... [F-0243, F-0275]
 
 # Settled shapes (shapes.md)
 

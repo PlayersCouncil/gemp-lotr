@@ -1125,4 +1125,4 @@ sub-parts, such as "adding to archery totals" and "taking archery wounds when as
 performing the second but not the first. However disallowing "participation" should disallow both sub-parts here,
 meaning Come Down is ineffectual." So an ally who "may not participate in archery fire" neither adds to the
 archery total nor takes archery wounds, whatever card would have him take them; the wounds go to an ally who can
-take them, or to companions (F-0243). *[2026-10-08, night]*
+take them, or to companions as F-0243 has it. Built in engine pass 17 as F-0275. *[2026-10-08, night]*
