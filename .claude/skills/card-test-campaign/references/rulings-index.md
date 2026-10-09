@@ -326,6 +326,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312)
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
+- Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10)
 
 ## Limits
 
