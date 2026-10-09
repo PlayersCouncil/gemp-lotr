@@ -19,8 +19,9 @@
         Runs the gate on the cards and commits the ones that clear it as one commit (land.py --batch), then commits
         whatever the lander changed under .claude/skills as "Skills: what <folder> turned up", rebuilding the
         rulings index first if the rulings, the shapes or the pitfalls changed.  Prints what landed and the head.
-        --changed names every card whose DEFINITION was corrected: before anything is committed, the tests of
-        every other card that uses one of them as a helper are run, and if any fails nothing is committed.
+        --changed names every card whose DEFINITION was corrected (batch cards and others alike): their files
+        go into the commit, and before anything is committed the tests of every other card that uses one of
+        them as a helper are run; if any fails nothing is committed.  --with is for any other file.
 
     landing.py commit "<subject>" <path...> [--body-file <file>]
         For work that is not a batch of cards (an engine or rig change with its tests and documents): commits
@@ -131,6 +132,15 @@ def finish(argv):
         extra.append(take(argv, "--with"))
     folder, ids = argv[0], argv[1:]
     tail = trailer()
+    # A corrected definition is committed with the batch whether or not --with names its file.
+    for card_id in changed_cards:
+        card = g.card_index().get(card_id)
+        if card is None:
+            print("NOT LANDED: --changed names %s, which is no card" % card_id)
+            return 2
+        path = g.rel(Path(card.file))
+        if path not in extra:
+            extra.append(path)
     if changed_cards:
         others = [c for c in users(changed_cards) if c not in ids]
         if others:

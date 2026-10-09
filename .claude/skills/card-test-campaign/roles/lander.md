@@ -147,11 +147,13 @@ something a test must cover. Append each as one line to `<state>/orchestrator/pr
 ## 7. Land
 
     python3 .claude/skills/card-test-campaign/scripts/landing.py finish <folder> <ids> \
-        [--with <a corrected definition's path>]... [--changed <ids of the cards whose definitions changed>] \
+        [--changed <ids of EVERY card whose definition you corrected, batch cards included>] \
+        [--with <another card's test file you put a line right in>]... \
         --note "<one line: the findings fixed, by number>"
 
-runs the gate again, commits the cards that clear it as one commit with the definitions, and commits your changes
-to the documents as a second one. If it says `NOT LANDED`, put right what it names and run it again. You run no
+runs the gate again, commits the cards that clear it as one commit together with the definitions of the cards
+`--changed` names, and commits your changes to the documents as a second one. Run it once, with everything: a
+second run makes a second commit. If it says `NOT LANDED`, put right what it names and run it again. You run no
 other git command.
 
 Then write the batch's report, `<state>/orchestrator/batches/<folder>.md`, for Ketura and the next orchestrator:

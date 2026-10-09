@@ -3,7 +3,9 @@
 The script's mutate.py call is intercepted: its card, old text, new text and --nth are applied to the card's file
 (CRLF kept), within the card's own block."""
 import subprocess, sys, runpy
-sys.path.insert(0, "/home/claude/work/repo/.claude/skills/card-test-campaign/scripts")
+import os
+# The scripts of the tree this file stands in (a batch may be working in a second tree).
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import gempcards as g
 done = []
 def fake_run(cmd, *a, **k):
