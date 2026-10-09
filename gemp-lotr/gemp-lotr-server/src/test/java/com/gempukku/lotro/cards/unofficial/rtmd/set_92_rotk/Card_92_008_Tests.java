@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -8,19 +9,19 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_92_008_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Aragorn, Ranger of the North (1_89): Gondor Man companion, twilight 4
-		put("aragorn", "1_89");
-		// Gimli, Dwarf of Erebor (1_13): Dwarven companion, twilight 2
-		put("gimli", "1_13");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, cost 4, vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2, vitality 3
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, cost 1; a character who is no companion
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -29,11 +30,34 @@ public class Card_92_008_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, cost 4, vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2, vitality 3
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, cost 1; a character who is no companion
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
 				null, "92_8"
+		);
+	}
+
+	// Galadriel bears the Ring (vitality 3), and Frodo is a companion like any other.
+	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("frodo", "1_290");      // Frodo, Son of Drogo: [shire] Hobbit companion; here he is not the Ring-bearer
+					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] Hobbit companion, cost 2; Ring-bound, and not the Ring-bearer
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, cost 4
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GaladrielRB,
+				VirtualTableScenario.RulingRing,
+				"92_8", null
 		);
 	}
 
@@ -43,6 +67,7 @@ public class Card_92_008_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_8
 		 * Type: MetaSite
+		 * Intensity: 4
 		 * Game Text: Each time you play a companion, you must exert the Ring-bearer.
 		 */
 
@@ -52,6 +77,7 @@ public class Card_92_008_Tests
 
 		assertEquals("Race Text 92_8", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(4, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -75,6 +101,10 @@ public class Card_92_008_Tests
 
 		scn.FreepsPlayCard(gimli);
 		assertEquals(2, scn.GetWoundsOn(frodo));
+		// The companions played are not the ones who exert, and nothing is asked.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -95,6 +125,75 @@ public class Card_92_008_Tests
 		scn.FreepsPlayCard(aragorn);
 
 		// Frodo should NOT be exerted — the modifier belongs to Shadow, not Freeps
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		assertEquals(0, scn.GetWoundsOn(frodo));
+		// Nor is the Ring-bearer of the modifier's owner, who played nothing.
+		assertEquals(0, scn.GetWoundsOn(scn.GetShadowRingBearer()));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void PlayingAnAllyDoesNotExertTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var bounder = scn.GetFreepsCard("bounder");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(bounder, gimli);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsPlayAvailable(bounder));
+
+		scn.FreepsPlayCard(bounder);
+		assertInZone(Zone.SUPPORT, bounder);
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// A companion played on the same board is what exerts him.
+		scn.FreepsPlayCard(gimli);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheRingBearerWhoIsNotFrodoExertsUntilSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetGaladrielScenario();
+
+		var galadriel = scn.GetRingBearer();
+		var frodo = scn.GetFreepsCard("frodo");
+		var sam = scn.GetFreepsCard("sam");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		// Frodo is a companion like any other here. He is put into play directly: while another
+		// character bears the Ring no Frodo may be played.
+		scn.MoveCompanionsToTable(frodo);
+		scn.MoveCardsToHand(sam, gimli, aragorn);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(galadriel));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// Sam is Ring-bound and no Ring-bearer: it is Galadriel who exerts, not he and not Frodo.
+		scn.FreepsPlayCard(sam);
+		assertEquals(1, scn.GetWoundsOn(galadriel));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		scn.FreepsPlayCard(gimli);
+		assertEquals(2, scn.GetWoundsOn(galadriel));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// Vitality 3 with 2 wounds: exhausted. She cannot exert, which does not stop a companion
+		// being played, and an exertion is no wound: she takes none.
+		assertTrue(scn.FreepsPlayAvailable(aragorn));
+		scn.FreepsPlayCard(aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertEquals(2, scn.GetWoundsOn(galadriel));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

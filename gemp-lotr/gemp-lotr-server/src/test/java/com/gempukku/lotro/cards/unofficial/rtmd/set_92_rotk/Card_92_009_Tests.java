@@ -6,26 +6,27 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_92_009_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Eomer, TMOR, Rohan companion, twilight 3
-		put("eomer", "4_267");
-		// Theoden, Tall and Proud: when killed, you may play a [Rohan] companion from discard or draw deck
-		put("theoden", "8_92");
-		// Morgul Slayer, [Sauron] Orc Minion, cost 2, strength 7, vitality 2; has text "Regroup: Exert this minion to wound a companion (except the Ring-bearer)."
-		put("slayer", "3_93");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eomer", "4_267");      // Eomer, Third Marshal of Riddermark: [rohan] Man companion, cost 3 (2 with a [rohan] Man to spot)
+					put("theoden", "8_92");     // Theoden, Tall and Proud: when he is killed, you may play a [rohan] companion from your discard pile or draw deck
+					put("slayer", "3_93");      // Morgul Slayer: [sauron] Orc, strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)."
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, cost 1; a character who is no companion
+					put("sword", "1_299");      // Hobbit Sword: [shire] possession, cost 1; bearer must be a Hobbit
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -34,7 +35,16 @@ public class Card_92_009_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eomer", "4_267");      // Eomer, Third Marshal of Riddermark: [rohan] Man companion, cost 3 (2 with a [rohan] Man to spot)
+					put("theoden", "8_92");     // Theoden, Tall and Proud: when he is killed, you may play a [rohan] companion from your discard pile or draw deck
+					put("slayer", "3_93");      // Morgul Slayer: [sauron] Orc, strength 7, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)."
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, cost 1; a character who is no companion
+					put("sword", "1_299");      // Hobbit Sword: [shire] possession, cost 1; bearer must be a Hobbit
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -48,6 +58,7 @@ public class Card_92_009_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_9
 		 * Type: MetaSite
+		 * Intensity: 4
 		 * Game Text: While your fellowship is at site 6 or higher, companions cannot be played.
 		 */
 
@@ -57,6 +68,7 @@ public class Card_92_009_Tests
 
 		assertEquals("Race Text 92_9", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(4, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -75,7 +87,9 @@ public class Card_92_009_Tests
 
 		scn.SkipToSite(5);
 
+		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsPlayAvailable(eomer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -91,12 +105,60 @@ public class Card_92_009_Tests
 		scn.StartGame();
 		scn.SkipToSite(6);
 
+		assertEquals(6, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsPlayAvailable(eomer));
+
+		// "Or higher": nor at the sites beyond.
+		scn.SkipToSite(7);
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.HAND, eomer);
+		assertFalse(scn.FreepsPlayAvailable(eomer));
+
+		scn.SkipToSite(8);
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.HAND, eomer);
+		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnAllyAndAPossessionCanStillBePlayed_AtSite6() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var eomer = scn.GetFreepsCard("eomer");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCardsToHand(eomer, gimli, bounder, sword);
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		// Companions of two cultures are refused; a character who is no companion and a possession are not.
+		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertFalse(scn.FreepsPlayAvailable(gimli));
+		assertTrue(scn.FreepsPlayAvailable(bounder));
+		assertTrue(scn.FreepsPlayAvailable(sword));
+
+		// Frodo is the only Hobbit in play to bear the sword.
+		scn.FreepsPlayCard(sword);
+		assertAttachedTo(sword, frodo);
+
+		scn.FreepsPlayCard(bounder);
+		assertInZone(Zone.SUPPORT, bounder);
+
+		assertInZone(Zone.HAND, eomer);
+		assertInZone(Zone.HAND, gimli);
+		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertFalse(scn.FreepsPlayAvailable(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
 	public void CompanionCannotBePlayedFromDeck_AtSite6OrHigher() throws DecisionResultInvalidException, CardNotFoundException {
-		// Westfold plays a companion from draw deck.  This should also be blocked at site 6+.
+		// Theoden plays a companion from the draw deck or discard pile.  This should also be blocked at site 6+.
 
 		var scn = GetFreepsScenario();
 
@@ -128,7 +190,7 @@ public class Card_92_009_Tests
 
 	@Test
 	public void CompanionCannotBePlayedFromDiscard_AtSite6OrHigher() throws DecisionResultInvalidException, CardNotFoundException {
-		// Westfold plays a companion from draw deck.  This should also be blocked at site 6+.
+		// Theoden plays a companion from the draw deck or discard pile.  This should also be blocked at site 6+.
 
 		var scn = GetFreepsScenario();
 
@@ -171,6 +233,31 @@ public class Card_92_009_Tests
 		scn.StartGame();
 		scn.SkipToSite(6);
 
+		assertEquals(6, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsPlayAvailable(eomer));
+
+		scn.FreepsPlayCard(eomer);
+		assertInZone(Zone.FREE_CHARACTERS, eomer);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0183: 'companions cannot be played' has no 'your': read literally, nobody plays a companion while the owner's fellowship is at site 6 or higher")
+	public void TheOtherPlayerCannotPlayCompanionsEither_WhileTheOwnersFellowshipIsAtSite6OrHigher() throws DecisionResultInvalidException, CardNotFoundException {
+		// The same board as OpponentNotAffected, read the other way: Shadow has the modifier and both
+		// fellowships stand at site 6.
+		var scn = GetShadowScenario();
+
+		var eomer = scn.GetFreepsCard("eomer");
+
+		scn.MoveCardsToHand(eomer);
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertInZone(Zone.HAND, eomer);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
