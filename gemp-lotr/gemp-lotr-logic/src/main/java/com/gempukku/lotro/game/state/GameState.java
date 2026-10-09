@@ -83,6 +83,8 @@ public class GameState {
     private final List<Assignment> _assignments = new LinkedList<>();
     private int _threatsToCome;
     private Map<PhysicalCard, Integer> _woundsToCome = Collections.emptyMap();
+    // The events printed with several phases that are being played, each with the phase it is being played in
+    private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
     private Skirmish _skirmish = null;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
@@ -571,6 +573,77 @@ public class GameState {
     public void eventPlayed(PhysicalCard card) {
         for (GameStateListener listener : getAllGameStateListeners())
             listener.eventPlayed(card);
+    }
+
+    /**
+     * Comprehensive Rules 4.2, "phase action": "If a phase action can be played in multiple phases (for example,
+     * "Maneuver or Skirmish:"), its action type is of the phase during which the action is taken."  So an event
+     * printed with several phases is, while it is being played, an event of the phase it is played in and of no
+     * other: Sword-wall ("Skirmish or Regroup") played in the regroup phase is a regroup event and no skirmish
+     * event (F-0292).
+     *
+     * This is that one phase.  It is null for a card that is not being played (nor being priced for a play:
+     * asIfBeingPlayed), wherever it lies, and for an event printed with one phase, with or without "Response":
+     * such a card is what is printed on it.  Filters.timeword is the reader.
+     */
+    public Timeword getPhaseOfEventBeingPlayed(PhysicalCard card) {
+        if (_phaseOfEventBeingPlayed.isEmpty())
+            return null;
+        return _phaseOfEventBeingPlayed.get(card);
+    }
+
+    /**
+     * The play of an event begins (PlayEventAction).  From here to eventPlayFinished an event printed with
+     * several phases, the current one among them, is an event of the current phase alone.
+     */
+    public void eventPlayStarted(PhysicalCard event) {
+        final Timeword phase = getPhaseAnEventWouldBePlayedIn(event);
+        if (phase != null)
+            _phaseOfEventBeingPlayed.put(event, phase);
+    }
+
+    /**
+     * The play of an event is over, whatever became of the card: it is again what is printed on it.
+     */
+    public void eventPlayFinished(PhysicalCard event) {
+        _phaseOfEventBeingPlayed.remove(event);
+    }
+
+    /**
+     * Answers a question about playing a card now as it will be answered while the card is being played: what an
+     * event printed with several phases costs to play is what it costs as an event of this phase ("each skirmish
+     * event you play is twilight cost -1" takes nothing off a "Maneuver or Skirmish" event in the maneuver
+     * phase), before the play as well as during it.  Nothing else is changed, and nothing at all for any other
+     * card.
+     */
+    public <T> T asIfBeingPlayed(PhysicalCard card, java.util.function.Supplier<T> question) {
+        if (_phaseOfEventBeingPlayed.containsKey(card))
+            return question.get();
+        final Timeword phase = getPhaseAnEventWouldBePlayedIn(card);
+        if (phase == null)
+            return question.get();
+
+        _phaseOfEventBeingPlayed.put(card, phase);
+        try {
+            return question.get();
+        } finally {
+            _phaseOfEventBeingPlayed.remove(card);
+        }
+    }
+
+    // The current phase, if the card is an event printed with it and with at least one other phase; else null.
+    private Timeword getPhaseAnEventWouldBePlayedIn(PhysicalCard card) {
+        final LotroCardBlueprint blueprint = card.getBlueprint();
+        if (blueprint.getCardType() != CardType.EVENT)
+            return null;
+        final Timeword current = Timeword.findByPhase(getCurrentPhase());
+        if (current == null || !blueprint.hasTimeword(current))
+            return null;
+        for (Timeword other : Timeword.values()) {
+            if (other != current && other.getPhase() != null && blueprint.hasTimeword(other))
+                return current;
+        }
+        return null;
     }
 
     public void activatedCard(String playerPerforming, PhysicalCard card) {

@@ -615,11 +615,16 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
         LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCost");
         try {
-            int result = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;
-            result += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, target);
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TWILIGHT_COST_MODIFIER, physicalCard)) {
-                result += modifier.getTwilightCostModifier(game, physicalCard, target, ignoreRoamingPenalty);
-            }
+            // What a card costs to play is what it costs to play now: an event printed with several phases is
+            // priced as an event of this one (CR 4.2 "phase action"), before its play as it is during it.
+            int result = game.getGameState().asIfBeingPlayed(physicalCard, () -> {
+                int cost = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;
+                cost += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, target);
+                for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TWILIGHT_COST_MODIFIER, physicalCard)) {
+                    cost += modifier.getTwilightCostModifier(game, physicalCard, target, ignoreRoamingPenalty);
+                }
+                return cost;
+            });
             result = Math.max(0, result);
 
             if (!ignoreRoamingPenalty && hasKeyword(game, physicalCard, Keyword.ROAMING)) {

@@ -649,6 +649,14 @@ printed number whatever the card does (Brought Down from Inside 69_24): read it 
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
 while a choice or a prevention of its effect is still pending fails.
 
+**An event printed with several phases is an event of the phase it is played in (F-0292).** While it is being
+played, and when its cost to play is read (`GetTwilightCost` of the card in hand, the play itself), a "Skirmish
+or Regroup" event is an event of the current phase alone: `timeword(skirmish)` in a `played` trigger, a response
+or a `modifyCost` is false of Sword-wall 4_84 played in the regroup phase. In a hand or a pile it is what is
+printed on it ("take a skirmish event into hand" finds it in any phase), and an event printed with one phase,
+with or without "Response" (Eye of Barad-dûr 5_96), is never narrowed
+(`mechanics/EventPrintedWithSeveralPhasesTests`).
+
 **`GetVitality` is the vitality left.** Printed vitality and what cards add, less wounds: a character of
 vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the stats test reads it.
 

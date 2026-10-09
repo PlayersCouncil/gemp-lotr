@@ -9,7 +9,6 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -428,7 +427,6 @@ public class Card_18_011_ErrataTests
 	}
 
 	@Test
-	@Ignore("F-0292: Sword-wall played in the regroup phase is a regroup event (CR 4.2 'phase action'), and the Ewer's offer is made all the same")
 	public void SwordWallPlayedInTheRegroupPhaseIsNoSkirmishEventAndBringsNoOffer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 

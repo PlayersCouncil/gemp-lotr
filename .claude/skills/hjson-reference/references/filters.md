@@ -319,7 +319,7 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
     Matches all cards which share a subtitle with one of the cards stored in the given `memory` location.
 * Timeword
     * [0]: timeword
-    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  If "current" is provided, it will match cards with a timeword matching the current phase.
+    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  If "current" is provided, it will match cards with a timeword matching the current phase.  An event printed with several phases ("Skirmish or Regroup") matches each of them wherever it lies, except while it is being played (and while its cost to play is worked out): then it matches the phase it is played in and no other (CR 4.2 "phase action").
 * Zone
     * [0]: zone
     Matches all cards within the given `zone`.  See `Zone` for a list of acceptable values.

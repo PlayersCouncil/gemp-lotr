@@ -154,8 +154,20 @@ public class Filters {
 
     // Filters available
 
+    /**
+     * An event of the given phase (or a response event).  A card is what is printed on it, except an event
+     * printed with several phases while it is being played: that is an event of the phase it is played in and
+     * of no other (CR 4.2 "phase action"; GameState.getPhaseOfEventBeingPlayed, F-0292).
+     */
     public static Filter timeword(Timeword timeword) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().hasTimeword(timeword);
+        return (game, physicalCard) -> {
+            if (game != null && game.getGameState() != null) {
+                final Timeword playedIn = game.getGameState().getPhaseOfEventBeingPlayed(physicalCard);
+                if (playedIn != null)
+                    return playedIn == timeword;
+            }
+            return physicalCard.getBlueprint().hasTimeword(timeword);
+        };
     }
 
     public static Filter maxResistance(final int resistance) {

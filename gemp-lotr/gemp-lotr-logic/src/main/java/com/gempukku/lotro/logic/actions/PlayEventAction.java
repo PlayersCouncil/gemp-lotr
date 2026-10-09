@@ -80,6 +80,9 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             _cardRemoved = true;
             final Zone playedFromZone = _eventPlayed.getZone();
             _eventPlayed.setPlayedFromZone(playedFromZone);
+            // An event printed with several phases is, from here until this action is over, an event of the
+            // phase it is being played in (CR 4.2 "phase action")
+            game.getGameState().eventPlayStarted(_eventPlayed);
 
             game.getGameState().sendMessage(_eventPlayed.getOwner() + " plays " + GameUtils.getCardLink(_eventPlayed) + " from " + playedFromZone.getHumanReadable());
             game.getGameState().removeCardsFromZone(_eventPlayed.getOwner(), Collections.singleton(_eventPlayed));
@@ -146,6 +149,7 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             game.getGameState().addCardToZone(game, _eventPlayed, Zone.DISCARD);
         }
 
+        game.getGameState().eventPlayFinished(_eventPlayed);
         return null;
     }
 }
