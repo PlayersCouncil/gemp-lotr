@@ -111,6 +111,15 @@ must be chosen there'). A pass is `FreepsPass()`, a trigger declined `FreepsDecl
 `ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
 git history may still show them.)
 
+**`FreepsChoose(text)` takes a phase action when no multiple choice is pending.** `FreepsChoose(text)` and
+`ShadowChoose(text)` answer a multiple choice if one is in front of the player. If none is and he has actions on
+offer, they go on to `FreepsChooseAction(text)` and take whichever action has the words in its wording, in
+silence. So an answer written for a choice the game never asks (an "X or Y" with nothing on either branch,
+F-0116) does something else: 92_35's old test answered `FreepsChoose("heal")` after an Athelas with nobody left
+to heal, and discarded a card from hand to heal with instead; it failed only once the hand held other cards.
+Read that the choice is pending before answering it by text (`FreepsDecisionAvailable("Choose action to
+perform")`).
+
 ## What is offered, and what an offer does
 
 **Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its
@@ -553,6 +562,15 @@ reads the player set-up has reached: with no companion in the decks the game has
 and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2 it reads 2, and 7 where a
 companion is in the decks). After `StartGame()` it is player 1's bid less 1 on every table (7 reads 6; 0 reads
 0): read a bid there (Race Text 91_18), and player 2's on his own turn, where nothing has been taken off.
+
+**A skirmish on player 2's turn.** The drive that works: `SkipToOtherPlayersTurn(); ShadowPass();` (player 2's
+fellowship moves) `MoveMinionsToTable(<player 1's minion>); SkipToPhaseInverted(Phase.ASSIGNMENT);
+PassCurrentPhaseActions(); ShadowAssignToMinions(companion, minion); ShadowResolveSkirmish(companion);
+ShadowPass();` and player 1, the Shadow player of that turn, then acts with the `Freeps...` methods
+(Card_93_001_Tests). The skirmish decision reads "Choose action to play or Pass" for both seats on every turn,
+so the bookend there is the seat's own `AwaitingFreepsSkirmishPhaseActions()` or
+`AwaitingShadowSkirmishPhaseActions()`: the "Play <phase> action or Pass" reading that the fellowship and
+Shadow phases need on player 2's turn matches nothing in a skirmish.
 
 ## Cards, owners and zones
 

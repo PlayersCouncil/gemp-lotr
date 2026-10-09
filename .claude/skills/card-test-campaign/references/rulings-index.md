@@ -324,7 +324,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "The Free Peoples player must <pay> to assign <this minion> ..." (F-0306, F-0307; F-0308 and Q-0174, open) [Q-0038]
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
-- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312)
+- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
 
@@ -334,6 +334,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Limit once per site" (Q-0084, F-0146, F-0145)
 - "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213]
 - A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134, Q-0141). A printed limit on a count inside ... [F-0135, F-0245]
+- A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
 - "Limit 1 per bearer" is a Restriction that lists `L`
 
 ## Costs, and playing cards from piles and hands
