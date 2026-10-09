@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -14,15 +15,15 @@ import static org.junit.Assert.*;
 
 public class Card_92_029_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Ulaire Enquea: unique Nazgul minion, twilight 6 — needed to reach shadow phase
-		put("enquea", "1_231");
-		// Ulaire Cantea: unique Nazgul minion, twilight 5 — in test booster, for uniqueness test
-		put("cantea", "1_230");
-	}};
-
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Ulaire Enquea: unique Nazgul minion, twilight 6. The minion that gives a turn its maneuver phase
+					put("enquea", "1_231");
+					// Ulaire Cantea: unique Nazgul minion, twilight 5 — in test booster, for uniqueness test
+					put("cantea", "1_230");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -31,7 +32,14 @@ public class Card_92_029_Tests
 	}
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Ulaire Enquea: unique Nazgul minion, twilight 6. The minion that gives a turn its maneuver phase
+					put("enquea", "1_231");
+					// Ulaire Cantea: unique Nazgul minion, twilight 5 — in test booster, for uniqueness test
+					put("cantea", "1_230");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -45,6 +53,7 @@ public class Card_92_029_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_29
 		 * Type: MetaSite
+		 * Intensity: -2
 		 * Game Text: Shadow: Open and reveal a sealed booster pack (limit once per turn).
 		 *   You may play one shadow card revealed, ignoring all costs.
 		 */
@@ -55,6 +64,7 @@ public class Card_92_029_Tests
 
 		assertEquals("Race Text 92_29", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-2, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -110,6 +120,7 @@ public class Card_92_029_Tests
 		scn.FreepsDismissRevealedCards();
 
 		assertEquals(11, scn.ShadowGetBPChoiceCount());
+		assertTrue(scn.ShadowDecisionAvailable("Booster pack contents"));
 	}
 
 	@Test
@@ -132,6 +143,7 @@ public class Card_92_029_Tests
 		scn.FreepsDismissRevealedCards();
 
 		assertEquals(18, scn.ShadowGetBPChoiceCount());
+		assertTrue(scn.ShadowDecisionAvailable("Booster pack contents"));
 	}
 
 	@Test
@@ -150,9 +162,66 @@ public class Card_92_029_Tests
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
 		scn.FreepsDismissRevealedCards();
 		// Decline to play any card
-		scn.ShadowPass();
+		scn.ShadowDeclineChoosing();
 
 		// Second use in same turn — should NOT be available
+		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheLimitIsForTheTurnAndNotThePhaseAndALaterTurnHasItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.FreepsPass();
+
+		// The first Shadow phase of player 1's turn
+		assertTrue(scn.ShadowActionAvailable(mod));
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDeclineChoosing();
+		assertFalse(scn.ShadowActionAvailable(mod));
+
+		// The fellowship moves again: a second Shadow phase in the same turn, and no second pack
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(mod));
+
+		// Player 2's own turn, and then player 1's next: player 2 is the Shadow player again, on a new turn
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(mod));
+	}
+
+	@Test
+	public void NotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+		var enquea = scn.GetShadowCard("enquea");
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.FreepsPass();
+
+		// Offered in the Shadow phase, and not used: the turn's one use is still to be had
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(mod));
+
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(mod));
 	}
 
@@ -168,6 +237,40 @@ public class Card_92_029_Tests
 
 		// Shadow phase — the mod is owned by Freeps, so Shadow can't use it
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheOwnerInTheFirstSeatOpensAPackWhenHeIsTheShadowPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var mod = scn.GetFreepsCard("mod");
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+
+		// Player 2's turn: player 1 is the Shadow player, and the modifier is his
+		scn.SkipToOtherPlayersTurn();
+		scn.ShadowPass();
+
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+		assertTrue(scn.FreepsActionAvailable(mod));
+
+		scn.StartCardCapture();
+		scn.FreepsUseCardAction(mod);
+		scn.FreepsChooseCardBPFromSelection("Test - Booster");
+		// The other player is the one shown the pack
+		assertEquals(8, scn.ShadowGetTotalRevealedCardCount());
+		scn.ShadowDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection("1_174");
+
+		var backstabber = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertEquals("Goblin Backstabber", backstabber.getBlueprint().getTitle());
+		assertEquals(scn.P1, backstabber.getOwner());
+		assertInZone(Zone.SHADOW_CHARACTERS, backstabber);
+		assertFalse(scn.FreepsActionAvailable(mod));
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
 
 	@Test
@@ -180,12 +283,35 @@ public class Card_92_029_Tests
 		scn.StartGame();
 		scn.FreepsPass();
 
+		// 1 companion + 2 for the site
+		assertEquals(3, scn.GetTwilight());
+		int shadowDeck = scn.GetShadowDeckCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
+
+		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
 		scn.ShadowChooseCardBPFromSelection("Test - Booster");
 		scn.FreepsDismissRevealedCards();
 
-		// Decline to play (empty response = select 0 cards)
-		scn.ShadowPass();
+		// "May play one": none need be chosen, and no more than one can be
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+
+		// Decline to play (select 0 cards)
+		scn.ShadowDeclineChoosing();
+
+		// Nothing was played and nothing paid, and the cards of the pack have gone to nobody's piles
+		assertEquals(0, scn.GetCreatedCards().size());
+		scn.StopCardCapture();
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		// The play was the owner's to make or not: the other player is asked nothing
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
 		// Should return to normal shadow phase actions
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -216,6 +342,7 @@ public class Card_92_029_Tests
 		assertEquals("Cave Troll of Moria", caveTroll.getBlueprint().getTitle());
 		assertInZone(Zone.SHADOW_CHARACTERS, caveTroll);
 		scn.StopCardCapture();
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -243,6 +370,7 @@ public class Card_92_029_Tests
 		assertEquals("Alive and Unspoiled", aliveAndUnspoiled.getBlueprint().getTitle());
 		assertInZone(Zone.SUPPORT, aliveAndUnspoiled);
 		scn.StopCardCapture();
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -258,8 +386,9 @@ public class Card_92_029_Tests
 		scn.StartGame();
 		scn.FreepsPass();
 
-		// Verify twilight pool is low (only Frodo moved = 2 twilight from site)
+		// Verify twilight pool is low: 1 companion + 2 for the site
 		assertTrue(scn.GetTwilight() < 10);
+		assertEquals(3, scn.GetTwilight());
 
 		scn.StartCardCapture();
 		scn.ShadowUseCardAction(mod);
@@ -271,6 +400,9 @@ public class Card_92_029_Tests
 		assertNotNull(caveTroll);
 		assertInZone(Zone.SHADOW_CHARACTERS, caveTroll);
 		scn.StopCardCapture();
+		// Neither its cost of 10 nor the 2 for roaming at site 2 was taken from the pool
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -296,7 +428,9 @@ public class Card_92_029_Tests
 		// The selectable shadow cards should be: 1_174 (Backstabber), 1_165 (Cave Troll), 1_120 (Alive and Unspoiled)
 		// but NOT 1_230 (Cantea, unique duplicate) and NOT 1_286 (Bounder, FP card).
 		assertFalse(scn.ShadowHasBPChoiceAvailable("1_230"));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_230", false));
 		assertTrue(scn.ShadowHasBPChoiceAvailable("1_174"));
+		assertTrue(scn.ShadowDecisionAvailable("Booster pack contents"));
 	}
 
 	@Test
@@ -317,8 +451,50 @@ public class Card_92_029_Tests
 
 		// Bounder (1_286) is FP — should not be selectable
 		assertFalse(scn.ShadowHasBPChoiceAvailable("1_286"));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_286", false));
 		// But shadow cards should be
 		assertTrue(scn.ShadowHasBPChoiceAvailable("1_174"));
+		assertTrue(scn.ShadowDecisionAvailable("Booster pack contents"));
+	}
+
+	@Test
+	public void OfTheEventsRevealedOnlyTheShadowPhaseEventMayBeChosenAndItIsPlayedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+
+		scn.UseTestBoosters();
+		scn.StartGame();
+		scn.FreepsPass();
+
+		// 1 companion + 2 for the site
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetShadowDiscardCount());
+
+		scn.StartCardCapture();
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+
+		// Enheartened Foe (1_247), a Shadow response event, and Drums in the Deep (1_168), a Shadow skirmish
+		// event, are shown and cannot be chosen. Foul Things (2_59), a Shadow event of the Shadow phase, can.
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_247", false));
+		assertFalse(scn.ShadowHasBPChoiceAvailable("1_247"));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_168", false));
+		assertFalse(scn.ShadowHasBPChoiceAvailable("1_168"));
+		assertTrue(scn.ShadowHasBPChoiceAvailable("2_59"));
+
+		scn.ShadowChooseCardBPFromSelection("2_59");
+
+		// Foul Things was played ("Play a [moria] minion from your discard pile", and there is none) and lies
+		// in its player's discard pile. Its cost of 2 was not paid: paid, the pool would read 1.
+		var foulThings = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertEquals("Foul Things", foulThings.getBlueprint().getTitle());
+		assertInZone(Zone.DISCARD, foulThings);
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -337,7 +513,14 @@ public class Card_92_029_Tests
 
 		// A revealed card is shown to all players (F-0039: the pack used to be shown to the Shadow player alone).
 		assertTrue(scn.FreepsGetTotalRevealedCardCount() > 0);
+		// All eight cards of the pack, Shadow and Free Peoples, and none of them his to choose
+		assertEquals(8, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasBPChoiceAvailable("1_174", false));
+		assertTrue(scn.FreepsHasBPChoiceAvailable("1_286", false));
+		assertFalse(scn.FreepsHasBPChoiceAvailable("1_174"));
 		scn.FreepsDismissRevealedCards();
 		assertTrue(scn.ShadowGetTotalRevealedCardCount() > 0);
+		assertEquals(8, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(scn.ShadowDecisionAvailable("Booster pack contents"));
 	}
 }
