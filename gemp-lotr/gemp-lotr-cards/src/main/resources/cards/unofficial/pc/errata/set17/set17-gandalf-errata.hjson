@@ -43,7 +43,7 @@
 								type: ForEachInMemory
 								memory: chosenMinions
 							}
-							secondNumber: 0
+							secondNumber: 1
 						}
 						true: [
 							{

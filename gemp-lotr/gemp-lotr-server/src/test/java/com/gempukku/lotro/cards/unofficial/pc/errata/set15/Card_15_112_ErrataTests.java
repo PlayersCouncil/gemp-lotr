@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -57,8 +56,8 @@ public class Card_15_112_ErrataTests
 		 * Strength: 13
 		 * Vitality: 4
 		 * Site Number: 5
-		 * Game Text: When you play this minion, you may discard 5 [orc] minions from play to make it strength +10
-		 * and <b>fierce</b> until the end of the turn.
+		 * Game Text: When you play this minion, you may discard 5 other [orc] minions from play to make it
+		 * strength +10 and <b>fierce</b> until the end of the turn.
 		 * Shadow: Remove (2) to play an [orc] Orc from your discard pile. It comes into play exhausted.
 		 */
 
@@ -270,35 +269,6 @@ public class Card_15_112_ErrataTests
 		scn.ShadowDeclineReconciliation();
 		assertInZone(Zone.DISCARD, troll);
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-	}
-
-	@Test
-	@Ignore("Q-0168: 'discard 5 [orc] minions' is built as five OTHER [orc] minions; by the words the troll, now in play, is one itself")
-	public void WithFourOtherOrcMinionsTheTrollJustPlayedMayBeTheFifthDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var troll = scn.GetShadowCard("troll1");
-		var pit = scn.GetShadowCard("pit1");
-		var khazad = scn.GetShadowCard("khazad1");
-		var sentry = scn.GetShadowCard("sentry");
-		var halftroll = scn.GetShadowCard("halftroll");
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToHand(troll);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(pit, khazad, sentry, halftroll, runner);
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		scn.ShadowPlayCard(troll);
-		// Once played the troll is in play and is an [orc] minion: with the four others, five.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(troll));
-
-		scn.ShadowAcceptOptionalTrigger();
-		// Exactly five candidates, so nothing is asked: all five go, the troll among them.
-		assertInZone(Zone.DISCARD, troll, pit, khazad, sentry, halftroll);
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

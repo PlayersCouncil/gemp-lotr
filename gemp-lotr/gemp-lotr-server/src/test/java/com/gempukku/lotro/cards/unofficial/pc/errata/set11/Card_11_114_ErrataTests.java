@@ -129,7 +129,7 @@ public class Card_11_114_ErrataTests
 	}
 
 	@Test
-	public void EachTimeACompanionExertsOneTwilightIsAddedWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EachTimeACompanionExertsYouMayAddOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
@@ -146,14 +146,56 @@ public class Card_11_114_ErrataTests
 		// Sam exerts to pay for his own ability; with no burden to remove it does nothing else.
 		scn.FreepsUseCardAction(sam);
 		assertEquals(1, scn.GetWoundsOn(sam));
+		// Nothing is added until the Shadow player says so.
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetTwilight());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.FreepsUseCardAction(sam);
 		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.GetTwilight());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DecliningLeavesThePoolAsItWasAndTheNextExertionIsAskedAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var demoralized = scn.GetShadowCard("demoralized");
+
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(demoralized);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsUseCardAction(sam);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowDeclineOptionalTrigger();
+
+		// The exertion stands, nothing was added, and the condition stays where it was.
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, demoralized);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Declining once is not declining for good: the next exertion asks again.
+		scn.FreepsUseCardAction(sam);
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -188,10 +230,20 @@ public class Card_11_114_ErrataTests
 		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, aragorn));
 		scn.ShadowChooseCard(aragorn);
 
-		// Two exertions of one companion by one effect: 1 for each.
+		// Two exertions of one companion by one effect: each is asked about as it happens, and adds 1.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(6, scn.GetTwilight());
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(7, scn.GetTwilight());
+
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(sam));
-		assertEquals(7, scn.GetTwilight());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -211,16 +263,19 @@ public class Card_11_114_ErrataTests
 
 		scn.StartGame();
 
-		// The condition is at work on this board: Sam's exertion adds 1.
+		// The condition is at work on this board: Sam's exertion is asked about, and adds 1.
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(sam);
 		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetTwilight());
 
-		// An ally exerts.
+		// An ally exerts: nothing is offered.
 		assertEquals(0, scn.GetWoundsOn(elrond));
 		scn.FreepsUseCardAction(elrond);
 		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
@@ -264,6 +319,8 @@ public class Card_11_114_ErrataTests
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(sam);
 		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetTwilight());
 
 		// Legolas costs 2 and is the sixth companion.
@@ -272,6 +329,10 @@ public class Card_11_114_ErrataTests
 
 		scn.FreepsUseCardAction(sam);
 		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(3, scn.GetTwilight());
+		// One offer, of the 2: there is no choosing the 1.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(demoralized));
+		scn.ShadowAcceptOptionalTrigger();
 		// 3 + 2.
 		assertEquals(5, scn.GetTwilight());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());

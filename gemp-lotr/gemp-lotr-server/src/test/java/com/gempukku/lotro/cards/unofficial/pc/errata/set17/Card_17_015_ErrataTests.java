@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -256,7 +255,6 @@ public class Card_17_015_ErrataTests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	@Ignore("Q-0169: with one minion in the discard pile, is \"If you do\" met by returning that one?")
 	@Test
 	public void WithOneMinionInTheShadowPlayersDiscardPileItIsReturnedAndHisHandIsNotRevealed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

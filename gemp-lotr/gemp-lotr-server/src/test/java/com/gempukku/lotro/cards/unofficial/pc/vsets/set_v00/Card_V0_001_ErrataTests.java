@@ -56,7 +56,7 @@ public class Card_V0_001_ErrataTests
 		 * Type: Site
 		 * Block: Shadows
 		 * Shadow Number: 0
-		 * Direction: Left
+		 * Direction: Right
 		 * Game Text: When sanctuary healing at this site, the Free Peoples player heals only 3 wounds instead
 		 * 	of 5.
 		 */
@@ -73,7 +73,7 @@ public class Card_V0_001_ErrataTests
 		// A Shadows-block site has no site number of its own.
 		assertEquals(0, card.getBlueprint().getSiteNumber());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
-		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
 	}
 
 	@Test

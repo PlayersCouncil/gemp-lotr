@@ -338,6 +338,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
 - "While ..., the move limit is +1 (-1)" with no "for this turn" (Q-0179, open) [Q-0122, F-0317]
+- "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
 
 ## What is offered and what is asked
 
@@ -350,7 +351,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041]
-- "When you play this ..., you may add (N)" built as a required trigger (F-0009; Q-0165, open) [Q-0167]
+- "When you play this ..., you may add (N)" built as a required trigger (F-0009; Q-0165, open) [Q-0167, F-0328]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0164]
