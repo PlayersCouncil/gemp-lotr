@@ -59,8 +59,9 @@ question with both readings; do not settle it by guessing, and do not settle it 
 does.
 
 A `grep` of a `.hjson` file prints whatever lines match, those of your other cards and their originals among
-them: to look for a helper or a printed text in stage 1, print game texts and nothing else
-(`grep -h 'gametext:' <files>`). You may read another card's finished test file of the same shape, so long as
+them: to look for a helper or a printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
+(printed fields and game text with ids, nothing of the implementation, your batch and its originals left out) and
+`packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition. You may read another card's finished test file of the same shape, so long as
 that card is neither one of your batch nor the Decipher original of one. Only those are shut: another card that
 shares a title with one of yours (a second Denethor) may be read as a helper like any other.
 
