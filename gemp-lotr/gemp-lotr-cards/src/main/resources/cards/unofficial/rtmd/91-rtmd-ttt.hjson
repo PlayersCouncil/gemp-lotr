@@ -60,6 +60,7 @@
 					type: OwnerIsFreeps
 				}
 				optional: true
+				player: owner
 				effect: {
 					type: PutCardsFromDeckIntoHand
 					select: choose(your)
@@ -100,6 +101,7 @@
 			{
 				type: Trigger
 				optional: true
+				player: owner
 				trigger: {
 					type: Moves
 				}

@@ -13,22 +13,21 @@ import static org.junit.Assert.*;
 
 public class Card_91_001_Tests
 {
-	private final HashMap<String, String> companionDeck =  new HashMap<>()
-	{{
-		// Gimli: twilight 2
-		put("gimli", "1_13");
-		// Boromir: twilight 3
-		put("boromir", "1_97");
-		// Legolas: twilight 2
-		put("legolas", "1_50");
-		// Aragorn, Elessar Telcontar: twilight 5
-		put("elessar", "10_25");
-		// Merry: twilight 1
-		put("merry", "1_302");
-	}};
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				companionDeck,
+				new HashMap<>()
+				{{
+					// Gimli: twilight 2
+					put("gimli", "1_13");
+					// Boromir: twilight 3
+					put("boromir", "1_97");
+					// Legolas: twilight 2
+					put("legolas", "1_50");
+					// Aragorn, Elessar Telcontar: twilight 5
+					put("elessar", "10_25");
+					// Merry: twilight 1
+					put("merry", "1_302");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -38,7 +37,19 @@ public class Card_91_001_Tests
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				companionDeck,
+				new HashMap<>()
+				{{
+					// Gimli: twilight 2
+					put("gimli", "1_13");
+					// Boromir: twilight 3
+					put("boromir", "1_97");
+					// Legolas: twilight 2
+					put("legolas", "1_50");
+					// Aragorn, Elessar Telcontar: twilight 5
+					put("elessar", "10_25");
+					// Merry: twilight 1
+					put("merry", "1_302");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -48,7 +59,19 @@ public class Card_91_001_Tests
 
 	protected VirtualTableScenario GetNoModScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				companionDeck,
+				new HashMap<>()
+				{{
+					// Gimli: twilight 2
+					put("gimli", "1_13");
+					// Boromir: twilight 3
+					put("boromir", "1_97");
+					// Legolas: twilight 2
+					put("legolas", "1_50");
+					// Aragorn, Elessar Telcontar: twilight 5
+					put("elessar", "10_25");
+					// Merry: twilight 1
+					put("merry", "1_302");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -61,6 +84,7 @@ public class Card_91_001_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_1
 		 * Type: MetaSite
+		 * Intensity: -3
 		 * Game Text: Your starting companions may have a total twilight cost of 6 instead of 4.
 		 */
 
@@ -70,6 +94,7 @@ public class Card_91_001_Tests
 
 		assertEquals("Race Text 91_1", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-3, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -103,15 +128,18 @@ public class Card_91_001_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
 
-		// Done selecting, finish starting fellowship
+		// At a total of 6 the choice is over, though Legolas (2) is still in the draw deck: the other
+		// player is asked for his starting fellowship
 		assertFalse(scn.FreepsDecisionAvailable("Starting fellowship"));
-		scn.ShadowDecided("");
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
+		scn.ShadowDeclineChoosing();
 
 		// Now finish game setup
 		scn.StartGame(true, false);
 
-		// Both companions should be in play
+		// All three companions should be in play
 		assertInPlay(gimli, boromir, merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -125,6 +153,7 @@ public class Card_91_001_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
 		var boromir = scn.GetFreepsCard("boromir");
+		var merry = scn.GetFreepsCard("merry");
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 
@@ -133,12 +162,14 @@ public class Card_91_001_Tests
 		scn.FreepsChooseCard(legolas);
 
 		// Boromir (3) should NOT be available since 4 + 3 = 7 > 6
+		// while Merry (1) is: 4 + 1 = 5
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertFalse(scn.FreepsHasCardChoiceAvailable(boromir));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 
-		// Done
-		scn.FreepsChoose("");
-		scn.StartGame(true, false);
+		// Done: stopping at 4 hands the choice to the other player
+		scn.FreepsDeclineChoosing();
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 
 	@Test
@@ -197,7 +228,7 @@ public class Card_91_001_Tests
 		var boromir = scn.GetShadowCard("boromir");
 		var merry = scn.GetShadowCard("merry");
 
-		scn.FreepsDecided("");
+		scn.FreepsDeclineChoosing();
 
 		// Starting fellowship decision should be available
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
@@ -225,7 +256,8 @@ public class Card_91_001_Tests
 		// Now finish game setup
 		scn.StartGame(true, false);
 
-		// Both companions should be in play
+		// All three companions should be in play
 		assertInPlay(gimli, boromir, merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

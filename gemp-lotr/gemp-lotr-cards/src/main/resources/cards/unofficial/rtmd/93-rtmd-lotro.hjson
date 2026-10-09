@@ -91,6 +91,7 @@
 		effects: {
 			type: Trigger
 			optional: true
+			player: owner
 			trigger: {
 				type: Moves
 			}
