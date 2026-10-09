@@ -260,6 +260,14 @@ answer's status with her words (approved as fixed, to be fixed, or not a bug) wi
 same day: every finding fixed without her word below F-0327 is approved; Q-0193 and Q-0196 kept; Q-0194 and Q-0195
 A; Q-0174 closed as settled by F-0308; F-0324, "I think a 'transferable to' filter is perfectly kosher, go for it."
 
+**An `at` test about a Decipher card becomes a lone test in that card's file (Ketura, 2026-10-09, late).** Asked
+whether the replacement of an `at` test that is the plain case of a card whose set is not yet worked should be
+(a) written now, to the Standard's form, as a lone test in the card's file, with no ledger and no landing, or
+(b) the occasion for the card's whole treatment out of set order: "A is all I wanted, yeah. Just wanted to ensure
+that we didn't forget certain tests which cover functionality that (so far) aren't covered elsewhere, and also to
+ensure that the improved version of those tests was inserted as a kickstart for the associated cards." So nothing
+an `at` test guards is lost, and its improved form waits in the card's file for the card's own batch.
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.

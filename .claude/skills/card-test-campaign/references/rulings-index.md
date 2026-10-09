@@ -62,6 +62,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card: Q-0167, Demoralized 61_114: B, asked each time ("I suspect it's a victim of the mass edit"). Q-0168, Mountain-troll 65_112: B, five ... [Q-0169, Q-0172, Q-0177, Q-0180, Q-0181, Q-0182, Q-0191, Q-0170, Q-0175]
 - Every finding below F-0308 that was fixed without her word is approved
 - One entry for one issue (Ketura, 2026-10-09, evening) [F-0327, Q-0193, Q-0196, Q-0194, Q-0195, Q-0174, F-0308, F-0324]
+- An `at` test about a Decipher card becomes a lone test in that card's file (Ketura, 2026-10-09, late)
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata
