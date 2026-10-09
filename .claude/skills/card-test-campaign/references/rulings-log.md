@@ -268,6 +268,18 @@ that we didn't forget certain tests which cover functionality that (so far) aren
 ensure that the improved version of those tests was inserted as a kickstart for the associated cards." So nothing
 an `at` test guards is lost, and its improved form waits in the card's file for the card's own batch.
 
+**"Instead" converts a cost; it does not prevent or cancel (Ketura, 2026-10-09, late; Merry 4_311 with Treebeard,
+Earthborn 4_103).** "The main thing that makes "instead" interesting is that it causes costs to be paid via an
+alternate currency--not preventing or canceling the effect, just providing a conversion. This has not been fully
+realized in the engine (nor with the rules interpretation gestalt)." A cost paid in the other currency is paid,
+and what it buys happens; where the game does not do that it is an engine finding, not a question.
+
+**The `at` tests, what is kept (Ketura, 2026-10-09, late).** "Some tests will be inferior to our standard card
+procedure. But it's the tricky ones, the ones about specific interactions between cards, that I know are important
+and need keeping. (The rest are busy work)". "The set 40 stuff going into oblivion is acceptable." A Hobbit-set
+test goes under `cards/unofficial/hobbit/` ("but not under 'pc', as the PC doesn't run that"), in the usual
+directory structure; the Hobbit sets themselves are still worked last.
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.

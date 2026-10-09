@@ -63,6 +63,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Every finding below F-0308 that was fixed without her word is approved
 - One entry for one issue (Ketura, 2026-10-09, evening) [F-0327, Q-0193, Q-0196, Q-0194, Q-0195, Q-0174, F-0308, F-0324]
 - An `at` test about a Decipher card becomes a lone test in that card's file (Ketura, 2026-10-09, late)
+- "Instead" converts a cost; it does not prevent or cancel (Ketura, 2026-10-09, late; Merry 4_311 with Treebeard, Earthborn 4_103). "The main thing ...
+- The `at` tests, what is kept (Ketura, 2026-10-09, late)
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata

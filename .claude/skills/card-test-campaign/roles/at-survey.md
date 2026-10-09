@@ -66,6 +66,19 @@ Work out, from the method and the cards it names (`packet.py <id> --blind` gives
 Several methods that guard one thing from different sides (the same rule with a companion, an ally, a minion) are
 ONE directive with the cases listed, if a single test class would hold them; say which methods it stands for.
 
+## Settled already (do not raise these again)
+
+- A replacement that is about one card goes into that card's own file as a LONE test, whether or not the card's
+  set has been worked: it is a kickstart for the card's own batch. Ketura wants above all "the tricky ones, the
+  ones about specific interactions between cards"; say in the directive when a method is one of those.
+- A Hobbit-set card (sets 30 to 33): its file goes under `cards/unofficial/hobbit/set<NN>/` (a new folder).
+- A commented-out test of the archived set 40 with no rule behind it: home `-`, dropped.
+- "Instead" converts a cost and does not prevent or cancel it: the cost is paid in the other currency and what it
+  buys happens (`lookup.py instead`).
+- New `mechanics/` class names are reconciled across all the surveys afterwards: propose one, and look at
+  `/mnt/user-data/outputs/card-tests/orchestrator/at-survey/*.tsv` for names earlier groups proposed, and reuse
+  one where it fits.
+
 ## What you write
 
 Two files, in `/mnt/user-data/outputs/card-tests/orchestrator/at-survey/` (create the folder), for EACH `at` file
