@@ -227,6 +227,18 @@ def open_entries(path: Path, start: str, stop: str) -> list:
     return out
 
 
+def reports(state: Path) -> list:
+    """Every report an engine item or a lander wrote, whole, newest first: Ketura reads them on the tracker when she
+    is away from the folder they are in."""
+    folder = state / "orchestrator"
+    found = sorted(folder.glob("engine-pass-*/*.md"), key=lambda p: (-int(re.sub(r"\D", "", p.parent.name) or 0), p.name))
+    batches = sorted(folder.glob("batches/*.md"), key=lambda p: p.name, reverse=True)
+    out = []
+    for p in batches + found:
+        out.append({"name": str(p.relative_to(folder)).replace(os.sep, "/"), "text": p.read_text(encoding="utf-8", errors="replace")[:80000]})
+    return out
+
+
 def build(state: Path) -> dict:
     base = read_tsv(state / "baseline.tsv")
     if not base:
@@ -285,6 +297,7 @@ def build(state: Path) -> dict:
         "findings": findings,
         "questions": open_entries(state / "questions.md", "\n## Open", "\n## Answered"),
         "rig": open_entries(state / "rig-requests.md", "\n## Open", "\n## Done"),
+        "reports": reports(state),
     }
     (state / "tracker.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     (state / "tracker.md").write_text(markdown(data), encoding="utf-8")

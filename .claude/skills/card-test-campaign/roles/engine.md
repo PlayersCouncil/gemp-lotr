@@ -66,7 +66,17 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    Then `python3 .claude/skills/card-test-campaign/scripts/land.py <the cards whose tests went live>` runs the
    gate on each and sets its status (their files are already committed, so it commits nothing). You run no other
    git command that writes, and you never push.
-9. **Write the report** for Ketura and the orchestrator, `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-<n>/<your item>.md`:
+9. **Anything that wants Ketura's word gets a number.** She reads the tracker on her phone, not your report, and
+   answers by number. So whatever you did beyond your item's words, and whatever you want her eye on, is filed
+   as a question of its own, whole enough to answer without opening anything else: what changed and why, which
+   cards behave differently, and exactly what striking it would undo.
+
+       python3 .claude/skills/card-test-campaign/scripts/landing.py question add "Keep or strike: <what>" /tmp/<your folder>/k1.md
+
+   A change already made stays unless she strikes it: say so in the entry. A finding you met and fixed outside
+   your item is recorded as `fixed` (not `fixed-approved`), which puts it on her page too. Give the numbers in
+   what you return.
+10. **Write the report** for Ketura and the orchestrator, `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-<n>/<your item>.md`:
    what was wrong; the change, class by class; every other card or definition that now behaves differently; the
    tests that show it; anything you looked at and left alone, and why.
 

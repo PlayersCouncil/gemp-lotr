@@ -87,6 +87,15 @@ behavior or interaction the test is handling, and then take that as a design dir
 wholesale new test." So an `at` test is not ported line by line: what it guards is written down, and a new test is
 written from that, in `mechanics/` or in the file of the card it is most about.
 
+**Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
+"Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
+period of time, so any details for every item I need to review will need to be there for the foreseeable future.
+Summaries aren't necessary in here, just a reference to the code, and if I can look at it in there that would be
+sufficient." So every item that wants her word has a number (Q-, F-, G-) and its full text on that page: open
+questions, changes an agent made beyond its brief ("Keep or strike" questions; unanswered, the change stays),
+findings mended or filed without her word, open rig requests; and the reports are on the page in full. Nothing for
+her lives only in a report or in the chat.
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -1150,3 +1159,8 @@ Querying, and then the appropriate functions can be set up to check for the "all
 defer to it." So every reading of whether an ally may take part in archery fire or skirmishes goes through the
 modifiers' querying, and there a "may not participate" beats a "may" (Q-0011), for the archery total, archery
 wounds, assignment and skirmishes alike. *[2026-10-08, night]*
+
+**F-0278, Gwaihir 101_15, and the Palantír's prompt.** On the yes/no before Gwaihir's 0-to-2 choice: "yes, go
+ahead and skip the prompt and just do the 0-1 choices." On the wording written for The Palantír of Orthanc 53_67
+("Choose any number of cards from your hand to place on top of your draw deck (you may choose none). Your hand will
+then be revealed."): "looks good". *[2026-10-08, night]*

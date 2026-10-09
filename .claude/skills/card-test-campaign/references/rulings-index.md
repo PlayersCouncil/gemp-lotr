@@ -25,6 +25,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Code review: "On RingBearerRule, the private filter is not the way to go. Instead add it to be a sibling of Filters.ringBearer." Done: ...
 - Landing is a stage of the pipeline, and reports name numbers only (Ketura, 2026-10-08, evening)
 - After the errata: Race to Mount Doom lightly, then the at tests, then the Decipher sets (Ketura, 2026-10-08, night). On RTMD: "These tests were done ...
+- Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata
 
@@ -276,6 +277,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0148, Glorfindel, Revealed in Wrath 59_16 and 9_16: A. A reveal the rest of an ability hangs on is a requirement or a cost. "Skirmish: Reveal the ... [Q-0104, Q-0029]
 - Q-0149, unordered card collections in other effects: left alone (B) [Q-0142, F-0268]
 - Q-0150, Streets of Edoras 4_340 against cards that have an ally take part: the bar wins (A) [Q-0011]
+- F-0278, Gwaihir 101_15, and the Palantír's prompt
 
 # Settled shapes (shapes.md)
 

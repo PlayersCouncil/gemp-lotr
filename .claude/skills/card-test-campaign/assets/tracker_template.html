@@ -87,6 +87,14 @@ h2 { font: 600 16px var(--cond); letter-spacing: .02em; margin: 8px 0 0 }
 .plain table td, .plain table th { padding-inline: 12px }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 12.5px }
 p.lead { margin: 0; color: var(--muted); max-width: 70ch }
+/* What waits on Ketura, and the reports: read on a phone, so each is a block of its own, not a table row. */
+.item { padding: 12px 14px; border-bottom: 1px solid var(--line) } .item:last-child { border-bottom: 0 }
+.item h3 { margin: 0 0 6px; font: 600 14px/1.35 var(--sans) } .item h3 .code { font: 500 12.5px var(--mono); color: var(--accent); margin-right: 8px }
+.item .body { white-space: pre-wrap; overflow-wrap: anywhere } .item .meta { color: var(--muted); font-size: 12.5px; margin-top: 6px; white-space: pre-wrap }
+.item code, details.report code { font: 12.5px var(--mono) }
+details.report { border-bottom: 1px solid var(--line) } details.report:last-child { border-bottom: 0 }
+details.report summary { padding: 10px 14px; cursor: pointer; font: 500 13px var(--mono) }
+details.report .body { padding: 0 14px 14px; white-space: pre-wrap; overflow-wrap: anywhere }
 @media (max-width: 620px) {
   .row { grid-template-columns: minmax(0, 1fr) 64px; row-gap: 6px }
   .row .bar { grid-column: 1 / -1 }
@@ -104,6 +112,7 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
     <button role="tab" id="tab-progress" aria-selected="true" aria-controls="progress">Progress</button>
     <button role="tab" id="tab-findings" aria-selected="false" aria-controls="findings">Findings</button>
     <button role="tab" id="tab-ask" aria-selected="false" aria-controls="ask">Waiting on Ketura</button>
+    <button role="tab" id="tab-reports" aria-selected="false" aria-controls="reports">Reports</button>
   </div>
 
   <section id="progress" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
@@ -129,12 +138,20 @@ p.lead { margin: 0; color: var(--muted); max-width: 70ch }
   </section>
 
   <section id="ask" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
-    <p class="lead">Open questions, in full as they stand in questions.md, and open rig requests from rig-requests.md.
-      Findings that wait on a word from her are under Findings.</p>
-    <h2>Questions</h2>
-    <div class="plain"><table id="qlist"></table></div>
-    <h2>Rig requests</h2>
-    <div class="plain"><table id="glist"></table></div>
+    <p class="lead">Everything that wants a word from her, in full: the open questions (a "Keep or strike" one is a
+      change already made that she may undo; left unanswered it stays), the findings mended or filed without her
+      word, and the open rig requests. An answer in the chat needs only the code.</p>
+    <h2 id="qhead">Questions</h2>
+    <div class="plain" id="qlist"></div>
+    <h2 id="fhead">Findings waiting for her word</h2>
+    <div class="plain" id="wlist"></div>
+    <h2 id="ghead">Rig requests</h2>
+    <div class="plain" id="glist"></div>
+  </section>
+
+  <section id="reports" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">What each engine item and each batch's lander wrote, whole, newest first. Tap one to open it.</p>
+    <div class="plain" id="rlist"></div>
   </section>
 </div>
 
@@ -261,25 +278,41 @@ function start() {
   drawFindingFilters(); drawFindings();
 
   // What waits on Ketura: the open questions and rig requests, word for word.
-  function drawOpen(table, items, none) { table.replaceChildren();
-    for (const q of items) { const body = el("td"); body.style.whiteSpace = "pre-wrap";
-      for (const part of (q.body || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
-        if (/^\*\*/.test(part)) body.append(el("b", { text: part.slice(2, -2) }));
-        else if (/^`/.test(part)) body.append(el("code", { text: part.slice(1, -1) }));
-        else body.append(part); }
-      table.append(el("tr", null, el("td", { class: "id", text: q.id }), el("td", null, el("b", { text: q.title || "" })), body)); }
-    if (!items.length) table.append(el("tr", null, el("td", { class: "note", text: none }))); }
+  function rich(node, text) { for (const part of (text || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
+      if (/^\*\*/.test(part)) node.append(el("b", { text: part.slice(2, -2) }));
+      else if (/^`/.test(part)) node.append(el("code", { text: part.slice(1, -1) }));
+      else node.append(part); } return node; }
+  function item(code, title, body, meta) { const d = el("div", { class: "item" }, el("h3", null, el("span", { class: "code", text: code }), title || ""));
+    d.append(rich(el("div", { class: "body" }), body)); if (meta) d.append(rich(el("div", { class: "meta" }), meta)); return d; }
+  function drawOpen(box, items, none) { box.replaceChildren();
+    for (const q of items) box.append(item(q.id, q.title, q.body));
+    if (!items.length) box.append(el("div", { class: "item" }, el("div", { class: "meta", text: none }))); }
   const Q = DATA.questions || [], G = DATA.rig || [];
+  // Findings that have not had her word: mended without it, or filed and waiting.
+  const WAITS = { "candidate": "believed wrong, not fixed: waiting on her", "fixed": "fixed without her word", "confirmed": "a fault by her word or the text; the fix is pending", "question": "hangs on an open question" };
+  const W = (DATA.findings || []).filter(f => WAITS[f.status]).slice().reverse();
   drawOpen(document.getElementById("qlist"), Q, "No question is open.");
   drawOpen(document.getElementById("glist"), G, "No rig request is open.");
-  document.getElementById("tab-ask").textContent = "Waiting on Ketura (" + (Q.length + G.length) + ")";
+  const wlist = document.getElementById("wlist"); wlist.replaceChildren();
+  for (const f of W) wlist.append(item(f.id, (f.card ? f.card + " " : "") + (f.name || ""), f.summary || "",
+    (KINDS[f.kind] || f.kind) + " · " + WAITS[f.status] + (f.found ? "\nFound: " + f.found : "") + (f.outcome ? "\nOutcome: " + f.outcome : "")));
+  if (!W.length) wlist.append(el("div", { class: "item" }, el("div", { class: "meta", text: "None." })));
+  document.getElementById("qhead").textContent = "Questions (" + Q.length + ")";
+  document.getElementById("fhead").textContent = "Findings waiting for her word (" + W.length + ")";
+  document.getElementById("ghead").textContent = "Rig requests (" + G.length + ")";
+  document.getElementById("tab-ask").textContent = "Waiting on Ketura (" + (Q.length + W.length + G.length) + ")";
+  const rlist = document.getElementById("rlist");
+  for (const r of (DATA.reports || [])) { const d = el("details", { class: "report" }, el("summary", { text: r.name }));
+    d.append(rich(el("div", { class: "body" }), r.text)); rlist.append(d); }
+  if (!(DATA.reports || []).length) rlist.append(el("div", { class: "item" }, el("div", { class: "meta", text: "No report yet." })));
 
   // Tabs.
-  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings"), ask: document.getElementById("tab-ask") };
+  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings"), ask: document.getElementById("tab-ask"), reports: document.getElementById("tab-reports") };
   function show(name) { for (const k in tabs) { tabs[k].setAttribute("aria-selected", String(k === name)); document.getElementById(k).hidden = k !== name; } }
-  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings"); tabs.ask.onclick = () => show("ask");
+  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings"); tabs.ask.onclick = () => show("ask"); tabs.reports.onclick = () => show("reports");
   if (location.hash === "#findings") show("findings");
   if (location.hash === "#ask") show("ask");
+  if (location.hash === "#reports") show("reports");
 }
 start();
 </script>

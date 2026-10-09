@@ -156,6 +156,10 @@ runs the gate again, commits the cards that clear it as one commit together with
 second run makes a second commit. If it says `NOT LANDED`, put right what it names and run it again. You run no
 other git command.
 
+Nothing that wants Ketura's word may live only in your report: she reads the tracker on her phone and answers by
+number. A question is filed (step 4); so is anything you did that she might undo, as a question headed "Keep or
+strike: <what>", whole enough to answer without opening anything else.
+
 Then write the batch's report, `<state>/orchestrator/batches/<folder>.md`, for Ketura and the next orchestrator:
 the cards and how each landed; each number filed, with one line; each change to another card's definition or test;
 and the three lists of step 6. Keep it to what happened.
