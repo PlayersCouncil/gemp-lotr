@@ -151,7 +151,7 @@
 					}
 					{
 						type: optional
-						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost the the card revealed?
+						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost of the card revealed?
 						cost: {
 							type: exert
 							select: self
@@ -169,7 +169,7 @@
 				]
 			}
 		]
-		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength –X, where X is the twilight cost of <br>the card revealed.
+		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength –X, where X is the twilight cost of the card revealed.
 		lore: ""
 		promotext: ""
 		alts: {

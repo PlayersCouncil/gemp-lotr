@@ -59,7 +59,7 @@
 						optional: false
 						trigger: {
 							type: RemovedFromPlay
-							filter: title(Radagast)
+							filter: self
 						}
 						effect: {
 							type: addModifier

@@ -239,7 +239,7 @@
 					}
 					{
 						type: optional
-						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost the the card revealed?
+						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost of the card revealed?
 						cost: {
 							type: exert
 							select: self
