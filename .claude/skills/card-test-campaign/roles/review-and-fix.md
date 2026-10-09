@@ -50,7 +50,9 @@ step where you can, and do not look at the same thing twice.
    Where you suspect a gap, name the wrong definition that would pass. If reading the test settles it (no
    candidate on the table tells the two apart), fix it without more ado. Only where you cannot tell by reading,
    prove it with that one mistake: `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`
-   (at most two such runs a card: each is a step, and steps are what cost). A mistake that survives is a gap;
+   (at most two runs a card that try a mistake to settle a doubt: each is a step, and steps are what cost.
+   Several mistakes may go in one run where a script of yours makes that possible; each is still reported
+   singly). A mistake that survives is a gap;
    one that is noticed is not. Settle what the game really does with a throwaway
    test: `cardtest.py probe /tmp/<your folder name>/Probe.java`.
 
@@ -63,8 +65,8 @@ step where you can, and do not look at the same thing twice.
    old reading active beside the parked one (a question), that active test is the one failure to expect against
    the correction; on a card with two questions each parked test also fails under the other's correction, so
    look for the parked test's own name in the "As a correction" line `mutate.py` prints (it names the parked
-   tests that pass and fail under the correction; "SURVIVED" above it only means no test failed, which is what
-   a correction wants). Report every active test that fails against the correction, not only the one written
+   tests that pass and fail under the correction, with the first lines of each failure under it; "SURVIVED"
+   above it only means no test failed, which is what a correction wants). Report every active test that fails against the correction, not only the one written
    for the question: those are what the correction breaks. Where the correction is an engine change and no
    definition change can show it, say so, and say what the parked test would read once the engine does it.
    Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
@@ -79,9 +81,11 @@ step where you can, and do not look at the same thing twice.
 6. **A flag with a name of its own.** Where the definition sets a flag or a modifier with a name of its own
    (`sarumanFirstSentenceInactive`), `grep` the card definitions for everything that reads it. Any reader the
    card's text does not name is an invalid candidate, and probably a finding. The same goes for a field set against its
-   usual value (`forced: false`, an `until:` of its own): `grep` the engine for what reads the field
-   (`grep -rn "forced" gemp-lotr/gemp-lotr-logic/src/main/java`); Frodo's "Shadow cards may not discard ... from
-   the top of your draw deck" reads `forced`, and Uruk Rager 51_150's `forced: false` slipped past it.
+   usual value (an `until:` of its own): `grep` the engine for what reads the field. `forced` on a discard from
+   hand or deck is no such field: every such discard must write it, and what it says is ruled (F-0205). `false`
+   is right where the discard is one of the Free Peoples player's options, `true` where a Shadow card makes him
+   discard with no choice (Frodo, Courteous Halfling 4_301's "Shadow cards may not discard ... from the top of
+   your draw deck" reads it); only a value that departs from that is a finding.
 
 ## Putting it right
 
@@ -97,7 +101,7 @@ to you.
   cards of one unique title in play. Giving a card another culture for race against culture (F-0019) is ruled
   and stays; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
 - **A gap** gets the candidate, reading or test that closes it. The one mistake that proved the gap must be
-  noticed afterwards: run it again.
+  noticed afterwards: run it again. A run that confirms a gap just closed does not count towards the two.
 - **A fix that changes what a test claims changes the ledger too.** Keep the claim lines, `Findings:`,
   `Dropped:` and Notes true.
 - **A finding the author missed** (the game is wrong): the test asserts what the text says and is parked with

@@ -384,4 +384,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Grep before calling a property unique to a block (Aldor 4_262)
 - Facts earlier authors got wrong
 - Rig methods newer than the generated list
+- lint's `second-copy` and `ruled` warnings
 - lint's `cardinfo` warning (Q-0145)

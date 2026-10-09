@@ -260,21 +260,32 @@ def all_rulings():
     return [(book,) + r for book in books() for r in book.rulings()]
 
 
-def cmd_card(arg: str, quiet_if_none=False) -> bool:
+def council_subjects(lines) -> set:
+    """The cards a council page is about: the one at its head, and those whose text it sets out."""
+    return {norm(n) for l in lines for n in re.findall(r"\{\{(?:CardText|CardSplashImage)\|([^}|]*)\}\}", l)}
+
+
+TITLE_ONLY = "  (names the title only: check which version it means)"
+MENTIONS = ("The rest only mention the name: each is a ruling on another card, or a council page about another card, "
+            "with this card's title somewhere in its text (often inside another card's name). Read one for whether "
+            "it bears on this card; it is not a ruling on it.")
+
+
+def card_rulings(arg: str):
+    """What the rules say of a card, as (named, mentioned), each a list of entries ready to print.  `named` are the
+    rulings on the card and the places that name it in full; `mentioned` are rulings on other cards that only have
+    its title in their text ("the Legolas Starter Deck", The Mirror of Galadriel) and council pages about another
+    card that name it in passing."""
     is_id = bool(re.match(r"^\d+_\d+$", arg))
     keys, weak = card_keys(card_id=arg) if is_id else card_keys(name=arg)
-    found = False
+    named, mentioned = [], []
     for book, names, kind, text, line_no in all_rulings():
         normed = [norm(n) for n in names]
         hit = [n for n in normed if n in keys]
         soft = [n for n in normed if n in weak]
         if hit or soft:
-            found = True
-            tag = "" if hit else "  (names the title only: check which version it means)"
-            print("### Individual ruling, %s line %d: %s%s" % (book.name, line_no, kind, tag))
-            print("Cards: " + "; ".join(names))
-            print(text)
-            print()
+            named.append("### Individual ruling, %s line %d: %s%s\nCards: %s\n%s"
+                         % (book.name, line_no, kind, "" if hit else TITLE_ONLY, "; ".join(names), text))
     seen = set()
     for book in books():
         for name, i in book.mentions():
@@ -285,18 +296,17 @@ def cmd_card(arg: str, quiet_if_none=False) -> bool:
                 if key in seen or sec is None or re.search(r"[XR]-List", sec[1]):
                     continue  # the banned and restricted lists name cards without saying anything about them
                 seen.add(key)
-                found = True
                 lo = i
                 while lo > sec[2] + 1 and book.lines[lo - 1].strip():
                     lo -= 1
                 hi = i
                 while hi + 1 < sec[3] and book.lines[hi + 1].strip():
                     hi += 1
-                tag = "" if n in keys else "  (names the title only: check which version it means)"
-                print("### Named in \"%s\", %s line %d%s" % (sec[1], book.label(), i + 1, tag))
-                print(clean("\n".join(book.lines[lo:hi + 1])).strip())
-                print()
-    # A ruling on another card that speaks of this one by its title in passing ("the Ring passes to Sam").
+                named.append("### Named in \"%s\", %s line %d%s\n%s" % (sec[1], book.label(), i + 1, "" if n in keys else TITLE_ONLY,
+                                                                      clean("\n".join(book.lines[lo:hi + 1])).strip()))
+    # A ruling on another card that speaks of this one in passing.  Where its text gives the card's full name it
+    # names the card; where it only has the title as a word ("the Ring passes to Sam", but also "the Legolas
+    # Starter Deck" and every card with Galadriel in its name) it is a mention, to be read as one.
     if is_id:
         title = g.card_index()[arg].field("title", "")
         if title and len(title) > 2:
@@ -306,24 +316,35 @@ def cmd_card(arg: str, quiet_if_none=False) -> bool:
                 if any(n in keys or n in weak for n in normed):
                     continue
                 if word.search(text):
-                    found = True
-                    print("### A ruling on another card mentions \"%s\", %s line %d: %s" % (title, book.name, line_no, kind))
-                    print("Cards: " + "; ".join(names))
-                    print(text)
-                    print()
+                    in_full = any(norm(n) in keys for n in re.findall(r"«([^»]+)»", text))
+                    entry = "### A ruling on another card %s, %s line %d: %s\nCards: %s\n%s" % (
+                        "names this card" if in_full else "has the word \"%s\" in it" % title,
+                        book.name, line_no, kind, "; ".join(names), text)
+                    (named if in_full else mentioned).append(entry)
     for cid, title, status, lines in council():
         names = council_names(lines)
         strong = bool(names & keys)
         if strong or (names & weak):
-            found = True
-            print("### Council ruling %s, \"%s\" (%s)%s" % (cid, title, status,
-                  "" if strong else "  (names the title only: check which version it means)"))
-            print(council_decision(lines))
-            print("(the whole page: rules.py council %s)" % cid)
-            print()
-    if not found and not quiet_if_none:
+            about = bool(council_subjects(lines) & (keys | weak))
+            entry = "### Council ruling %s, \"%s\" (%s)%s%s\n%s\n(the whole page: rules.py council %s)" % (
+                cid, title, status, "" if strong else TITLE_ONLY,
+                "" if about else "  (the page is about another card and names this one in passing)",
+                council_decision(lines), cid)
+            (named if about else mentioned).append(entry)
+    return named, mentioned
+
+
+def cmd_card(arg: str, quiet_if_none=False) -> bool:
+    named, mentioned = card_rulings(arg)
+    for entry in named:
+        print(entry + "\n")
+    if mentioned:
+        print(("" if named else "No ruling names this card.  ") + MENTIONS + "\n")
+        for entry in mentioned:
+            print(entry + "\n")
+    if not named and not mentioned and not quiet_if_none:
         print("The rules do not name this card.")
-    return found
+    return bool(named or mentioned)
 
 
 def terms_for(card_id: str, include_basic=False):

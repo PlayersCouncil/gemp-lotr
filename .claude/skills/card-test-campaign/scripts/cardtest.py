@@ -5,7 +5,8 @@
     cardtest.py run <what...>            compiles just those test files and runs them (a few seconds)
     cardtest.py suite [cards|all|<pkg>]  recompiles all the tests and runs a whole tree of them
     cardtest.py probe <file.java>        compiles and runs a throwaway JUnit class kept anywhere (/tmp, say), for
-                                         finding out what the game does without adding a test to the repository
+                                         finding out what the game does without adding a test to the repository;
+                                         a card test class the probe names is compiled with it as it now stands
 
 <what> is a blueprint id (1_40), a test file's path, or a selector (set:1, file:set01-Elven, seg:vset).
 
@@ -116,6 +117,21 @@ def run(argv) -> int:
     return run_junit([g.test_class_name(f.resolve()) for f in files], cp)
 
 
+def named_card_tests(files) -> list:
+    """The card test files that probe sources name, as a probe does that extends a card's test class to borrow its
+    scenario method.  They are compiled with the probe: the copy of a card's test class under target/test-classes
+    is only as new as the last `setup` or `suite`, and a probe built against it runs the card's old tests on its
+    old table."""
+    by_name = {path.stem: path for path in g.test_index().values()}
+    own = {f.stem for f in files}
+    out = []
+    for f in files:
+        for name in sorted(set(re.findall(r"\bCard_\w+Tests\b", f.read_text(encoding="utf-8", errors="replace")))):
+            if name in by_name and name not in own and by_name[name] not in out:
+                out.append(by_name[name])
+    return out
+
+
 def probe(argv) -> int:
     """Compiles and runs any JUnit class, wherever its file is: for trying something out without adding a test."""
     out_name = "probe"
@@ -130,7 +146,8 @@ def probe(argv) -> int:
     out_dir.mkdir(parents=True)
     cp = classpath(out_dir)
     javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(out_dir), "-cp", cp]
-                           + [str(f) for f in files], cwd=g.SERVER, env=env(), capture_output=True, text=True)
+                           + [str(f) for f in files + named_card_tests(files)], cwd=g.SERVER, env=env(),
+                           capture_output=True, text=True)
     if javac.returncode != 0:
         sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
         print("\nDid not compile.")

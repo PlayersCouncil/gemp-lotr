@@ -46,6 +46,8 @@ WAIVER_LINE = re.compile(r"^\s+no\s+(C-|[+\-CFDLOSRBZK])\s*:\s*\S")
 # "waits + F: G-0031 <why>": checks the rig cannot yet show.  The card is parked on that rig request until it can.
 WAITS_LINE = re.compile(r"^\s+waits\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*:\s*(G-\d{4})\b")
 CLAIM_LINE = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s*$")
+# The same with something after the test's name: read as the claim it is, and reported by its line.
+CLAIM_AND_WORDS = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s+(\S.*?)\s*$")
 TAG_LINE = re.compile(r"^\s*//\s*((?:[A-Z]\d+\s*:\s*[^;]+;?\s*)+)$")
 METHOD = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\(([^)]*)\)")
 
@@ -65,7 +67,11 @@ ACTS = re.compile(r"\b(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|Discar
                   r"Pass\w*|Assign\w*|Resolve\w*)\s*\(|\b(Pass\w+Actions|BothPass\w*|PassResponses|PassCurrentPhaseActions)\s*\(")
 # What counts as saying what the game is waiting for once a test has done its last thing.
 BOOKEND = re.compile(r"\bAwaiting\w+PhaseActions\s*\(|\bGameIsFinished\s*\(|\b\w*DecisionAvailable\s*\(|"
-                     r"\b\w*HasOptionalTriggerAvailable\s*\(|\b\w*AnyDecisionsAvailable\s*\(")
+                     r"\b\w*HasOptionalTriggerAvailable\s*\(|\b\w*AnyDecisionsAvailable\s*\(|"
+                     r"\bassertEquals\s*\(\s*Phase\s*\.\s*\w+\s*,\s*scn\s*\.\s*GetCurrentPhase\s*\(")
+# How a card that stays in play speaks of itself.  Where it is not unique, a second copy is what shows that the
+# words mean this copy and not every copy (the Standard's F).
+ITSELF = re.compile(r"\bthis (?:companion|minion|ally|follower|condition|possession|artifact|weapon|card)\b|\bhere\b", re.I)
 
 
 class Finding:
@@ -182,39 +188,87 @@ class Waived(set):
 
 
 def parse_ledger(path: Path):
-    """A card's ledger file as ({id: [type, checks, text, line]}, {id: {check: [test names]}}, cited ids), or
-    (None, None, []) if there is no file."""
+    """A card's ledger file as ({id: [type, checks, text, line, waived]}, {id: {check: [test names]}}, cited ids,
+    [(line number, what is wrong with that line)]), or (None, None, [], []) if there is no file."""
     if not path.is_file():
-        return None, None, []
+        return None, None, [], []
     lines = path.read_text(encoding="utf-8").replace("\r", "").split("\n")
-    clauses, claims, cited = {}, {}, []
-    last, in_header = None, False
+    clauses, claims, cited, faults = {}, {}, [], []
+    # above: what the lines above an indented line of no kind of its own make of it.  Under a clause line it is
+    # more of the clause's text; under a `no` or `waits` line it is that line's reason running on.
+    last, in_header, above = None, False, None
     for i, line in enumerate(lines):
         m = LEDGER_LINE.match(line)
-        c = CLAIM_LINE.match(line)
+        c = CLAIM_LINE.match(line) or CLAIM_AND_WORDS.match(line)
         if m:
             clauses[m.group(1)] = [m.group(2), set(m.group(3).split()), m.group(4), i, Waived()]
             claims[m.group(1)] = {}
-            last, in_header = m.group(1), False
+            last, in_header, above = m.group(1), False, "text"
         elif c and last is not None and not in_header:
             for check in c.group(1).split():
                 claims[last].setdefault(check, []).append(c.group(2))
+            above = "claim"
+            if c.re is CLAIM_AND_WORDS:
+                faults.append((i + 1, "'%s' after the test's name %s: a claim line is `<checks> -> <TestName>` and nothing "
+                                      "more, and a remark goes in Notes" % (c.group(3)[:40], c.group(2))))
+                above = "reason"
         elif WAITS_LINE.match(line) and last is not None and not in_header:
             w = WAITS_LINE.match(line)
             for check in w.group(1).split():
                 clauses[last][4].waits[check] = w.group(2)
+            above = "reason"
         elif WAIVER_LINE.match(line) and last is not None and not in_header:
             # "no -: why": a check the clause's type asks for and this clause cannot have.
             clauses[last][4].add(WAIVER_LINE.match(line).group(1))
+            above = "reason"
         elif re.match(r"^\s*(LEDGER|Sources|Findings|Formats|Dropped|Notes)\b", line):
             in_header = True
         elif not line.strip():
             pass
         elif last is not None and not in_header:
-            # A continuation of the previous clause's text.
-            clauses[last][2] += " " + line.strip()
+            if above == "text":
+                # A continuation of the clause's text.
+                clauses[last][2] += " " + line.strip()
+            elif above == "claim":
+                faults.append((i + 1, "'%s' stands below a claim line of %s and is not a claim, a `no` or a `waits` line: "
+                                      "a clause's text is written above its claims, and a remark goes in Notes"
+                                      % (line.strip()[:40], last)))
+                above = "reason"
+            # Otherwise the reason of a `no` or `waits` line running on to another line, or more of a remark
+            # already reported.
         cited += re.findall(r"\b[FQ]-\d{4}\b", line)
-    return clauses, claims, cited
+    return clauses, claims, cited, faults
+
+
+_log_entries = None
+
+
+def rulings_log_entries() -> list:
+    """The rulings log's entries as (line number, heading, text).  An entry is a paragraph that opens in bold, with
+    the paragraphs after it that do not, up to the next section heading; its heading is the words in bold."""
+    global _log_entries
+    if _log_entries is None:
+        _log_entries = []
+        log = g.SKILLS / "card-test-campaign" / "references" / "rulings-log.md"
+        lines = log.read_text(encoding="utf-8").split("\n") if log.is_file() else []
+        entry, start = None, None  # the entry being read, and the first line of the paragraph being read
+        for i, line in enumerate(lines + [""]):
+            if line.strip() and not line.startswith("#"):
+                if start is None:
+                    start = i
+                continue
+            if start is not None:
+                paragraph = "\n".join(lines[start:i])
+                opens = re.match(r"\*\*(.+?)\*\*", paragraph, re.S)
+                if opens:
+                    entry = [start + 1, re.sub(r"\s+", " ", opens.group(1)).strip().rstrip(".:"), ""]
+                    _log_entries.append(entry)
+                if entry is not None:
+                    entry[2] += paragraph + "\n"
+                start = None
+            if line.startswith("#"):
+                entry = None  # what stands under a section heading belongs to no entry above it
+    return _log_entries
 
 
 def squash(text: str) -> str:
@@ -289,7 +343,7 @@ def lint_file(path: Path):
             add("error", "in-file", i, "a clause tag comment in the test file: which test claims what is recorded in the ledger file")
 
     ledger_file = g.ledger_path(card_id) if card_id else None
-    clauses, claims, cited = parse_ledger(ledger_file) if ledger_file else (None, None, [])
+    clauses, claims, cited, faults = parse_ledger(ledger_file) if ledger_file else (None, None, [], [])
     test_names = {m[0] for m in tests}
     if clauses is None:
         add("error", "ledger", None, "no ledger file (%s)" % (ledger_file if ledger_file else "unknown card"))
@@ -297,6 +351,8 @@ def lint_file(path: Path):
     else:
         if not clauses:
             add("error", "ledger", None, "the ledger has no clause lines (ID Type [checks] text)")
+        for at, what in faults:
+            add("error", "ledger", None, "ledger line %d: %s" % (at, what))
         for cid, (ctype, codes, text, line, waived) in clauses.items():
             if ctype not in CORE:
                 add("error", "ledger", None, "%s: unknown clause type '%s'" % (cid, ctype))
@@ -346,11 +402,18 @@ def lint_file(path: Path):
         extra = set(claims.get(cid, {})) - codes
         if extra:
             add("error", "claim", None, "%s: tests claim %s, which the clause does not list" % (cid, " ".join(sorted(extra))))
-    if card_id and re.search(r'@Ignore\("Q-', raw):
-        log = g.SKILLS / "card-test-campaign" / "references" / "rulings-log.md"
-        if log.is_file() and re.search(r"\b%s\b" % re.escape(card_id), log.read_text(encoding="utf-8")):
-            add("warning", "ruled", None, "a test is parked on a question, and the rulings log names this card: "
-                                          "check whether the question has been answered")
+    asked = sorted(set(re.findall(r'@Ignore\("(Q-\d{4})', raw)))
+    if card_id and asked:
+        # The entries that name the card, or the question itself: which of them it was says at once whether it
+        # bears on the question (a note on the card's sheet row does not).
+        named = re.compile(r"\b(?:%s)\b" % "|".join(re.escape(x) for x in [card_id] + asked))
+        hits = [(at, heading, sorted(set(named.findall(text)))) for at, heading, text in rulings_log_entries() if named.search(text)]
+        if hits:
+            where = "; ".join('"%s" (line %d, names %s)' % (heading if len(heading) <= 70 else heading[:67] + "...", at, " and ".join(found))
+                              for at, heading, found in hits[:4])
+            add("warning", "ruled", None, "a test is parked on %s, and the rulings log names the card or the question in %s%s: "
+                                          "check whether the question has been answered"
+                % (" and ".join(asked), where, " and %d more entries" % (len(hits) - 4) if len(hits) > 4 else ""))
     if card_id and clauses and ledger_file is not None:
         had = baseline_tests().get(card_id, 0)
         if had > 1 and not re.search(r"^\s*Dropped\s*:", ledger_file.read_text(encoding="utf-8"), re.M):
@@ -406,6 +469,19 @@ def lint_file(path: Path):
                 add("warning", "same-blueprint", start, "%s: %s is chosen by blueprint, and %s %s the same blueprint (%s): unless "
                     "the twin is out of that pile, either copy may be taken and a reading of %s's zone fails at random"
                     % (name, chosen, ", ".join(twins), "has" if len(twins) == 1 else "have", bp, chosen))
+
+    # A card that is not unique and speaks of itself ("this condition", "here"): the Standard's F asks for a second
+    # copy in play wherever it could change a reading, and no scenario can hold one with a single alias of the
+    # blueprint (two reviewers found the copy missing where this check had passed: err-b58_1, err-b58_48).
+    if card is not None and (card.field("type", "") or "").lower() in PLAYED \
+            and (card.field("unique", "") or "false").strip().lower() == "false":
+        says = ITSELF.search(g.plain_text(card.field("gametext", "")))
+        copies = sorted(a for a, b in alias_bp.items() if b == card_id)
+        if says and len(copies) < 2:
+            add("warning", "second-copy", None, "the card is not unique and its text says \"%s\", and no scenario has two "
+                "aliases of %s: a second copy is in play wherever it could change a reading (which copy a card went to "
+                "or came from, a modifier tied to those words not stacking), or Notes say why none could"
+                % (says.group(0).lower(), card_id))
 
     # A race that shares its name with a culture (F-0019): unless the table holds a card of that culture outside the
     # race, culture(elven) written for elf passes every test. The usual board is a Man given the culture ad hoc.

@@ -7,11 +7,14 @@
     packet.py <id> --terms          also prints the text of each glossary entry the game text touches
 
 A packet is: where the card lives, what the reviewed spreadsheet says it is (Decipher cards), its definition, where
-the two disagree, every ruling that names it, the glossary entries its text touches, and its other versions.
+the two disagree (and where the definition's cardInfo is out of step with the rest of it, or it has no `side:`),
+every ruling that names it, then under a heading of their own the rulings on other cards that only have its title
+in their text, the glossary entries its text touches, and its other versions.
 """
 import re
 import sys
 
+import cardinfo
 import gempcards as g
 import reconcile
 import rules as rulebook
@@ -22,6 +25,9 @@ FORMAT_HINTS = [
                 "it needs a FormatRule clause and a test under each."),
     (r"\bsite \d|\bsites? \d|\b(fellowship|towers|king) block", "Names a site number or a block: test it on that block's path."),
 ]
+
+
+FREE_PEOPLES_CULTURES = {"dwarven", "elven", "gandalf", "gondor", "rohan", "shire", "esgaroth"}
 
 
 def errata_family(card_id: str):
@@ -38,6 +44,24 @@ def errata_family(card_id: str):
         m = re.search(r"^\s*parent\s*:\s*(\S+)", other.raw, re.M)
         if m and m.group(1) == card_id:
             out.append(("has a version", other_id))
+    return out
+
+
+def beyond_the_sheet(card_id: str, card) -> list:
+    """What the comparison with the sheet does not look at and a packet should still say of a definition: that it
+    has no `side:` line, and where its cardInfo block is out of step with the rest of it (Q-0145)."""
+    out = []
+    culture = (card.field("culture", "") or "").strip()
+    if culture and card.field("side") is None:
+        # CultureFieldProcessor: every culture but [gollum] carries its side, and a card with no side does not load.
+        side = "Free Peoples" if culture.lower() in FREE_PEOPLES_CULTURES else "Shadow"
+        out.append("side: the definition has no `side:` line, and the game takes the side from the culture (%s, so %s). "
+                   "Nothing plays differently for it: say so in the ledger's Notes and in your report, and raise no "
+                   "finding." % (culture, side))
+    for field, there, wanted in cardinfo.check(card_id):
+        out.append("cardInfo %s: the definition has `%s` where the rest of the definition and the other cards of its kind "
+                   "say `%s`. No test reads cardInfo; report it as a `data` finding (Q-0145; `cardinfo.py %s`)."
+                   % (field, there, wanted, card_id))
     return out
 
 
@@ -115,22 +139,34 @@ def main(argv):
         print("```")
         print()
 
-        if row and not blind:
-            diffs = reconcile.compare(card_id)
+        beyond = [] if blind else beyond_the_sheet(card_id, card)
+        if (row or beyond) and not blind:
+            diffs = reconcile.compare(card_id) if row else []
             print("## Sheet against definition")
             if diffs:
                 for field, sheet, definition in diffs:
                     print("- %s: sheet has `%s`, definition has `%s`" % (field, sheet, definition))
-            else:
+            elif row:
                 print("They agree on name, cost, type, numbers and game text.")
             if diffs:
                 print("Check the rulings below before treating a difference as an error: a ruling may account for it.")
+            if beyond:
+                print("Outside what the sheet is compared on:")
+                for line in beyond:
+                    print("- " + line)
             print()
 
+        named, mentioned = rulebook.card_rulings(card_id)
         print("## Rulings that name this card")
-        if not rulebook.cmd_card(card_id, quiet_if_none=True):
-            print("None in either rules document.")
-            print()
+        for entry in named:
+            print(entry + "\n")
+        if not named:
+            print("None in either rules document.\n")
+        if mentioned:
+            print("## Rulings on other cards that only mention its name")
+            print(rulebook.MENTIONS.replace("The rest only mention the name: each", "Each") + "\n")
+            for entry in mentioned:
+                print(entry + "\n")
 
         secs = rulebook.terms_for(card_id)
         print("## Glossary entries the game text touches")

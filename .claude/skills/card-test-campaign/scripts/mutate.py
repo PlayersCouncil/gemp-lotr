@@ -5,9 +5,10 @@
     mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs
     mutate.py <id> --all                    lists every mistake and what noticed it
     mutate.py <id> --replace <old> <new> --with-parked
-                                            runs the parked (@Ignore) tests too, and says which tests fail: with
-                                            the correction a finding proposes as the "mistake", a sound parked
-                                            test is one that passes here and fails against the card as it is
+                                            runs the parked (@Ignore) tests too, and says which tests fail and the
+                                            first lines of why: with the correction a finding proposes as the
+                                            "mistake", a sound parked test is one that passes here and fails
+                                            against the card as it is
     mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
 
 Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off either way, a
@@ -332,24 +333,70 @@ def sandbox(root: Path, card: g.CardDef, new_text: str) -> Path:
     return cwd
 
 
-def run_tests(cwd: Path, cp: str, test_class: str):
+FRAME = re.compile(r"^\s+at ([\w.$]+)\.([\w$<>]+)\(([\w$]+\.java):(\d+)\)")
+
+
+def failures(out: str, test_class: str) -> dict:
+    """What JUnit printed about each failing test, cut down to what says why: {test name: [lines]}.  The lines are
+    the exception with its message, its deepest cause where it has one, and where it was thrown: the rig's or the
+    game's frames nearest the throw, and the line of the test file that led there, with what that line says."""
+    found = {}
+    test = g.SERVER / "src" / "test" / "java" / Path(*test_class.split(".")).with_suffix(".java")
+    source = test.read_text(encoding="utf-8", errors="replace").split("\n") if test.is_file() else []
+    blocks = re.split(r"(?m)^\d+\) (\w+)\(.*\)\n", out.split("\nFAILURES!!!")[0])
+    own = test_class.rsplit(".", 1)[-1] + ".java"
+    for name, block in zip(blocks[1::2], blocks[2::2]):
+        lines = block.split("\n")
+        first_frame = next((n for n, line in enumerate(lines) if FRAME.match(line)), len(lines))
+        said = [line.strip() for line in lines[:first_frame] if line.strip()][:3]
+        causes = [line.strip() for line in lines if line.startswith("Caused by: ")]
+        if causes:
+            said.append(causes[-1][:300])
+        frames = []
+        for line in lines[first_frame:]:
+            m = FRAME.match(line)
+            if not m:
+                break  # the first cause's own frames start here
+            if m.group(1).startswith(("org.junit.", "java.", "jdk.", "sun.")):
+                continue
+            frames.append("at %s.%s (%s:%s)" % (m.group(1).rsplit(".", 1)[-1], m.group(2), m.group(3), m.group(4)))
+            if m.group(3) == own:
+                if 0 < int(m.group(4)) <= len(source):
+                    frames[-1] += "   " + source[int(m.group(4)) - 1].strip()[:160]
+                break  # the test's own line: nothing below it says more
+        if len(frames) > 4:
+            frames = frames[:3] + ["..."] + frames[-1:]
+        found[name] = [line[:300] for line in said] + frames
+    return found
+
+
+def run_tests_in_full(cwd: Path, cp: str, test_class: str):
+    """(verdict, what to say beside it, {failing test: the first lines of its failure})."""
     proc = subprocess.run(["java", "-cp", cp, "org.junit.runner.JUnitCore", test_class], cwd=cwd, env=cardtest.env(),
                           capture_output=True, text=True, errors="replace")
     out = proc.stdout + proc.stderr
     if re.search(r"^OK \(\d+ tests?\)", out, re.M):
-        return "survived", ""
+        return "survived", "", {}
+    why = failures(out, test_class)
     if "CardNotFoundException" in out or "Error while loading file" in out or "InvalidCardDefinitionException" in out:
-        why = re.search(r"(InvalidCardDefinitionException|CardNotFoundException|Error while loading file)[:\s]*([^\n]{0,160})", out)
-        return "invalid", (why.group(1) + ": " + why.group(2).strip()) if why else ""
+        said = re.search(r"(InvalidCardDefinitionException|CardNotFoundException|Error while loading file)[:\s]*([^\n]{0,160})", out)
+        return "invalid", (said.group(1) + ": " + said.group(2).strip()) if said else "", why
     failed = re.findall(r"^\d+\) (\w+)\(", out, re.M)
     # A definition that fails to load in some other way makes every test fail before it asserts anything: when
-    # every test failed and no failure is an assertion, call the change unloadable rather than noticed.
+    # every test failed and no failure is an assertion, call the change unloadable rather than noticed, and give
+    # the first failure's deepest cause as the reason (a file that no longer parses says where).
     run = re.search(r"^Tests run: (\d+),\s+Failures: (\d+)", out, re.M)
     causes = re.findall(r"^\d+\) \w+\(.*\)\n([\w.$]+)", out, re.M)
     if run and run.group(1) == run.group(2) and causes and not any(
             c.endswith(("AssertionError", "ComparisonFailure", "AssertionFailedError")) for c in causes):
-        return "invalid", "every test failed without an assertion (" + causes[0] + ")"
-    return "noticed", ", ".join(sorted(set(failed)))
+        first = why.get(failed[0], []) if failed else []
+        reason = next((line for line in reversed(first) if line.startswith("Caused by: ")), first[0] if first else causes[0])
+        return "invalid", "every test failed without an assertion: " + re.sub(r"^Caused by: ", "", reason)[:200], why
+    return "noticed", ", ".join(sorted(set(failed))), why
+
+
+def run_tests(cwd: Path, cp: str, test_class: str):
+    return run_tests_in_full(cwd, cp, test_class)[:2]
 
 
 def main(argv):
@@ -406,10 +453,11 @@ def main(argv):
     cp = cardtest.classpath(classes)
     source = test
     if with_parked:
-        # A copy of the test file with its @Ignore lines taken off, so that the parked tests run too.
+        # A copy of the test file with its @Ignore lines emptied, so that the parked tests run too and a failure's
+        # line number is still the line in the file itself.
         source = base / "src" / test.name
         source.parent.mkdir(parents=True)
-        source.write_text(re.sub(r"(?m)^\s*@Ignore\b.*\n", "", test.read_text(encoding="utf-8")), encoding="utf-8")
+        source.write_text(re.sub(r"(?m)^[ \t]*@Ignore\b.*$", "", test.read_text(encoding="utf-8")), encoding="utf-8")
     javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(classes), "-cp", cp, str(source)],
                            cwd=g.SERVER, env=cardtest.env(), capture_output=True, text=True)
     if javac.returncode != 0:
@@ -417,10 +465,20 @@ def main(argv):
         raise SystemExit("The test file does not compile.")
     test_class = g.test_class_name(test)
 
-    verdict, failing = run_tests(g.SERVER, cp, test_class)
+    verdict, failing, why = run_tests_in_full(g.SERVER, cp, test_class)
+
+    def say_why(why, only=None):
+        """The first lines of each failing test's failure, indented under the line that named the tests."""
+        for name in sorted(why):
+            if only is None or name in only:
+                print("    %s: %s" % (name, why[name][0] if why[name] else "(no message)"))
+                for line in why[name][1:]:
+                    print("        " + line)
+
     parked = re.findall(r"(?m)^\s*@Ignore\b.*\n(?:\s*@\w+.*\n)*\s*public\s+void\s+(\w+)", test.read_text(encoding="utf-8")) if with_parked else []
     if with_parked:
         print("With the parked tests switched on, against the card as it is: %s" % ("all pass" if verdict == "survived" else "failing: " + failing))
+        say_why(why)
     elif verdict != "survived":
         raise SystemExit("The tests do not pass against the card as it is; fix that first.")
 
@@ -428,14 +486,15 @@ def main(argv):
         i, what, new_card = todo[n]
         new_file = "\n".join(file_lines[:first] + new_card + file_lines[first + len(card_lines):])
         cwd = sandbox(base / ("m%03d" % n), card, new_file)
-        verdict, failed = run_tests(cwd, cp, test_class)
+        verdict, failed, why = run_tests_in_full(cwd, cp, test_class)
         shutil.rmtree(base / ("m%03d" % n), ignore_errors=True)
-        return n, verdict, failed
+        return n, verdict, failed, why
 
-    results = {}
+    results, whys = {}, {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, (os.cpu_count() or 2))) as pool:
-        for n, verdict, failed in pool.map(one, range(len(todo))):
+        for n, verdict, failed, why in pool.map(one, range(len(todo))):
             results[n] = (verdict, failed)
+            whys[n] = why
 
     print("%s  %s: %d mistakes made in the definition" % (card_id, g.full_name(card), len(todo)))
     counts = {"noticed": 0, "survived": 0, "invalid": 0}
@@ -463,6 +522,7 @@ def main(argv):
             else:
                 print("As a correction (line %d): parked tests passing: %s; parked tests still failing: %s; active tests failing: %s"
                       % (card.line + i, ", ".join(now_pass) or "none", ", ".join(still) or "none", ", ".join(active) or "none"))
+                say_why(whys[n], failed_set)
     shutil.rmtree(base, ignore_errors=True)
     return 0
 

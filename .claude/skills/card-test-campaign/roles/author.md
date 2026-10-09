@@ -58,7 +58,13 @@ file during this stage. If the text leaves a real doubt about what should happen
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
 
-**Stage 2, with everything.** Run `packet.py <id> --with-test`. If the card already has behavioural tests, go
+A `grep` of a `.hjson` file prints whatever lines match, those of your other cards and their originals among
+them: to look for a helper or a printed text in stage 1, print game texts and nothing else
+(`grep -h 'gametext:' <files>`). You may read another card's finished test file of the same shape, so long as
+that card is neither one of your batch nor the Decipher original of one.
+
+**Stage 2, with everything.** Run `packet.py <id> --with-test`, which prints the definition and the test file and
+so ends stage 1 for that card: its plan is saved first. If the card already has behavioural tests, go
 through them one by one against your plan: each either claims one of your checks (keep it, adapted to the
 standard), or duplicates another, or covers something your ledger missed (then your ledger was wrong: fix it), or
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
@@ -98,9 +104,11 @@ Decide which of three things is wrong, in this order, and say which in your repo
 2. **Your expectation.** You misread the text or a rule. Check with `rules.py term ...` and `rules.py card ...`.
    If the rules settle it, fix the plan and the test. If they do not, it is a question.
 3. **The game.** The text and rules are clear and the game does something else. Leave the test asserting what the
-   text says, park it with `@Ignore("F-0000: <one line>")` (the orchestrator assigns the real number), and report
+   text says, park it with `@Ignore("F-0000: <one line>")` (the orchestrator assigns the real number; a finding
+   that has its number already goes in under that number), and report
    it as a finding with: what the text says, what you expected, what happened, and your best guess at the kind
    (typo in the definition, oversight in the implementation, wrong displayed text, engine bug, rig bug).
+   A finding with two causes gets a parked test for each, or half a correction passes the one.
    A definition that does not do what its text says is fixed at landing by the orchestrator without waiting for
    Ketura (her rule since 2026-10-07), so for every finding show the correction (the `mutate.py` line that makes
    your parked test pass with every active test) and say in one sentence whether the departure looks like an

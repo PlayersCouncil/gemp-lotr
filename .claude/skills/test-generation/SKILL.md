@@ -276,9 +276,10 @@ C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally who
 ```
 
 The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
-be shown at all, not for one that is awkward to arrange. A `no` line is one line, and a claim line ends at the
-test's name: the conformance check reads an indented line after either, or a claim with words after it, as more
-of the clause's text, and then reports that the `C` clauses are not the card's game text.
+be shown at all, not for one that is awkward to arrange. A `no` line's reason may run on to the lines below it.
+A claim line ends at the test's name, and only claim, `no` and `waits` lines stand below one: the conformance
+check reports a claim with words after it, or a remark below a claim, by its line in the ledger. Remarks go in
+Notes.
 
 **A check the rig cannot show yet** is written the same way, as `waits <check>: <the rig request> <what the rig
 lacks>`. It is no waiver: the check is still owed, and the card is parked on the request until it is built.
@@ -327,7 +328,8 @@ wrongly become optional looks the same otherwise.
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
 `GameIsFinished()`. This is what catches a trigger left dangling or a response window nobody expected, and it is
-the proof in a test that something did *not* happen.
+the proof in a test that something did *not* happen. The conformance check also takes the phase read on its own
+(`assertEquals(Phase.REGROUP, scn.GetCurrentPhase())`), which says less: it does not show that nothing is pending.
 
 **Expected values come from the text.** Work out what should happen, write it down, then run it. Do not run the
 game and copy what it did. Where a number is a sum, the comment spells the sum:
@@ -356,7 +358,9 @@ comment, which the reviewer reads.
 
 `packet.py <id>` lists every individual ruling that names the card and every rules example that mentions it.
 Each becomes an `R` clause and a test, unless it only restates the printed text (a "Clarification" whose wording
-the spreadsheet already has): say so under `Sources:` instead.
+the spreadsheet already has): say so under `Sources:` instead. Rulings on other cards that only have this card's
+title in their text (another Galadriel, "the Legolas Starter Deck"), and council pages about another card, come
+under a heading of their own: read them for whether they bear on the card; they are not its rulings.
 
 Format is mostly a matter of which decks may sit down at a table and seldom changes how a card plays, so tests do
 not have to use the format a card was printed for. The exceptions are rules that a format switches on or off.
@@ -453,7 +457,8 @@ bookends, and that none of the ledger has leaked into the test file. Then:
    for. Read the card, not the tests.
 2. Does each test really show the check it claims? A `-` that is not the *nearest* miss, an `F` with one
    candidate, a `D` that only looks at one side of the boundary, all pass the conformance check. So does a
-   card that is not unique and says "this condition" or "here" with no second copy in play in any test.
+   card that is not unique and says "this condition" or "here" with no second copy in play in the test where
+   it matters: the check warns (`second-copy`) only where no scenario has two aliases of the card at all.
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
    number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
    Reading settles most of these (is there a candidate on the table that tells the two apart?);
