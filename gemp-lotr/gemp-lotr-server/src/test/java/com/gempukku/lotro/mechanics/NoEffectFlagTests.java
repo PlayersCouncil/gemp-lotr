@@ -1461,4 +1461,62 @@ public class NoEffectFlagTests
 		assertEquals("limit", scn.FreepsActionNoEffect(banner));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
+
+	protected VirtualTableScenario GetCapOnSomethingElseScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Sting: "Bearer must be Frodo.  Fellowship or Regroup: Exert Frodo to reveal an opponent's
+					// hand.  Remove (1) for each Orc revealed (limit (4))."  Its cap is written into the amount of
+					// twilight removed.
+					put("sting", "1_313");
+					put("troop1", "1_177");     // Goblin Patrol Troop: a [moria] Orc with no text
+					put("troop2", "1_177");
+					put("troop3", "1_177");
+					put("troop4", "1_177");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,     // Frodo, Son of Drogo: vitality 4
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A spent cap is read only where it is on a strength bonus, on the amount of a keyword or on a number of cards
+	// drawn (the three tests above), and marks the action only when nothing else the action does would happen
+	// either.  A cap on anything else is not read, and here the action still does something at its cap: the hand
+	// is revealed.  It is not marked.
+	@Test
+	public void ACapOnSomethingElseAnEffectDoesIsNotFlagged() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCapOnSomethingElseScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		scn.AttachCardsTo(frodo, sting);
+		scn.MoveCardsToHand(scn.GetShadowCard("troop1"), scn.GetShadowCard("troop2"),
+				scn.GetShadowCard("troop3"), scn.GetShadowCard("troop4"));
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsRefreshDecision();
+
+		// Four Orcs revealed: (4) removed, which is the whole of the limit.
+		assertEquals("false", scn.FreepsActionNoEffect(sting));
+		scn.FreepsUseCardAction(sting);
+		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// At the limit the ability is on offer and not marked.
+		assertTrue(scn.FreepsActionAvailable(sting));
+		assertEquals("false", scn.FreepsActionNoEffect(sting));
+
+		// Used again, Frodo exerts and the hand is revealed, and nothing more is removed.
+		scn.FreepsUseCardAction(sting);
+		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }

@@ -250,24 +250,16 @@
 				against: bearer
 				memorize: losingMinion
 			}
-			effect: [
-				{
-					type: If
-					check: {
-						type: perPhaseLimit
-						limit: 1
-					}
-					true: {
-						type: discardTopCardsFromDeck
-						deck: ownerFromMemory(losingMinion)
-						forced: true
-					}
-				}
-				{
-					type: incrementPerPhaseLimit
-					limit: 1
-				}				
-			]
+			// "This card can trigger only once for each Shadow player with a minion in that skirmish, regardless
+			// of how many minions that player had" (Comprehensive Rules 4.2, Section Three, DWARVEN AXE).  Each
+			// skirmish is a phase of its own.  As a limit on the trigger, the trigger raised for a second minion
+			// is dropped, and not put to the player to be ordered (F-0199).
+			limitPerPhase: 1
+			effect: {
+				type: discardTopCardsFromDeck
+				deck: ownerFromMemory(losingMinion)
+				forced: true
+			}
 		}
 		gametext: Bearer must be a Dwarf.<br>Each time a player's minion loses a skirmish to bearer, that player discards the top card from his or her draw deck.
 		lore: "'Buckler and corslet, axe and sword / And shining spears were laid in hoard.'"

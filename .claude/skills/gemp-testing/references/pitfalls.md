@@ -91,8 +91,9 @@ if the card offers no such action, or if more than one fits. A flagged action is
 any other: read the flag, then take the action. An optional trigger is read the same way while its offer is
 pending (`FreepsActionNoEffect(card)`, then `FreepsChooseOptionalTrigger(card)`). An ability or optional trigger
 with a cost whose limit is on what its effect gives (`effectLimitPerPhase` / `effectLimitPerTurn` in the
-definition) reads `"limit"` once it has given as much as the limit allows, and one whose capped bonus is spent
-likewise. One with a limit on uses is not offered at its limit, so there is no flag to read. The flag is worked out when the decision is sent, so after cheating the board get a new decision
+definition) reads `"limit"` once it has given as much as the limit allows. A cap written inside the effect
+reads `"limit"` once spent only where it is on a strength bonus, a keyword's amount or a number of cards drawn
+and the action does nothing else; a cap on anything else reads `"false"` (Sting 1_313, 51_313). One with a limit on uses is not offered at its limit, so there is no flag to read. The flag is worked out when the decision is sent, so after cheating the board get a new decision
 before reading it. At site 2 of `FellowshipSites` (Ettenmoors) each player
 is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".

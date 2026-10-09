@@ -373,8 +373,9 @@ nearest board where the action does something: for a limit, before the first use
 line each; no new test is needed. A card whose tests merely happen to offer a flagged action asserts nothing about
 it; neither does one with a limit on uses ("limit once per phase", a `limitPerPhase` or `limitPerTurn` field),
 which is withheld at its limit and has no flag to read; and neither does one whose cap is written inside its
-effect and not on the ability (a `CardAffectedLimitPerPhase` amount, `limitPerCardThisPhase`): that is the
-mechanic's. An ability
+effect and not on the ability (a `CardPhaseLimit` or `CardAffectedLimitPerPhase` amount, `limitPerCardThisPhase`):
+the game flags some of those at the cap and not others (hjson-reference, "Limits"), and which is the
+mechanic's to show, not the card's. An ability
 or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
 should be withheld, and offering it is a finding.
 

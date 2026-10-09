@@ -105,7 +105,7 @@ Sorting a text: "once", "twice" and "N times" count uses; "+N" counts what is gi
 
 Write a limit with a field. A hand-written `PerPhaseLimit` / `PerTurnLimit` requirement with an `IncrementPer...Limit` withholds the action at its limit whatever it costs, as `limitPerPhase` / `limitPerTurn` do; it is for where a field cannot say what is meant (`perPlayer`, a modifier, a limit shared by two abilities in some other way). An effect that plays a card still withholds the action while nothing can be played, at its limit or not.
 
-A cap written inside the effect, as opposed to on the ability, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above).
+A cap written inside the effect, as opposed to on the ability, leaves the ability on offer whatever it costs: `limitPerCardThisPhase` on ModifyStrength, or a `CardAffectedLimitPerPhase` / `CardPhaseLimit` value as the amount of ModifyStrength or AddKeyword or the count of DrawCards. Once the cap is spent for everyone the effect could reach, the action is flagged `limit` (where the rest of it can be judged: see `noEffectUnless` above). The flag is the whole action's: it is set only when every other effect of the action would do nothing as well, and a spent cap is read on those three effects alone (and on an `If` whose one check is a `PerPhaseLimit` / `PerTurnLimit`). A cap on anything else is not read and the action reads `false` at it: Sting 1_313 and 51_313, a `CardPhaseLimit` as the amount of RemoveTwilight after a reveal that still happens (`mechanics/NoEffectFlagTests`).
 
 `limitPerCardThisPhase` on ModifyStrength and ModifyResistance is counted for the SOURCE card for the phase, whoever the bonus is given to (F-0125, CR 4.2 "limit"): a "(limit +3)" cannot be given in full to each companion in turn. A `CardPhaseLimit` may take a `Conditional` as its `limit` ("limit +3 unless you can spot ..."); the no-effect judge reads such a cap as it stands, so the ability is flagged `limit` once it is spent. A limit that falls below what the card has already given leaves nothing to give and takes nothing back (F-0267).
 
@@ -138,7 +138,7 @@ A `CardPhaseLimit` is also how a printed "(limit -N)" on a play's twilight cost 
   player: freeps              // optional: who performs the action
 }
 ```
-The limit fields are as under Activated, "Limits": `limitPerPhase` / `limitPerTurn` withhold a Trigger at its limit; under `effectLimitPerPhase` / `effectLimitPerTurn` an optional Trigger with a cost is still offered at its limit, flagged, and a required one, or one with no cost, is not. The limit is counted in the phase the trigger goes off in unless `phase` names one.
+The limit fields are as under Activated, "Limits": `limitPerPhase` / `limitPerTurn` withhold a Trigger at its limit; under `effectLimitPerPhase` / `effectLimitPerTurn` an optional Trigger with a cost is still offered at its limit, flagged, and a required one, or one with no cost, is not. The limit is counted in the phase the trigger goes off in unless `phase` names one. On a required Trigger write the limit as the field, not as an `If` on `PerPhaseLimit` inside the effect: one event that raises the trigger twice (two minions losing one skirmish) then has the second dropped once the first has taken the use, where the `If` leaves it to be ordered and to do nothing (Dwarven Axe 1_9, F-0199; F-0145).
 
 `addTrigger` (the effect that gives a trigger to a card until some time) takes `limitPerPhase: N` too: it limits how often the added trigger goes off in a phase, counted on the card that added it (the event), like a card's own trigger's `limitPerPhase`. A required trigger raised by the same event beside one that takes the last use is dropped, not ordered (F-0145). Use it for "If a <character> loses/wins this skirmish ..." where several characters may match: that sentence is one effect, once, however many lose (Ketura on Q-0113; Ancient Enmity 1_29, 51_29).
 
@@ -344,9 +344,11 @@ Common fields on most: `over` (subtract from result), `limit` (cap), `multiplier
 For `until` field on ongoing effects:
 - `end(current)` — end of current phase (default)
 - `end(Skirmish)` — end of skirmish phase
-- `start(Regroup)` — start of regroup
+- `start(Regroup)` — start of regroup (a bare `Regroup` is the same)
 - `EndOfTurn` — end of turn
 - `EndOfGame` / `Permanent` — never expires
+
+These are the only forms. A `start(...)` or `end(...)` whose word is not a phase is refused and the card is not loaded: the turn is not a phase, so the end of the turn is `EndOfTurn`, never `end(turn)` (which used to be read, silently, as `end(current)`). The `oldPhase` and `newPhase` of a `DuplicateActionFromPhase` modifier are refused the same way (`mechanics/UnknownPhaseInADefinitionTests`).
 
 ---
 
