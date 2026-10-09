@@ -386,6 +386,16 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateCard(String blueprintId) {
+        return validateCard(blueprintId, true);
+    }
+
+    /**
+     * What this format has against one card, or null if nothing.
+     * @param heldToSets False for a card that need not come from one of this format's sets: a site in the adventure
+     * deck of a player whose sites may be of any block.  The X-list and the errata are read against it all the
+     * same, since they are the format's word on that one card and not on which sets or blocks it plays.
+     */
+    private String validateCard(String blueprintId, boolean heldToSets) {
         blueprintId = _library.getBaseBlueprintId(blueprintId);
         if (LotroCardBlueprintLibrary.isPlaceholderId(blueprintId))
             return "Future prize placeholders cannot be played";
@@ -394,7 +404,7 @@ public class DefaultLotroFormat implements LotroFormat {
             if (_validCards.contains(blueprintId) || _errataCardMap.containsValue(blueprintId))
                 return null;
 
-            if (!_validSets.isEmpty() && !isValidInSets(blueprintId))
+            if (heldToSets && !_validSets.isEmpty() && !isValidInSets(blueprintId))
                 return "Card not from valid set: " + GameUtils.getFullName(_library.getLotroCardBlueprint(blueprintId));
 
             // Banned cards
@@ -758,8 +768,10 @@ public class DefaultLotroFormat implements LotroFormat {
 
         if (skipBlockValidation) {
             // Meta-site override: skip normal block/set validation for sites.
-            // Only check that each card is actually a site, and enforce the
-            // "Movie-mix OR Shadows-only, not both" rule.
+            // Check that each card is actually a site, enforce the
+            // "Movie-mix OR Shadows-only, not both" rule, and hold each site to
+            // the format's X-list and errata, which are not rules of block:
+            // "sites from any block" lifts the block rule and nothing else.
             boolean hasMovieBlock = false;
             boolean hasShadows = false;
             for (String site : sites) {
@@ -768,6 +780,10 @@ public class DefaultLotroFormat implements LotroFormat {
                     if (bp.getCardType() != CardType.SITE) {
                         result += "Card assigned as Site is not really a site.\n";
                         continue;
+                    }
+                    String invalid = validateCard(site, false);
+                    if (invalid != null && !invalid.isEmpty()) {
+                        result += invalid + "\n";
                     }
                     SitesBlock block = bp.getSiteBlock();
                     if (block == SitesBlock.SHADOWS) {

@@ -984,7 +984,10 @@ so an `assertFalse` of it is no proof that a deck validates: where the deck can 
 The rig's `ShadowsSites` is not a legal adventure deck: six of its nine have Shadow number 0 and three of one
 number is the most ("Deck contains 6 sites with twilight number of 0.", in Expanded too). 92_19 puts 11_240,
 11_231 and 11_250 at sites 6 to 8. Slopes of Amon Hen 1_361, like Ettenmoors 1_331, is refused as first printed
-in PC Movie; under 92_19's override no site is held to the X-list or the errata at all (Q-0185, open).
+in PC Movie (its errata has seven sites: 1_331, 1_333, 1_361, 3_120, 4_355, 7_332, 7_359). Under 92_19's override
+(`skipSiteBlockValidation`) a site is let off the format's block, its sets and the Map, and is still held to the
+format's X-list and errata (Q-0185: A; `mechanics/SitesFromAnyBlockTests`): a mixed deck read as wholly legal
+with the override wants Bree Gate 1_327 or Ettenmoors 51_331 at 2, and in Multipath no Emyn Muil 1_360 at 9.
 The format has no Ring-bearer rule of its own: it counts the Ring-bearer, the Ring and the sites with the draw
 deck, by title, against the one copy limit (CR 4.2 "building your deck", the exception). Every deck the scenario
 builds has Frodo 1_290 as Ring-bearer, so `buildDeckWithCopies("1_290", n, true)` puts n Frodos beside him and

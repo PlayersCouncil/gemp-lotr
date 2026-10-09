@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -126,7 +125,6 @@ public class Card_92_019_Tests
 	}
 
 	@Test
-	@Ignore("Q-0185: with the modifier the game accepts a site the format has X-listed (and the first printing of a site the format plays as errata'd); the text lifts the block, not the X-list")
 	public void MovieBlock_ASiteTheFormatHasXListedIsStillRefusedWithContext() throws CardNotFoundException {
 		var dvs = GetMultipathScenario();
 
@@ -294,6 +292,55 @@ public class Card_92_019_Tests
 
 		var errors = dvs.validate(deck, VirtualTableScenario.FindCard("92_19").getDeckBuildingOverrides());
 		assertTrue("Mixed Shadows+Movie sites should fail even with map + context", dvs.hasSiteBlockError(errors));
+	}
+
+	@Test
+	public void PCMovie_TheFirstPrintingOfAnErratadSiteIsStillRefusedWithContext() throws CardNotFoundException {
+		var dvs = GetPCMovieScenario();
+
+		// Nine Fellowship sites under the Fellowship Map, with Ettenmoors at 2 as PC Movie plays it: the errata,
+		// 51_331.  A legal deck, with the modifier or without.
+		var sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", "51_331");
+		var deck = dvs.buildDeckWithMap("102_74", sites);
+		assertEquals(List.of(), dvs.validate(deck));
+		assertEquals(List.of(), dvs.validate(deck, VirtualTableScenario.FindCard("92_19").getDeckBuildingOverrides()));
+
+		// The same nine with Ettenmoors as first printed, 1_331.  All nine are of one block and of the Map's
+		// path, so neither is what the format objects to.
+		sites.put("site2", "1_331");
+		deck = dvs.buildDeckWithMap("102_74", sites);
+		assertNotEquals(List.of(), dvs.validate(deck));
+		assertFalse(dvs.hasSiteBlockError(dvs.validate(deck)));
+		assertFalse(dvs.hasMapError(dvs.validate(deck)));
+
+		// "Sites from any block" says nothing of errata: the deck is refused with the modifier as without it.
+		assertNotEquals(List.of(), dvs.validate(deck, VirtualTableScenario.FindCard("92_19").getDeckBuildingOverrides()));
+	}
+
+	@Test
+	public void PCMovie_WithFellowshipMap_AMixOfMovieSitesIsHeldToTheErrataWithContext() throws CardNotFoundException {
+		var dvs = GetPCMovieScenario();
+
+		// Ettenmoors at 2 as PC Movie plays it (the errata, 51_331), a Towers site at 3 (Barrows of Edoras) and a
+		// King site at 6 (Minas Tirith Seventh Circle): the deck this modifier is for.  A player without it is
+		// refused the deck for its sites; with it nothing at all is said against the deck.
+		var sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", "51_331");
+		sites.put("site3", "4_337");
+		sites.put("site6", "7_350");
+		var deck = dvs.buildDeckWithMap("102_74", sites);
+		assertTrue(dvs.hasSiteBlockError(dvs.validate(deck)));
+		assertEquals(List.of(), dvs.validate(deck, VirtualTableScenario.FindCard("92_19").getDeckBuildingOverrides()));
+
+		// The same mix with Ettenmoors as first printed, 1_331: refused with the modifier, and not for its blocks
+		// or by its Map, which the modifier has lifted
+		sites.put("site2", "1_331");
+		deck = dvs.buildDeckWithMap("102_74", sites);
+		var errors = dvs.validate(deck, VirtualTableScenario.FindCard("92_19").getDeckBuildingOverrides());
+		assertNotEquals(List.of(), errors);
+		assertFalse(dvs.hasSiteBlockError(errors));
+		assertFalse(dvs.hasMapError(errors));
 	}
 
 	// ===== Expanded =====
