@@ -1128,3 +1128,25 @@ performing the second but not the first. However disallowing "participation" sho
 meaning Come Down is ineffectual." So an ally who "may not participate in archery fire" neither adds to the
 archery total nor takes archery wounds, whatever card would have him take them; the wounds go to an ally who can
 take them, or to companions as F-0243 has it. Built in engine pass 17 as F-0275. *[2026-10-08, night]*
+
+**Q-0148, Glorfindel, Revealed in Wrath 59_16 and 9_16: A. A reveal the rest of an ability hangs on is a
+requirement or a cost.** "Skirmish: Reveal the top card of your draw deck. You may exert Glorfindel to make a
+Nazgûl he is skirmishing strength –X, where X is the twilight cost of the card revealed." With an empty draw deck:
+"I would consider this either a requirement or a cost. Either way, it has to happen for the rest to occur, so an
+empty deck should disallow the ability." So where what follows reads the card revealed, the reveal must be able to
+happen for the ability to be offered or the event played, whether or not a "to" stands after it. This is not the
+optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. *[2026-10-08, night]*
+
+**Q-0149, unordered card collections in other effects: left alone (B).** After Q-0142 put "each / every" in card
+id order, a dozen more effect classes were found to keep cards in sets with no order (kills, shuffles into a
+deck, discards from hand). "This is getting a bit into the weeds. If we have a specific reason, a test that won't
+work due to the stochastic ordering, we can address those as we go. But preemptively hitting it is unproductive I
+think." So: no sweep; a test that an unordered collection makes unreliable is a finding then, with that class
+ordered as F-0268 did. *[2026-10-08, night]*
+
+**Q-0150, Streets of Edoras 4_340 against cards that have an ally take part: the bar wins (A).** "Yeah pretty much
+everywhere that the "ally can participate" modifier is called should be confirmed to be going through Modifiers
+Querying, and then the appropriate functions can be set up to check for the "ally can't participate" modifier and
+defer to it." So every reading of whether an ally may take part in archery fire or skirmishes goes through the
+modifiers' querying, and there a "may not participate" beats a "may" (Q-0011), for the archery total, archery
+wounds, assignment and skirmishes alike. *[2026-10-08, night]*
