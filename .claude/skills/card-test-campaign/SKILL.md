@@ -25,8 +25,14 @@ work is organised.
 3. **PC errata** that only have a stat check or no test.
 4. **Decipher cards**, one set at a time and one culture file at a time within a set.
 
-Alongside: the tests under `at/` (written before the rig) are rewritten as card tests or as card-agnostic
-mechanic tests, and the dormant test files for earlier iterations of PC cards are kept compiling in step.
+As it is being worked (Ketura, 2026-10-08): the V-sets (done), the PC errata, then Race to Mount Doom, whose
+tests are recent and want less attention (layout and the standard's form more than new coverage), then the tests
+under `at/`, then the Decipher sets, the Hobbit sets last.
+
+The tests under `at/` (written before the rig; thirty-odd files) are not ported line by line. For each, what it
+guards is written down (the bug, the behaviour, the interaction), and that is the brief for a new test written to
+the standard, in `mechanics/` if it is about a rule or in the file of the card it is most about. The dormant test
+files for earlier iterations of PC cards are kept compiling in step.
 
 A chunk is one culture file of one set (`file:set01-Elven`), or one V-set, small enough for Ketura to review in a
 sitting. Nothing in a chunk is finished until she has approved it.
@@ -106,8 +112,13 @@ and were they gaps a real card can show?), and whether to review only cards whos
 question or a rig request (in the first 34, all three faults reviewers found in the game were on such cards, and
 about 9 test gaps were on cards that would have been skipped).
 
-Do not run `cardtest.py suite` or rebuild a module while pipelines are running: both rewrite classes the agents'
-tests are loading. Rig changes, tool changes and full-suite runs go in the gaps between waves. `usage.tsv` has
+Do not run `cardtest.py suite` or rebuild a module while pipelines are running IN THE SAME WORKING TREE: both
+rewrite classes the agents' tests are loading. To run card batches while an engine pass has the main tree, give
+them a second working tree with a build of its own (`git worktree add -b cards-wip /home/claude/work/cards
+feature/card-test-overhaul`, copy `generator_sheets/` in, `cardtest.py setup` there, and pass that path as `repo`).
+The registers are shared and locked, so numbering holds. When such a batch has landed,
+`scripts/orchestrator/integrate.sh` rebases its commits onto the campaign branch and moves the branch up to them;
+before the next batch, bring the second tree up to the branch and build it again. Rig changes, tool changes and full-suite runs go in the gaps between waves. `usage.tsv` has
 what each pipeline cost; `scripts/orchestrator/wf.py usage <folder>` works it out.
 
 **Nothing reports back by itself reliably.** A finished workflow sends a notification, but the workspace can

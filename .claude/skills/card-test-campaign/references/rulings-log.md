@@ -76,6 +76,16 @@ the updates itself, and then you only have a very few things to put in here so y
 Ideally you don't transcribe things that are in files I can read; just listing the Q- or F- or G- id's for me to
 go look up is sufficient." The tracker is refreshed at every landing.
 
+**After the errata: Race to Mount Doom lightly, then the `at` tests, then the Decipher sets (Ketura, 2026-10-08,
+night).** On RTMD: "These tests were done relatively recently, and so less effort should be required. I think that
+formatting and such may still be required, but these three sets should overall require less attention." On the
+`at` tests, which come next and before the Decipher sets: "we're going to tackle the `at` tests and get those all
+converted and in place, either in the appropriate mechanical folders or within the cards they are most associated
+with. These tests are going to be a bit gnarly and opaque, so it may make more sense to just note what bug or
+behavior or interaction the test is handling, and then take that as a design directive when instantiating a
+wholesale new test." So an `at` test is not ported line by line: what it guards is written down, and a new test is
+written from that, in `mechanics/` or in the file of the card it is most about.
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
