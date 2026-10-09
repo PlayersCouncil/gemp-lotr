@@ -13,14 +13,15 @@ import static org.junit.Assert.*;
 
 public class Card_91_007_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>()
-	{{
-		// Ulaire Enquea, Lieutenant of Morgul: Nazgul minion (home 3)
-		put("enquea", "1_231");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Ulaire Enquea, Lieutenant of Morgul: Nazgul minion (home 3)
+					put("enquea", "1_231");
+					// Goblin Patrol Troop: a [moria] Orc with no text, cost 6, home 4
+					put("troop", "1_177");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -29,7 +30,14 @@ public class Card_91_007_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Ulaire Enquea, Lieutenant of Morgul: Nazgul minion (home 3)
+					put("enquea", "1_231");
+					// Goblin Patrol Troop: a [moria] Orc with no text, cost 6, home 4
+					put("troop", "1_177");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -43,6 +51,7 @@ public class Card_91_007_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_7
 		 * Type: MetaSite
+		 * Intensity: 3
 		 * Game Text: Your opponent's minions are not roaming.
 		 */
 
@@ -52,6 +61,7 @@ public class Card_91_007_Tests
 
 		assertEquals("Race Text 91_7", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(3, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -62,6 +72,7 @@ public class Card_91_007_Tests
 		var scn = GetFreepsScenario();
 
 		var enquea = scn.GetShadowCard("enquea");
+		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToHand(enquea);
 
 		scn.StartGame();
@@ -69,12 +80,21 @@ public class Card_91_007_Tests
 		scn.FreepsPass(); // move to site 2
 
 		//There's only enough twilight to pay for Enquea, but not his roaming cost
+		// 3 set + 1 companion + 2 for the site
 		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(enquea));
 		scn.ShadowPlayCard(enquea);
 
 		// Enquea would normally be roaming at site 2
 		// With the modifier, it should NOT be roaming
 		assertFalse(scn.HasKeyword(enquea, Keyword.ROAMING));
+		// His printed 6 and no more
+		assertEquals(0, scn.GetTwilight());
+
+		// Nor is a minion of another culture and race, home site 4
+		scn.MoveMinionsToTable(troop);
+		assertFalse(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -85,12 +105,46 @@ public class Card_91_007_Tests
 		var scn = GetShadowScenario();
 
 		var enquea = scn.GetShadowCard("enquea");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
 		scn.FreepsPass(); // move to site 2
-		scn.MoveMinionsToTable(enquea);
+		scn.MoveMinionsToTable(enquea, troop);
 
 		// Shadow's own minions should NOT be affected by their own copy
 		assertTrue(scn.HasKeyword(enquea, Keyword.ROAMING));
+		assertTrue(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheOwnersOpponentsMinionsAreNotRoamingOnTheOwnersTurnToo() throws DecisionResultInvalidException, CardNotFoundException {
+		// Player 2 owns the modifier; on his own turn player 1 is the Shadow player and the opponent.
+		var scn = GetShadowScenario();
+
+		var enquea = scn.GetFreepsCard("enquea");
+		var troop = scn.GetFreepsCard("troop");
+
+		scn.StartGame();
+		scn.SkipToOtherPlayersTurn();
+		scn.MoveCardsToHand(enquea);
+		scn.SetTwilight(3);
+
+		scn.ShadowPass(); // player 2 moves to site 2
+
+		// There's only enough twilight to pay for Enquea, but not his roaming cost
+		// 3 set + 1 companion + 2 for the site
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(enquea));
+		scn.FreepsPlayCard(enquea);
+
+		assertFalse(scn.HasKeyword(enquea, Keyword.ROAMING));
+		// His printed 6 and no more
+		assertEquals(0, scn.GetTwilight());
+
+		// Nor is a minion of another culture and race, home site 4
+		scn.MoveMinionsToTable(troop);
+		assertFalse(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
 }
