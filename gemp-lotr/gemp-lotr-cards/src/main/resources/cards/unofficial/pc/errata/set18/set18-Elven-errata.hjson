@@ -152,7 +152,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: elf,companion
+					filter: culture(elven),companion
 					count:2
 				}
 			}
