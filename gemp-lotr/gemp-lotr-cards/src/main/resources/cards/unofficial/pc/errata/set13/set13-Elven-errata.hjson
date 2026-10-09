@@ -93,6 +93,7 @@
 				trigger: {
 					type: played
 					filter: your,event
+					memorize: playedEvent
 				}
 				requires: {
 					type: canSpot
@@ -102,9 +103,16 @@
 					type: exert
 					select: self
 				}
-				effect: {
-					type: putPlayedEventOnTopOfDrawDeck
-				}
+				effect: [
+					{
+						type: putPlayedEventIntoHand
+						filter: played
+					}
+					{
+						type: putCardsFromHandOnTopOfDeck
+						select: all(memory(playedEvent))
+					}
+				]
 			}
 		]
 		gametext: <b>Valiant.</b> <br><b>Response:</b> If you play an event during a skirmish involving this companion, exert this companion to place that event on top of your draw deck.
