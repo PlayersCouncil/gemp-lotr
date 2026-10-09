@@ -134,7 +134,7 @@ public class Card_92_002_Tests
 
 		// Condition should now be in support area
 		assertInZone(Zone.SUPPORT, condition1);
-		// The deck that was looked through is one card shorter and was shuffled once; the other player's was not
+		// The deck that was looked through is one card shorter and was shuffled; the other player's was not
 		assertEquals(deck - 1, scn.GetShadowDeckCount());
 		assertEquals(shuffles + 2, scn.GetShadowDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(otherShuffles, scn.GetFreepsDeckShuffleCount());

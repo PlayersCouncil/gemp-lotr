@@ -107,7 +107,7 @@ public class Card_01_087_ErrataTests
 		assertInZone(Zone.DECK, barliman, ottar);
 		assertInDiscard(wizard);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
-		// Looked through, so reshuffled: once, and only that deck.
+		// Looked through, so reshuffled, and only that deck.
 		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

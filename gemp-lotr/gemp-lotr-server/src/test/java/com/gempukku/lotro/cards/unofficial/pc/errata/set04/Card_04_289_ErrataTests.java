@@ -118,7 +118,7 @@ public class Card_04_289_ErrataTests
 		assertInZone(Zone.DECK, aldor, sword, arrow);
 		assertInDiscard(simbelmyne);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
-		// Looked through, so reshuffled: once, and only that deck.
+		// Looked through, so reshuffled, and only that deck.
 		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertEquals(opponentShuffles, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

@@ -164,7 +164,7 @@ public class Card_V1_019_Tests
 		assertInZone(Zone.DECK, arwen, celeborn);
 		assertInHand(legolas);
 		assertInDiscard(orophin);
-		// The draw deck has been looked through, so it is shuffled, once.
+		// The draw deck has been looked through, so it is shuffled.
 		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
