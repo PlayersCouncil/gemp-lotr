@@ -362,7 +362,9 @@ c)` puts each on top in turn, so the last one named is the top card.
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
 skirmishes that are not about him. Where a card's own text wounds the Ring-bearer in a skirmish, give the table
 The Great Ring 19_1 (`VirtualTableScenario.GreatRing`): it adds no strength and, while it is not worn, answers no
-wound; its maneuver and skirmish abilities are used only on purpose (Card_09_031_ErrataTests).
+wound; its maneuver and skirmish abilities are used only on purpose (Card_09_031_ErrataTests). Its erratum 69_1
+has no constant: give the table `"69_1"` as the ring id. The maneuver ability of either is offered only while
+the Ring is not worn (F-0303).
 
 **A companion beaten by double his strength is killed, not wounded.** A helper minion chosen only to win
 overwhelms: Goblin Patrol Troop (13) kills any companion of strength 6 or less, and a minion of 8 kills Dwarf
@@ -430,6 +432,12 @@ does not stay empty over a second move: where his draw deck holds cards the Shad
 inside `SkipToMovementDecision()`, so the last regroup phase asks him to reconcile again before the turn ends
 and the minions are discarded (Mountain-troll 65_112's tests).
 
+**`SkipToOtherPlayersTurn()` straight after `SkipToMovementDecision()` throws.** It calls
+`SkipToMovementDecision()` again and passes into the "another move" question: a bare
+`DecisionResultInvalidException`. To read the board at the move decision and then end the turn:
+`SkipToMovementDecision()`, the assertions, `FreepsChooseToStay()`, `PassReconcile(P1())`; the other player's
+"Play Fellowship action or Pass" is then pending (Card_19_024_ErrataTests).
+
 **A card discarded for where the fellowship is goes when the move is finished.** "Discard ... when at an
 underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` with a `Location` requirement) is
 not looked at between the moving of the marker and the adding of the move's twilight. At a decision raised by a
@@ -488,7 +496,9 @@ copy: a count of what a companion bears passes that one over. The other half is 
 are not active on your turn, so a Shadow condition you own is no candidate for your Free Peoples ability.
 Culture tokens go with the card: a token on his card is not spotted, reinforced or removed by your cards on your
 turn, and "remove an [elven] token to ..." is not offered when his is the only one (68_9, 68_11, 68_12). It is
-an invalid candidate by rule, not by the card's filter.
+an invalid candidate by rule, not by the card's filter. It cuts the other way after `SkipToOtherPlayersTurn()`:
+your own Free Peoples cards are then the inactive ones, and a bonus from your condition reads as the bearer's
+printed number whatever the card does (Brought Down from Inside 69_24): read it on its owner's turn.
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
