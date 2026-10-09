@@ -274,6 +274,11 @@ alternate currency--not preventing or canceling the effect, just providing a con
 realized in the engine (nor with the rules interpretation gestalt)." A cost paid in the other currency is paid,
 and what it buys happens; where the game does not do that it is an engine finding, not a question.
 
+**The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer).** "The game text on
+the ring and Ring-bearer are active enough for resistance calculations during the bidding process, otherwise
+Galadriel would never get to bid much at all." CR 4.2 "bid" (a bid equal to or higher than the Ring-bearer's
+resistance loses) is read against resistance with his own text and the Ring's counted.
+
 **The `at` tests, what is kept (Ketura, 2026-10-09, late).** "Some tests will be inferior to our standard card
 procedure. But it's the tricky ones, the ones about specific interactions between cards, that I know are important
 and need keeping. (The rest are busy work)". "The set 40 stuff going into oblivion is acceptable." A Hobbit-set

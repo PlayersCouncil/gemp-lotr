@@ -1,7 +1,7 @@
 export const meta = {
   name: 'at-survey',
   description: 'Survey the old at/ test files: what each test guards and where its replacement belongs (read-only)',
-  whenToUse: 'The `at` phase of the card test campaign, before any conversion. args: {repo, groups: [{key, files: [names]}]}; one agent per group, one after another. Writes orchestrator/at-survey/<File>.md and .tsv; returns a few lines per group',
+  whenToUse: 'The `at` phase of the card test campaign, before any conversion. args: {repo, groups: [{key, files: [names], note?}]}; one agent per group, one after another. Writes orchestrator/at-survey/<File>.md and .tsv; returns a few lines per group',
   phases: [{ title: 'Survey', detail: 'one agent for each group of files, in order' }],
 }
 const { repo, groups } = args
@@ -20,7 +20,7 @@ const results = []
 for (const g of groups) {
   const r = await agent(
     `Work in the repository at ${repo}; change nothing in it. Read .claude/skills/card-test-campaign/roles/at-survey.md and do what it says.\n\n` +
-    `Your files, all in ${at}:\n${g.files.map(f => '- ' + f).join('\n')}\n`,
+    `Your files, all in ${at}:\n${g.files.map(f => '- ' + f).join('\n')}\n` + (g.note ? `\n${g.note}\n` : ''),
     { label: `survey ${g.key}`, phase: 'Survey', schema: RESULT })
   if (!r) {
     results.push({ group: g.key, status: 'died' })

@@ -28,6 +28,11 @@ follows" and "Tests that are not about a card" (where a test of a rule goes, and
 Every step you take re-reads everything you have read so far: read a long file once, in slices if it is long, and
 do several things in one step where you can.
 
+Do NOT run tests, probes or any Java, and do not build: the machine is small, an engine pass is building on it,
+and it has restarted twice under the load. You work from reading: the old method, the cards' texts, the rules.
+Where only a run could tell you what an old board is waiting on, say that in the directive and leave it to the
+author who writes the replacement.
+
 ## For each test method
 
 Work out, from the method and the cards it names (`packet.py <id> --blind` gives a card's text; an id like
@@ -73,6 +78,12 @@ ONE directive with the cases listed, if a single test class would hold them; say
   ones about specific interactions between cards"; say in the directive when a method is one of those.
 - A Hobbit-set card (sets 30 to 33): its file goes under `cards/unofficial/hobbit/set<NN>/` (a new folder).
 - A commented-out test of the archived set 40 with no rule behind it: home `-`, dropped.
+- The bid before the game is read against the Ring-bearer's resistance IN FORCE, his own text and the Ring's
+  included (Ketura on Galadriel 9_14: "the game text on the ring and Ring-bearer are active enough for resistance
+  calculations during the bidding process, otherwise Galadriel would never get to bid much at all").
+- An old method that only shows a card doing what it says, where the card's landed tests already assert it, is
+  `covered` and simply goes: do not look for a hidden purpose (Ketura on hisFirstSeriousCheck: "just basic card
+  effect testing").
 - "Instead" converts a cost and does not prevent or cancel it: the cost is paid in the other currency and what it
   buys happens (`lookup.py instead`).
 - New `mechanics/` class names are reconciled across all the surveys afterwards: propose one, and look at
