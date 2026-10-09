@@ -26,7 +26,7 @@ with one legal bearer it is made without asking.
 
 **A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
 
-**A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/ChoiceWithNothingOnAnyBranchTests). The question is kept by a branch of several effects, by one that holds others (`if`, `costToEffect`, `multiple`), and by one whose effect cannot tell (a play from a pile, `chooseActiveCards`: Here Lies Balin 1_19 with no Orc in play is still asked).
+**A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/ChoiceWithNothingOnAnyBranchTests). The question is kept by a branch of several effects, by one that holds others (`if`, `costToEffect`, `multiple`), and by one whose effect cannot tell (a play from a pile; a `chooseActiveCards` that only picks the card for an effect written after the choice, as Here Lies Balin 1_19's second branch was until engine pass 21 wrote it as the wound itself: F-0310).
 
 **"Wound each" and "wound every" wound one card at a time.** Each of the wounds has its own "is about to"
 window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
@@ -139,10 +139,18 @@ limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no
 gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
 and nothing else happens; with no cost it is not offered at that limit either.
 
+**A choice between two things to do offers what can be done in full** (F-0310; CR 4.2 "effect"). Of "<do X> or
+<do Y>" as an effect the game offers the branches that can be performed in full, and carries out a lone one with
+no question. Where none can be but something can be done, every branch is offered and as much of the one chosen
+as can be done is done; where nothing can be done on any, nothing is asked (F-0116). Here Lies Balin 1_19: no
+Orc, nothing asked; one Orc of 1 vitality, both offered; two such Orcs, "wound 2 Orcs" unasked; one Orc of 3
+vitality, "wound 1 Orc twice" unasked (mechanics/ChoiceOfWhatCanBeDoneInFullTests). A choice's `memorize` holds
+the text of the branch taken, asked or not.
+
 **A "wound X twice" branch of a choice is not offered to a character with 1 vitality left.** In "add 2 burdens or
 wound him twice" (Boromir 59_31) only the first of the two wounds could be placed, so the game carries out the
 other branch and asks nothing (CR 4.2 "effect": a choice must be one the player is fully capable of performing;
-the glossary read together, not a ruling of Ketura's). With 2 vitality left the branch is offered and kills him,
+Ketura's ruling on F-0310, in the entry above). With 2 vitality left the branch is offered and kills him,
 which is also what tells a wound from an exertion (F-0148).
 
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing

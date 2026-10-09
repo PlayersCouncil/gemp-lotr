@@ -818,17 +818,11 @@
 							select: choose(orc)
 						}
 						{
-							type: chooseActiveCards
-							memorize: chosenOrc
+							type: wound
 							select: choose(orc)
-							text: Choose an Orc to wound twice
+							times: 2
 						}
 					]
-				}
-				{
-					type: wound
-					select: memory(chosenOrc)
-					times: 2
 				}
 			]
 		}

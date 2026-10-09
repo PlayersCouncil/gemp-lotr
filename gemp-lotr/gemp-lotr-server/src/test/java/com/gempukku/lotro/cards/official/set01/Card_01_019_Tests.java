@@ -83,8 +83,9 @@ public class Card_01_019_Tests
         assertTrue(scn.FreepsPlayAvailable(balin));
         scn.FreepsPlayCard(balin);
 
-        assertTrue(scn.FreepsDecisionAvailable("Choose action"));
-        scn.FreepsChooseOption("Wound 2 Orcs");
+        // Neither Orc has the vitality to be wounded twice, so "wound 2 Orcs" is the only choice the player is
+        // fully capable of: it is carried out and nothing is asked (Ketura on F-0310, 2026-10-09).
+        assertFalse(scn.FreepsDecisionAvailable("Choose action"));
 
         assertEquals(1, scn.GetWoundsOn(gimli));
         assertEquals(Zone.DISCARD, runner1.getZone());
@@ -182,6 +183,10 @@ public class Card_01_019_Tests
         // you must choose an action that you are fully capable of performing (if possible)."
         // As a result, if you can neither "wound 2 orcs" or "wound 1 orc twice", none of the choices are possible.
         // You then back up and choose the option you are most capable of performing (I guess)
+        // Ketura on F-0310 (2026-10-09): "the player should be given a choice and attempt to perform either
+        // branch."
+        assertTrue(scn.FreepsDecisionAvailable("Choose action"));
+        scn.FreepsChooseOption("Wound 1 Orc twice");
 
         assertEquals(Zone.DISCARD, runner1.getZone());
     }

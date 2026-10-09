@@ -78,10 +78,13 @@ public class Choice implements EffectAppenderProducer {
                     }
                 }
 
+                // Exactly one branch can be carried out in full: that is the one the player is capable of choosing
+                // (CR 4.2 "effect"; Ketura on F-0310), so it is taken without a question, and it is the one
+                // remembered as chosen, in the words the question would have shown.
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
                     playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegate);
-                    actionContext.setValueToMemory(memorize, textArray[0]);
+                    actionContext.setValueToMemory(memorize, effectTexts.getFirst());
                     return new StackActionEffect(subAction);
                 }
 
