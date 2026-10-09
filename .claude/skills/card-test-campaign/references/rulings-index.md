@@ -313,7 +313,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102]
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
-- Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0303]
+- Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0303, F-0314]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041]
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009; Q-0165, open) [Q-0167]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)

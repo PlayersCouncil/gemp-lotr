@@ -812,7 +812,18 @@ A Race to Mount Doom modifier of deck building is tied to validation by its own 
 `dvs.validate(deck, VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides())`, which is what
 `LeagueService.buildDeckValidationContext` merges for the player who has it. A context built by hand with the
 number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)`) tests the format and not the
-card: a wrong number in the definition passes it (92_1's old tests; 92_19 and 94_22 are written that way too).
+card: a wrong number in the definition passes it (92_1's and 92_19's old tests; 94_22 is written that way too).
+`hasSiteBlockError(errors)` matches the four block objections and nothing else ("same block", "not allowed in
+Multipath", "does not use supported block", "cannot mix Movie block and Shadows block sites"): not the Map's
+(`hasMapError`: a mixed Movie deck under a Map in PC Movie draws both, so read both), not "Card not from valid
+set", "Card is X-listed", "Deck combines both Shadows and Movie Block sites" or the counting rules. Nine Shadows
+sites in Multipath or PC Movie read false with no override at all (refused by set and by the Map, not by block),
+so an `assertFalse` of it is no proof that a deck validates: where the deck can be made wholly legal, read
+`assertEquals(List.of(), ...)` with the override and `assertNotEquals` without (92_19).
+The rig's `ShadowsSites` is not a legal adventure deck: six of its nine have Shadow number 0 and three of one
+number is the most ("Deck contains 6 sites with twilight number of 0.", in Expanded too). 92_19 puts 11_240,
+11_231 and 11_250 at sites 6 to 8. Slopes of Amon Hen 1_361, like Ettenmoors 1_331, is refused as first printed
+in PC Movie; under 92_19's override no site is held to the X-list or the errata at all (Q-0185, open).
 The format has no Ring-bearer rule of its own: it counts the Ring-bearer, the Ring and the sites with the draw
 deck, by title, against the one copy limit (CR 4.2 "building your deck", the exception). Every deck the scenario
 builds has Frodo 1_290 as Ring-bearer, so `buildDeckWithCopies("1_290", n, true)` puts n Frodos beside him and

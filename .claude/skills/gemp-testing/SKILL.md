@@ -241,6 +241,8 @@ read the other player as not offered on a board where he could pay its cost (sha
 "Race Text 91_2": read the log for what was done, not for the modifier's name. Its action is worded the same way
 ("Use The Shire"), so read and take it by card (`ShadowActionAvailable(mod)`): `ShadowActionAvailable("Use Race
 Text")` and `("mod")` are false whether it is offered or not, and an `assertFalse` of either shows nothing (92_10's old test).
+The old files reach the Shadow phase with `scn.FreepsPass(); scn.SkipToPhase(Phase.SHADOW);` and move minions to
+the table before `StartGame()`. Both work and are left as they are; `FreepsPass()` alone arrives there (92_20, 92_22).
 
 ## When the rig cannot do what a test needs
 
