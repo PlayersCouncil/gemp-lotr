@@ -370,6 +370,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)
 - Ruled on the night of 2026-10-07, and built by engine pass 12 (Q-0103 to Q-0108, F-0175 to F-0179) [Q-0105, Q-0023, Q-0104, Q-0107, F-0176, F-0178, F-0196]
 - Whose support area: support(you), support(opponent) and the rest (F-0177, Q-0101)
+- A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173, open)
 
 ## Reveals, draw decks and shuffles
 

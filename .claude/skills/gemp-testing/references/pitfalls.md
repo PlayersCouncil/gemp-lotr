@@ -401,6 +401,19 @@ other card has him participate or assigns a minion to him: he adds nothing to th
 archery wound, is on neither player's assignment list, and an effect that would assign a minion to him assigns
 nobody. The rest of that other card (a strength bonus) still reaches him (Q-0150, F-0281).
 
+**One blueprint under two site keys gets one alias.** The rig names each site of an adventure deck by the FIRST
+key of the site map that has its blueprint, and does not pass over a key already given (as it does for the
+card map): `put("site1", "18_138"); put("ruins", "18_138")` leaves one of the two aliases unset, and
+`GetFreepsSite("site1")` throws NoSuchElementException. Give every site a test names a blueprint of its own;
+fillers that are never looked up may share one (`Card_18_134_ErrataTests`). `GetFreepsSite(String)` and
+`GetShadowSite(String)` look for the alias and then for a title in the ADVENTURE DECK only: a site already laid
+is not found by its title (NoSuchElementException, no message). Fetch a site before it is laid.
+
+**`FreepsDeclineSanctuaryHealing()` sends five empty answers, whatever is being asked.** Once one sanctuary heal
+has been taken only four are left to decline, and the fifth answer passes the fellowship phase: the fellowship
+moves. To take some heals and decline the rest, choose each heal and then `FreepsDeclineChoosing()` once for each
+that remains, which fails loudly if it is called once too often (`Card_18_139_ErrataTests`).
+
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
 is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
 player 1's site before his turn ends. The card on the path is the copy of whoever laid it: from site 2 on, on
@@ -655,11 +668,14 @@ test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188"
 The key matters, though: the rig builds the adventure deck in the site map's HashMap order, and the path is
 ordered only while the FIRST card of that deck has a site number (`GameState.usesUnorderedSites`). A key that
 comes out ahead of every `siteN` (`homestead`, `redhornSite`, `redhornPass`, `anduin`, `path`; with `site9` taken
-out also `buckland`, `redhorn`, `banks`) makes the whole path unordered: `StartGame()` is left resting on "Choose
+out also `buckland`, `redhorn`, `banks`, `mithlond`) makes the whole path unordered: `StartGame()` is left resting on "Choose
 site to play", and the next `FreepsPass()` throws DecisionResultInvalidException from an
 ArbitraryCardsSelectionDecision. If that is where a new scenario stops, rename the key (`parapet`,
 `bucklandSite` and `shadowsSite` are safe either way), and never put the card under the key `site9` itself, which
 comes out first (`Card_18_112_ErrataTests`: `bucklandSite` and `redhorn` in place of sites 7 and 8, `site9` kept).
+A capital letter is enough to move a key (`Mithlond` is safe with `site9` taken out, `Card_18_136_ErrataTests`).
+`StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
+asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
 A Shadows-block site cannot stand as `site1` of such a path: the
 constructor throws a NullPointerException from `CheckForCorruptionGameProcess` (probed at landing, err-b65_17).
 Where its text is needed in the first fellowship phase, an ad hoc modifier that does what the site does stands in.

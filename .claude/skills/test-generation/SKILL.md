@@ -319,7 +319,9 @@ definition says when an event may be played, and a definition may carry more of 
 
 On a PC card the header comment already in the file often describes an earlier version of the card, above
 assertions that are current. Rewrite it from the packet; never keep it on trust. The V-set and errata sheets have
-no resistance column, so resistance is asserted at the definition's value.
+no resistance column, so resistance is asserted at the definition's value. No sheet has a site's direction
+either: assert the definition's value, and on an erratum compare it with the original's `direction:`; where the
+two differ it is a finding, and the two card images say which was printed (Doorway to Doom 68_134, F-0302).
 
 ## Rules every test follows
 
