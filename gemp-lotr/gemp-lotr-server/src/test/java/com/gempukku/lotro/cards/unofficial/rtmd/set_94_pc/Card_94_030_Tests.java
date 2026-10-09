@@ -2,9 +2,11 @@ package com.gempukku.lotro.cards.unofficial.rtmd.set_94_pc;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -12,29 +14,47 @@ import java.util.HashMap;
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
-public class Card_94_030_Tests {
-
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("wizardlate", "1_87"); // A Wizard Is Never Late: Fellowship event, plays a [gandalf] character straight from the draw deck
-		put("gandalf", "1_72"); // Gandalf, Friend of the Shirefolk: the [gandalf] character to fetch, and the "spot Gandalf" for Risk a Little Light
-		put("risk", "1_82"); // Risk a Little Light: looks at the top 2 cards and takes one into hand, discarding the other
-		put("knocked", "4_308"); // Knocked on the Head: Regroup event, plays an unbound Hobbit from the discard pile
-		put("merry", "1_302"); // Merry, Friend to Sam: unbound Hobbit, target for Knocked on the Head and for the deck searches
-		put("gimli", "1_13"); // Gimli, Son of Glóin: the Dwarf that bears Ring of Guile
-		put("guile", "9_8"); // Ring of Guile: Maneuver action takes a [dwarven] event into hand from the discard pile
-		put("shaft", "1_22"); // Mithril Shaft: the [dwarven] event sitting in the discard pile
-		put("troop", "1_177"); // Goblin Patrol Troop: a minion so the maneuver and regroup phases are actually reached
-		put("host", "1_187"); // Host of Thousands: Shadow event, plays a [moria] Orc from the discard pile
-		put("backstabber", "1_174"); // Goblin Backstabber: the [moria] Orc sitting in the discard pile
-		put("delving", "1_6"); // Delving: Fellowship event, exert a Dwarf companion to draw 3 cards (ordinary draw)
-		put("library", "9_39"); // Library of Orthanc: takes a card stacked on it into hand -- not deck or discard
-		put("stackedminion", "1_143"); // Troop of Uruk-hai: the [isengard] card stacked and taken into hand
-		put("stackedaxe", "1_9"); // filler card stacked on Library of Orthanc
-		put("stackedextra", "1_178"); // filler card stacked on Library of Orthanc
-	}};
-
+public class Card_94_030_Tests
+{
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// A Wizard Is Never Late: Fellowship event, plays a [gandalf] character straight from
+					// the draw deck
+					put("wizardlate", "1_87");
+					// Gandalf, Friend of the Shirefolk: the [gandalf] character to fetch, and the "spot
+					// Gandalf" for Risk a Little Light
+					put("gandalf", "1_72");
+					// Risk a Little Light: looks at the top 2 cards and takes one into hand, discarding
+					// the other
+					put("risk", "1_82");
+					// Knocked on the Head: Regroup event, plays an unbound Hobbit from the discard pile
+					put("knocked", "4_308");
+					// Merry, Friend to Sam: unbound Hobbit, target for Knocked on the Head and for the
+					// looks at the deck
+					put("merry", "1_302");
+					put("gimli", "1_13");  // Gimli, Son of Gloin: the Dwarf that bears Ring of Guile
+					// Ring of Guile: Maneuver action takes a [dwarven] event into hand from the discard pile
+					put("guile", "9_8");
+					put("shaft", "1_22");  // Mithril Shaft: the [dwarven] event sitting in the discard pile
+					// Goblin Patrol Troop: a minion so the maneuver and regroup phases are actually reached
+					put("troop", "1_177");
+					// Host of Thousands: Shadow event, plays a [moria] Orc from the discard pile
+					put("host", "1_187");
+					put("backstabber", "1_174"); // Goblin Backstabber: the [moria] Orc sitting in the discard pile
+					// Delving: Fellowship event, exert a Dwarf companion to draw 3 cards (ordinary draw)
+					put("delving", "1_6");
+					// Library of Orthanc: takes a card stacked on it into hand -- not deck or discard
+					put("library", "9_39");
+					// Troop of Uruk-hai: the [isengard] card stacked and taken into hand
+					put("stackedminion", "1_143");
+					put("stackedaxe", "1_9");     // Dwarven Axe: filler card stacked on Library of Orthanc
+					put("stackedextra", "1_178"); // Goblin Runner: filler card stacked on Library of Orthanc
+					// A New Light: Fellowship event; a Free Peoples player returns a minion from a Shadow
+					// player's discard pile to that player's hand, then discards a minion from that hand
+					put("light", "17_15");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -43,7 +63,28 @@ public class Card_94_030_Tests {
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// The same deck as the scenario with the modifier in player 1's seat
+					put("wizardlate", "1_87");    // A Wizard Is Never Late
+					put("gandalf", "1_72");       // Gandalf, Friend of the Shirefolk
+					put("risk", "1_82");          // Risk a Little Light
+					put("knocked", "4_308");      // Knocked on the Head
+					put("merry", "1_302");        // Merry, Friend to Sam
+					put("gimli", "1_13");         // Gimli, Son of Gloin
+					put("guile", "9_8");          // Ring of Guile
+					put("shaft", "1_22");         // Mithril Shaft
+					put("troop", "1_177");        // Goblin Patrol Troop
+					put("host", "1_187");         // Host of Thousands
+					put("backstabber", "1_174");  // Goblin Backstabber
+					put("delving", "1_6");        // Delving
+					put("library", "9_39");       // Library of Orthanc
+					put("stackedminion", "1_143"); // Troop of Uruk-hai
+					put("stackedaxe", "1_9");     // Dwarven Axe
+					put("stackedextra", "1_178"); // Goblin Runner
+					put("light", "17_15");        // A New Light
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -52,7 +93,28 @@ public class Card_94_030_Tests {
 	}
 
 	protected VirtualTableScenario GetControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// The same deck as the scenario with the modifier in player 1's seat
+					put("wizardlate", "1_87");    // A Wizard Is Never Late
+					put("gandalf", "1_72");       // Gandalf, Friend of the Shirefolk
+					put("risk", "1_82");          // Risk a Little Light
+					put("knocked", "4_308");      // Knocked on the Head
+					put("merry", "1_302");        // Merry, Friend to Sam
+					put("gimli", "1_13");         // Gimli, Son of Gloin
+					put("guile", "9_8");          // Ring of Guile
+					put("shaft", "1_22");         // Mithril Shaft
+					put("troop", "1_177");        // Goblin Patrol Troop
+					put("host", "1_187");         // Host of Thousands
+					put("backstabber", "1_174");  // Goblin Backstabber
+					put("delving", "1_6");        // Delving
+					put("library", "9_39");       // Library of Orthanc
+					put("stackedminion", "1_143"); // Troop of Uruk-hai
+					put("stackedaxe", "1_9");     // Dwarven Axe
+					put("stackedextra", "1_178"); // Goblin Runner
+					put("light", "17_15");        // A New Light
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -66,10 +128,14 @@ public class Card_94_030_Tests {
 		 * Name: Race Text 94_30
 		 * Type: MetaSite
 		 * Intensity: 5
-		 * Game Text: You may not play or take into hand cards from your discard pile or draw deck (except when reconciling).
+		 * Game Text: You may not play or take into hand cards from your discard pile or draw deck (except
+		 * when reconciling).
 		 */
+
 		var scn = GetFreepsScenario();
+
 		var mod = scn.GetFreepsCard("mod");
+
 		assertEquals("Race Text 94_30", mod.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, mod.getBlueprint().getCardType());
 		assertEquals(5, mod.getBlueprint().getIntensity());
@@ -84,6 +150,7 @@ public class Card_94_030_Tests {
 		scn.StartGame();
 
 		assertFalse(scn.FreepsPlayAvailable(wizardlate));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -101,6 +168,7 @@ public class Card_94_030_Tests {
 		scn.FreepsChooseCard(gandalf);
 
 		assertInPlay(gandalf);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -117,6 +185,8 @@ public class Card_94_030_Tests {
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertFalse(scn.FreepsPlayAvailable(knocked));
+		assertInDiscard(merry);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -136,6 +206,7 @@ public class Card_94_030_Tests {
 		scn.FreepsPlayCard(knocked);
 
 		assertInPlay(merry);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -158,6 +229,7 @@ public class Card_94_030_Tests {
 		// stays in the deck and is swept up by the card's own "discard the other" clause.
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInDiscard(merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -177,6 +249,7 @@ public class Card_94_030_Tests {
 		scn.FreepsChooseCard(merry);
 
 		assertInHand(merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -199,6 +272,7 @@ public class Card_94_030_Tests {
 
 		assertInDiscard(shaft);
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
@@ -219,6 +293,7 @@ public class Card_94_030_Tests {
 		scn.FreepsUseCardAction(guile);
 
 		assertInHand(shaft);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
@@ -237,6 +312,7 @@ public class Card_94_030_Tests {
 		scn.FreepsDeclineReconciliation();
 
 		assertEquals(1 + Math.min(7, deckBefore), scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
 	@Test
@@ -256,6 +332,108 @@ public class Card_94_030_Tests {
 		scn.FreepsPlayCard(delving);
 
 		assertEquals(deckBefore - 3, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0206: is a draw a card taken into hand from the draw deck? As built it is not, and OrdinaryDrawEffectIsNotBlocked asserts that")
+	public void ADrawOutsideAReconcileTakesNoCardFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		// The other reading of the same board: the text's one exception, reconciling, is a draw, so any
+		// other draw is a card taken into hand from the draw deck and is barred.
+		var scn = GetFreepsScenario();
+		var gimli = scn.GetFreepsCard("gimli");
+		var delving = scn.GetFreepsCard("delving");
+
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(delving);
+		scn.StartGame();
+
+		int deckBefore = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsPlayAvailable(delving));
+		scn.FreepsPlayCard(delving);
+
+		// The event is played and its exertion paid, and no card has left the draw deck
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(deckBefore, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TakingACardFromTheOpponentsDiscardPileIsUnaffected() throws DecisionResultInvalidException, CardNotFoundException {
+		// The restriction is on "your" piles: the owner's A New Light returns a Shadow minion from the Shadow
+		// player's discard pile to the Shadow player's hand. Two minions lie there so that one is chosen, and
+		// a second minion is in his hand for the card's own "discard a minion" to take, as the returned one
+		// would otherwise be the only choice and be discarded in turn.
+		var scn = GetFreepsScenario();
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var light = scn.GetFreepsCard("light");
+		var backstabber = scn.GetShadowCard("backstabber");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("stackedextra");
+
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(light);
+		scn.MoveCardsToDiscard(backstabber, troop);
+		scn.MoveCardsToHand(runner);
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(light));
+		assertEquals(1, scn.GetShadowHandCount());
+		scn.FreepsPlayCard(light);
+
+		assertTrue(scn.FreepsDecisionAvailable("choose card from discard"));
+		scn.FreepsChooseCardBPFromSelection(backstabber);
+		assertInHand(backstabber);
+		assertEquals(2, scn.GetShadowHandCount());
+		assertInDiscard(troop);
+
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(runner);
+
+		assertInHand(backstabber);
+		assertInDiscard(runner);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	@Ignore("Q-0207: does the bar on taking into hand from your discard pile reach the OPPONENT's card that returns your minion to your hand? As built it does (the flag is read for the card's owner, not for the player acting)")
+	public void AnOpponentsCardCanReturnTheOwnersMinionFromHisDiscardPileToHisHand() throws DecisionResultInvalidException, CardNotFoundException {
+		// The other reading of the same board with the modifier in the Shadow player's seat: "You may not ...
+		// take into hand cards from your discard pile" is about the owner's own taking, and here it is the
+		// Free Peoples player's A New Light that puts the Shadow player's minion into his hand.
+		var scn = GetShadowScenario();
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var light = scn.GetFreepsCard("light");
+		var backstabber = scn.GetShadowCard("backstabber");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("stackedextra");
+
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(light);
+		scn.MoveCardsToDiscard(backstabber, troop);
+		scn.MoveCardsToHand(runner);
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(light));
+		assertEquals(1, scn.GetShadowHandCount());
+		scn.FreepsPlayCard(light);
+
+		assertTrue(scn.FreepsDecisionAvailable("choose card from discard"));
+		scn.FreepsChooseCardBPFromSelection(backstabber);
+		assertInHand(backstabber);
+		assertEquals(2, scn.GetShadowHandCount());
+		assertInDiscard(troop);
+
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(runner);
+
+		assertInHand(backstabber);
+		assertInDiscard(runner);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -279,10 +457,35 @@ public class Card_94_030_Tests {
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(library));
+		assertEquals(3, scn.GetStackedCards(library).size());
+		assertEquals(0, scn.GetShadowHandCount());
 		scn.ShadowUseCardAction(library);
 
 		assertInHand(stackedminion);
 		assertEquals(2, scn.GetStackedCards(library).size());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheStartingFellowshipIsPlayedAndTheOpeningHandDealtAsEver() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+		var merry = scn.GetFreepsCard("merry");
+
+		// The modifier is in play from set-up, and a starting fellowship is played from the draw deck
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertInZone(Zone.DECK, merry);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
+		scn.FreepsChooseCard(merry);
+		assertInPlay(merry);
+
+		scn.FreepsDeclineChoosing();
+		scn.ShadowDeclineChoosing();
+		// This start of the game leaves the starting fellowships and the opening hands as they were dealt
+		scn.StartGame(false, false);
+
+		assertInPlay(merry);
+		assertEquals(8, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -304,6 +507,7 @@ public class Card_94_030_Tests {
 		scn.FreepsChooseCard(merry);
 
 		assertInHand(merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -320,6 +524,8 @@ public class Card_94_030_Tests {
 		scn.SetTwilight(5);
 
 		assertFalse(scn.ShadowPlayAvailable(host));
+		assertInDiscard(backstabber);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -335,5 +541,6 @@ public class Card_94_030_Tests {
 		scn.SetTwilight(5);
 
 		assertTrue(scn.ShadowPlayAvailable(host));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
