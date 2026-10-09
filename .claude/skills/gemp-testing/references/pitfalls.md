@@ -356,6 +356,9 @@ is barred (Q-0147, F-0275).
 block's path needs that block's sites in the scenario (Gondorian Merchant 7_97, home 3T, on the Towers sites:
 `SkipToSite(2)` and then the move). `SkipToSite(n)` stops in the fellowship phase at site n, so a
 `SkipToAssignments` from there moves the fellowship on to n + 1 first.
+No ally's home is a Shadows-block or King-block site (every `allyHome` is F, T or a Hobbit-set H): there an ally
+skirmishes only by another card's text. One Whom Men Would Follow 1_109, played in the maneuver phase as
+set-up, does it by legal play (`Card_11_232_ErrataTests`; the helper table has its row).
 An ally a card says may not participate (a [rohan] ally at Streets of Edoras 4_340) takes no part whatever
 other card has him participate or assigns a minion to him: he adds nothing to the archery total, is offered no
 archery wound, is on neither player's assignment list, and an effect that would assign a minion to him assigns
@@ -567,6 +570,11 @@ Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHindere
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
 site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
+The turn-skippers cannot walk such a path. For a high site number or a later region (sites 4-6 are region 2,
+7-9 region 3), where the card's text names no block's sites, put the Shadows-block site on a Fellowship-block
+path instead: a site map of `FellowshipSites` with the card in place of site n, `SkipToSite(n - 1)`,
+`MoveCardToAdventurePath(scn.GetShadowSite("siten"))`, `FreepsPass()`, and the fellowship moves to it
+(`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`).
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
