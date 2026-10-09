@@ -502,6 +502,13 @@ not looked at between the moving of the marker and the adding of the move's twil
 asked anything further. Outside a move the check acts at once (`mechanics/AtASiteWhenTheMoveIsFinishedTests`,
 F-0233).
 
+**Inside an "each time the fellowship moves" trigger the marker is already on the new site.** The engine raises
+"moved from", moves the marker, and only then raises "fellowship moves" and "moved to" (`MovementGameProcess`),
+where CR 4.2 "moving your fellowship" lists "When the fellowship moves..." actions before the marker is moved.
+At a decision raised by a `Moves` trigger `GetCurrentSiteNumber()` is the site arrived at, and a `Location`
+requirement in that trigger's block reads it too; `MovesFrom` is the trigger that still reads the site left.
+Lay a site threshold on such a text from this order, not from the CR's list (Race Text 92_18; shapes.md, Q-0184).
+
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
 second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the
