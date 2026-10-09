@@ -460,6 +460,9 @@ Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a
 Free Peoples card is a second name for it in the scenario (`put("mail2", "1_101")`), never the Shadow player's
 copy: a count of what a companion bears passes that one over. The other half is as true: your own Shadow cards
 are not active on your turn, so a Shadow condition you own is no candidate for your Free Peoples ability.
+Culture tokens go with the card: a token on his card is not spotted, reinforced or removed by your cards on your
+turn, and "remove an [elven] token to ..." is not offered when his is the only one (68_9, 68_11, 68_12). It is
+an invalid candidate by rule, not by the card's filter.
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
@@ -540,7 +543,7 @@ number"; the rule is under "modifier".
 
 ## A card that leaves play as it is played
 
-**A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession played on a bearer of Shadowfax: the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
+**A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
 
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 

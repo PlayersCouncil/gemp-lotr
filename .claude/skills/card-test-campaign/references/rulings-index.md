@@ -356,6 +356,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
 - "Place that event on top of (beneath) your draw deck" on a card that answers the play of an event (F-0287) [Q-0034]
+- "Each time you play a [culture] skirmish event" and an event printed with two phases (F-0292, open)
 
 ## Hinder, the support area, sites, Maps and the Ring
 
@@ -389,6 +390,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The turn-skippers do not lay sites
 - cardtest.py run ends with a blank line
 - Grep before calling a property unique to a block (Aldor 4_262) [Q-0158]
+- A definition's `revision:` can be behind the sheet (F-0294, Shadowfax 67_24)
 - Facts earlier authors got wrong
 - Rig methods newer than the generated list
 - lint's `second-copy` and `ruled` warnings
