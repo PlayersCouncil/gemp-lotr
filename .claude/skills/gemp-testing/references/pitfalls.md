@@ -209,7 +209,9 @@ owner` on the Trigger (shapes.md, F-0311). A modifier's phase action (`Activated
 offered to whichever player may act in the phase, and with no owner requirement the other player takes it and
 pays from his own hand (F-0312, 91_10). Read him as not offered on a board where he CAN pay: with an empty hand
 he is not offered whoever owns the modifier, and the reading shows nothing (91_10's old test). Which actions are
-meant for both players is in shapes.md (F-0312).
+meant for both players is in shapes.md (F-0312). The `-` of "your fellowship" (the modifier across the table,
+nobody offered) wants the same: the mover's side holds what the cost takes (93_3: a companion to kill), or a
+definition without its `OwnerIsFreeps` offers nothing either and passes.
 
 ## Reading and answering an offer
 
@@ -487,6 +489,12 @@ of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" car
 passes with its amount one off. Raise the limit first by legal play and read the sum: Durin's Secret 1_71 (a
 Fellowship event: spot Gandalf, a Dwarf and an Elf to make the move limit for this turn +1), then 2 + 1 - 1 reads 2
 and a penalty of 2 would read 1 (Card_01_260_ErrataTests, Card_91_008_Tests).
+
+**`until: end(regroup)` ends as a regroup move is finished, not with the turn.** When the fellowship moves again
+the engine runs the move and THEN ends the regroup phase (`FellowshipPlayerChoosesToMoveOrStayGameProcess`), so
+an effect added earlier in the turn lapses just after the second move and one added on that move lapses at once.
+A change that is to last the turn writes `until: endOfTurn`; read it in the Shadow phase after a second move
+(F-0317, 93_3: the limit read 3 up to the question of another move and 2 after the move).
 
 **`SkipToOtherPlayersTurn()` straight after `SkipToMovementDecision()` throws.** It calls
 `SkipToMovementDecision()` again and passes into the "another move" question: a bare
