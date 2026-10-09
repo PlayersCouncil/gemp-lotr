@@ -9,7 +9,14 @@ set -e
 WORK=${GEMP_WORK:-/home/claude/work}
 BRANCH=feature/card-test-overhaul
 if [ "$1" = "--renew" ]; then
-  cd "$WORK/cards" && git checkout -q cards-wip && git reset -q --hard "$BRANCH" && git log --oneline -1
+  cd "$WORK/cards" && git checkout -q cards-wip
+  # Never throw away a landed batch: if cards-wip holds commits the branch has not taken yet (the fast-forward was
+  # refused while an engine agent had one of their files open), bring the branch's new commits in under them instead.
+  if [ "$(git rev-list --count "$BRANCH"..cards-wip)" != "0" ]; then
+    git rebase -q "$BRANCH" && echo "cards-wip keeps $(git rev-list --count "$BRANCH"..cards-wip) commit(s) the branch has not taken; rebased onto $(git rev-parse --short=9 $BRANCH)"
+  else
+    git reset -q --hard "$BRANCH" && git log --oneline -1
+  fi
   python3 .claude/skills/card-test-campaign/scripts/cardtest.py setup | tail -1
   exit 0
 fi
