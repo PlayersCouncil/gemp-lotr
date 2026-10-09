@@ -144,14 +144,21 @@
 				filter: your,companion
 				memorize: dyingCompanion
 			}
-			requires: {
-				type: IsOwner
-			}
+			requires: [
+				{
+					type: IsOwner
+				}
+				{
+					type: CanSpot
+					filter: possession,attachedTo(memory(dyingCompanion))
+				}
+			]
 			effect: {
 				type: DoWhile
 				check: {
-					type: CanSpot
-					filter: possession,attachedTo(memory(dyingCompanion))
+					type: MemoryMatches
+					memory: moved
+					filter: possession
 				}
 				effect: [
 					{
@@ -159,6 +166,7 @@
 						select: choose(possession,attachedTo(memory(dyingCompanion)))
 						where: choose(character,not(memory(dyingCompanion)))
 						checkTarget: true
+						memorizeTransferred: moved
 					}
 				]
 			}

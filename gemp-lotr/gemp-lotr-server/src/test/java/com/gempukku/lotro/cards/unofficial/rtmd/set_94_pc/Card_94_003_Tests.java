@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -11,22 +12,27 @@ import java.util.HashMap;
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
-public class Card_94_003_Tests {
-
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("gimli", "1_13"); // Gimli, Son of Glóin: twilight 2 companion, the only card type a starting fellowship normally allows
-		put("sword", "1_299"); // Hobbit Sword: twilight 1 possession, bearer must be a Hobbit, so the Ring-bearer can carry it
-		put("pony", "13_143"); // Bill the Pony (dearly-loved): twilight 2 possession, bearer must be Ring-bound Hobbit, to prove a nonzero item cost never touches the twilight pool
-		put("pan", "3_108"); // Frying Pan: twilight 0 possession
-		put("bill", "3_106"); // Bill the Pony: a second twilight 0 possession, for the one-per-card-type cap
-		put("trolls", "3_114"); // Three Monstrous Trolls: twilight 0 support area condition, no bearer needed
-		put("proudfoot", "1_301"); // Master Proudfoot: twilight 1 ally
-		put("twofoot", "13_144"); // Daddy Twofoot: twilight 1 follower
-		put("smeagol", "6_45"); // Sméagol: twilight 0 companion, to prove the 0-cost-per-type cap does not apply to companions
-	}};
-
+public class Card_94_003_Tests
+{
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Glóin: twilight 2 companion, the only card type a starting fellowship normally allows
+					put("sword", "1_299");      // Hobbit Sword: twilight 1 possession (hand weapon), bearer must be a Hobbit, so the Ring-bearer can carry it
+					put("pony", "13_143");      // Bill the Pony (dearly-loved): twilight 2 possession, bearer must be Ring-bound Hobbit, to prove a nonzero item cost never touches the twilight pool
+					put("pan", "3_108");        // Frying Pan: twilight 0 possession (hand weapon), bearer must be a Hobbit
+					put("bill", "3_106");       // Bill the Pony: a second twilight 0 possession, of no class, for the one-per-card-type cap
+					put("phial", "13_155");     // Phial of Galadriel, The Light of Earendil: twilight 0 artifact, bearer must be a Ring-bound Hobbit
+					put("coat", "2_105");       // Mithril-coat: twilight 2 artifact, bearer must be Frodo
+					put("trolls", "3_114");     // Three Monstrous Trolls: twilight 0 support area condition, no bearer needed
+					put("proudfoot", "1_301");  // Master Proudfoot: twilight 1 ally
+					put("twofoot", "13_144");   // Daddy Twofoot: twilight 1 follower
+					put("smeagol", "6_45");     // Sméagol: twilight 0 companion, to prove the 0-cost-per-type cap does not apply to companions
+					put("stealth", "1_298");    // Hobbit Stealth: a Free Peoples event, twilight 1
+					put("runner", "1_178");     // Goblin Runner: a minion, twilight 1
+					put("armory", "1_173");     // Goblin Armory: a [moria] condition, twilight 0, plays to the support area and needs nothing to be played
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -35,7 +41,24 @@ public class Card_94_003_Tests {
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Glóin: twilight 2 companion, the only card type a starting fellowship normally allows
+					put("sword", "1_299");      // Hobbit Sword: twilight 1 possession (hand weapon), bearer must be a Hobbit, so the Ring-bearer can carry it
+					put("pony", "13_143");      // Bill the Pony (dearly-loved): twilight 2 possession, bearer must be Ring-bound Hobbit, to prove a nonzero item cost never touches the twilight pool
+					put("pan", "3_108");        // Frying Pan: twilight 0 possession (hand weapon), bearer must be a Hobbit
+					put("bill", "3_106");       // Bill the Pony: a second twilight 0 possession, of no class, for the one-per-card-type cap
+					put("phial", "13_155");     // Phial of Galadriel, The Light of Earendil: twilight 0 artifact, bearer must be a Ring-bound Hobbit
+					put("coat", "2_105");       // Mithril-coat: twilight 2 artifact, bearer must be Frodo
+					put("trolls", "3_114");     // Three Monstrous Trolls: twilight 0 support area condition, no bearer needed
+					put("proudfoot", "1_301");  // Master Proudfoot: twilight 1 ally
+					put("twofoot", "13_144");   // Daddy Twofoot: twilight 1 follower
+					put("smeagol", "6_45");     // Sméagol: twilight 0 companion, to prove the 0-cost-per-type cap does not apply to companions
+					put("stealth", "1_298");    // Hobbit Stealth: a Free Peoples event, twilight 1
+					put("runner", "1_178");     // Goblin Runner: a minion, twilight 1
+					put("armory", "1_173");     // Goblin Armory: a [moria] condition, twilight 0, plays to the support area and needs nothing to be played
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -44,10 +67,47 @@ public class Card_94_003_Tests {
 	}
 
 	protected VirtualTableScenario GetControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Glóin: twilight 2 companion, the only card type a starting fellowship normally allows
+					put("sword", "1_299");      // Hobbit Sword: twilight 1 possession (hand weapon), bearer must be a Hobbit, so the Ring-bearer can carry it
+					put("pony", "13_143");      // Bill the Pony (dearly-loved): twilight 2 possession, bearer must be Ring-bound Hobbit, to prove a nonzero item cost never touches the twilight pool
+					put("pan", "3_108");        // Frying Pan: twilight 0 possession (hand weapon), bearer must be a Hobbit
+					put("bill", "3_106");       // Bill the Pony: a second twilight 0 possession, of no class, for the one-per-card-type cap
+					put("phial", "13_155");     // Phial of Galadriel, The Light of Earendil: twilight 0 artifact, bearer must be a Ring-bound Hobbit
+					put("coat", "2_105");       // Mithril-coat: twilight 2 artifact, bearer must be Frodo
+					put("trolls", "3_114");     // Three Monstrous Trolls: twilight 0 support area condition, no bearer needed
+					put("proudfoot", "1_301");  // Master Proudfoot: twilight 1 ally
+					put("twofoot", "13_144");   // Daddy Twofoot: twilight 1 follower
+					put("smeagol", "6_45");     // Sméagol: twilight 0 companion, to prove the 0-cost-per-type cap does not apply to companions
+					put("stealth", "1_298");    // Hobbit Stealth: a Free Peoples event, twilight 1
+					put("runner", "1_178");     // Goblin Runner: a minion, twilight 1
+					put("armory", "1_173");     // Goblin Armory: a [moria] condition, twilight 0, plays to the support area and needs nothing to be played
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Two cards of cost 0 for each of the three card types that have two (conditions, allies, followers), and a companion of cost 0
+	protected VirtualTableScenario GetZeroCostCapScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("smeagol", "6_45");     // Sméagol: twilight 0 companion, played into the fellowship by the ordinary rule
+					put("trolls", "3_114");     // Three Monstrous Trolls: twilight 0 support area condition
+					put("stairs", "1_24");      // Stairs of Khazad-dûm: twilight 0 support area condition, a Dwarf's strength against [moria] minions
+					put("barliman", "1_70");    // Barliman Butterbur: twilight 0 ally, a fellowship ability used only on purpose
+					put("betsy", "33_19");      // Betsy Butterbur: twilight 0 ally of another title, a fellowship ability used only on purpose
+					put("army", "18_47");       // Elendil's Army: twilight 0 follower, whose Aid is made at the start of the maneuver phase
+					put("servant", "18_52");    // Gondorian Servant: twilight 0 follower of another title, whose Aid is made at the start of the maneuver phase
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"94_3", null
 		);
 	}
 
@@ -60,8 +120,11 @@ public class Card_94_003_Tests {
 		 * Intensity: -3
 		 * Game Text: You may include items, conditions, allies, and followers in your starting fellowship. You cannot play more than 1 card with 0 twilight cost of each card type this way.
 		 */
+
 		var scn = GetFreepsScenario();
+
 		var mod = scn.GetFreepsCard("mod");
+
 		assertEquals("Race Text 94_3", mod.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, mod.getBlueprint().getCardType());
 		assertEquals(-3, mod.getBlueprint().getIntensity());
@@ -93,6 +156,7 @@ public class Card_94_003_Tests {
 		assertAttachedTo(sword, frodo);
 		// During the starting-fellowship phase the twilight pool itself is the running budget total.
 		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 	}
 
 	@Test
@@ -108,6 +172,7 @@ public class Card_94_003_Tests {
 
 		assertInPlay(trolls, proudfoot, twofoot);
 		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 	}
 
 	@Test
@@ -135,8 +200,8 @@ public class Card_94_003_Tests {
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sword));
 
 		// Finish starting fellowship setup for both players and reach P1's first turn.
-		scn.FreepsChoose("");
-		scn.ShadowChoose("");
+		scn.FreepsDeclineChoosing();
+		scn.ShadowDeclineChoosing();
 		scn.StartGame(true, false);
 
 		// GameState.startPlayerTurn() zeroes the pool for every real turn, including the first one,
@@ -185,6 +250,114 @@ public class Card_94_003_Tests {
 	}
 
 	@Test
+	public void ArtifactsAreSelectableAndEventsAndMinionsAreNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var phial = scn.GetFreepsCard("phial");
+		var coat = scn.GetFreepsCard("coat");
+		var stealth = scn.GetFreepsCard("stealth");
+		var runner = scn.GetFreepsCard("runner");
+		var frodo = scn.GetRingBearer();
+
+		// An item is a possession or an artifact. An event and a minion are none of the four kinds named.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(phial, coat));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stealth, runner));
+
+		scn.FreepsChooseCard(coat);
+
+		assertAttachedTo(coat, frodo);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+	}
+
+	@Test
+	public void TheCapIsOnCardsOfCostZeroOnlyAndCountsPossessionsAndArtifactsApart() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var coat = scn.GetFreepsCard("coat");
+		var phial = scn.GetFreepsCard("phial");
+		var bill = scn.GetFreepsCard("bill");
+		var pan = scn.GetFreepsCard("pan");
+		var sword = scn.GetFreepsCard("sword");
+		var frodo = scn.GetRingBearer();
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(coat, phial, bill, pan, sword));
+
+		// An artifact of cost 2 is not the artifacts' one card of cost 0: the Phial stays on offer.
+		scn.FreepsChooseCard(coat);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(phial, bill, pan, sword));
+
+		// Bill the Pony is the possessions' one card of cost 0: the Frying Pan (cost 0) is no longer
+		// offered, the Hobbit Sword (cost 1) is, and so is the Phial, an artifact.
+		scn.FreepsChooseCard(bill);
+		assertAttachedTo(bill, frodo);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pan));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sword, phial));
+
+		scn.FreepsChooseCard(phial);
+		assertAttachedTo(phial, frodo);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pan));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sword));
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+	}
+
+	@Test
+	public void TheCapHoldsForConditionsAlliesAndFollowersAndNoCompanionIsCountedAgainstIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetZeroCostCapScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var trolls = scn.GetFreepsCard("trolls");
+		var stairs = scn.GetFreepsCard("stairs");
+		var barliman = scn.GetFreepsCard("barliman");
+		var betsy = scn.GetFreepsCard("betsy");
+		var army = scn.GetFreepsCard("army");
+		var servant = scn.GetFreepsCard("servant");
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(smeagol, trolls, stairs, barliman, betsy, army, servant));
+
+		// A companion of cost 0 is not played "this way": it uses up none of the three.
+		scn.FreepsChooseCard(smeagol);
+		assertInPlay(smeagol);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(trolls, stairs, barliman, betsy, army, servant));
+
+		// One card of cost 0 of each type, and the second one of that type is refused while the others are not.
+		scn.FreepsChooseCard(trolls);
+		assertInPlay(trolls);
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stairs));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(barliman, betsy, army, servant));
+
+		scn.FreepsChooseCard(barliman);
+		assertInPlay(barliman);
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stairs, betsy));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(army, servant));
+
+		scn.FreepsChooseCard(army);
+		assertInPlay(army);
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stairs, betsy, servant));
+		assertEquals(0, scn.GetTwilight());
+		// Nothing is left that he may play, so his starting fellowship is complete and the other player's is asked.
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
+	}
+
+	@Test
+	@Ignore("Q-0189: a Shadow condition is offered for the starting fellowship; the text names no side")
+	public void NoShadowCardIsOfferedForTheStartingFellowship() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var trolls = scn.GetFreepsCard("trolls");
+		var armory = scn.GetFreepsCard("armory");
+
+		// Both are conditions of cost 0 that play to the support area with nothing asked of the board.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(trolls));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(armory));
+	}
+
+	@Test
 	public void WithoutTheModOnlyCompanionsAreSelectable() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetControlScenario();
 		var gimli = scn.GetFreepsCard("gimli");
@@ -213,7 +386,7 @@ public class Card_94_003_Tests {
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(nonOwnerGimli));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(nonOwnerSword, nonOwnerTrolls));
-		scn.FreepsChoose("");
+		scn.FreepsDeclineChoosing();
 
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(ownerSword, ownerTrolls, ownerProudfoot, ownerTwofoot));
