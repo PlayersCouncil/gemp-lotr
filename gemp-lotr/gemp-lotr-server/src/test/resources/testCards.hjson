@@ -668,4 +668,38 @@
 		}
 		gametext: Each time the Free Peoples player starts to assign minions, add (1).
 	}
+	# TransferableToFilterTests: the filter word transferableTo, in a requirement and in a choice, so that the
+	# cards it accepts can be read one by one.  The one real card that uses it (Race Text 94_4) has it in the
+	# requirement of a trigger on a companion being killed, and "to" there is every other character.
+	0_8023: {
+		title: Test Porter
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			requires: {
+				type: canSpot
+				filter: possession,transferableTo(man)
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(possession,transferableTo(man))
+					count: 0-1
+					memorize: chosenPossession
+					text: Choose a possession that could be transferred to a Man
+				}
+				{
+					type: addTwilight
+					amount: 1
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> If a possession could be transferred to a Man, choose up to 1 such possession and add (1).
+	}
 }

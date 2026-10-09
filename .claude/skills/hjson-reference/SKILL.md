@@ -296,6 +296,8 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 
 `PlayableOn(<filter>)` (function filter, engine pass 7): a card in a hand or a pile that attaches and could be played NOW on a card the inner filter accepts. Use it wherever a text plays items "on" named bearers and the action should be withheld, or X capped, when nothing fits (F-0140, Q-0094): `HasCardInDiscard` with `filter: item,PlayableOn(memory(playedMinion))`.
 
+`TransferableTo(<filter>)` (function filter, engine pass 21, F-0324): a card in play that a card's effect could transfer NOW to a card the inner filter accepts: nothing says it cannot be transferred ("Possessions cannot be transferred from this companion", Warrior of Rohan 17_104), and one of those cards is an eligible bearer for it other than the one it has (its own "Bearer must be ...", one item of a class, no "cannot bear" in the way, not hindered). It is what `Transfer` with `checkTarget: true` goes on to ask. Write it in the requirement beside such an effect, with the effect's `where` filter inside it, so that "you may transfer ... to another eligible bearer" is withheld when a yes would move nothing (Q-0034): `CanSpot` with `filter: possession,attachedTo(memory(dyingCompanion)),transferableTo(character,not(memory(dyingCompanion)))` (Race Text 94_4). It does not read the allies' rules of the Free Peoples player's own fellowship-phase transfer.
+
 ## Value Resolution
 
 Numeric fields (`amount`, `count`, `times`, `value`) accept literals or evaluated expressions.

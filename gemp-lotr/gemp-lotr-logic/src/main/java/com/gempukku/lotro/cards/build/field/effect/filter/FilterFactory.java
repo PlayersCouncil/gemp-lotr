@@ -354,6 +354,15 @@ public class FilterFactory {
                                         && PlayUtils.checkPlayRequirements(game, physicalCard, on, twilightGoneFirst, threatsAddedFirst, 0, false, false, true);
                     };
                 });
+        // A card in play that a card's effect could transfer now to some card the inner filter accepts: it may
+        // be transferred at all, and one of those cards is an eligible bearer for it other than its own
+        // (Filters.transferableTo).  For the requirement that goes with "Transfer ... where: choose(<filter>),
+        // checkTarget: true", so that the offer is withheld when nothing could move (F-0324).
+        parameterFilters.put("transferableto",
+                (parameter, environment) -> {
+                    final FilterableSource toSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.transferableTo(toSource.getFilterable(actionContext));
+                });
         parameterFilters.put("hasattached",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

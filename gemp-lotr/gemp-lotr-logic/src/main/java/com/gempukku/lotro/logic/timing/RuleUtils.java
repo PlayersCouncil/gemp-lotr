@@ -216,6 +216,21 @@ public class RuleUtils {
         return totalBonus;
     }
 
+    /**
+     * The cards that a card's effect may transfer the given card to, "another eligible bearer" (Comprehensive
+     * Rules 4.2, "transfer"): a bearer that the card's own text and the rules on what a character may bear allow
+     * (getFullValidTargetFilter), other than the card that bears it now, and none that a "cannot bear" keeps it
+     * from.  Whether the card may be transferred at all (ModifiersQuerying.canBeTransferred) is not asked here.
+     * The Transfer effect with checkTarget and Filters.transferableTo both read this; the Free Peoples player's
+     * own transfer in the fellowship phase has rules of its own about allies (TransferItemRule).
+     */
+    public static Filter getTransferTargetFilter(final LotroGame game, final PhysicalCard card) {
+        return Filters.and(
+                getFullValidTargetFilter(card.getOwner(), game, card),
+                (Filter) (g, bearer) -> bearer != card.getAttachedTo()
+                        && g.getModifiersQuerying().canHaveTransferredOn(g, card, bearer));
+    }
+
     public static Filter getFullValidTargetFilter(String playerId, final LotroGame game, final PhysicalCard self) {
         final LotroCardBlueprint blueprint = self.getBlueprint();
         final Filterable validTargetFilter = blueprint.getValidTargetFilter(playerId, game, self);

@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,6 +23,7 @@ public class Card_94_004_Tests
 					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf companion; eligible alternate bearer of the cloak
 					put("knight", "5_35");      // Gondorian Knight: a [gondor] Man companion, vitality 3; Knight is its whole text
 					put("erland", "2_21");      // Erland, Advisor to Brand: a [gandalf] Man ally, vitality 2
+					put("warrior", "17_104");   // Warrior of Rohan: a [rohan] Man, vitality 3; "Possessions cannot be transferred from this companion to another character."
 					put("cloak", "1_42");       // Elven Cloak: a possession (cloak); "Bearer must be a companion."
 					put("armor", "1_92");       // Armor: a possession (armor); "Bearer must be a Man."
 					put("armor2", "1_92");
@@ -411,7 +411,6 @@ public class Card_94_004_Tests
 	}
 
 	@Test
-	@Ignore("F-0324: the offer is made though nobody else may bear the dying companion's only possession")
 	public void NotOfferedWhenNobodyElseMayBearTheOnlyPossession() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
@@ -436,6 +435,35 @@ public class Card_94_004_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertInZone(Zone.DEAD, aragorn);
 		assertInZone(Zone.DISCARD, rsword);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenThePossessionCannotBeTransferredFromTheCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var warrior = scn.GetFreepsCard("warrior");
+		var gimli = scn.GetFreepsCard("gimli");
+		var cloak = scn.GetFreepsCard("cloak");
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.MoveCompanionsToTable(warrior, gimli);
+		scn.AttachCardsTo(warrior, cloak);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		// Vitality 3 with 2 wounds: the Slayer's wound kills him.
+		scn.AddWoundsToChar(warrior, 2);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(warrior);
+
+		// Gimli and Frodo could bear the Cloak, and by the Warrior's own text it cannot be transferred from him.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, warrior);
+		assertInZone(Zone.DISCARD, cloak);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

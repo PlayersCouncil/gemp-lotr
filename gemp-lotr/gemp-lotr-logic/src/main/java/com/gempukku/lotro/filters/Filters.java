@@ -527,6 +527,20 @@ public class Filters {
     }
 
     /**
+     * A card in play that a card's effect could transfer now to one of the cards the filters accept (the
+     * definition word TransferableTo): nothing says the card cannot be transferred, and among those cards there
+     * is an active one it may go to (RuleUtils.getTransferTargetFilter: an eligible bearer other than the one it
+     * has).  It is what the Transfer effect with checkTarget goes on to ask, so a requirement written with it
+     * withholds "you may transfer ... to another eligible bearer" when a yes would move nothing (F-0324).
+     */
+    public static Filter transferableTo(final Filterable... to) {
+        final Filter toFilter = Filters.and(to);
+        return (game, physicalCard) -> physicalCard.getZone().isInPlay()
+                && game.getModifiersQuerying().canBeTransferred(game, physicalCard)
+                && Filters.countActive(game, toFilter, RuleUtils.getTransferTargetFilter(game, physicalCard)) > 0;
+    }
+
+    /**
      * Filter for cards that can be played ignoring all costs (twilight, ToPlay, ExtraCosts, roaming).
      * Still respects uniqueness, Rule of Nine, and CantPlayCards modifiers.
      */

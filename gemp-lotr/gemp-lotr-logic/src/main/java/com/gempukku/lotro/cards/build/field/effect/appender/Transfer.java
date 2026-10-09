@@ -44,12 +44,9 @@ public class Transfer implements EffectAppenderProducer {
                     where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
             result.addEffectAppender(
                     CardResolver.resolveCard(select,
-                            actionContext -> (Filter) (game, candidate) -> {
-                                final Filter eligibleBearer = RuleUtils.getFullValidTargetFilter(candidate.getOwner(), game, candidate);
-                                return Filters.countActive(game, whereSource.getFilterable(actionContext), eligibleBearer,
-                                        Filters.not(Filters.hasAttached(candidate)),
-                                        (Filter) (g, bearer) -> g.getModifiersQuerying().canHaveTransferredOn(g, candidate, bearer)) > 0;
-                            },
+                            actionContext -> (Filter) (game, candidate) ->
+                                    Filters.countActive(game, whereSource.getFilterable(actionContext),
+                                            RuleUtils.getTransferTargetFilter(game, candidate)) > 0,
                             memorizeTransferred, "you", "Choose card to transfer", environment));
         } else {
             result.addEffectAppender(
