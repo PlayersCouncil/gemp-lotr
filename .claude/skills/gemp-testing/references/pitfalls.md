@@ -229,6 +229,8 @@ there, and a card left out of a reveal, needs a blueprint no valid or shown card
 version of the title); a test that reads where the chosen card went keeps one copy in the pile. The ANSWER need
 not go by blueprint: `ShadowChooseCards(card)` takes that very card out of a discard pile (Mountain-troll
 65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls.
+It cuts both ways: a card read as NOT offered (one still in the hand, say) fails that reading as soon as a valid
+candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -314,6 +316,9 @@ with the Free Peoples player's pass in the new phase already spent and the Shado
 and `FreepsAssignToMinions` then fails, saying that the Free Peoples player is not being asked anything and
 what the Shadow player is being asked. A trigger at the start of the target phase itself is left pending, as a
 test of it needs.
+`SkipToOtherPlayersTurn()` does not decline what it ends on: an OPTIONAL start-of-turn trigger of the incoming
+player is left pending when it returns (the phase reads BETWEEN_TURNS), for the test to take or decline
+(Prized Lagan 68_110, the R check of "at the start of each turn, you may").
 
 **Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
@@ -439,6 +444,9 @@ last fierce skirmish is over. A "this phase" effect from the first assignment ph
 The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
 time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
 bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
+The round comes about with nobody assigned at all: where a fierce minion is in play and both players decline to
+assign, the fierce assignment phase follows, which is the cheapest way to stand just before the regroup phase
+(a D check on "until the regroup phase", Prized Lagan 68_110).
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
@@ -565,6 +573,11 @@ Where nothing in the zone can be chosen, the showing is the only decision ("... 
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
 answers a showing as readily as a choice, so one too few leaves "Choose cards from deck" pending. One too many
 fails the test, saying what is being asked instead (G-0034; it used to pass the phase in silence): delete the line.
+The showing lists every card of the zone and none of them can be chosen; the choice that follows lists only the
+cards that may be taken. So "shown, and cannot be chosen" is read at the showing
+(`ShadowHasCardChoiceAvailable(card, false)`, `ShadowGetTotalRevealedCardCount()`), and at the choice an invalid
+card is simply absent (`ShadowHasCardChoiceNotAvailable(card)`; `(card, false)` fails there). A search of the
+OTHER player's deck (Grond 68_82) is shown to the searching player alone: the deck's owner has no decision.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
