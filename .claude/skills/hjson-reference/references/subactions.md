@@ -1112,13 +1112,17 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * filter
       default: self
 * PutPlayedEventOnBottomOfDrawDeck
-  Causes the currently-resolving event to go to the bottom of its owner's draw deck after resolving instead of the discard pile.
-  If not part of the event itself, this must be part of a `Played` trigger reacting to that event.
+  Causes a currently-resolving event matching `filter` to go to the bottom of its owner's draw deck after resolving instead of the discard pile.
+  `filter` may only be either "self" (the card this is written on: an event that places itself) or "played" (the card whose play is being answered).  If not part of the event itself, this must be part of a `Played` trigger reacting to that event and must say `filter: played`: left at the default there it acts on the card with the trigger, which is not being played, and does nothing.
  See Hobbitses Are Dead).
+    * filter
+      default: self
 * PutPlayedEventOnTopOfDrawDeck
-  Causes the currently-resolving event to go to the top of its owner's draw deck after resolving instead of the discard pile.
-  If not part of the event itself, this must be part of a `Played` trigger reacting to that event.
- See Still Needed).
+  Causes a currently-resolving event matching `filter` to go to the top of its owner's draw deck after resolving instead of the discard pile.
+  `filter` may only be either "self" (the card this is written on: an event that places itself) or "played" (the card whose play is being answered).  If not part of the event itself, this must be part of a `Played` trigger reacting to that event and must say `filter: played`: left at the default there it acts on the card with the trigger, which is not being played, and does nothing.
+ See Still Needed) for "self", and Shrouded Elf for "played".
+    * filter
+      default: self
 * PutRandomCardFromHandBeneathDrawDeck
   Causes `player` to put `count` random cards from their hand beneath their draw deck.`
   `See Knights of His House).

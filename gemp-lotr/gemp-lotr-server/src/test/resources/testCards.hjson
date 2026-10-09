@@ -451,4 +451,58 @@
 		}
 		gametext: <b>Shadow:</b> Play a minion from your discard pile; its twilight cost is -1 for each minion you can spot (limit -2).
 	}
+	# PlacingTheEventPlayedOnADrawDeckTests: a Response that places "that event" (the one whose play it answers)
+	# on top of, or beneath, its owner's draw deck, in any phase and for a cost that can always be paid.  The one
+	# real text of the kind (Shrouded Elf 13_23 and its erratum 63_23) places the event on top only, for an
+	# exertion, in the Elf's own skirmish; no real card places another card's event beneath a draw deck.
+	0_8016: {
+		title: Test Shelf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: Response
+			trigger: {
+				type: played
+				filter: your,event
+			}
+			cost: {
+				type: AddTwilight
+				amount: 1
+			}
+			effect: {
+				type: PutPlayedEventOnTopOfDrawDeck
+				filter: played
+			}
+		}
+		gametext: <b>Response:</b> If you play an event, add (1) to place that event on top of your draw deck.
+	}
+	0_8017: {
+		title: Test Cellar
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: Response
+			trigger: {
+				type: played
+				filter: your,event
+			}
+			cost: {
+				type: AddTwilight
+				amount: 1
+			}
+			effect: {
+				type: PutPlayedEventOnBottomOfDrawDeck
+				filter: played
+			}
+		}
+		gametext: <b>Response:</b> If you play an event, add (1) to place that event beneath your draw deck.
+	}
 }

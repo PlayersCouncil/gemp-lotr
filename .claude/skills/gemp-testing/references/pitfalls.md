@@ -738,6 +738,8 @@ named and the valid ones are not.
 
 - `0_8014` Test Muster ("Shadow or Maneuver: Play a minion; its twilight cost is -1 for each minion you can spot (limit -2).") and `0_8015` Test Barrow (the same in the Shadow phase, from the discard pile): Shadow conditions with no cost, for mechanics/LimitOnADiscountTests.
 
+- `0_8016` Test Shelf ("Response: If you play an event, add (1) to place that event on top of your draw deck.") and `0_8017` Test Cellar (the same, beneath): Free Peoples conditions built on `filter: played`, for mechanics/PlacingTheEventPlayedOnADrawDeckTests. Each is offered again for the same play after it is used (a cost that can be paid): decline it.
+
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
 and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a
