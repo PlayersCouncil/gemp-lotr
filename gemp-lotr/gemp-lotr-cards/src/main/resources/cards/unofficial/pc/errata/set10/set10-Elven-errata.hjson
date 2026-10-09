@@ -443,10 +443,16 @@
 					type: losesInitiative
 					side: free peoples
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						filter: minion
+					}
+				]
 				effect: [
 					{
 						type: incrementPerTurnLimit
