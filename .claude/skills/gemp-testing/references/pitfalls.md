@@ -289,6 +289,9 @@ It cuts both ways: a card read as NOT offered (one still in the hand, say) fails
 candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
 The other player's pile can be told apart all the same: the invalid candidate for "your discard pile" is a card
 in HIS pile of a title that is in none of the chooser's piles (91_11: his Orc Bowmen, the chooser's left in the deck).
+A choice among cards that lie in no zone at all (94_31's "site from outside the game") is read and answered by
+blueprint id, `ShadowHasBPChoiceAvailable("1_361")` and `ShadowChooseCardBPFromSelection("1_361")`, and
+`ShadowGetChoiceMin()` reads its minimum as for any choice of cards (Card_94_031_Tests).
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -368,7 +371,19 @@ down after `SkipToSite`, not before.
 
 **Site 9 ends the game.** A fellowship that survives the skirmishes at site 9 has won, so `SkipToSite(9)` returns
 with the game over. To test something at site 9, `SkipToSite(8)` and then pass the fellowship phase: the
-fellowship moves, and the test is in the Shadow phase at site 9.
+fellowship moves, and the test is in the Shadow phase at site 9. A skipper that plays on through the winning
+turn finds nobody being asked anything and throws: `SkipToOtherPlayersTurn()` from player 1's fellowship phase at
+site 8 ends in `NoSuchElementException` out of `GetDecidingPlayer` (probed, rtmd-b94_29). Under a modifier that
+keeps the game going at site 9 (Race Text 94_31) `SkipToSite(9)` returns in the REGROUP phase of the turn that
+reached site 9, not in a fellowship phase, with player 1 asked for regroup actions (Card_94_031_Tests). The rig
+reads that a game is over (`GameIsFinished()`), not who won it.
+
+**Player 2 on site 9 with the game still going.** Player 1 wins at site 9 a turn before player 2 can stand
+there, so a text that bites only at site 9 ("your fellowship cannot win until ...", 94_31) is shown for player 2
+by putting him a site ahead: `SkipToSite(6); SkipToOtherPlayersTurn(); ShadowPass();
+SkipToPhaseInverted(Phase.REGROUP); PassCurrentPhaseActions(); ShadowChooseToMove(); SkipToOtherPlayersTurn();
+SkipToOtherPlayersTurn();` has him move twice on his sixth turn and leaves him at site 8 in the fellowship phase
+of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Tests, the last test).
 
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
 phase arrives. Make the assertions that matter before the event that ends the game.
@@ -628,7 +643,7 @@ and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2
 companion is in the decks). After `StartGame()` it is player 1's bid less 1 on every table (7 reads 6; 0 reads
 0): read a bid there (Race Text 91_18), and player 2's on his own turn, where nothing has been taken off.
 
-**A skirmish on player 2's turn.** The drive that works: `SkipToOtherPlayersTurn(); ShadowPass();` (player 2's
+**A skirmish, or any later phase, on player 2's turn: `SkipToPhaseInverted`.** The drive that works: `SkipToOtherPlayersTurn(); ShadowPass();` (player 2's
 fellowship moves) `MoveMinionsToTable(<player 1's minion>); SkipToPhaseInverted(Phase.ASSIGNMENT);
 PassCurrentPhaseActions(); ShadowAssignToMinions(companion, minion); ShadowResolveSkirmish(companion);
 ShadowPass();` and player 1, the Shadow player of that turn, then acts with the `Freeps...` methods
@@ -636,7 +651,8 @@ ShadowPass();` and player 1, the Shadow player of that turn, then acts with the 
 so the bookend there is the seat's own `AwaitingFreepsSkirmishPhaseActions()` or
 `AwaitingShadowSkirmishPhaseActions()`: the "Play <phase> action or Pass" reading that the fellowship and
 Shadow phases need on player 2's turn matches nothing in a skirmish. Any later phase of player 2's turn is reached
-the same way, `SkipToPhaseInverted(Phase.REGROUP)` and the like (`SkipToPhase` is for player 1's turns); the
+the same way, `SkipToPhaseInverted(Phase.REGROUP)` and the like (`SkipToPhase` is for player 1's turns: on
+player 2's it fails with "Attempting to skip to phase REGROUP, halted in phase SHADOW"); the
 bookend in the regroup phase there is `AwaitingShadowRegroupPhaseActions()`, player 2 being asked first
 (Card_93_010_Tests, Card_92_012_Tests).
 
