@@ -100,6 +100,93 @@ Dinen as a partial Tomb that does work at sanctuaries." So 18_139, 68_139 ("If t
 and 100_1 ("When sanctuary healing at this site, ... heals only 3 wounds instead of 5") are one design in three
 cards; 100_1 is still tested from its own text, with no original's definition to read.
 
+**Her notes of 2026-10-09 (the whole of them: `orchestrator/answers/2026-10-09-b.md`).** What they rule, by number:
+
+**A non-event's "make each X ..." need not be a snapshot (F-0217, Not Feared in Sunlight 52_107).** "This one
+actually doesn't work without the prior functionality. As a non-event, it's not beholden to the snapshot rule RAW,
+but there are no Nazgul on the table during the Fellowship phase so it can only function with the non-snapshot
+behavior. Revert this please." The snapshot of Q-0011 / F-0144 is the rule for EVENTS; an ability of a card in
+play whose text could do nothing as a snapshot keeps its standing filter. *[2026-10-09]*
+
+**A phase word in a "played" trigger is the phase the event is played in (F-0292).** "Definitely a bug, go ahead
+and fix." CR 4.2 "phase action": an action that can be played in several phases is of the phase it is taken in; a
+"Skirmish or Regroup" event played in the regroup phase is no skirmish event. *[2026-10-09]*
+
+**A site's arrow is tested and kept right (F-0302, Doorway to Doom 68_134).** "Go ahead and fix. You're right that
+the arrow never matters in normal gameplay, but that's no excuse for us to be sloppy on this. Eventually we do want
+to support multiplayer." *[2026-10-09]*
+
+**Úlairë Nertëa, Dark Horseman 69_38 (F-0307, F-0308).** On the burden: "so long as the freeps player is the one
+doing the assignment, it should add a burden automatically": whenever the Free Peoples player assigns her to a
+companion of the named race, by his own assigning or by a card (Éowyn 17_96; Shadowy Mount 12_171 has HIM assign),
+a burden is added without asking. On the named race: "Let's queue up the engine work that would enable the ability
+to reference the memory (one way or another); the mentioned race might be buried in the log and it's tedious to
+make the player scroll through it." *[2026-10-09]*
+
+**A choice between two things to do (F-0310, Here Lies Balin 1_19).** "Here Lies Balin is an infamous rules
+issue. To wit: when you make a choice you must make one you are "fully capable" of performing, which means that a
+1-vitality Orc cannot be hit by either branch. However, since you then must "do what you can and ignore the rest",
+the player should be given a choice and attempt to perform either branch. In the zero Orc case, I guess we just
+fizzle and offer neither option." So: a branch that can be performed in full is what may be chosen; where no branch
+can be performed in full but something can be done, both are offered and what can be done is done; where nothing
+can be done on any branch, nothing is asked (F-0116). *[2026-10-09]*
+
+**"Ignoring all costs" waives the cost in an event's own text (F-0316, Race Text 92_29).** "Well-reasoned, I
+approve fixing this." *[2026-10-09]*
+
+**Approved as found, to be fixed:** F-0041 (13_75: "Oversight, please fix"), F-0058, F-0201 (Response special
+abilities are special abilities to "a special ability is used": the engine change is no longer deferred), F-0313
+("PlayPermanentAction should be altered to shuffle at the appropriate time"), F-0315 (no unhindered companion, no
+move: "it will definitely need enforcing in the appropriate places"), F-0318 with F-0319 ("each character" at a
+sanctuary counts allies and minions: "Make sure to check minions too"), G-0037. *[2026-10-09]*
+
+**A limit on a discount is not a limit on a strength bonus (Q-0152: struck).** "I'm not convinced that a
+restriction on a discount is treated the same as a strength bonus limit, and in Regular's case it was moot anyway."
+The engine change of F-0245 (83596b32f) is reverted; Uruk Regular 54_192 is tested as it is built. *[2026-10-09]*
+
+**cardInfo (Q-0158).** "The intent is that `id` is for the card's unique identifier, and parent is supposed to
+point to the original (in the case of an errata, absent if an original card). So 1A. 2A is also preferred." An
+erratum's `//id:` is its own id everywhere (`54_192.1`); the older definitions are written out in the newer style
+(`side:`, `unique:`, the capitals of `type` and the like). *[2026-10-09]*
+
+**No Frodo beside a Ring-bearer who is not Frodo (Q-0159: B).** "Wow I didn't realize this was the case. Yeah it's
+illegitimate to put both ring bearers in play like that. B for sure. In addition please look for other standards
+which are twisting the game board state past the point of breaking for that, and in particular try to see if
+they're jumping at shadows; how many card definitions accidentally said "title(Frodo)" instead of "Ring-bearer"?"
+The board comes out of the Standard and the helper table, and tests that use it lose that candidate. *[2026-10-09]*
+
+**"Until the X phase", begun in the X phase (Q-0160: A, as built).** "'Until X phase' is definitely 'until the
+start of X phase', but it's definitely a bit muddy when you're doing that *in* X phase. The One Ring I believe
+takes itself off at the end of regroup if it is put on during regroup, which establishes at least a little
+precedence. Let's just leave it at A for now." *[2026-10-09]*
+
+**Can't beats can (Q-0161: keep).** "can't > can, so Streets > Shot": Streets of Edoras bars the ally Breaching
+Shot 102_21 would have take part. *[2026-10-09]*
+
+**The words of a choice from a discard pile (Q-0162: keep).** "Definitely keep, excellent work. Not every card
+needs to add its own wording I think, many of them really are just fine as "choose a card from discard". But if
+there's any real twist to it I think it's fine to improve the messaging to have a custom entry." *[2026-10-09]*
+
+**A reveal that a cost buys, from an empty draw deck (Q-0163: B).** "b is fine": offered, and flagged no-effect
+(the rule for a costed action that would do nothing); it is the rule for the Decipher cards of the shape too. *[2026-10-09]*
+
+**A sentence after a phase action belongs to that action (Q-0164: A, as built).** "On standard templating, phase
+actions go last on a card, with ongoing or each time triggers above them. If you see such text at the end after a
+phase action, it's tied to the prior phase action. In the Flaming Brand errata's case, you can think of it as
+"lighting" the brand, which then "burns out" later. These burn-out clauses keep the effects from being on events
+without the clog issues of events." *[2026-10-09]*
+
+**Mordor Fiend 60_91 loses its "you may" (Q-0165).** "Ah piss, we missed that. We'll alter the text, make it
+required in the text and alter the definition to match." *[2026-10-09]*
+
+**Real cards and real mechanics before invented ones (Q-0166: A).** "Always prefer using real mechanics or cards;
+if we have to invent cards we need to scrutize whether or not we have gotten lost in the weeds." An unpayable "add
+a burden" is shown with a hindered Ring-bearer; Test Seal is the mechanics' card only. *[2026-10-09]*
+
+**Kept as built:** Q-0151, Q-0153, Q-0154, Q-0156, Q-0157 ("Keep both"), and Q-0155 ("I'm okay with keeping I
+think but the order really doesn't matter unless a specific counterexample is brought to my attention").
+**F-0283: A** (Dunlending Warrior 4_18 and Ravager 4_15 are withheld when they can assign the minion to nobody). *[2026-10-09]*
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.

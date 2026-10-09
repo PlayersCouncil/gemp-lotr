@@ -27,6 +27,25 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - After the errata: Race to Mount Doom lightly, then the at tests, then the Decipher sets (Ketura, 2026-10-08, night). On RTMD: "These tests were done ...
 - Race to Mount Doom is re-worked to the Standard after all (Q-0178, Ketura, 2026-10-09) [F-0311]
 - Rath Dínen 100_1 and Steward's Tomb (Ketura, 2026-10-09)
+- Her notes of 2026-10-09 (the whole of them: `orchestrator/answers/2026-10-09-b.md`)
+- A non-event's "make each X ..." need not be a snapshot (F-0217, Not Feared in Sunlight 52_107) [Q-0011, F-0144]
+- A phase word in a "played" trigger is the phase the event is played in (F-0292)
+- A site's arrow is tested and kept right (F-0302, Doorway to Doom 68_134)
+- Úlairë Nertëa, Dark Horseman 69_38 (F-0307, F-0308)
+- A choice between two things to do (F-0310, Here Lies Balin 1_19) [F-0116]
+- "Ignoring all costs" waives the cost in an event's own text (F-0316, Race Text 92_29)
+- Approved as found, to be fixed [F-0041, F-0058, F-0201, F-0313, F-0315, F-0318, F-0319, G-0037]
+- A limit on a discount is not a limit on a strength bonus (Q-0152: struck) [F-0245]
+- cardInfo (Q-0158). "The intent is that id is for the card's unique identifier, and parent is supposed to point to the original (in the case of an ...
+- No Frodo beside a Ring-bearer who is not Frodo (Q-0159: B)
+- "Until the X phase", begun in the X phase (Q-0160: A, as built)
+- Can't beats can (Q-0161: keep)
+- The words of a choice from a discard pile (Q-0162: keep)
+- A reveal that a cost buys, from an empty draw deck (Q-0163: B)
+- A sentence after a phase action belongs to that action (Q-0164: A, as built)
+- Mordor Fiend 60_91 loses its "you may" (Q-0165)
+- Real cards and real mechanics before invented ones (Q-0166: A)
+- Kept as built: Q-0151, Q-0153, Q-0154, Q-0156, Q-0157 ("Keep both"), and Q-0155 ("I'm okay with keeping I think but the order really doesn't matter ... [F-0283]
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata
