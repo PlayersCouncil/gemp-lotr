@@ -157,20 +157,26 @@ public class Card_02_075_ErrataTests
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(bilbo));
 
-		// The Free Peoples player may assign no character to Bill: not the Hobbit, not a Man, not an ally at home.
-		assertFalse(scn.FreepsCanAssignAgainst(frodo, ferny));
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
-		assertFalse(scn.FreepsCanAssignAgainst(bilbo, ferny));
-		// It is Bill who is barred and that player: the same character may face another minion, and the Shadow
-		// player may assign Bill.
-		assertTrue(scn.FreepsCanAssignAgainst(aragorn, troop));
-		assertTrue(scn.ShadowCanAssignAgainst(bilbo, ferny));
+		// Bill is not the Free Peoples player's to assign: the game's rule says so, and he is not among the
+		// minions that player is offered, so no character can be assigned to him, Hobbit, Man or ally at home.
+		assertFalse(scn.FreepsCanAssign(ferny));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(ferny));
+		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+		// It is Bill who is barred, and to that player: the other minion is offered, every character is still
+		// offered for it, and the Shadow player may assign Bill.
+		assertTrue(scn.FreepsCanAssign(troop));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(frodo));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertTrue(scn.ShadowCanAssign(ferny));
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop));
+		assertFalse(scn.IsCharAssigned(ferny));
 
-		// What the Free Peoples player left unassigned, the Shadow player may assign, Bill included.
+		// What the Free Peoples player could not assign, the Shadow player may: Bill is on his list.
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(ferny));
 		scn.ShadowAssignToMinions(bilbo, ferny);
 		assertTrue(scn.IsCharAssignedAgainst(bilbo, ferny));
 		assertFalse(scn.IsCharAssigned(frodo));
@@ -198,10 +204,12 @@ public class Card_02_075_ErrataTests
 		scn.MoveMinionsToTable(ferny);
 
 		scn.SkipToAssignments();
-		// Sam is the one Hobbit: Galadriel and Aragorn are not.
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
-		assertFalse(scn.FreepsCanAssignAgainst(galadriel, ferny));
-		scn.FreepsDeclineAssignments();
+		// Sam is the one Hobbit: Galadriel and Aragorn are not. While he lives Bill is not the Free Peoples
+		// player's to assign, and with no other minion that player is asked nothing: the Shadow player assigns.
+		assertFalse(scn.FreepsCanAssign(ferny));
+		assertFalse(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(ferny));
 		scn.ShadowAssignToMinions(sam, ferny);
 
 		scn.FreepsResolveSkirmish(sam);
@@ -212,8 +220,12 @@ public class Card_02_075_ErrataTests
 		// The fierce round, with Bill still in play and no Hobbit left to spot.
 		assertTrue(scn.InFierceRound());
 		scn.PassFierceAssignmentActions();
-		assertTrue(scn.FreepsCanAssignAgainst(aragorn, ferny));
-		assertTrue(scn.FreepsCanAssignAgainst(galadriel, ferny));
+		// Bill is the Free Peoples player's to assign again, and on his list, with the two who are no Hobbits.
+		assertTrue(scn.FreepsCanAssign(ferny));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(ferny));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(galadriel));
 		scn.FreepsAssignToMinions(aragorn, ferny);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, ferny));
 		assertTrue(scn.FreepsDecisionAvailable("skirmish"));
@@ -234,19 +246,23 @@ public class Card_02_075_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(ferny, troop);
 
-		// With no Hobbit to spot, nothing stands between a character and Bill.
-		assertTrue(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		// With no Hobbit to spot, Bill is the Free Peoples player's to assign as any minion is.
+		assertTrue(scn.FreepsCanAssign(ferny));
 
 		scn.FreepsPlayCard(bilbo);
 		assertInZone(Zone.SUPPORT, bilbo);
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
+		assertFalse(scn.FreepsCanAssign(ferny));
 
-		// At site 2 Bilbo, whose home is site 3, cannot skirmish, but he can be spotted.
+		// At site 2 Bilbo, whose home is site 3, cannot skirmish, but he can be spotted: Bill is not offered
+		// to the Free Peoples player, and the other minion is.
 		scn.SkipToAssignments();
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(bilbo));
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, ferny));
-		assertFalse(scn.FreepsCanAssignAgainst(galadriel, ferny));
+		assertFalse(scn.FreepsCanAssign(ferny));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(ferny));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(galadriel));
 		assertFalse(scn.IsCharAssigned(ferny));
 
 		scn.FreepsAssignToMinions(aragorn, troop);
@@ -254,6 +270,7 @@ public class Card_02_075_ErrataTests
 		assertFalse(scn.IsCharAssigned(ferny));
 		// Bill is left for the Shadow player to assign.
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(ferny));
 	}
 
 	@Test

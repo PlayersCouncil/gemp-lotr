@@ -3,11 +3,13 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
@@ -23,18 +25,22 @@ import java.util.*;
 public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "hand", "select", "count", "reveal");
+        FieldUtils.validateAllowedFields(effectObject, "player", "hand", "select", "count", "reveal", "text");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String hand = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", false);
+        //What the player choosing the cards is asked.  A definition whose count may be 0 says here that choosing
+        // none is allowed, in place of a yes/no asked beforehand.
+        final String text = FieldUtils.getString(effectObject.get("text"), "text", "Choose cards from hand");
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(select, count, "_temp", player, hand, "Choose cards from hand", true, environment));
+                CardResolver.resolveCardsInHand(select, count, "_temp", player, hand, text, true, environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -43,7 +49,9 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
                         List<Effect> result = new LinkedList<>();
                         for (int i = 0; i < cards.size(); i++) {
                             result.add(
-                                    new ChooseArbitraryCardsEffect(actionContext.getPerformingPlayer(),
+                                    //The player who chose the cards puts them down in the order he likes, as
+                                    // PutCardsFromHandOnBottomOfDeck has it: not whoever is performing the action.
+                                    new ChooseArbitraryCardsEffect(playerSource.getPlayer(actionContext),
                                             "Choose card to put on top of deck", cards, 1, 1) {
                                         @Override
                                         protected void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards) {

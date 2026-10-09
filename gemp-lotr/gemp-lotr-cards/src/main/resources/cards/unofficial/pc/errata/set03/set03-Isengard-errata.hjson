@@ -772,16 +772,12 @@
 				}
 				effect: [
 					{
-						type: Optional
-						text: Would you like to put any cards in hand on top of your draw deck?
+						type: PutCardsFromHandOnTopOfDeck
 						player: Free Peoples
-						effect: {
-							type: PutCardsFromHandOnTopOfDeck
-							player: Free Peoples
-							hand: Free Peoples
-							count: any
-							reveal: false
-						}
+						hand: Free Peoples
+						count: any
+						reveal: false
+						text: Choose any number of cards from your hand to place on top of your draw deck (you may choose none). Your hand will then be revealed.
 					}
 					{
 						type: RevealHand

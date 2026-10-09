@@ -44,7 +44,9 @@ assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowC
 rule, whatever is being asked. A restriction on a pair ("may not assign a character to skirmish this minion",
 `cantBeAssignedToSkirmishAgainst`) shows in neither: both cards stay listed, and the game refuses the pair only
 when the assignment is answered. `FreepsCanAssignAgainst(character, minion)` and `ShadowCanAssignAgainst` read
-that (G-0029); a refused assignment is never shown by the rig throwing.
+that (G-0029); a refused assignment is never shown by the rig throwing. A restriction on one card for one player
+(`CantBeAssignedToSkirmish` with `player`: Bill Ferny 2_75 and 52_75, Q-0146) shows in the first two: the card is
+off that player's list, and when it is the only minion the Free Peoples player is not asked to assign at all.
 
 **One minion to a companion, and the minions left over.** The Free Peoples player may assign one minion to each
 companion (more takes defender): `FreepsAssignToMinions` with two minions in one group is refused by the game
@@ -361,6 +363,16 @@ F-0233).
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
 second use, and a choice that cannot be carried out in full then disappears (CR 4.2 "fully capable"). Read the
 deck's size where a discard or a draw must be possible.
+
+**A random or whole-hand effect takes whatever is there.** Where a test sets off anything that acts on a hand or
+a deck by chance or as a whole (a random look, reveal or discard from a hand; a discard "for each X revealed"; a
+shuffle; the reconciles of a turn-skipper drawing from a small deck), the card under test, and every card a later
+count depends on, is kept out of that hand or deck: put it somewhere fixed at the start of the scenario, the
+discard pile say (`MoveCardsToDiscard(card)`), and bring it in from there when it is wanted (Ketura on F-0264:
+"then it is guaranteed to not interfere with the rest of it"). A test that passes seven runs in eight is this:
+the card under test in the hand The Mirror of Galadriel discarded from (F-0264, 52_44); a fifth card of the
+culture left in a deck the reconciles drew from (F-0265, 58_20). Run a test that has such an effect twenty times
+before it is called finished.
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as

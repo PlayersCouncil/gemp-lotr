@@ -216,15 +216,19 @@ public class Card_02_044_ErrataTests
 		var mirror = scn.GetFreepsCard("mirror");
 		scn.MoveCardsToSupportArea(mirror);
 		scn.MoveAlliesToTable(galadriel);
-		// Nine cards, so that after one discarded and this card put down the Mirror's 7 are still there.
-		scn.MoveCardsToHand(business, scn.GetShadowCard("business2"), scn.GetShadowCard("servant"), scn.GetShadowCard("whu"),
+		// The card under test waits in the discard pile, where the Mirror's random look and discard cannot reach
+		// it (F-0264); it is put into play from there below.
+		scn.MoveCardsToDiscard(business);
+		// Eight cards in hand, so that after one is discarded the Mirror's 7 are still there.
+		scn.MoveCardsToHand(scn.GetShadowCard("business2"), scn.GetShadowCard("servant"), scn.GetShadowCard("whu"),
 				scn.GetShadowCard("troop1"), scn.GetShadowCard("troop2"), scn.GetShadowCard("mirror"),
 				scn.GetShadowCard("curse1"), scn.GetShadowCard("curse2"));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(uruk);
 		scn.SkipToPhase(Phase.MANEUVER);
-		assertEquals(9, scn.GetShadowHandCount());
+		assertEquals(8, scn.GetShadowHandCount());
+		assertInDiscard(business);
 
 		// Without the card, the Mirror looks at 2 cards and discards one.
 		scn.FreepsUseCardAction(mirror);
@@ -233,10 +237,11 @@ public class Card_02_044_ErrataTests
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseAny();
-		assertEquals(8, scn.GetShadowHandCount());
+		assertEquals(7, scn.GetShadowHandCount());
 		scn.ShadowPass();
 
 		scn.MoveCardsToSupportArea(business);
+		assertInZone(Zone.SUPPORT, business);
 
 		// With it, the Mirror is still used and its cost paid, and nothing is looked at or discarded.
 		assertEquals(7, scn.GetShadowHandCount());

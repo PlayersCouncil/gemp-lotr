@@ -33,14 +33,13 @@
 			{
 				type: modifier
 				modifier: {
-					type: cantBeAssignedToSkirmishAgainst
+					type: CantBeAssignedToSkirmish
 					requires: {
 						type: canSpot
 						filter: hobbit
 					}
-					minion: self
-					fpCharacter: any
-					side: free people
+					filter: self
+					player: freeps
 				}
 			}
 			{

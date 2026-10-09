@@ -138,7 +138,9 @@ public class Card_03_067_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(servant));
 		assertEquals(0, scn.GetWoundsOn(raiding));
 
-		scn.FreepsChooseYes();
+		// The Free Peoples player is asked for the cards at once, with no yes/no before it, in words that say
+		// none need be chosen (Q-0143).
+		assertTrue(scn.FreepsDecisionAvailable("you may choose none"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, sam, guard, gimli, armor, runner));
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(6, scn.FreepsGetChoiceMax());
@@ -188,8 +190,9 @@ public class Card_03_067_ErrataTests
 
 		scn.ShadowUseCardAction(palantir);
 		scn.ShadowChooseCard(troop);
-		// The Free Peoples player places nothing.
-		scn.FreepsChooseNo();
+		// The Free Peoples player places nothing: the choice of cards is answered with none.
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsDeclineChoosing();
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertEquals(3, scn.ShadowGetTotalRevealedCardCount());
@@ -230,10 +233,12 @@ public class Card_03_067_ErrataTests
 		scn.ShadowChooseCard(servant);
 		assertEquals(1, scn.GetWoundsOn(servant));
 
-		scn.FreepsChooseYes();
 		assertEquals(2, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCards(aragorn, sam);
-		// The Free Peoples player then puts them on the deck in the order he likes.
+		// The Free Peoples player then puts them on the deck in the order he likes: the two are his to choose
+		// from, and the Shadow player, whose ability it is, is asked nothing and is not shown them.
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		scn.FreepsChooseCardBPFromSelection(aragorn);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(Set.of(aragorn, sam), Set.of(scn.GetFromTopOfFreepsDeck(1), scn.GetFromTopOfFreepsDeck(2)));
@@ -269,7 +274,7 @@ public class Card_03_067_ErrataTests
 
 		scn.ShadowUseCardAction(palantir);
 		scn.ShadowChooseCard(servant);
-		scn.FreepsChooseNo();
+		scn.FreepsDeclineChoosing();
 		scn.ShadowDismissRevealedCards();
 		// Sam and Dwarf Guard: 7 + 2.
 		assertEquals(9, scn.GetStrength(servant));
@@ -340,7 +345,7 @@ public class Card_03_067_ErrataTests
 
 		// The only [isengard] minion is chosen for the exertion without asking.
 		scn.ShadowUseCardAction(palantir);
-		scn.FreepsChooseNo();
+		scn.FreepsDeclineChoosing();
 		scn.ShadowDismissRevealedCards();
 		assertEquals(1, scn.GetWoundsOn(servant));
 		assertFalse(scn.ShadowActionAvailable(palantir));

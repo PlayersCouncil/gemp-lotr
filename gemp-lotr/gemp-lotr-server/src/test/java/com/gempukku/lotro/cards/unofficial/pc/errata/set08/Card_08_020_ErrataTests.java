@@ -204,13 +204,20 @@ public class Card_08_020_ErrataTests
 		var armor = scn.GetFreepsCard("armor");
 		var swordarm = scn.GetFreepsCard("swordarm");
 		var mail = scn.GetFreepsCard("mail");
+		var shield = scn.GetFreepsCard("shield");
 		scn.MoveCompanionsToTable(gandalf, aragorn);
 		scn.MoveCardsToHand(fire);
+		// The fifth [gondor] card waits in the discard pile, as in the test at site 1: left in the draw deck,
+		// the reconciles on the way would draw it or not by chance (F-0265).
+		scn.MoveCardsToDiscard(shield);
 
 		scn.StartGame();
 		scn.SkipToSite(4);
-		// The reconciles on the way drew the small deck into the hand: the [gondor] cards go back.
+		// The reconciles on the way drew most of the small deck into the hand: the four [gondor] cards go back,
+		// from wherever they are.
 		scn.MoveCardsToTopOfDeck(boromir, armor, swordarm, mail);
+		assertInZone(Zone.DECK, boromir, armor, swordarm, mail);
+		assertInDiscard(shield);
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertTrue(scn.FreepsPlayAvailable(fire));

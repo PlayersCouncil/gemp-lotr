@@ -1067,7 +1067,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * reveal
       default: false
 * PutCardsFromHandOnTopOfDeck
-  Causes `player` to `select count` cards from the given `hand` and place them on the top of their owner's draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".  It's also not necessary if being done to an opponent's cards)
+  Causes `player` to `select count` cards from the given `hand` and place them on the top of their owner's draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".  It's also not necessary if being done to an opponent's cards)  With more than one card, `player` is then asked their order on the deck.  `text` is what `player` is asked when choosing; where `count` may be 0, say there that none need be chosen instead of wrapping the effect in an `Optional` (Q-0143).
   See The Palantir of Orthanc).
     * player
       default: you
@@ -1079,6 +1079,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       default: choose(any)
     * reveal
       default: false
+    * text
+      default: Choose cards from hand
 * PutCardsFromPlayOnBottomOfDeck
   Causes `player` to `select count` cards from play and place them on the bottom of their owner's draw deck.
   See Uruk Reserve).
