@@ -300,6 +300,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Participates in archery fire and skirmishes" against "may not participate" (Q-0150, F-0281) [F-0283]
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
+- "While ..., the move limit is +1 (-1)" with no "for this turn" (Q-0179, open) [Q-0122]
 
 ## What is offered and what is asked
 

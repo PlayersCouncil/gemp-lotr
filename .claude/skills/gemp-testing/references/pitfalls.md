@@ -363,7 +363,9 @@ that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` 
 that player's hand exactly those cards, in that order, and put the rest of it on top of his draw deck (G-0035;
 `Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
-until some legal action has been taken.
+until some legal action has been taken. The Free Peoples player reconciles at the end of his turn as well: after
+`SkipToOtherPlayersTurn()` a deck of eight or fewer is all in player 1's hand (8 in hand, 0 in the deck), so a
+draw of his on player 2's turn has cards put back on his deck first (Card_91_005_Tests).
 
 **A reconcile on the way discards from the front of the hand.** A player over the hand size at a reconcile on the way discards down to it from the front of his hand, however many cards that is (`PassReconcile(player)`, which every turn-skipper uses), so a test may put any number of cards in a hand before skipping. A test that reaches "Choose cards to discard down to 8" by its own passes answers it in one go: `scn.PassReconcile(scn.P1())`, or `FreepsChooseCards(...)` with exactly `FreepsGetChoiceMin()` cards.
 
@@ -454,6 +456,12 @@ with cards in his hand he is first asked "Reconcile - choose card to discard or 
 does not stay empty over a second move: where his draw deck holds cards the Shadow player draws at the reconcile
 inside `SkipToMovementDecision()`, so the last regroup phase asks him to reconcile again before the turn ends
 and the minions are discarded (Mountain-troll 65_112's tests).
+
+**The move limit never reads below 1.** The engine floors it (`ModifiersLogic.getMoveLimit`), so from the base
+of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" card whose every board starts from 2
+passes with its amount one off. Raise the limit first by legal play and read the sum: Durin's Secret 1_71 (a
+Fellowship event: spot Gandalf, a Dwarf and an Elf to make the move limit for this turn +1), then 2 + 1 - 1 reads 2
+and a penalty of 2 would read 1 (Card_01_260_ErrataTests, Card_91_008_Tests).
 
 **`SkipToOtherPlayersTurn()` straight after `SkipToMovementDecision()` throws.** It calls
 `SkipToMovementDecision()` again and passes into the "another move" question: a bare
